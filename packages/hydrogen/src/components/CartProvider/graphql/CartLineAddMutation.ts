@@ -5,6 +5,7 @@ export type CartLineAddMutationVariables = Types.Exact<{
   cartId: Types.Scalars['ID'];
   lines: Array<Types.CartLineInput> | Types.CartLineInput;
   numCartLines?: Types.Maybe<Types.Scalars['Int']>;
+  country?: Types.Maybe<Types.CountryCode>;
 }>;
 
 export type CartLineAddMutation = {__typename?: 'Mutation'} & {

@@ -65,6 +65,9 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
+import {useServerState} from '../../foundation/useServerState';
+import {ServerStateContextValue} from '../../foundation';
+
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
     case 'cartFetch': {
@@ -252,6 +255,9 @@ export function CartProvider({
    */
   cart?: CartFragmentFragment;
 }) {
+  const {serverState} = useServerState() as ServerStateContextValue;
+  const countryCode = serverState?.country?.isoCode;
+
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
     : {status: 'uninitialized'};
@@ -267,7 +273,11 @@ export function CartProvider({
 
       const {data} = await fetch<CartQueryQueryVariables, CartQueryQuery>({
         query: CartQuery,
-        variables: {id: cartId, numCartLines},
+        variables: {
+          id: cartId,
+          numCartLines,
+          country: countryCode,
+        },
       });
 
       if (!data?.cart) {
@@ -278,7 +288,7 @@ export function CartProvider({
 
       dispatch({type: 'resolve', cart: cartFromGraphQL(data.cart)});
     },
-    [fetch, numCartLines]
+    [fetch, numCartLines, countryCode]
   );
 
   const cartCreate = useCallback(
@@ -286,6 +296,13 @@ export function CartProvider({
       dispatch({type: 'cartCreate'});
 
       onCreate?.();
+
+      if (countryCode && !cart.buyerIdentity?.countryCode) {
+        if (cart.buyerIdentity == null) {
+          cart.buyerIdentity = {};
+        }
+        cart.buyerIdentity.countryCode = countryCode;
+      }
 
       const {data, error} = await fetch<
         CartCreateMutationVariables,
@@ -295,6 +312,7 @@ export function CartProvider({
         variables: {
           input: cart,
           numCartLines,
+          country: countryCode,
         },
       });
 
@@ -317,7 +335,7 @@ export function CartProvider({
         );
       }
     },
-    [onCreate, fetch, numCartLines]
+    [onCreate, fetch, numCartLines, countryCode]
   );
 
   const addLineItem = useCallback(
@@ -334,6 +352,7 @@ export function CartProvider({
             cartId: state.cart.id!,
             lines: lines,
             numCartLines,
+            country: countryCode,
           },
         });
 
@@ -352,7 +371,7 @@ export function CartProvider({
         }
       }
     },
-    [fetch, numCartLines, onLineAdd]
+    [fetch, numCartLines, onLineAdd, countryCode]
   );
 
   const removeLineItem = useCallback(
@@ -371,6 +390,7 @@ export function CartProvider({
             cartId: state.cart.id!,
             lines: lines,
             numCartLines,
+            country: countryCode,
           },
         });
 
@@ -389,7 +409,7 @@ export function CartProvider({
         }
       }
     },
-    [fetch, onLineRemove, numCartLines]
+    [fetch, onLineRemove, numCartLines, countryCode]
   );
 
   const updateLineItem = useCallback(
@@ -408,6 +428,7 @@ export function CartProvider({
             cartId: state.cart.id!,
             lines: lines,
             numCartLines,
+            country: countryCode,
           },
         });
         if (error) {
@@ -425,7 +446,7 @@ export function CartProvider({
         }
       }
     },
-    [fetch, onLineUpdate, numCartLines]
+    [fetch, onLineUpdate, numCartLines, countryCode]
   );
 
   const noteUpdate = useCallback(
@@ -444,6 +465,7 @@ export function CartProvider({
             cartId: state.cart.id!,
             note: note,
             numCartLines,
+            country: countryCode,
           },
         });
 
@@ -462,7 +484,7 @@ export function CartProvider({
         }
       }
     },
-    [fetch, onNoteUpdate, numCartLines]
+    [fetch, onNoteUpdate, numCartLines, countryCode]
   );
 
   const buyerIdentityUpdate = useCallback(
@@ -479,8 +501,9 @@ export function CartProvider({
           query: CartBuyerIdentityUpdate,
           variables: {
             cartId: state.cart.id!,
-            buyerIdentity: buyerIdentity,
+            buyerIdentity,
             numCartLines,
+            country: countryCode,
           },
         });
 
@@ -499,7 +522,7 @@ export function CartProvider({
         }
       }
     },
-    [fetch, onBuyerIdentityUpdate, numCartLines]
+    [fetch, onBuyerIdentityUpdate, numCartLines, countryCode]
   );
 
   const cartAttributesUpdate = useCallback(
@@ -518,6 +541,7 @@ export function CartProvider({
             cartId: state.cart.id!,
             attributes: attributes,
             numCartLines,
+            country: countryCode,
           },
         });
 
@@ -536,7 +560,7 @@ export function CartProvider({
         }
       }
     },
-    [fetch, onAttributesUpdate, numCartLines]
+    [fetch, onAttributesUpdate, numCartLines, countryCode]
   );
 
   const discountCodesUpdate = useCallback(
@@ -558,6 +582,7 @@ export function CartProvider({
             cartId: state.cart.id!,
             discountCodes: discountCodes,
             numCartLines,
+            country: countryCode,
           },
         });
 
@@ -576,7 +601,7 @@ export function CartProvider({
         }
       }
     },
-    [fetch, onDiscountCodesUpdate, numCartLines]
+    [fetch, onDiscountCodesUpdate, numCartLines, countryCode]
   );
 
   const didFetchCart = useRef(false);
@@ -591,6 +616,14 @@ export function CartProvider({
       cartFetch(localStorage.getItem(CART_ID_STORAGE_KEY)!);
     }
   }, [cartFetch, state]);
+
+  useEffect(() => {
+    if (state.status !== 'idle') {
+      return;
+    }
+    buyerIdentityUpdate({countryCode}, state);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countryCode]);
 
   const cartContextValue = useMemo(() => {
     return {
