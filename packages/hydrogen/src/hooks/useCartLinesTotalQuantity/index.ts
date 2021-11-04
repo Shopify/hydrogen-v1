@@ -1,0 +1,1 @@
+export {useCartLinesTotalQuantity} from './useCartLinesTotalQuantity';

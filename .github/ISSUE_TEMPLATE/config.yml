@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ideas + Feature requests
+    url: https://github.com/Shopify/hydrogen/discussions/categories/ideas-feature-requests
+    about: Upvote existing ideas + feature requests, or start a new discussion with yours.
+  - name: Help
+    url: https://github.com/Shopify/hydrogen/discussions/categories/help
+    about: See if your question was already answered, or start a new discussion.
+  - name: Feedback
+    url: https://github.com/Shopify/hydrogen/discussions/categories/feedback
+    about: We <3 feedback. 

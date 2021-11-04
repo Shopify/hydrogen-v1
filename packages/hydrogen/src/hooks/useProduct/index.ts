@@ -1,0 +1,1 @@
+export {useProduct} from './useProduct';

@@ -1,0 +1,9 @@
+#import './CartFragment.graphql'
+
+mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250) {
+  cartNoteUpdate(cartId: $cartId, note: $note) {
+    cart {
+      ...CartFragment
+    }
+  }
+}

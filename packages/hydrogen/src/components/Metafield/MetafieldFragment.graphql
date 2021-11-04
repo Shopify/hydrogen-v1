@@ -1,0 +1,10 @@
+fragment MetafieldFragment on Metafield {
+  id
+  type
+  namespace
+  key
+  value
+  createdAt
+  updatedAt
+  description
+}

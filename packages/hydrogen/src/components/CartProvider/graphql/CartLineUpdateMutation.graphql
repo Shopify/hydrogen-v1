@@ -1,0 +1,9 @@
+#import './CartFragment.graphql'
+
+mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartLines: Int = 250) {
+  cartLinesUpdate(cartId: $cartId, lines: $lines) {
+    cart {
+      ...CartFragment
+    }
+  }
+}

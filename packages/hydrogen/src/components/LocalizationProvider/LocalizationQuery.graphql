@@ -1,0 +1,18 @@
+query Localization {
+  localization {
+    country {
+      isoCode
+      name
+      currency {
+        isoCode
+      }
+    }
+    availableCountries {
+      isoCode
+      name
+      currency {
+        isoCode
+      }
+    }
+  }
+}

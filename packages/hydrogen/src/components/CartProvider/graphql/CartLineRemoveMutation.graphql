@@ -1,0 +1,9 @@
+#import './CartFragment.graphql'
+
+mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250) {
+  cartLinesRemove(cartId: $cartId, lineIds: $lines) {
+    cart {
+      ...CartFragment
+    }
+  }
+}

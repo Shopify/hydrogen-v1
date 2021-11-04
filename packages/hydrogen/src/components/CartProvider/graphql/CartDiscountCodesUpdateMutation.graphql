@@ -1,0 +1,9 @@
+#import './CartFragment.graphql'
+
+mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCartLines: Int = 250) {
+  cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+    cart {
+      ...CartFragment
+    }
+  }
+}

@@ -1,0 +1,13 @@
+#import './CartFragment.graphql'
+
+mutation CartBuyerIdentityUpdate(
+  $cartId: ID!
+  $buyerIdentity: CartBuyerIdentityInput!
+  $numCartLines: Int = 250
+) {
+  cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+    cart {
+      ...CartFragment
+    }
+  }
+}

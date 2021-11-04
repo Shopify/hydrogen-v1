@@ -1,0 +1,1 @@
+export {parseMetafieldValue} from './parseMetafieldValue';

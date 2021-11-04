@@ -1,0 +1,9 @@
+#import './CartFragment.graphql'
+
+mutation CartCreate($input: CartInput!, $numCartLines: Int = 250) {
+  cartCreate(input: $input) {
+    cart {
+      ...CartFragment
+    }
+  }
+}

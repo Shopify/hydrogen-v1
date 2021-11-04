@@ -1,0 +1,7 @@
+#import './CartFragment.graphql'
+
+query CartQuery($id: ID!, $numCartLines: Int = 250) {
+  cart(id: $id) {
+    ...CartFragment
+  }
+}

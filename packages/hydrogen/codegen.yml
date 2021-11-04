@@ -1,0 +1,30 @@
+overwrite: true
+schema: ["src/graphql/schema.json"]
+documents: ["src/components/**/*.graphql", "src/foundation/**/*.graphql", "src/hooks/**/*.graphql"]
+generates:
+  src/graphql/types/types.ts:
+    config:
+      withComponents: false
+      withHooks: false
+      withHOC: false
+      useTypeImports: true
+    plugins:
+      - "typescript"
+  src/:
+    preset: near-operation-file
+    config:
+      documentMode: string
+      withHooks: false
+    presetConfig:
+      baseTypesPath: graphql/types/types.ts
+      extension: .ts
+    plugins:
+      - typescript-operations
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
+  ./src/graphql/graphql-constants.ts:
+    plugins:
+      - "./codegen-hydrogen-plugin.js"
+
+

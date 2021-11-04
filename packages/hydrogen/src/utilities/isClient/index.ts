@@ -1,0 +1,1 @@
+export {isClient} from './isClient';

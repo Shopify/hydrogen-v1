@@ -1,0 +1,27 @@
+{
+  "name": "create-hydrogen-app",
+  "publishConfig": {
+    "access": "public",
+    "@shopify:registry": "https://registry.npmjs.org"
+  },
+  "version": "0.5.8",
+  "main": "index.js",
+  "license": "MIT",
+  "bin": {
+    "create-hydrogen": "index.js",
+    "create-hydrogen-app": "index.js"
+  },
+  "files": [
+    "index.js",
+    "scripts",
+    "template-*"
+  ],
+  "scripts": {
+    "prepack": "node ./scripts/tmp-copy-template-from-dev.js"
+  },
+  "dependencies": {
+    "enquirer": "^2.3.6",
+    "kolorist": "^1.4.0",
+    "minimist": "^1.2.5"
+  }
+}

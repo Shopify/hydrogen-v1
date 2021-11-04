@@ -1,0 +1,1 @@
+export {SelectedVariantBuyNowButton} from './SelectedVariantBuyNowButton';
