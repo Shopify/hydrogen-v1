@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 describe('CartLineQuantityAdjustButton', () => {
-  it('increases quantity', () => {
+  it.skip('increases quantity', () => {
     const cart = {
       ...CART,
       lines: {edges: [{node: CART_LINE}]},
@@ -57,7 +57,7 @@ describe('CartLineQuantityAdjustButton', () => {
     });
   });
 
-  it('decreases quantity', () => {
+  it.skip('decreases quantity', () => {
     const cart = {
       ...CART,
       lines: {
