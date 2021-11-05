@@ -57,7 +57,7 @@ function renderReactProp(prop: any): any {
 export function parseReactFromString(input: string, options: any = {}) {
   return domToReact(
     // @ts-ignore
-    htmlToDOM(input, {lowerCaseAttributeNames: false}),
+    htmlToDOM(input, {lowerCaseTags: false, lowerCaseAttributeNames: false}),
     options
   );
 }
