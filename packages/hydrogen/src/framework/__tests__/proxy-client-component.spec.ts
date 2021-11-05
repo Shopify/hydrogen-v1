@@ -15,7 +15,7 @@ it('wraps default exports for dev', async () => {
       isBuild: false,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
-import Counter from '/path/to/Counter.client.jsx?client';
+import Counter from '/path/to/Counter.client.jsx?no-proxy';
 
 export default wrapInClientMarker({ name: 'Counter', id: '/path/to/Counter.client.jsx', component: Counter, named: false });
 `);
@@ -31,7 +31,7 @@ it('wraps default exports for build', async () => {
       isBuild: true,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
-import Counter from '/path/to/Counter.client.jsx?client';
+import Counter from '/path/to/Counter.client.jsx?no-proxy';
 
 export default wrapInClientMarker({ name: 'Counter', id: '/${FAKE_FILE_PATH}', component: Counter, named: false });
 `);
@@ -47,7 +47,7 @@ it('wraps named exports', async () => {
       isBuild: false,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
-import * as namedImports from '/path/to/Counter.client.jsx?client';
+import * as namedImports from '/path/to/Counter.client.jsx?no-proxy';
 
 export const Counter = wrapInClientMarker({ name: 'Counter', id: '/path/to/Counter.client.jsx', component: namedImports['Counter'], named: true });
 export const Clicker = wrapInClientMarker({ name: 'Clicker', id: '/path/to/Counter.client.jsx', component: namedImports['Clicker'], named: true });
@@ -64,7 +64,7 @@ it('combines default and named exports', async () => {
       isBuild: false,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
-import Counter, * as namedImports from '/path/to/Counter.client.jsx?client';
+import Counter, * as namedImports from '/path/to/Counter.client.jsx?no-proxy';
 
 export default wrapInClientMarker({ name: 'Counter', id: '/path/to/Counter.client.jsx', component: Counter, named: false });
 export const Clicker = wrapInClientMarker({ name: 'Clicker', id: '/path/to/Counter.client.jsx', component: namedImports['Clicker'], named: true });
@@ -81,9 +81,9 @@ it('does not wrap non-component exports', async () => {
       isBuild: false,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
-import Counter from '/path/to/Counter.client.jsx?client';
+import Counter from '/path/to/Counter.client.jsx?no-proxy';
 
-export {MyFragment} from '/path/to/Counter.client.jsx?client';
+export {MyFragment} from '/path/to/Counter.client.jsx?no-proxy';
 export default wrapInClientMarker({ name: 'Counter', id: '/path/to/Counter.client.jsx', component: Counter, named: false });
 `);
 });
@@ -97,5 +97,5 @@ it('can export non-component only', async () => {
       src: `export const LocalizationContext = {}; export const useMyStuff = () => {}; export const MY_CONSTANT = 42;`,
       isBuild: false,
     })
-  ).toBe(`export * from '/path/to/Counter.client.jsx?client';\n`);
+  ).toBe(`export * from '/path/to/Counter.client.jsx?no-proxy';\n`);
 });
