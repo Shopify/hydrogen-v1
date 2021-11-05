@@ -54,11 +54,8 @@ export async function getItemFromCache(
 ): Promise<undefined | [any, Response]> {
   const cache = getCache();
   if (!cache) {
-    console.log('[getItemFromCache] no cache available');
     return;
   }
-
-  console.log('[getItemFromCache]', {key});
 
   const url = getKeyUrl(hashKey(key));
   const request = new Request(url);
@@ -79,7 +76,6 @@ export async function setItemInCache(
 ) {
   const cache = getCache();
   if (!cache) {
-    console.log('[setItemInCache] no cache available');
     return;
   }
 
@@ -94,8 +90,6 @@ export async function setItemInCache(
   const headers = new Headers({
     'cache-control': generateCacheControlHeader(cacheOptions),
   });
-
-  console.log('[setItemInCache]', {headers, key});
 
   const response = new Response(JSON.stringify(value), {headers});
 

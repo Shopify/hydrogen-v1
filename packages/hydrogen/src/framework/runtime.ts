@@ -13,7 +13,6 @@ export interface RuntimeContext {
  * - `waitUntil()` to run promises after request has ended
  */
 export function setContext(ctx?: RuntimeContext) {
-  console.log('[setContext]');
   globalThis.__ctx = ctx;
 }
 
@@ -22,7 +21,6 @@ export function getContext() {
 }
 
 export function setCache(cache?: Cache) {
-  console.log('[setCache]');
   globalThis.__cache = cache;
 }
 
@@ -37,10 +35,8 @@ export function runDelayedFunction(fn: () => Promise<any>) {
    * Runtimes (Oxygen, Node.js) might not have this.
    */
   if (!context?.waitUntil) {
-    console.log('[runDelayedFunction] no waitUntil available');
     return fn();
   }
 
-  console.log('[runDelayedFunction] running delayed function using waitUntil');
   return context.waitUntil(fn());
 }
