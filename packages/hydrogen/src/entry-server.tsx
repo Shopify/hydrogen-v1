@@ -5,6 +5,7 @@ import {
   // @ts-ignore
 } from 'react-dom/unstable-fizz';
 import {renderToString} from 'react-dom/server';
+import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
 import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
@@ -42,7 +43,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const render: Renderer = async function (
     url,
-    {context, request, isReactHydrationRequest}
+    {context, request, isReactHydrationRequest, dev}
   ) {
     const state = isReactHydrationRequest
       ? JSON.parse(url.searchParams?.get('state') ?? '{}')
@@ -53,6 +54,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
+      dev,
     });
 
     const body = await renderApp(ReactApp, state, isReactHydrationRequest);
@@ -88,6 +90,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
+      dev,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -146,6 +149,11 @@ const renderHydrogen: ServerHandler = (App, hook) => {
         },
         onError(error: any) {
           didError = true;
+
+          if (dev) {
+            response.write(getErrorMarkup(error));
+          }
+
           console.error(error);
         },
       }
@@ -168,6 +176,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
+      dev,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -224,11 +233,13 @@ function buildReactApp({
   state,
   context,
   request,
+  dev,
 }: {
   App: ComponentType;
   state: any;
   context: any;
   request: ServerComponentRequest;
+  dev: boolean | undefined;
 }) {
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();

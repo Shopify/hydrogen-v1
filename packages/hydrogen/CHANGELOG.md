@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - fix: update interaction prompt and interaction promp style attributes for Model3d
+- fix: make sure all errors show an error dialog when hydrogen is in dev mode
 - feat: use Image url field instead of deprecated originalSrc field
 - feat: switch to unstable API
 - feat: fix lowercased SVG tags in RSC
