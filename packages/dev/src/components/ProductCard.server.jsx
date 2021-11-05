@@ -10,7 +10,7 @@ export default function ProductCard({product}) {
   }
 
   return (
-    <div className="text-lg mb-4 relative">
+    <div className="text-md mb-4 relative">
       <Link to={`/products/${product.handle}`}>
         <div className="rounded-lg border-2 border-gray-200 mb-2 relative flex items-center justify-center overflow-hidden object-cover h-96">
           {selectedVariant.image ? (
@@ -45,7 +45,7 @@ export default function ProductCard({product}) {
               )}
             </Money>
           )}
-          <Money className="text-black text-lg" money={selectedVariant.priceV2}>
+          <Money className="text-black text-md" money={selectedVariant.priceV2}>
             {({amount, currencyNarrowSymbol, currencyCode}) => (
               <>
                 {currencyCode}

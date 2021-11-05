@@ -49,7 +49,7 @@ function AddToCartMarkup() {
         <Product.SelectedVariant.BuyNowButton
           className={BUTTON_SECONDARY_CLASSES}
         >
-          Buy It Now
+          Buy it now
         </Product.SelectedVariant.BuyNowButton>
       )}
     </div>
@@ -219,7 +219,7 @@ export default function ProductDetails({product}) {
               </div>
             </div>
             {/* Product Description */}
-            <Product.Description className="prose border-t border-gray-200 pt-6 text-black text-lg" />
+            <Product.Description className="prose border-t border-gray-200 pt-6 text-black text-md" />
             <Product.Metafield namespace="my_fields" keyName="size_chart">
               {({value}) => {
                 return value ? (

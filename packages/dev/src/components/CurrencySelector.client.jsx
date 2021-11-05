@@ -29,7 +29,7 @@ export default function CurrencySelector() {
               <div className="bg-white p-4 rounded-lg drop-shadow-2xl">
                 <Listbox.Option
                   disabled
-                  className="p-2 text-lg text-left font-medium uppercase"
+                  className="p-2 text-md text-left font-medium uppercase"
                 >
                   Currency
                 </Listbox.Option>

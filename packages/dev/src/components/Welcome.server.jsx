@@ -22,7 +22,7 @@ function DocsButton({url, label}) {
     <a
       href={url}
       target="_blank"
-      className="bg-white shadow py-2 px-5 rounded-full inline-flex items-center"
+      className="bg-white shadow py-2 px-5 rounded-full inline-flex items-center hover:opacity-80"
       rel="noreferrer"
     >
       {label}
@@ -35,16 +35,16 @@ function StorefrontInfo({shopName, totalProducts, totalCollections}) {
   const pluralize = (count, noun, suffix = 's') =>
     `${count} ${noun}${count === 1 ? '' : suffix}`;
   return (
-    <div className="bg-white p-8 md:p-16 shadow-xl rounded-xl text-gray-900">
-      <p className="text-lg font-medium uppercase mb-4">Connected Storefront</p>
+    <div className="bg-white p-12 shadow-xl rounded-xl text-gray-900">
+      <p className="text-md font-medium uppercase mb-4">Connected Storefront</p>
       <h2 className="text-2xl font-bold mb-4">{shopName}</h2>
-      <p className="text-lg">
+      <p className="text-md">
         {pluralize(totalProducts, 'Product')}
         {', '}
         {pluralize(totalCollections, 'Collection')}
       </p>
       {totalProducts === 0 && totalCollections === 0 && (
-        <div className="py-2 px-3 bg-red-100 text-lg">
+        <div className="py-2 px-3 bg-red-100 text-md">
           Use the{' '}
           <a
             href="https://shopify.dev/apps/tools/cli/getting-started"
@@ -57,14 +57,14 @@ function StorefrontInfo({shopName, totalProducts, totalCollections}) {
           to populate sample products and collections.
         </div>
       )}
-      <hr className="my-8" />
+      <hr className="my-4" />
       <a
         href="https://shopify.dev/custom-storefronts/hydrogen/getting-started#update-information-about-your-shopify-storefront"
-        className="text-lg inline-flex items-center text-blue-700 font-medium"
+        className="text-md inline-flex items-center text-blue-700 font-medium hover:underline"
         target="_blank"
         rel="noreferrer"
       >
-        Changing your storefront access token
+        Change your storefront access token
         <ExternalIcon />
       </a>
     </div>
@@ -73,15 +73,15 @@ function StorefrontInfo({shopName, totalProducts, totalCollections}) {
 
 function TemplateLinks({firstProductPath, firstCollectionPath}) {
   return (
-    <div className="bg-white p-8 md:p-16 shadow-xl rounded-xl text-gray-900">
-      <p className="text-lg font-medium uppercase mb-4">
+    <div className="bg-white p-12 md:p-12 shadow-xl rounded-xl text-gray-900">
+      <p className="text-md font-medium uppercase mb-4">
         Explore the templates
       </p>
       <ul>
         <li className="mb-4">
           <a
             href={`/collections/${firstCollectionPath}`}
-            className="text-lg font-medium text-blue-700"
+            className="text-md font-medium text-blue-700 hover:underline"
           >
             Collection template
           </a>
@@ -89,13 +89,16 @@ function TemplateLinks({firstProductPath, firstCollectionPath}) {
         <li className="mb-4">
           <a
             href={`/products/${firstProductPath}`}
-            className="text-lg font-medium text-blue-700"
+            className="text-md font-medium text-blue-700 hover:underline"
           >
             Product template
           </a>
         </li>
         <li>
-          <a href="/error-page" className="text-lg font-medium text-blue-700">
+          <a
+            href="/error-page"
+            className="text-md font-medium text-blue-700 hover:underline"
+          >
             404 template
           </a>
         </li>
@@ -118,7 +121,9 @@ export default function Welcome() {
   return (
     <div className="text-gray-900 pt-16 rounded-[40px] my-16 px-4 xl:px-12 bg-gradient-to-b from-white -mx-4 xl:-mx-12">
       <div className="text-center mb-16">
-        <h1 className="font-extrabold mb-4 text-7xl">Hello, Hydrogen</h1>
+        <h1 className="font-extrabold mb-4 text-5xl md:text-7xl">
+          Hello, Hydrogen
+        </h1>
         <p className="text-lg mb-8">
           Welcome to your custom storefront. Let&rsquo;s get building.
         </p>
