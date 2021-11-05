@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- Add create page command [#810](https://github.com/Shopify/hydrogen/pull/810)
 - Add create component command [#806](https://github.com/Shopify/hydrogen/pull/806)
 - Add init command [#791](https://github.com/Shopify/hydrogen/pull/791)
 
