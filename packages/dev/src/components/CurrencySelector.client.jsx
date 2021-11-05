@@ -79,6 +79,7 @@ function ArrowIcon({className}) {
   return (
     <svg
       className={className}
+      aria-hidden="true"
       width="10"
       height="6"
       viewBox="0 0 10 6"
