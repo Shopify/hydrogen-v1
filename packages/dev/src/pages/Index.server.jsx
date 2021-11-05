@@ -22,7 +22,7 @@ function GradientBackground() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        className="filter blur-[50px]"
+        className="filter blur-[30px]"
         aria-hidden="true"
       >
         <defs>
@@ -87,17 +87,17 @@ export default function Index({country = {isoCode: 'US'}}) {
     <Layout hero={<GradientBackground />}>
       <div className="relative mb-12">
         <Welcome />
-        <div className="bg-white p-8 shadow-xl rounded-xl mb-10">
+        <div className="bg-white p-12 shadow-xl rounded-xl mb-10">
           {featuredProductsCollection ? (
             <>
-              <div className="flex justify-between items-center mb-8 text-lg font-medium">
+              <div className="flex justify-between items-center mb-8 text-md font-medium">
                 <span className="text-black uppercase">
                   {featuredProductsCollection.title}
                 </span>
                 <span className="hidden md:inline-flex">
                   <Link
                     to={`/collections/${featuredProductsCollection.handle}`}
-                    className="text-blue-600"
+                    className="text-blue-600 hover:underline"
                   >
                     Shop all
                   </Link>

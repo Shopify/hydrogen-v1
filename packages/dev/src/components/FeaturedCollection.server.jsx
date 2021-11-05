@@ -13,7 +13,7 @@ export default function FeaturedCollection({collection}) {
         <p className="text-xl text-gray-500 mb-6">{collection.description}</p>
         <Link
           to={`/collections/${collection.handle}`}
-          className="inline-block bg-gray-900 text-white text-lg font-medium rounded-md py-4 px-16"
+          className="inline-block bg-gray-900 text-white text-lg font-medium rounded-md py-4 px-16 uppercase"
         >
           Shop Collection
         </Link>
