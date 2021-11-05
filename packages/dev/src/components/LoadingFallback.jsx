@@ -12,7 +12,7 @@ export default function LoadingFallback() {
               <OpenIcon />
             </div>
             <p className="font-black uppercase text-2xl tracking-widest">
-              Snowdevil Snowboards
+              Snowdevil
             </p>
             <CartIcon />
           </div>
