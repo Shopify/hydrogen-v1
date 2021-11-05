@@ -45,6 +45,7 @@ function CartHeader() {
     <header className="border-b-2 border-black py-3 px-6 flex justify-between items-center bg-white sticky top-0">
       <button type="button" onClick={closeCart}>
         <ArrowIcon />
+        <span className="sr-only">Close cart</span>
       </button>
       <span className="text-xs">Free shipping on orders over $50</span>
       <CartIconWithItems />
