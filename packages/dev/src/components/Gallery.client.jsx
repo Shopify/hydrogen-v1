@@ -28,6 +28,12 @@ export default function Gallery() {
     >
       <SelectedVariantImage className="w-[80vw] md:w-full h-full object-cover object-center flex-shrink-0 md:flex-shrink-none snap-start md:col-span-2 border border-gray-200 rounded-lg" />
       {galleryMedia.map((med) => {
+        let extraProps = {};
+
+        if (med.mediaContentType === 'MODEL_3D') {
+          extraProps = MODEL_3D_PROPS;
+        }
+
         return (
           <MediaFile
             tabIndex="0"
@@ -38,10 +44,14 @@ export default function Gallery() {
               height: '485',
               crop: 'center',
             }}
-            interactionPromptThreshold="0"
+            {...extraProps}
           />
         );
       })}
     </div>
   );
 }
+
+const MODEL_3D_PROPS = {
+  interactionPromptThreshold: '0',
+};

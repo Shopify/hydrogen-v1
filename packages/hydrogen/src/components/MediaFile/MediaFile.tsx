@@ -18,7 +18,6 @@ export interface MediaFileProps {
   media: MediaImageMedia | Model3DMedia | ExternalVideoMedia | VideoMedia;
   /** The options for the `Image`, `Video`, `ExternalVideo`, or `Model3D` components. */
   options?: VideoProps['options'] | ExternalVideoProps['options'];
-  interactionPromptThreshold?: number;
 }
 
 /**
@@ -30,7 +29,6 @@ export interface MediaFileProps {
 export function MediaFile({
   media,
   options,
-  interactionPromptThreshold,
   ...passthroughProps
 }: MediaFileProps) {
   switch (media.mediaContentType) {
@@ -60,13 +58,7 @@ export function MediaFile({
         />
       );
     case 'MODEL_3D':
-      return (
-        <Model3D
-          interactionPromptThreshold={interactionPromptThreshold}
-          {...passthroughProps}
-          model={media as Model3DMedia}
-        />
-      );
+      return <Model3D {...passthroughProps} model={media as Model3DMedia} />;
     default:
       return null;
   }
