@@ -15,6 +15,18 @@ jest.mock('../../CartProvider', () => ({
 }));
 
 describe('AddToCartButton', () => {
+  beforeEach(() => {
+    // @ts-ignore
+    global.fetch = jest.fn(async (_url, _init) => {
+      return {
+        json: async () =>
+          JSON.stringify({
+            data: {},
+          }),
+      };
+    });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
