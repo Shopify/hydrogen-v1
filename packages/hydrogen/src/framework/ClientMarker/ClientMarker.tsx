@@ -2,21 +2,50 @@ import React, {FunctionComponent, useContext} from 'react';
 import {HydrationContext} from '../Hydration/HydrationContext.server';
 import {renderReactProps} from '../Hydration/react-utils';
 
-interface Props {
+interface ClientMarkerMeta {
   name: string;
   id: string;
-  props: any;
   component: FunctionComponent;
   named: boolean;
 }
 
-export function ClientMarker({
-  name,
-  id,
+export function wrapInClientMarker(meta: ClientMarkerMeta) {
+  const {component, name} = meta;
+
+  if (
+    !component ||
+    (typeof component !== 'function' &&
+      !Object.prototype.hasOwnProperty.call(component, 'render'))
+  ) {
+    // This is not a React component, return it as is.
+    return component;
+  }
+
+  // Use object syntax here to make sure the function name
+  // comes from the meta params for better error stacks.
+  const wrappedComponent = {
+    // eslint-disable-next-line react/display-name
+    [name]: (props: any) => <ClientMarker {...{props, meta}} />,
+  }[name];
+
+  // Relay component properties such as `Image.Fragment`
+  for (const [key, value] of Object.entries(component)) {
+    Object.defineProperty(wrappedComponent, key, {
+      enumerable: true,
+      value,
+    });
+  }
+
+  return wrappedComponent;
+}
+
+function ClientMarker({
   props: allProps,
-  component: Component,
-  named,
-}: Props) {
+  meta: {name, id, component: Component, named},
+}: {
+  meta: ClientMarkerMeta;
+  props: any;
+}) {
   const isHydrating = useContext(HydrationContext);
 
   if (!isHydrating) return <Component {...allProps} />;
