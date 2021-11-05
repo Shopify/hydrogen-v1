@@ -25,6 +25,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: remove console logs for caching
 - fix: lowercased SVG tags in RSC
 - fix: make the URL search property available via hooks
+- feat: add search page
 
 ## 0.5.8 - 2021-11-04
 
