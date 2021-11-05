@@ -2,6 +2,9 @@ import React, {Suspense} from 'react';
 import {screen, render, waitFor} from '@testing-library/react';
 import {convertHydrationResponseToReactComponents} from '../Cache.client';
 
+jest.mock('../is-dev');
+jest.mock('../import-dev');
+
 it('handles DOM elements', async () => {
   const tuples = [['$', 'div', null, {children: 'hello'}]];
   const payload = `J0:${JSON.stringify(tuples)}`;

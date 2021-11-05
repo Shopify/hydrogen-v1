@@ -80,6 +80,11 @@ export default () => {
     },
 
     async load(id, options) {
+      if (config.command === 'build' && id.includes('/Hydration/import-dev')) {
+        // Manual tree-shaking
+        return {code: 'export default null', moduleSideEffects: false};
+      }
+
       if (!isSSR(options)) return null;
 
       // Wrapped components won't match this becase they end in ?no-proxy
@@ -93,6 +98,49 @@ export default () => {
       }
 
       return null;
+    },
+
+    transform(code, id) {
+      /**
+       * In order to allow dynamic component imports from RSC, we use Vite's import.meta.glob.
+       * This replaces the glob import path placeholders in importer-dev.ts with resolved paths
+       * to all client components (both user and Hydrogen components).
+       *
+       * NOTE: Glob import paths MUST be relative to the importer file (import-dev.ts) in
+       * order to get the `?v=xxx` querystring from Vite added to the import URL.
+       * If the paths are relative to the root instead, Vite won't add the querystring
+       * and we will have duplicated files in the browser (with duplicated contexts, etc).
+       */
+      if (id.includes('/Hydration/import-dev')) {
+        // eslint-disable-next-line node/no-missing-require
+        const hydrogenPath = path.dirname(require.resolve('@shopify/hydrogen'));
+        const importerPath = path.join(hydrogenPath, 'framework', 'Hydration');
+
+        const importerToRootPath = path.relative(importerPath, config.root);
+        const [importerToRootNested] =
+          importerToRootPath.match(/(\.\.\/)+/) || [];
+        const userPrefix = path.normalize(
+          path.join(importerPath, importerToRootNested)
+        );
+        const userGlob = path.join(
+          importerToRootPath,
+          'src',
+          '**/*.client.[jt]sx'
+        );
+
+        const libPrefix = hydrogenPath + path.sep;
+        const libGlob = path.join(
+          path.relative(importerPath, hydrogenPath),
+          'components',
+          '**/*.client.js'
+        );
+
+        return code
+          .replace('__USER_COMPONENTS_PREFIX__', userPrefix)
+          .replace('__USER_COMPONENTS_GLOB__', userGlob)
+          .replace('__LIB_COMPONENTS_PREFIX__', libPrefix)
+          .replace('__LIB_COMPONENTS_GLOB__', libGlob);
+      }
     },
   } as Plugin;
 
