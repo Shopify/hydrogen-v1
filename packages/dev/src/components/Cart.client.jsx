@@ -183,7 +183,7 @@ function CartItemQuantity() {
 
 function CartFooter() {
   return (
-    <footer className="bottom-0 sticky pb-8">
+    <footer className="bottom-0 sticky pb-8 border-t border-black border-opacity-5">
       <div className="relative h-60 bg-white text-gray-900 p-7">
         <div role="table" aria-label="Cost summary">
           <div role="row" className="flex justify-between">
