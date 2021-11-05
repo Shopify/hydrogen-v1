@@ -3,7 +3,7 @@ import {Link} from '@shopify/hydrogen';
 export default function Footer({collection, product}) {
   return (
     <footer role="contentinfo">
-      <div className="border-t-2 border-b-2 border-black">
+      <div className="bg-white border-t border-b border-black border-opacity-5">
         <div className="mx-auto max-w-7xl px-4 py-14 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
@@ -96,7 +96,7 @@ export default function Footer({collection, product}) {
           </div>
         </div>
       </div>
-      <div className="py-6 px-4 md:px-8">
+      <div className="py-6 px-4 md:px-8 bg-gray-50">
         <p className="text-gray-600">© 2021 Shopify</p>
       </div>
     </footer>
