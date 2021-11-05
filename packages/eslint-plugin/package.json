@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-hydrogen",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Eslint rules for hydrogen",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -20,8 +20,8 @@
     "directory": "packages/eslint-plugin"
   },
   "dependencies": {
-    "@typescript-eslint/experimental-utils": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/experimental-utils": "^4.0.1",
     "@typescript-eslint/parser": "^4.26.0",
     "@typescript-eslint/types": "^4.20.0",
     "eslint": "^7.27.0",
