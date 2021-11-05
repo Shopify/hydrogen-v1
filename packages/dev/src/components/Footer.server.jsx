@@ -7,9 +7,9 @@ export default function Footer({collection, product}) {
         <div className="mx-auto max-w-7xl px-4 py-14 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
-            <h5 className="text-black text-sm font-mono font-bold uppercase">
+            <h2 className="text-black text-sm font-mono font-bold uppercase">
               Community
-            </h5>
+            </h2>
             <ul className="mt-8 space-y-4">
               <li className="text-sm font-medium text-gray-600 hover:text-gray-900">
                 <a
@@ -61,9 +61,9 @@ export default function Footer({collection, product}) {
           </div>
           {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
-            <h5 className="text-black text-sm font-mono font-bold uppercase">
+            <h2 className="text-black text-sm font-mono font-bold uppercase">
               Templates
-            </h5>
+            </h2>
             <ul className="mt-8 space-y-4">
               <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
                 <Link to="/home">Home</Link>
@@ -78,9 +78,9 @@ export default function Footer({collection, product}) {
           </div>
           {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
-            <h5 className="text-black text-sm font-mono font-bold uppercase">
+            <h2 className="text-black text-sm font-mono font-bold uppercase">
               Docs
-            </h5>
+            </h2>
             <ul className="mt-8 space-y-4">
               <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
                 <a href="https://shopify.dev/custom-storefronts/hydrogen">
