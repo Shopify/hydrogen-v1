@@ -1,4 +1,6 @@
-import {Link, Image, Money} from '@shopify/hydrogen';
+import {Image, Money} from '@shopify/hydrogen';
+
+import {Link} from './Link.client';
 
 export default function ProductCard({product}) {
   const selectedVariant = product.variants.edges[0].node;
