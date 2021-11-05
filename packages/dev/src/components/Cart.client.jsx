@@ -45,6 +45,7 @@ function CartHeader() {
     <header className="border-b border-gray-300 bg-white py-3 px-6 flex justify-between items-center sticky top-0">
       <button type="button" onClick={closeCart}>
         <ArrowIcon />
+        <span className="sr-only">Close cart</span>
       </button>
       <span className="text-xs text-gray-500">
         Free shipping on orders over $50
@@ -109,6 +110,7 @@ function CartItems() {
               <CartLine.QuantityAdjustButton
                 adjust="remove"
                 aria-label="Remove from cart"
+                className="disabled:pointer-events-all disabled:cursor-wait"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +139,8 @@ function CartItemQuantity() {
     <div className="flex border rounded border-gray-300 items-center overflow-auto mt-2">
       <CartLine.QuantityAdjustButton
         adjust="decrease"
-        className="p-2"
         aria-label="Decrease quantity"
+        className="p-2 disabled:pointer-events-all disabled:cursor-wait"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -159,8 +161,8 @@ function CartItemQuantity() {
       />
       <CartLine.QuantityAdjustButton
         adjust="increase"
-        className="p-2 text-gray-400"
         aria-label="Increase quantity"
+        className="p-2 text-gray-400 disabled:pointer-events-all disabled:cursor-wait"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -9,6 +9,7 @@ export type Renderer = (
     request: ServerComponentRequest;
     context?: Record<string, any>;
     isReactHydrationRequest?: boolean;
+    dev?: boolean;
   }
 ) => Promise<
   {
