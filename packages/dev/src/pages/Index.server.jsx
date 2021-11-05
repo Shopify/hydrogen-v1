@@ -76,7 +76,10 @@ export default function Index({country = {isoCode: 'US'}}) {
   });
 
   const collections = data ? flattenConnection(data.collections) : [];
-  const featuredProducts = flattenConnection(collections[0].products);
+  const featuredProductsCollection = collections[0];
+  const featuredProducts = flattenConnection(
+    featuredProductsCollection.products,
+  );
   const featuredCollection =
     collections && collections.length > 1 ? collections[1] : collections[0];
 
@@ -87,11 +90,11 @@ export default function Index({country = {isoCode: 'US'}}) {
         <div className="bg-white p-8 shadow-xl rounded-xl mb-10">
           <div className="flex justify-between items-center mb-8 text-lg font-medium">
             <span className="text-black uppercase">
-              {featuredCollection.title}
+              {featuredProductsCollection.title}
             </span>
             <span className="hidden md:inline-flex">
               <Link
-                to={`/collections/${featuredCollection.handle}`}
+                to={`/collections/${featuredProductsCollection.handle}`}
                 className="text-blue-600"
               >
                 Shop all
