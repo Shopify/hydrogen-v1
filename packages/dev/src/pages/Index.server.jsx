@@ -77,9 +77,9 @@ export default function Index({country = {isoCode: 'US'}}) {
 
   const collections = data ? flattenConnection(data.collections) : [];
   const featuredProductsCollection = collections[0];
-  const featuredProducts = flattenConnection(
-    featuredProductsCollection.products,
-  );
+  const featuredProducts = featuredProductsCollection
+    ? flattenConnection(featuredProductsCollection.products)
+    : null;
   const featuredCollection =
     collections && collections.length > 1 ? collections[1] : collections[0];
 
@@ -88,34 +88,38 @@ export default function Index({country = {isoCode: 'US'}}) {
       <div className="relative mb-12">
         <Welcome />
         <div className="bg-white p-8 shadow-xl rounded-xl mb-10">
-          <div className="flex justify-between items-center mb-8 text-lg font-medium">
-            <span className="text-black uppercase">
-              {featuredProductsCollection.title}
-            </span>
-            <span className="hidden md:inline-flex">
-              <Link
-                to={`/collections/${featuredProductsCollection.handle}`}
-                className="text-blue-600"
-              >
-                Shop all
-              </Link>
-            </span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-            {featuredProducts.map((product) => (
-              <div key={product.id}>
-                <ProductCard product={product} />
+          {featuredProductsCollection ? (
+            <>
+              <div className="flex justify-between items-center mb-8 text-lg font-medium">
+                <span className="text-black uppercase">
+                  {featuredProductsCollection.title}
+                </span>
+                <span className="hidden md:inline-flex">
+                  <Link
+                    to={`/collections/${featuredProductsCollection.handle}`}
+                    className="text-blue-600"
+                  >
+                    Shop all
+                  </Link>
+                </span>
               </div>
-            ))}
-          </div>
-          <div className="md:hidden text-center">
-            <Link
-              to={`/collections/${featuredCollection.handle}`}
-              className="text-blue-600"
-            >
-              Shop all
-            </Link>
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                {featuredProducts.map((product) => (
+                  <div key={product.id}>
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+              </div>
+              <div className="md:hidden text-center">
+                <Link
+                  to={`/collections/${featuredCollection.handle}`}
+                  className="text-blue-600"
+                >
+                  Shop all
+                </Link>
+              </div>
+            </>
+          ) : null}
         </div>
         <FeaturedCollection collection={featuredCollection} />
       </div>

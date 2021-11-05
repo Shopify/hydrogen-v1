@@ -112,7 +112,7 @@ export default function Welcome() {
 
   const firstProduct = products ? products[0].handle : '';
   const totalProducts = products && products.length;
-  const firstCollection = collections ? collections[0].handle : '';
+  const firstCollection = collections[0] ? collections[0].handle : '';
   const totalCollections = collections && collections.length;
 
   return (
