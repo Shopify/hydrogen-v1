@@ -11,8 +11,8 @@ module.exports = {
         DEFAULT: {
           css: {
             hr: {
-              borderColor: theme('colors.gray.900'),
-              borderWidth: '1px',
+              borderColor: theme('colors.gray.200'),
+              borderTopWidth: '1px',
               marginTop: '2rem',
               marginBottom: '2rem',
             },

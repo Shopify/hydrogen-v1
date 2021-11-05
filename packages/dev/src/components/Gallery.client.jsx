@@ -26,13 +26,13 @@ export default function Gallery() {
       className="gap-4 flex md:grid md:grid-cols-2 overflow-x-scroll no-scrollbar scroll-snap-x scroll-smooth h-[485px] md:h-auto place-content-start"
       tabIndex="-1"
     >
-      <SelectedVariantImage className="w-[80vw] md:w-full h-full object-cover object-center flex-shrink-0 md:flex-shrink-none snap-start md:col-span-2 border-2 border-black" />
+      <SelectedVariantImage className="w-[80vw] md:w-full h-full object-cover object-center flex-shrink-0 md:flex-shrink-none snap-start md:col-span-2 border border-gray-200 rounded-lg" />
       {galleryMedia.map((med) => {
         return (
           <MediaFile
             tabIndex="0"
             key={med.id || med.image.id}
-            className="w-[80vw] md:w-auto h-full md:h-auto object-cover object-center transition-all snap-start border-2 border-black flex-shrink-0"
+            className="w-[80vw] md:w-auto h-full md:h-auto object-cover object-center transition-all snap-start border border-gray-200 flex-shrink-0 rounded-lg"
             media={med}
             options={{
               height: '485',
