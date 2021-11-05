@@ -13,6 +13,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - feat: use Image url field instead of deprecated originalSrc field
 - feat: switch to unstable API
 - feat: fix lowercased SVG tags in RSC
+- fix: MediaFile component warning on non-Model3D types
 
 ## 0.5.8 - 2021-11-04
 
