@@ -32,7 +32,7 @@ interface Props {
   serverState: Record<string, any>;
   setServerState: React.Dispatch<
     React.SetStateAction<{
-      page: string;
+      pathname: string;
       search: string;
     }>
   >;

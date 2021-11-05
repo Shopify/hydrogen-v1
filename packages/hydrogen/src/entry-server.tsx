@@ -47,7 +47,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
   ) {
     const state = isReactHydrationRequest
       ? JSON.parse(url.searchParams?.get('state') ?? '{}')
-      : {page: url.pathname};
+      : {pathname: url.pathname, search: url.search};
 
     const {ReactApp, helmetContext, componentResponse} = buildReactApp({
       App,
@@ -83,7 +83,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     url: URL,
     {context, request, response, template, dev}
   ) {
-    const state = {page: url.pathname, search: url.search};
+    const state = {pathname: url.pathname, search: url.search};
 
     const {ReactApp, componentResponse} = buildReactApp({
       App,
@@ -246,7 +246,7 @@ function buildReactApp({
 
   const ReactApp = (props: any) => (
     <StaticRouter
-      location={{pathname: state.page, search: state.search}}
+      location={{pathname: state.pathname, search: state.search}}
       context={context}
     >
       <HelmetProvider context={helmetContext}>
