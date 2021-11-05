@@ -107,6 +107,7 @@ function CartItems() {
               <CartLine.QuantityAdjustButton
                 adjust="remove"
                 aria-label="Remove from cart"
+                className="disabled:pointer-events-all disabled:cursor-wait"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -135,8 +136,8 @@ function CartItemQuantity() {
     <div className="flex border border-gray-300 items-center overflow-auto mt-2">
       <CartLine.QuantityAdjustButton
         adjust="decrease"
-        className="p-2"
         aria-label="Decrease quantity"
+        className="p-2 disabled:pointer-events-all disabled:cursor-wait"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -157,8 +158,8 @@ function CartItemQuantity() {
       />
       <CartLine.QuantityAdjustButton
         adjust="increase"
-        className="p-2"
         aria-label="Increase quantity"
+        className="p-2 disabled:pointer-events-all disabled:cursor-wait"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

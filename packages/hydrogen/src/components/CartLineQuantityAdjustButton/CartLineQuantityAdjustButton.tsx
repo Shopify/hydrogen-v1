@@ -1,5 +1,6 @@
 import React, {ReactNode, ElementType} from 'react';
 import {
+  useCart,
   useCartLinesRemoveCallback,
   useCartLinesUpdateCallback,
 } from '../CartProvider';
@@ -24,11 +25,13 @@ export function CartLineQuantityAdjustButton<
 ) {
   const updateLines = useCartLinesUpdateCallback();
   const removeLines = useCartLinesRemoveCallback();
+  const {status} = useCart();
   const cartLine = useCartLine();
   const {children, adjust, ...passthroughProps} = props;
 
   return (
     <button
+      disabled={status !== 'idle'}
       onClick={() => {
         if (adjust === 'remove') {
           removeLines([cartLine.id]);
