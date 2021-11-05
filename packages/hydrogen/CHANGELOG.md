@@ -10,6 +10,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: update interaction prompt and interaction promp style attributes for Model3d
 - feat: use Image url field instead of deprecated originalSrc field
 - feat: switch to unstable API
+- fix: transform deeply-imported client components
+- fix: duplicated files and contexts in browser
 
 ## 0.5.8 - 2021-11-04
 
