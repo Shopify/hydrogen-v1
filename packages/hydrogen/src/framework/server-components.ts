@@ -1,31 +1,29 @@
-export async function wrapClientComponents({
+import {init, parse} from 'es-module-lexer';
+import {promises as fs} from 'fs';
+import {transformWithEsbuild} from 'vite';
+import MagicString from 'magic-string';
+
+export async function proxyClientComponent({
   id,
-  getManifestFile,
-  root,
+  src,
   isBuild,
+  getFileFromClientManifest,
+  root,
 }: {
   id: string;
-  getManifestFile: (manifestId: string) => Promise<string>;
+  src?: string;
+  isBuild?: boolean;
+  getFileFromClientManifest: (id: string) => Promise<string>;
   root: string;
-  isBuild: boolean;
 }) {
-  const normalizedId = id.slice(0, id.indexOf('?fromServer'));
-  const manifestId = normalizedId.replace(root, '');
-  const name = id.split('/').pop()!.split('.').shift();
+  const [rawId] = id.split('?');
+  const manifestId = rawId.replace(root, '');
+  const defaultComponentName = rawId.split('/').pop()?.split('.').shift()!;
 
-  /**
-   * ?fromServer can designate named exports as a comma-separated list.
-   * ?fromServer=Foo,Bar
-   *
-   * Re-named exports are also supported:
-   * ?fromServer=Foo:Baz,Bar
-   */
-  const names = id.includes('?fromServer=')
-    ? id
-        .slice(id.indexOf('?fromServer=') + '?fromServer='.length)
-        .split(',')
-        .map((name) => name.split(':').shift())
-    : [];
+  // Modify the import ID to avoid infinite wraps
+  const importFrom = `${rawId}?no-proxy`;
+
+  await init;
 
   /**
    * Determine the id of the chunk to be imported. If we're building
@@ -33,74 +31,102 @@ export async function wrapClientComponents({
    * during the client manifest. Otherwise, we can pass the normalizedId
    * and Vite's dev server will load it as expected.
    */
-  const importId = isBuild
-    ? '/' + (await getManifestFile(manifestId))
-    : normalizedId;
+  const assetId = isBuild
+    ? '/' + (await getFileFromClientManifest(manifestId))
+    : rawId;
 
-  const isNamedExport = names.length > 0;
-
-  let code = `import React from 'react';
-  import {ClientMarker} from '@shopify/hydrogen/marker';`;
-
-  if (!isNamedExport) {
-    code += `
-  import _Component from '${normalizedId}';
-
-  export default function _ClientComponent(props) {
-    return React.createElement(ClientMarker, { name: '${name}', id: '${importId}', props, component: _Component, named: false });
-  }
-  export * from '${normalizedId}';`;
-  } else {
-    code += `
-  import {${names
-    .map((name, idx) => name + ' as ' + `_Component${idx}`)
-    .join(', ')}} from '${normalizedId}';`;
-
-    names.forEach((name, idx) => {
-      code += `\n
-  export function ${name}(props) {
-    return React.createElement(ClientMarker, { name: '${name}', id: '${importId}', props, component: _Component${idx}, named: true });
-  }`;
-    });
+  if (!src) {
+    src = await fs.readFile(rawId, 'utf-8');
   }
 
-  return code;
+  const {code} = await transformWithEsbuild(src, rawId);
+  const [, exportStatements] = parse(code);
+  const hasDefaultExport = exportStatements.includes('default');
+
+  // Split namedImports in components to wrap and everything else (e.g. GQL Fragments)
+  const namedImports = exportStatements.reduce(
+    (acc, i) => {
+      if (i !== 'default') {
+        // Add here any other naming pattern for a non-component export
+        if (/^use[A-Z]|Fragment$|Context$|^[A-Z_]+$/.test(i)) {
+          acc.other.push(i);
+        } else {
+          acc.components.push(i);
+        }
+      }
+
+      return acc;
+    },
+    {components: [] as string[], other: [] as string[]}
+  );
+
+  if (!hasDefaultExport && namedImports.components.length === 0) {
+    return `export * from '${importFrom}';\n`;
+  }
+
+  const s = new MagicString(
+    `import {wrapInClientMarker} from '@shopify/hydrogen/marker';`
+  );
+
+  s.append('\nimport ');
+
+  if (hasDefaultExport) {
+    s.append(defaultComponentName);
+    if (namedImports.components.length > 0) {
+      s.append(', ');
+    }
+  }
+
+  if (namedImports.components.length) {
+    s.append('* as namedImports');
+  }
+
+  s.append(` from '${importFrom}';\n\n`);
+
+  // Re-export other stuff directly without wrapping
+  if (namedImports.other.length > 0) {
+    s.append(
+      `export {${namedImports.other.join(', ')}} from '${importFrom}';\n`
+    );
+  }
+
+  if (hasDefaultExport) {
+    s.append(
+      generateComponentExport({
+        id: assetId,
+        componentName: defaultComponentName,
+        isDefault: true,
+      })
+    );
+  }
+
+  namedImports.components.forEach((name) =>
+    s.append(
+      generateComponentExport({
+        id: assetId,
+        componentName: name,
+        isDefault: false,
+      })
+    )
+  );
+
+  return s.toString();
 }
 
-export function tagClientComponents(
-  src: string,
-  additionalReferences: Array<string | RegExp> = []
-) {
-  const modulePatterns = [/[\w\/\.]+\.client(?:\.(?:j|t)sx?)?/]
-    // @ts-ignore
-    .concat(additionalReferences)
-    .map((pattern) => (pattern instanceof RegExp ? pattern.source : pattern));
+function generateComponentExport({
+  id,
+  isDefault,
+  componentName,
+}: {
+  id: string;
+  isDefault: boolean;
+  componentName: string;
+}) {
+  const component = isDefault
+    ? componentName
+    : `namedImports['${componentName}']`;
 
-  const fromModulePattern = modulePatterns.join('|');
-
-  /**
-   * Default exports
-   * @see https://rubular.com/r/XZjsrolet5twvB
-   */
-  let regex = new RegExp(
-    `import\\s*\\w*\\s*from\\s*(?:'|")(?:(${fromModulePattern}))`,
-    'g'
-  );
-  let code = src.replace(regex, (mod) => mod + '?fromServer');
-
-  /**
-   * Named exports
-   * @see https://rubular.com/r/6qdREcs4T9Nw1e
-   */
-  regex = new RegExp(
-    `import\\s*{([\\w\\s,]+)}\\s*from\\s*(?:'|")(?:(${fromModulePattern}))`,
-    'g'
-  );
-  code = code.replace(
-    regex,
-    (mod, imports) =>
-      `${mod}?fromServer=${imports.replace(/ as /g, ':').replace(/ /g, '')}`
-  );
-
-  return {code, map: {mappings: ''}};
+  return `export ${
+    isDefault ? 'default' : `const ${componentName} =`
+  } wrapInClientMarker({ name: '${componentName}', id: '${id}', component: ${component}, named: ${!isDefault} });\n`;
 }

@@ -2,7 +2,7 @@ import type {Plugin, ResolvedConfig} from 'vite';
 import path from 'path';
 import {promises as fs} from 'fs';
 import glob from 'fast-glob';
-import {tagClientComponents, wrapClientComponents} from '../server-components';
+import {proxyClientComponent} from '../server-components';
 
 export default () => {
   let config: ResolvedConfig;
@@ -79,37 +79,16 @@ export default () => {
       }
     },
 
-    transform(src, id, options) {
-      if (!isSSR(options)) return null;
-
-      /**
-       * When a server component imports a client component, tag a `?fromServer`
-       * identifier at the end of the import to indicate that we should transform
-       * it with a ClientMarker (below).
-       *
-       * We are manually passing `@shopify/hydrogen/client` as an additional "from"
-       * identifier to allow local Server Components to import them as tagged Client Components.
-       * We should also accept this as a plugin argument for other third-party packages.
-       */
-      if (/\.server\.(j|t)sx?$/.test(id)) {
-        return tagClientComponents(src);
-      }
-    },
-
     async load(id, options) {
       if (!isSSR(options)) return null;
 
-      /**
-       * Client components being loaded from server components need to be
-       * wrapped in a ClientMarker so we can serialize their props and
-       * dynamically load them in the browser.
-       */
-      if (id.includes('?fromServer')) {
-        return await wrapClientComponents({
+      // Wrapped components won't match this becase they end in ?no-proxy
+      if (/\.client\.[jt]sx?$/.test(id)) {
+        return await proxyClientComponent({
           id,
-          getManifestFile: getFileFromClientManifest,
-          root: config.root,
           isBuild: config.command === 'build',
+          getFileFromClientManifest,
+          root: config.root,
         });
       }
 
