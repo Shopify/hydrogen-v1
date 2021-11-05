@@ -10,7 +10,7 @@ export default function Header({collections, storeName}) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   return (
-    <header className="h-20 lg:h-32">
+    <header className="h-20 lg:h-32" role="banner">
       <div className="fixed z-20 h-20 lg:h-32 w-full bg-white/90 border-b border-black border-opacity-5 px-6 md:px-8 md:py-6 lg:pt-8 lg:pb-0 mx-auto">
         <div className="h-full flex lg:flex-col place-content-between">
           <div className="text-center w-full flex justify-between items-center">

@@ -1,4 +1,6 @@
-import {Link, Image, Money} from '@shopify/hydrogen';
+import {Image, Money} from '@shopify/hydrogen';
+
+import {Link} from './Link.client';
 
 export default function ProductCard({product}) {
   const selectedVariant = product.variants.edges[0].node;
@@ -11,10 +13,12 @@ export default function ProductCard({product}) {
     <div className="text-lg mb-4 relative">
       <Link to={`/products/${product.handle}`}>
         <div className="rounded-lg border-2 border-gray-200 mb-2 relative flex items-center justify-center overflow-hidden object-cover h-96">
-          <Image
-            className="bg-white absolute w-full h-full transition-all duration-500 ease-in-out transform bg-center bg-cover object-center object-contain hover:scale-110"
-            image={selectedVariant.image}
-          />
+          {selectedVariant.image ? (
+            <Image
+              className="bg-white absolute w-full h-full transition-all duration-500 ease-in-out transform bg-center bg-cover object-center object-contain hover:scale-110"
+              image={selectedVariant.image}
+            />
+          ) : null}
           {!selectedVariant?.availableForSale && (
             <div className="absolute top-3 left-3 rounded-3xl text-xs bg-black text-white py-3 px-4">
               Out of stock

@@ -73,12 +73,9 @@ export function useQuery<T>(
         });
       }
 
-      console.log('[useQuery] returning cached response');
-
       return output;
     }
 
-    console.log('[useQuery] cache miss; generating output');
     const newOutput = await generateNewOutput();
 
     /**
