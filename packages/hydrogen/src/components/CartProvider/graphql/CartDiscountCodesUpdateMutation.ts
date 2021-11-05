@@ -7,6 +7,7 @@ export type CartDiscountCodesUpdateMutationVariables = Types.Exact<{
     Array<Types.Scalars['String']> | Types.Scalars['String']
   >;
   numCartLines?: Types.Maybe<Types.Scalars['Int']>;
+  country?: Types.Maybe<Types.CountryCode>;
 }>;
 
 export type CartDiscountCodesUpdateMutation = {__typename?: 'Mutation'} & {

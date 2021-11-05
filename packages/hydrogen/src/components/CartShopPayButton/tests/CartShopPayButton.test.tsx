@@ -8,6 +8,18 @@ import {ShopifyProvider} from '../../../foundation';
 import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
 
 describe('CartShopPayButton', () => {
+  beforeEach(() => {
+    // @ts-ignore
+    global.fetch = jest.fn(async (_url, _init) => {
+      return {
+        json: async () =>
+          JSON.stringify({
+            data: {},
+          }),
+      };
+    });
+  });
+
   it('renders a ShopPayButton', () => {
     const wrapper = mountWithShopifyProvider(
       <ShopifyProvider shopifyConfig={SHOPIFY_CONFIG}>
