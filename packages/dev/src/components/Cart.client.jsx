@@ -11,7 +11,7 @@ import {Dialog} from '@headlessui/react';
 
 import {useCartUI} from './CartUIProvider.client';
 import CartIconWithItems from './CartIconWithItems.client';
-import Button, {BUTTON_PRIMARY_CLASSES} from './Button.client';
+import {BUTTON_PRIMARY_CLASSES} from './Button.client';
 
 export default function Cart() {
   const {isCartOpen, closeCart} = useCartUI();
@@ -19,9 +19,9 @@ export default function Cart() {
 
   return (
     <Dialog open={isCartOpen} onClose={closeCart}>
-      <Dialog.Overlay className="fixed z-20 inset-0 bg-black opacity-75" />
+      <Dialog.Overlay className="fixed z-20 inset-0 bg-gray-50 opacity-75" />
       <div
-        className={`absolute flex flex-col md:block z-20 top-0 left-0 right-0 bottom-0 md:top-7 h-full md:left-auto md:right-7 md:bottom-auto md:h-auto md:max-h-[calc(100vh-56px)] bg-white w-full md:w-[470px] ${
+        className={`absolute flex flex-col md:block z-20 top-0 left-0 right-0 bottom-0 md:top-7 h-full md:left-auto md:right-7 md:bottom-auto md:h-auto md:max-h-[calc(100vh-56px)] bg-gray-50 w-full md:w-[470px] rounded-b-lg shadow-2xl ${
           itemCount === 0 ? 'overflow-hidden' : 'overflow-y-scroll'
         }`}
       >
@@ -42,12 +42,14 @@ export default function Cart() {
 function CartHeader() {
   const {closeCart} = useCartUI();
   return (
-    <header className="border-b-2 border-black py-3 px-6 flex justify-between items-center bg-white sticky top-0">
+    <header className="border-b border-gray-300 bg-white py-3 px-6 flex justify-between items-center sticky top-0">
       <button type="button" onClick={closeCart}>
         <ArrowIcon />
         <span className="sr-only">Close cart</span>
       </button>
-      <span className="text-xs">Free shipping on orders over $50</span>
+      <span className="text-xs text-gray-500">
+        Free shipping on orders over $50
+      </span>
       <CartIconWithItems />
     </header>
   );
@@ -65,12 +67,12 @@ function CartItems() {
         {({merchandise}) => (
           <div
             role="row"
-            className="flex py-7 border-b-2 last:border-b-0 border-black"
+            className="flex py-7 border-b last:border-b-0 border-gray-300 text-gray-900"
           >
             <div role="cell" className="flex-shrink-0 mr-7">
               <Link to={`products/${merchandise.product.handle}`}>
                 <CartLine.Image
-                  className="bg-white border-2 border-black"
+                  className="bg-white border border-black border-opacity-5 rounded-xl "
                   options={{width: 98, height: 98, crop: 'center'}}
                 />
               </Link>
@@ -134,7 +136,7 @@ function CartItems() {
 
 function CartItemQuantity() {
   return (
-    <div className="flex border border-gray-300 items-center overflow-auto mt-2">
+    <div className="flex border rounded border-gray-300 items-center overflow-auto mt-2">
       <CartLine.QuantityAdjustButton
         adjust="decrease"
         aria-label="Decrease quantity"
@@ -142,7 +144,7 @@ function CartItemQuantity() {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
+          className="h-5 w-5 text-gray-400"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -160,7 +162,7 @@ function CartItemQuantity() {
       <CartLine.QuantityAdjustButton
         adjust="increase"
         aria-label="Increase quantity"
-        className="p-2 disabled:pointer-events-all disabled:cursor-wait"
+        className="p-2 text-gray-400 disabled:pointer-events-all disabled:cursor-wait"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -181,27 +183,29 @@ function CartItemQuantity() {
 
 function CartFooter() {
   return (
-    <footer className="bottom-0 sticky">
-      <div className="relative h-60 bg-white p-7 border-t-2 border-black">
+    <footer className="bottom-0 sticky pb-8 border-t border-black border-opacity-5">
+      <div className="relative h-60 bg-white text-gray-900 p-7">
         <div role="table" aria-label="Cost summary">
-          <div role="row" className="flex justify-between font-medium text-lg">
-            <span role="rowheader">Subtotal</span>
+          <div role="row" className="flex justify-between">
+            <span className="font-semibold" role="rowheader">
+              Subtotal
+            </span>
             <CartEstimatedCost
               amountType="subtotal"
               role="cell"
-              className="text-right"
+              className="text-right "
             />
           </div>
-          <div role="row" className="flex justify-between text-xs mt-2">
-            <span role="rowheader">Shipping</span>
+          <div role="row" className="flex justify-between mt-2">
+            <span className="font-semibold" role="rowheader">
+              Shipping
+            </span>
             <span role="cell" className="uppercase">
               Free
             </span>
           </div>
         </div>
-        <CartShopPayButton
-          className={`${BUTTON_PRIMARY_CLASSES} flex py-1 mt-6 mb-2 justify-center bg-[#5a31f4] hover:bg-[#5a31f4]`}
-        />
+        <CartShopPayButton className="flex my-4 justify-center w-full bg-[#5a31f4] py-2 rounded-md" />
         <CartCheckoutButton className={BUTTON_PRIMARY_CLASSES}>
           Checkout
         </CartCheckoutButton>
@@ -214,8 +218,16 @@ function CartEmpty() {
   const {closeCart} = useCartUI();
   return (
     <div className="p-7 flex flex-col">
-      <p className="mb-4 text-lg">Your cart is empty</p>
-      <Button handleClick={closeCart} label="Continue Shopping" />
+      <p className="mb-4 text-lg text-gray-500 text-center">
+        Your cart is empty
+      </p>
+      <button
+        type="button"
+        onClick={closeCart}
+        className={BUTTON_PRIMARY_CLASSES}
+      >
+        Continue Shopping
+      </button>
     </div>
   );
 }
