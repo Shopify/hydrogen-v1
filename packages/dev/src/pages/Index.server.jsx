@@ -3,10 +3,10 @@ import {
   flattenConnection,
   ProductProviderFragment,
   Image,
-  Link,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
+import {Link} from '../components/Link.client';
 import Layout from '../components/Layout.server';
 import FeaturedCollection from '../components/FeaturedCollection.server';
 import ProductCard from '../components/ProductCard.server';
@@ -28,7 +28,7 @@ function GradientBackground() {
         <defs>
           <path fill="#fff" d="M0 0h960v540H0z" id="reuse-0" />
         </defs>
-        <g clip-path="url(#a)">
+        <g clipPath="url(#a)">
           <use xlinkHref="#reuse-0" />
           <path d="M960 0H0v743h960V0Z" fill="#7CFBEE" />
           <path

@@ -1,4 +1,6 @@
-import {Image, Link} from '@shopify/hydrogen/client';
+import {Image} from '@shopify/hydrogen/client';
+
+import {Link} from './Link.client';
 
 export default function FeaturedCollection({collection}) {
   return collection ? (

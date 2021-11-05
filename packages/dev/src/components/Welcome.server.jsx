@@ -1,6 +1,8 @@
 import {useShopQuery, flattenConnection} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
+import {Link} from './Link.client';
+
 function ExternalIcon() {
   return (
     <svg
@@ -79,28 +81,28 @@ function TemplateLinks({firstProductPath, firstCollectionPath}) {
       </p>
       <ul>
         <li className="mb-4">
-          <a
-            href={`/collections/${firstCollectionPath}`}
+          <Link
+            to={`/collections/${firstCollectionPath}`}
             className="text-md font-medium text-blue-700 hover:underline"
           >
             Collection template
-          </a>
+          </Link>
         </li>
         <li className="mb-4">
-          <a
-            href={`/products/${firstProductPath}`}
+          <Link
+            to={`/products/${firstProductPath}`}
             className="text-md font-medium text-blue-700 hover:underline"
           >
             Product template
-          </a>
+          </Link>
         </li>
         <li>
-          <a
-            href="/error-page"
+          <Link
+            to="/error-page"
             className="text-md font-medium text-blue-700 hover:underline"
           >
             404 template
-          </a>
+          </Link>
         </li>
       </ul>
     </div>
