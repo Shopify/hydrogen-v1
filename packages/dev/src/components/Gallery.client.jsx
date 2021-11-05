@@ -10,7 +10,7 @@ export default function Gallery() {
   const featuredMedia = selectedVariant.image || media[0].image;
   const featuredMediaSrc = featuredMedia.url.split('?')[0];
   const galleryMedia = media.filter((med) => {
-    if (med.mediaContentType === 'MODEL_3D') {
+    if (med.mediaContentType === MODEL_3D_TYPE) {
       return true;
     }
 
@@ -30,7 +30,7 @@ export default function Gallery() {
       {galleryMedia.map((med) => {
         let extraProps = {};
 
-        if (med.mediaContentType === 'MODEL_3D') {
+        if (med.mediaContentType === MODEL_3D_TYPE) {
           extraProps = MODEL_3D_PROPS;
         }
 
@@ -52,6 +52,7 @@ export default function Gallery() {
   );
 }
 
+const MODEL_3D_TYPE = 'MODEL_3D';
 const MODEL_3D_PROPS = {
   interactionPromptThreshold: '0',
 };
