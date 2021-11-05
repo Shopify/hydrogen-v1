@@ -1,6 +1,6 @@
 #import './CartFragment.graphql'
 
-mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250) {
+mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartNoteUpdate(cartId: $cartId, note: $note) {
     cart {
       ...CartFragment

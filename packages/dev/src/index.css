@@ -29,6 +29,10 @@
   font-variant-ligatures: none;
 }
 
+html {
+  scroll-padding-top: 10rem;
+}
+
 model-viewer::part(default-progress-mask) {
   display: none;
 }

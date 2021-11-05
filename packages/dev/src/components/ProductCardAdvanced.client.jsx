@@ -7,7 +7,6 @@ import {
   ProductTitle,
 } from '@shopify/hydrogen/client';
 
-import ProductReviewMarkup from './ProductReview';
 import ProductVariantImageSelector from './ProductVariantImageSelector.client';
 
 export default function ProductCardAdvanced({product}) {
@@ -64,7 +63,6 @@ function ProductCard() {
           </SelectedVariantPrice>
         </div>
       </Link>
-      <ProductReviewMarkup />
       {variants.length > 1 && <ProductVariantImageSelector />}
       {!selectedVariant.availableForSale && (
         <p className="text-xs mt-2">Avaliable in 2-3 weeks</p>

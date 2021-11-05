@@ -179,7 +179,7 @@ All data fetching happens on the server and is never exposed to the client, unle
 Hydrogen provides the following ways to fetch data from server components:
 
 - [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery): A hook that allows you to make server-only GraphQL queries to the Storefront API.
-- `useQuery`: A simple wrapper around `fetch` that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs.
+- [`useQuery`](/api/hydrogen/hooks/global/usequery):: A simple wrapper around `fetch` that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs.
 
 ### Accessing Hydrogen components from client components
 

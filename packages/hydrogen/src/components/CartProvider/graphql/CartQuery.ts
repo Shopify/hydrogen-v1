@@ -4,6 +4,7 @@ import {CartFragmentFragment} from './CartFragment';
 export type CartQueryQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   numCartLines?: Types.Maybe<Types.Scalars['Int']>;
+  country?: Types.Maybe<Types.CountryCode>;
 }>;
 
 export type CartQueryQuery = {__typename?: 'QueryRoot'} & {

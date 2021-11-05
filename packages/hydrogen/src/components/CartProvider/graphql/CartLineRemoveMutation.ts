@@ -5,6 +5,7 @@ export type CartLineRemoveMutationVariables = Types.Exact<{
   cartId: Types.Scalars['ID'];
   lines: Array<Types.Scalars['ID']> | Types.Scalars['ID'];
   numCartLines?: Types.Maybe<Types.Scalars['Int']>;
+  country?: Types.Maybe<Types.CountryCode>;
 }>;
 
 export type CartLineRemoveMutation = {__typename?: 'Mutation'} & {

@@ -3,10 +3,21 @@ import {CartProvider} from '../../CartProvider';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures';
 import {CartEstimatedCost} from '../CartEstimatedCost.client';
 import {Money} from '../../Money';
-import {CurrencyCode} from '../../../graphql/types/types';
 import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
 
-describe('<CartTotal />', () => {
+describe('<CartEstimatedCost />', () => {
+  beforeEach(() => {
+    // @ts-ignore
+    global.fetch = jest.fn(async (_url, _init) => {
+      return {
+        json: async () =>
+          JSON.stringify({
+            data: {},
+          }),
+      };
+    });
+  });
+
   it('renders a <Money />', () => {
     const wrapper = mountWithShopifyProvider(
       <CartProvider cart={CART_WITH_LINES}>
@@ -14,7 +25,6 @@ describe('<CartTotal />', () => {
       </CartProvider>
     );
 
-    const expectedMoney = CART_WITH_LINES.estimatedCost.totalAmount;
     expect(wrapper).toContainReactComponent(Money);
   });
 

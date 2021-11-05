@@ -7,6 +7,18 @@ import {CartProvider} from '../../CartProvider';
 import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
 
 describe('CartLines', () => {
+  beforeEach(() => {
+    // @ts-ignore
+    global.fetch = jest.fn(async (_url, _init) => {
+      return {
+        json: async () =>
+          JSON.stringify({
+            data: {},
+          }),
+      };
+    });
+  });
+
   it('renders items', () => {
     const wrapper = mountWithShopifyProvider(
       <CartProvider cart={cart}>
