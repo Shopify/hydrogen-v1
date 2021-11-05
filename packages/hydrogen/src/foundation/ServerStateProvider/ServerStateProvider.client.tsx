@@ -33,6 +33,7 @@ interface Props {
   setServerState: React.Dispatch<
     React.SetStateAction<{
       page: string;
+      search: string;
     }>
   >;
   children: ReactNode;

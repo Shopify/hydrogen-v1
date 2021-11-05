@@ -83,7 +83,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     url: URL,
     {context, request, response, template, dev}
   ) {
-    const state = {page: url.pathname};
+    const state = {page: url.pathname, search: url.search};
 
     const {ReactApp, componentResponse} = buildReactApp({
       App,
@@ -245,7 +245,10 @@ function buildReactApp({
   const componentResponse = new ServerComponentResponse();
 
   const ReactApp = (props: any) => (
-    <StaticRouter location={state.page} context={context}>
+    <StaticRouter
+      location={{pathname: state.page, search: state.search}}
+      context={context}
+    >
       <HelmetProvider context={helmetContext}>
         <App request={request} response={componentResponse} {...props} />
       </HelmetProvider>
