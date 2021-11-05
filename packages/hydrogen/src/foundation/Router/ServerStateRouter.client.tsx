@@ -15,7 +15,7 @@ export function ServerStateRouter() {
 
   useEffect(() => {
     setIsNavigating(true);
-    setServerState('page', location.pathname);
+    setServerState('pathname', location.pathname);
   }, [location.pathname, setServerState]);
 
   useEffect(() => {
