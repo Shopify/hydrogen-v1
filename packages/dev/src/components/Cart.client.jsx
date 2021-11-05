@@ -11,6 +11,7 @@ import {Dialog} from '@headlessui/react';
 
 import {useCartUI} from './CartUIProvider.client';
 import CartIconWithItems from './CartIconWithItems.client';
+import {BUTTON_PRIMARY_CLASSES} from './Button.client';
 
 export default function Cart() {
   const {isCartOpen, closeCart} = useCartUI();
@@ -203,7 +204,7 @@ function CartFooter() {
           </div>
         </div>
         <CartShopPayButton className="flex my-4 justify-center w-full bg-[#5a31f4] py-2 rounded-md" />
-        <CartCheckoutButton className="w-full bg-gray-900 text-white font-medium text-center py-4 disabled:cursor-wait disabled:opacity-60 rounded-md">
+        <CartCheckoutButton className={BUTTON_PRIMARY_CLASSES}>
           Checkout
         </CartCheckoutButton>
       </div>
@@ -221,7 +222,7 @@ function CartEmpty() {
       <button
         type="button"
         onClick={closeCart}
-        className="bg-black text-white rounded-md py-4 w-full"
+        className={BUTTON_PRIMARY_CLASSES}
       >
         Continue Shopping
       </button>
