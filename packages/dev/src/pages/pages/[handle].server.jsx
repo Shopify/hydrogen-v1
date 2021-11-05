@@ -3,10 +3,15 @@ import {useShopQuery, RawHtml} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
+import NotFound from '../../components/NotFound.server';
 
 export default function Page() {
   const {handle} = useParams();
   const {data} = useShopQuery({query: QUERY, variables: {handle}});
+
+  if (!data.pageByHandle) {
+    return <NotFound />;
+  }
 
   const page = data.pageByHandle;
 
