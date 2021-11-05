@@ -13,7 +13,6 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: make sure all errors show an error dialog when hydrogen is in dev mode
 - feat: use Image url field instead of deprecated originalSrc field
 - feat: switch to unstable API
-- feat: fix lowercased SVG tags in RSC
 - fix: MediaFile component warning on non-Model3D types
 - fix: remove console logs for caching
 - fix: lowercased SVG tags in RSC
