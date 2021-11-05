@@ -1,4 +1,4 @@
-import {Link} from '@shopify/hydrogen';
+import {Link} from './Link.client';
 
 export default function Footer({collection, product}) {
   return (
@@ -68,7 +68,9 @@ export default function Footer({collection, product}) {
                 <Link to={`/products/${product?.handle}`}>Product</Link>
               </li>
               <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
-                <Link to={`/collection/${collection?.handle}`}>Collection</Link>
+                <Link to={`/collections/${collection?.handle}`}>
+                  Collection
+                </Link>
               </li>
             </ul>
           </div>
