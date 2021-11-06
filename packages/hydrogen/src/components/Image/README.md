@@ -6,35 +6,6 @@ The `Image` component renders an image for the Storefront API's
 ## Example code
 
 ```tsx
-/** External images with a custom loader */
-
-import {Image} from '@shopify/hydrogen';
-const imageLoader = (src, options) => {
-  const {width, height, scale} = options;
-  return `https://foo.com/${src}?w=${width}&h=${height}&scale=${scale}`;
-};
-export default function ExternalImageWithLoader() {
-  return (
-    <Image
-      src="fancyImage.png"
-      width={500}
-      height={500}
-      loaderOptions={{scale: 2}}
-    />
-  );
-}
-```
-
-```tsx
-/** External images */
-
-import {Image} from '@shopify/hydrogen';
-export default function ExternalImage() {
-  return <Image src="https://foo.com/logo.png" width={500} height={500} />;
-}
-```
-
-```tsx
 /** Storefront API images */
 
 import {Image} from '@shopify/hydrogen';
@@ -60,6 +31,35 @@ export default function Product() {
   const image = data.productByHandle.images.edges[0].node;
 
   return <Image image={image} />;
+}
+```
+
+```tsx
+/** External images */
+
+import {Image} from '@shopify/hydrogen';
+export default function ExternalImage() {
+  return <Image src="https://foo.com/logo.png" width={500} height={500} />;
+}
+```
+
+```tsx
+/** External images with a custom loader */
+
+import {Image} from '@shopify/hydrogen';
+const imageLoader = (src, options) => {
+  const {width, height, scale} = options;
+  return `https://foo.com/${src}?w=${width}&h=${height}&scale=${scale}`;
+};
+export default function ExternalImageWithLoader() {
+  return (
+    <Image
+      src="fancyImage.png"
+      width={500}
+      height={500}
+      loaderOptions={{scale: 2}}
+    />
+  );
 }
 ```
 
