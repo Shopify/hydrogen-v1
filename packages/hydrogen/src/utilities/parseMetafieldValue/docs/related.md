@@ -1,3 +1,3 @@
 ## Related hook
 
-- [`useParsedMetafields`](/beta/hydrogen/reference/hooks/metafield/useparsedmetafields)
+- [`useParsedMetafields`](/api/hydrogen/hooks/metafield/useparsedmetafields)
