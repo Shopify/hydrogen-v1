@@ -53,8 +53,8 @@ export function Product({handle}) {
 
 ## Related components
 
-- [ProductProvider](beta/hydrogen/reference/components/product-variant/productprovider)
+- [ProductProvider](api/hydrogen/components/product-variant/productprovider)
 
 ## Related hooks
 
-- [useProduct](beta/hydrogen/reference/hooks/product-variant/useproduct)
+- [useProduct](api/hydrogen/hooks/product-variant/useproduct)
