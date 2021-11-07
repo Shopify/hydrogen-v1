@@ -182,3 +182,16 @@ When finished, push up your changes.
 Next, visit the Shipit page for Hydrogen and click **Deploy**.
 
 After Shipit has released your version, visit the [releases page on GitHub](https://github.com/Shopify/hydrogen/releases), click on the version number you just released, and select "Create release from tag." Then, select "Auto-generate release notes." At this point, edit the release notes as you see fit (e.g. call out any breaking changes or upgrade guides). Finally, click "Publish release."
+
+## Testing changes in another project
+
+From the root of the repo, run:
+
+```bash
+yarn tophat ../PATH/TO/PROJECT --packages [...PACKAGES_LIST]
+
+
+# example
+yarn tophat../cartogram/hydrogen-shop --packages cli hydrogen eslint-plugin
+
+```
