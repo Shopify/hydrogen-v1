@@ -155,7 +155,7 @@ The following section includes information about working with React Server Compo
 
 ### Sharing `state` between client and server
 
-The `state` object is core to React Server Components. Hydrogen provides a [`useServerState()` hook with a `setServerState()` helper function](/custom-storefronts/hydrogen/framework/server-state), which allows components to paginate within collections, programmatically switch routes, or do anything that requires new data from the server.
+The `state` object is core to React Server Components. Hydrogen provides a [`useServerState()` hook with a `setServerState()` helper function](/api/hydrogen/framework/server-state), which allows components to paginate within collections, programmatically switch routes, or do anything that requires new data from the server.
 
 Sharing state information between the client and server is important for common tasks, like `page` routing. The following diagram shows how the `page` state is shared between the client and server:
 
@@ -224,6 +224,6 @@ The following prop wouldn't send successfully:
 
 ## Next steps
 
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn how to manage the [state on the server](/api/hydrogen/framework/server-state) as you're building your Hydrogen app.
+- Get familiar with the [file-based routing system](/api/hydrogen/framework/routes) that Hydrogen uses.
+- Learn how the [page server component](/api/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

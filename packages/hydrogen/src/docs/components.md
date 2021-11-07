@@ -262,5 +262,5 @@ The [LocalizationProvider](/api/hydrogen/components/localization/localizationpro
 ## Next steps
 
 - [Get started](/custom-storefronts/hydrogen/getting-started) with Hydrogen and begin building a custom storefront.
-- Learn about [Hydrogen's architecture and framework](/custom-storefronts/hydrogen/framework).
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about [Hydrogen's architecture and framework](/api/hydrogen/framework).
+- Learn about [React Server Components](/api/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
