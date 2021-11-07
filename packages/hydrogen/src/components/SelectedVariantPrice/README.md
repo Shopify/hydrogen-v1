@@ -29,7 +29,7 @@ The `SelectedVariantPrice` component is aliased by the `Product.SelectedVariant.
 
 ## Component type
 
-The `SelectedVariantPrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `SelectedVariantPrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/api/hydrogen/framework/react-server-components).
 
 ## Related components
 
