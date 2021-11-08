@@ -60,8 +60,8 @@ readChangelogs().forEach(({packageChangelogPath, packageChangelog}) => {
         /^<!-- ## Unreleased -->\n\n## /gm;
 
       expect([
-        unrelasedHeaderWithContent.test(packageChangelog) ||
-          unrelasedHeaderWithSubHeader.test(packageChangelog),
+        unreleasedHeaderWithContent.test(packageChangelog) ||
+          unreleasedHeaderWithSubHeader.test(packageChangelog),
         commentedUnreleasedHeaderWithNoContent.test(packageChangelog),
       ]).toContain(true);
     });
