@@ -65,4 +65,3 @@ Learn more about [getting started with Hydrogen](https://shopify.dev/custom-stor
 - [`@shopify/hydrogen-plugin-sanity`](https://www.npmjs.com/package/@shopify/hydrogen-plugin-sanity)
 - [`create-hydrogen-app`](https://www.npmjs.com/package/create-hydrogen-app)
 - [`eslint-plugin-hydrogen`](https://www.npmjs.com/package/eslint-plugin-hydrogen)
-- [`@shopify/create-hydrogen` (deprecated)](https://www.npmjs.com/package/@shopify/create-hydrogen)
