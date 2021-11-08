@@ -30,6 +30,7 @@ export function renderReactProps(props: any) {
 function renderReactProp(prop: any): any {
   if (
     typeof prop === 'object' &&
+    prop !== null &&
     prop['$$typeof'] === Symbol.for('react.element')
   ) {
     if (prop.type instanceof Function) {
