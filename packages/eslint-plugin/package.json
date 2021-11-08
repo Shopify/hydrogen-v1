@@ -42,7 +42,6 @@
     "ts-jest": "^26.5.4"
   },
   "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": ">= 4",
     "eslint": ">=5"
   }
 }
