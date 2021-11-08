@@ -1,18 +1,10 @@
 import {proxyClientComponent} from '../server-components';
 
-const root = '/path/to/';
-const src = `export default function() {}`;
-const FAKE_FILE_PATH = 'full/path/to/Counter.client.jsx';
-const getFileFromClientManifest = async (id: string) => FAKE_FILE_PATH;
-
 it('wraps default exports for dev', async () => {
   expect(
     await proxyClientComponent({
       id: '/path/to/Counter.client.jsx',
-      getFileFromClientManifest,
-      root,
-      src,
-      isBuild: false,
+      src: `export default function() {}`,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
 import Counter from '/path/to/Counter.client.jsx?no-proxy';
@@ -21,30 +13,11 @@ export default wrapInClientMarker({ name: 'Counter', id: '/path/to/Counter.clien
 `);
 });
 
-it('wraps default exports for build', async () => {
-  expect(
-    await proxyClientComponent({
-      id: '/path/to/Counter.client.jsx',
-      getFileFromClientManifest,
-      root,
-      src,
-      isBuild: true,
-    })
-  ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
-import Counter from '/path/to/Counter.client.jsx?no-proxy';
-
-export default wrapInClientMarker({ name: 'Counter', id: '/${FAKE_FILE_PATH}', component: Counter, named: false });
-`);
-});
-
 it('wraps named exports', async () => {
   expect(
     await proxyClientComponent({
       id: '/path/to/Counter.client.jsx',
-      getFileFromClientManifest,
-      root,
       src: `export function Counter() {}\nexport const Clicker = () => {};`,
-      isBuild: false,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
 import * as namedImports from '/path/to/Counter.client.jsx?no-proxy';
@@ -58,10 +31,7 @@ it('combines default and named exports', async () => {
   expect(
     await proxyClientComponent({
       id: '/path/to/Counter.client.jsx',
-      getFileFromClientManifest,
-      root,
       src: `export default function() {}\nexport const Clicker = () => {};`,
-      isBuild: false,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
 import Counter, * as namedImports from '/path/to/Counter.client.jsx?no-proxy';
@@ -75,10 +45,7 @@ it('does not wrap non-component exports', async () => {
   expect(
     await proxyClientComponent({
       id: '/path/to/Counter.client.jsx',
-      getFileFromClientManifest,
-      root,
       src: `export default function() {}\nexport const MyFragment = 'fragment myFragment on MyQuery { id }';`,
-      isBuild: false,
     })
   ).toBe(`import {wrapInClientMarker} from '@shopify/hydrogen/marker';
 import Counter from '/path/to/Counter.client.jsx?no-proxy';
@@ -92,10 +59,7 @@ it('can export non-component only', async () => {
   expect(
     await proxyClientComponent({
       id: '/path/to/Counter.client.jsx',
-      getFileFromClientManifest,
-      root,
       src: `export const LocalizationContext = {}; export const useMyStuff = () => {}; export const MY_CONSTANT = 42;`,
-      isBuild: false,
     })
   ).toBe(`export * from '/path/to/Counter.client.jsx?no-proxy';\n`);
 });

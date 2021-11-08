@@ -6,40 +6,22 @@ import MagicString from 'magic-string';
 export async function proxyClientComponent({
   id,
   src,
-  isBuild,
-  getFileFromClientManifest,
-  root,
 }: {
   id: string;
   src?: string;
-  isBuild?: boolean;
-  getFileFromClientManifest: (id: string) => Promise<string>;
-  root: string;
 }) {
-  const [rawId] = id.split('?');
-  const manifestId = rawId.replace(root, '');
-  const defaultComponentName = rawId.split('/').pop()?.split('.').shift()!;
+  const defaultComponentName = id.split('/').pop()?.split('.').shift()!;
 
   // Modify the import ID to avoid infinite wraps
-  const importFrom = `${rawId}?no-proxy`;
+  const importFrom = `${id}?no-proxy`;
 
   await init;
 
-  /**
-   * Determine the id of the chunk to be imported. If we're building
-   * the production bundle, we need to reference the chunk generated
-   * during the client manifest. Otherwise, we can pass the normalizedId
-   * and Vite's dev server will load it as expected.
-   */
-  const assetId = isBuild
-    ? '/' + (await getFileFromClientManifest(manifestId))
-    : rawId;
-
   if (!src) {
-    src = await fs.readFile(rawId, 'utf-8');
+    src = await fs.readFile(id, 'utf-8');
   }
 
-  const {code} = await transformWithEsbuild(src, rawId);
+  const {code} = await transformWithEsbuild(src, id);
   const [, exportStatements] = parse(code);
   const hasDefaultExport = exportStatements.includes('default');
 
@@ -93,7 +75,7 @@ export async function proxyClientComponent({
   if (hasDefaultExport) {
     s.append(
       generateComponentExport({
-        id: assetId,
+        id,
         componentName: defaultComponentName,
         isDefault: true,
       })
@@ -103,7 +85,7 @@ export async function proxyClientComponent({
   namedImports.components.forEach((name) =>
     s.append(
       generateComponentExport({
-        id: assetId,
+        id,
         componentName: name,
         isDefault: false,
       })

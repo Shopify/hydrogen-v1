@@ -1,13 +1,10 @@
 import type {Plugin, ResolvedConfig} from 'vite';
 import path from 'path';
-import {promises as fs} from 'fs';
 import glob from 'fast-glob';
 import {proxyClientComponent} from '../server-components';
 
 export default () => {
   let config: ResolvedConfig;
-
-  let clientManifest: any;
 
   return {
     name: 'vite-plugin-react-server-components-shim',
@@ -79,22 +76,12 @@ export default () => {
       }
     },
 
-    async load(id, options) {
-      if (config.command === 'build' && id.includes('/Hydration/import-dev')) {
-        // Manual tree-shaking
-        return {code: 'export default null', moduleSideEffects: false};
-      }
-
+    load(id, options) {
       if (!isSSR(options)) return null;
 
       // Wrapped components won't match this becase they end in ?no-proxy
       if (/\.client\.[jt]sx?$/.test(id)) {
-        return await proxyClientComponent({
-          id,
-          isBuild: config.command === 'build',
-          getFileFromClientManifest,
-          root: config.root,
-        });
+        return proxyClientComponent({id});
       }
 
       return null;
@@ -106,12 +93,12 @@ export default () => {
        * This replaces the glob import path placeholders in importer-dev.ts with resolved paths
        * to all client components (both user and Hydrogen components).
        *
-       * NOTE: Glob import paths MUST be relative to the importer file (import-dev.ts) in
+       * NOTE: Glob import paths MUST be relative to the importer file (client-imports.ts) in
        * order to get the `?v=xxx` querystring from Vite added to the import URL.
        * If the paths are relative to the root instead, Vite won't add the querystring
        * and we will have duplicated files in the browser (with duplicated contexts, etc).
        */
-      if (id.includes('/Hydration/import-dev')) {
+      if (id.includes('/Hydration/client-imports')) {
         // eslint-disable-next-line node/no-missing-require
         const hydrogenPath = path.dirname(require.resolve('@shopify/hydrogen'));
         const importerPath = path.join(hydrogenPath, 'framework', 'Hydration');
@@ -158,46 +145,5 @@ export default () => {
       return !!options.ssr;
     }
     return false;
-  }
-
-  async function getFileFromClientManifest(manifestId: string) {
-    const manifest = await getClientManifest();
-
-    const fileName = '/' + manifestId.split('/').pop()!;
-    const matchingKey = Object.keys(manifest).find((key) =>
-      key.endsWith(fileName)
-    );
-
-    if (!matchingKey) {
-      throw new Error(
-        `Could not find a matching entry in the manifest for: ${manifestId}`
-      );
-    }
-
-    return manifest[matchingKey].file;
-  }
-
-  async function getClientManifest() {
-    if (config.command !== 'build') {
-      return {};
-    }
-
-    if (clientManifest) return clientManifest;
-
-    try {
-      const manifest = JSON.parse(
-        await fs.readFile(
-          path.resolve(config.root, './dist/client/manifest.json'),
-          'utf-8'
-        )
-      );
-
-      clientManifest = manifest;
-
-      return manifest;
-    } catch (e) {
-      console.error(`Failed to load client manifest:`);
-      console.error(e);
-    }
   }
 };
