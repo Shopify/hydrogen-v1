@@ -62,7 +62,7 @@ function tophat({scope, files, packageDir, destProjectDir, skipBuild}) {
     cp('-R', source, destinationPackage);
 
     log('Success!');
-    logDivder();
+    logDivider();
   });
 
   logBreak();
