@@ -192,6 +192,6 @@ yarn tophat ../PATH/TO/PROJECT --packages [...PACKAGES_LIST]
 
 
 # example
-yarn tophat../cartogram/hydrogen-shop --packages cli hydrogen eslint-plugin
+yarn tophat ../cartogram/hydrogen-shop --packages cli hydrogen eslint-plugin
 
 ```
