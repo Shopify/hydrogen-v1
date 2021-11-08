@@ -142,10 +142,11 @@ export class DocsGen {
 
         await componentResult.docs(componentEntryBase);
 
-        await Promise.all([
-          componentResult.writeReadme(componentEntryBase),
-          componentResult.writeDevDoc(componentPaths.output),
-        ]);
+        await componentResult.writeReadme(componentEntryBase);
+
+        if (this.writeDocs) {
+          componentResult.writeDevDoc(componentPaths.output);
+        }
 
         listItems.push({
           name: `<a href="${componentUrl}">${name}</a>`,
