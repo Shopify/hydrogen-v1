@@ -3,6 +3,7 @@ import {ASTNode} from 'graphql';
 import {useQuery} from '../useQuery';
 import type {CacheOptions} from '../../types';
 import {isClient, fetchBuilder, graphqlRequestBody} from '../../utilities';
+import {getConfig} from '../../framework/config';
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
   data: T;
@@ -59,6 +60,10 @@ export function useShopQuery<T>({
     const errors = data.errors instanceof Array ? data.errors : [data.errors];
     for (const error of errors) {
       console.error('GraphQL Error', error);
+
+      if (getConfig().dev) {
+        throw new Error(error.message);
+      }
     }
     console.error(`GraphQL errors: ${errors.length}`);
   }

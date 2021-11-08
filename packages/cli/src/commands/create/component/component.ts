@@ -1,19 +1,12 @@
-import {pascalCase} from 'change-case';
-import {Env} from '../../../types';
-
-export enum ComponentType {
-  Client = 'React client component',
-  Shared = 'React shared component',
-  Server = 'React server component',
-}
-
+import {Env, ComponentType} from '../../../types';
+import {componentName, validComponentName} from '../../../utilities';
 /**
  * Scaffold a new React component.
  */
 export async function component(env: Env) {
   const {ui, fs, workspace} = env;
   const name = await ui.ask('What do you want to name this component?', {
-    validate: validateComponentName,
+    validate: validComponentName,
     default: 'ProductCard',
     name: 'name',
   });
@@ -40,30 +33,4 @@ export async function component(env: Env) {
       ),
     })
   );
-}
-
-function validateComponentName(name: string) {
-  const suggested = pascalCase(name);
-  if (name === suggested) {
-    return true;
-  }
-
-  return `Invalid component name. Try ${suggested} instead.`;
-}
-
-function getReactComponentTypeSuffix(component: ComponentType) {
-  switch (component) {
-    case ComponentType.Client:
-      return 'client';
-    case ComponentType.Server:
-      return 'server';
-    default:
-      return null;
-  }
-}
-
-function componentName(name: string, type: ComponentType, extension: string) {
-  return [name, getReactComponentTypeSuffix(type), extension]
-    .filter((fp) => fp)
-    .join('.');
 }

@@ -5,6 +5,7 @@ export type CartBuyerIdentityUpdateMutationVariables = Types.Exact<{
   cartId: Types.Scalars['ID'];
   buyerIdentity: Types.CartBuyerIdentityInput;
   numCartLines?: Types.Maybe<Types.Scalars['Int']>;
+  country?: Types.Maybe<Types.CountryCode>;
 }>;
 
 export type CartBuyerIdentityUpdateMutation = {__typename?: 'Mutation'} & {

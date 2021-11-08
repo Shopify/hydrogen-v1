@@ -1,17 +1,15 @@
 import {Link} from '@shopify/hydrogen/client';
 
 const DEFAULT_CLASSES =
-  'inline-flex items-center justify-center border-4 border-white font-mono text-white font-bold drop-shadow-lg active:drop-shadow-none text-center';
-
-const SIZE_CLASSES = {
-  small: 'px-5 py-3',
-  large: 'px-5 md:px-20 py-6 ',
-};
+  'block m-0 w-full items-center justify-center uppercase font-medium text-center px-6 py-4 rounded disabled:border-gray-300 disabled:bg-gray-300 disabled:cursor-not-allowed';
 
 const VARIANT_CLASSES = {
-  primary: 'bg-blue-600 hover:bg-blue-500 active:bg-blue-700',
-  secondary: 'bg-black hover:bg-opacity-75 active:bg-opacity-50',
+  primary: 'text-white bg-gray-900 hover:bg-gray-800 active:bg-gray-700',
+  secondary: 'bg-white hover:bg-gray-50 active:bg-gray-100 border border-black',
 };
+
+export const BUTTON_PRIMARY_CLASSES = `${DEFAULT_CLASSES} ${VARIANT_CLASSES.primary}`;
+export const BUTTON_SECONDARY_CLASSES = `${DEFAULT_CLASSES} ${VARIANT_CLASSES.secondary}`;
 
 const ExternalIcon = () => (
   <svg
@@ -30,12 +28,11 @@ export default function Button({
   className,
   label,
   handleClick,
-  size = 'large',
   url,
   variant = 'primary',
   passthroughProps,
 }) {
-  const classes = `${DEFAULT_CLASSES} ${SIZE_CLASSES[size]} ${VARIANT_CLASSES[variant]} ${className}`;
+  const classes = `${DEFAULT_CLASSES} ${VARIANT_CLASSES[variant]} ${className}`;
   const isExternal = url
     ? url.indexOf('://') > 0 || url.indexOf('//') === 0
     : false;

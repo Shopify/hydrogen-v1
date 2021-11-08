@@ -24,7 +24,7 @@ import getPort from 'get-port';
 const INPUT_TIMEOUT = 500;
 const execPromise = promisify(exec);
 
-type Command = 'create' | 'create component';
+type Command = 'create' | 'create component' | 'create page';
 type Input = Record<string, string | boolean | null>;
 
 interface App {

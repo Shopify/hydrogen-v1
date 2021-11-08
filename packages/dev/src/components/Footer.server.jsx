@@ -1,15 +1,13 @@
-import {Link} from '@shopify/hydrogen';
+import {Link} from './Link.client';
 
 export default function Footer({collection, product}) {
   return (
     <footer role="contentinfo">
-      <div className="border-t-2 border-b-2 border-black">
+      <div className="relative bg-white border-t border-b border-black border-opacity-5">
         <div className="mx-auto max-w-7xl px-4 py-14 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
-            <h5 className="text-black text-sm font-mono font-bold uppercase">
-              Community
-            </h5>
+            <h2 className="text-md font-medium uppercase mb-4">Community</h2>
             <ul className="mt-8 space-y-4">
               <li className="text-sm font-medium text-gray-600 hover:text-gray-900">
                 <a
@@ -61,9 +59,7 @@ export default function Footer({collection, product}) {
           </div>
           {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
-            <h5 className="text-black text-sm font-mono font-bold uppercase">
-              Templates
-            </h5>
+            <h2 className="text-md font-medium uppercase mb-4">Templates</h2>
             <ul className="mt-8 space-y-4">
               <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
                 <Link to="/home">Home</Link>
@@ -72,15 +68,15 @@ export default function Footer({collection, product}) {
                 <Link to={`/products/${product?.handle}`}>Product</Link>
               </li>
               <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
-                <Link to={`/collection/${collection?.handle}`}>Collection</Link>
+                <Link to={`/collections/${collection?.handle}`}>
+                  Collection
+                </Link>
               </li>
             </ul>
           </div>
           {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
-            <h5 className="text-black text-sm font-mono font-bold uppercase">
-              Docs
-            </h5>
+            <h2 className="text-md font-medium uppercase mb-4">Docs</h2>
             <ul className="mt-8 space-y-4">
               <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
                 <a href="https://shopify.dev/custom-storefronts/hydrogen">
@@ -96,7 +92,7 @@ export default function Footer({collection, product}) {
           </div>
         </div>
       </div>
-      <div className="py-6 px-4 md:px-8">
+      <div className="py-6 px-4 md:px-8 bg-gray-50">
         <p className="text-gray-600">© 2021 Shopify</p>
       </div>
     </footer>

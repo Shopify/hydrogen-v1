@@ -5,13 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+<!-- ## Unreleased -->
 
+## 0.6.0 - 2021-11-05
+
+- feat: disable the quantity adjust button when the cart is not idle
+- feat: use country server state in cart for the inContext directive
 - fix: update interaction prompt and interaction promp style attributes for Model3d
+- fix: make sure all errors show an error dialog when hydrogen is in dev mode
 - feat: use Image url field instead of deprecated originalSrc field
 - feat: switch to unstable API
 - fix: transform deeply-imported client components
 - fix: duplicated files and contexts in browser
+- fix: MediaFile component warning on non-Model3D types
+- fix: remove console logs for caching
+- fix: lowercased SVG tags in RSC
+- fix: make the URL search property available via hooks
 
 ## 0.5.8 - 2021-11-04
 

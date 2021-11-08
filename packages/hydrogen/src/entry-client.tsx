@@ -32,7 +32,8 @@ export default renderHydrogen;
 
 function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
   const [serverState, setServerState] = useState({
-    page: window.location.pathname,
+    pathname: window.location.pathname,
+    search: window.location.search,
   });
   const response = useServerResponse(serverState);
 

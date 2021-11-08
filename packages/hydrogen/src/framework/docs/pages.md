@@ -130,7 +130,7 @@ Since this code lives inside a server component, you can use [`useShopQuery`](/a
 
 ### `response.cache()`
 
-If you want to modify the [full-page cache options](/custom-storefronts/hydrogen/framework/cache), then you can call `cache()` on the response object:
+If you want to modify the [full-page cache options](/api/hydrogen/framework/cache), then you can call `cache()` on the response object:
 
 {% codeblock file %}
 
@@ -149,7 +149,7 @@ export default function MyProducts({response}) {
 
 ## Server state props
 
-In addition to `request` and `response` props, any state you manage with [`setServerState`](/custom-storefronts/hydrogen/framework/server-state) is passed to each of your page server components as props:
+In addition to `request` and `response` props, any state you manage with [`setServerState`](/api/hydrogen/framework/server-state) is passed to each of your page server components as props:
 
 {% codeblock file %}
 
@@ -447,6 +447,6 @@ const QUERY = gql`
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn about [React Server Components](/api/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to manage the [state on the server](/api/hydrogen/framework/server-state) as you're building your Hydrogen app.
+- Get familiar with the [file-based routing system](/api/hydrogen/framework/routes) that Hydrogen uses.

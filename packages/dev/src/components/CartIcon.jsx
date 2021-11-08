@@ -1,6 +1,7 @@
 export default function CartIcon() {
   return (
     <svg
+      aria-hidden="true"
       width="40"
       height="40"
       viewBox="0 0 40 40"

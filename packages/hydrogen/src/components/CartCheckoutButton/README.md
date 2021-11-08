@@ -11,7 +11,7 @@ The `CartCheckoutButton` component renders a button that redirects to the checko
 
 ## Component type
 
-The `CartCheckoutButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `CartCheckoutButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/api/hydrogen/framework/react-server-components).
 
 ## Example code
 
@@ -33,9 +33,9 @@ export class MyComponent() {
 
 ## Props
 
-| Name | Required | Description |
-| ---- | -------- | ----------- |
-| `children` | Yes | A `ReactNode` element. |
+| Name       | Required | Description            |
+| ---------- | -------- | ---------------------- |
+| `children` | Yes      | A `ReactNode` element. |
 
 ## Related components
 

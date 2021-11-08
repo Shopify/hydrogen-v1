@@ -4,12 +4,14 @@ import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provide
 
 const mockCreateInstantCheckout = jest.fn();
 const mockUseInstantCheckout = jest.fn();
+const mockUseCartFetch = jest.fn();
 
 import {BuyNowButton} from '../BuyNowButton.client';
 
 jest.mock('../../CartProvider', () => ({
   ...(jest.requireActual('../../CartProvider') as {}),
   useInstantCheckout: mockUseInstantCheckout,
+  useCartFetch: mockUseCartFetch,
 }));
 
 describe('BuyNowButton', () => {

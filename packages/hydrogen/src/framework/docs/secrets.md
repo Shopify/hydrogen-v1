@@ -5,9 +5,11 @@ Secrets are environment variables that contain sensitive information. This guide
 You can store secrets in a `.env` file in your project, as per [Vite's guide to secrets](https://vitejs.dev/guide/env-and-mode.html#env-files):
 
 {% codeblock file, filename: 'secrets.env' %}
+
 ```
 VITE_MY_API_SECRET=topsecret
 ```
+
 {% endcodeblock %}
 
 ### Prefixing secret names
@@ -16,6 +18,6 @@ You need to prefix your secret names with `VITE_` for them to be displayed withi
 
 ## Next steps
 
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn how to manage the [state on the server](/api/hydrogen/framework/server-state) as you're building your Hydrogen app.
+- Get familiar with the [file-based routing system](/api/hydrogen/framework/routes) that Hydrogen uses.
+- Learn how the [page server component](/api/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

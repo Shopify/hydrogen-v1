@@ -11,6 +11,12 @@ export interface Env<Context = {}> {
   context?: Context;
 }
 
+export enum ComponentType {
+  Client = 'React client component',
+  Shared = 'React shared component',
+  Server = 'React server component',
+}
+
 export interface TemplateOptions {
   ifFeature(feature: Feature, output: string): string;
   features: Feature[];

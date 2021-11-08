@@ -9,7 +9,7 @@ import {Metafield} from '../../graphql/types/types';
  * | ------------------------------------------------------------------------- | -------- |
  * | A [Metafield object](/api/storefront/reference/common-objects/metafield). | Yes      |
  *
- * ## Return Type
+ * ## Return type
  *
  * Depending on the `type` specified in the passed [Metafield](/api/storefront/reference/common-objects/metafield), the following type is returned:
  *
@@ -33,11 +33,6 @@ import {Metafield} from '../../graphql/types/types';
  * | `page_reference`         | string                                                                                        |
  * | `variant_reference`      | string                                                                                        |
  * | `url`                    | string                                                                                        |
- *
- *
- * ## Related hook
- *
- * - [`useParsedMetafields`](/api/hydrogen/hooks/metafield/useparsedmetafields)
  */
 export function parseMetafieldValue(metafield: Partial<Metafield>) {
   if (metafield.value == null) {

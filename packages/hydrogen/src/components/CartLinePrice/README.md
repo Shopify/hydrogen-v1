@@ -33,7 +33,7 @@ The `CartLinePrice` component is aliased by the `CartLine.Price` component. You 
 
 ## Component type
 
-The `CartLinePrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `CartLinePrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/api/hydrogen/framework/react-server-components).
 
 ## Related components
 

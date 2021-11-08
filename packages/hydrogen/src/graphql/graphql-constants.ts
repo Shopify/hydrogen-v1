@@ -1,7 +1,7 @@
 /**
  *```
  *
- * mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $numCartLines: Int = 250) {
+ * mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
  *   cartAttributesUpdate(attributes: $attributes, cartId: $cartId) {
  *     cart {
  *       ...CartFragment
@@ -100,7 +100,7 @@
  *```
  */
 export const CartAttributesUpdate: string = `
-mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $numCartLines: Int = 250) {
+mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartAttributesUpdate(attributes: $attributes, cartId: $cartId) {
     cart {
       ...CartFragment
@@ -204,7 +204,8 @@ fragment ImageFragment on Image {
  *   $cartId: ID!
  *   $buyerIdentity: CartBuyerIdentityInput!
  *   $numCartLines: Int = 250
- * ) {
+ *   $country: CountryCode = ZZ
+ * ) @inContext(country: $country) {
  *   cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
  *     cart {
  *       ...CartFragment
@@ -307,7 +308,8 @@ mutation CartBuyerIdentityUpdate(
   $cartId: ID!
   $buyerIdentity: CartBuyerIdentityInput!
   $numCartLines: Int = 250
-) {
+  $country: CountryCode = ZZ
+) @inContext(country: $country) {
   cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
     cart {
       ...CartFragment
@@ -407,7 +409,7 @@ fragment ImageFragment on Image {
 /**
  *```
  *
- * mutation CartCreate($input: CartInput!, $numCartLines: Int = 250) {
+ * mutation CartCreate($input: CartInput!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
  *   cartCreate(input: $input) {
  *     cart {
  *       ...CartFragment
@@ -506,7 +508,7 @@ fragment ImageFragment on Image {
  *```
  */
 export const CartCreate: string = `
-mutation CartCreate($input: CartInput!, $numCartLines: Int = 250) {
+mutation CartCreate($input: CartInput!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartCreate(input: $input) {
     cart {
       ...CartFragment
@@ -606,7 +608,7 @@ fragment ImageFragment on Image {
 /**
  *```
  *
- * mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCartLines: Int = 250) {
+ * mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
  *   cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
  *     cart {
  *       ...CartFragment
@@ -705,7 +707,7 @@ fragment ImageFragment on Image {
  *```
  */
 export const CartDiscountCodesUpdate: string = `
-mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCartLines: Int = 250) {
+mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
     cart {
       ...CartFragment
@@ -986,7 +988,7 @@ fragment ImageFragment on Image {
 /**
  *```
  *
- * mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $numCartLines: Int = 250) {
+ * mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
  *   cartLinesAdd(cartId: $cartId, lines: $lines) {
  *     cart {
  *       ...CartFragment
@@ -1085,7 +1087,7 @@ fragment ImageFragment on Image {
  *```
  */
 export const CartLineAdd: string = `
-mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $numCartLines: Int = 250) {
+mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesAdd(cartId: $cartId, lines: $lines) {
     cart {
       ...CartFragment
@@ -1185,7 +1187,7 @@ fragment ImageFragment on Image {
 /**
  *```
  *
- * mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250) {
+ * mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
  *   cartLinesRemove(cartId: $cartId, lineIds: $lines) {
  *     cart {
  *       ...CartFragment
@@ -1284,7 +1286,7 @@ fragment ImageFragment on Image {
  *```
  */
 export const CartLineRemove: string = `
-mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250) {
+mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesRemove(cartId: $cartId, lineIds: $lines) {
     cart {
       ...CartFragment
@@ -1384,7 +1386,7 @@ fragment ImageFragment on Image {
 /**
  *```
  *
- * mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartLines: Int = 250) {
+ * mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
  *   cartLinesUpdate(cartId: $cartId, lines: $lines) {
  *     cart {
  *       ...CartFragment
@@ -1483,7 +1485,7 @@ fragment ImageFragment on Image {
  *```
  */
 export const CartLineUpdate: string = `
-mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartLines: Int = 250) {
+mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesUpdate(cartId: $cartId, lines: $lines) {
     cart {
       ...CartFragment
@@ -1583,7 +1585,7 @@ fragment ImageFragment on Image {
 /**
  *```
  *
- * mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250) {
+ * mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
  *   cartNoteUpdate(cartId: $cartId, note: $note) {
  *     cart {
  *       ...CartFragment
@@ -1682,7 +1684,7 @@ fragment ImageFragment on Image {
  *```
  */
 export const CartNoteUpdate: string = `
-mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250) {
+mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartNoteUpdate(cartId: $cartId, note: $note) {
     cart {
       ...CartFragment
@@ -1782,7 +1784,7 @@ fragment ImageFragment on Image {
 /**
  *```
  *
- * query CartQuery($id: ID!, $numCartLines: Int = 250) {
+ * query CartQuery($id: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
  *   cart(id: $id) {
  *     ...CartFragment
  *   }
@@ -1879,7 +1881,7 @@ fragment ImageFragment on Image {
  *```
  */
 export const CartQuery: string = `
-query CartQuery($id: ID!, $numCartLines: Int = 250) {
+query CartQuery($id: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cart(id: $id) {
     ...CartFragment
   }

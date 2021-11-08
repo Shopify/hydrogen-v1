@@ -5,6 +5,7 @@ import minimist from 'minimist';
 export * from './error';
 export * from './feature';
 export {merge} from './merge';
+export {componentName, validComponentName} from './react';
 
 const DEFAULT_SUBCOMMANDS = {
   create: 'app',

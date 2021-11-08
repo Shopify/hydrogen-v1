@@ -2,7 +2,7 @@ The Hydrogen framework uses a file-based routing system. This guide provides an 
 
 ## How routes work
 
-All components added to `src/pages` directory are registered as routes in `App.server.jsx`. Any filenames with brackets like `[handle]` are converted to a React Router parameter called  `:handle`.
+All components added to `src/pages` directory are registered as routes in `App.server.jsx`. Any filenames with brackets like `[handle]` are converted to a React Router parameter called `:handle`.
 
 ### Example
 
@@ -21,6 +21,7 @@ You have following components in your `src/pages` directory:
 The routes are registered in `App.server.jsx` and React Router converts `[handle]` to `:handle`:
 
 {% codeblock file, filename: 'App.server.jsx' %}
+
 ```
 /
 /custom-page
@@ -74,5 +75,5 @@ const {pathname} = useLocation();
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn about [React Server Components](/api/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how the [page server component](/api/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

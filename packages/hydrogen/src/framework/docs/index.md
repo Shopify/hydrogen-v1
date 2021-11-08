@@ -1,7 +1,7 @@
 <aside class="note beta">
 <h4>Developer preview</h4>
 
-<p>This is a developer preview of Hydrogen. The documentation will be updated as Shopify introduces new features and refines existing functionality. Production launches of Hydrogen custom storefronts aren't yet supported as Shopify is evolving the Hydrogen framework.</p>
+<p>This is a developer preview of Hydrogen. The documentation will be updated as Shopify introduces <a href="https://github.com/Shopify/hydrogen/releases">new features and refines existing functionality</a>. Production launches of Hydrogen custom storefronts aren't yet supported as Shopify is evolving the Hydrogen framework.</p>
 
 </aside>
 
@@ -20,7 +20,7 @@ Hydrogen comes with [React Router](https://reactrouter.com/), a tool that allows
 
 When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started#step-1-create-a-new-hydrogen-app), a file structure for the project is generated. Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
 
-- A set of boilerplate [components](/api/hydrogen/components) (`components`) and [pages](/custom-storefronts/hydrogen/framework/pages) (`pages`)
+- A set of boilerplate [components](/api/hydrogen/components) (`components`) and [pages](/api/hydrogen/framework/pages) (`pages`)
 - The main app component, which includes boilerplate code for the app and routing (`App.server.jsx`)
 - The Hydrogen app's two entry points, which are based on environment:
 
@@ -77,4 +77,4 @@ The Hydrogen app is hosted on a worker platform (for example, Oxygen or Cloudfla
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about [React Server Components](/api/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.

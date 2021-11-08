@@ -2,7 +2,7 @@ import {useContext} from 'react';
 import {ServerStateContext} from '../ServerStateProvider';
 
 /**
- * The `useServerState` hook allows you to [manage server state](/custom-storefronts/hydrogen/framework/server-state) when using Hydrogen as a React Server Component framework.
+ * The `useServerState` hook allows you to [manage server state](/api/hydrogen/framework/server-state) when using Hydrogen as a React Server Component framework.
  *
  * ## Return value
  *

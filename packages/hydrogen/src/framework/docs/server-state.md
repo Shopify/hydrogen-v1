@@ -1,4 +1,4 @@
-As you build your Hydrogen app with [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `state` on the server. Sharing state information between the client and server is important for common tasks, like [page routing](/custom-storefronts/hydrogen/framework/react-server-components#sharing-state-between-client-and-server).
+As you build your Hydrogen app with [React Server Components](/api/hydrogen/framework/react-server-components), you'll likely need to update `state` on the server. Sharing state information between the client and server is important for common tasks, like [page routing](/api/hydrogen/framework/react-server-components#sharing-state-between-client-and-server).
 
 This guide describes how to manage your server state during your development process.
 
@@ -9,11 +9,13 @@ The `state` object is core to React Server Components. Hydrogen provides a `useS
 For example, you can take geo-location co-ordinates and set them as `serverState` to provide a new hydrated experience for the current location:
 
 {% codeblock file, filename: 'GeoLocate.client.jsx' %}
+
 ```js
 navigator.geolocation.getCurrentPosition((data) => {
   setServerState('geoCoordinates', data);
 });
 ```
+
 {% endcodeblock %}
 
 ## Managing server state
@@ -33,6 +35,7 @@ Whenever you modify the state with `setServerState()`, Hydrogen automatically ma
 The following example shows a page that queries a specific product ID based on server state:
 
 {% codeblock file, filename: 'MyPage.server.jsx' %}
+
 ```jsx
 export default function MyPage({selectedProductId}) {
   const {data} = useShopQuery({
@@ -49,9 +52,11 @@ export default function MyPage({selectedProductId}) {
   );
 }
 ```
+
 {% endcodeblock %}
 
 {% codeblock file, filename: 'ProductSelector.client.jsx' %}
+
 ```jsx
 import {useServerState} from '@shopify/hydrogen/client';
 
@@ -78,10 +83,11 @@ export default function ProductSelector({selectedProductId}) {
   );
 }
 ```
+
 {% endcodeblock %}
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about [React Server Components](/api/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
 - Learn how to interact with the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn how the [page server component](/api/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
