@@ -24,7 +24,7 @@ export default wrapInClientMarker({ name: 'Counter', id: '/path/to/Counter.clien
 it('wraps default exports for build', async () => {
   expect(
     await proxyClientComponent({
-      id: '/path/to/Counter.client.jsx?fromServer',
+      id: '/path/to/Counter.client.jsx',
       getFileFromClientManifest,
       root,
       src,
@@ -40,7 +40,7 @@ export default wrapInClientMarker({ name: 'Counter', id: '/${FAKE_FILE_PATH}', c
 it('wraps named exports', async () => {
   expect(
     await proxyClientComponent({
-      id: '/path/to/Counter.client.jsx?fromServer=Counter',
+      id: '/path/to/Counter.client.jsx',
       getFileFromClientManifest,
       root,
       src: `export function Counter() {}\nexport const Clicker = () => {};`,
@@ -57,7 +57,7 @@ export const Clicker = wrapInClientMarker({ name: 'Clicker', id: '/path/to/Count
 it('combines default and named exports', async () => {
   expect(
     await proxyClientComponent({
-      id: '/path/to/Counter.client.jsx?fromServer=Counter',
+      id: '/path/to/Counter.client.jsx',
       getFileFromClientManifest,
       root,
       src: `export default function() {}\nexport const Clicker = () => {};`,
@@ -74,7 +74,7 @@ export const Clicker = wrapInClientMarker({ name: 'Clicker', id: '/path/to/Count
 it('does not wrap non-component exports', async () => {
   expect(
     await proxyClientComponent({
-      id: '/path/to/Counter.client.jsx?fromServer=Counter',
+      id: '/path/to/Counter.client.jsx',
       getFileFromClientManifest,
       root,
       src: `export default function() {}\nexport const MyFragment = 'fragment myFragment on MyQuery { id }';`,
@@ -91,7 +91,7 @@ export default wrapInClientMarker({ name: 'Counter', id: '/path/to/Counter.clien
 it('can export non-component only', async () => {
   expect(
     await proxyClientComponent({
-      id: '/path/to/Counter.client.jsx?fromServer=Counter',
+      id: '/path/to/Counter.client.jsx',
       getFileFromClientManifest,
       root,
       src: `export const LocalizationContext = {}; export const useMyStuff = () => {}; export const MY_CONSTANT = 42;`,
