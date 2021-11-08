@@ -2,7 +2,7 @@ import React, {Suspense} from 'react';
 import {screen, render, waitFor} from '@testing-library/react';
 import {convertHydrationResponseToReactComponents} from '../Cache.client';
 
-jest.mock('../client-imports');
+jest.mock('../client-imports', () => (id: string) => import(id));
 
 it('handles DOM elements', async () => {
   const tuples = [['$', 'div', null, {children: 'hello'}]];
@@ -32,7 +32,7 @@ it('handles DOM elements with arrays of children', async () => {
 it('handles client components', async () => {
   const mod = {
     name: 'Counter',
-    id: './__tests__/fixtures/Counter.js',
+    id: './fixtures/Counter.js',
     named: false,
   };
   const tuples = [['$', '@1', null, {children: 'hello'}]];
@@ -50,7 +50,7 @@ it('handles client components', async () => {
 it('handles client components with props', async () => {
   const mod = {
     name: 'Counter',
-    id: './__tests__/fixtures/Counter.js',
+    id: './fixtures/Counter.js',
     named: false,
   };
   const tuples = [['$', '@1', null, {children: 'hello', count: 2}]];
@@ -68,7 +68,7 @@ it('handles client components with props', async () => {
 it('handles client components with array props', async () => {
   const mod = {
     name: 'Counter',
-    id: './__tests__/fixtures/Counter.js',
+    id: './fixtures/Counter.js',
     named: false,
   };
   const tuples = [
