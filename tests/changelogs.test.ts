@@ -54,8 +54,8 @@ readChangelogs().forEach(({packageChangelogPath, packageChangelog}) => {
       // - An Unreleased header, that is immediatly preceded by a bullet ("- ...")
       // - A commented out Unreleased header, that is immediatly preceded by a level 2 heading (Version info)
 
-      const unrelasedHeaderWithContent = /^## Unreleased\n\n- /gm;
-      const unrelasedHeaderWithSubHeader = /^## Unreleased\n\n### /gm;
+      const unreleasedHeaderWithContent = /^## Unreleased\n\n- /gm;
+      const unreleasedHeaderWithSubHeader = /^## Unreleased\n\n### /gm;
       const commentedUnreleasedHeaderWithNoContent =
         /^<!-- ## Unreleased -->\n\n## /gm;
 
