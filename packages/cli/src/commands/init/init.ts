@@ -13,7 +13,7 @@ export enum Template {
  * Create a new `@shopify/hydrogen` app.
  */
 export async function init(env: Env) {
-  const {ui, fs, workspace} = env;
+  const {ui, fs, workspace, ...passThroughEnv} = env;
 
   const name = await ui.ask('What do you want to name this app?', {
     validate: validateProjectName,
@@ -43,8 +43,8 @@ export async function init(env: Env) {
   );
 
   if (template === Template.None) {
-    const context = {name};
-    await app({ui, fs, workspace, context});
+    const context = {name, ...passThroughEnv.context};
+    await app({...passThroughEnv, ui, fs, workspace, context});
   }
 
   if (template === Template.Default) {

@@ -1,3 +1,4 @@
+import debug from 'debug';
 import {Workspace} from './workspace';
 import {Ui} from './ui';
 import {Fs} from './fs';
@@ -9,6 +10,7 @@ export interface Env<Context = {}> {
   workspace: Workspace;
   fs: Fs;
   context?: Context;
+  logger: debug.Debugger;
 }
 
 export enum ComponentType {
