@@ -1,0 +1,60 @@
+{
+  "useShopQuery": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "usq",
+    "body": ["const {data} = useShopQuery({query: ${2:QUERY}});"],
+    "description": "Use useShopQuery"
+  },
+  "New Storefront query": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "sq",
+    "body": [
+      "import gql from 'graphql-tag';",
+      "",
+      "const QUERY = gql`",
+      "\tquery ${1:${TM_FILENAME_BASE/[\\.-]//g}}Query$2 {",
+      "\t\t$3",
+      "\t}",
+      "`"
+    ],
+    "description": "New Storefront query"
+  },
+  "importFromHydrogen": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "imph",
+    "body": "import { $2 } from '@shopify/hydrogen$0'",
+    "description": "Import from hydrogen"
+  },
+  "New Hydrogen page": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "hp",
+    "body": [
+      "function ${1:${TM_FILENAME_BASE/[\\.-]//g}}($2) {",
+      "\treturn (",
+      "\t\t<div>",
+      "\t\t\t$0",
+      "\t\t</div>",
+      "\t)",
+      "}",
+      "",
+      "export default ${1:${TM_FILENAME_BASE/[\\.-]//g}}"
+    ],
+    "description": "Create a new Hydrogen Page"
+  },
+  "ProductProviderFragment variables": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "ppfv",
+    "body": [
+      "$country: CountryCode",
+      "$handle: String!",
+      "$numProductMetafields: Int = 20",
+      "$numProductVariants: Int = 250",
+      "$numProductMedia: Int = 6",
+      "$numProductVariantMetafields: Int = 10",
+      "$numProductVariantSellingPlanAllocations: Int = 0",
+      "$numProductSellingPlanGroups: Int = 0",
+      "$numProductSellingPlans: Int = 0"
+    ],
+    "description": "Output ProductProviderFragment variables"
+  }
+}

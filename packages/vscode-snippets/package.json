@@ -1,0 +1,40 @@
+{
+  "name": "hydrogen-vscode-snippets",
+  "displayName": "@shopify/hydrogen VSCode Snippets",
+  "description": "Snippets for use in @shopify/hydrogen apps",
+  "version": "0.0.0",
+  "publisher": "@shopify",
+  "icon": "HydrogenLogo.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.28.0"
+  },
+  "categories": [
+    "Snippets"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/hydrogen.git",
+    "directory": "packages/snippets"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippets.json"
+      },
+      {
+        "language": "javascriptreact",
+        "path": "./snippets.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets.json"
+      }
+    ]
+  }
+}
