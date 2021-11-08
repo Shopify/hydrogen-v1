@@ -8,7 +8,7 @@ const logBreak = () => {
 const log = (text) => {
   echo(`  ${text}`);
 };
-const logDivder = () => {
+const logDivider = () => {
   logBreak();
   echo('-----');
   logBreak();
