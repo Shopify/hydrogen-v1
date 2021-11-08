@@ -17,10 +17,10 @@ export default function App({...serverState}) {
   const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
 
   return (
-    <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
-      <LocalizationProvider>
-        <CartProvider>
-          <Suspense fallback={<LoadingFallback />}>
+    <Suspense fallback={<LoadingFallback />}>
+      <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
+        <LocalizationProvider>
+          <CartProvider>
             <DefaultSeo />
             <Switch>
               <DefaultRoutes
@@ -29,9 +29,9 @@ export default function App({...serverState}) {
                 fallback={<NotFound />}
               />
             </Switch>
-          </Suspense>
-        </CartProvider>
-      </LocalizationProvider>
-    </ShopifyServerProvider>
+          </CartProvider>
+        </LocalizationProvider>
+      </ShopifyServerProvider>
+    </Suspense>
   );
 }
