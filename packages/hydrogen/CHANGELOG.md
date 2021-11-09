@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- fix: remove CartProvider from BuyNowButton
 - fix: reading property of null for component props
 - fix: transform deeply-imported client components
 - fix: duplicated files and contexts in browser
