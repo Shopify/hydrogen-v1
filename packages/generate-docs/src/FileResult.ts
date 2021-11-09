@@ -25,7 +25,7 @@ export class FileResult {
   public async writeDevDoc(path: string) {
     const result = inPageAnchors(this.staged.join(''));
 
-    const comment = `<!-- This file is generated from the source code and any changes you make here will be overwritten. -->`;
+    const comment = `<!-- This file is generated from source code in the Shopify/hydrogen repo. Any changes you make here will be overwritten. -->`;
 
     await this.write(path, [this.frontMatter, comment, result].join('\n\n'));
   }
@@ -38,7 +38,7 @@ export class FileResult {
 
       const localPath = path.replace(resolve('.'), '');
       const finalPath = resolve(path, 'README.md');
-      const comment = `<!-- This file is generated from the source code. Edit the files in ${localPath} and run 'yarn generate-docs' at the root of this repo. -->`;
+      const comment = `<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in ${localPath} and run 'yarn generate-docs' at the root of this repo. -->`;
       await this.write(
         finalPath,
         [comment, ...this.staged].join('\n\n').trim()

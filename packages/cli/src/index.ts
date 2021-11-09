@@ -4,8 +4,13 @@ import {Cli} from './ui';
 import {Workspace} from './workspace';
 import {Fs} from './fs';
 import {loadConfig} from './config';
+import {Env} from './types';
 
 const logger = debug('hydrogen');
+
+interface ModuleType {
+  default: (env: Env) => Promise<void>;
+}
 
 (async () => {
   const rawInputs = process.argv.slice(2);
@@ -22,10 +27,23 @@ const logger = debug('hydrogen');
     throw new InputError();
   }
 
+  async function runModule(module: ModuleType) {
+    logger('Run start');
+
+    await module.default({
+      ui,
+      fs,
+      workspace,
+      logger: debug(`hydrogen/${command}`),
+    });
+
+    logger('Run end');
+  }
+
   try {
     const module = await import(`./commands/${command}`);
 
-    await module.default({ui, fs, workspace});
+    await runModule(module);
   } catch (error) {
     logger(error);
 
@@ -36,7 +54,9 @@ const logger = debug('hydrogen');
     ui.printFile(file);
   }
 
-  await workspace.commit();
+  if (command === 'init') {
+    await workspace.commit();
+  }
 })().catch((error) => {
   logger(error);
   process.exitCode = 1;
