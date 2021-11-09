@@ -13,6 +13,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - No updates. Transitive dependency bump.
 
+- fix: do not set headers after they are sent to client
+
 ## 0.6.0 - 2021-11-05
 
 - feat: disable the quantity adjust button when the cart is not idle

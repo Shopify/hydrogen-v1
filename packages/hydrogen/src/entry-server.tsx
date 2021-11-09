@@ -97,7 +97,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       console.error('Fatal', error);
     });
 
-    let didError = false;
+    let didError: Error | undefined;
 
     const head = template.match(/<head>(.+?)<\/head>/s)![1];
 
@@ -124,6 +124,11 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           response.setHeader('Content-type', 'text/html');
           response.write('<!DOCTYPE html>');
           startWriting();
+
+          if (dev && didError) {
+            // This error was delayed until the headers were properly sent.
+            response.write(getErrorMarkup(didError));
+          }
         },
         onCompleteAll() {
           if (componentResponse.canStream()) return;
@@ -148,9 +153,11 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           }
         },
         onError(error: any) {
-          didError = true;
+          didError = error;
 
-          if (dev) {
+          if (dev && response.headersSent) {
+            // Calling write would flush headers automatically.
+            // Delay this error until headers are properly sent.
             response.write(getErrorMarkup(error));
           }
 
@@ -183,7 +190,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       console.error('Fatal', error);
     });
 
-    let didError = false;
+    let didError: Error | undefined;
 
     const writer = new HydrationWriter();
 
@@ -212,7 +219,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           response.end(generateWireSyntaxFromRenderedHtml(writer.toString()));
         },
         onError(error: any) {
-          didError = true;
+          didError = error;
           console.error(error);
         },
       }
