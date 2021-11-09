@@ -1,6 +1,5 @@
 import type {Plugin, ResolvedConfig} from 'vite';
 import path from 'path';
-import glob from 'fast-glob';
 import {proxyClientComponent} from '../server-components';
 
 export default () => {
@@ -13,31 +12,6 @@ export default () => {
 
     configResolved(_config) {
       config = _config;
-    },
-
-    buildStart() {
-      if (config.build.ssr || config.command !== 'build') return;
-
-      const hydrogenComponentPath = path.dirname(
-        // eslint-disable-next-line node/no-missing-require
-        require.resolve('@shopify/hydrogen')
-      );
-
-      /**
-       * Grab each of the client components in this project and emit them as chunks.
-       * This allows us to dynamically import them later during partial hydration in production.
-       */
-      const clientComponents = glob
-        .sync(path.resolve(config.root, './src/**/*.client.(j|t)sx'))
-        .concat(glob.sync(path.join(hydrogenComponentPath, '**/*.client.js')));
-
-      clientComponents.forEach((id) => {
-        this.emitFile({
-          type: 'chunk',
-          id,
-          preserveSignature: 'strict',
-        });
-      });
     },
 
     async resolveId(source, importer) {
