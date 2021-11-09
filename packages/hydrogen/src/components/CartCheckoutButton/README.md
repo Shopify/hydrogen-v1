@@ -33,9 +33,9 @@ export class MyComponent() {
 
 ## Props
 
-| Name | Required | Description |
-| ---- | -------- | ----------- |
-| `children` | Yes | A `ReactNode` element. |
+| Name       | Required | Description            |
+| ---------- | -------- | ---------------------- |
+| `children` | Yes      | A `ReactNode` element. |
 
 ## Related components
 

@@ -1,1 +1,1 @@
-export {ClientMarker} from './dist/esnext/framework/ClientMarker';
+export * from './dist/esnext/framework/ClientMarker';

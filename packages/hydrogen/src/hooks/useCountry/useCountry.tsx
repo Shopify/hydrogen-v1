@@ -1,11 +1,8 @@
 import {useContext} from 'react';
-import {
-  LocalizationContext,
-  LocalizationContextValue,
-} from '../../components/LocalizationProvider/LocalizationContext.client';
+import {LocalizationContext} from '../../components/LocalizationProvider/LocalizationContext.client';
 
 function useLocalization() {
-  const context = useContext<LocalizationContextValue>(LocalizationContext);
+  const context = useContext(LocalizationContext);
 
   if (context == null) {
     throw new Error('No Localization Context available');

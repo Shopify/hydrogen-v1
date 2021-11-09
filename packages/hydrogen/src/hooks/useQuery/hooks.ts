@@ -56,19 +56,14 @@ export function useQuery<T>(
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
-          console.log(`[stale regen] no cache lock`);
           await setItemInCache(lockKey, true);
-          console.log(`[stale regen] set cache lock`);
           try {
             const output = await generateNewOutput();
-            console.log(`[stale regen] got new output`);
             await setItemInCache(key, output, queryOptions?.cache);
-            console.log(`[stale regen] set new output`);
           } catch (e: any) {
             console.error(`Error generating async response: ${e.message}`);
           } finally {
             await deleteItemFromCache(lockKey);
-            console.log(`[stale regen] deleted lock`);
           }
         });
       }

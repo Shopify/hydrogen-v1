@@ -1,4 +1,4 @@
-import {join, resolve} from 'path';
+import {resolve} from 'path';
 
 import minimist from 'minimist';
 
@@ -15,10 +15,8 @@ const DEFAULT_SUBCOMMANDS = {
 export function parseCliArguments(rawInputs?: string[]) {
   const inputs = minimist(rawInputs || []);
   const command = inputs._[0];
-  const root =
-    command === 'create' && inputs._[2]
-      ? join(process.cwd(), inputs._[2])
-      : process.cwd();
+
+  const root = inputs.root || process.cwd();
   const subcommand =
     inputs._[1] || DEFAULT_SUBCOMMANDS[command as 'create' | 'version'];
   const {debug} = inputs;

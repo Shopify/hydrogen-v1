@@ -4,10 +4,10 @@ The `useServerState` hook allows you to [manage server state](/api/hydrogen/fram
 
 The `useServerState` hook returns an object with the following keys:
 
-| Key            | Description                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| `serverState`    | The current server state.                                                                                      |
-| `setServerState` | A function used to modify server state.                                                                       |
+| Key              | Description                                                                            |
+| ---------------- | -------------------------------------------------------------------------------------- |
+| `serverState`    | The current server state.                                                              |
+| `setServerState` | A function used to modify server state.                                                |
 | `pending`        | Whether a [transition is pending](https://github.com/reactwg/react-18/discussions/41). |
 
 ## `setServerState`

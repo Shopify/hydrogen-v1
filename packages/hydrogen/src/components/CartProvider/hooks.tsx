@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useShop} from '../../foundation';
 import {flattenConnection} from '../../utilities';
 import {CartInput} from '../../graphql/types/types';
@@ -47,10 +47,9 @@ export function useCartFetch() {
 }
 
 export function useInstantCheckout() {
-  const [cart, updateCart] = React.useState<Cart | undefined>();
-  const [checkoutUrl, updateCheckoutUrl] =
-    React.useState<Cart['checkoutUrl']>();
-  const [error, updateError] = React.useState<string | undefined>();
+  const [cart, updateCart] = useState<Cart | undefined>();
+  const [checkoutUrl, updateCheckoutUrl] = useState<Cart['checkoutUrl']>();
+  const [error, updateError] = useState<string | undefined>();
 
   const fetch = useCartFetch();
 

@@ -30,7 +30,8 @@
     "h2": "./packages/cli/bin/hydrogen",
     "update-docs-on-version": "ts-node --project ./tsconfig.json ./scripts/update-docs-on-version.ts",
     "generate-docs": "ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
-    "generate-docs:debug": "node --inspect-brk ./node_modules/.bin/ts-node --project ./tsconfig.json ./scripts/generate-docs.ts"
+    "generate-docs:debug": "node --inspect-brk ./node_modules/.bin/ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
+    "tophat": "node ./scripts/tophat"
   },
   "devDependencies": {
     "@shopify/prettier-config": "^1.1.2",
@@ -65,7 +66,9 @@
     "ts-node": "^10.2.1",
     "typescript": "^4.2.3",
     "vite": "^2.6.0",
-    "yorkie": "^2.0.0"
+    "yorkie": "^2.0.0",
+    "glob": "^7.2.0",
+    "shelljs": "^0.8.4"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",

@@ -16,17 +16,7 @@ export interface ServerStateContextValue {
   pending: any;
 }
 
-/**
- * This is a workaround to support exposing context from within a server component
- * exported from Hydrogen.
- */
-declare global {
-  var __serverStateContext: any;
-}
-export const ServerStateContext =
-  globalThis.__serverStateContext || createContext<any>(null);
-
-globalThis.__serverStateContext = ServerStateContext;
+export const ServerStateContext = createContext<any>(null);
 
 interface Props {
   serverState: Record<string, any>;

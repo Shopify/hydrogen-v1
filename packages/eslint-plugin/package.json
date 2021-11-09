@@ -12,7 +12,8 @@
     "test": "jest",
     "dev": "yarn build -w",
     "build": "tsc -p .",
-    "prepack": "yarn build"
+    "prepack": "yarn build",
+    "tophat": "node ./scripts/tophat"
   },
   "repository": {
     "type": "git",
@@ -42,7 +43,6 @@
     "ts-jest": "^26.5.4"
   },
   "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": ">= 4",
     "eslint": ">=5"
   }
 }
