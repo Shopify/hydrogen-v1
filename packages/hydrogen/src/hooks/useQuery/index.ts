@@ -1,2 +1,2 @@
-export {useQuery} from './hooks';
+export {useQuery} from './useQuery';
 export {QueryProvider} from './QueryProvider';

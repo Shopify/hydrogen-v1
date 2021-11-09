@@ -1,1 +1,1 @@
-export {useServerState} from './use-server-state';
+export {useServerState} from './useServerState';
