@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Wrap instances of `<Money>` in client components due to render prop usage
 - Eliminate use of `Link` client re-exports
+- fix: gallery safari grid layout
 
 ## 0.6.1 - 2021-11-08
 
