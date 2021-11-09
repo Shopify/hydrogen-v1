@@ -1,4 +1,9 @@
-import {useShopQuery, flattenConnection, Image} from '@shopify/hydrogen';
+import {
+  Image,
+  useShopQuery,
+  flattenConnection,
+  LocalizationProvider,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Header from './Header.client';
@@ -33,7 +38,9 @@ export default function Layout({children, hero}) {
         </a>
       </div>
       <div className="min-h-screen max-w-screen text-gray-700 font-sans">
-        <Header collections={collections} storeName={storeName} />
+        <LocalizationProvider>
+          <Header collections={collections} storeName={storeName} />
+        </LocalizationProvider>
         {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
         <div>
           <div
