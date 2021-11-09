@@ -35,10 +35,13 @@ function createFromFetch(fetchPromise: Promise<any>) {
         if (!response.ok) {
           throw new Error(`Hydration request failed: ${response.statusText}`);
         }
-        return response.text();
-      })
-      .then((payload) => {
-        return convertHydrationResponseToReactComponents(payload);
+
+        // Mocked status to bypass fetch opaque responses
+        if (response.status === 299) {
+          return {redirect: response.headers.get('location')};
+        }
+
+        return response.text().then(convertHydrationResponseToReactComponents);
       })
       .catch((e) => {
         console.error(e);
