@@ -118,6 +118,28 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             componentResponse.cacheControlHeader
           );
 
+          const {customHead} = componentResponse;
+          if (customHead) {
+            if (customHead.headers) {
+              for (const [key, value] of Object.entries(customHead.headers)) {
+                response.setHeader(key, value);
+              }
+            }
+
+            if (customHead.statusText) {
+              response.statusMessage = customHead.statusText;
+            }
+
+            if (customHead.status) {
+              response.statusCode = customHead.status;
+
+              if (response.statusCode >= 300 && response.statusCode < 400) {
+                // Redirect
+                return response.end();
+              }
+            }
+          }
+
           if (!componentResponse.canStream()) return;
 
           response.statusCode = didError ? 500 : 200;
