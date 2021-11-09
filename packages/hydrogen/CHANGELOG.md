@@ -8,6 +8,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - fix: reading property of null for component props
+- fix: transform deeply-imported client components
+- fix: duplicated files and contexts in browser
 
 ## 0.6.1 - 2021-11-08
 

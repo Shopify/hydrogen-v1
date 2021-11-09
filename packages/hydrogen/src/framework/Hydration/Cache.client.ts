@@ -1,5 +1,6 @@
 import {createElement, Fragment, ReactElement} from 'react';
 import {wrapPromise} from '../../utilities';
+import importClientComponent from './client-imports';
 
 const cache = new Map();
 const moduleCache = new Map();
@@ -148,7 +149,9 @@ async function eagerLoadModules(manifest: WireManifest) {
         if (moduleCache.has(module.id)) {
           return moduleCache.get(module.id);
         }
-        const mod = await import(/* @vite-ignore */ module.id);
+
+        const mod = await importClientComponent(module.id);
+
         moduleCache.set(module.id, mod);
         return mod;
       })

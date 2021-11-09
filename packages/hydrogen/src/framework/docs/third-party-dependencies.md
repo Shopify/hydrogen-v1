@@ -5,6 +5,7 @@ Third-party dependencies will generally work out-of-the-box with Hydrogen. This 
 To install third party dependencies, run one of the following commands:
 
 {% codeblock file, filename: 'Terminal' %}
+
 ```bash
 // Install dependencies with npm
 npm install <dependency>
@@ -12,6 +13,7 @@ npm install <dependency>
 // Install dependencies with yarn
 yarn add <dependency>
 ```
+
 {% endcodeblock %}
 
 ## Where to insert dependencies
@@ -43,8 +45,8 @@ export default defineConfig({
   plugins: [hydrogen(shopifyConfig)],
 
   optimizeDeps: {
-    include: ['YOUR_DEPENDENCY']
-  }
+    include: ['YOUR_DEPENDENCY'],
+  },
 });
 ```
 

@@ -5,9 +5,11 @@ Secrets are environment variables that contain sensitive information. This guide
 You can store secrets in a `.env` file in your project, as per [Vite's guide to secrets](https://vitejs.dev/guide/env-and-mode.html#env-files):
 
 {% codeblock file, filename: 'secrets.env' %}
+
 ```
 VITE_MY_API_SECRET=topsecret
 ```
+
 {% endcodeblock %}
 
 ### Prefixing secret names

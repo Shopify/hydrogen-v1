@@ -1,13 +1,9 @@
 import type {Plugin, ResolvedConfig} from 'vite';
 import path from 'path';
-import {promises as fs} from 'fs';
-import glob from 'fast-glob';
-import {tagClientComponents, wrapClientComponents} from '../server-components';
+import {proxyClientComponent} from '../server-components';
 
 export default () => {
   let config: ResolvedConfig;
-
-  let clientManifest: any;
 
   return {
     name: 'vite-plugin-react-server-components-shim',
@@ -16,31 +12,6 @@ export default () => {
 
     configResolved(_config) {
       config = _config;
-    },
-
-    buildStart() {
-      if (config.build.ssr || config.command !== 'build') return;
-
-      const hydrogenComponentPath = path.dirname(
-        // eslint-disable-next-line node/no-missing-require
-        require.resolve('@shopify/hydrogen')
-      );
-
-      /**
-       * Grab each of the client components in this project and emit them as chunks.
-       * This allows us to dynamically import them later during partial hydration in production.
-       */
-      const clientComponents = glob
-        .sync(path.resolve(config.root, './src/**/*.client.(j|t)sx'))
-        .concat(glob.sync(path.join(hydrogenComponentPath, '**/*.client.js')));
-
-      clientComponents.forEach((id) => {
-        this.emitFile({
-          type: 'chunk',
-          id,
-          preserveSignature: 'strict',
-        });
-      });
     },
 
     async resolveId(source, importer) {
@@ -79,41 +50,58 @@ export default () => {
       }
     },
 
-    transform(src, id, options) {
+    load(id, options) {
       if (!isSSR(options)) return null;
 
-      /**
-       * When a server component imports a client component, tag a `?fromServer`
-       * identifier at the end of the import to indicate that we should transform
-       * it with a ClientMarker (below).
-       *
-       * We are manually passing `@shopify/hydrogen/client` as an additional "from"
-       * identifier to allow local Server Components to import them as tagged Client Components.
-       * We should also accept this as a plugin argument for other third-party packages.
-       */
-      if (/\.server\.(j|t)sx?$/.test(id)) {
-        return tagClientComponents(src);
-      }
-    },
-
-    async load(id, options) {
-      if (!isSSR(options)) return null;
-
-      /**
-       * Client components being loaded from server components need to be
-       * wrapped in a ClientMarker so we can serialize their props and
-       * dynamically load them in the browser.
-       */
-      if (id.includes('?fromServer')) {
-        return await wrapClientComponents({
-          id,
-          getManifestFile: getFileFromClientManifest,
-          root: config.root,
-          isBuild: config.command === 'build',
-        });
+      // Wrapped components won't match this becase they end in ?no-proxy
+      if (/\.client\.[jt]sx?$/.test(id)) {
+        return proxyClientComponent({id});
       }
 
       return null;
+    },
+
+    transform(code, id) {
+      /**
+       * In order to allow dynamic component imports from RSC, we use Vite's import.meta.glob.
+       * This replaces the glob import path placeholders in importer-dev.ts with resolved paths
+       * to all client components (both user and Hydrogen components).
+       *
+       * NOTE: Glob import paths MUST be relative to the importer file (client-imports.ts) in
+       * order to get the `?v=xxx` querystring from Vite added to the import URL.
+       * If the paths are relative to the root instead, Vite won't add the querystring
+       * and we will have duplicated files in the browser (with duplicated contexts, etc).
+       */
+      if (id.includes('/Hydration/client-imports')) {
+        // eslint-disable-next-line node/no-missing-require
+        const hydrogenPath = path.dirname(require.resolve('@shopify/hydrogen'));
+        const importerPath = path.join(hydrogenPath, 'framework', 'Hydration');
+
+        const importerToRootPath = path.relative(importerPath, config.root);
+        const [importerToRootNested] =
+          importerToRootPath.match(/(\.\.\/)+/) || [];
+        const userPrefix = path.normalize(
+          path.join(importerPath, importerToRootNested)
+        );
+        const userGlob = path.join(
+          importerToRootPath,
+          'src',
+          '**/*.client.[jt]sx'
+        );
+
+        const libPrefix = hydrogenPath + path.sep;
+        const libGlob = path.join(
+          path.relative(importerPath, hydrogenPath),
+          'components',
+          '**/*.client.js'
+        );
+
+        return code
+          .replace('__USER_COMPONENTS_PREFIX__', userPrefix)
+          .replace('__USER_COMPONENTS_GLOB__', userGlob)
+          .replace('__LIB_COMPONENTS_PREFIX__', libPrefix)
+          .replace('__LIB_COMPONENTS_GLOB__', libGlob);
+      }
     },
   } as Plugin;
 
@@ -131,46 +119,5 @@ export default () => {
       return !!options.ssr;
     }
     return false;
-  }
-
-  async function getFileFromClientManifest(manifestId: string) {
-    const manifest = await getClientManifest();
-
-    const fileName = '/' + manifestId.split('/').pop()!;
-    const matchingKey = Object.keys(manifest).find((key) =>
-      key.endsWith(fileName)
-    );
-
-    if (!matchingKey) {
-      throw new Error(
-        `Could not find a matching entry in the manifest for: ${manifestId}`
-      );
-    }
-
-    return manifest[matchingKey].file;
-  }
-
-  async function getClientManifest() {
-    if (config.command !== 'build') {
-      return {};
-    }
-
-    if (clientManifest) return clientManifest;
-
-    try {
-      const manifest = JSON.parse(
-        await fs.readFile(
-          path.resolve(config.root, './dist/client/manifest.json'),
-          'utf-8'
-        )
-      );
-
-      clientManifest = manifest;
-
-      return manifest;
-    } catch (e) {
-      console.error(`Failed to load client manifest:`);
-      console.error(e);
-    }
   }
 };
