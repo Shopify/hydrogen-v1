@@ -19,6 +19,7 @@ async function runCliGenerator(args: Partial<Options> = {}) {
         'Use the  `@shopify/hydrogen-cli` to quickly get up and running building hydrogen apps.',
       url: '/api/hydrogen/cli/index.md',
       entry: '../',
+      hidden: true,
     }),
     cliGenerator.section({
       title: 'Commands',
@@ -26,6 +27,7 @@ async function runCliGenerator(args: Partial<Options> = {}) {
       url: '/api/hydrogen/cli/commands/index.md',
       entry: 'commands',
       tableColumns: ['Command', 'Description'],
+      hidden: true,
     }),
     cliGenerator.section({
       title: 'Create',
@@ -33,6 +35,7 @@ async function runCliGenerator(args: Partial<Options> = {}) {
       url: '/api/hydrogen/cli/commands/create/index.md',
       entry: 'commands/create',
       tableColumns: ['Command', 'Description'],
+      hidden: true,
     }),
   ]);
 }
