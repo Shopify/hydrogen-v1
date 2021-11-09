@@ -2,6 +2,7 @@
 const {defineConfig} = require('eslint-define-config');
 
 module.exports = defineConfig({
+  ignorePatterns: ['**/graphql/types/types.ts'],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
   extends: [
