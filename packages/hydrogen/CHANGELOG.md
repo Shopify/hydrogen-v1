@@ -8,6 +8,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - fix: reading property of null for component props
+- fix: transform deeply-imported client components
+- fix: duplicated files and contexts in browser
 
 ## 0.6.1 - 2021-11-08
 
@@ -21,8 +23,6 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: make sure all errors show an error dialog when hydrogen is in dev mode
 - feat: use Image url field instead of deprecated originalSrc field
 - feat: switch to unstable API
-- fix: transform deeply-imported client components
-- fix: duplicated files and contexts in browser
 - fix: MediaFile component warning on non-Model3D types
 - fix: remove console logs for caching
 - fix: lowercased SVG tags in RSC
