@@ -1,6 +1,6 @@
 import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
-import {useShopQuery} from '../../hooks/useShopQuery';
+import {useShopQuery} from '../../foundation/useShopQuery';
 import {LocalizationQuery} from './LocalizationQuery';
 import {Localization} from '../../graphql/graphql-constants';
 

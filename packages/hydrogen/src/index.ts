@@ -16,7 +16,7 @@ export {Helmet} from 'react-helmet-async';
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
 
 // Exported here because users shouldn't be making `useShopQuery` calls from the client
-export * from './hooks/useShopQuery';
+export * from './foundation/useShopQuery';
 
 // Export server-only CartQuery here instead of `CartProvider.client` to prevent
 // it from being bundled with other client components
