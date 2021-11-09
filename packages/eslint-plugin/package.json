@@ -12,7 +12,8 @@
     "test": "jest",
     "dev": "yarn build -w",
     "build": "tsc -p .",
-    "prepack": "yarn build"
+    "prepack": "yarn build",
+    "tophat": "node ./scripts/tophat"
   },
   "repository": {
     "type": "git",
