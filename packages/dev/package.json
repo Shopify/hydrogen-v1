@@ -28,7 +28,7 @@
     "prettier": "^2.3.2",
     "stylelint": "^13.13.0",
     "tailwindcss": "^2.2.4",
-    "vite": "^2.6.0"
+    "vite": "^2.6.14"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.1",

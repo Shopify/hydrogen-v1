@@ -9,7 +9,7 @@
     "build:worker": "WORKER=true vite build --outDir dist/worker --ssr worker.js"
   },
   "devDependencies": {
-    "vite": "^2.6.0"
+    "vite": "^2.6.14"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "*",
