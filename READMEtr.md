@@ -3,6 +3,7 @@
 📚 [Docs](https://shopify.dev/custom-storefronts/hydrogen) | 🗣 [Discord](https://discord.gg/Hefq6w5c5d) | 💬 [Tartışmalar](https://github.com/Shopify/hydrogen/discussions) | 📝 [Değişim Günlüğü](./packages/hydrogen/CHANGELOG.md)
 
 Languages
+
 [Turkish](./READMEtr.md)
 
 Hydrogen, dinamik ve **Shopify destekli** özelleştirilmiş vitrinler oluşturmanıza yardımcı olan **React temelli bir yazılım çerçevesidir**.
