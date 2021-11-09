@@ -1,6 +1,5 @@
-import {Image} from '@shopify/hydrogen';
+import {Image, Link} from '@shopify/hydrogen';
 
-import {Link} from './Link.client';
 import MoneyCompareAtPrice from './MoneyCompareAtPrice.client';
 import MoneyPrice from './MoneyPrice.client';
 

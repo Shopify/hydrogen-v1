@@ -1,4 +1,4 @@
-import {Link} from '../components/Link.client';
+import {Link} from '@shopify/hydrogen';
 
 export default function Index() {
   return (
