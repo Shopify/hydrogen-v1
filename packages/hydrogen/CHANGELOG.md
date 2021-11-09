@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- feat: add product reference metafield support
 - feat: add file reference metafield support
 - fix: binding of waitUntil in playground/server-components-worker
 - fix: default to `retry: false` in `useQuery`

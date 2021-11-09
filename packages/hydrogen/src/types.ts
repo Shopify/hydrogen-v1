@@ -2,6 +2,7 @@ import type {ServerResponse} from 'http';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
+import type {Product as ProductBase} from './components/ProductProvider';
 
 export type Renderer = (
   url: URL,
@@ -82,7 +83,7 @@ interface ProductVariant {
   __typename?: string;
 }
 
-interface Product {
+interface Product extends ProductBase {
   __typename?: string;
 }
 

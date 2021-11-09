@@ -6,6 +6,7 @@ import {RawHtml} from '../../RawHtml';
 import {Image} from '../../Image';
 import {StarRating} from '../components';
 import {getMediaImage} from '../../../utilities/tests/media';
+import {ProductProvider} from '../../ProductProvider';
 
 describe('<Metafield />', () => {
   it('renders nothing when the metafield value is undefined', () => {
@@ -737,68 +738,119 @@ describe('<Metafield />', () => {
   });
 
   describe('with `product_reference` type metafield', () => {
-    it('renders the product reference as a string in a `span` by default', () => {
-      const metafield = getParsedMetafield({type: 'product_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+    describe('when `reference` is undefined', () => {
+      it('renders the value as a string in a `span` by default', () => {
+        const metafield = getParsedMetafield({
+          type: 'product_reference',
+          reference: undefined,
+        });
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield} />
+        );
 
-      expect(component).toContainReactComponent('span', {
-        children: metafield.value,
+        expect(component).toContainReactComponent('span', {
+          children: metafield.value,
+        });
+      });
+
+      it('renders the value as a string in the element specified by the `as` prop', () => {
+        const metafield = getParsedMetafield({
+          type: 'product_reference',
+          reference: undefined,
+        });
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield} as="p" />
+        );
+
+        expect(component).toContainReactComponent('p', {
+          children: metafield.value,
+        });
+      });
+
+      it('passes the metafield as a render prop to the children render function', () => {
+        const children = jest.fn().mockImplementation(() => {
+          return null;
+        });
+        const metafield = getParsedMetafield({
+          type: 'product_reference',
+          reference: undefined,
+        });
+
+        mountWithShopifyProvider(
+          <Metafield metafield={metafield}>{children}</Metafield>
+        );
+
+        expect(children).toHaveBeenCalledWith({
+          ...metafield,
+          value: metafield.value,
+        });
+      });
+
+      it('renders its children', () => {
+        const metafield = getParsedMetafield({
+          type: 'product_reference',
+          reference: undefined,
+        });
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield}>
+            {({value}) => {
+              return <p>The reference is {value}</p>;
+            }}
+          </Metafield>
+        );
+
+        expect(component).toContainReactComponent('p', {
+          children: [`The reference is `, metafield.value],
+        });
+      });
+
+      it('allows passthrough props', () => {
+        const component = mountWithShopifyProvider(
+          <Metafield
+            metafield={getParsedMetafield({
+              type: 'product_reference',
+              reference: undefined,
+            })}
+            className="emphasized"
+          />
+        );
+        expect(component).toContainReactComponent('span', {
+          className: 'emphasized',
+        });
       });
     });
 
-    it('renders the product reference as a string in the element specified by the `as` prop', () => {
-      const metafield = getParsedMetafield({type: 'product_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} as="p" />
-      );
+    describe('when `reference` is not undefined', () => {
+      it('renders a `ProductProvider` with its children by default', () => {
+        const metafield = getParsedMetafield({type: 'product_reference'});
+        function Children() {
+          return null;
+        }
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield}>
+            <Children />
+          </Metafield>
+        );
 
-      expect(component).toContainReactComponent('p', {
-        children: metafield.value,
+        expect(component).toContainReactComponent(ProductProvider, {
+          children: <Children />,
+        });
       });
-    });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'product_reference'});
+      it('passes the metafield as a render prop to the children render function', () => {
+        const children = jest.fn().mockImplementation(() => {
+          return null;
+        });
+        const metafield = getParsedMetafield({type: 'product_reference'});
 
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
+        mountWithShopifyProvider(
+          <Metafield metafield={metafield}>{children}</Metafield>
+        );
 
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'product_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The reference is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The reference is `, metafield.value],
-      });
-    });
-
-    it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
-        <Metafield
-          metafield={getParsedMetafield({type: 'product_reference'})}
-          className="emphasized"
-        />
-      );
-      expect(component).toContainReactComponent('span', {
-        className: 'emphasized',
+        expect(children).toHaveBeenCalledWith({
+          ...metafield,
+          value: metafield.value,
+        });
       });
     });
   });

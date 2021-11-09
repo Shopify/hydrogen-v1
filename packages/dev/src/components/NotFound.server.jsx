@@ -68,6 +68,7 @@ export default function NotFound({country = {isoCode: 'US'}}) {
 const QUERY = gql`
   query NotFoundProductDetails(
     $country: CountryCode
+    $includeReferenceMetafieldDetails: Boolean = false
     $numProductMetafields: Int!
     $numProductVariants: Int!
     $numProductMedia: Int!

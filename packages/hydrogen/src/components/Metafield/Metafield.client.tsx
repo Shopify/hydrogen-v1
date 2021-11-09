@@ -8,12 +8,13 @@ import {ParsedMetafield, Measurement, Rating} from '../../types';
 import {MetafieldFragment as Fragment} from '../../graphql/graphql-constants';
 import {Image} from '../Image';
 import {MediaImage} from '../../types';
+import {ProductProvider, Product} from '../ProductProvider';
 
 export interface MetafieldProps {
   /** A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API. */
   metafield: ParsedMetafield;
-  /** A render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props). */
-  children?: (value: ParsedMetafield) => ReactElement;
+  /** A React Element, or a render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props). */
+  children?: ReactElement | ((value: ParsedMetafield) => ReactElement);
 }
 
 /**
@@ -110,6 +111,19 @@ export function Metafield<TTag extends ElementType>(
         const ref = metafield.reference as MediaImage;
         return ref.image ? (
           <Image image={ref.image} {...passthroughProps} />
+        ) : null;
+      }
+    };
+    case 'product_reference': {
+      if (metafield.reference?.__typename === 'Product') {
+        const product = metafield.reference as Product;
+        return product ? (
+          <ProductProvider
+            product={product}
+            initialVariantId={product?.variants?.edges?.[0]?.node.id ?? ''}
+          >
+            {children}
+          </ProductProvider>
         ) : null;
       }
     }
