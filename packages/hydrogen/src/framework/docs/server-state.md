@@ -9,11 +9,13 @@ The `state` object is core to React Server Components. Hydrogen provides a `useS
 For example, you can take geo-location co-ordinates and set them as `serverState` to provide a new hydrated experience for the current location:
 
 {% codeblock file, filename: 'GeoLocate.client.jsx' %}
+
 ```js
 navigator.geolocation.getCurrentPosition((data) => {
   setServerState('geoCoordinates', data);
 });
 ```
+
 {% endcodeblock %}
 
 ## Managing server state
@@ -33,6 +35,7 @@ Whenever you modify the state with `setServerState()`, Hydrogen automatically ma
 The following example shows a page that queries a specific product ID based on server state:
 
 {% codeblock file, filename: 'MyPage.server.jsx' %}
+
 ```jsx
 export default function MyPage({selectedProductId}) {
   const {data} = useShopQuery({
@@ -49,9 +52,11 @@ export default function MyPage({selectedProductId}) {
   );
 }
 ```
+
 {% endcodeblock %}
 
 {% codeblock file, filename: 'ProductSelector.client.jsx' %}
+
 ```jsx
 import {useServerState} from '@shopify/hydrogen/client';
 
@@ -78,6 +83,7 @@ export default function ProductSelector({selectedProductId}) {
   );
 }
 ```
+
 {% endcodeblock %}
 
 ## Next steps

@@ -1,4 +1,4 @@
-import {DEFAULT_API_VERSION} from '../foundation';
+import {DEFAULT_API_VERSION} from '../foundation/ShopifyProvider/consts';
 
 export function graphiqlHtml(
   shop: string,

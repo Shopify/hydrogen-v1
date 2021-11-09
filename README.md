@@ -1,6 +1,6 @@
 ![Hydrogen logo](/docs/images/HydrogenLogo.png)
 
-📚 [Docs](https://shopify.dev/custom-storefronts/hydrogen)  | 🗣 [Discord](https://discord.gg/Hefq6w5c5d)  |  💬 [Discussions](https://github.com/Shopify/hydrogen/discussions)  |  📝 [Changelog](./packages/hydrogen/CHANGELOG.md)
+📚 [Docs](https://shopify.dev/custom-storefronts/hydrogen) | 🗣 [Discord](https://discord.gg/Hefq6w5c5d) | 💬 [Discussions](https://github.com/Shopify/hydrogen/discussions) | 📝 [Changelog](./packages/hydrogen/CHANGELOG.md)
 
 Hydrogen is a **React-based framework** for building dynamic, **Shopify-powered** custom storefronts.
 
