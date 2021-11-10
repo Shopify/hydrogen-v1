@@ -1,8 +1,4 @@
----
-gid: 2d9f4930-fafe-11eb-9a03-0242ac130003
-title: LocalizationProvider
-description: Use a LocalizationProvider component to automatically query the Storefront API's localization field for the ISO code, name of the country, and available countries, and keep this information in a context.
----
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/LocalizationProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `LocalizationProvider` component automatically queries the Storefront API's [`localization`](/api/storefront/reference/common-objects/queryroot) field for the `isoCode` and `name` of the `country` and `availableCountries` and keeps this information in a context.
 

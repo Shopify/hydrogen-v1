@@ -1,4 +1,4 @@
-<!-- This file is generated from the source code. Edit the files in /packages/hydrogen/src/components/RawHtml and run 'yarn generate-docs' at the root of this repo. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/RawHtml and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `RawHtml` component renders an HTML string as HTML DOM elements. This should be used for
 displaying rich text-like descriptions associated with a product.

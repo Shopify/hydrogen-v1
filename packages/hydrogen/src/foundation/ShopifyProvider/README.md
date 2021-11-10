@@ -1,8 +1,4 @@
----
-gid: b4dc58a2-fafe-11eb-9a03-0242ac130003
-title: ShopifyProvider
-description: Use the ShopifyProvider component to wrap your entire app and provide support for hooks.
----
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/foundation/ShopifyProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `ShopifyProvider` component wraps your entire app and provides support for hooks. You should place it in your app's entry point component. For example, `<App>`.
 

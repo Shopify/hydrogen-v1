@@ -1,4 +1,4 @@
-<!-- This file is generated from the source code. Edit the files in /packages/hydrogen/src/components/CartLines and run 'yarn generate-docs' at the root of this repo. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartLines and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `CartLines` component iterates over each cart line and renders its `children` within
 a `CartLineProvider` for each cart line. It also provides render props in the case where `children` is a function.
