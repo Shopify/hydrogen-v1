@@ -90,7 +90,7 @@ export function generateWireSyntaxFromRenderedHtml(html: string) {
         return `M${idx + 1}:${JSON.stringify(component)}`;
       })
       .join('\n') + `\nJ0:${JSON.stringify(wireModel)}`
-  );
+  ).trim();
 }
 
 function isDomNode(item: any) {
