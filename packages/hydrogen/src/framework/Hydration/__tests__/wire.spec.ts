@@ -2,7 +2,7 @@ import {generateWireSyntaxFromRenderedHtml} from '../wire.server';
 
 it('renders normal html elements', () => {
   const input = `<div class="foo"><p id="bar">Hello!</p></div>`;
-  const output = `\nJ0:["$","div",null,{"className":"foo","children":["$","p",null,{"id":"bar","children":"Hello!"}]}]`;
+  const output = `J0:["$","div",null,{"className":"foo","children":["$","p",null,{"id":"bar","children":"Hello!"}]}]`;
 
   expect(generateWireSyntaxFromRenderedHtml(input)).toBe(output);
 });
@@ -98,7 +98,7 @@ J0:["$","div",null,{"className":"foo","children":["\\n    ",["$","@1",null,{"sid
 it('renders Client Components with nested props that have multiple children', () => {
   const input = `<div class="foo"><p>Bar</p><div>Baz</div></div>`;
 
-  const output = `\nJ0:["$","div",null,{"className":"foo","children":[["$","p",null,{"key":0,"children":"Bar"}],["$","div",null,{"key":1,"children":"Baz"}]]}]`;
+  const output = `J0:["$","div",null,{"className":"foo","children":[["$","p",null,{"key":0,"children":"Bar"}],["$","div",null,{"key":1,"children":"Baz"}]]}]`;
 
   expect(generateWireSyntaxFromRenderedHtml(input)).toBe(output);
 });
