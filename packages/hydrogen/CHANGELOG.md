@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+## 0.6.4 - 2021-11-10
+
+- fix: fix scroll to top on app first load
+
 ## 0.6.3 - 2021-11-10
 
 - fix: add trailing slash to user components glob

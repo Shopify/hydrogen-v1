@@ -9,13 +9,16 @@ import {useServerState} from '../useServerState';
  * server state, which in turn fetches the correct server component.
  */
 export function ServerStateRouter() {
-  const {setServerState, pending} = useServerState() as ServerStateContextValue;
+  const {setServerState, pending, serverState} =
+    useServerState() as ServerStateContextValue;
   const [isNavigating, setIsNavigating] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    setIsNavigating(true);
-    setServerState('pathname', location.pathname);
+    if (serverState.pathname !== location.pathname) {
+      setIsNavigating(true);
+      setServerState('pathname', location.pathname);
+    }
   }, [location.pathname, setServerState]);
 
   useEffect(() => {
