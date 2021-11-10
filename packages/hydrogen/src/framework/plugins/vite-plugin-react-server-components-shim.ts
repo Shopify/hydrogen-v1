@@ -1,4 +1,5 @@
 import type {Plugin, ResolvedConfig} from 'vite';
+import {normalizePath} from 'vite';
 import path from 'path';
 import {proxyClientComponent} from '../server-components';
 
@@ -77,7 +78,9 @@ export default () => {
         const hydrogenPath = path.dirname(require.resolve('@shopify/hydrogen'));
         const importerPath = path.join(hydrogenPath, 'framework', 'Hydration');
 
-        const importerToRootPath = path.relative(importerPath, config.root);
+        const importerToRootPath = normalizePath(
+          path.relative(importerPath, config.root)
+        );
         const [importerToRootNested] =
           importerToRootPath.match(/(\.\.\/)+(\.\.)?/) || [];
         const userPrefix = path.normalize(
@@ -100,10 +103,10 @@ export default () => {
         );
 
         return code
-          .replace('__USER_COMPONENTS_PREFIX__', userPrefix)
-          .replace('__USER_COMPONENTS_GLOB__', userGlob)
-          .replace('__LIB_COMPONENTS_PREFIX__', libPrefix)
-          .replace('__LIB_COMPONENTS_GLOB__', libGlob);
+          .replace('__USER_COMPONENTS_PREFIX__', normalizePath(userPrefix))
+          .replace('__USER_COMPONENTS_GLOB__', normalizePath(userGlob))
+          .replace('__LIB_COMPONENTS_PREFIX__', normalizePath(libPrefix))
+          .replace('__LIB_COMPONENTS_GLOB__', normalizePath(libGlob));
       }
     },
   } as Plugin;
