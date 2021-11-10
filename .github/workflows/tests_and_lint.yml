@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
 
     strategy:
       matrix:
@@ -39,6 +39,10 @@ jobs:
 
       - name: Install the packages
         run: yarn install --frozen-lockfile
+      
+      - name: Prepack
+        run: yarn prepack
+        working-directory: ./packages/create-hydrogen-app
 
       - name: Lint the framework code
         run: yarn lint
