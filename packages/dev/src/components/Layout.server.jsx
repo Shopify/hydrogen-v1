@@ -28,7 +28,7 @@ export default function Layout({children, hero}) {
   const storeName = data ? data.shop.name : '';
 
   return (
-    <>
+    <LocalizationProvider>
       <div className="absolute top-0 left-0">
         <a
           href="#mainContent"
@@ -38,9 +38,7 @@ export default function Layout({children, hero}) {
         </a>
       </div>
       <div className="min-h-screen max-w-screen text-gray-700 font-sans">
-        <LocalizationProvider>
-          <Header collections={collections} storeName={storeName} />
-        </LocalizationProvider>
+        <Header collections={collections} storeName={storeName} />
         {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
         <div>
           <div
@@ -59,7 +57,7 @@ export default function Layout({children, hero}) {
         </main>
         <Footer collection={collections[0]} product={products[0]} />
       </div>
-    </>
+    </LocalizationProvider>
   );
 }
 
