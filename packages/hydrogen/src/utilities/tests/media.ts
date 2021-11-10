@@ -25,6 +25,9 @@ export function getPreviewImage(image: Partial<Image> = {}) {
     url: image.url ?? faker.random.image(),
     width: image.width ?? faker.datatype.number(),
     height: image.height ?? faker.datatype.number(),
+    originalSrc: '',
+    transformedSrc: '',
+    src: '',
   };
 }
 

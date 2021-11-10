@@ -132,6 +132,7 @@ const QUERY = gql`
     $country: CountryCode
     $numCollections: Int = 2
     $numProducts: Int = 3
+    $includeReferenceMetafieldDetails: Boolean = false
     $numProductMetafields: Int = 0
     $numProductVariants: Int = 250
     $numProductMedia: Int = 1
