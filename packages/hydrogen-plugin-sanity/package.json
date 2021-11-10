@@ -20,9 +20,10 @@
     "@shopify/hydrogen": "^0.6.3"
   },
   "peerDependencies": {
-    "@shopify/hydrogen": "^0.4.0"
+    "@shopify/hydrogen": "^0.6.3"
   },
   "dependencies": {
-    "graphql": "^15.5.0"
+    "graphql": "^16.0.1",
+    "picosanity": "^3.0.2"
   }
 }
