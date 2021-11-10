@@ -2,6 +2,7 @@ import type {Plugin, ResolvedConfig} from 'vite';
 import {normalizePath} from 'vite';
 import path from 'path';
 import {proxyClientComponent} from '../server-components';
+import {resolve} from './resolver';
 
 export default () => {
   let config: ResolvedConfig;
@@ -75,7 +76,7 @@ export default () => {
        */
       if (id.includes('/Hydration/client-imports')) {
         // eslint-disable-next-line node/no-missing-require
-        const hydrogenPath = path.dirname(require.resolve('@shopify/hydrogen'));
+        const hydrogenPath = path.dirname(resolve('@shopify/hydrogen'));
         const importerPath = path.join(hydrogenPath, 'framework', 'Hydration');
 
         const importerToRootPath = normalizePath(
