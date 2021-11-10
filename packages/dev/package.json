@@ -1,7 +1,7 @@
 {
   "name": "dev",
   "description": "This is a dev environment for Hydrogen",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.4.1",
-    "@shopify/hydrogen": "^0.6.1",
+    "@shopify/hydrogen": "^0.6.2",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "graphql-tag": "^2.12.4",
