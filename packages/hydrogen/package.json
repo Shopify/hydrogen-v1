@@ -25,13 +25,13 @@
     "worker.js"
   ],
   "scripts": {
-    "predev": "rimraf ./dist ../dev/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdir ../../node_modules/@shopify/hydrogen",
+    "predev": "rimraf ./dist ../dev/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" \"dev-worker {@}/worker\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
     "dev-esnext": "tsc -w --incremental --p tsconfig.build.json",
     "dev-node": "tsc -w --incremental --p tsconfig.cjs.json",
     "dev-worker": "tsc -w --incremental --p tsconfig.worker.json",
     "dev-copy": "cp *.[jt]s *.json ../../node_modules/@shopify/hydrogen",
-    "prebuild": "rimraf dist ../../node_modules/@shopify/hydrogen && mkdir ../../node_modules/@shopify/hydrogen && yarn lint",
+    "prebuild": "rimraf dist ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "build": "run-p build-esnext build-node build-worker && yarn build-copy",
     "build-esnext": "tsc --p tsconfig.build.json",
     "build-node": "tsc --p tsconfig.cjs.json",
@@ -48,6 +48,7 @@
     "directory": "packages/hydrogen"
   },
   "devDependencies": {
+    "mkdirp": "^1.0.4",
     "@babel/core": "^7.13.16",
     "@graphql-codegen/cli": "^1.21.4",
     "@graphql-codegen/graphql-modules-preset": "^1.2.5",
