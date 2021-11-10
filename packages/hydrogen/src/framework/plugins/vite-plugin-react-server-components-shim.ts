@@ -79,9 +79,12 @@ export default () => {
 
         const importerToRootPath = path.relative(importerPath, config.root);
         const [importerToRootNested] =
-          importerToRootPath.match(/(\.\.\/)+/) || [];
+          importerToRootPath.match(/(\.\.\/)+(\.\.)?/) || [];
         const userPrefix = path.normalize(
-          path.join(importerPath, importerToRootNested)
+          path.join(
+            importerPath,
+            importerToRootNested.replace(/\/?$/, path.sep)
+          )
         );
         const userGlob = path.join(
           importerToRootPath,
