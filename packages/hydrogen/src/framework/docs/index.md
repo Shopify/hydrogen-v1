@@ -1,5 +1,3 @@
-<!-- This file is generated from the source code and any changes you make here will be overwritten. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
-
 <aside class="note beta">
 <h4>Developer preview</h4>
 

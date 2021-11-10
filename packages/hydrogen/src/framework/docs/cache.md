@@ -1,5 +1,3 @@
-<!-- This file is generated from the source code and any changes you make here will be overwritten. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
-
 Caching is a fundamental building block of a good shopping experience. Combined with streaming server-side rendering, caching ensures that buyers get the quickest response possible while also displaying the latest data.
 
 Hydrogen provides two mechanisms for cache within applications:
