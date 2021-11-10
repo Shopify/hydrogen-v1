@@ -1,4 +1,9 @@
-import {useShopQuery, flattenConnection, Image} from '@shopify/hydrogen';
+import {
+  Image,
+  useShopQuery,
+  flattenConnection,
+  LocalizationProvider,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Header from './Header.client';
@@ -23,7 +28,7 @@ export default function Layout({children, hero}) {
   const storeName = data ? data.shop.name : '';
 
   return (
-    <>
+    <LocalizationProvider>
       <div className="absolute top-0 left-0">
         <a
           href="#mainContent"
@@ -52,7 +57,7 @@ export default function Layout({children, hero}) {
         </main>
         <Footer collection={collections[0]} product={products[0]} />
       </div>
-    </>
+    </LocalizationProvider>
   );
 }
 
