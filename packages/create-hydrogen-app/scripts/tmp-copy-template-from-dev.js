@@ -12,7 +12,7 @@ const {copy} = require('./utils');
 
 const devPath = path.resolve(__dirname, '..', '..', 'dev');
 const templatePath = path.resolve(__dirname, '..', './template-hydrogen');
-const skipFiles = ['node_modules', 'dist'];
+const skipFiles = ['node_modules', 'dist', '.stackblitzrc'];
 
 // Remove the symlink and replace it with a folder
 fs.unlinkSync(templatePath);
