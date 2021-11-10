@@ -25,7 +25,7 @@ const allClientComponents = {
   ),
 };
 
-export default function importDevClientComponent(moduleId: string) {
+export default function importClientComponent(moduleId: string) {
   const modImport = allClientComponents[moduleId];
 
   if (!modImport) {
