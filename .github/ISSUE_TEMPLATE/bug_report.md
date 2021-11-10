@@ -10,7 +10,11 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **To Reproduce**
-Steps to reproduce the behaviour:
+
+- Provide a link to a [StackBlitz sandbox](https://hydrogen.new) which reproduces the issue
+- OR: provide a link to a repository that reproduces the issue
+
+If you cannot do one of the above, list steps to reproduce the behaviour below:
 
 1. Go to '...'
 2. Click on '....'
