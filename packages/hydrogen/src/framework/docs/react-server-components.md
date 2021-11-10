@@ -1,4 +1,4 @@
-<!-- This file is generated from the source code and any changes you make here will be overwritten. -->
+<!-- This file is generated from the source code and any changes you make here will be overwritten. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
 Hydrogen is modelled after [React Server Components](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html), an approach that offers an opinionated data-fetching and rendering workflow for React apps. React Server Components are rendered in the server-side to improve the performance of React apps by decreasing bundle size and performing queries on the server.
 

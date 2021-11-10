@@ -1,3 +1,5 @@
+<!-- This file is generated from the source code and any changes you make here will be overwritten. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+
 Hydrogen's quick start environment is styled using the Tailwind CSS utility library [Tailwind CSS](https://tailwindcss.com/). This guide describes the CSS support that's built into Hydrogen apps and how you can customize your app's styles.
 
 ## How it works

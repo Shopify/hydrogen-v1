@@ -1,3 +1,5 @@
+<!-- This file is generated from the source code and any changes you make here will be overwritten. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+
 As you build your Hydrogen app with [React Server Components](/api/hydrogen/framework/react-server-components), you'll likely need to update `state` on the server. Sharing state information between the client and server is important for common tasks, like [page routing](/api/hydrogen/framework/react-server-components#sharing-state-between-client-and-server).
 
 This guide describes how to manage your server state during your development process.
@@ -20,7 +22,7 @@ navigator.geolocation.getCurrentPosition((data) => {
 
 ## Managing server state
 
-The most basic example of `state` is the `page` prop, which Hydrogen manages for you whenever your URL location changes. However, you can set any state that you want within client components using the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook:
+The most basic example of `state` is the `page` prop, which Hydrogen manages for you whenever your URL location changes. The server state is passed as a prop to page components. However, you can set any state that you want within client components using the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook:
 
 ```js
 import {useServerState} from '@shopify/hydrogen/client';

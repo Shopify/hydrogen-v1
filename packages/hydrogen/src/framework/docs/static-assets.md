@@ -1,3 +1,5 @@
+<!-- This file is generated from the source code and any changes you make here will be overwritten. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+
 When building your custom storefront, it can be useful to have access to static assets not already hosted elsewhere, like images or text documents. This guide describes how to reference and serve static assets in Hydrogen.
 
 ## How static assets work

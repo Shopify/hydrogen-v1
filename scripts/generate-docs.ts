@@ -224,7 +224,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       title: 'React Server Components overview',
       description:
         'Learn about React Server Components, an opinionated data-fetching and rendering workflow for React apps.',
-      url: '/api/hydrogen/framework/react-server-components.md',
+      url: '/api/hydrogen/framework/react-server-components/index.md',
       entry: 'framework/docs/react-server-components.md',
     }),
     generator.section({

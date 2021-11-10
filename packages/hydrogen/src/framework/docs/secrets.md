@@ -1,3 +1,5 @@
+<!-- This file is generated from the source code and any changes you make here will be overwritten. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+
 Secrets are environment variables that contain sensitive information. This guide describes how to store secrets in your Hydrogen project.
 
 ## How secrets work

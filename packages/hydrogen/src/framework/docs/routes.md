@@ -1,3 +1,5 @@
+<!-- This file is generated from the source code and any changes you make here will be overwritten. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+
 The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen app.
 
 ## How routes work
