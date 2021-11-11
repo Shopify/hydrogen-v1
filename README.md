@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://hydrogen.shopify.dev">
-    <img src="./docs/images/HydrogenLogo.png"/>
+    <img src="./docs/images/HydrogenLogo.png" alt="Hydrogen Logo"/>
     </a>
 </p>
 
