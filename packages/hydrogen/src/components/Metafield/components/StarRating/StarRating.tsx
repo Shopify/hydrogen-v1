@@ -38,7 +38,7 @@ export function StarRating<TTag extends ElementType>(
   return <Wrapper {...passthroughProps}>{starsArray}</Wrapper>;
 }
 
-export function Star({percentFilled}: {percentFilled: Number}) {
+export function Star({percentFilled}: {percentFilled: number}) {
   if (percentFilled === 100) {
     return <span>{STAR_FILLED}</span>;
   }

@@ -4,34 +4,17 @@ module.exports = {
   ignorePatterns: ['**/graphql/types/types.ts'],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
-  extends: [
-    'plugin:node/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-  ],
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
-  parser: '@typescript-eslint/parser',
+  extends: ['plugin:node/recommended', 'plugin:hydrogen/typescript'],
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
   },
   rules: {
-    'tsdoc/syntax': 'warn',
-    'no-debugger': ['error'],
+    'tsdoc/syntax': 'error',
     'node/no-missing-import': [
       'error',
       {
         allowModules: ['types', 'testUtils', '@shopify/hydrogen'],
-        tryExtensions: ['.ts', '.js', '.jsx', '.tsx', '.d.ts'],
-      },
-    ],
-    'node/no-missing-require': [
-      'error',
-      {
         tryExtensions: ['.ts', '.js', '.jsx', '.tsx', '.d.ts'],
       },
     ],
@@ -46,15 +29,7 @@ module.exports = {
         ],
       },
     ],
-    'node/no-extraneous-require': [
-      'error',
-      {
-        allowModules: ['@shopify/hydrogen'],
-      },
-    ],
-    'node/no-deprecated-api': 'off',
     'node/no-unpublished-import': 'off',
-    'node/no-unpublished-require': 'off',
     'node/no-unsupported-features/es-syntax': 'off',
     'node/no-unsupported-features/es-builtins': [
       'error',
@@ -72,14 +47,17 @@ module.exports = {
         ignores: [],
       },
     ],
-    'no-process-exit': 'off',
     'prefer-const': [
       'warn',
       {
         destructuring: 'all',
       },
     ],
-    'react/prop-types': 'off',
+    '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/naming-convention': 'off',
+    '@typescript-eslint/no-namespace': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
   overrides: [
     {
@@ -87,23 +65,6 @@ module.exports = {
       rules: {
         'node/no-extraneous-import': 'off',
         'node/no-extraneous-require': 'off',
-      },
-    },
-    {
-      files: ['packages/create-hydrogen-app/template-*/**'],
-      rules: {
-        'node/no-missing-import': 'off',
-      },
-    },
-    {
-      files: [
-        'packages/dev/**',
-        'packages/localdev/**',
-        'packages/playground/**',
-      ],
-      rules: {
-        'react/react-in-jsx-scope': 'off',
-        'react/prop-types': 'off',
       },
     },
     {
