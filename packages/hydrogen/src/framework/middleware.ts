@@ -141,9 +141,8 @@ function shouldInterceptRequest(
   isReactHydrationRequest: boolean
 ) {
   return (
-    (/text\/html|application\/hydrogen/.test(request.headers['accept'] ?? '') ||
-      isReactHydrationRequest) &&
-    request.url !== '/favicon.ico'
+    /text\/html|application\/hydrogen/.test(request.headers['accept'] ?? '') ||
+    isReactHydrationRequest
   );
 }
 
