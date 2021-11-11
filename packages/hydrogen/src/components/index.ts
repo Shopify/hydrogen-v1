@@ -126,3 +126,8 @@ CartLine.Quantity = CartLineQuantity;
 CartLine.QuantityAdjustButton = CartLineQuantityAdjustButton;
 CartLine.SelectedOptions = CartLineSelectedOptions;
 CartLine.Attributes = CartLineAttributes;
+
+export {CollectionProvider, CollectionContext} from './CollectionProvider';
+export {CollectionTitle} from './CollectionTitle';
+export {CollectionDescription} from './CollectionDescription';
+export {CollectionProducts} from './CollectionProducts';

@@ -1,0 +1,19 @@
+#import '../Image/ImageFragment.graphql'
+#import '../ProductProvider/ProductProviderFragment.graphql'
+
+fragment CollectionFragment on Collection {
+  descriptionHtml
+  handle
+  id
+  image {
+    ...ImageFragment
+  }
+  title
+  products(first: 10) {
+    edges {
+      node {
+        ...ProductProviderFragment
+      }
+    }
+  }
+}
