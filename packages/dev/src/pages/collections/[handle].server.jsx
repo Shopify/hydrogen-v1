@@ -2,16 +2,13 @@ import {
   MediaFileFragment,
   ProductProviderFragment,
   useShopQuery,
-  flattenConnection,
-  RawHtml,
 } from '@shopify/hydrogen';
 import {useParams} from 'react-router-dom';
 import gql from 'graphql-tag';
 
-import LoadMoreProducts from '../../components/LoadMoreProducts.client';
 import Layout from '../../components/Layout.server';
-import ProductCard from '../../components/ProductCard.server';
 import NotFound from '../../components/NotFound.server';
+import CollectionDetails from '../../components/CollectionDetails.client';
 
 export default function Collection({
   country = {isoCode: 'US'},
@@ -31,31 +28,9 @@ export default function Collection({
     return <NotFound />;
   }
 
-  const collection = data.collection;
-  const products = flattenConnection(collection.products);
-  const hasNextPage = data.collection.products.pageInfo.hasNextPage;
-
   return (
     <Layout>
-      <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
-        {collection.title}
-      </h1>
-      <RawHtml string={collection.descriptionHtml} className="text-2xl" />
-      <p className="text-sm text-gray-500 mt-5 mb-5">
-        {products.length} {products.length > 1 ? 'products' : 'product'}
-      </p>
-
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-        {products.map((product) => (
-          <li key={product.id}>
-            <ProductCard product={product} />
-          </li>
-        ))}
-      </ul>
-
-      {hasNextPage && (
-        <LoadMoreProducts startingCount={collectionProductCount} />
-      )}
+      <CollectionDetails collection={data.collection} />
     </Layout>
   );
 }

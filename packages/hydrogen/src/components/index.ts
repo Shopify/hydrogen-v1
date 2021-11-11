@@ -131,3 +131,13 @@ export {CollectionProvider, CollectionContext} from './CollectionProvider';
 export {CollectionTitle} from './CollectionTitle';
 export {CollectionDescription} from './CollectionDescription';
 export {CollectionProducts} from './CollectionProducts';
+
+import {CollectionProvider} from './CollectionProvider';
+import {CollectionTitle} from './CollectionTitle';
+import {CollectionDescription} from './CollectionDescription';
+import {CollectionProducts} from './CollectionProducts';
+
+export const Collection: Function & Record<string, any> = CollectionProvider;
+Collection.Title = CollectionTitle;
+Collection.Description = CollectionDescription;
+Collection.Products = CollectionProducts;
