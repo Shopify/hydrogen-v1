@@ -4,7 +4,6 @@ import {
   useShopQuery,
   flattenConnection,
   RawHtml,
-  ProductSortOption,
 } from '@shopify/hydrogen';
 import {useParams, useLocation} from 'react-router-dom';
 import gql from 'graphql-tag';
@@ -12,6 +11,7 @@ import gql from 'graphql-tag';
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
 import Layout from '../../components/Layout.server';
 import ProductCard from '../../components/ProductCard.server';
+import ProductSort from '../../components/ProductSort.server';
 import NotFound from '../../components/NotFound.server';
 
 export default function Collection({
@@ -45,12 +45,6 @@ export default function Collection({
   const products = flattenConnection(collection.products);
   const hasNextPage = data.collection.products.pageInfo.hasNextPage;
 
-  const sortOptions = [
-    {title: 'created', sortKey: 'created'},
-    {title: 'price', sortKey: 'price'},
-    {title: 'best selling', sortKey: 'best_selling'},
-  ];
-
   return (
     <Layout>
       <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
@@ -58,17 +52,7 @@ export default function Collection({
       </h1>
       <RawHtml string={collection.descriptionHtml} className="text-2xl" />
 
-      <ul>
-        {sortOptions.map((sortOption) => (
-          <ProductSortOption
-            key={sortOption.sortKey}
-            sortOption={sortOption}
-            className="border-2 border-red-700 block"
-          >
-            <li>{sortOption.title}</li>
-          </ProductSortOption>
-        ))}
-      </ul>
+      <ProductSort />
 
       <p className="text-sm text-gray-500 mt-5 mb-5">
         {products.length} {products.length > 1 ? 'products' : 'product'}

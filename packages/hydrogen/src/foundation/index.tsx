@@ -3,3 +3,4 @@ export {ShopifyServerProvider} from './ShopifyProvider/ShopifyServerProvider.ser
 export * from './ServerStateProvider';
 export {useShop} from './useShop';
 export {DefaultRoutes} from './Router';
+export {setQueryStringParam} from './QueryString';
