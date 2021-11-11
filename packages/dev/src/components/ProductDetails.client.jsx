@@ -130,7 +130,6 @@ export default function ProductDetails({product}) {
 
           <Gallery />
 
-          {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
             <div className="hidden md:block">
               <Product.Title
