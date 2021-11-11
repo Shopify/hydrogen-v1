@@ -23,6 +23,7 @@ export default function Collection({
   const {search} = useLocation();
   const params = new URLSearchParams(search);
 
+  // TODO: move this inside QueryString framework component
   const productsSortKeyUrlParam = params.get('sort_by')?.toUpperCase();
 
   const {data} = useShopQuery({
