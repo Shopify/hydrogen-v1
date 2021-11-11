@@ -13,6 +13,15 @@ it('handles DOM elements', async () => {
   expect(screen.getByText('hello')).toBeInTheDocument();
 });
 
+it('ignores new lines', async () => {
+  const tuples = [['$', 'div', null, {children: 'hello'}]];
+  const payload = `\nJ0:${JSON.stringify(tuples)}\n`;
+
+  render(await convertHydrationResponseToReactComponents(payload));
+
+  expect(screen.getByText('hello')).toBeInTheDocument();
+});
+
 it('handles DOM elements with arrays of children', async () => {
   const tuples = [
     [
