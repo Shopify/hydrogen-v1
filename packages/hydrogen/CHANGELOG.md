@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+<!-- ## Unreleased -->
+
+## 0.6.4 - 2021-11-11
 
 - fix: let Vite handle public assets in development
 - fix: new lines in hydration request break JSON.parse
