@@ -13,10 +13,11 @@
   "scripts": {
     "dev-lib": "yarn workspace @shopify/hydrogen dev",
     "dev-server": "cross-env LOCAL_DEV=true VITE_INSPECT=1 yarn workspace dev dev",
-    "build": "run-s build-lib build-dev build-cli",
+    "build": "run-s build-lib build-dev build-cli build-lint",
     "build-lib": "yarn workspace @shopify/hydrogen build",
     "build-cli": "yarn workspace @shopify/hydrogen-cli build",
     "build-dev": "yarn workspace dev build",
+    "build-lint": "yarn workspace @shopify/eslint-plugin build",
     "lint": "run-p lint:js lint:language",
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src",
     "lint:language": "alex .",
