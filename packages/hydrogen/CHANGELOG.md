@@ -9,7 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - fix(#201): normalize POSIX separators to support windows
 - fix: scroll to top on app first load
-- chore(#78): update variantID to variantId
+- fix(#78): update variantID to variantId
 
 ## 0.6.3 - 2021-11-10
 
