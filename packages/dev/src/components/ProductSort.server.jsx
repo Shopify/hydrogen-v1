@@ -1,5 +1,4 @@
 import {ProductSortOption} from '@shopify/hydrogen';
-import {Fragment} from 'react';
 
 export default function ProductSort() {
   const sortOptions = [
@@ -10,15 +9,17 @@ export default function ProductSort() {
 
   return (
     <>
+      <b> sort by: </b>
       <ul>
         {sortOptions.map((sortOption) => (
-          <ProductSortOption
-            key={sortOption.sortKey}
-            sortOption={sortOption}
-            className="border-2 border-red-700 block"
-          >
-            <li>{sortOption.title}</li>
-          </ProductSortOption>
+          <li key={sortOption.sortKey}>
+            <ProductSortOption
+              sortOption={sortOption}
+              className="cursor-pointer"
+            >
+              {sortOption.title}
+            </ProductSortOption>
+          </li>
         ))}
       </ul>
     </>
