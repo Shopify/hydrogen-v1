@@ -57,6 +57,7 @@ export {
   ProductProviderFragment,
 } from './ProductProvider';
 export {ProductDescription} from './ProductDescription';
+export {ProductSort} from './ProductSort';
 export {ProductTitle} from './ProductTitle';
 export {SelectedVariantPrice} from './SelectedVariantPrice';
 export {SelectedVariantAddToCartButton} from './SelectedVariantAddToCartButton';

@@ -4,8 +4,9 @@ import {
   useShopQuery,
   flattenConnection,
   RawHtml,
+  ProductSort,
 } from '@shopify/hydrogen';
-import {useParams} from 'react-router-dom';
+import {useParams, useLocation} from 'react-router-dom';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
@@ -16,14 +17,23 @@ import NotFound from '../../components/NotFound.server';
 export default function Collection({
   country = {isoCode: 'US'},
   collectionProductCount = 24,
+  productsSortKey,
 }) {
   const {handle} = useParams();
+  const {search} = useLocation();
+  const params = new URLSearchParams(search);
+
+  const productsSortKeyUrlParam = params.get('sort_by')?.toUpperCase();
+
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       handle,
       country: country.isoCode,
       numProducts: collectionProductCount,
+      productsSortKey: productsSortKey
+        ? productsSortKey
+        : productsSortKeyUrlParam,
     },
   });
 
@@ -41,6 +51,7 @@ export default function Collection({
         {collection.title}
       </h1>
       <RawHtml string={collection.descriptionHtml} className="text-2xl" />
+      <ProductSort as="ul" className="border-black	border-2" />
       <p className="text-sm text-gray-500 mt-5 mb-5">
         {products.length} {products.length > 1 ? 'products' : 'product'}
       </p>
@@ -72,13 +83,14 @@ const QUERY = gql`
     $numProductVariantSellingPlanAllocations: Int = 0
     $numProductSellingPlanGroups: Int = 0
     $numProductSellingPlans: Int = 0
+    $productsSortKey: ProductCollectionSortKeys = COLLECTION_DEFAULT
   ) @inContext(country: $country) {
     collection(handle: $handle) {
       id
       title
       descriptionHtml
 
-      products(first: $numProducts) {
+      products(first: $numProducts, sortKey: $productsSortKey) {
         edges {
           node {
             vendor
