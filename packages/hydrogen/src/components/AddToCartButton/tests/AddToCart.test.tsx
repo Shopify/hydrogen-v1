@@ -34,7 +34,7 @@ describe('AddToCartButton', () => {
   it('renders a button', () => {
     const component = mountWithShopifyProvider(
       <CartProvider>
-        <AddToCartButton variantID="123">Add to cart</AddToCartButton>
+        <AddToCartButton variantId="123">Add to cart</AddToCartButton>
       </CartProvider>
     );
 
@@ -46,7 +46,7 @@ describe('AddToCartButton', () => {
   it('allows passthrough props', () => {
     const component = mountWithShopifyProvider(
       <CartProvider>
-        <AddToCartButton variantID="123" className="bg-blue-600">
+        <AddToCartButton variantId="123" className="bg-blue-600">
           Add to cart
         </AddToCartButton>
       </CartProvider>
@@ -61,7 +61,7 @@ describe('AddToCartButton', () => {
     it('disables the button', () => {
       const component = mountWithShopifyProvider(
         <CartProvider>
-          <AddToCartButton variantID="123" className="bg-blue-600">
+          <AddToCartButton variantId="123" className="bg-blue-600">
             Add to cart
           </AddToCartButton>
         </CartProvider>
@@ -79,7 +79,7 @@ describe('AddToCartButton', () => {
         <CartProvider>
           <AddToCartButton
             accessibleAddingToCartLabel="Adding product to your cart"
-            variantID="123"
+            variantId="123"
             className="bg-blue-600"
           >
             Add to cart
@@ -102,7 +102,7 @@ describe('AddToCartButton', () => {
           <CartProvider cart={CART}>
             <AddToCartButton
               attributes={[{key: 'size', value: 'large'}]}
-              variantID="123"
+              variantId="123"
               className="bg-blue-600"
             >
               Add to cart
@@ -131,7 +131,7 @@ describe('AddToCartButton', () => {
           <CartProvider>
             <AddToCartButton
               attributes={[{key: 'size', value: 'large'}]}
-              variantID="123"
+              variantId="123"
               className="bg-blue-600"
             >
               Add to cart
