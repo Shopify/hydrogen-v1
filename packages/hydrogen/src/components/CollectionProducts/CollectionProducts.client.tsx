@@ -9,7 +9,7 @@ export interface CollectionProductsProps {
    */
   as?: 'ul';
   /** A `ReactNode` element or a function that takes a product as an argument and returns a `ReactNode`. */
-  children: ReactNode | ((line: Cart['lines'][1]) => ReactNode);
+  children: ReactNode | ((product: any) => ReactNode);
 }
 
 /**

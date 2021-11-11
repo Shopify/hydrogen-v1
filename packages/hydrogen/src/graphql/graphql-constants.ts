@@ -1979,7 +1979,7 @@ fragment ImageFragment on Image {
 /**
  *```
  *
- * fragment CollectionFragment on Collection {
+ * fragment CollectionProviderFragment on Collection {
  *   descriptionHtml
  *   handle
  *   id
@@ -1987,11 +1987,14 @@ fragment ImageFragment on Image {
  *     ...ImageFragment
  *   }
  *   title
- *   products(first: 10) {
+ *   products(first: $numCollectionProducts) {
  *     edges {
  *       node {
  *         ...ProductProviderFragment
  *       }
+ *     }
+ *     pageInfo {
+ *       hasNextPage
  *     }
  *   }
  * }
@@ -2292,8 +2295,8 @@ fragment ImageFragment on Image {
  * }
  *```
  */
-export const CollectionFragment: string = `
-fragment CollectionFragment on Collection {
+export const CollectionProviderFragment: string = `
+fragment CollectionProviderFragment on Collection {
   descriptionHtml
   handle
   id
@@ -2301,11 +2304,14 @@ fragment CollectionFragment on Collection {
     ...ImageFragment
   }
   title
-  products(first: 10) {
+  products(first: $numCollectionProducts) {
     edges {
       node {
         ...ProductProviderFragment
       }
+    }
+    pageInfo {
+      hasNextPage
     }
   }
 }

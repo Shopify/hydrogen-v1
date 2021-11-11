@@ -1,1 +1,7 @@
-export {Image, ImageProps, ImageFragment, MediaImageProps} from './Image';
+export {
+  Image,
+  ImageProps,
+  ImageFragment,
+  MediaImageProps,
+  PropsWeControl as ImagePropsWeControl,
+} from './Image';

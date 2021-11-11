@@ -1,11 +1,12 @@
 import {createContext} from 'react';
-import {CollectionFragmentFragment} from './CollectionFragment';
+import {CollectionProviderFragmentFragment} from './CollectionProviderFragment';
 
 type CollectionContextType = Omit<
-  Partial<CollectionFragmentFragment>,
+  Partial<CollectionProviderFragmentFragment>,
   'products'
 > & {
-  products?: CollectionFragmentFragment['products']['edges'][0]['node'][];
+  products?: CollectionProviderFragmentFragment['products']['edges'][0]['node'][];
+  hasNextPage?: boolean;
 };
 
 export const CollectionContext = createContext<CollectionContextType | null>(

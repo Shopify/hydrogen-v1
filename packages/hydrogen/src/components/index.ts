@@ -127,17 +127,24 @@ CartLine.QuantityAdjustButton = CartLineQuantityAdjustButton;
 CartLine.SelectedOptions = CartLineSelectedOptions;
 CartLine.Attributes = CartLineAttributes;
 
-export {CollectionProvider, CollectionContext} from './CollectionProvider';
+export {
+  CollectionProvider,
+  CollectionContext,
+  CollectionProviderFragment,
+} from './CollectionProvider';
 export {CollectionTitle} from './CollectionTitle';
 export {CollectionDescription} from './CollectionDescription';
 export {CollectionProducts} from './CollectionProducts';
+export {CollectionImage} from './CollectionImage';
 
 import {CollectionProvider} from './CollectionProvider';
 import {CollectionTitle} from './CollectionTitle';
 import {CollectionDescription} from './CollectionDescription';
 import {CollectionProducts} from './CollectionProducts';
+import {CollectionImage} from './CollectionImage';
 
 export const Collection: Function & Record<string, any> = CollectionProvider;
 Collection.Title = CollectionTitle;
 Collection.Description = CollectionDescription;
 Collection.Products = CollectionProducts;
+Collection.Image = CollectionImage;

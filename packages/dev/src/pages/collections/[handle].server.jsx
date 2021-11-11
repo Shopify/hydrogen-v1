@@ -1,8 +1,4 @@
-import {
-  MediaFileFragment,
-  ProductProviderFragment,
-  useShopQuery,
-} from '@shopify/hydrogen';
+import {useShopQuery, CollectionProviderFragment} from '@shopify/hydrogen';
 import {useParams} from 'react-router-dom';
 import gql from 'graphql-tag';
 
@@ -15,12 +11,13 @@ export default function Collection({
   collectionProductCount = 24,
 }) {
   const {handle} = useParams();
+  console.log('QUERY', CollectionProviderFragment);
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       handle,
       country: country.isoCode,
-      numProducts: collectionProductCount,
+      numCollectionProducts: collectionProductCount,
     },
   });
 
@@ -39,7 +36,7 @@ const QUERY = gql`
   query CollectionDetails(
     $handle: String!
     $country: CountryCode
-    $numProducts: Int!
+    $numCollectionProducts: Int!
     $numProductMetafields: Int = 0
     $numProductVariants: Int = 250
     $numProductMedia: Int = 6
@@ -49,24 +46,9 @@ const QUERY = gql`
     $numProductSellingPlans: Int = 0
   ) @inContext(country: $country) {
     collection(handle: $handle) {
-      id
-      title
-      descriptionHtml
-
-      products(first: $numProducts) {
-        edges {
-          node {
-            vendor
-            ...ProductProviderFragment
-          }
-        }
-        pageInfo {
-          hasNextPage
-        }
-      }
+      ...CollectionProviderFragment
     }
   }
 
-  ${MediaFileFragment}
-  ${ProductProviderFragment}
+  ${CollectionProviderFragment}
 `;

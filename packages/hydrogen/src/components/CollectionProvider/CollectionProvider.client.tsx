@@ -1,19 +1,23 @@
 import React, {ReactNode, useMemo} from 'react';
 import {flattenConnection} from '../..';
-import {CollectionFragmentFragment} from './CollectionFragment';
+import {CollectionProviderFragmentFragment} from './CollectionProviderFragment';
 import {CollectionContext} from './context';
+import {CollectionProviderFragment as Fragment} from '../../graphql/graphql-constants';
 
 export function CollectionProvider({
   collection,
   children,
 }: {
-  collection: CollectionFragmentFragment;
+  collection: CollectionProviderFragmentFragment;
   children: ReactNode;
 }) {
   const value = useMemo(() => {
+    const products = flattenConnection(collection.products);
     return {
       ...collection,
-      products: flattenConnection(collection.products),
+      products,
+      productCount: products.length,
+      hasNextPage: collection.products.pageInfo.hasNextPage,
     };
   }, [collection]);
 
@@ -23,3 +27,6 @@ export function CollectionProvider({
     </CollectionContext.Provider>
   );
 }
+
+CollectionProvider.Fragment = Fragment;
+export const CollectionProviderFragment = Fragment;

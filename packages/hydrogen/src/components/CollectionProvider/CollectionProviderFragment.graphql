@@ -1,7 +1,7 @@
 #import '../Image/ImageFragment.graphql'
 #import '../ProductProvider/ProductProviderFragment.graphql'
 
-fragment CollectionFragment on Collection {
+fragment CollectionProviderFragment on Collection {
   descriptionHtml
   handle
   id
@@ -9,11 +9,14 @@ fragment CollectionFragment on Collection {
     ...ImageFragment
   }
   title
-  products(first: 10) {
+  products(first: $numCollectionProducts) {
     edges {
       node {
         ...ProductProviderFragment
       }
+    }
+    pageInfo {
+      hasNextPage
     }
   }
 }

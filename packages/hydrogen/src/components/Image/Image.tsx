@@ -40,7 +40,7 @@ export interface ExternalImageProps extends BaseImageProps {
 
 export type ImageProps = MediaImageProps | ExternalImageProps;
 
-type PropsWeControl = 'src' | 'width' | 'height';
+export type PropsWeControl = 'src' | 'width' | 'height';
 
 function convertShopifyImageData({
   image,

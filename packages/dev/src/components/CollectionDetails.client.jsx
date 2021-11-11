@@ -3,6 +3,7 @@ import {Collection, Product} from '@shopify/hydrogen/client';
 export default function CollectionDetails({collection}) {
   return (
     <Collection collection={collection}>
+      <Collection.Image />
       <Collection.Title className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6" />
       <Collection.Description className="text-2xl" />
 

@@ -1,7 +1,7 @@
 import React, {ElementType} from 'react';
 import {useProduct} from '../ProductProvider';
 import {Props} from '../types';
-import {Image} from '../Image';
+import {Image, ImagePropsWeControl} from '../Image';
 import {ImageSizeOptions} from '../../utilities';
 
 /**
@@ -9,7 +9,7 @@ import {ImageSizeOptions} from '../../utilities';
  * It must be a descendent of a `ProductProvider` component.
  */
 export function SelectedVariantImage<TTag extends ElementType = 'img'>(
-  props: Props<TTag> & {options?: ImageSizeOptions}
+  props: Props<TTag, ImagePropsWeControl> & {options?: ImageSizeOptions}
 ) {
   const product = useProduct();
 
