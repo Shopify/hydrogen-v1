@@ -1,7 +1,6 @@
 // @ts-check
-const {defineConfig} = require('eslint-define-config');
 
-module.exports = defineConfig({
+module.exports = {
   ignorePatterns: ['**/graphql/types/types.ts'],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
@@ -119,4 +118,4 @@ module.exports = defineConfig({
       },
     },
   ],
-});
+};
