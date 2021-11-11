@@ -25,19 +25,20 @@ export default (
         return await server.transformIndexHtml(url, indexHtml);
       }
 
-      server.middlewares.use(
-        hydrogenMiddleware({
-          dev: true,
-          shopifyConfig,
-          indexTemplate: getIndexTemplate,
-          getServerEntrypoint: async () =>
-            await server.ssrLoadModule(resolve('./src/entry-server')),
-          devServer: server,
-          cache: pluginOptions?.devCache
-            ? (new InMemoryCache() as unknown as Cache)
-            : undefined,
-        })
-      );
+      return () =>
+        server.middlewares.use(
+          hydrogenMiddleware({
+            dev: true,
+            shopifyConfig,
+            indexTemplate: getIndexTemplate,
+            getServerEntrypoint: async () =>
+              await server.ssrLoadModule(resolve('./src/entry-server')),
+            devServer: server,
+            cache: pluginOptions?.devCache
+              ? (new InMemoryCache() as unknown as Cache)
+              : undefined,
+          })
+        );
     },
   } as Plugin;
 };
