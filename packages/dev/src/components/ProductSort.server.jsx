@@ -14,7 +14,7 @@ export default function ProductSort() {
         {sortOptions.map((sortOption) => (
           <li key={sortOption.sortKey}>
             <ProductSortOption
-              sortOption={sortOption}
+              sortKey={sortOption.sortKey}
               className="cursor-pointer"
             >
               {sortOption.title}
