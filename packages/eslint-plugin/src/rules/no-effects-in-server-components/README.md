@@ -4,35 +4,33 @@ The `useEffect` and `useLayoutEffect` lifecycle hooks do not function as expecte
 
 ## Rule Details
 
-This rule prevents using these hooks in files that do not end with the `.client` suffix that denotes a React Component that does not run on the server.
-
-Examples of **incorrect** code for this rule:
+This rule prevents using these hooks in files that do not end with the `.client` suffix.
 
 ```tsx
-// MyServerComponent.server.jsx
+// Examples of **incorrect** code for this rule:
 
-function MyServerComponent() {
-  const [state, setState] = useState();
+// MyComponent.jsx or MyComponent.server.jsx
+import {useEffect} from 'react';
+
+function MyNonClientComponent() {
+  useEffect(() => {
+    // code inside this useEffect will not execute as expected
+  });
+
   return null;
 }
 ```
 
 ```tsx
-// MyServerComponent.jsx
+// Examples of **correct** code for this rule:
 
-function MyServerComponent() {
-  const [state, setState] = useState();
-  return null;
-}
-```
-
-Examples of **correct** code for this rule:
-
-```tsx
 // MyClientComponent.client.jsx
+import {useEffect} from 'react';
 
 function MyClientComponent() {
-  const [state, setState] = useState();
+  useEffect(() => {
+    // in client components, this code will execute as expected
+  });
   return null;
 }
 ```
