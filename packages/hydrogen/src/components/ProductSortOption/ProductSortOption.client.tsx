@@ -1,7 +1,7 @@
 import React, {ElementType} from 'react';
 import {Props} from '../types';
 import {useServerState} from '../../foundation/useServerState';
-import {setQueryStringParam} from '../../foundation/QueryString';
+import {useQueryString} from '../../foundation/useQueryString';
 
 /**
  * The `ProductSortOption` component renders a `span` element that is used to attach the click
@@ -17,7 +17,7 @@ export function ProductSortOption<TTag extends ElementType>(
 ) {
   const {setServerState} = useServerState();
   const {children, sortKey, ...passthroughProps} = props;
-
+  const {setQueryStringParam} = useQueryString();
   return (
     <span
       onClick={() => {

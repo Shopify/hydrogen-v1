@@ -4,8 +4,9 @@ import {
   useShopQuery,
   flattenConnection,
   RawHtml,
+  useQueryString,
 } from '@shopify/hydrogen';
-import {useParams, useLocation} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
@@ -19,12 +20,11 @@ export default function Collection({
   collectionProductCount = 24,
   productsSortKey,
 }) {
+  const {getQueryStringParam} = useQueryString();
   const {handle} = useParams();
-  const {search} = useLocation();
-  const params = new URLSearchParams(search);
 
   // TODO: move this inside QueryString framework component
-  const productsSortKeyUrlParam = params.get('sort_by')?.toUpperCase();
+  const productsSortKeyUrlParam = getQueryStringParam('sort_by')?.toUpperCase();
 
   const {data} = useShopQuery({
     query: QUERY,
