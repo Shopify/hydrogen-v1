@@ -23,7 +23,8 @@ export default function Collection({
   const {getQueryStringParam} = useQueryString();
   const {handle} = useParams();
 
-  // TODO: move this inside QueryString framework component
+  // this reads only the first load query param and it's intentional, after first load
+  // we use productsSortKey which i being pushed by serServerState from `ProductSortOption.client.tsx`
   const productsSortKeyUrlParam = getQueryStringParam('sort_by')?.toUpperCase();
 
   const {data} = useShopQuery({
