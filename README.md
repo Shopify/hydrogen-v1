@@ -3,7 +3,7 @@
 </p>
 <p align="center">
     <a href="https://www.npmjs.com/package/@shopify/hydrogen"><img src="https://img.shields.io/npm/v/@shopify/hydrogen.svg?sanitize=true" alt="Version"></a>
-    <a href="https://www.npmjs.com/package/@shopify/hydrogen"><img src="https://img.shields.io/npm/l/@shopify/hydrogen.svg?sanitize=true" alt="License"></a>
+    <a href="https://github.com/Shopify/hydrogen/blob/main/LICENSE.md"><img src="https://img.shields.io/npm/l/@shopify/hydrogen.svg?sanitize=true" alt="License"></a>
     <a href="https://npmcharts.com/compare/@shopify/hydrogen?minimal=true"><img src="https://img.shields.io/npm/dm/@shopify/hydrogen.svg?sanitize=true" alt="Downloads"></a>
  </p>
 
