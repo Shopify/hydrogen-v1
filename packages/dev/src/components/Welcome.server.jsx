@@ -113,7 +113,7 @@ export default function Welcome() {
   const products = data && flattenConnection(data.products);
   const collections = data && flattenConnection(data.collections);
 
-  const firstProduct = products ? products[0].handle : '';
+  const firstProduct = products && products.length ? products[0].handle : '';
   const totalProducts = products && products.length;
   const firstCollection = collections[0] ? collections[0].handle : '';
   const totalCollections = collections && collections.length;

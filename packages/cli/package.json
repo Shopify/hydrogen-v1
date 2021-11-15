@@ -37,7 +37,9 @@
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
     "inquirer": "^8.1.2",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "prettier": "^2.4.1",
+    "@shopify/prettier-config": "^1.1.2"
   },
   "devDependencies": {
     "@types/change-case": "^2.3.1",

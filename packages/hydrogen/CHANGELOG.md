@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- fix: default to `retry: false` in `useQuery`
 - fix: starter template media gallery error when handling videos
 
 ## 0.6.4 - 2021-11-11
