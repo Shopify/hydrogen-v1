@@ -112,19 +112,7 @@ export default () => {
     },
   } as Plugin;
 
-  // Mitigation for upcoming minor Vite update
-  // https://github.com/vitejs/vite/pull/5253
-  // TO-DO: When the vite package is updated with the above Vite PR,
-  // clean up this function and treat `options` param as objects
-  // from this point forward
-  // Timeline: Targetting for Vite 2.7
-  function isSSR(options: undefined | boolean | {ssr: boolean}): boolean {
-    if (typeof options === 'boolean') {
-      return options;
-    }
-    if (typeof options === 'object') {
-      return !!options.ssr;
-    }
-    return false;
+  function isSSR(options: undefined | {ssr?: boolean | undefined}): boolean {
+    return !!options?.ssr;
   }
 };
