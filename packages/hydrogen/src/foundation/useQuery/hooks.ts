@@ -29,6 +29,17 @@ export function useQuery<T>(
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions<T, Error, T, QueryKey>
 ) {
+  const resolvedQueryOptions = {
+    /**
+     * Prevent react-query from from retrying request failures. This sometimes bites developers
+     * because they will get back a 200 GraphQL response with errors, but not properly check
+     * for errors. This leads to a failed `queryFn` and react-query keeps running it, leading
+     * to a much slower response time and a poor developer experience.
+     */
+    retry: false,
+    ...(queryOptions ?? {}),
+  };
+
   /**
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
@@ -59,7 +70,7 @@ export function useQuery<T>(
           await setItemInCache(lockKey, true);
           try {
             const output = await generateNewOutput();
-            await setItemInCache(key, output, queryOptions?.cache);
+            await setItemInCache(key, output, resolvedQueryOptions?.cache);
           } catch (e: any) {
             console.error(`Error generating async response: ${e.message}`);
           } finally {
@@ -77,11 +88,12 @@ export function useQuery<T>(
      * Important: Do this async
      */
     runDelayedFunction(
-      async () => await setItemInCache(key, newOutput, queryOptions?.cache)
+      async () =>
+        await setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
     );
 
     return newOutput;
   }
 
-  return useReactQuery<T, Error>(key, cachedQueryFn, queryOptions);
+  return useReactQuery<T, Error>(key, cachedQueryFn, resolvedQueryOptions);
 }
