@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+- fix: add check for products.length in `Welcom.server.jsx`
+
 ## 0.6.4 - 2021-11-11
 
 - No updates. Transitive dependency bump.
