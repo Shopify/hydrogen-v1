@@ -114,10 +114,15 @@ export class Cli implements Ui {
     );
   }
 
-  printFile({path, overwritten}: FileResult) {
+  printFile({path, overwritten, diff}: FileResult) {
     const overwrote = overwritten
-      ? chalk.redBright` • `
-      : chalk.greenBright` • `;
-    this.say([overwrote, path].join(''));
+      ? chalk.redBright`• Overwrote`
+      : chalk.greenBright`• Wrote new`;
+
+    const difference = diff ? `` : chalk.cyanBright`• No change`;
+
+    this.say(
+      [overwrote, difference, chalk.underline.whiteBright(path)].join(' ')
+    );
   }
 }
