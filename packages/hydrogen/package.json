@@ -36,7 +36,7 @@
     "build-esnext": "tsc --p tsconfig.build.json",
     "build-node": "tsc --p tsconfig.cjs.json",
     "build-worker": "tsc --p tsconfig.worker.json",
-    "build-copy": "cp -r *.[jt]s *.json dist ../../node_modules/@shopify/hydrogen",
+    "build-copy": "cpy --parents *.[jt]s *.json dist ../../node_modules/@shopify/hydrogen",
     "lint": "eslint --ext .ts src/** --no-error-on-unmatched-pattern",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
@@ -48,6 +48,7 @@
     "directory": "packages/hydrogen"
   },
   "devDependencies": {
+    "cpy-cli": "3.1.1",
     "mkdirp": "^1.0.4",
     "@babel/core": "^7.13.16",
     "@graphql-codegen/cli": "^1.21.4",
