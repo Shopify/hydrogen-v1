@@ -7,6 +7,9 @@ module.exports = {
   },
   theme: {
     extend: {
+      screens: {
+        'hero-xl': '1328px',
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {
