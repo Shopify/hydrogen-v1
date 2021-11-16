@@ -24,6 +24,7 @@ interface Props {
     React.SetStateAction<{
       pathname: string;
       search: string;
+      [key: string]: any; // Allow custom properties
     }>
   >;
   children: ReactNode;
@@ -38,7 +39,7 @@ export function ServerStateProvider({
 
   const setServerStateCallback = useCallback(
     (
-      input: () => void | Record<string, any> | string,
+      input: (() => any) | Record<string, any> | string,
       value?: string | Record<string, any>
     ) => {
       /**
@@ -51,15 +52,13 @@ export function ServerStateProvider({
       startTransition(() => {
         // Support callback-style setState
         if (typeof input === 'function') {
-          // @ts-ignore
-          return setServerState(input);
+          return setServerState(input as () => any);
         }
 
         // Support a simple object, and spread it into the existing object.
         if (typeof input === 'object') {
           return setServerState((prev) => ({
             ...prev,
-            // @ts-ignore
             ...input,
           }));
         }
