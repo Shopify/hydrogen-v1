@@ -1,6 +1,7 @@
-import {Image, Money} from '@shopify/hydrogen';
+import {Image, Link} from '@shopify/hydrogen';
 
-import {Link} from './Link.client';
+import MoneyCompareAtPrice from './MoneyCompareAtPrice.client';
+import MoneyPrice from './MoneyPrice.client';
 
 export default function ProductCard({product}) {
   const selectedVariant = product.variants.edges[0].node;
@@ -36,24 +37,9 @@ export default function ProductCard({product}) {
 
         <div className="flex ">
           {selectedVariant.compareAtPriceV2 && (
-            <Money money={selectedVariant.compareAtPriceV2}>
-              {({amount, currencyNarrowSymbol}) => (
-                <span className="line-through text-lg mr-2.5 text-gray-500">
-                  {currencyNarrowSymbol}
-                  {amount}
-                </span>
-              )}
-            </Money>
+            <MoneyCompareAtPrice money={selectedVariant.compareAtPriceV2} />
           )}
-          <Money className="text-black text-md" money={selectedVariant.priceV2}>
-            {({amount, currencyNarrowSymbol, currencyCode}) => (
-              <>
-                {currencyCode}
-                {currencyNarrowSymbol}
-                {amount}
-              </>
-            )}
-          </Money>
+          <MoneyPrice money={selectedVariant.priceV2} />
         </div>
       </Link>
     </div>

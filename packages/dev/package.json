@@ -1,11 +1,11 @@
 {
   "name": "dev",
   "description": "This is a dev environment for Hydrogen",
-  "version": "0.6.1",
+  "version": "0.6.4",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "LOCAL_DEV=true vite",
+    "dev": "vite",
     "lint": "npm-run-all lint:*",
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src",
     "lint:css": "stylelint ./src/**/*.{css,sass,scss}",
@@ -28,11 +28,11 @@
     "prettier": "^2.3.2",
     "stylelint": "^13.13.0",
     "tailwindcss": "^2.2.4",
-    "vite": "^2.6.0"
+    "vite": "^2.6.14"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.1",
-    "@shopify/hydrogen": "^0.6.1",
+    "@shopify/hydrogen": "^0.6.4",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "graphql-tag": "^2.12.4",

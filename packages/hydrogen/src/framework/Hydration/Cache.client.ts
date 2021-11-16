@@ -1,5 +1,6 @@
 import {createElement, Fragment, ReactElement} from 'react';
 import {wrapPromise} from '../../utilities';
+import importClientComponent from './client-imports';
 
 const cache = new Map();
 const moduleCache = new Map();
@@ -135,7 +136,10 @@ function createManifestFromWirePayload(payload: string): WireManifest {
   return payload.split('\n').reduce((memo, row) => {
     const [key, ...values] = row.split(':');
 
-    memo[key] = JSON.parse(values.join(':'));
+    if (key) {
+      memo[key] = JSON.parse(values.join(':'));
+    }
+
     return memo;
   }, {} as Record<string, any>) as WireManifest;
 }
@@ -148,7 +152,9 @@ async function eagerLoadModules(manifest: WireManifest) {
         if (moduleCache.has(module.id)) {
           return moduleCache.get(module.id);
         }
-        const mod = await import(/* @vite-ignore */ module.id);
+
+        const mod = await importClientComponent(module.id);
+
         moduleCache.set(module.id, mod);
         return mod;
       })

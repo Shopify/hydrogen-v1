@@ -19,8 +19,8 @@ Components can be customized using passthrough props and render props:
 
 - **Passthrough props**: You can pass attributes as props to the Hydrogen component, and the Hydrogen component will pass them through to the rendered HTML tag.
 
-    > Note:
-    > Any attributes supported by the component's outputted HTML tag are supported, except for those explicitly controlled by the component (for example, `src` for the `Image` component and `dangerouslySetInnerHtml` for the `RawHtml` component).
+  > Note:
+  > Any attributes supported by the component's outputted HTML tag are supported, except for those explicitly controlled by the component (for example, `src` for the `Image` component and `dangerouslySetInnerHtml` for the `RawHtml` component).
 
 - **Render props**: You can pass a function that returns JSX as a child to the Hydrogen component.
 

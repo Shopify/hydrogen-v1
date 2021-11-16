@@ -1,4 +1,4 @@
-export {Link} from 'react-router-dom';
+export {Link} from './Link';
 export type {MediaFileProps} from './MediaFile';
 export {MediaFile, MediaFileFragment} from './MediaFile';
 export type {VideoProps} from './Video';

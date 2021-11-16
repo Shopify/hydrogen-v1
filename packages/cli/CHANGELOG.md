@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+<!-- ## Unreleased -->
+
+## 0.6.4 - 2021-11-11
+
+- No updates. Transitive dependency bump.
+
+## 0.6.2 - 2021-11-10
 
 - Add ability to explicitly set the root for the running command using the `--root` flag
 

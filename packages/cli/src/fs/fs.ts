@@ -1,16 +1,19 @@
 import {resolve, join, isAbsolute, dirname, relative} from 'path';
 import {readFile, writeFile, mkdirp, pathExists, emptyDir} from 'fs-extra';
+import {RunError} from '../utilities/error';
 
 import {formatFile} from '../utilities';
 
 export interface FileResult {
   path: string;
   overwritten: boolean;
+  diff: boolean;
 }
 
 export class Fs {
   root: string;
   files = new Map<string, string>();
+  // TODO: Implement dry-run behaviour by keeping track of original sources
   readCache = new Map<string, string>();
 
   constructor(root: string) {
@@ -28,12 +31,19 @@ export class Fs {
       return this.files.get(fullPath)!;
     }
 
-    if (this.readCache.has(fullPath)) {
-      return this.readCache.get(fullPath)!;
+    const exists = await this.exists(path);
+
+    if (!exists) {
+      throw new RunError(
+        `Tried to operate on file at ${path}, but it does not exist.`
+      );
     }
 
     const contents = await readFile(fullPath, 'utf8');
-    this.readCache.set(fullPath, contents);
+
+    if (!this.readCache.has(fullPath)) {
+      this.readCache.set(fullPath, contents);
+    }
 
     return contents;
   }
@@ -50,8 +60,12 @@ export class Fs {
         await mkdirp(dirname(path));
       }
 
-      await writeFile(path, formatFile(contents));
-      yield {path: this.relativePath(path), overwritten: exists};
+      const oldFile = this.readCache.get(path);
+      const formattedFile = formatFile(contents);
+      const diff = oldFile ? formatFile(oldFile) !== formattedFile : false;
+
+      await writeFile(path, formatFile(formattedFile));
+      yield {path: this.relativePath(path), overwritten: exists, diff: diff};
     }
   }
 

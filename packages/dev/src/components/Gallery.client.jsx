@@ -10,7 +10,10 @@ export default function Gallery() {
   const featuredMedia = selectedVariant.image || media[0].image;
   const featuredMediaSrc = featuredMedia.url.split('?')[0];
   const galleryMedia = media.filter((med) => {
-    if (med.mediaContentType === MODEL_3D_TYPE) {
+    if (
+      med.mediaContentType === MODEL_3D_TYPE ||
+      med.mediaContentType === VIDEO_TYPE
+    ) {
       return true;
     }
 
@@ -26,7 +29,7 @@ export default function Gallery() {
       className="gap-4 flex md:grid md:grid-cols-2 overflow-x-scroll no-scrollbar scroll-snap-x scroll-smooth h-[485px] md:h-auto place-content-start"
       tabIndex="-1"
     >
-      <SelectedVariantImage className="w-[80vw] md:w-full h-full object-cover object-center flex-shrink-0 md:flex-shrink-none snap-start md:col-span-2 border border-gray-200 rounded-lg" />
+      <SelectedVariantImage className="w-[80vw] md:w-full h-full md:h-auto object-cover object-center flex-shrink-0 md:flex-shrink-none snap-start md:col-span-2 border border-gray-200 rounded-lg" />
       {galleryMedia.map((med) => {
         let extraProps = {};
 
@@ -56,3 +59,4 @@ const MODEL_3D_TYPE = 'MODEL_3D';
 const MODEL_3D_PROPS = {
   interactionPromptThreshold: '0',
 };
+const VIDEO_TYPE = 'VIDEO';

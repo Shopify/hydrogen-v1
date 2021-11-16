@@ -3,10 +3,10 @@ import {
   flattenConnection,
   ProductProviderFragment,
   Image,
+  Link,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
-import {Link} from '../components/Link.client';
 import Layout from '../components/Layout.server';
 import FeaturedCollection from '../components/FeaturedCollection.server';
 import ProductCard from '../components/ProductCard.server';

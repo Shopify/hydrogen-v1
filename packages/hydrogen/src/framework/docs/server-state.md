@@ -9,16 +9,18 @@ The `state` object is core to React Server Components. Hydrogen provides a `useS
 For example, you can take geo-location co-ordinates and set them as `serverState` to provide a new hydrated experience for the current location:
 
 {% codeblock file, filename: 'GeoLocate.client.jsx' %}
+
 ```js
 navigator.geolocation.getCurrentPosition((data) => {
   setServerState('geoCoordinates', data);
 });
 ```
+
 {% endcodeblock %}
 
 ## Managing server state
 
-The most basic example of `state` is the `page` prop, which Hydrogen manages for you whenever your URL location changes. However, you can set any state that you want within client components using the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook:
+The most basic example of `state` is the `page` prop, which Hydrogen manages for you whenever your URL location changes. The server state is passed as a prop to page components. However, you can set any state that you want within client components using the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook:
 
 ```js
 import {useServerState} from '@shopify/hydrogen/client';
@@ -33,6 +35,7 @@ Whenever you modify the state with `setServerState()`, Hydrogen automatically ma
 The following example shows a page that queries a specific product ID based on server state:
 
 {% codeblock file, filename: 'MyPage.server.jsx' %}
+
 ```jsx
 export default function MyPage({selectedProductId}) {
   const {data} = useShopQuery({
@@ -49,9 +52,11 @@ export default function MyPage({selectedProductId}) {
   );
 }
 ```
+
 {% endcodeblock %}
 
 {% codeblock file, filename: 'ProductSelector.client.jsx' %}
+
 ```jsx
 import {useServerState} from '@shopify/hydrogen/client';
 
@@ -78,6 +83,7 @@ export default function ProductSelector({selectedProductId}) {
   );
 }
 ```
+
 {% endcodeblock %}
 
 ## Next steps

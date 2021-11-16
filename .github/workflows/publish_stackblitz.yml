@@ -1,0 +1,23 @@
+name: Publish to Stackblitz
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish latest release to Stackblitz
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Rename gitignore
+        run: |
+          mv packages/dev/_gitignore packages/dev/.gitignore
+      - name: Push to stackblitz branch
+        uses: EndBug/add-and-commit@v7.4.0
+        with:
+          branch: main
+          push: 'origin stackblitz --force'
+
