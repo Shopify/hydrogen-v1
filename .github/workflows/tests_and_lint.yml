@@ -1,15 +1,15 @@
 name: Tests and Lint
 
 on:
-  push:
   pull_request:
     branches: [main]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [windows-latest, ubuntu-latest]
         node-version: [14.x, 15.x, 16.x]
 
     name: Node.js ${{ matrix.node-version }}
