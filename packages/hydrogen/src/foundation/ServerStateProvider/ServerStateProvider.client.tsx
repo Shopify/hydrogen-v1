@@ -39,7 +39,7 @@ export function ServerStateProvider({
 
   const setServerStateCallback = useCallback(
     (
-      input: (() => any) | Record<string, any> | string,
+      input: ((prev: any) => any) | Record<string, any> | string,
       value?: string | Record<string, any>
     ) => {
       /**
@@ -50,26 +50,22 @@ export function ServerStateProvider({
        * the `pending` flag also provided by the hook to display in the UI.
        */
       startTransition(() => {
-        // Support callback-style setState
-        if (typeof input === 'function') {
-          return setServerState(input as () => any);
-        }
+        return setServerState((prev) => {
+          let newValue: Record<string, any>;
 
-        // Support a simple object, and spread it into the existing object.
-        if (typeof input === 'object') {
-          return setServerState((prev) => ({
-            ...prev,
-            ...input,
-          }));
-        }
+          if (typeof input === 'function') {
+            newValue = input(prev);
+          } else if (typeof input === 'string') {
+            newValue = {[input]: value};
+          } else {
+            newValue = input;
+          }
 
-        // Support a key, value as well.
-        if (typeof input === 'string') {
-          return setServerState((prev) => ({
+          return {
             ...prev,
-            [input]: value,
-          }));
-        }
+            ...newValue,
+          };
+        });
       });
     },
     [setServerState, startTransition]
