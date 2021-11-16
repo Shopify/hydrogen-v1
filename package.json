@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev-lib": "yarn workspace @shopify/hydrogen dev",
-    "dev-server": "LOCAL_DEV=true VITE_INSPECT=1 yarn workspace dev dev",
+    "dev-server": "cross-env LOCAL_DEV=true VITE_INSPECT=1 yarn workspace dev dev",
     "build": "run-s build-lib build-dev build-cli",
     "build-lib": "yarn workspace @shopify/hydrogen build",
     "build-cli": "yarn workspace @shopify/hydrogen-cli build",
@@ -34,6 +34,7 @@
     "tophat": "node ./scripts/tophat"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/react-testing": "^3.2.0",
     "@testing-library/jest-dom": "^5.11.10",
