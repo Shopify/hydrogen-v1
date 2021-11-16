@@ -12,7 +12,7 @@ jobs:
         os: [windows-latest, ubuntu-latest]
         node-version: [14.x, 15.x, 16.x]
 
-    name: Node.js ${{ matrix.node-version }}
+    name: OS ${{ matrix.os }} / NodeJS ${{ matrix.node-version }}
 
     steps:
       - name: Checkout the code
