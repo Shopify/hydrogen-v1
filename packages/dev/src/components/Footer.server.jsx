@@ -72,6 +72,9 @@ export default function Footer({collection, product}) {
                   Collection
                 </Link>
               </li>
+              <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
+                <Link to="/404">404</Link>
+              </li>
             </ul>
           </div>
           {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
