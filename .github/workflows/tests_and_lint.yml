@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install the packages
-        run: yarn install --frozen-lockfile --network-timeout 100000
+        run: yarn install --frozen-lockfile
 
       - name: Lint the framework code
         run: yarn lint
