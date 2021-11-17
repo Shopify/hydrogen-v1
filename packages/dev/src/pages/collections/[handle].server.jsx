@@ -40,7 +40,7 @@ export default function Collection({
       <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
         {collection.title}
       </h1>
-      <RawHtml string={collection.descriptionHtml} className="text-2xl" />
+      <RawHtml string={collection.descriptionHtml} className="text-lg" />
       <p className="text-sm text-gray-500 mt-5 mb-5">
         {products.length} {products.length > 1 ? 'products' : 'product'}
       </p>
