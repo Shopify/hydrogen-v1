@@ -30,7 +30,7 @@ addEventListener('fetch', (event) => {
         assetHandler,
         cache: caches.default,
         context: {
-            waitUntil: event.waitUntil ? (p) => event.waitUntil(p) : undefined,
+          waitUntil: event.waitUntil ? (p) => event.waitUntil(p) : undefined,
         },
       })
     );
