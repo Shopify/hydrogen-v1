@@ -38,21 +38,6 @@ export type UseMoneyValue = {
   original: MoneyV2;
 };
 
-// TODO: Remove this when Oxygen supports Intl properly (oxygen-sws#527)
-const NARROW_SYMBOL_MAP: Partial<Record<MoneyV2['currencyCode'], string>> = {
-  USD: '$',
-  AUD: '$',
-  CAD: '$',
-  NZD: '$',
-  EUR: '€',
-  GBP: '£',
-  INR: '₹',
-  RUB: '₽',
-  CNY: '¥',
-  JPY: '¥',
-  BRL: 'R$',
-};
-
 /**
  * The `useMoney` hook takes a [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) and returns a
  * default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by
@@ -99,7 +84,6 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
         money.currencyCode,
       currencyNarrowSymbol:
         narrowParts.find((part) => part.type === 'currency')?.value ?? // e.g. "$"
-        NARROW_SYMBOL_MAP[money.currencyCode] ??
         '',
       parts: baseParts,
       localizedString: value,
