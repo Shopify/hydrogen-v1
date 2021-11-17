@@ -8,6 +8,29 @@
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esnext/index.js",
+      "node": "./dist/esnext/index.js"
+    },
+    "./plugin": {
+      "node": "./dist/node/framework/plugin.js"
+    },
+    "./marker": {
+      "import": "./dist/esnext/framework/ClientMarker/index.js"
+    },
+    "./middleware": {
+      "import": "./dist/esnext/framework/middleware.js",
+      "node": "./dist/node/framework/middleware.js"
+    },
+    "./worker": {
+      "import": "./dist/worker/handle-worker-event.js"
+    },
+    "./*": {
+      "import": "./dist/esnext/*.js",
+      "node": "./dist/esnext/*.js"
+    }
+  },
   "types": "dist/esnext/index.d.ts",
   "files": [
     "dist",
