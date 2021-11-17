@@ -11,26 +11,35 @@ declare global {
   var __DEV__: boolean;
 }
 
-export interface ServerStateContextValue {
-  serverState: Record<string, any>;
-  setServerState(
-    input: (() => void) | Record<string, any> | string,
-    value?: string | Record<string, any>
-  ): void;
-  pending: any;
+export interface ServerState {
+  pathname: string;
+  search: string;
+  [key: string]: any;
 }
 
-export const ServerStateContext = createContext<any>(null);
+export interface ServerStateSetter {
+  (
+    input:
+      | ((prev: ServerState) => Partial<ServerState>)
+      | Partial<ServerState>
+      | string,
+    propValue?: any // Value when using string input
+  ): void;
+}
 
-interface Props {
-  serverState: Record<string, any>;
-  setServerState: React.Dispatch<
-    React.SetStateAction<{
-      pathname: string;
-      search: string;
-      [key: string]: any; // Allow custom properties
-    }>
-  >;
+export interface ServerStateContextValue {
+  pending: boolean;
+  serverState: ServerState;
+  setServerState: ServerStateSetter;
+}
+
+export const ServerStateContext = createContext<ServerStateContextValue>(
+  null as any
+);
+
+interface ServerStateProviderProps {
+  serverState: ServerState;
+  setServerState: React.Dispatch<React.SetStateAction<ServerState>>;
   children: ReactNode;
 }
 
@@ -38,14 +47,11 @@ export function ServerStateProvider({
   serverState,
   setServerState,
   children,
-}: Props) {
+}: ServerStateProviderProps) {
   const [pending, startTransition] = useTransition();
 
-  const setServerStateCallback = useCallback(
-    (
-      input: ((prev: any) => any) | Record<string, any> | string,
-      value?: string | Record<string, any>
-    ) => {
+  const setServerStateCallback = useCallback<ServerStateSetter>(
+    (input, propValue) => {
       /**
        * By wrapping this state change in a transition, React renders the new state
        * concurrently in a new "tree" instead of Suspending and showing the (blank)
@@ -60,7 +66,7 @@ export function ServerStateProvider({
           if (typeof input === 'function') {
             newValue = input(prev);
           } else if (typeof input === 'string') {
-            newValue = {[input]: value};
+            newValue = {[input]: propValue};
           } else {
             newValue = input;
           }
