@@ -2,20 +2,20 @@ import {AST_NODE_TYPES} from '@typescript-eslint/types';
 
 import {createRule, isClientComponent} from '../../utilities';
 
-const BANNED_HOOKS = ['useState', 'useReducer'];
+const BANNED_HOOKS = ['useEffect', 'useLayoutEffect'];
 
-export const noStateInServerComponents = createRule({
+export const noEffectsInServerComponents = createRule({
   name: `hydrogen/${__dirname}`,
   meta: {
     type: 'problem',
     docs: {
       description:
-        'Prevents `useState` and `useReducer` in React Server Components',
+        'Prevents `useEffect` and `useLayoutEffect` in React Server Components',
       category: 'Possible Errors',
       recommended: 'error',
     },
     messages: {
-      noStateInServerComponents: `Do not use {{hook}} in React Server Components.`,
+      noEffectsInServerComponents: `Do not use {{hook}} in React Server Components.`,
     },
     schema: [],
   },
@@ -31,7 +31,7 @@ export const noStateInServerComponents = createRule({
           context.report({
             node,
             data: {hook: node.callee.name},
-            messageId: 'noStateInServerComponents',
+            messageId: 'noEffectsInServerComponents',
           });
         }
       },

@@ -1,7 +1,7 @@
 import type {Plugin} from 'vite';
 import path from 'path';
 import {promises as fs} from 'fs';
-import hydrogenMiddleware from '../middleware';
+import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
 import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
 
@@ -24,6 +24,15 @@ export default (
         const indexHtml = await fs.readFile(resolve('index.html'), 'utf-8');
         return await server.transformIndexHtml(url, indexHtml);
       }
+
+      // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
+      // By running this middleware first, we avoid that.
+      server.middlewares.use(
+        graphiqlMiddleware({
+          shopifyConfig,
+          dev: true,
+        })
+      );
 
       return () =>
         server.middlewares.use(

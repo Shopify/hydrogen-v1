@@ -1,6 +1,6 @@
 import {useShop} from '../../foundation/useShop';
 import {ASTNode} from 'graphql';
-import {useQuery} from '../useQuery';
+import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';
 import {isClient, fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';

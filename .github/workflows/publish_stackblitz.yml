@@ -3,6 +3,7 @@ name: Publish to Stackblitz
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -17,5 +18,6 @@ jobs:
       - name: Push to stackblitz branch
         uses: EndBug/add-and-commit@v7.4.0
         with:
+          branch: main
           push: 'origin stackblitz --force'
 
