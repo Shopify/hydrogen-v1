@@ -13,6 +13,7 @@ const config: Config.InitialOptions = {
   watchPathIgnorePatterns: ['<rootDir>/temp', 'fixtures'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
   globals: {
+    __DEV__: true,
     'ts-jest': {
       tsconfig: {
         jsx: 'react',

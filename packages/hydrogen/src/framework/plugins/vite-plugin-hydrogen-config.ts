@@ -4,7 +4,7 @@ export default () => {
   return {
     name: 'vite-plugin-hydrogen-config',
 
-    config: () => ({
+    config: (_, env) => ({
       resolve: {
         alias: {
           /**
@@ -58,6 +58,10 @@ export default () => {
           'react-dom',
           'react-router-dom',
         ],
+      },
+
+      define: {
+        __DEV__: env.mode !== 'production',
       },
     }),
   } as Plugin;

@@ -7,6 +7,10 @@ import React, {
   useTransition,
 } from 'react';
 
+declare global {
+  var __DEV__: boolean;
+}
+
 export interface ServerStateContextValue {
   serverState: Record<string, any>;
   setServerState(
@@ -61,7 +65,7 @@ export function ServerStateProvider({
             newValue = input;
           }
 
-          if (import.meta.env.DEV) {
+          if (__DEV__) {
             if ('request' in newValue || 'response' in newValue) {
               console.warn(
                 `Custom "request" and "response" properties in server state are ignored. Use a different name.`
