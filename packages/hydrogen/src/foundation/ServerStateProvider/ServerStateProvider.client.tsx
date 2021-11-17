@@ -61,6 +61,14 @@ export function ServerStateProvider({
             newValue = input;
           }
 
+          if (import.meta.env.DEV) {
+            if ('request' in newValue || 'response' in newValue) {
+              console.warn(
+                `Custom "request" and "response" properties in server state are ignored. Use a different name.`
+              );
+            }
+          }
+
           return {
             ...prev,
             ...newValue,

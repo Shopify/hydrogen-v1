@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - fix: default to `retry: false` in `useQuery`
 - fix: starter template media gallery error when handling videos
+- fix: warn and ignore reserved properties in server state
 
 ## 0.6.4 - 2021-11-11
 
