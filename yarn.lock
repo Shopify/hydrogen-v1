@@ -14510,10 +14510,10 @@ vite-plugin-inspect@^0.3.6:
     sirv "^1.0.17"
     ufo "^0.7.9"
 
-vite@^2.7.0-beta.6:
-  version "2.7.0-beta.6"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-2.7.0-beta.6.tgz#955fd31b782331872f79726c99429cbe592ea61a"
-  integrity sha512-pUgtEouWAaK/RAk+OhusmHAyOn6pSoncLaeA5oRMIhwffaOpoWb2btk2sSYZ3AbKPhfNw5LR7os1kDiHYR0R3g==
+vite@^2.7.0-beta.7:
+  version "2.7.0-beta.7"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.7.0-beta.7.tgz#f8016196964fd0ab5c62ca49c68acd2388f684a7"
+  integrity sha512-ev2ck1fbIyudor4yQx9ypUslkufiMlz7Mj0aCfQxpSeAEMcXs4ZdM+vhN+xYozXdF8hXnxTgUo/FbcdgSGq8Vw==
   dependencies:
     esbuild "^0.13.12"
     postcss "^8.3.11"
