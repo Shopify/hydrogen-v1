@@ -3,6 +3,7 @@ import {writeFile, readFile, pathExists} from 'fs-extra';
 import {promisify} from 'util';
 import childProcess from 'child_process';
 import {formatFile, merge} from '../utilities';
+import {loadConfig} from '../config';
 
 const exec = promisify(childProcess.exec);
 
@@ -32,6 +33,7 @@ const DEFAULT_CONFIG = {
 export class Workspace {
   dependencies = new Map<string, DependencyOptions>();
   config: Config;
+  project: Promise<{[key: string]: any}>;
   _name?: string;
   _root: string;
 
@@ -41,6 +43,7 @@ export class Workspace {
       ...DEFAULT_CONFIG,
       ...config,
     };
+    this.project = this.packageJson() || {};
   }
 
   async commit() {
@@ -86,13 +89,7 @@ export class Workspace {
       additionalConfigs['prettier'] = '@shopify/prettier-config';
     }
 
-    const existingPackageJson = (await pathExists(
-      join(this.root(), 'package.json')
-    ))
-      ? JSON.parse(
-          await readFile(join(this.root(), 'package.json'), {encoding: 'utf8'})
-        )
-      : {};
+    const existingPackageJson = await this.project;
 
     const packageJson = JSON.stringify(
       merge(
@@ -127,6 +124,16 @@ export class Workspace {
     return this.config.componentsDirectory;
   }
 
+  async packageJson() {
+    return (await pathExists(join(this.root(), 'package.json')))
+      ? JSON.parse(
+          await readFile(join(this.root(), 'package.json'), {
+            encoding: 'utf8',
+          })
+        )
+      : {};
+  }
+
   hasFile(path: string) {
     return pathExists(path);
   }
@@ -150,6 +157,33 @@ export class Workspace {
     }
 
     this.dependencies.set(dependency, options);
+  }
+
+  async hasDependency(dependency: string): Promise<false | string> {
+    const pkg = await this.project;
+
+    if (pkg.dependencies && pkg.dependencies[dependency]) {
+      return pkg.dependencies[dependency];
+    }
+    if (pkg.devDependencies && pkg.devDependencies[dependency]) {
+      return pkg.devDependencies[dependency];
+    }
+
+    return false;
+  }
+
+  async nodeVersion() {
+    const pkg = await this.project;
+
+    if (pkg.engines && pkg.engines.node) {
+      return pkg.engines.node;
+    }
+
+    return false;
+  }
+
+  getConfig(key: string) {
+    return loadConfig(key, {root: this._root});
   }
 
   async gitInit() {
