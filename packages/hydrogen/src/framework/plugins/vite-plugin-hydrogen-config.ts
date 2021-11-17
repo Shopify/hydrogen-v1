@@ -20,6 +20,13 @@ export default () => {
 
       build: {
         sourcemap: true,
+        rollupOptions: process.env.WORKER
+          ? {
+              output: {
+                format: 'es',
+              },
+            }
+          : {},
       },
 
       ssr: {
