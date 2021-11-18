@@ -1,6 +1,6 @@
 import React, {useEffect, ElementType, useState, useCallback} from 'react';
 import type {ReactNode} from 'react';
-import {CartProvider, useInstantCheckout} from '../CartProvider';
+import {useInstantCheckout} from '../CartProvider';
 import {Props} from '../types';
 
 export interface BuyNowButtonProps {
@@ -21,16 +21,6 @@ export type BuyNowButtonPropsWeControl = 'onClick';
 
 /** The `BuyNowButton` component renders a button that adds an item to the cart and redirects the customer to checkout. */
 export function BuyNowButton<TTag extends ElementType = 'button'>(
-  props: Props<TTag, BuyNowButtonPropsWeControl> & BuyNowButtonProps
-) {
-  return (
-    <CartProvider>
-      <Button {...props} />
-    </CartProvider>
-  );
-}
-
-function Button<TTag extends ElementType = 'button'>(
   props: Props<TTag, BuyNowButtonPropsWeControl> & BuyNowButtonProps
 ) {
   const {createInstantCheckout, checkoutUrl} = useInstantCheckout();

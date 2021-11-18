@@ -4,7 +4,7 @@
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"
   },
-  "version": "0.6.1",
+  "version": "0.6.4",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -25,18 +25,18 @@
     "worker.js"
   ],
   "scripts": {
-    "predev": "rimraf ./dist ../dev/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdir ../../node_modules/@shopify/hydrogen",
+    "predev": "rimraf ./dist ../dev/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" \"dev-worker {@}/worker\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
     "dev-esnext": "tsc -w --incremental --p tsconfig.build.json",
     "dev-node": "tsc -w --incremental --p tsconfig.cjs.json",
     "dev-worker": "tsc -w --incremental --p tsconfig.worker.json",
     "dev-copy": "cp *.[jt]s *.json ../../node_modules/@shopify/hydrogen",
-    "prebuild": "rimraf dist ../../node_modules/@shopify/hydrogen && mkdir ../../node_modules/@shopify/hydrogen && yarn lint",
+    "prebuild": "rimraf dist ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "build": "run-p build-esnext build-node build-worker && yarn build-copy",
     "build-esnext": "tsc --p tsconfig.build.json",
     "build-node": "tsc --p tsconfig.cjs.json",
     "build-worker": "tsc --p tsconfig.worker.json",
-    "build-copy": "cp -r *.[jt]s *.json dist ../../node_modules/@shopify/hydrogen",
+    "build-copy": "cpy --parents *.[jt]s *.json dist ../../node_modules/@shopify/hydrogen",
     "lint": "eslint --ext .ts src/** --no-error-on-unmatched-pattern",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
@@ -48,6 +48,8 @@
     "directory": "packages/hydrogen"
   },
   "devDependencies": {
+    "cpy-cli": "3.1.1",
+    "mkdirp": "^1.0.4",
     "@babel/core": "^7.13.16",
     "@graphql-codegen/cli": "^1.21.4",
     "@graphql-codegen/graphql-modules-preset": "^1.2.5",
@@ -78,10 +80,10 @@
     "react": "^18",
     "react-dom": "^18",
     "react-router-dom": "^5.2.0",
-    "vite": "^2.6.0"
+    "vite": "^2.6.14"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^1.0.6",
+    "@vitejs/plugin-react": "^1.0.8",
     "connect": "^3.7.0",
     "es-module-lexer": "^0.9.0",
     "fast-glob": "^3.2.5",

@@ -1,6 +1,8 @@
 import type {Plugin, ResolvedConfig} from 'vite';
+import {normalizePath} from 'vite';
 import path from 'path';
 import {proxyClientComponent} from '../server-components';
+import {resolve} from './resolver';
 
 export default () => {
   let config: ResolvedConfig;
@@ -74,14 +76,19 @@ export default () => {
        */
       if (id.includes('/Hydration/client-imports')) {
         // eslint-disable-next-line node/no-missing-require
-        const hydrogenPath = path.dirname(require.resolve('@shopify/hydrogen'));
+        const hydrogenPath = path.dirname(resolve('@shopify/hydrogen'));
         const importerPath = path.join(hydrogenPath, 'framework', 'Hydration');
 
-        const importerToRootPath = path.relative(importerPath, config.root);
+        const importerToRootPath = normalizePath(
+          path.relative(importerPath, config.root)
+        );
         const [importerToRootNested] =
-          importerToRootPath.match(/(\.\.\/)+/) || [];
+          importerToRootPath.match(/(\.\.\/)+(\.\.)?/) || [];
         const userPrefix = path.normalize(
-          path.join(importerPath, importerToRootNested)
+          path.join(
+            importerPath,
+            importerToRootNested.replace(/\/?$/, path.sep)
+          )
         );
         const userGlob = path.join(
           importerToRootPath,
@@ -97,10 +104,10 @@ export default () => {
         );
 
         return code
-          .replace('__USER_COMPONENTS_PREFIX__', userPrefix)
-          .replace('__USER_COMPONENTS_GLOB__', userGlob)
-          .replace('__LIB_COMPONENTS_PREFIX__', libPrefix)
-          .replace('__LIB_COMPONENTS_GLOB__', libGlob);
+          .replace('__USER_COMPONENTS_PREFIX__', normalizePath(userPrefix))
+          .replace('__USER_COMPONENTS_GLOB__', normalizePath(userGlob))
+          .replace('__LIB_COMPONENTS_PREFIX__', normalizePath(libPrefix))
+          .replace('__LIB_COMPONENTS_GLOB__', normalizePath(libGlob));
       }
     },
   } as Plugin;

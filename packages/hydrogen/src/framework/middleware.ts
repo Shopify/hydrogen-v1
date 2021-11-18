@@ -14,18 +14,13 @@ type HydrogenMiddlewareArgs = {
   cache?: Cache;
 };
 
-/**
- * Provides middleware to Node.js Express-like servers. Used by the Hydrogen
- * Vite dev server plugin as well as production Node.js implementation.
- */
-export default function hydrogenMiddleware({
-  dev,
+export function graphiqlMiddleware({
   shopifyConfig,
-  cache,
-  indexTemplate,
-  getServerEntrypoint,
-  devServer,
-}: HydrogenMiddlewareArgs) {
+  dev,
+}: {
+  shopifyConfig: ShopifyConfig;
+  dev: boolean;
+}) {
   return async function (
     request: IncomingMessage,
     response: http.ServerResponse,
@@ -37,6 +32,26 @@ export default function hydrogenMiddleware({
       return respondWithGraphiql(response, shopifyConfig);
     }
 
+    next();
+  };
+}
+
+/**
+ * Provides middleware to Node.js Express-like servers. Used by the Hydrogen
+ * Vite dev server plugin as well as production Node.js implementation.
+ */
+export function hydrogenMiddleware({
+  dev,
+  cache,
+  indexTemplate,
+  getServerEntrypoint,
+  devServer,
+}: HydrogenMiddlewareArgs) {
+  return async function (
+    request: IncomingMessage,
+    response: http.ServerResponse,
+    next: NextFunction
+  ) {
     const url = new URL('http://' + request.headers.host + request.originalUrl);
 
     const isReactHydrationRequest = url.pathname === '/react';
@@ -141,9 +156,8 @@ function shouldInterceptRequest(
   isReactHydrationRequest: boolean
 ) {
   return (
-    (/text\/html|application\/hydrogen/.test(request.headers['accept'] ?? '') ||
-      isReactHydrationRequest) &&
-    request.url !== '/favicon.ico'
+    /text\/html|application\/hydrogen/.test(request.headers['accept'] ?? '') ||
+    isReactHydrationRequest
   );
 }
 

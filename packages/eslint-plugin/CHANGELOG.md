@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- New rule `hydrogen/no-effect-in-server-components`. This rule prevents using `useEffect` and `useLayoutEffect` in non-client components.
+
+## 0.6.2 - 2021-11-10
+
 - Added new `hydrogen/typescript` config
 - Added `env#node: true` and `parserOptions#sourceType: 'module'` to core config
 - Fixed issue requiring typescript to be install on non-typescript projects

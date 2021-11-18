@@ -19,6 +19,7 @@ async function runCliGenerator(args: Partial<Options> = {}) {
         'Use the  `@shopify/hydrogen-cli` to quickly get up and running building hydrogen apps.',
       url: '/api/hydrogen/cli/index.md',
       entry: '../',
+      hidden: true,
     }),
     cliGenerator.section({
       title: 'Commands',
@@ -26,6 +27,7 @@ async function runCliGenerator(args: Partial<Options> = {}) {
       url: '/api/hydrogen/cli/commands/index.md',
       entry: 'commands',
       tableColumns: ['Command', 'Description'],
+      hidden: true,
     }),
     cliGenerator.section({
       title: 'Create',
@@ -33,6 +35,7 @@ async function runCliGenerator(args: Partial<Options> = {}) {
       url: '/api/hydrogen/cli/commands/create/index.md',
       entry: 'commands/create',
       tableColumns: ['Command', 'Description'],
+      hidden: true,
     }),
   ]);
 }
@@ -218,11 +221,18 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/index.md',
     }),
     generator.section({
-      title: 'React Server Components',
+      title: 'React Server Components overview',
       description:
         'Learn about React Server Components, an opinionated data-fetching and rendering workflow for React apps.',
-      url: '/api/hydrogen/framework/react-server-components.md',
+      url: '/api/hydrogen/framework/react-server-components/index.md',
       entry: 'framework/docs/react-server-components.md',
+    }),
+    generator.section({
+      title: 'Working with React Server Components',
+      description:
+        'Learn how to work with React Server Components in your Hydrogen app and the known limitations.',
+      url: '/api/hydrogen/framework/react-server-components/work-with-rsc.md',
+      entry: 'framework/docs/work-with-rsc.md',
     }),
     generator.section({
       title: 'Built-in CSS support',

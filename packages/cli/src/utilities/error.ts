@@ -1,3 +1,6 @@
-export class NotImplementedError extends Error {}
-export class InputError extends Error {}
-export class UnknownError extends Error {}
+// TODO: Make these more meaningful and logging behavior
+export class BaseError extends Error {}
+export class NotImplementedError extends BaseError {}
+export class InputError extends BaseError {}
+export class UnknownError extends BaseError {}
+export class RunError extends BaseError {}

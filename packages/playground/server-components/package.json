@@ -1,7 +1,7 @@
 {
   "name": "test-server-components",
   "private": true,
-  "version": "0.6.1",
+  "version": "0.6.4",
   "scripts": {
     "dev": "vite",
     "build": "yarn build:client && yarn build:server",
@@ -9,10 +9,10 @@
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.jsx"
   },
   "devDependencies": {
-    "vite": "^2.6.0"
+    "vite": "^2.6.14"
   },
   "dependencies": {
-    "@shopify/hydrogen": "^0.6.1",
+    "@shopify/hydrogen": "^0.6.4",
     "react": "18.0.0-alpha-e6be2d531",
     "react-dom": "18.0.0-alpha-e6be2d531",
     "react-router-dom": "^5.2.0"

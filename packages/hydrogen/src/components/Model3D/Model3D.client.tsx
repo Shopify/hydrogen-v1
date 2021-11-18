@@ -319,7 +319,7 @@ export function Model3D<TTag extends ElementType>(
       src={model.sources[0].url}
       alt={model.alt}
       camera-controls={passthroughProps.cameraControls ?? true}
-      poster={model.previewImage?.url}
+      poster={passthroughProps.poster || model.previewImage?.url}
       autoplay={passthroughProps.autoplay ?? true}
       loading={passthroughProps.loading}
       reveal={passthroughProps.reveal}

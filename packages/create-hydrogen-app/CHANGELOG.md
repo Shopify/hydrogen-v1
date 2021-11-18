@@ -7,7 +7,23 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- Devcontainer support added [#164](https://github.com/Shopify/hydrogen/pull/164)
+- fix: add check for products.length in `Welcome.server.jsx`
+
+## 0.6.4 - 2021-11-11
+
+- No updates. Transitive dependency bump.
+
+## 0.6.3 - 2021-11-10
+
+- No updates. Transitive dependency bump.
+
+## 0.6.2 - 2021-11-10
+
 - Wrap instances of `<Money>` in client components due to render prop usage
+- Eliminate use of `Link` client re-exports
+- fix: gallery safari grid layout
+- fix: Move `LocalizationProvider` to `Layout.server` to prevent issues with React Router & Suspense
 
 ## 0.6.1 - 2021-11-08
 

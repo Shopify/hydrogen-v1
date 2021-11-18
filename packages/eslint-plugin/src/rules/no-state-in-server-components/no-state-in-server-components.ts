@@ -15,7 +15,7 @@ export const noStateInServerComponents = createRule({
       recommended: 'error',
     },
     messages: {
-      noStateInServerComponents: `Do not use {{hook}} in React Server Components. These components only run once and therefore cannot handle state like traditional client components.`,
+      noStateInServerComponents: `Do not use {{hook}} in React Server Components.`,
     },
     schema: [],
   },

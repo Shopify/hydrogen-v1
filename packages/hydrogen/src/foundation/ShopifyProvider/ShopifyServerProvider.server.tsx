@@ -1,7 +1,7 @@
 import React, {ReactElement} from 'react';
 import {ShopifyConfig} from '../../types';
 import {ShopifyProvider} from './ShopifyProvider';
-import {QueryProvider} from '../../hooks/useQuery';
+import {QueryProvider} from '../../foundation/useQuery';
 import {ReactQueryHydrationContext} from './types';
 
 export function ShopifyServerProvider({

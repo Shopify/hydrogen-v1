@@ -1,7 +1,7 @@
 import type {Plugin} from 'vite';
 import path from 'path';
 import {promises as fs} from 'fs';
-import hydrogenMiddleware from '../middleware';
+import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
 import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
 
@@ -25,19 +25,29 @@ export default (
         return await server.transformIndexHtml(url, indexHtml);
       }
 
+      // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
+      // By running this middleware first, we avoid that.
       server.middlewares.use(
-        hydrogenMiddleware({
-          dev: true,
+        graphiqlMiddleware({
           shopifyConfig,
-          indexTemplate: getIndexTemplate,
-          getServerEntrypoint: async () =>
-            await server.ssrLoadModule(resolve('./src/entry-server')),
-          devServer: server,
-          cache: pluginOptions?.devCache
-            ? (new InMemoryCache() as unknown as Cache)
-            : undefined,
+          dev: true,
         })
       );
+
+      return () =>
+        server.middlewares.use(
+          hydrogenMiddleware({
+            dev: true,
+            shopifyConfig,
+            indexTemplate: getIndexTemplate,
+            getServerEntrypoint: async () =>
+              await server.ssrLoadModule(resolve('./src/entry-server')),
+            devServer: server,
+            cache: pluginOptions?.devCache
+              ? (new InMemoryCache() as unknown as Cache)
+              : undefined,
+          })
+        );
     },
   } as Plugin;
 };

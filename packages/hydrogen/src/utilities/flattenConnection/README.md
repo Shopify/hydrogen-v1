@@ -1,4 +1,4 @@
-<!-- This file is generated from the source code. Edit the files in /packages/hydrogen/src/utilities/flattenConnection and run 'yarn generate-docs' at the root of this repo. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/utilities/flattenConnection and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `flattenConnection` utility transforms a connection object from the Storefront API (for example, [Product-related connections](api/storefront/reference/products/product#connections)) into a flat array of nodes.
 
