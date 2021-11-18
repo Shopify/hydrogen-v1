@@ -151,7 +151,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           }
         },
         onCompleteAll() {
-          if (componentResponse.canStream()) return;
+          if (componentResponse.canStream() || response.writableEnded) return;
 
           response.statusCode =
             componentResponse.status ?? (didError ? 500 : 200);
