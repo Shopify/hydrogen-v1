@@ -58,7 +58,7 @@ export class ServerComponentResponse extends Response {
     }
   }
 
-  redirect(status: number, location: string) {
+  redirect(location: string, status = 307) {
     this.writeHead({status, headers: {location}});
   }
 
