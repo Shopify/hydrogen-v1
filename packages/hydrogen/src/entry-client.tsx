@@ -1,7 +1,7 @@
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
 import {createRoot} from 'react-dom';
-import {BrowserRouter, Redirect} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {HelmetProvider} from 'react-helmet-async';
@@ -35,8 +35,7 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
     pathname: window.location.pathname,
     search: window.location.search,
   });
-
-  const response = useServerResponse(serverState).read();
+  const response = useServerResponse(serverState);
 
   return (
     <ServerStateProvider
@@ -47,12 +46,8 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
         <HelmetProvider>
           <BrowserRouter>
             <ServerStateRouter />
-            {response.redirect ? (
-              <Redirect to={response.redirect} />
-            ) : (
-              /* @ts-ignore */
-              <ClientWrapper>{response}</ClientWrapper>
-            )}
+            {/* @ts-ignore */}
+            <ClientWrapper>{response.read()}</ClientWrapper>
           </BrowserRouter>
         </HelmetProvider>
       </QueryProvider>

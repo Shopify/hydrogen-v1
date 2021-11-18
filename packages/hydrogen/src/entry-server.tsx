@@ -20,7 +20,6 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
-import type {ServerResponse} from 'http';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
@@ -119,11 +118,25 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             componentResponse.cacheControlHeader
           );
 
-          if (componentResponse.customHead) {
-            writeHeadToServerResponse(componentResponse, response);
-            if (response.statusCode >= 300 && response.statusCode < 400) {
-              // Redirect
-              return response.end();
+          const {customHead} = componentResponse;
+          if (customHead) {
+            if (customHead.headers) {
+              for (const [key, value] of Object.entries(customHead.headers)) {
+                response.setHeader(key, value);
+              }
+            }
+
+            if (customHead.statusText) {
+              response.statusMessage = customHead.statusText;
+            }
+
+            if (customHead.status) {
+              response.statusCode = customHead.status;
+
+              if (response.statusCode >= 300 && response.statusCode < 400) {
+                // Redirect
+                return response.end();
+              }
             }
           }
 
@@ -214,15 +227,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
          * `template` and `script` tags inserted and rendered as part of the hydration response.
          */
         onCompleteAll() {
-          if (componentResponse.customHead) {
-            writeHeadToServerResponse(componentResponse, response);
-            if (response.statusCode >= 300 && response.statusCode < 400) {
-              // Redirect: mock status to bypass fetch opaque responses
-              response.statusCode = 299;
-              return response.end();
-            }
-          }
-
           // Tell React to start writing to the writer
           startWriting();
 
@@ -448,25 +452,6 @@ async function renderAppFromStringWithPrepass(
   return isReactHydrationRequest
     ? generateWireSyntaxFromRenderedHtml(body)
     : body;
-}
-
-export function writeHeadToServerResponse(
-  {customHead = {}}: ServerComponentResponse,
-  serverResponse: ServerResponse
-) {
-  if (customHead.headers) {
-    for (const [key, value] of Object.entries(customHead.headers)) {
-      serverResponse.setHeader(key, value);
-    }
-  }
-
-  if (customHead.statusText) {
-    serverResponse.statusMessage = customHead.statusText;
-  }
-
-  if (customHead.status) {
-    serverResponse.statusCode = customHead.status;
-  }
 }
 
 export default renderHydrogen;
