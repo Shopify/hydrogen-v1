@@ -1,6 +1,6 @@
 import {createContext} from 'react';
 import {ProductOptionsHookValue} from '../../hooks';
-import {GraphQLConnection, ParsedMetafield} from '../../types';
+import {GraphQLConnection, ParsedMetafield, RawMetafield} from '../../types';
 import {ProductProviderFragmentFragment} from './ProductProviderFragment';
 import {Product} from './types';
 import {Collection, Image} from '../../graphql/types/types';
@@ -21,7 +21,7 @@ export type ProductContextType = Omit<
     media?: ProductProviderFragmentFragment['media']['edges'][0]['node'][];
     mediaConnection?: ProductProviderFragmentFragment['media'];
     metafields?: ParsedMetafield[];
-    metafieldsConnection?: ProductProviderFragmentFragment['metafields'];
+    metafieldsConnection?: GraphQLConnection<RawMetafield>;
     images?: Partial<Image>[];
     imagesConnection?: GraphQLConnection<Partial<Image>>;
     collections?: Partial<Collection>[];

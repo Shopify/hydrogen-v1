@@ -1,3 +1,5 @@
+#import '../Image/ImageFragment.graphql'
+
 fragment MetafieldFragment on Metafield {
   id
   type
@@ -7,4 +9,14 @@ fragment MetafieldFragment on Metafield {
   createdAt
   updatedAt
   description
+  reference @include(if: $includeReferenceMetafieldDetails) {
+    __typename
+    ... on MediaImage {
+      id
+      mediaContentType
+      image {
+        ...ImageFragment
+      }
+    }
+  }
 }

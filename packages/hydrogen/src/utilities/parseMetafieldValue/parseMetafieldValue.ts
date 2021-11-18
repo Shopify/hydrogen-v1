@@ -1,4 +1,4 @@
-import {Metafield} from '../../graphql/types/types';
+import {RawMetafield} from '../../types';
 
 /**
  * The `parseMetafieldValue` function parses a [Metafield](/api/storefront/reference/common-objects/metafield)'s `value` from a string into a sensible type corresponding to the [Metafield](/api/storefront/reference/common-objects/metafield)'s `type`.
@@ -34,7 +34,7 @@ import {Metafield} from '../../graphql/types/types';
  * | `variant_reference`      | string                                                                                        |
  * | `url`                    | string                                                                                        |
  */
-export function parseMetafieldValue(metafield: Partial<Metafield>) {
+export function parseMetafieldValue(metafield: Partial<RawMetafield>) {
   if (metafield.value == null) {
     return metafield.value;
   }

@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- feat: add file reference metafield support
 - fix: binding of waitUntil in playground/server-components-worker
 - fix: default to `retry: false` in `useQuery`
 - fix: starter template media gallery error when handling videos
