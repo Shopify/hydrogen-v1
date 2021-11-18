@@ -12,11 +12,12 @@
     "build": "yarn build:client && yarn build:server && yarn build:worker",
     "build:client": "vite build --outDir dist/client --manifest",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.jsx",
-    "build:worker": "WORKER=true vite build --outDir dist/worker --ssr worker.js",
+    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker.js",
     "serve": "node --enable-source-maps server"
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@shopify/eslint-plugin": "^40.4.0",
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/stylelint-plugin": "^10.0.1",

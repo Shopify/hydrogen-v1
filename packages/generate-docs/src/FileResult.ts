@@ -24,7 +24,8 @@ export class FileResult {
 
   public async writeDevDoc(path: string) {
     const result = inPageAnchors(this.staged.join(''));
-    const docPath = "https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md"
+    const docPath =
+      'https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md';
 
     const comment = `<!-- This file is generated from source code in the Shopify/hydrogen repo. Any changes you make here will be overwritten. For more information, refer to ${docPath}. -->`;
 
@@ -38,7 +39,8 @@ export class FileResult {
       }
 
       const localPath = path.replace(resolve('.'), '');
-      const docPath = "https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md"
+      const docPath =
+        'https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md';
       const finalPath = resolve(path, 'README.md');
       const comment = `<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in ${localPath} and run 'yarn generate-docs' at the root of this repo. For more information, refer to ${docPath}. -->`;
       await this.write(

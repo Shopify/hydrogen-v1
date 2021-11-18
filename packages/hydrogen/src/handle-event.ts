@@ -109,8 +109,11 @@ export default async function handleEvent(
   );
 
   if (componentResponse.customBody) {
+    const {status, customStatus} = componentResponse;
+
     return new Response(await componentResponse.customBody, {
-      status: componentResponse.status ?? 200,
+      status: customStatus?.code ?? status ?? 200,
+      statusText: customStatus?.text,
       headers,
     });
   }
@@ -134,8 +137,11 @@ export default async function handleEvent(
 
     headers.append('content-type', 'text/html');
 
+    const {status, customStatus} = componentResponse;
+
     response = new Response(html, {
-      status: componentResponse.status ?? 200,
+      status: customStatus?.code ?? status ?? 200,
+      statusText: customStatus?.text,
       headers,
     });
   }
