@@ -2,17 +2,11 @@ import {renderToString} from 'react-dom/server';
 import {CacheOptions} from '../../types';
 import {generateCacheControlHeader} from '../cache';
 
-type Head = {
-  status?: number;
-  statusText?: string;
-  headers?: Record<string, any>;
-};
-
 export class ServerComponentResponse extends Response {
   private wait = false;
   private cacheOptions?: CacheOptions;
 
-  public customHead: Head | undefined;
+  public customStatus?: {code?: number; text?: string};
 
   /**
    * Allow custom body to be a string or a Promise.
@@ -44,19 +38,23 @@ export class ServerComponentResponse extends Response {
     return generateCacheControlHeader(options);
   }
 
-  writeHead({status, statusText, headers}: Head = {}) {
-    this.customHead = this.customHead || {};
-
-    if (status) {
-      this.customHead.status = status;
-    }
-
-    if (statusText) {
-      this.customHead.statusText = statusText;
+  writeHead({
+    status,
+    statusText,
+    headers,
+  }: {
+    status?: number;
+    statusText?: string;
+    headers?: Record<string, any>;
+  } = {}) {
+    if (status || statusText) {
+      this.customStatus = {code: status, text: statusText};
     }
 
     if (headers) {
-      this.customHead.headers = {...this.customHead.headers, ...headers};
+      for (const [key, value] of Object.entries(headers)) {
+        this.headers.set(key, value);
+      }
     }
   }
 
