@@ -11,6 +11,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: binding of waitUntil in playground/server-components-worker
 - fix: default to `retry: false` in `useQuery`
 - fix: starter template media gallery error when handling videos
+- fix: warn and ignore reserved properties in server state
 - fix: run graphiql middleware before vite, fixing graphiql
 - feat: allow custom Model3D poster
 - feat: support synchronous server redirects
@@ -103,6 +104,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: invoke CartProvider callbacks before performing the GraphQL mutations
 - fix: fix the accessible label in the AddToCartButton component when an item is added to cart
 - fix: cart fetch to return stringified error
+- fix: remove sourcemap warnings
 
 ## 0.2.1 - 2021-10-12
 

@@ -3,14 +3,6 @@
 The `isClient` utility is a function that returns a boolean indicating
 if the code was run on the client.
 
-## Arguments
-
-None
-
-## Return type
-
-A `boolean` indicating if the code was run on the client.
-
 ## Example code
 
 ```tsx
@@ -24,6 +16,14 @@ export function MyComponent() {
   return <p>I ran on the server</p>;
 }
 ```
+
+## Arguments
+
+None
+
+## Return type
+
+A `boolean` indicating if the code was run on the client.
 
 ## Related utilities
 

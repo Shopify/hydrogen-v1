@@ -73,7 +73,7 @@ You might want to customize the response returned from the Hydrogen server. For 
 
 All server components receive a `response` prop containing a Hydrogen-specific version of [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
-### `response.cache()`
+#### `response.cache()`
 
 If you want to modify the [full-page cache options](/api/hydrogen/framework/cache), then you can call `cache()` on the response object:
 
@@ -127,7 +127,7 @@ export default function CustomPage({response}) {
 > Caution:
 > You must call `response.doNotStream()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved.
 
-### `response.redirect()`
+#### `response.redirect()`
 
 If you want to return users to a different URL, use `response.redirect()` in your server components.
 
@@ -159,7 +159,7 @@ response.redirect('https://yoursite.com/new-page', 301);
 > Caution:
 > You must call `response.redirect()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response.
 
-### `response.send()`
+#### `response.send()`
 
 If you want to return a different response body than React-rendered HTML, then pass the custom body to `response.send()` and return it from your server component:
 
@@ -179,7 +179,7 @@ export default function CustomPage({response}) {
 
 Since this code lives inside a server component, you can use [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) to populate your [custom responses](#creative-ways-to-use-custom-responses) with Shopify data.
 
-## Server state props
+### Server state props
 
 In addition to `request` and `response` props, any state you manage with [`setServerState`](/api/hydrogen/framework/server-state) is passed to each of your page server components as props:
 
