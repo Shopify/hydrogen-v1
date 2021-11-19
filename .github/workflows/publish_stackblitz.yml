@@ -16,8 +16,7 @@ jobs:
         run: |
           mv packages/dev/_gitignore packages/dev/.gitignore
       - name: Push to stackblitz branch
-        uses: EndBug/add-and-commit@v7.4.0
-        with:
-          branch: main
-          push: 'origin/stackblitz --force'
+        run: |
+          git commit -am "Update Stackblitz branch"
+          git push origin stackblitz --force
 
