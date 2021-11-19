@@ -23,7 +23,7 @@ If you want to add custom `head` tags, then you can import `Helmet` from Hydroge
 {% codeblock file %}
 
 ```jsx
-// Client Components only!
+// Import only client components.
 
 import {Helmet} from '@shopify/hydrogen/client';
 

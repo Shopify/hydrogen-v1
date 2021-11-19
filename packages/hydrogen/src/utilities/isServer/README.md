@@ -3,14 +3,6 @@
 The `isServer` utility is a function that returns a `boolean` indicating
 if the code was run on the server.
 
-## Arguments
-
-None
-
-## Return type
-
-A `boolean` indicating if the code was run on the server.
-
 ## Example code
 
 ```tsx
@@ -24,6 +16,14 @@ export function MyComponent() {
   return <p>I ran on the client</p>;
 }
 ```
+
+## Arguments
+
+None
+
+## Return type
+
+A `boolean` indicating if the code was run on the server.
 
 ## Related utilities
 
