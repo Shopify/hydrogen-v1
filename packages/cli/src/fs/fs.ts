@@ -38,14 +38,18 @@ export class Fs {
         `Tried to operate on file at ${path}, but it does not exist.`
       );
     }
+    try {
+      const contents = await readFile(fullPath, 'utf8');
 
-    const contents = await readFile(fullPath, 'utf8');
+      if (!this.readCache.has(fullPath)) {
+        this.readCache.set(fullPath, contents);
+      }
 
-    if (!this.readCache.has(fullPath)) {
-      this.readCache.set(fullPath, contents);
+      return contents;
+    } catch (error) {
+      // TODO: Better error handling
+      console.log(error);
     }
-
-    return contents;
   }
 
   async exists(path: string) {
