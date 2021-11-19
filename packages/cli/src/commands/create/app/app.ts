@@ -1,6 +1,7 @@
 import {Env} from '../../../types';
 import {Feature, ifFeature} from '../../../utilities/feature';
-
+import addShopifyConfig from '../../addons/shopifyConfig';
+import addEslint from '../../addons/eslint';
 /**
  * Configure, modify and scaffold new `@shopify/hydrogen` apps.
  */
@@ -22,26 +23,15 @@ export async function app(env: Env<{name: string}>) {
     multiple: true,
   });
 
-  const storeDomain = await ui.ask('What is your myshopify.com store domain?', {
-    default: 'hydrogen-preview.myshopify.com',
-    name: 'storeDomain',
-  });
-
-  const storefrontToken = await ui.ask('What is your storefront token?', {
-    default: '3b580e70970c4528da70c98e097c2fa0',
-    name: 'storeFrontToken',
-  });
+  await addShopifyConfig(env);
 
   const templateArgs = {
     ifFeature: ifFeature(features),
     features,
-    storeDomain: storeDomain?.replace(/^https?:\/\//i, ''),
-    storefrontToken,
     name,
   };
 
   await Promise.all([
-    render('shopify.config.js', './templates/shopify-config-js'),
     render('index.html', './templates/index-html'),
     render('vite.config.js', './templates/vite-config-js'),
     render('src/index.css', './templates/index-css'),
@@ -65,10 +55,7 @@ export async function app(env: Env<{name: string}>) {
   }
 
   if (features.includes(Feature.Eslint)) {
-    await render('.eslintrc.js', './templates/eslintrc-js');
-    workspace.install('eslint');
-    // TODO: Replace with hydrogen plugin when available
-    workspace.install('@shopify/eslint-plugin');
+    await addEslint(env);
   }
 
   if (features.includes(Feature.Tailwind)) {

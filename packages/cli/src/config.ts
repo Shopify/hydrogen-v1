@@ -1,4 +1,6 @@
 import {cosmiconfig, Options} from 'cosmiconfig';
+import TypeScriptLoader from '@endemolshinegroup/cosmiconfig-typescript-loader';
+
 import debug from 'debug';
 import {resolve} from 'path';
 
@@ -15,6 +17,7 @@ export async function loadConfig(
   const configExplorer = cosmiconfig(key, {
     stopDir,
     cache: false,
+    loaders: {'.js': TypeScriptLoader},
     ...options,
   });
 

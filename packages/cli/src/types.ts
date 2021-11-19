@@ -26,3 +26,12 @@ export interface TemplateOptions {
   storefrontToken: string;
   name: string;
 }
+
+export interface CheckResult {
+  id: string;
+  type: 'Setup' | 'Dependencies' | 'Deployment' | 'Performance';
+  description: string;
+  success: boolean;
+  link?: string;
+  fix?: (env: Env) => void;
+}
