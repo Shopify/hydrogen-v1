@@ -104,6 +104,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: invoke CartProvider callbacks before performing the GraphQL mutations
 - fix: fix the accessible label in the AddToCartButton component when an item is added to cart
 - fix: cart fetch to return stringified error
+- fix: remove sourcemap warnings
 
 ## 0.2.1 - 2021-10-12
 
