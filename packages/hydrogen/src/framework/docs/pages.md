@@ -73,6 +73,25 @@ You might want to customize the response returned from the Hydrogen server. For 
 
 All server components receive a `response` prop containing a Hydrogen-specific version of [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
+#### `response.cache()`
+
+If you want to modify the [full-page cache options](/api/hydrogen/framework/cache), then you can call `cache()` on the response object:
+
+{% codeblock file %}
+
+```jsx
+export default function MyProducts({response}) {
+  response.cache({
+    // Cache the page for one hour.
+    maxAge: 60 * 60,
+    // Serve the stale page for up to 23 hours while getting a fresh response in the background.
+    staleWhileRevalidate: 23 * 60 * 60,
+  });
+}
+```
+
+{% endcodeblock %}
+
 #### `response.doNotStream()`
 
 By default, Hydrogen [streams SSR responses](https://github.com/reactwg/react-18/discussions/37). To customize a response, you need to tell Hydrogen that your server component plans to modify it in some way by calling `response.doNotStream()`:
@@ -108,7 +127,39 @@ export default function CustomPage({response}) {
 > Caution:
 > You must call `response.doNotStream()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved.
 
-### `response.send()`
+#### `response.redirect()`
+
+If you want to return users to a different URL, use `response.redirect()` in your server components.
+
+{% codeblock file %}
+
+```jsx
+export default function PageThatShouldRedirect({response}) {
+  response.redirect('https://yoursite.com/new-page');
+
+  return <p>Redirecting...</p>;
+}
+```
+
+{% endcodeblock %}
+
+The `redirect` function accepts a `location` URL and an optional `statusCode`, which defaults to `307`:
+
+{% codeblock file %}
+
+```jsx
+response.redirect('https://yoursite.com/new-page', 301);
+```
+
+{% endcodeblock %}
+
+> Note:
+> This redirect method only supports initial server-rendered page responses. It does not yet support client-navigated responses.
+
+> Caution:
+> You must call `response.redirect()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response.
+
+#### `response.send()`
 
 If you want to return a different response body than React-rendered HTML, then pass the custom body to `response.send()` and return it from your server component:
 
@@ -127,25 +178,6 @@ export default function CustomPage({response}) {
 {% endcodeblock %}
 
 Since this code lives inside a server component, you can use [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) to populate your [custom responses](#creative-ways-to-use-custom-responses) with Shopify data.
-
-### `response.cache()`
-
-If you want to modify the [full-page cache options](/api/hydrogen/framework/cache), then you can call `cache()` on the response object:
-
-{% codeblock file %}
-
-```jsx
-export default function MyProducts({response}) {
-  response.cache({
-    // Cache the page for one hour.
-    maxAge: 60 * 60,
-    // Serve the stale page for up to 23 hours while getting a fresh response in the background.
-    staleWhileRevalidate: 23 * 60 * 60,
-  });
-}
-```
-
-{% endcodeblock %}
 
 ### Server state props
 
