@@ -261,7 +261,7 @@ function buildReactApp({
       context={context}
     >
       <HelmetProvider context={helmetContext}>
-        <App request={request} response={componentResponse} {...props} />
+        <App {...props} request={request} response={componentResponse} />
       </HelmetProvider>
     </StaticRouter>
   );
