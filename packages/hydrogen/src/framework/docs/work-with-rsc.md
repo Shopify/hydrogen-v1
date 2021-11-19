@@ -31,15 +31,15 @@ Sharing state information between the client and server is important for common 
 
 1. `App.server.jsx` relies on the `page` state to choose the correct route to render. To change routes, the client updates the `page` state:
 
-   {% codeblock file, filename: 'ProductDetails.client.jsx' %}
+    {% codeblock file, filename: 'ProductDetails.client.jsx' %}
 
-   ```js
-   useEffect(() => {
-     setServerState('page', location.pathname);
-   }, [location.pathname, setServerState]);
-   ```
+    ```js
+    useEffect(() => {
+      setServerState('page', location.pathname);
+    }, [location.pathname, setServerState]);
+    ```
 
-   {% endcodeblock %}
+    {% endcodeblock %}
 
 2. The `page` state is sent to the server. This happens through a `useServerResponse` fetch call. It's a special server endpoint called `/react` which accepts `state` as a query parameter.
 3. The `/react` endpoint returns the wire representation for the new state.

@@ -147,7 +147,7 @@ export default function MyProducts({response}) {
 
 {% endcodeblock %}
 
-## Server state props
+### Server state props
 
 In addition to `request` and `response` props, any state you manage with [`setServerState`](/api/hydrogen/framework/server-state) is passed to each of your page server components as props:
 
