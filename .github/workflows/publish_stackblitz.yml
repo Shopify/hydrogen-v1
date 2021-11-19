@@ -17,6 +17,8 @@ jobs:
           mv packages/dev/_gitignore packages/dev/.gitignore
       - name: Push to stackblitz branch
         run: |
-          git commit --author "Hydrogen Bot <hydrogen@shopify.com>" -am "Update Stackblitz branch"
+          git config user.email "hydrogen@shopify.com"
+          git config user.name "Hydrogen Bot"
+          git commit -am "Update Stackblitz branch"
           git push origin stackblitz --force
 
