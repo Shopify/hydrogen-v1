@@ -19,5 +19,5 @@ jobs:
         uses: EndBug/add-and-commit@v7.4.0
         with:
           branch: main
-          push: 'origin stackblitz --force'
+          push: 'origin/stackblitz --force'
 
