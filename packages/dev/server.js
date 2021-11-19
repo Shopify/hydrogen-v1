@@ -3,8 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 
-// TODO: Make it so we don't have to call `.default` at the end of this
-const hydrogenMiddleware = require('@shopify/hydrogen/middleware').default;
+const {hydrogenMiddleware} = require('@shopify/hydrogen/middleware');
 
 const resolve = (p) => path.resolve(__dirname, p);
 
