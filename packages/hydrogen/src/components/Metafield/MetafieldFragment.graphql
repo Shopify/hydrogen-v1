@@ -1,4 +1,5 @@
 #import '../Image/ImageFragment.graphql'
+#import '../Money/MoneyFragment.graphql'
 
 fragment MetafieldFragment on Metafield {
   id
@@ -16,6 +17,49 @@ fragment MetafieldFragment on Metafield {
       mediaContentType
       image {
         ...ImageFragment
+      }
+    }
+    ... on Product {
+      handle
+      id
+      title
+      compareAtPriceRange {
+        minVariantPrice {
+          ...MoneyFragment
+        }
+        maxVariantPrice {
+          ...MoneyFragment
+        }
+      }
+      priceRange {
+        minVariantPrice {
+          ...MoneyFragment
+        }
+        maxVariantPrice {
+          ...MoneyFragment
+        }
+      }
+      variants (first: 1) {
+        edges {
+          node {
+            id
+            title
+            availableForSale
+            image {
+              ...ImageFragment
+            }
+            compareAtPriceV2 {
+              ...MoneyFragment
+            }
+            priceV2 {
+              ...MoneyFragment
+            }
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
       }
     }
   }

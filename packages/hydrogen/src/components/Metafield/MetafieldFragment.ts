@@ -26,12 +26,12 @@ export type MetafieldFragmentFragment = {__typename?: 'Metafield'} & Pick<
           'handle' | 'id' | 'title'
         > & {
             compareAtPriceRange: {__typename?: 'ProductPriceRange'} & {
-              maxVariantPrice: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
               minVariantPrice: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
+              maxVariantPrice: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
             };
             priceRange: {__typename?: 'ProductPriceRange'} & {
-              maxVariantPrice: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
               minVariantPrice: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
+              maxVariantPrice: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
             };
             variants: {__typename?: 'ProductVariantConnection'} & {
               edges: Array<
@@ -43,10 +43,10 @@ export type MetafieldFragmentFragment = {__typename?: 'Metafield'} & Pick<
                       image?: Types.Maybe<
                         {__typename?: 'Image'} & ImageFragmentFragment
                       >;
-                      priceV2: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
                       compareAtPriceV2?: Types.Maybe<
                         {__typename?: 'MoneyV2'} & MoneyFragmentFragment
                       >;
+                      priceV2: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
                       selectedOptions: Array<
                         {__typename?: 'SelectedOption'} & Pick<
                           Types.SelectedOption,

@@ -2212,18 +2212,18 @@ fragment Model3DFragment on Model3d {
  *       id
  *       title
  *       compareAtPriceRange {
- *         maxVariantPrice {
+ *         minVariantPrice {
  *           ...MoneyFragment
  *         }
- *         minVariantPrice {
+ *         maxVariantPrice {
  *           ...MoneyFragment
  *         }
  *       }
  *       priceRange {
- *         maxVariantPrice {
+ *         minVariantPrice {
  *           ...MoneyFragment
  *         }
- *         minVariantPrice {
+ *         maxVariantPrice {
  *           ...MoneyFragment
  *         }
  *       }
@@ -2236,10 +2236,10 @@ fragment Model3DFragment on Model3d {
  *             image {
  *               ...ImageFragment
  *             }
- *             priceV2 {
+ *             compareAtPriceV2 {
  *               ...MoneyFragment
  *             }
- *             compareAtPriceV2 {
+ *             priceV2 {
  *               ...MoneyFragment
  *             }
  *             selectedOptions {
@@ -2261,6 +2261,10 @@ fragment Model3DFragment on Model3d {
  *   height
  * }
  *
+ * fragment MoneyFragment on MoneyV2 {
+ *   currencyCode
+ *   amount
+ * }
  *```
  */
 export const MetafieldFragment: string = `
@@ -2287,18 +2291,18 @@ fragment MetafieldFragment on Metafield {
       id
       title
       compareAtPriceRange {
-        maxVariantPrice {
+        minVariantPrice {
           ...MoneyFragment
         }
-        minVariantPrice {
+        maxVariantPrice {
           ...MoneyFragment
         }
       }
       priceRange {
-        maxVariantPrice {
+        minVariantPrice {
           ...MoneyFragment
         }
-        minVariantPrice {
+        maxVariantPrice {
           ...MoneyFragment
         }
       }
@@ -2311,10 +2315,10 @@ fragment MetafieldFragment on Metafield {
             image {
               ...ImageFragment
             }
-            priceV2 {
+            compareAtPriceV2 {
               ...MoneyFragment
             }
-            compareAtPriceV2 {
+            priceV2 {
               ...MoneyFragment
             }
             selectedOptions {
@@ -2335,7 +2339,11 @@ fragment ImageFragment on Image {
   width
   height
 }
-`;
+
+fragment MoneyFragment on MoneyV2 {
+  currencyCode
+  amount
+}`;
 
 /**
 *```
@@ -2483,18 +2491,18 @@ export const MoneyFragment: string = `fragment MoneyFragment on MoneyV2 {
  *       id
  *       title
  *       compareAtPriceRange {
- *         maxVariantPrice {
+ *         minVariantPrice {
  *           ...MoneyFragment
  *         }
- *         minVariantPrice {
+ *         maxVariantPrice {
  *           ...MoneyFragment
  *         }
  *       }
  *       priceRange {
- *         maxVariantPrice {
+ *         minVariantPrice {
  *           ...MoneyFragment
  *         }
- *         minVariantPrice {
+ *         maxVariantPrice {
  *           ...MoneyFragment
  *         }
  *       }
@@ -2507,10 +2515,10 @@ export const MoneyFragment: string = `fragment MoneyFragment on MoneyV2 {
  *             image {
  *               ...ImageFragment
  *             }
- *             priceV2 {
+ *             compareAtPriceV2 {
  *               ...MoneyFragment
  *             }
- *             compareAtPriceV2 {
+ *             priceV2 {
  *               ...MoneyFragment
  *             }
  *             selectedOptions {
@@ -2640,6 +2648,10 @@ export const MoneyFragment: string = `fragment MoneyFragment on MoneyV2 {
  *   height
  * }
  *
+ * fragment MoneyFragment on MoneyV2 {
+ *   currencyCode
+ *   amount
+ * }
  *
  * fragment SellingPlanFragment on SellingPlan {
  *   id
@@ -2835,18 +2847,18 @@ fragment MetafieldFragment on Metafield {
       id
       title
       compareAtPriceRange {
-        maxVariantPrice {
+        minVariantPrice {
           ...MoneyFragment
         }
-        minVariantPrice {
+        maxVariantPrice {
           ...MoneyFragment
         }
       }
       priceRange {
-        maxVariantPrice {
+        minVariantPrice {
           ...MoneyFragment
         }
-        minVariantPrice {
+        maxVariantPrice {
           ...MoneyFragment
         }
       }
@@ -2859,10 +2871,10 @@ fragment MetafieldFragment on Metafield {
             image {
               ...ImageFragment
             }
-            priceV2 {
+            compareAtPriceV2 {
               ...MoneyFragment
             }
-            compareAtPriceV2 {
+            priceV2 {
               ...MoneyFragment
             }
             selectedOptions {
@@ -2992,6 +3004,10 @@ fragment ImageFragment on Image {
   height
 }
 
+fragment MoneyFragment on MoneyV2 {
+  currencyCode
+  amount
+}
 
 fragment SellingPlanFragment on SellingPlan {
   id
