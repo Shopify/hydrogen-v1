@@ -22,6 +22,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: new lines in hydration request break JSON.parse
 - fix(#201): normalize POSIX separators to support windows
 - fix: scroll to top on app first load
+- fix(#78): update variantID to variantId
 
 ## 0.6.3 - 2021-11-10
 

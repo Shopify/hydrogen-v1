@@ -16,7 +16,7 @@ type PropsWeControl = 'disabled';
 export function SelectedVariantAddToCartButton<
   TTag extends React.ElementType = 'button'
 >(
-  props: Props<TTag, PropsWeControl> & Omit<AddToCartButtonProps, 'variantID'>
+  props: Props<TTag, PropsWeControl> & Omit<AddToCartButtonProps, 'variantId'>
 ) {
   const product = useProduct();
 
@@ -29,7 +29,7 @@ export function SelectedVariantAddToCartButton<
   return (
     <CartButton
       {...passthroughProps}
-      variantID={product.selectedVariant?.id ?? ''}
+      variantId={product.selectedVariant?.id ?? ''}
       quantity={quantity ?? 1}
       disabled={!product.selectedVariant || passthroughProps.disabled}
       attributes={attributes}

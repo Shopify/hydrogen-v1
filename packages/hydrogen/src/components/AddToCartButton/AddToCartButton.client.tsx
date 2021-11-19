@@ -13,7 +13,7 @@ export interface AddToCartButtonProps {
     value: string;
   }[];
   /** The ID of the variant. */
-  variantID: string;
+  variantId: string;
   /** The item quantity. */
   quantity?: number;
   /** Any ReactNode elements. */
@@ -33,7 +33,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
 ) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {
-    variantID,
+    variantId,
     quantity = 1,
     attributes,
     children,
@@ -63,7 +63,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
               lines: [
                 {
                   quantity: quantity,
-                  merchandiseId: variantID,
+                  merchandiseId: variantId,
                   attributes: attributes,
                 },
               ],
@@ -72,7 +72,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
             addLines([
               {
                 quantity: quantity,
-                merchandiseId: variantID,
+                merchandiseId: variantId,
                 attributes: attributes,
               },
             ]);
