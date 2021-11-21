@@ -2523,10 +2523,10 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@shopify/ast-utilities@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@shopify/ast-utilities/-/ast-utilities-1.1.0.tgz#452323035a33959cd3604e971abcb94423d596be"
-  integrity sha512-Jxm+as9nsFWogV3822EYzh4X/wQ2xaGhhDKJgXlKgIcTPwjCLcZ0dXQHwLUTlFxW7Ip9TilX4fDpDFJbCX3kZg==
+"@shopify/ast-utilities@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@shopify/ast-utilities/-/ast-utilities-1.2.0.tgz#16c3e72eff72cd9b689d0c522f9699a329992a21"
+  integrity sha512-TuIFfHizIpxfW2Roeibin4jaqA0F0CfFga7CBJFNJ1Gh971q3Lo0Lpi2u8r6cQn8YV6pjYVCBVVrypSVlCP2HQ==
   dependencies:
     "@babel/plugin-transform-react-jsx" ">=7.0.0"
     "@babel/plugin-transform-typescript" ">=7.0.0"

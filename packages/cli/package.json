@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@shopify/prettier-config": "^1.1.2",
-    "@shopify/ast-utilities": "^1.1.0",
+    "@shopify/ast-utilities": "^1.2.0",
     "@types/debug": "^4.1.7",
     "chalk": "^4.1.2",
     "change-case": "^4.1.2",

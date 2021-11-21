@@ -2,31 +2,33 @@ import {Env, CheckResult} from '../../../../types';
 import addShopifyConfig from '../../../addons/shopifyConfig';
 import addShopifyProvider from '../../../addons/shopifyProvider';
 
-export async function checkShopify({workspace}: Env): Promise<CheckResult[]> {
+export async function checkShopify(env: Env): Promise<CheckResult[]> {
+  const {fs, workspace} = env;
   const shopifyConfig = await workspace.getConfig('shopify');
-  console.log(shopifyConfig);
   const hasShopifyConfig = Boolean(shopifyConfig);
   const validStoreDomain =
     hasShopifyConfig &&
     shopifyConfig.storeDomain &&
     shopifyConfig.storeDomain.match(/.myshopify.com$/)?.length === 1;
 
+  const hasShopifyProvider =
+    (await fs.exists('src/App.server.jsx')) &&
+    (await fs.read('src/App.server.jsx'))?.includes('ShopifyServerProvider');
+
+  console.log(hasShopifyProvider);
   return [
     {
       id: 'shopify-config',
       type: 'Setup',
       description: 'Has Shopify config',
       success: hasShopifyConfig,
-      link: 'https://shopify.dev/custom-storefronts/hydrogen/shopify-config',
       fix: addShopifyConfig,
     },
     {
       id: 'shopify-provider',
       type: 'Setup',
       description: 'Has Shopify provider',
-      // TODO Make this work
-      success: false,
-      link: 'https://shopify.dev/custom-storefronts/hydrogen/shopify-config',
+      success: !!hasShopifyProvider,
       fix: addShopifyProvider,
     },
     {
@@ -34,7 +36,6 @@ export async function checkShopify({workspace}: Env): Promise<CheckResult[]> {
       type: 'Setup',
       description: 'Has valid storeDomain',
       success: validStoreDomain,
-      link: 'https://shopify.dev/custom-storefronts/hydrogen/shopify-config#store-domain',
     },
   ];
 }

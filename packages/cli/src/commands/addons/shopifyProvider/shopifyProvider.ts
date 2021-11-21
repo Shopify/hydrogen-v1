@@ -3,10 +3,9 @@ import {
   transform,
   addImportSpecifier,
   addImportStatement,
-  replaceJsxBody,
+  wrapJsxChildren,
 } from '@shopify/ast-utilities/javascript';
 
-// TODO Make this work
 export async function addShopifyProvider(env: Env) {
   const {workspace, fs} = env;
 
@@ -15,10 +14,11 @@ export async function addShopifyProvider(env: Env) {
       fs.join(workspace.root(), 'src/App.server.jsx'),
       await transform(
         await fs.read(fs.join(workspace.root(), 'src/App.server.jsx')),
-        addImportStatement(`import shopifyConfig from '../shopify.config';`),
         addImportSpecifier('@shopify/hydrogen', 'ShopifyServerProvider'),
-        replaceJsxBody(
-          `<ShopifyServerProvider></ShopifyServerProvider>`,
+        addImportStatement(`import shopifyConfig from '../shopify.config';`),
+
+        wrapJsxChildren(
+          `<ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}></ShopifyServerProvider>`,
           'Suspense'
         )
       )

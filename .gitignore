@@ -121,6 +121,10 @@ dist
 # User localdev package
 packages/localdev
 
+# yalc files
+.yalc
+yalc.lock
+
 .DS_Store
 
 temp
