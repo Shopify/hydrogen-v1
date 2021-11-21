@@ -5,17 +5,7 @@
 
 </aside>
 
-Hydrogen contains a set of Shopify-specific commerce hooks that help accelerate your development process. This guide describes the different hook categories that Hydrogen offers.
-
-## How Hydrogen hooks work
-
-Hydrogen hooks are functions that allow you to use state and other methods inside Hydrogen [components](/api/hydrogen/components).
-
-Some examples of hooks used by components include the following:
-
-- The `useShopQuery` hook allows you to run queries to the Storefront API in your server components.
-- The `useProduct` hook allows you to access product information in any components that are children of the `Product` component.
-- The `useCart...` hooks provides access to the cart object, and can be used by children components of the `CartProvider`.
+Hydrogen contains a set of Shopify-specific commerce hooks that help accelerate your development process. This guide provides a complete reference of Hydrogen hooks.
 
 ## Primitive hooks
 

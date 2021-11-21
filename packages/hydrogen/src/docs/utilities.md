@@ -5,7 +5,7 @@
 
 </aside>
 
-Hydrogen contains a set of utilities that help accelerate your development process. This guide describes the different utilities that Hydrogen offers.
+Hydrogen contains a set of utilities that help accelerate your development process. This guide provides a complete reference of Hydrogen utilities.
 
 ## Utilities
 

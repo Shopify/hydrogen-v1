@@ -5,7 +5,7 @@
 
 </aside>
 
-Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. This guide references the components, hooks, and utilities that Hydrogen offers, and their relationships to each other.
+Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. This guide provides a complete reference of the components, hooks, and utilities that Hydrogen offers, and their relationships to each other.
 
 ## Primitive components and hooks
 
