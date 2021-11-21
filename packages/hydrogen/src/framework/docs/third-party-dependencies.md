@@ -20,7 +20,7 @@ npm install <dependency>
 
 Consider the following:
 
-- If the dependency interacts with `useState` or browser APIs, then place it inside a `*.client.jsx` component. Follow the [rules of server and client components](/api/hydrogen/framework/react-server-components#rules-for-server-and-client-components).
+- If the dependency interacts with `useState` or browser APIs, then place it inside a `*.client.jsx` component. Follow the [rules of server and client components](/custom-storefronts/hydrogen/framework/react-server-components#rules-for-server-and-client-components).
 - If the dependency is purely client-based, and you don't need to interact with it in individual components, then you can insert it in `src/entry-client.jsx`.
 - If the dependency includes a style import from a CSS file, then you can import that in `src/entry-client.jsx`.
 

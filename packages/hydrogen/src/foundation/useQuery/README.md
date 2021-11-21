@@ -36,7 +36,7 @@ The `options` object accepts the following properties:
 
 | Key     | Required | Description                                                                             |
 | ------- | -------- | --------------------------------------------------------------------------------------- |
-| `cache` | No       | An object describing the [cache policy](/api/hydrogen/framework/cache) for the request. |
+| `cache` | No       | An object describing the [cache policy](/custom-storefronts/hydrogen/framework/cache) for the request. |
 
 ## Related hooks
 
