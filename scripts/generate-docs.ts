@@ -48,7 +48,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
   });
   await Promise.all([
     // Components
-
+    generator.section({
+      title: 'Hydrogen components overview',
+      description:
+        'Get familiar with the Shopify-specific commerce components included in Hydrogen.',
+      url: '/api/hydrogen/components/index.md',
+      entry: 'docs/components',
+    }),
     // Primitive
     generator.section({
       title: 'Primitive',
@@ -131,6 +137,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
 
     // Hooks
+    generator.section({
+      title: 'Hydrogen hooks overview',
+      description:
+        'Get familiar with the Shopify-specific commerce hooks included in Hydrogen.',
+      url: '/api/hydrogen/hooks/index.md',
+      entry: 'docs/hooks',
+    }),
     // Global
     generator.section({
       title: 'Global',
@@ -199,11 +212,11 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     // Utilities
     generator.section({
-      title: 'Utilities overview',
+      title: 'Hydrogen utilities overview',
       description:
         'Get familiar with the Shopify-specific commerce utilities included in Hydrogen.',
       url: '/api/hydrogen/utilities/index.md',
-      entry: 'utilities',
+      entry: 'docs/utilities',
     }),
     // SDK reference
     generator.section({
