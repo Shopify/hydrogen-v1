@@ -12,6 +12,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Devcontainer support added [#164](https://github.com/Shopify/hydrogen/pull/164)
 - fix: add check for products.length in `Welcome.server.jsx`
 - BREAKING CHANGE: the previously default export from `@shopify/hydrogen/middleware` is now a named export `hydrogenMiddleware`.
+- fix: starter template media gallery error when handling videos
+- fix: add 404 link to footer
+- fix: align font styles for h1 and paragraph
 
 ## 0.6.4 - 2021-11-11
 
