@@ -2,16 +2,16 @@ Third-party dependencies will generally work out-of-the-box with Hydrogen. This 
 
 ## Install dependencies
 
-To install third party dependencies, run one of the following commands:
+To install third party dependencies, run the following command:
 
 {% codeblock file, filename: 'Terminal' %}
 
-```bash
-// Install dependencies with npm
-npm install <dependency>
-
-// Install dependencies with yarn
+```bash?filename: 'Terminal', title: 'yarn'
 yarn add <dependency>
+```
+
+```bash?filename: 'Terminal', title: 'npm'
+npm install <dependency>
 ```
 
 {% endcodeblock %}

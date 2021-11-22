@@ -1,5 +1,5 @@
 import {SellingPlanGroup, Variant} from '../../hooks/useProductOptions';
-import {GraphQLConnection} from '../../types';
+import {GraphQLConnection, RawMetafield} from '../../types';
 import {ProductProviderFragmentFragment} from './ProductProviderFragment';
 import {ImageFragmentFragment} from '../Image/ImageFragment';
 import {Collection} from '../../graphql/types/types';
@@ -12,7 +12,7 @@ export interface Product {
   handle?: ProductProviderFragmentFragment['descriptionHtml'];
   id?: ProductProviderFragmentFragment['id'];
   media?: ProductProviderFragmentFragment['media'];
-  metafields?: ProductProviderFragmentFragment['metafields'];
+  metafields?: GraphQLConnection<RawMetafield>;
   priceRange?: Partial<ProductProviderFragmentFragment['priceRange']>;
   title?: ProductProviderFragmentFragment['title'];
   variants?: GraphQLConnection<Variant>;

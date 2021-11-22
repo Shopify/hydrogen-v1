@@ -46,7 +46,7 @@ export const METAFIELDS: MetafieldType[] = [
 
 export function getRawMetafield(
   metafield: Partial<Metafield> & {type?: MetafieldType} = {}
-): Omit<Metafield, 'parentResource' | 'valueType'> {
+): RawMetafield {
   const type: MetafieldType =
     metafield.type == null
       ? faker.random.arrayElement(METAFIELDS)
@@ -62,6 +62,7 @@ export function getRawMetafield(
     type,
     updatedAt: metafield.updatedAt ?? faker.date.recent(),
     value: metafield.value ?? getMetafieldValue(type),
+    reference: metafield.reference,
   };
 }
 

@@ -25,7 +25,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
     );
 
     expect(button).toContainReactComponent(AddToCartButton, {
-      variantID: selectedVariant.id,
+      variantId: selectedVariant.id,
       quantity: 1,
       disabled: undefined,
       attributes: undefined,
@@ -66,7 +66,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
     );
 
     expect(button).toContainReactComponent(AddToCartButton, {
-      variantID: '',
+      variantId: '',
       disabled: true,
     });
   });

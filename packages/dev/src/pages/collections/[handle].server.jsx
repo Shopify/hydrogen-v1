@@ -65,6 +65,7 @@ const QUERY = gql`
     $handle: String!
     $country: CountryCode
     $numProducts: Int!
+    $includeReferenceMetafieldDetails: Boolean = false
     $numProductMetafields: Int = 0
     $numProductVariants: Int = 250
     $numProductMedia: Int = 6

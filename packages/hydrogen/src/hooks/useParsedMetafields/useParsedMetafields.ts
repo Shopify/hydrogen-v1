@@ -1,6 +1,5 @@
 import {useMemo} from 'react';
-import {GraphQLConnection, ParsedMetafield} from '../../types';
-import {Metafield} from '../../graphql/types/types';
+import {GraphQLConnection, ParsedMetafield, RawMetafield} from '../../types';
 import {flattenConnection, parseMetafieldValue} from '../../utilities';
 
 /**
@@ -8,7 +7,7 @@ import {flattenConnection, parseMetafieldValue} from '../../utilities';
  * in an array of metafields whose `values` have been parsed according to the metafield `type`.
  */
 export function useParsedMetafields(
-  metafields: GraphQLConnection<Partial<Metafield>> | undefined
+  metafields: GraphQLConnection<RawMetafield> | undefined
 ): ParsedMetafield[] {
   return useMemo(() => {
     if (metafields == null) {

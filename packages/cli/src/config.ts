@@ -1,22 +1,37 @@
-import {cosmiconfig} from 'cosmiconfig';
+import {cosmiconfig, Options} from 'cosmiconfig';
 import debug from 'debug';
+import {resolve} from 'path';
 
 const logger = debug('hydrogen');
 
-export async function loadConfig() {
-  logger('Loading config...');
+export async function loadConfig(
+  key = 'hydrogen',
+  options: Options & {root?: string} = {}
+) {
+  const stopDir = options.root ? resolve(options.root) : process.cwd();
 
-  const configExplorer = cosmiconfig('hydrogen');
-  const config = await configExplorer.search();
+  logger(`Loading ${key} config at ${stopDir}...`);
 
-  if (!config) {
-    logger('No config found');
+  const configExplorer = cosmiconfig(key, {
+    stopDir,
+    cache: false,
+    ...options,
+  });
 
-    return null;
+  try {
+    const config = await configExplorer.search(stopDir);
+
+    if (!config) {
+      logger(`No ${key} config found`);
+
+      return null;
+    }
+
+    logger(`Config ${key} found at ${config.filepath}`);
+    logger(config.config);
+
+    return config.config;
+  } catch (error) {
+    logger(error);
   }
-
-  logger(`Config found at ${config.filepath}`);
-  logger(config.config);
-
-  return config.config;
 }

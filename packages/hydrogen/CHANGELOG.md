@@ -7,10 +7,16 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- feat: add file reference metafield support
+- fix: binding of waitUntil in playground/server-components-worker
 - fix: default to `retry: false` in `useQuery`
 - fix: starter template media gallery error when handling videos
 - fix: add 404 link to footer
 - fix: align font styles for h1 and paragraph
+- fix: warn and ignore reserved properties in server state
+- fix: run graphiql middleware before vite, fixing graphiql
+- feat: allow custom Model3D poster
+- feat: support synchronous server redirects
 
 ## 0.6.4 - 2021-11-11
 
@@ -18,6 +24,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: new lines in hydration request break JSON.parse
 - fix(#201): normalize POSIX separators to support windows
 - fix: scroll to top on app first load
+- fix(#78): update variantID to variantId
 
 ## 0.6.3 - 2021-11-10
 
@@ -100,6 +107,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: invoke CartProvider callbacks before performing the GraphQL mutations
 - fix: fix the accessible label in the AddToCartButton component when an item is added to cart
 - fix: cart fetch to return stringified error
+- fix: remove sourcemap warnings
 
 ## 0.2.1 - 2021-10-12
 

@@ -9,11 +9,11 @@ This guide provides information about rules for server and client components and
 
 React Server Components include the following component types:
 
-| Type | Description |
-|---|---|
+| Type   | Description                                                                                                                                                       |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Server | Components that render on the server. Server components don't include any client-side interactivity. Only server components can make calls to the Storefront API. |
-| Client | Components that render on the client. These components include client-side interactivity. |
-| Shared | Components that render on both the server and the client. |
+| Client | Components that render on the client. These components include client-side interactivity.                                                                         |
+| Shared | Components that render on both the server and the client.                                                                                                         |
 
 ## Rules for server and client components
 
@@ -37,6 +37,7 @@ Due to these constraints, there are [specific rules](https://github.com/josephsa
 The following example shows a server component (`Product.server.jsx`) that uses the [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) hook to fetch data. The data is passed to a client component (`WishListButton.client.jsx`) that uses state:
 
 {% codeblock file, filename: 'Product.server.jsx' %}
+
 ```js
 import {useShopQuery} from '@shopify/hydrogen';
 import WishListButton from './WishListButton.client';
@@ -52,10 +53,11 @@ export default function Product() {
   );
 }
 ```
+
 {% endcodeblock %}
 
-
 {% codeblock file, filename: 'WishListButton.client.jsx' %}
+
 ```js
 import {useState} from 'react';
 
@@ -69,6 +71,7 @@ export default function WishListButton({product}) {
   );
 }
 ```
+
 {% endcodeblock %}
 
 ## Sharing code between server and client

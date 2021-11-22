@@ -20,6 +20,7 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
+import type {ServerResponse} from 'http';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
@@ -118,27 +119,28 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             componentResponse.cacheControlHeader
           );
 
+          writeHeadToServerResponse(response, componentResponse, didError);
+          if (isRedirect(response)) {
+            // Return redirects early without further rendering/streaming
+            return response.end();
+          }
+
           if (!componentResponse.canStream()) return;
 
-          response.statusCode = didError ? 500 : 200;
-          response.setHeader('Content-type', 'text/html');
-          response.write('<!DOCTYPE html>');
-          startWriting();
-
-          if (dev && didError) {
-            // This error was delayed until the headers were properly sent.
-            response.write(getErrorMarkup(didError));
-          }
+          startWritingHtmlToServerResponse(
+            response,
+            startWriting,
+            dev ? didError : undefined
+          );
         },
         onCompleteAll() {
-          if (componentResponse.canStream()) return;
+          if (componentResponse.canStream() || response.writableEnded) return;
 
-          response.statusCode =
-            componentResponse.status ?? (didError ? 500 : 200);
-
-          componentResponse.headers.forEach((value, header) => {
-            response.setHeader(header, value);
-          });
+          writeHeadToServerResponse(response, componentResponse, didError);
+          if (isRedirect(response)) {
+            // Redirects found after any async code
+            return response.end();
+          }
 
           if (componentResponse.customBody) {
             if (componentResponse.customBody instanceof Promise) {
@@ -147,9 +149,11 @@ const renderHydrogen: ServerHandler = (App, hook) => {
               response.end(componentResponse.customBody);
             }
           } else {
-            response.setHeader('Content-type', 'text/html');
-            response.write('<!DOCTYPE html>');
-            startWriting();
+            startWritingHtmlToServerResponse(
+              response,
+              startWriting,
+              dev ? didError : undefined
+            );
           }
         },
         onError(error: any) {
@@ -257,7 +261,7 @@ function buildReactApp({
       context={context}
     >
       <HelmetProvider context={helmetContext}>
-        <App request={request} response={componentResponse} {...props} />
+        <App {...props} request={request} response={componentResponse} />
       </HelmetProvider>
     </StaticRouter>
   );
@@ -433,3 +437,45 @@ async function renderAppFromStringWithPrepass(
 }
 
 export default renderHydrogen;
+
+function startWritingHtmlToServerResponse(
+  response: ServerResponse,
+  startWriting: () => void,
+  error?: Error
+) {
+  if (!response.headersSent) {
+    response.setHeader('Content-type', 'text/html');
+    response.write('<!DOCTYPE html>');
+  }
+
+  startWriting();
+
+  if (error) {
+    // This error was delayed until the headers were properly sent.
+    response.write(getErrorMarkup(error));
+  }
+}
+
+function writeHeadToServerResponse(
+  response: ServerResponse,
+  {headers, status, customStatus}: ServerComponentResponse,
+  error?: Error
+) {
+  if (response.headersSent) return;
+
+  headers.forEach((value, key) => response.setHeader(key, value));
+
+  if (error) {
+    response.statusCode = 500;
+  } else {
+    response.statusCode = customStatus?.code ?? status ?? 200;
+
+    if (customStatus?.text) {
+      response.statusMessage = customStatus.text;
+    }
+  }
+}
+
+function isRedirect(response: ServerResponse) {
+  return response.statusCode >= 300 && response.statusCode < 400;
+}

@@ -242,7 +242,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/css-support.md',
     }),
     generator.section({
-      title: 'Cache',
+      title: 'Caching',
       description: 'Learn how to manage cache options for Hydrogen apps.',
       url: '/api/hydrogen/framework/cache.md',
       entry: 'framework/docs/cache.md',
