@@ -4,7 +4,7 @@
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"
   },
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -48,8 +48,6 @@
     "directory": "packages/hydrogen"
   },
   "devDependencies": {
-    "cpy-cli": "3.1.1",
-    "mkdirp": "^1.0.4",
     "@babel/core": "^7.13.16",
     "@graphql-codegen/cli": "^1.21.4",
     "@graphql-codegen/graphql-modules-preset": "^1.2.5",
@@ -71,6 +69,8 @@
     "@types/react-dom": "^17.0.3",
     "@types/react-router-dom": "^5.1.7",
     "babel-loader": "^8.2.2",
+    "cpy-cli": "3.1.1",
+    "mkdirp": "^1.0.4",
     "postcss": "^8",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
