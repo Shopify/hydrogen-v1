@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
 import Button from './Button.client';
-import ProductCard from './ProductCard.server';
+import ProductCard from './ProductCard';
 
 function NotFoundHero() {
   return (
