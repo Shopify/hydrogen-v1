@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 
 declare global {
+  // eslint-disable-next-line no-var
   var __DEV__: boolean;
 }
 

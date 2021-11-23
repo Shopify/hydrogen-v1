@@ -21,7 +21,6 @@ export const mountWithShopifyProvider = createMount<
   context: (options) => ({
     shopifyConfig: getShopifyConfig(options.shopifyConfig),
   }),
-  // eslint-disable-next-line react/display-name
   render: (element, {shopifyConfig}) => (
     <ShopifyProvider shopifyConfig={shopifyConfig}>{element}</ShopifyProvider>
   ),

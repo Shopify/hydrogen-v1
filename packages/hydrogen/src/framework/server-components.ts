@@ -10,7 +10,7 @@ export async function proxyClientComponent({
   id: string;
   src?: string;
 }) {
-  const defaultComponentName = id.split('/').pop()?.split('.').shift()!;
+  const defaultComponentName = id.split('/').pop()?.split('.').shift();
 
   // Modify the import ID to avoid infinite wraps
   const importFrom = `${id}?no-proxy`;
@@ -53,7 +53,7 @@ export async function proxyClientComponent({
   s.append('\nimport ');
 
   if (hasDefaultExport) {
-    s.append(defaultComponentName);
+    s.append(defaultComponentName!);
     if (namedImports.components.length > 0) {
       s.append(', ');
     }
@@ -76,7 +76,7 @@ export async function proxyClientComponent({
     s.append(
       generateComponentExport({
         id,
-        componentName: defaultComponentName,
+        componentName: defaultComponentName!,
         isDefault: true,
       })
     );

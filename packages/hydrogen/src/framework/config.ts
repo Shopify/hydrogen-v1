@@ -1,4 +1,6 @@
-declare module globalThis {
+/* eslint-disable no-var */
+/* eslint-disable @typescript-eslint/no-namespace */
+declare namespace globalThis {
   var __config: HydrogenConfig | undefined;
 }
 

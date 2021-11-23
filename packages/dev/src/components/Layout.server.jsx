@@ -39,8 +39,8 @@ export default function Layout({children, hero}) {
       </div>
       <div className="min-h-screen max-w-screen text-gray-700 font-sans">
         <Header collections={collections} storeName={storeName} />
-        {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
         <div>
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
           <div
             className={`z-50 fixed top-0 bottom-0 left-0 right-0 bg-black transition-opacity duration-400 ${
               isCartOpen ? 'opacity-20' : 'opacity-0 pointer-events-none'
