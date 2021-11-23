@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - Use `eslint-plugin-hydrogen` recommended config for JS linting
+- fix: 404 Page > Variable not declared
 
 ## 0.7.0 - 2021-11-22
 
