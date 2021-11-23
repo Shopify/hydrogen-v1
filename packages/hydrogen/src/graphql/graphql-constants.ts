@@ -99,7 +99,7 @@
  *
  *```
  */
-export const CartAttributesUpdate: string = `
+export const CartAttributesUpdate = `
 mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartAttributesUpdate(attributes: $attributes, cartId: $cartId) {
     cart {
@@ -303,7 +303,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartBuyerIdentityUpdate: string = `
+export const CartBuyerIdentityUpdate = `
 mutation CartBuyerIdentityUpdate(
   $cartId: ID!
   $buyerIdentity: CartBuyerIdentityInput!
@@ -507,7 +507,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartCreate: string = `
+export const CartCreate = `
 mutation CartCreate($input: CartInput!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartCreate(input: $input) {
     cart {
@@ -706,7 +706,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartDiscountCodesUpdate: string = `
+export const CartDiscountCodesUpdate = `
 mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
     cart {
@@ -896,7 +896,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartFragment: string = `fragment CartFragment on Cart {
+export const CartFragment = `fragment CartFragment on Cart {
   id
   checkoutUrl
   buyerIdentity {
@@ -1086,7 +1086,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartLineAdd: string = `
+export const CartLineAdd = `
 mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesAdd(cartId: $cartId, lines: $lines) {
     cart {
@@ -1285,7 +1285,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartLineRemove: string = `
+export const CartLineRemove = `
 mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesRemove(cartId: $cartId, lineIds: $lines) {
     cart {
@@ -1484,7 +1484,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartLineUpdate: string = `
+export const CartLineUpdate = `
 mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesUpdate(cartId: $cartId, lines: $lines) {
     cart {
@@ -1683,7 +1683,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartNoteUpdate: string = `
+export const CartNoteUpdate = `
 mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartNoteUpdate(cartId: $cartId, note: $note) {
     cart {
@@ -1880,7 +1880,7 @@ fragment ImageFragment on Image {
  *
  *```
  */
-export const CartQuery: string = `
+export const CartQuery = `
 query CartQuery($id: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cart(id: $id) {
     ...CartFragment
@@ -1987,7 +1987,7 @@ fragment ImageFragment on Image {
 
 *```
 */
-export const ExternalVideoFragment: string = `fragment ExternalVideoFragment on ExternalVideo {
+export const ExternalVideoFragment = `fragment ExternalVideoFragment on ExternalVideo {
   id
   embeddedUrl
   host
@@ -2008,7 +2008,7 @@ export const ExternalVideoFragment: string = `fragment ExternalVideoFragment on 
 
 *```
 */
-export const ImageFragment: string = `fragment ImageFragment on Image {
+export const ImageFragment = `fragment ImageFragment on Image {
   id
   url
   altText
@@ -2042,7 +2042,7 @@ export const ImageFragment: string = `fragment ImageFragment on Image {
 
 *```
 */
-export const Localization: string = `query Localization {
+export const Localization = `query Localization {
   localization {
     country {
       isoCode
@@ -2126,7 +2126,7 @@ export const Localization: string = `query Localization {
  *
  *```
  */
-export const MediaFileFragment: string = `
+export const MediaFileFragment = `
 fragment MediaFileFragment on Media {
   ... on MediaImage {
     mediaContentType
@@ -2219,7 +2219,7 @@ fragment Model3DFragment on Model3d {
  *
  *```
  */
-export const MetafieldFragment: string = `
+export const MetafieldFragment = `
 fragment MetafieldFragment on Metafield {
   id
   type
@@ -2266,7 +2266,7 @@ fragment ImageFragment on Image {
 
 *```
 */
-export const Model3DFragment: string = `fragment Model3DFragment on Model3d {
+export const Model3DFragment = `fragment Model3DFragment on Model3d {
   id
   alt
   mediaContentType
@@ -2289,7 +2289,7 @@ export const Model3DFragment: string = `fragment Model3DFragment on Model3d {
 
 *```
 */
-export const MoneyFragment: string = `fragment MoneyFragment on MoneyV2 {
+export const MoneyFragment = `fragment MoneyFragment on MoneyV2 {
   currencyCode
   amount
 }
@@ -2605,7 +2605,7 @@ export const MoneyFragment: string = `fragment MoneyFragment on MoneyV2 {
  * }
  *```
  */
-export const ProductProviderFragment: string = `
+export const ProductProviderFragment = `
 fragment ProductProviderFragment on Product  {
   compareAtPriceRange {
     maxVariantPrice {
@@ -2933,7 +2933,7 @@ fragment MoneyFragment on MoneyV2 {
  * }
  *```
  */
-export const UnitPriceFragment: string = `
+export const UnitPriceFragment = `
 fragment UnitPriceFragment on ProductVariant {
   unitPriceMeasurement {
     measuredType
@@ -2967,7 +2967,7 @@ fragment MoneyFragment on MoneyV2 {
 
 *```
 */
-export const VideoFragment: string = `fragment VideoFragment on Video {
+export const VideoFragment = `fragment VideoFragment on Video {
   id
   previewImage {
     url
@@ -3017,7 +3017,7 @@ export const VideoFragment: string = `fragment VideoFragment on Video {
  * }
  *```
  */
-export const SellingPlanFragment: string = `
+export const SellingPlanFragment = `
 fragment SellingPlanFragment on SellingPlan {
   id
   description
@@ -3104,7 +3104,7 @@ fragment MoneyFragment on MoneyV2 {
  * }
  *```
  */
-export const SellingPlanGroupsFragment: string = `
+export const SellingPlanGroupsFragment = `
 fragment SellingPlanGroupsFragment on SellingPlanGroup {
   sellingPlans(first:$numProductSellingPlans) {
     edges {
@@ -3271,7 +3271,7 @@ fragment MoneyFragment on MoneyV2 {
  * }
  *```
  */
-export const VariantFragment: string = `
+export const VariantFragment = `
 fragment VariantFragment on ProductVariant {
   id
   title
