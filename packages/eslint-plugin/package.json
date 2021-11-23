@@ -20,9 +20,6 @@
     "url": "git+https://github.com/Shopify/hydrogen.git",
     "directory": "packages/eslint-plugin"
   },
-  "installConfig": {
-    "hoistingLimits": "workspace"
-  },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/experimental-utils": "^4.0.1",
