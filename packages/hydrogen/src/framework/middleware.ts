@@ -12,6 +12,7 @@ type HydrogenMiddlewareArgs = {
   getServerEntrypoint: () => Record<string, any> | Promise<Record<string, any>>;
   devServer?: ViteDevServer;
   cache?: Cache;
+  secrets?: Record<string, any>;
 };
 
 export function graphiqlMiddleware({
@@ -46,6 +47,7 @@ export function hydrogenMiddleware({
   indexTemplate,
   getServerEntrypoint,
   devServer,
+  secrets,
 }: HydrogenMiddlewareArgs) {
   return async function (
     request: IncomingMessage,
@@ -104,6 +106,7 @@ export function hydrogenMiddleware({
           streamableResponse: response,
           dev,
           cache,
+          secrets,
         }
       );
 

@@ -11,6 +11,8 @@ addEventListener('fetch', (event) => {
         indexTemplate: indexHtml,
         cache: caches.default,
         context: event,
+        // Oxygen.env or CFW's env parameter
+        secrets: {MY_SECRET: '42'},
       }),
     );
   } catch (error) {

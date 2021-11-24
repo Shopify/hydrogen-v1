@@ -25,6 +25,7 @@ async function createServer() {
       getServerEntrypoint: () =>
         require('./dist/server/entry-server.js').default,
       indexTemplate: indexProd,
+      secrets: {MY_SECRET: '42'},
     }),
   );
 

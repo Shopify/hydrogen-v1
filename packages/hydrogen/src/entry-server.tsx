@@ -44,7 +44,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const render: Renderer = async function (
     url,
-    {context, request, isReactHydrationRequest, dev}
+    {context, request, isReactHydrationRequest, secrets, dev}
   ) {
     const state = isReactHydrationRequest
       ? JSON.parse(url.searchParams?.get('state') ?? '{}')
@@ -55,7 +55,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      dev,
+      secrets,
     });
 
     const body = await renderApp(ReactApp, state, isReactHydrationRequest);
@@ -82,7 +82,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const stream: Streamer = function (
     url: URL,
-    {context, request, response, template, dev}
+    {context, request, response, template, secrets, dev}
   ) {
     const state = {pathname: url.pathname, search: url.search};
 
@@ -91,7 +91,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      dev,
+      secrets,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -178,7 +178,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const hydrate: Hydrator = function (
     url: URL,
-    {context, request, response, dev}
+    {context, request, response, secrets, dev}
   ) {
     const state = JSON.parse(url.searchParams.get('state') || '{}');
 
@@ -187,7 +187,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      dev,
+      secrets,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -244,16 +244,21 @@ function buildReactApp({
   state,
   context,
   request,
-  dev,
+  secrets = {},
 }: {
   App: ComponentType;
   state: any;
   context: any;
   request: ServerComponentRequest;
-  dev: boolean | undefined;
+  secrets?: Record<string, any>;
 }) {
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
+  const hydrogenServerProps = {
+    request,
+    response: componentResponse,
+    secrets,
+  };
 
   const ReactApp = (props: any) => (
     <StaticRouter
@@ -261,7 +266,7 @@ function buildReactApp({
       context={context}
     >
       <HelmetProvider context={helmetContext}>
-        <App {...props} request={request} response={componentResponse} />
+        <App {...props} {...hydrogenServerProps} />
       </HelmetProvider>
     </StaticRouter>
   );

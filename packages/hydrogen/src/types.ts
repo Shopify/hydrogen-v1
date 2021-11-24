@@ -9,6 +9,7 @@ export type Renderer = (
     request: ServerComponentRequest;
     context?: Record<string, any>;
     isReactHydrationRequest?: boolean;
+    secrets?: Record<string, any>;
     dev?: boolean;
   }
 ) => Promise<
@@ -25,6 +26,7 @@ export type Streamer = (
     request: ServerComponentRequest;
     response: ServerResponse;
     template: string;
+    secrets?: Record<string, any>;
     dev?: boolean;
   }
 ) => void;
@@ -35,6 +37,7 @@ export type Hydrator = (
     context: any;
     request: ServerComponentRequest;
     response: ServerResponse;
+    secrets?: Record<string, any>;
     dev?: boolean;
   }
 ) => void;
