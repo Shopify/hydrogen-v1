@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - fix: avoid repeating the same identifier for default and named exports
+- fix: remove sourcemap warnings
 
 ## 0.7.0 - 2021-11-22
 

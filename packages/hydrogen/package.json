@@ -83,7 +83,7 @@
     "vite": "^2.6.14"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^1.0.8",
+    "@vitejs/plugin-react": "^1.1.0",
     "connect": "^3.7.0",
     "es-module-lexer": "^0.9.0",
     "fast-glob": "^3.2.5",
