@@ -32,6 +32,12 @@ addEventListener('fetch', (event) => {
         context: {
           waitUntil: event.waitUntil ? (p) => event.waitUntil(p) : undefined,
         },
+        // This should be the new `env` parameter when using Modules format
+        secrets: Object.fromEntries(
+          Object.entries(globalThis).filter(([key]) =>
+            key.startsWith('SECRET_')
+          )
+        ),
       })
     );
   } catch (error) {
