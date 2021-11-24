@@ -135,6 +135,7 @@ export interface Model3DProps {
 type PropsWeControl = 'src' | 'alt' | 'poster';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'model-viewer': any;

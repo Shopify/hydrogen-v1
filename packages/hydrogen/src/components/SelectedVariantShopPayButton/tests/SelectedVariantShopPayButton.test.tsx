@@ -28,6 +28,7 @@ describe('<SelectedVariantShopPayButton />', () => {
       </CartProvider>
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     button.act(() => {});
 
     expect(button).toContainReactComponent(ShopPayButton, {

@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - Change `ProductCard` and `FeaturedCollection` from server components to shared components
+- Use `eslint-plugin-hydrogen` recommended config for JS linting
 
 ## 0.7.0 - 2021-11-22
 

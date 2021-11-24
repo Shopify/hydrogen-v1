@@ -325,11 +325,10 @@ class Sandbox {
 }
 
 class Result {
-  success: boolean = false;
+  success = false;
   error: Error | null = null;
   stderr: string[] = [];
   stdout: string[] = [];
-  constructor() {}
 
   get inspect() {
     return {

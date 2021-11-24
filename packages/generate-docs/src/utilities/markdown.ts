@@ -18,7 +18,7 @@ export async function concat(
   return nextPaths.length ? concat(newContent, nextPaths) : newContent;
 }
 
-export function padBreak(content: string[], num: number = 1) {
+export function padBreak(content: string[], num = 1) {
   const end = ''.padEnd(num, `\n`);
   return content.map((str) => `${str}${end}`);
 }

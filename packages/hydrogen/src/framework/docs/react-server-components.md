@@ -112,6 +112,6 @@ The following prop wouldn't send successfully:
 
 ## Next steps
 
-- Learn how to [work with React Server Components](/api/hydrogen/framework/react-server-components/work-with-rsc).
-- Get familiar with the [file-based routing system](/api/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/api/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn how to [work with React Server Components](/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc).
+- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

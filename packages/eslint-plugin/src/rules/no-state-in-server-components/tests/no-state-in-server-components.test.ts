@@ -11,7 +11,7 @@ function error(hookName: string) {
   return {
     type: AST_NODE_TYPES.CallExpression,
     data: {hook: hookName},
-    messageId: 'noStateInServerComponents' as 'noStateInServerComponents',
+    messageId: 'noStateInServerComponents' as const,
   };
 }
 

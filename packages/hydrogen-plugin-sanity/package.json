@@ -23,6 +23,6 @@
     "@shopify/hydrogen": "^0.4.0"
   },
   "dependencies": {
-    "graphql": "^15.5.0"
+    "graphql": "15.3.0"
   }
 }
