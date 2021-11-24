@@ -5,7 +5,7 @@
 
 </aside>
 
-Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. This guide references the components, hooks, and utilities that Hydrogen offers, and their relationships to each other.
+Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. This guide provides a complete reference of the components, hooks, and utilities that Hydrogen offers, and their relationships to each other.
 
 ## Primitive components and hooks
 
@@ -347,5 +347,5 @@ Hydrogen includes the following utilities to help speed up your development proc
 ## Next steps
 
 - [Get started](/custom-storefronts/hydrogen/getting-started) with Hydrogen and begin building a custom storefront.
-- Learn about [Hydrogen's architecture and framework](/api/hydrogen/framework).
-- Learn about [React Server Components](/api/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about [Hydrogen's architecture and framework](/custom-storefronts/hydrogen/framework).
+- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.

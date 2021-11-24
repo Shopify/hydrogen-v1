@@ -6,7 +6,7 @@ Any descendents of this provider can use the `useCountry` and `useAvailableCount
 
 ## Component type
 
-The `LocalizationProvider` component is a server component, which means that it renders on the server. For more information about component types, refer to [React Server Components](/api/hydrogen/framework/react-server-components).
+The `LocalizationProvider` component is a server component, which means that it renders on the server. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Example code
 
