@@ -12,6 +12,8 @@ declare global {
   var __DEV__: boolean;
 }
 
+const PRIVATE_PROPS = ['request', 'response', 'secrets'] as const;
+
 export interface ServerState {
   pathname: string;
   search: string;
@@ -73,9 +75,10 @@ export function ServerStateProvider({
           }
 
           if (__DEV__) {
-            if ('request' in newValue || 'response' in newValue) {
+            const privateProp = PRIVATE_PROPS.find((prop) => prop in newValue);
+            if (privateProp) {
               console.warn(
-                `Custom "request" and "response" properties in server state are ignored. Use a different name.`
+                `Custom "${privateProp}" property in server state is ignored. Use a different name.`
               );
             }
           }
