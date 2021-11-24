@@ -1,4 +1,4 @@
-import type {Plugin} from 'vite';
+import {Plugin, loadEnv} from 'vite';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
@@ -18,12 +18,18 @@ export default (
      * loading them in an SSR context, rendering them using the `entry-server` endpoint in the
      * user's project, and injecting the static HTML into the template.
      */
-    configureServer(server) {
+    async configureServer(server) {
       const resolve = (p: string) => path.resolve(server.config.root, p);
       async function getIndexTemplate(url: string) {
         const indexHtml = await fs.readFile(resolve('index.html'), 'utf-8');
         return await server.transformIndexHtml(url, indexHtml);
       }
+
+      const secrets = await loadEnv(
+        server.config.mode,
+        server.config.root,
+        'SECRET_'
+      );
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
       // By running this middleware first, we avoid that.
@@ -46,6 +52,7 @@ export default (
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)
               : undefined,
+            secrets,
           })
         );
     },
