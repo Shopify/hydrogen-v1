@@ -46,7 +46,7 @@ export function useShopQuery<T>({
     body,
   });
 
-  const {data} = useQuery<UseShopQueryResponse<T>>(
+  const result = useQuery<UseShopQueryResponse<T>>(
     [storeDomain, graphqlApiVersion, body],
     fetchBuilder<UseShopQueryResponse<T>>(request),
     {cache}
@@ -56,8 +56,9 @@ export function useShopQuery<T>({
    * GraphQL errors get printed to the console but ultimately
    * get returned to the consumer.
    */
-  if (data?.errors) {
-    const errors = data.errors instanceof Array ? data.errors : [data.errors];
+  if (result.errors) {
+    const errors =
+      result.errors instanceof Array ? result.errors : [result.errors];
     for (const error of errors) {
       console.error('GraphQL Error', error);
 
@@ -68,5 +69,5 @@ export function useShopQuery<T>({
     console.error(`GraphQL errors: ${errors.length}`);
   }
 
-  return data as UseShopQueryResponse<T>;
+  return result as UseShopQueryResponse<T>;
 }

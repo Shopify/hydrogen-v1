@@ -116,6 +116,8 @@ export interface Measurement {
   value: number;
 }
 
+export type QueryKey = string | readonly unknown[];
+
 export interface CacheOptions {
   private?: boolean;
   maxAge?: number;

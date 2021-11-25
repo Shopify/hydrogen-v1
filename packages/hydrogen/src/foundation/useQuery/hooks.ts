@@ -1,33 +1,82 @@
-import {QueryFunctionContext, useQuery as useReactQuery} from 'react-query';
-import type {UseQueryOptions, QueryKey, QueryFunction} from 'react-query';
-import {CacheOptions} from '../../types';
+import type {CacheOptions, QueryKey} from '../../types';
 import {
   deleteItemFromCache,
   getItemFromCache,
   isStale,
   setItemInCache,
+  hashKey,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
+import {SuspensePromise} from './SuspensePromise';
 
-export interface HydrogenUseQueryOptions<
-  TQueryFnData = unknown,
-  TError = unknown,
-  TData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
-> extends UseQueryOptions<TQueryFnData, TError, TData, TQueryKey> {
+const suspensePromises: Map<string, SuspensePromise<unknown>> = new Map();
+
+export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
 }
 
 /**
- * The `useQuery` hook is a wrapper around `useQuery` from `react-query`. It supports Suspense calls on the server and on the client.
+ * The `useQuery` hook is a wrapper around global runtime's Cache API.
+ * It supports Suspense calls on the server and on the client.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
   key: QueryKey,
   /** An asynchronous query function like `fetch` which returns data. */
-  queryFn: QueryFunction<T>,
+  queryFn: () => Promise<T>,
   /** Options including `cache` to manage the cache behavior of the sub-request. */
-  queryOptions?: HydrogenUseQueryOptions<T, Error, T, QueryKey>
+  queryOptions?: HydrogenUseQueryOptions
+): T {
+  const cacheKey = hashKey(key);
+  const suspensePromise = getSuspensePromise<T>(key, queryFn, queryOptions);
+  const status = suspensePromise.status;
+
+  if (status === SuspensePromise.PENDING) {
+    throw suspensePromise.promise;
+  } else if (status === SuspensePromise.ERROR) {
+    throw suspensePromise.result;
+  } else if (status === SuspensePromise.SUCCESS) {
+    suspensePromises.delete(cacheKey);
+    return suspensePromise.result as T;
+  }
+
+  throw 'useQuery - something is really wrong if this throws';
+}
+
+/**
+ * Preloads the query with suspense support
+ */
+export function preloadQuery<T>(
+  /** A string or array to uniquely identify the current query. */
+  key: QueryKey,
+  /** An asynchronous query function like `fetch` which returns data. */
+  queryFn: () => Promise<T>,
+  /** Options including `cache` to manage the cache behavior of the sub-request. */
+  queryOptions?: HydrogenUseQueryOptions
+): void {
+  getSuspensePromise<T>(key, queryFn, queryOptions);
+}
+
+function getSuspensePromise<T>(
+  key: QueryKey,
+  queryFn: () => Promise<T>,
+  queryOptions?: HydrogenUseQueryOptions
+): SuspensePromise<T> {
+  const cacheKey = hashKey(key);
+  let suspensePromise = suspensePromises.get(cacheKey);
+  if (!suspensePromise) {
+    suspensePromise = new SuspensePromise<T>(
+      cachedQueryFnBuilder(key, queryFn, queryOptions)
+    );
+    suspensePromises.set(cacheKey, suspensePromise);
+  }
+  return suspensePromise as SuspensePromise<T>;
+}
+
+function cachedQueryFnBuilder<T>(
+  key: QueryKey,
+  queryFn: () => Promise<T>,
+  queryOptions?: HydrogenUseQueryOptions
 ) {
   const resolvedQueryOptions = {
     /**
@@ -47,7 +96,7 @@ export function useQuery<T>(
     const cacheResponse = await getItemFromCache(key);
 
     async function generateNewOutput() {
-      return await queryFn({} as QueryFunctionContext);
+      return await queryFn();
     }
 
     if (cacheResponse) {
@@ -95,5 +144,5 @@ export function useQuery<T>(
     return newOutput;
   }
 
-  return useReactQuery<T, Error>(key, cachedQueryFn, resolvedQueryOptions);
+  return cachedQueryFn;
 }
