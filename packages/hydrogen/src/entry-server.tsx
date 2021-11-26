@@ -408,26 +408,15 @@ async function renderAppFromStringWithPrepass(
   state: any,
   isReactHydrationRequest?: boolean
 ) {
-  const hydrationContext: ReactQueryHydrationContext = {};
-
   const app = isReactHydrationRequest ? (
     <HydrationContext.Provider value={true}>
-      <ReactApp hydrationContext={hydrationContext} {...state} />
+      <ReactApp {...state} />
     </HydrationContext.Provider>
   ) : (
-    <ReactApp hydrationContext={hydrationContext} {...state} />
+    <ReactApp {...state} />
   );
 
   await ssrPrepass(app);
-
-  /**
-   * Dehydrate all the queries made during the prepass above and store
-   * them in the context object to be used for the next render pass.
-   * This prevents rendering the Suspense fallback in `renderToString`.
-   */
-  if (hydrationContext.queryClient) {
-    hydrationContext.dehydratedState = dehydrate(hydrationContext.queryClient);
-  }
 
   const body = renderToString(app);
 
