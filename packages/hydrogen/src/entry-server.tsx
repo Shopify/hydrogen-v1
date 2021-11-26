@@ -10,7 +10,6 @@ import ssrPrepass from 'react-ssr-prepass';
 import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import {HydrationContext} from './framework/Hydration/HydrationContext.server';
-import type {ReactQueryHydrationContext} from './foundation/ShopifyProvider/types';
 import {generateWireSyntaxFromRenderedHtml} from './framework/Hydration/wire.server';
 import {FilledContext, HelmetProvider} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
@@ -18,7 +17,6 @@ import {HydrationWriter} from './framework/Hydration/writer.server';
 import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
 import type {ServerResponse} from 'http';
 
