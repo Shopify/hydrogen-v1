@@ -67,42 +67,6 @@ export function useShopQuery<T>({
   return result as UseShopQueryResponse<T>;
 }
 
-/**
- * The `preloadShopQuery` hook allows you to make, non-blocking, server-only, GraphQL
- * queries to the Storefront API to help reduce Suspense waterfalls.
- * It has the same parameter signature as `useShopQuery`
- * \> Note:
- * \> It must be a descendent of a `ShopifyProvider` component.
- */
-export function preloadShopQuery<T>({
-  query,
-  variables = {},
-  cache = {},
-}: {
-  /** A string of the GraphQL query. */
-  query?: ASTNode | string;
-  /** An object of the variables for the GraphQL query. */
-  variables?: Record<string, any>;
-  /** An object containing cache-control options for the sub-request. */
-  cache?: CacheOptions;
-}): void {
-  if (isClient()) {
-    throw new Error(
-      'Shopify Storefront API requests should only be made from the server.'
-    );
-  }
-  const body = query ? graphqlRequestBody(query, variables) : '';
-  const {request, key} = createShopRequest(body);
-
-  preloadQuery<UseShopQueryResponse<T>>(
-    key,
-    query
-      ? fetchBuilder<UseShopQueryResponse<T>>(request)
-      : async () => ({data: undefined as unknown as T, errors: undefined}),
-    {cache}
-  );
-}
-
 function createShopRequest(body: string) {
   const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
 

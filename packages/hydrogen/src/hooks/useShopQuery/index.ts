@@ -1,1 +1,1 @@
-export {useShopQuery, preloadShopQuery} from './hooks';
+export {useShopQuery} from './hooks';

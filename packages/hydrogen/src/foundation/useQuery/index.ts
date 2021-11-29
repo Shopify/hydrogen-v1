@@ -1,1 +1,1 @@
-export {useQuery, preloadQuery} from './hooks';
+export {useQuery} from './hooks';

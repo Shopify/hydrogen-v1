@@ -53,22 +53,6 @@ export function useQuery<T>(
   throw 'useQuery - something is really wrong if this throws';
 }
 
-/**
- * The `preloadQuery` hook is a wrapper around Suspense calls that
- * doesn't block to help reduce Suspense waterfalls. It has the
- * same parameter signature as `useQuery`
- */
-export function preloadQuery<T>(
-  /** A string or array to uniquely identify the current query. */
-  key: QueryKey,
-  /** An asynchronous query function like `fetch` which returns data. */
-  queryFn: () => Promise<T>,
-  /** Options including `cache` to manage the cache behavior of the sub-request. */
-  queryOptions?: HydrogenUseQueryOptions
-): void {
-  getSuspensePromise<T>(key, queryFn, queryOptions);
-}
-
 function getSuspensePromise<T>(
   key: QueryKey,
   queryFn: () => Promise<T>,
