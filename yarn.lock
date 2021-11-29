@@ -11157,14 +11157,14 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@18.0.0-beta-fdc1d617a-20211118:
-  version "18.0.0-beta-fdc1d617a-20211118"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.0.0-beta-fdc1d617a-20211118.tgz#0d2ddaa962fae1bbcf17c0eac5e3879d30793753"
-  integrity sha512-BlA0NdAKE+Ibe5orAfHphf76ltL9+PiWsexrjVjtRcumrra3WH3rDYT+evXfLFBzxpbZDjhkL1oQ1/zCjKyWBA==
+react-dom@0.0.0-experimental-0cc724c77-20211125:
+  version "0.0.0-experimental-0cc724c77-20211125"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-0cc724c77-20211125.tgz#f48ee44d803b7ba6a888f1cd5ef4402e84f46dba"
+  integrity sha512-VAaAcGgIVGHX8nOjwQNLEFNI1ONyxsPvKgZ3ywJjEEo5leMDCuYzu+AC2kn1wyyd/4SsI0FOogbpaTcnLMgoUg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-    scheduler "0.21.0-beta-fdc1d617a-20211118"
+    scheduler "0.0.0-experimental-0cc724c77-20211125"
 
 react-error-boundary@^3.1.3:
   version "3.1.4"
@@ -11261,10 +11261,10 @@ react-ssr-prepass@^1.4.0:
   resolved "https://registry.yarnpkg.com/react-ssr-prepass/-/react-ssr-prepass-1.4.0.tgz#33a3db19414f0f8f9f3f781c88f760ae366b4f51"
   integrity sha512-0SzdmiQUtHvhxCabHg9BI/pkJfijGkQ0jQL6fC4YFy7idaDOuaiQLsajIkkNxffFXtJFHIWFITlve2WB88e0Jw==
 
-react@18.0.0-beta-fdc1d617a-20211118:
-  version "18.0.0-beta-fdc1d617a-20211118"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.0.0-beta-fdc1d617a-20211118.tgz#ed8dd1674ddcab02bfff88ba368ad4d44db79fa7"
-  integrity sha512-+02tXs7Wc5az4Aw+dWp7Vwmd68POpiJF0pD20dVCwS+W8xxQ9GFEJrd5VE4Nal+HWDkGzSb6dApxoahULK/8ZA==
+react@0.0.0-experimental-0cc724c77-20211125:
+  version "0.0.0-experimental-0cc724c77-20211125"
+  resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-0cc724c77-20211125.tgz#ed650068fbccae10a4cb7b78981517cf7a249f22"
+  integrity sha512-8jVo1Rew40qblTTRkVm6ksk4YZ0rG30nwyXwDnnPEszQaUp+dXfEFsoxnSGElroECC2dx4Gg3a6kFsmrBYaF5Q==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -11967,10 +11967,10 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@0.21.0-beta-fdc1d617a-20211118:
-  version "0.21.0-beta-fdc1d617a-20211118"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.21.0-beta-fdc1d617a-20211118.tgz#1f5e075e81b48af4a50d8f602a7a636731f0b8d4"
-  integrity sha512-fagjljhO7tVIGdT3rtYjjbHve/XfMubdY3Yna799WMK/rfYZtsGvX3GPu3IsjwOIs3IrcGjlxVRm6u3PFO+lwA==
+scheduler@0.0.0-experimental-0cc724c77-20211125:
+  version "0.0.0-experimental-0cc724c77-20211125"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.0.0-experimental-0cc724c77-20211125.tgz#79c9bedbcc1942aab5ddadf12711ddd5db8ef915"
+  integrity sha512-JcvQnsZuiqkRI+uekA9cgAVOHccuBxzOdTqPs3FAInrnZO9OhufomeTKIXuFQwjwZ5DYstOSZax/QnKVXCJFbw==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

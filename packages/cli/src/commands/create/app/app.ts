@@ -95,8 +95,12 @@ export async function app(env: Env<{name: string}>) {
     workspace.install('graphql-tag');
   }
 
-  workspace.install('react', {version: '18.0.0-beta-fdc1d617a-20211118'});
-  workspace.install('react-dom', {version: '18.0.0-beta-fdc1d617a-20211118'});
+  workspace.install('react', {
+    version: '0.0.0-experimental-0cc724c77-20211125',
+  });
+  workspace.install('react-dom', {
+    version: '0.0.0-experimental-0cc724c77-20211125',
+  });
   workspace.install('react-router-dom', {version: '^5.2.0'});
   workspace.install('@shopify/hydrogen');
   workspace.install('vite', {dev: true, version: '^2.6.14'});

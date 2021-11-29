@@ -9,7 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Change `ProductCard` and `FeaturedCollection` from server components to shared components
 - Use `eslint-plugin-hydrogen` recommended config for JS linting
-- Upgrade to latest React 18 beta
+- Upgrade to latest React 18 experimental version
 
 ## 0.7.0 - 2021-11-22
 
