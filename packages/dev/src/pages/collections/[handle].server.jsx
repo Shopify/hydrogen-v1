@@ -5,7 +5,6 @@ import {
   flattenConnection,
   RawHtml,
 } from '@shopify/hydrogen';
-import {useParams} from 'react-router-dom';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';

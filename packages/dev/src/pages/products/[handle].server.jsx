@@ -1,5 +1,4 @@
 import {useShopQuery, ProductProviderFragment} from '@shopify/hydrogen';
-import {useParams} from 'react-router-dom';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';

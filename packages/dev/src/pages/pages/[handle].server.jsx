@@ -1,4 +1,3 @@
-import {useParams} from 'react-router-dom';
 import {useShopQuery, RawHtml} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
