@@ -6,7 +6,7 @@ import {
   setItemInCache,
   hashKey,
 } from '../../framework/cache';
-import {runDelayedFunction} from '../../framework/runtime';
+import {runDelayedFunction, getCache} from '../../framework/runtime';
 import {SuspensePromise} from './SuspensePromise';
 
 const suspensePromises: Map<string, SuspensePromise<unknown>> = new Map();
@@ -36,7 +36,16 @@ export function useQuery<T>(
   } else if (status === SuspensePromise.ERROR) {
     throw suspensePromise.result;
   } else if (status === SuspensePromise.SUCCESS) {
-    suspensePromises.delete(cacheKey);
+    // If we have Cache, we'll follow the cache maxAge spec before removing from SuspensePromise map
+    if (getCache()) {
+      setTimeout(() => {
+        if (suspensePromises.has(cacheKey)) {
+          suspensePromises.delete(cacheKey);
+        }
+      }, suspensePromise.maxAge);
+    } else {
+      suspensePromises.delete(cacheKey);
+    }
     return suspensePromise.result as T;
   }
 
@@ -66,7 +75,8 @@ function getSuspensePromise<T>(
   let suspensePromise = suspensePromises.get(cacheKey);
   if (!suspensePromise) {
     suspensePromise = new SuspensePromise<T>(
-      cachedQueryFnBuilder(key, queryFn, queryOptions)
+      cachedQueryFnBuilder(key, queryFn, queryOptions),
+      queryOptions?.cache?.maxAge
     );
     suspensePromises.set(cacheKey, suspensePromise);
   }
