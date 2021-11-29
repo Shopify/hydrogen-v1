@@ -37,7 +37,7 @@ export function useShopQuery<T>({
   }
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {request, key} = createShopRquest(body);
+  const {request, key} = createShopRequest(body);
 
   const result = useQuery<UseShopQueryResponse<T>>(
     key,
@@ -92,7 +92,7 @@ export function preloadShopQuery<T>({
     );
   }
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {request, key} = createShopRquest(body);
+  const {request, key} = createShopRequest(body);
 
   preloadQuery<UseShopQueryResponse<T>>(
     key,
@@ -103,7 +103,7 @@ export function preloadShopQuery<T>({
   );
 }
 
-function createShopRquest(body: string) {
+function createShopRequest(body: string) {
   const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
 
   const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
