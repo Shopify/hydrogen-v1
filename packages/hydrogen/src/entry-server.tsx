@@ -7,7 +7,6 @@ import {
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
-import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import {HydrationContext} from './framework/Hydration/HydrationContext.server';
 import type {ReactQueryHydrationContext} from './foundation/ShopifyProvider/types';
@@ -256,14 +255,9 @@ function buildReactApp({
   const componentResponse = new ServerComponentResponse();
 
   const ReactApp = (props: any) => (
-    <StaticRouter
-      location={{pathname: state.pathname, search: state.search}}
-      context={context}
-    >
-      <HelmetProvider context={helmetContext}>
-        <App {...props} request={request} response={componentResponse} />
-      </HelmetProvider>
-    </StaticRouter>
+    <HelmetProvider context={helmetContext}>
+      <App {...props} request={request} response={componentResponse} />
+    </HelmetProvider>
   );
 
   return {helmetContext, ReactApp, componentResponse};

@@ -75,6 +75,7 @@ const QUERY = gql`
     $numProductVariantSellingPlanAllocations: Int!
     $numProductSellingPlanGroups: Int!
     $numProductSellingPlans: Int!
+    $includeReferenceMetafieldDetails: Boolean = false
   ) @inContext(country: $country) {
     products(first: 3) {
       edges {

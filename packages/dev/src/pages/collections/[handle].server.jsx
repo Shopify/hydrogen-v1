@@ -15,9 +15,10 @@ import NotFound from '../../components/NotFound.server';
 
 export default function Collection({
   country = {isoCode: 'US'},
+  params,
   collectionProductCount = 24,
 }) {
-  const {handle} = useParams();
+  const {handle} = params;
   const {data} = useShopQuery({
     query: QUERY,
     variables: {

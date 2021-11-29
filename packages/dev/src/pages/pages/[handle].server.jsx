@@ -5,8 +5,8 @@ import gql from 'graphql-tag';
 import Layout from '../../components/Layout.server';
 import NotFound from '../../components/NotFound.server';
 
-export default function Page() {
-  const {handle} = useParams();
+export default function Page({params}) {
+  const {handle} = params;
   const {data} = useShopQuery({query: QUERY, variables: {handle}});
 
   if (!data.pageByHandle) {
