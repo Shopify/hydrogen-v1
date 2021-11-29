@@ -16,7 +16,8 @@ export interface HydrogenUseQueryOptions {
 }
 
 /**
- * The `useQuery` hook is a wrapper around global runtime's Cache API.
+ * The `useQuery` hook is a wrapper around Suspense calls and
+ * global runtime's Cache if it exist.
  * It supports Suspense calls on the server and on the client.
  */
 export function useQuery<T>(
@@ -53,7 +54,9 @@ export function useQuery<T>(
 }
 
 /**
- * Preloads the query with suspense support
+ * The `preloadQuery` hook is a wrapper around Suspense calls that
+ * doesn't block to help reduce Suspense waterfalls. It has the
+ * same parameter signature as `useQuery`
  */
 export function preloadQuery<T>(
   /** A string or array to uniquely identify the current query. */
@@ -89,13 +92,6 @@ function cachedQueryFnBuilder<T>(
   queryOptions?: HydrogenUseQueryOptions
 ) {
   const resolvedQueryOptions = {
-    /**
-     * Prevent react-query from from retrying request failures. This sometimes bites developers
-     * because they will get back a 200 GraphQL response with errors, but not properly check
-     * for errors. This leads to a failed `queryFn` and react-query keeps running it, leading
-     * to a much slower response time and a poor developer experience.
-     */
-    retry: false,
     ...(queryOptions ?? {}),
   };
 
