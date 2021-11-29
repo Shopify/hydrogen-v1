@@ -52,8 +52,6 @@ export function matchPath(pathname: string, options: MatchPathOptions = {}) {
     });
     const match = regexp.exec(pathname);
 
-    console.log(path, pathname, match);
-
     if (!match) return null;
 
     const [url, ...values] = match;
