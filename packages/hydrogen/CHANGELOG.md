@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - fix: avoid repeating the same identifier for default and named exports
 - fix: remove sourcemap warnings
+- feat: upgrade to latest React 18 beta
 
 ## 0.7.0 - 2021-11-22
 

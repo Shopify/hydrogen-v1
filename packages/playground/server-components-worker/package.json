@@ -16,8 +16,8 @@
     "@cloudflare/kv-asset-handler": "*",
     "@shopify/hydrogen": "^0.7.0",
     "miniflare": "^1.3.3",
-    "react": "18.0.0-alpha-e6be2d531",
-    "react-dom": "18.0.0-alpha-e6be2d531",
+    "react": "18.0.0-beta-fdc1d617a-20211118",
+    "react-dom": "18.0.0-beta-fdc1d617a-20211118",
     "react-router-dom": "^5.2.0"
   }
 }
