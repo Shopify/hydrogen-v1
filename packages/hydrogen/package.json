@@ -79,10 +79,10 @@
     "react": "^18",
     "react-dom": "^18",
     "react-router-dom": "^5.2.0",
-    "vite": "^2.7.0-beta.7"
+    "vite": "^2.7.0-beta.8"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^1.1.0-beta.0",
+    "@vitejs/plugin-react": "^1.1.0",
     "connect": "^3.7.0",
     "es-module-lexer": "^0.9.0",
     "fast-glob": "^3.2.5",
