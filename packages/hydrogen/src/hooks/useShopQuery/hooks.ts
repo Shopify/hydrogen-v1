@@ -4,6 +4,7 @@ import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';
 import {isClient, fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
+
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
   data: T;
@@ -20,8 +21,10 @@ export function useShopQuery<T>({
   variables = {},
   cache = {},
 }: {
-  /** A string of the GraphQL query. */
-  query: ASTNode | string;
+  /** A string of the GraphQL query.
+   * If no query is provided, useShopQuery will make no calls to the Storefront API.
+   */
+  query?: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
   /** An object containing cache-control options for the sub-request. */
@@ -35,7 +38,7 @@ export function useShopQuery<T>({
 
   const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
 
-  const body = graphqlRequestBody(query, variables);
+  const body = query ? graphqlRequestBody(query, variables) : "";
   const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
   const request = new Request(url, {
     method: 'POST',
@@ -48,7 +51,10 @@ export function useShopQuery<T>({
 
   const {data} = useQuery<UseShopQueryResponse<T>>(
     [storeDomain, graphqlApiVersion, body],
-    fetchBuilder<UseShopQueryResponse<T>>(request),
+    query
+      ? fetchBuilder<UseShopQueryResponse<T>>(request)
+      // If no query, avoid calling SFAPI & return nothing
+      : async () => ({data: undefined as unknown as T, errors: undefined}),
     {cache}
   );
 
