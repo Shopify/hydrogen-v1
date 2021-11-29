@@ -1,7 +1,7 @@
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
 import {createRoot} from 'react-dom';
-import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter, Switch} from 'react-router-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {HelmetProvider} from 'react-helmet-async';
@@ -47,7 +47,9 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
           <BrowserRouter>
             <ServerStateRouter />
             {/* @ts-ignore */}
-            <ClientWrapper>{response.read()}</ClientWrapper>
+            <Switch>
+              <ClientWrapper>{response.read()}</ClientWrapper>
+            </Switch>
           </BrowserRouter>
         </HelmetProvider>
       </QueryProvider>
