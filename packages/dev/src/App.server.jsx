@@ -17,10 +17,6 @@ export default function App({...serverState}) {
         <CartProvider>
           <DefaultSeo />
           <DefaultRoutes
-            location={{
-              pathname: serverState.pathname,
-              search: serverState.search,
-            }}
             pages={pages}
             serverState={serverState}
             fallback={<NotFound />}

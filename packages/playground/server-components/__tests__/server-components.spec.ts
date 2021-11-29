@@ -10,6 +10,7 @@ it('shows the homepage, navigates to about, and increases the count', async () =
 });
 
 it('follows synchronous redirects', async () => {
+  console.log(viteTestUrl);
   await page.goto(viteTestUrl + '/redirected');
   expect(await page.url()).toContain('/about');
   expect(await page.textContent('h1')).toContain('About');

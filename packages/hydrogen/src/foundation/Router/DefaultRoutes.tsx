@@ -10,12 +10,10 @@ export type ImportGlobEagerOutput = Record<string, Record<'default', any>>;
  * @see https://vitejs.dev/guide/features.html#glob-import
  */
 export function DefaultRoutes({
-  location,
   pages,
   serverState,
   fallback,
 }: {
-  location: Location;
   pages: ImportGlobEagerOutput;
   serverState: Record<string, any>;
   fallback?: ReactElement;
@@ -30,7 +28,7 @@ export function DefaultRoutes({
   let foundRoute, foundRouteDetails;
 
   for (let i = 0; i < routes.length; i++) {
-    foundRouteDetails = matchPath(location.pathname, routes[i]);
+    foundRouteDetails = matchPath(serverState.pathname, routes[i]);
 
     if (foundRouteDetails) {
       foundRoute = routes[i];
@@ -43,11 +41,6 @@ export function DefaultRoutes({
   ) : (
     fallback
   );
-}
-
-interface Location {
-  pathname: string;
-  searcH: string;
 }
 
 interface HydrogenRoute {
