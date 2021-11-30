@@ -1,6 +1,8 @@
 export {
   ServerStateProvider,
   ServerStateContext,
-  ServerStateContextValue,
+} from './ServerStateProvider.client';
+export type {
   ServerState,
+  ServerStateContextValue,
 } from './ServerStateProvider.client';
