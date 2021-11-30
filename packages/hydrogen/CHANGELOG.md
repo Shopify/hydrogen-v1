@@ -10,6 +10,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: avoid repeating the same identifier for default and named exports
 - fix: remove sourcemap warnings
 - feat: allow `useShopQuery` to be skippable if no query is passed.
+- fix: Remove usage of `react-query` (Not a breaking change)
 
 ## 0.7.0 - 2021-11-22
 
