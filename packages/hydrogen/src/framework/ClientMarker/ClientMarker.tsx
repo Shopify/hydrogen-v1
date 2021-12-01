@@ -8,7 +8,7 @@ interface ClientMarkerMeta {
 }
 
 export function wrapInClientMarker(meta: ClientMarkerMeta) {
-  const {component: Component} = meta;
+  const {component: Component, name} = meta;
 
   if (
     !Component ||
@@ -19,15 +19,22 @@ export function wrapInClientMarker(meta: ClientMarkerMeta) {
     return Component;
   }
 
-  Object.defineProperty(Component, '$$moduleReference', {
-    enumerable: true,
-    value: {
-      $$typeof: Symbol.for('react.module.reference'),
-      filepath: meta.id,
-      name: meta.name,
-      named: meta.named,
-    },
-  });
+  // Use object syntax here to make sure the function name
+  // comes from the meta params for better error stacks.
+  const wrappedComponent = {
+    [name]: (props: any) => <Component {...props} />,
+  }[name];
 
-  return Component;
+  return {
+    // React access the `render` function directly when encountring this type
+    $$typeof: Symbol.for('react.forward_ref'),
+    render: wrappedComponent,
+
+    // RSC checks this hack instead of $$typeof
+    _$$typeof: Symbol.for('react.module.reference'),
+    // RSC payload
+    filepath: meta.id,
+    name: meta.name,
+    named: meta.named,
+  };
 }

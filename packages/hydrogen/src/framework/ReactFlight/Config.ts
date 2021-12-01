@@ -61,7 +61,10 @@ const commonImplementation = {
     return reference.filepath + '#' + reference.name;
   },
   isModuleReference(reference: Object): boolean {
-    return (reference as any).$$typeof === MODULE_TAG;
+    return (
+      ((reference as any)._$$typeof || (reference as any).$$typeof) ===
+      MODULE_TAG
+    );
   },
   resolveModuleMetaData<T>(
     config: BundlerConfig, // this is not used
