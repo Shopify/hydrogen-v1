@@ -11256,6 +11256,10 @@ react-router@5.2.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
+"react-server@link:../../react/build/node_modules/react-server":
+  version "0.0.0"
+  uid ""
+
 react-ssr-prepass@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/react-ssr-prepass/-/react-ssr-prepass-1.4.0.tgz#33a3db19414f0f8f9f3f781c88f760ae366b4f51"
