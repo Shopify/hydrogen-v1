@@ -3,7 +3,7 @@ import {RequestProviderProps} from './types';
 import {RequestContext} from './RequestContext';
 
 /**
- * The `useShop` hook provides access to values within `shopify.config.js`.The `useShop` hook provides access to values within `shopify.config.js`. It must be a descendent of a `ShopifyProvider` component.
+ * Returns the unique identifier for the current rendering request
  */
 export function useRequest(): RequestProviderProps {
   const context = useContext(RequestContext);

@@ -6,7 +6,7 @@
  * - Adds a static constructor to convert a Node.js `IncomingMessage` to a Request.
  */
 
-let count = 0;
+import {v4 as uuidv4} from 'uuid';
 
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
@@ -25,10 +25,7 @@ export class ServerComponentRequest extends Request {
     }
 
     this.cookies = this.parseCookies();
-
-    // Unique Id for this request - use a uuidv4 later
-    count += 1;
-    this.requestId = count.toString();
+    this.requestId = uuidv4();
   }
 
   private parseCookies() {
