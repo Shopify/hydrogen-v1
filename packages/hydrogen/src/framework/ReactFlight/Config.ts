@@ -40,12 +40,14 @@ export type ModuleReference<T> = {
   $$typeof: Symbol;
   filepath: string;
   name: string;
+  named?: boolean;
 };
 
 export type ModuleMetaData = {
   id: string;
-  chunks: Array<string>;
+  chunks?: Array<string>;
   name: string;
+  named?: boolean;
 };
 
 export type ModuleKey = string;
@@ -62,10 +64,14 @@ const commonImplementation = {
     return (reference as any).$$typeof === MODULE_TAG;
   },
   resolveModuleMetaData<T>(
-    config: BundlerConfig,
+    config: BundlerConfig, // this is not used
     moduleReference: ModuleReference<T>
   ): ModuleMetaData {
-    return config[moduleReference.filepath][moduleReference.name];
+    return {
+      id: moduleReference.filepath,
+      name: moduleReference.name,
+      named: moduleReference.named,
+    };
   },
 };
 

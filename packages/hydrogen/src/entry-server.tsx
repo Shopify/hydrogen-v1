@@ -23,6 +23,8 @@ import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
 import type {ServerResponse} from 'http';
 
+import {renderToPipeableStream as renderRSCFlight} from './framework/ReactFlight/Renderer';
+
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
  * - `renderToReadableStream` for "browser" (aka worker)
@@ -182,7 +184,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
   ) {
     const state = JSON.parse(url.searchParams.get('state') || '{}');
 
-    const {ReactApp, componentResponse} = buildReactApp({
+    const {ReactApp} = buildReactApp({
       App,
       state,
       context,
@@ -194,41 +196,12 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       console.error('Fatal', error);
     });
 
-    let didError: Error | undefined;
-
-    const writer = new HydrationWriter();
-
-    const {pipe, abort} = renderToPipeableStream(
-      <HydrationContext.Provider value={true}>
-        <ReactApp {...state} />
-      </HydrationContext.Provider>,
-      {
-        /**
-         * When hydrating, we have to wait until `onCompleteAll` to avoid having
-         * `template` and `script` tags inserted and rendered as part of the hydration response.
-         */
-        onCompleteAll() {
-          // Tell React to start writing to the writer
-          pipe(writer);
-
-          // Tell React that the writer is ready to drain, which sometimes results in a last "chunk" being written.
-          writer.drain();
-
-          response.statusCode = didError ? 500 : 200;
-          response.setHeader(
-            getCacheControlHeader({dev}),
-            componentResponse.cacheControlHeader
-          );
-          response.end(generateWireSyntaxFromRenderedHtml(writer.toString()));
-        },
-        onError(error: any) {
-          didError = error;
-          console.error(error);
-        },
-      }
+    const {pipe} = renderRSCFlight(
+      <ReactApp {...state} />,
+      {} // Empty manifest
     );
 
-    setTimeout(abort, STREAM_ABORT_TIMEOUT_MS);
+    pipe(response);
   };
 
   return {
