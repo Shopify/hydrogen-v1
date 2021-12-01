@@ -19,10 +19,8 @@ export class SuspensePromise<T> {
   status: string = SuspensePromise.PENDING;
   promise: Promise<T>;
   result: T | undefined;
-  maxAge = 0;
 
-  constructor(promiseFn: () => Promise<T>, maxAge = 0) {
-    this.maxAge = maxAge * 1000;
+  constructor(promiseFn: () => Promise<T>) {
     this.promise = promiseFn();
     this.promise.then(
       (r) => {

@@ -15,7 +15,7 @@ export interface HydrogenUseQueryOptions {
 }
 type SuspenseCache = Map<string, SuspensePromise<unknown>>;
 
-let requestCaches: Map<string, SuspenseCache> = new Map();
+const requestCaches: Map<string, SuspenseCache> = new Map();
 
 function getRequestCache(): SuspenseCache {
   const {requestId} = useRequest();
@@ -69,8 +69,7 @@ function getSuspensePromise<T>(
   let suspensePromise = suspenseCache.get(cacheKey);
   if (!suspensePromise) {
     suspensePromise = new SuspensePromise<T>(
-      cachedQueryFnBuilder(key, queryFn, queryOptions),
-      queryOptions?.cache?.maxAge
+      cachedQueryFnBuilder(key, queryFn, queryOptions)
     );
     suspenseCache.set(cacheKey, suspensePromise);
   }
