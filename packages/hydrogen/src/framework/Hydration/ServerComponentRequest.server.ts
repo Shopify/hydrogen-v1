@@ -5,8 +5,12 @@
  * - Adds a `cookies` map for easy access
  * - Adds a static constructor to convert a Node.js `IncomingMessage` to a Request.
  */
+
+let count = 0;
+
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
+  public requestId: string;
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -21,6 +25,10 @@ export class ServerComponentRequest extends Request {
     }
 
     this.cookies = this.parseCookies();
+
+    // Unique Id for this request - use a uuidv4 later
+    count += 1;
+    this.requestId = count.toString();
   }
 
   private parseCookies() {

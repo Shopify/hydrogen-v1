@@ -8,11 +8,28 @@ import {
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
 import {SuspensePromise} from './SuspensePromise';
-
-const suspensePromises: Map<string, SuspensePromise<unknown>> = new Map();
+import {useRequest} from '../RequestServerProvider/hook';
 
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
+}
+type SuspenseCache = Map<string, SuspensePromise<unknown>>;
+
+let requestCaches: Map<string, SuspenseCache> = new Map();
+
+function getRequestCache(): SuspenseCache {
+  const {requestId} = useRequest();
+
+  let requestCache: SuspenseCache | undefined = requestCaches.get(requestId);
+  if (!requestCache) {
+    requestCache = new Map();
+    requestCaches.set(requestId, requestCache);
+  }
+  return requestCache;
+}
+
+export function clearRequestCache(requestId: string) {
+  requestCaches.delete(requestId);
 }
 
 /**
@@ -28,7 +45,6 @@ export function useQuery<T>(
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
 ): T {
-  const cacheKey = hashKey(key);
   const suspensePromise = getSuspensePromise<T>(key, queryFn, queryOptions);
   const status = suspensePromise.status;
 
@@ -37,8 +53,6 @@ export function useQuery<T>(
   } else if (status === SuspensePromise.ERROR) {
     throw suspensePromise.result;
   } else if (status === SuspensePromise.SUCCESS) {
-    // Remove from suspense short term cache when result is fullfilled
-    suspensePromises.delete(cacheKey);
     return suspensePromise.result as T;
   }
 
@@ -51,13 +65,14 @@ function getSuspensePromise<T>(
   queryOptions?: HydrogenUseQueryOptions
 ): SuspensePromise<T> {
   const cacheKey = hashKey(key);
-  let suspensePromise = suspensePromises.get(cacheKey);
+  const suspenseCache = getRequestCache();
+  let suspensePromise = suspenseCache.get(cacheKey);
   if (!suspensePromise) {
     suspensePromise = new SuspensePromise<T>(
       cachedQueryFnBuilder(key, queryFn, queryOptions),
       queryOptions?.cache?.maxAge
     );
-    suspensePromises.set(cacheKey, suspensePromise);
+    suspenseCache.set(cacheKey, suspensePromise);
   }
   return suspensePromise as SuspensePromise<T>;
 }
