@@ -10,6 +10,7 @@ import {runDelayedFunction} from '../../framework/runtime';
 import {SuspensePromise} from './SuspensePromise';
 import {useRequest} from '../RequestServerProvider/hook';
 
+import type {SuspensePromiseResult} from './SuspensePromise';
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
 }
@@ -44,7 +45,7 @@ export function useQuery<T>(
   queryFn: () => Promise<T>,
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
-): T {
+): SuspensePromiseResult<T> {
   const suspensePromise = getSuspensePromise<T>(key, queryFn, queryOptions);
   const status = suspensePromise.status;
 
@@ -53,7 +54,7 @@ export function useQuery<T>(
   } else if (status === SuspensePromise.ERROR) {
     throw suspensePromise.result;
   } else if (status === SuspensePromise.SUCCESS) {
-    return suspensePromise.result as T;
+    return suspensePromise.result as SuspensePromiseResult<T>;
   }
 
   throw 'useQuery - something is really wrong if this throws';

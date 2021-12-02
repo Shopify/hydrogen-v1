@@ -11,6 +11,10 @@
  * try to process the same component again at a later time
  */
 
+export interface SuspensePromiseResult<T> {
+  data: T;
+}
+
 export class SuspensePromise<T> {
   static PENDING = 'pending';
   static SUCCESS = 'success';
@@ -18,18 +22,18 @@ export class SuspensePromise<T> {
 
   status: string = SuspensePromise.PENDING;
   promise: Promise<T>;
-  result: T | undefined;
+  result: SuspensePromiseResult<T> | undefined;
 
   constructor(promiseFn: () => Promise<T>) {
     this.promise = promiseFn();
     this.promise.then(
       (r) => {
         this.status = SuspensePromise.SUCCESS;
-        this.result = r;
+        this.result = {data: r};
       },
       (e) => {
         this.status = SuspensePromise.ERROR;
-        this.result = e;
+        this.result = {data: e};
       }
     );
   }
