@@ -1,7 +1,7 @@
 // Transform relative paths to absolute in order
 // to match component IDs from ClientMarker.
 function normalizeComponentPaths(
-  componentObject: Record<string, undefined | (() => any)>,
+  componentObject: Record<string, undefined | (() => Promise<any>)>,
   prefix: string
 ) {
   return Object.entries(componentObject).reduce((acc, [key, value]) => {

@@ -58,6 +58,7 @@ export default () => {
           'react-dom',
           'react-router-dom',
           'react-server',
+          'react-client/flight',
         ],
       },
 
