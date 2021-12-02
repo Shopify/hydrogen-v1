@@ -43,7 +43,8 @@ export function useShopQuery<T>({
     key,
     query
       ? fetchBuilder<UseShopQueryResponse<T>>(request)
-      : async () => ({data: undefined as unknown as T, errors: undefined}),
+      : // If no query, avoid calling SFAPI & return nothing
+        async () => ({data: undefined as unknown as T, errors: undefined}),
     {cache}
   );
 
@@ -51,7 +52,7 @@ export function useShopQuery<T>({
    * GraphQL errors get printed to the console but ultimately
    * get returned to the consumer.
    */
-  if (data.errors) {
+  if (data?.errors) {
     const errors = data.errors instanceof Array ? data.errors : [data.errors];
     for (const error of errors) {
       console.error('GraphQL Error', error);
