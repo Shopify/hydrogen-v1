@@ -62,7 +62,7 @@ const commonImplementation = {
   },
   isModuleReference(reference: Object): boolean {
     return (
-      ((reference as any)._$$typeof || (reference as any).$$typeof) ===
+      ((reference as any).$$typeof_rsc || (reference as any).$$typeof) ===
       MODULE_TAG
     );
   },

@@ -1,4 +1,5 @@
-import {FunctionComponent} from 'react';
+import React, {FunctionComponent} from 'react';
+import {createObject} from '../../utilities/object';
 
 interface ClientMarkerMeta {
   name: string;
@@ -21,20 +22,31 @@ export function wrapInClientMarker(meta: ClientMarkerMeta) {
 
   // Use object syntax here to make sure the function name
   // comes from the meta params for better error stacks.
-  const wrappedComponent = {
+  const render = {
     [name]: (props: any) => <Component {...props} />,
   }[name];
 
-  return {
-    // React access the `render` function directly when encountring this type
+  const componentRef = createObject({
+    // React accesses the `render` function directly when encountring this type
     $$typeof: Symbol.for('react.forward_ref'),
-    render: wrappedComponent,
+    render,
+  });
 
-    // RSC checks this hack instead of $$typeof
-    _$$typeof: Symbol.for('react.module.reference'),
-    // RSC payload
+  const rscDescriptor = createObject({
+    // This custom type is checked in RSC renderer
+    $$typeof_rsc: Symbol.for('react.module.reference'),
     filepath: meta.id,
     name: meta.name,
     named: meta.named,
-  };
+  });
+
+  return new Proxy(componentRef, {
+    get: (target, prop) =>
+      // 1. Let React access the element/ref and type in SSR
+      (target as any)[prop] ??
+      // 2. Check descriptor properties for RSC requests
+      (rscDescriptor as any)[prop] ??
+      // 3. Fallback to custom component properties such as `Image.Fragment`
+      (Component as any)[prop],
+  });
 }
