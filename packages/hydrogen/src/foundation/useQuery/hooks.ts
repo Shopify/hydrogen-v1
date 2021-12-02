@@ -29,8 +29,20 @@ function getRequestCache(): SuspenseCache {
   return requestCache;
 }
 
+/**
+ * Clears the short term cache by request id
+ * @param requestId - the unique id of the request
+ */
 export function clearRequestCache(requestId: string) {
   requestCaches.delete(requestId);
+
+  // Periodically clears the default cache "0"
+  // This cache sometimes gets set but will never be use
+  // Most requests will be assigned a unique id but some may miss
+  // for whatever reason (usually during boot)
+  runDelayedFunction(async () => {
+    requestCaches.delete('0');
+  });
 }
 
 /**
