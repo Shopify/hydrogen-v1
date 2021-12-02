@@ -1,9 +1,9 @@
 import type {Writable} from 'stream';
-import type {BundlerConfig, ReactModel} from './Config';
+import type {BundlerConfig, ReactModel} from './ServerConfig';
 
 // @ts-ignore
 import createFlightRenderer from 'react-server/flight';
-import rendererConfig from './Config';
+import rendererConfig from './ServerConfig';
 
 const {createRequest, startWork, startFlowing} =
   createFlightRenderer(rendererConfig);
@@ -22,12 +22,12 @@ type Controls = {
 
 function renderToPipeableStream(
   model: ReactModel,
-  webpackMap: BundlerConfig,
+  manifest?: BundlerConfig,
   options?: Options
 ): Controls {
   const request = createRequest(
     model,
-    webpackMap,
+    manifest || {},
     options ? options.onError : undefined
   );
   let hasStartedFlowing = false;

@@ -72,9 +72,11 @@ const commonImplementation = {
   ): ModuleMetaData {
     return {
       id: moduleReference.filepath,
+      // chunks: [],
       name: moduleReference.name,
       named: moduleReference.named,
     };
+    // return config[moduleReference.filepath][moduleReference.name];
   },
 };
 

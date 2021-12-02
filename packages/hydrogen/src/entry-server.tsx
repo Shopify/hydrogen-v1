@@ -23,7 +23,7 @@ import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
 import type {ServerResponse} from 'http';
 
-import {renderToPipeableStream as renderRSCFlight} from './framework/ReactFlight/Renderer';
+import {renderToPipeableStream as renderRSCFlight} from './framework/ReactFlight/ServerRenderer';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
