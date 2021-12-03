@@ -65,8 +65,8 @@ const moduleCache = new Map();
 
 export default {
   supportsBinaryStreams: typeof TextDecoder !== 'undefined',
-  resolveModuleReference(idx: string) {
-    return idx;
+  resolveModuleReference(data: ModuleMetaData) {
+    return data;
   },
   preloadModule({id}: ModuleMetaData) {
     if (moduleCache.has(id)) return;
@@ -79,7 +79,7 @@ export default {
     // Store the original promise first, then override cache with its result.
     cacheResult(importClientComponent(id)).then(cacheResult, cacheResult);
   },
-  requireModule({id, name, named}: ModuleMetaData) {
+  requireModule({id, name}: ModuleMetaData) {
     if (moduleCache.has(id)) {
       const mod = moduleCache.get(id);
 
@@ -89,7 +89,7 @@ export default {
         throw mod;
       }
 
-      return mod[named ? name : 'default'];
+      return mod[name];
     }
   },
   parseModel(response: FlightResponse, json: string) {

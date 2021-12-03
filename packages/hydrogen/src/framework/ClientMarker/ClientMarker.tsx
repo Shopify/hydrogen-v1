@@ -36,8 +36,7 @@ export function wrapInClientMarker(meta: ClientMarkerMeta) {
     // This custom type is checked in RSC renderer
     $$typeof_rsc: Symbol.for('react.module.reference'),
     filepath: meta.id,
-    name: meta.name,
-    named: meta.named,
+    name: meta.named ? meta.name : 'default',
   });
 
   return new Proxy(componentRef, {

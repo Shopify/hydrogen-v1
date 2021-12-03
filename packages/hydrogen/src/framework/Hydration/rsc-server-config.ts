@@ -40,14 +40,11 @@ export type ModuleReference<T> = {
   $$typeof: Symbol;
   filepath: string;
   name: string;
-  named?: boolean;
 };
 
 export type ModuleMetaData = {
   id: string;
-  chunks?: Array<string>;
   name: string;
-  named?: boolean;
 };
 
 export type ModuleKey = string;
@@ -72,11 +69,8 @@ const commonImplementation = {
   ): ModuleMetaData {
     return {
       id: moduleReference.filepath,
-      // chunks: [],
       name: moduleReference.name,
-      named: moduleReference.named,
     };
-    // return config[moduleReference.filepath][moduleReference.name];
   },
 };
 
