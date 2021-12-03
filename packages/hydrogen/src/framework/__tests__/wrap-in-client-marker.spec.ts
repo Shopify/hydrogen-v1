@@ -1,4 +1,4 @@
-import {wrapInClientMarker} from '../ClientMarker';
+import {wrapInClientMarker, MODULE_TAG} from '../ClientMarker';
 
 const params = {
   id: '/path/to/Counter.client.jsx',
@@ -23,16 +23,7 @@ it('only wraps React-like components', async () => {
   ).toBe(42);
 });
 
-it('keeps the component name', async () => {
-  const wrapped = wrapInClientMarker({
-    ...params,
-    component: () => 'component' as any,
-  });
-
-  expect(wrapped.name).toBe(params.name);
-});
-
-it('relays enumerable properties', async () => {
+it('adds descriptor, relays enumerable properties and keeps the component name', async () => {
   const fragment = 'MyFragment';
   const component = () => 'component' as any;
   component.Fragment = fragment;
@@ -44,4 +35,8 @@ it('relays enumerable properties', async () => {
 
   // @ts-ignore
   expect(wrapped.Fragment).toBe(fragment);
+  // @ts-ignore
+  expect(wrapped.$$typeof_rsc).toBe(MODULE_TAG);
+  // @ts-ignore
+  expect(wrapped.render.name).toBe(params.name);
 });
