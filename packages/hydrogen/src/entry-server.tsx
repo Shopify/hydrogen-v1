@@ -18,7 +18,7 @@ import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
-import type {ServerResponse} from 'http';
+import {ServerResponse} from 'http';
 import {RenderCacheProvider} from './foundation/RenderCacheProvider';
 
 /**

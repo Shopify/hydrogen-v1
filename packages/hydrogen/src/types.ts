@@ -1,4 +1,4 @@
-import type {ServerResponse} from 'http';
+import {ServerResponse} from 'http';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
