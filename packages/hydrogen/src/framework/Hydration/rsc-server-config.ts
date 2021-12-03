@@ -1,5 +1,6 @@
 import type {Writable} from 'stream';
 import type {ReactElement} from 'react';
+import {MODULE_TAG} from '../ClientMarker';
 
 const __WORKER__ = typeof process === 'undefined';
 // declare global {
@@ -48,8 +49,6 @@ export type ModuleMetaData = {
 };
 
 export type ModuleKey = string;
-
-const MODULE_TAG = Symbol.for('react.module.reference');
 
 const textEncoder = __WORKER__ ? new TextEncoder() : null;
 

@@ -1,29 +1,29 @@
 import React, {FunctionComponent} from 'react';
 import {createObject} from '../../utilities/object';
 
-interface ClientMarkerMeta {
-  name: string;
+interface ClientMarker {
   id: string;
-  component: FunctionComponent;
+  name: string;
   named: boolean;
+  component: FunctionComponent;
 }
 
-export function wrapInClientMarker(meta: ClientMarkerMeta) {
-  const {component: Component, name} = meta;
+export const MODULE_TAG = Symbol.for('react.module.reference');
 
+export function wrapInClientMarker({id, name, named, component}: ClientMarker) {
   if (
-    !Component ||
-    (typeof Component !== 'function' &&
-      !Object.prototype.hasOwnProperty.call(Component, 'render'))
+    !component ||
+    (typeof component !== 'function' &&
+      !Object.prototype.hasOwnProperty.call(component, 'render'))
   ) {
     // This is not a React component, return it as is.
-    return Component;
+    return component;
   }
 
   // Use object syntax here to make sure the function name
   // comes from the meta params for better error stacks.
   const render = {
-    [name]: (props: any) => <Component {...props} />,
+    [name]: (props: any) => React.createElement(component, props),
   }[name];
 
   const componentRef = createObject({
@@ -35,8 +35,8 @@ export function wrapInClientMarker(meta: ClientMarkerMeta) {
   const rscDescriptor = createObject({
     // This custom type is checked in RSC renderer
     $$typeof_rsc: Symbol.for('react.module.reference'),
-    filepath: meta.id,
-    name: meta.named ? meta.name : 'default',
+    filepath: id,
+    name: named ? name : 'default',
   });
 
   return new Proxy(componentRef, {
@@ -46,6 +46,6 @@ export function wrapInClientMarker(meta: ClientMarkerMeta) {
       // 2. Check descriptor properties for RSC requests
       (rscDescriptor as any)[prop] ??
       // 3. Fallback to custom component properties such as `Image.Fragment`
-      (Component as any)[prop],
+      (component as any)[prop],
   });
 }
