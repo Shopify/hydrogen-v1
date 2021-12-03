@@ -23,7 +23,10 @@ import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
 import type {ServerResponse} from 'http';
 
-import {renderToPipeableStream as renderRSCFlight} from './framework/ReactFlight/ServerRenderer';
+import {
+  rscRenderToPipeableStream,
+  rscRenderToReadableStream,
+} from './framework/ReactFlight/ServerRenderer';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
@@ -198,12 +201,13 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       console.error('Fatal', error);
     });
 
-    const {pipe} = renderRSCFlight(
-      <ReactApp {...state} />,
-      {} // Empty manifest
-    );
-
-    pipe(response);
+    if (rscRenderToPipeableStream) {
+      rscRenderToPipeableStream(<ReactApp {...state} />).pipe(response);
+    } else if (rscRenderToReadableStream) {
+      const stream = rscRenderToReadableStream(<ReactApp {...state} />);
+      // TODO: How do we pipe the stream to the response?
+      return new Response(stream);
+    }
   };
 
   return {
