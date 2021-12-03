@@ -1,6 +1,6 @@
 import {resolve} from 'path';
 // eslint-disable-next-line node/no-missing-import
-import {DocsGen, Options} from '../packages/generate-docs';
+import {DocsGen, Options, Column} from '../packages/generate-docs';
 
 const ROOT = resolve('.');
 const logger = console;
@@ -10,6 +10,12 @@ async function runCliGenerator(args: Partial<Options> = {}) {
     inputRootPath: ROOT,
     packageName: 'cli',
     ...args,
+  });
+
+  const CommandsTable = await cliGenerator.table({
+    title: 'Commands',
+    description: 'The Hydrogen CLI has the following commands',
+    columns: [Column.ComponentName, Column.Description],
   });
 
   await Promise.all([
@@ -26,7 +32,7 @@ async function runCliGenerator(args: Partial<Options> = {}) {
       description: 'Command reference for the `@shopify/hydrogen-cli`',
       url: '/api/hydrogen/cli/commands/index.md',
       entry: 'commands',
-      tableColumns: ['Command', 'Description'],
+      tables: [CommandsTable],
       hidden: true,
     }),
     cliGenerator.section({
@@ -34,11 +40,16 @@ async function runCliGenerator(args: Partial<Options> = {}) {
       description: 'Create command reference from the `@shopify/hydrogen-cli`',
       url: '/api/hydrogen/cli/commands/create/index.md',
       entry: 'commands/create',
-      tableColumns: ['Command', 'Description'],
       hidden: true,
+      tables: [CommandsTable],
     }),
   ]);
 }
+
+const COMPONENTS_TABLE = {
+  title: 'Reference',
+  columns: [Column.ComponentName, Column.ComponentType, Column.Description],
+};
 
 async function runHydrogenGenerator(args: Partial<Options> = {}) {
   const generator = new DocsGen({
@@ -46,6 +57,33 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     packageName: 'hydrogen',
     ...args,
   });
+
+  // Tables
+  const primitiveComponentsTable = await generator.table({
+    ...COMPONENTS_TABLE,
+    description: 'Hydrogen includes the following primitive components:',
+  });
+
+  const cartComponentsTable = await generator.table({
+    ...COMPONENTS_TABLE,
+    description: 'Hydrogen includes the following cart components:',
+  });
+
+  const productAndVariantTable = await generator.table({
+    ...COMPONENTS_TABLE,
+    description:
+      'Hydrogen includes the following product and variant components:',
+  });
+
+  const localizationTable = await generator.table({
+    ...COMPONENTS_TABLE,
+    description: 'Hydrogen includes the following localization components:',
+  });
+  const globalComponentsTable = await generator.table({
+    ...COMPONENTS_TABLE,
+    description: 'Hydrogen includes the following global components:',
+  });
+
   await Promise.all([
     // Components
     generator.section({
@@ -59,7 +97,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     generator.section({
       title: 'Primitive',
       description:
-        'Get familiar with the Hydrogen primitive components included in Hydrogen.',
+        'Primitive components are the building blocks for different component types, including products, variants, and cart.',
       url: '/api/hydrogen/components/primitive/index.md',
       entry: [
         'components/ExternalVideo',
@@ -73,6 +111,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/UnitPrice',
         'components/Video',
       ],
+      tables: [primitiveComponentsTable],
     }),
     // Global
     generator.section({
@@ -80,7 +119,8 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the Hydrogen global components included in Hydrogen.',
       url: '/api/hydrogen/components/global/index.md',
-      entry: 'foundation/ShopifyProvider',
+      entry: ['foundation/ShopifyProvider'],
+      tables: [globalComponentsTable],
     }),
     // Product and variant
     generator.section({
@@ -102,10 +142,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/SelectedVariantShopPayButton',
         'components/SelectedVariantUnitPrice',
       ],
+      tables: [productAndVariantTable],
     }),
     // Cart
     generator.section({
-      title: 'Cart',
+      title: 'Cart components',
+      intro:
+        'A cart contains the merchandise that a customer intends to purchase and the estimated cost associated with the cart. When a customer is ready to purchase their items, they can proceed to checkout.',
       description:
         'Get familiar with the Hydrogen cart components included in Hydrogen.',
       url: '/api/hydrogen/components/cart/index.md',
@@ -126,6 +169,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/CartProvider',
         'components/CartShopPayButton',
       ],
+      tables: [cartComponentsTable],
     }),
     // Localization
     generator.section({
@@ -133,7 +177,8 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the Hydrogen localization components included in Hydrogen.',
       url: '/api/hydrogen/components/localization/index.md',
-      entry: 'components/LocalizationProvider',
+      entry: ['components/LocalizationProvider'],
+      tables: [localizationTable],
     }),
 
     // Hooks
@@ -312,6 +357,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
 }
 
 export default async function runAll(args: Partial<Options> = {}) {
+  // return Promise.all([runCliGenerator(args)]).catch(
   return Promise.all([runHydrogenGenerator(args), runCliGenerator(args)]).catch(
     (error) => {
       logger.error(error);

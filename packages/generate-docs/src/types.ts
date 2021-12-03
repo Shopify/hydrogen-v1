@@ -1,3 +1,9 @@
+export enum Column {
+  ComponentName = 'Component name',
+  ComponentType = 'Component type',
+  Description = 'Description',
+}
+
 export interface Packages {
   [key: string]: string;
 }

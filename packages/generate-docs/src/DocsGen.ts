@@ -7,6 +7,7 @@ import {findUuid, strip, firstSentence} from './utilities/shared';
 import {padBreak, stripMarkdown} from './utilities/markdown';
 import type {Node} from './utilities/shared';
 import {FileResult} from './FileResult';
+import {Column} from './types';
 
 const SHOPIFY_DEV_CONTENT_PATH = '../shopify-dev/content';
 const SOURCE_DIRECTORY_NAME = 'src';
@@ -17,10 +18,23 @@ export interface Options {
   generateDocsForShopifyDev?: boolean;
 }
 
+interface TableItem {
+  name: string;
+  type: 'Shared' | 'Client' | 'Server';
+  description: string;
+}
+
 interface SectionOptions extends FrontMatter {
   entry?: string | string[];
   level: number;
-  tableColumns?: string[];
+  tables?: ((items: TableItem[]) => (string | string[])[])[];
+  intro: string;
+}
+
+interface TableOptions {
+  columns: Column[];
+  title: string;
+  description: string;
 }
 
 export class DocsGen {
@@ -41,62 +55,128 @@ export class DocsGen {
     this.writeDocs = options.generateDocsForShopifyDev;
   }
 
+  table(config: TableOptions) {
+    return (items: TableItem[]) => {
+      const cells = items.map((comp) => {
+        if (config.columns.includes(Column.ComponentType)) {
+          return [comp.name, comp.type, comp.description];
+        }
+        return [comp.name, comp.description];
+      });
+
+      return [
+        `## ${config.title}`,
+        config.description,
+        padBreak([markdownTable([config.columns, ...cells])]),
+      ];
+    };
+  }
+
   async section({
     url,
     title = 'untitled',
+    description,
     entry = '.',
     level = 1,
-    tableColumns,
+    tables = [],
+    intro = '',
     ...passThroughFrontMatter
   }: Partial<SectionOptions>) {
+    const isOverviewPage = Array.isArray(entry);
     const paths = await this.paths(url);
     const indexResult = new FileResult({
       gid: findUuid(paths.output),
       url: paths.url,
       title,
+      description,
       ...passThroughFrontMatter,
     });
 
-    const listItems = [];
+    if (isOverviewPage) {
+      await indexResult.push(intro);
+      await indexResult.push(`\n`);
 
-    if (Array.isArray(entry)) {
-      return Promise.all([
-        entry.map((en) => {
-          this.section({
-            ...passThroughFrontMatter,
-            url,
-            title,
-            entry: en,
-            level: level + 1,
-          });
-        }),
-      ]);
+      const pagePromises = entry.map((en) => {
+        return this.section({
+          ...passThroughFrontMatter,
+          url,
+          title,
+          entry: en,
+          description,
+          level: level + 1,
+        });
+      });
+
+      const tableOfContents: TableItem[] = [];
+
+      for await (const page of pagePromises) {
+        tableOfContents.push(page[0]);
+      }
+
+      const tableMarkup = tables.map((table) => {
+        const tm = table(tableOfContents.filter((x) => x)).join('\n\n');
+
+        return tm;
+      });
+
+      indexResult.push(tableMarkup.join(''));
+
+      if (this.writeDocs) {
+        await indexResult.writeDevDoc(paths.output);
+      }
+
+      return [];
     }
 
     const basePath = join(this.packageRoot, SOURCE_DIRECTORY_NAME, entry);
+
+    if (level === 1) {
+      await indexResult.docs(basePath);
+    }
 
     if (basePath.endsWith('.md')) {
       await indexResult.add(basePath);
     }
 
-    const componentIndex = join(basePath, 'index.ts');
     if (level === 1) {
       await indexResult.overview(basePath);
     }
 
+    const outputDirectory = resolve(
+      url?.split('/').slice(0, -1).join('/') || ''
+    );
+
+    const components = await this.gatherComponents({
+      entry: basePath,
+      output: outputDirectory,
+      level,
+    });
+
+    return components;
+  }
+
+  async gatherComponents({
+    entry,
+    output,
+    level,
+  }: {
+    entry: string;
+    output: string;
+    level: number;
+  }) {
+    const listItems: TableItem[] = [];
+    const componentIndex = join(entry, 'index.ts');
+
     if (await pathExists(componentIndex)) {
       const {components, hooks, nodes} = await buildComponentGraph(
         componentIndex
-      );
-      const outputDirectory = resolve(
-        url?.split('/').slice(0, -1).join('/') || ''
       );
 
       for (const component of [...components, ...hooks]) {
         const {
           value: {name, docs, props},
         } = component as any;
-        const componentUrl = join(outputDirectory, name.toLowerCase());
+        const componentUrl = join(output, name.toLowerCase());
 
         const componentOutputFile = `${componentUrl}.md`;
         const componentPaths = await this.paths(componentOutputFile);
@@ -134,7 +214,7 @@ export class DocsGen {
           componentResult.table({
             properties: face.value.properties,
             exports: nodes,
-            directory: paths.entry,
+            directory: entry,
           });
 
           await componentResult.push(`\n`);
@@ -148,40 +228,16 @@ export class DocsGen {
           componentResult.writeDevDoc(componentPaths.output);
         }
 
+        const componentType = getComponentType(join(entry, name));
+
         listItems.push({
           name: `<a href="${componentUrl}">${name}</a>`,
           description,
+          type: componentType as 'Server' | 'Client' | 'Shared',
         });
       }
-
-      if (listItems.length) {
-        indexResult.push(`\n`);
-        indexResult.push(
-          list({
-            items: listItems,
-            // TODO: How do we dynamically know what the columns are?
-            columns: tableColumns,
-          })
-        );
-        indexResult.push(`\n`);
-      }
     }
-
-    if (level === 1) {
-      await indexResult.docs(basePath);
-    }
-
-    if (this.writeDocs) {
-      await indexResult.writeDevDoc(paths.output);
-    }
-
-    /**
-     * If we are in at package root (anything at the first level of packages/<package-name>)
-     * we want to write a package-level readme (for example: packages/hydrogen/README.md)
-     */
-    if (resolve(basePath) === this.packageRoot) {
-      await indexResult.writeReadme(resolve(basePath));
-    }
+    return listItems;
   }
 
   private async paths(url?: string) {
@@ -254,4 +310,18 @@ export function list({
     return [comp.name, comp.description];
   });
   return padBreak([markdownTable([columns, ...cells])]);
+}
+
+function getComponentType(path: string) {
+  try {
+    if (require.resolve(`${path}.client.tsx`)) {
+      return 'Client';
+    }
+
+    if (require.resolve(`${path}.server.tsx`)) {
+      return 'Server';
+    }
+  } catch {
+    return 'Shared';
+  }
 }
