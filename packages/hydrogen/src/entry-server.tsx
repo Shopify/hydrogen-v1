@@ -24,7 +24,7 @@ import type {ServerResponse} from 'http';
 import {
   rscRenderToPipeableStream,
   rscRenderToReadableStream,
-} from './framework/ReactFlight/ServerRenderer';
+} from './framework/Hydration/rsc-server-renderer';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:

@@ -1,9 +1,9 @@
 import type {Writable} from 'stream';
-import type {BundlerConfig, ReactModel} from './ServerConfig';
+import type {BundlerConfig, ReactModel} from './rsc-server-config';
 
 // @ts-ignore
 import createFlightRenderer from 'react-server/flight';
-import rendererConfig from './ServerConfig';
+import rendererConfig from './rsc-server-config';
 
 const {createRequest, startWork, startFlowing} =
   createFlightRenderer(rendererConfig);

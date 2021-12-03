@@ -1,7 +1,7 @@
-import type {FlightResponse} from './ClientConfig';
+import type {FlightResponse} from './rsc-client-config';
 // @ts-ignore
 import createFlightHydrator from 'react-client/flight';
-import hydratorConfig from './ClientConfig';
+import hydratorConfig from './rsc-client-config';
 
 const {createResponse, reportGlobalError, processBinaryChunk, close} =
   createFlightHydrator(hydratorConfig);

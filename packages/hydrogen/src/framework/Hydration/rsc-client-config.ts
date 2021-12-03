@@ -1,5 +1,5 @@
-import importClientComponent from '../Hydration/client-imports';
-import type {ModuleReference, ModuleMetaData} from './ServerConfig';
+import importClientComponent from './client-imports';
+import type {ModuleReference, ModuleMetaData} from './rsc-server-config';
 
 export type UninitializedModel = string;
 export type StringDecoder = unknown;

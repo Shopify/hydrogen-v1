@@ -1,7 +1,7 @@
 // @ts-ignore
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
-import {createFromFetch} from '../ReactFlight/ClientHydrator';
-import type {FlightResponse} from '../ReactFlight/ClientConfig';
+import {createFromFetch} from '../Hydration/rsc-client-hydrator';
+import type {FlightResponse} from '../Hydration/rsc-client-config';
 
 function createResponseCache() {
   return new Map<string, FlightResponse>();
