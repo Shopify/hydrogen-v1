@@ -29,7 +29,9 @@ export default function importClientComponent(moduleId: string) {
   const modImport = allClientComponents[moduleId];
 
   if (!modImport) {
-    throw new Error(`Could not find client component ${moduleId}`);
+    return Promise.reject(
+      new Error(`Could not find client component ${moduleId}`)
+    );
   }
 
   return modImport();
