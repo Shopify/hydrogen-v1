@@ -96,7 +96,8 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     // Primitive
     generator.section({
       title: 'Primitive components',
-      intro: 'Primitive components are the building blocks for different component types, including products, variants, and cart.',
+      intro:
+        'Primitive components are the building blocks for different component types, including products, variants, and cart.',
       description:
         'Get familiar with the primitive components included in Hydrogen.',
       url: '/api/hydrogen/components/primitive/index.md',
@@ -117,7 +118,8 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     // Global
     generator.section({
       title: 'Global components',
-      intro: 'Global components are React components that relate to your entire app.',
+      intro:
+        'Global components are React components that relate to your entire app.',
       description:
         'Get familiar with the global components included in Hydrogen.',
       url: '/api/hydrogen/components/global/index.md',
@@ -127,7 +129,8 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     // Product and variant
     generator.section({
       title: 'Product and variant components',
-      intro: 'Products are the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options. Each combination of option values for a product can be a variant for that product. For example, a t-shirt might be available for purchase in blue and green. The blue t-shirt and the green t-shirt are variants.',
+      intro:
+        'Products are the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options. Each combination of option values for a product can be a variant for that product. For example, a t-shirt might be available for purchase in blue and green. The blue t-shirt and the green t-shirt are variants.',
       description:
         'Get familiar with the product and variant components included in Hydrogen.',
       url: '/api/hydrogen/components/product-variant/index.md',
@@ -177,7 +180,8 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     // Localization
     generator.section({
       title: 'Localization components',
-      intro: 'Localization can help merchants expand their business to a global audience by creating shopping experiences in local languages and currencies.',
+      intro:
+        'Localization can help merchants expand their business to a global audience by creating shopping experiences in local languages and currencies.',
       description:
         'Get familiar with the localization components included in Hydrogen.',
       url: '/api/hydrogen/components/localization/index.md',

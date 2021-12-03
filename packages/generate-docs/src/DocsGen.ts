@@ -317,11 +317,13 @@ function getComponentType(path: string) {
     if (require.resolve(`${path}.client.tsx`)) {
       return 'Client';
     }
+  } catch {}
 
+  try {
     if (require.resolve(`${path}.server.tsx`)) {
       return 'Server';
     }
-  } catch {
-    return 'Shared';
-  }
+  } catch {}
+
+  return 'Shared';
 }
