@@ -2,7 +2,12 @@ import {EntryServerHandler} from './types';
 import type {ServerResponse} from 'http';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
-import {setContext, setCache, RuntimeContext} from './framework/runtime';
+import {
+  setContext,
+  setCache,
+  RuntimeContext,
+  supportsReadableStream,
+} from './framework/runtime';
 import {setConfig} from './framework/config';
 
 interface HydrogenFetchEvent {
@@ -72,18 +77,27 @@ export default async function handleEvent(
     );
   }
 
-  const isStreamable = streamableResponse && isStreamableRequest(url);
-
   /**
    * Stream back real-user responses, but for bots/etc,
    * use `render` instead. This is because we need to inject <head>
    * things for SEO reasons.
+   *
+   * Also prevent streaming in workers runtimes that don't support ReadableStream.
    */
+  const isStreamable =
+    isStreamableRequest(url) &&
+    (streamableResponse || supportsReadableStream());
+
   if (isStreamable) {
     if (isReactHydrationRequest) {
-      hydrate(url, {context: {}, request, response: streamableResponse, dev});
+      return hydrate(url, {
+        context: {},
+        request,
+        response: streamableResponse,
+        dev,
+      });
     } else {
-      stream(url, {
+      return stream(url, {
         context: {},
         request,
         response: streamableResponse,
@@ -91,7 +105,6 @@ export default async function handleEvent(
         dev,
       });
     }
-    return;
   }
 
   const {body, bodyAttributes, htmlAttributes, componentResponse, ...head} =

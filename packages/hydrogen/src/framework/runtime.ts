@@ -42,3 +42,12 @@ export function runDelayedFunction(fn: () => Promise<any>) {
 
   return context.waitUntil(fn());
 }
+
+export function supportsReadableStream() {
+  try {
+    new ReadableStream();
+    return true;
+  } catch (_e) {
+    return false;
+  }
+}

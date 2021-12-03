@@ -21,6 +21,7 @@ import {ServerComponentRequest} from './framework/Hydration/ServerComponentReque
 import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
 import type {ServerResponse} from 'http';
+import {supportsReadableStream} from './framework/runtime';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
@@ -94,83 +95,18 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       dev,
     });
 
-    response.socket!.on('error', (error: any) => {
-      console.error('Fatal', error);
-    });
-
-    let didError: Error | undefined;
-
     const head = template.match(/<head>(.+?)<\/head>/s)![1];
 
-    const {startWriting, abort} = pipeToNodeWritable(
-      <Html head={head}>
-        <ReactApp {...state} />
-      </Html>,
-      response,
-      {
-        onReadyToStream() {
-          /**
-           * TODO: This assumes `response.cache()` has been called _before_ any
-           * queries which might be caught behind Suspense. Clarify this or add
-           * additional checks downstream?
-           */
-          response.setHeader(
-            getCacheControlHeader({dev}),
-            componentResponse.cacheControlHeader
-          );
-
-          writeHeadToServerResponse(response, componentResponse, didError);
-          if (isRedirect(response)) {
-            // Return redirects early without further rendering/streaming
-            return response.end();
-          }
-
-          if (!componentResponse.canStream()) return;
-
-          startWritingHtmlToServerResponse(
-            response,
-            startWriting,
-            dev ? didError : undefined
-          );
-        },
-        onCompleteAll() {
-          if (componentResponse.canStream() || response.writableEnded) return;
-
-          writeHeadToServerResponse(response, componentResponse, didError);
-          if (isRedirect(response)) {
-            // Redirects found after any async code
-            return response.end();
-          }
-
-          if (componentResponse.customBody) {
-            if (componentResponse.customBody instanceof Promise) {
-              componentResponse.customBody.then((body) => response.end(body));
-            } else {
-              response.end(componentResponse.customBody);
-            }
-          } else {
-            startWritingHtmlToServerResponse(
-              response,
-              startWriting,
-              dev ? didError : undefined
-            );
-          }
-        },
-        onError(error: any) {
-          didError = error;
-
-          if (dev && response.headersSent) {
-            // Calling write would flush headers automatically.
-            // Delay this error until headers are properly sent.
-            response.write(getErrorMarkup(error));
-          }
-
-          console.error(error);
-        },
-      }
-    );
-
-    setTimeout(abort, STREAM_ABORT_TIMEOUT_MS);
+    return isWorker
+      ? streamWorkerResponse({ReactApp, componentResponse, head, state, dev})
+      : streamNodeResponse({
+          ReactApp,
+          componentResponse,
+          response,
+          head,
+          state,
+          dev,
+        });
   };
 
   /**
@@ -190,46 +126,22 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       dev,
     });
 
-    response.socket!.on('error', (error: any) => {
-      console.error('Fatal', error);
-    });
-
-    let didError: Error | undefined;
-
-    const writer = new HydrationWriter();
-
-    const {startWriting, abort} = pipeToNodeWritable(
-      <HydrationContext.Provider value={true}>
-        <ReactApp {...state} />
-      </HydrationContext.Provider>,
-      writer,
-      {
-        /**
-         * When hydrating, we have to wait until `onCompleteAll` to avoid having
-         * `template` and `script` tags inserted and rendered as part of the hydration response.
-         */
-        onCompleteAll() {
-          // Tell React to start writing to the writer
-          startWriting();
-
-          // Tell React that the writer is ready to drain, which sometimes results in a last "chunk" being written.
-          writer.drain();
-
-          response.statusCode = didError ? 500 : 200;
-          response.setHeader(
-            getCacheControlHeader({dev}),
-            componentResponse.cacheControlHeader
-          );
-          response.end(generateWireSyntaxFromRenderedHtml(writer.toString()));
-        },
-        onError(error: any) {
-          didError = error;
-          console.error(error);
-        },
-      }
-    );
-
-    setTimeout(abort, STREAM_ABORT_TIMEOUT_MS);
+    return isWorker
+      ? streamWorkerResponse({
+          ReactApp,
+          componentResponse,
+          state,
+          dev,
+          isReactHydrationRequest: true,
+        })
+      : streamNodeResponse({
+          ReactApp,
+          componentResponse,
+          response,
+          state,
+          dev,
+          isReactHydrationRequest: true,
+        });
   };
 
   return {
@@ -238,6 +150,239 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     hydrate,
   };
 };
+
+/**
+ * Hydrogen's API allows developers to prevent streaming in order to return a custom response type.
+ * However, since we're building a ReadableStream rather than a WritableStream, we cannot explicitly
+ * say when to start piping (streaming) content. Instead, we check to see if we can stream once the
+ * initial shell is ready. That allows us to buffer the response if needed. Then, we rely on a timer
+ * callback function to actually return the Response by resolving it from the Promise.
+ *
+ * NOTE: We cannot simply `await` the Promise and call `resolve()` within one of the React callbacks
+ * because some Worker runtimes like Cloudflare consider this a "noop" and will prematurely end the
+ * request. Using `setTimeout` mitigates this, as it's considered a resolvable part of the request.
+ */
+function streamWorkerResponse({
+  ReactApp,
+  componentResponse,
+  head,
+  state,
+  dev,
+  isReactHydrationRequest,
+}: {
+  ReactApp: ComponentType;
+  componentResponse: ServerComponentResponse;
+  head?: string;
+  state: any;
+  dev?: boolean;
+  isReactHydrationRequest?: boolean;
+}) {
+  return new Promise((resolve, reject) => {
+    let canStream = false;
+    let error: any;
+
+    const app = isReactHydrationRequest ? (
+      <HydrationContext.Provider value={true}>
+        <ReactApp {...state} />
+      </HydrationContext.Provider>
+    ) : (
+      <Html head={head!}>
+        <ReactApp {...state} />
+      </Html>
+    );
+
+    const stream = renderToReadableStream(app, {
+      onReadyToStream() {
+        canStream = !isReactHydrationRequest && componentResponse.canStream();
+      },
+      onCompleteAll() {
+        canStream = true;
+      },
+      onError(e: any) {
+        error = e;
+        reject(e);
+      },
+    });
+
+    async function maybeSendResponse() {
+      if (!canStream) {
+        setTimeout(maybeSendResponse, 20);
+        return;
+      }
+
+      let status = error
+        ? 500
+        : componentResponse.customStatus?.code ??
+          componentResponse.status ??
+          200;
+
+      /**
+       * Don't allow custom statuses for Hydration responses.
+       */
+      if (isReactHydrationRequest) {
+        status = error ? 500 : 200;
+      }
+
+      const statusText = !isReactHydrationRequest
+        ? componentResponse.customStatus?.text
+        : '';
+
+      let responseInit = stream;
+
+      /**
+       * If responding to RSC, read the whole body and convert it to custom "wire" syntax.
+       */
+      if (isReactHydrationRequest) {
+        responseInit = generateWireSyntaxFromRenderedHtml(
+          await new Response(stream).text()
+        );
+      }
+
+      const response = new Response(responseInit, {
+        status,
+        statusText,
+        headers: {
+          [getCacheControlHeader({dev})]: componentResponse.cacheControlHeader,
+        },
+      });
+
+      if (!isReactHydrationRequest) {
+        componentResponse.headers.forEach((value, key) =>
+          response.headers.set(key, value)
+        );
+      }
+
+      if (!response.headers.has('content-type')) {
+        response.headers.set('content-type', 'text/html');
+      }
+
+      resolve(response);
+    }
+
+    maybeSendResponse();
+  });
+}
+
+function streamNodeResponse({
+  ReactApp,
+  componentResponse,
+  response,
+  head,
+  state,
+  dev,
+  isReactHydrationRequest,
+}: {
+  ReactApp: ComponentType;
+  componentResponse: ServerComponentResponse;
+  response: ServerResponse;
+  head?: string;
+  state: any;
+  dev?: boolean;
+  isReactHydrationRequest?: boolean;
+}) {
+  response.socket!.on('error', (error: any) => {
+    console.error('Fatal', error);
+  });
+
+  let didError: Error | undefined;
+
+  const writable = isReactHydrationRequest ? new HydrationWriter() : response;
+
+  const app = isReactHydrationRequest ? (
+    <HydrationContext.Provider value={true}>
+      <ReactApp {...state} />
+    </HydrationContext.Provider>
+  ) : (
+    <Html head={head!}>
+      <ReactApp {...state} />
+    </Html>
+  );
+
+  const {startWriting, abort} = pipeToNodeWritable(app, writable, {
+    onReadyToStream() {
+      if (isReactHydrationRequest) return;
+
+      /**
+       * TODO: This assumes `response.cache()` has been called _before_ any
+       * queries which might be caught behind Suspense. Clarify this or add
+       * additional checks downstream?
+       */
+      response.setHeader(
+        getCacheControlHeader({dev}),
+        componentResponse.cacheControlHeader
+      );
+
+      writeHeadToServerResponse(response, componentResponse, didError);
+      if (isRedirect(response)) {
+        // Return redirects early without further rendering/streaming
+        return response.end();
+      }
+
+      if (!componentResponse.canStream()) return;
+
+      startWritingHtmlToServerResponse(
+        response,
+        startWriting,
+        dev ? didError : undefined
+      );
+    },
+    onCompleteAll() {
+      if (!isReactHydrationRequest) {
+        if (componentResponse.canStream() || response.writableEnded) return;
+
+        writeHeadToServerResponse(response, componentResponse, didError);
+        if (isRedirect(response)) {
+          // Redirects found after any async code
+          return response.end();
+        }
+
+        if (componentResponse.customBody) {
+          if (componentResponse.customBody instanceof Promise) {
+            componentResponse.customBody.then((body) => response.end(body));
+          } else {
+            response.end(componentResponse.customBody);
+          }
+        } else {
+          startWritingHtmlToServerResponse(
+            response,
+            startWriting,
+            dev ? didError : undefined
+          );
+        }
+      } else {
+        // Tell React to start writing to the writer
+        startWriting();
+
+        // Tell React that the writer is ready to drain, which sometimes results in a last "chunk" being written.
+        (writable as HydrationWriter).drain();
+
+        response.statusCode = didError ? 500 : 200;
+        response.setHeader(
+          getCacheControlHeader({dev}),
+          componentResponse.cacheControlHeader
+        );
+        response.end(
+          generateWireSyntaxFromRenderedHtml(
+            (writable as HydrationWriter).toString()
+          )
+        );
+      }
+    },
+    onError(error: any) {
+      didError = error;
+
+      if (dev && response.headersSent) {
+        // Calling write would flush headers automatically.
+        // Delay this error until headers are properly sent.
+        response.write(getErrorMarkup(error));
+      }
+
+      console.error(error);
+    },
+  });
+
+  setTimeout(abort, STREAM_ABORT_TIMEOUT_MS);
+}
 
 function buildReactApp({
   App,
@@ -283,15 +428,6 @@ function extractHeadElements(helmetContext: FilledContext) {
     style: helmet.style.toString(),
     title: helmet.title.toString(),
   };
-}
-
-function supportsReadableStream() {
-  try {
-    new ReadableStream();
-    return true;
-  } catch (_e) {
-    return false;
-  }
 }
 
 async function renderApp(
