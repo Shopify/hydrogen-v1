@@ -19,7 +19,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     return;
   }
 
-  createRoot(root, {hydrate: true}).render(
+  createRoot(root).render(
     <ErrorBoundary FallbackComponent={Error}>
       <Suspense fallback={null}>
         <Content clientWrapper={ClientWrapper} />
@@ -47,7 +47,7 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
           <BrowserRouter>
             <ServerStateRouter />
             {/* @ts-ignore */}
-            <ClientWrapper>{response.read()}</ClientWrapper>
+            <ClientWrapper>{response.readRoot()}</ClientWrapper>
           </BrowserRouter>
         </HelmetProvider>
       </QueryProvider>
