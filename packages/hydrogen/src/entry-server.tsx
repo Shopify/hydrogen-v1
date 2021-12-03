@@ -19,8 +19,7 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import type {ServerResponse} from 'http';
-import {RequestServerProvider} from './foundation/RequestServerProvider';
-import {clearRequestCache} from './foundation/useQuery/hooks';
+import {RenderCacheProvider} from './foundation/RenderCacheProvider';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
@@ -73,7 +72,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       params = hook(params) || params;
     }
 
-    clearRequestCache(request.requestId);
     return {body, componentResponse, ...params};
   };
 
@@ -135,14 +133,10 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           );
         },
         onCompleteAll() {
-          if (componentResponse.canStream() || response.writableEnded) {
-            clearRequestCache(request.requestId);
-            return;
-          }
+          if (componentResponse.canStream() || response.writableEnded) return;
 
           writeHeadToServerResponse(response, componentResponse, didError);
           if (isRedirect(response)) {
-            clearRequestCache(request.requestId);
             // Redirects found after any async code
             return response.end();
           }
@@ -160,7 +154,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
               dev ? didError : undefined
             );
           }
-          clearRequestCache(request.requestId);
         },
         onError(error: any) {
           didError = error;
@@ -227,12 +220,10 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             componentResponse.cacheControlHeader
           );
           response.end(generateWireSyntaxFromRenderedHtml(writer.toString()));
-          clearRequestCache(request.requestId);
         },
         onError(error: any) {
           didError = error;
           console.error(error);
-          clearRequestCache(request.requestId);
         },
       }
     );
@@ -262,9 +253,10 @@ function buildReactApp({
 }) {
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
+  const renderCache = {};
 
   const ReactApp = (props: any) => (
-    <RequestServerProvider requestId={request.requestId}>
+    <RenderCacheProvider cache={renderCache}>
       <StaticRouter
         location={{pathname: state.pathname, search: state.search}}
         context={context}
@@ -273,7 +265,7 @@ function buildReactApp({
           <App {...props} request={request} response={componentResponse} />
         </HelmetProvider>
       </StaticRouter>
-    </RequestServerProvider>
+    </RenderCacheProvider>
   );
 
   return {helmetContext, ReactApp, componentResponse};

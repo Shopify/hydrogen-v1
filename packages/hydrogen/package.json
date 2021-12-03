@@ -74,8 +74,7 @@
     "postcss": "^8",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
-    "tailwindcss": "^2.1.1",
-    "uuid": "^8.3.2"
+    "tailwindcss": "^2.1.1"
   },
   "peerDependencies": {
     "react": "^18",

@@ -4,45 +4,13 @@ import {
   getItemFromCache,
   isStale,
   setItemInCache,
-  hashKey,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
-import {SuspensePromise} from './SuspensePromise';
-import {useRequest} from '../RequestServerProvider/hook';
+import {useRenderCacheData} from '../RenderCacheProvider/hook';
 
-import type {SuspensePromiseResult} from './SuspensePromise';
+import type {RenderCacheResult} from '../RenderCacheProvider/types';
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
-}
-type SuspenseCache = Map<string, SuspensePromise<unknown>>;
-
-const requestCaches: Map<string, SuspenseCache> = new Map();
-
-function getRequestCache(): SuspenseCache {
-  const {requestId} = useRequest();
-
-  let requestCache: SuspenseCache | undefined = requestCaches.get(requestId);
-  if (!requestCache) {
-    requestCache = new Map();
-    requestCaches.set(requestId, requestCache);
-  }
-  return requestCache;
-}
-
-/**
- * Clears the short term cache by request id
- * @param requestId - the unique id of the request
- */
-export function clearRequestCache(requestId: string) {
-  requestCaches.delete(requestId);
-
-  // Periodically clears the default cache "0"
-  // This cache sometimes gets set but will never be use
-  // Most requests will be assigned a unique id but some may miss
-  // for whatever reason (usually during boot)
-  runDelayedFunction(async () => {
-    requestCaches.delete('0');
-  });
 }
 
 /**
@@ -57,36 +25,11 @@ export function useQuery<T>(
   queryFn: () => Promise<T>,
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
-): SuspensePromiseResult<T> {
-  const suspensePromise = getSuspensePromise<T>(key, queryFn, queryOptions);
-  const status = suspensePromise.status;
-
-  if (status === SuspensePromise.PENDING) {
-    throw suspensePromise.promise;
-  } else if (status === SuspensePromise.ERROR) {
-    throw suspensePromise.result;
-  } else if (status === SuspensePromise.SUCCESS) {
-    return suspensePromise.result as SuspensePromiseResult<T>;
-  }
-
-  throw 'useQuery - something is really wrong if this throws';
-}
-
-function getSuspensePromise<T>(
-  key: QueryKey,
-  queryFn: () => Promise<T>,
-  queryOptions?: HydrogenUseQueryOptions
-): SuspensePromise<T> {
-  const cacheKey = hashKey(key);
-  const suspenseCache = getRequestCache();
-  let suspensePromise = suspenseCache.get(cacheKey);
-  if (!suspensePromise) {
-    suspensePromise = new SuspensePromise<T>(
-      cachedQueryFnBuilder(key, queryFn, queryOptions)
-    );
-    suspenseCache.set(cacheKey, suspensePromise);
-  }
-  return suspensePromise as SuspensePromise<T>;
+): RenderCacheResult<T> {
+  return useRenderCacheData<T>(
+    key,
+    cachedQueryFnBuilder(key, queryFn, queryOptions)
+  );
 }
 
 function cachedQueryFnBuilder<T>(
