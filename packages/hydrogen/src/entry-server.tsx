@@ -8,12 +8,12 @@ import {
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
-import {StaticRouter} from 'react-router-dom';
+// import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import {HydrationContext} from './framework/Hydration/HydrationContext.server';
 import type {ReactQueryHydrationContext} from './foundation/ShopifyProvider/types';
 import {generateWireSyntaxFromRenderedHtml} from './framework/Hydration/wire.server';
-import {FilledContext, HelmetProvider} from 'react-helmet-async';
+// import {FilledContext, HelmetProvider} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {HydrationWriter} from './framework/Hydration/writer.server';
 import {Renderer, Hydrator, Streamer} from './types';
@@ -53,7 +53,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       ? JSON.parse(url.searchParams?.get('state') ?? '{}')
       : {pathname: url.pathname, search: url.search};
 
-    const {ReactApp, helmetContext, componentResponse} = buildReactApp({
+    const {ReactApp, /*helmetContext,*/ componentResponse} = buildReactApp({
       App,
       state,
       context,
@@ -67,7 +67,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       return {body: await componentResponse.customBody, url, componentResponse};
     }
 
-    let params = {url, ...extractHeadElements(helmetContext)};
+    let params = {url /*, ...extractHeadElements(helmetContext)*/};
 
     /**
      * We allow the developer to "hook" into this process and mutate the params.
@@ -224,38 +224,36 @@ function buildReactApp({
   request: ServerComponentRequest;
   dev: boolean | undefined;
 }) {
-  const helmetContext = {} as FilledContext;
+  // const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
 
   const ReactApp = (props: any) => (
-    <StaticRouter
-      location={{pathname: state.pathname, search: state.search}}
-      context={context}
-    >
-      <HelmetProvider context={helmetContext}>
-        <App {...props} request={request} response={componentResponse} />
-      </HelmetProvider>
-    </StaticRouter>
+    // <StaticRouter
+    //   location={{pathname: state.pathname, search: state.search}}
+    //   context={context}
+    // >
+    <App {...props} request={request} response={componentResponse} />
+    // </StaticRouter>
   );
 
-  return {helmetContext, ReactApp, componentResponse};
+  return {/*helmetContext,*/ ReactApp, componentResponse};
 }
 
-function extractHeadElements(helmetContext: FilledContext) {
-  const {helmet} = helmetContext;
+// function extractHeadElements(helmetContext: FilledContext) {
+//   const {helmet} = helmetContext;
 
-  return {
-    base: helmet.base.toString(),
-    bodyAttributes: helmet.bodyAttributes.toString(),
-    htmlAttributes: helmet.htmlAttributes.toString(),
-    link: helmet.link.toString(),
-    meta: helmet.meta.toString(),
-    noscript: helmet.noscript.toString(),
-    script: helmet.script.toString(),
-    style: helmet.style.toString(),
-    title: helmet.title.toString(),
-  };
-}
+//   return {
+//     base: helmet.base.toString(),
+//     bodyAttributes: helmet.bodyAttributes.toString(),
+//     htmlAttributes: helmet.htmlAttributes.toString(),
+//     link: helmet.link.toString(),
+//     meta: helmet.meta.toString(),
+//     noscript: helmet.noscript.toString(),
+//     script: helmet.script.toString(),
+//     style: helmet.style.toString(),
+//     title: helmet.title.toString(),
+//   };
+// }
 
 function supportsReadableStream() {
   try {
@@ -282,15 +280,10 @@ async function renderApp(
     );
   }
 
-  const app = isReactHydrationRequest ? (
-    <HydrationContext.Provider value={true}>
-      <ReactApp {...state} />
-    </HydrationContext.Provider>
-  ) : (
-    <ReactApp {...state} />
+  return renderAppFromBufferedStream(
+    <ReactApp {...state} />,
+    isReactHydrationRequest
   );
-
-  return renderAppFromBufferedStream(app, isReactHydrationRequest);
 }
 
 function renderAppFromBufferedStream(
