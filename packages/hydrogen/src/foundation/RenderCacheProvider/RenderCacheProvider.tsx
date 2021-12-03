@@ -1,6 +1,6 @@
 import React from 'react';
-import {RenderCacheProviderProps} from './types';
 import {RenderCacheContext} from './RenderCacheContext';
+import type {RenderCacheProviderProps} from './types';
 
 export function RenderCacheProvider({
   cache,

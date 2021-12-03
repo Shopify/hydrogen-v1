@@ -5,7 +5,6 @@
  * - Adds a `cookies` map for easy access
  * - Adds a static constructor to convert a Node.js `IncomingMessage` to a Request.
  */
-
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
 
