@@ -25,7 +25,9 @@ const allClientComponents = {
   ),
 };
 
-export default function importClientComponent(moduleId: string) {
+const moduleCache = new Map();
+
+function importClientComponent(moduleId: string) {
   const modImport = allClientComponents[moduleId];
 
   if (!modImport) {
@@ -33,4 +35,20 @@ export default function importClientComponent(moduleId: string) {
   }
 
   return modImport();
+}
+
+export function preloadClientComponent(id: string) {
+  if (moduleCache.has(id)) return;
+
+  function cacheResult<T = Promise<unknown> | unknown>(mod: T) {
+    moduleCache.set(id, mod);
+    return mod;
+  }
+
+  // Store the original promise first, then override cache with its result.
+  cacheResult(importClientComponent(id)).then(cacheResult, cacheResult);
+}
+
+export function getClientComponent(id: string) {
+  return moduleCache.get(id);
 }

@@ -1,4 +1,4 @@
-import importClientComponent from './client-imports';
+import {preloadClientComponent, getClientComponent} from './client-imports';
 import type {ModuleReference, ModuleMetaData} from './rsc-server-config';
 
 export type UninitializedModel = string;
@@ -61,28 +61,17 @@ export type FlightResponse = ResponseBase & {
   _stringDecoder: StringDecoder;
 };
 
-const moduleCache = new Map();
-
 export default {
   supportsBinaryStreams: typeof TextDecoder !== 'undefined',
   resolveModuleReference(data: ModuleMetaData) {
     return data;
   },
   preloadModule({id}: ModuleMetaData) {
-    if (moduleCache.has(id)) return;
-
-    function cacheResult<T = Promise<unknown> | unknown>(mod: T) {
-      moduleCache.set(id, mod);
-      return mod;
-    }
-
-    // Store the original promise first, then override cache with its result.
-    cacheResult(importClientComponent(id)).then(cacheResult, cacheResult);
+    preloadClientComponent(id);
   },
   requireModule({id, name}: ModuleMetaData) {
-    if (moduleCache.has(id)) {
-      const mod = moduleCache.get(id);
-
+    const mod = getClientComponent(id);
+    if (mod) {
       if (mod instanceof Promise || mod instanceof Error) {
         // This module is being read but it's either still being
         // downloaded or it has errored out. Pass it to Suspense.
