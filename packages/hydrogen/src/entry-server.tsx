@@ -10,9 +10,9 @@ import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
 // import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
-import {HydrationContext} from './framework/Hydration/HydrationContext.server';
+// import {HydrationContext} from './framework/Hydration/HydrationContext.server';
 import type {ReactQueryHydrationContext} from './foundation/ShopifyProvider/types';
-import {generateWireSyntaxFromRenderedHtml} from './framework/Hydration/wire.server';
+// import {generateWireSyntaxFromRenderedHtml} from './framework/Hydration/wire.server';
 // import {FilledContext, HelmetProvider} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {HydrationWriter} from './framework/Hydration/writer.server';
@@ -61,7 +61,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       dev,
     });
 
-    const body = await renderApp(ReactApp, state, isReactHydrationRequest);
+    const body = isReactHydrationRequest
+      ? '' // TODO: Implement RSC without streaming -- Or wait until ReadableStream is supported
+      : await renderApp(ReactApp, state);
 
     if (componentResponse.customBody) {
       return {body: await componentResponse.customBody, url, componentResponse};
@@ -264,32 +266,23 @@ function supportsReadableStream() {
   }
 }
 
-async function renderApp(
-  ReactApp: JSXElementConstructor<any>,
-  state: any,
-  isReactHydrationRequest?: boolean
-) {
+async function renderApp(ReactApp: JSXElementConstructor<any>, state: any) {
   /**
    * Temporary workaround until all Worker runtimes support ReadableStream
    */
   if (isWorker && !supportsReadableStream()) {
-    return renderAppFromStringWithPrepass(
-      ReactApp,
-      state,
-      isReactHydrationRequest
-    );
+    return renderAppFromStringWithPrepass(ReactApp, state);
   }
 
-  return renderAppFromBufferedStream(
-    <ReactApp {...state} />,
-    isReactHydrationRequest
-  );
+  return renderAppFromBufferedStream(ReactApp, state);
 }
 
 function renderAppFromBufferedStream(
-  app: JSX.Element,
-  isReactHydrationRequest?: boolean
+  ReactApp: JSXElementConstructor<any>,
+  state: any
 ) {
+  const app = <ReactApp {...state} />;
+
   return new Promise<string>((resolve, reject) => {
     if (isWorker) {
       let isComplete = false;
@@ -321,11 +314,7 @@ function renderAppFromBufferedStream(
          * to resolve and be processed by the rest of the pipeline.
          */
         const res = new Response(stream);
-        if (isReactHydrationRequest) {
-          resolve(generateWireSyntaxFromRenderedHtml(await res.text()));
-        } else {
-          resolve(await res.text());
-        }
+        resolve(await res.text());
       }
 
       checkForResults();
@@ -344,11 +333,7 @@ function renderAppFromBufferedStream(
           // Tell React that the writer is ready to drain, which sometimes results in a last "chunk" being written.
           writer.drain();
 
-          if (isReactHydrationRequest) {
-            resolve(generateWireSyntaxFromRenderedHtml(writer.toString()));
-          } else {
-            resolve(writer.toString());
-          }
+          resolve(writer.toString());
         },
         onError(error: any) {
           console.error(error);
@@ -370,18 +355,11 @@ function renderAppFromBufferedStream(
  */
 async function renderAppFromStringWithPrepass(
   ReactApp: JSXElementConstructor<any>,
-  state: any,
-  isReactHydrationRequest?: boolean
+  state: any
 ) {
   const hydrationContext: ReactQueryHydrationContext = {};
 
-  const app = isReactHydrationRequest ? (
-    <HydrationContext.Provider value={true}>
-      <ReactApp hydrationContext={hydrationContext} {...state} />
-    </HydrationContext.Provider>
-  ) : (
-    <ReactApp hydrationContext={hydrationContext} {...state} />
-  );
+  const app = <ReactApp hydrationContext={hydrationContext} {...state} />;
 
   await ssrPrepass(app);
 
@@ -394,11 +372,7 @@ async function renderAppFromStringWithPrepass(
     hydrationContext.dehydratedState = dehydrate(hydrationContext.queryClient);
   }
 
-  const body = renderToString(app);
-
-  return isReactHydrationRequest
-    ? generateWireSyntaxFromRenderedHtml(body)
-    : body;
+  return renderToString(app);
 }
 
 export default renderHydrogen;
