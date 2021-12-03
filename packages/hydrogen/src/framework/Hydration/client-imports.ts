@@ -52,3 +52,15 @@ export function preloadClientComponent(id: string) {
 export function getClientComponent(id: string) {
   return moduleCache.get(id);
 }
+
+declare global {
+  interface Window {
+    preloadedModules: Array<string> | {push: (id: string) => void};
+  }
+}
+
+// Preload components that were streamed before this code loaded:
+if (typeof window !== 'undefined' && Array.isArray(window.preloadedModules)) {
+  window.preloadedModules.forEach(preloadClientComponent);
+  window.preloadedModules = {push: preloadClientComponent};
+}

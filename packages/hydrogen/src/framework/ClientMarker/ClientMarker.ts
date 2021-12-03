@@ -23,7 +23,17 @@ export function wrapInClientMarker({id, name, named, component}: ClientMarker) {
   // Use object syntax here to make sure the function name
   // comes from the meta params for better error stacks.
   const render = {
-    [name]: (props: any) => React.createElement(component, props),
+    [name]: (props: any) =>
+      React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(
+          'script',
+          {'data-rsc-id': id},
+          `preloadRSC(document.currentScript)`
+        ),
+        React.createElement(component, props)
+      ),
   }[name];
 
   const componentRef = createObject({

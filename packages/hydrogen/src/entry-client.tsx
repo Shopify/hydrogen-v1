@@ -1,3 +1,6 @@
+// Preload client components as side effect
+import './framework/Hydration/client-imports';
+
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
 import {createRoot} from 'react-dom';
