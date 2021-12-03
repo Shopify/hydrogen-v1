@@ -95,9 +95,10 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     // Primitive
     generator.section({
-      title: 'Primitive',
+      title: 'Primitive components',
+      intro: 'Primitive components are the building blocks for different component types, including products, variants, and cart.',
       description:
-        'Primitive components are the building blocks for different component types, including products, variants, and cart.',
+        'Get familiar with the primitive components included in Hydrogen.',
       url: '/api/hydrogen/components/primitive/index.md',
       entry: [
         'components/ExternalVideo',
@@ -115,18 +116,20 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     // Global
     generator.section({
-      title: 'Global',
+      title: 'Global components',
+      intro: 'Global components are React components that relate to your entire app.',
       description:
-        'Get familiar with the Hydrogen global components included in Hydrogen.',
+        'Get familiar with the global components included in Hydrogen.',
       url: '/api/hydrogen/components/global/index.md',
       entry: ['foundation/ShopifyProvider'],
       tables: [globalComponentsTable],
     }),
     // Product and variant
     generator.section({
-      title: 'Product and variant',
+      title: 'Product and variant components',
+      intro: 'Products are the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options. Each combination of option values for a product can be a variant for that product. For example, a t-shirt might be available for purchase in blue and green. The blue t-shirt and the green t-shirt are variants.',
       description:
-        'Get familiar with the Hydrogen product and variant components included in Hydrogen.',
+        'Get familiar with the product and variant components included in Hydrogen.',
       url: '/api/hydrogen/components/product-variant/index.md',
       entry: [
         'components/ProductDescription',
@@ -150,7 +153,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       intro:
         'A cart contains the merchandise that a customer intends to purchase and the estimated cost associated with the cart. When a customer is ready to purchase their items, they can proceed to checkout.',
       description:
-        'Get familiar with the Hydrogen cart components included in Hydrogen.',
+        'Get familiar with the cart components included in Hydrogen.',
       url: '/api/hydrogen/components/cart/index.md',
       entry: [
         'components/AddToCartButton',
@@ -173,9 +176,10 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     // Localization
     generator.section({
-      title: 'Localization',
+      title: 'Localization components',
+      intro: 'Localization can help merchants expand their business to a global audience by creating shopping experiences in local languages and currencies.',
       description:
-        'Get familiar with the Hydrogen localization components included in Hydrogen.',
+        'Get familiar with the localization components included in Hydrogen.',
       url: '/api/hydrogen/components/localization/index.md',
       entry: ['components/LocalizationProvider'],
       tables: [localizationTable],
