@@ -8,8 +8,8 @@ import {
 import gql from 'graphql-tag';
 
 import Layout from '../components/Layout.server';
-import FeaturedCollection from '../components/FeaturedCollection.server';
-import ProductCard from '../components/ProductCard.server';
+import FeaturedCollection from '../components/FeaturedCollection';
+import ProductCard from '../components/ProductCard';
 import Welcome from '../components/Welcome.server';
 
 function GradientBackground() {

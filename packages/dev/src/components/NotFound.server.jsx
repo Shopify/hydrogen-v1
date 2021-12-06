@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
 import Button from './Button.client';
-import ProductCard from './ProductCard.server';
+import ProductCard from './ProductCard';
 
 function NotFoundHero() {
   return (
@@ -68,6 +68,7 @@ export default function NotFound({country = {isoCode: 'US'}}) {
 const QUERY = gql`
   query NotFoundProductDetails(
     $country: CountryCode
+    $includeReferenceMetafieldDetails: Boolean = false
     $numProductMetafields: Int!
     $numProductVariants: Int!
     $numProductMedia: Int!

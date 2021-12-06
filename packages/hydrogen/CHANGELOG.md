@@ -7,6 +7,12 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+## 0.7.1 - 2021-12-02
+
+- fix: avoid repeating the same identifier for default and named exports
+- fix: remove sourcemap warnings
+- feat: allow `useShopQuery` to be skippable if no query is passed.
+
 ## 0.7.0 - 2021-11-22
 
 - feat: add file reference metafield support

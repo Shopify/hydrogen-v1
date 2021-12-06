@@ -3,7 +3,6 @@ import {normalizePath} from 'vite';
 import path from 'path';
 import {proxyClientComponent} from '../server-components';
 import {resolve} from './resolver';
-import {promises as fs} from 'fs';
 
 export default () => {
   let config: ResolvedConfig;
@@ -59,18 +58,6 @@ export default () => {
       // Wrapped components won't match this becase they end in ?no-proxy
       if (/\.client\.[jt]sx?$/.test(id)) {
         return proxyClientComponent({id});
-      }
-
-      // Temporary fix for sourcemap warnings in client components. This can be fixed in @vitejs/react-plugin.
-      // `react-ssr-prepass` sourcemap seems to be broken and crashes in workers/Jest.
-      if (
-        id.endsWith('?no-proxy') ||
-        id.includes('dist/react-ssr-prepass.es.js')
-      ) {
-        return {
-          code: await fs.readFile(id.split('?')[0], 'utf-8'),
-          map: {mappings: ''},
-        };
       }
 
       return null;
