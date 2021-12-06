@@ -23,6 +23,9 @@ async function assetHandler(event, url) {
 
 addEventListener('fetch', (event) => {
   try {
+    // Mock Oxygen global
+    globalThis.Oxygen = {env: {SECRET_TEST: globalThis.SECRET_TEST}};
+
     event.respondWith(
       handleEvent(event, {
         entrypoint,
@@ -32,12 +35,6 @@ addEventListener('fetch', (event) => {
         context: {
           waitUntil: event.waitUntil ? (p) => event.waitUntil(p) : undefined,
         },
-        // This should be the new `env` parameter when using Modules format
-        secrets: Object.fromEntries(
-          Object.entries(globalThis).filter(([key]) =>
-            key.startsWith('SECRET_')
-          )
-        ),
       })
     );
   } catch (error) {

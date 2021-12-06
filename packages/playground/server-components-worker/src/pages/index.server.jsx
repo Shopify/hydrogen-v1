@@ -1,6 +1,6 @@
 import {Link} from '@shopify/hydrogen';
 
-export default function Index({secrets}) {
+export default function Index() {
   return (
     <>
       <h1>Home</h1>
@@ -8,7 +8,7 @@ export default function Index({secrets}) {
         About
       </Link>
 
-      <div className="secrets">{JSON.stringify(secrets)}</div>
+      <div className="secrets">{JSON.stringify(Oxygen.env)}</div>
     </>
   );
 }

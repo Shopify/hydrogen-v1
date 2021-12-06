@@ -6,7 +6,7 @@ it('shows the homepage, navigates to about, and increases the count', async () =
   await page.goto(url + '/');
 
   expect(await page.textContent('h1')).toContain('Home');
-  expect(await page.textContent('.secrets')).toContain('{"SECRET_TEST":"42"}');
+  expect(await page.textContent('.secrets')).toContain('"SECRET_TEST":"42"');
   await page.click('.btn');
 
   expect(await page.textContent('body')).toContain('About');
