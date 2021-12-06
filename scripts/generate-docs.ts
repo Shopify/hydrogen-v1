@@ -365,7 +365,6 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
 }
 
 export default async function runAll(args: Partial<Options> = {}) {
-  // return Promise.all([runCliGenerator(args)]).catch(
   return Promise.all([runHydrogenGenerator(args), runCliGenerator(args)]).catch(
     (error) => {
       logger.error(error);

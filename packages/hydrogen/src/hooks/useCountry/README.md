@@ -49,7 +49,7 @@ This hook returns an array with the following elements:
 
 ## Related components
 
-- [`LocalizationProvider`](/api/hydrogen/components/cart/cartprovider)
+- [`LocalizationProvider`](/api/hydrogen/components/localization/localizationprovider)
 
 ## Related hooks
 
