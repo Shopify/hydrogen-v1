@@ -8,12 +8,12 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - fix: export `CartLineSelectedOptions` properly
+- fix: fix suspense utility function
 
 ## 0.7.1 - 2021-12-02
 
 - fix: avoid repeating the same identifier for default and named exports
 - fix: remove sourcemap warnings
-- fix: fix suspense utility function
 - feat: allow `useShopQuery` to be skippable if no query is passed.
 - fix: Remove usage of `react-query` (Not a breaking change)
 
