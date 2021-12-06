@@ -44,7 +44,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const render: Renderer = async function (
     url,
-    {context, request, isReactHydrationRequest, secrets, dev}
+    {context, request, isReactHydrationRequest, dev}
   ) {
     const state = isReactHydrationRequest
       ? JSON.parse(url.searchParams?.get('state') ?? '{}')
@@ -55,7 +55,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      secrets,
     });
 
     const body = await renderApp(ReactApp, state, isReactHydrationRequest);
@@ -82,7 +81,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const stream: Streamer = function (
     url: URL,
-    {context, request, response, template, secrets, dev}
+    {context, request, response, template, dev}
   ) {
     const state = {pathname: url.pathname, search: url.search};
 
@@ -91,7 +90,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      secrets,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -178,7 +176,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const hydrate: Hydrator = function (
     url: URL,
-    {context, request, response, secrets, dev}
+    {context, request, response, dev}
   ) {
     const state = JSON.parse(url.searchParams.get('state') || '{}');
 
@@ -187,7 +185,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      secrets,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -244,20 +241,17 @@ function buildReactApp({
   state,
   context,
   request,
-  secrets = {},
 }: {
   App: ComponentType;
   state: any;
   context: any;
   request: ServerComponentRequest;
-  secrets?: Record<string, any>;
 }) {
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
   const hydrogenServerProps = {
     request,
     response: componentResponse,
-    secrets,
   };
 
   const ReactApp = (props: any) => (

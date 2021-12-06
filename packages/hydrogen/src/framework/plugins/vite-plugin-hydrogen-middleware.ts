@@ -4,7 +4,6 @@ import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
 import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
-import {resolve as requireResolve} from './resolver';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -15,8 +14,6 @@ export default (
   shopifyConfig: ShopifyConfig,
   pluginOptions: HydrogenVitePluginOptions
 ) => {
-  let cachedGeneratedSecrets = '';
-
   return {
     name: 'vite-plugin-hydrogen-middleware',
 
@@ -35,8 +32,6 @@ export default (
 
       const env = await loadEnv(server.config.mode, server.config.root, '');
       globalThis.Oxygen = {env};
-
-      await generateSecrets(env);
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
       // By running this middleware first, we avoid that.
@@ -59,29 +54,8 @@ export default (
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)
               : undefined,
-            secrets: env,
           })
         );
     },
   } as Plugin;
-
-  async function generateSecrets(secrets: Record<string, string>) {
-    const generatedSecrets = Object.keys(secrets)
-      .map((key) => `  ${key}: string;`)
-      .join('\n');
-
-    if (generatedSecrets !== cachedGeneratedSecrets) {
-      cachedGeneratedSecrets = generatedSecrets;
-
-      const hydrogenPath = path.resolve(
-        path.dirname(requireResolve('@shopify/hydrogen'))
-      );
-
-      await fs.writeFile(
-        path.join(hydrogenPath, 'generated-secrets.d.ts'),
-        `export interface HydrogenSecrets extends Record<string, string> {\n${generatedSecrets}\n}`,
-        'utf-8'
-      );
-    }
-  }
 };

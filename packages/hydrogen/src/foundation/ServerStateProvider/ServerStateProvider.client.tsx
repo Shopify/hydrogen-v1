@@ -12,7 +12,7 @@ declare global {
   var __DEV__: boolean;
 }
 
-const PRIVATE_PROPS = ['request', 'response', 'secrets'] as const;
+const PRIVATE_PROPS = ['request', 'response'] as const;
 
 export interface ServerState {
   pathname: string;

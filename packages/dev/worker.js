@@ -11,12 +11,6 @@ addEventListener('fetch', (event) => {
         indexTemplate: indexHtml,
         cache: caches.default,
         context: event,
-        // Oxygen.env or CFW's env parameter in Modules format
-        secrets: Object.fromEntries(
-          Object.entries(globalThis).filter(([key]) =>
-            key.startsWith('SECRET_'),
-          ),
-        ),
       }),
     );
   } catch (error) {

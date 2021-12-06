@@ -10,8 +10,6 @@ export {
   isClient,
 } from './utilities';
 
-export * from './generated-secrets';
-
 export {Helmet} from 'react-helmet-async';
 
 // This is exported here because it contains a Server Component

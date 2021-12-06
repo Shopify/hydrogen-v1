@@ -21,7 +21,6 @@ export interface HandleEventOptions {
   streamableResponse: ServerResponse;
   dev?: boolean;
   context?: RuntimeContext;
-  secrets?: Record<string, any>;
 }
 
 export default async function handleEvent(
@@ -35,7 +34,6 @@ export default async function handleEvent(
     dev,
     cache,
     context,
-    secrets,
   }: HandleEventOptions
 ) {
   const url = new URL(request.url);
@@ -87,7 +85,6 @@ export default async function handleEvent(
         context: {},
         request,
         response: streamableResponse,
-        secrets,
         dev,
       });
     } else {
@@ -96,7 +93,6 @@ export default async function handleEvent(
         request,
         response: streamableResponse,
         template,
-        secrets,
         dev,
       });
     }
@@ -108,7 +104,6 @@ export default async function handleEvent(
       request,
       context: {},
       isReactHydrationRequest,
-      secrets,
       dev,
     });
 

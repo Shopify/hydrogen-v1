@@ -25,11 +25,6 @@ async function createServer() {
       getServerEntrypoint: () =>
         require('./dist/server/entry-server.js').default,
       indexTemplate: indexProd,
-      secrets: Object.fromEntries(
-        Object.entries(process.env).filter(([key]) =>
-          key.startsWith('SECRET_'),
-        ),
-      ),
     }),
   );
 
