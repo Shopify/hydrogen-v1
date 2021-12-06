@@ -6,7 +6,7 @@ import ProductDetails from '../../components/ProductDetails.client';
 import NotFound from '../../components/NotFound.server';
 import Layout from '../../components/Layout.server';
 
-export default function Product({country = {isoCode: 'US'}}) {
+export default function Product({country = {isoCode: 'US'}, helmetData}) {
   const {handle} = useParams();
 
   const {data} = useShopQuery({
@@ -23,7 +23,7 @@ export default function Product({country = {isoCode: 'US'}}) {
 
   return (
     <Layout>
-      <ProductDetails product={data.product} />
+      <ProductDetails product={data.product} helmetData={helmetData} />
     </Layout>
   );
 }
