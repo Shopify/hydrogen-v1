@@ -18,6 +18,7 @@ describe('<StarRating />', () => {
 
   /**
    * TODO: Fix the flakiness of this test, likely due to floating point math :)
+   * https://github.com/Shopify/hydrogen/issues/19
    */
   it.skip('renders the number of filled stars corresponding to the rating value', () => {
     const rating = getParsedMetafield({type: 'rating'});
