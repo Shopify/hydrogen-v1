@@ -8,7 +8,7 @@ export default function Index() {
         About
       </Link>
 
-      <div className="secrets">{JSON.stringify(Oxygen.env)}</div>
+      <div className="secrets">SECRET_TEST:{Oxygen.env.SECRET_TEST}</div>
     </>
   );
 }
