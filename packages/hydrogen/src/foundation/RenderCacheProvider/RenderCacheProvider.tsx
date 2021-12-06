@@ -4,10 +4,16 @@ import type {RenderCacheProviderProps} from './types';
 
 export function RenderCacheProvider({
   cache,
+  preloadCache,
   children,
 }: RenderCacheProviderProps) {
   return (
-    <RenderCacheContext.Provider value={{cache}}>
+    <RenderCacheContext.Provider
+      value={{
+        cache,
+        preloadCache,
+      }}
+    >
       {children}
     </RenderCacheContext.Provider>
   );
