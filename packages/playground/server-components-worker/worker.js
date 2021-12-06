@@ -4,6 +4,13 @@ import entrypoint from './src/entry-server.jsx';
 import indexHtml from './dist/client/index.html?raw';
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 
+// Mock Oxygen global
+globalThis.Oxygen = {
+  env: {
+    HYDROGEN_PRIVATE_TEST: globalThis.HYDROGEN_PRIVATE_TEST,
+  },
+};
+
 async function assetHandler(event, url) {
   const response = await getAssetFromKV(event, {});
 
@@ -23,9 +30,6 @@ async function assetHandler(event, url) {
 
 addEventListener('fetch', (event) => {
   try {
-    // Mock Oxygen global
-    globalThis.Oxygen = {env: {SECRET_TEST: globalThis.SECRET_TEST}};
-
     event.respondWith(
       handleEvent(event, {
         entrypoint,

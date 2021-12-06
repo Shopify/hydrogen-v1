@@ -15,6 +15,8 @@ exports.serve = async function serve(root, isProd) {
   // because Vite doesn't support the concept of a "webworker server"
   const {build} = require('vite');
 
+  process.env.HYDROGEN_PUBLIC_TEST = '42-public';
+
   // client build
   await build({
     root,
@@ -38,6 +40,7 @@ exports.serve = async function serve(root, isProd) {
   });
 
   delete process.env.WORKER;
+  delete process.env.HYDROGEN_PUBLIC_TEST;
 
   const {createServer} = require(path.resolve(root, 'start-worker.js'));
   const {app} = await createServer(root, isProd);

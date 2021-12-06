@@ -9,7 +9,7 @@ async function createServer(root = process.cwd()) {
     scriptPath: path.resolve(root, 'dist/worker/worker.js'),
     sitePath: path.resolve(root, 'dist/client'),
     bindings: {
-      SECRET_TEST: '42',
+      HYDROGEN_PRIVATE_TEST: '42-private',
     },
   });
 
