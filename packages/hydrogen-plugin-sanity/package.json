@@ -1,6 +1,6 @@
 {
   "name": "@shopify/hydrogen-plugin-sanity",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Hydrogen plugins for integrating with Sanity",
   "main": "dist/esnext/index.js",
   "publishConfig": {
@@ -17,7 +17,7 @@
     "prepack": "yarn build"
   },
   "devDependencies": {
-    "@shopify/hydrogen": "^0.7.0"
+    "@shopify/hydrogen": "^0.7.1"
   },
   "peerDependencies": {
     "@shopify/hydrogen": "^0.4.0"
