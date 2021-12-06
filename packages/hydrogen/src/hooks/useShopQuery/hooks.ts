@@ -36,25 +36,15 @@ export function useShopQuery<T>({
     );
   }
 
-  const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
-
-  const body = query ? graphqlRequestBody(query, variables) : "";
-  const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
-  const request = new Request(url, {
-    method: 'POST',
-    headers: {
-      'X-Shopify-Storefront-Access-Token': storefrontToken,
-      'content-type': 'application/json',
-    },
-    body,
-  });
+  const body = query ? graphqlRequestBody(query, variables) : '';
+  const {request, key} = createShopRequest(body);
 
   const {data} = useQuery<UseShopQueryResponse<T>>(
-    [storeDomain, graphqlApiVersion, body],
+    key,
     query
       ? fetchBuilder<UseShopQueryResponse<T>>(request)
-      // If no query, avoid calling SFAPI & return nothing
-      : async () => ({data: undefined as unknown as T, errors: undefined}),
+      : // If no query, avoid calling SFAPI & return nothing
+        async () => ({data: undefined as unknown as T, errors: undefined}),
     {cache}
   );
 
@@ -75,4 +65,22 @@ export function useShopQuery<T>({
   }
 
   return data as UseShopQueryResponse<T>;
+}
+
+function createShopRequest(body: string) {
+  const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
+
+  const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
+
+  return {
+    request: new Request(url, {
+      method: 'POST',
+      headers: {
+        'X-Shopify-Storefront-Access-Token': storefrontToken,
+        'content-type': 'application/json',
+      },
+      body,
+    }),
+    key: [storeDomain, graphqlApiVersion, body],
+  };
 }

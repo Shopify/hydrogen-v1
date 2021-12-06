@@ -1,5 +1,5 @@
 import {EntryServerHandler} from './types';
-import type {ServerResponse} from 'http';
+import {ServerResponse} from 'http';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
