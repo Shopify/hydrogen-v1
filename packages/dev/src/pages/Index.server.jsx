@@ -8,8 +8,8 @@ import {
 import gql from 'graphql-tag';
 
 import Layout from '../components/Layout.server';
-import FeaturedCollection from '../components/FeaturedCollection.server';
-import ProductCard from '../components/ProductCard.server';
+import FeaturedCollection from '../components/FeaturedCollection';
+import ProductCard from '../components/ProductCard';
 import Welcome from '../components/Welcome.server';
 
 function GradientBackground() {
@@ -132,6 +132,7 @@ const QUERY = gql`
     $country: CountryCode
     $numCollections: Int = 2
     $numProducts: Int = 3
+    $includeReferenceMetafieldDetails: Boolean = false
     $numProductMetafields: Int = 0
     $numProductVariants: Int = 250
     $numProductMedia: Int = 1

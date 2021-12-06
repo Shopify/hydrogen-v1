@@ -28,6 +28,8 @@ export interface Model3DProps {
   };
   /** A string of either `auto`, `lazy`, or `eager` to indicate the conditions for preloading. Refer to [`loading` in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-loading). */
   loading?: 'auto' | 'lazy' | 'eager';
+  /** A url to display an image instead of the model, useful for showing the user something before a model is loaded and ready to render. If none is provided, [Model3d.previewImage](https://shopify.dev/api/storefront/reference/products/model3d#previewimage-2021-10) is used. Refer to [`poster` in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-poster). */
+  poster?: string;
   /** A string of either `auto`, `interaction`, or `manual` to indicate when the model should be revealed. Refer to [`reveal` in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-reveal). */
   reveal?: 'auto' | 'interaction' | 'manual';
   /** A boolean to enable an AR experience. Refer to [`ar` in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-augmentedreality-attributes-ar). */
@@ -133,6 +135,7 @@ export interface Model3DProps {
 type PropsWeControl = 'src' | 'alt' | 'poster';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'model-viewer': any;
@@ -319,7 +322,7 @@ export function Model3D<TTag extends ElementType>(
       src={model.sources[0].url}
       alt={model.alt}
       camera-controls={passthroughProps.cameraControls ?? true}
-      poster={model.previewImage?.url}
+      poster={passthroughProps.poster || model.previewImage?.url}
       autoplay={passthroughProps.autoplay ?? true}
       loading={passthroughProps.loading}
       reveal={passthroughProps.reveal}

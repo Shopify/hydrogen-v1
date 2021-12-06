@@ -3,6 +3,7 @@ import {ESLintUtils} from '@typescript-eslint/experimental-utils';
 
 export * from './react';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const PACKAGE_JSON = require('../../package.json');
 const REPO = getRepoFromPackageJson(PACKAGE_JSON);
 

@@ -7,16 +7,16 @@ import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
 import Button from './Button.client';
-import ProductCard from './ProductCard.server';
+import ProductCard from './ProductCard';
 
 function NotFoundHero() {
   return (
     <div className="py-10 border-b border-gray-200">
       <div className="max-w-3xl text-center mx-4 md:mx-auto">
-        <h1 className="text-gray-700 text-5xl font-bold mb-4">
+        <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
           We&#39;ve lost this page
         </h1>
-        <p className="text-xl m-8 text-gray-500">
+        <p className="text-lg m-8 text-gray-500">
           We couldn’t find the page you’re looking for. Try checking the URL or
           heading back to the home page.
         </p>
@@ -68,6 +68,7 @@ export default function NotFound({country = {isoCode: 'US'}}) {
 const QUERY = gql`
   query NotFoundProductDetails(
     $country: CountryCode
+    $includeReferenceMetafieldDetails: Boolean = false
     $numProductMetafields: Int!
     $numProductVariants: Int!
     $numProductMedia: Int!

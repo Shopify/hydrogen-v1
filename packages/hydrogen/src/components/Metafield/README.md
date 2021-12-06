@@ -65,7 +65,7 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 | `single_line_text_field` | A `RawHtml` component with the text.                                                                                                                                                       |
 | `multi_line_text_field`  | A `RawHtml` component with the text.                                                                                                                                                       |
 | `product_reference`      | A `span` containing the product reference GID.                                                                                                                                             |
-| `file_reference`         | A `span` containing the file reference GID.                                                                                                                                                |
+| `file_reference`         | An `Image` component when the file reference is of type `MediaImage`, or a `span` containing the file reference GID for other file types.                                                  |
 | `page_reference`         | A `span` containing the page reference GID.                                                                                                                                                |
 | `variant_reference`      | A `span` containing the variant reference GID.                                                                                                                                             |
 | `url`                    | An `a` tag with the `href` corresponding to the URL and the label corresponding to the URL.                                                                                                |
@@ -76,7 +76,7 @@ The `Metafield` components provides the Metafield object with a `value` that was
 
 ## Component type
 
-The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/api/hydrogen/framework/react-server-components).
+The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## GraphQL fragment
 
@@ -92,8 +92,26 @@ fragment MetafieldFragment on Metafield {
   createdAt
   updatedAt
   description
+  reference @include(if: $includeReferenceMetafieldDetails) {
+    __typename
+    ... on MediaImage {
+      id
+      mediaContentType
+      image {
+        ...ImageFragment
+      }
+    }
+  }
 }
 ```
+
+### Variables
+
+The `MetafieldFragment` includes variables that you will need to provide values for when performing your query.
+
+| Variable                            | Description                                                                                                                                                                        |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `$includeReferenceMetafieldDetails` | A boolean indicating if the reference type should be queried. Only applicable to `file_reference`, `product_reference`, `variant_reference`, and `page_reference` metafield types. |
 
 ## Related components
 

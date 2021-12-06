@@ -5,10 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+<!-- ## Unreleased -->
 
+## 0.7.1 - 2021-12-02
+
+- fix: avoid repeating the same identifier for default and named exports
+- fix: remove sourcemap warnings
+- feat: allow `useShopQuery` to be skippable if no query is passed.
+- fix: Remove usage of `react-query` (Not a breaking change)
+
+## 0.7.0 - 2021-11-22
+
+- feat: add file reference metafield support
+- fix: binding of waitUntil in playground/server-components-worker
 - fix: default to `retry: false` in `useQuery`
-- fix: starter template media gallery error when handling videos
+- fix: warn and ignore reserved properties in server state
+- fix: run graphiql middleware before vite, fixing graphiql
+- feat: allow custom Model3D poster
+- feat: support synchronous server redirects
 
 ## 0.6.4 - 2021-11-11
 
@@ -16,6 +30,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: new lines in hydration request break JSON.parse
 - fix(#201): normalize POSIX separators to support windows
 - fix: scroll to top on app first load
+- fix(#78): update variantID to variantId
 
 ## 0.6.3 - 2021-11-10
 
@@ -98,6 +113,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: invoke CartProvider callbacks before performing the GraphQL mutations
 - fix: fix the accessible label in the AddToCartButton component when an item is added to cart
 - fix: cart fetch to return stringified error
+- fix: remove sourcemap warnings
 
 ## 0.2.1 - 2021-10-12
 

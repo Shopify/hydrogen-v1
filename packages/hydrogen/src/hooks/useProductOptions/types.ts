@@ -1,5 +1,4 @@
-import {MetafieldFragmentFragment} from '../..';
-import {GraphQLConnection} from '../../types';
+import {GraphQLConnection, RawMetafield} from '../../types';
 import {SellingPlanFragmentFragment} from './SellingPlanFragment';
 import {SellingPlanGroupsFragmentFragment} from './SellingPlanGroupsFragment';
 import {VariantFragmentFragment} from './VariantFragment';
@@ -14,7 +13,7 @@ export type Variant = Omit<
 > & {
   id: VariantFragmentFragment['id'];
   selectedOptions: VariantFragmentFragment['selectedOptions'];
-  metafields?: GraphQLConnection<Partial<MetafieldFragmentFragment>>;
+  metafields?: GraphQLConnection<Partial<RawMetafield>>;
   sellingPlanAllocations?: GraphQLConnection<SellingPlanAllocation>;
 };
 

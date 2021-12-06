@@ -20,17 +20,6 @@ export function slash(p: string): string {
   return p.replace(/\\/g, '/');
 }
 
-// injected by the test env
-declare global {
-  namespace NodeJS {
-    interface Global {
-      page?: Page;
-      viteTestUrl?: string;
-      watcher?: RollupWatcher;
-    }
-  }
-}
-
 let server: ViteDevServer | http.Server;
 let tempDir: string;
 let rootDir: string;
@@ -42,7 +31,7 @@ const onConsole = (msg) => {
 };
 
 beforeAll(async () => {
-  const page = global.page;
+  const page = (global as any).page;
   if (!page) {
     return;
   }
@@ -77,6 +66,7 @@ beforeAll(async () => {
       const testCustomServe = resolve(dirname(testPath), 'serve.js');
       if (fs.existsSync(testCustomServe)) {
         // test has custom server configuration.
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const {serve} = require(testCustomServe);
         server = await serve(rootDir, isBuildTest);
         return;
@@ -108,8 +98,9 @@ beforeAll(async () => {
         server = await (await createServer(options)).listen();
         // use resolved port/base from server
         const base = server.config.base === '/' ? '' : server.config.base;
-        const url =
-          (global.viteTestUrl = `http://localhost:${server.config.server.port}${base}`);
+        const url = ((
+          global as any
+        ).viteTestUrl = `http://localhost:${server.config.server.port}${base}`);
         await page.goto(url);
       } else {
         process.env.VITE_INLINE = 'inline-build';
@@ -126,10 +117,10 @@ beforeAll(async () => {
         const isWatch = !!resolvedConfig!.build.watch;
         // in build watch,call startStaticServer after the build is complete
         if (isWatch) {
-          global.watcher = rollupOutput as RollupWatcher;
-          await notifyRebuildComplete(global.watcher);
+          (global as any).watcher = rollupOutput as RollupWatcher;
+          await notifyRebuildComplete((global as any).watcher);
         }
-        const url = (global.viteTestUrl = await startStaticServer());
+        const url = ((global as any).viteTestUrl = await startStaticServer());
         await page.goto(url);
       }
     }
@@ -147,8 +138,8 @@ beforeAll(async () => {
 }, 30000);
 
 afterAll(async () => {
-  global.page?.off('console', onConsole);
-  await global.page?.close();
+  (global as any).page?.off('console', onConsole);
+  await (global as any).page?.close();
   await server?.close();
   if (err) {
     throw err;

@@ -10,6 +10,7 @@ export interface ShopPayButtonProps {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'shop-pay-button': {

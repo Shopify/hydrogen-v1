@@ -5,24 +5,7 @@
 
 </aside>
 
-Hydrogen contains a set of Shopify-specific commerce components that help accelerate your development process. This guide describes how Hydrogen components work and the different component categories that Hydrogen offers.
-
-## How Hydrogen components work
-
-Hydrogen components contain all of business logic for the commerce concept they represent. They don't provide visual styles (CSS) or hardcoded content (for example, strings like "Add to cart" and "Remove from cart").
-
-Components are used to parse and process data, and render sensible defaults for semantic markup and localization. Many components have GraphQL fragments that you can use to query the data you need.
-
-### Passthrough and render props
-
-Components can be customized using passthrough props and render props:
-
-- **Passthrough props**: You can pass attributes as props to the Hydrogen component, and the Hydrogen component will pass them through to the rendered HTML tag.
-
-  > Note:
-  > Any attributes supported by the component's outputted HTML tag are supported, except for those explicitly controlled by the component (for example, `src` for the `Image` component and `dangerouslySetInnerHtml` for the `RawHtml` component).
-
-- **Render props**: You can pass a function that returns JSX as a child to the Hydrogen component.
+Hydrogen contains a set of Shopify-specific commerce components that help accelerate your development process. This guide provides a complete reference of Hydrogen components.
 
 ## Primitive components
 
@@ -262,5 +245,5 @@ The [LocalizationProvider](/api/hydrogen/components/localization/localizationpro
 ## Next steps
 
 - [Get started](/custom-storefronts/hydrogen/getting-started) with Hydrogen and begin building a custom storefront.
-- Learn about [Hydrogen's architecture and framework](/api/hydrogen/framework).
-- Learn about [React Server Components](/api/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about [Hydrogen's architecture and framework](/custom-storefronts/hydrogen/framework).
+- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.

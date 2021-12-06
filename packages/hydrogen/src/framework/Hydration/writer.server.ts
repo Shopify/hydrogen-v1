@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /**
  * HydrationWriter is an implementation of `WritableStream` which
  * keeps track of chunks emitted from React's `pipeToNodeWritable`.

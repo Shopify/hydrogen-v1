@@ -44,7 +44,7 @@ interface HydrogenRoute {
 
 export function createRoutesFromPages(
   pages: ImportGlobEagerOutput,
-  topLevelPath: string = '*'
+  topLevelPath = '*'
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 

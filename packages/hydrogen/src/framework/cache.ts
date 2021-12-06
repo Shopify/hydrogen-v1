@@ -1,5 +1,4 @@
-import type {QueryKey} from 'react-query';
-import type {CacheOptions} from '../types';
+import type {CacheOptions, QueryKey} from '../types';
 import {getCache} from './runtime';
 
 const DEFAULT_SUBREQUEST_CACHE_OPTIONS: CacheOptions = {
@@ -28,7 +27,7 @@ export function getCacheControlHeader({dev}: {dev?: boolean}) {
   return dev ? 'cache-control-preview' : 'cache-control';
 }
 
-function hashKey(key: QueryKey): string {
+export function hashKey(key: QueryKey): string {
   const rawKey = key instanceof Array ? key : [key];
 
   /**

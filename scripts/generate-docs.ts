@@ -48,7 +48,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
   });
   await Promise.all([
     // Components
-
+    generator.section({
+      title: 'Hydrogen components overview',
+      description:
+        'Get familiar with the Shopify-specific commerce components included in Hydrogen.',
+      url: '/api/hydrogen/components/index.md',
+      entry: 'docs/components',
+    }),
     // Primitive
     generator.section({
       title: 'Primitive',
@@ -131,6 +137,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
 
     // Hooks
+    generator.section({
+      title: 'Hydrogen hooks overview',
+      description:
+        'Get familiar with the Shopify-specific commerce hooks included in Hydrogen.',
+      url: '/api/hydrogen/hooks/index.md',
+      entry: 'docs/hooks',
+    }),
     // Global
     generator.section({
       title: 'Global',
@@ -199,11 +212,11 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     // Utilities
     generator.section({
-      title: 'Utilities overview',
+      title: 'Hydrogen utilities overview',
       description:
         'Get familiar with the Shopify-specific commerce utilities included in Hydrogen.',
       url: '/api/hydrogen/utilities/index.md',
-      entry: 'utilities',
+      entry: 'docs/utilities',
     }),
     // SDK reference
     generator.section({
@@ -217,82 +230,82 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     generator.section({
       title: 'Hydrogen framework overview',
       description: 'Learn about the architecture and framework of Hydrogen.',
-      url: '/api/hydrogen/framework/index.md',
+      url: '/custom-storefronts/hydrogen/framework/index.md',
       entry: 'framework/docs/index.md',
     }),
     generator.section({
       title: 'React Server Components overview',
       description:
         'Learn about React Server Components, an opinionated data-fetching and rendering workflow for React apps.',
-      url: '/api/hydrogen/framework/react-server-components/index.md',
+      url: '/custom-storefronts/hydrogen/framework/react-server-components/index.md',
       entry: 'framework/docs/react-server-components.md',
     }),
     generator.section({
       title: 'Working with React Server Components',
       description:
         'Learn how to work with React Server Components in your Hydrogen app and the known limitations.',
-      url: '/api/hydrogen/framework/react-server-components/work-with-rsc.md',
+      url: '/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc.md',
       entry: 'framework/docs/work-with-rsc.md',
     }),
     generator.section({
       title: 'Built-in CSS support',
       description:
         'Learn about the CSS support built into Hydrogen apps and how you can customize the styles in your app.',
-      url: '/api/hydrogen/framework/css-support.md',
+      url: '/custom-storefronts/hydrogen/framework/css-support.md',
       entry: 'framework/docs/css-support.md',
     }),
     generator.section({
-      title: 'Cache',
+      title: 'Caching',
       description: 'Learn how to manage cache options for Hydrogen apps.',
-      url: '/api/hydrogen/framework/cache.md',
+      url: '/custom-storefronts/hydrogen/framework/cache.md',
       entry: 'framework/docs/cache.md',
     }),
     generator.section({
       title: 'Server state',
       description:
         'Learn how to update the state on the server when you are building your Hydrogen app.',
-      url: '/api/hydrogen/framework/server-state.md',
+      url: '/custom-storefronts/hydrogen/framework/server-state.md',
       entry: 'framework/docs/server-state.md',
     }),
     generator.section({
       title: 'Routes',
       description:
         'Get familiar with the file-based routing system that Hydrogen uses.',
-      url: '/api/hydrogen/framework/routes.md',
+      url: '/custom-storefronts/hydrogen/framework/routes.md',
       entry: 'framework/docs/routes.md',
     }),
     generator.section({
       title: 'Pages',
       description: 'Learn about how page server components receive props.',
-      url: '/api/hydrogen/framework/pages.md',
+      url: '/custom-storefronts/hydrogen/framework/pages.md',
       entry: 'framework/docs/pages.md',
     }),
     generator.section({
       title: 'Secrets',
       description:
         'Learn how to store sensitive information in your Hydrogen project.',
-      url: '/api/hydrogen/framework/secrets.md',
+      url: '/custom-storefronts/hydrogen/framework/secrets.md',
       entry: 'framework/docs/secrets.md',
     }),
     generator.section({
       title: 'SEO',
       description:
         'Learn how to customize the output of SEO-related tags in your Hydrogen client and server components.',
-      url: '/api/hydrogen/framework/seo.md',
+      url: '/custom-storefronts/hydrogen/framework/seo.md',
       entry: 'framework/docs/seo.md',
     }),
     generator.section({
       title: 'Static assets',
       description:
         'Learn how to reference and serve static assets in Hydrogen.',
-      url: '/api/hydrogen/framework/static-assets.md',
+      url: '/custom-storefronts/hydrogen/framework/static-assets.md',
       entry: 'framework/docs/static-assets.md',
     }),
     generator.section({
       title: 'Third-party dependencies',
       description:
         'Tips and tricks for using third-party dependencies in Hydrogen apps.',
-      url: '/api/hydrogen/framework/third-party-dependencies.md',
+      url: '/custom-storefronts/hydrogen/framework/third-party-dependencies.md',
       entry: 'framework/docs/third-party-dependencies.md',
     }),
   ]);

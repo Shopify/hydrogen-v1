@@ -7,7 +7,6 @@ import {ErrorBoundary} from 'react-error-boundary';
 import {HelmetProvider} from 'react-helmet-async';
 import {useServerResponse} from './framework/Hydration/Cache.client';
 import {ServerStateProvider, ServerStateRouter} from './client';
-import {QueryProvider} from './hooks';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   const root = document.getElementById('root');
@@ -42,15 +41,13 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
       serverState={serverState}
       setServerState={setServerState}
     >
-      <QueryProvider>
-        <HelmetProvider>
-          <BrowserRouter>
-            <ServerStateRouter />
-            {/* @ts-ignore */}
-            <ClientWrapper>{response.read()}</ClientWrapper>
-          </BrowserRouter>
-        </HelmetProvider>
-      </QueryProvider>
+      <HelmetProvider>
+        <BrowserRouter>
+          <ServerStateRouter />
+          {/* @ts-ignore */}
+          <ClientWrapper>{response.read()}</ClientWrapper>
+        </BrowserRouter>
+      </HelmetProvider>
     </ServerStateProvider>
   );
 }

@@ -5,7 +5,6 @@ export default function Footer({collection, product}) {
     <footer role="contentinfo">
       <div className="relative bg-white border-t border-b border-black border-opacity-5">
         <div className="mx-auto max-w-7xl px-4 py-14 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
             <h2 className="text-md font-medium uppercase mb-4">Community</h2>
             <ul className="mt-8 space-y-4">
@@ -57,7 +56,6 @@ export default function Footer({collection, product}) {
               </li>
             </ul>
           </div>
-          {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
             <h2 className="text-md font-medium uppercase mb-4">Templates</h2>
             <ul className="mt-8 space-y-4">
@@ -72,9 +70,11 @@ export default function Footer({collection, product}) {
                   Collection
                 </Link>
               </li>
+              <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
+                <Link to="/404">404</Link>
+              </li>
             </ul>
           </div>
-          {/* eslint-disable-next-line @shopify/jsx-prefer-fragment-wrappers */}
           <div>
             <h2 className="text-md font-medium uppercase mb-4">Docs</h2>
             <ul className="mt-8 space-y-4">

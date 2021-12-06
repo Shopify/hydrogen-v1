@@ -52,7 +52,7 @@ export default () => {
       }
     },
 
-    load(id, options) {
+    async load(id, options) {
       if (!isSSR(options)) return null;
 
       // Wrapped components won't match this becase they end in ?no-proxy

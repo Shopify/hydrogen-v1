@@ -24,10 +24,11 @@ import getPort from 'get-port';
 const INPUT_TIMEOUT = 500;
 const execPromise = promisify(exec);
 
-type Command = 'create' | 'create component' | 'create page';
+type Command = 'create' | 'create component' | 'create page' | 'check';
 type Input = Record<string, string | boolean | null>;
 
 interface App {
+  output: Result;
   withServer: (
     runner: (context: ServerContext) => Promise<void>
   ) => Promise<void>;
@@ -95,6 +96,7 @@ export async function withCli(
         }
 
         return {
+          output: result,
           withServer: async function withServer(
             runner: (context: ServerContext) => Promise<void>,
             serverOptions?: ServerOptions
@@ -323,11 +325,10 @@ class Sandbox {
 }
 
 class Result {
-  success: boolean = false;
+  success = false;
   error: Error | null = null;
   stderr: string[] = [];
   stdout: string[] = [];
-  constructor() {}
 
   get inspect() {
     return {

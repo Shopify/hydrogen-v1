@@ -2,16 +2,16 @@ Third-party dependencies will generally work out-of-the-box with Hydrogen. This 
 
 ## Install dependencies
 
-To install third party dependencies, run one of the following commands:
+To install third party dependencies, run the following command:
 
 {% codeblock file, filename: 'Terminal' %}
 
-```bash
-// Install dependencies with npm
-npm install <dependency>
-
-// Install dependencies with yarn
+```bash?filename: 'Terminal', title: 'yarn'
 yarn add <dependency>
+```
+
+```bash?filename: 'Terminal', title: 'npm'
+npm install <dependency>
 ```
 
 {% endcodeblock %}
@@ -20,7 +20,7 @@ yarn add <dependency>
 
 Consider the following:
 
-- If the dependency interacts with `useState` or browser APIs, then place it inside a `*.client.jsx` component. Follow the [rules of server and client components](/api/hydrogen/framework/react-server-components#rules-for-server-and-client-components).
+- If the dependency interacts with `useState` or browser APIs, then place it inside a `*.client.jsx` component. Follow the [rules of server and client components](/custom-storefronts/hydrogen/framework/react-server-components#rules-for-server-and-client-components).
 - If the dependency is purely client-based, and you don't need to interact with it in individual components, then you can insert it in `src/entry-client.jsx`.
 - If the dependency includes a style import from a CSS file, then you can import that in `src/entry-client.jsx`.
 

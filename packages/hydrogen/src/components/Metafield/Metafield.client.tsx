@@ -6,6 +6,8 @@ import {StarRating} from './components/StarRating';
 import {RawHtml} from '../RawHtml';
 import {ParsedMetafield, Measurement, Rating} from '../../types';
 import {MetafieldFragment as Fragment} from '../../graphql/graphql-constants';
+import {Image} from '../Image';
+import {MediaImage} from '../../types';
 
 export interface MetafieldProps {
   /** A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API. */
@@ -103,6 +105,14 @@ export function Metafield<TTag extends ElementType>(
           {JSON.stringify(metafield.value)}
         </Wrapper>
       );
+    case 'file_reference': {
+      if (metafield.reference?.__typename === 'MediaImage') {
+        const ref = metafield.reference as MediaImage;
+        return ref.image ? (
+          <Image image={ref.image} {...passthroughProps} />
+        ) : null;
+      }
+    }
     default: {
       const Wrapper = as ?? 'span';
       return (

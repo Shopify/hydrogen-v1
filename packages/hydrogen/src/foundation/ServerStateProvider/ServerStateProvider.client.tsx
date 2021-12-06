@@ -7,25 +7,40 @@ import React, {
   useTransition,
 } from 'react';
 
-export interface ServerStateContextValue {
-  serverState: Record<string, any>;
-  setServerState(
-    input: (() => void) | Record<string, any> | string,
-    value?: string | Record<string, any>
-  ): void;
-  pending: any;
+declare global {
+  // eslint-disable-next-line no-var
+  var __DEV__: boolean;
 }
 
-export const ServerStateContext = createContext<any>(null);
+export interface ServerState {
+  pathname: string;
+  search: string;
+  [key: string]: any;
+}
 
-interface Props {
-  serverState: Record<string, any>;
-  setServerState: React.Dispatch<
-    React.SetStateAction<{
-      pathname: string;
-      search: string;
-    }>
-  >;
+export interface ServerStateSetter {
+  (
+    input:
+      | ((prev: ServerState) => Partial<ServerState>)
+      | Partial<ServerState>
+      | string,
+    propValue?: any // Value when using string input
+  ): void;
+}
+
+export interface ServerStateContextValue {
+  pending: boolean;
+  serverState: ServerState;
+  setServerState: ServerStateSetter;
+}
+
+export const ServerStateContext = createContext<ServerStateContextValue>(
+  null as any
+);
+
+interface ServerStateProviderProps {
+  serverState: ServerState;
+  setServerState: React.Dispatch<React.SetStateAction<ServerState>>;
   children: ReactNode;
 }
 
@@ -33,14 +48,11 @@ export function ServerStateProvider({
   serverState,
   setServerState,
   children,
-}: Props) {
+}: ServerStateProviderProps) {
   const [pending, startTransition] = useTransition();
 
-  const setServerStateCallback = useCallback(
-    (
-      input: () => void | Record<string, any> | string,
-      value?: string | Record<string, any>
-    ) => {
+  const setServerStateCallback = useCallback<ServerStateSetter>(
+    (input, propValue) => {
       /**
        * By wrapping this state change in a transition, React renders the new state
        * concurrently in a new "tree" instead of Suspending and showing the (blank)
@@ -49,28 +61,30 @@ export function ServerStateProvider({
        * the `pending` flag also provided by the hook to display in the UI.
        */
       startTransition(() => {
-        // Support callback-style setState
-        if (typeof input === 'function') {
-          // @ts-ignore
-          return setServerState(input);
-        }
+        return setServerState((prev) => {
+          let newValue: Record<string, any>;
 
-        // Support a simple object, and spread it into the existing object.
-        if (typeof input === 'object') {
-          return setServerState((prev) => ({
-            ...prev,
-            // @ts-ignore
-            ...input,
-          }));
-        }
+          if (typeof input === 'function') {
+            newValue = input(prev);
+          } else if (typeof input === 'string') {
+            newValue = {[input]: propValue};
+          } else {
+            newValue = input;
+          }
 
-        // Support a key, value as well.
-        if (typeof input === 'string') {
-          return setServerState((prev) => ({
+          if (__DEV__) {
+            if ('request' in newValue || 'response' in newValue) {
+              console.warn(
+                `Custom "request" and "response" properties in server state are ignored. Use a different name.`
+              );
+            }
+          }
+
+          return {
             ...prev,
-            [input]: value,
-          }));
-        }
+            ...newValue,
+          };
+        });
       });
     },
     [setServerState, startTransition]

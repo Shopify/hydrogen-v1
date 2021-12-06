@@ -1,6 +1,6 @@
 {
   "name": "@shopify/hydrogen-cli",
-  "version": "0.6.4",
+  "version": "0.7.1",
   "description": "Command line interface for hydrogen",
   "license": "MIT",
   "engines": {
@@ -29,6 +29,7 @@
     "directory": "packages/cli"
   },
   "dependencies": {
+    "@shopify/prettier-config": "^1.1.2",
     "@types/debug": "^4.1.7",
     "chalk": "^4.1.2",
     "change-case": "^4.1.2",
@@ -38,8 +39,7 @@
     "glob": "^7.2.0",
     "inquirer": "^8.1.2",
     "minimist": "^1.2.5",
-    "prettier": "^2.4.1",
-    "@shopify/prettier-config": "^1.1.2"
+    "prettier": "^2.4.1"
   },
   "devDependencies": {
     "@types/change-case": "^2.3.1",

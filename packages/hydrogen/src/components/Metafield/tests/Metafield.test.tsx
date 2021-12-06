@@ -3,7 +3,9 @@ import {Metafield} from '../Metafield.client';
 import {getParsedMetafield} from '../../../utilities/tests/metafields';
 import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
 import {RawHtml} from '../../RawHtml';
+import {Image} from '../../Image';
 import {StarRating} from '../components';
+import {getMediaImage} from '../../../utilities/tests/media';
 
 describe('<Metafield />', () => {
   it('renders nothing when the metafield value is undefined', () => {
@@ -936,68 +938,98 @@ describe('<Metafield />', () => {
   });
 
   describe('with `file_reference` type metafield', () => {
-    it('renders the file reference as a string in a `span` by default', () => {
-      const metafield = getParsedMetafield({type: 'file_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+    describe('when the reference type is a MediaImage', () => {
+      it('renders an Image component', () => {
+        const metafield = getParsedMetafield({
+          type: 'file_reference',
+          reference: {__typename: 'MediaImage', ...getMediaImage()},
+        });
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield} />
+        );
 
-      expect(component).toContainReactComponent('span', {
-        children: metafield.value,
+        expect(component).toContainReactComponent(Image);
+      });
+
+      it('allows passthrough props', () => {
+        const metafield = getParsedMetafield({
+          type: 'file_reference',
+          reference: {__typename: 'MediaImage', ...getMediaImage()},
+        });
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield} className="rounded-md" />
+        );
+
+        expect(component).toContainReactComponent(Image, {
+          className: 'rounded-md',
+        });
       });
     });
 
-    it('renders the file reference as a string in the element specified by the `as` prop', () => {
-      const metafield = getParsedMetafield({type: 'file_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} as="p" />
-      );
+    describe('when the reference type is not a MediaImage', () => {
+      it('renders the file reference as a string in a `span` by default', () => {
+        const metafield = getParsedMetafield({type: 'file_reference'});
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield} />
+        );
 
-      expect(component).toContainReactComponent('p', {
-        children: metafield.value,
+        expect(component).toContainReactComponent('span', {
+          children: metafield.value,
+        });
       });
-    });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
+      it('renders the file reference as a string in the element specified by the `as` prop', () => {
+        const metafield = getParsedMetafield({type: 'file_reference'});
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield} as="p" />
+        );
+
+        expect(component).toContainReactComponent('p', {
+          children: metafield.value,
+        });
       });
-      const metafield = getParsedMetafield({type: 'file_reference'});
 
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
+      it('passes the metafield as a render prop to the children render function', () => {
+        const children = jest.fn().mockImplementation(() => {
+          return null;
+        });
+        const metafield = getParsedMetafield({type: 'file_reference'});
 
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
+        mountWithShopifyProvider(
+          <Metafield metafield={metafield}>{children}</Metafield>
+        );
+
+        expect(children).toHaveBeenCalledWith({
+          ...metafield,
+          value: metafield.value,
+        });
       });
-    });
 
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'file_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The reference is {value}</p>;
-          }}
-        </Metafield>
-      );
+      it('renders its children', () => {
+        const metafield = getParsedMetafield({type: 'file_reference'});
+        const component = mountWithShopifyProvider(
+          <Metafield metafield={metafield}>
+            {({value}) => {
+              return <p>The reference is {value}</p>;
+            }}
+          </Metafield>
+        );
 
-      expect(component).toContainReactComponent('p', {
-        children: [`The reference is `, metafield.value],
+        expect(component).toContainReactComponent('p', {
+          children: [`The reference is `, metafield.value],
+        });
       });
-    });
 
-    it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
-        <Metafield
-          metafield={getParsedMetafield({type: 'file_reference'})}
-          className="emphasized"
-        />
-      );
-      expect(component).toContainReactComponent('span', {
-        className: 'emphasized',
+      it('allows passthrough props', () => {
+        const component = mountWithShopifyProvider(
+          <Metafield
+            metafield={getParsedMetafield({type: 'file_reference'})}
+            className="emphasized"
+          />
+        );
+        expect(component).toContainReactComponent('span', {
+          className: 'emphasized',
+        });
       });
     });
   });

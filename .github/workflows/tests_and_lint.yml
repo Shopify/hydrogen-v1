@@ -1,44 +1,45 @@
 name: Tests and Lint
 
 on:
-  push:
   pull_request:
     branches: [main]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [windows-latest, ubuntu-latest]
         node-version: [14.x, 15.x, 16.x]
 
-    name: Node.js ${{ matrix.node-version }}
+    name: OS ${{ matrix.os }} / NodeJS ${{ matrix.node-version }}
 
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Get the yarn cache directory path
+      - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - name: Get the cache for yarn
-        uses: actions/cache@v2
-        id: yarn-cache
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
       - name: Install the packages
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-engines
+
+      - name: Build the code
+        run: yarn build
 
       - name: Lint the framework code
         run: yarn lint
@@ -46,9 +47,6 @@ jobs:
       - name: Lint the template code
         run: yarn lint
         working-directory: ./packages/dev
-
-      - name: Build the code
-        run: yarn build
 
       - name: Run the unit tests
         run: yarn test

@@ -19,10 +19,11 @@ Because of the way tree-shaking works in Vite, avoid importing server components
 Hydrogen provides a special `@shopify/hydrogen/client` module to reference components that are safe to use within client components. You should use this import path when writing your client components.
 
 ## Sharing `state` between client and server
+
 > Note:
 > The functionality described in this section is unique to Hydrogen's React Server Components implementation.
 
-Hydrogen provides a [`useServerState()` hook with a `setServerState()` helper function](/api/hydrogen/framework/server-state), which allows components to paginate within collections, programmatically switch routes, or do anything that requires new data from the server.
+Hydrogen provides a [`useServerState()` hook with a `setServerState()` helper function](/custom-storefronts/hydrogen/framework/server-state), which allows components to paginate within collections, programmatically switch routes, or do anything that requires new data from the server.
 
 Sharing state information between the client and server is important for common tasks, like `page` routing. The following diagram shows how the `page` state is shared between the client and server:
 
@@ -30,19 +31,21 @@ Sharing state information between the client and server is important for common 
 
 1. `App.server.jsx` relies on the `page` state to choose the correct route to render. To change routes, the client updates the `page` state:
 
-    {% codeblock file, filename: 'ProductDetails.client.jsx' %}
-    ```js
-    useEffect(() => {
-      setServerState('page', location.pathname);
-    }, [location.pathname, setServerState]);
-    ```
-    {% endcodeblock %}
+   {% codeblock file, filename: 'ProductDetails.client.jsx' %}
+
+   ```js
+   useEffect(() => {
+     setServerState('page', location.pathname);
+   }, [location.pathname, setServerState]);
+   ```
+
+   {% endcodeblock %}
 
 2. The `page` state is sent to the server. This happens through a `useServerResponse` fetch call. It's a special server endpoint called `/react` which accepts `state` as a query parameter.
 3. The `/react` endpoint returns the wire representation for the new state.
 4. The state is partially hydrated (made interactive) and rendered into the DOM, similar to how the initial page was made interactive.
 
-    Hydrogen uses `/react` for routing, but also for any other state that needs to be synced to the server.
+   Hydrogen uses `/react` for routing, but also for any other state that needs to be synced to the server.
 
 ## Using `Context` in React Server Components
 
@@ -70,6 +73,7 @@ The following rules apply to `Provider` components:
 The following example shows the implementation of a `Provider` component:
 
 {% codeblock file, filename: 'CartContext.client.jsx' %}
+
 ```js
 // This must be a separate client component from your special `Provider` component.
 
@@ -87,11 +91,12 @@ export function useCartContext() {
   return context;
 }
 ```
+
 {% endcodeblock %}
 
 {% codeblock file, filename: 'CartProvider.client.jsx' %}
-```js
 
+```js
 import {CartContext} from './CartContext.client';
 
 export default function CartProvider({items, children}) {
@@ -103,11 +108,12 @@ export default function CartProvider({items, children}) {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 ```
+
 {% endcodeblock %}
 
 {% codeblock file, filename: 'App.server.jsx' %}
-```js
 
+```js
 import CartProvider from './CartProvider.client';
 
 export default function App() {
@@ -120,10 +126,11 @@ export default function App() {
   );
 }
 ```
+
 {% endcodeblock %}
 
 ## Next steps
 
-- Learn how to manage the [state on the server](/api/hydrogen/framework/server-state) as you're building your Hydrogen app.
-- Get familiar with the [file-based routing system](/api/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/api/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
+- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

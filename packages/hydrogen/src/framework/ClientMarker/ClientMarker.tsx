@@ -24,7 +24,6 @@ export function wrapInClientMarker(meta: ClientMarkerMeta) {
   // Use object syntax here to make sure the function name
   // comes from the meta params for better error stacks.
   const wrappedComponent = {
-    // eslint-disable-next-line react/display-name
     [name]: (props: any) => <ClientMarker {...{props, meta}} />,
   }[name];
 
