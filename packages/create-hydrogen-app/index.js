@@ -12,7 +12,7 @@ const {copy} = require('./scripts/utils.js');
 
 const cwd = process.cwd();
 
-const TEMPLATES = ['hydrogen'];
+const TEMPLATES = ['hydrogen', 'bare-bones'];
 
 const renameFiles = {
   _gitignore: '.gitignore',
@@ -61,11 +61,10 @@ async function init() {
     }
   }
 
-  const firstAndOnlyTemplate =
-    TEMPLATES && TEMPLATES.length && TEMPLATES.length === 1 && TEMPLATES[0];
+  const defaultTemplate = 'hydrogen';
 
   // Determine template
-  let template = argv.t || argv.template || firstAndOnlyTemplate;
+  let template = argv.t || argv.template || defaultTemplate;
   let message = 'Select a template:';
   let isValidTemplate = false;
 
