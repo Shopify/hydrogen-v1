@@ -6,6 +6,11 @@ import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
 import {resolve as requireResolve} from './resolver';
 
+declare global {
+  // eslint-disable-next-line no-var
+  var Oxygen: {env: Record<string, string | undefined>; [key: string]: any};
+}
+
 export default (
   shopifyConfig: ShopifyConfig,
   pluginOptions: HydrogenVitePluginOptions
@@ -28,13 +33,10 @@ export default (
         return await server.transformIndexHtml(url, indexHtml);
       }
 
-      const secrets = await loadEnv(
-        server.config.mode,
-        server.config.root,
-        'SECRET_'
-      );
+      const env = await loadEnv(server.config.mode, server.config.root, '');
+      globalThis.Oxygen = {env};
 
-      await generateSecrets(secrets);
+      await generateSecrets(env);
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
       // By running this middleware first, we avoid that.
@@ -57,7 +59,7 @@ export default (
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)
               : undefined,
-            secrets,
+            secrets: env,
           })
         );
     },
