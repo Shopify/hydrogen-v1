@@ -16,7 +16,7 @@ export default function App({...serverState}) {
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
         <CartProvider>
-          <DefaultSeo />
+          <DefaultSeo helmetData={serverState.helmetData} />
           <Switch>
             <DefaultRoutes
               pages={pages}

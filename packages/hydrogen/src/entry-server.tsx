@@ -11,7 +11,7 @@ import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import {HydrationContext} from './framework/Hydration/HydrationContext.server';
 import {generateWireSyntaxFromRenderedHtml} from './framework/Hydration/wire.server';
-import {FilledContext, HelmetProvider} from 'react-helmet-async';
+import {FilledContext, HelmetData} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {HydrationWriter} from './framework/Hydration/writer.server';
 import {Renderer, Hydrator, Streamer} from './types';
@@ -261,9 +261,12 @@ function buildReactApp({
         location={{pathname: state.pathname, search: state.search}}
         context={context}
       >
-        <HelmetProvider context={helmetContext}>
-          <App {...props} request={request} response={componentResponse} />
-        </HelmetProvider>
+        <App
+          {...props}
+          request={request}
+          response={componentResponse}
+          helmetData={new HelmetData(helmetContext)}
+        />
       </StaticRouter>
     </RenderCacheProvider>
   );

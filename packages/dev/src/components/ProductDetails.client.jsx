@@ -104,12 +104,12 @@ function SizeChart() {
   );
 }
 
-export default function ProductDetails({product}) {
+export default function ProductDetails({product, helmetData}) {
   const initialVariant = flattenConnection(product.variants)[0];
 
   return (
     <>
-      <Seo product={product} />
+      <Seo product={product} helmetData={helmetData} />
       <Product product={product} initialVariantId={initialVariant.id}>
         <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-x-8 my-16">
           <div className="md:hidden mt-5 mb-8">
