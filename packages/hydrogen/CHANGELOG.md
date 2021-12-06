@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - fix: export `CartLineSelectedOptions` properly
+- fix: fix suspense utility function
 
 ## 0.7.1 - 2021-12-02
 
