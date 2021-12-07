@@ -20,6 +20,17 @@ export default () => {
 
       build: {
         sourcemap: true,
+        /**
+         * By default, SSR dedupe logic gets bundled which runs `require('module')`.
+         * We don't want this in our workers runtime, because `require` is not supported.
+         */
+        rollupOptions: process.env.WORKER
+          ? {
+              output: {
+                format: 'es',
+              },
+            }
+          : {},
       },
 
       ssr: {

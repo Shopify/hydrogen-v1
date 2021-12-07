@@ -16,27 +16,27 @@ If you don't want to build with Tailwind's library and instead want to write you
 3. Remove Tailwind from `postcss.config.js`.
 4. Run the following commands:
 
-    {% codeblock file, filename: 'Terminal' %}
+   {% codeblock file, filename: 'Terminal' %}
 
-    ```bash?filename: 'Terminal', title: 'yarn'
-    # Switch to your app's directory
-    cd <directory>
-    # Install dependencies for your project
-    yarn install
-    # Start the development server
-    yarn dev
-    ```
+   ```bash?filename: 'Terminal', title: 'yarn'
+   # Switch to your app's directory
+   cd <directory>
+   # Install dependencies for your project
+   yarn install
+   # Start the development server
+   yarn dev
+   ```
 
-    ```bash?filename: 'Terminal', title: 'npm'
-    # Switch to your app's directory
-    cd <directory>
-    # Install dependencies for your project
-    npm i --legacy-peer-deps
-    # Start the development server
-    npm run dev
-    ```
+   ```bash?filename: 'Terminal', title: 'npm'
+   # Switch to your app's directory
+   cd <directory>
+   # Install dependencies for your project
+   npm i --legacy-peer-deps
+   # Start the development server
+   npm run dev
+   ```
 
-    {% endcodeblock %}
+   {% endcodeblock %}
 
 ## Known issues with server-side rendering (SSR)
 
