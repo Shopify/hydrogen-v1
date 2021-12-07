@@ -28,8 +28,6 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
 export default renderHydrogen;
 
-// trigger
-
 function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
   const [serverState, setServerState] = useState({
     pathname: window.location.pathname,
