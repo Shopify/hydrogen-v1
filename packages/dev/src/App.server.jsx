@@ -1,5 +1,4 @@
 import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
 import {Suspense} from 'react';
 
 import shopifyConfig from '../shopify.config';
@@ -17,13 +16,11 @@ export default function App({...serverState}) {
       <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
         <CartProvider>
           <DefaultSeo helmetData={serverState.helmetData} />
-          <Switch>
-            <DefaultRoutes
-              pages={pages}
-              serverState={serverState}
-              fallback={<NotFound />}
-            />
-          </Switch>
+          <DefaultRoutes
+            pages={pages}
+            serverState={serverState}
+            fallback={<NotFound />}
+          />
         </CartProvider>
       </ShopifyServerProvider>
     </Suspense>

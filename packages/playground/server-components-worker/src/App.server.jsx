@@ -9,13 +9,11 @@ export default function App({...serverState}) {
   return (
     <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
       <Suspense fallback={'Loading...'}>
-        <Switch>
-          <DefaultRoutes
-            pages={pages}
-            serverState={serverState}
-            fallback="Not Found"
-          />
-        </Switch>
+        <DefaultRoutes
+          pages={pages}
+          serverState={serverState}
+          fallback="Not Found"
+        />
       </Suspense>
     </ShopifyServerProvider>
   );

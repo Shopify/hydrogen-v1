@@ -7,7 +7,6 @@ import {
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
-import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import {HydrationContext} from './framework/Hydration/HydrationContext.server';
 import {generateWireSyntaxFromRenderedHtml} from './framework/Hydration/wire.server';
@@ -257,17 +256,12 @@ function buildReactApp({
 
   const ReactApp = (props: any) => (
     <RenderCacheProvider cache={renderCache}>
-      <StaticRouter
-        location={{pathname: state.pathname, search: state.search}}
-        context={context}
-      >
-        <App
-          {...props}
-          request={request}
-          response={componentResponse}
-          helmetData={new HelmetData(helmetContext)}
-        />
-      </StaticRouter>
+      <App
+        {...props}
+        request={request}
+        response={componentResponse}
+        helmetData={new HelmetData(helmetContext)}
+      />
     </RenderCacheProvider>
   );
 

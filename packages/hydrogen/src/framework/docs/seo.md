@@ -57,13 +57,11 @@ export default function App({...serverState}) {
     <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
       <Suspense fallback="Loading...">
         <DefaultSeo />
-        <Switch>
-          <DefaultRoutes
-            pages={pages}
-            serverState={serverState}
-            fallback={<NotFound />}
-          />
-        </Switch>
+        <DefaultRoutes
+          pages={pages}
+          serverState={serverState}
+          fallback={<NotFound />}
+        />
       </Suspense>
     </ShopifyServerProvider>
   );
