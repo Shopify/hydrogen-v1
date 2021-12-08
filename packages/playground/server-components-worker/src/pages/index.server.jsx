@@ -10,8 +10,8 @@ export default function Index() {
       </Link>
 
       <div className="secrets-server">
-        <div>PUBLIC_VAR:{Oxygen.env.HYDROGEN_PUBLIC_TEST || ''}|</div>
-        <div>PRIVATE_VAR:{Oxygen.env.HYDROGEN_PRIVATE_TEST || ''}|</div>
+        <div>PUBLIC_VARIABLE:{import.meta.env.PUBLIC_VARIABLE || ''}|</div>
+        <div>PRIVATE_VARIABLE:{Oxygen.env.PRIVATE_VARIABLE || ''}|</div>
       </div>
 
       <div className="secrets-client">

@@ -7,7 +7,7 @@ import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 // Mock Oxygen global
 globalThis.Oxygen = {
   env: {
-    HYDROGEN_PRIVATE_TEST: globalThis.HYDROGEN_PRIVATE_TEST,
+    PRIVATE_VARIABLE: globalThis.PRIVATE_VARIABLE,
   },
 };
 

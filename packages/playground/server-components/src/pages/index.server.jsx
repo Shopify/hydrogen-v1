@@ -8,7 +8,9 @@ export default function Index() {
         About
       </Link>
 
-      <div className="secrets">SECRET_TEST:{Oxygen.env.SECRET_TEST}</div>
+      <div className="secrets">
+        PRIVATE_VARIABLE:{Oxygen.env.PRIVATE_VARIABLE}
+      </div>
     </>
   );
 }

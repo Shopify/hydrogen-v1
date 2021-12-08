@@ -1,18 +1,16 @@
 export default function Env() {
-  let publicTest, privateTest;
+  let publicVariable, privateVariable;
   try {
     // This is replaced with a string at build time
-    publicTest = Oxygen.env.HYDROGEN_PUBLIC_TEST;
+    publicVariable = import.meta.env.PUBLIC_VARIABLE;
     // This one crashes because Oxygen is not defined in browser
-    privateTest = Oxygen.env.HYDROGEN_PRIVATE_TEST;
-  } catch (error) {
-    console.error(error);
-  }
+    privateVariable = Oxygen.env.PRIVATE_VARIABLE;
+  } catch (error) {}
 
   return (
     <>
-      <div>PUBLIC_VAR:{publicTest || ''}|</div>
-      <div>PRIVATE_VAR:{privateTest || ''}|</div>
+      <div>PUBLIC_VARIABLE:{publicVariable || ''}|</div>
+      <div>PRIVATE_VARIABLE:{privateVariable || ''}|</div>
     </>
   );
 }
