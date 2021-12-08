@@ -7,9 +7,17 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- Upgrade to latest React 18 experimental version
+
+## 0.8.0 - 2021-12-07
+
+- Lowercase `index.server.jsx` filename to match others
+
+## 0.7.1 - 2021-12-02
+
 - Change `ProductCard` and `FeaturedCollection` from server components to shared components
 - Use `eslint-plugin-hydrogen` recommended config for JS linting
-- Upgrade to latest React 18 experimental version
+- fix: 404 Page > Variable not declared
 
 ## 0.7.0 - 2021-11-22
 

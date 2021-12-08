@@ -18,8 +18,7 @@ export interface UnitPriceProps {
 
 /**
  * The `UnitPrice` component renders a string with a [UnitPrice](/themes/pricing-payments/unit-pricing) as the
- * [Storefront API's `MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) with a reference unit from
- * the [Storefront API's `UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement).
+ * [Storefront API's `MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) with a reference unit from the [Storefront API's `UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement).
  *
  * If `children` is a function, then it will provide render props for the `children` corresponding to the object
  * returned by the `useMoney` hook and the `UnitPriceMeasurement` object.

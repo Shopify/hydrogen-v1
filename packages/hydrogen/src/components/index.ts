@@ -15,8 +15,8 @@ export type {Model3DProps} from './Model3D';
 export {Model3D} from './Model3D';
 export type {MoneyProps} from './Money';
 export {Money} from './Money';
-export {Metafield, MetafieldFragmentFragment} from './Metafield';
-export type {MetafieldType} from './Metafield';
+export {Metafield} from './Metafield';
+export type {MetafieldType, MetafieldFragmentFragment} from './Metafield';
 export {CartLineProvider, useCartLine} from './CartLineProvider';
 export {CartLineImage} from './CartLineImage';
 export {CartLinePrice} from './CartLinePrice';
@@ -28,6 +28,7 @@ export {CartLines} from './CartLines';
 export {CartCheckoutButton} from './CartCheckoutButton';
 export {CartShopPayButton} from './CartShopPayButton';
 export {CartEstimatedCost} from './CartEstimatedCost';
+export {CartLineSelectedOptions} from './CartLineSelectedOptions';
 export {
   CartProvider,
   useCart,
