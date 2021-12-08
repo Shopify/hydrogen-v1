@@ -4,6 +4,7 @@ import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
 import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
+import {envPrefix} from './vite-plugin-hydrogen-config';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -31,6 +32,12 @@ export default (
       }
 
       const env = await loadEnv(server.config.mode, server.config.root, '');
+      for (const key of Object.keys(env)) {
+        if (envPrefix.some((prefix) => key.startsWith(prefix))) {
+          delete env[key];
+        }
+      }
+
       globalThis.Oxygen = {env};
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`

@@ -1,5 +1,7 @@
 import {Plugin} from 'vite';
 
+export const envPrefix = ['VITE_', 'PUBLIC_'];
+
 export default () => {
   return {
     name: 'vite-plugin-hydrogen-config',
@@ -63,7 +65,7 @@ export default () => {
         __DEV__: env.mode !== 'production',
       },
 
-      envPrefix: ['VITE_', 'PUBLIC_'],
+      envPrefix,
     }),
   } as Plugin;
 };
