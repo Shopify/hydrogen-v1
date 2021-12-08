@@ -1,4 +1,3 @@
-import type {QueryClient} from 'react-query';
 import {ShopifyConfig} from '../../types';
 
 export type ShopifyProviderValue = ShopifyConfig;
@@ -10,8 +9,3 @@ export type ShopifyProviderProps = {
   children?: React.ReactNode;
   manager?: any;
 };
-
-export interface ReactQueryHydrationContext {
-  queryClient?: QueryClient;
-  dehydratedState?: any;
-}

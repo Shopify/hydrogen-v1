@@ -9,11 +9,17 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - feat: Add global `Oxygen.env` for server-only environment variables.
 
+## 0.8.0 - 2021-12-07
+
+- fix: export `CartLineSelectedOptions` properly
+- fix: fix suspense utility function
+
 ## 0.7.1 - 2021-12-02
 
 - fix: avoid repeating the same identifier for default and named exports
 - fix: remove sourcemap warnings
 - feat: allow `useShopQuery` to be skippable if no query is passed.
+- fix: Remove usage of `react-query` (Not a breaking change)
 
 ## 0.7.0 - 2021-11-22
 

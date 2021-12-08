@@ -10,7 +10,6 @@ import ssrPrepass from 'react-ssr-prepass';
 import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import {HydrationContext} from './framework/Hydration/HydrationContext.server';
-import type {ReactQueryHydrationContext} from './foundation/ShopifyProvider/types';
 import {generateWireSyntaxFromRenderedHtml} from './framework/Hydration/wire.server';
 import {FilledContext, HelmetProvider} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
@@ -18,9 +17,9 @@ import {HydrationWriter} from './framework/Hydration/writer.server';
 import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
-import type {ServerResponse} from 'http';
+import {ServerResponse} from 'http';
+import {RenderCacheProvider} from './foundation/RenderCacheProvider';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
@@ -247,6 +246,7 @@ function buildReactApp({
   context: any;
   request: ServerComponentRequest;
 }) {
+  const renderCache = {};
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
   const hydrogenServerProps = {
@@ -255,14 +255,16 @@ function buildReactApp({
   };
 
   const ReactApp = (props: any) => (
-    <StaticRouter
-      location={{pathname: state.pathname, search: state.search}}
-      context={context}
-    >
-      <HelmetProvider context={helmetContext}>
-        <App {...props} {...hydrogenServerProps} />
-      </HelmetProvider>
-    </StaticRouter>
+    <RenderCacheProvider cache={renderCache}>
+      <StaticRouter
+        location={{pathname: state.pathname, search: state.search}}
+        context={context}
+      >
+        <HelmetProvider context={helmetContext}>
+          <App {...props} {...hydrogenServerProps} />
+        </HelmetProvider>
+      </StaticRouter>
+    </RenderCacheProvider>
   );
 
   return {helmetContext, ReactApp, componentResponse};
@@ -407,26 +409,15 @@ async function renderAppFromStringWithPrepass(
   state: any,
   isReactHydrationRequest?: boolean
 ) {
-  const hydrationContext: ReactQueryHydrationContext = {};
-
   const app = isReactHydrationRequest ? (
     <HydrationContext.Provider value={true}>
-      <ReactApp hydrationContext={hydrationContext} {...state} />
+      <ReactApp {...state} />
     </HydrationContext.Provider>
   ) : (
-    <ReactApp hydrationContext={hydrationContext} {...state} />
+    <ReactApp {...state} />
   );
 
   await ssrPrepass(app);
-
-  /**
-   * Dehydrate all the queries made during the prepass above and store
-   * them in the context object to be used for the next render pass.
-   * This prevents rendering the Suspense fallback in `renderToString`.
-   */
-  if (hydrationContext.queryClient) {
-    hydrationContext.dehydratedState = dehydrate(hydrationContext.queryClient);
-  }
 
   const body = renderToString(app);
 

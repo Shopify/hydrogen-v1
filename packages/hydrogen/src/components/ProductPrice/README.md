@@ -1,9 +1,7 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ProductPrice and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `ProductPrice` component renders a `Money` component with the product
-[`priceRange`](/api/storefront/reference/products/productpricerange)'s `maxVariantPrice`
-or `minVariantPrice`, for either the regular price or compare at price range.
-It must be a descendent of the `ProductProvider` component.
+[`priceRange`](/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
 
 ## Example code
 
