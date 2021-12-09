@@ -1,6 +1,5 @@
 import '@shopify/react-testing';
 import '@shopify/react-testing/matchers';
-import '@testing-library/jest-dom';
 import './scripts/polyfillWebRuntime';
 
 // TODO remove all these mocks when @shopify/react-testing supports React 18 experimental

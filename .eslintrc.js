@@ -21,12 +21,7 @@ module.exports = {
     'node/no-extraneous-import': [
       'error',
       {
-        allowModules: [
-          '@shopify/hydrogen',
-          '@testing-library/react',
-          '@testing-library/user-event',
-          '@shopify/react-testing',
-        ],
+        allowModules: ['@shopify/hydrogen', '@shopify/react-testing'],
       },
     ],
     'node/no-unpublished-import': 'off',
