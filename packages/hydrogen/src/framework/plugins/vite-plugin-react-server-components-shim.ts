@@ -75,6 +75,8 @@ export default () => {
        * and we will have duplicated files in the browser (with duplicated contexts, etc).
        */
       if (id.includes('/Hydration/client-imports')) {
+        const CLIENT_COMPONENT_GLOB = '**/*.client.[jt]s?(x)';
+
         // eslint-disable-next-line node/no-missing-require
         const hydrogenPath = path.dirname(resolve('@shopify/hydrogen'));
         const importerPath = path.join(hydrogenPath, 'framework', 'Hydration');
@@ -84,6 +86,7 @@ export default () => {
         );
         const [importerToRootNested] =
           importerToRootPath.match(/(\.\.\/)+(\.\.)?/) || [];
+
         const userPrefix = path.normalize(
           path.join(
             importerPath,
@@ -93,21 +96,30 @@ export default () => {
         const userGlob = path.join(
           importerToRootPath,
           'src',
-          '**/*.client.[jt]sx'
+          CLIENT_COMPONENT_GLOB
         );
 
-        const libPrefix = hydrogenPath + path.sep;
-        const libGlob = path.join(
-          path.relative(importerPath, hydrogenPath),
-          'components',
-          '**/*.client.js'
-        );
+        const importers = [[userGlob, userPrefix]];
 
-        return code
-          .replace('__USER_COMPONENTS_PREFIX__', normalizePath(userPrefix))
-          .replace('__USER_COMPONENTS_GLOB__', normalizePath(userGlob))
-          .replace('__LIB_COMPONENTS_PREFIX__', normalizePath(libPrefix))
-          .replace('__LIB_COMPONENTS_GLOB__', normalizePath(libGlob));
+        // Where to look for client components, aside from user src
+        const clientComponentPaths = [path.join(hydrogenPath, 'components')];
+
+        for (const componentsPath of clientComponentPaths) {
+          const libPrefix = componentsPath + path.sep;
+          const libGlob = path.join(
+            path.relative(importerPath, componentsPath),
+            CLIENT_COMPONENT_GLOB
+          );
+
+          importers.push([libGlob, libPrefix]);
+        }
+
+        return importers.reduce(
+          (acc, [glob, prefix]) =>
+            acc +
+            `\nObject.assign(allClientComponents, normalizeComponentPaths(import.meta.glob('${glob}'), '${prefix}'));`,
+          code
+        );
       }
     },
   } as Plugin;
