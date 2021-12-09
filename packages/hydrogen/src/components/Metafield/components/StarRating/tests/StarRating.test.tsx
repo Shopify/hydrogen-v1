@@ -16,18 +16,14 @@ describe('<StarRating />', () => {
     expect(component).toContainReactComponentTimes(Star, range);
   });
 
-  /**
-   * TODO: Fix the flakiness of this test, likely due to floating point math :)
-   * https://github.com/Shopify/hydrogen/issues/19
-   */
-  it.skip('renders the number of filled stars corresponding to the rating value', () => {
+  it('renders the number of filled stars corresponding to the rating value', () => {
     const rating = getParsedMetafield({type: 'rating'});
     const component = mount(<StarRating rating={rating.value as Rating} />);
 
     // The number of completely filled stars should be the integer value of the rating
     // minus the minumum scale value, plus one (since the scale is inclusive)
     const numberOfCompletelyFilledStars =
-      parseInt((rating.value as any).value) -
+      parseInt((rating.value as any).value, 10) -
       (rating.value as any).scale_min +
       1;
     const partialStarFill = (parseFloat((rating.value as any).value) % 1) * 100;
