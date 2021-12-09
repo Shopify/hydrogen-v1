@@ -1,8 +1,5 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
-  variants: {
-    extend: {},
-  },
   theme: {
     extend: {
       typography: (theme) => ({
