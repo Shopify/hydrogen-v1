@@ -78,8 +78,8 @@
     "tailwindcss": "^2.1.1"
   },
   "peerDependencies": {
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "0.0.0-experimental-0cc724c77-20211125",
+    "react-dom": "0.0.0-experimental-0cc724c77-20211125",
     "react-router-dom": "^5.2.0",
     "vite": "^2.7.0"
   },

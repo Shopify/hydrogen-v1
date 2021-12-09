@@ -238,7 +238,7 @@ it('supports selecting a selling plan', () => {
     return (
       <>
         {(sellingPlanGroups ?? []).map((sellingPlanGroup) => (
-          <>
+          <React.Fragment key={sellingPlanGroup.name}>
             <h2>{sellingPlanGroup.name}</h2>
             <ul>
               {sellingPlanGroup.sellingPlans.map((sellingPlan) => {
@@ -251,7 +251,7 @@ it('supports selecting a selling plan', () => {
                 );
               })}
             </ul>
-          </>
+          </React.Fragment>
         ))}
         <div data-testid="selectedSellingPlan">
           {JSON.stringify(selectedSellingPlan)}
