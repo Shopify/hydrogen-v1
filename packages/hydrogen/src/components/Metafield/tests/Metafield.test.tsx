@@ -9,6 +9,8 @@ import {getMediaImage} from '../../../utilities/tests/media';
 
 describe('<Metafield />', () => {
   it('renders nothing when the metafield value is undefined', () => {
+    console.warn = jest.fn();
+
     const component = mountWithShopifyProvider(
       <Metafield metafield={{type: 'color', value: undefined}} />
     );
@@ -16,11 +18,14 @@ describe('<Metafield />', () => {
   });
 
   it('logs a warning to the console when the metafield value is null', () => {
-    const mock = jest.spyOn(console, 'warn');
+    console.warn = jest.fn();
+
     const metafield = {type: 'color', value: undefined};
     mountWithShopifyProvider(<Metafield metafield={metafield} />);
 
-    expect(mock).toHaveBeenCalledWith(`No metafield value for ${metafield}`);
+    expect(console.warn).toHaveBeenCalledWith(
+      `No metafield value for ${metafield}`
+    );
   });
 
   describe('with `date` type metafield', () => {
