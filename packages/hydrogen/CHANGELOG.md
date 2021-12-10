@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - feat: upgrade to latest React 18 experimental version
+- docs: product provider tweaks
 
 ## 0.8.0 - 2021-12-07
 

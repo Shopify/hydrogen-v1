@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 
 const QUERY = gql`
   query product($handle: String!) {
-    product: productByHandle(handle: $handle) {
+    product: product(handle: $handle) {
       ...ProductProviderFragment
     }
   }
@@ -11,13 +11,10 @@ const QUERY = gql`
   ${ProductProviderFragment}
 `;
 
-
 export function Product() {
-  const {data} = useShopQuery({query: QUERY})
+  const {data} = useShopQuery({query: QUERY});
 
   return (
-    <ProductProvider value={data.product.product}>
-      {/* Your JSX */}
-    </ProductProvider>
-  )
+    <ProductProvider product={data.product}>{/* Your JSX */}</ProductProvider>
+  );
 }
