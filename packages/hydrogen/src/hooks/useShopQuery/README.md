@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/hooks/useShopQuery and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
-The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. The `useShop` hook provides access to values within `shopify.config.js`. It must be a descendent of a `ShopifyProvider` component.
+The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
 
 ## Example code
 
@@ -48,10 +48,11 @@ const QUERY = gql`
 
 The `useShopQuery` takes an object as its only argument, with the following keys:
 
-| Key         | Required | Description                                       |
-| ----------- | -------- | ------------------------------------------------- |
-| `query`     | Yes      | A string of the GraphQL query.                    |
-| `variables` | No       | An object of the variables for the GraphQL query. |
+| Key         | Required | Description                                                                                            |
+| ----------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `query`     | Yes      | A string of the GraphQL query.                                                                         |
+| `variables` | No       | An object of the variables for the GraphQL query.                                                      |
+| `cache`     | No       | An object describing the [cache policy](/custom-storefronts/hydrogen/framework/cache) for the request. |
 
 ## Return value
 
@@ -64,3 +65,7 @@ The `useShopQuery` returns an object with the following keys:
 ## Related components
 
 - [`ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider)
+
+## Related hooks
+
+- [`useQuery`](/api/hydrogen/hooks/global/usequery)

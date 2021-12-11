@@ -12,9 +12,7 @@ export interface UseShopQueryResponse<T> {
 }
 
 /**
- * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API.
- * \> Note:
- * \> It must be a descendent of a `ShopifyProvider` component.
+ * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
  */
 export function useShopQuery<T>({
   query,
