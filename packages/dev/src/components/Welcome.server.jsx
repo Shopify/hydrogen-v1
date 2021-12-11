@@ -107,6 +107,9 @@ function TemplateLinks({firstProductPath, firstCollectionPath}) {
   );
 }
 
+/**
+ * Displays the content on the homepage of the Hydrogen app
+ */
 export default function Welcome() {
   const {data} = useShopQuery({query: QUERY});
   const shopName = data ? data.shop.name : '';

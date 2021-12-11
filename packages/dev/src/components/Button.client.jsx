@@ -24,6 +24,9 @@ const ExternalIcon = () => (
   </svg>
 );
 
+/**
+ * Sets the primary and secondary classes for button components
+ */
 export default function Button({
   className,
   label,

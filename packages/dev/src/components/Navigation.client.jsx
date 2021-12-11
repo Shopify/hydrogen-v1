@@ -1,5 +1,8 @@
 import {Link} from '@shopify/hydrogen/client';
 
+/**
+ * Defines the navigation for a web storefront
+ */
 export default function Navigation({collections}) {
   return (
     <nav className="hidden lg:block text-center">
