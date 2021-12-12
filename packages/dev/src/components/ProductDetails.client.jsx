@@ -9,7 +9,7 @@ import {
 } from './Button.client';
 
 /**
- * Displays detailed information about a product to allow buyers to make informed decisions
+ * A client component that displays detailed information about a product to allow buyers to make informed decisions
  */
 function ProductPriceMarkup() {
   return (

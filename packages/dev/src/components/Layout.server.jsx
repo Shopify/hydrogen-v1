@@ -12,7 +12,7 @@ import {useCartUI} from './CartUIProvider.client';
 import Cart from './Cart.client';
 
 /**
- * Defines a structure and organization of a page that can be used in different parts of the Hydrogen app
+ * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
 export default function Layout({children, hero}) {
   const {data} = useShopQuery({

@@ -1,7 +1,7 @@
 import {useProduct} from '@shopify/hydrogen/client';
 
 /**
- * Tracks a selected variant and/or selling plan state, as well as callbacks for modifying the state
+ * A client component that tracks a selected variant and/or selling plan state, as well as callbacks for modifying the state
  */
 export default function ProductOptions() {
   const {options, setSelectedOption, selectedOptions} = useProduct();

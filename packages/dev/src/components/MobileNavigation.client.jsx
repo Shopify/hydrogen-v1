@@ -6,7 +6,7 @@ import MobileCurrencySelector from './MobileCurrencySelector.client';
 import OpenIcon from './OpenIcon';
 
 /**
- * Defines the navigation for a mobile storefront
+ * A client component that defines the navigation for a mobile storefront
  */
 export default function MobileNavigation({collections, isOpen, setIsOpen}) {
   const OpenFocusTrap = isOpen ? FocusTrap : Fragment;

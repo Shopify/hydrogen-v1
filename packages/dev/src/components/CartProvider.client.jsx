@@ -4,7 +4,7 @@ import {CartProvider as ShopifyCartProvider} from '@shopify/hydrogen/client';
 import CartUIProvider, {useCartUI} from './CartUIProvider.client';
 
 /**
- * Creates a cart object and provides callbacks that can be accessed by any descendent component using the `useCart` hook and related hooks
+ * A client component that creates a cart object and provides callbacks that can be accessed by any descendent component using the `useCart` hook and related hooks
  */
 export default function CartProvider({children, numCartLines}) {
   return (

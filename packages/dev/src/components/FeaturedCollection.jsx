@@ -1,7 +1,7 @@
 import {Image, Link} from '@shopify/hydrogen';
 
 /**
- * Defines a single featured collection to display on a storefront
+ * A shared component that defines a single featured collection to display on a storefront
  */
 export default function FeaturedCollection({collection}) {
   return collection ? (

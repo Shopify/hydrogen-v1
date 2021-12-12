@@ -1,7 +1,7 @@
 import {Link} from '@shopify/hydrogen';
 
 /**
- * Specifies the content of the footer on the website
+ * A server component that specifies the content of the footer on the website
  */
 export default function Footer({collection, product}) {
   return (

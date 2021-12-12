@@ -7,7 +7,7 @@ import Navigation from './Navigation.client';
 import MobileNavigation from './MobileNavigation.client';
 
 /**
- * Specifies the content of the header on the website
+ * A client component that specifies the content of the header on the website
  */
 export default function Header({collections, storeName}) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);

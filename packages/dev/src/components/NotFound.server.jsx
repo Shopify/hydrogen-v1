@@ -10,7 +10,7 @@ import Button from './Button.client';
 import ProductCard from './ProductCard';
 
 /**
- * Defines the content to display when a page isn't found (404 error)
+ * A server component that defines the content to display when a page isn't found (404 error)
  */
 function NotFoundHero() {
   return (

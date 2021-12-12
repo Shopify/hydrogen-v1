@@ -5,7 +5,7 @@ import {
 } from '@shopify/hydrogen/client';
 
 /**
- * Defines a media gallery for hosting images, 3D models, and videos of products
+ * A client component that defines a media gallery for hosting images, 3D models, and videos of products
  */
 export default function Gallery() {
   const {media, selectedVariant} = useProduct();

@@ -1,7 +1,7 @@
 import {useServerState} from '@shopify/hydrogen/client';
 
 /**
- * Provides functionality to initially show a subset of products and a button to load more products
+ * A client component that provides functionality to initially show a subset of products and a button to load more products
  */
 export default function LoadMoreProducts({startingCount}) {
   const {pending, serverState, setServerState} = useServerState();

@@ -4,7 +4,7 @@ import MoneyCompareAtPrice from './MoneyCompareAtPrice.client';
 import MoneyPrice from './MoneyPrice.client';
 
 /**
- * Displays a single product to allow buyers to quickly identify a particular item of interest
+ * A shared component that displays a single product to allow buyers to quickly identify a particular item of interest
  */
 export default function ProductCard({product}) {
   const selectedVariant = product.variants.edges[0].node;

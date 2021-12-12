@@ -1,7 +1,7 @@
 import {Link} from '@shopify/hydrogen/client';
 
 /**
- * Defines the navigation for a web storefront
+ * A client component that defines the navigation for a web storefront
  */
 export default function Navigation({collections}) {
   return (
