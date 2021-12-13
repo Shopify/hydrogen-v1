@@ -4,57 +4,35 @@ import {CartLineQuantity} from '../../CartLineQuantity';
 import {CartLineQuantityAdjustButton} from '../CartLineQuantityAdjustButton';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {CartProvider, useCart} from '../../CartProvider';
+import {CartContext} from '../../CartProvider/context';
 import {CART} from '../../CartProvider/tests/fixtures';
 import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
 
-beforeEach(() => {
-  if (global.fetch) {
-    // @ts-ignore
-    global.fetch.mockClear();
-  }
-});
-
 describe('CartLineQuantityAdjustButton', () => {
-  it.skip('increases quantity', () => {
-    const cart = {
-      ...CART,
-      lines: {edges: [{node: CART_LINE}]},
-    };
-
+  it('increases quantity', () => {
+    const linesUpdateMock = jest.fn();
     const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={cart}>
+      <CartContextProvider passthroughProp={{linesUpdate: linesUpdateMock}}>
         <Cart>
           <CartLineQuantityAdjustButton adjust="increase">
             Increase
           </CartLineQuantityAdjustButton>
         </Cart>
-      </CartProvider>
+      </CartContextProvider>
     );
 
     expect(wrapper).toContainReactComponent('span', {
       children: CART_LINE.quantity,
     });
 
-    mockCartFetch(
-      cartDataWithLineOverrides({
-        quantity: 2,
-      })
-    );
-
     wrapper.find('button')!.trigger('onClick');
 
-    expect(fetch).toHaveBeenCalled();
-    // @ts-ignore
-    const init = fetch.mock.calls[0][1];
-    const body = JSON.parse(init.body);
-
-    expect(body.query).toContain('mutation CartLineUpdate');
-    expect(body.variables.cartId).toBe(CART.id);
-    expect(body.variables.lines[0]).toEqual({id: CART_LINE.id, quantity: 2});
-
-    expect(wrapper).toContainReactComponent('span', {
-      children: CART_LINE.quantity + 1,
-    });
+    expect(linesUpdateMock).toHaveBeenCalledWith([
+      {
+        id: CART_LINE.id,
+        quantity: 2,
+      },
+    ]);
   });
 
   it.skip('decreases quantity', () => {
@@ -108,6 +86,27 @@ describe('CartLineQuantityAdjustButton', () => {
     });
   });
 });
+
+function CartContextProvider({
+  children,
+  passthroughProp = {},
+}: {
+  children: any;
+  passthroughProp?: object;
+}) {
+  const cartContextValueMock = {
+    status: 'idle' as const,
+    ...CART,
+    lines: [CART_LINE],
+    ...passthroughProp,
+  };
+  return (
+    // @ts-expect-error We aren't passing though all the necessary props here which triggers TS errors. However, we do allow the tests to pass through the props that they need to watch in passthroughProps prop
+    <CartContext.Provider value={cartContextValueMock}>
+      {children}
+    </CartContext.Provider>
+  );
+}
 
 function Cart({children}: {children: any}) {
   const {lines} = useCart();
