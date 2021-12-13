@@ -73,6 +73,6 @@ Learn more about [getting started with Hydrogen](https://shopify.dev/custom-stor
 
 - [`@shopify/hydrogen`](https://www.npmjs.com/package/@shopify/hydrogen)
 - [`@shopify/hydrogen-cli`](https://www.npmjs.com/package/@shopify/hydrogen-cli)
-- [`@shopify/hydrogen-plugin-sanity`](https://www.npmjs.com/package/@shopify/hydrogen-plugin-sanity)
 - [`create-hydrogen-app`](https://www.npmjs.com/package/create-hydrogen-app)
 - [`eslint-plugin-hydrogen`](https://www.npmjs.com/package/eslint-plugin-hydrogen)
+- [`hydrogen-plugin-sanity`](https://www.npmjs.com/package/hydrogen-plugin-sanity)
