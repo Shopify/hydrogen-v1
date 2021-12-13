@@ -21,6 +21,7 @@ export default function App({log, ...serverState}) {
             <DefaultRoutes
               pages={pages}
               serverState={serverState}
+              log={log}
               fallback={<NotFound />}
             />
           </Switch>
