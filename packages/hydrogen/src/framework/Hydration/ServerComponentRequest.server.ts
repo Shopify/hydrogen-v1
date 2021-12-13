@@ -7,6 +7,7 @@
  */
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
+  public time: number;
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -19,6 +20,7 @@ export class ServerComponentRequest extends Request {
         method: input.method,
       });
     }
+    this.time = performance.now();
 
     this.cookies = this.parseCookies();
   }

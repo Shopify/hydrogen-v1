@@ -1,4 +1,5 @@
 import {ServerResponse} from 'http';
+import type {Logger} from './utilities/log/log';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
@@ -10,6 +11,7 @@ export type Renderer = (
     context?: Record<string, any>;
     isReactHydrationRequest?: boolean;
     dev?: boolean;
+    log: Logger;
   }
 ) => Promise<
   {

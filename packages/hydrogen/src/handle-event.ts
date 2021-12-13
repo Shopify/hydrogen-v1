@@ -4,6 +4,7 @@ import type {ServerComponentRequest} from './framework/Hydration/ServerComponent
 import {getCacheControlHeader} from './framework/cache';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
+import {log, logServerResponse} from './utilities/log/log';
 
 interface HydrogenFetchEvent {
   /**
@@ -36,6 +37,7 @@ export default async function handleEvent(
     context,
   }: HandleEventOptions
 ) {
+  request.time = performance.now();
   const url = new URL(request.url);
 
   /**
@@ -75,6 +77,8 @@ export default async function handleEvent(
   const userAgent = request.headers.get('user-agent');
   const isStreamable = streamableResponse && !isBotUA(url, userAgent);
 
+  const logger = log(request);
+
   /**
    * Stream back real-user responses, but for bots/etc,
    * use `render` instead. This is because we need to inject <head>
@@ -87,6 +91,7 @@ export default async function handleEvent(
         request,
         response: streamableResponse,
         dev,
+        log: logger,
       });
     } else {
       stream(url, {
@@ -95,6 +100,7 @@ export default async function handleEvent(
         response: streamableResponse,
         template,
         dev,
+        log: logger
       });
     }
     return;
@@ -106,6 +112,7 @@ export default async function handleEvent(
       context: {},
       isReactHydrationRequest,
       dev,
+      log: logger
     });
 
   const headers = componentResponse.headers;
@@ -156,6 +163,8 @@ export default async function handleEvent(
       headers,
     });
   }
+
+  logServerResponse('ssr', log, request, response.status);
 
   return response;
 }

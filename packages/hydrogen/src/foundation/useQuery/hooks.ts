@@ -1,4 +1,5 @@
 import type {CacheOptions, QueryKey} from '../../types';
+import {log} from '../../utilities';
 import {
   deleteItemFromCache,
   getItemFromCache,
@@ -58,13 +59,13 @@ function cachedQueryFnBuilder<T>(
        * Important: Do this async
        */
       if (isStale(response)) {
-        console.log(
+        log.debug(
           '[useQuery] cache stale; generating new response in background'
         );
         const lockKey = `lock-${key}`;
 
         runDelayedFunction(async () => {
-          console.log(`[stale regen] fetching cache lock`);
+          log.debug(`[stale regen] fetching cache lock`);
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
@@ -73,7 +74,7 @@ function cachedQueryFnBuilder<T>(
             const output = await generateNewOutput();
             await setItemInCache(key, output, resolvedQueryOptions?.cache);
           } catch (e: any) {
-            console.error(`Error generating async response: ${e.message}`);
+            log.error(`Error generating async response: ${e.message}`);
           } finally {
             await deleteItemFromCache(lockKey);
           }
