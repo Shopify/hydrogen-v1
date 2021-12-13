@@ -9,6 +9,9 @@ import Layout from './Layout.server';
 import Button from './Button.client';
 import ProductCard from './ProductCard';
 
+/**
+ * A server component that defines the content to display when a page isn't found (404 error)
+ */
 function NotFoundHero() {
   return (
     <div className="py-10 border-b border-gray-200">

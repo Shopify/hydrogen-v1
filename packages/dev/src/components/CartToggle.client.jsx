@@ -1,6 +1,9 @@
 import {useCartUI} from './CartUIProvider.client';
 import CartIconWithItems from './CartIconWithItems.client';
 
+/**
+ * A client component that defines the behavior when a user toggles a cart
+ */
 export default function CartToggle({handleClick}) {
   const cartUI = useCartUI();
 

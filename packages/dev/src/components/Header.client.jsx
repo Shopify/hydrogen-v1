@@ -6,6 +6,9 @@ import CurrencySelector from './CurrencySelector.client';
 import Navigation from './Navigation.client';
 import MobileNavigation from './MobileNavigation.client';
 
+/**
+ * A client component that specifies the content of the header on the website
+ */
 export default function Header({collections, storeName}) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
