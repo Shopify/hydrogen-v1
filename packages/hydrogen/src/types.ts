@@ -27,6 +27,7 @@ export type Streamer = (
     request: ServerComponentRequest;
     response: ServerResponse;
     template: string;
+    log: Logger;
     dev?: boolean;
   }
 ) => void;
@@ -37,6 +38,7 @@ export type Hydrator = (
     context: any;
     request: ServerComponentRequest;
     response: ServerResponse;
+    log: Logger;
     dev?: boolean;
   }
 ) => void;

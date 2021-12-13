@@ -5,7 +5,7 @@ import {
   // @ts-ignore
   renderToReadableStream, // Only available in Browser/Worker context
 } from 'react-dom/server';
-import {log, Logger, logServerResponse} from './utilities/log/log';
+import {Logger, logServerResponse} from './utilities/log/log';
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
@@ -84,10 +84,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const stream: Streamer = function (
     url: URL,
-    {context, request, response, template, dev}
+    {context, request, response, template, dev, log}
   ) {
     const state = {pathname: url.pathname, search: url.search};
-    const logger = log(request);
 
     const {ReactApp, componentResponse} = buildReactApp({
       App,
@@ -95,7 +94,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       context,
       request,
       dev,
-      log: logger,
+      log,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -126,7 +125,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             request,
             response,
             componentResponse,
-            logger,
+            log,
             didError
           );
           if (isRedirect(response)) {
@@ -151,7 +150,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             request,
             response,
             componentResponse,
-            logger,
+            log,
             didError
           );
           if (isRedirect(response)) {
@@ -189,7 +188,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
     const streamTimeout = setTimeout(() => {
       const errorMessage = `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`;
-      logger.error(errorMessage);
+      log.error(errorMessage);
 
       if (dev && response.headersSent) {
         response.write(getErrorMarkup(new Error(errorMessage)));
@@ -204,10 +203,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const hydrate: Hydrator = function (
     url: URL,
-    {context, request, response, dev}
+    {context, request, response, dev, log}
   ) {
     const state = JSON.parse(url.searchParams.get('state') || '{}');
-    const logger = log(request);
 
     const {ReactApp, componentResponse} = buildReactApp({
       App,
@@ -215,7 +213,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       context,
       request,
       dev,
-      log: logger,
+      log,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -261,7 +259,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     const renderTimeout = setTimeout(() => {
       const errorMessage = `The app failed to render RSC after ${STREAM_ABORT_TIMEOUT_MS} ms`;
       didError = new Error(errorMessage);
-      logger.error(errorMessage);
+      log.error(errorMessage);
       abort();
     }, STREAM_ABORT_TIMEOUT_MS);
   };
