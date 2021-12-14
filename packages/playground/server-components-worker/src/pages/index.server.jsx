@@ -1,4 +1,5 @@
 import {Link} from '@shopify/hydrogen';
+import ClientEnv from '../components/ClientEnv.client';
 
 export default function Index() {
   return (
@@ -7,6 +8,15 @@ export default function Index() {
       <Link className="btn" to="/about">
         About
       </Link>
+
+      <div className="secrets-server">
+        <div>PUBLIC_VARIABLE:{import.meta.env.PUBLIC_VARIABLE || ''}|</div>
+        <div>PRIVATE_VARIABLE:{Oxygen.env.PRIVATE_VARIABLE || ''}|</div>
+      </div>
+
+      <div className="secrets-client">
+        <ClientEnv />
+      </div>
     </>
   );
 }

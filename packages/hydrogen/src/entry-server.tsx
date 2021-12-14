@@ -55,7 +55,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      dev,
     });
 
     const body = await renderApp(ReactApp, state, isReactHydrationRequest);
@@ -91,7 +90,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      dev,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -186,7 +184,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
-      dev,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -242,17 +239,19 @@ function buildReactApp({
   state,
   context,
   request,
-  dev,
 }: {
   App: ComponentType;
   state: any;
   context: any;
   request: ServerComponentRequest;
-  dev: boolean | undefined;
 }) {
+  const renderCache = {};
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
-  const renderCache = {};
+  const hydrogenServerProps = {
+    request,
+    response: componentResponse,
+  };
 
   const ReactApp = (props: any) => (
     <RenderCacheProvider cache={renderCache}>
@@ -261,7 +260,7 @@ function buildReactApp({
         context={context}
       >
         <HelmetProvider context={helmetContext}>
-          <App {...props} request={request} response={componentResponse} />
+          <App {...props} {...hydrogenServerProps} />
         </HelmetProvider>
       </StaticRouter>
     </RenderCacheProvider>

@@ -8,6 +8,9 @@ async function createServer(root = process.cwd()) {
   const mf = new Miniflare({
     scriptPath: path.resolve(root, 'dist/worker/worker.js'),
     sitePath: path.resolve(root, 'dist/client'),
+    bindings: {
+      PRIVATE_VARIABLE: '42-private',
+    },
   });
 
   const app = mf.createServer();

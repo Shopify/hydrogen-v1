@@ -81,7 +81,12 @@ export default async function handleEvent(
    */
   if (isStreamable) {
     if (isReactHydrationRequest) {
-      hydrate(url, {context: {}, request, response: streamableResponse, dev});
+      hydrate(url, {
+        context: {},
+        request,
+        response: streamableResponse,
+        dev,
+      });
     } else {
       stream(url, {
         context: {},
@@ -95,7 +100,12 @@ export default async function handleEvent(
   }
 
   const {body, bodyAttributes, htmlAttributes, componentResponse, ...head} =
-    await render(url, {request, context: {}, isReactHydrationRequest, dev});
+    await render(url, {
+      request,
+      context: {},
+      isReactHydrationRequest,
+      dev,
+    });
 
   const headers = componentResponse.headers;
 

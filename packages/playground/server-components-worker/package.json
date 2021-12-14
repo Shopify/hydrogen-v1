@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "DEV=true node start-worker",
     "build": "yarn build:client && yarn build:worker",
-    "build:client": "vite build --outDir dist/client --manifest",
-    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker.js"
+    "build:client": "cross-env PUBLIC_VARIABLE=42-public vite build --outDir dist/client --manifest",
+    "build:worker": "cross-env WORKER=true PUBLIC_VARIABLE=42-public  vite build --outDir dist/worker --ssr worker.js"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
