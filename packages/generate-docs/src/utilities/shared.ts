@@ -11,7 +11,7 @@ import type {
   FrontMatter,
 } from '../types';
 
-import {Module} from './dependency-graph';
+import {Module} from '@shopify/docs-tools';
 
 export function isComponentName(name?: string) {
   if (!name) {

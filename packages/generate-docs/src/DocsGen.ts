@@ -2,7 +2,7 @@ import {resolve, join, parse} from 'path';
 import markdownTable from 'markdown-table';
 import {pathExists, ensureDir} from 'fs-extra';
 import type {FrontMatter} from './types';
-import {createDependencyGraph} from './utilities/dependency-graph';
+import {createDependencyGraph} from '@shopify/docs-tools';
 import {findUuid, strip, firstSentence} from './utilities/shared';
 import {padBreak, stripMarkdown} from './utilities/markdown';
 import type {Node} from './utilities/shared';

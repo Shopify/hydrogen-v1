@@ -9,9 +9,7 @@ describe('component', () => {
 
       expect(await fs.read('src/components/Button.client.jsx')).toBe(
         `export function Button() {
-  return (
-    <div>Button component at \`src/components/Button.client.jsx\`</div>
-  );
+  return <div>Button component at \`src/components/Button.client.jsx\`</div>;
 }
 `
       );

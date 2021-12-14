@@ -1,5 +1,8 @@
 import {Image, Link} from '@shopify/hydrogen';
 
+/**
+ * A shared component that defines a single featured collection to display on a storefront
+ */
 export default function FeaturedCollection({collection}) {
   return collection ? (
     <div className="shadow-xl rounded-xl grid grid-cols-1 lg:grid-cols-2 items-center bg-white overflow-hidden">

@@ -1,3 +1,6 @@
+/**
+ * A shared component that specifies the icon to render when opened
+ */
 export default function OpenIcon() {
   return (
     <svg

@@ -8,6 +8,9 @@ import {
   BUTTON_SECONDARY_CLASSES,
 } from './Button.client';
 
+/**
+ * A client component that displays detailed information about a product to allow buyers to make informed decisions
+ */
 function ProductPriceMarkup() {
   return (
     <div className="flex md:flex-col items-end font-semibold text-lg md:items-start md:mb-4">

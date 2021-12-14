@@ -4,6 +4,9 @@ import {Listbox} from '@headlessui/react';
 
 import {ArrowIcon, CheckIcon} from './CurrencySelector.client';
 
+/**
+ * A client component that selects the appropriate currency to display for products on a mobile storefront
+ */
 export default function MobileCurrencySelector() {
   const countries = useAvailableCountries();
   const [selectedCountry, setSelectedCountry] = useCountry();

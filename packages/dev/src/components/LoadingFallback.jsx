@@ -1,6 +1,9 @@
 import CartIcon from './CartIcon';
 import OpenIcon from './OpenIcon';
 
+/**
+ * A shared component and Suspense call that's used in `App.server.jsx` to let your app wait for code to load while declaring a loading state
+ */
 export default function LoadingFallback() {
   return (
     <header className="h-20 lg:h-32 max-w-screen text-gray-700">

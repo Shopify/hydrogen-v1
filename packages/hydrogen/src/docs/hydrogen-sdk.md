@@ -346,6 +346,6 @@ Hydrogen includes the following utilities to help speed up your development proc
 
 ## Next steps
 
-- [Get started](/custom-storefronts/hydrogen/getting-started) with Hydrogen and begin building a custom storefront.
+- [Get started](/custom-storefronts/hydrogen/getting-started/create) with Hydrogen and begin building a custom storefront.
 - Learn about [Hydrogen's architecture and framework](/custom-storefronts/hydrogen/framework).
 - Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
