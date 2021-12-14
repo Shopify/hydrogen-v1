@@ -8,6 +8,10 @@ export {
   graphqlRequestBody,
   decodeShopifyId,
   isClient,
+  log,
+  setLogger,
+  getTime,
+  Logger,
 } from './utilities';
 
 export {Helmet} from 'react-helmet-async';

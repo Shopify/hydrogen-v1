@@ -1,1 +1,1 @@
-export {log, setLogger} from './log';
+export {log, setLogger, Logger, logServerResponse} from './log';

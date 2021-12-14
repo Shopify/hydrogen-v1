@@ -1,3 +1,5 @@
+import {getTime} from '../../utilities/timing';
+
 /**
  * This augments the `Request` object from the Fetch API:
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Request
@@ -20,7 +22,7 @@ export class ServerComponentRequest extends Request {
         method: input.method,
       });
     }
-    this.time = performance.now();
+    this.time = getTime();
 
     this.cookies = this.parseCookies();
   }

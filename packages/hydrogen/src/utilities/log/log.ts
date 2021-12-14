@@ -1,5 +1,6 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import kleur from 'kleur';
+import {getTime} from '../timing';
 
 export interface RequestLogger extends Logger {
   (request: ServerComponentRequest): Logger;
@@ -67,7 +68,7 @@ export function logServerResponse(
 
   const styledType = kleur.italic(type);
   const paddedTiming = pad(
-    (performance.now() - request.time).toFixed(2) + ' ms',
+    (getTime() - request.time).toFixed(2) + ' ms',
     '          '
   );
 

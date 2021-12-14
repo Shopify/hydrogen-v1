@@ -37,7 +37,6 @@ export default async function handleEvent(
     context,
   }: HandleEventOptions
 ) {
-  request.time = performance.now();
   const url = new URL(request.url);
 
   /**

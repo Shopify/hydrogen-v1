@@ -16,6 +16,7 @@ describe('log', () => {
       fatal: jest.fn(),
     };
 
+    global.Date.now = () => 2100;
     global.performance.now = () => 2100;
   });
 
