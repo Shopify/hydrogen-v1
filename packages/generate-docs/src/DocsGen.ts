@@ -32,7 +32,7 @@ interface SectionOptions extends FrontMatter {
 }
 
 interface TableOptions {
-  columns: Column[];
+  columns: (string | Column)[];
   title: string;
   description: string;
 }
