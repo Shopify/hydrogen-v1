@@ -335,11 +335,11 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/pages.md',
     }),
     generator.section({
-      title: 'Secrets',
+      title: 'Environment variables',
       description:
         'Learn how to store sensitive information in your Hydrogen project.',
-      url: '/custom-storefronts/hydrogen/framework/secrets.md',
-      entry: 'framework/docs/secrets.md',
+      url: '/custom-storefronts/hydrogen/framework/environment-variables.md',
+      entry: 'framework/docs/environment-variables.md',
     }),
     generator.section({
       title: 'SEO',
