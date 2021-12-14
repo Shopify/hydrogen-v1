@@ -58,29 +58,22 @@ export function logServerResponse(
   request: ServerComponentRequest,
   responseStatus: number
 ) {
-  const statusColor =
+  const coloredResponseStatus =
     responseStatus >= 500
       ? kleur.red(responseStatus)
       : responseStatus >= 300
       ? kleur.yellow(responseStatus)
       : kleur.green(responseStatus);
-  if (responseStatus >= 500) {
-    log.debug(
-      request.method,
-      kleur.italic(type),
-      statusColor,
-      (performance.now() - request.time).toFixed(2) + ' ms',
-      request.url
-    );
-  } else {
-    log.debug(
-      request.method,
-      kleur.italic(type),
-      statusColor,
-      pad((performance.now() - request.time).toFixed(2) + ' ms', '          '),
-      request.url
-    );
-  }
+
+  const styledType = kleur.italic(type);
+  const paddedTiming = pad(
+    (performance.now() - request.time).toFixed(2) + ' ms',
+    '          '
+  );
+
+  log.debug(
+    `${request.method} ${styledType} ${coloredResponseStatus} ${paddedTiming} ${request.url}`
+  );
 }
 
 function pad(str: string, _pad: string) {
