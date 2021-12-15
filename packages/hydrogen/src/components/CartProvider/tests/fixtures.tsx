@@ -4,9 +4,8 @@ import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {getPrice} from '../../../utilities/tests/price';
 import {CartContext} from '../context';
 import {CartWithActions} from '../types';
-import {CartFragmentFragment} from '../graphql/CartFragment';
 
-export const CART: CartFragmentFragment = {
+export const CART = {
   id: 'abc',
   checkoutUrl: 'https://shopify.com/checkout',
   attributes: [],
@@ -22,6 +21,11 @@ export const CART: CartFragmentFragment = {
 };
 
 export const CART_WITH_LINES = {
+  ...CART,
+  lines: {edges: [{node: CART_LINE}]},
+};
+
+export const CART_WITH_FLAT_LINES = {
   ...CART,
   lines: [CART_LINE],
 };
@@ -40,7 +44,7 @@ export const mountWithCartProvider = createMount<
 
 function getCartConfig(config: CartProviderOptions = {}): CartWithActions {
   return {
-    ...CART_WITH_LINES,
+    ...CART_WITH_FLAT_LINES,
     ...config,
   } as CartWithActions;
 }

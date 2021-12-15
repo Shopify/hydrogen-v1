@@ -5,7 +5,7 @@ import {CartLineQuantityAdjustButton} from '../CartLineQuantityAdjustButton';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {useCart} from '../../CartProvider';
 import {
-  CART_WITH_LINES,
+  CART_WITH_FLAT_LINES,
   mountWithCartProvider,
 } from '../../CartProvider/tests/fixtures';
 
@@ -40,7 +40,7 @@ describe('CartLineQuantityAdjustButton', () => {
   it('decreases quantity when quantity >= 2', () => {
     const linesUpdateMock = jest.fn();
     const customLine = {
-      ...CART_WITH_LINES['lines'][0],
+      ...CART_WITH_FLAT_LINES['lines'][0],
       quantity: 2,
     };
     const wrapper = mountWithCartProvider(
