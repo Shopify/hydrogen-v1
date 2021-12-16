@@ -2704,6 +2704,9 @@ fragment MetafieldFragment on Metafield {
 fragment VariantFragment on ProductVariant {
   id
   title
+  sku
+  barcode
+  quantityAvailable
   availableForSale
   image {
     ...ImageFragment
