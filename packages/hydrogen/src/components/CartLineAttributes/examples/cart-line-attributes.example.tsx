@@ -14,6 +14,6 @@ export function App() {
           )}
         </CartLineAttributes>
       </CartLineProvider>
-    )
+    );
   });
 }

@@ -248,7 +248,8 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       tables: [
         await generator.table({
           title: 'Reference',
-          description: 'Hydrogen includes the following product and variant hooks:',
+          description:
+            'Hydrogen includes the following product and variant hooks:',
           columns: ['Hook name', Column.Description],
         }),
       ],

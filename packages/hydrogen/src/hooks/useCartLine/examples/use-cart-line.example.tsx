@@ -9,7 +9,7 @@ export function MyComponent() {
         <CartLineItem />
       </CartLineProvider>
     );
-  })
+  });
 }
 
 export function CartLineItem() {
@@ -21,5 +21,5 @@ export function CartLineItem() {
       <span>{price}</span>
       <span>{quantity}</span>
     </>
-  )
+  );
 }

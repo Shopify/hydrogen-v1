@@ -30,6 +30,9 @@ jobs:
       - name: Build the code
         run: yarn build
 
+      - name: Check formatting
+        run: yarn format:check
+
       - name: Lint the framework code
         run: yarn lint
 
