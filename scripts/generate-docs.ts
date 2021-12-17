@@ -213,11 +213,19 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
 
     // Primitive
     generator.section({
-      title: 'Primitive',
-      description:
-        'Get familiar with the Hydrogen primitive hooks included in Hydrogen.',
+      title: 'Primitive hooks',
+      description: 'Learn about the primitive hooks offered in Hydrogen.',
       url: '/api/hydrogen/hooks/primitive/index.md',
       entry: ['hooks/useMoney'],
+      intro:
+        'Primitive hooks are the building blocks for different component types, including products, variants, and cart.',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description: 'Hydrogen includes the following primitive hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
+      ],
     }),
     // Product and variant
     generator.section({
