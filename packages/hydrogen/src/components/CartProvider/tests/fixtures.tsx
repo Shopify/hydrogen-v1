@@ -4,6 +4,7 @@ import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {getPrice} from '../../../utilities/tests/price';
 import {CartContext} from '../context';
 import {CartWithActions} from '../types';
+import {flattenConnection} from '../../../utilities';
 
 export const CART = {
   id: 'abc',
@@ -25,9 +26,9 @@ export const CART_WITH_LINES = {
   lines: {edges: [{node: CART_LINE}]},
 };
 
-export const CART_WITH_FLAT_LINES = {
+export const CART_WITH_LINES_FLATTENED = {
   ...CART,
-  lines: [CART_LINE],
+  lines: flattenConnection(CART_WITH_LINES.lines),
 };
 
 export const mountWithCartProvider = createMount<
@@ -44,7 +45,7 @@ export const mountWithCartProvider = createMount<
 
 function getCartConfig(config: CartProviderOptions = {}): CartWithActions {
   return {
-    ...CART_WITH_FLAT_LINES,
+    ...CART_WITH_LINES_FLATTENED,
     ...config,
   } as CartWithActions;
 }
