@@ -73,7 +73,7 @@ export default async function handleEvent(
   }
 
   const userAgent = request.headers.get('user-agent');
-  const isStreamable = streamableResponse && isBotUA(url, userAgent);
+  const isStreamable = streamableResponse && !isBotUA(url, userAgent);
 
   /**
    * Stream back real-user responses, but for bots/etc,
