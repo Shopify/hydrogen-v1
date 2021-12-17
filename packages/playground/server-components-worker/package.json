@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.8.0",
   "scripts": {
-    "dev": "DEV=true node start-worker",
+    "_dev": "DEV=true node start-worker",
     "build": "yarn build:client && yarn build:worker",
     "build:client": "cross-env PUBLIC_VARIABLE=42-public vite build --outDir dist/client --manifest",
     "build:worker": "cross-env WORKER=true PUBLIC_VARIABLE=42-public  vite build --outDir dist/worker --ssr worker.js"

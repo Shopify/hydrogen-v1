@@ -13161,6 +13161,11 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
+turbo@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/turbo/-/turbo-1.0.17.tgz#25f7103e11b88291a8af31bd9d0de6025ea744b1"
+  integrity sha512-59oUN8xaLH5EEgUGbYSA/PGvGZTL3zJq4vJeUDtCZEYBcUx3sr+7ugws+cTb0jiPTllT1h+EprLcA9JN2MHUwg==
+
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"

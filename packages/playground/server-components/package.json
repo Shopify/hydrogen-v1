@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.8.0",
   "scripts": {
-    "dev": "vite",
+    "_dev": "vite",
     "build": "yarn build:client && yarn build:server",
     "build:client": "vite build --outDir dist/client --manifest",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.jsx"
