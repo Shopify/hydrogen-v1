@@ -9,7 +9,7 @@ export function Html({children, head}: {children: ReactNode; head: string}) {
         <div id="root">{children}</div>
         {/* In production, Vite bundles the entrypoint JS inside <head> */}
         {/* @ts-ignore because module=commonjs doesn't allow this */}
-        {import.meta.env.DEV && (
+        {!process.env.PRODUCTION && (
           <script type="module" src="/src/entry-client.jsx"></script>
         )}
       </body>

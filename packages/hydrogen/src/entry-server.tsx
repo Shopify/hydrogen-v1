@@ -272,6 +272,11 @@ function buildReactApp({
 function extractHeadElements(helmetContext: FilledContext) {
   const {helmet} = helmetContext;
 
+  /**
+   * TODO: Why isn't helmet present in unit tests?
+   */
+  if (!helmet) return {};
+
   return {
     base: helmet.base.toString(),
     bodyAttributes: helmet.bodyAttributes.toString(),
