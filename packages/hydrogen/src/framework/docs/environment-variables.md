@@ -16,15 +16,13 @@ MY_SECRET_API_TOKEN="topsecret"
 
 ### Public variables
 
-In Hydrogen, any environment variable prefixed with `PUBLIC_` or `VITE_` in the `.env` files are treated as public and are available in the browser. These variables can be accessed using Vite's `import.meta.env` in any component.
+In Hydrogen, environment variables prefixed with `PUBLIC_` in the `.env` files are treated as public and are available in the browser. These variables can be accessed using Vite's `import.meta.env` in any component.
 
 ### Private variables
 
-Any variable that isn't prefixed with `PUBLIC_` is treated as a server runtime variable in non-production environments. These variables are not exposed to the browser and can only be accessed from server components using the global `Oxygen.env` object.
+Any variable from `.env` files that isn't prefixed with `PUBLIC_` is treated as a server runtime variable in non-production environments. These variables are not exposed to the browser and can only be accessed from server components using the global `Oxygen.env` object.
 
-In production, however, variables are loaded directly from your Oxygen admin panel and will be available in the global `Oxygen.env` object. None of the `.env` files will be used to load production variables.
-
-Note that, for other platforms, you might need to polyfill the global `Oxygen` object. For example, when deploying to a Node.js server: `globalThis.Oxygen = {env: process.env};`.
+In production, however, none of the `.env` files will be used to load runtime variables by default. Instead, loading variables will vary based on the hosting runtime you're using. For example, when deploying to a Node.js server, pass your variables to the Node.js process and create a global `Oxygen` object based on that: `globalThis.Oxygen = {env: process.env};`.
 
 ## Next steps
 
