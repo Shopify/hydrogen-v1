@@ -1,8 +1,5 @@
 import {Logger, logServerResponse} from '../log';
-// import {kleur} from 'kleur';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
-
-// jest.mock('kleur');
 
 let mockLogger: Logger;
 

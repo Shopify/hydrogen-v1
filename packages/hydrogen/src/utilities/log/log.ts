@@ -1,5 +1,5 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
-import kleur from 'kleur';
+import {yellow, red, green, italic} from 'kolorist';
 import {getTime} from '../timing';
 
 export interface Logger {
@@ -30,13 +30,13 @@ export function getLoggerFromContext(context: any): Logger {
     console.log(...args);
   },
   warn(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(kleur.yellow('WARN: '), ...args);
+    console.log(yellow('WARN: '), ...args);
   },
   error(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(kleur.red('ERROR: '), ...args);
+    console.log(red('ERROR: '), ...args);
   },
   fatal(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(kleur.red('FATAL: '), ...args);
+    console.log(red('FATAL: '), ...args);
   },
 };
 
@@ -75,12 +75,12 @@ export function logServerResponse(
 ) {
   const coloredResponseStatus =
     responseStatus >= 500
-      ? kleur.red(responseStatus)
+      ? red(responseStatus)
       : responseStatus >= 300
-      ? kleur.yellow(responseStatus)
-      : kleur.green(responseStatus);
+      ? yellow(responseStatus)
+      : green(responseStatus);
 
-  const styledType = kleur.italic(type);
+  const styledType = italic(type);
   const paddedTiming = pad(
     (getTime() - request.time).toFixed(2) + ' ms',
     '          '
