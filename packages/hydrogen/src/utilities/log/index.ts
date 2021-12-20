@@ -1,1 +1,7 @@
-export {log, setLogger, Logger, logServerResponse} from './log';
+export {
+  log,
+  setLogger,
+  Logger,
+  logServerResponse,
+  getLoggerFromContext,
+} from './log';

@@ -4,7 +4,7 @@ import type {ServerComponentRequest} from './framework/Hydration/ServerComponent
 import {getCacheControlHeader} from './framework/cache';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
-import {log, logServerResponse} from './utilities/log';
+import {getLoggerFromContext, logServerResponse} from './utilities/log';
 
 interface HydrogenFetchEvent {
   /**
@@ -76,7 +76,7 @@ export default async function handleEvent(
   const userAgent = request.headers.get('user-agent');
   const isStreamable = streamableResponse && !isBotUA(url, userAgent);
 
-  const logger = log(request);
+  const logger = getLoggerFromContext(request);
 
   /**
    * Stream back real-user responses, but for bots/etc,
@@ -163,7 +163,7 @@ export default async function handleEvent(
     });
   }
 
-  logServerResponse('ssr', log, request, response.status);
+  logServerResponse('ssr', logger, request, response.status);
 
   return response;
 }

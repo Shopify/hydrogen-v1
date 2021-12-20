@@ -342,6 +342,10 @@ Hydrogen includes the following utilities to help speed up your development proc
     <td><a href="/api/hydrogen/utilities/parsemetafieldvalue">parseMetafieldValue</a></td>
     <td>Parses a metafield's value from a string to a sensible type corresponding to the metafield's type.</td>
   </tr>
+  <tr>
+    <td><a href="/api/hydrogen/utilities/log">log</a></td>
+    <td>A utility for logging debugging, warning, and error information about the application</td>
+  </tr>
 </table>
 
 ## Next steps
