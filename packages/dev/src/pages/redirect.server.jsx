@@ -1,4 +1,4 @@
 export default function Redirect({response}) {
   response.redirect('/products/snowboard');
-  return null;
+  return <div>This page is redirected</div>;
 }
