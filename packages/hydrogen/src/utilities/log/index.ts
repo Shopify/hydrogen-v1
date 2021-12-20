@@ -4,4 +4,5 @@ export {
   Logger,
   logServerResponse,
   getLoggerFromContext,
+  resetLogger,
 } from './log';

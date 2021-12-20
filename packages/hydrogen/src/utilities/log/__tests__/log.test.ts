@@ -1,4 +1,11 @@
-import {Logger, logServerResponse} from '../log';
+import {
+  log,
+  setLogger,
+  Logger,
+  logServerResponse,
+  getLoggerFromContext,
+  resetLogger,
+} from '../log';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 
 let mockLogger: Logger;
@@ -15,6 +22,8 @@ describe('log', () => {
 
     global.Date.now = () => 2100;
     global.performance.now = () => 2100;
+
+    resetLogger();
   });
 
   it('should log 500 server response', () => {
@@ -54,5 +63,32 @@ describe('log', () => {
     expect((mockLogger.debug as any).mock.calls[0][0]).toMatchInlineSnapshot(
       `"GET [3mstr[23m [33m301[39m 1100.00 ms http://localhost:3000/"`
     );
+  });
+
+  ['trace', 'debug', 'warn', 'error', 'fatal'].forEach((method) => {
+    it(`logs ${method}`, () => {
+      setLogger(mockLogger);
+
+      (log as any)[method](`hydrogen: ${method}`);
+      expect((mockLogger as any)[method]).toHaveBeenCalled();
+      expect(((mockLogger as any)[method] as any).mock.calls[0][0]).toEqual({});
+      expect(((mockLogger as any)[method] as any).mock.calls[0][1]).toBe(
+        `hydrogen: ${method}`
+      );
+    });
+
+    it('gets logger for a given context', () => {
+      setLogger(mockLogger);
+      const clog = getLoggerFromContext({some: 'data'});
+
+      (clog as any)[method](`hydrogen: ${method}`);
+      expect((mockLogger as any)[method]).toHaveBeenCalled();
+      expect(((mockLogger as any)[method] as any).mock.calls[0][0]).toEqual({
+        some: 'data',
+      });
+      expect(((mockLogger as any)[method] as any).mock.calls[0][1]).toBe(
+        `hydrogen: ${method}`
+      );
+    });
   });
 });

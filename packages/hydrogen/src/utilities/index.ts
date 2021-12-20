@@ -23,6 +23,7 @@ export {
   Logger,
   logServerResponse,
   getLoggerFromContext,
+  resetLogger,
 } from './log';
 export {getMeasurementAsParts, getMeasurementAsString} from './measurement';
 export {parseMetafieldValue} from './parseMetafieldValue';

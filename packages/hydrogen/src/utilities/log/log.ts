@@ -22,7 +22,7 @@ export function getLoggerFromContext(context: any): Logger {
 
 // @todo - multiple instances of log.ts are loaded, we utilitze the
 // global in order to make sure that the logger is a singleton
-(globalThis as any).__hlogger = {
+let defaultLogger = ((globalThis as any).__hlogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(...args);
   },
@@ -38,10 +38,14 @@ export function getLoggerFromContext(context: any): Logger {
   fatal(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(red('FATAL: '), ...args);
   },
-};
+});
 
 export function setLogger(_logger: Logger) {
   (globalThis as any).__hlogger = _logger;
+}
+
+export function resetLogger() {
+  (globalThis as any).__hlogger = defaultLogger;
 }
 
 /**
@@ -63,7 +67,7 @@ export const log: Logger = {
     return (globalThis as any).__hlogger.error({}, ...args);
   },
   fatal(...args) {
-    return (globalThis as any).__hlogger.trace({}, ...args);
+    return (globalThis as any).__hlogger.fatal({}, ...args);
   },
 };
 
