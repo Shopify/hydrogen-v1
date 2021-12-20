@@ -1,7 +1,7 @@
 #import './SellingPlanFragment.graphql'
 
 fragment SellingPlanGroupsFragment on SellingPlanGroup {
-  sellingPlans(first:$numProductSellingPlans) {
+  sellingPlans(first: $numProductSellingPlans) {
     edges {
       node {
         ...SellingPlanFragment

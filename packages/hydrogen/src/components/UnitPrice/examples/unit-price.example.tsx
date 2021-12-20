@@ -25,17 +25,25 @@ const QUERY = gql`
 
 export default function Product() {
   const {data} = useShopQuery({query: QUERY});
-  const selectedVariant = data.product.variants.edges[0].node
+  const selectedVariant = data.product.variants.edges[0].node;
 
-  return <UnitPrice unitPrice={selectedVariant.unitPrice} unitPriceMeasurement={selectedVariant.unitPriceMeasurement} />;
+  return (
+    <UnitPrice
+      unitPrice={selectedVariant.unitPrice}
+      unitPriceMeasurement={selectedVariant.unitPriceMeasurement}
+    />
+  );
 }
 
 export default function ProductWithCustomUnitPrice() {
   const {data} = useShopQuery({query: QUERY});
-  const selectedVariant = data.product.variants.edges[0].node
+  const selectedVariant = data.product.variants.edges[0].node;
 
   return (
-    <UnitPrice unitPrice={selectedVariant.unitPrice} unitPriceMeasurement={selectedVariant.unitPriceMeasurement}>
+    <UnitPrice
+      unitPrice={selectedVariant.unitPrice}
+      unitPriceMeasurement={selectedVariant.unitPriceMeasurement}
+    >
       {({amount, currencyCode, currencyNarrowSymbol, referenceUnit}) => {
         return (
           <>

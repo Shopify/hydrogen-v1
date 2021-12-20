@@ -1,4 +1,8 @@
-import {CartLineProvider, useCart, CartLineProductTitle} from '@shopify/hydrogen';
+import {
+  CartLineProvider,
+  useCart,
+  CartLineProductTitle,
+} from '@shopify/hydrogen';
 
 export function App() {
   const {lines} = useCart();
@@ -8,6 +12,6 @@ export function App() {
       <CartLineProvider key={line.id} line={line}>
         <CartLineProductTitle />
       </CartLineProvider>
-    )
+    );
   });
 }

@@ -1,6 +1,7 @@
 #import './CartFragment.graphql'
 
-query CartQuery($id: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
+query CartQuery($id: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ)
+@inContext(country: $country) {
   cart(id: $id) {
     ...CartFragment
   }

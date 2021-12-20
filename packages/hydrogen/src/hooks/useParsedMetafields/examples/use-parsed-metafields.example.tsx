@@ -6,8 +6,12 @@ export function Product(product) {
   return (
     <ul>
       {metafields.map((field) => {
-        return <li><Metafield metafield={field} /></li>
+        return (
+          <li>
+            <Metafield metafield={field} />
+          </li>
+        );
       })}
     </ul>
-  )
+  );
 }

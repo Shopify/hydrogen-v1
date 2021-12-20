@@ -13,7 +13,9 @@ export function ProductWithRenderProp({product}) {
     <ProductProvider product={product}>
       <ProductMetafield namespace="my_fields" keyName="manufacture_date">
         {({value}) => {
-          return <p>This product was manufactured on {value.toLocaleDateString()}</p>
+          return (
+            <p>This product was manufactured on {value.toLocaleDateString()}</p>
+          );
         }}
       </ProductMetafield>
     </ProductProvider>

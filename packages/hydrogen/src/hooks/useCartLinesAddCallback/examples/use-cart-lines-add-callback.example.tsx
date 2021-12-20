@@ -6,10 +6,12 @@ export function CustomAddToCartButton() {
   return (
     <button
       onClick={() => {
-        addLines([{
-          quantity: 1,
-          merchandiseId: '1234',
-        }])
+        addLines([
+          {
+            quantity: 1,
+            merchandiseId: '1234',
+          },
+        ]);
       }}
     >
       Add to cart
