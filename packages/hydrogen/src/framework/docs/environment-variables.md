@@ -1,4 +1,4 @@
-Environment variables, also known as secrets, allow loading different values in your app depending on the running environment. This guide describes how to store environment variables in your Hydrogen project.
+Environment variables, also known as secrets, allow you to load different values in your app depending on the running environment. This guide describes how to store environment variables in your Hydrogen project.
 
 ## How environment variables work
 
@@ -16,11 +16,11 @@ MY_SECRET_API_TOKEN="topsecret"
 
 ### Public variables
 
-In Hydrogen, any environment variable prefixed with `PUBLIC_` or `VITE_` in the `.env` files will be treated as public and will be available in the browser. These variables can be accessed using Vite's `import.meta.env` in any component.
+In Hydrogen, any environment variable prefixed with `PUBLIC_` or `VITE_` in the `.env` files are treated as public and are available in the browser. These variables can be accessed using Vite's `import.meta.env` in any component.
 
 ### Private variables
 
-Any variable that is not prefixed as mentioned above will be treated as a server runtime variable in non-production environments. These variables are not exposed to the browser and can only be accessed from server components using the global `Oxygen.env` object.
+Any variable that isn't prefixed with `PUBLIC_` is treated as a server runtime variable in non-production environments. These variables are not exposed to the browser and can only be accessed from server components using the global `Oxygen.env` object.
 
 In production, however, variables are loaded directly from your Oxygen admin panel and will be available in the global `Oxygen.env` object. None of the `.env` files will be used to load production variables.
 
