@@ -49,7 +49,12 @@ export default () => {
       },
 
       optimizeDeps: {
-        exclude: ['@shopify/hydrogen/client', '@shopify/hydrogen/entry-client'],
+        exclude: [
+          '@shopify/hydrogen/client',
+          '@shopify/hydrogen/entry-client',
+          '@shopify/hydrogen',
+          '@shopify/hydrogen/*',
+        ],
         include: [
           /**
            * Additionally, the following dependencies have trouble loading the

@@ -14,7 +14,9 @@ export interface Logger {
   fatal: (...args: Array<any>) => void;
 }
 
-let logger = {
+// @todo - multiple instances of log.ts are loaded, we utilitze the
+// global in order to make sure that the logger is a singleton
+(globalThis as any).__hlogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(...args);
   },
@@ -33,25 +35,25 @@ let logger = {
 };
 
 export function setLogger(_logger: Logger) {
-  logger = _logger;
+  (globalThis as any).__hlogger = _logger;
 }
 
 export const log: RequestLogger = function (
   request: ServerComponentRequest
 ): Logger {
   return {
-    trace: (...args) => logger.trace({request}, ...args),
-    debug: (...args) => logger.debug({request}, ...args),
-    warn: (...args) => logger.warn({request}, ...args),
-    error: (...args) => logger.error({request}, ...args),
-    fatal: (...args) => logger.fatal({request}, ...args),
+    trace: (...args) => (globalThis as any).__hlogger.trace({request}, ...args),
+    debug: (...args) => (globalThis as any).__hlogger.debug({request}, ...args),
+    warn: (...args) => (globalThis as any).__hlogger.warn({request}, ...args),
+    error: (...args) => (globalThis as any).__hlogger.error({request}, ...args),
+    fatal: (...args) => (globalThis as any).__hlogger.fatal({request}, ...args),
   };
 };
-log.trace = (...args) => logger.trace({}, ...args);
-log.debug = (...args) => logger.debug({}, ...args);
-log.warn = (...args) => logger.warn({}, ...args);
-log.error = (...args) => logger.error({}, ...args);
-log.fatal = (...args) => logger.trace({}, ...args);
+log.trace = (...args) => (globalThis as any).__hlogger.trace({}, ...args);
+log.debug = (...args) => (globalThis as any).__hlogger.debug({}, ...args);
+log.warn = (...args) => (globalThis as any).__hlogger.warn({}, ...args);
+log.error = (...args) => (globalThis as any).__hlogger.error({}, ...args);
+log.fatal = (...args) => (globalThis as any).__hlogger.trace({}, ...args);
 
 export function logServerResponse(
   type: 'str' | 'rsc' | 'ssr',
@@ -71,9 +73,13 @@ export function logServerResponse(
     (getTime() - request.time).toFixed(2) + ' ms',
     '          '
   );
+  const url =
+    type === 'rsc'
+      ? decodeURIComponent(request.url.substring(request.url.indexOf('=') + 1))
+      : request.url;
 
   log.debug(
-    `${request.method} ${styledType} ${coloredResponseStatus} ${paddedTiming} ${request.url}`
+    `${request.method} ${styledType} ${coloredResponseStatus} ${paddedTiming} ${url}`
   );
 }
 
