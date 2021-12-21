@@ -8,7 +8,7 @@ import {
 } from '../log';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 
-let mockLogger: Logger;
+let mockLogger: jest.Mocked<Logger>;
 
 describe('log', () => {
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe('log', () => {
     } as ServerComponentRequest;
     logServerResponse('str', mockLogger, request, 500);
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect((mockLogger.debug as any).mock.calls[0][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
       `"GET [3mstr[23m [31m500[39m 1100.00 ms http://localhost:3000/"`
     );
   });
@@ -47,7 +47,7 @@ describe('log', () => {
     } as ServerComponentRequest;
     logServerResponse('str', mockLogger, request, 200);
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect((mockLogger.debug as any).mock.calls[0][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
       `"GET [3mstr[23m [32m200[39m 1100.00 ms http://localhost:3000/"`
     );
   });
@@ -60,8 +60,21 @@ describe('log', () => {
     } as ServerComponentRequest;
     logServerResponse('str', mockLogger, request, 301);
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect((mockLogger.debug as any).mock.calls[0][0]).toMatchInlineSnapshot(
-      `"GET [3mstr[23m [33m301[39m 1100.00 ms http://localhost:3000/"`
+    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
+      `"GET [3mstr[23m [94m301[39m 1100.00 ms http://localhost:3000/"`
+    );
+  });
+
+  it('should log 400 server response', () => {
+    const request = {
+      method: 'GET',
+      url: 'http://localhost:3000/',
+      time: 1000,
+    } as ServerComponentRequest;
+    logServerResponse('str', mockLogger, request, 404);
+    expect(mockLogger.debug).toHaveBeenCalled();
+    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
+      `"GET [3mstr[23m [33m404[39m 1100.00 ms http://localhost:3000/"`
     );
   });
 

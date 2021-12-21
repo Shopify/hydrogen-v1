@@ -1,6 +1,11 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
-import {yellow, red, green, italic} from 'kolorist';
+import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __hlogger: Logger;
+}
 
 export interface Logger {
   trace: (...args: Array<any>) => void;
@@ -12,17 +17,17 @@ export interface Logger {
 
 export function getLoggerFromContext(context: any): Logger {
   return {
-    trace: (...args) => (globalThis as any).__hlogger.trace(context, ...args),
-    debug: (...args) => (globalThis as any).__hlogger.debug(context, ...args),
-    warn: (...args) => (globalThis as any).__hlogger.warn(context, ...args),
-    error: (...args) => (globalThis as any).__hlogger.error(context, ...args),
-    fatal: (...args) => (globalThis as any).__hlogger.fatal(context, ...args),
+    trace: (...args) => globalThis.__hlogger.trace(context, ...args),
+    debug: (...args) => globalThis.__hlogger.debug(context, ...args),
+    warn: (...args) => globalThis.__hlogger.warn(context, ...args),
+    error: (...args) => globalThis.__hlogger.error(context, ...args),
+    fatal: (...args) => globalThis.__hlogger.fatal(context, ...args),
   };
 }
 
 // @todo - multiple instances of log.ts are loaded, we utilitze the
 // global in order to make sure that the logger is a singleton
-let defaultLogger = ((globalThis as any).__hlogger = {
+const defaultLogger = (globalThis.__hlogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(...args);
   },
@@ -30,22 +35,22 @@ let defaultLogger = ((globalThis as any).__hlogger = {
     console.log(...args);
   },
   warn(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(yellow('WARN: '), ...args);
+    console.warn(yellow('WARN: '), ...args);
   },
   error(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(red('ERROR: '), ...args);
+    console.error(red('ERROR: '), ...args);
   },
   fatal(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(red('FATAL: '), ...args);
+    console.error(red('FATAL: '), ...args);
   },
 });
 
 export function setLogger(_logger: Logger) {
-  (globalThis as any).__hlogger = _logger;
+  globalThis.__hlogger = _logger;
 }
 
 export function resetLogger() {
-  (globalThis as any).__hlogger = defaultLogger;
+  globalThis.__hlogger = defaultLogger;
 }
 
 /**
@@ -55,19 +60,19 @@ export function resetLogger() {
  */
 export const log: Logger = {
   trace(...args) {
-    return (globalThis as any).__hlogger.trace({}, ...args);
+    return globalThis.__hlogger.trace({}, ...args);
   },
   debug(...args) {
-    return (globalThis as any).__hlogger.debug({}, ...args);
+    return globalThis.__hlogger.debug({}, ...args);
   },
   warn(...args) {
-    return (globalThis as any).__hlogger.warn({}, ...args);
+    return globalThis.__hlogger.warn({}, ...args);
   },
   error(...args) {
-    return (globalThis as any).__hlogger.error({}, ...args);
+    return globalThis.__hlogger.error({}, ...args);
   },
   fatal(...args) {
-    return (globalThis as any).__hlogger.fatal({}, ...args);
+    return globalThis.__hlogger.fatal({}, ...args);
   },
 };
 
@@ -80,8 +85,10 @@ export function logServerResponse(
   const coloredResponseStatus =
     responseStatus >= 500
       ? red(responseStatus)
-      : responseStatus >= 300
+      : responseStatus >= 400
       ? yellow(responseStatus)
+      : responseStatus >= 300
+      ? lightBlue(responseStatus)
       : green(responseStatus);
 
   const styledType = italic(type);
