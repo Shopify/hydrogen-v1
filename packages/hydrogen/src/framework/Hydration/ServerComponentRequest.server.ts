@@ -7,6 +7,7 @@
  */
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
+  public context: {cache: Map<string, any>; [key: string]: any};
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -20,6 +21,7 @@ export class ServerComponentRequest extends Request {
       });
     }
 
+    this.context = {cache: new Map()};
     this.cookies = this.parseCookies();
   }
 

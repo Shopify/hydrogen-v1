@@ -11157,9 +11157,11 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-"react-client@link:../../react/build/node_modules/react-client":
-  version "0.0.0"
-  uid ""
+"react-client@file:../../react/build/node_modules/react-client":
+  version "0.1.0"
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 react-dom@0.0.0-experimental-0cc724c77-20211125:
   version "0.0.0-experimental-0cc724c77-20211125"
@@ -11260,9 +11262,11 @@ react-router@5.2.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-"react-server@link:../../react/build/node_modules/react-server":
-  version "0.0.0"
-  uid ""
+"react-server@file:../../react/build/node_modules/react-server":
+  version "0.1.0"
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 react-ssr-prepass@^1.4.0:
   version "1.4.0"

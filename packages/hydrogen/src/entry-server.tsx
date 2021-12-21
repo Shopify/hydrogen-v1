@@ -19,6 +19,10 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
+import {
+  ServerRequestProvider,
+  requestHydrationCache,
+} from './foundation/ServerRequestProvider';
 import type {ServerResponse} from 'http';
 
 import {
@@ -193,6 +197,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       context,
       request,
       dev,
+      isHydration: true,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -221,22 +226,50 @@ function buildReactApp({
   context,
   request,
   dev,
+  isHydration,
 }: {
   App: ComponentType;
   state: any;
   context: any;
   request: ServerComponentRequest;
   dev: boolean | undefined;
+  isHydration?: boolean;
 }) {
   // const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
+
+  function Wrapper({children}: any) {
+    if (isHydration) {
+      // Save the request object in a React cache that is
+      // scoped to this current rendering.
+
+      // @ts-ignore
+      const requestCache = React.unstable_getCacheForType(
+        requestHydrationCache
+      );
+
+      requestCache.set(requestHydrationCache.key, request);
+
+      return children;
+    }
+
+    // Use a normal provider in SSR to make the request object
+    // available in the current rendering.
+    return (
+      <ServerRequestProvider request={request}>
+        {children}
+      </ServerRequestProvider>
+    );
+  }
 
   const ReactApp = (props: any) => (
     // <StaticRouter
     //   location={{pathname: state.pathname, search: state.search}}
     //   context={context}
     // >
-    <App {...props} request={request} response={componentResponse} />
+    <Wrapper>
+      <App {...props} request={request} response={componentResponse} />
+    </Wrapper>
     // </StaticRouter>
   );
 
