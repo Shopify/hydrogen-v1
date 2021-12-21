@@ -2,6 +2,11 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 
+/** A utility for logging debugging, warning, and error information about the application.
+ * Use by importing `log` `@shopify/hydrogen` or by using a `log` prop passed to each page
+ * component. Using the latter is ideal, because it will ty your log to the current request in progress.
+ */
+
 declare global {
   // eslint-disable-next-line no-var
   var __hlogger: Logger;
@@ -53,11 +58,6 @@ export function resetLogger() {
   globalThis.__hlogger = defaultLogger;
 }
 
-/**
- * A utility for logging debugging, warning, and error information about the application.
- * Use by importing `log` `@shopify/hydrogen` or by using a `log` prop passed to each page
- * component. Using the latter is ideal, because it will ty your log to the current request in progress.
- */
 export const log: Logger = {
   trace(...args) {
     return globalThis.__hlogger.trace({}, ...args);
