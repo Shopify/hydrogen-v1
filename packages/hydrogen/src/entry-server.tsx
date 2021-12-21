@@ -90,12 +90,44 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    * Stream a response to the client. NOTE: This omits custom `<head>`
    * information, so this method should not be used by crawlers.
    */
-  const stream: Streamer = function (
+  const stream: Streamer = async function (
     url: URL,
     {context, request, response, template, dev}
   ) {
     const state = {pathname: url.pathname, search: url.search};
 
+    // App for RSC rendering
+    const {ReactApp: HydrationReactApp} = buildReactApp({
+      App,
+      state,
+      context,
+      request,
+      dev,
+      isHydration: true,
+    });
+
+    let flightResponse = '';
+    if (rscRenderToPipeableStream) {
+      // Node.js branch
+
+      const {pipe} = rscRenderToPipeableStream(
+        <HydrationReactApp {...state} />
+      );
+
+      const {PassThrough} = await import('stream');
+      const writer = new PassThrough();
+      writer.setEncoding('utf-8');
+      writer.on('data', (chunk: string) => {
+        // TODO: wrap each chunk in <script> tag and stream it directly
+        flightResponse += chunk;
+      });
+      pipe(writer);
+    } else {
+      // Worker branch
+      // TODO implement RSC with TransformStream?
+    }
+
+    // App for SSR rendering
     const {ReactApp, componentResponse} = buildReactApp({
       App,
       state,
@@ -143,6 +175,18 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           );
         },
         onCompleteAll() {
+          if (componentResponse.canStream() && !response.writableEnded) {
+            // SSR has finished so RSC is also done. Attach the RSC
+            // response in a script tag at the end.
+            // TODO: this could be streamed line by line as it comes
+            // instead of batching it at the end.
+            response.write(
+              `<script data-flight>window.__flight=${JSON.stringify(
+                flightResponse
+              )}</script>`
+            );
+          }
+
           if (componentResponse.canStream() || response.writableEnded) return;
 
           writeHeadToServerResponse(response, componentResponse, didError);

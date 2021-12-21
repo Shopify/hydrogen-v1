@@ -1,6 +1,9 @@
 // @ts-ignore
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
-import {createFromFetch} from '../Hydration/rsc-client-hydrator';
+import {
+  createFromFetch,
+  createFromReadableStream,
+} from '../Hydration/rsc-client-hydrator';
 import type {FlightResponse} from '../Hydration/rsc-client-config';
 
 function createResponseCache() {
@@ -23,7 +26,28 @@ export function useServerResponse(state: any) {
     return response;
   }
 
-  response = createFromFetch(fetch('/react?state=' + encodeURIComponent(key)));
+  // @ts-ignore
+  if (window.__flight) {
+    // The flight response was inlined during SSR, use it directly.
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      start(controller) {
+        // @ts-ignore
+        controller.enqueue(encoder.encode(window.__flight));
+        controller.close();
+      },
+    });
+
+    response = createFromReadableStream(stream);
+
+    // @ts-ignore
+    delete window.__flight;
+  } else {
+    // Request a new flight response.
+    response = createFromFetch(
+      fetch('/react?state=' + encodeURIComponent(key))
+    );
+  }
 
   cache.set(key, response);
   return response;
