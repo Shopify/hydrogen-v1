@@ -128,7 +128,11 @@ export default async function handleEvent(
   if (componentResponse.customBody) {
     const {status, customStatus} = componentResponse;
 
-    return new Response(await componentResponse.customBody, {
+    const body = await componentResponse.customBody;
+
+    if (body instanceof Response) return body;
+
+    return new Response(body, {
       status: customStatus?.code ?? status ?? 200,
       statusText: customStatus?.text,
       headers,
@@ -138,7 +142,7 @@ export default async function handleEvent(
   let response;
 
   if (isReactHydrationRequest) {
-    response = new Response(body, {
+    response = new Response(body as string, {
       status: componentResponse.status ?? 200,
       headers,
     });

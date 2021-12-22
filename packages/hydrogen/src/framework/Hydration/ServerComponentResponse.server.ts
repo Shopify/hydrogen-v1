@@ -9,9 +9,9 @@ export class ServerComponentResponse extends Response {
   public customStatus?: {code?: number; text?: string};
 
   /**
-   * Allow custom body to be a string or a Promise.
+   * Allow custom body to be a string, Response object, or a Promise.
    */
-  public customBody: string | Promise<string> = '';
+  public customBody: string | Response | Promise<string | Response> = '';
 
   /**
    * Buffer the current response until all queries have resolved,

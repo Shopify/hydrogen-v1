@@ -160,7 +160,15 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
           if (componentResponse.customBody) {
             if (componentResponse.customBody instanceof Promise) {
-              componentResponse.customBody.then((body) => response.end(body));
+              componentResponse.customBody.then((body) => {
+                if (body instanceof Response) {
+                  response.end(body.body);
+                } else {
+                  response.end(body);
+                }
+              });
+            } else if (componentResponse.customBody instanceof Response) {
+              response.end(componentResponse.customBody.body);
             } else {
               response.end(componentResponse.customBody);
             }

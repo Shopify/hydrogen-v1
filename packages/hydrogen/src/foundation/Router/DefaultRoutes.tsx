@@ -1,8 +1,13 @@
 import React, {ReactElement, useMemo} from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router-dom';
 import {Logger} from '../../utilities/log/log';
+import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
+import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
 
-export type ImportGlobEagerOutput = Record<string, Record<'default', any>>;
+export type ImportGlobEagerOutput = Record<
+  string,
+  Record<'default' | 'api', any>
+>;
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -78,9 +83,18 @@ export function createRoutesFromPages(
      */
     const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
 
+    if (!pages[key].default && !pages[key].api)
+      throw new Error(
+        `${key} doesn't export a default React component or an API function`
+      );
+    if (pages[key].default && pages[key].api)
+      throw new Error(
+        `${key} cannot export both a default React component and an API function`
+      );
+
     return {
       path: topLevelPrefix + path,
-      component: pages[key].default,
+      component: pages[key].default || APIComponent.bind(null, pages[key].api),
       exact,
     };
   });
@@ -92,4 +106,23 @@ export function createRoutesFromPages(
     ...routes.filter((route) => !route.path.includes(':')),
     ...routes.filter((route) => route.path.includes(':')),
   ];
+}
+
+function APIComponent(
+  APIFunction: any,
+  props: {response: ServerComponentResponse; request: ServerComponentRequest}
+) {
+  props.response.doNotStream();
+
+  const response = APIFunction(props.request);
+
+  props.response.writeHead({
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers,
+  });
+
+  props.response.send(response);
+
+  return null;
 }

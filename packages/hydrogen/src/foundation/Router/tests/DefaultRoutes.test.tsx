@@ -1,6 +1,6 @@
 import {createRoutesFromPages, ImportGlobEagerOutput} from '../DefaultRoutes';
 
-const STUB_MODULE = {default: {}};
+const STUB_MODULE = {default: {}, api: null};
 
 it('converts normal pages to routes', () => {
   const pages: ImportGlobEagerOutput = {
@@ -240,4 +240,32 @@ it('factors in the top-level path prefix', () => {
       exact: true,
     },
   ]);
+});
+
+it('errors when a route has a default _and_ api export', () => {
+  function makeError() {
+    const pages: ImportGlobEagerOutput = {
+      './pages/contact.server.jsx': {default: {}, api: function () {}},
+    };
+
+    createRoutesFromPages(pages);
+  }
+
+  expect(makeError).toThrowError(
+    './pages/contact.server.jsx cannot export both a default React component and an API function'
+  );
+});
+
+it("errors routes don't have a default or api export", () => {
+  function makeError() {
+    const pages: ImportGlobEagerOutput = {
+      './pages/contact.server.jsx': {} as any,
+    };
+
+    createRoutesFromPages(pages);
+  }
+
+  expect(makeError).toThrowError(
+    `./pages/contact.server.jsx doesn't export a default React component or an API function`
+  );
 });
