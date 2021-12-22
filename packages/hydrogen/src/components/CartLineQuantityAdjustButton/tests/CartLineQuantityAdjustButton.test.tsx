@@ -5,7 +5,7 @@ import {CartLineQuantityAdjustButton} from '../CartLineQuantityAdjustButton';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {useCart} from '../../CartProvider';
 import {CART_WITH_LINES_FLATTENED} from '../../CartProvider/tests/fixtures';
-import {mountWithCartProvider} from '../../CartProvider/tests/CartProvider';
+import {mountWithCartProvider} from '../../CartProvider/tests/utilities';
 
 describe('CartLineQuantityAdjustButton', () => {
   it('increases quantity', () => {
