@@ -25,6 +25,7 @@
     "worker.js"
   ],
   "scripts": {
+    "size": "size-limit",
     "predev": "rimraf ./dist ../dev/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" \"dev-worker {@}/worker\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
     "dev-esnext": "tsc -w --incremental --p tsconfig.build.json",
@@ -61,6 +62,7 @@
     "@graphql-codegen/typescript-react-apollo": "2.2.4",
     "@graphql-typed-document-node/core": "^3.1.0",
     "@rollup/plugin-graphql": "^1.0.0",
+    "@size-limit/preset-small-lib": "^7.0.4",
     "@types/connect": "^3.4.34",
     "@types/graphql": "^14.5.0",
     "@types/node": "^15.12.4",
@@ -75,6 +77,7 @@
     "postcss": "^8",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
+    "size-limit": "^7.0.4",
     "tailwindcss": "^2.1.1"
   },
   "peerDependencies": {
@@ -98,5 +101,10 @@
     "react-helmet-async": "^1.0.9",
     "react-ssr-prepass": "^1.4.0",
     "vite-plugin-inspect": "^0.3.6"
-  }
+  },
+  "size-limit": [
+    {
+      "path": "./dist/esnext/components/**/*.js"
+    }
+  ]
 }
