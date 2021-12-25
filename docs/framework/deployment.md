@@ -118,3 +118,7 @@ Then you can deploy your project with [Wrangler](https://developers.cloudflare.c
 ```bash
 CF_ACCOUNT_ID=<YOUR_CLOUDFLARE_ACCT_ID> wrangler publish
 ```
+
+### Platform: Layer0
+
+Get started in just a few minutes by following [Layer0's guide to deploying Shopify Hydrogen](https://docs.layer0.co/guides/shopify_hydrogen).
