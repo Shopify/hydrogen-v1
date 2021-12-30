@@ -18,6 +18,7 @@ export function useShopQuery<T>({
   query,
   variables = {},
   cache = {},
+  locale = '',
 }: {
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
@@ -27,6 +28,7 @@ export function useShopQuery<T>({
   variables?: Record<string, any>;
   /** An object containing cache-control options for the sub-request. */
   cache?: CacheOptions;
+  locale?: string;
 }): UseShopQueryResponse<T> {
   if (isClient()) {
     throw new Error(
@@ -35,7 +37,7 @@ export function useShopQuery<T>({
   }
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {request, key} = createShopRequest(body);
+  const {request, key} = createShopRequest(body, locale);
 
   const {data} = useQuery<UseShopQueryResponse<T>>(
     key,
@@ -65,7 +67,7 @@ export function useShopQuery<T>({
   return data as UseShopQueryResponse<T>;
 }
 
-function createShopRequest(body: string) {
+function createShopRequest(body: string, locale: string) {
   const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
 
   const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
@@ -76,9 +78,10 @@ function createShopRequest(body: string) {
       headers: {
         'X-Shopify-Storefront-Access-Token': storefrontToken,
         'content-type': 'application/json',
+        ...(locale ? {'Accept-Language': locale} : null),
       },
       body,
     }),
-    key: [storeDomain, graphqlApiVersion, body],
+    key: [storeDomain, graphqlApiVersion, body, locale],
   };
 }
