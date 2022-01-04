@@ -46,6 +46,13 @@ export function fetchBuilder<T>(request: Request) {
       headers,
       method: clonedRequest.method,
     });
+
+    debugger;
+
+    if (!response.ok) {
+      throw response;
+    }
+
     const data = await response.json();
 
     return data as T;
