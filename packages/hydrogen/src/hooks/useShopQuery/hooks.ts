@@ -1,4 +1,5 @@
 import {useShop} from '../../foundation/useShop';
+import {log} from '../../utilities';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';
@@ -53,13 +54,13 @@ export function useShopQuery<T>({
   if (data?.errors) {
     const errors = data.errors instanceof Array ? data.errors : [data.errors];
     for (const error of errors) {
-      console.error('GraphQL Error', error);
-
       if (getConfig().dev) {
         throw new Error(error.message);
+      } else {
+        log.error('GraphQL Error', error);
       }
     }
-    console.error(`GraphQL errors: ${errors.length}`);
+    log.error(`GraphQL errors: ${errors.length}`);
   }
 
   return data as UseShopQueryResponse<T>;
