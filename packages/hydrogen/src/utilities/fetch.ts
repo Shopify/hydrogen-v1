@@ -47,8 +47,6 @@ export function fetchBuilder<T>(request: Request) {
       method: clonedRequest.method,
     });
 
-    debugger;
-
     if (!response.ok) {
       throw response;
     }
