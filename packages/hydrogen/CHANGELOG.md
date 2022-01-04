@@ -9,6 +9,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## 0.8.1 - 2022-01-04
 
+- feat: `useQuery` returns an error if the query's fetch was unsuccessful
+- feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
 - feat: Detect bot user agents and give bots a non-streamed response.
 - feat: Add global `Oxygen.env` for server-only environment variables.
 - fix: cart decrease button removes at zero quantity
