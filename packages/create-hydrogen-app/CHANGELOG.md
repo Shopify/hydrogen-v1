@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - Upgrade to latest React 18 experimental version
+- Upgrade to Tailwind v3
 
 ## 0.8.0 - 2021-12-07
 
