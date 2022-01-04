@@ -5,6 +5,7 @@ import {
   // @ts-ignore
   renderToReadableStream, // Only available in Browser/Worker context
 } from 'react-dom/server';
+import {Logger, logServerResponse} from './utilities/log/log';
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
@@ -44,7 +45,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const render: Renderer = async function (
     url,
-    {context, request, isReactHydrationRequest, dev}
+    {context, request, isReactHydrationRequest, dev, log}
   ) {
     const state = isReactHydrationRequest
       ? JSON.parse(url.searchParams?.get('state') ?? '{}')
@@ -55,9 +56,11 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
+      dev,
+      log,
     });
 
-    const body = await renderApp(ReactApp, state, isReactHydrationRequest);
+    const body = await renderApp(ReactApp, state, log, isReactHydrationRequest);
 
     if (componentResponse.customBody) {
       return {body: await componentResponse.customBody, url, componentResponse};
@@ -81,7 +84,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const stream: Streamer = function (
     url: URL,
-    {context, request, response, template, dev}
+    {context, request, response, template, dev, log}
   ) {
     const state = {pathname: url.pathname, search: url.search};
 
@@ -90,10 +93,12 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
+      dev,
+      log,
     });
 
     response.socket!.on('error', (error: any) => {
-      console.error('Fatal', error);
+      log.fatal(error);
     });
 
     let didError: Error | undefined;
@@ -116,7 +121,13 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             componentResponse.cacheControlHeader
           );
 
-          writeHeadToServerResponse(response, componentResponse, didError);
+          writeHeadToServerResponse(
+            request,
+            response,
+            componentResponse,
+            log,
+            didError
+          );
           if (isRedirect(response)) {
             // Return redirects early without further rendering/streaming
             return response.end();
@@ -131,9 +142,17 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           );
         },
         onCompleteAll() {
+          clearTimeout(streamTimeout);
+
           if (componentResponse.canStream() || response.writableEnded) return;
 
-          writeHeadToServerResponse(response, componentResponse, didError);
+          writeHeadToServerResponse(
+            request,
+            response,
+            componentResponse,
+            log,
+            didError
+          );
           if (isRedirect(response)) {
             // Redirects found after any async code
             return response.end();
@@ -162,12 +181,21 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             response.write(getErrorMarkup(error));
           }
 
-          console.error(error);
+          log.error(error);
         },
       }
     );
 
-    setTimeout(abort, STREAM_ABORT_TIMEOUT_MS);
+    const streamTimeout = setTimeout(() => {
+      const errorMessage = `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`;
+      log.error(errorMessage);
+
+      if (dev && response.headersSent) {
+        response.write(getErrorMarkup(new Error(errorMessage)));
+      }
+
+      abort();
+    }, STREAM_ABORT_TIMEOUT_MS);
   };
 
   /**
@@ -175,7 +203,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const hydrate: Hydrator = function (
     url: URL,
-    {context, request, response, dev}
+    {context, request, response, dev, log}
   ) {
     const state = JSON.parse(url.searchParams.get('state') || '{}');
 
@@ -184,10 +212,12 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       state,
       context,
       request,
+      dev,
+      log,
     });
 
     response.socket!.on('error', (error: any) => {
-      console.error('Fatal', error);
+      log.fatal(error);
     });
 
     let didError: Error | undefined;
@@ -204,6 +234,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
          * `template` and `script` tags inserted and rendered as part of the hydration response.
          */
         onCompleteAll() {
+          clearTimeout(renderTimeout);
           // Tell React to start writing to the writer
           pipe(writer);
 
@@ -216,15 +247,21 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             componentResponse.cacheControlHeader
           );
           response.end(generateWireSyntaxFromRenderedHtml(writer.toString()));
+          logServerResponse('rsc', log, request, response.statusCode);
         },
         onError(error: any) {
           didError = error;
-          console.error(error);
+          log.error(error);
         },
       }
     );
 
-    setTimeout(abort, STREAM_ABORT_TIMEOUT_MS);
+    const renderTimeout = setTimeout(() => {
+      const errorMessage = `The app failed to render RSC after ${STREAM_ABORT_TIMEOUT_MS} ms`;
+      didError = new Error(errorMessage);
+      log.error(errorMessage);
+      abort();
+    }, STREAM_ABORT_TIMEOUT_MS);
   };
 
   return {
@@ -239,11 +276,15 @@ function buildReactApp({
   state,
   context,
   request,
+  dev,
+  log,
 }: {
   App: ComponentType;
   state: any;
   context: any;
   request: ServerComponentRequest;
+  dev: boolean | undefined;
+  log: Logger;
 }) {
   const renderCache = {};
   const helmetContext = {} as FilledContext;
@@ -251,6 +292,7 @@ function buildReactApp({
   const hydrogenServerProps = {
     request,
     response: componentResponse,
+    log,
   };
 
   const ReactApp = (props: any) => (
@@ -297,8 +339,9 @@ function supportsReadableStream() {
 async function renderApp(
   ReactApp: JSXElementConstructor<any>,
   state: any,
+  log: Logger,
   isReactHydrationRequest?: boolean
-) {
+): Promise<string> {
   /**
    * Temporary workaround until all Worker runtimes support ReadableStream
    */
@@ -306,6 +349,7 @@ async function renderApp(
     return renderAppFromStringWithPrepass(
       ReactApp,
       state,
+      log,
       isReactHydrationRequest
     );
   }
@@ -318,23 +362,31 @@ async function renderApp(
     <ReactApp {...state} />
   );
 
-  return renderAppFromBufferedStream(app, isReactHydrationRequest);
+  return renderAppFromBufferedStream(app, log, isReactHydrationRequest);
 }
 
 function renderAppFromBufferedStream(
   app: JSX.Element,
+  log: Logger,
   isReactHydrationRequest?: boolean
 ) {
   return new Promise<string>((resolve, reject) => {
+    const errorTimeout = setTimeout(() => {
+      reject(
+        new Error(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`)
+      );
+    }, STREAM_ABORT_TIMEOUT_MS);
+
     if (isWorker) {
       let isComplete = false;
 
       const stream = renderToReadableStream(app, {
         onCompleteAll() {
+          clearTimeout(errorTimeout);
           isComplete = true;
         },
         onError(error: any) {
-          console.error(error);
+          log.error(error);
           reject(error);
         },
       }) as ReadableStream;
@@ -373,6 +425,7 @@ function renderAppFromBufferedStream(
          * `template` and `script` tags inserted and rendered as part of the hydration response.
          */
         onCompleteAll() {
+          clearTimeout(errorTimeout);
           // Tell React to start writing to the writer
           pipe(writer);
 
@@ -386,7 +439,7 @@ function renderAppFromBufferedStream(
           }
         },
         onError(error: any) {
-          console.error(error);
+          log.error(error);
           reject(error);
         },
       });
@@ -406,6 +459,7 @@ function renderAppFromBufferedStream(
 async function renderAppFromStringWithPrepass(
   ReactApp: JSXElementConstructor<any>,
   state: any,
+  log: Logger,
   isReactHydrationRequest?: boolean
 ) {
   const app = isReactHydrationRequest ? (
@@ -446,8 +500,10 @@ function startWritingHtmlToServerResponse(
 }
 
 function writeHeadToServerResponse(
+  request: ServerComponentRequest,
   response: ServerResponse,
   {headers, status, customStatus}: ServerComponentResponse,
+  log: Logger,
   error?: Error
 ) {
   if (response.headersSent) return;
@@ -463,6 +519,8 @@ function writeHeadToServerResponse(
       response.statusMessage = customStatus.text;
     }
   }
+
+  logServerResponse('str', log, request, response.statusCode);
 }
 
 function isRedirect(response: ServerResponse) {

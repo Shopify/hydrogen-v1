@@ -17,6 +17,15 @@ export {wrapPromise} from './suspense';
 export {flattenConnection} from './flattenConnection';
 export {isClient} from './isClient';
 export {isServer} from './isServer';
+export {
+  log,
+  setLogger,
+  Logger,
+  logServerResponse,
+  getLoggerFromContext,
+  resetLogger,
+} from './log';
 export {getMeasurementAsParts, getMeasurementAsString} from './measurement';
 export {parseMetafieldValue} from './parseMetafieldValue';
 export {fetchBuilder, graphqlRequestBody, decodeShopifyId} from './fetch';
+export {getTime} from './timing';
