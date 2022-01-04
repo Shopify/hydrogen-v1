@@ -5,6 +5,9 @@ import {FocusTrap} from '@headlessui/react';
 import MobileCurrencySelector from './MobileCurrencySelector.client';
 import OpenIcon from './OpenIcon';
 
+/**
+ * A client component that defines the navigation for a mobile storefront
+ */
 export default function MobileNavigation({collections, isOpen, setIsOpen}) {
   const OpenFocusTrap = isOpen ? FocusTrap : Fragment;
 

@@ -13,6 +13,9 @@ import {useCartUI} from './CartUIProvider.client';
 import CartIconWithItems from './CartIconWithItems.client';
 import {BUTTON_PRIMARY_CLASSES} from './Button.client';
 
+/**
+ * A client component that contains the merchandise that a customer intends to purchase, and the estimated cost associated with the cart
+ */
 export default function Cart() {
   const {isCartOpen, closeCart} = useCartUI();
   const itemCount = useCartLinesTotalQuantity();

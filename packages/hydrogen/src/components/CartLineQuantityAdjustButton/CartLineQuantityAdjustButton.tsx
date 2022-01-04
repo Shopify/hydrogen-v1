@@ -40,6 +40,12 @@ export function CartLineQuantityAdjustButton<
 
         const quantity =
           adjust === 'decrease' ? cartLine.quantity - 1 : cartLine.quantity + 1;
+
+        if (quantity <= 0) {
+          removeLines([cartLine.id]);
+          return;
+        }
+
         updateLines([{id: cartLine.id, quantity}]);
       }}
       {...passthroughProps}

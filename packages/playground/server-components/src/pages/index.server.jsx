@@ -7,6 +7,10 @@ export default function Index() {
       <Link className="btn" to="/about">
         About
       </Link>
+
+      <div className="secrets">
+        PRIVATE_VARIABLE:{Oxygen.env.PRIVATE_VARIABLE}
+      </div>
     </>
   );
 }

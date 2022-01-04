@@ -1,10 +1,9 @@
-import type {Plugin} from 'vite';
+import {Plugin} from 'vite';
 
 export default () => {
   return {
     name: 'vite-plugin-hydrogen-config',
-
-    config: (_, env) => ({
+    config: async (config, env) => ({
       resolve: {
         alias: {
           /**
@@ -74,6 +73,8 @@ export default () => {
       define: {
         __DEV__: env.mode !== 'production',
       },
+
+      envPrefix: ['VITE_', 'PUBLIC_'],
     }),
   } as Plugin;
 };

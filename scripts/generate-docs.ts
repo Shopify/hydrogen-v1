@@ -207,16 +207,34 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'foundation/useServerState',
         'foundation/useShop',
         'foundation/useQuery',
+        'hooks/useShopQuery',
+      ],
+      intro:
+        'Global hooks are React hooks that relate to your entire app. You use global hooks to fetch data from server components.',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description: 'Hydrogen includes the following global hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
       ],
     }),
 
     // Primitive
     generator.section({
-      title: 'Primitive',
-      description:
-        'Get familiar with the Hydrogen primitive hooks included in Hydrogen.',
+      title: 'Primitive hooks',
+      description: 'Learn about the primitive hooks offered in Hydrogen.',
       url: '/api/hydrogen/hooks/primitive/index.md',
       entry: ['hooks/useMoney'],
+      intro:
+        'Primitive hooks are the building blocks for different component types, including products, variants, and cart.',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description: 'Hydrogen includes the following primitive hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
+      ],
     }),
     // Product and variant
     generator.section({
@@ -225,6 +243,16 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'Get familiar with the Hydrogen product and variant hooks included in Hydrogen.',
       url: '/api/hydrogen/hooks/product-variant/index.md',
       entry: ['hooks/useProduct', 'hooks/useProductOptions'],
+      intro:
+        'Products are the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options. Each combination of option values for a product can be a variant for that product. For example, a t-shirt might be available for purchase in blue and green. The blue t-shirt and the green t-shirt are variants.',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description:
+            'Hydrogen includes the following product and variant hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
+      ],
     }),
     // Metafield
     generator.section({
@@ -233,6 +261,15 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'Get familiar with the Hydrogen metafield hooks included in Hydrogen.',
       url: '/api/hydrogen/hooks/metafield/index.md',
       entry: ['hooks/useParsedMetafields'],
+      intro:
+        'Metafields allow you to attach specialized information to Shopify resources, such as part numbers or release dates. Merchants and other apps can retrieve and edit the data that is stored in metafields from the Shopify admin.',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description: 'Hydrogen includes the following metafield hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
+      ],
     }),
     // Cart
     generator.section({
@@ -254,6 +291,15 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'hooks/useCartLinesUpdateCallback',
         'hooks/useCartNoteUpdateCallback',
       ],
+      intro:
+        'A cart contains the merchandise that a customer intends to purchase and the estimated cost associated with the cart. When a customer is ready to purchase their items, they can proceed to checkout.',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description: 'Hydrogen includes the following cart hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
+      ],
     }),
     // Localization
     generator.section({
@@ -262,6 +308,15 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'Get familiar with the Hydrogen localization hooks included in Hydrogen.',
       url: '/api/hydrogen/hooks/localization/index.md',
       entry: ['hooks/useAvailableCountries', 'hooks/useCountry'],
+      intro:
+        'Localization can help merchants expand their business to a global audience by creating shopping experiences in local languages and currencies.',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description: 'Hydrogen includes the following localization hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
+      ],
     }),
     // Utilities
     generator.section({

@@ -1,5 +1,8 @@
 import {useShop, Helmet} from '@shopify/hydrogen/client';
 
+/**
+ * A client component that customizes the output of SEO-related tags in your document `head`
+ */
 export default function Seo({shopName, product}) {
   const {locale} = useShop();
   const lang = locale.split(/[-_]/)[0];

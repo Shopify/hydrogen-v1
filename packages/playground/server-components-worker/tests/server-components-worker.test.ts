@@ -5,7 +5,15 @@ const url = `http://localhost:${port}`;
 it('shows the homepage, navigates to about, and increases the count', async () => {
   await page.goto(url + '/');
 
-  expect(await page.textContent('body')).toContain('Home');
+  expect(await page.textContent('h1')).toContain('Home');
+
+  const secretsServer = await page.textContent('.secrets-server');
+  expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');
+  expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
+  const secretsClient = await page.textContent('.secrets-client');
+  expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
+  expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
+
   await page.click('.btn');
 
   expect(await page.textContent('body')).toContain('About');

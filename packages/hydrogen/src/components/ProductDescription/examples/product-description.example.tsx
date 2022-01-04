@@ -5,5 +5,5 @@ export function Product({product}) {
     <ProductProvider value={product}>
       <ProductDescription />
     </ProductProvider>
-  )
+  );
 }

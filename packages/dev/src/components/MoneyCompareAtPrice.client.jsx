@@ -1,5 +1,8 @@
 import {Money} from '@shopify/hydrogen/client';
 
+/**
+ * A client component that renders a `Money` component for a product's compare at price
+ */
 export default function MoneyCompareAtPrice({money}) {
   return (
     <Money money={money}>

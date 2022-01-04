@@ -8,6 +8,9 @@ import React, {
 
 export const CartContext = createContext(null);
 
+/**
+ * A client component that defines the behavior that occurs when a user is interacting with a cart (for example, opening or closing it)
+ */
 export default function CartUIProvider({children}) {
   const [open, setOpen] = useState(false);
 

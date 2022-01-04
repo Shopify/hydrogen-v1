@@ -1,4 +1,10 @@
-import {CartLines, CartLineImage, CartLineProductTitle, CartLinePrice, Link} from '@shopify/hydrogen';
+import {
+  CartLines,
+  CartLineImage,
+  CartLineProductTitle,
+  CartLinePrice,
+  Link,
+} from '@shopify/hydrogen';
 
 export function MyComponent() {
   return (
@@ -7,15 +13,17 @@ export function MyComponent() {
       <CartLineProductTitle />
       <CartLinePrice />
     </CartLines>
-  )
+  );
 }
 
 export function MyComponentWithRenderProps() {
   return (
     <CartLines>
       {({merchandise}) => (
-        <Link to={`/product/${merchandise.handle}`}>{merchandise.product.title}</Link>
+        <Link to={`/product/${merchandise.handle}`}>
+          {merchandise.product.title}
+        </Link>
       )}
     </CartLines>
-  )
+  );
 }
