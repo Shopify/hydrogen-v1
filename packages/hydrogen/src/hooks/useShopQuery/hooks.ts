@@ -51,7 +51,7 @@ export function useShopQuery<T>({
    */
   if (fetchError) {
     const errorMessage = `Failed to fetch the Storefront API. ${
-      // 403s to the SF API (almost?) always mean that your Shopify crendentials are bad/wrong
+      // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
       fetchError.status === 403
         ? `You may have a bad value in 'shopify.config.js'`
         : `${fetchError.statusText}`
