@@ -9,7 +9,6 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - feat: `useQuery` returns an error if the query's fetch was unsuccessful
 - feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
-- dx: Add a VSCode `launch.json` config to enable debugging on the server with the `dev-server` script and VSCode's built-in debugger
 - feat: Detect bot user agents and give bots a non-streamed response.
 - feat: Add global `Oxygen.env` for server-only environment variables.
 - fix: cart decrease button removes at zero quantity
