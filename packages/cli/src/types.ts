@@ -1,16 +1,21 @@
 import debug from 'debug';
 import {Workspace} from './workspace';
 import {Ui} from './ui';
-import {Fs} from './fs';
+import {Fs, FileResult} from './fs';
 
 import {Feature} from './utilities/feature';
 
+type Hooks = {
+  onCommit: (env: Env) => Promise<void>;
+  onUpdateFile: (file: FileResult) => Promise<void>;
+};
 export interface Env<Context = {}> {
   ui: Ui;
   workspace: Workspace;
   fs: Fs;
   context?: Context;
   logger: debug.Debugger;
+  hooks: Hooks;
 }
 
 export enum ComponentType {
