@@ -58,7 +58,7 @@ export function useShopQuery<T>({
         : `${fetchError.statusText}`
     }`;
 
-    console.error(errorMessage);
+    log.error(errorMessage);
 
     if (getConfig().dev) {
       throw new Error(errorMessage);
