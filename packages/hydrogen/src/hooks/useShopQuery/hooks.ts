@@ -1,5 +1,5 @@
 import {useShop} from '../../foundation/useShop';
-import {log} from '../../utilities';
+import {log} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';

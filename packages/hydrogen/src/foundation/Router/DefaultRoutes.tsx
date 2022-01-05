@@ -1,6 +1,6 @@
 import React, {ReactElement, useMemo} from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router-dom';
-import {Logger} from '../../utilities/log/log';
+import type {Logger} from '../../utilities/log/log';
 
 export type ImportGlobEagerOutput = Record<string, Record<'default', any>>;
 
