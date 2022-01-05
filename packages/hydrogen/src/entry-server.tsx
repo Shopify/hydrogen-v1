@@ -5,7 +5,11 @@ import {
   // @ts-ignore
   renderToReadableStream, // Only available in Browser/Worker context
 } from 'react-dom/server';
-import {Logger, logServerResponse} from './utilities/log/log';
+import {
+  Logger,
+  logServerResponse,
+  getLoggerFromContext,
+} from './utilities/log/log';
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
@@ -45,8 +49,10 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const render: Renderer = async function (
     url,
-    {context, request, isReactHydrationRequest, dev, log}
+    {context, request, isReactHydrationRequest, dev}
   ) {
+    const log = getLoggerFromContext(request);
+
     const state = isReactHydrationRequest
       ? JSON.parse(url.searchParams?.get('state') ?? '{}')
       : {pathname: url.pathname, search: url.search};
@@ -61,6 +67,13 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     });
 
     const body = await renderApp(ReactApp, state, log, isReactHydrationRequest);
+
+    logServerResponse(
+      'ssr',
+      log,
+      request,
+      componentResponse.customStatus?.code ?? componentResponse.status ?? 200
+    );
 
     if (componentResponse.customBody) {
       return {body: await componentResponse.customBody, url, componentResponse};
@@ -84,8 +97,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const stream: Streamer = function (
     url: URL,
-    {context, request, response, template, dev, log}
+    {context, request, response, template, dev}
   ) {
+    const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
 
     const {ReactApp, componentResponse} = buildReactApp({
@@ -203,8 +217,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const hydrate: Hydrator = function (
     url: URL,
-    {context, request, response, dev, log}
+    {context, request, response, dev}
   ) {
+    const log = getLoggerFromContext(request);
     const state = JSON.parse(url.searchParams.get('state') || '{}');
 
     const {ReactApp, componentResponse} = buildReactApp({
