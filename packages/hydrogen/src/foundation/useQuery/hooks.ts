@@ -1,5 +1,5 @@
 import type {CacheOptions, QueryKey} from '../../types';
-import {log} from '../../utilities';
+import {log} from '../../utilities/log';
 import {
   deleteItemFromCache,
   getItemFromCache,
