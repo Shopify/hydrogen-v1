@@ -1,9 +1,43 @@
-import {createElement, Fragment, ReactElement} from 'react';
+// @ts-nocheck
+import {
+  createElement,
+  Fragment,
+  ReactElement,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useEffect,
+  // useLayoutEffect,
+  // useRef,
+  // useState,
+} from 'react';
 import {wrapPromise} from '../../utilities';
 import importClientComponent from './client-imports';
 
 const cache = new Map();
 const moduleCache = new Map();
+
+const listeners: (readonly [string, (response: any) => any])[] = [];
+export function subscribe(key: string, cb: (response: any) => any) {
+  const item = [key, cb] as const;
+  listeners.push(item);
+  return () => {
+    const index = listeners.indexOf(item);
+    listeners.splice(index, 1);
+  };
+}
+export function refresh(key: string) {
+  const response = createFromFetch(
+    fetch('/react?state=' + encodeURIComponent(key))
+  );
+  cache.set(key, response);
+
+  listeners.forEach(([k, cb]) => {
+    if (k === key) {
+      cb(response);
+    }
+  });
+}
 
 /**
  * Much of this is borrowed from React's demo implementation:
@@ -13,17 +47,39 @@ const moduleCache = new Map();
  */
 export function useServerResponse(state: any) {
   const key = JSON.stringify(state);
-  let response = cache.get(key);
-  if (response) {
-    return response;
-  }
-  response = createFromFetch(fetch('/react?state=' + encodeURIComponent(key)));
+  let [response, setResponse] = useState(cache.get(key));
+  const firstResponse = useRef();
+  console.log(response);
 
-  cache.set(key, response);
-
+  useEffect(() => {
+    const cachedResponse = createFromFetch(
+      fetch('/react?state=' + encodeURIComponent(key))
+    );
+    cache.set(key, cachedResponse);
+    setResponse(cachedResponse);
+  }, []);
+  useEffect(() => {
+    console.log('hello');
+    const unsubscribe = subscribe(key, (newResponse) =>
+      setResponse(newResponse)
+    );
+    return unsubscribe;
+  }, [key]);
   return response;
 }
 
+// export function useServerResponse(state: any) {
+//   const key = JSON.stringify(state);
+//   let response = cache.get(key);
+//   if (response) {
+//     return response;
+//   }
+//   response = createFromFetch(fetch('/react?state=' + encodeURIComponent(key)));
+//
+//   cache.set(key, response);
+//
+//   return response;
+// }
 /**
  * Similar to the RSC demo, `createFromFetch` wraps around a fetch call and throws
  * promise events to the Suspense boundary until the content has loaded.

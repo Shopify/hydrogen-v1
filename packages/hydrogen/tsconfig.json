@@ -12,6 +12,7 @@
     "types": ["jest", "@shopify/react-testing/matchers"],
     "strict": true,
     "noUnusedLocals": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck":true
   }
 }

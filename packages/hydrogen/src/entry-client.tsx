@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
 import {createRoot} from 'react-dom';
@@ -5,7 +6,7 @@ import {BrowserRouter} from 'react-router-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {HelmetProvider} from 'react-helmet-async';
-import {useServerResponse} from './framework/Hydration/Cache.client';
+import {useServerResponse, refresh} from './framework/Hydration/Cache.client';
 import {ServerStateProvider, ServerStateRouter} from './client';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper) => {
@@ -20,7 +21,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
   createRoot(root, {hydrate: true}).render(
     <ErrorBoundary FallbackComponent={Error}>
-      <Suspense fallback={null}>
+      <Suspense fallback={<h1>wait</h1>}>
         <Content clientWrapper={ClientWrapper} />
       </Suspense>
     </ErrorBoundary>
@@ -28,6 +29,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 };
 
 export default renderHydrogen;
+export {refresh};
 
 function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
   const [serverState, setServerState] = useState({
@@ -35,6 +37,9 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
     search: window.location.search,
   });
   const response = useServerResponse(serverState);
+  if (!response) {
+    return null;
+  }
 
   return (
     <ServerStateProvider

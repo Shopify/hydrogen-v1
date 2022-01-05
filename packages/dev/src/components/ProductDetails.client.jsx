@@ -124,7 +124,8 @@ export default function ProductDetails({product}) {
               <div className="text-sm font-medium mb-2 text-gray-900">
                 {product.vendor}
               </div>
-            )}
+            )}{' '}
+            sdfs
             <span />
             <div className="flex justify-between md:block">
               <ProductPriceMarkup />

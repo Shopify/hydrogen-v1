@@ -37,6 +37,7 @@
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "graphql-tag": "^2.12.4",
+    "picocolors": "^1.0.0",
     "react": "0.0.0-experimental-0cc724c77-20211125",
     "react-dom": "0.0.0-experimental-0cc724c77-20211125",
     "react-router-dom": "^5.2.0",

@@ -68,6 +68,7 @@ function GradientBackground() {
 }
 
 export default function Index({country = {isoCode: 'US'}}) {
+  // return <h1>hello</h1>
   const {data} = useShopQuery({
     query: QUERY,
     variables: {

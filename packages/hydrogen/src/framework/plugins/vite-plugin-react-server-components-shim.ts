@@ -6,6 +6,7 @@ import {resolve} from './resolver';
 
 export default () => {
   let config: ResolvedConfig;
+  const serverComponentsIds = new Set<string>();
 
   return {
     name: 'vite-plugin-react-server-components-shim',
@@ -53,6 +54,11 @@ export default () => {
     },
 
     async load(id, options) {
+      if (/\.server(\.(j|t)sx?)?$/.test(id) && !/\/node_modules\//.test(id)) {
+        const moduleInfo = this.getModuleInfo(id);
+        serverComponentsIds.add(moduleInfo!.id);
+      }
+
       if (!isSSR(options)) return null;
 
       // Wrapped components won't match this becase they end in ?no-proxy
@@ -109,6 +115,21 @@ export default () => {
           .replace('__LIB_COMPONENTS_PREFIX__', normalizePath(libPrefix))
           .replace('__LIB_COMPONENTS_GLOB__', normalizePath(libGlob));
       }
+    },
+    handleHotUpdate({modules, read, server, file}) {
+      console.log('hello', file);
+      server.ws.send({
+        type: 'custom',
+        event: 'component',
+        data: {},
+      });
+      // serverComponentsIds.forEach((id) => {
+      //   // console.log(server.moduleGraph.getModuleById(id))
+      // })
+      // // server.moduleGraph.
+      // // modules.length = 0
+      // console.log(file, modules.map(module => module.importers));
+      return [];
     },
   } as Plugin;
 

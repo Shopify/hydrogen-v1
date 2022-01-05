@@ -1,1 +1,1 @@
-export {default} from './dist/esnext/entry-client';
+export {default, refresh} from './dist/esnext/entry-client';
