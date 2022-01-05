@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - fix: load logger only once.
+- fix: warn when requests take longer than 3000ms instead of erroring
 - feat: `useQuery` returns an error if the query's fetch was unsuccessful
 - feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
 
