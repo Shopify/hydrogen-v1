@@ -2,7 +2,9 @@ import React, {createContext, ReactNode, useContext} from 'react';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 
 // Context to inject current request in SSR
-const RequestContext = createContext<ServerComponentRequest>(null as any);
+const RequestContext = createContext<ServerComponentRequest>({
+  context: {cache: new Map()},
+} as ServerComponentRequest);
 
 // Cache to inject current request in RSC
 export function requestHydrationCache() {

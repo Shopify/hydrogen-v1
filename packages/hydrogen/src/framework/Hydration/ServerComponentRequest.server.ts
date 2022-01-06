@@ -1,3 +1,12 @@
+let reqCounter = 0; // For debugging
+const generateId =
+  typeof crypto !== 'undefined' &&
+  // @ts-ignore
+  !!crypto.randomUUID
+    ? // @ts-ignore
+      () => crypto.randomUUID() as string
+    : () => `req${++reqCounter}`;
+
 /**
  * This augments the `Request` object from the Fetch API:
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Request
@@ -7,6 +16,7 @@
  */
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
+  public id: string;
   public context: {cache: Map<string, any>; [key: string]: any};
 
   constructor(input: any);
@@ -23,6 +33,7 @@ export class ServerComponentRequest extends Request {
 
     this.context = {cache: new Map()};
     this.cookies = this.parseCookies();
+    this.id = generateId();
   }
 
   private parseCookies() {

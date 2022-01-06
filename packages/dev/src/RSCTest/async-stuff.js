@@ -14,7 +14,7 @@ export default function (key, ms = 1000) {
     return cached;
   }
 
-  console.log('---FETCHING', key);
+  console.log('---FETCHING', key, request?.id || 'undefined');
   const promise = new Promise((r) => setTimeout(() => r(true), ms));
   cache.set(key, promise);
   promise.then((result) => {
