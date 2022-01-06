@@ -18,6 +18,8 @@ export type Renderer = (
   } & Record<string, any>
 >;
 
+export type QueryKey = string | readonly unknown[];
+
 export type Streamer = (
   url: URL,
   options: {

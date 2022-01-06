@@ -11,7 +11,7 @@ import ssrPrepass from 'react-ssr-prepass';
 // import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import type {ReactQueryHydrationContext} from './foundation/ShopifyProvider/types';
-// import {FilledContext, HelmetProvider} from 'react-helmet-async';
+import {FilledContext} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {HydrationWriter} from './framework/Hydration/writer.server';
 import {Renderer, Hydrator, Streamer} from './types';
@@ -54,7 +54,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       ? JSON.parse(url.searchParams?.get('state') ?? '{}')
       : {pathname: url.pathname, search: url.search};
 
-    const {ReactApp, /*helmetContext,*/ componentResponse} = buildReactApp({
+    const {ReactApp, helmetContext, componentResponse} = buildReactApp({
       App,
       state,
       context,
@@ -70,7 +70,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       return {body: await componentResponse.customBody, url, componentResponse};
     }
 
-    let params = {url /*, ...extractHeadElements(helmetContext)*/};
+    let params = {url, ...extractHeadElements(helmetContext)};
 
     /**
      * We allow the developer to "hook" into this process and mutate the params.
@@ -228,7 +228,7 @@ function buildReactApp({
   request: ServerComponentRequest;
   dev: boolean | undefined;
 }) {
-  // const helmetContext = {} as FilledContext;
+  const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
 
   const ReactApp = (props: any) => (
@@ -236,28 +236,35 @@ function buildReactApp({
     //   location={{pathname: state.pathname, search: state.search}}
     //   context={context}
     // >
-    <App {...props} request={request} response={componentResponse} />
+    <App
+      {...props}
+      request={request}
+      response={componentResponse}
+      helmetContext={helmetContext}
+    />
     // </StaticRouter>
   );
 
-  return {/*helmetContext,*/ ReactApp, componentResponse};
+  return {helmetContext, ReactApp, componentResponse};
 }
 
-// function extractHeadElements(helmetContext: FilledContext) {
-//   const {helmet} = helmetContext;
+function extractHeadElements(helmetContext: FilledContext) {
+  const {helmet} = helmetContext;
 
-//   return {
-//     base: helmet.base.toString(),
-//     bodyAttributes: helmet.bodyAttributes.toString(),
-//     htmlAttributes: helmet.htmlAttributes.toString(),
-//     link: helmet.link.toString(),
-//     meta: helmet.meta.toString(),
-//     noscript: helmet.noscript.toString(),
-//     script: helmet.script.toString(),
-//     style: helmet.style.toString(),
-//     title: helmet.title.toString(),
-//   };
-// }
+  return helmet
+    ? {
+        base: helmet.base.toString(),
+        bodyAttributes: helmet.bodyAttributes.toString(),
+        htmlAttributes: helmet.htmlAttributes.toString(),
+        link: helmet.link.toString(),
+        meta: helmet.meta.toString(),
+        noscript: helmet.noscript.toString(),
+        script: helmet.script.toString(),
+        style: helmet.style.toString(),
+        title: helmet.title.toString(),
+      }
+    : {};
+}
 
 function supportsReadableStream() {
   try {

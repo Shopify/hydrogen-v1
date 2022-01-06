@@ -1,6 +1,10 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
+import {setShopifyConfig} from '@shopify/hydrogen';
+import shopifyConfig from '../shopify.config';
 
-import App from './RSCTest/App.server';
+setShopifyConfig(shopifyConfig);
+
+import App from './App.server';
 
 export default renderHydrogen(App, () => {
   // Custom hook

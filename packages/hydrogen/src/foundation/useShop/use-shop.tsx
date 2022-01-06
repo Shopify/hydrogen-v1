@@ -1,16 +1,14 @@
-import {useContext} from 'react';
 import {ShopifyProviderValue} from '../ShopifyProvider/types';
-import {ShopifyContext} from '../ShopifyProvider/ShopifyContext';
+
+let config: ShopifyProviderValue | null = null;
 
 /**
  * The `useShop` hook provides access to values within `shopify.config.js`.The `useShop` hook provides access to values within `shopify.config.js`. It must be a descendent of a `ShopifyProvider` component.
  */
 export function useShop(): ShopifyProviderValue {
-  const context = useContext(ShopifyContext);
+  return config as ShopifyProviderValue;
+}
 
-  if (!context) {
-    throw new Error('No Shopify Context found');
-  }
-
-  return context;
+export function setShopifyConfig(newConfig: ShopifyProviderValue) {
+  config = newConfig;
 }

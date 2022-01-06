@@ -7,8 +7,12 @@ function normalizeComponentPaths(
   componentObject: ComponentMap,
   prefix: string
 ) {
+  const fixComponentPath = prefix.endsWith('components/');
+
   return Object.entries(componentObject).reduce((acc, [key, value]) => {
-    acc[prefix + key.replace(/\.\.\//gm, '')] = value;
+    const noPrefix = key.replace(/\.\.\//gm, '');
+    acc[prefix + (fixComponentPath ? noPrefix.substring(11) : noPrefix)] =
+      value;
     return acc;
   }, {} as typeof componentObject);
 }
@@ -21,8 +25,9 @@ export default function importClientComponent(moduleId: string) {
   const modImport = allClientComponents[moduleId];
 
   if (!modImport) {
+    debugger;
     return Promise.reject(
-      new Error(`Could not find client component ${moduleId}`)
+      new Error(`Could not find client component "${moduleId}"`)
     );
   }
 

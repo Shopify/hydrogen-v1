@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 
 import Seo from './Seo.client';
 
-export default function SeoServer() {
+export default function DefaultSeo() {
   const {
     data: {
       shop: {name: shopName},
