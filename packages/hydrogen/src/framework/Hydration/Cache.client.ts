@@ -6,6 +6,33 @@ import {
 } from '../Hydration/rsc-client-hydrator';
 import type {FlightResponse} from '../Hydration/rsc-client-config';
 
+declare global {
+  // eslint-disable-next-line no-var
+  var __flight: Array<string>;
+}
+
+let rscReader: ReadableStream | null;
+
+if (window.__flight) {
+  const stream = new TransformStream();
+  rscReader = stream.readable;
+  const writer = stream.writable.getWriter();
+  const encoder = new TextEncoder();
+  const write = (chunk: string) => {
+    writer.write(encoder.encode(chunk));
+    return 0;
+  };
+
+  window.__flight.forEach(write);
+  window.__flight.push = write;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!writer.closed) {
+      writer.close();
+    }
+  });
+}
+
 function createResponseCache() {
   return new Map<string, FlightResponse>();
 }
@@ -26,22 +53,10 @@ export function useServerResponse(state: any) {
     return response;
   }
 
-  // @ts-ignore
-  if (window.__flight) {
+  if (rscReader) {
     // The flight response was inlined during SSR, use it directly.
-    const encoder = new TextEncoder();
-    const stream = new ReadableStream({
-      start(controller) {
-        // @ts-ignore
-        controller.enqueue(encoder.encode(window.__flight));
-        controller.close();
-      },
-    });
-
-    response = createFromReadableStream(stream);
-
-    // @ts-ignore
-    delete window.__flight;
+    response = createFromReadableStream(rscReader);
+    rscReader = null;
   } else {
     // Request a new flight response.
     response = createFromFetch(
