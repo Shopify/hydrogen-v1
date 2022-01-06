@@ -14,18 +14,18 @@ export async function loadConfig(key = 'hydrogen', root?: string) {
     const {config, sources} = await loadUnconfig<Config>({
       sources: [
         {
-          files: 'hydrogen',
+          files: key,
           extensions: ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs', 'json', ''],
         },
         {
-          files: 'hydrogen.config',
+          files: `${key}.config`,
           extensions: ['ts', 'mts', 'cts', 'js', 'mjs', 'cjs', 'json', ''],
         },
         {
           files: 'package.json',
           extensions: [],
-          rewrite(_config?: {hydrogen?: Config}) {
-            return _config?.hydrogen;
+          rewrite(_config: any) {
+            return _config?.[key];
           },
         },
       ],
