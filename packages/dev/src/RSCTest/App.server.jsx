@@ -5,7 +5,7 @@ import C1 from './C1.client';
 import C2 from './C2.client';
 import CShared from './CShared';
 
-export default function App({...serverState}) {
+export default function App() {
   // const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
 
   return (

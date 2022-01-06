@@ -1,5 +1,5 @@
 import renderHydrogen from '@shopify/hydrogen/entry-client';
-import {ShopifyProvider, setShopifyConfig} from '@shopify/hydrogen/client';
+import {setShopifyConfig} from '@shopify/hydrogen/client';
 
 import shopifyConfig from '../shopify.config';
 

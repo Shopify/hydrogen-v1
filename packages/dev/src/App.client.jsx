@@ -1,5 +1,5 @@
-import CartProvider from './components/CartProvider.client';
 import {HelmetProvider} from 'react-helmet-async';
+import CartProvider from './components/CartProvider.client';
 
 /**
  *  Setup client context, though the children are most likely server components
