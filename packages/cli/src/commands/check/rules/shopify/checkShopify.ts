@@ -1,6 +1,6 @@
 import {Env, CheckResult} from '../../../../types';
-import addShopifyConfig from '../../../addons/shopifyConfig';
-import addShopifyProvider from '../../../addons/shopifyProvider';
+import addShopifyConfig from '../../../add/shopifyConfig';
+import addShopifyProvider from '../../../add/shopifyProvider';
 
 export async function checkShopify(env: Env): Promise<CheckResult[]> {
   const {fs, workspace} = env;

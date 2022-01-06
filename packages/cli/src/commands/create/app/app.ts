@@ -1,7 +1,7 @@
 import {Env} from '../../../types';
 import {Feature, ifFeature} from '../../../utilities/feature';
-import addShopifyConfig from '../../addons/shopifyConfig';
-import addEslint from '../../addons/eslint';
+import addShopifyConfig from '../../add/shopifyConfig';
+import addEslint from '../../add/eslint';
 /**
  * Configure, modify and scaffold new `@shopify/hydrogen` apps.
  */

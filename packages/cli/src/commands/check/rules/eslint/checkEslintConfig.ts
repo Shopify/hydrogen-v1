@@ -1,5 +1,5 @@
 import {Env, CheckResult} from '../../../../types';
-import addEslint from '../../../addons/eslint';
+import addEslint from '../../../add/eslint';
 
 export async function checkEslintConfig({
   workspace,
