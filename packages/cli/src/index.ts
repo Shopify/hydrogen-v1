@@ -17,7 +17,7 @@ interface ModuleType {
   const {command, root} = parseCliArguments(rawInputs);
   const ui = new Cli();
 
-  const config = (await loadConfig('hydrogen', {root})) || {};
+  const config = (await loadConfig('hydrogen', root)) || {};
   const workspace = new Workspace({root, ...config});
   const fs = new Fs(root);
 

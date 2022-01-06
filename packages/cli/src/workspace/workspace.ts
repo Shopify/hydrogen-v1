@@ -21,7 +21,7 @@ interface Dependencies {
   };
 }
 
-interface Config {
+export interface Config {
   typescript?: boolean;
   componentsDirectory: string;
 }
@@ -183,7 +183,7 @@ export class Workspace {
   }
 
   getConfig(key: string) {
-    return loadConfig(key, {root: this._root});
+    return loadConfig(key, this._root);
   }
 
   async gitInit() {
