@@ -4,7 +4,6 @@ import {
   checkHydrogenVersion,
   checkEslintConfig,
   checkNodeVersion,
-  checkShopify,
 } from './rules';
 
 export async function check(env: Env) {
@@ -19,7 +18,6 @@ export async function check(env: Env) {
       ...(await checkNodeVersion(env)),
       ...(await checkHydrogenVersion(env)),
       ...(await checkEslintConfig(env)),
-      ...(await checkShopify(env)),
     ];
   } catch (error) {
     console.log(error);
