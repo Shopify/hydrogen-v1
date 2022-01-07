@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+- feat: remove Oxygen specific `fetch` workaround
+
 ## 0.8.2 - 2022-01-07
 
 - fix: load logger only once.
