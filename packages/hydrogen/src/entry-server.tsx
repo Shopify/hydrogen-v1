@@ -241,14 +241,20 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     });
 
     if (rscRenderToPipeableStream) {
-      rscRenderToPipeableStream(<ReactApp {...state} />).pipe(response);
+      const stream = rscRenderToPipeableStream(<ReactApp {...state} />).pipe(
+        response
+      );
+      stream.on('finish', function () {
+        logServerResponse('rsc', log, request, response.statusCode);
+      });
     } else if (rscRenderToReadableStream) {
       const stream = rscRenderToReadableStream(<ReactApp {...state} />);
+      stream.on('end', function () {
+        logServerResponse('rsc', log, request, response.statusCode);
+      });
       // TODO: How do we pipe the stream to the response?
       return new Response(stream);
     }
-
-    logServerResponse('rsc', log, request, response.statusCode);
   };
 
   return {
