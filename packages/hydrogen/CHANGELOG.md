@@ -10,6 +10,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: load logger only once.
 - feat: `useQuery` returns an error if the query's fetch was unsuccessful
 - feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
+- fix: do not attempt to decode product IDs, as they are no longer base64-encoded in `unstable`
 
 ## 0.8.1 - 2022-01-04
 
