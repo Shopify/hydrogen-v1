@@ -18,24 +18,33 @@ export default function Cart() {
   const itemCount = useCartLinesTotalQuantity();
 
   return (
-    <Dialog open={isCartOpen} onClose={closeCart}>
-      <Dialog.Overlay className="fixed z-20 inset-0 bg-gray-50 opacity-75" />
+    <div>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
-        className={`absolute flex flex-col md:block z-20 top-0 left-0 right-0 bottom-0 md:top-7 h-full md:left-auto md:right-7 md:bottom-auto md:h-auto md:max-h-[calc(100vh-56px)] bg-gray-50 w-full md:w-[470px] rounded-b-lg shadow-2xl ${
-          itemCount === 0 ? 'overflow-hidden' : 'overflow-y-scroll'
+        className={`z-20 fixed top-0 bottom-0 left-0 right-0 bg-black transition-opacity duration-400 ${
+          isCartOpen ? 'opacity-20' : 'opacity-0 pointer-events-none'
         }`}
-      >
-        <CartHeader />
-        {itemCount === 0 ? (
-          <CartEmpty />
-        ) : (
-          <>
-            <CartItems />
-            <CartFooter />
-          </>
-        )}
-      </div>
-    </Dialog>
+        onClick={isCartOpen ? closeCart : null}
+      />
+      <Dialog open={isCartOpen} onClose={closeCart}>
+        <Dialog.Overlay className="fixed z-20 inset-0 bg-gray-50 opacity-75" />
+        <div
+          className={`absolute flex flex-col md:block z-20 top-0 left-0 right-0 bottom-0 md:top-7 h-full md:left-auto md:right-7 md:bottom-auto md:h-auto md:max-h-[calc(100vh-56px)] bg-gray-50 w-full md:w-[470px] rounded-b-lg shadow-2xl ${
+            itemCount === 0 ? 'overflow-hidden' : 'overflow-y-scroll'
+          }`}
+        >
+          <CartHeader />
+          {itemCount === 0 ? (
+            <CartEmpty />
+          ) : (
+            <>
+              <CartItems />
+              <CartFooter />
+            </>
+          )}
+        </div>
+      </Dialog>
+    </div>
   );
 }
 

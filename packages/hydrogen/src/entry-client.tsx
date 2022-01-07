@@ -1,12 +1,13 @@
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
 import {createRoot} from 'react-dom';
-// import {BrowserRouter} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 // import {HelmetProvider} from 'react-helmet-async';
 import {useServerResponse} from './framework/Hydration/Cache.client';
-// import {ServerStateProvider, ServerStateRouter} from './client';
+import {ServerStateRouter} from './client';
+import {ServerStateProvider} from '.';
 // import {QueryProvider} from './hooks';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper) => {
@@ -31,26 +32,26 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 export default renderHydrogen;
 
 function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
-  const [serverState /*, setServerState */] = useState({
+  const [serverState, setServerState] = useState({
     pathname: window.location.pathname,
     search: window.location.search,
   });
   const response = useServerResponse(serverState);
 
   return (
-    // <ServerStateProvider
-    //   serverState={serverState}
-    //   setServerState={setServerState}
-    // >
-    // <QueryProvider>
-    //   <HelmetProvider>
-    // <BrowserRouter>
-    // <ServerStateRouter />
-    <ClientWrapper>{response.readRoot()}</ClientWrapper>
-    // </BrowserRouter>
-    // </HelmetProvider>
-    // </QueryProvider>
-    // </ServerStateProvider>
+    <ServerStateProvider
+      serverState={serverState}
+      setServerState={setServerState}
+    >
+      {/* // <QueryProvider>
+    //   <HelmetProvider> */}
+      <BrowserRouter>
+        <ServerStateRouter />
+        <ClientWrapper>{response.readRoot()}</ClientWrapper>
+      </BrowserRouter>
+      {/* // </HelmetProvider>
+    // </QueryProvider> */}
+    </ServerStateProvider>
   );
 }
 

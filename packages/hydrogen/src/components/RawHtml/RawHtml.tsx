@@ -28,14 +28,15 @@ export function RawHtml<TTag extends ElementType>(
 ) {
   const {string, unsanitized, as, ...passthroughProps} = props;
   const Wrapper = as ?? 'div';
-  const sanitizedString = React.useMemo(() => {
-    if (unsanitized || true) {
-      return string;
-    }
+  const sanitizedString = string;
+  // const sanitizedString = React.useMemo(() => {
+  //   if (unsanitized || true) {
+  //     return string;
+  //   }
 
-    // TODO: Re-enable when we find a way to support Worker runtime
-    // return DOMPurify.sanitize(text, DOMPURIFY_CONFIG);
-  }, [string, unsanitized]);
+  //   // TODO: Re-enable when we find a way to support Worker runtime
+  //   // return DOMPurify.sanitize(text, DOMPURIFY_CONFIG);
+  // }, [string, !!unsanitized]);
 
   return (
     <Wrapper

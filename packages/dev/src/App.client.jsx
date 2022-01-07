@@ -1,0 +1,13 @@
+import {HelmetProvider} from 'react-helmet-async';
+import CartProvider from './components/CartProvider.client';
+
+/**
+ *  Setup client context, though the children are most likely server components
+ */
+export default function ClientApp({helmetContext, children}) {
+  return (
+    <HelmetProvider helmetContext={helmetContext}>
+      <CartProvider>{children}</CartProvider>
+    </HelmetProvider>
+  );
+}
