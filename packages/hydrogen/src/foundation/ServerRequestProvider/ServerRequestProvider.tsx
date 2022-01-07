@@ -1,29 +1,29 @@
-import React, {createContext, ReactNode, useContext} from 'react';
+import React, {createContext, useContext} from 'react';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 
 // Context to inject current request in SSR
-const RequestContext = createContext<ServerComponentRequest>({
+const RequestContextSSR = createContext<ServerComponentRequest>({
   context: {cache: new Map()},
 } as ServerComponentRequest);
 
 // Cache to inject current request in RSC
-export function requestHydrationCache() {
+function requestCacheRSC() {
   return new Map();
 }
 
-requestHydrationCache.key = Symbol.for('request');
+requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
 
 export function useServerRequest() {
   let request: ServerComponentRequest;
   try {
     // Context only works in SSR rendering
-    request = useContext(RequestContext);
+    request = useContext(RequestContextSSR);
   } catch (error) {
     // If normal context failed it means this is not an SSR request.
     // Try getting RSC cache instead:
     // @ts-ignore
-    const cache = React.unstable_getCacheForType(requestHydrationCache);
-    request = cache ? cache.get(requestHydrationCache.key) : null;
+    const cache = React.unstable_getCacheForType(requestCacheRSC);
+    request = cache ? cache.get(requestCacheRSC.key) : null;
   }
 
   if (!request) {
@@ -34,15 +34,31 @@ export function useServerRequest() {
 }
 
 export function ServerRequestProvider({
+  isRSC,
   request,
   children,
 }: {
+  isRSC: boolean;
   request: ServerComponentRequest;
-  children: ReactNode;
+  children: JSX.Element;
 }) {
+  if (isRSC) {
+    // Save the request object in a React cache that is
+    // scoped to this current rendering.
+
+    // @ts-ignore
+    const requestCache = React.unstable_getCacheForType(requestCacheRSC);
+
+    requestCache.set(requestCacheRSC.key, request);
+
+    return children;
+  }
+
+  // Use a normal provider in SSR to make the request object
+  // available in the current rendering.
   return (
-    <RequestContext.Provider value={request}>
+    <RequestContextSSR.Provider value={request}>
       {children}
-    </RequestContext.Provider>
+    </RequestContextSSR.Provider>
   );
 }

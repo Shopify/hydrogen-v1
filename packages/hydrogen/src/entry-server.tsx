@@ -8,7 +8,6 @@ import {
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
-// import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import type {ReactQueryHydrationContext} from './foundation/ShopifyProvider/types';
 // import {FilledContext, HelmetProvider} from 'react-helmet-async';
@@ -19,10 +18,7 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {dehydrate} from 'react-query/hydration';
 import {getCacheControlHeader} from './framework/cache';
-import {
-  ServerRequestProvider,
-  requestHydrationCache,
-} from './foundation/ServerRequestProvider';
+import {ServerRequestProvider} from './foundation/ServerRequestProvider';
 import type {ServerResponse} from 'http';
 
 import {
@@ -36,6 +32,19 @@ import {
  * - `pipeToNodeWritable` for node.js
  */
 const isWorker = Boolean(renderToReadableStream);
+
+const wrapInFlightContainer = ({
+  init,
+  chunk,
+  nonce,
+}: {
+  init?: boolean;
+  chunk?: string;
+  nonce?: string;
+}) =>
+  `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
+    init ? '=[]' : `.push(\`${chunk}\`)`
+  }</script>`;
 
 /**
  * If a query is taking too long, or something else went wrong,
@@ -97,21 +106,19 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     const state = {pathname: url.pathname, search: url.search};
 
     // App for RSC rendering
-    const {ReactApp: HydrationReactApp} = buildReactApp({
+    const {ReactApp: ReactAppRSC} = buildReactApp({
       App,
       state,
       context,
       request,
       dev,
-      isHydration: true,
+      isRSC: true,
     });
 
     if (rscRenderToPipeableStream) {
       // Node.js branch
 
-      const {pipe} = rscRenderToPipeableStream(
-        <HydrationReactApp {...state} />
-      );
+      const {pipe} = rscRenderToPipeableStream(<ReactAppRSC {...state} />);
 
       let flightResponseBuffer = '';
       const {PassThrough} = await import('stream');
@@ -124,7 +131,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             flightResponseBuffer = '';
           }
 
-          response.write(`<script>window.__flight.push(\`${chunk}\`)</script>`);
+          response.write(wrapInFlightContainer({chunk}));
         } else {
           flightResponseBuffer += chunk;
         }
@@ -152,7 +159,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
     const head =
       (template.match(/<head>(.+?)<\/head>/s)![1] || '') +
-      '<script>window.__flight=[];</script>'; // Initialize the Flight container
+      wrapInFlightContainer({init: true});
 
     const {pipe, abort} = renderToPipeableStream(
       <Html head={head}>
@@ -239,7 +246,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       context,
       request,
       dev,
-      isHydration: true,
+      isRSC: true,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -268,51 +275,22 @@ function buildReactApp({
   context,
   request,
   dev,
-  isHydration,
+  isRSC = false,
 }: {
   App: ComponentType;
   state: any;
   context: any;
   request: ServerComponentRequest;
   dev: boolean | undefined;
-  isHydration?: boolean;
+  isRSC?: boolean;
 }) {
   // const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
 
-  function Wrapper({children}: any) {
-    if (isHydration) {
-      // Save the request object in a React cache that is
-      // scoped to this current rendering.
-
-      // @ts-ignore
-      const requestCache = React.unstable_getCacheForType(
-        requestHydrationCache
-      );
-
-      requestCache.set(requestHydrationCache.key, request);
-
-      return children;
-    }
-
-    // Use a normal provider in SSR to make the request object
-    // available in the current rendering.
-    return (
-      <ServerRequestProvider request={request}>
-        {children}
-      </ServerRequestProvider>
-    );
-  }
-
   const ReactApp = (props: any) => (
-    // <StaticRouter
-    //   location={{pathname: state.pathname, search: state.search}}
-    //   context={context}
-    // >
-    <Wrapper>
+    <ServerRequestProvider request={request} isRSC={isRSC}>
       <App {...props} request={request} response={componentResponse} />
-    </Wrapper>
-    // </StaticRouter>
+    </ServerRequestProvider>
   );
 
   return {/*helmetContext,*/ ReactApp, componentResponse};
