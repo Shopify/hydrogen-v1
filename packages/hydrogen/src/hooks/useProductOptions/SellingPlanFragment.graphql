@@ -11,17 +11,17 @@ fragment SellingPlanFragment on SellingPlan {
   priceAdjustments {
     orderCount
     adjustmentValue {
-      ...on SellingPlanFixedAmountPriceAdjustment {
+      ... on SellingPlanFixedAmountPriceAdjustment {
         adjustmentAmount {
           ...MoneyFragment
         }
       }
-      ...on SellingPlanFixedPriceAdjustment {
+      ... on SellingPlanFixedPriceAdjustment {
         price {
           ...MoneyFragment
         }
       }
-      ...on SellingPlanPercentagePriceAdjustment {
+      ... on SellingPlanPercentagePriceAdjustment {
         adjustmentPercentage
       }
     }

@@ -1,10 +1,9 @@
-import type {Plugin} from 'vite';
+import {Plugin} from 'vite';
 
 export default () => {
   return {
     name: 'vite-plugin-hydrogen-config',
-
-    config: (_, env) => ({
+    config: async (config, env) => ({
       resolve: {
         alias: {
           /**
@@ -24,6 +23,17 @@ export default () => {
 
       build: {
         sourcemap: true,
+        /**
+         * By default, SSR dedupe logic gets bundled which runs `require('module')`.
+         * We don't want this in our workers runtime, because `require` is not supported.
+         */
+        rollupOptions: process.env.WORKER
+          ? {
+              output: {
+                format: 'es',
+              },
+            }
+          : {},
       },
 
       ssr: {
@@ -69,6 +79,8 @@ export default () => {
       define: {
         __DEV__: env.mode !== 'production',
       },
+
+      envPrefix: ['VITE_', 'PUBLIC_'],
     }),
   } as Plugin;
 };

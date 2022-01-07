@@ -126,7 +126,7 @@ export function getMetafieldValue(type: MetafieldType) {
       return JSON.stringify({
         scale_max: max,
         scale_min: min,
-        value: faker.datatype.float({min, max}),
+        value: faker.datatype.float({min, max, precision: 0.0001}),
       });
     default:
       return JSON.stringify(faker.datatype.json());

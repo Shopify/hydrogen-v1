@@ -1,4 +1,4 @@
-import type {ServerResponse} from 'http';
+import {ServerResponse} from 'http';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
@@ -17,8 +17,6 @@ export type Renderer = (
     componentResponse: ServerComponentResponse;
   } & Record<string, any>
 >;
-
-export type QueryKey = string | readonly unknown[];
 
 export type Streamer = (
   url: URL,
@@ -117,6 +115,8 @@ export interface Measurement {
   unit: string;
   value: number;
 }
+
+export type QueryKey = string | readonly unknown[];
 
 export interface CacheOptions {
   private?: boolean;

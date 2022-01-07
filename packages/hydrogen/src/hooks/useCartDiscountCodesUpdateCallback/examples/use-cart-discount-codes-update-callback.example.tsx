@@ -10,12 +10,12 @@ export function CartDiscountCodeUpdate() {
         type="text"
         placeholder="Discount code"
         onChange={(event) => {
-          setDiscountCode(event.target.value)
-        }
-        }/>
+          setDiscountCode(event.target.value);
+        }}
+      />
       <button
         onClick={() => {
-          updateDiscountCodes([discountCode])
+          updateDiscountCodes([discountCode]);
         }}
       >
         Apply

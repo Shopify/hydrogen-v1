@@ -11,7 +11,7 @@ import type {
   FrontMatter,
 } from '../types';
 
-import {Module} from './dependency-graph';
+import {Module} from '@shopify/docs-tools';
 
 export function isComponentName(name?: string) {
   if (!name) {
@@ -295,14 +295,9 @@ export function firstSentence(content: string) {
   if (content === '') {
     return content;
   }
-  const lines = content.split(/(\n|\. )/g);
-  let firstSentence = lines.length ? lines[0] : content;
+  const lines = content.split('\n').join(' ').split('. ');
 
-  // try to split on period if first line doesn't have one
-  if (lines.length && lines[0].indexOf('.') !== 0) {
-    const sentences = content.split('.');
-    firstSentence = sentences[0];
-  }
+  let firstSentence = lines.length ? lines[0] : content;
 
   if (firstSentence[firstSentence.length - 1] !== '.') {
     firstSentence += '.';

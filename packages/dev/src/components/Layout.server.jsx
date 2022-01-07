@@ -10,6 +10,9 @@ import Header from './Header.client';
 import Footer from './Footer.server';
 import Cart from './Cart.client';
 
+/**
+ * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
+ */
 export default function Layout({children, hero}) {
   const {data} = useShopQuery({
     query: QUERY,

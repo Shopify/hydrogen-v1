@@ -7,9 +7,32 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- fix: load logger only once.
+- feat: `useQuery` returns an error if the query's fetch was unsuccessful
+- feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
+- fix: do not attempt to decode product IDs, as they are no longer base64-encoded in `unstable`
+
+## 0.8.1 - 2022-01-04
+
+- feat: Detect bot user agents and give bots a non-streamed response.
+- feat: Add global `Oxygen.env` for server-only environment variables.
+- fix: cart decrease button removes at zero quantity
+- feat: upgrade to latest React 18 experimental version
+- docs: product provider tweaks
+- docs: Document naming conventions
+- feat: logging abstraction with default timing information
+
+## 0.8.0 - 2021-12-07
+
+- fix: export `CartLineSelectedOptions` properly
+- fix: fix suspense utility function
+
+## 0.7.1 - 2021-12-02
+
 - fix: avoid repeating the same identifier for default and named exports
 - fix: remove sourcemap warnings
-- feat: upgrade to latest React 18 experimental version
+- feat: allow `useShopQuery` to be skippable if no query is passed.
+- fix: Remove usage of `react-query` (Not a breaking change)
 
 ## 0.7.0 - 2021-11-22
 

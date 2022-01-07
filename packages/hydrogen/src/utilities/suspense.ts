@@ -2,9 +2,9 @@
  * Wrap the fetch promise in a way that React Suspense understands.
  * Essentially, keep throwing something until you have legit data.
  */
-export function wrapPromise(promise: Promise<any>) {
+export function wrapPromise<T>(promise: Promise<T>) {
   let status = 'pending';
-  let response: Promise<any> | any;
+  let response: T;
 
   const suspender = promise.then(
     (res) => {
@@ -14,17 +14,10 @@ export function wrapPromise(promise: Promise<any>) {
     (err) => {
       status = 'error';
       response = err;
-
-      throw err;
     }
   );
 
   const read = () => {
-    /**
-     * TODO: This logic doesn't hold up when an error is thrown. For some reason.
-     * We instead throw the exception above in the suspender. We should revisit
-     * this and add a better server fetch implementation.
-     */
     switch (status) {
       case 'pending':
         throw suspender;

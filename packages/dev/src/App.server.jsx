@@ -6,7 +6,7 @@ import NotFound from './components/NotFound.server';
 import AppClient from './App.client';
 import LoadingFallback from './components/LoadingFallback';
 
-export default function App({...serverState}) {
+export default function App({log, ...serverState}) {
   const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
 
   return (
@@ -16,6 +16,7 @@ export default function App({...serverState}) {
         <DefaultRoutes
           pages={pages}
           serverState={serverState}
+          log={log}
           fallback={<NotFound />}
         />
       </AppClient>

@@ -5,11 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+<!-- ## Unreleased -->
+
+## 0.8.1 - 2022-01-04
+
+- Upgrade to latest React 18 experimental version
+- Upgrade to Tailwind v3
+
+## 0.8.0 - 2021-12-07
+
+- Lowercase `index.server.jsx` filename to match others
+
+## 0.7.1 - 2021-12-02
 
 - Change `ProductCard` and `FeaturedCollection` from server components to shared components
 - Use `eslint-plugin-hydrogen` recommended config for JS linting
-- Upgrade to latest React 18 experimental version
+- fix: 404 Page > Variable not declared
 
 ## 0.7.0 - 2021-11-22
 

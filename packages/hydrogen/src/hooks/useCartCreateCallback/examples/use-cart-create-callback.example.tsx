@@ -8,11 +8,13 @@ export function CustomAddToCartButton() {
       onClick={() => {
         // if no cart exists, create it
         createCart({
-          lines: [{
-            quantity: 1,
-            merchandiseId: '1234',
-          }]
-        })
+          lines: [
+            {
+              quantity: 1,
+              merchandiseId: '1234',
+            },
+          ],
+        });
       }}
     >
       Add to cart

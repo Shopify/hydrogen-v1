@@ -2,7 +2,7 @@ The Hydrogen framework includes page server components. This guide describes how
 
 ## How pages work
 
-Hydrogen uses file-based routing, and any pages added to the `src/pages` folder will be automatically registered as routes by the app.
+Hydrogen uses file-based routing. Any pages added to the `src/pages` directory will be automatically registered as routes by the app.
 
 You might want to add a new page and have it display at `localhost:3000/test`. You can do this by adding a new file to `src/pages`. For example, if you add `test.server.jsx` to `src/pages`, then the page displays at `localhost:3000/test`.
 
@@ -16,9 +16,6 @@ The following example shows how each `*.server.jsx` file maps to a different pag
 ```
 └── src
     ├── pages
-        └── blogs
-            └── [handle]
-            └── [handle].server.jsx // localhost:3000/blogs/<handle>
         └── collections
             └── [handle].server.jsx // localhost:3000/collections/<handle>
         └── pages

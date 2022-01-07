@@ -1,5 +1,6 @@
 import React, {ReactElement} from 'react';
 import {matchPath} from '../../utilities/matchPath';
+import type {Logger} from '../../utilities/log/log';
 
 export type ImportGlobEagerOutput = Record<string, Record<'default', any>>;
 
@@ -13,14 +14,17 @@ export function DefaultRoutes({
   pages,
   serverState,
   fallback,
+  log,
 }: {
   pages: ImportGlobEagerOutput;
   serverState: Record<string, any>;
   fallback?: ReactElement;
+  log: Logger;
 }) {
   const basePath = '/';
 
   const routes = createRoutesFromPages(pages, basePath);
+  // @todo renable memo
   // const routes = useMemo(
   //   () => createRoutesFromPages(pages, basePath),
   //   [pages, basePath]

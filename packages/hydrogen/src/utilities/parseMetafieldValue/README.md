@@ -36,7 +36,7 @@ export function Product({handle}) {
 
   const metafields = flattenConnection(data.product.metafields);
   const parsedMetafields = metafields.map((metafield) =>
-    parseMetafieldValue(metafield),
+    parseMetafieldValue(metafield)
   );
 
   return (

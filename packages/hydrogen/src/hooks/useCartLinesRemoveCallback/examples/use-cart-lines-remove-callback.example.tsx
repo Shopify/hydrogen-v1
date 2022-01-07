@@ -6,7 +6,7 @@ export function RemoveFromCartButton({lineId}) {
   return (
     <button
       onClick={() => {
-        removeLines([lineId])
+        removeLines([lineId]);
       }}
     >
       Remove from cart
