@@ -2,8 +2,9 @@ import semver from 'semver';
 import {Env, CheckResult} from '../../../../types';
 import addHydrogen from '../../../add/hydrogen';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const HYDROGEN_MIN_VERSION = require('../../../../../package.json').version;
+export const HYDROGEN_MIN_VERSION =
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('../../../../../package.json').version;
 
 export async function checkHydrogenVersion({
   workspace,
@@ -21,7 +22,7 @@ export async function checkHydrogenVersion({
 
   const description = success
     ? `Has latest hydrogen version`
-    : `Didn’t find latest version of hydrogen (${HYDROGEN_MIN_VERSION}), found ${normalizedVersion})`;
+    : `Didn’t find latest version of hydrogen (${HYDROGEN_MIN_VERSION}), found ${normalizedVersion}`;
 
   return [
     {

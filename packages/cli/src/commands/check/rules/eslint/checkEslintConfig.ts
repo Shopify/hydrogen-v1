@@ -27,9 +27,7 @@ export async function checkEslintConfig({
       description: 'Has eslint config',
       success: hasEslintConfig,
       link: 'https://shopify.dev/custom-storefronts/hydrogen/lint',
-      fix: async (env) => {
-        await addEslint(env);
-      },
+      fix: addEslint,
     },
     {
       id: 'eslint-config-hydrogen',
@@ -37,9 +35,7 @@ export async function checkEslintConfig({
       description: 'Has hydrogen eslint config',
       success: hasHydrogenConfig && hasHydrogenEslintPackage,
       link: 'https://shopify.dev/custom-storefronts/hydrogen/lint',
-      fix: async (env) => {
-        await addEslint(env);
-      },
+      fix: addEslint,
     },
   ];
 }

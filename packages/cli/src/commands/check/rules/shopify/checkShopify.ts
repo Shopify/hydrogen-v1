@@ -15,7 +15,6 @@ export async function checkShopify(env: Env): Promise<CheckResult[]> {
     (await fs.exists('src/App.server.jsx')) &&
     (await fs.read('src/App.server.jsx'))?.includes('ShopifyServerProvider');
 
-  console.log(hasShopifyProvider);
   return [
     {
       id: 'shopify-config',
