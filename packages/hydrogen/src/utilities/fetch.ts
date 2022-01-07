@@ -70,12 +70,6 @@ export function graphqlRequestBody(
 
 export function decodeShopifyId(id: string) {
   if (!id.startsWith('gid://')) {
-    id =
-      typeof btoa !== 'undefined'
-        ? btoa(id)
-        : Buffer.from(id, 'base64').toString('ascii');
-  }
-  if (!id.startsWith('gid://')) {
     throw new Error('invalid Shopify ID');
   }
   return id;

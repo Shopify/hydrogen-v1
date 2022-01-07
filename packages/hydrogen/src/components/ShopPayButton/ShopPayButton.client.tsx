@@ -34,7 +34,7 @@ export function ShopPayButton({variantIds, className}: ShopPayButtonProps) {
 
   useEffect(() => {
     const ids = variantIds.reduce<string[]>((accumulator, gid) => {
-      const id = atob(gid).split('/').pop();
+      const id = gid.split('/').pop();
       if (id) {
         accumulator.push(id);
       }
