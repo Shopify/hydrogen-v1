@@ -12,6 +12,7 @@ import {
 } from './utilities/log/log';
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
+import {defer} from './utilities/defer';
 import ssrPrepass from 'react-ssr-prepass';
 // import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
@@ -100,7 +101,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    * Stream a response to the client. NOTE: This omits custom `<head>`
    * information, so this method should not be used by crawlers.
    */
-  const stream: Streamer = function (
+  const stream: Streamer = async function (
     url: URL,
     {context, request, response, template, dev}
   ) {
@@ -116,19 +117,24 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       log,
     });
 
-    response.socket!.on('error', (error: any) => {
-      log.fatal(error);
-    });
+    if (response) {
+      response.socket!.on('error', (error: any) => {
+        log.fatal(error);
+      });
+    }
 
     let didError: Error | undefined;
 
     const head = template.match(/<head>(.+?)<\/head>/s)![1];
 
-    const {pipe, abort} = renderToPipeableStream(
+    const ReactAppSSR = (
       <Html head={head}>
         <ReactApp {...state} />
-      </Html>,
-      {
+      </Html>
+    );
+
+    if (renderToPipeableStream) {
+      const {pipe, abort} = renderToPipeableStream(ReactAppSSR, {
         onCompleteShell() {
           /**
            * TODO: This assumes `response.cache()` has been called _before_ any
@@ -140,13 +146,10 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             componentResponse.cacheControlHeader
           );
 
-          writeHeadToServerResponse(
-            request,
-            response,
-            componentResponse,
-            log,
-            didError
-          );
+          writeHeadToServerResponse(response, componentResponse, didError);
+
+          logServerResponse('str', log, request, response.statusCode);
+
           if (isRedirect(response)) {
             // Return redirects early without further rendering/streaming
             return response.end();
@@ -165,13 +168,10 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
-          writeHeadToServerResponse(
-            request,
-            response,
-            componentResponse,
-            log,
-            didError
-          );
+          writeHeadToServerResponse(response, componentResponse, didError);
+
+          logServerResponse('str', log, request, response.statusCode);
+
           if (isRedirect(response)) {
             // Redirects found after any async code
             return response.end();
@@ -202,19 +202,108 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
           log.error(error);
         },
-      }
-    );
+      });
 
-    const streamTimeout = setTimeout(() => {
-      const errorMessage = `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`;
-      log.error(errorMessage);
+      const streamTimeout = setTimeout(() => {
+        const errorMessage = `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`;
+        log.error(errorMessage);
 
-      if (dev && response.headersSent) {
-        response.write(getErrorMarkup(new Error(errorMessage)));
-      }
+        if (dev && response.headersSent) {
+          response.write(getErrorMarkup(new Error(errorMessage)));
+        }
 
-      abort();
-    }, STREAM_ABORT_TIMEOUT_MS);
+        abort();
+      }, STREAM_ABORT_TIMEOUT_MS);
+    } else if (renderToReadableStream) {
+      const deferred = defer();
+      const encoder = new TextEncoder();
+      const transform = new TransformStream();
+      const writable = transform.writable.getWriter();
+      const responseOptions = {} as ResponseOptions;
+
+      const readable: ReadableStream = renderToReadableStream(ReactAppSSR, {
+        onCompleteShell() {
+          Object.assign(
+            responseOptions,
+            getResponseOptions(componentResponse, didError)
+          );
+
+          /**
+           * TODO: This assumes `response.cache()` has been called _before_ any
+           * queries which might be caught behind Suspense. Clarify this or add
+           * additional checks downstream?
+           */
+          responseOptions.headers[getCacheControlHeader({dev})] =
+            componentResponse.cacheControlHeader;
+
+          if (isRedirect(responseOptions)) {
+            // Return redirects early without further rendering/streaming
+            return deferred.resolve(null);
+          }
+
+          if (!componentResponse.canStream()) return;
+
+          startWritingHtmlToStream(
+            responseOptions,
+            writable,
+            encoder,
+            dev ? didError : undefined
+          );
+
+          deferred.resolve(null);
+          readable.pipeThrough(transform);
+        },
+        onCompleteAll() {
+          if (componentResponse.canStream()) return;
+
+          Object.assign(
+            responseOptions,
+            getResponseOptions(componentResponse, didError)
+          );
+
+          if (isRedirect(responseOptions)) {
+            // Redirects found after any async code
+            return deferred.resolve(null);
+          }
+
+          if (componentResponse.customBody) {
+            if (componentResponse.customBody instanceof Promise) {
+              componentResponse.customBody.then((body) =>
+                writable.write(encoder.encode(body))
+              );
+            } else {
+              writable.write(encoder.encode(componentResponse.customBody));
+            }
+          } else {
+            startWritingHtmlToStream(
+              responseOptions,
+              writable,
+              encoder,
+              dev ? didError : undefined
+            );
+
+            readable.pipeThrough(transform);
+          }
+
+          deferred.resolve(null);
+        },
+        onError(error: any) {
+          didError = error;
+
+          if (dev && deferred.status === 'pending') {
+            writable.write(getErrorMarkup(error));
+          }
+
+          console.error(error);
+        },
+      });
+
+      await deferred.promise;
+
+      logServerResponse('str', log, request, responseOptions.status);
+
+      return new Response(transform.readable, responseOptions);
+    }
   };
 
   /**
@@ -236,23 +325,31 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       log,
     });
 
-    response.socket!.on('error', (error: any) => {
-      log.fatal(error);
-    });
+    if (response) {
+      response.socket!.on('error', (error: any) => {
+        log.fatal(error);
+      });
+    }
 
     if (rscRenderToPipeableStream) {
       const stream = rscRenderToPipeableStream(<ReactApp {...state} />).pipe(
         response
       );
+
       stream.on('finish', function () {
         logServerResponse('rsc', log, request, response.statusCode);
       });
     } else if (rscRenderToReadableStream) {
-      const stream = rscRenderToReadableStream(<ReactApp {...state} />);
-      stream.on('end', function () {
-        logServerResponse('rsc', log, request, response.statusCode);
-      });
-      // TODO: How do we pipe the stream to the response?
+      const stream = rscRenderToReadableStream(
+        <ReactApp {...state} />
+      ) as ReadableStream;
+
+      // TODO: there's no 'on' method in ReadableStream. How do we know when
+      // it finishes? RS.piteTo(writable).then(...) ?
+      // stream.on('end', function () {
+      //   logServerResponse('rsc', log, request, response.statusCode);
+      // });
+
       return new Response(stream);
     }
   };
@@ -458,30 +555,71 @@ function startWritingHtmlToServerResponse(
   }
 }
 
-function writeHeadToServerResponse(
-  request: ServerComponentRequest,
-  response: ServerResponse,
+function startWritingHtmlToStream(
+  responseOptions: ResponseOptions,
+  writable: WritableStreamDefaultWriter,
+  encoder: TextEncoder,
+  error?: Error
+) {
+  responseOptions.headers['Content-type'] = 'text/html';
+  writable.write(encoder.encode('<!DOCTYPE html>'));
+
+  if (error) {
+    // This error was delayed until the headers were properly sent.
+    writable.write(encoder.encode(getErrorMarkup(error)));
+  }
+}
+
+type ResponseOptions = {
+  headers: Record<string, string>;
+  status: number;
+  statusText?: string;
+};
+
+function getResponseOptions(
   {headers, status, customStatus}: ServerComponentResponse,
-  log: Logger,
+  error?: Error
+) {
+  const responseInit = {} as ResponseOptions;
+  // @ts-ignore
+  responseInit.headers = Object.fromEntries(headers.entries());
+
+  if (error) {
+    responseInit.status = 500;
+  } else {
+    responseInit.status = customStatus?.code ?? status ?? 200;
+
+    if (customStatus?.text) {
+      responseInit.statusText = customStatus.text;
+    }
+  }
+
+  return responseInit;
+}
+
+function writeHeadToServerResponse(
+  response: ServerResponse,
+  serverComponentResponse: ServerComponentResponse,
   error?: Error
 ) {
   if (response.headersSent) return;
 
-  headers.forEach((value, key) => response.setHeader(key, value));
+  const {headers, status, statusText} = getResponseOptions(
+    serverComponentResponse,
+    error
+  );
+  response.statusCode = status;
 
-  if (error) {
-    response.statusCode = 500;
-  } else {
-    response.statusCode = customStatus?.code ?? status ?? 200;
-
-    if (customStatus?.text) {
-      response.statusMessage = customStatus.text;
-    }
+  if (statusText) {
+    response.statusMessage = statusText;
   }
 
-  logServerResponse('str', log, request, response.statusCode);
+  Object.entries(headers).forEach(([key, value]) =>
+    response.setHeader(key, value)
+  );
 }
 
-function isRedirect(response: ServerResponse) {
-  return response.statusCode >= 300 && response.statusCode < 400;
+function isRedirect(response: {status?: number; statusCode?: number}) {
+  const status = response.status ?? response.statusCode ?? 0;
+  return status >= 300 && status < 400;
 }

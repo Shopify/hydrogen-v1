@@ -82,14 +82,14 @@ export default async function handleEvent(
    */
   if (isStreamable) {
     if (isReactHydrationRequest) {
-      hydrate(url, {
+      return hydrate(url, {
         context: {},
         request,
         response: streamableResponse,
         dev,
       });
     } else {
-      stream(url, {
+      return stream(url, {
         context: {},
         request,
         response: streamableResponse,
@@ -97,7 +97,6 @@ export default async function handleEvent(
         dev,
       });
     }
-    return;
   }
 
   const {body, bodyAttributes, htmlAttributes, componentResponse, ...head} =
