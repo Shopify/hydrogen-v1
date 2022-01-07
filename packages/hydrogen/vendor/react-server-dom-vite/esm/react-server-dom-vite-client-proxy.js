@@ -24,12 +24,14 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function isReactComponent(component) {
+function isReactComponent(component, name) {
   if (component) {
     return (
-      typeof component === 'function' ||
-      typeof component.render === 'function' ||
-      component.$$typeof === Symbol.for('react.element')
+      // Workaround for hooks
+      !/^use[A-Z]/.test(name) &&
+      (typeof component === 'function' ||
+        typeof component.render === 'function' ||
+        component.$$typeof === Symbol.for('react.element'))
     );
   }
 
@@ -42,7 +44,7 @@ function wrapInClientProxy(_ref) {
     named = _ref.named,
     component = _ref.component;
 
-  if (!isReactComponent(component)) {
+  if (!isReactComponent(component, name)) {
     // This is not a React component, return it as is.
     return component;
   } // Use object syntax here to make sure the function name
