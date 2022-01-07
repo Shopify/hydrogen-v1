@@ -1,10 +1,10 @@
 // @ts-ignore
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
-import {createFromFetch} from '../Hydration/rsc-client-hydrator';
-import type {FlightResponse} from '../Hydration/rsc-client-config';
+// @ts-ignore
+import {createFromFetch} from '@shopify/hydrogen/vendor/react-server-dom-vite';
 
 function createResponseCache() {
-  return new Map<string, FlightResponse>();
+  return new Map<string, any>();
 }
 
 /**

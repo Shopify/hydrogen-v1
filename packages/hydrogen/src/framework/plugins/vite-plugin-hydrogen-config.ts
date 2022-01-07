@@ -15,6 +15,10 @@ export default () => {
           'html-dom-parser': process.env.WORKER
             ? 'html-dom-parser/lib/server/html-to-dom'
             : 'html-dom-parser',
+          // This library is currently included as a compiled vendor lib, not published yet to NPM
+          'react-server-dom-vite/client-proxy': require.resolve(
+            '@shopify/hydrogen/vendor/react-server-dom-vite/esm/react-server-dom-vite-client-proxy.js'
+          ),
         },
       },
 
@@ -26,8 +30,9 @@ export default () => {
         external: ['isomorphic-dompurify'],
         /**
          * Tell Vite to bundle everything when we're building for Workers.
+         * Otherwise, bundle RSC plugin as a workaround to apply the vendor alias above.
          */
-        noExternal: Boolean(process.env.WORKER),
+        noExternal: Boolean(process.env.WORKER) || [/react-server-dom-vite/],
         target: process.env.WORKER ? 'webworker' : 'node',
       },
 
@@ -57,8 +62,7 @@ export default () => {
           'react',
           'react-dom',
           'react-router-dom',
-          'react-server',
-          'react-client/flight',
+          'react-server-dom-vite/client-proxy',
         ],
       },
 
