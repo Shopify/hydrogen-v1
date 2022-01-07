@@ -35,7 +35,7 @@ describe('log', () => {
     logServerResponse('str', mockLogger, request, 500);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"GET [3mstreaming SSR[23m [31m500[39m 1100.00 ms http://localhost:3000/"`
+      `"GET [3mstreaming SSR    [23m [31m500[39m 1100.00 ms http://localhost:3000/"`
     );
   });
 
@@ -48,7 +48,7 @@ describe('log', () => {
     logServerResponse('str', mockLogger, request, 200);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"GET [3mstreaming SSR[23m [32m200[39m 1100.00 ms http://localhost:3000/"`
+      `"GET [3mstreaming SSR    [23m [32m200[39m 1100.00 ms http://localhost:3000/"`
     );
   });
 
@@ -61,7 +61,7 @@ describe('log', () => {
     logServerResponse('str', mockLogger, request, 301);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"GET [3mstreaming SSR[23m [94m301[39m 1100.00 ms http://localhost:3000/"`
+      `"GET [3mstreaming SSR    [23m [94m301[39m 1100.00 ms http://localhost:3000/"`
     );
   });
 
@@ -74,7 +74,7 @@ describe('log', () => {
     logServerResponse('str', mockLogger, request, 404);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"GET [3mstreaming SSR[23m [33m404[39m 1100.00 ms http://localhost:3000/"`
+      `"GET [3mstreaming SSR    [23m [33m404[39m 1100.00 ms http://localhost:3000/"`
     );
   });
 

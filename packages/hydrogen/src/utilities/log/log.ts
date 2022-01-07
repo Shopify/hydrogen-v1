@@ -92,7 +92,7 @@ export function logServerResponse(
       : type === 'rsc'
       ? 'server components'
       : 'buffered SSR';
-  const styledType = italic(fullType);
+  const styledType = italic(pad(fullType, '                 '));
   const paddedTiming = pad(
     (getTime() - request.time).toFixed(2) + ' ms',
     '          '
