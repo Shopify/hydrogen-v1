@@ -38,7 +38,7 @@ export function useRenderCacheData<T>(
       if (!promise) {
         promise = fetcher().then(
           (r) => (data = {data: r}),
-          (e) => (data = {data: e})
+          (e) => (data = {error: e})
         );
       }
       throw promise;

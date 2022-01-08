@@ -1,4 +1,5 @@
 import {useShop} from '../../foundation/useShop';
+import {log} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';
@@ -37,7 +38,7 @@ export function useShopQuery<T>({
   const body = query ? graphqlRequestBody(query, variables) : '';
   const {request, key} = createShopRequest(body);
 
-  const {data} = useQuery<UseShopQueryResponse<T>>(
+  const {data, error: fetchError} = useQuery<UseShopQueryResponse<T>>(
     key,
     query
       ? fetchBuilder<UseShopQueryResponse<T>>(request)
@@ -47,19 +48,42 @@ export function useShopQuery<T>({
   );
 
   /**
+   * The fetch request itself failed, so we handle that differently than a GraphQL error
+   */
+  if (fetchError) {
+    const errorMessage = `Failed to fetch the Storefront API. ${
+      // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
+      fetchError.status === 403
+        ? `You may have a bad value in 'shopify.config.js'`
+        : `${fetchError.statusText}`
+    }`;
+
+    log.error(errorMessage);
+
+    if (getConfig().dev) {
+      throw new Error(errorMessage);
+    } else {
+      // in non-dev environments, we probably don't want super-detailed error messages for the user
+      throw new Error(
+        `The fetch attempt failed; there was an issue connecting to the data source.`
+      );
+    }
+  }
+
+  /**
    * GraphQL errors get printed to the console but ultimately
    * get returned to the consumer.
    */
   if (data?.errors) {
     const errors = data.errors instanceof Array ? data.errors : [data.errors];
     for (const error of errors) {
-      console.error('GraphQL Error', error);
-
       if (getConfig().dev) {
         throw new Error(error.message);
+      } else {
+        log.error('GraphQL Error', error);
       }
     }
-    console.error(`GraphQL errors: ${errors.length}`);
+    log.error(`GraphQL errors: ${errors.length}`);
   }
 
   return data as UseShopQueryResponse<T>;

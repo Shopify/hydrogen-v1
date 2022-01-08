@@ -5,9 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+<!-- ## Unreleased -->
+
+## 0.8.2 - 2022-01-07
+
+- No updates. Transitive dependency bump.
+
+## 0.8.1 - 2022-01-04
 
 - Upgrade to latest React 18 experimental version
+- Upgrade to Tailwind v3
 
 ## 0.8.0 - 2021-12-07
 
