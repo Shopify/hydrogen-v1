@@ -51,20 +51,24 @@ export function useServerResponse(state: any) {
   let [response, setResponse] = useState(cache.get(key));
   const firstResponse = useRef();
   console.log(response);
-  if (!response) {
-    const cachedResponse = createFromFetch(
-      fetch('/react?state=' + encodeURIComponent(key))
-    );
-    cache.set(key, cachedResponse);
-    setResponse(cachedResponse);
-  }
 
   useEffect(() => {
+    //   response = createFromFetch(fetch('/react?state=' + encodeURIComponent(key)));
     const unsubscribe = subscribe(key, (newResponse) =>
       setResponse(newResponse)
     );
     return unsubscribe;
   }, [key]);
+
+  if (!response) {
+    const cachedResponse = createFromFetch(
+      fetch('/react?state=' + encodeURIComponent(key))
+    );
+    cache.set(key, cachedResponse);
+    return cachedResponse;
+    // setResponse(cachedResponse);
+  }
+
   return response;
 }
 
