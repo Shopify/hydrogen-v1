@@ -26,6 +26,7 @@ export function subscribe(key: string, cb: (response: any) => any) {
     listeners.splice(index, 1);
   };
 }
+
 export function refresh(key: string) {
   const response = createFromFetch(
     fetch('/react?state=' + encodeURIComponent(key))
@@ -50,16 +51,15 @@ export function useServerResponse(state: any) {
   let [response, setResponse] = useState(cache.get(key));
   const firstResponse = useRef();
   console.log(response);
-
-  useEffect(() => {
+  if (!response) {
     const cachedResponse = createFromFetch(
       fetch('/react?state=' + encodeURIComponent(key))
     );
     cache.set(key, cachedResponse);
     setResponse(cachedResponse);
-  }, []);
+  }
+
   useEffect(() => {
-    console.log('hello');
     const unsubscribe = subscribe(key, (newResponse) =>
       setResponse(newResponse)
     );
@@ -68,18 +68,6 @@ export function useServerResponse(state: any) {
   return response;
 }
 
-// export function useServerResponse(state: any) {
-//   const key = JSON.stringify(state);
-//   let response = cache.get(key);
-//   if (response) {
-//     return response;
-//   }
-//   response = createFromFetch(fetch('/react?state=' + encodeURIComponent(key)));
-//
-//   cache.set(key, response);
-//
-//   return response;
-// }
 /**
  * Similar to the RSC demo, `createFromFetch` wraps around a fetch call and throws
  * promise events to the Suspense boundary until the content has loaded.
@@ -205,13 +193,12 @@ async function eagerLoadModules(manifest: WireManifest) {
     Object.entries(manifest)
       .map(async ([key, module]) => {
         if (!key.startsWith('M')) return;
-        if (moduleCache.has(module.id)) {
-          return moduleCache.get(module.id);
-        }
 
-        const mod = await importClientComponent(module.id);
+        // fake cache to make new imports every time (for HMR)
+        const mod = await import(
+          /* @vite-ignore */ `${module.id}?v=${Date.now()}`
+        );
 
-        moduleCache.set(module.id, mod);
         return mod;
       })
       .filter(Boolean)
