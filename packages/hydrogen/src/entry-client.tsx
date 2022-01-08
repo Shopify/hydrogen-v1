@@ -21,7 +21,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
   createRoot(root, {hydrate: true}).render(
     <ErrorBoundary FallbackComponent={Error}>
-      <Suspense fallback={<h1>wait</h1>}>
+      <Suspense fallback={<div>Loading...</div>}>
         <Content clientWrapper={ClientWrapper} />
       </Suspense>
     </ErrorBoundary>
@@ -37,9 +37,6 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
     search: window.location.search,
   });
   const response = useServerResponse(serverState);
-  if (!response) {
-    return null;
-  }
 
   return (
     <ServerStateProvider
