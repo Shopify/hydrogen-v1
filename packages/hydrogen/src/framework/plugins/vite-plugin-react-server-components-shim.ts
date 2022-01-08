@@ -116,20 +116,24 @@ export default () => {
           .replace('__LIB_COMPONENTS_GLOB__', normalizePath(libGlob));
       }
     },
-    handleHotUpdate({modules, read, server, file}) {
-      console.log('hello', file);
-      server.ws.send({
-        type: 'custom',
-        event: 'component',
-        data: {},
-      });
-      // serverComponentsIds.forEach((id) => {
-      //   // console.log(server.moduleGraph.getModuleById(id))
-      // })
-      // // server.moduleGraph.
-      // // modules.length = 0
-      // console.log(file, modules.map(module => module.importers));
-      return [];
+    async handleHotUpdate({modules, server, file}) {
+      if (
+        /\.server(\.(j|t)sx?)?$/.test(file) &&
+        modules.some((module) =>
+          [...module.importers].some((importer) =>
+            // importer.file?.includes('.server.')
+            /\.server(\.(j|t)sx?)?$/.test(importer.file!)
+          )
+        )
+      ) {
+        server.ws.send({
+          type: 'custom',
+          event: 'component',
+          data: {},
+        });
+
+        return [];
+      }
     },
   } as Plugin;
 
