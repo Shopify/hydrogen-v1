@@ -50,10 +50,8 @@ export function useServerResponse(state: any) {
   const key = JSON.stringify(state);
   let [response, setResponse] = useState(cache.get(key));
   const firstResponse = useRef();
-  console.log(response);
 
   useEffect(() => {
-    //   response = createFromFetch(fetch('/react?state=' + encodeURIComponent(key)));
     const unsubscribe = subscribe(key, (newResponse) =>
       setResponse(newResponse)
     );
@@ -66,7 +64,6 @@ export function useServerResponse(state: any) {
     );
     cache.set(key, cachedResponse);
     return cachedResponse;
-    // setResponse(cachedResponse);
   }
 
   return response;
