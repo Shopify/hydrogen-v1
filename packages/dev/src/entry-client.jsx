@@ -5,7 +5,6 @@ import shopifyConfig from '../shopify.config';
 
 if (import.meta.hot) {
   import.meta.hot.on('component', () => {
-    // console.log('here', refresh);
     const serverState = {
       pathname: window.location.pathname,
       search: window.location.search,
