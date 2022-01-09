@@ -118,10 +118,9 @@ export default () => {
     },
     async handleHotUpdate({modules, server, file}) {
       if (
-        /\.server(\.(j|t)sx?)?$/.test(file) &&
+        /\.client\.[jt]sx?$/.test(file) &&
         modules.some((module) =>
           [...module.importers].some((importer) =>
-            // importer.file?.includes('.server.')
             /\.server(\.(j|t)sx?)?$/.test(importer.file!)
           )
         )
