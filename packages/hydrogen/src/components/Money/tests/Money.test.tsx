@@ -1,8 +1,14 @@
 import React from 'react';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithShopifyProvider,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
 import {CurrencyCode} from '../../../graphql/types/types';
 import {getPrice} from '../../../utilities/tests/price';
 import {Money} from '../Money.client';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 describe('<Money />', () => {
   it('renders a formatted money string', () => {

@@ -1,6 +1,12 @@
 import React from 'react';
 
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithShopifyProvider,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 const mockCreateInstantCheckout = jest.fn();
 const mockUseInstantCheckout = jest.fn();

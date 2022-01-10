@@ -69,13 +69,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
     const body = await renderApp(ReactApp, state, log);
 
-    logServerResponse(
-      'ssr',
-      log,
-      request,
-      componentResponse.customStatus?.code ?? componentResponse.status ?? 200
-    );
-
     if (componentResponse.customBody) {
       return {body: await componentResponse.customBody, url, componentResponse};
     }
@@ -88,6 +81,13 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     if (hook) {
       params = hook(params) || params;
     }
+
+    logServerResponse(
+      'ssr',
+      log,
+      request,
+      componentResponse.customStatus?.code ?? componentResponse.status ?? 200
+    );
 
     return {body, componentResponse, ...params};
   };

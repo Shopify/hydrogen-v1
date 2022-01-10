@@ -1,10 +1,16 @@
 import React from 'react';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithShopifyProvider,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
 import {getProduct} from '../../../utilities/tests/product';
 import {ProductProvider} from '../../ProductProvider';
 import {SelectedVariantBuyNowButton} from '../SelectedVariantBuyNowButton';
 import {CartProvider} from '../../CartProvider';
 import {BuyNowButton} from '../../BuyNowButton';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 /**
  * The `SelectedVariantBuyNowButton` component renders a `BuyNowButton` for the product's selected variant. Clicking this button automatically adds the selected variant to the cart and redirect the customer to checkout.

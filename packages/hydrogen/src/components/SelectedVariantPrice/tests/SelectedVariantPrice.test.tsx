@@ -1,9 +1,15 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithShopifyProvider,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
 import {Money} from '../../Money';
 import {ProductProvider} from '../../ProductProvider';
 import {SelectedVariantPrice} from '../SelectedVariantPrice.client';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 describe('<SelectedVariantPrice />', () => {
   it('renders <Money /> with the selected variant regular price by default', () => {

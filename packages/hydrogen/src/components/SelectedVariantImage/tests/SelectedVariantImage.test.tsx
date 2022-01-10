@@ -1,9 +1,15 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithShopifyProvider,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
 import {SelectedVariantImage} from '../SelectedVariantImage.client';
 import {Image} from '../../Image';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 describe('<SelectedVariantImage />', () => {
   it("renders <Image /> with the selected variant's image", () => {

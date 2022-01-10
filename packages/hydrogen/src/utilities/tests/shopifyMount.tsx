@@ -1,29 +1,17 @@
 import React from 'react';
 import {createMount} from '@shopify/react-testing';
-import {
-  DEFAULT_API_VERSION,
-  ShopifyProvider,
-} from '../../foundation/ShopifyProvider';
+import {DEFAULT_API_VERSION} from '../../foundation';
 import {ShopifyConfig} from '../../types';
 
-export interface ShopifyProviderOptions {
-  shopifyConfig?: Partial<ShopifyConfig>;
-}
-
-export interface ShopifyProviderContext {
-  shopifyConfig: ShopifyConfig;
-}
+export interface ShopifyProviderOptions {}
+export interface ShopifyProviderContext {}
 
 export const mountWithShopifyProvider = createMount<
   ShopifyProviderOptions,
   ShopifyProviderContext
 >({
-  context: (options) => ({
-    shopifyConfig: getShopifyConfig(options.shopifyConfig),
-  }),
-  render: (element, {shopifyConfig}) => (
-    <ShopifyProvider shopifyConfig={shopifyConfig}>{element}</ShopifyProvider>
-  ),
+  context: (options) => ({}),
+  render: (element, {}) => <React.Fragment>{element}</React.Fragment>,
 });
 
 export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {

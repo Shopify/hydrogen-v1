@@ -1,8 +1,14 @@
 import React from 'react';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithShopifyProvider,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
 import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement';
 import {getPrice} from '../../../utilities/tests/price';
 import {UnitPrice} from '../UnitPrice.client';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 const unitPrice = getPrice();
 const unitPriceMeasurement = getUnitPriceMeasurement();

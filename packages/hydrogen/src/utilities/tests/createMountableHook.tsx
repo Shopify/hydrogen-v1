@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {mountWithShopifyProvider} from './shopify_provider';
+import {mountWithShopifyProvider} from './shopifyMount';
 
 // This exported function allows you to test the results of a hook directly
 // instead of testing the presence of strings in a mounted component.
