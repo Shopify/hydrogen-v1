@@ -1,12 +1,9 @@
-import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
+import {DefaultRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-
-import shopifyConfig from '../shopify.config';
 
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
-import CartProvider from './components/CartProvider.client';
+import AppClient from './App.client';
 import LoadingFallback from './components/LoadingFallback';
 
 export default function App({log, ...serverState}) {
@@ -14,19 +11,15 @@ export default function App({log, ...serverState}) {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
-        <CartProvider>
-          <DefaultSeo />
-          <Switch>
-            <DefaultRoutes
-              pages={pages}
-              serverState={serverState}
-              log={log}
-              fallback={<NotFound />}
-            />
-          </Switch>
-        </CartProvider>
-      </ShopifyServerProvider>
+      <AppClient helmetContext={serverState.helmetContext}>
+        <DefaultSeo />
+        <DefaultRoutes
+          pages={pages}
+          serverState={serverState}
+          log={log}
+          fallback={<NotFound />}
+        />
+      </AppClient>
     </Suspense>
   );
 }

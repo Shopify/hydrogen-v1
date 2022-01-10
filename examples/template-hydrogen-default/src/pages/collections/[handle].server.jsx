@@ -5,7 +5,6 @@ import {
   flattenConnection,
   RawHtml,
 } from '@shopify/hydrogen';
-import {useParams} from 'react-router-dom';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
@@ -16,8 +15,9 @@ import NotFound from '../../components/NotFound.server';
 export default function Collection({
   country = {isoCode: 'US'},
   collectionProductCount = 24,
+  params,
 }) {
-  const {handle} = useParams();
+  const {handle} = params;
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
