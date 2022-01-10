@@ -1,6 +1,9 @@
 import App from './App.server';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {setLogger} from '@shopify/hydrogen';
+import {setLogger, setShopifyConfig} from '@shopify/hydrogen';
+import shopifyConfig from '../shopify.config';
+
+setShopifyConfig(shopifyConfig);
 
 setLogger({
   trace() {},
