@@ -136,8 +136,6 @@ export default async function handleEvent(
     });
   }
 
-  let response;
-
   const html = template
     .replace(
       `<div id="root"></div>`,
@@ -151,7 +149,7 @@ export default async function handleEvent(
 
   const {status, customStatus} = componentResponse;
 
-  response = new Response(html, {
+  const response = new Response(html, {
     status: customStatus?.code ?? status ?? 200,
     statusText: customStatus?.text,
     headers,

@@ -1,4 +1,4 @@
-import {HelmetProvider} from 'react-helmet-async';
+import {HelmetProvider} from '@shopify/hydrogen/client';
 import CartProvider from './components/CartProvider.client';
 
 /**
