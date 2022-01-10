@@ -1,7 +1,7 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
 import {
-  mountWithShopifyProvider,
+  mountWithProviders,
   getShopifyConfig,
 } from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
@@ -13,7 +13,7 @@ setShopifyConfig(getShopifyConfig());
 describe('<ProductTitle />', () => {
   it('renders the product title in a <span> by default', () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductTitle />
       </ProductProvider>
@@ -26,7 +26,7 @@ describe('<ProductTitle />', () => {
 
   it('renders the product title in the HTML element specified by the `as` prop', () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductTitle as="p" />
       </ProductProvider>

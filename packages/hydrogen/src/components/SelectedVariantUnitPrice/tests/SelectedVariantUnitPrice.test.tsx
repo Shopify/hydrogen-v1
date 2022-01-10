@@ -1,7 +1,7 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
 import {
-  mountWithShopifyProvider,
+  mountWithProviders,
   getShopifyConfig,
 } from '../../../utilities/tests/shopifyMount';
 import {UnitPrice} from '../../UnitPrice';
@@ -15,7 +15,7 @@ describe('<SelectedVariantUnitPrice />', () => {
   it('renders <UnitPrice />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <ProductProvider product={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantUnitPrice />
       </ProductProvider>
