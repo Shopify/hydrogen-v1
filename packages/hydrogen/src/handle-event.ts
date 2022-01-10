@@ -99,11 +99,19 @@ export default async function handleEvent(
     }
   }
 
+  if (isReactHydrationRequest) {
+    return hydrate(url, {
+      context: {},
+      request,
+      dev,
+      buffered: true,
+    });
+  }
+
   const {body, bodyAttributes, htmlAttributes, componentResponse, ...head} =
     await render(url, {
       request,
       context: {},
-      isReactHydrationRequest,
       dev,
     });
 
@@ -130,31 +138,24 @@ export default async function handleEvent(
 
   let response;
 
-  if (isReactHydrationRequest) {
-    response = new Response(body, {
-      status: componentResponse.status ?? 200,
-      headers,
-    });
-  } else {
-    const html = template
-      .replace(
-        `<div id="root"></div>`,
-        `<div id="root" data-server-rendered="true">${body}</div>`
-      )
-      .replace(/<head>(.*?)<\/head>/s, generateHeadTag(head))
-      .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
-      .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&');
+  const html = template
+    .replace(
+      `<div id="root"></div>`,
+      `<div id="root" data-server-rendered="true">${body}</div>`
+    )
+    .replace(/<head>(.*?)<\/head>/s, generateHeadTag(head))
+    .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
+    .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&');
 
-    headers.append('content-type', 'text/html');
+  headers.append('content-type', 'text/html');
 
-    const {status, customStatus} = componentResponse;
+  const {status, customStatus} = componentResponse;
 
-    response = new Response(html, {
-      status: customStatus?.code ?? status ?? 200,
-      statusText: customStatus?.text,
-      headers,
-    });
-  }
+  response = new Response(html, {
+    status: customStatus?.code ?? status ?? 200,
+    statusText: customStatus?.text,
+    headers,
+  });
 
   return response;
 }

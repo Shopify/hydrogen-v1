@@ -53,15 +53,10 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    * and returning any initial state that needs to be hydrated into the client version of the app.
    * NOTE: This is currently only used for SEO bots or Worker runtime (where Stream is not yet supported).
    */
-  const render: Renderer = async function (
-    url,
-    {context, request, isReactHydrationRequest, dev}
-  ) {
+  const render: Renderer = async function (url, {context, request, dev}) {
     const log = getLoggerFromContext(request);
 
-    const state = isReactHydrationRequest
-      ? JSON.parse(url.searchParams?.get('state') ?? '{}')
-      : {pathname: url.pathname, search: url.search};
+    const state = {pathname: url.pathname, search: url.search};
 
     const {ReactApp, helmetContext, componentResponse} = buildReactApp({
       App,
@@ -72,9 +67,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       log,
     });
 
-    const body = isReactHydrationRequest
-      ? '' // TODO: Implement RSC without streaming -- Or wait until ReadableStream is supported
-      : await renderApp(ReactApp, state, log);
+    const body = await renderApp(ReactApp, state, log);
 
     logServerResponse(
       'ssr',
@@ -311,9 +304,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
   /**
    * Stream a hydration response to the client.
    */
-  const hydrate: Hydrator = function (
+  const hydrate: Hydrator = async function (
     url: URL,
-    {context, request, response, dev}
+    {context, request, response, buffered, dev}
   ) {
     const log = getLoggerFromContext(request);
     const state = JSON.parse(url.searchParams.get('state') || '{}');
@@ -339,15 +332,35 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       );
 
       stream.on('finish', function () {
-        logServerResponse('rsc', log, request, response.statusCode);
+        logServerResponse('rsc', log, request, response!.statusCode);
       });
     } else if (rscRenderToReadableStream) {
       const stream = rscRenderToReadableStream(
         <ReactApp {...state} />
-      ) as ReadableStream;
+      ) as ReadableStream<Uint8Array>;
+
+      if (buffered) {
+        // Note: CFW does not support reader.piteTo nor iterable syntax
+        const decoder = new TextDecoder();
+        const reader = stream.getReader();
+
+        let done = false;
+        let bufferedBody = '';
+
+        while (!done) {
+          const progress = await reader.read();
+
+          bufferedBody += decoder.decode(progress.value);
+          done = progress.done;
+        }
+
+        logServerResponse('rsc', log, request, 200);
+
+        return new Response(bufferedBody);
+      }
 
       // TODO: there's no 'on' method in ReadableStream. How do we know when
-      // it finishes? RS.piteTo(writable).then(...) ?
+      // it finishes? RS.piteTo(writable).then(...) ? stream.tee => read.then(...) ?
       // stream.on('end', function () {
       //   logServerResponse('rsc', log, request, response.statusCode);
       // });
