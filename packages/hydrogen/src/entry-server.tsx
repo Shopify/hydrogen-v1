@@ -25,11 +25,13 @@ import {ServerComponentRequest} from './framework/Hydration/ServerComponentReque
 import {getCacheControlHeader} from './framework/cache';
 import {ServerResponse} from 'http';
 
-import {
-  renderToPipeableStream as rscRenderToPipeableStream,
-  renderToReadableStream as rscRenderToReadableStream,
-  // @ts-ignore
-} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
+// @ts-ignore
+import * as rscRenderer from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
+
+const {
+  renderToPipeableStream: rscRenderToPipeableStream,
+  renderToReadableStream: rscRenderToReadableStream,
+} = rscRenderer;
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
