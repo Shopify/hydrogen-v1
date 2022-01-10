@@ -9,9 +9,6 @@ import {
   useEffect,
   // @ts-ignore
   useTransition,
-  // useLayoutEffect,
-  // useRef,
-  // useState,
 } from 'react';
 import {wrapPromise} from '../../utilities';
 import importClientComponent, {allClientComponents} from './client-imports';
@@ -29,7 +26,12 @@ export function subscribe(key: string, cb: (response: any) => any) {
   };
 }
 
-export function refresh(key: string) {
+export function refresh(key: string, file?: string) {
+  const module = moduleCache.get(file);
+  if (module) {
+    moduleCache.delete(file);
+  }
+
   const response = createFromFetch(
     fetch('/react?state=' + encodeURIComponent(key))
   );
@@ -200,15 +202,16 @@ async function eagerLoadModules(manifest: WireManifest) {
     Object.entries(manifest)
       .map(async ([key, module]) => {
         if (!key.startsWith('M')) return;
+        if (moduleCache.has(module.id)) {
+          return moduleCache.get(module.id);
+        }
 
-        console.log(module.id);
-        // console.log(allClientComponents);
         const mod = module.id.includes('@shopify/hydrogen/dist')
           ? await importClientComponent(module.id)
-          : await import(/* @vite-ignore */ `${module.id + '?v=' + version}`);
-        // fake cache key to make new imports every time (for HMR)
-        // const mod = await import([> @vite-ignore <] `${module.id}`);
+          : // fake cache key to make new imports every time (for HMR)
+            await import(/* @vite-ignore */ `${module.id + '?v=' + version}`);
 
+        moduleCache.set(module.id, mod);
         return mod;
       })
       .filter(Boolean)
