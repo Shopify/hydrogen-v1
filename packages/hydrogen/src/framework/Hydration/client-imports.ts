@@ -12,7 +12,7 @@ function normalizeComponentPaths(
 
 // These strings are replaced in a plugin with real globs
 // and paths that depend on the user project structure.
-const allClientComponents = {
+export const allClientComponents = {
   ...normalizeComponentPaths(
     // @ts-ignore
     import.meta.glob('__LIB_COMPONENTS_GLOB__'),

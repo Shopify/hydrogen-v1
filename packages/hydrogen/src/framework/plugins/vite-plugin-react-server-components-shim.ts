@@ -18,6 +18,7 @@ export default () => {
     },
 
     async resolveId(source, importer) {
+      console.log('here', source);
       if (!importer) return null;
 
       /**
@@ -108,6 +109,7 @@ export default () => {
           'components',
           '**/*.client.js'
         );
+        console.log(userPrefix, importerToRootPath);
 
         return code
           .replace('__USER_COMPONENTS_PREFIX__', normalizePath(userPrefix))
@@ -125,6 +127,7 @@ export default () => {
           )
         )
       ) {
+        console.log(modules);
         server.ws.send({
           type: 'custom',
           event: 'component',

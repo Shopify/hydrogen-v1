@@ -14,6 +14,7 @@ if (import.meta.hot) {
   });
 }
 function ClientApp({children}) {
+  console.log(children);
   return (
     <ShopifyProvider shopifyConfig={shopifyConfig}>{children}</ShopifyProvider>
   );

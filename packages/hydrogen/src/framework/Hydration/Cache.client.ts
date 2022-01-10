@@ -7,12 +7,14 @@ import {
   useRef,
   useState,
   useEffect,
+  // @ts-ignore
+  useTransition,
   // useLayoutEffect,
   // useRef,
   // useState,
 } from 'react';
 import {wrapPromise} from '../../utilities';
-import importClientComponent from './client-imports';
+import importClientComponent, {allClientComponents} from './client-imports';
 
 const cache = new Map();
 const moduleCache = new Map();
@@ -47,13 +49,16 @@ export function refresh(key: string) {
  * Note that we'd want to add some other constraints and controls around caching here.
  */
 export function useServerResponse(state: any) {
+  const [pending, startTransition] = useTransition();
   const key = JSON.stringify(state);
   let [response, setResponse] = useState(cache.get(key));
   const firstResponse = useRef();
 
   useEffect(() => {
     const unsubscribe = subscribe(key, (newResponse) =>
-      setResponse(newResponse)
+      startTransition(() => {
+        setResponse(newResponse);
+      })
     );
     return unsubscribe;
   }, [key]);
@@ -190,15 +195,19 @@ function createManifestFromWirePayload(payload: string): WireManifest {
 }
 
 async function eagerLoadModules(manifest: WireManifest) {
+  const version = performance.now().toFixed();
   const modules = await Promise.all(
     Object.entries(manifest)
       .map(async ([key, module]) => {
         if (!key.startsWith('M')) return;
 
-        // fake cache to make new imports every time (for HMR)
-        const mod = await import(
-          /* @vite-ignore */ `${module.id}?v=${Date.now()}`
-        );
+        console.log(module.id);
+        // console.log(allClientComponents);
+        const mod = module.id.includes('@shopify/hydrogen/dist')
+          ? await importClientComponent(module.id)
+          : await import(/* @vite-ignore */ `${module.id + '?v=' + version}`);
+        // fake cache key to make new imports every time (for HMR)
+        // const mod = await import([> @vite-ignore <] `${module.id}`);
 
         return mod;
       })
