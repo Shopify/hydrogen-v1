@@ -24,14 +24,6 @@
     "middleware.d.ts",
     "worker.js"
   ],
-  "exports": {
-    ".": "./dist/esnext/index.js",
-    "./plugin": "./plugin.js",
-    "./entry-client": "./entry-client.js",
-    "./client": "./client.js",
-    "./worker": "./worker.js",
-    "./*": "./*"
-  },
   "scripts": {
     "predev": "rimraf ./dist ../dev/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" \"dev-worker {@}/worker\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
@@ -82,9 +74,7 @@
     "mkdirp": "^1.0.4",
     "postcss": "^8",
     "raw-loader": "^4.0.2",
-    "rimraf": "^3.0.2",
-    "tailwindcss": "^2.1.1",
-    "vite": "^2.7.6"
+    "rimraf": "^3.0.2"
   },
   "peerDependencies": {
     "react": "0.0.0-experimental-0cc724c77-20211125",

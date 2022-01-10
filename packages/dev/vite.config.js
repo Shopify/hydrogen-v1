@@ -9,5 +9,5 @@ export default defineConfig({
     force: true,
   },
   plugins: [hydrogen(shopifyConfig)],
-  optimizeDeps: {include: ['@headlessui/react'], exclude: ['@shopify/polaris']},
+  optimizeDeps: {include: ['@headlessui/react']},
 });

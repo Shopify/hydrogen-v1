@@ -7,7 +7,6 @@ import {resolve} from './resolver';
 
 export default () => {
   let config: ResolvedConfig;
-  const serverComponentsIds = new Set<string>();
 
   return {
     name: 'vite-plugin-react-server-components-shim',
@@ -55,11 +54,6 @@ export default () => {
     },
 
     async load(id, options) {
-      if (/\.server(\.(j|t)sx?)?$/.test(id) && !/\/node_modules\//.test(id)) {
-        const moduleInfo = this.getModuleInfo(id);
-        serverComponentsIds.add(moduleInfo!.id);
-      }
-
       if (!isSSR(options)) return null;
 
       // Wrapped components won't match this becase they end in ?no-proxy

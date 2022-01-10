@@ -39,7 +39,7 @@ const isWorker = Boolean(renderToReadableStream);
  * send back a response containing the Suspense fallback and rely
  * on the client to hydrate and build the React tree.
  */
-const STREAM_ABORT_TIMEOUT_MS = 3000;
+const STREAM_ABORT_TIMEOUT_MS = 20000;
 
 const renderHydrogen: ServerHandler = (App, hook) => {
   /**

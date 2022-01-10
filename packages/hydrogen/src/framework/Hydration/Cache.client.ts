@@ -53,8 +53,7 @@ export function refresh(key: string, file?: string) {
 export function useServerResponse(state: any) {
   const [pending, startTransition] = useTransition();
   const key = JSON.stringify(state);
-  let [response, setResponse] = useState(cache.get(key));
-  const firstResponse = useRef();
+  const [response, setResponse] = useState(cache.get(key));
 
   useEffect(() => {
     const unsubscribe = subscribe(key, (newResponse) =>
