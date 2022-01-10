@@ -1,4 +1,5 @@
 import type {Plugin, ResolvedConfig} from 'vite';
+import chalk from 'chalk';
 import {normalizePath} from 'vite';
 import path from 'path';
 import {proxyClientComponent} from '../server-components';
@@ -18,7 +19,6 @@ export default () => {
     },
 
     async resolveId(source, importer) {
-      console.log('here', source);
       if (!importer) return null;
 
       /**
@@ -109,7 +109,6 @@ export default () => {
           'components',
           '**/*.client.js'
         );
-        console.log(userPrefix, importerToRootPath);
 
         return code
           .replace('__USER_COMPONENTS_PREFIX__', normalizePath(userPrefix))
@@ -119,6 +118,11 @@ export default () => {
       }
     },
     async handleHotUpdate({modules, server, file}) {
+      server.config.logger.info(chalk.green(`hmr update `) + chalk.dim(file), {
+        clear: true,
+        timestamp: true,
+      });
+
       if (
         /\.client\.[jt]sx?$/.test(file) &&
         modules.some((module) =>
@@ -127,11 +131,10 @@ export default () => {
           )
         )
       ) {
-        console.log(modules);
         server.ws.send({
           type: 'custom',
-          event: 'component',
-          data: {},
+          event: 'client-component',
+          data: file,
         });
 
         return [];
