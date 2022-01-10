@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- fix: replace log abbreviations with full text.
+
+## 0.8.2 - 2022-01-07
+
 - fix: load logger only once.
 - feat: `useQuery` returns an error if the query's fetch was unsuccessful
 - feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
