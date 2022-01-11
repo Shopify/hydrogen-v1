@@ -30,12 +30,10 @@ const {
   renderToReadableStream: rscRenderToReadableStream,
 } = rscRenderer;
 
-/**
- * react-dom/unstable-fizz provides different entrypoints based on runtime:
- * - `renderToReadableStream` for "browser" (aka worker)
- * - `pipeToNodeWritable` for node.js
- */
-const isWorker = Boolean(renderToReadableStream);
+declare global {
+  // eslint-disable-next-line no-var
+  var __WORKER__: boolean;
+}
 
 /**
  * If a query is taking too long, or something else went wrong,
@@ -125,88 +123,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       </Html>
     );
 
-    if (renderToPipeableStream) {
-      const {pipe, abort} = renderToPipeableStream(ReactAppSSR, {
-        onCompleteShell() {
-          /**
-           * TODO: This assumes `response.cache()` has been called _before_ any
-           * queries which might be caught behind Suspense. Clarify this or add
-           * additional checks downstream?
-           */
-          response.setHeader(
-            getCacheControlHeader({dev}),
-            componentResponse.cacheControlHeader
-          );
-
-          writeHeadToServerResponse(response, componentResponse, didError);
-
-          logServerResponse('str', log, request, response.statusCode);
-
-          if (isRedirect(response)) {
-            // Return redirects early without further rendering/streaming
-            return response.end();
-          }
-
-          if (!componentResponse.canStream()) return;
-
-          startWritingHtmlToServerResponse(
-            response,
-            pipe,
-            dev ? didError : undefined
-          );
-        },
-        onCompleteAll() {
-          clearTimeout(streamTimeout);
-
-          if (componentResponse.canStream() || response.writableEnded) return;
-
-          writeHeadToServerResponse(response, componentResponse, didError);
-
-          logServerResponse('str', log, request, response.statusCode);
-
-          if (isRedirect(response)) {
-            // Redirects found after any async code
-            return response.end();
-          }
-
-          if (componentResponse.customBody) {
-            if (componentResponse.customBody instanceof Promise) {
-              componentResponse.customBody.then((body) => response.end(body));
-            } else {
-              response.end(componentResponse.customBody);
-            }
-          } else {
-            startWritingHtmlToServerResponse(
-              response,
-              pipe,
-              dev ? didError : undefined
-            );
-          }
-        },
-        onError(error: any) {
-          didError = error;
-
-          if (dev && response.headersSent) {
-            // Calling write would flush headers automatically.
-            // Delay this error until headers are properly sent.
-            response.write(getErrorMarkup(error));
-          }
-
-          log.error(error);
-        },
-      });
-
-      const streamTimeout = setTimeout(() => {
-        const errorMessage = `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`;
-        log.error(errorMessage);
-
-        if (dev && response.headersSent) {
-          response.write(getErrorMarkup(new Error(errorMessage)));
-        }
-
-        abort();
-      }, STREAM_ABORT_TIMEOUT_MS);
-    } else if (renderToReadableStream) {
+    if (__WORKER__) {
       const deferred = defer();
       const encoder = new TextEncoder();
       const transform = new TransformStream();
@@ -295,6 +212,87 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       logServerResponse('str', log, request, responseOptions.status);
 
       return new Response(transform.readable, responseOptions);
+    } else {
+      const {pipe, abort} = renderToPipeableStream(ReactAppSSR, {
+        onCompleteShell() {
+          /**
+           * TODO: This assumes `response.cache()` has been called _before_ any
+           * queries which might be caught behind Suspense. Clarify this or add
+           * additional checks downstream?
+           */
+          response.setHeader(
+            getCacheControlHeader({dev}),
+            componentResponse.cacheControlHeader
+          );
+
+          writeHeadToServerResponse(response, componentResponse, didError);
+
+          logServerResponse('str', log, request, response.statusCode);
+
+          if (isRedirect(response)) {
+            // Return redirects early without further rendering/streaming
+            return response.end();
+          }
+
+          if (!componentResponse.canStream()) return;
+
+          startWritingHtmlToServerResponse(
+            response,
+            pipe,
+            dev ? didError : undefined
+          );
+        },
+        onCompleteAll() {
+          clearTimeout(streamTimeout);
+
+          if (componentResponse.canStream() || response.writableEnded) return;
+
+          writeHeadToServerResponse(response, componentResponse, didError);
+
+          logServerResponse('str', log, request, response.statusCode);
+
+          if (isRedirect(response)) {
+            // Redirects found after any async code
+            return response.end();
+          }
+
+          if (componentResponse.customBody) {
+            if (componentResponse.customBody instanceof Promise) {
+              componentResponse.customBody.then((body) => response.end(body));
+            } else {
+              response.end(componentResponse.customBody);
+            }
+          } else {
+            startWritingHtmlToServerResponse(
+              response,
+              pipe,
+              dev ? didError : undefined
+            );
+          }
+        },
+        onError(error: any) {
+          didError = error;
+
+          if (dev && response.headersSent) {
+            // Calling write would flush headers automatically.
+            // Delay this error until headers are properly sent.
+            response.write(getErrorMarkup(error));
+          }
+
+          log.error(error);
+        },
+      });
+
+      const streamTimeout = setTimeout(() => {
+        const errorMessage = `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`;
+        log.error(errorMessage);
+
+        if (dev && response.headersSent) {
+          response.write(getErrorMarkup(new Error(errorMessage)));
+        }
+
+        abort();
+      }, STREAM_ABORT_TIMEOUT_MS);
     }
   };
 
@@ -323,13 +321,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       });
     }
 
-    if (rscRenderToPipeableStream) {
-      const stream = rscRenderToPipeableStream(<ReactApp />).pipe(response);
-
-      stream.on('finish', function () {
-        logServerResponse('rsc', log, request, response!.statusCode);
-      });
-    } else if (rscRenderToReadableStream) {
+    if (__WORKER__) {
       const stream = rscRenderToReadableStream(
         <ReactApp />
       ) as ReadableStream<Uint8Array>;
@@ -361,6 +353,12 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       logServerResponse('rsc', log, request, 200);
 
       return new Response(bufferedBody);
+    } else {
+      const stream = rscRenderToPipeableStream(<ReactApp />).pipe(response);
+
+      stream.on('finish', function () {
+        logServerResponse('rsc', log, request, response!.statusCode);
+      });
     }
   };
 
@@ -435,7 +433,7 @@ async function renderToBufferedString(
       );
     }, STREAM_ABORT_TIMEOUT_MS);
 
-    if (isWorker) {
+    if (__WORKER__) {
       const deferred = defer();
       const stream = renderToReadableStream(ReactApp, {
         onCompleteAll() {

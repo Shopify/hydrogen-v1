@@ -68,6 +68,7 @@ export default () => {
 
       define: {
         __DEV__: env.mode !== 'production',
+        __WORKER__: !!process.env.WORKER,
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],
