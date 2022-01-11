@@ -1,5 +1,6 @@
 import {defineConfig} from 'vite';
 import hydrogen from '@shopify/hydrogen/plugin';
+import replace from '@rollup/plugin-replace';
 
 import shopifyConfig from './shopify.config';
 
@@ -7,4 +8,13 @@ import shopifyConfig from './shopify.config';
 export default defineConfig({
   plugins: [hydrogen(shopifyConfig)],
   optimizeDeps: {include: ['@headlessui/react']},
+  build: {
+    rollupOptions: {
+      plugins: [
+        replace({
+          __buildTimestamp__: () => +new Date(),
+        }),
+      ],
+    },
+  },
 });

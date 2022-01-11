@@ -28,7 +28,7 @@ export function useQuery<T>(
   queryOptions?: HydrogenUseQueryOptions
 ): RenderCacheResult<T> {
   return useRenderCacheData<T>(
-    key,
+    ['__buildTimestamp__', ...key],
     cachedQueryFnBuilder(key, queryFn, queryOptions)
   );
 }
