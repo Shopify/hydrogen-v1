@@ -34,7 +34,7 @@ export type Hydrator = (
     context: any;
     request: ServerComponentRequest;
     response?: ServerResponse;
-    buffered?: boolean;
+    isStreamable: boolean;
     dev?: boolean;
   }
 ) => void;

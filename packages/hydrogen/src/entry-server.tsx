@@ -303,7 +303,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const hydrate: Hydrator = async function (
     url: URL,
-    {context, request, response, buffered, dev}
+    {context, request, response, isStreamable, dev}
   ) {
     const log = getLoggerFromContext(request);
     const state = JSON.parse(url.searchParams.get('state') || '{}');
@@ -334,33 +334,33 @@ const renderHydrogen: ServerHandler = (App, hook) => {
         <ReactApp />
       ) as ReadableStream<Uint8Array>;
 
-      if (buffered) {
-        // Note: CFW does not support reader.piteTo nor iterable syntax
-        const decoder = new TextDecoder();
-        const reader = stream.getReader();
+      if (isStreamable) {
+        // TODO: there's no 'on' method in ReadableStream. How do we know when
+        // it finishes? RS.piteTo(writable).then(...) ? stream.tee => read.then(...) ?
+        // stream.on('end', function () {
+        //   logServerResponse('rsc', log, request, response.statusCode);
+        // });
 
-        let done = false;
-        let bufferedBody = '';
-
-        while (!done) {
-          const progress = await reader.read();
-
-          bufferedBody += decoder.decode(progress.value);
-          done = progress.done;
-        }
-
-        logServerResponse('rsc', log, request, 200);
-
-        return new Response(bufferedBody);
+        return new Response(stream);
       }
 
-      // TODO: there's no 'on' method in ReadableStream. How do we know when
-      // it finishes? RS.piteTo(writable).then(...) ? stream.tee => read.then(...) ?
-      // stream.on('end', function () {
-      //   logServerResponse('rsc', log, request, response.statusCode);
-      // });
+      // Note: CFW does not support reader.piteTo nor iterable syntax
+      const decoder = new TextDecoder();
+      const reader = stream.getReader();
 
-      return new Response(stream);
+      let done = false;
+      let bufferedBody = '';
+
+      while (!done) {
+        const progress = await reader.read();
+
+        bufferedBody += decoder.decode(progress.value);
+        done = progress.done;
+      }
+
+      logServerResponse('rsc', log, request, 200);
+
+      return new Response(bufferedBody);
     }
   };
 

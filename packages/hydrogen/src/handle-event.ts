@@ -73,7 +73,17 @@ export default async function handleEvent(
   }
 
   const userAgent = request.headers.get('user-agent');
-  const isStreamable = streamableResponse && !isBotUA(url, userAgent);
+  const isStreamable = Boolean(streamableResponse && !isBotUA(url, userAgent));
+
+  if (isReactHydrationRequest) {
+    return hydrate(url, {
+      context: {},
+      request,
+      response: streamableResponse,
+      isStreamable,
+      dev,
+    });
+  }
 
   /**
    * Stream back real-user responses, but for bots/etc,
@@ -81,30 +91,12 @@ export default async function handleEvent(
    * things for SEO reasons.
    */
   if (isStreamable) {
-    if (isReactHydrationRequest) {
-      return hydrate(url, {
-        context: {},
-        request,
-        response: streamableResponse,
-        dev,
-      });
-    } else {
-      return stream(url, {
-        context: {},
-        request,
-        response: streamableResponse,
-        template,
-        dev,
-      });
-    }
-  }
-
-  if (isReactHydrationRequest) {
-    return hydrate(url, {
+    return stream(url, {
       context: {},
       request,
+      response: streamableResponse,
+      template,
       dev,
-      buffered: true,
     });
   }
 
