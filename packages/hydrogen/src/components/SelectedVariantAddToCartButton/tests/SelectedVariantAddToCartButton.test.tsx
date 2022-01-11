@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  mountWithShopifyProvider,
+  mountWithProviders,
   getShopifyConfig,
 } from '../../../utilities/tests/shopifyMount';
 import {getProduct} from '../../../utilities/tests/product';
@@ -17,7 +17,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
 
-    const button = mountWithShopifyProvider(
+    const button = mountWithProviders(
       <CartProvider>
         <ProductProvider
           product={product}
@@ -42,7 +42,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
 
-    const button = mountWithShopifyProvider(
+    const button = mountWithProviders(
       <CartProvider>
         <ProductProvider
           product={product}
@@ -61,7 +61,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
   });
 
   it('renders a disabled <AddToCartButton /> when there is no selected variant', () => {
-    const button = mountWithShopifyProvider(
+    const button = mountWithProviders(
       <CartProvider>
         <ProductProvider product={getProduct()} initialVariantId="">
           <SelectedVariantAddToCartButton>
@@ -79,7 +79,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
 
   it('renders <AddToCartButton /> with attributes when the `attributes` prop is provided', () => {
     const attributes = [{key: 'hello', value: 'world'}];
-    const button = mountWithShopifyProvider(
+    const button = mountWithProviders(
       <CartProvider>
         <ProductProvider product={getProduct()} initialVariantId="">
           <SelectedVariantAddToCartButton attributes={attributes}>

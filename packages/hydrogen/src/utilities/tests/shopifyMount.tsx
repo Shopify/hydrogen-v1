@@ -6,7 +6,7 @@ import {ShopifyConfig} from '../../types';
 export interface ShopifyProviderOptions {}
 export interface ShopifyProviderContext {}
 
-export const mountWithShopifyProvider = createMount<
+export const mountWithProviders = createMount<
   ShopifyProviderOptions,
   ShopifyProviderContext
 >({

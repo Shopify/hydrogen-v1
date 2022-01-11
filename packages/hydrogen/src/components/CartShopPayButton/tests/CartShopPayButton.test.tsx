@@ -3,7 +3,7 @@ import {CartShopPayButton} from '../CartShopPayButton.client';
 import {CartProvider} from '../../CartProvider';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures';
 import {ShopPayButton} from '../../ShopPayButton';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {getShopifyConfig} from '../../../utilities/tests/shopifyMount';
 import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
 
@@ -23,7 +23,7 @@ describe('CartShopPayButton', () => {
   });
 
   it('renders a ShopPayButton', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={CART_WITH_LINES}>
         <CartShopPayButton />
       </CartProvider>

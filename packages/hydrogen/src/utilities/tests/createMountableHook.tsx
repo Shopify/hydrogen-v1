@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {mountWithShopifyProvider} from './shopifyMount';
+import {mountWithProviders} from './shopifyMount';
 
 // This exported function allows you to test the results of a hook directly
 // instead of testing the presence of strings in a mounted component.
@@ -20,7 +20,7 @@ export function createMountableHook<T>(hook: (args: T) => any) {
       return null;
     }
 
-    await mountWithShopifyProvider(<TestComponent />);
+    await mountWithProviders(<TestComponent />);
 
     return value;
   };

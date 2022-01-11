@@ -1,7 +1,7 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
 import {
-  mountWithShopifyProvider,
+  mountWithProviders,
   getShopifyConfig,
 } from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
@@ -14,7 +14,7 @@ setShopifyConfig(getShopifyConfig());
 describe('<ProductDescription/>', () => {
   it('renders <RawHtml /> with the product’s descriptionHtml', () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductDescription />
       </ProductProvider>

@@ -2,7 +2,7 @@ import React from 'react';
 import {ProductContext} from '../context';
 import {ProductProvider} from '../ProductProvider.client';
 import {
-  mountWithShopifyProvider,
+  mountWithProviders,
   getShopifyConfig,
 } from '../../../utilities/tests/shopifyMount';
 import {getProduct} from '../../../utilities/tests/product';
@@ -14,7 +14,7 @@ setShopifyConfig(getShopifyConfig());
 describe('<ProductProvider />', () => {
   it('sets up a product context for the provided product', () => {
     const product = getProduct();
-    const productProvider = mountWithShopifyProvider(
+    const productProvider = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         Hello world
       </ProductProvider>
@@ -50,7 +50,7 @@ describe('<ProductProvider />', () => {
 
   it('renders its children', () => {
     const Children = () => null;
-    const productProvider = mountWithShopifyProvider(
+    const productProvider = mountWithProviders(
       <ProductProvider product={getProduct()} initialVariantId="">
         <Children />
       </ProductProvider>
