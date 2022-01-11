@@ -52,8 +52,8 @@ export class Fs {
     }
   }
 
-  async exists(path: string) {
-    return await pathExists(this.fullPath(path));
+  exists(path: string) {
+    return pathExists(this.fullPath(path));
   }
 
   async *commit(): AsyncIterableIterator<FileResult> {
@@ -75,6 +75,10 @@ export class Fs {
 
   write(path: string, contents: string) {
     this.files.set(this.fullPath(path), contents);
+  }
+
+  makeDir(dir: string) {
+    return mkdirp(dir);
   }
 
   fullPath(path: string) {
