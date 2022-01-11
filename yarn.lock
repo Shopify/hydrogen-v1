@@ -11019,11 +11019,6 @@ react-router@5.2.1:
   version "0.0.0"
   uid ""
 
-react-ssr-prepass@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/react-ssr-prepass/-/react-ssr-prepass-1.4.0.tgz#33a3db19414f0f8f9f3f781c88f760ae366b4f51"
-  integrity sha512-0SzdmiQUtHvhxCabHg9BI/pkJfijGkQ0jQL6fC4YFy7idaDOuaiQLsajIkkNxffFXtJFHIWFITlve2WB88e0Jw==
-
 react@0.0.0-experimental-0cc724c77-20211125:
   version "0.0.0-experimental-0cc724c77-20211125"
   resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-0cc724c77-20211125.tgz#ed650068fbccae10a4cb7b78981517cf7a249f22"

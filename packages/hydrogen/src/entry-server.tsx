@@ -1,4 +1,4 @@
-import React, {ComponentType, JSXElementConstructor} from 'react';
+import React, {ComponentType} from 'react';
 import {
   // @ts-ignore
   renderToPipeableStream, // Only available in Node context
@@ -10,11 +10,8 @@ import {
   logServerResponse,
   getLoggerFromContext,
 } from './utilities/log/log';
-import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
-import ssrPrepass from 'react-ssr-prepass';
-// import {StaticRouter} from 'react-router-dom';
 import type {ServerHandler} from './types';
 import {FilledContext} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
@@ -67,7 +64,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       log,
     });
 
-    const body = await renderApp(ReactApp, state, log);
+    const body = await renderToBufferedString(<ReactApp />, {log});
 
     if (componentResponse.customBody) {
       return {body: await componentResponse.customBody, url, componentResponse};
@@ -124,7 +121,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
     const ReactAppSSR = (
       <Html head={head}>
-        <ReactApp {...state} />
+        <ReactApp />
       </Html>
     );
 
@@ -327,16 +324,14 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     }
 
     if (rscRenderToPipeableStream) {
-      const stream = rscRenderToPipeableStream(<ReactApp {...state} />).pipe(
-        response
-      );
+      const stream = rscRenderToPipeableStream(<ReactApp />).pipe(response);
 
       stream.on('finish', function () {
         logServerResponse('rsc', log, request, response!.statusCode);
       });
     } else if (rscRenderToReadableStream) {
       const stream = rscRenderToReadableStream(
-        <ReactApp {...state} />
+        <ReactApp />
       ) as ReadableStream<Uint8Array>;
 
       if (buffered) {
@@ -385,7 +380,7 @@ function buildReactApp({
   log,
 }: {
   App: ComponentType;
-  state: any;
+  state?: object | null;
   context: any;
   request: ServerComponentRequest;
   dev: boolean | undefined;
@@ -404,7 +399,7 @@ function buildReactApp({
 
   const ReactApp = (props: any) => (
     // <RenderCacheProvider cache={renderCache}>
-    <App {...props} {...hydrogenServerProps} />
+    <App {...state} {...props} {...hydrogenServerProps} />
     // </RenderCacheProvider>
   );
 
@@ -429,38 +424,11 @@ function extractHeadElements(helmetContext: FilledContext) {
     : {};
 }
 
-function supportsReadableStream() {
-  try {
-    new ReadableStream();
-    return true;
-  } catch (_e) {
-    return false;
-  }
-}
-
-async function renderApp(
-  ReactApp: JSXElementConstructor<any>,
-  state: any,
-  log: Logger
+async function renderToBufferedString(
+  ReactApp: JSX.Element,
+  {log}: {log: Logger}
 ): Promise<string> {
-  /**
-   * Temporary workaround until all Worker runtimes support ReadableStream
-   */
-  if (isWorker && !supportsReadableStream()) {
-    return renderAppFromStringWithPrepass(ReactApp, state, log);
-  }
-
-  return renderAppFromBufferedStream(ReactApp, log, state);
-}
-
-function renderAppFromBufferedStream(
-  ReactApp: JSXElementConstructor<any>,
-  log: Logger,
-  state: any
-) {
-  const app = <ReactApp {...state} />;
-
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<string>(async (resolve, reject) => {
     const errorTimeout = setTimeout(() => {
       reject(
         new Error(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`)
@@ -468,44 +436,35 @@ function renderAppFromBufferedStream(
     }, STREAM_ABORT_TIMEOUT_MS);
 
     if (isWorker) {
-      let isComplete = false;
-
-      const stream = renderToReadableStream(app, {
+      const deferred = defer();
+      const stream = renderToReadableStream(ReactApp, {
         onCompleteAll() {
           clearTimeout(errorTimeout);
-          isComplete = true;
+          /**
+           * We want to wait until `onCompleteAll` has been called before fetching the
+           * stream body. Otherwise, React 18's streaming JS script/template tags
+           * will be included in the output and cause issues when loading
+           * the Client Components in the browser.
+           */
+          deferred.resolve(null);
         },
         onError(error: any) {
           log.error(error);
-          reject(error);
+          deferred.reject(error);
         },
       }) as ReadableStream;
 
+      await deferred.promise.catch(reject);
+
       /**
-       * We want to wait until `onCompleteAll` has been called before fetching the
-       * stream body. Otherwise, React 18's streaming JS script/template tags
-       * will be included in the output and cause issues when loading
-       * the Client Components in the browser.
+       * Use the stream to build a `Response`, and fetch the body from the response
+       * to resolve and be processed by the rest of the pipeline.
        */
-      async function checkForResults() {
-        if (!isComplete) {
-          setTimeout(checkForResults, 100);
-          return;
-        }
-
-        /**
-         * Use the stream to build a `Response`, and fetch the body from the response
-         * to resolve and be processed by the rest of the pipeline.
-         */
-        const res = new Response(stream);
-        resolve(await res.text());
-      }
-
-      checkForResults();
+      resolve(await new Response(stream).text());
     } else {
       const writer = new HydrationWriter();
 
-      const {pipe} = renderToPipeableStream(app, {
+      const {pipe} = renderToPipeableStream(ReactApp, {
         /**
          * When hydrating, we have to wait until `onCompleteAll` to avoid having
          * `template` and `script` tags inserted and rendered as part of the hydration response.
@@ -527,27 +486,6 @@ function renderAppFromBufferedStream(
       });
     }
   });
-}
-
-/**
- * If we can't render a "blocking" response by buffering React's SSR
- * streaming functionality (likely due to lack of support for a primitive
- * in the runtime), we fall back to using `renderToString`. By default,
- * `renderToString` stops at Suspense boundaries and will not
- * keep trying them until they resolve. This means have to
- * use ssr-prepass to fetch all the queries once, store
- * the results in a context object, and re-render.
- */
-async function renderAppFromStringWithPrepass(
-  ReactApp: JSXElementConstructor<any>,
-  state: any,
-  log: Logger
-) {
-  const app = <ReactApp {...state} />;
-
-  await ssrPrepass(app);
-
-  return renderToString(app);
 }
 
 export default renderHydrogen;
