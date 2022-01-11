@@ -15,7 +15,6 @@ import {defer} from './utilities/defer';
 import type {ServerHandler} from './types';
 import {FilledContext} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
-import {HydrationWriter} from './framework/Hydration/writer.server';
 import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
@@ -373,15 +372,14 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       // Note: CFW does not support reader.piteTo nor iterable syntax
       const decoder = new TextDecoder();
       const reader = stream.getReader();
-
-      let done = false;
       let bufferedBody = '';
 
-      while (!done) {
-        const progress = await reader.read();
+      while (true) {
+        const {done, value} = await reader.read();
+        if (done) break;
 
-        bufferedBody += decoder.decode(progress.value);
-        done = progress.done;
+        bufferedBody +=
+          typeof value === 'string' ? value : decoder.decode(value);
       }
 
       logServerResponse('rsc', log, request, 200);
@@ -494,7 +492,8 @@ async function renderToBufferedString(
        */
       resolve(await new Response(stream).text());
     } else {
-      const writer = new HydrationWriter();
+      const {PassThrough} = await import('stream');
+      const writer = new PassThrough();
 
       const {pipe} = renderToPipeableStream(ReactApp, {
         /**
@@ -503,13 +502,13 @@ async function renderToBufferedString(
          */
         onCompleteAll() {
           clearTimeout(errorTimeout);
+
+          let data = '';
+          writer.on('data', (chunk) => (data += chunk.toString()));
+          writer.once('error', reject);
+          writer.once('end', () => resolve(data));
           // Tell React to start writing to the writer
           pipe(writer);
-
-          // Tell React that the writer is ready to drain, which sometimes results in a last "chunk" being written.
-          writer.drain();
-
-          resolve(writer.toString());
         },
         onError(error: any) {
           log.error(error);
