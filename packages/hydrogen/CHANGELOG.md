@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- feat: add null value handling in useShop (#449)
 - fix: replace log abbreviations with full text.
 - feature: add optional `locale` param to `useShopQuery` to be used as `Accept-Language` in the store Storefront API query
 
