@@ -1,6 +1,7 @@
 import prettier from 'prettier';
 
 const PRETTIER_CONFIG = {
+  parser: 'babel',
   ...require('@shopify/prettier-config'),
 };
 

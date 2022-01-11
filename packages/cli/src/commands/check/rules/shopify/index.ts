@@ -1,0 +1,1 @@
+export {checkShopify} from './checkShopify';
