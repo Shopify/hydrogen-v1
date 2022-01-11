@@ -20,9 +20,7 @@ export async function checkHydrogenVersion({
 
   const success = h2Version === 'latest' || latestHydrogen;
 
-  const description = success
-    ? `Has latest hydrogen version`
-    : `Didn’t find latest version of hydrogen (${HYDROGEN_MIN_VERSION}), found ${normalizedVersion}`;
+  const description = `Has latest hydrogen version (latest: ${HYDROGEN_MIN_VERSION} / found ${normalizedVersion})`;
 
   return [
     {

@@ -150,7 +150,7 @@ async function* runFixers(
 }
 
 function statusEmoji(success: boolean) {
-  return success ? chalk.green(`✓`) : chalk.red(`✕`);
+  return success ? '✓' : `✕`;
 }
 
 function statusFixable(fix: CheckResult['fix']) {
