@@ -29,6 +29,7 @@ export function useShopQuery<T>({
   variables?: Record<string, any>;
   /** An object containing cache-control options for the sub-request. */
   cache?: CacheOptions;
+  /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
 }): UseShopQueryResponse<T> {
   if (isClient()) {
@@ -91,8 +92,13 @@ export function useShopQuery<T>({
   return data as UseShopQueryResponse<T>;
 }
 
-function createShopRequest(body: string, locale: string) {
-  const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
+function createShopRequest(body: string, locale?: string) {
+  const {
+    storeDomain,
+    storefrontToken,
+    graphqlApiVersion,
+    locale: defaultLocale,
+  } = useShop();
 
   const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
 
@@ -102,7 +108,7 @@ function createShopRequest(body: string, locale: string) {
       headers: {
         'X-Shopify-Storefront-Access-Token': storefrontToken,
         'content-type': 'application/json',
-        ...(locale ? {'Accept-Language': locale} : null),
+        'Accept-Language': (locale as string) ?? defaultLocale,
       },
       body,
     }),

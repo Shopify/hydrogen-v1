@@ -1,10 +1,9 @@
 import {Product, flattenConnection, useProduct} from '@shopify/hydrogen/client';
-import {useShop} from '@shopify/hydrogen/client';
 
 import ProductOptions from './ProductOptions.client';
 import Gallery from './Gallery.client';
 import Seo from './Seo.client';
-import Button, {
+import {
   BUTTON_PRIMARY_CLASSES,
   BUTTON_SECONDARY_CLASSES,
 } from './Button.client';
@@ -110,28 +109,11 @@ function SizeChart() {
 
 export default function ProductDetails({product}) {
   const initialVariant = flattenConnection(product.variants)[0];
-  const {locale, setLocale} = useShop();
-
-  function _setLocale() {
-    if (locale === 'it-it') {
-      setLocale('en-us');
-    } else {
-      setLocale('it-it');
-    }
-  }
 
   return (
     <>
       <Seo product={product} />
       <Product product={product} initialVariantId={initialVariant.id}>
-        <div className="border p-4">
-          Current Locale: {locale}
-          <Button
-            handleClick={_setLocale}
-            label="toggle lang"
-            className="w-auto"
-          ></Button>
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-x-8 my-16">
           <div className="md:hidden mt-5 mb-8">
             <Product.Title
