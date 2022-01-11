@@ -1,5 +1,6 @@
 import React, {ReactElement, useMemo} from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router-dom';
+import type {Logger} from '../../utilities/log/log';
 
 export type ImportGlobEagerOutput = Record<string, Record<'default', any>>;
 
@@ -13,10 +14,12 @@ export function DefaultRoutes({
   pages,
   serverState,
   fallback,
+  log,
 }: {
   pages: ImportGlobEagerOutput;
   serverState: Record<string, any>;
   fallback?: ReactElement;
+  log: Logger;
 }) {
   const {path} = useRouteMatch();
   const routes = useMemo(
@@ -28,7 +31,7 @@ export function DefaultRoutes({
     <Switch>
       {routes.map((route) => (
         <Route key={route.path} exact={route.exact} path={route.path}>
-          <route.component {...serverState} />
+          <route.component {...serverState} log={log} />
         </Route>
       ))}
       {fallback && <Route path="*">{fallback}</Route>}

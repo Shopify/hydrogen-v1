@@ -7,12 +7,24 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- fix: replace log abbreviations with full text.
+
+## 0.8.2 - 2022-01-07
+
+- fix: load logger only once.
+- feat: `useQuery` returns an error if the query's fetch was unsuccessful
+- feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
+- fix: do not attempt to decode product IDs, as they are no longer base64-encoded in `unstable`
+
+## 0.8.1 - 2022-01-04
+
 - feat: Detect bot user agents and give bots a non-streamed response.
 - feat: Add global `Oxygen.env` for server-only environment variables.
 - fix: cart decrease button removes at zero quantity
 - feat: upgrade to latest React 18 experimental version
 - docs: product provider tweaks
 - docs: Document naming conventions
+- feat: logging abstraction with default timing information
 
 ## 0.8.0 - 2021-12-07
 

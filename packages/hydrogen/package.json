@@ -4,7 +4,7 @@
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"
   },
-  "version": "0.8.0",
+  "version": "0.8.2",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -74,8 +74,7 @@
     "mkdirp": "^1.0.4",
     "postcss": "^8",
     "raw-loader": "^4.0.2",
-    "rimraf": "^3.0.2",
-    "tailwindcss": "^2.1.1"
+    "rimraf": "^3.0.2"
   },
   "peerDependencies": {
     "react": "0.0.0-experimental-0cc724c77-20211125",
@@ -92,6 +91,7 @@
     "html-dom-parser": "^1.0.1",
     "html-react-parser": "^1.2.6",
     "isomorphic-dompurify": "^0.13.0",
+    "kolorist": "^1.5.1",
     "magic-string": "^0.25.7",
     "node-fetch": "^2.6.1",
     "react-error-boundary": "^3.1.3",

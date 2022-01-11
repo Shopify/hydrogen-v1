@@ -8,6 +8,16 @@ export type RenderCacheProviderProps = {
   children?: React.ReactNode;
 };
 
-export interface RenderCacheResult<T> {
+export type RenderCacheResult<T> =
+  | RenderCacheResultSuccess<T>
+  | RenderCacheResultError;
+
+type RenderCacheResultSuccess<T> = {
   data: T;
-}
+  error?: never;
+};
+
+type RenderCacheResultError = {
+  data?: never;
+  error: Response;
+};
