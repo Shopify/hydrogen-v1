@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - fix: replace log abbreviations with full text.
+- feature: add optional `locale` param to `useShopQuery` to be used as `Accept-Language` in the store Storefront API query
 
 ## 0.8.2 - 2022-01-07
 
