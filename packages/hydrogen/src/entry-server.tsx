@@ -124,7 +124,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     );
 
     if (__WORKER__) {
-      const deferred = defer();
+      const deferred = defer<boolean>();
       const encoder = new TextEncoder();
       const transform = new TransformStream();
       const writable = transform.writable.getWriter();
@@ -147,7 +147,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
           if (isRedirect(responseOptions)) {
             // Return redirects early without further rendering/streaming
-            return deferred.resolve(null);
+            return deferred.resolve(false);
           }
 
           if (!componentResponse.canStream()) return;
@@ -159,8 +159,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             dev ? didError : undefined
           );
 
-          deferred.resolve(null);
-          readable.pipeThrough(transform);
+          deferred.resolve(true);
         },
         onCompleteAll() {
           if (componentResponse.canStream()) return;
@@ -172,7 +171,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
           if (isRedirect(responseOptions)) {
             // Redirects found after any async code
-            return deferred.resolve(null);
+            return deferred.resolve(false);
           }
 
           if (componentResponse.customBody) {
@@ -183,6 +182,8 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             } else {
               writable.write(encoder.encode(componentResponse.customBody));
             }
+
+            deferred.resolve(false);
           } else {
             startWritingHtmlToStream(
               responseOptions,
@@ -191,10 +192,8 @@ const renderHydrogen: ServerHandler = (App, hook) => {
               dev ? didError : undefined
             );
 
-            readable.pipeThrough(transform);
+            deferred.resolve(true);
           }
-
-          deferred.resolve(null);
         },
         onError(error: any) {
           didError = error;
@@ -207,7 +206,13 @@ const renderHydrogen: ServerHandler = (App, hook) => {
         },
       });
 
-      await deferred.promise;
+      const shouldUseStream = await deferred.promise;
+
+      writable.releaseLock();
+
+      if (shouldUseStream) {
+        readable.pipeThrough(transform);
+      }
 
       logServerResponse('str', log, request, responseOptions.status);
 
@@ -327,12 +332,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       ) as ReadableStream<Uint8Array>;
 
       if (isStreamable) {
-        // TODO: there's no 'on' method in ReadableStream. How do we know when
-        // it finishes? RS.piteTo(writable).then(...) ? stream.tee => read.then(...) ?
-        // stream.on('end', function () {
-        //   logServerResponse('rsc', log, request, response.statusCode);
-        // });
-
+        logServerResponse('rsc', log, request, 200);
         return new Response(stream);
       }
 
