@@ -1,5 +1,4 @@
 import {ServerResponse} from 'http';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
 
@@ -7,15 +6,11 @@ export type Renderer = (
   url: URL,
   options: {
     request: ServerComponentRequest;
+    template: string;
     context?: Record<string, any>;
     dev?: boolean;
   }
-) => Promise<
-  {
-    body: string;
-    componentResponse: ServerComponentResponse;
-  } & Record<string, any>
->;
+) => Promise<Response>;
 
 export type Streamer = (
   url: URL,

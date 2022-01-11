@@ -31,6 +31,8 @@ const {
 } = rscRenderer;
 
 declare global {
+  // This is provided by a Vite plugin
+  // and will trigger tree-shaking.
   // eslint-disable-next-line no-var
   var __WORKER__: boolean;
 }
@@ -48,9 +50,11 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    * and returning any initial state that needs to be hydrated into the client version of the app.
    * NOTE: This is currently only used for SEO bots or Worker runtime (where Stream is not yet supported).
    */
-  const render: Renderer = async function (url, {context, request, dev}) {
+  const render: Renderer = async function (
+    url,
+    {context, request, template, dev}
+  ) {
     const log = getLoggerFromContext(request);
-
     const state = {pathname: url.pathname, search: url.search};
 
     const {ReactApp, helmetContext, componentResponse} = buildReactApp({
@@ -62,29 +66,61 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       log,
     });
 
-    const body = await renderToBufferedString(<ReactApp />, {log});
+    let html = await renderToBufferedString(
+      <Html template={template}>
+        <ReactApp />
+      </Html>,
+      {log}
+    );
+
+    const {headers, status, statusText} = getResponseOptions(componentResponse);
+
+    /**
+     * TODO: Also add `Vary` headers for `accept-language` and any other keys
+     * we want to shard our full-page cache for all Hydrogen storefronts.
+     */
+    headers[getCacheControlHeader({dev})] =
+      componentResponse.cacheControlHeader;
 
     if (componentResponse.customBody) {
-      return {body: await componentResponse.customBody, url, componentResponse};
+      // This can be used to return sitemap.xml or any other custom response.
+
+      logServerResponse('ssr', log, request, status);
+
+      return new Response(await componentResponse.customBody, {
+        status,
+        statusText,
+        headers,
+      });
     }
 
-    let params = {url, ...extractHeadElements(helmetContext)};
+    headers['Content-type'] = 'text/html';
+    const params = {url, ...extractHeadElements(helmetContext)};
 
     /**
      * We allow the developer to "hook" into this process and mutate the params.
      */
     if (hook) {
-      params = hook(params) || params;
+      Object.assign(params, hook(params) || {});
     }
 
-    logServerResponse(
-      'ssr',
-      log,
-      request,
-      componentResponse.customStatus?.code ?? componentResponse.status ?? 200
-    );
+    const {bodyAttributes, htmlAttributes, ...head} = params;
 
-    return {body, componentResponse, ...params};
+    html = html
+      .replace(
+        /<head>(.*?)<\/head>/s,
+        generateHeadTag(head as Record<string, any>)
+      )
+      .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
+      .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&');
+
+    logServerResponse('ssr', log, request, status);
+
+    return new Response(html, {
+      status,
+      statusText,
+      headers,
+    });
   };
 
   /**
@@ -107,7 +143,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       log,
     });
 
-    if (response) {
+    if (!__WORKER__ && response) {
       response.socket!.on('error', (error: any) => {
         log.fatal(error);
       });
@@ -115,10 +151,8 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
     let didError: Error | undefined;
 
-    const head = template.match(/<head>(.+?)<\/head>/s)![1];
-
     const ReactAppSSR = (
-      <Html head={head}>
+      <Html template={template} htmlAttrs={{lang: 'en'}}>
         <ReactApp />
       </Html>
     );
@@ -573,4 +607,31 @@ function writeHeadToServerResponse(
 function isRedirect(response: {status?: number; statusCode?: number}) {
   const status = response.status ?? response.statusCode ?? 0;
   return status >= 300 && status < 400;
+}
+
+/**
+ * Generate the contents of the `head` tag, and update the existing `<title>` tag
+ * if one exists, and if a title is passed.
+ */
+function generateHeadTag({title, ...rest}: Record<string, string>) {
+  const headProps = ['base', 'meta', 'style', 'noscript', 'script', 'link'];
+
+  const otherHeadProps = headProps
+    .map((prop) => rest[prop])
+    .filter(Boolean)
+    .join('\n');
+
+  return (_outerHtml: string, innerHtml: string) => {
+    let headHtml = otherHeadProps + innerHtml;
+
+    if (title) {
+      if (headHtml.includes('<title>')) {
+        headHtml = headHtml.replace(/(<title>(?:.|\n)*?<\/title>)/, title);
+      } else {
+        headHtml += title;
+      }
+    }
+
+    return `<head>${headHtml}</head>`;
+  };
 }
