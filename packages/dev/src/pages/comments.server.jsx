@@ -11,7 +11,8 @@ export async function api(request) {
     case 'GET':
       return new Response(JSON.stringify(comments), {status: 200});
     case 'POST':
-      comments.push(createNewComment(JSON.parse(request.body)));
+      const newComment = await request.json();
+      comments.push(createNewComment(newComment));
       return new Response(JSON.stringify(comments[comments.length - 1]), {
         status: 200,
       });
@@ -23,6 +24,6 @@ export async function api(request) {
   return new Response(null, {status: 404});
 }
 
-function createNewComment(body) {
-  return {...JSON.parse(body), id: idCounter++};
+function createNewComment(newComment) {
+  return {...newComment, id: idCounter++};
 }

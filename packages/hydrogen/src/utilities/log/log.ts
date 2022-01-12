@@ -77,7 +77,7 @@ export const log: Logger = {
 };
 
 export function logServerResponse(
-  type: 'str' | 'rsc' | 'ssr',
+  type: 'str' | 'rsc' | 'ssr' | 'api',
   log: Logger,
   request: ServerComponentRequest,
   responseStatus: number

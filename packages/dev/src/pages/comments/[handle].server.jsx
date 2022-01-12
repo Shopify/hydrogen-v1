@@ -1,9 +1,7 @@
 import {comments} from '../comments.server';
 
-export async function api(request) {
-  const comment = comments.find(
-    (comment) => comment.id == request?.params?.handle,
-  );
+export async function api(request, {params: {handle}}) {
+  const comment = comments.find((comment) => comment.id == handle);
 
   if (comment) {
     switch (request.method) {
@@ -22,7 +20,7 @@ export async function api(request) {
     }
   }
 
-  return new Response(null, {
+  return new Response('Not found', {
     status: 404,
   });
 }

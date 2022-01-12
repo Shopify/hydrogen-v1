@@ -5,6 +5,7 @@ import {getCacheControlHeader} from './framework/cache';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
 import {getLoggerFromContext, logServerResponse} from './utilities/log';
+import {renderApiRoute} from './utilities/apiRoutes';
 
 interface HydrogenFetchEvent {
   /**
@@ -62,21 +63,29 @@ export default async function handleEvent(
   ) {
     return assetHandler(event, url);
   }
-  const {render, hydrate, stream}: EntryServerHandler =
+  const {render, hydrate, stream, getApiRoute}: EntryServerHandler =
     entrypoint.default || entrypoint;
 
   // @ts-ignore
-  if (dev && !(render && hydrate && stream)) {
+  if (dev && !(render && hydrate && stream && getApiRoute)) {
     throw new Error(
       `entry-server.jsx could not be loaded. This likely occurred because of a Vite compilation error.\n` +
         `Please check your server logs for more information.`
     );
   }
 
+  const logger = getLoggerFromContext(request);
+
+  if (!isReactHydrationRequest) {
+    const apiRoute = getApiRoute(url);
+
+    if (apiRoute) {
+      return renderApiRoute(request, apiRoute, logger);
+    }
+  }
+
   const userAgent = request.headers.get('user-agent');
   const isStreamable = streamableResponse && !isBotUA(url, userAgent);
-
-  const logger = getLoggerFromContext(request);
 
   /**
    * Stream back real-user responses, but for bots/etc,

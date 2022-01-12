@@ -2456,6 +2456,14 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/body-parser@^1.19.2":
+  version "1.19.2"
+  resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
+  integrity sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==
+  dependencies:
+    "@types/connect" "*"
+    "@types/node" "*"
+
 "@types/change-case@^2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@types/change-case/-/change-case-2.3.1.tgz#dbaf4efb63ad8586ab8819179a790904ccb6a837"
@@ -2463,7 +2471,7 @@
   dependencies:
     change-case "*"
 
-"@types/connect@^3.4.34":
+"@types/connect@*", "@types/connect@^3.4.34":
   version "3.4.35"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
   integrity sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==
@@ -10407,6 +10415,11 @@ path-to-regexp@^1.7.0:
   integrity sha512-n43JRhlUKUAlibEJhPeir1ncUID16QnEjNpwzNdO3Lm4ywrBpBZ5oLD0I6br9evr1Y9JTqwRtAh7JLoOzAQdVA==
   dependencies:
     isarray "0.0.1"
+
+path-to-regexp@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-6.2.0.tgz#f7b3803336104c346889adece614669230645f38"
+  integrity sha512-f66KywYG6+43afgE/8j/GoiNyygk/bnoCbps++3ErRKsIYkGGupyv07R2Ok5m9i67Iqc+T2g1eAUGUPzWhYTyg==
 
 path-type@^3.0.0:
   version "3.0.0"

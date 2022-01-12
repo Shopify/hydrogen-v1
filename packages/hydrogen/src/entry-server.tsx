@@ -10,7 +10,7 @@ import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
 import ssrPrepass from 'react-ssr-prepass';
 import {StaticRouter} from 'react-router-dom';
-import type {ServerHandler} from './types';
+import type {ImportGlobEagerOutput, ServerHandler} from './types';
 import {HydrationContext} from './framework/Hydration/HydrationContext.server';
 import {generateWireSyntaxFromRenderedHtml} from './framework/Hydration/wire.server';
 import {FilledContext, HelmetProvider} from 'react-helmet-async';
@@ -22,6 +22,7 @@ import {ServerComponentRequest} from './framework/Hydration/ServerComponentReque
 import {getCacheControlHeader} from './framework/cache';
 import {ServerResponse} from 'http';
 import {RenderCacheProvider} from './foundation/RenderCacheProvider';
+import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
 
 /**
  * react-dom/unstable-fizz provides different entrypoints based on runtime:
@@ -37,7 +38,7 @@ const isWorker = Boolean(renderToReadableStream);
  */
 const STREAM_ABORT_TIMEOUT_MS = 3000;
 
-const renderHydrogen: ServerHandler = (App, hook) => {
+const renderHydrogen: ServerHandler = (App, pages, hook) => {
   /**
    * The render function is responsible for turning the provided `App` into an HTML string,
    * and returning any initial state that needs to be hydrated into the client version of the app.
@@ -58,6 +59,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       request,
       dev,
       log,
+      pages,
     });
 
     const body = await renderApp(ReactApp, state, log, isReactHydrationRequest);
@@ -95,6 +97,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       request,
       dev,
       log,
+      pages,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -222,6 +225,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       request,
       dev,
       log,
+      pages,
     });
 
     response.socket!.on('error', (error: any) => {
@@ -272,10 +276,16 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     }, STREAM_ABORT_TIMEOUT_MS);
   };
 
+  function getApiRoute(url: URL) {
+    const routes = getApiRoutesFromPages(pages);
+    return getApiRouteFromURL(url, routes);
+  }
+
   return {
     render,
     stream,
     hydrate,
+    getApiRoute,
   };
 };
 
@@ -286,6 +296,7 @@ function buildReactApp({
   request,
   dev,
   log,
+  pages,
 }: {
   App: ComponentType;
   state: any;
@@ -293,6 +304,7 @@ function buildReactApp({
   request: ServerComponentRequest;
   dev: boolean | undefined;
   log: Logger;
+  pages?: ImportGlobEagerOutput;
 }) {
   const renderCache = {};
   const helmetContext = {} as FilledContext;
@@ -310,7 +322,7 @@ function buildReactApp({
         context={context}
       >
         <HelmetProvider context={helmetContext}>
-          <App {...props} {...hydrogenServerProps} />
+          <App {...props} {...hydrogenServerProps} pages={pages} />
         </HelmetProvider>
       </StaticRouter>
     </RenderCacheProvider>
