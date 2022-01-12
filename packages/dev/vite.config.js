@@ -4,6 +4,8 @@ import replace from '@rollup/plugin-replace';
 
 import shopifyConfig from './shopify.config';
 
+console.log('GITHASH: ', process.env.GITHASH);
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [hydrogen(shopifyConfig)],
