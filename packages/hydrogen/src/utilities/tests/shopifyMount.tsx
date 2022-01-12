@@ -1,6 +1,6 @@
 import React from 'react';
 import {createMount} from '@shopify/react-testing';
-import {DEFAULT_API_VERSION} from '../../foundation';
+import {DEFAULT_API_VERSION} from '../../foundation/constants';
 import {ShopifyConfig} from '../../types';
 
 export interface ShopifyProviderOptions {}
