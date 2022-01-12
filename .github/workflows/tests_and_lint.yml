@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        node-version: [14.x, 15.x, 16.x]
+        node-version: [16.x]
 
     name: OS ${{ matrix.os }} / NodeJS ${{ matrix.node-version }}
 
