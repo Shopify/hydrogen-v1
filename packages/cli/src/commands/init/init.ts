@@ -32,6 +32,8 @@ export async function init(env: Env) {
     if (overwrite) {
       await fs.empty(workspace.root());
     }
+  } else {
+    await fs.makeDir(workspace.root());
   }
 
   const template = await ui.ask<Template>(
