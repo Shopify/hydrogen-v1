@@ -11,15 +11,6 @@ export function useShop(): ShopifyProviderValue {
   if (!context) {
     throw new Error('No Shopify Context found');
   }
-  if (!context.storeDomain) {
-    throw new Error('`storeDomain` should be defined in `shopify.config.js`');
-  }
-
-  if (!context.storefrontToken) {
-    throw new Error(
-      '`storefrontToken` should be defined in `shopify.config.js`'
-    );
-  }
 
   return context;
 }

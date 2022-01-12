@@ -13,6 +13,10 @@ export function ShopifyProvider({
   shopifyConfig,
   children,
 }: ShopifyProviderProps) {
+  if (!shopifyConfig) {
+    throw new Error('`shopifyConfig` should be defined in `ShopifyProvider`');
+  }
+
   const shopifyProviderValue = useMemo(
     () => ({
       locale: 'en-us',
