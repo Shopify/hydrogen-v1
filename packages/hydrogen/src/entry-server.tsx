@@ -490,11 +490,19 @@ function buildReactApp({
     log,
   };
 
-  const ReactApp = (props: any) => (
-    <ServerRequestProvider request={request} isRSC={isRSC}>
-      <App {...state} {...props} {...hydrogenServerProps} />
-    </ServerRequestProvider>
-  );
+  const ReactApp = (props: any) => {
+    const AppContent = (
+      <ServerRequestProvider request={request} isRSC={isRSC}>
+        <App {...state} {...props} {...hydrogenServerProps} />
+      </ServerRequestProvider>
+    );
+
+    if (isRSC) return AppContent;
+
+    // Note: The <Suspense> wrapper in SSR is
+    // required to match hydration in browser
+    return <React.Suspense fallback={null}>{AppContent}</React.Suspense>;
+  };
 
   return {helmetContext, ReactApp, componentResponse};
 }
