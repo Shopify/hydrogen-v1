@@ -47,8 +47,10 @@ function flightContainer({
   chunk?: string;
   nonce?: string;
 }) {
+  const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
+
   return `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
-    init ? '=[]' : `.push(\`${chunk}\`)`
+    init ? '=[]' : `.push(\`${normalizedChunk}\`)`
   }</script>`;
 }
 
