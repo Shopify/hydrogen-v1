@@ -1,13 +1,7 @@
 import React, {ReactElement, useMemo} from 'react';
 import {Route, Switch, useRouteMatch} from 'react-router-dom';
 import {Logger} from '../../utilities/log/log';
-import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
-import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
-
-export type ImportGlobEagerOutput = Record<
-  string,
-  Record<'default' | 'api', any>
->;
+import type {ImportGlobEagerOutput} from '../../types';
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -56,48 +50,50 @@ export function createRoutesFromPages(
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
-  const routes = Object.keys(pages).map((key) => {
-    const path = key
-      .replace('./pages', '')
-      .replace(/\.server\.(t|j)sx?$/, '')
-      /**
-       * Replace /index with /
-       */
-      .replace(/\/index$/i, '/')
-      /**
-       * Only lowercase the first letter. This allows the developer to use camelCase
-       * dynamic paths while ensuring their standard routes are normalized to lowercase.
-       */
-      .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
-      /**
-       * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
-       */
-      .replace(
-        /\[(?:[.]{3})?(\w+?)\]/g,
-        (_match, param: string) => `:${param}`
-      );
+  const routes = Object.keys(pages)
+    .map((key) => {
+      const path = key
+        .replace('./pages', '')
+        .replace(/\.server\.(t|j)sx?$/, '')
+        /**
+         * Replace /index with /
+         */
+        .replace(/\/index$/i, '/')
+        /**
+         * Only lowercase the first letter. This allows the developer to use camelCase
+         * dynamic paths while ensuring their standard routes are normalized to lowercase.
+         */
+        .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
+        /**
+         * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
+         */
+        .replace(
+          /\[(?:[.]{3})?(\w+?)\]/g,
+          (_match, param: string) => `:${param}`
+        );
 
-    /**
-     * Catch-all routes [...handle].jsx don't need an exact match
-     * https://reactrouter.com/core/api/Route/exact-bool
-     */
-    const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
+      /**
+       * Catch-all routes [...handle].jsx don't need an exact match
+       * https://reactrouter.com/core/api/Route/exact-bool
+       */
+      const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
 
-    if (!pages[key].default && !pages[key].api)
-      throw new Error(
-        `${key} doesn't export a default React component or an API function`
-      );
-    if (pages[key].default && pages[key].api)
-      throw new Error(
-        `${key} cannot export both a default React component and an API function`
-      );
+      if (!pages[key].default && !pages[key].api)
+        throw new Error(
+          `${key} doesn't export a default React component or an API function`
+        );
+      if (pages[key].default && pages[key].api)
+        throw new Error(
+          `${key} cannot export both a default React component and an API function`
+        );
 
-    return {
-      path: topLevelPrefix + path,
-      component: pages[key].default || APIComponent.bind(null, pages[key].api),
-      exact,
-    };
-  });
+      return {
+        path: topLevelPrefix + path,
+        component: pages[key].default,
+        exact,
+      };
+    })
+    .filter((route) => route.component);
 
   /**
    * Place static paths BEFORE dynamic paths to grant priority.
@@ -106,23 +102,4 @@ export function createRoutesFromPages(
     ...routes.filter((route) => !route.path.includes(':')),
     ...routes.filter((route) => route.path.includes(':')),
   ];
-}
-
-function APIComponent(
-  APIFunction: any,
-  props: {response: ServerComponentResponse; request: ServerComponentRequest}
-) {
-  props.response.doNotStream();
-
-  const response = APIFunction(props.request);
-
-  props.response.writeHead({
-    status: response.status,
-    statusText: response.statusText,
-    headers: response.headers,
-  });
-
-  props.response.send(response);
-
-  return null;
 }

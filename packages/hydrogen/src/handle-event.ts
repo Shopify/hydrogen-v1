@@ -4,7 +4,7 @@ import type {ServerComponentRequest} from './framework/Hydration/ServerComponent
 import {getCacheControlHeader} from './framework/cache';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
-import {getLoggerFromContext, logServerResponse} from './utilities/log';
+import {log} from './utilities/log';
 import {renderApiRoute} from './utilities/apiRoutes';
 
 interface HydrogenFetchEvent {
@@ -74,13 +74,11 @@ export default async function handleEvent(
     );
   }
 
-  const logger = getLoggerFromContext(request);
-
   if (!isReactHydrationRequest) {
     const apiRoute = getApiRoute(url);
 
     if (apiRoute) {
-      return renderApiRoute(request, apiRoute, logger);
+      return renderApiRoute(request, apiRoute, log);
     }
   }
 
@@ -99,7 +97,6 @@ export default async function handleEvent(
         request,
         response: streamableResponse,
         dev,
-        log: logger,
       });
     } else {
       stream(url, {
@@ -108,7 +105,6 @@ export default async function handleEvent(
         response: streamableResponse,
         template,
         dev,
-        log: logger,
       });
     }
     return;
@@ -120,7 +116,6 @@ export default async function handleEvent(
       context: {},
       isReactHydrationRequest,
       dev,
-      log: logger,
     });
 
   const headers = componentResponse.headers;
@@ -137,11 +132,7 @@ export default async function handleEvent(
   if (componentResponse.customBody) {
     const {status, customStatus} = componentResponse;
 
-    const body = await componentResponse.customBody;
-
-    if (body instanceof Response) return body;
-
-    return new Response(body, {
+    return new Response(await componentResponse.customBody, {
       status: customStatus?.code ?? status ?? 200,
       statusText: customStatus?.text,
       headers,
@@ -151,7 +142,7 @@ export default async function handleEvent(
   let response;
 
   if (isReactHydrationRequest) {
-    response = new Response(body as string, {
+    response = new Response(body, {
       status: componentResponse.status ?? 200,
       headers,
     });
@@ -175,8 +166,6 @@ export default async function handleEvent(
       headers,
     });
   }
-
-  logServerResponse('ssr', logger, request, response.status);
 
   return response;
 }
