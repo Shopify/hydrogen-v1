@@ -38,7 +38,7 @@ declare global {
   var __WORKER__: boolean;
 }
 
-const wrapInFlightContainer = ({
+function flightContainer({
   init,
   chunk,
   nonce,
@@ -46,10 +46,11 @@ const wrapInFlightContainer = ({
   init?: boolean;
   chunk?: string;
   nonce?: string;
-}) =>
-  `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
+}) {
+  return `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
     init ? '=[]' : `.push(\`${chunk}\`)`
   }</script>`;
+}
 
 /**
  * If a query is taking too long, or something else went wrong,
@@ -167,7 +168,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       }
 
       if (chunk) {
-        writable.write(wrapInFlightContainer({chunk}));
+        writable.write(flightContainer({chunk}));
       }
     };
 
@@ -214,7 +215,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       <Html
         template={template}
         htmlAttrs={{lang: 'en'}}
-        headSuffix={wrapInFlightContainer({init: true})}
+        headSuffix={flightContainer({init: true})}
       >
         <ReactApp />
       </Html>
