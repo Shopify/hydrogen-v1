@@ -2,10 +2,12 @@ import {join} from 'path';
 import {writeFile, readFile, pathExists} from 'fs-extra';
 import {promisify} from 'util';
 import childProcess from 'child_process';
-import {formatFile, merge} from '../utilities';
+import {merge} from '../utilities';
 import {loadConfig} from '../config';
 
 const exec = promisify(childProcess.exec);
+
+const DEFAULT_PACKAGE_NAME = 'hydrogen-app';
 
 interface DependencyOptions {
   dev?: boolean;
@@ -94,7 +96,7 @@ export class Workspace {
     const packageJson = JSON.stringify(
       merge(
         {
-          name: this.name(),
+          name: this.name() || DEFAULT_PACKAGE_NAME,
 
           scripts: {
             ...baseScripts,
@@ -187,17 +189,21 @@ export class Workspace {
   }
 
   async gitInit() {
-    await exec(`git init`, {cwd: this._root});
-    // TODO: Change the branch name to main and commit files
-    await writeFile(
-      join(this._root, '.gitignore'),
-      formatFile(`
-      node_modules
-      .DS_Store
-      dist
-      dist-ssr
-      *.local
-      `)
-    );
+    try {
+      await exec(`git init`, {cwd: this._root});
+      // TODO: Change the branch name to main and commit files
+      await writeFile(
+        join(this._root, '.gitignore'),
+        `
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+        `
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

@@ -21,6 +21,7 @@ import {ServerComponentRequest} from './framework/Hydration/ServerComponentReque
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
 import type {ServerResponse} from 'http';
+import type {PassThrough as PassThroughType} from 'stream';
 
 // @ts-ignore
 import * as rscRenderer from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
@@ -308,7 +309,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
       return new Response(transform.readable, responseOptions);
     } else {
-      const {pipe, abort} = renderToPipeableStream(ReactAppSSR, {
+      const {pipe} = renderToPipeableStream(ReactAppSSR, {
         onCompleteShell() {
           /**
            * TODO: This assumes `response.cache()` has been called _before_ any
@@ -379,14 +380,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       });
 
       const streamTimeout = setTimeout(() => {
-        const errorMessage = `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`;
-        log.error(errorMessage);
-
-        if (dev && response.headersSent) {
-          response.write(getErrorMarkup(new Error(errorMessage)));
-        }
-
-        abort();
+        log.warn(
+          `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`
+        );
       }, STREAM_ABORT_TIMEOUT_MS);
     }
   };
@@ -520,9 +516,7 @@ async function renderToBufferedString(
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     const errorTimeout = setTimeout(() => {
-      reject(
-        new Error(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`)
-      );
+      log.warn(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`);
     }, STREAM_ABORT_TIMEOUT_MS);
 
     if (__WORKER__) {
@@ -552,8 +546,7 @@ async function renderToBufferedString(
        */
       resolve(await new Response(stream).text());
     } else {
-      const {PassThrough} = await import('stream');
-      const writer = new PassThrough();
+      const writer = await createNodeWriter();
 
       const {pipe} = renderToPipeableStream(ReactApp, {
         /**
@@ -693,4 +686,14 @@ function generateHeadTag({title, ...rest}: Record<string, string>) {
 
     return `<head>${headHtml}</head>`;
   };
+}
+
+async function createNodeWriter() {
+  // Importing 'stream' directly breaks Vite resolve
+  // when building for workers, even though this code
+  // does not run in a worker. Looks like tree-shaking
+  // kicks in after the import analysis/bundle.
+  const streamImport = __WORKER__ ? '' : 'stream';
+  const {PassThrough} = await import(streamImport);
+  return new PassThrough() as InstanceType<typeof PassThroughType>;
 }

@@ -1,4 +1,5 @@
 import {cosmiconfig, Options} from 'cosmiconfig';
+
 import debug from 'debug';
 import {resolve} from 'path';
 

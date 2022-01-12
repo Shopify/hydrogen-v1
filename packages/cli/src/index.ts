@@ -54,9 +54,7 @@ interface ModuleType {
     ui.printFile(file);
   }
 
-  if (command === 'init') {
-    await workspace.commit();
-  }
+  await workspace.commit();
 })().catch((error) => {
   logger(error);
   process.exitCode = 1;
