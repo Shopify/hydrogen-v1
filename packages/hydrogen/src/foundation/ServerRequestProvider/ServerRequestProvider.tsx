@@ -1,8 +1,14 @@
 import React, {createContext, useContext} from 'react';
+import {hashKey} from '../../framework/cache';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
+import type {QueryKey} from '../../types';
 
 // Context to inject current request in SSR
 const RequestContextSSR = createContext<ServerComponentRequest>({
+  // Initial value is required due to a bug:
+  // https://github.com/Shopify/hydrogen/issues/415
+  time: 0,
+  id: 'initial-value',
   context: {cache: new Map()},
 } as ServerComponentRequest);
 
@@ -12,6 +18,38 @@ function requestCacheRSC() {
 }
 
 requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
+
+type ServerRequestProviderProps = {
+  isRSC: boolean;
+  request: ServerComponentRequest;
+  children: JSX.Element;
+};
+
+export function ServerRequestProvider({
+  isRSC,
+  request,
+  children,
+}: ServerRequestProviderProps) {
+  if (isRSC) {
+    // Save the request object in a React cache that is
+    // scoped to this current rendering.
+
+    // @ts-ignore
+    const requestCache = React.unstable_getCacheForType(requestCacheRSC);
+
+    requestCache.set(requestCacheRSC.key, request);
+
+    return children;
+  }
+
+  // Use a normal provider in SSR to make the request object
+  // available in the current rendering.
+  return (
+    <RequestContextSSR.Provider value={request}>
+      {children}
+    </RequestContextSSR.Provider>
+  );
+}
 
 export function useServerRequest() {
   let request: ServerComponentRequest;
@@ -33,32 +71,36 @@ export function useServerRequest() {
   return request;
 }
 
-export function ServerRequestProvider({
-  isRSC,
-  request,
-  children,
-}: {
-  isRSC: boolean;
-  request: ServerComponentRequest;
-  children: JSX.Element;
-}) {
-  if (isRSC) {
-    // Save the request object in a React cache that is
-    // scoped to this current rendering.
+type RequestCacheResult<T> =
+  | {data: T; error?: never} // success
+  | {data?: never; error: Response}; // failure
 
-    // @ts-ignore
-    const requestCache = React.unstable_getCacheForType(requestCacheRSC);
+/**
+ * Returns data stored in the request cache.
+ * It will throw the promise if data is not ready.
+ */
+export function useRequestCacheData<T>(
+  key: QueryKey,
+  fetcher: () => Promise<T>
+): RequestCacheResult<T> {
+  const {cache} = useServerRequest().context;
+  const cacheKey = hashKey(key);
 
-    requestCache.set(requestCacheRSC.key, request);
+  if (!cache.has(cacheKey)) {
+    let data: RequestCacheResult<T>;
+    let promise: Promise<RequestCacheResult<T>>;
 
-    return children;
+    cache.set(cacheKey, () => {
+      if (data !== undefined) return data;
+      if (!promise) {
+        promise = fetcher().then(
+          (r) => (data = {data: r}),
+          (e) => (data = {error: e})
+        );
+      }
+      throw promise;
+    });
   }
 
-  // Use a normal provider in SSR to make the request object
-  // available in the current rendering.
-  return (
-    <RequestContextSSR.Provider value={request}>
-      {children}
-    </RequestContextSSR.Provider>
-  );
+  return cache.get(cacheKey).call() as RequestCacheResult<T>;
 }

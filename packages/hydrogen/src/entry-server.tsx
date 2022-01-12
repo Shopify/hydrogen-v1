@@ -480,14 +480,12 @@ function buildReactApp({
   log: Logger;
   isRSC?: boolean;
 }) {
-  const renderCache = {};
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
   const hydrogenServerProps = {
     request,
     response: componentResponse,
     helmetContext: helmetContext,
-    cache: renderCache,
     log,
   };
 
