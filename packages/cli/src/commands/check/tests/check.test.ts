@@ -1,5 +1,10 @@
 import {withCli} from '../../../testing';
 
+// Some tests in this file are finishing before
+// the stream is closed. This is a known issue.
+// We should investigate and remove this increase.
+jest.setTimeout(30000);
+
 describe('check', () => {
   describe('eslint', () => {
     it('fails in an empty project', async () => {
