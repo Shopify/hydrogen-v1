@@ -251,7 +251,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
       return new Response(transform.readable, responseOptions);
     } else {
-      const {pipe, abort} = renderToPipeableStream(ReactAppSSR, {
+      const {pipe} = renderToPipeableStream(ReactAppSSR, {
         onCompleteShell() {
           /**
            * TODO: This assumes `response.cache()` has been called _before_ any
@@ -322,14 +322,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       });
 
       const streamTimeout = setTimeout(() => {
-        const errorMessage = `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`;
-        log.error(errorMessage);
-
-        if (dev && response.headersSent) {
-          response.write(getErrorMarkup(new Error(errorMessage)));
-        }
-
-        abort();
+        log.warn(
+          `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`
+        );
       }, STREAM_ABORT_TIMEOUT_MS);
     }
   };
@@ -460,9 +455,7 @@ async function renderToBufferedString(
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     const errorTimeout = setTimeout(() => {
-      reject(
-        new Error(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`)
-      );
+      log.warn(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`);
     }, STREAM_ABORT_TIMEOUT_MS);
 
     if (__WORKER__) {
