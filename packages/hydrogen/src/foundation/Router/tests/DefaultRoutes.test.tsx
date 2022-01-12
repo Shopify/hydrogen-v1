@@ -1,4 +1,5 @@
-import {createRoutesFromPages, ImportGlobEagerOutput} from '../DefaultRoutes';
+import {createRoutesFromPages} from '../DefaultRoutes';
+import {ImportGlobEagerOutput} from '../../../types';
 
 const STUB_MODULE = {default: {}, api: null};
 

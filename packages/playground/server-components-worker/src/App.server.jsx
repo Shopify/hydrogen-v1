@@ -4,14 +4,12 @@ import shopifyConfig from '../shopify.config';
 import {Suspense} from 'react';
 
 export default function App({...serverState}) {
-  const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
-
   return (
     <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
       <Suspense fallback={'Loading...'}>
         <Switch>
           <DefaultRoutes
-            pages={pages}
+            pages={serverState.pages}
             serverState={serverState}
             fallback="Not Found"
           />

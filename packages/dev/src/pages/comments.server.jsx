@@ -7,11 +7,12 @@ export const comments = [
 let idCounter = 1;
 
 export async function api(request) {
+  let newComment;
   switch (request.method) {
     case 'GET':
       return new Response(JSON.stringify(comments), {status: 200});
     case 'POST':
-      const newComment = await request.json();
+      newComment = await request.json();
       comments.push(createNewComment(newComment));
       return new Response(JSON.stringify(comments[comments.length - 1]), {
         status: 200,

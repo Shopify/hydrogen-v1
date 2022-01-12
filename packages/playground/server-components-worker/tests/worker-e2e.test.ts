@@ -1,6 +1,19 @@
+import {port} from './serve';
+
+const url = `http://localhost:${port}`;
+
 it('shows the homepage, navigates to about, and increases the count', async () => {
+  await page.goto(url + '/');
+
   expect(await page.textContent('h1')).toContain('Home');
-  expect(await page.textContent('.secrets')).toContain('PRIVATE_VARIABLE:42');
+
+  const secretsServer = await page.textContent('.secrets-server');
+  expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');
+  expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
+  const secretsClient = await page.textContent('.secrets-client');
+  expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
+  expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
+
   await page.click('.btn');
 
   expect(await page.textContent('body')).toContain('About');
@@ -11,13 +24,13 @@ it('shows the homepage, navigates to about, and increases the count', async () =
 });
 
 it('follows synchronous redirects', async () => {
-  await page.goto(viteTestUrl + '/redirected');
+  await page.goto(url + '/redirected');
   expect(await page.url()).toContain('/about');
   expect(await page.textContent('h1')).toContain('About');
 });
 
 it('should GET data from an API route', async () => {
-  const response = await page.request.get(viteTestUrl + '/comments', {
+  const response = await page.request.get(url + '/comments', {
     headers: {
       Accept: 'application/json',
     },
@@ -29,7 +42,7 @@ it('should GET data from an API route', async () => {
 });
 
 it('should GET by a route parameter', async () => {
-  const response = await page.request.get(viteTestUrl + '/comments/0', {
+  const response = await page.request.get(url + '/comments/0', {
     headers: {
       Accept: 'application/json',
     },
@@ -41,7 +54,7 @@ it('should GET by a route parameter', async () => {
 });
 
 it('should POST data to an API route', async () => {
-  const response = await page.request.post(viteTestUrl + '/comments', {
+  const response = await page.request.post(url + '/comments', {
     data: JSON.stringify({
       value: 'new comment',
     }),
@@ -56,7 +69,7 @@ it('should POST data to an API route', async () => {
 });
 
 it('should DELETE an API route', async () => {
-  const response = await page.request.delete(viteTestUrl + '/comments', {
+  const response = await page.request.delete(url + '/comments', {
     headers: {
       Accept: 'application/json',
     },
@@ -66,11 +79,16 @@ it('should DELETE an API route', async () => {
 });
 
 it('should return 404 on unknown method', async () => {
-  const response = await page.request.patch(viteTestUrl + '/comments', {
+  const response = await page.request.patch(url + '/comments', {
+    data: JSON.stringify({}),
     headers: {
       Accept: 'application/json',
     },
   });
+
+  const text = await response.text();
+
   expect(response.status()).toBe(404);
-  expect(response.statusText()).toBe('Not found');
+  expect(response.statusText()).toBe('Not Found');
+  expect(text).toBe('Comment method not found');
 });
