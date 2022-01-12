@@ -14,7 +14,7 @@ export function ShopifyProvider({
   children,
 }: ShopifyProviderProps) {
   if (!shopifyConfig) {
-    throw new Error('`shopifyConfig` should be defined in `ShopifyProvider`');
+    throw new Error('The `shopifyConfig` prop should be passed to `ShopifyProvider`');
   }
 
   const shopifyProviderValue = useMemo(
