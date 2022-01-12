@@ -8,6 +8,7 @@ let idCounter = 1;
 
 export async function api(request) {
   let newComment;
+
   switch (request.method) {
     case 'GET':
       return new Response(JSON.stringify(comments), {status: 200});

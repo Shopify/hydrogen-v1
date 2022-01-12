@@ -22,7 +22,6 @@ async function createServer() {
 
   app.use('*', bodyParser.raw());
   app.use('*', bodyParser.text({type: ['application/*', 'text/*']}));
-  // app.use('*', bodyParser.json());
 
   app.use(
     '*',
