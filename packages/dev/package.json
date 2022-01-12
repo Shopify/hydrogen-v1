@@ -9,7 +9,7 @@
     "lint": "npm-run-all lint:*",
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src",
     "lint:css": "stylelint ./src/**/*.{css,sass,scss}",
-    "setGitHash": "if [ -x 'command -v GITHUB_SHA' ]; then cross-env GITHASH=GITHUB_SHA; else cross-env GITHASH=`git rev-parse --short HEAD`; fi;",
+    "setGitHash": "if [ \"$GITHUB_SHA\" != \"\" ]; then cross-env GITHASH=$GITHUB_SHA; else cross-env GITHASH=`git rev-parse --short HEAD`; fi;",
     "build": "yarn build:client && yarn build:server && yarn build:worker",
     "build:client": "yarn setGitHash && vite build --outDir dist/client --manifest",
     "build:server": "yarn setGitHash && vite build --outDir dist/server --ssr src/entry-server.jsx",
