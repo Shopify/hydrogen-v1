@@ -10,9 +10,9 @@
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src",
     "lint:css": "stylelint ./src/**/*.{css,sass,scss}",
     "build": "yarn build:client && yarn build:server && yarn build:worker",
-    "build:client": "cross-env GITHASH=$(git rev-parse --short HEAD) vite build --outDir dist/client --manifest",
-    "build:server": "cross-env GITHASH=$(git rev-parse --short HEAD) vite build --outDir dist/server --ssr src/entry-server.jsx",
-    "build:worker": "cross-env WORKER=true GITHASH=$(git rev-parse --short HEAD) vite build --outDir dist/worker --ssr worker.js",
+    "build:client": "cross-env GITHASH=$(git rev-parse --short HEAD); vite build --outDir dist/client --manifest",
+    "build:server": "cross-env GITHASH=$(git rev-parse --short HEAD); vite build --outDir dist/server --ssr src/entry-server.jsx",
+    "build:worker": "cross-env WORKER=true; cross-env GITHASH=$(git rev-parse --short HEAD); vite build --outDir dist/worker --ssr worker.js",
     "serve": "node --enable-source-maps server"
   },
   "prettier": "@shopify/prettier-config",
