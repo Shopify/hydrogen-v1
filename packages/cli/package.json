@@ -20,8 +20,8 @@
     "dev": "yarn build -w",
     "build": "tsc -p . ",
     "prepack": "yarn build && node scripts/copy-templates.js",
-    "hydrogen": "./packages/cli/bin/hydrogen",
-    "h2": "./packages/cli/bin/hydrogen"
+    "hydrogen": "./bin/hydrogen",
+    "h2": "./bin/hydrogen"
   },
   "repository": {
     "type": "git",
