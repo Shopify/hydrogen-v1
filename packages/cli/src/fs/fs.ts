@@ -65,10 +65,12 @@ export class Fs {
       }
 
       const oldFile = this.readCache.get(path);
-      const formattedFile = formatFile(contents);
-      const diff = oldFile ? formatFile(oldFile) !== formattedFile : false;
+      const formattedFile = await formatFile(path, contents);
+      const diff = oldFile
+        ? (await formatFile(path, oldFile)) !== formattedFile
+        : false;
 
-      await writeFile(path, formatFile(formattedFile));
+      await writeFile(path, formattedFile);
       yield {path: this.relativePath(path), overwritten: exists, diff: diff};
     }
   }
