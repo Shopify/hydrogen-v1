@@ -19,7 +19,8 @@ import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
-import {ServerResponse} from 'http';
+import {ServerRequestProvider} from './foundation/ServerRequestProvider';
+import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
 
 // @ts-ignore
@@ -35,6 +36,22 @@ declare global {
   // and will trigger tree-shaking.
   // eslint-disable-next-line no-var
   var __WORKER__: boolean;
+}
+
+function flightContainer({
+  init,
+  chunk,
+  nonce,
+}: {
+  init?: boolean;
+  chunk?: string;
+  nonce?: string;
+}) {
+  const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
+
+  return `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
+    init ? '=[]' : `.push(\`${normalizedChunk}\`)`
+  }</script>`;
 }
 
 /**
@@ -134,6 +151,51 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
 
+    // App for RSC rendering
+    const {ReactApp: ReactAppRSC} = buildReactApp({
+      App,
+      state,
+      context,
+      request,
+      dev,
+      log,
+      isRSC: true,
+    });
+
+    let flightResponseBuffer = '';
+    const flush = (writable: {write: (chunk: string) => void}, chunk = '') => {
+      if (flightResponseBuffer) {
+        chunk = flightResponseBuffer + chunk;
+        flightResponseBuffer = '';
+      }
+
+      if (chunk) {
+        writable.write(flightContainer({chunk}));
+      }
+    };
+
+    if (__WORKER__) {
+      // Worker branch
+      // TODO implement RSC with TransformStream?
+    } else {
+      // Node.js branch
+
+      const {pipe} = rscRenderToPipeableStream(<ReactAppRSC />);
+
+      const writer = await createNodeWriter();
+      writer.setEncoding('utf-8');
+      writer.on('data', (chunk: string) => {
+        if (response.headersSent) {
+          flush(response, chunk);
+        } else {
+          flightResponseBuffer += chunk;
+        }
+      });
+
+      pipe(writer);
+    }
+
+    // App for SSR rendering
     const {ReactApp, componentResponse} = buildReactApp({
       App,
       state,
@@ -152,7 +214,11 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     let didError: Error | undefined;
 
     const ReactAppSSR = (
-      <Html template={template} htmlAttrs={{lang: 'en'}}>
+      <Html
+        template={template}
+        htmlAttrs={{lang: 'en'}}
+        headSuffix={flightContainer({init: true})}
+      >
         <ReactApp />
       </Html>
     );
@@ -278,6 +344,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           startWritingHtmlToServerResponse(
             response,
             pipe,
+            flush,
             dev ? didError : undefined
           );
         },
@@ -305,6 +372,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             startWritingHtmlToServerResponse(
               response,
               pipe,
+              flush,
               dev ? didError : undefined
             );
           }
@@ -347,6 +415,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       request,
       dev,
       log,
+      isRSC: true,
     });
 
     if (!__WORKER__ && response) {
@@ -404,6 +473,7 @@ function buildReactApp({
   request,
   dev,
   log,
+  isRSC = false,
 }: {
   App: ComponentType;
   state?: object | null;
@@ -411,23 +481,30 @@ function buildReactApp({
   request: ServerComponentRequest;
   dev: boolean | undefined;
   log: Logger;
+  isRSC?: boolean;
 }) {
-  const renderCache = {};
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
   const hydrogenServerProps = {
     request,
     response: componentResponse,
     helmetContext: helmetContext,
-    cache: renderCache,
     log,
   };
 
-  const ReactApp = (props: any) => (
-    // <RenderCacheProvider cache={renderCache}>
-    <App {...state} {...props} {...hydrogenServerProps} />
-    // </RenderCacheProvider>
-  );
+  const ReactApp = (props: any) => {
+    const AppContent = (
+      <ServerRequestProvider request={request} isRSC={isRSC}>
+        <App {...state} {...props} {...hydrogenServerProps} />
+      </ServerRequestProvider>
+    );
+
+    if (isRSC) return AppContent;
+
+    // Note: The <Suspense> wrapper in SSR is
+    // required to match hydration in browser
+    return <React.Suspense fallback={null}>{AppContent}</React.Suspense>;
+  };
 
   return {helmetContext, ReactApp, componentResponse};
 }
@@ -517,6 +594,7 @@ export default renderHydrogen;
 function startWritingHtmlToServerResponse(
   response: ServerResponse,
   pipe: (r: ServerResponse) => void,
+  flush: (w: ServerResponse) => void,
   error?: Error
 ) {
   if (!response.headersSent) {
@@ -524,7 +602,8 @@ function startWritingHtmlToServerResponse(
     response.write('<!DOCTYPE html>');
   }
 
-  pipe(response);
+  pipe(response); // Writes <head> synchronously
+  flush(response); // Uses the <head> written
 
   if (error) {
     // This error was delayed until the headers were properly sent.

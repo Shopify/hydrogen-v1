@@ -4,6 +4,7 @@ import {Suspense} from 'react';
 import C1 from './C1.client';
 import C2 from './C2.client';
 import CShared from './CShared';
+import CAsync1 from './CAsync1.server';
 
 export default function App() {
   // const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
@@ -15,6 +16,7 @@ export default function App() {
         <C1 />
         <C2 myProp2={true} />
         <CShared myPropShared={true} />
+        <CAsync1 />
       </div>
     </Suspense>
   );

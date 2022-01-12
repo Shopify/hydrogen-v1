@@ -11121,10 +11121,6 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-"react-client@link:../react/build/node_modules/react-client":
-  version "0.0.0"
-  uid ""
-
 react-dom@0.0.0-experimental-0cc724c77-20211125:
   version "0.0.0-experimental-0cc724c77-20211125"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-0cc724c77-20211125.tgz#f48ee44d803b7ba6a888f1cd5ef4402e84f46dba"
@@ -11209,10 +11205,6 @@ react-router@5.2.1:
     react-is "^16.6.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
-
-"react-server@link:../react/build/node_modules/react-server":
-  version "0.0.0"
-  uid ""
 
 react@0.0.0-experimental-0cc724c77-20211125:
   version "0.0.0-experimental-0cc724c77-20211125"

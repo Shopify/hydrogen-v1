@@ -1,7 +1,37 @@
 // @ts-ignore
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
-// @ts-ignore
-import {createFromFetch} from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import {
+  createFromFetch,
+  createFromReadableStream,
+  // @ts-ignore
+} from '@shopify/hydrogen/vendor/react-server-dom-vite';
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __flight: Array<string>;
+}
+
+let rscReader: ReadableStream | null;
+
+if (window.__flight && window.__flight.length > 0) {
+  const stream = new TransformStream();
+  rscReader = stream.readable;
+  const writer = stream.writable.getWriter();
+  const encoder = new TextEncoder();
+  const write = (chunk: string) => {
+    writer.write(encoder.encode(chunk));
+    return 0;
+  };
+
+  window.__flight.forEach(write);
+  window.__flight.push = write;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!writer.closed) {
+      writer.close();
+    }
+  });
+}
 
 function createResponseCache() {
   return new Map<string, any>();
@@ -23,7 +53,16 @@ export function useServerResponse(state: any) {
     return response;
   }
 
-  response = createFromFetch(fetch('/react?state=' + encodeURIComponent(key)));
+  if (rscReader) {
+    // The flight response was inlined during SSR, use it directly.
+    response = createFromReadableStream(rscReader);
+    rscReader = null;
+  } else {
+    // Request a new flight response.
+    response = createFromFetch(
+      fetch('/react?state=' + encodeURIComponent(key))
+    );
+  }
 
   cache.set(key, response);
   return response;
