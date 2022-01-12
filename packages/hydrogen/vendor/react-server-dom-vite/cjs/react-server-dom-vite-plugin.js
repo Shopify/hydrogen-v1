@@ -105,9 +105,11 @@ function ReactFlightVitePlugin() {
           'src',
           CLIENT_COMPONENT_GLOB
         );
-        var importers = [[userGlob, userPrefix]];
+        // Fix for windows: avoid ending strings in backslash
+        var dummySuffix = '#';
+        var importers = [[userGlob, userPrefix + dummySuffix]];
         clientComponentPaths.forEach(function (componentPath) {
-          var libPrefix = componentPath + path.sep;
+          var libPrefix = componentPath + path.sep + dummySuffix;
           var libGlob = path.join(
             path.relative(importerPath, componentPath),
             CLIENT_COMPONENT_GLOB
@@ -136,7 +138,7 @@ function ReactFlightVitePlugin() {
 }
 
 var serializedNormalizePaths = function () {
-  return "\nfunction __vncp(obj, prefix) {\n  const nestedRE = /\\.\\.\\//gm;\n  return Object.keys(obj).reduce(function (acc, key) {\n    acc[prefix + key.replace(nestedRE, '')] = obj[key];\n    return acc;\n  }, {});\n}\n";
+  return "\nfunction __vncp(obj, prefix) {\n  const nestedRE = /\\.\\.\\//gm;\n  return Object.keys(obj).reduce(function (acc, key) {\n    acc[prefix.slice(0, -1) + key.replace(nestedRE, '')] = obj[key];\n    return acc;\n  }, {});\n}\n";
 };
 
 async function proxyClientComponent(id, src) {
