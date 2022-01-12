@@ -353,7 +353,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       log,
     });
 
-    if (response) {
+    if (!__WORKER__ && response) {
       response.socket!.on('error', (error: any) => {
         log.fatal(error);
       });
