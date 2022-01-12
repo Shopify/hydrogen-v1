@@ -1,4 +1,4 @@
-import {DEFAULT_API_VERSION} from '../foundation';
+import {DEFAULT_API_VERSION} from '../foundation/constants';
 
 export function graphiqlHtml(
   shop: string,
