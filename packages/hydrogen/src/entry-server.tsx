@@ -237,7 +237,7 @@ const renderHydrogen: ServerHandler = (App, pages, hook) => {
 
     const writer = new HydrationWriter();
 
-    const {pipe, abort} = renderToPipeableStream(
+    const {pipe} = renderToPipeableStream(
       <HydrationContext.Provider value={true}>
         <ReactApp {...state} />
       </HydrationContext.Provider>,
@@ -270,10 +270,9 @@ const renderHydrogen: ServerHandler = (App, pages, hook) => {
     );
 
     const renderTimeout = setTimeout(() => {
-      const errorMessage = `The app failed to render RSC after ${STREAM_ABORT_TIMEOUT_MS} ms`;
-      didError = new Error(errorMessage);
-      log.error(errorMessage);
-      abort();
+      log.error(
+        `The app failed to render RSC after ${STREAM_ABORT_TIMEOUT_MS} ms`
+      );
     }, STREAM_ABORT_TIMEOUT_MS);
   };
 
@@ -393,9 +392,7 @@ function renderAppFromBufferedStream(
 ) {
   return new Promise<string>((resolve, reject) => {
     const errorTimeout = setTimeout(() => {
-      reject(
-        new Error(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`)
-      );
+      log.warn(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`);
     }, STREAM_ABORT_TIMEOUT_MS);
 
     if (isWorker) {
