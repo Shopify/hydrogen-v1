@@ -87,7 +87,9 @@ export function logServerResponse(
       : green(responseStatus);
 
   const fullType =
-    type === 'str'
+    type === 'api'
+      ? 'api'
+      : type === 'str'
       ? 'streaming SSR'
       : type === 'rsc'
       ? 'server components'
