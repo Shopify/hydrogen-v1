@@ -8,6 +8,6 @@ export function App() {
       <CartLineProvider key={line.id} line={line}>
         <CartLinePrice priceType="compareAt" />
       </CartLineProvider>
-    )
+    );
   });
 }

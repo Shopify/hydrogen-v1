@@ -51,6 +51,25 @@ yarn lint
 yarn format
 ```
 
+## Naming conventions
+
+Hydrogen follows common React naming conventions for filenames, component names, classes, constants, and more.
+
+- For component **filenames** and **class names**, always use `PascalCase`.
+- For **non-component filenames**, always use fully lowercase `kebab-case`.
+- For **test filenames**, append `.test` before the file extension.
+- When declaring **instances** of components, always use `camelCase`.
+- When declaring **exported constants**, always use `SCREAMING_SNAKE_CASE`.
+
+| &nbsp;                       | ✅ Valid                                        | 🚫 Invalid                                                                          |
+| ---------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **Component filenames:**     | `ProductTitle.tsx`<br>`ProductTitle.client.tsx` | `productTitle.tsx`<br>`product_title.tsx`<br>`product-title.client.tsx`             |
+| **Non-component filenames:** | `client.ts`<br>`handle-event.ts`                | `Client.ts`<br>`handleEvent.ts`<br>`handle_event.ts`                                |
+| **Test filenames:**          | `ExternalVideo.test.tsx`                        | `ExternalVideo-test.tsx`<br>`ExternalVideo_test.tsx`<br>`ExternalVideoTest.tsx`     |
+| **Component classes:**       | `<AddToCartButton />`                           | `<addToCartButton />`                                                               |
+| **Component instances:**     | `const cartSelector = <CartSelector />`         | `const CartSelector = <CartSelector />`<br>`const cart_selector = <CartSelector />` |
+| **Exported constants:**      | `export const CART_COOKIE_TTL_DAYS = 14;`       | `export const CartCookieTTLDays = 14;`<br>`export const cart_cookie_ttl_days = 14;` |
+
 ## Commit Messages
 
 Commit messages must follow the [commit message convention](../.github/commit-convention.md) so that changelogs can be more easily generated. Commit messages are automatically validated before commit (by invoking [Git Hooks](https://git-scm.com/docs/githooks) via [yorkie](https://github.com/yyx990803/yorkie)).

@@ -5,8 +5,10 @@ import {CartLinePrice} from '../CartLinePrice.client';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {Money} from '../../Money';
 import {CurrencyCode} from '../../../graphql/types/types';
-import {ShopifyProvider} from '../../../foundation';
-import {SHOPIFY_CONFIG} from '../../../foundation/ShopifyProvider/tests/fixtures';
+import {getShopifyConfig} from '../../../utilities/tests/shopifyMount';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 describe('<CartLinePrice />', () => {
   it('renders <Money /> with the regular price by default', () => {
@@ -22,11 +24,9 @@ describe('<CartLinePrice />', () => {
     };
 
     const wrapper = mount(
-      <ShopifyProvider shopifyConfig={SHOPIFY_CONFIG}>
-        <CartLineProvider line={line}>
-          <CartLinePrice />
-        </CartLineProvider>
-      </ShopifyProvider>
+      <CartLineProvider line={line}>
+        <CartLinePrice />
+      </CartLineProvider>
     );
 
     expect(wrapper).toContainReactComponent(Money, {
@@ -47,11 +47,9 @@ describe('<CartLinePrice />', () => {
     };
 
     const wrapper = mount(
-      <ShopifyProvider shopifyConfig={SHOPIFY_CONFIG}>
-        <CartLineProvider line={line}>
-          <CartLinePrice priceType="compareAt" />
-        </CartLineProvider>
-      </ShopifyProvider>
+      <CartLineProvider line={line}>
+        <CartLinePrice priceType="compareAt" />
+      </CartLineProvider>
     );
 
     expect(wrapper).toContainReactComponent(Money, {
@@ -73,11 +71,9 @@ describe('<CartLinePrice />', () => {
     };
 
     const wrapper = mount(
-      <ShopifyProvider shopifyConfig={SHOPIFY_CONFIG}>
-        <CartLineProvider line={line}>
-          <CartLinePrice />
-        </CartLineProvider>
-      </ShopifyProvider>
+      <CartLineProvider line={line}>
+        <CartLinePrice />
+      </CartLineProvider>
     );
 
     expect(wrapper).toContainReactComponent(Money, {
@@ -98,15 +94,13 @@ describe('<CartLinePrice />', () => {
     };
 
     const wrapper = mount(
-      <ShopifyProvider shopifyConfig={SHOPIFY_CONFIG}>
-        <CartLineProvider line={line}>
-          <CartLinePrice>
-            {({localizedString}) => {
-              return <p>{`The amount is ${localizedString}`}</p>;
-            }}
-          </CartLinePrice>
-        </CartLineProvider>
-      </ShopifyProvider>
+      <CartLineProvider line={line}>
+        <CartLinePrice>
+          {({localizedString}) => {
+            return <p>{`The amount is ${localizedString}`}</p>;
+          }}
+        </CartLinePrice>
+      </CartLineProvider>
     );
 
     expect(wrapper).toContainReactComponent('p', {
@@ -127,11 +121,9 @@ describe('<CartLinePrice />', () => {
     };
 
     const wrapper = mount(
-      <ShopifyProvider shopifyConfig={SHOPIFY_CONFIG}>
-        <CartLineProvider line={line}>
-          <CartLinePrice className="underline" />
-        </CartLineProvider>
-      </ShopifyProvider>
+      <CartLineProvider line={line}>
+        <CartLinePrice className="underline" />
+      </CartLineProvider>
     );
 
     expect(wrapper).toContainReactComponent(Money, {

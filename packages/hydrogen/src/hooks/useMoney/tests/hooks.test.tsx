@@ -1,8 +1,10 @@
 import {createMountableHook} from '../../../utilities/tests/createMountableHook';
+import {getShopifyConfig} from '../../../utilities/tests/shopifyMount';
 import {CurrencyCode} from '../../../graphql/types/types';
-
 import {useMoney} from '../hooks';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
 
+setShopifyConfig(getShopifyConfig());
 const mountUseMoney = createMountableHook(useMoney);
 
 it('returns an object with all of the details about the money', async () => {

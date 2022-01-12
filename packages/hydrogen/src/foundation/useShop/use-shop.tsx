@@ -1,14 +1,14 @@
-import {ShopifyProviderValue} from '../ShopifyProvider/types';
+import type {ShopifyConfig} from '../../types';
 
-let config: ShopifyProviderValue | null = null;
+let config: ShopifyConfig | null = null;
 
 /**
- * The `useShop` hook provides access to values within `shopify.config.js`.The `useShop` hook provides access to values within `shopify.config.js`. It must be a descendent of a `ShopifyProvider` component.
+ * The `useShop` hook provides access to values within `shopify.config.js`. It must be a descendent of a `ShopifyProvider` component.
  */
-export function useShop(): ShopifyProviderValue {
-  return config as ShopifyProviderValue;
+export function useShop(): ShopifyConfig {
+  return config as ShopifyConfig;
 }
 
-export function setShopifyConfig(newConfig: ShopifyProviderValue) {
+export function setShopifyConfig(newConfig: ShopifyConfig) {
   config = newConfig;
 }

@@ -7,6 +7,22 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+## 0.8.2 - 2022-01-07
+
+- No updates. Transitive dependency bump.
+
+## 0.8.1 - 2022-01-04
+
+- Deprecate this plugin. Use [hydrogen-plugin-sanity](https://www.npmjs.com/package/hydrogen-plugin-sanity) instead.
+
+## 0.8.0 - 2021-12-07
+
+- No updates. Transitive dependency bump.
+
+## 0.7.1 - 2021-12-02
+
+- No updates. Transitive dependency bump.
+
 ## 0.7.0 - 2021-11-22
 
 - No updates. Transitive dependency bump.

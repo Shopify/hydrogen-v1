@@ -3,8 +3,8 @@ import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
 import {
   createFromFetch,
   createFromReadableStream,
-} from '../Hydration/rsc-client-hydrator';
-import type {FlightResponse} from '../Hydration/rsc-client-config';
+  // @ts-ignore
+} from '@shopify/hydrogen/vendor/react-server-dom-vite';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -34,7 +34,7 @@ if (window.__flight) {
 }
 
 function createResponseCache() {
-  return new Map<string, FlightResponse>();
+  return new Map<string, any>();
 }
 
 /**

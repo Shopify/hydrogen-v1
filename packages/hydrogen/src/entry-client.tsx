@@ -6,9 +6,7 @@ import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 // import {HelmetProvider} from 'react-helmet-async';
 import {useServerResponse} from './framework/Hydration/Cache.client';
-import {ServerStateRouter} from './client';
-import {ServerStateProvider} from '.';
-// import {QueryProvider} from './hooks';
+import {ServerStateProvider, ServerStateRouter} from './client';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   const root = document.getElementById('root');

@@ -1,7 +1,7 @@
 <aside class="note beta">
 <h4>Developer preview</h4>
 
-<p>This is a developer preview of Hydrogen. The documentation will be updated as Shopify introduces <a href="https://github.com/Shopify/hydrogen/releases">new features and refines existing functionality</a>. Production launches of Hydrogen custom storefronts aren't yet supported as Shopify is evolving the Hydrogen framework.</p>
+<p>This is a developer preview of Hydrogen. The documentation will be updated as Shopify introduces <a href="https://github.com/Shopify/hydrogen/releases">new features and refines existing functionality</a>.</p>
 
 </aside>
 
@@ -18,31 +18,27 @@ Hydrogen comes with [React Router](https://reactrouter.com/), a tool that allows
 
 ## Hydrogen project structure
 
-When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started#step-1-create-a-new-hydrogen-app), a file structure for the project is generated. Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
+When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Hydrogen starter template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store. Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
 
-- A set of boilerplate [components](/api/hydrogen/components) (`components`) and [pages](/custom-storefronts/hydrogen/framework/pages) (`pages`)
+- A set of boilerplate [`components`](/custom-storefronts/hydrogen/getting-started#components) and [`pages`](/custom-storefronts/hydrogen/getting-started#pages)
 - The main app component, which includes boilerplate code for the app and routing (`App.server.jsx`)
 - The Hydrogen app's two entry points, which are based on environment:
 
   - **Server**: `entry-server.jsx`
   - **Client**: `entry-client.jsx`
 
-- A shortcut icon (`favicon.svg`) that you can change to your own favicon
 - Basic styles provided by Tailwind CSS (`index.css`)
 
-{% codeblock file, filename: "Hydrogen project structure" %}
+{% codeblock file, filename: "File structure of the Hydrogen starter template" %}
 
 ```
 └── src
     ├── components
+        └── Button.client.jsx
         └── Cart.client.jsx
-        └── CartProvider.client.jsx
-        └── CartUIProvider.client.jsx
+        └── CartIcon.client.jsx
         └── ...
     ├── pages
-        └── blogs
-            └── [handle]
-            └── [handle].server.jsx
         └── collections
             └── [handle].server.jsx
         └── pages
@@ -50,12 +46,10 @@ When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started#st
         └── products
             └── [handle].server.jsx
         └── index.server.jsx
-        └── search.server.jsx
         └── sitemap.xml.server.jsx
     ├── App.server.jsx
     ├── entry-client.jsx
     ├── entry-server.jsx
-    ├── favicon.svg
     ├── index.css
 ```
 

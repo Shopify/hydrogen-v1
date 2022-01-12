@@ -6,10 +6,12 @@ export function CustomAdjustQuantityButton({lineId, newQuantity}) {
   return (
     <button
       onClick={() => {
-        updateLines([{
-          id: lineId,
-          quantity: newQuantity,
-        }])
+        updateLines([
+          {
+            id: lineId,
+            quantity: newQuantity,
+          },
+        ]);
       }}
     >
       +

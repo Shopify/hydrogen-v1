@@ -1,13 +1,19 @@
 import React from 'react';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithProviders,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
 import {CurrencyCode} from '../../../graphql/types/types';
 import {getPrice} from '../../../utilities/tests/price';
 import {Money} from '../Money.client';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 describe('<Money />', () => {
   it('renders a formatted money string', () => {
     const money = getPrice({currencyCode: CurrencyCode.Usd});
-    const component = mountWithShopifyProvider(<Money money={money} />);
+    const component = mountWithProviders(<Money money={money} />);
 
     expect(component).toContainReactText(`$${money.amount}`);
   });
@@ -16,13 +22,13 @@ describe('<Money />', () => {
     const money = getPrice({
       currencyCode: CurrencyCode.Eur,
     });
-    const component = mountWithShopifyProvider(<Money money={money} />);
+    const component = mountWithProviders(<Money money={money} />);
 
     expect(component).toContainReactText(`€${money.amount}`);
   });
 
   it('allows pass-through props to the wrapping component', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <Money money={getPrice()} className="money" />
     );
 
@@ -33,7 +39,7 @@ describe('<Money />', () => {
     const money = getPrice({
       currencyCode: CurrencyCode.Cad,
     });
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <Money money={money}>
         {(money) => <p>{`You owe ${money.amount}!`}</p>}
       </Money>

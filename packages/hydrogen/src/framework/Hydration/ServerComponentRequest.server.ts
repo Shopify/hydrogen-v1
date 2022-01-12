@@ -1,3 +1,5 @@
+import {getTime} from '../../utilities/timing';
+
 let reqCounter = 0; // For debugging
 const generateId =
   typeof crypto !== 'undefined' &&
@@ -18,6 +20,7 @@ export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
   public id: string;
   public context: {cache: Map<string, any>; [key: string]: any};
+  public time: number;
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -31,9 +34,10 @@ export class ServerComponentRequest extends Request {
       });
     }
 
+    this.time = getTime();
+    this.id = generateId();
     this.context = {cache: new Map()};
     this.cookies = this.parseCookies();
-    this.id = generateId();
   }
 
   private parseCookies() {

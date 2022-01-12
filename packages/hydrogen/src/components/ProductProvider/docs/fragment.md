@@ -67,7 +67,8 @@ The `ProductProviderFragment` includes variables that you will need to provide v
 | `$numProductVariantMetafields`             | The number of `Metafield` objects to query for in a variant's `MetafieldConnection`.                  |
 | `$numProductVariantSellingPlanAllocations` | The number of `SellingPlanAllocations` to query for in a variant's `SellingPlanAllocationConnection`. |
 | `$numProductSellingPlanGroups`             | The number of `SellingPlanGroups` objects to query for in a `SellingPlanGroupConnection`.             |
-| `$$numProductSellingPlans`                 | The number of `SellingPlan` objects to query for in a `SellingPlanConnection`.                        |
+| `$numProductSellingPlans`                  | The number of `SellingPlan` objects to query for in a `SellingPlanConnection`.                        |
+| `$includeReferenceMetafieldDetails`        | A boolean indicating if the reference metafield details should be queried.                            |
 
 ### Example query
 
@@ -86,6 +87,7 @@ export default function Product() {
       numProductVariantSellingPlanAllocations: 10,
       numProductSellingPlanGroups: 10,
       numProductSellingPlans: 10,
+      includeReferenceMetafieldDetails: false,
     },
   });
 

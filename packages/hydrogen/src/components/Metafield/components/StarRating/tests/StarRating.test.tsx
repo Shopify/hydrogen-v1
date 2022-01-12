@@ -23,7 +23,7 @@ describe('<StarRating />', () => {
     // The number of completely filled stars should be the integer value of the rating
     // minus the minumum scale value, plus one (since the scale is inclusive)
     const numberOfCompletelyFilledStars =
-      parseInt((rating.value as any).value) -
+      parseInt((rating.value as any).value, 10) -
       (rating.value as any).scale_min +
       1;
     const partialStarFill = (parseFloat((rating.value as any).value) % 1) * 100;

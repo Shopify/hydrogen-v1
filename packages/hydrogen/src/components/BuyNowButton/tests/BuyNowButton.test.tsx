@@ -1,6 +1,12 @@
 import React from 'react';
 
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithProviders,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 const mockCreateInstantCheckout = jest.fn();
 const mockUseInstantCheckout = jest.fn();
@@ -27,7 +33,7 @@ describe('BuyNowButton', () => {
   });
 
   it('renders a button', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
     );
     expect(component).toContainReactComponent('button', {
@@ -36,7 +42,7 @@ describe('BuyNowButton', () => {
   });
 
   it('can optionally disable the button', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <BuyNowButton disabled={true} variantId="1">
         Add to Cart
       </BuyNowButton>
@@ -48,7 +54,7 @@ describe('BuyNowButton', () => {
   });
 
   it('allows pass-through props', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <BuyNowButton className="fancy-button" variantId="1">
         Add to Cart
       </BuyNowButton>
@@ -61,7 +67,7 @@ describe('BuyNowButton', () => {
 
   describe('when the button is clicked', () => {
     it('uses useCartCreateCallback with the correct arguments', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <BuyNowButton
           attributes={[
             {key: 'color', value: 'blue'},
@@ -94,7 +100,7 @@ describe('BuyNowButton', () => {
     });
 
     it('disables the button', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
       );
 
@@ -130,7 +136,7 @@ describe('BuyNowButton', () => {
     afterEach(() => (window.location = location));
 
     it('redirects to checkout', () => {
-      mountWithShopifyProvider(
+      mountWithProviders(
         <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
       );
 

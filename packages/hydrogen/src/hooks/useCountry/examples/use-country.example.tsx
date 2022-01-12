@@ -5,24 +5,26 @@ export function MyComponent() {
   const [country, setCountry] = useCountry();
 
   const query = gql`
-    query ProductPriceMax ($country: CountryCode) @inContext(country: $country){
+    query ProductPriceMax($country: CountryCode) @inContext(country: $country) {
       productByHandle(handle: "1234") {
         priceRange {
-          maxVariantPrice{
+          maxVariantPrice {
             amount
             currencyCode
           }
         }
       }
     }
-  `
+  `;
 
   const {data} = useShopQuery({
     query,
     variables: {
       country: country.isoCode,
-    }
-  })
+    },
+  });
 
-  return {/* Your JSX*/}
+  return {
+    /* Your JSX*/
+  };
 }

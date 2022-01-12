@@ -3,7 +3,13 @@ import {CartProvider} from '../../CartProvider';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures';
 import {CartEstimatedCost} from '../CartEstimatedCost.client';
 import {Money} from '../../Money';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {
+  mountWithProviders,
+  getShopifyConfig,
+} from '../../../utilities/tests/shopifyMount';
+import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
+
+setShopifyConfig(getShopifyConfig());
 
 describe('<CartEstimatedCost />', () => {
   beforeEach(() => {
@@ -19,7 +25,7 @@ describe('<CartEstimatedCost />', () => {
   });
 
   it('renders a <Money />', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={CART_WITH_LINES}>
         <CartEstimatedCost />
       </CartProvider>
@@ -29,7 +35,7 @@ describe('<CartEstimatedCost />', () => {
   });
 
   it('does not render when no estimated cost', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider>
         <CartEstimatedCost />
       </CartProvider>
@@ -39,7 +45,7 @@ describe('<CartEstimatedCost />', () => {
   });
 
   it('renders a totalAmount when total is the amountType', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={CART_WITH_LINES}>
         <CartEstimatedCost amountType="total" />
       </CartProvider>
@@ -52,7 +58,7 @@ describe('<CartEstimatedCost />', () => {
   });
 
   it('renders a subtotalAmount when subtotal is the amountType', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={CART_WITH_LINES}>
         <CartEstimatedCost amountType="subtotal" />
       </CartProvider>
@@ -65,7 +71,7 @@ describe('<CartEstimatedCost />', () => {
   });
 
   it('renders a totalTaxAmount when tax is the amountType', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={CART_WITH_LINES}>
         <CartEstimatedCost amountType="tax" />
       </CartProvider>
@@ -78,7 +84,7 @@ describe('<CartEstimatedCost />', () => {
   });
 
   it('renders a totalDutyAmount when duty is the amountType', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={CART_WITH_LINES}>
         <CartEstimatedCost amountType="duty" />
       </CartProvider>

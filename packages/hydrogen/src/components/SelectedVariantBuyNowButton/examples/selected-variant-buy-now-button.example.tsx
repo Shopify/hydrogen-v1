@@ -1,4 +1,8 @@
-import {SelectedVariantBuyNowButton, ProductProvider, useProduct} from '@shopify/hydrogen';
+import {
+  SelectedVariantBuyNowButton,
+  ProductProvider,
+  useProduct,
+} from '@shopify/hydrogen';
 
 export function ProductDetails({product}) {
   return (

@@ -4,7 +4,7 @@
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"
   },
-  "version": "0.7.0",
+  "version": "0.8.2",
   "main": "index.js",
   "license": "MIT",
   "bin": {
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "enquirer": "^2.3.6",
-    "kolorist": "^1.4.0",
+    "kolorist": "^1.5.1",
     "minimist": "^1.2.5"
   }
 }

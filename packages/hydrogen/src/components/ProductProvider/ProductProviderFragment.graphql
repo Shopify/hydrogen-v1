@@ -4,7 +4,7 @@
 #import '../../hooks/useProductOptions/SellingPlanGroupsFragment.graphql'
 #import '../Money/MoneyFragment.graphql'
 
-fragment ProductProviderFragment on Product  {
+fragment ProductProviderFragment on Product {
   compareAtPriceRange {
     maxVariantPrice {
       ...MoneyFragment
