@@ -20,6 +20,7 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerResponse} from 'http';
+import type {PassThrough as PassThroughType} from 'stream';
 
 // @ts-ignore
 import * as rscRenderer from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
@@ -485,8 +486,7 @@ async function renderToBufferedString(
        */
       resolve(await new Response(stream).text());
     } else {
-      const {PassThrough} = await import('stream');
-      const writer = new PassThrough();
+      const writer = await createNodeWriter();
 
       const {pipe} = renderToPipeableStream(ReactApp, {
         /**
@@ -626,4 +626,14 @@ function generateHeadTag({title, ...rest}: Record<string, string>) {
 
     return `<head>${headHtml}</head>`;
   };
+}
+
+async function createNodeWriter() {
+  // Importing 'stream' directly breaks Vite resolve
+  // when building for workers, even though this code
+  // does not run in a worker. Looks like tree-shaking
+  // kicks in after the import analysis/bundle.
+  const streamImport = __WORKER__ ? '' : 'stream';
+  const {PassThrough} = await import(streamImport);
+  return new PassThrough() as InstanceType<typeof PassThroughType>;
 }
