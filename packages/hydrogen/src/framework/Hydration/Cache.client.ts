@@ -13,7 +13,7 @@ declare global {
 
 let rscReader: ReadableStream | null;
 
-if (window.__flight) {
+if (window.__flight && window.__flight.length > 0) {
   const stream = new TransformStream();
   rscReader = stream.readable;
   const writer = stream.writable.getWriter();

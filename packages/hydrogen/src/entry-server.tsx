@@ -159,31 +159,37 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       isRSC: true,
     });
 
-    if (rscRenderToPipeableStream) {
+    let flightResponseBuffer = '';
+    const flush = (writable: {write: (chunk: string) => void}, chunk = '') => {
+      if (flightResponseBuffer) {
+        chunk = flightResponseBuffer + chunk;
+        flightResponseBuffer = '';
+      }
+
+      if (chunk) {
+        writable.write(wrapInFlightContainer({chunk}));
+      }
+    };
+
+    if (__WORKER__) {
+      // Worker branch
+      // TODO implement RSC with TransformStream?
+    } else {
       // Node.js branch
 
       const {pipe} = rscRenderToPipeableStream(<ReactAppRSC />);
 
-      let flightResponseBuffer = '';
-      const {PassThrough} = await import('stream');
-      const writer = new PassThrough();
+      const writer = await createNodeWriter();
       writer.setEncoding('utf-8');
       writer.on('data', (chunk: string) => {
         if (response.headersSent) {
-          if (flightResponseBuffer) {
-            chunk = flightResponseBuffer + chunk;
-            flightResponseBuffer = '';
-          }
-
-          response.write(wrapInFlightContainer({chunk}));
+          flush(response, chunk);
         } else {
           flightResponseBuffer += chunk;
         }
       });
+
       pipe(writer);
-    } else {
-      // Worker branch
-      // TODO implement RSC with TransformStream?
     }
 
     // App for SSR rendering
@@ -335,6 +341,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           startWritingHtmlToServerResponse(
             response,
             pipe,
+            flush,
             dev ? didError : undefined
           );
         },
@@ -362,6 +369,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             startWritingHtmlToServerResponse(
               response,
               pipe,
+              flush,
               dev ? didError : undefined
             );
           }
@@ -577,6 +585,7 @@ export default renderHydrogen;
 function startWritingHtmlToServerResponse(
   response: ServerResponse,
   pipe: (r: ServerResponse) => void,
+  flush: (w: ServerResponse) => void,
   error?: Error
 ) {
   if (!response.headersSent) {
@@ -584,7 +593,8 @@ function startWritingHtmlToServerResponse(
     response.write('<!DOCTYPE html>');
   }
 
-  pipe(response);
+  pipe(response); // Writes <head> synchronously
+  flush(response); // Uses the <head> written
 
   if (error) {
     // This error was delayed until the headers were properly sent.
