@@ -9,6 +9,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - fix: replace log abbreviations with full text.
 - feature: add optional `locale` param to `useShopQuery` to be used as `Accept-Language` in the store Storefront API query
+- fix: render error in `Gallery.client.jsx` component when product resource has an external video.
+- fix: update ExternalVideo to new Storefront API schema to use `embedUrl` which provides an embed compatible url that the now depercated `embeddedUrl` field did not.
 
 ## 0.8.2 - 2022-01-07
 

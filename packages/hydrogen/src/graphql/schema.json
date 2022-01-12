@@ -13290,7 +13290,7 @@
               "deprecationReason": null
             },
             {
-              "name": "embeddedUrl",
+              "name": "embedUrl",
               "description": "The URL.",
               "args": [],
               "type": {

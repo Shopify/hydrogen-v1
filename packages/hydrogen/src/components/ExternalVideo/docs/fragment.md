@@ -5,7 +5,7 @@ The following fragment is available as a string for your GraphQL query using `Ex
 ```graphql
 fragment ExternalVideoFragment on ExternalVideo {
   id
-  embeddedUrl
+  embedUrl
   host
 }
 ```

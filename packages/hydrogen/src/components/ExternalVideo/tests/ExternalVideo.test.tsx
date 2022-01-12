@@ -9,7 +9,7 @@ describe('<ExternalVideo />', () => {
     const component = mount(<ExternalVideo video={video} />);
 
     expect(component).toContainReactComponent('iframe', {
-      src: video.embeddedUrl,
+      src: video.embedUrl,
       id: video.id,
       allow:
         'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
@@ -45,7 +45,7 @@ describe('<ExternalVideo />', () => {
     const component = mount(
       <ExternalVideo
         video={getExternalVideo({
-          embeddedUrl: 'https://www.youtube.com/embed/a2YSgfwXc9c',
+          embedUrl: 'https://www.youtube.com/embed/a2YSgfwXc9c',
         })}
         options={options}
       />

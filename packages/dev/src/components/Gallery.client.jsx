@@ -15,7 +15,8 @@ export default function Gallery() {
   const galleryMedia = media.filter((med) => {
     if (
       med.mediaContentType === MODEL_3D_TYPE ||
-      med.mediaContentType === VIDEO_TYPE
+      med.mediaContentType === VIDEO_TYPE ||
+      med.mediaContentType === EXTERNAL_VIDEO_TYPE
     ) {
       return true;
     }
@@ -63,3 +64,4 @@ const MODEL_3D_PROPS = {
   interactionPromptThreshold: '0',
 };
 const VIDEO_TYPE = 'VIDEO';
+const EXTERNAL_VIDEO_TYPE = 'EXTERNAL_VIDEO';

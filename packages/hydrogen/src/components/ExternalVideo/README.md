@@ -47,10 +47,10 @@ export default function MyProductVideo() {
 
 ## Props
 
-| Name     | Type                                                                                    | Description                                                                                                                                                                                                                       |
-| -------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| video    | <code>Pick<<wbr>ExternalVideoType, "host" &#124; "embeddedUrl" &#124; "id"<wbr>></code> | An object with the keys `host`, `embeddedUrl`, and `id`. Refer to the Storefront API's [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).                                                                  |
-| options? | <code>YouTube &#124; Vimeo</code>                                                       | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
+| Name     | Type                                                                                 | Description                                                                                                                                                                                                                       |
+| -------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| video    | <code>Pick<<wbr>ExternalVideoType, "host" &#124; "embedUrl" &#124; "id"<wbr>></code> | An object with the keys `host`, `embedUrl`, and `id`. Refer to the Storefront API's [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).                                                                     |
+| options? | <code>YouTube &#124; Vimeo</code>                                                    | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
 
 ## Component type
 
@@ -63,7 +63,7 @@ The following fragment is available as a string for your GraphQL query using `Ex
 ```graphql
 fragment ExternalVideoFragment on ExternalVideo {
   id
-  embeddedUrl
+  embedUrl
   host
 }
 ```

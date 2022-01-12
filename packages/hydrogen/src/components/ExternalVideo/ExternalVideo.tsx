@@ -5,10 +5,10 @@ import {ExternalVideoFragment as Fragment} from '../../graphql/graphql-constants
 import {ExternalVideo as ExternalVideoType} from '../../graphql/types/types';
 
 export interface ExternalVideoProps {
-  /** An object with the keys `host`, `embeddedUrl`, and `id`. Refer to the Storefront API's
+  /** An object with the keys `host`, `embedUrl`, and `id`. Refer to the Storefront API's
    * [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).
    */
-  video: Pick<ExternalVideoType, 'host' | 'embeddedUrl' | 'id'>;
+  video: Pick<ExternalVideoType, 'host' | 'embedUrl' | 'id'>;
   /** An object containing the options available for either
    * [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or
    * [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters).
@@ -35,7 +35,7 @@ export function ExternalVideo<TTag extends React.ElementType = 'iframe'>(
     ...passthroughProps
   } = props;
 
-  const url = useEmbeddedVideoUrl(video.embeddedUrl, options);
+  const url = useEmbeddedVideoUrl(video.embedUrl, options);
 
   return (
     <iframe

@@ -47,7 +47,7 @@ export function getExternalVideo(externalVideo: Partial<ExternalVideo> = {}) {
   return {
     id: externalVideo.id ?? faker.random.words(),
     mediaContentType: MediaContentType.ExternalVideo,
-    embeddedUrl: externalVideo.embeddedUrl ?? faker.internet.url(),
+    embedUrl: externalVideo.embedUrl ?? faker.internet.url(),
     host:
       externalVideo.host ?? faker.datatype.number({max: 2, min: 1}) === 1
         ? MediaHost.Youtube

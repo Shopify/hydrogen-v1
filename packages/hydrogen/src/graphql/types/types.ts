@@ -3054,8 +3054,10 @@ export type ExternalVideo = Node &
     __typename?: 'ExternalVideo';
     /** A word or phrase to share the nature or contents of a media. */
     alt?: Maybe<Scalars['String']>;
-    /** The URL. */
-    embeddedUrl: Scalars['URL'];
+    /** The embed compatible URL of the video for the respective host.  */
+    embedUrl: Scalars['URL'];
+    /** The origin URL of the video on the respective host. */
+    originUrl: Scalars['URL'];
     /** The host of the external video. */
     host: MediaHost;
     /** A globally-unique identifier. */
