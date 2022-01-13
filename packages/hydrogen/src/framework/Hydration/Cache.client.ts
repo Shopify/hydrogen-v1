@@ -14,23 +14,28 @@ declare global {
 let rscReader: ReadableStream | null;
 
 if (window.__flight && window.__flight.length > 0) {
-  const stream = new TransformStream();
-  rscReader = stream.readable;
-  const writer = stream.writable.getWriter();
-  const encoder = new TextEncoder();
-  const write = (chunk: string) => {
-    writer.write(encoder.encode(chunk));
-    return 0;
-  };
+  const contentLoaded = new Promise((resolve) =>
+    document.addEventListener('DOMContentLoaded', resolve)
+  );
 
-  window.__flight.forEach(write);
-  window.__flight.push = write;
+  try {
+    rscReader = new ReadableStream({
+      start(controller) {
+        const encoder = new TextEncoder();
+        const write = (chunk: string) => {
+          controller.enqueue(encoder.encode(chunk));
+          return 0;
+        };
 
-  document.addEventListener('DOMContentLoaded', function () {
-    if (!writer.closed) {
-      writer.close();
-    }
-  });
+        window.__flight.forEach(write);
+        window.__flight.push = write;
+
+        contentLoaded.then(() => controller.close());
+      },
+    });
+  } catch (_) {
+    // Old browser, will try a new hydration request later
+  }
 }
 
 function createResponseCache() {
