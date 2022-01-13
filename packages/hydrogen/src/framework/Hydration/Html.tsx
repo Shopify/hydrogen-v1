@@ -4,20 +4,12 @@ import React, {ReactNode} from 'react';
 type HtmlOptions = {
   children: ReactNode;
   template: string;
-  headSuffix?: string;
   htmlAttrs?: Record<string, string>;
   bodyAttrs?: Record<string, string>;
 };
 
-export function Html({
-  children,
-  template,
-  headSuffix,
-  htmlAttrs,
-  bodyAttrs,
-}: HtmlOptions) {
-  const head =
-    (template.match(/<head>(.+?)<\/head>/s)![1] || '') + (headSuffix || '');
+export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
+  const head = template.match(/<head>(.+?)<\/head>/s)![1] || '';
 
   return (
     <html {...htmlAttrs}>

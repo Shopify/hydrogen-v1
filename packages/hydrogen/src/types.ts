@@ -7,7 +7,6 @@ export type Renderer = (
   options: {
     request: ServerComponentRequest;
     template: string;
-    context?: Record<string, any>;
     dev?: boolean;
   }
 ) => Promise<Response>;
@@ -15,7 +14,6 @@ export type Renderer = (
 export type Streamer = (
   url: URL,
   options: {
-    context: any;
     request: ServerComponentRequest;
     response: ServerResponse;
     template: string;
@@ -26,7 +24,6 @@ export type Streamer = (
 export type Hydrator = (
   url: URL,
   options: {
-    context: any;
     request: ServerComponentRequest;
     response?: ServerResponse;
     isStreamable: boolean;

@@ -77,7 +77,6 @@ export default async function handleEvent(
 
   if (isReactHydrationRequest) {
     return hydrate(url, {
-      context: {},
       request,
       response: streamableResponse,
       isStreamable,
@@ -92,7 +91,6 @@ export default async function handleEvent(
    */
   if (isStreamable) {
     return stream(url, {
-      context: {},
       request,
       response: streamableResponse,
       template,
@@ -103,7 +101,6 @@ export default async function handleEvent(
   return render(url, {
     request,
     template,
-    context: {},
     dev,
   });
 }

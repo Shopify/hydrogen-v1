@@ -67,19 +67,14 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    * and returning any initial state that needs to be hydrated into the client version of the app.
    * NOTE: This is currently only used for SEO bots or Worker runtime (where Stream is not yet supported).
    */
-  const render: Renderer = async function (
-    url,
-    {context, request, template, dev}
-  ) {
+  const render: Renderer = async function (url, {request, template, dev}) {
     const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
 
     const {ReactApp, helmetContext, componentResponse} = buildReactApp({
       App,
       state,
-      context,
       request,
-      dev,
       log,
     });
 
@@ -146,7 +141,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const stream: Streamer = async function (
     url: URL,
-    {context, request, response, template, dev}
+    {request, response, template, dev}
   ) {
     const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
@@ -155,15 +150,22 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     const {ReactApp: ReactAppRSC} = buildReactApp({
       App,
       state,
-      context,
       request,
-      dev,
       log,
       isRSC: true,
     });
 
+    let isContainerInitialized = false;
     let flightResponseBuffer = '';
-    const flush = (writable: {write: (chunk: string) => void}, chunk = '') => {
+    const flushRSC = (
+      writable: {write: (chunk: string) => void},
+      chunk = ''
+    ) => {
+      if (!isContainerInitialized) {
+        isContainerInitialized = true;
+        writable.write(flightContainer({init: true}));
+      }
+
       if (flightResponseBuffer) {
         chunk = flightResponseBuffer + chunk;
         flightResponseBuffer = '';
@@ -186,7 +188,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       writer.setEncoding('utf-8');
       writer.on('data', (chunk: string) => {
         if (response.headersSent) {
-          flush(response, chunk);
+          flushRSC(response, chunk);
         } else {
           flightResponseBuffer += chunk;
         }
@@ -199,9 +201,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     const {ReactApp, componentResponse} = buildReactApp({
       App,
       state,
-      context,
       request,
-      dev,
       log,
     });
 
@@ -214,11 +214,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     let didError: Error | undefined;
 
     const ReactAppSSR = (
-      <Html
-        template={template}
-        htmlAttrs={{lang: 'en'}}
-        headSuffix={flightContainer({init: true})}
-      >
+      <Html template={template} htmlAttrs={{lang: 'en'}}>
         <ReactApp />
       </Html>
     );
@@ -301,10 +297,9 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
       const shouldUseStream = await deferred.promise;
 
-      writable.releaseLock();
-
       if (shouldUseStream) {
-        readable.pipeThrough(transform);
+        writable.releaseLock();
+        readable.pipeTo(transform.writable);
       }
 
       logServerResponse('str', log, request, responseOptions.status);
@@ -337,7 +332,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           startWritingHtmlToServerResponse(
             response,
             pipe,
-            flush,
+            flushRSC,
             dev ? didError : undefined
           );
         },
@@ -362,7 +357,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           startWritingHtmlToServerResponse(
             response,
             pipe,
-            flush,
+            flushRSC,
             dev ? didError : undefined
           );
         },
@@ -392,7 +387,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
    */
   const hydrate: Hydrator = async function (
     url: URL,
-    {context, request, response, isStreamable, dev}
+    {request, response, isStreamable, dev}
   ) {
     const log = getLoggerFromContext(request);
     const state = JSON.parse(url.searchParams.get('state') || '{}');
@@ -400,9 +395,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     const {ReactApp} = buildReactApp({
       App,
       state,
-      context,
       request,
-      dev,
       log,
       isRSC: true,
     });
@@ -414,18 +407,18 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     }
 
     if (__WORKER__) {
-      const stream = rscRenderToReadableStream(
+      const readable = rscRenderToReadableStream(
         <ReactApp />
       ) as ReadableStream<Uint8Array>;
 
       if (isStreamable) {
         logServerResponse('rsc', log, request, 200);
-        return new Response(stream);
+        return new Response(readable);
       }
 
       // Note: CFW does not support reader.piteTo nor iterable syntax
       const decoder = new TextDecoder();
-      const reader = stream.getReader();
+      const reader = readable.getReader();
       let bufferedBody = '';
 
       while (true) {
@@ -458,17 +451,13 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 function buildReactApp({
   App,
   state,
-  context,
   request,
-  dev,
   log,
   isRSC = false,
 }: {
   App: ComponentType;
   state?: object | null;
-  context: any;
   request: ServerComponentRequest;
-  dev: boolean | undefined;
   log: Logger;
   isRSC?: boolean;
 }) {
@@ -583,7 +572,7 @@ export default renderHydrogen;
 function startWritingHtmlToServerResponse(
   response: ServerResponse,
   pipe: (r: ServerResponse) => void,
-  flush: (w: ServerResponse) => void,
+  flushRSC: (w: ServerResponse) => void,
   error?: Error
 ) {
   if (!response.headersSent) {
@@ -591,8 +580,8 @@ function startWritingHtmlToServerResponse(
     response.write('<!DOCTYPE html>');
   }
 
-  pipe(response); // Writes <head> synchronously
-  flush(response); // Uses the <head> written
+  pipe(response);
+  flushRSC(response);
 
   if (error) {
     // This error was delayed until the headers were properly sent.
