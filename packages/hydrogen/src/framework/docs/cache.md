@@ -141,6 +141,20 @@ You can also preview the full-page caching headers in the network tab of your br
 
 ![A screenshot of the response headers](/assets/custom-storefronts/hydrogen/response-headers.png)
 
+## Busting query cache on build
+
+To enable query cache busting on build, pass `purgeQueryCacheOnBuild: true}` to the second parameter of the Hydrogen Vite plugin:
+
+{% codeblock file, filename: '/vite.config.js' %}
+
+```js
+export default defineConfig({
+  plugins: [hydrogen(shopifyConfig, {purgeQueryCacheOnBuild: true})],
+});
+```
+
+{% endcodeblock %}
+
 ## Caching in production
 
 Sub-request caching uses an instance of [Cache](https://developer.mozilla.org/en-US/docs/Web/API/Cache) passed to the entry point.
