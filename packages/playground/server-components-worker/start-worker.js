@@ -13,7 +13,7 @@ async function createServer(root = process.cwd()) {
     },
   });
 
-  const app = mf.createServer();
+  const app = await mf.createServer();
 
   return {app};
 }
