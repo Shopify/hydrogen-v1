@@ -261,7 +261,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
           deferred.resolve(true);
         },
-        onCompleteAll() {
+        async onCompleteAll() {
           if (componentResponse.canStream()) return;
 
           Object.assign(
@@ -275,25 +275,18 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           }
 
           if (componentResponse.customBody) {
-            if (componentResponse.customBody instanceof Promise) {
-              componentResponse.customBody.then((body) =>
-                writable.write(encoder.encode(body))
-              );
-            } else {
-              writable.write(encoder.encode(componentResponse.customBody));
-            }
-
-            deferred.resolve(false);
-          } else {
-            startWritingHtmlToStream(
-              responseOptions,
-              writable,
-              encoder,
-              dev ? didError : undefined
-            );
-
-            deferred.resolve(true);
+            writable.write(encoder.encode(await componentResponse.customBody));
+            return deferred.resolve(false);
           }
+
+          startWritingHtmlToStream(
+            responseOptions,
+            writable,
+            encoder,
+            dev ? didError : undefined
+          );
+
+          deferred.resolve(true);
         },
         onError(error: any) {
           didError = error;
@@ -348,7 +341,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
             dev ? didError : undefined
           );
         },
-        onCompleteAll() {
+        async onCompleteAll() {
           clearTimeout(streamTimeout);
 
           if (componentResponse.canStream() || response.writableEnded) return;
@@ -363,19 +356,15 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           }
 
           if (componentResponse.customBody) {
-            if (componentResponse.customBody instanceof Promise) {
-              componentResponse.customBody.then((body) => response.end(body));
-            } else {
-              response.end(componentResponse.customBody);
-            }
-          } else {
-            startWritingHtmlToServerResponse(
-              response,
-              pipe,
-              flush,
-              dev ? didError : undefined
-            );
+            return response.end(await componentResponse.customBody);
           }
+
+          startWritingHtmlToServerResponse(
+            response,
+            pipe,
+            flush,
+            dev ? didError : undefined
+          );
         },
         onError(error: any) {
           didError = error;
