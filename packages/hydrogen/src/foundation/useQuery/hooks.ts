@@ -27,10 +27,10 @@ export function useQuery<T>(
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
 ): RenderCacheResult<T> {
-  const gitHashKey = ['__buildGitHash__', ...key];
+  const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
   return useRenderCacheData<T>(
-    gitHashKey,
-    cachedQueryFnBuilder(gitHashKey, queryFn, queryOptions)
+    withCacheIdKey,
+    cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
   );
 }
 
