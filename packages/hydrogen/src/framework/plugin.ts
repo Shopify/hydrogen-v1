@@ -18,6 +18,6 @@ export default (
     reactServerComponentShim(),
     react(),
 
-    pluginOptions.purgeQueryCacheOnBuild ? purgeQueryCache() : null,
+    pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ];
 };
