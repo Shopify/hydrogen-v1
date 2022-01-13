@@ -84,6 +84,18 @@ export function hydrogenMiddleware({
         globalThis.Headers = fetch.Headers;
       }
 
+      if (!globalThis.ReadableStream) {
+        const {ReadableStream, WritableStream, TransformStream} = await import(
+          'stream/web'
+        );
+
+        Object.assign(globalThis, {
+          ReadableStream,
+          WritableStream,
+          TransformStream,
+        });
+      }
+
       /**
        * Dynamically import ServerComponentResponse after the `fetch`
        * polyfill has loaded above.
