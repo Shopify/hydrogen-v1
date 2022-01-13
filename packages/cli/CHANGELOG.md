@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- feat: unconfig in CLI (#375)
 - New command: `check`, for running audits on the current project to look for common problems
 - New command: add, to run an atomic change to a project (ie: `hydrogen add lint`)
 
