@@ -18,7 +18,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     return;
   }
 
-  createRoot(root).render(
+  createRoot(root, {hydrate: true}).render(
     <ErrorBoundary FallbackComponent={Error}>
       <Suspense fallback={null}>
         <Content clientWrapper={ClientWrapper} />
