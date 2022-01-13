@@ -63,6 +63,10 @@ export default () => {
           'react-dom',
           'react-router-dom',
           'react-server-dom-vite/client-proxy',
+          'react-error-boundary',
+          'graphql',
+          'kolorist',
+          'path-to-regexp',
         ],
       },
 
