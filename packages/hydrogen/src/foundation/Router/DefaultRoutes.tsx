@@ -82,10 +82,6 @@ export function createRoutesFromPages(
         throw new Error(
           `${key} doesn't export a default React component or an API function`
         );
-      if (pages[key].default && pages[key].api)
-        throw new Error(
-          `${key} cannot export both a default React component and an API function`
-        );
 
       return {
         path: topLevelPrefix + path,

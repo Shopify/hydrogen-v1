@@ -243,20 +243,6 @@ it('factors in the top-level path prefix', () => {
   ]);
 });
 
-it('errors when a route has a default _and_ api export', () => {
-  function makeError() {
-    const pages: ImportGlobEagerOutput = {
-      './pages/contact.server.jsx': {default: {}, api: function () {}},
-    };
-
-    createRoutesFromPages(pages);
-  }
-
-  expect(makeError).toThrowError(
-    './pages/contact.server.jsx cannot export both a default React component and an API function'
-  );
-});
-
 it("errors routes don't have a default or api export", () => {
   function makeError() {
     const pages: ImportGlobEagerOutput = {

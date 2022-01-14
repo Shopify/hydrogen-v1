@@ -77,7 +77,12 @@ export default async function handleEvent(
   if (!isReactHydrationRequest) {
     const apiRoute = getApiRoute(url);
 
-    if (apiRoute) {
+    // The API Route might have a default export, making it also a server component
+    // If it does, only render the API route if the request method is GET
+    if (
+      apiRoute &&
+      (!apiRoute.hasServerComponent || request.method !== 'GET')
+    ) {
       return renderApiRoute(request, apiRoute, log);
     }
   }

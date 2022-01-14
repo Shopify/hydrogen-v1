@@ -171,7 +171,7 @@ function shouldInterceptRequest(
   isReactHydrationRequest: boolean
 ) {
   return (
-    /text\/html|application\/hydrogen|application\/json/.test(
+    /text\/html|text\/plain|application\/hydrogen|application\/json/.test(
       request.headers['accept'] ?? ''
     ) || isReactHydrationRequest
   );

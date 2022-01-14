@@ -29,6 +29,65 @@ it('follows synchronous redirects', async () => {
   expect(await page.textContent('h1')).toContain('About');
 });
 
+it('should support API route on a serve component for POST methods', async () => {
+  const response = await page.request.post(url + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toEqual('some api response');
+});
+
+it('should support API route on a serve component for PUT methods', async () => {
+  const response = await page.request.put(url + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toEqual('some api response');
+});
+
+it('should support API route on a serve component for PATCH methods', async () => {
+  const response = await page.request.patch(url + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toEqual('some api response');
+});
+
+it('should support API route on a serve component for DELETE methods', async () => {
+  const response = await page.request.delete(url + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toEqual('some api response');
+});
+
+it('should support API route on a serve component for HEAD methods', async () => {
+  const response = await page.request.head(url + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+});
+
 it('should GET data from an API route', async () => {
   const response = await page.request.get(url + '/comments', {
     headers: {

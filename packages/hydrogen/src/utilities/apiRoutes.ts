@@ -17,10 +17,12 @@ type ResourceGetter = (
 interface HydrogenApiRoute {
   path: string;
   resource: ResourceGetter;
+  hasServerComponent: boolean;
 }
 
 export type ApiRouteMatch = {
   resource: ResourceGetter;
+  hasServerComponent: boolean;
   params: RouteParams;
 };
 
@@ -64,6 +66,7 @@ export function getApiRoutesFromPages(
       return {
         path: topLevelPrefix + path,
         resource: pages[key].api,
+        hasServerComponent: !!pages[key].default,
         exact,
       };
     });
@@ -96,6 +99,7 @@ export function getApiRouteFromURL(
   return {
     resource: foundRoute.resource,
     params: foundRouteDetails.params,
+    hasServerComponent: foundRoute.hasServerComponent,
   };
 }
 

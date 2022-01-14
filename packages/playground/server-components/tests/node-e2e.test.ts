@@ -16,6 +16,65 @@ it('follows synchronous redirects', async () => {
   expect(await page.textContent('h1')).toContain('About');
 });
 
+it('should support API route on a serve component for POST methods', async () => {
+  const response = await page.request.post(viteTestUrl + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toEqual('some api response');
+});
+
+it('should support API route on a serve component for PUT methods', async () => {
+  const response = await page.request.put(viteTestUrl + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toEqual('some api response');
+});
+
+it('should support API route on a serve component for PATCH methods', async () => {
+  const response = await page.request.patch(viteTestUrl + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toEqual('some api response');
+});
+
+it('should support API route on a serve component for DELETE methods', async () => {
+  const response = await page.request.delete(viteTestUrl + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toEqual('some api response');
+});
+
+it('should support API route on a serve component for HEAD methods', async () => {
+  const response = await page.request.head(viteTestUrl + '/', {
+    headers: {
+      Accept: 'text/plain',
+    },
+  });
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+});
+
 it('should GET data from an API route', async () => {
   const response = await page.request.get(viteTestUrl + '/comments', {
     headers: {
