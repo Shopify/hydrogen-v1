@@ -47,7 +47,7 @@ function ReactFlightVitePlugin() {
       if (
         /\.server(\.[jt]sx?)?$/.test(source) &&
         !(
-          /(\.server\.[jt]sx?|entry-server\.[jt]sx?|\/index\.html)$/.test(
+          /(\.server\.[jt]sx?|entry-server\.[jt]sx?|index\.html)$/.test(
             importer
           ) || isServerComponentImporterAllowed(importer, source)
         )
