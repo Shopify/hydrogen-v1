@@ -19,7 +19,7 @@ export function ProductProvider({
   /** A [Product object](/api/storefront/reference/products/product). */
   product: Product;
   /** The initially selected variant. */
-  initialVariantId: string;
+  initialVariantId?: string;
 }) {
   const {
     variants,
