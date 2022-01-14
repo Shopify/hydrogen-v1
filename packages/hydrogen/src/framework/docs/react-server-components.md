@@ -17,15 +17,15 @@ For example, the following React element tree is [composed of React components](
 
 React Server Components include the following component types:
 
-| Type   | Description                                                                                                                                                                                                                                                 | Filename convention                         |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| Server | Components that fetch data and render content on the server. Their dependencies aren't in the client bundle. Server components don't include any client-side interactivity. Only server components can make calls to the [Storefront API](/api/storefront). | End in `.client.jsx`                        |
-| Client | Components that render on the client. These components include client-side stateful interactivity.                                                                                                                                                          | End in `.server.jsx`                        |
-| Shared | Components that render on both the server and the client.                                                                                                                                                                                                   | Don't end in `.client.jsx` or `.server.jsx` |
+| Type   | Description                                                                                                                                                                                                                                                 | Filename convention                                                   |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Server | Components that fetch data and render content on the server. Their dependencies aren't in the client bundle. Server components don't include any client-side interactivity. Only server components can make calls to the [Storefront API](/api/storefront). | Server components end in `.server.jsx`.                               |
+| Client | Components that render on the client. Client components include client-side stateful interactivity.                                                                                                                                                         | Client components end in `.client.jsx`.                               |
+| Shared | Components that render on both the server and the client.                                                                                                                                                                                                   | Shared components don't end in either `.client.jsx` or `.server.jsx`. |
 
 ## Benefits
 
-React Server Components separate the concerns between client and server logic. This separation provides the following benefits to Hydrogen apps:
+React Server Components separate client and server logic. This separation provides the following benefits to Hydrogen apps:
 
 - Server-only code that has no impact on bundle size and reduces bundle sizes
 - Server-side access to custom and private server-side data sources
@@ -44,7 +44,7 @@ React Server Components have the following constraints on server and client comp
 - Client components can’t access server-only features, like the filesystem, and can only import other client components.
 - Server components can’t access client-only features, like state.
 
-Due to these constraints, there are [specific rules](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#capabilities--constraints-of-server-and-client-components) you need to follow when building your Hydrogen app:
+Due to these constraints, there are [specific rules](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#capabilities--constraints-of-server-and-client-components) that you need to follow when building your Hydrogen app:
 
 ![A diagram that illustrates the rules that apply to server and client components](/assets/custom-storefronts/hydrogen/server-client-component-rules.png)
 
@@ -83,7 +83,7 @@ export default function MyServerComponent() {
 
 ```js
 // `MyOuterServerComponent` can instantiate both the client and server
-// components. You can pass in a `<MyServerComponent/>` as
+// components. You can pass in `<MyServerComponent/>` as
 // the `children` prop to `MyClientComponent`.
 import MyClientComponent from './MyClientComponent.client';
 import MyServerComponent from './MyServerComponent.server';
@@ -128,11 +128,11 @@ The following prop wouldn't send successfully:
 
 ### Sharing code between server and client
 
-In addition to server-specific and client-specific components, you can also create components that work on both the server and the client. This allows logic to be shared across environments, as long as the components meet all the [constraints of both the server and client components](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#sharing-code-between-server-and-client).
+In addition to server-specific and client-specific components, you can create components that work on both the server and the client. This allows logic to be shared across environments, as long as the components meet all the [constraints of both the server and client components](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#sharing-code-between-server-and-client).
 
 ![A diagram that illustrates server-specific and client-specific components, and shared components between the client and server](/assets/custom-storefronts/hydrogen/hydrogen-shared-components.png)
 
-Although shared components have the most restrictions, many components already obey these rules and can be used across the server and client without modification. For example, many components transform some props based on certain conditions, without using state or loading additional data. This is why shared components are the default and don’t have a special file extension.
+Although shared components have the most constraints, many components already obey these rules and can be used across the server and client without modification. For example, many components transform some props based on certain conditions, without using state or loading additional data. This is why shared components are the default and [don’t have a dedicated file extension](#component-types).
 
 ## Next steps
 
