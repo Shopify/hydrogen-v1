@@ -142,6 +142,10 @@ export function collectQueryCacheControlHeaders(
   queryKey: QueryKey,
   cacheControlHeader: string | null
 ) {
+  if (!logger.options?.showCacheControlHeader) {
+    return;
+  }
+
   const cacheKey = hashKey(queryKey);
   const queryName = findQueryname(cacheKey);
 
