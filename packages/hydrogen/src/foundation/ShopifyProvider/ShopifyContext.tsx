@@ -13,6 +13,7 @@ export function makeShopifyContext(
     locale: shopifyConfig.defaultLocale ?? DEFAULT_LOCALE,
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
-    graphqlApiVersion: shopifyConfig.graphqlApiVersion ?? DEFAULT_API_VERSION,
+    storefrontApiVersion:
+      shopifyConfig.storefrontApiVersion ?? DEFAULT_API_VERSION,
   };
 }

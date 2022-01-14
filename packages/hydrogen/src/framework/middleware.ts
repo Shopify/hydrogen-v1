@@ -175,14 +175,14 @@ async function respondWithGraphiql(
     );
   }
 
-  const {storeDomain, storefrontToken, graphqlApiVersion} = shopifyConfig;
+  const {storeDomain, storefrontToken, storefrontApiVersion} = shopifyConfig;
 
   response.setHeader('Content-Type', 'text/html');
   response.end(
     graphiqlHtml(
       storeDomain?.replace(/^https?:\/\//, ''),
       storefrontToken,
-      graphqlApiVersion
+      storefrontApiVersion
     )
   );
 }

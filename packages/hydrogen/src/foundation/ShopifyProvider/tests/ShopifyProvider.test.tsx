@@ -72,13 +72,13 @@ describe('<ShopifyProvider />', () => {
       });
     });
 
-    it('contains graphqlApiVersion from shopifyConfig', () => {
+    it('contains storefrontApiVersion from shopifyConfig', () => {
       const provider = mount(
         <ShopifyProvider
           shopifyConfig={{
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
-            graphqlApiVersion: '2022-04',
+            storefrontApiVersion: '2022-04',
           }}
         >
           <Children />
@@ -87,12 +87,12 @@ describe('<ShopifyProvider />', () => {
 
       expect(provider).toContainReactComponent(ShopifyContext.Provider, {
         value: expect.objectContaining({
-          graphqlApiVersion: '2022-04',
+          storefrontApiVersion: '2022-04',
         }),
       });
     });
 
-    it('contains DEFAULT_API_VERSION as graphqlApiVersion when it is not specify in shopifyConfig', () => {
+    it('contains DEFAULT_API_VERSION as storefrontApiVersion when it is not specify in shopifyConfig', () => {
       const provider = mount(
         <ShopifyProvider
           shopifyConfig={{
@@ -106,7 +106,7 @@ describe('<ShopifyProvider />', () => {
 
       expect(provider).toContainReactComponent(ShopifyContext.Provider, {
         value: expect.objectContaining({
-          graphqlApiVersion: DEFAULT_API_VERSION,
+          storefrontApiVersion: DEFAULT_API_VERSION,
         }),
       });
     });
