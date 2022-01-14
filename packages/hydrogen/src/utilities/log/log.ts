@@ -169,7 +169,7 @@ export function logCacheControlHeaders(
   Object.keys(queryCacheControlHeaders).forEach((cacheKey) => {
     const query = queryCacheControlHeaders[cacheKey];
     log.debug(
-      `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${query.header}}`
+      `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${query.header}`
     );
   });
 
