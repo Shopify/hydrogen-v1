@@ -123,7 +123,11 @@ function ReactFlightVitePlugin() {
               var glob = _ref3[0],
                 prefix = _ref3[1];
               return (
-                "__vncp(import.meta.glob('" + glob + "'), '" + prefix + "')"
+                "__vncp(import.meta.glob('" +
+                vite.normalizePath(glob) +
+                "'), '" +
+                vite.normalizePath(prefix) +
+                "')"
               );
             })
             .join(', ') +
