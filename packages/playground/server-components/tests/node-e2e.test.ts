@@ -138,3 +138,10 @@ it('should return 404 on unknown method', async () => {
   expect(response.statusText()).toBe('Not Found');
   expect(text).toBe('Comment method not found');
 });
+
+it('supports form request on API routes', async () => {
+  await page.goto(viteTestUrl + '/form');
+  await page.type('#fname', 'sometext');
+  await page.click('#fsubmit');
+  expect(await page.textContent('*')).toContain('fname=sometext');
+});
