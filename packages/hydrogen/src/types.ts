@@ -127,4 +127,5 @@ export interface CacheOptions {
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
+  purgeQueryCacheOnBuild?: boolean;
 }

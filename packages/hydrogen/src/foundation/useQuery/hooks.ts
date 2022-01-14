@@ -27,9 +27,10 @@ export function useQuery<T>(
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
 ): RenderCacheResult<T> {
+  const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
   return useRenderCacheData<T>(
-    key,
-    cachedQueryFnBuilder(key, queryFn, queryOptions)
+    withCacheIdKey,
+    cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
   );
 }
 
