@@ -8,6 +8,7 @@ import {
 import {
   Logger,
   logServerResponse,
+  logCacheControlHeaders,
   getLoggerFromContext,
 } from './utilities/log/log';
 import {renderToString} from 'react-dom/server';
@@ -74,6 +75,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       request,
       componentResponse.customStatus?.code ?? componentResponse.status ?? 200
     );
+    logCacheControlHeaders(request, componentResponse);
 
     if (componentResponse.customBody) {
       return {body: await componentResponse.customBody, url, componentResponse};
@@ -157,6 +159,8 @@ const renderHydrogen: ServerHandler = (App, hook) => {
         },
         onCompleteAll() {
           clearTimeout(streamTimeout);
+
+          logCacheControlHeaders(request, componentResponse);
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
@@ -257,6 +261,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
           );
           response.end(generateWireSyntaxFromRenderedHtml(writer.toString()));
           logServerResponse('rsc', log, request, response.statusCode);
+          logCacheControlHeaders(request, componentResponse);
         },
         onError(error: any) {
           didError = error;

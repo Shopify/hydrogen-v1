@@ -1,3 +1,5 @@
+import {logCacheApiStatus} from '../../utilities/log/log';
+
 /**
  * This is an in-memory implementation of `Cache` that *barely*
  * works and is only meant to be used during development.
@@ -10,7 +12,7 @@ export class InMemoryCache {
   }
 
   put(request: Request, response: Response) {
-    console.log(`[Cache] PUT ${request.url.slice(0, 100)}`);
+    logCacheApiStatus(`[Cache] PUT ${request.url.slice(0, 100)}`);
     this.store.set(request.url, {
       value: response,
       date: new Date(),
@@ -21,7 +23,7 @@ export class InMemoryCache {
     const match = this.store.get(request.url);
 
     if (!match) {
-      console.log(`[Cache] MISS ${request.url.slice(0, 100)}`);
+      logCacheApiStatus(`[Cache] MISS ${request.url.slice(0, 100)}`);
       return;
     }
 
@@ -37,7 +39,7 @@ export class InMemoryCache {
 
     const isMiss = age > maxAge + swr;
     if (isMiss) {
-      console.log(`[Cache] MISS ${request.url.slice(0, 100)}`);
+      logCacheApiStatus(`[Cache] MISS ${request.url.slice(0, 100)}`);
       this.store.delete(request.url);
       return;
     }
@@ -47,7 +49,9 @@ export class InMemoryCache {
     const headers = new Headers(value.headers);
     headers.set('cache', isStale ? 'STALE' : 'HIT');
     headers.set('date', date.toGMTString());
-    console.log(`[Cache] ${headers.get('cache')} ${request.url.slice(0, 100)}`);
+    logCacheApiStatus(
+      `[Cache] ${headers.get('cache')} ${request.url.slice(0, 100)}`
+    );
 
     const response = new Response(value.body, {
       headers,
@@ -58,6 +62,6 @@ export class InMemoryCache {
 
   delete(request: Request) {
     this.store.delete(request.url);
-    console.log(`[Cache] DELETE ${request.url.slice(0, 100)}`);
+    logCacheApiStatus(`[Cache] DELETE ${request.url.slice(0, 100)}`);
   }
 }

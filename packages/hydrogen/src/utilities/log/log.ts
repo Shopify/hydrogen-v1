@@ -1,6 +1,9 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
+import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
+import {QueryKey} from '../../types';
+import {hashKey} from '../../framework/cache';
 
 /** A utility for logging debugging, warning, and error information about the application.
  * Use by importing `log` `@shopify/hydrogen` or by using a `log` prop passed to each page
@@ -13,7 +16,13 @@ export interface Logger {
   warn: (...args: Array<any>) => void;
   error: (...args: Array<any>) => void;
   fatal: (...args: Array<any>) => void;
+  options?: LoggerOptions;
 }
+
+export type LoggerOptions = {
+  showCacheControlHeader?: boolean;
+  showCacheApiStatus?: boolean;
+};
 
 const defaultLogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
@@ -31,6 +40,7 @@ const defaultLogger = {
   fatal(context: {[key: string]: any}, ...args: Array<any>) {
     console.error(red('FATAL: '), ...args);
   },
+  options: {},
 };
 
 let logger = defaultLogger as Logger;
@@ -47,6 +57,10 @@ export function getLoggerFromContext(context: any): Logger {
 
 export function setLogger(newLogger: Logger) {
   logger = newLogger;
+}
+
+export function setLoggerOptions(options: LoggerOptions) {
+  logger.options = options;
 }
 
 export function resetLogger() {
@@ -109,4 +123,71 @@ export function logServerResponse(
 
 function pad(str: string, _pad: string) {
   return (str + _pad).substring(0, _pad.length);
+}
+
+function parseUrl(url: string) {
+  return /\?state=/.test(url) ? decodeURIComponent(url) : url;
+}
+
+type QueryCacheControlHeaders = {
+  [key: string]: {
+    name: string;
+    header: string | null;
+  };
+};
+
+let queryCacheControlHeaders: QueryCacheControlHeaders = {};
+let longestQueryNameLength = 0;
+export function collectQueryCacheControlHeaders(
+  queryKey: QueryKey,
+  cacheControlHeader: string | null
+) {
+  const cacheKey = hashKey(queryKey);
+  const queryName = findQueryname(cacheKey);
+
+  longestQueryNameLength =
+    longestQueryNameLength < queryName.length
+      ? queryName.length
+      : longestQueryNameLength;
+  queryCacheControlHeaders[cacheKey] = {
+    name: queryName,
+    header: cacheControlHeader,
+  };
+}
+
+export function logCacheControlHeaders(
+  request: ServerComponentRequest,
+  response: ServerComponentResponse
+) {
+  if (!logger.options?.showCacheControlHeader) {
+    return;
+  }
+
+  log.debug(`┌── Cache control header for ${parseUrl(request.url)}`);
+  log.debug(`│ ${response.cacheControlHeader}\n│`);
+
+  Object.keys(queryCacheControlHeaders).forEach((cacheKey) => {
+    const query = queryCacheControlHeaders[cacheKey];
+    log.debug(
+      `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${query.header}}`
+    );
+  });
+
+  log.debug('└──');
+  queryCacheControlHeaders = {};
+}
+
+function findQueryname(key: string) {
+  const match = key.match(/query ([^\s\()]*)\s?(|\(\{)/);
+  if (match && match.length > 1) {
+    return match[1];
+  }
+  return '<unknown>';
+}
+
+export function logCacheApiStatus(...args: Array<any>) {
+  if (!logger.options?.showCacheApiStatus) {
+    return;
+  }
+  log.debug({}, ...args);
 }

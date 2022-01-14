@@ -11,7 +11,7 @@ export {
   getTime,
 } from './utilities';
 
-export {log, setLogger, Logger} from './utilities/log';
+export {log, setLogger, setLoggerOptions, Logger} from './utilities/log';
 
 export {Helmet} from 'react-helmet-async';
 

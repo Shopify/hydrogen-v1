@@ -2,6 +2,7 @@ import type {CacheOptions, QueryKey} from '../../types';
 import {log} from '../../utilities/log';
 import {
   deleteItemFromCache,
+  generateSubRequestCacheControlHeader,
   getItemFromCache,
   isStale,
   setItemInCache,
@@ -10,6 +11,7 @@ import {runDelayedFunction} from '../../framework/runtime';
 import {useRenderCacheData} from '../RenderCacheProvider/hook';
 
 import type {RenderCacheResult} from '../RenderCacheProvider/types';
+import {collectQueryCacheControlHeaders} from '../../utilities/log/log';
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
 }
@@ -56,6 +58,11 @@ function cachedQueryFnBuilder<T>(
     if (cacheResponse) {
       const [output, response] = cacheResponse;
 
+      collectQueryCacheControlHeaders(
+        key,
+        response.headers.get('cache-control')
+      );
+
       /**
        * Important: Do this async
        */
@@ -93,6 +100,11 @@ function cachedQueryFnBuilder<T>(
     runDelayedFunction(
       async () =>
         await setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+    );
+
+    collectQueryCacheControlHeaders(
+      key,
+      generateSubRequestCacheControlHeader(resolvedQueryOptions?.cache)
     );
 
     return newOutput;
