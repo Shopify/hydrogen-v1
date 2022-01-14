@@ -73,15 +73,18 @@ export function hydrogenMiddleware({
        * which is needed for proxy requests and server-side API requests.
        */
       if (!globalThis.fetch) {
-        const fetch = await import('node-fetch');
+        const {fetch, Request, Response, Headers} = await import('undici');
+        const {default: AbortController} = await import('abort-controller');
         // @ts-ignore
-        globalThis.fetch = fetch.default;
+        globalThis.fetch = fetch;
         // @ts-ignore
-        globalThis.Request = fetch.Request;
+        globalThis.Request = Request;
         // @ts-ignore
-        globalThis.Response = fetch.Response;
+        globalThis.Response = Response;
         // @ts-ignore
-        globalThis.Headers = fetch.Headers;
+        globalThis.Headers = Headers;
+        // @ts-ignore
+        globalThis.AbortController = AbortController;
       }
 
       /**
@@ -117,7 +120,19 @@ export function hydrogenMiddleware({
         });
 
         response.statusCode = eventResponse.status;
-        response.end(eventResponse.body);
+
+        if (eventResponse.body) {
+          const reader = eventResponse.body.getReader();
+          reader.read().then(function processValue(result: any): any {
+            const {done, value} = result;
+            if (done) {
+              response.end();
+              return;
+            }
+            response.write(value);
+            return reader.read().then(processValue);
+          });
+        }
       }
     } catch (e: any) {
       if (dev && devServer) devServer.ssrFixStacktrace(e);

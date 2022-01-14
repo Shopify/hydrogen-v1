@@ -1,4 +1,5 @@
-import {Headers, Request, Response} from 'node-fetch';
+import {Headers, Request, Response} from 'undici';
+import AbortController from 'abort-controller';
 
 // Note: globalThis.fetch is already polyfilled by Jest with DOM utilities
 
@@ -8,3 +9,5 @@ globalThis.Headers = Headers;
 globalThis.Request = Request;
 // @ts-ignore
 globalThis.Response = Response;
+// @ts-ignore
+globalThis.AbortController = AbortController;
