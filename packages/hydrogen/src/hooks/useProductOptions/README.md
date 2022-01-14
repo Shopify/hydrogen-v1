@@ -25,7 +25,7 @@ export function MyComponent() {
         value={selectedVariant?.id}
         onChange={(e) =>
           setSelectedVariant(
-            variants.find((variant) => variant.id === e.target.value)
+            variants.find((variant) => variant.id === e.target.value),
           )
         }
       >
