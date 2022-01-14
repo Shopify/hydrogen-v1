@@ -143,7 +143,7 @@ You can also preview the full-page caching headers in the network tab of your br
 
 ## Busting query cache on build
 
-To enable query cache busting on build, pass `purgeQueryCacheOnBuild: true}` to the second parameter of the Hydrogen Vite plugin:
+To enable query cache busting on build, pass `{purgeQueryCacheOnBuild: true}` to the second parameter of the Hydrogen Vite plugin:
 
 {% codeblock file, filename: '/vite.config.js' %}
 
