@@ -10,6 +10,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Warn instead of error when a page server component is missing valid exports
 - Adopt upstream version of React Server Components. See [#498](https://github.com/Shopify/hydrogen/pull/498) for breaking changes.
 - The 'locale' option in shopify.config.js had been renamed to 'defaultLocale'
+- dx: rename `graphqlApiVersion` to `storefrontApiVersion` in `shopify.config.js`
 
 ## 0.9.1 - 2022-01-20
 
