@@ -17,11 +17,11 @@ For example, the following React element tree is [composed of React components](
 
 React Server Components include the following component types:
 
-| Type   | Description | Filename convention                                                                                    
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| Server | Components that fetch data and render content on the server. Their dependencies aren't in the client bundle. Server components don't include any client-side interactivity. Only server components can make calls to the [Storefront API](/api/storefront). | End in `.client.jsx` |
-| Client | Components that render on the client. These components include client-side stateful interactivity. | End in `.server.jsx` |
-| Shared | Components that render on both the server and the client. | Don't end in `.client.jsx` or `.server.jsx` |
+| Type   | Description                                                                                                                                                                                                                                                 | Filename convention                         |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Server | Components that fetch data and render content on the server. Their dependencies aren't in the client bundle. Server components don't include any client-side interactivity. Only server components can make calls to the [Storefront API](/api/storefront). | End in `.client.jsx`                        |
+| Client | Components that render on the client. These components include client-side stateful interactivity.                                                                                                                                                          | End in `.server.jsx`                        |
+| Shared | Components that render on both the server and the client.                                                                                                                                                                                                   | Don't end in `.client.jsx` or `.server.jsx` |
 
 ## Benefits
 
@@ -57,13 +57,13 @@ The following example shows how to pass a server component as a `children` prop 
 {% codeblock file, filename: 'MyClientComponent.client.jsx' %}
 
 ```js
-export default function MyClientComponent({ children }) {
+export default function MyClientComponent({children}) {
   return (
     <div>
       <h1>This code is rendered on the client</h1>
       {children}
     </div>
-  )
+  );
 }
 ```
 
@@ -73,7 +73,7 @@ export default function MyClientComponent({ children }) {
 
 ```js
 export default function MyServerComponent() {
-  return <span>This code is rendered on the server</span>
+  return <span>This code is rendered on the server</span>;
 }
 ```
 
@@ -85,14 +85,14 @@ export default function MyServerComponent() {
 // `MyOuterServerComponent` can instantiate both the client and server
 // components. You can pass in a `<MyServerComponent/>` as
 // the `children` prop to `MyClientComponent`.
-import MyClientComponent from './MyClientComponent.client'
-import MyServerComponent from './MyServerComponent.server'
+import MyClientComponent from './MyClientComponent.client';
+import MyServerComponent from './MyServerComponent.server';
 export default function MyOuterServerComponent() {
   return (
     <MyClientComponent>
       <MyServerComponent />
     </MyClientComponent>
-  )
+  );
 }
 ```
 
