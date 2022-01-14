@@ -1,6 +1,6 @@
 // @ts-check
 const fs = require('fs');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const path = require('path');
 const express = require('express');
 

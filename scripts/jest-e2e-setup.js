@@ -15,9 +15,7 @@ module.exports = async () => {
 
   global.__BROWSER_SERVER__ = browserServer;
 
-  console.log('bret');
   await fs.mkdirp(DIR);
-  console.log('little');
   await fs.writeFile(path.join(DIR, 'wsEndpoint'), browserServer.wsEndpoint());
   await fs.remove(path.resolve(__dirname, '../temp'));
 };
