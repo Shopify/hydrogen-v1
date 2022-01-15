@@ -18,8 +18,10 @@ export function ProductProvider({
   children: ReactNode;
   /** A [Product object](/api/storefront/reference/products/product). */
   product: Product;
-  /** The initially selected variant. */
-  initialVariantId?: string;
+  /** The initially selected variant. This is required only if you're using a `SelectedVariantX` hook in the `ProductProvider` component.*/
+  initialVariantId?: Parameters<
+    typeof useProductOptions
+  >['0']['initialVariantId'];
 }) {
   const {
     variants,
