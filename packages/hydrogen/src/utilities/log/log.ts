@@ -168,14 +168,20 @@ export function logCacheControlHeaders(
   }
 
   log.debug(`┌── Cache control header for ${parseUrl(request.url)}`);
-  log.debug(`│ ${response.cacheControlHeader}\n│`);
+  log.debug(`│ ${response.cacheControlHeader}`);
 
-  Object.keys(queryCacheControlHeaders).forEach((cacheKey) => {
-    const query = queryCacheControlHeaders[cacheKey];
-    log.debug(
-      `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${query.header}`
-    );
-  });
+  const queryList = Object.keys(queryCacheControlHeaders);
+  if (queryList.length > 0) {
+    log.debug('│');
+    queryList.forEach((cacheKey) => {
+      const query = queryCacheControlHeaders[cacheKey];
+      log.debug(
+        `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${
+          query.header
+        }`
+      );
+    });
+  }
 
   log.debug('└──');
   queryCacheControlHeaders = {};
