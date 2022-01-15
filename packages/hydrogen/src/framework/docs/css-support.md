@@ -22,12 +22,17 @@ The following example shows Tailwind classes in use:
 ```js
 // The text is centered.
 <div class="text-center">
-  // The heading is larger than normal text, has a small margin below it, and is bold.
+  // The heading is larger than normal text, has a small margin below it, and is
+  bold.
   <h2 class="text-lg mb-4 font-bold">Hello, Hydrogen</h2>
-  // The paragraph text is grey. Specifically, it’s the 600 shade of gray (100 is lightest and 900 is darkest).
-  <p class="text-gray-600">Welcome to your custom storefront. Let's get building.</p>
+  // The paragraph text is grey. Specifically, it’s the 600 shade of gray (100
+  is lightest and 900 is darkest).
+  <p class="text-gray-600">
+    Welcome to your custom storefront. Let's get building.
+  </p>
 </div>
 ```
+
 {% endcodeblock %}
 
 ### Human-readable class names

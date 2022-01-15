@@ -357,8 +357,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     generator.section({
       title: 'Built-in CSS support',
-      description:
-        'Learn about the CSS support built into Hydrogen apps.',
+      description: 'Learn about the CSS support built into Hydrogen apps.',
       url: '/custom-storefronts/hydrogen/framework/css-support.md',
       entry: 'framework/docs/css-support.md',
     }),
