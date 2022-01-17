@@ -5,7 +5,8 @@ const url = `http://localhost:${port}`;
 it('shows the homepage, navigates to about, and increases the count', async () => {
   await page.goto(url + '/');
 
-  expect(await page.textContent('h1')).toContain('Home');
+  const content = await page.content();
+  expect(content).toContain('<h1>Home</h1>');
 
   const secretsServer = await page.textContent('.secrets-server');
   expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');

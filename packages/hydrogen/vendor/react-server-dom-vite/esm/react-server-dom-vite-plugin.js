@@ -43,7 +43,7 @@ function ReactFlightVitePlugin() {
       if (
         /\.server(\.[jt]sx?)?$/.test(source) &&
         !(
-          /(\.server\.[jt]sx?|entry-server\.[jt]sx?|\/index\.html)$/.test(
+          /(\.server\.[jt]sx?|entry-server\.[jt]sx?|index\.html)$/.test(
             importer
           ) || isServerComponentImporterAllowed(importer, source)
         )
@@ -117,7 +117,11 @@ function ReactFlightVitePlugin() {
               var glob = _ref3[0],
                 prefix = _ref3[1];
               return (
-                "__vncp(import.meta.glob('" + glob + "'), '" + prefix + "')"
+                "__vncp(import.meta.glob('" +
+                vite.normalizePath(glob) +
+                "'), '" +
+                vite.normalizePath(prefix) +
+                "')"
               );
             })
             .join(', ') +
