@@ -9,9 +9,7 @@ export default function () {
   
   import shopifyConfig from '../shopify.config';
   
-  export default function App({...serverState}) {
-    const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
-  
+  export default function App({pages, ...serverState}) {
     return (
       <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
         <Suspense fallback="Loading...">
