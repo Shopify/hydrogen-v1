@@ -1,6 +1,11 @@
 export async function api(request) {
-  const text = await request.text();
-  return new Response(text);
+  const formData = await request.formData();
+  let resp = '';
+
+  for (let entry of formData) {
+    resp += entry.join('=');
+  }
+  return new Response(resp);
 }
 
 export default function () {
