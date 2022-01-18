@@ -1,5 +1,5 @@
 import {loadScript} from '../../utilities/script_loader';
-import {useState, useEffect, useMemo} from 'react';
+import {useState, useEffect} from 'react';
 
 type LoadScriptParams = Parameters<typeof loadScript>;
 export function useScriptLoader(
@@ -7,8 +7,6 @@ export function useScriptLoader(
   options?: LoadScriptParams[1]
 ) {
   const [status, setStatus] = useState<ScriptState>('loading');
-  const [reloadValue, reloadFn] = useState({});
-  const forceReload = useMemo(() => reloadFn({}), []);
 
   useEffect(() => {
     async function loadScriptWrapper() {
@@ -22,9 +20,9 @@ export function useScriptLoader(
     }
 
     loadScriptWrapper();
-  }, [reloadValue, url, options]);
+  }, [url, JSON.stringify(options)]);
 
-  return {status, forceReload};
+  return status;
 }
 
 type ScriptState = 'loading' | 'done' | 'error';

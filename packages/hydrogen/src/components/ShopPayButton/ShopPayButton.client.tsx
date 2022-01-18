@@ -29,7 +29,7 @@ const URL = 'https://cdn.shopify.com/shopifycloud/shop-js/v0.1/client.js';
 export function ShopPayButton({variantIds, className}: ShopPayButtonProps) {
   const [ids, setIds] = useState<string[]>([]);
   const {storeDomain} = useShop();
-  const {status: shopPayLoadedStatus} = useScriptLoader(URL);
+  const shopPayLoadedStatus = useScriptLoader(URL);
 
   useEffect(() => {
     const ids = variantIds.reduce<string[]>((accumulator, gid) => {

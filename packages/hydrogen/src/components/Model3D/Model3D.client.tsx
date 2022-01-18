@@ -164,7 +164,7 @@ export function Model3D<TTag extends ElementType>(
     ...passthroughProps
   } = props;
 
-  const {status: modelViewerLoadedStatus} = useScriptLoader(
+  const modelViewerLoadedStatus = useScriptLoader(
     'https://unpkg.com/@google/model-viewer@v1.8.0/dist/model-viewer.min.js',
     {
       module: true,
