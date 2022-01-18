@@ -12,10 +12,6 @@ import FeaturedCollection from '../components/FeaturedCollection';
 import ProductCard from '../components/ProductCard';
 import Welcome from '../components/Welcome.server';
 
-export function api() {
-  return new Response('hi there');
-}
-
 function GradientBackground() {
   return (
     <div className="fixed top-0 w-full h-3/5 overflow-hidden">

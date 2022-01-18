@@ -16,7 +16,7 @@ setLogger({
   },
 });
 
-const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
+const pages = import.meta.globEager('./pages/**/*.server.[jt]s[x]');
 
 export default renderHydrogen(App, {pages}, ({url}) => {
   // Custom hook
