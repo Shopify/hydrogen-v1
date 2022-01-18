@@ -71,6 +71,12 @@ export const log: Logger = {
   },
 };
 
+const SERVER_RESPONSE_MAP: Record<string, string> = {
+  str: 'streaming SSR',
+  rsc: 'server Components',
+  ssr: 'buffered SSR',
+};
+
 export function logServerResponse(
   type: 'str' | 'rsc' | 'ssr' | 'api',
   log: Logger,
@@ -86,19 +92,7 @@ export function logServerResponse(
       ? lightBlue(responseStatus)
       : green(responseStatus);
 
-  let fullType: string = type;
-
-  switch (type) {
-    case 'str':
-      fullType = 'streaming SSR';
-      break;
-    case 'rsc':
-      fullType = 'server components';
-      break;
-    case 'ssr':
-      fullType = 'buffered SSR';
-      break;
-  }
+  const fullType: string = SERVER_RESPONSE_MAP[type] || type;
 
   const styledType = italic(pad(fullType, '                 '));
   const paddedTiming = pad(
