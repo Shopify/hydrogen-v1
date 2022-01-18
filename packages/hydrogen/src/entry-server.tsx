@@ -417,17 +417,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       }
 
       // Note: CFW does not support reader.piteTo nor iterable syntax
-      const decoder = new TextDecoder();
-      const reader = readable.getReader();
-      let bufferedBody = '';
-
-      while (true) {
-        const {done, value} = await reader.read();
-        if (done) break;
-
-        bufferedBody +=
-          typeof value === 'string' ? value : decoder.decode(value);
-      }
+      const bufferedBody = await bufferReadableStream(readable.getReader());
 
       logServerResponse('rsc', log, request, 200);
 
@@ -447,6 +437,20 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     hydrate,
   };
 };
+
+async function bufferReadableStream(reader: ReadableStreamDefaultReader) {
+  const decoder = new TextDecoder();
+  let result = '';
+
+  while (true) {
+    const {done, value} = await reader.read();
+    if (done) break;
+
+    result += typeof value === 'string' ? value : decoder.decode(value);
+  }
+
+  return result;
+}
 
 function buildReactApp({
   App,
@@ -516,7 +520,7 @@ async function renderToBufferedString(
 
     if (__WORKER__) {
       const deferred = defer();
-      const stream = renderToReadableStream(ReactApp, {
+      const readable = renderToReadableStream(ReactApp, {
         onCompleteAll() {
           clearTimeout(errorTimeout);
           /**
@@ -531,15 +535,11 @@ async function renderToBufferedString(
           log.error(error);
           deferred.reject(error);
         },
-      }) as ReadableStream;
+      }) as ReadableStream<Uint8Array>;
 
       await deferred.promise.catch(reject);
 
-      /**
-       * Use the stream to build a `Response`, and fetch the body from the response
-       * to resolve and be processed by the rest of the pipeline.
-       */
-      resolve(await new Response(stream).text());
+      resolve(await bufferReadableStream(readable.getReader()));
     } else {
       const writer = await createNodeWriter();
 
