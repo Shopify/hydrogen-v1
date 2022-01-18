@@ -38,6 +38,7 @@
     "debug": "^4.3.2",
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
+    "glob-promise": "^4.2.2",
     "inquirer": "^8.1.2",
     "minimist": "^1.2.5",
     "prettier": "^2.4.1"

@@ -7,6 +7,7 @@ export * from './feature';
 export {merge} from './merge';
 export {componentName, validComponentName} from './react';
 export {formatFile} from './format';
+export {tree, uniq} from './tree';
 
 const DEFAULT_SUBCOMMANDS = {
   create: 'app',
@@ -25,6 +26,6 @@ export function parseCliArguments(rawInputs?: string[]) {
   return {
     root: resolve(root),
     mode: debug ? 'debug' : 'default',
-    command: [command, subcommand].join('/'),
+    command: subcommand ? [command, subcommand].join('/') : command,
   };
 }
