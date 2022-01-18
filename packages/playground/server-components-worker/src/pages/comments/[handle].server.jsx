@@ -15,12 +15,13 @@ export async function api(request, {params: {handle}}) {
           1
         );
         return new Response(null, {
-          status: 200,
+          status: 204,
         });
     }
 
     return new Response('Comment method not found', {
-      status: 404,
+      status: 405,
+      headers: {Allow: 'GET, DELETE'},
     });
   }
 

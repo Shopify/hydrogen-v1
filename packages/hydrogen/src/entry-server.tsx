@@ -9,6 +9,7 @@ import {
   Logger,
   logServerResponse,
   getLoggerFromContext,
+  log,
 } from './utilities/log/log';
 import {renderToString} from 'react-dom/server';
 import {getErrorMarkup} from './utilities/error';
@@ -42,7 +43,7 @@ const isWorker = Boolean(renderToReadableStream);
  */
 const STREAM_ABORT_TIMEOUT_MS = 3000;
 
-const renderHydrogen: ServerHandler = (App, pages, hook) => {
+const renderHydrogen: ServerHandler = (App, {pages} = {}, hook) => {
   /**
    * The render function is responsible for turning the provided `App` into an HTML string,
    * and returning any initial state that needs to be hydrated into the client version of the app.
@@ -286,6 +287,7 @@ const renderHydrogen: ServerHandler = (App, pages, hook) => {
     stream,
     hydrate,
     getApiRoute,
+    log,
   };
 };
 

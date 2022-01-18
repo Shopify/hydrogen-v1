@@ -120,8 +120,8 @@ it('should DELETE an API route', async () => {
       Accept: 'application/json',
     },
   });
-  expect(response.status()).toBe(200);
-  expect(response.statusText()).toBe('OK');
+  expect(response.status()).toBe(204);
+  expect(response.statusText()).toBe('No Content');
 });
 
 it('should return 404 on unknown method', async () => {
@@ -134,8 +134,8 @@ it('should return 404 on unknown method', async () => {
 
   const text = await response.text();
 
-  expect(response.status()).toBe(404);
-  expect(response.statusText()).toBe('Not Found');
+  expect(response.status()).toBe(405);
+  expect(response.statusText()).toBe('Method Not Allowed');
   expect(text).toBe('Comment method not found');
 });
 

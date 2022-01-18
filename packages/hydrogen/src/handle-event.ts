@@ -4,7 +4,6 @@ import type {ServerComponentRequest} from './framework/Hydration/ServerComponent
 import {getCacheControlHeader} from './framework/cache';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
-import {log} from './utilities/log';
 import {renderApiRoute} from './utilities/apiRoutes';
 
 interface HydrogenFetchEvent {
@@ -63,7 +62,7 @@ export default async function handleEvent(
   ) {
     return assetHandler(event, url);
   }
-  const {render, hydrate, stream, getApiRoute}: EntryServerHandler =
+  const {render, hydrate, stream, getApiRoute, log}: EntryServerHandler =
     entrypoint.default || entrypoint;
 
   // @ts-ignore

@@ -123,15 +123,14 @@ export function hydrogenMiddleware({
 
         if (eventResponse.body) {
           const reader = eventResponse.body.getReader();
-          reader.read().then(function processValue(result: any): any {
-            const {done, value} = result;
-            if (done) {
-              response.end();
-              return;
-            }
+
+          while (true) {
+            const {done, value} = await reader.read();
+            if (done) return response.end();
             response.write(value);
-            return reader.read().then(processValue);
-          });
+          }
+        } else {
+          response.end();
         }
       }
     } catch (e: any) {

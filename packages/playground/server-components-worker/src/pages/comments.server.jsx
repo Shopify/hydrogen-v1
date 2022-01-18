@@ -19,10 +19,13 @@ export async function api(request) {
       });
     case 'DELETE':
       comments.length = 0;
-      return new Response('success', {status: 200});
+      return new Response(null, {status: 204});
   }
 
-  return new Response('Comment method not found', {status: 404});
+  return new Response('Comment method not found', {
+    status: 405,
+    headers: {Allow: 'GET, POST, DELETE'},
+  });
 }
 
 function createNewComment(newComment) {

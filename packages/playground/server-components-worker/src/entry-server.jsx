@@ -17,6 +17,6 @@ setLogger({
   },
 });
 
-export default renderHydrogen(App, pages, ({url}) => {
+export default renderHydrogen(App, {pages}, ({url}) => {
   // Custom hook
 });

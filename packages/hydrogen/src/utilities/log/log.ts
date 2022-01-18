@@ -86,14 +86,20 @@ export function logServerResponse(
       ? lightBlue(responseStatus)
       : green(responseStatus);
 
-  const fullType =
-    type === 'api'
-      ? 'api'
-      : type === 'str'
-      ? 'streaming SSR'
-      : type === 'rsc'
-      ? 'server components'
-      : 'buffered SSR';
+  let fullType: string = type;
+
+  switch (type) {
+    case 'str':
+      fullType = 'streaming SSR';
+      break;
+    case 'rsc':
+      fullType = 'server components';
+      break;
+    case 'ssr':
+      fullType = 'buffered SSR';
+      break;
+  }
+
   const styledType = italic(pad(fullType, '                 '));
   const paddedTiming = pad(
     (getTime() - request.time).toFixed(2) + ' ms',
