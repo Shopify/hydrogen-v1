@@ -4,13 +4,7 @@ import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {CartLineProductTitle} from '../../CartLineProductTitle';
 import {CART} from '../../CartProvider/tests/fixtures';
 import {CartProvider} from '../../CartProvider';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('CartLines', () => {
   beforeEach(() => {

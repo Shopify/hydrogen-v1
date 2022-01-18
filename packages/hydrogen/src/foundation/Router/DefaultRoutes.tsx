@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
 import type {Logger} from '../../utilities/log/log';
 
@@ -23,12 +23,10 @@ export function DefaultRoutes({
 }) {
   const basePath = '/';
 
-  const routes = createRoutesFromPages(pages, basePath);
-  // @todo renable memo
-  // const routes = useMemo(
-  //   () => createRoutesFromPages(pages, basePath),
-  //   [pages, basePath]
-  // );
+  const routes = useMemo(
+    () => createRoutesFromPages(pages, basePath),
+    [pages, basePath]
+  );
 
   let foundRoute, foundRouteDetails;
 

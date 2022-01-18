@@ -25,6 +25,7 @@ import type {PassThrough as PassThroughType} from 'stream';
 
 // @ts-ignore
 import * as rscRenderer from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
+import {setShopifyConfig} from './foundation/useShop';
 
 const {
   renderToPipeableStream: rscRenderToPipeableStream,
@@ -61,7 +62,9 @@ function flightContainer({
  */
 const STREAM_ABORT_TIMEOUT_MS = 3000;
 
-const renderHydrogen: ServerHandler = (App, hook) => {
+const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
+  setShopifyConfig(shopifyConfig);
+
   /**
    * The render function is responsible for turning the provided `App` into an HTML string,
    * and returning any initial state that needs to be hydrated into the client version of the app.
@@ -108,13 +111,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
     headers['Content-type'] = 'text/html';
     const params = {url, ...extractHeadElements(helmetContext)};
-
-    /**
-     * We allow the developer to "hook" into this process and mutate the params.
-     */
-    if (hook) {
-      Object.assign(params, hook(params) || {});
-    }
 
     const {bodyAttributes, htmlAttributes, ...head} = params;
 

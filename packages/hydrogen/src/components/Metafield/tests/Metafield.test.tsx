@@ -1,17 +1,11 @@
 import React from 'react';
 import {Metafield} from '../Metafield.client';
 import {getParsedMetafield} from '../../../utilities/tests/metafields';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {RawHtml} from '../../RawHtml';
 import {Image} from '../../Image';
 import {StarRating} from '../components';
 import {getMediaImage} from '../../../utilities/tests/media';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
 
 describe('<Metafield />', () => {
   it('renders nothing when the metafield value is undefined', () => {

@@ -5,10 +5,7 @@ import {CartLinePrice} from '../CartLinePrice.client';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {Money} from '../../Money';
 import {CurrencyCode} from '../../../graphql/types/types';
-import {getShopifyConfig} from '../../../utilities/tests/shopifyMount';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('<CartLinePrice />', () => {
   it('renders <Money /> with the regular price by default', () => {
@@ -23,7 +20,7 @@ describe('<CartLinePrice />', () => {
       },
     };
 
-    const wrapper = mount(
+    const wrapper = mountWithProviders(
       <CartLineProvider line={line}>
         <CartLinePrice />
       </CartLineProvider>
@@ -46,7 +43,7 @@ describe('<CartLinePrice />', () => {
       },
     };
 
-    const wrapper = mount(
+    const wrapper = mountWithProviders(
       <CartLineProvider line={line}>
         <CartLinePrice priceType="compareAt" />
       </CartLineProvider>
@@ -70,7 +67,7 @@ describe('<CartLinePrice />', () => {
       },
     };
 
-    const wrapper = mount(
+    const wrapper = mountWithProviders(
       <CartLineProvider line={line}>
         <CartLinePrice />
       </CartLineProvider>
@@ -93,7 +90,7 @@ describe('<CartLinePrice />', () => {
       },
     };
 
-    const wrapper = mount(
+    const wrapper = mountWithProviders(
       <CartLineProvider line={line}>
         <CartLinePrice>
           {({localizedString}) => {
@@ -120,7 +117,7 @@ describe('<CartLinePrice />', () => {
       },
     };
 
-    const wrapper = mount(
+    const wrapper = mountWithProviders(
       <CartLineProvider line={line}>
         <CartLinePrice className="underline" />
       </CartLineProvider>

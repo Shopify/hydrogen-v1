@@ -1,16 +1,10 @@
 import React from 'react';
 import {CartProvider} from '../../CartProvider';
 import {getProduct} from '../../../utilities/tests/product';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
 import {ShopPayButton} from '../../ShopPayButton';
 import {SelectedVariantShopPayButton} from '../SelectedVariantShopPayButton.client';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
 
 jest.mock('../../ShopPayButton', () => ({
   ShopPayButton() {
