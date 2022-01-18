@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {getProduct} from '../../../utilities/tests/product';
 import {ProductProvider} from '../../ProductProvider';
 import {SelectedVariantAddToCartButton} from '../SelectedVariantAddToCartButton.client';
 import {CartProvider} from '../../CartProvider';
 import {AddToCartButton} from '../../AddToCartButton';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
 
 describe('<SelectedVariantAddToCartButton />', () => {
   it('renders the default <AddToCartButton /> for the selected variant', () => {

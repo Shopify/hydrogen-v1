@@ -1,9 +1,7 @@
 import App from './App.server';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {setLogger, setShopifyConfig} from '@shopify/hydrogen';
+import {setLogger} from '@shopify/hydrogen';
 import shopifyConfig from '../shopify.config';
-
-setShopifyConfig(shopifyConfig);
 
 setLogger({
   trace() {},
@@ -19,6 +17,4 @@ setLogger({
   },
 });
 
-export default renderHydrogen(App, ({url}) => {
-  // Custom hook
-});
+export default renderHydrogen(App, {shopifyConfig});

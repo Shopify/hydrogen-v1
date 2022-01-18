@@ -1,15 +1,9 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {UnitPrice} from '../../UnitPrice';
 import {ProductProvider} from '../../ProductProvider/index';
 import {SelectedVariantUnitPrice} from '../SelectedVariantUnitPrice.client';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
 
 describe('<SelectedVariantUnitPrice />', () => {
   it('renders <UnitPrice />', () => {

@@ -1,15 +1,9 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {Money} from '../../Money';
 import {ProductProvider} from '../../ProductProvider';
 import {ProductPrice} from '../ProductPrice.client';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
 
 describe('<ProductPrice />', () => {
   it("renders <Money /> with the product's minimum regular price by default", () => {
