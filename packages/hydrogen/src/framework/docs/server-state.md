@@ -1,4 +1,4 @@
-As you build your Hydrogen app with [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `state` on the server. Sharing state information between the client and server is important for common tasks, like [page routing](/custom-storefronts/hydrogen/framework/react-server-components#sharing-state-between-client-and-server).
+As you build your Hydrogen app with [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `state` on the server. Sharing state information between the client and server is important for common tasks, like [page routing](/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc#sharing-state-between-client-and-server).
 
 This guide describes how to manage your server state during your development process.
 
