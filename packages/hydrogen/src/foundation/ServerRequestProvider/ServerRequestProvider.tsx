@@ -9,7 +9,7 @@ const RequestContextSSR = createContext<ServerComponentRequest>({
   // https://github.com/Shopify/hydrogen/issues/415
   time: 0,
   id: 'initial-value',
-  context: {cache: new Map()},
+  ctx: {cache: new Map()},
 } as ServerComponentRequest);
 
 // Cache to inject current request in RSC
@@ -83,7 +83,7 @@ export function useRequestCacheData<T>(
   key: QueryKey,
   fetcher: () => Promise<T>
 ): RequestCacheResult<T> {
-  const {cache} = useServerRequest().context;
+  const {cache} = useServerRequest().ctx;
   const cacheKey = hashKey(key);
 
   if (!cache.has(cacheKey)) {

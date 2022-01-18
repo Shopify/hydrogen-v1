@@ -19,8 +19,9 @@ const generateId =
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
   public id: string;
-  public context: {cache: Map<string, any>; [key: string]: any};
   public time: number;
+  // CFW Request has a reserved 'context' property, use 'ctx' instead.
+  public ctx: {cache: Map<string, any>; [key: string]: any};
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -36,7 +37,8 @@ export class ServerComponentRequest extends Request {
 
     this.time = getTime();
     this.id = generateId();
-    this.context = {cache: new Map()};
+
+    this.ctx = {cache: new Map()};
     this.cookies = this.parseCookies();
   }
 

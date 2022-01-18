@@ -2,7 +2,7 @@ import {useServerRequest} from '@shopify/hydrogen';
 
 export default function (key, ms = 1000) {
   const request = useServerRequest();
-  const cache = request.context.cache;
+  const cache = request.ctx.cache;
 
   const cached = cache.get(key);
 
