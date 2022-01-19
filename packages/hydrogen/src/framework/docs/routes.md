@@ -73,6 +73,69 @@ const {pathname} = useLocation();
 
 {% endcodeblock %}
 
+## API routes
+
+As of January 19, 2022, any server component within the `src/pages` directory that exports an API function will become an API route. If you created a Hydrogen app before January 19, 2022, and you want to implement an API route, then you need to make the following changes:
+
+1. Move `const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');` from `App.server.jsx` to `entry-server.jsx`.
+2. Pass the `pages` constant to the `renderHydrogen` component.
+3. Make sure that `App.server.jsx` receives `pages` as a prop.
+
+Your `App.server.jsx` and `entry-server.jsx` files should look similar to the following:
+
+{% codeblock file, filename: 'entry-server.jsx' %}
+
+```jsx
+import renderHydrogen from '@shopify/hydrogen/entry-server';
+
+import App from './App.server';
+
+const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
+
+export default renderHydrogen(App, {pages}, () => {
+  // Custom hook
+});
+```
+
+{% endcodeblock %}
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```jsx
+import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
+import {Switch} from 'react-router-dom';
+import {Suspense} from 'react';
+
+import shopifyConfig from '../shopify.config';
+
+import DefaultSeo from './components/DefaultSeo.server';
+import NotFound from './components/NotFound.server';
+import CartProvider from './components/CartProvider.client';
+import LoadingFallback from './components/LoadingFallback';
+
+export default function App({log, pages, ...serverState}) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
+        <CartProvider>
+          <DefaultSeo />
+          <Switch>
+            <DefaultRoutes
+              pages={pages}
+              serverState={serverState}
+              log={log}
+              fallback={<NotFound />}
+            />
+          </Switch>
+        </CartProvider>
+      </ShopifyServerProvider>
+    </Suspense>
+  );
+}
+```
+
+{% endcodeblock %}
+
 ## Next steps
 
 - Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.

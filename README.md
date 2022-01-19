@@ -24,7 +24,7 @@ Spin up a Hydrogen app in your browser with our [playground](https://hydrogen.ne
 **Requirements:**
 
 - `yarn` or `npm`
-- Node.js version 14.0 or higher
+- Node.js version 16.5.0 or higher
 
 **Installation:**
 
