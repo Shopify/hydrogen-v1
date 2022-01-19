@@ -5,13 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-<!-- ## Unreleased -->
+## Unreleased
 
 - feat: remove Oxygen specific `fetch` workaround
+
+## 0.8.3 - 2022-01-13
+
+- fix: replace log abbreviations with full text.
+- feature: add optional `locale` param to `useShopQuery` to be used as `Accept-Language` in the store Storefront API query
+- feature: Optional purge query cache per build
 
 ## 0.8.2 - 2022-01-07
 
 - fix: load logger only once.
+- fix: warn when requests take longer than 3000ms instead of erroring
 - feat: `useQuery` returns an error if the query's fetch was unsuccessful
 - feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
 - fix: do not attempt to decode product IDs, as they are no longer base64-encoded in `unstable`

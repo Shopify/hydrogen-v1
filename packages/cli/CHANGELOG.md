@@ -7,6 +7,11 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+## 0.8.3 - 2022-01-13
+
+- New command: `check`, for running audits on the current project to look for common problems
+- New command: add, to run an atomic change to a project (ie: `hydrogen add lint`)
+
 ## 0.8.1 - 2022-01-04
 
 - No updates. Transitive dependency bump.

@@ -1,4 +1,5 @@
 import {cosmiconfig, Options} from 'cosmiconfig';
+
 import debug from 'debug';
 import {resolve} from 'path';
 
@@ -35,3 +36,5 @@ export async function loadConfig(
     logger(error);
   }
 }
+
+export const CONFIG_DIRECTORY = '.hydrogen';

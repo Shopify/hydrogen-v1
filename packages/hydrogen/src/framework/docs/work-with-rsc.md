@@ -1,4 +1,4 @@
-This guide provides information about working with React Server Components in your Hydrogen app.
+This guide provides information about working with React Server Components in your Hydrogen app. To learn how React Server Components work in the context of Hydrogen, refer to [React Server Components overview](/custom-storefronts/hydrogen/framework/react-server-components).
 
 > Note:
 > React Server Components are currently in Alpha. However, Hydrogen includes a built-in layer of abstraction that provides stability, regardless of the state of React Server Components.
@@ -12,11 +12,65 @@ Hydrogen provides the following ways to fetch data from server components:
 - [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery): A hook that allows you to make server-only GraphQL queries to the Storefront API.
 - [`useQuery`](/api/hydrogen/hooks/global/usequery): A simple wrapper around `fetch` that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs.
 
+### Example
+
+The following example shows a server component (`Product.server.jsx`) that uses the `useShopQuery` hook to fetch data. The data is passed to a client component (`WishListButton.client.jsx`) that uses state:
+
+{% codeblock file, filename: 'Product.server.jsx' %}
+
+```js
+import {useShopQuery} from '@shopify/hydrogen';
+import WishListButton from './WishListButton.client';
+
+export default function Product() {
+  const {data} = useShopQuery({query: QUERY});
+
+  return (
+    <section>
+      <h1>{data.product.title}</h1>
+      <WishListButton product={data.product} />
+    </section>
+  );
+}
+```
+
+{% endcodeblock %}
+
+{% codeblock file, filename: 'WishListButton.client.jsx' %}
+
+```js
+import {useState} from 'react';
+
+export default function WishListButton({product}) {
+  const [added, setAddToWishList] = useState(false);
+
+  return (
+    <button onClick={() => setAddToWishList(!added)} type="button">
+      {added ? 'Added' : 'Add'} {product.title} to Wish List
+    </button>
+  );
+}
+```
+
+{% endcodeblock %}
+
 ## Accessing Hydrogen components from client components
 
 Because of the way tree-shaking works in Vite, avoid importing server components when referencing Hydrogen client components in one of your client components.
 
 Hydrogen provides a special `@shopify/hydrogen/client` module to reference components that are safe to use within client components. You should use this import path when writing your client components.
+
+### Example
+
+The following example shows how to use the `@shopify/hydrogen/client` import path in a client component:
+
+{% codeblock file, filename: 'ProductSelector.client.jsx' %}
+
+```jsx
+import {useServerState} from '@shopify/hydrogen/client';
+```
+
+{% endcodeblock %}
 
 ## Sharing `state` between client and server
 
