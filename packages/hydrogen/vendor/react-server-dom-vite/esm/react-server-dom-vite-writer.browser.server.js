@@ -839,7 +839,10 @@ function performWork(request) {
   }
 }
 
+let reentrant = false;
 function flushCompletedChunks(request, destination) {
+  if (reentrant) return;
+  reentrant = true;
   try {
     // We emit module chunks first in the stream so that
     // they can be preloaded as early as possible.
@@ -893,6 +896,7 @@ function flushCompletedChunks(request, destination) {
 
     errorChunks.splice(0, i);
   } finally {
+    reentrant = false;
   }
 
   if (request.pendingChunks === 0) {
