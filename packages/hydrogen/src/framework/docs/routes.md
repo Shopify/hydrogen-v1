@@ -75,11 +75,96 @@ const {pathname} = useLocation();
 
 ## API routes
 
-As of January 19, 2022, any server component within the `src/pages` directory that exports an API function will become an API route. If you created a Hydrogen app before January 19, 2022, and you want to implement an API route, then you need to make the following changes:
+API routes allow you to build your API in Hydrogen. Any server component within the `src/pages` directory that exports an API function will become an API route. The following examples show some common use cases for implementing API routes.
+
+### Examples
+
+The following example shows a simple "Hello world" implementation of an API route:
+
+{% codeblock file, filename: "Hello world example" %}
+
+```jsx
+export function api(request, {params}) {
+  return new Response('Hello world!');
+}
+```
+
+{% endcodeblock %}
+
+The following example shows an API route that returns a JSON response:
+
+{% codeblock file, filename: "Return a JSON response" %}
+
+```jsx
+export function api(request, {params}) {
+  return new Response(JSON.stringify({data: 1}), {
+    headers: {'Content-Type': 'application/json'},
+  });
+}
+```
+
+{% endcodeblock %}
+
+The following example shows how to set up a URL redirect with a status code of `301`:
+
+{% codeblock file, filename: "Set up a URL redirect" %}
+
+```jsx
+export function api(request, {params}) {
+  return new Response(null, {
+    status: 301,
+    headers: {Location: 'https://shopify.dev/custom-storefronts/hydrogen'},
+  });
+}
+```
+
+{% endcodeblock %}
+
+The following example shows how to switch the HTTP method for the action performed by API:
+
+{% codeblock file, filename: "Switch the HTTP method" %}
+
+```jsx
+export async function api(request, {params}) {
+  switch (request.method) {
+    case 'GET':
+      return new Response('GET');
+    case 'POST':
+      return new Response('POST');
+  }
+}
+```
+
+{% endcodeblock %}
+
+The following example shows how to use API routes to read a request body:
+
+{% codeblock file, filename: "Read a request body" %}
+
+```jsx
+export async function api(request, {params}) {
+  if (request.method === 'PUT') {
+    const json = await request.json();
+    await saveToDatabase(params.handle, json);
+    return new Response('success');
+  }
+
+  return new Response(null, {status: 405, headers: {Allow: 'PUT'}});
+}
+```
+
+{% endcodeblock %}
+
+### Changes for existing Hydrogen apps
+
+If you created a Hydrogen app before January 19, 2022, and you want to implement an API route, then you need to make the following changes:
 
 1. Move `const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');` from `App.server.jsx` to `entry-server.jsx`.
 2. Pass the `pages` constant to the `renderHydrogen` component.
 3. Make sure that `App.server.jsx` receives `pages` as a prop.
+
+> Note:
+> All Hydrogen apps created after January 19, 2022 automatically include these changes.
 
 Your `App.server.jsx` and `entry-server.jsx` files should look similar to the following:
 
