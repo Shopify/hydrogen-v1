@@ -122,10 +122,10 @@ export function useCartContext() {
   const context = useContext(CartAppContext);
 
   if (!context) {
-   throw new Error('No cart context found');
+    throw new Error('No cart context found');
   }
 
- return context;
+  return context;
 }
 ```
 
@@ -139,10 +139,10 @@ import {CartContext} from './CartContext.client';
 export default function CartProvider({items, children}) {
   const value = {
     items,
-   // ...
- };
+    // ...
+  };
 
- return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 ```
 
@@ -154,12 +154,12 @@ export default function CartProvider({items, children}) {
 import CartProvider from './CartProvider.client';
 
 export default function App() {
- const {data} = useShopQuery({query: QUERY});
+  const {data} = useShopQuery({query: QUERY});
 
   return (
-   <CartProvider items={data.items}>
-     <p>Your app here</p>
-   </CartProvider>
+    <CartProvider items={data.items}>
+      <p>Your app here</p>
+    </CartProvider>
   );
 }
 ```
