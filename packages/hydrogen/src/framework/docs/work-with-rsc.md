@@ -103,34 +103,17 @@ Sharing state information between the client and server is important for common 
 
 ## Using `Context` in React Server Components
 
-> Note:
-> The functionality described in this section is unique to Hydrogen's React Server Components implementation and will change when server context is implemented upstream in React.
-
 React developers commonly use [`Context`](https://reactjs.org/docs/context.html) to share state among many different components in a render tree, without having to drill props down to each individual component.
 
-Server context support is [on the React team's roadmap](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#how-do-you-do-routing), but it is not yet implemented. In order to share context between server components and client components, Hydrogen provides a workaround mechanism.
-
-### `Provider` components
-
-Any client component with a name that ends in `Provider` receives special treatment during server-rendering and client hydration. This allows server components to share context during the server-side rendering and makes sure that the context is initialized as a client component on the client.
-
-### Rules
-
-The following rules apply to `Provider` components:
-
-- You can't fetch server-only data from within `Provider` components. Instead, fetch data within server components and pass the data as props to the `Provider`.
-- You can pass props to the `Provider` from server components, but they must be JSON-serializable.
-- You need to split `Context` and `Provider` into separate files due to the way that components are dynamically loaded on the client.
+Currently, with the exception of [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) and [`useQuery`](/api/hydrogen/hooks/global/usequery), you can't use `Context` inside server components. However, you can use `Context` inside client components.
 
 ### Example
 
-The following example shows the implementation of a `Provider` component:
+The following example shows how to use `Context` in the `CartProvider` client component:
 
 {% codeblock file, filename: 'CartContext.client.jsx' %}
 
 ```js
-// This must be a separate client component from your special `Provider` component.
-
 const CartAppContext = createContext();
 
 export default CartAppContext;
@@ -139,10 +122,10 @@ export function useCartContext() {
   const context = useContext(CartAppContext);
 
   if (!context) {
-    throw new Error('No cart context found');
+   throw new Error('No cart context found');
   }
 
-  return context;
+ return context;
 }
 ```
 
@@ -156,10 +139,10 @@ import {CartContext} from './CartContext.client';
 export default function CartProvider({items, children}) {
   const value = {
     items,
-    // ...
-  };
+   // ...
+ };
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+ return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 ```
 
@@ -171,12 +154,12 @@ export default function CartProvider({items, children}) {
 import CartProvider from './CartProvider.client';
 
 export default function App() {
-  const {data} = useShopQuery({query: QUERY});
+ const {data} = useShopQuery({query: QUERY});
 
   return (
-    <CartProvider items={data.items}>
-      <p>Your app here</p>
-    </CartProvider>
+   <CartProvider items={data.items}>
+     <p>Your app here</p>
+   </CartProvider>
   );
 }
 ```
