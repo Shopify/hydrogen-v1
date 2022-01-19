@@ -1,7 +1,6 @@
 import {EntryServerHandler} from './types';
 import {ServerResponse} from 'http';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import {getCacheControlHeader} from './framework/cache';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
 
@@ -72,8 +71,18 @@ export default async function handleEvent(
     );
   }
 
-  const userAgent = request.headers.get('user-agent');
-  const isStreamable = streamableResponse && !isBotUA(url, userAgent);
+  // TODO: use __WORKER__ boolean to enable streaming once CFW supports `new Response(stream)`
+  const isStreamable =
+    !!streamableResponse && !isBotUA(url, request.headers.get('user-agent'));
+
+  if (isReactHydrationRequest) {
+    return hydrate(url, {
+      request,
+      response: streamableResponse,
+      isStreamable,
+      dev,
+    });
+  }
 
   /**
    * Stream back real-user responses, but for bots/etc,
@@ -81,111 +90,19 @@ export default async function handleEvent(
    * things for SEO reasons.
    */
   if (isStreamable) {
-    if (isReactHydrationRequest) {
-      hydrate(url, {
-        context: {},
-        request,
-        response: streamableResponse,
-        dev,
-      });
-    } else {
-      stream(url, {
-        context: {},
-        request,
-        response: streamableResponse,
-        template,
-        dev,
-      });
-    }
-    return;
-  }
-
-  const {body, bodyAttributes, htmlAttributes, componentResponse, ...head} =
-    await render(url, {
+    return stream(url, {
       request,
-      context: {},
-      isReactHydrationRequest,
+      response: streamableResponse,
+      template,
       dev,
     });
-
-  const headers = componentResponse.headers;
-
-  /**
-   * TODO: Also add `Vary` headers for `accept-language` and any other keys
-   * we want to shard our full-page cache for all Hydrogen storefronts.
-   */
-  headers.set(
-    getCacheControlHeader({dev}),
-    componentResponse.cacheControlHeader
-  );
-
-  if (componentResponse.customBody) {
-    const {status, customStatus} = componentResponse;
-
-    return new Response(await componentResponse.customBody, {
-      status: customStatus?.code ?? status ?? 200,
-      statusText: customStatus?.text,
-      headers,
-    });
   }
 
-  let response;
-
-  if (isReactHydrationRequest) {
-    response = new Response(body, {
-      status: componentResponse.status ?? 200,
-      headers,
-    });
-  } else {
-    const html = template
-      .replace(
-        `<div id="root"></div>`,
-        `<div id="root" data-server-rendered="true">${body}</div>`
-      )
-      .replace(/<head>(.*?)<\/head>/s, generateHeadTag(head))
-      .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
-      .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&');
-
-    headers.append('content-type', 'text/html');
-
-    const {status, customStatus} = componentResponse;
-
-    response = new Response(html, {
-      status: customStatus?.code ?? status ?? 200,
-      statusText: customStatus?.text,
-      headers,
-    });
-  }
-
-  return response;
-}
-
-/**
- * Generate the contents of the `head` tag, and update the existing `<title>` tag
- * if one exists, and if a title is passed.
- */
-function generateHeadTag(head: Record<string, string>) {
-  const headProps = ['base', 'meta', 'style', 'noscript', 'script', 'link'];
-  const {title, ...rest} = head;
-
-  const otherHeadProps = headProps
-    .map((prop) => rest[prop])
-    .filter(Boolean)
-    .join('\n');
-
-  return (_outerHtml: string, innerHtml: string) => {
-    let headHtml = otherHeadProps + innerHtml;
-
-    if (title) {
-      if (headHtml.includes('<title>')) {
-        headHtml = headHtml.replace(/(<title>(?:.|\n)*?<\/title>)/, title);
-      } else {
-        headHtml += title;
-      }
-    }
-
-    return `<head>${headHtml}</head>`;
-  };
+  return render(url, {
+    request,
+    template,
+    dev,
+  });
 }
 
 /**

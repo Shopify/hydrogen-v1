@@ -1,5 +1,4 @@
 import {ServerResponse} from 'http';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
 
@@ -7,21 +6,14 @@ export type Renderer = (
   url: URL,
   options: {
     request: ServerComponentRequest;
-    context?: Record<string, any>;
-    isReactHydrationRequest?: boolean;
+    template: string;
     dev?: boolean;
   }
-) => Promise<
-  {
-    body: string;
-    componentResponse: ServerComponentResponse;
-  } & Record<string, any>
->;
+) => Promise<Response>;
 
 export type Streamer = (
   url: URL,
   options: {
-    context: any;
     request: ServerComponentRequest;
     response: ServerResponse;
     template: string;
@@ -32,9 +24,9 @@ export type Streamer = (
 export type Hydrator = (
   url: URL,
   options: {
-    context: any;
     request: ServerComponentRequest;
-    response: ServerResponse;
+    response?: ServerResponse;
+    isStreamable: boolean;
     dev?: boolean;
   }
 ) => void;
@@ -58,14 +50,21 @@ export type Hook = (
 
 export type ServerHandler = (
   App: any,
-  hook?: Hook
+  options: {
+    shopifyConfig: ShopifyConfig;
+  }
 ) => {
   render: Renderer;
   stream: Streamer;
   hydrate: Hydrator;
 };
 
-export type ClientHandler = (App: any, hook?: Hook) => Promise<void>;
+export type ClientHandler = (
+  App: any,
+  options: {
+    shopifyConfig: ShopifyConfig;
+  }
+) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];

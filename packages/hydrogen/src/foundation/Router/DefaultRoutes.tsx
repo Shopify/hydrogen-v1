@@ -1,5 +1,5 @@
 import React, {ReactElement, useMemo} from 'react';
-import {Route, Switch, useRouteMatch} from 'react-router-dom';
+import {matchPath} from '../../utilities/matchPath';
 import type {Logger} from '../../utilities/log/log';
 
 export type ImportGlobEagerOutput = Record<string, Record<'default', any>>;
@@ -21,21 +21,28 @@ export function DefaultRoutes({
   fallback?: ReactElement;
   log: Logger;
 }) {
-  const {path} = useRouteMatch();
+  const basePath = '/';
+
   const routes = useMemo(
-    () => createRoutesFromPages(pages, path),
-    [pages, path]
+    () => createRoutesFromPages(pages, basePath),
+    [pages, basePath]
   );
 
-  return (
-    <Switch>
-      {routes.map((route) => (
-        <Route key={route.path} exact={route.exact} path={route.path}>
-          <route.component {...serverState} log={log} />
-        </Route>
-      ))}
-      {fallback && <Route path="*">{fallback}</Route>}
-    </Switch>
+  let foundRoute, foundRouteDetails;
+
+  for (let i = 0; i < routes.length; i++) {
+    foundRouteDetails = matchPath(serverState.pathname, routes[i]);
+
+    if (foundRouteDetails) {
+      foundRoute = routes[i];
+      break;
+    }
+  }
+
+  return foundRoute ? (
+    <foundRoute.component params={foundRouteDetails.params} {...serverState} />
+  ) : (
+    fallback
   );
 }
 

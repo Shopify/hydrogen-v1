@@ -30,13 +30,13 @@
     "dev-esnext": "tsc -w --incremental --p tsconfig.build.json",
     "dev-node": "tsc -w --incremental --p tsconfig.cjs.json",
     "dev-worker": "tsc -w --incremental --p tsconfig.worker.json",
-    "dev-copy": "cp *.[jt]s *.json ../../node_modules/@shopify/hydrogen",
+    "dev-copy": "cpy --parents *.[jt]s *.json vendor ../../node_modules/@shopify/hydrogen",
     "prebuild": "rimraf dist ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "build": "run-p build-esnext build-node build-worker && yarn build-copy",
     "build-esnext": "tsc --p tsconfig.build.json",
     "build-node": "tsc --p tsconfig.cjs.json",
     "build-worker": "tsc --p tsconfig.worker.json",
-    "build-copy": "cpy --parents *.[jt]s *.json dist ../../node_modules/@shopify/hydrogen",
+    "build-copy": "cpy --parents *.[jt]s *.json dist vendor ../../node_modules/@shopify/hydrogen",
     "lint": "eslint --ext .ts src/** --no-error-on-unmatched-pattern",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
@@ -81,23 +81,20 @@
     "react": "0.0.0-experimental-0cc724c77-20211125",
     "react-dom": "0.0.0-experimental-0cc724c77-20211125",
     "react-router-dom": "^5.2.0",
-    "vite": "^2.7.0"
+    "vite": "^2.7.1"
   },
   "dependencies": {
+    "path-to-regexp": "^6.2.0",
     "@vitejs/plugin-react": "^1.1.1",
     "connect": "^3.7.0",
     "es-module-lexer": "^0.9.0",
     "fast-glob": "^3.2.5",
     "graphql": "^16.0.1",
-    "html-dom-parser": "^1.0.1",
-    "html-react-parser": "^1.2.6",
     "isomorphic-dompurify": "^0.13.0",
     "kolorist": "^1.5.1",
-    "magic-string": "^0.25.7",
     "node-fetch": "^2.6.1",
     "react-error-boundary": "^3.1.3",
-    "react-helmet-async": "^1.0.9",
-    "react-ssr-prepass": "^1.4.0",
+    "react-helmet-async": "^1.2.2",
     "vite-plugin-inspect": "^0.3.6"
   }
 }

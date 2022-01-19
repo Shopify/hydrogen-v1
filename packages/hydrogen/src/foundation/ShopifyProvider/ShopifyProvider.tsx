@@ -1,9 +1,7 @@
 import React, {useMemo} from 'react';
 import {ShopifyContext} from './ShopifyContext';
 import {ShopifyProviderProps} from './types';
-import {DEFAULT_API_VERSION} from './consts';
-
-export {DEFAULT_API_VERSION} from './consts';
+import {DEFAULT_API_VERSION} from '../constants';
 
 /**
  * The `ShopifyProvider` component wraps your entire app and provides support for hooks.
