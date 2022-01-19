@@ -1,19 +1,38 @@
+import Form from '../components/Form.client';
+
+const names = [];
+
 export async function api(request) {
   const formData = await request.formData();
-  let resp = '';
 
   for (let entry of formData) {
-    resp += entry.join('=');
+    names.push(entry[1]);
   }
-  return new Response(resp);
+
+  return new Response(null, {
+    status: 303,
+    headers: {
+      Location: '/form',
+    },
+  });
 }
 
 export default function () {
   return (
-    <form action="/form" method="POST">
+    <Form action="/form" method="POST">
       <label htmlFor="fname">First name:</label>
-      <input type="text" id="fname" name="fname"></input>
+      <input type="text" id="fname" name="fname" autoFocus></input>
       <input id="fsubmit" type="submit" value="Submit"></input>
-    </form>
+      <ol>
+        {names.map((name) => (
+          <li key={name}>{name}</li>
+        ))}
+      </ol>
+    </Form>
   );
 }
+
+// Form component
+// renders a vanilla form action method
+// if JS is enabled, disables the form post, and instead fetch posts.
+// Calls RSC hydrate on success

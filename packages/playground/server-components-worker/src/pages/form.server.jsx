@@ -5,7 +5,12 @@ export async function api(request) {
   for (let entry of formData) {
     resp += entry.join('=');
   }
-  return new Response(resp);
+  return new Response(null, {
+    status: 303,
+    headers: {
+      Location: '/form',
+    },
+  });
 }
 
 export default function () {
