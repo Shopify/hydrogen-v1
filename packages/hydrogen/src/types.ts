@@ -2,6 +2,8 @@ import {ServerResponse} from 'http';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
+import {ApiRouteMatch} from './utilities/apiRoutes';
+import {Logger} from './utilities/log/log';
 
 export type Renderer = (
   url: URL,
@@ -43,6 +45,8 @@ export type EntryServerHandler = {
   render: Renderer;
   stream: Streamer;
   hydrate: Hydrator;
+  getApiRoute: (url: URL) => ApiRouteMatch | null;
+  log: Logger;
 };
 
 export type ShopifyConfig = {
@@ -56,14 +60,20 @@ export type Hook = (
   params: {url: URL} & Record<string, any>
 ) => any | Promise<any>;
 
+export type ImportGlobEagerOutput = Record<
+  string,
+  Record<'default' | 'api', any>
+>;
+
+export type ServerHandlerConfig = {
+  pages?: ImportGlobEagerOutput;
+};
+
 export type ServerHandler = (
   App: any,
+  config?: ServerHandlerConfig,
   hook?: Hook
-) => {
-  render: Renderer;
-  stream: Streamer;
-  hydrate: Hydrator;
-};
+) => EntryServerHandler;
 
 export type ClientHandler = (App: any, hook?: Hook) => Promise<void>;
 

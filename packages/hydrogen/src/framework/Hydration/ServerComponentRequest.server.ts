@@ -20,6 +20,10 @@ export class ServerComponentRequest extends Request {
       super(getUrlFromNodeRequest(input), {
         headers: new Headers(input.headers as {[key: string]: string}),
         method: input.method,
+        body:
+          input.method !== 'GET' && input.method !== 'HEAD'
+            ? input.body
+            : undefined,
       });
     }
     this.time = getTime();

@@ -1,5 +1,9 @@
 import {Link} from '@shopify/hydrogen';
 
+export function api() {
+  return new Response('some api response');
+}
+
 export default function Index() {
   return (
     <>

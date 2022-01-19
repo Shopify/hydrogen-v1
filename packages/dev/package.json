@@ -32,10 +32,12 @@
     "vite": "^2.7.0"
   },
   "dependencies": {
+    "path-to-regexp": "^6.2.0",
     "@headlessui/react": "^1.4.1",
     "@shopify/hydrogen": "^0.8.3",
     "compression": "^1.7.4",
     "express": "^4.17.1",
+    "body-parser": "^1.19.1",
     "graphql-tag": "^2.12.4",
     "react": "0.0.0-experimental-0cc724c77-20211125",
     "react-dom": "0.0.0-experimental-0cc724c77-20211125",
