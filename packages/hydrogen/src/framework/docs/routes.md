@@ -79,7 +79,7 @@ API routes allow you to build your API in Hydrogen. Any server component within 
 
 ### Examples
 
-The following example shows a simple "Hello world" implementation of an API route:
+The following example shows a "Hello world" implementation of an API route:
 
 {% codeblock file, filename: "Hello world example" %}
 
@@ -120,7 +120,7 @@ export function api(request, {params}) {
 
 {% endcodeblock %}
 
-The following example shows how to switch the HTTP method for the action performed by API:
+The following example shows how to switch the HTTP method for the action performed by an API:
 
 {% codeblock file, filename: "Switch the HTTP method" %}
 
