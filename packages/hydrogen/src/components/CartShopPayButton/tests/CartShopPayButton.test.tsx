@@ -4,10 +4,6 @@ import {CartProvider} from '../../CartProvider';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures';
 import {ShopPayButton} from '../../ShopPayButton';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {getShopifyConfig} from '../../../utilities/tests/shopifyMount';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
 
 describe('CartShopPayButton', () => {
   beforeEach(() => {

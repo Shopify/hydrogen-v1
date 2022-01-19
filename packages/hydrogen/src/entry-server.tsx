@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ComponentType} from 'react';
 import {
   // @ts-ignore
   renderToPipeableStream, // Only available in Node context
@@ -20,22 +20,16 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
+import {setShopifyConfig} from './foundation/useShop';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
 
 // @ts-ignore
-import * as rscRenderer from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
+import {renderToPipeableStream as rscRenderToPipeableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
 // @ts-ignore
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
-import {
-  createFromReadableStream,
-  // @ts-ignore
-} from '@shopify/hydrogen/vendor/react-server-dom-vite';
-
-const {
-  renderToPipeableStream: rscRenderToPipeableStream,
-  // renderToReadableStream: rscRenderToReadableStream,
-} = rscRenderer;
+// @ts-ignore
+import {createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
 
 declare global {
   // This is provided by a Vite plugin
@@ -67,7 +61,9 @@ declare global {
  */
 const STREAM_ABORT_TIMEOUT_MS = 3000;
 
-const renderHydrogen: ServerHandler = (App, hook) => {
+const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
+  setShopifyConfig(shopifyConfig);
+
   /**
    * The render function is responsible for turning the provided `App` into an HTML string,
    * and returning any initial state that needs to be hydrated into the client version of the app.
@@ -114,13 +110,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
 
     headers['Content-type'] = 'text/html';
     const params = {url, ...extractHeadElements(helmetContext)};
-
-    /**
-     * We allow the developer to "hook" into this process and mutate the params.
-     */
-    if (hook) {
-      Object.assign(params, hook(params) || {});
-    }
 
     const {bodyAttributes, htmlAttributes, ...head} = params;
 
@@ -357,12 +346,6 @@ const renderHydrogen: ServerHandler = (App, hook) => {
     const log = getLoggerFromContext(request);
     const state = JSON.parse(url.searchParams.get('state') || '{}');
 
-    if (!__WORKER__ && response) {
-      response.socket!.on('error', (error: any) => {
-        log.fatal(error);
-      });
-    }
-
     const {ReactApp} = buildReactApp({
       App,
       state,
@@ -382,17 +365,7 @@ const renderHydrogen: ServerHandler = (App, hook) => {
       }
 
       // Note: CFW does not support reader.piteTo nor iterable syntax
-      const decoder = new TextDecoder();
-      const reader = readable.getReader();
-      let bufferedBody = '';
-
-      while (true) {
-        const {done, value} = await reader.read();
-        if (done) break;
-
-        bufferedBody +=
-          typeof value === 'string' ? value : decoder.decode(value);
-      }
+      const bufferedBody = await bufferReadableStream(readable.getReader());
 
       logServerResponse('rsc', log, request, 200);
 
@@ -413,6 +386,20 @@ const renderHydrogen: ServerHandler = (App, hook) => {
   };
 };
 
+async function bufferReadableStream(reader: ReadableStreamDefaultReader) {
+  const decoder = new TextDecoder();
+  let result = '';
+
+  while (true) {
+    const {done, value} = await reader.read();
+    if (done) break;
+
+    result += typeof value === 'string' ? value : decoder.decode(value);
+  }
+
+  return result;
+}
+
 function buildReactApp({
   App,
   state,
@@ -420,7 +407,7 @@ function buildReactApp({
   log,
   isRSC = false,
 }: {
-  App: any;
+  App: ComponentType;
   state?: object | null;
   request: ServerComponentRequest;
   log: Logger;
@@ -435,11 +422,19 @@ function buildReactApp({
     log,
   };
 
-  const ReactApp = (props: any) => (
-    <ServerRequestProvider request={request} isRSC={isRSC}>
-      <App {...state} {...props} {...hydrogenServerProps} />
-    </ServerRequestProvider>
-  );
+  const ReactApp = (props: any) => {
+    const AppContent = (
+      <ServerRequestProvider request={request} isRSC={isRSC}>
+        <App {...state} {...props} {...hydrogenServerProps} />
+      </ServerRequestProvider>
+    );
+
+    if (isRSC) return AppContent;
+
+    // Note: The <Suspense> wrapper in SSR is
+    // required to match hydration in browser
+    return <React.Suspense fallback={null}>{AppContent}</React.Suspense>;
+  };
 
   return {helmetContext, ReactApp, componentResponse};
 }
@@ -473,7 +468,7 @@ async function renderToBufferedString(
 
     if (__WORKER__) {
       const deferred = defer();
-      const stream = renderToReadableStream(ReactApp, {
+      const readable = renderToReadableStream(ReactApp, {
         onCompleteAll() {
           clearTimeout(errorTimeout);
           /**
@@ -488,15 +483,11 @@ async function renderToBufferedString(
           log.error(error);
           deferred.reject(error);
         },
-      }) as ReadableStream;
+      }) as ReadableStream<Uint8Array>;
 
       await deferred.promise.catch(reject);
 
-      /**
-       * Use the stream to build a `Response`, and fetch the body from the response
-       * to resolve and be processed by the rest of the pipeline.
-       */
-      resolve(await new Response(stream).text());
+      resolve(await bufferReadableStream(readable.getReader()));
     } else {
       const writer = await createNodeWriter();
 

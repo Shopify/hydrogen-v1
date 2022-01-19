@@ -1,15 +1,9 @@
 import React from 'react';
 import {ProductContext} from '../context';
 import {ProductProvider} from '../ProductProvider.client';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {getProduct} from '../../../utilities/tests/product';
 import {flattenConnection} from '../../../utilities';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
 
 describe('<ProductProvider />', () => {
   it('sets up a product context for the provided product', () => {

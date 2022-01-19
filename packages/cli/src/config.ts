@@ -36,3 +36,5 @@ export async function loadConfig(
     logger(error);
   }
 }
+
+export const CONFIG_DIRECTORY = '.hydrogen';

@@ -2,13 +2,7 @@ import React from 'react';
 import {CartProvider} from '../../CartProvider';
 import {CartCheckoutButton} from '../CartCheckoutButton.client';
 import {CART} from '../../CartProvider/tests/fixtures';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 jest.mock('../../CartProvider', () => ({
   ...(jest.requireActual('../../CartProvider') as {}),

@@ -1,14 +1,8 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
 import {ProductTitle} from '../ProductTitle.client';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
 
 describe('<ProductTitle />', () => {
   it('renders the product title in a <span> by default', () => {

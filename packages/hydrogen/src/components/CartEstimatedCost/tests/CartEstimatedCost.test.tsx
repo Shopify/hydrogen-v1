@@ -3,13 +3,7 @@ import {CartProvider} from '../../CartProvider';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures';
 import {CartEstimatedCost} from '../CartEstimatedCost.client';
 import {Money} from '../../Money';
-import {
-  mountWithProviders,
-  getShopifyConfig,
-} from '../../../utilities/tests/shopifyMount';
-import {setShopifyConfig} from '../../../foundation/useShop/use-shop';
-
-setShopifyConfig(getShopifyConfig());
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('<CartEstimatedCost />', () => {
   beforeEach(() => {

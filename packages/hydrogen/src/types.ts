@@ -50,14 +50,21 @@ export type Hook = (
 
 export type ServerHandler = (
   App: any,
-  hook?: Hook
+  options: {
+    shopifyConfig: ShopifyConfig;
+  }
 ) => {
   render: Renderer;
   stream: Streamer;
   hydrate: Hydrator;
 };
 
-export type ClientHandler = (App: any, hook?: Hook) => Promise<void>;
+export type ClientHandler = (
+  App: any,
+  options: {
+    shopifyConfig: ShopifyConfig;
+  }
+) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
@@ -119,4 +126,5 @@ export interface CacheOptions {
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
+  purgeQueryCacheOnBuild?: boolean;
 }

@@ -61,8 +61,7 @@ function writeChunk(destination, chunk) {
   return destination.desiredSize > 0;
 }
 function close(destination) {
-  // TODO: why is this closed twice?
-  // destination.close();
+  destination.close();
 }
 var textEncoder = new TextEncoder();
 function stringToChunk(content) {
