@@ -105,7 +105,7 @@ Sharing state information between the client and server is important for common 
 
 React developers commonly use [`Context`](https://reactjs.org/docs/context.html) to share state among many different components in a render tree, without having to drill props down to each individual component.
 
-Currently, with the exception of [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) and [`useQuery`](/api/hydrogen/hooks/global/usequery), you can't use `Context` inside server components. However, you can use `Context` inside client components.
+Currently, you can't use `Context` inside server components because server context isn't yet available in React. However, you can use `Context` inside client components.
 
 ### Example
 
