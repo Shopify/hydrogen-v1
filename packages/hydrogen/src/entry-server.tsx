@@ -297,10 +297,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
           startWritingHtmlToServerResponse(
             response,
-            pipe,
             dev ? didError : undefined
           );
 
+          // Piping ends the response but RSC reader will always finish
+          // earlier because SSR is also reading RSC until it finishes.
+          pipe(response);
           bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) =>
             response.write(chunk)
           );
@@ -325,12 +327,16 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
           startWritingHtmlToServerResponse(
             response,
-            pipe,
             dev ? didError : undefined
           );
 
-          bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) =>
-            response.write(chunk)
+          bufferReadableStream(rscToScriptTagReadable.getReader()).then(
+            (scriptTags) => {
+              // Piping ends the response so script tags
+              // must be written before that.
+              response.write(scriptTags);
+              pipe(response);
+            }
           );
         },
         onError(error: any) {
@@ -554,15 +560,12 @@ export default renderHydrogen;
 
 function startWritingHtmlToServerResponse(
   response: ServerResponse,
-  pipe: (r: ServerResponse) => void,
   error?: Error
 ) {
   if (!response.headersSent) {
     response.setHeader('Content-type', 'text/html');
     response.write('<!DOCTYPE html>');
   }
-
-  pipe(response);
 
   if (error) {
     // This error was delayed until the headers were properly sent.
