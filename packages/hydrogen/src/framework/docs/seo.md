@@ -44,7 +44,6 @@ The following example shows how to include a catch-all SEO component (`<DefaultS
 
 ```jsx
 import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
 import DefaultSeo from './components/DefaultSeo.server';
