@@ -292,6 +292,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
           logServerResponse('str', log, request, responseOptions.status);
         });
       } else {
+        writable.close();
         logServerResponse('str', log, request, responseOptions.status);
       }
 
