@@ -44,7 +44,7 @@ export type EntryServerHandler = {
 };
 
 export type ShopifyConfig = {
-  locale?: string;
+  defaultLocale?: string;
   storeDomain: string;
   storefrontToken: string;
   graphqlApiVersion?: string;

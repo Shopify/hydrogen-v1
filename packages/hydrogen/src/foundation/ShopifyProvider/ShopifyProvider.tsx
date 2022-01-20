@@ -1,7 +1,6 @@
 import React, {useMemo} from 'react';
-import {ShopifyContext} from './ShopifyContext';
-import {ShopifyProviderProps} from './types';
-import {DEFAULT_API_VERSION} from '../constants';
+import {ShopifyContext, makeShopifyContext} from './ShopifyContext';
+import type {ShopifyProviderProps} from './types';
 
 /**
  * The `ShopifyProvider` component wraps your entire app and provides support for hooks.
@@ -14,12 +13,7 @@ export function ShopifyProvider({
   children,
 }: ShopifyProviderProps) {
   const shopifyProviderValue = useMemo(
-    () => ({
-      locale: 'en-us',
-      graphqlApiVersion: DEFAULT_API_VERSION,
-      ...shopifyConfig,
-      storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
-    }),
+    () => makeShopifyContext(shopifyConfig),
     [shopifyConfig]
   );
 

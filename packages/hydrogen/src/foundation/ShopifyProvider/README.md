@@ -21,3 +21,12 @@ export default function App() {
 ## Component type
 
 The `ShopifyProvider` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+
+## Props
+
+`ShopifyProvider` accepts the following Props
+
+| Props           | Description                              |
+| --------------- | ---------------------------------------- |
+| `shopifyConfig` | The content of `shopify.config.js` file. |
+| `children`      | The rest of the application.             |
