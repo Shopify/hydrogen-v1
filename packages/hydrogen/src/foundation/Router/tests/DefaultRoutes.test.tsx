@@ -1,5 +1,6 @@
 import {createRoutesFromPages} from '../DefaultRoutes';
 import {ImportGlobEagerOutput} from '../../../types';
+import {Logger} from '../../..';
 
 const STUB_MODULE = {default: {}, api: null};
 
@@ -244,15 +245,14 @@ it('factors in the top-level path prefix', () => {
 });
 
 it("errors routes don't have a default or api export", () => {
-  function makeError() {
-    const pages: ImportGlobEagerOutput = {
-      './pages/contact.server.jsx': {} as any,
-    };
+  const log: Logger = {...console, fatal: jest.fn(), warn: jest.fn()};
+  const pages: ImportGlobEagerOutput = {
+    './pages/contact.server.jsx': {} as any,
+  };
 
-    createRoutesFromPages(pages);
-  }
+  createRoutesFromPages(pages, '*', log);
 
-  expect(makeError).toThrowError(
+  expect(log.warn).toBeCalledWith(
     `./pages/contact.server.jsx doesn't export a default React component or an API function`
   );
 });
