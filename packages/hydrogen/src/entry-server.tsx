@@ -186,7 +186,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
     });
 
     if (__WORKER__) {
-      const deferred = defer<boolean>();
+      const deferredShouldReturnApp = defer<boolean>();
       const encoder = new TextEncoder();
       const transform = new TransformStream();
       const writable = transform.writable.getWriter();
@@ -209,7 +209,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
           if (isRedirect(responseOptions)) {
             // Return redirects early without further rendering/streaming
-            return deferred.resolve(false);
+            return deferredShouldReturnApp.resolve(false);
           }
 
           if (!componentResponse.canStream()) return;
@@ -221,7 +221,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
             dev ? didError : undefined
           );
 
-          deferred.resolve(true);
+          deferredShouldReturnApp.resolve(true);
         },
         async onCompleteAll() {
           if (componentResponse.canStream()) return;
@@ -233,12 +233,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
           if (isRedirect(responseOptions)) {
             // Redirects found after any async code
-            return deferred.resolve(false);
+            return deferredShouldReturnApp.resolve(false);
           }
 
           if (componentResponse.customBody) {
             writable.write(encoder.encode(await componentResponse.customBody));
-            return deferred.resolve(false);
+            return deferredShouldReturnApp.resolve(false);
           }
 
           startWritingHtmlToStream(
@@ -248,12 +248,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
             dev ? didError : undefined
           );
 
-          deferred.resolve(true);
+          deferredShouldReturnApp.resolve(true);
         },
         onError(error: any) {
           didError = error;
 
-          if (dev && deferred.status === 'pending') {
+          if (dev && deferredShouldReturnApp.status === 'pending') {
             writable.write(getErrorMarkup(error));
           }
 
@@ -261,14 +261,39 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
         },
       });
 
-      const shouldUseStream = await deferred.promise;
+      if (await deferredShouldReturnApp.promise) {
+        let rscBuffer = '';
+        let isDocumentMalformed = true;
+        const tryFlushingRsc = (chunk = '') => {
+          rscBuffer += chunk;
+          if (rscBuffer && !isDocumentMalformed) {
+            writable.write(encoder.encode(rscBuffer));
+            rscBuffer = '';
+          }
+        };
 
-      if (shouldUseStream) {
-        writable.releaseLock();
-        readable.pipeTo(transform.writable);
+        const writingSSR = bufferReadableStream(
+          readable.getReader(),
+          (chunk) => {
+            isDocumentMalformed = !chunk.endsWith('>');
+            writable.write(encoder.encode(chunk));
+            tryFlushingRsc();
+          }
+        );
+
+        const writingRSC = bufferReadableStream(
+          rscToScriptTagReadable.getReader(),
+          tryFlushingRsc
+        );
+
+        Promise.all([writingSSR, writingRSC]).then(() => {
+          tryFlushingRsc();
+          writable.close();
+          logServerResponse('str', log, request, responseOptions.status);
+        });
+      } else {
+        logServerResponse('str', log, request, responseOptions.status);
       }
-
-      logServerResponse('str', log, request, responseOptions.status);
 
       return new Response(transform.readable, responseOptions);
     } else {
