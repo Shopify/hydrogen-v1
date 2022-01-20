@@ -2252,7 +2252,7 @@
   resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.12.24.tgz#30728e34ebc90351dd3aff4e18d038eed2c3e098"
   integrity sha512-Mfmij13RUTmHEMi9vRUhMXD7rnGR2VvxeNYtaGtaJ4redwwjT4UXYJ+nzmVJF7hhd4pn/Fx5sncDKxMVFJSWPg==
 
-"@miniflare/core@2.2.0":
+"@miniflare/core@2.2.0", "@miniflare/core@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/core/-/core-2.2.0.tgz#ec45606ca2864612a455b91df74d57c2a279f866"
   integrity sha512-CJwYhyXQ7si0ALZ4wB/vFAo0sHcyaMR7A8oQb6HaZ8XKhaKkzA8BmPutMvYVikiW+oRJP3YRcJGuVKibL3TSgA==
@@ -2266,28 +2266,14 @@
     set-cookie-parser "^2.4.8"
     undici "4.12.1"
 
-"@miniflare/http-server@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@miniflare/http-server/-/http-server-2.2.0.tgz#a6d899532a4c6ae0cd36e5ceac0da7635be44558"
-  integrity sha512-nx7xEXKYvPyUpu2HFigD+UEgclipMQzGdTKtm4t6JzsOGYys7Lj7kGjryYaQVtbbJvPKIxqSaViFQDk/QSdosg==
-  dependencies:
-    "@miniflare/core" "2.2.0"
-    "@miniflare/shared" "2.2.0"
-    "@miniflare/web-sockets" "2.2.0"
-    kleur "^4.1.4"
-    selfsigned "^2.0.0"
-    undici "4.12.1"
-    ws "^8.2.2"
-    youch "^2.2.2"
-
-"@miniflare/runner-vm@2.2.0":
+"@miniflare/runner-vm@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/runner-vm/-/runner-vm-2.2.0.tgz#897042f6e08f2112ae054d9a9f1b07e34c87d721"
   integrity sha512-x58BxIsAB6LcYgqTNVfxTsKFCu4G3Xiuj1k+3ZQ4b8v8TZjuZ3iOJcsrYU0PlbW5JpnRA8IH/mkiFRb/MrLtaQ==
   dependencies:
     "@miniflare/shared" "2.2.0"
 
-"@miniflare/shared@2.2.0":
+"@miniflare/shared@2.2.0", "@miniflare/shared@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/shared/-/shared-2.2.0.tgz#a4c79b0919a54c9c3da64c65f05ae813e56988ce"
   integrity sha512-ikz3nkBexVQ16Ioi6naAzK6Spj5O7lUcqIihMLCQKTAAdC252EL0QrBRxHV9MlvkypVNj6MqkoL4E6HcyuCo6g==
@@ -2302,7 +2288,7 @@
   dependencies:
     "@miniflare/shared" "2.2.0"
 
-"@miniflare/web-sockets@2.2.0":
+"@miniflare/web-sockets@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/web-sockets/-/web-sockets-2.2.0.tgz#77c3c3a5c86dcbeee8b5ad8a31904a80dc737531"
   integrity sha512-/GHYuTq6m28udequw4E8IpcFmcEheAcVQ3oZyAvY0ub0by8v4WzYuougiizqYylyQZ0KXyLg8SmPeBNChe82Zw==
@@ -2919,6 +2905,11 @@
   integrity sha512-W864tg/Osz1+9f4lrGTZpCSO5/z4608eUp19tbozkq2HJK6i3z1kT0H9tlADXuYIb1YYOBByU4Jsqkk75q48qA==
   dependencies:
     "@types/unist" "*"
+
+"@types/mime@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.3.tgz#c893b73721db73699943bfc3653b1deb7faa4a3a"
+  integrity sha512-Jus9s4CDbqwocc5pOAnh8ShfrnMcPHuJYzVcSUU7lrh8Ni5HuIqX3oilL86p3dlTrk0LzHRCgA/GQ7uNCw6l2Q==
 
 "@types/minimatch@*", "@types/minimatch@^3.0.3":
   version "3.0.5"
@@ -9895,11 +9886,6 @@ node-forge@^0.10.0:
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.10.0.tgz#32dea2afb3e9926f02ee5ce8794902691a676bf3"
   integrity sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==
 
-node-forge@^1.2.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-1.2.1.tgz#82794919071ef2eb5c509293325cec8afd0fd53c"
-  integrity sha512-Fcvtbb+zBcZXbTTVwqGA5W+MKBj56UjVRevvchv5XrcyXbmNdesfZL37nlcWOfpgHhgmxApw3tQbTr4CqNmX4w==
-
 node-gyp@^5.0.2:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-5.1.1.tgz#eb915f7b631c937d282e33aed44cb7a025f62a3e"
@@ -12164,13 +12150,6 @@ selfsigned@^1.10.11:
   dependencies:
     node-forge "^0.10.0"
 
-selfsigned@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-2.0.0.tgz#e927cd5377cbb0a1075302cff8df1042cc2bce5b"
-  integrity sha512-cUdFiCbKoa1mZ6osuJs2uDHrs0k0oprsKveFiiaBKCNq3SYyb5gs2HxhQyDNLCmL51ZZThqi4YNDpCK6GOP1iQ==
-  dependencies:
-    node-forge "^1.2.0"
-
 semiver@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/semiver/-/semiver-1.1.0.tgz#9c97fb02c21c7ce4fcf1b73e2c7a24324bdddd5f"
@@ -13707,7 +13686,18 @@ unified-message-control@^3.0.0:
     unist-util-visit "^2.0.0"
     vfile-location "^3.0.0"
 
-unified@9.2.2, unified@^8.4.0, unified@^9.0.0, unified@^9.1.0:
+unified@^8.4.0:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/unified/-/unified-8.4.2.tgz#13ad58b4a437faa2751a4a4c6a16f680c500fff1"
+  integrity sha512-JCrmN13jI4+h9UAyKEoGcDZV+i1E7BLFuG7OsaDvTXI5P0qhHX+vZO/kOhz9jn8HGENDKbwSeB0nVOg4gVStGA==
+  dependencies:
+    bail "^1.0.0"
+    extend "^3.0.0"
+    is-plain-obj "^2.0.0"
+    trough "^1.0.0"
+    vfile "^4.0.0"
+
+unified@^9.0.0, unified@^9.1.0:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/unified/-/unified-9.2.2.tgz#67649a1abfc3ab85d2969502902775eb03146975"
   integrity sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==

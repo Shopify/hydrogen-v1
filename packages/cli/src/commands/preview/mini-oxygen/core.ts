@@ -2,11 +2,11 @@ import {CorePlugin, MiniflareCore} from '@miniflare/core';
 import {VMScriptRunner} from '@miniflare/runner-vm';
 import {Log, LogLevel} from '@miniflare/shared';
 
-import {createServer} from './server.mjs';
-import {StorageFactory} from './storage.mjs';
+import {createServer} from './server';
+import {StorageFactory} from './storage';
 
-export class MiniOxygen extends MiniflareCore {
-  constructor(options) {
+export class MiniOxygen extends MiniflareCore<any> {
+  constructor(options: any) {
     const storageFactory = new StorageFactory();
     super(
       PLUGINS,
@@ -17,7 +17,7 @@ export class MiniOxygen extends MiniflareCore {
       },
       {
         ...options,
-      },
+      }
     );
   }
 

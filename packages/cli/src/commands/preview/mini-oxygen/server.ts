@@ -1,19 +1,22 @@
 import path from 'path';
 import http from 'http';
+import type {IncomingMessage} from 'http';
 import fs from 'fs';
 import mime from 'mime';
 import {URL} from 'url';
 import {Request} from '@miniflare/core';
 import connect from 'connect';
+import type {NextHandleFunction} from 'connect';
+import type {MiniOxygen} from './core';
 
-function createAssetMiddleware() {
+function createAssetMiddleware(): NextHandleFunction {
   return (req, res, next) => {
-    if (req.url.includes('/assets')) {
-      const filePath = path.join(process.cwd(), './dist/client', req.url);
+    if (req.url!.includes('/assets')) {
+      const filePath = path.join(process.cwd(), './dist/client', req.url!);
       const rs = fs.createReadStream(filePath);
       const {size} = fs.statSync(filePath);
 
-      res.setHeader('Content-Type', mime.getType(filePath));
+      res.setHeader('Content-Type', mime.getType(filePath)!);
       res.setHeader('Content-Length', size);
 
       return rs.pipe(res);
@@ -23,8 +26,8 @@ function createAssetMiddleware() {
   };
 }
 
-function createRequestMiddleware(mf) {
-  return async (req, res) => {
+function createRequestMiddleware(mf: MiniOxygen): any {
+  return async (req: any, res: any) => {
     let response;
     let status = 500;
     let headers = {};
@@ -46,7 +49,7 @@ function createRequestMiddleware(mf) {
       }
 
       res.end();
-    } catch (e) {
+    } catch (e: any) {
       res.writeHead(500, {'Content-Type': 'text/plain; charset=UTF-8'});
       res.end(e.stack, 'utf8');
     }
@@ -55,7 +58,7 @@ function createRequestMiddleware(mf) {
   };
 }
 
-export async function createServer(mf) {
+export async function createServer(mf: MiniOxygen) {
   const app = connect();
 
   app.use(createAssetMiddleware());
@@ -66,8 +69,8 @@ export async function createServer(mf) {
   return server;
 }
 
-function urlFromRequest(req) {
-  const protocol = req.socket.encrypted ? 'https' : 'http';
+function urlFromRequest(req: IncomingMessage) {
+  const protocol = (req.socket as any).encrypted ? 'https' : 'http';
   const origin = `${protocol}://${req.headers.host ?? 'localhost'}`;
   const url = new URL(req.url ?? '', origin);
 

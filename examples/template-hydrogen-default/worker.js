@@ -9,6 +9,7 @@ addEventListener('fetch', (event) => {
       handleEvent(event, {
         entrypoint,
         indexTemplate: indexHtml,
+        cache: caches.default,
         context: event,
       }),
     );
