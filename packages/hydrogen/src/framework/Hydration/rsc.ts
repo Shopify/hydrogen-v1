@@ -1,3 +1,6 @@
+// TODO should we move this file to src/foundation
+// so it is considered ESM instead of CJS?
+
 // @ts-ignore
 import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
 import {

@@ -4,7 +4,7 @@ import {createRoot} from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import type {ClientHandler, ShopifyConfig} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
-import {useServerResponse} from './framework/Hydration/Cache.client';
+import {useServerResponse} from './framework/Hydration/rsc';
 import {
   ServerStateProvider,
   ServerStateRouter,
