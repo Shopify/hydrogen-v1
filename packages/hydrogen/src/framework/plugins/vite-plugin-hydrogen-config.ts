@@ -73,5 +73,23 @@ export default () => {
 
       envPrefix: ['VITE_', 'PUBLIC_'],
     }),
+
+    // TODO: Remove when react-dom/fizz is fixed
+    generateBundle: process.env.WORKER
+      ? (options, bundle) => {
+          // There's only one key in bundle, normally `worker.js`
+          const [bundleKey] = Object.keys(bundle);
+          const workerBundle = bundle[bundleKey];
+          // It's always a chunk, this is just for TypeScript
+          if (workerBundle.type === 'chunk') {
+            // Code tries to access an undefined value. This
+            // puts a guard before accessing it.
+            workerBundle.code = workerBundle.code.replace(
+              /\(([a-z0-9]+)\.locked\)/gm,
+              '($1 && $1.locked)'
+            );
+          }
+        }
+      : undefined,
   } as Plugin;
 };
