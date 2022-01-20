@@ -36,21 +36,21 @@ declare global {
   var __WORKER__: boolean;
 }
 
-// function flightContainer({
-//   init,
-//   chunk,
-//   nonce,
-// }: {
-//   init?: boolean;
-//   chunk?: string;
-//   nonce?: string;
-// }) {
-//   const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
+function flightContainer({
+  init,
+  chunk,
+  nonce,
+}: {
+  init?: boolean;
+  chunk?: string;
+  nonce?: string;
+}) {
+  const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
 
-//   return `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
-//     init ? '=[]' : `.push(\`${normalizedChunk}\`)`
-//   }</script>`;
-// }
+  return `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
+    init ? '=[]' : `.push(\`${normalizedChunk}\`)`
+  }</script>`;
+}
 
 /**
  * If a query is taking too long, or something else went wrong,
@@ -155,23 +155,35 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       isRSC: true,
     });
 
-    const rscReadable = rscRenderToReadableStream(
-      <ReactAppRSC />
-    ) as ReadableStream<Uint8Array>;
+    const [rscReadableForFizz, rscReadableForFlight] = (
+      rscRenderToReadableStream(<ReactAppRSC />) as ReadableStream<Uint8Array>
+    ).tee();
 
-    // TODO: tee the readable stream to get the flight syntax
-    const rscResponse = createFromReadableStream(rscReadable);
+    const rscResponse = createFromReadableStream(rscReadableForFizz);
     function RscConsumer() {
-      return rscResponse.readRoot();
+      return (
+        <React.Suspense fallback={null}>
+          {rscResponse.readRoot()}
+        </React.Suspense>
+      );
     }
 
     const ReactAppSSR = (
       <Html template={template} htmlAttrs={{lang: 'en'}}>
-        <React.Suspense fallback={null}>
-          <RscConsumer />
-        </React.Suspense>
+        <RscConsumer />
       </Html>
     );
+
+    const rscToScriptTagReadable = new ReadableStream({
+      start(controller) {
+        const encoder = new TextEncoder();
+        controller.enqueue(encoder.encode(flightContainer({init: true})));
+
+        bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
+          controller.enqueue(encoder.encode(flightContainer({chunk})));
+        }).then(() => controller.close());
+      },
+    });
 
     if (__WORKER__) {
       const deferred = defer<boolean>();
@@ -288,6 +300,10 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
             pipe,
             dev ? didError : undefined
           );
+
+          bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) =>
+            response.write(chunk)
+          );
         },
         async onCompleteAll() {
           clearTimeout(streamTimeout);
@@ -311,6 +327,10 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
             response,
             pipe,
             dev ? didError : undefined
+          );
+
+          bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) =>
+            response.write(chunk)
           );
         },
         onError(error: any) {
@@ -391,7 +411,10 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
   };
 };
 
-async function bufferReadableStream(reader: ReadableStreamDefaultReader) {
+async function bufferReadableStream(
+  reader: ReadableStreamDefaultReader,
+  cb?: (chunk: string) => void
+) {
   const decoder = new TextDecoder();
   let result = '';
 
@@ -399,7 +422,14 @@ async function bufferReadableStream(reader: ReadableStreamDefaultReader) {
     const {done, value} = await reader.read();
     if (done) break;
 
-    result += typeof value === 'string' ? value : decoder.decode(value);
+    const stringValue =
+      typeof value === 'string' ? value : decoder.decode(value);
+
+    result += stringValue;
+
+    if (cb) {
+      cb(stringValue);
+    }
   }
 
   return result;
