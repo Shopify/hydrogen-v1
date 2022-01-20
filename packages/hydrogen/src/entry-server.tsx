@@ -22,10 +22,8 @@ import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
 import {setShopifyConfig} from './foundation/useShop';
 import type {ServerResponse} from 'http';
-import type {PassThrough as PassThroughType} from 'stream';
+import type {PassThrough as PassThroughType, Writable} from 'stream';
 
-// @ts-ignore
-import {renderToPipeableStream as rscRenderToPipeableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
 // @ts-ignore
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
 // @ts-ignore
@@ -371,7 +369,14 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
       return new Response(bufferedBody);
     } else {
-      const stream = rscRenderToPipeableStream(<ReactApp />).pipe(response);
+      const rscWriter = await import(
+        // @ts-ignore
+        '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
+      );
+
+      const stream = rscWriter
+        .renderToPipeableStream(<ReactApp />)
+        .pipe(response) as Writable;
 
       stream.on('finish', function () {
         logServerResponse('rsc', log, request, response!.statusCode);
