@@ -295,7 +295,15 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
         logServerResponse('str', log, request, responseOptions.status);
       }
 
-      return new Response(transform.readable, responseOptions);
+      if (await isStreamingSupported()) {
+        return new Response(transform.readable, responseOptions);
+      }
+
+      const bufferedBody = await bufferReadableStream(
+        transform.readable.getReader()
+      );
+
+      return new Response(bufferedBody, responseOptions);
     } else {
       const {pipe} = renderToPipeableStream(ReactAppSSR, {
         onCompleteShell() {
@@ -408,7 +416,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
         <ReactApp />
       ) as ReadableStream<Uint8Array>;
 
-      if (isStreamable) {
+      if (isStreamable && (await isStreamingSupported())) {
         logServerResponse('rsc', log, request, 200);
         return new Response(readable);
       }
@@ -702,4 +710,27 @@ async function createNodeWriter() {
   const streamImport = __WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
+}
+
+let cachedStreamingSupport: boolean;
+async function isStreamingSupported() {
+  if (cachedStreamingSupport === undefined) {
+    try {
+      const rs = new ReadableStream({
+        start(controller) {
+          controller.close();
+        },
+      });
+
+      // This will throw in CFW until streaming
+      // is supported. It works in Miniflare.
+      await new Response(rs).text();
+
+      cachedStreamingSupport = true;
+    } catch (_) {
+      cachedStreamingSupport = false;
+    }
+  }
+
+  return cachedStreamingSupport;
 }

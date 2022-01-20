@@ -71,9 +71,9 @@ export default async function handleEvent(
     );
   }
 
-  // TODO: use __WORKER__ boolean to enable streaming once CFW supports `new Response(stream)`
   const isStreamable =
-    !!streamableResponse && !isBotUA(url, request.headers.get('user-agent'));
+    !isBotUA(url, request.headers.get('user-agent')) &&
+    (!!streamableResponse || supportsReadableStream());
 
   if (isReactHydrationRequest) {
     return hydrate(url, {
@@ -163,3 +163,12 @@ const botUserAgents = [
  * Creates a regex based on the botUserAgents array
  */
 const botUARegex = new RegExp(botUserAgents.join('|'), 'i');
+
+function supportsReadableStream() {
+  try {
+    new ReadableStream();
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
