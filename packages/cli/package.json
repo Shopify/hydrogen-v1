@@ -29,6 +29,8 @@
     "directory": "packages/cli"
   },
   "dependencies": {
+    "@miniflare/cache": "^2.2.0",
+    "@miniflare/storage-memory": "^2.2.0",
     "@shopify/ast-utilities": "^1.2.0",
     "@shopify/prettier-config": "^1.1.2",
     "@types/debug": "^4.1.7",

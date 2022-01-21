@@ -1,4 +1,5 @@
 import {CorePlugin, MiniflareCore} from '@miniflare/core';
+import {CachePlugin} from '@miniflare/cache';
 import {VMScriptRunner} from '@miniflare/runner-vm';
 import {Log, LogLevel} from '@miniflare/shared';
 
@@ -32,4 +33,5 @@ export class MiniOxygen extends MiniflareCore<any> {
 
 const PLUGINS = {
   CorePlugin,
+  CachePlugin,
 };

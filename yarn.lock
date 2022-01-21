@@ -2252,6 +2252,16 @@
   resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.12.24.tgz#30728e34ebc90351dd3aff4e18d038eed2c3e098"
   integrity sha512-Mfmij13RUTmHEMi9vRUhMXD7rnGR2VvxeNYtaGtaJ4redwwjT4UXYJ+nzmVJF7hhd4pn/Fx5sncDKxMVFJSWPg==
 
+"@miniflare/cache@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@miniflare/cache/-/cache-2.2.0.tgz#407f27fb007bd10f805bd1232e0daecaf18898df"
+  integrity sha512-N6b4V6fp4V0ljUHWs6+wVAvT94/SUCp6+pn3wnizjnYQhDE9ns8KJHu6zOTi+OkZUezjdUDJK0dqQXIKC/23XA==
+  dependencies:
+    "@miniflare/core" "2.2.0"
+    "@miniflare/shared" "2.2.0"
+    http-cache-semantics "^4.1.0"
+    undici "4.12.1"
+
 "@miniflare/core@2.2.0", "@miniflare/core@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/core/-/core-2.2.0.tgz#ec45606ca2864612a455b91df74d57c2a279f866"
@@ -2280,6 +2290,13 @@
   dependencies:
     ignore "^5.1.8"
     kleur "^4.1.4"
+
+"@miniflare/storage-memory@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@miniflare/storage-memory/-/storage-memory-2.2.0.tgz#b89bfdd7a9368138e64e5e1018543da221937308"
+  integrity sha512-1Ze2ZGwRFzH+6lLu6hZMTwGYTNioIT07QXvz3ZS/ilpg++cWUtqy2yHnajdJgcnNDNNQ4iVGladC2GNezrLbHg==
+  dependencies:
+    "@miniflare/shared" "2.2.0"
 
 "@miniflare/watcher@2.2.0":
   version "2.2.0"
@@ -13614,7 +13631,18 @@ unified-message-control@^3.0.0:
     unist-util-visit "^2.0.0"
     vfile-location "^3.0.0"
 
-unified@9.2.2, unified@^8.4.0, unified@^9.0.0, unified@^9.1.0:
+unified@^8.4.0:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/unified/-/unified-8.4.2.tgz#13ad58b4a437faa2751a4a4c6a16f680c500fff1"
+  integrity sha512-JCrmN13jI4+h9UAyKEoGcDZV+i1E7BLFuG7OsaDvTXI5P0qhHX+vZO/kOhz9jn8HGENDKbwSeB0nVOg4gVStGA==
+  dependencies:
+    bail "^1.0.0"
+    extend "^3.0.0"
+    is-plain-obj "^2.0.0"
+    trough "^1.0.0"
+    vfile "^4.0.0"
+
+unified@^9.0.0, unified@^9.1.0:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/unified/-/unified-9.2.2.tgz#67649a1abfc3ab85d2969502902775eb03146975"
   integrity sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==
