@@ -25,7 +25,7 @@ async function walk(
     return {files: [], directories: []};
   }
 
-  const pattern = recursive ? '*/**' : '*';
+  const pattern = recursive ? '**' : '*';
   const items = await glob.promise(pattern, {
     cwd: path,
     root: path,

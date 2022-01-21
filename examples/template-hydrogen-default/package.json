@@ -13,10 +13,12 @@
     "build:client": "vite build --outDir dist/client --manifest",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.jsx",
     "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker.js",
-    "serve": "node --enable-source-maps server"
+    "serve": "node --enable-source-maps server",
+    "preview": "hydrogen preview"
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
+    "@shopify/hydrogen-cli": "^0.9.0",
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/stylelint-plugin": "^10.0.1",
     "@tailwindcss/typography": "^0.5.0",
