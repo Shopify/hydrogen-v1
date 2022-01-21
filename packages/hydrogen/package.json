@@ -14,6 +14,7 @@
   "types": "dist/esnext/index.d.ts",
   "files": [
     "dist",
+    "vendor",
     "plugin.js",
     "plugin.d.ts",
     "entry-server.js",
