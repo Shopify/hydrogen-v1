@@ -3,6 +3,7 @@ import {ServerResponse} from 'http';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
+import {renderApiRoute} from './utilities/apiRoutes';
 
 interface HydrogenFetchEvent {
   /**
@@ -62,15 +63,28 @@ export default async function handleEvent(
   ) {
     return assetHandler(event, url);
   }
-  const {render, hydrate, stream}: EntryServerHandler =
+  const {render, hydrate, stream, getApiRoute, log}: EntryServerHandler =
     entrypoint.default || entrypoint;
 
   // @ts-ignore
-  if (dev && !(render && hydrate && stream)) {
+  if (dev && !(render && hydrate && stream && getApiRoute)) {
     throw new Error(
       `entry-server.jsx could not be loaded. This likely occurred because of a Vite compilation error.\n` +
         `Please check your server logs for more information.`
     );
+  }
+
+  if (!isReactHydrationRequest) {
+    const apiRoute = getApiRoute(url);
+
+    // The API Route might have a default export, making it also a server component
+    // If it does, only render the API route if the request method is GET
+    if (
+      apiRoute &&
+      (!apiRoute.hasServerComponent || request.method !== 'GET')
+    ) {
+      return renderApiRoute(request, apiRoute, log);
+    }
   }
 
   const isStreamable =

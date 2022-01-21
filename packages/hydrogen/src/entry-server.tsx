@@ -9,10 +9,11 @@ import {
   Logger,
   logServerResponse,
   getLoggerFromContext,
+  log,
 } from './utilities/log/log';
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
-import type {ServerHandler} from './types';
+import type {ImportGlobEagerOutput, ServerHandler} from './types';
 import type {FilledContext} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {Renderer, Hydrator, Streamer} from './types';
@@ -23,6 +24,7 @@ import {ServerRequestProvider} from './foundation/ServerRequestProvider';
 import {setShopifyConfig} from './foundation/useShop';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
+import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
 
 // @ts-ignore
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
@@ -43,7 +45,7 @@ declare global {
  */
 const STREAM_ABORT_TIMEOUT_MS = 3000;
 
-const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
+const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
   setShopifyConfig(shopifyConfig);
 
   /**
@@ -63,6 +65,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       state,
       request,
       log,
+      pages,
     });
 
     let html = await renderToBufferedString(
@@ -135,6 +138,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       request,
       log,
       isRSC: true,
+      pages,
     });
 
     const [rscReadableForFizz, rscReadableForFlight] = (
@@ -404,6 +408,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       request,
       log,
       isRSC: true,
+      pages,
     });
 
     if (__WORKER__) {
@@ -440,10 +445,17 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
     }
   };
 
+  function getApiRoute(url: URL) {
+    const routes = getApiRoutesFromPages(pages);
+    return getApiRouteFromURL(url, routes);
+  }
+
   return {
     render,
     stream,
     hydrate,
+    getApiRoute,
+    log,
   };
 };
 
@@ -477,12 +489,14 @@ function buildReactApp({
   request,
   log,
   isRSC = false,
+  pages,
 }: {
   App: ComponentType;
   state?: object | null;
   request: ServerComponentRequest;
   log: Logger;
   isRSC?: boolean;
+  pages?: ImportGlobEagerOutput;
 }) {
   const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
@@ -496,7 +510,7 @@ function buildReactApp({
   const ReactApp = (props: any) => {
     const AppContent = (
       <ServerRequestProvider request={request} isRSC={isRSC}>
-        <App {...state} {...props} {...hydrogenServerProps} />
+        <App {...state} {...props} {...hydrogenServerProps} pages={pages} />
       </ServerRequestProvider>
     );
 

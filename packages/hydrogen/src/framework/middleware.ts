@@ -54,19 +54,6 @@ export function hydrogenMiddleware({
   ) {
     const url = new URL('http://' + request.headers.host + request.originalUrl);
 
-    const isReactHydrationRequest = url.pathname === '/react';
-
-    /**
-     * If it's a dev environment, it's assumed that Vite's dev server is handling
-     * any static or JS requests, so we need to ensure that we don't try to handle them.
-     *
-     * If it's a product environment, it's assumed that the developer is handling
-     * static requests with e.g. static middleware.
-     */
-    if (dev && !shouldInterceptRequest(request, isReactHydrationRequest)) {
-      return next();
-    }
-
     try {
       /**
        * We're running in the Node.js runtime without access to `fetch`,
@@ -74,14 +61,17 @@ export function hydrogenMiddleware({
        */
       if (!globalThis.fetch) {
         const fetch = await import('node-fetch');
+        const {default: AbortController} = await import('abort-controller');
         // @ts-ignore
-        globalThis.fetch = fetch.default;
+        globalThis.fetch = fetch;
         // @ts-ignore
         globalThis.Request = fetch.Request;
         // @ts-ignore
         globalThis.Response = fetch.Response;
         // @ts-ignore
         globalThis.Headers = fetch.Headers;
+        // @ts-ignore
+        globalThis.AbortController = AbortController;
       }
 
       if (!globalThis.ReadableStream) {
@@ -129,7 +119,12 @@ export function hydrogenMiddleware({
         });
 
         response.statusCode = eventResponse.status;
-        response.end(eventResponse.body);
+
+        if (eventResponse.body) {
+          response.write(eventResponse.body);
+        }
+
+        response.end();
       }
     } catch (e: any) {
       if (dev && devServer) devServer.ssrFixStacktrace(e);
@@ -161,16 +156,6 @@ export function hydrogenMiddleware({
       }
     }
   };
-}
-
-function shouldInterceptRequest(
-  request: IncomingMessage,
-  isReactHydrationRequest: boolean
-) {
-  return (
-    /text\/html|application\/hydrogen/.test(request.headers['accept'] ?? '') ||
-    isReactHydrationRequest
-  );
 }
 
 /**

@@ -1,4 +1,5 @@
 import {Plugin, loadEnv, ResolvedConfig} from 'vite';
+import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
@@ -35,6 +36,8 @@ export default (
           dev: true,
         })
       );
+
+      server.middlewares.use(bodyParser.raw({type: '*/*'}));
 
       return () =>
         server.middlewares.use(

@@ -2,7 +2,7 @@ import React, {ReactElement, useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
 import type {Logger} from '../../utilities/log/log';
 
-export type ImportGlobEagerOutput = Record<string, Record<'default', any>>;
+import type {ImportGlobEagerOutput} from '../../types';
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -24,7 +24,7 @@ export function DefaultRoutes({
   const basePath = '/';
 
   const routes = useMemo(
-    () => createRoutesFromPages(pages, basePath),
+    () => createRoutesFromPages(pages, basePath, log),
     [pages, basePath]
   );
 
@@ -54,43 +54,52 @@ interface HydrogenRoute {
 
 export function createRoutesFromPages(
   pages: ImportGlobEagerOutput,
-  topLevelPath = '*'
+  topLevelPath = '*',
+  log: Logger | null = null
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
-  const routes = Object.keys(pages).map((key) => {
-    const path = key
-      .replace('./pages', '')
-      .replace(/\.server\.(t|j)sx?$/, '')
-      /**
-       * Replace /index with /
-       */
-      .replace(/\/index$/i, '/')
-      /**
-       * Only lowercase the first letter. This allows the developer to use camelCase
-       * dynamic paths while ensuring their standard routes are normalized to lowercase.
-       */
-      .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
-      /**
-       * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
-       */
-      .replace(
-        /\[(?:[.]{3})?(\w+?)\]/g,
-        (_match, param: string) => `:${param}`
-      );
+  const routes = Object.keys(pages)
+    .map((key) => {
+      const path = key
+        .replace('./pages', '')
+        .replace(/\.server\.(t|j)sx?$/, '')
+        /**
+         * Replace /index with /
+         */
+        .replace(/\/index$/i, '/')
+        /**
+         * Only lowercase the first letter. This allows the developer to use camelCase
+         * dynamic paths while ensuring their standard routes are normalized to lowercase.
+         */
+        .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
+        /**
+         * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
+         */
+        .replace(
+          /\[(?:[.]{3})?(\w+?)\]/g,
+          (_match, param: string) => `:${param}`
+        );
 
-    /**
-     * Catch-all routes [...handle].jsx don't need an exact match
-     * https://reactrouter.com/core/api/Route/exact-bool
-     */
-    const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
+      /**
+       * Catch-all routes [...handle].jsx don't need an exact match
+       * https://reactrouter.com/core/api/Route/exact-bool
+       */
+      const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
 
-    return {
-      path: topLevelPrefix + path,
-      component: pages[key].default,
-      exact,
-    };
-  });
+      if (!pages[key].default && !pages[key].api) {
+        log?.warn(
+          `${key} doesn't export a default React component or an API function`
+        );
+      }
+
+      return {
+        path: topLevelPrefix + path,
+        component: pages[key].default,
+        exact,
+      };
+    })
+    .filter((route) => route.component);
 
   /**
    * Place static paths BEFORE dynamic paths to grant priority.
