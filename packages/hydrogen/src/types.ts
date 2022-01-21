@@ -64,16 +64,18 @@ export type ServerHandlerConfig = {
   shopifyConfig: ShopifyConfig;
 };
 
+export type ClientHandlerConfig = {
+  shopifyConfig: ShopifyConfig;
+};
+
 export type ServerHandler = (
   App: any,
-  config?: ServerHandlerConfig
+  config: ServerHandlerConfig
 ) => EntryServerHandler;
 
 export type ClientHandler = (
   App: any,
-  options: {
-    shopifyConfig: ShopifyConfig;
-  }
+  config: ClientHandlerConfig
 ) => Promise<void>;
 
 export interface GraphQLConnection<T> {
