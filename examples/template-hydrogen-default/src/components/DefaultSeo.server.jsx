@@ -6,7 +6,7 @@ import Seo from './Seo.client';
 /**
  * A server component that fetches a `shop.name` and sets default values and templates for every page on a website
  */
-export default function SeoServer() {
+export default function DefaultSeo() {
   const {
     data: {
       shop: {name: shopName},
