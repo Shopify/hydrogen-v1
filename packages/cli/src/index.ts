@@ -27,12 +27,6 @@ const logger = debug('hydrogen');
 
   await command.load();
   await command.run({ui, fs, workspace, logger});
-
-  for await (const file of fs.commit()) {
-    ui.printFile(file);
-  }
-
-  await workspace.commit();
 })().catch((error) => {
   logger(error);
   process.exitCode = 1;
