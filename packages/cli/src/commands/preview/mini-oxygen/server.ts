@@ -9,10 +9,11 @@ import connect from 'connect';
 import type {NextHandleFunction} from 'connect';
 import type {MiniOxygen} from './core';
 
-function createAssetMiddleware(): NextHandleFunction {
+function createAssetMiddleware(assets: string[]): NextHandleFunction {
   return (req, res, next) => {
-    if (req.url!.includes('/assets')) {
-      const filePath = path.join(process.cwd(), './dist/client', req.url!);
+    const filePath = path.join(process.cwd(), './dist/client', req.url!);
+
+    if (assets.includes(filePath)) {
       const rs = fs.createReadStream(filePath);
       const {size} = fs.statSync(filePath);
 
@@ -58,10 +59,13 @@ function createRequestMiddleware(mf: MiniOxygen): any {
   };
 }
 
-export async function createServer(mf: MiniOxygen) {
+export async function createServer(
+  mf: MiniOxygen,
+  options: {assets: string[]} = {assets: []}
+) {
   const app = connect();
 
-  app.use(createAssetMiddleware());
+  app.use(createAssetMiddleware(options.assets));
   app.use(createRequestMiddleware(mf));
 
   const server = http.createServer(app);
