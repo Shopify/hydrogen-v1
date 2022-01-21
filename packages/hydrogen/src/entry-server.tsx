@@ -13,7 +13,7 @@ import {
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
 import type {ServerHandler} from './types';
-import {FilledContext} from 'react-helmet-async';
+import type {FilledContext} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -34,22 +34,6 @@ declare global {
   // and will trigger tree-shaking.
   // eslint-disable-next-line no-var
   var __WORKER__: boolean;
-}
-
-function flightContainer({
-  init,
-  chunk,
-  nonce,
-}: {
-  init?: boolean;
-  chunk?: string;
-  nonce?: string;
-}) {
-  const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
-
-  return `<script${nonce ? ` nonce="${nonce}"` : ''}>${
-    init ? 'var ' : ''
-  }__flight${init ? '=[]' : `.push(\`${normalizedChunk}\`)`}</script>`;
 }
 
 /**
@@ -173,13 +157,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
     const rscToScriptTagReadable = new ReadableStream({
       start(controller) {
+        let init = true;
         const encoder = new TextEncoder();
-        controller.enqueue(
-          encoder.encode(flightContainer({init: true, nonce}))
-        );
-
         bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
-          controller.enqueue(encoder.encode(flightContainer({chunk, nonce})));
+          const scriptTag = flightContainer({init, chunk, nonce});
+          controller.enqueue(encoder.encode(scriptTag));
+          init = false;
         }).then(() => controller.close());
       },
     });
@@ -262,33 +245,37 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       });
 
       if (await deferredShouldReturnApp.promise) {
-        let rscBuffer = '';
-        let isDocumentMalformed = true;
-        const tryFlushingRsc = (chunk = '') => {
-          rscBuffer += chunk;
-          if (rscBuffer && !isDocumentMalformed) {
-            writable.write(encoder.encode(rscBuffer));
-            rscBuffer = '';
-          }
-        };
-
+        let bufferedSsr = '';
+        let isPendingSsrWrite = false;
         const writingSSR = bufferReadableStream(
           readable.getReader(),
           (chunk) => {
-            isDocumentMalformed = !chunk.endsWith('>');
-            writable.write(encoder.encode(chunk));
-            tryFlushingRsc();
+            bufferedSsr += chunk;
+
+            if (!isPendingSsrWrite) {
+              isPendingSsrWrite = true;
+              setTimeout(() => {
+                isPendingSsrWrite = false;
+                // React can write fractional chunks synchronously.
+                // This timeout ensures we only write full HTML tags
+                // in order to allow RSC writing concurrently.
+                if (bufferedSsr) {
+                  writable.write(encoder.encode(bufferedSsr));
+                  bufferedSsr = '';
+                }
+              }, 0);
+            }
           }
         );
 
         const writingRSC = bufferReadableStream(
           rscToScriptTagReadable.getReader(),
-          tryFlushingRsc
+          (scriptTag) => writable.write(encoder.encode(scriptTag))
         );
 
         Promise.all([writingSSR, writingRSC]).then(() => {
-          tryFlushingRsc();
-          writable.close();
+          // Last SSR write might be pending, delay closing the writable one tick
+          setTimeout(() => writable.close(), 0);
           logServerResponse('str', log, request, responseOptions.status);
         });
       } else {
@@ -498,7 +485,7 @@ function buildReactApp({
   const hydrogenServerProps = {
     request,
     response: componentResponse,
-    helmetContext: helmetContext,
+    helmetContext,
     log,
   };
 
@@ -718,6 +705,28 @@ async function createNodeWriter() {
   const streamImport = __WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
+}
+
+function flightContainer({
+  init,
+  chunk,
+  nonce,
+}: {
+  chunk?: string;
+  init?: boolean;
+  nonce?: string;
+}) {
+  let script = `<script${nonce ? ` nonce="${nonce}"` : ''}>`;
+  if (init) {
+    script += 'var __flight=[];';
+  }
+
+  if (chunk) {
+    const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
+    script += `__flight.push(\`${normalizedChunk}\`)`;
+  }
+
+  return script + '</script>';
 }
 
 let cachedStreamingSupport: boolean;
