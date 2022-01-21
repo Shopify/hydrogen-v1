@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+## 0.10.0-experimental.1 - 2022-01-21
+
+- No updates. Transitive dependency bump.
+
 ## 0.10.0-experimental.0 - 2022-01-21
 
 - Warn instead of error when a page server component is missing valid exports
