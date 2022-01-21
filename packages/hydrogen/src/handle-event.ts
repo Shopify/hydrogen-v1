@@ -17,7 +17,7 @@ export interface HandleEventOptions {
   indexTemplate: string | ((url: string) => Promise<string>);
   assetHandler?: (event: HydrogenFetchEvent, url: URL) => Promise<Response>;
   cache?: Cache;
-  streamableResponse: ServerResponse;
+  streamableResponse?: ServerResponse;
   dev?: boolean;
   context?: RuntimeContext;
 }

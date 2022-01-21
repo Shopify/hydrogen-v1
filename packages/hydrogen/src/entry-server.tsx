@@ -140,12 +140,6 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
     const state = {pathname: url.pathname, search: url.search};
     let didError: Error | undefined;
 
-    if (!__WORKER__ && response) {
-      response.socket!.on('error', (error: any) => {
-        log.fatal(error);
-      });
-    }
-
     // App for RSC rendering
     const {ReactApp: ReactAppRSC, componentResponse} = buildReactApp({
       App,
@@ -305,7 +299,9 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       );
 
       return new Response(bufferedBody, responseOptions);
-    } else {
+    } else if (response) {
+      response.socket!.on('error', log.fatal);
+
       const {pipe} = renderToPipeableStream(ReactAppSSR, {
         onCompleteShell() {
           /**
@@ -428,7 +424,9 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       logServerResponse('rsc', log, request, 200);
 
       return new Response(bufferedBody);
-    } else {
+    } else if (response) {
+      response.socket!.on('error', log.fatal);
+
       const rscWriter = await import(
         // @ts-ignore
         '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'

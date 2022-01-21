@@ -15,7 +15,7 @@ export type Streamer = (
   url: URL,
   options: {
     request: ServerComponentRequest;
-    response: ServerResponse;
+    response?: ServerResponse;
     template: string;
     dev?: boolean;
   }
