@@ -286,13 +286,11 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
           (scriptTag) => writable.write(encoder.encode(scriptTag))
         );
 
-        Promise.all([writingSSR, writingRSC])
-          .then(() => {
-            // Last SSR write might be pending, delay closing the writable one tick
-            setTimeout(() => writable.close(), 0);
-            logServerResponse('str', log, request, responseOptions.status);
-          })
-          .catch((error) => console.log('lsjdfalkjsdlkjasdlfjkasdlkfjasdlkjf'));
+        Promise.all([writingSSR, writingRSC]).then(() => {
+          // Last SSR write might be pending, delay closing the writable one tick
+          setTimeout(() => writable.close(), 0);
+          logServerResponse('str', log, request, responseOptions.status);
+        });
       } else {
         writable.close();
         logServerResponse('str', log, request, responseOptions.status);
@@ -576,7 +574,6 @@ async function renderToBufferedString(
           deferred.resolve(null);
         },
         onError(error: any) {
-          console.log('hi there! b');
           log.error(error);
           deferred.reject(error);
         },
@@ -605,7 +602,6 @@ async function renderToBufferedString(
           pipe(writer);
         },
         onError(error: any) {
-          console.log('hi there! c');
           log.error(error);
           reject(error);
         },
