@@ -47,9 +47,9 @@ function flightContainer({
 }) {
   const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
 
-  return `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
-    init ? '=[]' : `.push(\`${normalizedChunk}\`)`
-  }</script>`;
+  return `<script${nonce ? ` nonce="${nonce}"` : ''}>${
+    init ? 'var ' : ''
+  }__flight${init ? '=[]' : `.push(\`${normalizedChunk}\`)`}</script>`;
 }
 
 /**
@@ -67,7 +67,10 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
    * and returning any initial state that needs to be hydrated into the client version of the app.
    * NOTE: This is currently only used for SEO bots or Worker runtime (where Stream is not yet supported).
    */
-  const render: Renderer = async function (url, {request, template, dev}) {
+  const render: Renderer = async function (
+    url,
+    {request, template, nonce, dev}
+  ) {
     const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
 
@@ -82,7 +85,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       <Html template={template}>
         <ReactApp />
       </Html>,
-      {log}
+      {log, nonce}
     );
 
     const {headers, status, statusText} = getResponseOptions(componentResponse);
@@ -134,7 +137,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
    */
   const stream: Streamer = async function (
     url: URL,
-    {request, response, template, dev}
+    {request, response, template, nonce, dev}
   ) {
     const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
@@ -171,10 +174,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
     const rscToScriptTagReadable = new ReadableStream({
       start(controller) {
         const encoder = new TextEncoder();
-        controller.enqueue(encoder.encode(flightContainer({init: true})));
+        controller.enqueue(
+          encoder.encode(flightContainer({init: true, nonce}))
+        );
 
         bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
-          controller.enqueue(encoder.encode(flightContainer({chunk})));
+          controller.enqueue(encoder.encode(flightContainer({chunk, nonce})));
         }).then(() => controller.close());
       },
     });
@@ -187,6 +192,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       const responseOptions = {} as ResponseOptions;
 
       const readable: ReadableStream = renderToReadableStream(ReactAppSSR, {
+        nonce,
         onCompleteShell() {
           Object.assign(
             responseOptions,
@@ -303,6 +309,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       response.socket!.on('error', log.fatal);
 
       const {pipe} = renderToPipeableStream(ReactAppSSR, {
+        nonce,
         onCompleteShell() {
           /**
            * TODO: This assumes `response.cache()` has been called _before_ any
@@ -532,7 +539,7 @@ function extractHeadElements(helmetContext: FilledContext) {
 
 async function renderToBufferedString(
   ReactApp: JSX.Element,
-  {log}: {log: Logger}
+  {log, nonce}: {log: Logger; nonce?: string}
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     const errorTimeout = setTimeout(() => {
@@ -542,6 +549,7 @@ async function renderToBufferedString(
     if (__WORKER__) {
       const deferred = defer();
       const readable = renderToReadableStream(ReactApp, {
+        nonce,
         onCompleteAll() {
           clearTimeout(errorTimeout);
           /**
@@ -565,6 +573,7 @@ async function renderToBufferedString(
       const writer = await createNodeWriter();
 
       const {pipe} = renderToPipeableStream(ReactApp, {
+        nonce,
         /**
          * When hydrating, we have to wait until `onCompleteAll` to avoid having
          * `template` and `script` tags inserted and rendered as part of the hydration response.

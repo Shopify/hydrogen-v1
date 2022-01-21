@@ -20,6 +20,7 @@ export interface HandleEventOptions {
   streamableResponse?: ServerResponse;
   dev?: boolean;
   context?: RuntimeContext;
+  nonce?: string;
 }
 
 export default async function handleEvent(
@@ -33,6 +34,7 @@ export default async function handleEvent(
     dev,
     cache,
     context,
+    nonce,
   }: HandleEventOptions
 ) {
   const url = new URL(request.url);
@@ -94,6 +96,7 @@ export default async function handleEvent(
       request,
       response: streamableResponse,
       template,
+      nonce,
       dev,
     });
   }
@@ -101,6 +104,7 @@ export default async function handleEvent(
   return render(url, {
     request,
     template,
+    nonce,
     dev,
   });
 }

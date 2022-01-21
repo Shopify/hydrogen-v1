@@ -16,7 +16,7 @@ declare global {
 
 let rscReader: ReadableStream | null;
 
-if (window.__flight && window.__flight.length > 0) {
+if (__flight && __flight.length > 0) {
   const contentLoaded = new Promise((resolve) =>
     document.addEventListener('DOMContentLoaded', resolve)
   );
@@ -30,8 +30,8 @@ if (window.__flight && window.__flight.length > 0) {
           return 0;
         };
 
-        window.__flight.forEach(write);
-        window.__flight.push = write;
+        __flight.forEach(write);
+        __flight.push = write;
 
         contentLoaded.then(() => controller.close());
       },
