@@ -203,6 +203,14 @@ Next, visit the Shipit page for Hydrogen and click **Deploy**.
 
 After Shipit has released your version, visit the [releases page on GitHub](https://github.com/Shopify/hydrogen/releases), click on the version number you just released, and select "Create release from tag." Then, select "Auto-generate release notes." At this point, edit the release notes as you see fit (e.g. call out any breaking changes or upgrade guides). Finally, click "Publish release."
 
+## Releasing experimental versions
+
+To release an experimental version, follow the instructions above for releasing new versions, only use the `experimental` branch instead.
+
+When you run `yarn bump-version`, be sure to select a pre-release that meets expectations (or enter a custom version).
+
+After running the script, go to Shipit and find "Hydrogen Experimental." Run a deploy, and this should release your new version with the `experimental` tag on NPM.
+
 ## Testing changes in another project
 
 From the root of the repo, run:
