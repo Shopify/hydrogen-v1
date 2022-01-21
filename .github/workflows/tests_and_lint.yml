@@ -38,7 +38,7 @@ jobs:
 
       - name: Lint the template code
         run: yarn lint
-        working-directory: ./packages/dev
+        working-directory: ./examples/template-hydrogen-default
 
       - name: Run the unit tests
         run: yarn test

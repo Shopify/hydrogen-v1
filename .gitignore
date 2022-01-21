@@ -110,6 +110,7 @@ dist
 
 # VSCode launch configs
 .vscode/
+!examples/*/.vscode/
 
 # yarn v2
 .yarn/cache
