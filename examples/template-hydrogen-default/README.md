@@ -18,6 +18,15 @@ yarn dev
 
 Remember to update `shopify.config.js` with your shop's domain and Storefront API token!
 
+## Previewing a production build
+
+To run a local preview of your Hydrogen app in an environment similar to Oxygen, build your Hydrogen app and then run `yarn preview`:
+
+```bash
+yarn build
+yarn preview
+```
+
 ## Building for production
 
 ```bash
