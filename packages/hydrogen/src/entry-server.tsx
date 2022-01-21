@@ -97,6 +97,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
     const params = {url, ...extractHeadElements(helmetContext)};
 
     const {bodyAttributes, htmlAttributes, ...head} = params;
+    head.script = (head.script || '') + flightContainer({init: true, nonce});
 
     html = html
       .replace(
