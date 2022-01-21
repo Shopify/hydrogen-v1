@@ -10,7 +10,14 @@ const path = require('path');
 const fs = require('fs');
 const {copy} = require('./utils');
 
-const devPath = path.resolve(__dirname, '..', '..', 'dev');
+const devPath = path.resolve(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'examples',
+  'template-hydrogen-default'
+);
 const templatePath = path.resolve(__dirname, '..', './template-hydrogen');
 const skipFiles = ['node_modules', 'dist', '.stackblitzrc'];
 
