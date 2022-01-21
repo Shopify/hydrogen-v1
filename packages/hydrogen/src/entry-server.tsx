@@ -175,7 +175,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       const writable = transform.writable.getWriter();
       const responseOptions = {} as ResponseOptions;
 
-      const readable: ReadableStream = renderToReadableStream(ReactAppSSR, {
+      const ssrReadable: ReadableStream = renderToReadableStream(ReactAppSSR, {
         nonce,
         onCompleteShell() {
           Object.assign(
@@ -249,7 +249,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
         let bufferedSsr = '';
         let isPendingSsrWrite = false;
         const writingSSR = bufferReadableStream(
-          readable.getReader(),
+          ssrReadable.getReader(),
           (chunk) => {
             bufferedSsr += chunk;
 
