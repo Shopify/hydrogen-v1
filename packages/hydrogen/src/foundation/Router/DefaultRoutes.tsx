@@ -22,7 +22,7 @@ export function DefaultRoutes({
 }) {
   const {path} = useRouteMatch();
   const routes = useMemo(
-    () => createRoutesFromPages(pages, path),
+    () => createRoutesFromPages(pages, path, log),
     [pages, path]
   );
 
@@ -46,7 +46,8 @@ interface HydrogenRoute {
 
 export function createRoutesFromPages(
   pages: ImportGlobEagerOutput,
-  topLevelPath = '*'
+  topLevelPath = '*',
+  log: Logger | null = null
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
@@ -78,10 +79,11 @@ export function createRoutesFromPages(
        */
       const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
 
-      if (!pages[key].default && !pages[key].api)
-        throw new Error(
+      if (!pages[key].default && !pages[key].api) {
+        log?.warn(
           `${key} doesn't export a default React component or an API function`
         );
+      }
 
       return {
         path: topLevelPrefix + path,
