@@ -7,6 +7,7 @@ export type Renderer = (
   options: {
     request: ServerComponentRequest;
     template: string;
+    nonce?: string;
     dev?: boolean;
   }
 ) => Promise<Response>;
@@ -15,8 +16,9 @@ export type Streamer = (
   url: URL,
   options: {
     request: ServerComponentRequest;
-    response: ServerResponse;
+    response?: ServerResponse;
     template: string;
+    nonce?: string;
     dev?: boolean;
   }
 ) => void;

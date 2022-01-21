@@ -17,9 +17,10 @@ export interface HandleEventOptions {
   indexTemplate: string | ((url: string) => Promise<string>);
   assetHandler?: (event: HydrogenFetchEvent, url: URL) => Promise<Response>;
   cache?: Cache;
-  streamableResponse: ServerResponse;
+  streamableResponse?: ServerResponse;
   dev?: boolean;
   context?: RuntimeContext;
+  nonce?: string;
 }
 
 export default async function handleEvent(
@@ -33,6 +34,7 @@ export default async function handleEvent(
     dev,
     cache,
     context,
+    nonce,
   }: HandleEventOptions
 ) {
   const url = new URL(request.url);
@@ -71,9 +73,9 @@ export default async function handleEvent(
     );
   }
 
-  // TODO: use __WORKER__ boolean to enable streaming once CFW supports `new Response(stream)`
   const isStreamable =
-    !!streamableResponse && !isBotUA(url, request.headers.get('user-agent'));
+    !isBotUA(url, request.headers.get('user-agent')) &&
+    (!!streamableResponse || supportsReadableStream());
 
   if (isReactHydrationRequest) {
     return hydrate(url, {
@@ -94,6 +96,7 @@ export default async function handleEvent(
       request,
       response: streamableResponse,
       template,
+      nonce,
       dev,
     });
   }
@@ -101,6 +104,7 @@ export default async function handleEvent(
   return render(url, {
     request,
     template,
+    nonce,
     dev,
   });
 }
@@ -163,3 +167,12 @@ const botUserAgents = [
  * Creates a regex based on the botUserAgents array
  */
 const botUARegex = new RegExp(botUserAgents.join('|'), 'i');
+
+function supportsReadableStream() {
+  try {
+    new ReadableStream();
+    return true;
+  } catch (_) {
+    return false;
+  }
+}

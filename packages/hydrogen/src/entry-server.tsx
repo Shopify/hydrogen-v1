@@ -13,46 +13,27 @@ import {
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
 import type {ServerHandler} from './types';
-import {FilledContext} from 'react-helmet-async';
+import type {FilledContext} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
+import {setShopifyConfig} from './foundation/useShop';
 import type {ServerResponse} from 'http';
-import type {PassThrough as PassThroughType} from 'stream';
+import type {PassThrough as PassThroughType, Writable} from 'stream';
 
 // @ts-ignore
-import * as rscRenderer from '@shopify/hydrogen/vendor/react-server-dom-vite/writer';
-import {setShopifyConfig} from './foundation/useShop';
-
-const {
-  renderToPipeableStream: rscRenderToPipeableStream,
-  renderToReadableStream: rscRenderToReadableStream,
-} = rscRenderer;
+import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
+// @ts-ignore
+import {createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
 
 declare global {
   // This is provided by a Vite plugin
   // and will trigger tree-shaking.
   // eslint-disable-next-line no-var
   var __WORKER__: boolean;
-}
-
-function flightContainer({
-  init,
-  chunk,
-  nonce,
-}: {
-  init?: boolean;
-  chunk?: string;
-  nonce?: string;
-}) {
-  const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
-
-  return `<script${nonce ? ` nonce="${nonce}"` : ''}>window.__flight${
-    init ? '=[]' : `.push(\`${normalizedChunk}\`)`
-  }</script>`;
 }
 
 /**
@@ -70,7 +51,10 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
    * and returning any initial state that needs to be hydrated into the client version of the app.
    * NOTE: This is currently only used for SEO bots or Worker runtime (where Stream is not yet supported).
    */
-  const render: Renderer = async function (url, {request, template, dev}) {
+  const render: Renderer = async function (
+    url,
+    {request, template, nonce, dev}
+  ) {
     const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
 
@@ -85,7 +69,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       <Html template={template}>
         <ReactApp />
       </Html>,
-      {log}
+      {log, nonce}
     );
 
     const {headers, status, statusText} = getResponseOptions(componentResponse);
@@ -113,6 +97,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
     const params = {url, ...extractHeadElements(helmetContext)};
 
     const {bodyAttributes, htmlAttributes, ...head} = params;
+    head.script = (head.script || '') + flightContainer({init: true, nonce});
 
     html = html
       .replace(
@@ -137,13 +122,14 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
    */
   const stream: Streamer = async function (
     url: URL,
-    {request, response, template, dev}
+    {request, response, template, nonce, dev}
   ) {
     const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
+    let didError: Error | undefined;
 
     // App for RSC rendering
-    const {ReactApp: ReactAppRSC} = buildReactApp({
+    const {ReactApp: ReactAppRSC, componentResponse} = buildReactApp({
       App,
       state,
       request,
@@ -151,78 +137,46 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       isRSC: true,
     });
 
-    let isContainerInitialized = false;
-    let flightResponseBuffer = '';
-    const flushRSC = (
-      writable: {write: (chunk: string) => void},
-      chunk = ''
-    ) => {
-      if (!isContainerInitialized) {
-        isContainerInitialized = true;
-        writable.write(flightContainer({init: true}));
-      }
+    const [rscReadableForFizz, rscReadableForFlight] = (
+      rscRenderToReadableStream(<ReactAppRSC />) as ReadableStream<Uint8Array>
+    ).tee();
 
-      if (flightResponseBuffer) {
-        chunk = flightResponseBuffer + chunk;
-        flightResponseBuffer = '';
-      }
-
-      if (chunk) {
-        writable.write(flightContainer({chunk}));
-      }
-    };
-
-    if (__WORKER__) {
-      // Worker branch
-      // TODO implement RSC with TransformStream?
-    } else {
-      // Node.js branch
-
-      const {pipe} = rscRenderToPipeableStream(<ReactAppRSC />);
-
-      const writer = await createNodeWriter();
-      writer.setEncoding('utf-8');
-      writer.on('data', (chunk: string) => {
-        if (response.headersSent) {
-          flushRSC(response, chunk);
-        } else {
-          flightResponseBuffer += chunk;
-        }
-      });
-
-      pipe(writer);
+    const rscResponse = createFromReadableStream(rscReadableForFizz);
+    function RscConsumer() {
+      return (
+        <React.Suspense fallback={null}>
+          {rscResponse.readRoot()}
+        </React.Suspense>
+      );
     }
-
-    // App for SSR rendering
-    const {ReactApp, componentResponse} = buildReactApp({
-      App,
-      state,
-      request,
-      log,
-    });
-
-    if (!__WORKER__ && response) {
-      response.socket!.on('error', (error: any) => {
-        log.fatal(error);
-      });
-    }
-
-    let didError: Error | undefined;
 
     const ReactAppSSR = (
       <Html template={template} htmlAttrs={{lang: 'en'}}>
-        <ReactApp />
+        <RscConsumer />
       </Html>
     );
 
+    const rscToScriptTagReadable = new ReadableStream({
+      start(controller) {
+        let init = true;
+        const encoder = new TextEncoder();
+        bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
+          const scriptTag = flightContainer({init, chunk, nonce});
+          controller.enqueue(encoder.encode(scriptTag));
+          init = false;
+        }).then(() => controller.close());
+      },
+    });
+
     if (__WORKER__) {
-      const deferred = defer<boolean>();
+      const deferredShouldReturnApp = defer<boolean>();
       const encoder = new TextEncoder();
       const transform = new TransformStream();
       const writable = transform.writable.getWriter();
       const responseOptions = {} as ResponseOptions;
 
-      const readable: ReadableStream = renderToReadableStream(ReactAppSSR, {
+      const ssrReadable: ReadableStream = renderToReadableStream(ReactAppSSR, {
+        nonce,
         onCompleteShell() {
           Object.assign(
             responseOptions,
@@ -239,7 +193,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
           if (isRedirect(responseOptions)) {
             // Return redirects early without further rendering/streaming
-            return deferred.resolve(false);
+            return deferredShouldReturnApp.resolve(false);
           }
 
           if (!componentResponse.canStream()) return;
@@ -251,7 +205,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
             dev ? didError : undefined
           );
 
-          deferred.resolve(true);
+          deferredShouldReturnApp.resolve(true);
         },
         async onCompleteAll() {
           if (componentResponse.canStream()) return;
@@ -263,12 +217,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
           if (isRedirect(responseOptions)) {
             // Redirects found after any async code
-            return deferred.resolve(false);
+            return deferredShouldReturnApp.resolve(false);
           }
 
           if (componentResponse.customBody) {
             writable.write(encoder.encode(await componentResponse.customBody));
-            return deferred.resolve(false);
+            return deferredShouldReturnApp.resolve(false);
           }
 
           startWritingHtmlToStream(
@@ -278,12 +232,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
             dev ? didError : undefined
           );
 
-          deferred.resolve(true);
+          deferredShouldReturnApp.resolve(true);
         },
         onError(error: any) {
           didError = error;
 
-          if (dev && deferred.status === 'pending') {
+          if (dev && deferredShouldReturnApp.status === 'pending') {
             writable.write(getErrorMarkup(error));
           }
 
@@ -291,18 +245,59 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
         },
       });
 
-      const shouldUseStream = await deferred.promise;
+      if (await deferredShouldReturnApp.promise) {
+        let bufferedSsr = '';
+        let isPendingSsrWrite = false;
+        const writingSSR = bufferReadableStream(
+          ssrReadable.getReader(),
+          (chunk) => {
+            bufferedSsr += chunk;
 
-      if (shouldUseStream) {
-        writable.releaseLock();
-        readable.pipeTo(transform.writable);
+            if (!isPendingSsrWrite) {
+              isPendingSsrWrite = true;
+              setTimeout(() => {
+                isPendingSsrWrite = false;
+                // React can write fractional chunks synchronously.
+                // This timeout ensures we only write full HTML tags
+                // in order to allow RSC writing concurrently.
+                if (bufferedSsr) {
+                  writable.write(encoder.encode(bufferedSsr));
+                  bufferedSsr = '';
+                }
+              }, 0);
+            }
+          }
+        );
+
+        const writingRSC = bufferReadableStream(
+          rscToScriptTagReadable.getReader(),
+          (scriptTag) => writable.write(encoder.encode(scriptTag))
+        );
+
+        Promise.all([writingSSR, writingRSC]).then(() => {
+          // Last SSR write might be pending, delay closing the writable one tick
+          setTimeout(() => writable.close(), 0);
+          logServerResponse('str', log, request, responseOptions.status);
+        });
+      } else {
+        writable.close();
+        logServerResponse('str', log, request, responseOptions.status);
       }
 
-      logServerResponse('str', log, request, responseOptions.status);
+      if (await isStreamingSupported()) {
+        return new Response(transform.readable, responseOptions);
+      }
 
-      return new Response(transform.readable, responseOptions);
-    } else {
+      const bufferedBody = await bufferReadableStream(
+        transform.readable.getReader()
+      );
+
+      return new Response(bufferedBody, responseOptions);
+    } else if (response) {
+      response.socket!.on('error', log.fatal);
+
       const {pipe} = renderToPipeableStream(ReactAppSSR, {
+        nonce,
         onCompleteShell() {
           /**
            * TODO: This assumes `response.cache()` has been called _before_ any
@@ -327,9 +322,17 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
           startWritingHtmlToServerResponse(
             response,
-            pipe,
-            flushRSC,
             dev ? didError : undefined
+          );
+
+          // Piping ends the response so let RSC go first.
+          // Generally, RSC reader should finish before SSR because
+          // the latter is also reading RSC until it finishes.
+          // However, this might not be the case in small apps that
+          // are written in SSR at once.
+          setTimeout(() => pipe(response), 0);
+          bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) =>
+            response.write(chunk)
           );
         },
         async onCompleteAll() {
@@ -352,9 +355,16 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
 
           startWritingHtmlToServerResponse(
             response,
-            pipe,
-            flushRSC,
             dev ? didError : undefined
+          );
+
+          bufferReadableStream(rscToScriptTagReadable.getReader()).then(
+            (scriptTags) => {
+              // Piping ends the response so script tags
+              // must be written before that.
+              response.write(scriptTags);
+              pipe(response);
+            }
           );
         },
         onError(error: any) {
@@ -396,18 +406,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       isRSC: true,
     });
 
-    if (!__WORKER__ && response) {
-      response.socket!.on('error', (error: any) => {
-        log.fatal(error);
-      });
-    }
-
     if (__WORKER__) {
       const readable = rscRenderToReadableStream(
         <ReactApp />
       ) as ReadableStream<Uint8Array>;
 
-      if (isStreamable) {
+      if (isStreamable && (await isStreamingSupported())) {
         logServerResponse('rsc', log, request, 200);
         return new Response(readable);
       }
@@ -418,8 +422,17 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
       logServerResponse('rsc', log, request, 200);
 
       return new Response(bufferedBody);
-    } else {
-      const stream = rscRenderToPipeableStream(<ReactApp />).pipe(response);
+    } else if (response) {
+      response.socket!.on('error', log.fatal);
+
+      const rscWriter = await import(
+        // @ts-ignore
+        '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
+      );
+
+      const stream = rscWriter
+        .renderToPipeableStream(<ReactApp />)
+        .pipe(response) as Writable;
 
       stream.on('finish', function () {
         logServerResponse('rsc', log, request, response!.statusCode);
@@ -434,7 +447,10 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
   };
 };
 
-async function bufferReadableStream(reader: ReadableStreamDefaultReader) {
+async function bufferReadableStream(
+  reader: ReadableStreamDefaultReader,
+  cb?: (chunk: string) => void
+) {
   const decoder = new TextDecoder();
   let result = '';
 
@@ -442,7 +458,14 @@ async function bufferReadableStream(reader: ReadableStreamDefaultReader) {
     const {done, value} = await reader.read();
     if (done) break;
 
-    result += typeof value === 'string' ? value : decoder.decode(value);
+    const stringValue =
+      typeof value === 'string' ? value : decoder.decode(value);
+
+    result += stringValue;
+
+    if (cb) {
+      cb(stringValue);
+    }
   }
 
   return result;
@@ -466,7 +489,7 @@ function buildReactApp({
   const hydrogenServerProps = {
     request,
     response: componentResponse,
-    helmetContext: helmetContext,
+    helmetContext,
     log,
   };
 
@@ -507,7 +530,7 @@ function extractHeadElements(helmetContext: FilledContext) {
 
 async function renderToBufferedString(
   ReactApp: JSX.Element,
-  {log}: {log: Logger}
+  {log, nonce}: {log: Logger; nonce?: string}
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     const errorTimeout = setTimeout(() => {
@@ -517,6 +540,7 @@ async function renderToBufferedString(
     if (__WORKER__) {
       const deferred = defer();
       const readable = renderToReadableStream(ReactApp, {
+        nonce,
         onCompleteAll() {
           clearTimeout(errorTimeout);
           /**
@@ -540,6 +564,7 @@ async function renderToBufferedString(
       const writer = await createNodeWriter();
 
       const {pipe} = renderToPipeableStream(ReactApp, {
+        nonce,
         /**
          * When hydrating, we have to wait until `onCompleteAll` to avoid having
          * `template` and `script` tags inserted and rendered as part of the hydration response.
@@ -567,17 +592,12 @@ export default renderHydrogen;
 
 function startWritingHtmlToServerResponse(
   response: ServerResponse,
-  pipe: (r: ServerResponse) => void,
-  flushRSC: (w: ServerResponse) => void,
   error?: Error
 ) {
   if (!response.headersSent) {
     response.setHeader('Content-type', 'text/html');
     response.write('<!DOCTYPE html>');
   }
-
-  pipe(response);
-  flushRSC(response);
 
   if (error) {
     // This error was delayed until the headers were properly sent.
@@ -689,4 +709,49 @@ async function createNodeWriter() {
   const streamImport = __WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
+}
+
+function flightContainer({
+  init,
+  chunk,
+  nonce,
+}: {
+  chunk?: string;
+  init?: boolean;
+  nonce?: string;
+}) {
+  let script = `<script${nonce ? ` nonce="${nonce}"` : ''}>`;
+  if (init) {
+    script += 'var __flight=[];';
+  }
+
+  if (chunk) {
+    const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
+    script += `__flight.push(\`${normalizedChunk}\`)`;
+  }
+
+  return script + '</script>';
+}
+
+let cachedStreamingSupport: boolean;
+async function isStreamingSupported() {
+  if (cachedStreamingSupport === undefined) {
+    try {
+      const rs = new ReadableStream({
+        start(controller) {
+          controller.close();
+        },
+      });
+
+      // This will throw in CFW until streaming
+      // is supported. It works in Miniflare.
+      await new Response(rs).text();
+
+      cachedStreamingSupport = true;
+    } catch (_) {
+      cachedStreamingSupport = false;
+    }
+  }
+
+  return cachedStreamingSupport;
 }
