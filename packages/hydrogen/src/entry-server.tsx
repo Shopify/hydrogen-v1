@@ -325,9 +325,12 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig}) => {
             dev ? didError : undefined
           );
 
-          // Piping ends the response but RSC reader will always finish
-          // earlier because SSR is also reading RSC until it finishes.
-          pipe(response);
+          // Piping ends the response so let RSC go first.
+          // Generally, RSC reader should finish before SSR because
+          // the latter is also reading RSC until it finishes.
+          // However, this might not be the case in small apps that
+          // are written in SSR at once.
+          setTimeout(() => pipe(response), 0);
           bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) =>
             response.write(chunk)
           );
