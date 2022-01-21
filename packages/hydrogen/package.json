@@ -28,7 +28,7 @@
     "worker.js"
   ],
   "scripts": {
-    "predev": "rimraf ./dist ../dev/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
+    "predev": "rimraf ./dist ../../examples/template-hydrogen-default/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" \"dev-worker {@}/worker\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
     "dev-esnext": "tsc -w --incremental --p tsconfig.build.json",
     "dev-node": "tsc -w --incremental --p tsconfig.cjs.json",
