@@ -205,11 +205,13 @@ After Shipit has released your version, visit the [releases page on GitHub](http
 
 ## Releasing experimental versions
 
-To release an experimental version, follow the instructions above for releasing new versions, only use the `experimental` branch instead.
+Releasing an experimental version of Hydrogen to GitHub can be useful if you want to test the new version in existing apps.
 
-When you run `yarn bump-version`, be sure to select a pre-release that meets expectations (or enter a custom version).
+To release an experimental version, merge your changes into the `experimental` branch.
 
-After running the script, go to Shipit and find "Hydrogen Experimental." Run a deploy, and this should release your new version with the `experimental` tag on NPM.
+Then, run `yarn bump-version` locally while in the branch. Be sure to select a pre-release that contains `v.X.X-experimental.N` or enter a custom version.
+
+After running the script, go to Shipit and find "Hydrogen Experimental." Run a deploy against the commit containing your new version, and this should release your experimental version on NPM with the `experimental` tag.
 
 ## Testing changes in another project
 
