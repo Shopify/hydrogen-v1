@@ -35,7 +35,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -51,7 +51,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -115,7 +115,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -131,7 +131,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -195,7 +195,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -214,7 +214,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -277,7 +277,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -296,7 +296,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -359,7 +359,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -378,7 +378,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -441,7 +441,7 @@ describe('<Metafield />', () => {
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
