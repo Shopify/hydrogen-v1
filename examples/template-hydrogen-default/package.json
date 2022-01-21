@@ -1,7 +1,7 @@
 {
   "name": "template-hydrogen-default",
   "description": "This the default template for Hydrogen",
-  "version": "0.10.0-experimental.1",
+  "version": "0.10.0-experimental.2",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
-    "@shopify/hydrogen-cli": "^0.10.0-experimental.0",
+    "@shopify/hydrogen-cli": "^0.10.0-experimental.2",
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/stylelint-plugin": "^10.0.1",
     "@tailwindcss/typography": "^0.5.0",
