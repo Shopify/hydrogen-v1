@@ -1,6 +1,6 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
 import {SelectedVariantImage} from '../SelectedVariantImage.client';
 import {Image} from '../../Image';
@@ -9,7 +9,7 @@ describe('<SelectedVariantImage />', () => {
   it("renders <Image /> with the selected variant's image", () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <ProductProvider product={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage />
       </ProductProvider>
@@ -23,7 +23,7 @@ describe('<SelectedVariantImage />', () => {
   it('allows passthrough props', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <ProductProvider product={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage className="w-full" />
       </ProductProvider>
@@ -40,7 +40,7 @@ describe('<SelectedVariantImage />', () => {
     const selectedVariant = product.variants.edges[0].node;
     selectedVariant.image = undefined;
 
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <ProductProvider product={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage />
       </ProductProvider>

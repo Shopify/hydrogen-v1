@@ -2,13 +2,19 @@ import React, {Suspense, useState} from 'react';
 // @ts-ignore
 import {createRoot} from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
-import type {ClientHandler} from './types';
+import type {ClientHandler, ShopifyConfig} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
-import {HelmetProvider} from 'react-helmet-async';
-import {useServerResponse} from './framework/Hydration/Cache.client';
-import {ServerStateProvider, ServerStateRouter} from './client';
+import {useServerResponse} from './framework/Hydration/rsc';
+import {
+  ServerStateProvider,
+  ServerStateRouter,
+  ShopifyProvider,
+} from './client';
 
-const renderHydrogen: ClientHandler = async (ClientWrapper) => {
+const renderHydrogen: ClientHandler = async (
+  ClientWrapper,
+  {shopifyConfig}
+) => {
   const root = document.getElementById('root');
 
   if (!root) {
@@ -21,7 +27,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   createRoot(root, {hydrate: true}).render(
     <ErrorBoundary FallbackComponent={Error}>
       <Suspense fallback={null}>
-        <Content clientWrapper={ClientWrapper} />
+        <Content clientWrapper={ClientWrapper} shopifyConfig={shopifyConfig} />
       </Suspense>
     </ErrorBoundary>
   );
@@ -29,7 +35,13 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
 export default renderHydrogen;
 
-function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
+function Content({
+  clientWrapper: ClientWrapper,
+  shopifyConfig,
+}: {
+  clientWrapper: any;
+  shopifyConfig: ShopifyConfig;
+}) {
   const [serverState, setServerState] = useState({
     pathname: window.location.pathname,
     search: window.location.search,
@@ -37,18 +49,17 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
   const response = useServerResponse(serverState);
 
   return (
-    <ServerStateProvider
-      serverState={serverState}
-      setServerState={setServerState}
-    >
-      <HelmetProvider>
+    <ShopifyProvider shopifyConfig={shopifyConfig}>
+      <ServerStateProvider
+        serverState={serverState}
+        setServerState={setServerState}
+      >
         <BrowserRouter>
           <ServerStateRouter />
-          {/* @ts-ignore */}
-          <ClientWrapper>{response.read()}</ClientWrapper>
+          <ClientWrapper>{response.readRoot()}</ClientWrapper>
         </BrowserRouter>
-      </HelmetProvider>
-    </ServerStateProvider>
+      </ServerStateProvider>
+    </ShopifyProvider>
   );
 }
 

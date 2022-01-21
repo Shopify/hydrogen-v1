@@ -1,6 +1,6 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {Money} from '../../Money';
 import {ProductProvider} from '../../ProductProvider';
 import {ProductPrice} from '../ProductPrice.client';
@@ -8,7 +8,7 @@ import {ProductPrice} from '../ProductPrice.client';
 describe('<ProductPrice />', () => {
   it("renders <Money /> with the product's minimum regular price by default", () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductPrice />
       </ProductProvider>
@@ -21,7 +21,7 @@ describe('<ProductPrice />', () => {
 
   it("renders <Money /> with the product's maximum regular price when `valueType` is `max`", () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductPrice valueType="max" />
       </ProductProvider>
@@ -34,7 +34,7 @@ describe('<ProductPrice />', () => {
 
   it("renders <Money /> with the product's minimum compareAt price when the `priceType` is `compareAt`", () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductPrice priceType="compareAt" />
       </ProductProvider>
@@ -47,7 +47,7 @@ describe('<ProductPrice />', () => {
 
   it("renders <Money /> with the product's maximum compareAt price when `valueType` is `max` and `priceType` is `compareAt`", () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductPrice valueType="max" priceType="compareAt" />
       </ProductProvider>
@@ -63,7 +63,7 @@ describe('<ProductPrice />', () => {
     const children = ({amount}) => {
       return <p>{`The amount is ${amount}`}</p>;
     };
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductPrice>{children}</ProductPrice>
       </ProductProvider>
@@ -75,7 +75,7 @@ describe('<ProductPrice />', () => {
   });
 
   it('supports passthrough props', () => {
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={getProduct()} initialVariantId="">
         <ProductPrice className="emphasized" />
       </ProductProvider>

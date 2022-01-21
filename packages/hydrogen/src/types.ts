@@ -1,5 +1,4 @@
 import {ServerResponse} from 'http';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
 import {ApiRouteMatch} from './utilities/apiRoutes';
@@ -9,24 +8,19 @@ export type Renderer = (
   url: URL,
   options: {
     request: ServerComponentRequest;
-    context?: Record<string, any>;
-    isReactHydrationRequest?: boolean;
+    template: string;
+    nonce?: string;
     dev?: boolean;
   }
-) => Promise<
-  {
-    body: string;
-    componentResponse: ServerComponentResponse;
-  } & Record<string, any>
->;
+) => Promise<Response>;
 
 export type Streamer = (
   url: URL,
   options: {
-    context: any;
     request: ServerComponentRequest;
-    response: ServerResponse;
+    response?: ServerResponse;
     template: string;
+    nonce?: string;
     dev?: boolean;
   }
 ) => void;
@@ -34,9 +28,9 @@ export type Streamer = (
 export type Hydrator = (
   url: URL,
   options: {
-    context: any;
     request: ServerComponentRequest;
-    response: ServerResponse;
+    response?: ServerResponse;
+    isStreamable: boolean;
     dev?: boolean;
   }
 ) => void;
@@ -67,15 +61,22 @@ export type ImportGlobEagerOutput = Record<
 
 export type ServerHandlerConfig = {
   pages?: ImportGlobEagerOutput;
+  shopifyConfig: ShopifyConfig;
+};
+
+export type ClientHandlerConfig = {
+  shopifyConfig: ShopifyConfig;
 };
 
 export type ServerHandler = (
   App: any,
-  config?: ServerHandlerConfig,
-  hook?: Hook
+  config: ServerHandlerConfig
 ) => EntryServerHandler;
 
-export type ClientHandler = (App: any, hook?: Hook) => Promise<void>;
+export type ClientHandler = (
+  App: any,
+  config: ClientHandlerConfig
+) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];

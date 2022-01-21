@@ -1,5 +1,14 @@
 import {getTime} from '../../utilities/timing';
 
+let reqCounter = 0; // For debugging
+const generateId =
+  typeof crypto !== 'undefined' &&
+  // @ts-ignore
+  !!crypto.randomUUID
+    ? // @ts-ignore
+      () => crypto.randomUUID() as string
+    : () => `req${++reqCounter}`;
+
 /**
  * This augments the `Request` object from the Fetch API:
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Request
@@ -9,7 +18,10 @@ import {getTime} from '../../utilities/timing';
  */
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
+  public id: string;
   public time: number;
+  // CFW Request has a reserved 'context' property, use 'ctx' instead.
+  public ctx: {cache: Map<string, any>; [key: string]: any};
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -26,8 +38,11 @@ export class ServerComponentRequest extends Request {
             : undefined,
       });
     }
-    this.time = getTime();
 
+    this.time = getTime();
+    this.id = generateId();
+
+    this.ctx = {cache: new Map()};
     this.cookies = this.parseCookies();
   }
 

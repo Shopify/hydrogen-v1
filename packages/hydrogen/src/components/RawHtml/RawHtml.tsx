@@ -35,7 +35,7 @@ export function RawHtml<TTag extends ElementType>(
 
     // TODO: Re-enable when we find a way to support Worker runtime
     // return DOMPurify.sanitize(text, DOMPURIFY_CONFIG);
-  }, [string, unsanitized]);
+  }, [string, !!unsanitized]);
 
   return (
     <Wrapper

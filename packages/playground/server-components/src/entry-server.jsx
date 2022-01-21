@@ -1,6 +1,7 @@
 import App from './App.server';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLogger} from '@shopify/hydrogen';
+import shopifyConfig from '../shopify.config';
 
 setLogger({
   trace() {},
@@ -18,6 +19,4 @@ setLogger({
 
 const pages = import.meta.globEager('./pages/**/*.server.[jt]s[x]');
 
-export default renderHydrogen(App, {pages}, ({url}) => {
-  // Custom hook
-});
+export default renderHydrogen(App, {shopifyConfig, pages});

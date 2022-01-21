@@ -74,6 +74,18 @@ export function hydrogenMiddleware({
         globalThis.AbortController = AbortController;
       }
 
+      if (!globalThis.ReadableStream) {
+        const {ReadableStream, WritableStream, TransformStream} = await import(
+          'stream/web'
+        );
+
+        Object.assign(globalThis, {
+          ReadableStream,
+          WritableStream,
+          TransformStream,
+        });
+      }
+
       /**
        * Dynamically import ServerComponentResponse after the `fetch`
        * polyfill has loaded above.
