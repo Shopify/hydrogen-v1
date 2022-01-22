@@ -4,7 +4,7 @@ This hook returns an object with the following keys:
 
 | Key                    | Description                                                                                                              |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `shopify.config.js` locale.     |
+| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the  `defaultLocale` in the `shopify.config.js` file.     |
 | `currencyCode`         | The currency code from the `MoneyV2` object.                                                                             |
 | `currencyName`         | The name for the currency code, returned by `Intl.NumberFormat`.                                                         |
 | `currencySymbol`       | The currency symbol returned by `Intl.NumberFormat`.                                                                     |
