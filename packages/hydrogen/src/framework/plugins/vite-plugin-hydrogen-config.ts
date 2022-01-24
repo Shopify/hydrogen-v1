@@ -1,4 +1,13 @@
 import {Plugin} from 'vite';
+import {execSync} from 'child_process';
+
+// TODO: Remove this patch after this is fixed:
+// https://github.com/facebook/react/issues/23089
+const patchFilepath = require.resolve(
+  '@shopify/hydrogen/scripts/patch-react.js'
+);
+
+execSync('node ' + patchFilepath);
 
 export default () => {
   return {
