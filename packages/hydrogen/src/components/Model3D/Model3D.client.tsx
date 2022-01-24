@@ -10,7 +10,7 @@ import {
   Model3dSource,
   Image,
 } from '../../graphql/types/types';
-import {useScriptLoader} from '../../hooks/useScriptLoader/useScriptLoader';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
 import {Model3DFragment as Fragment} from '../../graphql/graphql-constants';
 import {Props} from '../types';
 
@@ -164,7 +164,7 @@ export function Model3D<TTag extends ElementType>(
     ...passthroughProps
   } = props;
 
-  const modelViewerLoadedStatus = useScriptLoader(
+  const modelViewerLoadedStatus = useLoadScript(
     'https://unpkg.com/@google/model-viewer@v1.8.0/dist/model-viewer.min.js',
     {
       module: true,

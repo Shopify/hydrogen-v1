@@ -2,7 +2,7 @@ import {loadScript} from '../../utilities/script_loader';
 import {useState, useEffect} from 'react';
 
 type LoadScriptParams = Parameters<typeof loadScript>;
-export function useScriptLoader(
+export function useLoadScript(
   url: LoadScriptParams[0],
   options?: LoadScriptParams[1]
 ) {

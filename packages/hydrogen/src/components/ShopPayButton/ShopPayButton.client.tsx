@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useShop} from '../../foundation/useShop';
-import {useScriptLoader} from '../../hooks/useScriptLoader/useScriptLoader';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
 
 export interface ShopPayButtonProps {
   /** An array of IDs of the variants to purchase with Shop Pay. */
@@ -29,7 +29,7 @@ const URL = 'https://cdn.shopify.com/shopifycloud/shop-js/v0.1/client.js';
 export function ShopPayButton({variantIds, className}: ShopPayButtonProps) {
   const [ids, setIds] = useState<string[]>([]);
   const {storeDomain} = useShop();
-  const shopPayLoadedStatus = useScriptLoader(URL);
+  const shopPayLoadedStatus = useLoadScript(URL);
 
   useEffect(() => {
     const ids = variantIds.reduce<string[]>((accumulator, gid) => {
