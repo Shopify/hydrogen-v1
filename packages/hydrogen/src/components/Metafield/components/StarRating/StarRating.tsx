@@ -7,6 +7,8 @@ export const STAR_FILLED = '★';
 
 export interface StarRatingProps {
   rating: Rating;
+  /** An HTML ElementType to be rendered as the base element wrapper. The default is 'div' */
+  as?: ElementType;
 }
 
 export function StarRating<TTag extends ElementType>(

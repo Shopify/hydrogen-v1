@@ -12,8 +12,8 @@ export interface UnitPriceProps {
   unitPriceMeasurement: UnitPriceMeasurement;
   /** A function that takes an object returned by the `UnitPrice` component and returns a `ReactNode`. */
   children?: ReactNode;
-  /** A `ReactNode` */
-  as?: ReactNode;
+  /** An HTML ElementType to be rendered as the base element wrapper. The default is 'div' */
+  as?: ElementType;
 }
 
 /**

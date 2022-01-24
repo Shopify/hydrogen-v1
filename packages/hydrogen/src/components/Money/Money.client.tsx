@@ -5,7 +5,7 @@ import {MoneyV2} from '../../graphql/types/types';
 import {MoneyFragment as Fragment} from '../../graphql/graphql-constants';
 
 export interface MoneyProps {
-  /** A `ReactNode` element. */
+  /** An HTML ElementType to be rendered as the base element wrapper. The default is 'div' */
   as?: ElementType;
   /** A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2). */
   money: MoneyV2;
