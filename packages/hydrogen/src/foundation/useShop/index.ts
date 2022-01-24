@@ -1,1 +1,1 @@
-export {useShop, setShopifyConfig} from './use-shop';
+export {useShop, setShop} from './use-shop';

@@ -1,6 +1,7 @@
 import React from 'react';
 import {createMount} from '@shopify/react-testing';
-import {DEFAULT_API_VERSION} from '../../foundation/constants';
+import {DEFAULT_API_VERSION, DEFAULT_LOCALE} from '../../foundation/constants';
+
 import {ShopifyConfig} from '../../types';
 import {ShopifyProvider} from '../../foundation/ShopifyProvider';
 
@@ -26,6 +27,7 @@ export const mountWithProviders = createMount<
 
 export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {
   return {
+    locale: config.defaultLocale ?? DEFAULT_LOCALE,
     storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
     storefrontToken: config.storefrontToken ?? 'abc123',
     graphqlApiVersion: config.graphqlApiVersion ?? DEFAULT_API_VERSION,

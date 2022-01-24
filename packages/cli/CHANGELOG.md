@@ -14,6 +14,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## 0.10.0-experimental.0 - 2022-01-21
 
 - Adds `preview` command for running Hydrogen apps in a local Worker runtime
+- Prevent CLI commands from unintentionally mutating the app code
+- Adds cache support for `preview` command
 
 ## 0.9.1 - 2022-01-20
 
