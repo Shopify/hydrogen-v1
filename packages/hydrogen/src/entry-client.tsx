@@ -10,6 +10,7 @@ import {
   ServerStateRouter,
   ShopifyProvider,
 } from './client';
+import {Boomerang} from './components/Boomerang';
 
 const renderHydrogen: ClientHandler = async (
   ClientWrapper,
@@ -59,6 +60,7 @@ function Content({
           <ServerStateRouter />
           <ClientWrapper>{response.readRoot()}</ClientWrapper>
         </BrowserRouter>
+        <Boomerang storeDomain={shopifyConfig.storeDomain} />
       </ServerStateProvider>
     </ShopifyProvider>
   );

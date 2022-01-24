@@ -66,6 +66,18 @@ export function useServerResponse(state: any) {
     response = createFromReadableStream(rscReader);
     rscReader = null;
   } else {
+    try {
+      /* @ts-ignore */
+      if (
+        window.BOOMR &&
+        window.BOOMR.plugins &&
+        window.BOOMR.plugins.Hydrogen
+      ) {
+        /* @ts-ignore */
+        BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
+      }
+    } catch (e) {}
+
     // Request a new flight response.
     response = createFromFetch(
       fetch('/react?state=' + encodeURIComponent(key))
