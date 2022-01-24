@@ -15,8 +15,6 @@ import {Model3DFragment as Fragment} from '../../graphql/graphql-constants';
 import {Props} from '../types';
 
 export interface Model3DProps {
-  /** A `ReactNode` element. */
-  as?: ReactNode;
   /** A function that takes an object return by the `useMoney` hook and returns a `ReactNode`. */
   children?: ReactNode;
   /** An object with the same fields as the [GraphQL fragment](#graphql-fragment). */
