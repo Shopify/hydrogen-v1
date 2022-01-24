@@ -10,3 +10,4 @@ export {useProductQuery} from './useProductQuery';
 export {useMultipleProductsQuery} from './useMultipleProductsQuery';
 export {useCollectionQuery} from './useCollectionQuery';
 export {useMultipleCollectionsQuery} from './useMultipleCollectionsQuery';
+export {useProductMediaQuery} from './useProductMediaQuery';

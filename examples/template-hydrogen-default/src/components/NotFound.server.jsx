@@ -29,10 +29,15 @@ function NotFoundHero() {
 }
 
 export default function NotFound({country = {isoCode: 'US'}}) {
-  const {data} = useMultipleProductsQuery({
-    numProducts: 3,
+  const {data, getNextPage} = useMultipleProductsQuery({
+    numProducts: 1,
     country: country.isoCode,
   });
+
+  const nextPageData = getNextPage();
+
+  console.log('nextPageData', nextPageData);
+
   const products = data ? flattenConnection(data.products) : [];
 
   return (

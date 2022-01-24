@@ -2,6 +2,8 @@
 import type {
   CountryCode,
   CustomGraphQLFragment,
+  ProductsQueryQuery,
+  Cursor,
 } from 'storefront-api-js-client-prototype';
 import {useSFAPIClient} from '../../foundation/useSFAPIClient';
 import {useShopQuery} from '../useShopQuery';
@@ -29,19 +31,63 @@ export function useMultipleProductsQuery({
   numProducts,
   customFragment,
   country,
+  cursor,
+  paginationDirection = 'next',
 }: {
   numProducts: number;
   country: CountryCode;
   customFragment?: CustomGraphQLFragment;
-}): any {
+  cursor?: string;
+  paginationDirection?: 'next' | 'previous';
+}) {
   const SFAPIClient = useSFAPIClient();
+
+  const cursorConfig: Cursor | undefined = cursor
+    ? {
+        value: cursor,
+        getNodesBeforeAfterCursor:
+          paginationDirection === 'next' ? 'afterCursor' : 'beforeCursor',
+      }
+    : undefined;
+
   const {gql, variables} = SFAPIClient.product.queryAllProducts({
     count: numProducts,
     queryConfig: DEFAULT_QUERY_CONFIG,
+    cursor: cursorConfig,
     customFragment,
     country,
   });
-  const data = useShopQuery({query: gql, variables});
-  console.log('in all products', data);
-  return data;
+  const {data} = useShopQuery<ProductsQueryQuery>({query: gql, variables});
+
+  const getNextPage = data.products.pageInfo.hasNextPage
+    ? () => {
+        const cursor = data.products.edges.at(-1)?.cursor;
+        return useMultipleProductsQuery({
+          numProducts,
+          customFragment,
+          country,
+          cursor,
+          paginationDirection: 'next',
+        });
+      }
+    : null;
+
+  const getPreviousPage = data.products.pageInfo.hasPreviousPage
+    ? () => {
+        const cursor = data.products.edges[0]?.cursor;
+        return useMultipleProductsQuery({
+          numProducts,
+          customFragment,
+          country,
+          cursor,
+          paginationDirection: 'previous',
+        });
+      }
+    : null;
+
+  return {
+    data,
+    getNextPage,
+    getPreviousPage,
+  };
 }
