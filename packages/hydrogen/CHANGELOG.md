@@ -11,6 +11,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Adopt upstream version of React Server Components. See [#498](https://github.com/Shopify/hydrogen/pull/498) for breaking changes.
 - The 'locale' option in shopify.config.js had been renamed to 'defaultLocale'
 - dx: rename `graphqlApiVersion` to `storefrontApiVersion` in `shopify.config.js`
+- Bump to latest version of React experimental to include [upstream context bugfix](https://github.com/facebook/react/issues/23089)
 
 ## 0.9.1 - 2022-01-20
 
