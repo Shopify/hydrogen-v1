@@ -3,7 +3,7 @@ import React from 'react';
 import {mount} from '@shopify/react-testing';
 import {ShopifyProvider} from '../ShopifyProvider';
 import {ShopifyContext} from '../ShopifyContext';
-import {DEFAULT_API_VERSION, DEFAULT_LOCALE} from '../../constants';
+import {DEFAULT_LOCALE} from '../../constants';
 import {SHOPIFY_CONFIG} from './fixtures';
 
 describe('<ShopifyProvider />', () => {
@@ -25,6 +25,7 @@ describe('<ShopifyProvider />', () => {
             defaultLocale: 'zh-TW',
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
+            storefrontApiVersion: 'unstable',
           }}
         >
           <Children />
@@ -42,6 +43,7 @@ describe('<ShopifyProvider />', () => {
           shopifyConfig={{
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
+            storefrontApiVersion: 'unstable',
           }}
         >
           <Children />
@@ -59,6 +61,7 @@ describe('<ShopifyProvider />', () => {
           shopifyConfig={{
             storeDomain: 'https://hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
+            storefrontApiVersion: 'unstable',
           }}
         >
           <Children />
@@ -72,13 +75,13 @@ describe('<ShopifyProvider />', () => {
       });
     });
 
-    it('contains graphqlApiVersion from shopifyConfig', () => {
+    it('contains storefrontApiVersion from shopifyConfig', () => {
       const provider = mount(
         <ShopifyProvider
           shopifyConfig={{
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
-            graphqlApiVersion: '2022-04',
+            storefrontApiVersion: '2022-04',
           }}
         >
           <Children />
@@ -87,26 +90,7 @@ describe('<ShopifyProvider />', () => {
 
       expect(provider).toContainReactComponent(ShopifyContext.Provider, {
         value: expect.objectContaining({
-          graphqlApiVersion: '2022-04',
-        }),
-      });
-    });
-
-    it('contains DEFAULT_API_VERSION as graphqlApiVersion when it is not specify in shopifyConfig', () => {
-      const provider = mount(
-        <ShopifyProvider
-          shopifyConfig={{
-            storeDomain: 'hydrogen-preview.myshopify.com',
-            storefrontToken: '1234',
-          }}
-        >
-          <Children />
-        </ShopifyProvider>
-      );
-
-      expect(provider).toContainReactComponent(ShopifyContext.Provider, {
-        value: expect.objectContaining({
-          graphqlApiVersion: DEFAULT_API_VERSION,
+          storefrontApiVersion: '2022-04',
         }),
       });
     });

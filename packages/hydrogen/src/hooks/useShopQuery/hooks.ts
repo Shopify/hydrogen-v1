@@ -96,11 +96,11 @@ function createShopRequest(body: string, locale?: string) {
   const {
     storeDomain,
     storefrontToken,
-    graphqlApiVersion,
+    storefrontApiVersion,
     locale: defaultLocale,
   } = useShop();
 
-  const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
+  const url = `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`;
 
   return {
     request: new Request(url, {
@@ -112,6 +112,6 @@ function createShopRequest(body: string, locale?: string) {
       },
       body,
     }),
-    key: [storeDomain, graphqlApiVersion, body, locale],
+    key: [storeDomain, storefrontApiVersion, body, locale],
   };
 }

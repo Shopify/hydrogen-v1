@@ -11,6 +11,7 @@
   },
   "scripts": {
     "dev-lib": "yarn workspace @shopify/hydrogen dev",
+    "dev-cli": "yarn workspace @shopify/hydrogen-cli dev",
     "dev-server": "yarn dev-hydrogen-template",
     "dev-hydrogen-template": "yarn workspace template-hydrogen-default dev",
     "build": "run-s build-lib build-dev build-cli build-lint",
