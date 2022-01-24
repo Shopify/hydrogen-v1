@@ -12,6 +12,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - The 'locale' option in shopify.config.js had been renamed to 'defaultLocale'
 - dx: rename `graphqlApiVersion` to `storefrontApiVersion` in `shopify.config.js`
 - Bump to latest version of React experimental to include [upstream context bugfix](https://github.com/facebook/react/issues/23089)
+- feature: improve API routes by allowing [strings and JS objects](https://github.com/Shopify/hydrogen/issues/476) to be returned.
+- fix: make sure that API routes [hot reload properly](https://github.com/Shopify/hydrogen/issues/497)
 
 ## 0.9.1 - 2022-01-20
 
