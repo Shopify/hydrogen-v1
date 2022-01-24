@@ -83,10 +83,10 @@ export async function app(env: Env<{name: string}>) {
   }
 
   workspace.install('react', {
-    version: '0.0.0-experimental-0cc724c77-20211125',
+    version: '0.0.0-experimental-529dc3ce8-20220124',
   });
   workspace.install('react-dom', {
-    version: '0.0.0-experimental-0cc724c77-20211125',
+    version: '0.0.0-experimental-529dc3ce8-20220124',
   });
   workspace.install('react-router-dom', {version: '^5.2.0'});
   workspace.install('@shopify/hydrogen');

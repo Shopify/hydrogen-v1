@@ -1,6 +1,6 @@
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
-import {createRoot} from 'react-dom';
+import {hydrateRoot} from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import type {ClientHandler, ShopifyConfig} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
@@ -24,7 +24,8 @@ const renderHydrogen: ClientHandler = async (
     return;
   }
 
-  createRoot(root, {hydrate: true}).render(
+  hydrateRoot(
+    root,
     <ErrorBoundary FallbackComponent={Error}>
       <Suspense fallback={null}>
         <Content clientWrapper={ClientWrapper} shopifyConfig={shopifyConfig} />
