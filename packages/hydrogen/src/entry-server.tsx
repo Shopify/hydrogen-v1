@@ -25,6 +25,7 @@ import {setShop} from './foundation/useShop';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
+import {getLocaleDirection, getLocaleLanguage} from './utilities/locale';
 
 // @ts-ignore
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
@@ -155,7 +156,13 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
     }
 
     const ReactAppSSR = (
-      <Html template={template} htmlAttrs={{lang: 'en'}}>
+      <Html
+        template={template}
+        htmlAttrs={{
+          lang: getLocaleLanguage(shopifyConfig.defaultLocale),
+          dir: getLocaleDirection(shopifyConfig.defaultLocale),
+        }}
+      >
         <RscConsumer />
       </Html>
     );
