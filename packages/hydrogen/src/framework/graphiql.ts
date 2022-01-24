@@ -1,8 +1,4 @@
-export function graphiqlHtml(
-  shop: string,
-  token: string,
-  apiVersion = 'unstable'
-) {
+export function graphiqlHtml(shop: string, token: string, apiVersion: string) {
   return `<html>
   <head>
     <title>Shopify Storefront API</title>
