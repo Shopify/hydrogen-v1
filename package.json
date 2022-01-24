@@ -10,6 +10,7 @@
     "node": ">=14"
   },
   "scripts": {
+    "postinstall": "node ./packages/hydrogen/scripts/patch-react.js",
     "dev-lib": "yarn workspace @shopify/hydrogen dev",
     "dev-server": "yarn dev-hydrogen-template",
     "dev-hydrogen-template": "yarn workspace template-hydrogen-default dev",

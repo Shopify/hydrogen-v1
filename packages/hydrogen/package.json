@@ -26,9 +26,11 @@
     "marker.js",
     "middleware.js",
     "middleware.d.ts",
-    "worker.js"
+    "worker.js",
+    "scripts"
   ],
   "scripts": {
+    "postinstall": "node ./scripts/patch-react.js",
     "predev": "rimraf ./dist ../../examples/template-hydrogen-default/node_modules/@shopify/hydrogen ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" \"dev-worker {@}/worker\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
     "dev-esnext": "tsc -w --incremental --p tsconfig.build.json",
