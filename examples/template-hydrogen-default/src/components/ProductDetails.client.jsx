@@ -2,7 +2,6 @@ import {Product, flattenConnection, useProduct} from '@shopify/hydrogen/client';
 
 import ProductOptions from './ProductOptions.client';
 import Gallery from './Gallery.client';
-import Seo from './Seo.client';
 import {
   BUTTON_PRIMARY_CLASSES,
   BUTTON_SECONDARY_CLASSES,
@@ -112,7 +111,6 @@ export default function ProductDetails({product}) {
 
   return (
     <>
-      <Seo product={product} />
       <Product product={product} initialVariantId={initialVariant.id}>
         <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-x-8 my-16">
           <div className="md:hidden mt-5 mb-8">

@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
 import NotFound from '../../components/NotFound.server';
+import PageSeo from '../../components/PageSeo.client';
 
 export default function Page({params}) {
   const {handle} = params;
@@ -16,6 +17,7 @@ export default function Page({params}) {
 
   return (
     <Layout>
+      <PageSeo page={page} />
       <h1 className="text-2xl font-bold">{page.title}</h1>
       <RawHtml string={page.body} className="prose mt-8" />
     </Layout>
@@ -24,9 +26,13 @@ export default function Page({params}) {
 
 const QUERY = gql`
   query PageDetails($handle: String!) {
-    pageByHandle(handle: $handle) {
+    page(handle: $handle) {
       title
       body
+      seo {
+        title
+        description
+      }
     }
   }
 `;
