@@ -6,27 +6,9 @@ import React, {
   useRef,
 } from 'react';
 import type {Reducer} from 'react';
+import {useSFAPIClient} from '../../foundation';
 import {flattenConnection} from '../../utilities';
-import {
-  CartCreateMutation,
-  CartCreateMutationVariables,
-} from './graphql/CartCreateMutation';
 import {Cart, CartAction, State} from './types';
-import {
-  CartLineAddMutation,
-  CartLineAddMutationVariables,
-} from './graphql/CartLineAddMutation';
-import {
-  CartLineAdd,
-  CartCreate,
-  CartLineRemove,
-  CartLineUpdate,
-  CartNoteUpdate,
-  CartBuyerIdentityUpdate,
-  CartAttributesUpdate,
-  CartDiscountCodesUpdate,
-  CartQuery,
-} from '../../graphql/graphql-constants';
 import {
   CartLineInput,
   CartInput,
@@ -36,34 +18,10 @@ import {
 } from '../../graphql/types/types';
 import {useCartFetch} from './hooks';
 import {CartContext} from './context';
-import {
-  CartLineRemoveMutationVariables,
-  CartLineRemoveMutation,
-} from './graphql/CartLineRemoveMutation';
-import {
-  CartLineUpdateMutationVariables,
-  CartLineUpdateMutation,
-} from './graphql/CartLineUpdateMutation';
-import {
-  CartNoteUpdateMutationVariables,
-  CartNoteUpdateMutation,
-} from './graphql/CartNoteUpdateMutation';
-import {
-  CartBuyerIdentityUpdateMutationVariables,
-  CartBuyerIdentityUpdateMutation,
-} from './graphql/CartBuyerIdentityUpdateMutation';
-import {
-  CartDiscountCodesUpdateMutationVariables,
-  CartDiscountCodesUpdateMutation,
-} from './graphql/CartDiscountCodesUpdateMutation';
-
-import {
-  CartAttributesUpdateMutationVariables,
-  CartAttributesUpdateMutation,
-} from './graphql/CartAttributesUpdateMutation';
+import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation';
+import {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation';
 import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
-import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
 import {useServerState} from '../../foundation/useServerState';
 import {ServerStateContextValue} from '../../foundation';
@@ -266,18 +224,21 @@ export function CartProvider({
     initialStatus
   );
   const fetchCart = useCartFetch();
+  const SFAPIClient = useSFAPIClient();
 
   const cartFetch = useCallback(
     async (cartId: string) => {
       dispatch({type: 'cartFetch'});
 
-      const {data} = await fetchCart<CartQueryQueryVariables, CartQueryQuery>({
-        query: CartQuery,
-        variables: {
-          id: cartId,
-          numCartLines,
-          country: countryCode,
-        },
+      const {gql, variables} = SFAPIClient.cart.queryCart({
+        id: cartId,
+        queryConfig: {numCartLines},
+        country: countryCode,
+      });
+
+      const {data} = await fetchCart({
+        query: gql,
+        variables,
       });
 
       if (!data?.cart) {
@@ -304,16 +265,15 @@ export function CartProvider({
         cart.buyerIdentity.countryCode = countryCode;
       }
 
-      const {data, error} = await fetchCart<
-        CartCreateMutationVariables,
-        CartCreateMutation
-      >({
-        query: CartCreate,
-        variables: {
-          input: cart,
-          numCartLines,
-          country: countryCode,
-        },
+      const {gql, variables} = SFAPIClient.cart.createCart({
+        input: cart,
+        queryConfig: {numCartLines},
+        country: countryCode,
+      });
+
+      const {data, error} = await fetchCart({
+        query: gql,
+        variables,
       });
 
       if (error) {
@@ -343,17 +303,17 @@ export function CartProvider({
       if (state.status === 'idle') {
         dispatch({type: 'addLineItem'});
         onLineAdd?.();
-        const {data, error} = await fetchCart<
-          CartLineAddMutationVariables,
-          CartLineAddMutation
-        >({
-          query: CartLineAdd,
-          variables: {
-            cartId: state.cart.id!,
-            lines: lines,
-            numCartLines,
-            country: countryCode,
-          },
+
+        const {gql, variables} = SFAPIClient.cart.addLineItems({
+          id: state.cart.id!,
+          lines,
+          queryConfig: {numCartLines},
+          country: countryCode,
+        });
+
+        const {data, error} = await fetchCart({
+          query: gql,
+          variables,
         });
 
         if (error) {
@@ -381,17 +341,16 @@ export function CartProvider({
 
         onLineRemove?.();
 
-        const {data, error} = await fetchCart<
-          CartLineRemoveMutationVariables,
-          CartLineRemoveMutation
-        >({
-          query: CartLineRemove,
-          variables: {
-            cartId: state.cart.id!,
-            lines: lines,
-            numCartLines,
-            country: countryCode,
-          },
+        const {gql, variables} = SFAPIClient.cart.removeLineItems({
+          id: state.cart.id!,
+          lineIds: lines,
+          queryConfig: {numCartLines},
+          country: countryCode,
+        });
+
+        const {data, error} = await fetchCart({
+          query: gql,
+          variables,
         });
 
         if (error) {
@@ -419,18 +378,18 @@ export function CartProvider({
 
         onLineUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartLineUpdateMutationVariables,
-          CartLineUpdateMutation
-        >({
-          query: CartLineUpdate,
-          variables: {
-            cartId: state.cart.id!,
-            lines: lines,
-            numCartLines,
-            country: countryCode,
-          },
+        const {gql, variables} = SFAPIClient.cart.updateLineItems({
+          id: state.cart.id!,
+          lines,
+          queryConfig: {numCartLines},
+          country: countryCode,
         });
+
+        const {data, error} = await fetchCart({
+          query: gql,
+          variables,
+        });
+
         if (error) {
           dispatch({
             type: 'reject',
@@ -456,17 +415,16 @@ export function CartProvider({
 
         onNoteUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartNoteUpdateMutationVariables,
-          CartNoteUpdateMutation
-        >({
-          query: CartNoteUpdate,
-          variables: {
-            cartId: state.cart.id!,
-            note: note,
-            numCartLines,
-            country: countryCode,
-          },
+        const {gql, variables} = SFAPIClient.cart.updateNote({
+          id: state.cart.id!,
+          note: note ?? '',
+          queryConfig: {numCartLines},
+          country: countryCode,
+        });
+
+        const {data, error} = await fetchCart({
+          query: gql,
+          variables,
         });
 
         if (error) {
@@ -494,17 +452,16 @@ export function CartProvider({
 
         onBuyerIdentityUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartBuyerIdentityUpdateMutationVariables,
-          CartBuyerIdentityUpdateMutation
-        >({
-          query: CartBuyerIdentityUpdate,
-          variables: {
-            cartId: state.cart.id!,
-            buyerIdentity,
-            numCartLines,
-            country: countryCode,
-          },
+        const {gql, variables} = SFAPIClient.cart.updateBuyerIdentity({
+          id: state.cart.id!,
+          buyerIdentity,
+          queryConfig: {numCartLines},
+          country: countryCode,
+        });
+
+        const {data, error} = await fetchCart({
+          query: gql,
+          variables,
         });
 
         if (error) {
@@ -532,17 +489,16 @@ export function CartProvider({
 
         onAttributesUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartAttributesUpdateMutationVariables,
-          CartAttributesUpdateMutation
-        >({
-          query: CartAttributesUpdate,
-          variables: {
-            cartId: state.cart.id!,
-            attributes: attributes,
-            numCartLines,
-            country: countryCode,
-          },
+        const {gql, variables} = SFAPIClient.cart.updateAttributes({
+          id: state.cart.id!,
+          attributes,
+          queryConfig: {numCartLines},
+          country: countryCode,
+        });
+
+        const {data, error} = await fetchCart({
+          query: gql,
+          variables,
         });
 
         if (error) {
@@ -573,17 +529,19 @@ export function CartProvider({
 
         onDiscountCodesUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartDiscountCodesUpdateMutationVariables,
-          CartDiscountCodesUpdateMutation
-        >({
-          query: CartDiscountCodesUpdate,
-          variables: {
-            cartId: state.cart.id!,
-            discountCodes: discountCodes,
-            numCartLines,
-            country: countryCode,
-          },
+        const discountCodeArray =
+          typeof discountCodes === 'string' ? [discountCodes] : discountCodes;
+
+        const {gql, variables} = SFAPIClient.cart.updateDiscountCodes({
+          id: state.cart.id!,
+          discountCodes: discountCodeArray ?? [],
+          queryConfig: {numCartLines},
+          country: countryCode,
+        });
+
+        const {data, error} = await fetchCart({
+          query: gql,
+          variables,
         });
 
         if (error) {

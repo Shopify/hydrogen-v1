@@ -1,25 +1,19 @@
 import React, {useState} from 'react';
-import {useShop} from '../../foundation';
+import {useShop, useSFAPIClient} from '../../foundation';
 import {flattenConnection} from '../../utilities';
-import {CartInput} from '../../graphql/types/types';
-import {CartCreate} from '../../graphql/graphql-constants';
-import {
-  CartCreateMutation,
-  CartCreateMutationVariables,
-} from './graphql/CartCreateMutation';
-import {Cart} from './types';
+import {CartInput, Cart} from '../../graphql/types/types';
 
 export function useCartFetch() {
   const {storeDomain, graphqlApiVersion, storefrontToken} = useShop();
 
   return React.useCallback(
-    <T, K>({
+    ({
       query,
       variables,
     }: {
       query: string;
-      variables: T;
-    }): Promise<{data: K | undefined; error: any}> => {
+      variables: Record<string, any>;
+    }): Promise<{data: any | undefined; error: any}> => {
       return fetch(
         `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`,
         {
@@ -55,14 +49,13 @@ export function useInstantCheckout() {
 
   const createInstantCheckout = React.useCallback(
     async (cartInput: CartInput) => {
-      const {data, error} = await fetch<
-        CartCreateMutationVariables,
-        CartCreateMutation
-      >({
-        query: CartCreate,
-        variables: {
-          input: cartInput,
-        },
+      const SFAPIClient = useSFAPIClient();
+
+      const {gql, variables} = SFAPIClient.cart.createCart({input: cartInput});
+
+      const {data, error} = await fetch({
+        query: gql,
+        variables,
       });
 
       if (error) {

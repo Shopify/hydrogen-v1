@@ -1,9 +1,4 @@
-import {
-  useShopQuery,
-  ProductProviderFragment,
-  flattenConnection,
-} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {useMultipleProductsQuery, flattenConnection} from '@shopify/hydrogen';
 
 import Layout from './Layout.server';
 import Button from './Button.client';
@@ -34,18 +29,9 @@ function NotFoundHero() {
 }
 
 export default function NotFound({country = {isoCode: 'US'}}) {
-  const {data} = useShopQuery({
-    query: QUERY,
-    variables: {
-      country: country.isoCode,
-      numProductMetafields: 0,
-      numProductVariants: 250,
-      numProductMedia: 0,
-      numProductVariantMetafields: 0,
-      numProductVariantSellingPlanAllocations: 0,
-      numProductSellingPlanGroups: 0,
-      numProductSellingPlans: 0,
-    },
+  const {data} = useMultipleProductsQuery({
+    numProducts: 3,
+    country: country.isoCode,
   });
   const products = data ? flattenConnection(data.products) : [];
 
@@ -67,27 +53,3 @@ export default function NotFound({country = {isoCode: 'US'}}) {
     </Layout>
   );
 }
-
-const QUERY = gql`
-  query NotFoundProductDetails(
-    $country: CountryCode
-    $includeReferenceMetafieldDetails: Boolean = false
-    $numProductMetafields: Int!
-    $numProductVariants: Int!
-    $numProductMedia: Int!
-    $numProductVariantMetafields: Int!
-    $numProductVariantSellingPlanAllocations: Int!
-    $numProductSellingPlanGroups: Int!
-    $numProductSellingPlans: Int!
-  ) @inContext(country: $country) {
-    products(first: 3) {
-      edges {
-        node {
-          ...ProductProviderFragment
-        }
-      }
-    }
-  }
-
-  ${ProductProviderFragment}
-`;

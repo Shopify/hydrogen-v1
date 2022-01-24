@@ -1,0 +1,1 @@
+export {useMultipleCollectionsQuery} from './hooks';

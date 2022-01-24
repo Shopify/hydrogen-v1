@@ -1,10 +1,21 @@
-import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
+import {flattenConnection, useMultipleProductsQuery} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 export default function Sitemap({response}) {
   response.doNotStream();
 
-  const {data} = useShopQuery({query: QUERY});
+  const customFragment = gql`
+    fragment ProductFragment on Product {
+      updatedAt
+      handle
+      featuredImage {
+        url
+        altText
+      }
+    }
+  `;
+
+  const {data} = useMultipleProductsQuery({numProducts: 100, customFragment});
 
   response.headers.set('content-type', 'application/xml');
 
@@ -28,10 +39,10 @@ function shopSitemap(data) {
             <changefreq>daily</changefreq>
             <image:image>
               <image:loc>
-                ${product?.images?.edges?.[0]?.node?.url}
+                ${product?.featuredImage?.url}
               </image:loc>
               <image:title>
-                ${product?.images?.edges?.[0]?.node?.altText ?? ''}
+                ${product?.featuredImage?.altText ?? ''}
               </image:title>
               <image:caption />
             </image:image>
@@ -41,24 +52,3 @@ function shopSitemap(data) {
         .join('')}
     </urlset>`;
 }
-
-const QUERY = gql`
-  query Products {
-    products(first: 100) {
-      edges {
-        node {
-          updatedAt
-          handle
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;

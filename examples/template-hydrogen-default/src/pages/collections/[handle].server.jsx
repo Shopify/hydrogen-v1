@@ -1,11 +1,8 @@
 import {
-  MediaFileFragment,
-  ProductProviderFragment,
-  useShopQuery,
+  useCollectionQuery,
   flattenConnection,
   RawHtml,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
 import Layout from '../../components/Layout.server';
@@ -18,13 +15,10 @@ export default function Collection({
   params,
 }) {
   const {handle} = params;
-  const {data} = useShopQuery({
-    query: QUERY,
-    variables: {
-      handle,
-      country: country.isoCode,
-      numProducts: collectionProductCount,
-    },
+  const {data} = useCollectionQuery({
+    handle,
+    country: country.isoCode,
+    numProducts: collectionProductCount,
   });
 
   if (data?.collection == null) {
@@ -59,40 +53,3 @@ export default function Collection({
     </Layout>
   );
 }
-
-const QUERY = gql`
-  query CollectionDetails(
-    $handle: String!
-    $country: CountryCode
-    $numProducts: Int!
-    $includeReferenceMetafieldDetails: Boolean = false
-    $numProductMetafields: Int = 0
-    $numProductVariants: Int = 250
-    $numProductMedia: Int = 6
-    $numProductVariantMetafields: Int = 0
-    $numProductVariantSellingPlanAllocations: Int = 0
-    $numProductSellingPlanGroups: Int = 0
-    $numProductSellingPlans: Int = 0
-  ) @inContext(country: $country) {
-    collection(handle: $handle) {
-      id
-      title
-      descriptionHtml
-
-      products(first: $numProducts) {
-        edges {
-          node {
-            vendor
-            ...ProductProviderFragment
-          }
-        }
-        pageInfo {
-          hasNextPage
-        }
-      }
-    }
-  }
-
-  ${MediaFileFragment}
-  ${ProductProviderFragment}
-`;

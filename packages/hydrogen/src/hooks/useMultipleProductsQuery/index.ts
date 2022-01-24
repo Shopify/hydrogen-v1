@@ -1,0 +1,1 @@
+export {useMultipleProductsQuery} from './hooks';

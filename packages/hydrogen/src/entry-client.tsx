@@ -10,6 +10,7 @@ import {
   ServerStateRouter,
   ShopifyProvider,
 } from './client';
+import {setSFAPIClient} from './foundation/useSFAPIClient';
 
 const renderHydrogen: ClientHandler = async (
   ClientWrapper,
@@ -23,6 +24,8 @@ const renderHydrogen: ClientHandler = async (
     );
     return;
   }
+
+  setSFAPIClient(shopifyConfig);
 
   createRoot(root, {hydrate: true}).render(
     <ErrorBoundary FallbackComponent={Error}>

@@ -22,6 +22,7 @@ import {ServerComponentRequest} from './framework/Hydration/ServerComponentReque
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
 import {setShop} from './foundation/useShop';
+import {setSFAPIClient} from './foundation/useSFAPIClient';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
@@ -47,6 +48,7 @@ const STREAM_ABORT_TIMEOUT_MS = 3000;
 
 const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
   setShop(shopifyConfig);
+  setSFAPIClient(shopifyConfig);
 
   /**
    * The render function is responsible for turning the provided `App` into an HTML string,

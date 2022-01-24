@@ -10,7 +10,7 @@ export default function Seo({shopName, product}) {
   if (product) {
     const variant = product.variants.edges[0].node;
     const price = variant.priceV2;
-    const image = product.images.edges[0]?.node;
+    const image = product.featuredImage;
     const title = product.seo?.title ?? product.title;
     const description = product.seo?.description ?? product.description;
 
