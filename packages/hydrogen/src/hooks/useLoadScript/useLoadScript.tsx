@@ -1,11 +1,15 @@
-import {loadScript} from '../../utilities/script_loader';
+import {loadScript} from '../../utilities/load_script';
 import {useState, useEffect} from 'react';
 
 type LoadScriptParams = Parameters<typeof loadScript>;
+
+/**
+ * A client-only hook for loading an external script tag
+ */
 export function useLoadScript(
   url: LoadScriptParams[0],
   options?: LoadScriptParams[1]
-) {
+): ScriptState {
   const [status, setStatus] = useState<ScriptState>('loading');
 
   useEffect(() => {
