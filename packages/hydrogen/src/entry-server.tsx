@@ -338,12 +338,14 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
             dev ? didError : undefined
           );
 
+          setTimeout(() => {
+            log.trace('node pipe response');
+            pipe(response);
+          }, 0);
+
           bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) => {
             log.trace('rsc chunk');
             return response.write(chunk);
-          }).then(() => {
-            log.trace('node pipe response');
-            pipe(response);
           });
         },
         async onCompleteAll() {
