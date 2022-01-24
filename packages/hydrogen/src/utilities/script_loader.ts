@@ -19,7 +19,10 @@ export function loadScript(src: string, options?: {module?: boolean}) {
     script.onerror = () => {
       reject(false);
     };
-    document.body.appendChild(script);
+
+    setTimeout(() => {
+      document.body.appendChild(script);
+    }, 0);
   });
 
   SCRIPTS_LOADED[src] = promise;

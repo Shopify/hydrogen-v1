@@ -67,10 +67,12 @@ export function useServerResponse(state: any) {
     rscReader = null;
   } else {
     try {
-      /* @ts-ignore */
       if (
+        /* @ts-ignore */
         window.BOOMR &&
+        /* @ts-ignore */
         window.BOOMR.plugins &&
+        /* @ts-ignore */
         window.BOOMR.plugins.Hydrogen
       ) {
         /* @ts-ignore */
