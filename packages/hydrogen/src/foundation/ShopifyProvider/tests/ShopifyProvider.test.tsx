@@ -3,7 +3,7 @@ import React from 'react';
 import {mount} from '@shopify/react-testing';
 import {ShopifyProvider} from '../ShopifyProvider';
 import {ShopifyContext} from '../ShopifyContext';
-import {DEFAULT_API_VERSION, DEFAULT_LOCALE} from '../../constants';
+import {DEFAULT_LOCALE} from '../../constants';
 import {SHOPIFY_CONFIG} from './fixtures';
 
 describe('<ShopifyProvider />', () => {
@@ -25,6 +25,7 @@ describe('<ShopifyProvider />', () => {
             defaultLocale: 'zh-TW',
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
+            storefrontApiVersion: 'unstable',
           }}
         >
           <Children />
@@ -42,6 +43,7 @@ describe('<ShopifyProvider />', () => {
           shopifyConfig={{
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
+            storefrontApiVersion: 'unstable',
           }}
         >
           <Children />
@@ -59,6 +61,7 @@ describe('<ShopifyProvider />', () => {
           shopifyConfig={{
             storeDomain: 'https://hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
+            storefrontApiVersion: 'unstable',
           }}
         >
           <Children />

@@ -1,9 +1,7 @@
-import {DEFAULT_API_VERSION} from '../foundation/constants';
-
 export function graphiqlHtml(
   shop: string,
   token: string,
-  apiVersion = DEFAULT_API_VERSION
+  apiVersion = 'unstable'
 ) {
   return `<html>
   <head>
