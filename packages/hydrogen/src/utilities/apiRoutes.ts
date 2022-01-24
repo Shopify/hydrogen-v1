@@ -3,7 +3,8 @@ import {matchPath} from './matchPath';
 import {Logger, logServerResponse} from '../utilities/log/log';
 import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 
-let cachedRoutes: Array<HydrogenApiRoute> = [];
+let memoizedRoutes: Array<HydrogenApiRoute> = [];
+let memoizedPages: ImportGlobEagerOutput = {};
 
 type RouteParams = Record<string, string>;
 type RequestOptions = {
@@ -12,7 +13,7 @@ type RequestOptions = {
 type ResourceGetter = (
   request: Request,
   requestOptions: RequestOptions
-) => Promise<Response>;
+) => Promise<Response | Object | String>;
 
 interface HydrogenApiRoute {
   path: string;
@@ -30,7 +31,7 @@ export function getApiRoutesFromPages(
   pages: ImportGlobEagerOutput | undefined,
   topLevelPath = '*'
 ): Array<HydrogenApiRoute> {
-  if (cachedRoutes?.length || !pages) return cachedRoutes;
+  if (!pages || memoizedPages === pages) return memoizedRoutes;
 
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
@@ -71,12 +72,14 @@ export function getApiRoutesFromPages(
       };
     });
 
-  cachedRoutes = [
+  memoizedRoutes = [
     ...routes.filter((route) => !route.path.includes(':')),
     ...routes.filter((route) => route.path.includes(':')),
   ];
 
-  return cachedRoutes;
+  memoizedPages = pages;
+
+  return memoizedRoutes;
 }
 
 export function getApiRouteFromURL(
@@ -112,6 +115,18 @@ export async function renderApiRoute(
 
   try {
     response = await route.resource(request, {params: route.params});
+
+    if (!(response instanceof Response)) {
+      if (typeof response === 'string' || response instanceof String) {
+        response = new Response(response as string);
+      } else if (typeof response === 'object') {
+        response = new Response(JSON.stringify(response), {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    }
   } catch (e) {
     log.error(e);
     response = new Response('Error processing: ' + request.url, {status: 500});

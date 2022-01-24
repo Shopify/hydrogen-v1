@@ -152,6 +152,22 @@ it('should return 404 on unknown method', async () => {
   expect(text).toBe('Comment method not found');
 });
 
+it('should support simple strings returned from API routes', async () => {
+  const response = await page.request.get(url + '/string');
+  const text = await response.text();
+
+  expect(response.status()).toBe(200);
+  expect(text).toBe('some string');
+});
+
+it('should support objects as json returned from API routes', async () => {
+  const response = await page.request.get(url + '/json');
+  const json = await response.json();
+
+  expect(response.status()).toBe(200);
+  expect(json).toEqual({some: 'json'});
+});
+
 it('supports form request on API routes', async () => {
   await page.goto(url + '/form');
   await page.type('#fname', 'sometext');
