@@ -91,25 +91,6 @@ describe('<ShopifyProvider />', () => {
         }),
       });
     });
-
-    it('contains DEFAULT_API_VERSION as storefrontApiVersion when it is not specify in shopifyConfig', () => {
-      const provider = mount(
-        <ShopifyProvider
-          shopifyConfig={{
-            storeDomain: 'hydrogen-preview.myshopify.com',
-            storefrontToken: '1234',
-          }}
-        >
-          <Children />
-        </ShopifyProvider>
-      );
-
-      expect(provider).toContainReactComponent(ShopifyContext.Provider, {
-        value: expect.objectContaining({
-          storefrontApiVersion: DEFAULT_API_VERSION,
-        }),
-      });
-    });
   });
 });
 

@@ -1,5 +1,5 @@
 import {createContext} from 'react';
-import {DEFAULT_API_VERSION, DEFAULT_LOCALE} from '../constants';
+import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig} from '../../types';
 
@@ -13,7 +13,6 @@ export function makeShopifyContext(
     locale: shopifyConfig.defaultLocale ?? DEFAULT_LOCALE,
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
-    storefrontApiVersion:
-      shopifyConfig.storefrontApiVersion ?? DEFAULT_API_VERSION,
+    storefrontApiVersion: shopifyConfig.storefrontApiVersion,
   };
 }
