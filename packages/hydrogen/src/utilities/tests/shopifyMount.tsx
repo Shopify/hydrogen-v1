@@ -1,6 +1,6 @@
 import React from 'react';
 import {createMount} from '@shopify/react-testing';
-import {DEFAULT_API_VERSION, DEFAULT_LOCALE} from '../../foundation/constants';
+import {DEFAULT_LOCALE} from '../../foundation/constants';
 
 import {ShopifyConfig} from '../../types';
 import {ShopifyProvider} from '../../foundation/ShopifyProvider';
@@ -30,6 +30,6 @@ export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {
     locale: config.defaultLocale ?? DEFAULT_LOCALE,
     storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
     storefrontToken: config.storefrontToken ?? 'abc123',
-    graphqlApiVersion: config.graphqlApiVersion ?? DEFAULT_API_VERSION,
+    storefrontApiVersion: config.storefrontApiVersion ?? 'unstable',
   };
 }

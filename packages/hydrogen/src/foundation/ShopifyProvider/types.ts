@@ -4,7 +4,7 @@ export type ShopifyContextValue = {
   locale: string;
   storeDomain: ShopifyConfig['storeDomain'];
   storefrontToken: ShopifyConfig['storefrontToken'];
-  graphqlApiVersion: string;
+  storefrontApiVersion: string;
 };
 
 export type ShopifyProviderProps = {
