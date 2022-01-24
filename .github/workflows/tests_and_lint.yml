@@ -25,7 +25,8 @@ jobs:
           cache: 'yarn'
 
       - name: Install the packages
-        run: yarn install --frozen-lockfile --ignore-engines
+        # Bump yarn timeout to fix an issue with Windows CI downloading the Playwright/Chromium stuff
+        run: yarn install --frozen-lockfile --ignore-engines --network-timeout 36000
 
       - name: Build the code
         run: yarn build
