@@ -1,6 +1,6 @@
 {
   "name": "@shopify/hydrogen-cli",
-  "version": "0.10.0-experimental.3",
+  "version": "0.10.0-experimental.4",
   "description": "Command line interface for hydrogen",
   "license": "MIT",
   "engines": {
