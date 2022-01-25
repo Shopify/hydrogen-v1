@@ -33,8 +33,8 @@ export class MissingDependencyError extends HelpfulError {
       content: () => `\`${dep}\` is required to use this command.`,
       suggestion: () =>
         [
-          `- Run \`yarn add ${dep}\` to install the missing dependency.`,
           `- Run \`yarn\` to install all dependencies listed in the package.json.`,
+          `- Run \`yarn add ${dep}\` to install the missing dependency.`,
         ].join(`\n`),
     });
   }
