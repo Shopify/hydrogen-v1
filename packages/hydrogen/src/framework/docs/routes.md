@@ -2,7 +2,7 @@ The Hydrogen framework uses a file-based routing system. This guide provides an 
 
 ## How routes work
 
-All components added to `src/pages` directory are registered as routes in `App.server.jsx`. Any filenames with brackets like `[handle]` are converted to a React Router parameter called `:handle`.
+All components added to the `src/pages` directory are registered as routes in `App.server.jsx`. Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
 
 ### Example
 
@@ -18,7 +18,7 @@ You have following components in your `src/pages` directory:
 
 {% endcodeblock %}
 
-The routes are registered in `App.server.jsx` and React Router converts `[handle]` to `:handle`:
+The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` to `:handle`:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
@@ -30,14 +30,15 @@ The routes are registered in `App.server.jsx` and React Router converts `[handle
 
 {% endcodeblock %}
 
-To obtain the `handle` from React Router, add the following code to `App.server.jsx`:
+The `handle` property is passed directly to the root server component `/pages/products/[handle].server.jsx`:
 
-{% codeblock file, filename: 'App.server.jsx' %}
+{% codeblock file, filename: '[handle].server.jsx' %}
 
 ```jsx
-import {useParams} from 'react-router-dom';
-
-const {handle} = useParams();
+export default function Product({params}) {
+  const {handle} = params;
+  return <div>{handle}</div>;
+}
 ```
 
 {% endcodeblock %}
@@ -63,12 +64,12 @@ You can extend dynamic routes to catch all paths by adding an ellipsis (...) ins
 
 The following example shows how to obtain catch all routes data using `location.pathname`:
 
-{% codeblock file, filename: 'App.server.jsx' %}
+{% codeblock file, filename: '[...handle].server.jsx' %}
 
 ```jsx
-import {useLocation} from 'react-router-dom';
-
-const {pathname} = useLocation();
+export default function({request}) {
+  const { pathname } = new URL(request.url);)
+}
 ```
 
 {% endcodeblock %}
@@ -172,14 +173,13 @@ Your `App.server.jsx` and `entry-server.jsx` files should look similar to the fo
 
 ```jsx
 import renderHydrogen from '@shopify/hydrogen/entry-server';
+import shopifyConfig from '../shopify.config';
 
 import App from './App.server';
 
 const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {pages}, () => {
-  // Custom hook
-});
+export default renderHydrogen(App, {shopifyConfig, pages});
 ```
 
 {% endcodeblock %}
@@ -187,33 +187,26 @@ export default renderHydrogen(App, {pages}, () => {
 {% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
-import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
+import {DefaultRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-
-import shopifyConfig from '../shopify.config';
 
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
-import CartProvider from './components/CartProvider.client';
+import AppClient from './App.client';
 import LoadingFallback from './components/LoadingFallback';
 
 export default function App({log, pages, ...serverState}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
-        <CartProvider>
-          <DefaultSeo />
-          <Switch>
-            <DefaultRoutes
-              pages={pages}
-              serverState={serverState}
-              log={log}
-              fallback={<NotFound />}
-            />
-          </Switch>
-        </CartProvider>
-      </ShopifyServerProvider>
+      <AppClient helmetContext={serverState.helmetContext}>
+        <DefaultSeo />
+        <DefaultRoutes
+          pages={pages}
+          serverState={serverState}
+          log={log}
+          fallback={<NotFound />}
+        />
+      </AppClient>
     </Suspense>
   );
 }
