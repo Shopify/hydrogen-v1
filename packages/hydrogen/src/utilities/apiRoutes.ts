@@ -127,6 +127,15 @@ export async function renderApiRoute(
         });
       }
     }
+
+    switch (response.status) {
+      case 200:
+        response = new Response(response.body, {status: 200, statusText: 'OK'});
+
+      case 418:
+        response = new Response(response.body, {status: 418, statusText: 'I\'m a Teapot'});
+    }
+
   } catch (e) {
     log.error(e);
     response = new Response('Error processing: ' + request.url, {status: 500});

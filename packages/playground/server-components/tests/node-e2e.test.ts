@@ -161,3 +161,25 @@ it.skip('supports form request on API routes', async () => {
   await page.click('#fsubmit');
   expect(await page.textContent('*')).toContain('fname=sometext');
 });
+
+it('should return 204 No Content', async () => {
+  const response = await page.request.get(viteTestUrl + '/status',);
+
+  expect(response.status()).toBe(204);
+  expect(response.statusText()).toBe('No Content');
+});
+
+it('should return 418 status Teapot', async () => {
+  const response = await page.request.get(viteTestUrl + '/status/418');
+
+  expect(response.status()).toBe(418);
+  expect(response.statusText()).toBe('I\'m a Teapot');
+});
+
+it('should return 400 status Bad Request', async () => {
+  const response = await page.request.get(viteTestUrl + '/status/400');
+
+
+  expect(response.status()).toBe(400);
+  expect(response.statusText()).toBe('Bad Request');
+});
