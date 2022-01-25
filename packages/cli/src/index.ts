@@ -1,6 +1,6 @@
 import debug from 'debug';
 
-import {parseCliArguments, InputError} from './utilities';
+import {parseCliArguments, logError} from './utilities';
 import {Cli} from './ui';
 import {Workspace} from './workspace';
 import {Fs} from './fs';
@@ -16,17 +16,15 @@ const logger = debug('hydrogen');
   const config = (await loadConfig('hydrogen', {root})) || {};
   const workspace = new Workspace({root, ...config});
   const fs = new Fs(root);
-
-  if (!inputs.command) {
-    ui.say(`Missing command input`, {error: true});
-
-    throw new InputError();
-  }
-
   const command = new Command(inputs.command);
+  const env = {ui, fs, workspace, logger};
 
-  await command.load();
-  await command.run({ui, fs, workspace, logger});
+  try {
+    await command.load();
+    await command.run(env);
+  } catch (error) {
+    logError(error, env);
+  }
 })().catch((error) => {
   logger(error);
   process.exitCode = 1;
