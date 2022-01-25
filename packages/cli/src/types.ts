@@ -41,3 +41,5 @@ export interface CheckResult {
   /** optional function to correct the problems in the current project **/
   fix?: (env: Env) => void;
 }
+
+export type Loggable = (env: Env) => string;
