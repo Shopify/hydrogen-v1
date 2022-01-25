@@ -2,7 +2,7 @@ The Hydrogen framework uses a file-based routing system. This guide provides an 
 
 ## How routes work
 
-All components added to `src/pages` directory are registered as routes in `App.server.jsx`. Any filenames with brackets like `[handle]` are converted to a route parameter called `:handle`.
+All components added to the `src/pages` directory are registered as routes in `App.server.jsx`. Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
 
 ### Example
 
