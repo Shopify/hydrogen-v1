@@ -1,6 +1,6 @@
 ## Return value
 
-The `useLoadScript` hook returns a string of three potential values, that allow you to understand the state of the external script you are loading:
+The `useLoadScript` hook returns the following values that allow you to understand the state of the external script you are loading:
 
 | Value     | Description                                                                                                                              |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
