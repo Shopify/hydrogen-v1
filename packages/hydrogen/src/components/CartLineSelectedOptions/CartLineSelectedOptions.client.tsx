@@ -15,6 +15,10 @@ interface SelectedOptionsRenderProps {
  */
 export function CartLineSelectedOptions<TTag extends ElementType>(
   props: Props<TTag> & {
+    /** A `ReactNode` element. Valid values: `ul` or `undefined`. If `ul`, then each child will
+     * be wrapped with a `li` element.
+     */
+    as?: ElementType;
     /** A function that takes an object as an argument and returns a `ReactNode`. */
     children: (props: SelectedOptionsRenderProps) => ReactElement;
   }
