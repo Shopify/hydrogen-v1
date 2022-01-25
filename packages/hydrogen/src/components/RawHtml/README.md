@@ -19,10 +19,11 @@ export function MyComponent() {
 
 ## Props
 
-| Name         | Type                 | Description                                                              |
-| ------------ | -------------------- | ------------------------------------------------------------------------ |
-| string       | <code>string</code>  | An HTML string.                                                          |
-| unsanitized? | <code>boolean</code> | Whether the HTML string should be sanitized with `isomorphic-dompurify`. |
+| Name         | Type                     | Description                                                                          |
+| ------------ | ------------------------ | ------------------------------------------------------------------------------------ |
+| string       | <code>string</code>      | An HTML string.                                                                      |
+| unsanitized? | <code>boolean</code>     | Whether the HTML string should be sanitized with `isomorphic-dompurify`.             |
+| as?          | <code>ElementType</code> | An HTML ElementType to be rendered as the base element wrapper. The default is 'div' |
 
 ## Component type
 
