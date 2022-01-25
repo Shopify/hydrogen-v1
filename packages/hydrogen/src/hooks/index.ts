@@ -5,4 +5,4 @@ export {useQuery} from '../foundation/useQuery';
 export {useMoney} from './useMoney';
 export {useMeasurement} from './useMeasurement';
 export {useParsedMetafields} from './useParsedMetafields';
-export {useLoadScript} from './useLoadScript/useLoadScript';
+export {useLoadScript} from './useLoadScript';
