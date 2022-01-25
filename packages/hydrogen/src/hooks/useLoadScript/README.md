@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/hooks/useLoadScript and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
 
-A client-only hook for loading an external script tag
+The `useScriptLoader` hook loads an external script tag on the client-side.
 
 ## Example code
 
@@ -27,7 +27,7 @@ export function MyComponent() {
 
 ## Arguments
 
-The `useLoadScript` hook can take in two parameters:
+The `useLoadScript` hook takes the following arguments:
 
 | Parameter | Required | Description                                                                                                        |
 | --------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
@@ -36,10 +36,10 @@ The `useLoadScript` hook can take in two parameters:
 
 ## Return value
 
-The `useLoadScript` hook returns a string of three potential values, that allow you to understand the state of the external script you are loading:
+The `useLoadScript` hook returns the following values that allow you to understand the state of the external script you are loading:
 
-| Value     | Description                                                                                                                              |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `loading` | The script is still loading. Note that the script tag could be on the page but the resource has not fully loaded yet while in this state |
-| `done`    | The script is fully loaded and ready to use                                                                                              |
-| `error`   | There was an error loading the script                                                                                                    |
+| Value     | Description                                                                                                                                     |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `loading` | The script is still loading. For example, the script tag can be on the page but the resource might not be fully loaded yet while in this state. |
+| `done`    | The script is fully loaded and ready to use.                                                                                                    |
+| `error`   | There was an error loading the script.                                                                                                          |
