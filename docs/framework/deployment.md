@@ -44,6 +44,7 @@ account_id = ""
 workers_dev = true
 route = ""
 zone_id = ""
+compatibility_flags = ["streams_enable_constructors"]
 
 [site]
 bucket = "dist/client"
