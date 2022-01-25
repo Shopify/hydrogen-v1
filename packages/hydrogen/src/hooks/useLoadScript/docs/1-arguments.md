@@ -1,6 +1,6 @@
 ## Arguments
 
-The `useLoadScript` hook can take in two parameters:
+The `useLoadScript` hook takes the following arguments:
 
 | Parameter | Required | Description                                                                                                        |
 | --------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
