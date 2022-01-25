@@ -30,7 +30,7 @@ The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` t
 
 {% endcodeblock %}
 
-The `handle` property is passed directly to the root server component `/pages/products/[handle].server.jsx`. :
+The `handle` property is passed directly to the root server component `/pages/products/[handle].server.jsx`:
 
 {% codeblock file, filename: '[handle].server.jsx' %}
 
