@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 type LoadScriptParams = Parameters<typeof loadScript>;
 
 /**
- * A client-only hook for loading an external script tag
+ * The `useScriptLoader` hook loads an external script tag on the client-side.
  */
 export function useLoadScript(
   url: LoadScriptParams[0],
