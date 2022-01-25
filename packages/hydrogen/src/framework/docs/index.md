@@ -12,8 +12,6 @@ Hydrogen includes a framework that offers a set of best practices and scaffoldin
 Hydrogen is the approach you use to build a custom storefront. It includes a [Vite](https://vitejs.dev/) plugin that offers server-side rendering (SSR) and hydration middleware, as well as server and client component code transformations.
 The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations.
 
-Hydrogen comes with [React Router](https://reactrouter.com/), a tool that allows you to handle routes in your app using dynamic routing.
-
 ![A diagram that illustrates Vite's offering of server-side rendering (SSR) and hydration middleware, and server and client component code transformations](/assets/custom-storefronts/hydrogen/hydrogen-framework-overview.png)
 
 ## Hydrogen project structure
