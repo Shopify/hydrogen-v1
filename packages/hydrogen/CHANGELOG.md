@@ -20,6 +20,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Bump to latest version of React experimental to include [upstream context bugfix](https://github.com/facebook/react/issues/23089)
 - feature: improve API routes by allowing [strings and JS objects](https://github.com/Shopify/hydrogen/issues/476) to be returned.
 - fix: make sure that API routes [hot reload properly](https://github.com/Shopify/hydrogen/issues/497)
+- New React hook `useScriptLoader` is available to more easily load external scripts
 
 ## 0.9.1 - 2022-01-20
 
