@@ -9,7 +9,7 @@ import {Command} from './Command';
 
 const logger = debug('hydrogen');
 
-(async () => {
+export async function init(commandConfig?: any /* TODO do better than any */) {
   const rawInputs = process.argv.slice(2);
   const {root, ...inputs} = parseCliArguments(rawInputs);
   const ui = new Cli();
@@ -20,6 +20,7 @@ const logger = debug('hydrogen');
     onUpdateFile: () => Promise.resolve(),
     onCommit: () => Promise.resolve(),
   };
+  inputs.command = commandConfig ? commandConfig.command : inputs.command;
 
   const command = new Command(inputs.command);
   const env = {ui, fs, workspace, logger, hooks};
@@ -36,7 +37,4 @@ const logger = debug('hydrogen');
   }
 
   await hooks.onCommit({hooks, ui, workspace, fs, logger});
-})().catch((error) => {
-  logger(error);
-  process.exitCode = 1;
-});
+}
