@@ -2,6 +2,7 @@ import {ImportGlobEagerOutput} from '../types';
 import {matchPath} from './matchPath';
 import {Logger, logServerResponse} from '../utilities/log/log';
 import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
+import { RestError, TeapotError } from './apiStatusResponses';
 
 let memoizedRoutes: Array<HydrogenApiRoute> = [];
 let memoizedPages: ImportGlobEagerOutput = {};
@@ -128,17 +129,18 @@ export async function renderApiRoute(
       }
     }
 
-    switch (response.status) {
-      case 200:
-        response = new Response(response.body, {status: 200, statusText: 'OK'});
+  } catch (error) {
+    log.error(error);
 
-      case 418:
-        response = new Response(response.body, {status: 418, statusText: 'I\'m a Teapot'});
+    console.log('api error instanceof Error: ' + (error instanceof Error))
+    console.log('api error instanceof RestError: ' + (error instanceof RestError))
+    console.log('api error instanceof TeapotError: ' + (error instanceof TeapotError))
+
+    if (error instanceof RestError) {
+      response = (error as RestError).getResponse()
+    } else {
+      response = new Response('Error processing: ' + request.url, {status: 500});
     }
-
-  } catch (e) {
-    log.error(e);
-    response = new Response('Error processing: ' + request.url, {status: 500});
   }
 
   logServerResponse(
