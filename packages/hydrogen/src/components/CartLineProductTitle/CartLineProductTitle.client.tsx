@@ -8,7 +8,7 @@ import {useCartLine} from '../CartLineProvider';
  */
 export function CartLineProductTitle<TTag extends ElementType>(
   props: Props<TTag> & {
-    /** An HTML ElementType to be rendered as the base element wrapper. The default is 'span' */
+    /** An HTML tag to be rendered as the base element wrapper. The default is `span`.  */
     as?: ElementType;
   }
 ) {
