@@ -1,59 +1,43 @@
+const TYPE = '__REST_ERROR__';
 export class RestError extends Error {
-    status: number;
-    details: string;
+  /**
+   *  Cannot use typeof
+   */
+  static isRestError(error: unknown) {
+    if (!error) return false;
+    return (error as RestError).__type === TYPE;
+  }
 
-    constructor(message: string, status: number, details: string) {
-        super(message);
-        this.name = this.constructor.name;
-        this.status = status;
-        this.details = details;
+  __type = TYPE;
+  status: number;
+  details: string;
 
-        // Set the prototype explicitly.
-        Object.setPrototypeOf(this, RestError.prototype)
-    };
+  constructor(message: string, status: number, details: string) {
+    super(message);
+    this.name = this.constructor.name;
+    this.status = status;
+    this.details = details;
+  }
 
-    getResponse() {
-        return new Response(this.message, { status: this.status });
-    };
-
-    getStatus() {
-        return this.status;
-    };
-
-    getDetails() {
-        return this.details;
-    };
-
-    getMessage() {
-        return this.message;
-    };
-};
+  getResponse() {
+    return new Response(this.message, {status: this.status});
+  }
+}
 
 export class BadRequestError extends RestError {
-    constructor(message: string, details: string) {
-        super(message, 400, details);
-
-        // Set the prototype explicitly.
-        Object.setPrototypeOf(this, BadRequestError.prototype)
-    };
-};
+  constructor(message: string, details: string) {
+    super(message, 400, details);
+  }
+}
 
 export class UnauthorizedError extends RestError {
-    constructor(message: string, details: string) {
-        super(message, 401, details);
-
-        // Set the prototype explicitly.
-        Object.setPrototypeOf(this, UnauthorizedError.prototype)
-    };
-};
-
+  constructor(message: string, details: string) {
+    super(message, 401, details);
+  }
+}
 
 export class TeapotError extends RestError {
-    constructor(message: string, details: string) {
-        super(message, 418, details);
-
-        // Set the prototype explicitly.
-        Object.setPrototypeOf(this, TeapotError.prototype)
-    };
-};
-
+  constructor(message: string, details: string) {
+    super(message, 418, details);
+  }
+}
