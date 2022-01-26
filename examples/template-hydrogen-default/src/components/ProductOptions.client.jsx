@@ -1,10 +1,38 @@
+import {useEffect} from 'react';
+import {useHistory} from 'react-router-dom';
 import {useProduct} from '@shopify/hydrogen/client';
 
 /**
  * A client component that tracks a selected variant and/or selling plan state, as well as callbacks for modifying the state
  */
 export default function ProductOptions() {
-  const {options, setSelectedOption, selectedOptions} = useProduct();
+  const {options, setSelectedOption, selectedOptions, setSelectedOptions} =
+    useProduct();
+  const history = useHistory();
+
+  useEffect(() => {
+    const params = new URLSearchParams(history.location.search);
+
+    params.forEach((value, name) => {
+      selectedOptions[name] = value;
+    });
+
+    history.replace({
+      search: params.toString(),
+    });
+
+    setSelectedOptions(selectedOptions);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(selectedOptions);
+
+    history.replace({
+      search: params.toString(),
+    });
+  }, [history, selectedOptions]);
 
   return (
     <>
