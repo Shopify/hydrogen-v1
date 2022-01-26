@@ -1,6 +1,6 @@
 {
   "name": "@shopify/generate-docs",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Command line interface for generating docs from code comments",
   "license": "MIT",
   "private": true,
