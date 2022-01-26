@@ -8,7 +8,7 @@ import {useCartLine} from '../CartLineProvider';
  */
 export function CartLineQuantity<TTag extends ElementType>(
   props: Props<TTag> & {
-    /** An HTML ElementType to be rendered as the base element wrapper. The default is 'div' */
+    /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
     as?: ElementType;
   }
 ) {
