@@ -6,7 +6,7 @@ import CartProvider from './components/CartProvider.client';
  */
 export default function ClientApp({helmetContext, children}) {
   return (
-    <HelmetProvider helmetContext={helmetContext}>
+    <HelmetProvider context={helmetContext}>
       <CartProvider>{children}</CartProvider>
     </HelmetProvider>
   );
