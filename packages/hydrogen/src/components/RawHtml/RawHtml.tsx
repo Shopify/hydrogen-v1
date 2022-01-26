@@ -13,7 +13,7 @@ export interface RawHtmlProps {
   string: string;
   /** Whether the HTML string should be sanitized with `isomorphic-dompurify`. */
   unsanitized?: boolean;
-  /** An HTML ElementType to be rendered as the base element wrapper. The default is 'div' */
+  /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: ElementType;
 }
 
