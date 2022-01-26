@@ -30,12 +30,11 @@ export class MissingDependencyError extends HelpfulError {
   constructor(dep: string) {
     super({
       title: `Missing the \`${dep}\` dependency`,
-      content: () => `\`${dep}\` is required to use this command.`,
-      suggestion: () =>
-        [
-          `- Run \`yarn\` to install all dependencies listed in the package.json.`,
-          `- Run \`yarn add ${dep}\` to install the missing dependency.`,
-        ].join(`\n`),
+      content: `\`${dep}\` is required to use this command.`,
+      suggestion: [
+        `- Run \`yarn\` to install all dependencies listed in the package.json.`,
+        `- Run \`yarn add ${dep}\` to install the missing dependency.`,
+      ].join(`\n`),
     });
   }
 }
@@ -49,12 +48,20 @@ export function logError(error: any, env: Env) {
   if (isHelpfulError(error)) {
     if (error.content) {
       env.ui.say('What happened?', {strong: true});
-      env.ui.say(error.content(env), {breakAfter: true});
+      env.ui.say(
+        typeof error.content === 'string' ? error.content : error.content(env),
+        {breakAfter: true}
+      );
     }
 
     if (error.suggestion) {
       env.ui.say('What do I do next?', {strong: true});
-      env.ui.say(error.suggestion(env), {breakAfter: true});
+      env.ui.say(
+        typeof error.suggestion === 'string'
+          ? error.suggestion
+          : error.suggestion(env),
+        {breakAfter: true}
+      );
     }
 
     env.ui.say('Still experiencing issues?', {strong: true});
