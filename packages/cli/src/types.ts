@@ -42,4 +42,4 @@ export interface CheckResult {
   fix?: (env: Env) => void;
 }
 
-export type Loggable = (env: Env) => string;
+export type Loggable = string | ((env: Env) => string);
