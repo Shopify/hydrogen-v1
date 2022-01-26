@@ -62,14 +62,13 @@ export function logError(error: any, env: Env) {
   env.ui.say(
     'Help us make Hydrogen better by reporting this error so we can improve this message and/or fix the error.'
   );
-  env.ui.say('- Report on Discord: https://discord.com/invite/ppSbThrFaS');
+  env.ui.say(
+    '- Chat with us on Discord: https://discord.com/invite/ppSbThrFaS'
+  );
   env.ui.say(
     '- Create an issue in GitHub: https://github.com/Shopify/hydrogen/issues/new'
   );
-  env.ui.say(
-    '- Fill out our feedback form: https://www.surveymonkey.com/r/HydrogenFeedback',
-    {breakAfter: true}
-  );
+
   env.ui.say('Error stack:', {strong: true});
   env.ui.say(error.stack);
 }
