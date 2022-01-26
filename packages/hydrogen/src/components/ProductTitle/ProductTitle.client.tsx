@@ -9,7 +9,7 @@ import {Props} from '../types';
  */
 export function ProductTitle<TTag extends ElementType = 'span'>(
   props: Props<TTag> & {
-    /** The `as` prop is an HTML element to wrap the title. If not specified, then the
+    /** An HTML tag to wrap the title. If not specified, then the
      * title is wrapped in a `span` element.
      */
     as?: ElementType;
