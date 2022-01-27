@@ -636,6 +636,12 @@ export function CartProvider({
           }),
       status: state.status,
       error: 'error' in state ? state.error : undefined,
+      cartLinesTotalQuantity:
+        'cart' in state
+          ? state.cart.lines.reduce((previous, current) => {
+              return previous + current.quantity;
+            }, 0)
+          : 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
         addLineItem(lines, state);
