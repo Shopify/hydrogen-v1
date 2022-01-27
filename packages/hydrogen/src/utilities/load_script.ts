@@ -19,7 +19,6 @@ export function loadScript(src: string, options?: {module?: boolean}) {
     script.onerror = () => {
       reject(false);
     };
-
     document.body.appendChild(script);
   });
 
