@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useShop} from '../../foundation/useShop';
-import {loadScript} from '../../utilities';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
 
 export interface ShopPayButtonProps {
   /** An array of IDs of the variants to purchase with Shop Pay. */
@@ -28,9 +28,8 @@ const URL = 'https://cdn.shopify.com/shopifycloud/shop-js/v0.1/client.js';
  */
 export function ShopPayButton({variantIds, className}: ShopPayButtonProps) {
   const [ids, setIds] = useState<string[]>([]);
-  const [shopPayLoaded, setShopPayLoaded] = useState<boolean>(false);
-
   const {storeDomain} = useShop();
+  const shopPayLoadedStatus = useLoadScript(URL);
 
   useEffect(() => {
     const ids = variantIds.reduce<string[]>((accumulator, gid) => {
@@ -43,25 +42,9 @@ export function ShopPayButton({variantIds, className}: ShopPayButtonProps) {
     setIds(ids);
   }, [variantIds]);
 
-  useEffect(() => {
-    async function loadShopPay() {
-      const loaded = await loadScript(URL, {
-        module: true,
-      });
-
-      if (!loaded) {
-        console.warn('shop-pay-button library did not load');
-      }
-
-      setShopPayLoaded(true);
-    }
-
-    loadShopPay();
-  }, []);
-
   return (
     <div className={className} tabIndex={1}>
-      {shopPayLoaded && (
+      {shopPayLoadedStatus === 'done' && (
         <shop-pay-button
           store-url={`https://${storeDomain}`}
           variants={ids.join(',')}

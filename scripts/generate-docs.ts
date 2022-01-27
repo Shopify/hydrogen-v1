@@ -225,7 +225,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       title: 'Primitive hooks',
       description: 'Learn about the primitive hooks offered in Hydrogen.',
       url: '/api/hydrogen/hooks/primitive/index.md',
-      entry: ['hooks/useMoney'],
+      entry: ['hooks/useMoney', 'hooks/useLoadScript'],
       intro:
         'Primitive hooks are the building blocks for different component types, including products, variants, and cart.',
       tables: [
