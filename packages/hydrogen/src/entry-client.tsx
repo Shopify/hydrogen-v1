@@ -10,7 +10,7 @@ import {
   ServerStateRouter,
   ShopifyProvider,
 } from './client';
-import {Boomerang} from './components/Boomerang';
+import Boomerang from './components/Boomerang/Boomerang.client';
 
 const renderHydrogen: ClientHandler = async (
   ClientWrapper,

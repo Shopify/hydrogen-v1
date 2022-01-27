@@ -4,7 +4,7 @@ import {loadScript} from '../../utilities';
 const URL =
   'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
 
-export function Boomerang({storeDomain}: {storeDomain: string}) {
+export default function Boomerang({storeDomain}: {storeDomain: string}) {
   useEffect(() => {
     (function () {
       if (
@@ -55,26 +55,6 @@ export function Boomerang({storeDomain}: {storeDomain: string}) {
     })();
     loadScript(URL);
   }, [storeDomain]);
-
-  return null;
-}
-
-export function BoomerangPageTemplate({pageTemplate}: {pageTemplate: string}) {
-  useEffect(() => {
-    (function () {
-      // @ts-ignore
-      window.BOOMR = window.BOOMR || {};
-
-      // @ts-ignore
-      window.BOOMR.pageTemplate = pageTemplate.toLowerCase();
-
-      // @ts-ignore
-      if (BOOMR.addVar) {
-        // @ts-ignore
-        BOOMR.addVar('page_template', BOOMR.pageTemplate.toString());
-      }
-    })();
-  }, [pageTemplate]);
 
   return null;
 }

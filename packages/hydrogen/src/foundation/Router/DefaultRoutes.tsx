@@ -1,6 +1,6 @@
 import React, {ReactElement, useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
-import {BoomerangPageTemplate} from '../../components/Boomerang';
+import BoomerangPageTemplate from '../../components/Boomerang/BoomerangPageTemplate.client';
 import type {Logger} from '../../utilities/log/log';
 
 import type {ImportGlobEagerOutput} from '../../types';
@@ -51,7 +51,13 @@ export function DefaultRoutes({
   ) : (
     <>
       {fallback}
-      <BoomerangPageTemplate pageTemplate="fallback" />
+      <BoomerangPageTemplate
+        pageTemplate={
+          typeof fallback?.type === 'function'
+            ? fallback?.type.name
+            : fallback?.type
+        }
+      />
     </>
   );
 }

@@ -75,7 +75,7 @@ export function useServerResponse(state: any) {
       window.BOOMR.plugins.Hydrogen
     ) {
       /* @ts-ignore */
-      BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
+      window.BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
     }
 
     // Request a new flight response.
