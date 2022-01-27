@@ -10,7 +10,7 @@ import {
   Model3dSource,
   Image,
 } from '../../graphql/types/types';
-import {loadScript} from '../../utilities';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
 import {Model3DFragment as Fragment} from '../../graphql/graphql-constants';
 import {Props} from '../types';
 
@@ -161,29 +161,13 @@ export function Model3D<TTag extends ElementType>(
     className,
     ...passthroughProps
   } = props;
-  const [modelViewerLoaded, setModelViewerLoaded] = useState<boolean>(false);
 
-  useEffect(() => {
-    // The ModelViewer library depends on `window` so
-    // we cannot use it server side, so we instead load
-    // it dynamically
-    async function loadModelViewer() {
-      const loaded = await loadScript(
-        'https://unpkg.com/@google/model-viewer@v1.8.0/dist/model-viewer.min.js',
-        {
-          module: true,
-        }
-      );
-
-      if (!loaded) {
-        console.warn('model-viewer library did not load');
-      }
-
-      setModelViewerLoaded(true);
+  const modelViewerLoadedStatus = useLoadScript(
+    'https://unpkg.com/@google/model-viewer@v1.8.0/dist/model-viewer.min.js',
+    {
+      module: true,
     }
-
-    loadModelViewer();
-  }, []);
+  );
 
   useEffect(() => {
     if (modelViewer == null) {
@@ -306,7 +290,7 @@ export function Model3D<TTag extends ElementType>(
     passthroughProps.onSceneGraphReady,
   ]);
 
-  if (!modelViewerLoaded) {
+  if (modelViewerLoadedStatus !== 'done') {
     // TODO: What do we want to display while the model-viewer library loads?
     return null;
   }
