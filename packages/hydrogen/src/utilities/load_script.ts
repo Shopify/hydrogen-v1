@@ -20,9 +20,7 @@ export function loadScript(src: string, options?: {module?: boolean}) {
       reject(false);
     };
 
-    setTimeout(() => {
-      document.body.appendChild(script);
-    }, 0);
+    document.body.appendChild(script);
   });
 
   SCRIPTS_LOADED[src] = promise;
