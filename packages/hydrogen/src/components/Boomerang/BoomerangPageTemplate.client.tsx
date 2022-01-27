@@ -1,26 +1,18 @@
 import {useEffect} from 'react';
 
 export default function BoomerangPageTemplate({
-  pageTemplate,
+  pageTemplate = 'not-set',
 }: {
   pageTemplate: string | undefined;
 }) {
-  if (!pageTemplate) {
-    pageTemplate = 'not-set';
-  }
-
+  const templateName = pageTemplate.toLowerCase();
   useEffect(() => {
     (function () {
-      // @ts-ignore
       window.BOOMR = window.BOOMR || {};
+      window.BOOMR.pageTemplate = templateName;
 
-      // @ts-ignore
-      window.BOOMR.pageTemplate = pageTemplate.toLowerCase();
-
-      // @ts-ignore
-      if (BOOMR.addVar) {
-        // @ts-ignore
-        BOOMR.addVar('page_template', BOOMR.pageTemplate.toString());
+      if (window.BOOMR.addVar) {
+        window.BOOMR.addVar('page_template', templateName);
       }
     })();
   }, [pageTemplate]);

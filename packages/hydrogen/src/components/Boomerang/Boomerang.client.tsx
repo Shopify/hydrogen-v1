@@ -1,6 +1,13 @@
 import {useEffect} from 'react';
 import {loadScript} from '../../utilities';
 
+declare global {
+  interface Window {
+    BOOMR: any;
+    BOOMR_onload: any;
+  }
+}
+
 const URL =
   'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
 
@@ -8,30 +15,24 @@ export default function Boomerang({storeDomain}: {storeDomain: string}) {
   useEffect(() => {
     (function () {
       if (
-        // @ts-ignore
         window.BOOMR &&
-        // @ts-ignore
         (window.BOOMR.version || window.BOOMR.snippetExecuted)
       ) {
         return;
       }
-      // @ts-ignore
-      window.BOOMR = window.BOOMR || {};
 
-      // @ts-ignore
+      window.BOOMR = window.BOOMR || {};
       window.BOOMR.storeDomain = storeDomain;
 
       function boomerangSaveLoadTime(e: Event) {
-        // @ts-ignore
         window.BOOMR_onload = (e && e.timeStamp) || new Date().getTime();
       }
 
-      function boomerangInit(e: Event) {
-        // @ts-ignore
+      // @ts-ignore
+      function boomerangInit(e) {
         e.detail.BOOMR.init({
           producer_url: 'https://monorail-edge.shopifysvc.com/v1/produce',
         });
-        // @ts-ignore
         e.detail.BOOMR.t_end = new Date().getTime();
       }
 
