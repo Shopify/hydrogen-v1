@@ -1,4 +1,5 @@
 const TYPE = '__REST_ERROR__';
+
 export class RestError extends Error {
   /**
    *  Cannot use typeof
@@ -20,7 +21,7 @@ export class RestError extends Error {
   }
 
   getResponse() {
-    return new Response(this.message, {status: this.status});
+    return new Response(JSON.stringify({error: this.message, details: this.details}), {status: this.status, statusText: this.message});
   }
 }
 
@@ -33,6 +34,36 @@ export class BadRequestError extends RestError {
 export class UnauthorizedError extends RestError {
   constructor(message: string, details: string) {
     super(message, 401, details);
+  }
+}
+
+export class ForbiddenError extends RestError {
+  constructor(message: string, details: string) {
+    super(message, 403, details)
+  }
+}
+
+export class NotFoundError extends RestError {
+  constructor(message: string, details: string) {
+    super(message, 404, details)
+  }
+}
+
+export class MethodNotAllowedError extends RestError {
+  constructor(message: string, details: string) {
+    super(message, 405, details)
+  }
+}
+
+export class UnknownError extends RestError {
+  constructor(message: string, details: string) {
+    super(message, 500, details)
+  }
+}
+
+export class ExternalServiceError extends RestError {
+  constructor(message: string, details: string) {
+    super(message, 503, details)
   }
 }
 

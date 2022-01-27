@@ -174,3 +174,46 @@ it('supports form request on API routes', async () => {
   await page.click('#fsubmit');
   expect(await page.textContent('*')).toContain('fname=sometext');
 });
+
+it('should return 400 status Bad Request', async () => {
+  const response = await page.request.get(url + '/status/');
+
+  expect(response.status()).toBe(200);
+  expect(response.statusText()).toBe('OK');
+});
+
+it('should return 400 status Bad Request', async () => {
+  const response = await page.request.get(url + '/status/400');
+
+  expect(response.status()).toBe(400);
+  expect(response.statusText()).toBe('Bad Request');
+});
+
+it('should return 401 status Unauthorized', async () => {
+  const response = await page.request.get(url + '/status/401');
+
+  expect(response.status()).toBe(401);
+  expect(response.statusText()).toBe('Unauthorized');
+});
+
+it('should return 403 status Forbidden', async () => {
+  const response = await page.request.get(url + '/status/403');
+
+  expect(response.status()).toBe(403);
+  expect(response.statusText()).toBe('Forbidden');
+});
+
+it('should return 404 status Not Found', async () => {
+  const response = await page.request.get(url + '/status/404');
+
+  expect(response.status()).toBe(404);
+  expect(response.statusText()).toBe('Not Found');
+});
+
+
+it('should return 418 status Teapot', async () => {
+  const response = await page.request.get(url + '/status/418');
+
+  expect(response.status()).toBe(418);
+  expect(response.statusText()).toBe('I\'m a Teapot');
+});
