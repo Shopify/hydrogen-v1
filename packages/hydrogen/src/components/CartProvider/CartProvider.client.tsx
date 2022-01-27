@@ -232,7 +232,7 @@ export function CartProvider({
   onDiscountCodesUpdate,
   cart,
 }: {
-  /** Any `ReactNode` elements */
+  /** Any `ReactNode` elements. */
   children: React.ReactNode;
   numCartLines?: number;
   /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
