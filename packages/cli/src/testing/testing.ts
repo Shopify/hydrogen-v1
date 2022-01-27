@@ -29,7 +29,8 @@ export type Command =
   | 'create component'
   | 'create page'
   | 'check'
-  | 'preview';
+  | 'preview'
+  | 'dev';
 type Input = Record<string, string | boolean | null>;
 
 interface App {

@@ -1,6 +1,6 @@
 import debug from 'debug';
-
-import {parseCliArguments, InputError} from './utilities';
+import {parseCliArguments} from './utilities';
+import {Env} from './types';
 import {Cli} from './ui';
 import {Workspace} from './workspace';
 import {Fs} from './fs';
@@ -16,17 +16,26 @@ const logger = debug('hydrogen');
   const config = (await loadConfig('hydrogen', {root})) || {};
   const workspace = new Workspace({root, ...config});
   const fs = new Fs(root);
-
-  if (!inputs.command) {
-    ui.say(`Missing command input`, {error: true});
-
-    throw new InputError();
-  }
+  const hooks: Env['hooks'] = {
+    onUpdateFile: () => Promise.resolve(),
+    onCommit: () => Promise.resolve(),
+  };
 
   const command = new Command(inputs.command);
+  const env = {ui, fs, workspace, logger, hooks};
 
   await command.load();
-  await command.run({ui, fs, workspace, logger});
+  await command.run(env);
+
+  // this is a temporary implementation to support a post-commit hook
+  // and a more robust implementation will be added in the future
+  // that will take inspiration from the tapable library
+  // see: https://github.com/webpack/tapable
+  for await (const file of fs.commit()) {
+    await hooks.onUpdateFile(file);
+  }
+
+  await hooks.onCommit({hooks, ui, workspace, fs, logger});
 })().catch((error) => {
   logger(error);
   process.exitCode = 1;

@@ -1,7 +1,7 @@
 {
   "name": "server-components-worker",
   "private": true,
-  "version": "0.9.1",
+  "version": "0.10.1",
   "scripts": {
     "dev": "DEV=true node start-worker",
     "build": "yarn build:client && yarn build:worker",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "*",
-    "@shopify/hydrogen": "^0.9.1",
+    "@shopify/hydrogen": "^0.10.1",
     "miniflare": "^1.3.3",
     "react": "0.0.0-experimental-529dc3ce8-20220124",
     "react-dom": "0.0.0-experimental-529dc3ce8-20220124",

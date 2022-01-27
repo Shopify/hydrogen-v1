@@ -76,7 +76,7 @@ export function hydrogenMiddleware({
 
       if (!globalThis.ReadableStream) {
         const {ReadableStream, WritableStream, TransformStream} = await import(
-          'stream/web'
+          'web-streams-polyfill/ponyfill'
         );
 
         Object.assign(globalThis, {

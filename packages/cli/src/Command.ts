@@ -1,7 +1,8 @@
 import {resolve, basename, extname} from 'path';
 import debug from 'debug';
+import {InputError} from './utilities';
 
-import {InputError, tree} from './utilities';
+import {tree} from './utilities';
 import {CONFIG_DIRECTORY} from './config';
 import {Env} from './types';
 
@@ -14,42 +15,40 @@ export class Command {
   private module: ModuleType | null = null;
   private modulePath: string | null = null;
 
-  constructor(public command: string) {
+  constructor(public command?: string) {
     this.logger = debug(`hydrogen/${command}`);
   }
 
   async run(env: Env) {
+    if (!this.command) {
+      throw new InputError();
+    }
+
     this.logger(`Running ${this.command}`);
 
     if (!this.modulePath) {
       return;
     }
 
-    try {
-      this.module = await import(this.modulePath);
+    this.module = await import(this.modulePath);
 
-      if (!this.module) {
-        return;
-      }
-
-      await this.module.default({
-        ...env,
-        logger: this.logger,
-      });
-    } catch (error) {
-      this.logger(error);
-      console.error(error);
-      env.ui.say(`Command module not found at ${this.modulePath} ${error}`, {
-        error: true,
-      });
-
-      throw new InputError();
+    if (!this.module) {
+      return;
     }
+
+    await this.module.default({
+      ...env,
+      logger: this.logger,
+    });
 
     this.logger(`Finished ${this.command}`);
   }
 
   async load() {
+    if (!this.command) {
+      throw new InputError();
+    }
+
     this.logger(`Loading ${this.command}`);
 
     const localCommands = await tree(resolve(CONFIG_DIRECTORY, 'commands'));

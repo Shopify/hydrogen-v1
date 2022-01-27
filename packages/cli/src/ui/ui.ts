@@ -31,6 +31,8 @@ interface ConstructorOptions {
 
 interface SayOptions {
   error?: boolean;
+  breakAfter?: boolean;
+  strong?: boolean;
 }
 
 export interface Ui {
@@ -42,6 +44,7 @@ export interface Ui {
   ask(message: string, options: BooleanQuestionOptions): Promise<boolean>;
   ask<T = string>(message: string, options?: BaseOptions): Promise<T>;
   say(message: string | [string, string][], options?: SayOptions): void;
+  printFile(file: FileResult): void;
 }
 
 export class Cli implements Ui {
@@ -99,19 +102,17 @@ export class Cli implements Ui {
       return;
     }
 
-    const styledMessage = options.error ? chalk.redBright`${message}` : message;
-    const type = options.error ? chalk.black.bgRedBright` error ` : '';
+    const styledText = options.error ? chalk.redBright`${message}` : message;
+    const type = options.error
+      ? `${chalk.black.bgRedBright` error `}${this.indent}`
+      : '';
+    const combinedMessage = [type, styledText].join('');
 
-    console.log(
-      [
-        this.indent,
-        this.prefix,
-        this.indent,
-        type,
-        this.indent,
-        styledMessage,
-      ].join('')
-    );
+    console.log(options.strong ? chalk.bold(combinedMessage) : combinedMessage);
+
+    if (options.breakAfter) {
+      console.log('');
+    }
   }
 
   printFile({path, overwritten, diff}: FileResult) {

@@ -7,6 +7,15 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- dx: Correct Typescript issue where `as` was a default prop for all components when it should not be
+- New React hook `useScriptLoader` is available to more easily load external scripts
+
+## 0.10.1 - 2022-01-26
+
+- Fix: hot reload for newly added page files
+
+## 0.10.0 - 2022-01-25
+
 - Warn instead of error when a page server component is missing valid exports
 - Adopt upstream version of React Server Components. See [#498](https://github.com/Shopify/hydrogen/pull/498) for breaking changes.
 - The 'locale' option in shopify.config.js had been renamed to 'defaultLocale'
