@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
 import {loadScript} from '../../utilities';
 
-// get from local file for now but this should be a public Shopify CDN file
-const URL = '/boomerang-hydrogen-debug.js';
+const URL =
+  'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
 
 export function Boomerang({storeDomain}: {storeDomain: string}) {
   useEffect(() => {
@@ -55,6 +55,26 @@ export function Boomerang({storeDomain}: {storeDomain: string}) {
     })();
     loadScript(URL);
   }, [storeDomain]);
+
+  return null;
+}
+
+export function BoomerangPageTemplate({pageTemplate}: {pageTemplate: string}) {
+  useEffect(() => {
+    (function () {
+      // @ts-ignore
+      window.BOOMR = window.BOOMR || {};
+
+      // @ts-ignore
+      window.BOOMR.pageTemplate = pageTemplate.toLowerCase();
+
+      // @ts-ignore
+      if (BOOMR.addVar) {
+        // @ts-ignore
+        BOOMR.addVar('page_template', BOOMR.pageTemplate.toString());
+      }
+    })();
+  }, [pageTemplate]);
 
   return null;
 }

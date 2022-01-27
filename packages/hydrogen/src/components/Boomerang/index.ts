@@ -1,1 +1,1 @@
-export {Boomerang} from './Boomerang.client';
+export {Boomerang, BoomerangPageTemplate} from './Boomerang.client';

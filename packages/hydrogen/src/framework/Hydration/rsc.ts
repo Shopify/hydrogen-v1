@@ -66,19 +66,17 @@ export function useServerResponse(state: any) {
     response = createFromReadableStream(rscReader);
     rscReader = null;
   } else {
-    try {
-      if (
-        /* @ts-ignore */
-        window.BOOMR &&
-        /* @ts-ignore */
-        window.BOOMR.plugins &&
-        /* @ts-ignore */
-        window.BOOMR.plugins.Hydrogen
-      ) {
-        /* @ts-ignore */
-        BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
-      }
-    } catch (e) {}
+    if (
+      /* @ts-ignore */
+      window.BOOMR &&
+      /* @ts-ignore */
+      window.BOOMR.plugins &&
+      /* @ts-ignore */
+      window.BOOMR.plugins.Hydrogen
+    ) {
+      /* @ts-ignore */
+      BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
+    }
 
     // Request a new flight response.
     response = createFromFetch(
