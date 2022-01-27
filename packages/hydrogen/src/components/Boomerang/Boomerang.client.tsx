@@ -25,7 +25,7 @@ export default function Boomerang({storeDomain}: {storeDomain: string}) {
       window.BOOMR.storeDomain = storeDomain;
 
       function boomerangSaveLoadTime(e: Event) {
-        window.BOOMR_onload = (e && e.timeStamp) || new Date().getTime();
+        window.BOOMR_onload = (e && e.timeStamp) || Date.now();
       }
 
       // @ts-ignore
@@ -33,7 +33,7 @@ export default function Boomerang({storeDomain}: {storeDomain: string}) {
         e.detail.BOOMR.init({
           producer_url: 'https://monorail-edge.shopifysvc.com/v1/produce',
         });
-        e.detail.BOOMR.t_end = new Date().getTime();
+        e.detail.BOOMR.t_end = Date.now();
       }
 
       if (window.addEventListener) {
