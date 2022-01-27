@@ -42,6 +42,28 @@ it('handles index pages', () => {
   ]);
 });
 
+it('handles nested index pages', () => {
+  const pages: ImportGlobEagerOutput = {
+    './pages/blogs/index.server.jsx': STUB_MODULE,
+    './pages/products/snowboards/fastones/index.server.jsx': STUB_MODULE,
+  };
+
+  const routes = createRoutesFromPages(pages);
+
+  expect(routes).toEqual([
+    {
+      path: '/blogs',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+    {
+      path: '/products/snowboards/fastones',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+  ]);
+});
+
 it('handles dynamic paths', () => {
   const pages: ImportGlobEagerOutput = {
     './pages/contact.server.jsx': STUB_MODULE,

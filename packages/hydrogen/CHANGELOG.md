@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- Fix index routes. See [#562](https://github.com/Shopify/hydrogen/issues/562)
 - dx: Correct Typescript issue where `as` was a default prop for all components when it should not be
 - New React hook `useScriptLoader` is available to more easily load external scripts
 
