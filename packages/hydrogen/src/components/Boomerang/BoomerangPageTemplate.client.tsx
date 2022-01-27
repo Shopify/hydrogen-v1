@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 
 export default function BoomerangPageTemplate({
-  pageTemplate = 'not-set',
+  pageTemplate = 'fallback_not_set',
 }: {
   pageTemplate: string | undefined;
 }) {
