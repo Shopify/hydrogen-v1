@@ -1,6 +1,6 @@
 import React, {ReactElement, useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
-import BoomerangPageTemplate from '../../components/Boomerang/BoomerangPageTemplate.client';
+import BoomerangPageTemplate from '../Boomerang/BoomerangPageTemplate.client';
 import type {Logger} from '../../utilities/log/log';
 
 import type {ImportGlobEagerOutput} from '../../types';
