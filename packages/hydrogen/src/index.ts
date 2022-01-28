@@ -11,6 +11,7 @@ export {
   getTime,
 } from './utilities';
 
+export {ShopifyProvider} from './foundation/ShopifyProvider';
 export {log, setLogger, Logger} from './utilities/log';
 
 export {Helmet} from 'react-helmet-async';

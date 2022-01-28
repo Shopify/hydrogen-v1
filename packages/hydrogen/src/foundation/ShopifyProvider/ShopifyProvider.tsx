@@ -1,6 +1,29 @@
-import React, {useMemo} from 'react';
-import {ShopifyContext, makeShopifyContext} from './ShopifyContext';
+import React, {useMemo, useContext} from 'react';
+// import {ShopifyContext, makeShopifyContext} from './ShopifyContext';
 import type {ShopifyProviderProps} from './types';
+
+import {createContext} from 'react';
+import {DEFAULT_LOCALE} from '../constants';
+import type {ShopifyContextValue} from './types';
+import type {ShopifyConfig} from '../../types';
+import {RequestContextSSR} from '../ServerRequestProvider';
+
+export const ShopifyContext = createContext<ShopifyContextValue | null>(null);
+
+function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
+  return {
+    locale: shopifyConfig.defaultLocale ?? DEFAULT_LOCALE,
+    storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
+    storefrontToken: shopifyConfig.storefrontToken,
+    storefrontApiVersion: shopifyConfig.storefrontApiVersion,
+  };
+}
+
+export function shopifyProviderRSC() {
+  return new Map();
+}
+
+shopifyProviderRSC.key = Symbol.for('SHOPIFY_PROVIDER_RSC');
 
 /**
  * The `ShopifyProvider` component wraps your entire app and provides support for hooks.
@@ -11,15 +34,33 @@ import type {ShopifyProviderProps} from './types';
 export function ShopifyProvider({
   shopifyConfig,
   children,
-}: ShopifyProviderProps) {
+}: ShopifyProviderProps): JSX.Element {
   const shopifyProviderValue = useMemo(
     () => makeShopifyContext(shopifyConfig),
     [shopifyConfig]
   );
+
+  if (isRSC()) {
+    const shopifyProviderCache =
+    // @ts-ignore
+      React.unstable_getCacheForType(shopifyProviderRSC);
+    shopifyProviderCache.set(shopifyProviderRSC.key, shopifyProviderValue);
+    return <>{children}</>;
+  }
 
   return (
     <ShopifyContext.Provider value={shopifyProviderValue}>
       {children}
     </ShopifyContext.Provider>
   );
+}
+
+function isRSC() {
+  if (typeof window !== 'undefined') return false;
+  try {
+    useContext(RequestContextSSR);
+    return false;
+  } catch (error) {
+    return true;
+  }
 }

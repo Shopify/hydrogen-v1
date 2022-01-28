@@ -21,7 +21,6 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
-import {setShop} from './foundation/useShop';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
@@ -45,9 +44,7 @@ declare global {
  */
 const STREAM_ABORT_TIMEOUT_MS = 3000;
 
-const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
-  setShop(shopifyConfig);
-
+const renderHydrogen: ServerHandler = (App, {pages}) => {
   /**
    * The render function is responsible for turning the provided `App` into an HTML string,
    * and returning any initial state that needs to be hydrated into the client version of the app.

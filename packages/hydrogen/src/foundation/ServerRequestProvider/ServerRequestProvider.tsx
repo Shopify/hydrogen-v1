@@ -4,7 +4,7 @@ import type {ServerComponentRequest} from '../../framework/Hydration/ServerCompo
 import type {QueryKey} from '../../types';
 
 // Context to inject current request in SSR
-const RequestContextSSR = createContext<ServerComponentRequest>({
+export const RequestContextSSR = createContext<ServerComponentRequest>({
   // Initial value is required due to a bug:
   // https://github.com/Shopify/hydrogen/issues/415
   time: 0,
