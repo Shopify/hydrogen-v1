@@ -2,7 +2,7 @@ import {ImportGlobEagerOutput} from '../types';
 import {matchPath} from './matchPath';
 import {Logger, logServerResponse} from '../utilities/log/log';
 import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
-import {RestError} from './apiStatusResponses';
+import {RestStatusResponse} from './apiStatusResponses';
 
 let memoizedRoutes: Array<HydrogenApiRoute> = [];
 let memoizedPages: ImportGlobEagerOutput = {};
@@ -132,8 +132,8 @@ export async function renderApiRoute(
     // Cannot use error typeof RestError because there
     // are multiple instances of RestError in memory between
     // what is imported by `handle-event.ts` and `entry-server.jsx`
-    if (RestError.isRestError(error)) {
-      response = (error as RestError).getResponse();
+    if (RestStatusResponse.isRestStatusResponse(error)) {
+      response = (error as RestStatusResponse).getResponse();
     } else {
       response = new Response('Error processing: ' + request.url, {
         status: 500,
