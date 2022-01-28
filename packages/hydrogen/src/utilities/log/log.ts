@@ -17,7 +17,8 @@ export interface Logger {
 
 const defaultLogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(...args);
+    // Re-enable following line to show trace debugging information
+    // console.log(context.id, ...args);
   },
   debug(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(...args);
