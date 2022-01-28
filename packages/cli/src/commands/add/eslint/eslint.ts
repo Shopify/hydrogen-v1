@@ -7,6 +7,6 @@ export async function addEslint(env: Env) {
     fs.join(workspace.root(), '.eslintrc.js'),
     (await import('./templates/eslintrc-js')).default()
   );
-  workspace.install('eslint');
-  workspace.install('eslint-plugin-hydrogen');
+  workspace.install('eslint', {dev: true, version: '^7.31.0'});
+  workspace.install('eslint-plugin-hydrogen', {dev: true, version: '^0.6.2'});
 }
