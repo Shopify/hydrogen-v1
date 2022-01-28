@@ -9,7 +9,7 @@ import {
   Logger,
   logServerResponse,
   getLoggerFromContext,
-  log,
+  log as noContextLogger,
 } from './utilities/log/log';
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
@@ -128,6 +128,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
     {request, response, template, nonce, dev}
   ) {
     const log = getLoggerFromContext(request);
+    log.trace('start stream');
     const state = {pathname: url.pathname, search: url.search};
     let didError: Error | undefined;
 
@@ -162,13 +163,17 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
 
     const rscToScriptTagReadable = new ReadableStream({
       start(controller) {
+        log.trace('rsc start chunks');
         let init = true;
         const encoder = new TextEncoder();
         bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
           const scriptTag = flightContainer({init, chunk, nonce});
           controller.enqueue(encoder.encode(scriptTag));
           init = false;
-        }).then(() => controller.close());
+        }).then(() => {
+          log.trace('rsc finish chunks');
+          return controller.close();
+        });
       },
     });
 
@@ -182,6 +187,8 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
       const ssrReadable: ReadableStream = renderToReadableStream(ReactAppSSR, {
         nonce,
         onCompleteShell() {
+          log.trace('worker ready to stream');
+
           Object.assign(
             responseOptions,
             getResponseOptions(componentResponse, didError)
@@ -212,6 +219,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
           deferredShouldReturnApp.resolve(true);
         },
         async onCompleteAll() {
+          log.trace('worker complete stream');
           if (componentResponse.canStream()) return;
 
           Object.assign(
@@ -303,6 +311,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
       const {pipe} = renderToPipeableStream(ReactAppSSR, {
         nonce,
         onCompleteShell() {
+          log.trace('node ready to stream');
           /**
            * TODO: This assumes `response.cache()` has been called _before_ any
            * queries which might be caught behind Suspense. Clarify this or add
@@ -313,7 +322,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
             componentResponse.cacheControlHeader
           );
 
-          writeHeadToServerResponse(response, componentResponse, didError);
+          writeHeadToServerResponse(response, componentResponse, log, didError);
 
           logServerResponse('str', log, request, response.statusCode);
 
@@ -329,22 +338,23 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
             dev ? didError : undefined
           );
 
-          // Piping ends the response so let RSC go first.
-          // Generally, RSC reader should finish before SSR because
-          // the latter is also reading RSC until it finishes.
-          // However, this might not be the case in small apps that
-          // are written in SSR at once.
-          setTimeout(() => pipe(response), 0);
-          bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) =>
-            response.write(chunk)
-          );
+          setTimeout(() => {
+            log.trace('node pipe response');
+            pipe(response);
+          }, 0);
+
+          bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) => {
+            log.trace('rsc chunk');
+            return response.write(chunk);
+          });
         },
         async onCompleteAll() {
+          log.trace('node complete stream');
           clearTimeout(streamTimeout);
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
-          writeHeadToServerResponse(response, componentResponse, didError);
+          writeHeadToServerResponse(response, componentResponse, log, didError);
 
           logServerResponse('str', log, request, response.statusCode);
 
@@ -455,7 +465,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
     stream,
     hydrate,
     getApiRoute,
-    log,
+    log: noContextLogger,
   };
 };
 
@@ -664,9 +674,11 @@ function getResponseOptions(
 function writeHeadToServerResponse(
   response: ServerResponse,
   serverComponentResponse: ServerComponentResponse,
+  log: Logger,
   error?: Error
 ) {
   if (response.headersSent) return;
+  log.trace('writeHeadToServerResponse');
 
   const {headers, status, statusText} = getResponseOptions(
     serverComponentResponse,
