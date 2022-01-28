@@ -114,3 +114,5 @@ CartLine.Quantity = CartLineQuantity;
 CartLine.QuantityAdjustButton = CartLineQuantityAdjustButton;
 CartLine.SelectedOptions = CartLineSelectedOptions;
 CartLine.Attributes = CartLineAttributes;
+
+export {Seo} from './Seo';

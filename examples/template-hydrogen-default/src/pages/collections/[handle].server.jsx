@@ -4,13 +4,13 @@ import {
   useShopQuery,
   flattenConnection,
   RawHtml,
+  Seo,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
 import Layout from '../../components/Layout.server';
 import ProductCard from '../../components/ProductCard';
-import CollectionSeo from '../../components/CollectionSeo.client';
 import NotFound from '../../components/NotFound.server';
 
 export default function Collection({
@@ -38,7 +38,7 @@ export default function Collection({
 
   return (
     <Layout>
-      <CollectionSeo collection={collection} />
+      <Seo collection={collection} />
       <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
         {collection.title}
       </h1>
@@ -46,7 +46,6 @@ export default function Collection({
       <p className="text-sm text-gray-500 mt-5 mb-5">
         {products.length} {products.length > 1 ? 'products' : 'product'}
       </p>
-
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
         {products.map((product) => (
           <li key={product.id}>
@@ -54,7 +53,6 @@ export default function Collection({
           </li>
         ))}
       </ul>
-
       {hasNextPage && (
         <LoadMoreProducts startingCount={collectionProductCount} />
       )}

@@ -2,9 +2,15 @@ The Hydrogen framework includes `<Seo>` client and server components. This guide
 
 ## How SEO works
 
-The Hydrogen framework includes a `<Seo>` client component inside your app's `components` which you can use to customize the output of SEO-related tags in your document `head`.
+The Hydrogen framework work with Seo by inspects the user-agent for every request, and buffer the response to fully render the response on server side instead.
 
-Hydrogen also supplies a `<DefaultSeo>` server component, which is responsible for fetching your `shop.name` and setting default values and templates for every page on your website.
+To emulate this behaviour, add `?_bot` query param at the end of url.
+
+## What Hydrogen provides
+
+The Hydrogen framework supplies a `<DefaultSeo>` server component, which is responsible for fetching your `shop.name` and `shop.description` to act as default seo values for every page on your website.
+
+The Hydrogen package also includes a `<Seo>` client component that are being use on home, product, collection, and page server entry components that output the SEO-related tags in your document `head` and override the default values.
 
 ## Client component examples
 
@@ -18,7 +24,25 @@ The following example shows how to pass a `product` prop to the component to gen
 
 {% endcodeblock %}
 
-If you want to add custom `head` tags, then you can import `Helmet` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
+This component can also be use for simple SEO tags such as adding image Seo to a shipping page for example.
+
+{% codeblock file %}
+
+```jsx
+<Seo
+  page={{
+    title: 'Shipping',
+    description: 'This page explains the shipping policy.',
+  }}
+  image={{
+    url: 'https://shop-name.com/shipping.png';
+  }}
+/>
+```
+
+{% endcodeblock %}
+
+If you want to add more custom `head` tags, then you can import `Helmet` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
 
 {% codeblock file %}
 
@@ -51,13 +75,13 @@ import NotFound from './components/NotFound.server';
 import AppClient from './App.client';
 import LoadingFallback from './components/LoadingFallback';
 
-export default function App({log, ...serverState}) {
+export default function App({log, url, ...serverState}) {
   const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
 
   return (
     <Suspense fallback={<LoadingFallback />}>
       <AppClient helmetContext={serverState.helmetContext}>
-        <DefaultSeo />
+        <DefaultSeo url={url} />
         <DefaultRoutes
           pages={pages}
           serverState={serverState}

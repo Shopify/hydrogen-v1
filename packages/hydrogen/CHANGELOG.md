@@ -34,7 +34,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## 0.10.1 - 2022-01-26
 
 - Fix: hot reload for newly added page files
-- Seo.client updated to included some default seo for pages & collection. More details [#539](https://github.com/Shopify/hydrogen/pull/539)
+- Seo.client component had been moved from `src/components` to `@shopify/hydrogen. The props of this components also changed for default usage. See [doc] (../src/components/Seo/README.md) for the details. [#539](https://github.com/Shopify/hydrogen/pull/539)
 
 ## 0.10.0 - 2022-01-25
 

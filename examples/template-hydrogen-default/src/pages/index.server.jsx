@@ -4,6 +4,7 @@ import {
   ProductProviderFragment,
   Image,
   Link,
+  Seo,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -14,12 +15,32 @@ import Welcome from '../components/Welcome.server';
 import {Suspense} from 'react';
 
 export default function Index({country = {isoCode: 'US'}}) {
+  const {data} = useShopQuery({
+    query: QUERY,
+    variables: {
+      country: country.isoCode,
+    },
+  });
+
+  const {
+    shop: {
+      name: shopName,
+      primaryDomain: {url: shopUrl},
+    },
+  } = data;
+
   return (
     <Layout hero={<GradientBackground />}>
+      <Seo
+        homePage={{
+          title: shopName,
+          url: shopUrl,
+        }}
+      />
       <div className="relative mb-12">
         <Welcome />
         <Suspense fallback={<BoxFallback />}>
-          <FeaturedProductsBox country={country} />
+          <FeaturedProductsBox data={data} />
         </Suspense>
         <Suspense fallback={<BoxFallback />}>
           <FeaturedCollectionBox country={country} />
@@ -33,14 +54,7 @@ function BoxFallback() {
   return <div className="bg-white p-12 shadow-xl rounded-xl mb-10 h-40"></div>;
 }
 
-function FeaturedProductsBox({country}) {
-  const {data} = useShopQuery({
-    query: QUERY,
-    variables: {
-      country: country.isoCode,
-    },
-  });
-
+function FeaturedProductsBox({data}) {
   const collections = data ? flattenConnection(data.collections) : [];
   const featuredProductsCollection = collections[0];
   const featuredProducts = featuredProductsCollection
@@ -169,6 +183,13 @@ const QUERY = gql`
     $numProductSellingPlanGroups: Int = 0
     $numProductSellingPlans: Int = 0
   ) @inContext(country: $country) {
+    shop {
+      name
+      description
+      primaryDomain {
+        url
+      }
+    }
     collections(first: $numCollections) {
       edges {
         node {
