@@ -1,4 +1,5 @@
 export * from './ServerStateProvider';
-export {useShop, setShop} from './useShop';
+export {useShop} from './useShop';
 export {DefaultRoutes} from './Router';
 export {useServerRequest} from './ServerRequestProvider';
+export {Boomerang} from './Boomerang/Boomerang.client';

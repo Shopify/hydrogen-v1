@@ -1,34 +1,29 @@
-import {useContext} from 'react';
-import {
-  ShopifyContext,
-  makeShopifyContext,
-} from '../ShopifyProvider/ShopifyContext';
+import React, {useContext} from 'react';
+import {ShopifyContext} from '../ShopifyProvider';
 import type {ShopifyContextValue} from '../ShopifyProvider/types';
-import type {ShopifyConfig} from '../../types';
+import {shopifyProviderRSC} from '../ShopifyProvider/ShopifyProvider';
 
-let contextValue: ShopifyContextValue | null = null;
+// let contextValue: ShopifyContextValue | null = null;
 
 /**
  * The `useShop` hook provides access to values within `shopify.config.js`. It must be a descendent of a `ShopifyProvider` component.
  */
 export function useShop(): ShopifyContextValue {
-  /**
-   * During RSC, context is not (yet) allowed on Server Component, so we should be calling `setShop`
-   * in server and returning the object here.
-   */
-  if (contextValue) {
-    return contextValue;
+  let context: ShopifyContextValue | null;
+  try {
+    // Context only works in SSR rendering
+    context = useContext(ShopifyContext);
+  } catch (error) {
+    // If normal context failed it means this is not an SSR request.
+    // Try getting RSC cache instead:
+    // @ts-ignore
+    const cache = React.unstable_getCacheForType(shopifyProviderRSC);
+    context = cache ? cache.get(shopifyProviderRSC.key) : null;
   }
-
-  const context = useContext(ShopifyContext);
 
   if (!context) {
     throw new Error('No Shopify Context found');
   }
 
   return context;
-}
-
-export function setShop(shopifyConfig: ShopifyConfig) {
-  contextValue = makeShopifyContext(shopifyConfig);
 }

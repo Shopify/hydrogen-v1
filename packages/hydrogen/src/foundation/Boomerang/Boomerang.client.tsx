@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
 import {loadScript} from '../../utilities';
+import {useShop} from '../useShop';
 
 declare global {
   interface Window {
@@ -11,7 +12,9 @@ declare global {
 const URL =
   'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
 
-export default function Boomerang({storeDomain}: {storeDomain: string}) {
+export function Boomerang() {
+  const {storeDomain} = useShop();
+
   useEffect(() => {
     (function () {
       if (
