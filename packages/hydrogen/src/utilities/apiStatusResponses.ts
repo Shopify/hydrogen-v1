@@ -1,16 +1,16 @@
 /**
  * API status response codes are implemented below using https://httpstatuses.com/ as a template. Developers can use
- * these functions by either returning them to get a JSON response, or by throwing them as an error. Each response has a
- * default code that will be returned with it's coresponding message. The message can be optionally changed as needed in
- * the functions parameters and include any optional details. If there is a response missing a developer can use
- * RestStatusResponse instead.
+ * these functions by throwing them as an error. Each response has a default code that will be returned with it's
+ * coresponding message. The message can be optionally changed as needed in the functions parameters and include any
+ * optional details. If there is a response missing a developer can use RestStatusResponse instead.
  * */
 
 const TYPE = '__REST_STATUS__';
 const isDev = process.env.NODE_ENV === 'development';
 
 interface Response {
-  error: string,
+  statusMessage: string,
+  status: number
   details: string,
   stackTrace: any
 }
@@ -37,13 +37,15 @@ export class RestStatusResponse extends Error {
 
   getResponse() {
     let responseMessage = <Response>{
-      error: this.message,
+      statusMessage: this.message,
+      status: this.status,
       details: this.details,
       stackTrace: null,
     };
 
     if(isDev) responseMessage = <Response>{
-      error: this.message,
+      statusMessage: this.message,
+      status: this.status,
       details: this.details,
       stackTrace: this.stack
     }
@@ -56,7 +58,9 @@ export class RestStatusResponse extends Error {
  *   1×× Informational
  */
 
-export class ContinueResponse extends RestStatusResponse {
+/* 1xx Status codes don't work very well when returned in a response to the client...*/
+
+/*export class ContinueResponse extends RestStatusResponse {
   constructor(message: string, details: string) {
     super(100, (message ? message : 'Continue'),  details);
   }
@@ -78,7 +82,7 @@ export class EarlyHintsResponse extends RestStatusResponse {
   constructor(message: string, details: string) {
     super(103, (message ? message : 'Early Hints'),  details);
   }
-}
+}*/
 
 /*
  *   2×× Success
