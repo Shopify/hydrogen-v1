@@ -40,10 +40,11 @@ export function ProductWithRenderProp({product}) {
 
 ## Props
 
-| Name      | Type                                                  | Description                                                                                               |
-| --------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| metafield | <code>ParsedMetafield</code>                          | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.         |
-| children? | <code>(value: ParsedMetafield) => ReactElement</code> | A render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props). |
+| Name      | Type                                                  | Description                                                                                                                                           |
+| --------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| metafield | <code>ParsedMetafield</code>                          | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.                                                     |
+| children? | <code>(value: ParsedMetafield) => ReactElement</code> | A render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props).                                             |
+| as?       | <code>ElementType</code>                              | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/definitions/types). |
 
 ## Default output
 

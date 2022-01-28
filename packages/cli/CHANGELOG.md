@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+## 0.10.1 - 2022-01-26
+
+- Adds command hooks `onCommit` and `onUpdateFile`
+
 ## 0.10.0 - 2022-01-25
 
 - Adds `dev` command for running Hydrogen apps locally with vite

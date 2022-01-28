@@ -9,6 +9,8 @@
 
 import {createElement} from 'react';
 
+globalThis.__COMPONENT_INDEX = {};
+
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -66,6 +68,13 @@ function wrapInClientProxy(_ref) {
   rscDescriptor.$$typeof_rsc = Symbol.for('react.module.reference');
   rscDescriptor.filepath = id;
   rscDescriptor.name = named ? name : 'default';
+
+  if (!__COMPONENT_INDEX[id]) {
+    // Store a loader function to find components during SSR when consuming RSC
+    __COMPONENT_INDEX[id] = () =>
+      Promise.resolve({[rscDescriptor.name]: component});
+  }
+
   return new Proxy(componentRef, {
     get: function (target, prop) {
       return (

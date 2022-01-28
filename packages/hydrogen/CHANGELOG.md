@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-<!-- ## Unreleased -->
+## Unreleased
+
+- dx: Correct Typescript issue where `as` was a default prop for all components when it should not be
+- New React hook `useScriptLoader` is available to more easily load external scripts
+- DX: Update types and docs for `useCart()` hook and `<CartProvider>`
+
+## 0.10.1 - 2022-01-26
+
+- Fix: hot reload for newly added page files
 
 ## 0.10.0 - 2022-01-25
 

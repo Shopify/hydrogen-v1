@@ -44,6 +44,7 @@ export interface Ui {
   ask(message: string, options: BooleanQuestionOptions): Promise<boolean>;
   ask<T = string>(message: string, options?: BaseOptions): Promise<T>;
   say(message: string | [string, string][], options?: SayOptions): void;
+  printFile(file: FileResult): void;
 }
 
 export class Cli implements Ui {

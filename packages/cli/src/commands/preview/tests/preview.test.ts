@@ -3,10 +3,12 @@ import {withCli} from '../../../testing';
 describe('preview', () => {
   it('provides a helpful message when no worker build exists', async () => {
     await withCli(async ({run, fs}) => {
-      const {output} = await run('preview');
+      const result = await run('preview');
+      const output = result.output.stdout.join('');
 
-      expect(output.stdout.join('')).toContain(
-        'worker.js not found! Run `npm run build` first.'
+      expect(output).toContain('worker.js not found');
+      expect(output).toContain(
+        'Run `yarn run build` to generate a worker build and try again.'
       );
     });
   });

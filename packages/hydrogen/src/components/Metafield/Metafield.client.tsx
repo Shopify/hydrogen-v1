@@ -14,6 +14,8 @@ export interface MetafieldProps {
   metafield: ParsedMetafield;
   /** A render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props). */
   children?: (value: ParsedMetafield) => ReactElement;
+  /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/definitions/types). */
+  as?: ElementType;
 }
 
 /**
