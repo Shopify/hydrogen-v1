@@ -106,7 +106,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/Image',
         'components/MediaFile',
         'components/Metafield',
-        'components/Model3D',
+        'components/ModelViewer',
         'components/Money',
         'components/RawHtml',
         'components/ShopPayButton',
