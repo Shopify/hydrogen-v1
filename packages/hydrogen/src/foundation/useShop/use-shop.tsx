@@ -1,7 +1,8 @@
 import React, {useContext} from 'react';
 import {ShopifyContext} from '../ShopifyProvider';
 import type {ShopifyContextValue} from '../ShopifyProvider/types';
-import {shopifyProviderRSC} from '../ShopifyProvider/ShopifyProvider';
+import {SHOPIFY_PROVIDER_CONTEXT_KEY} from '../ShopifyProvider/ShopifyProvider';
+import {contextCache} from '../contextCache';
 
 // let contextValue: ShopifyContextValue | null = null;
 
@@ -17,8 +18,8 @@ export function useShop(): ShopifyContextValue {
     // If normal context failed it means this is not an SSR request.
     // Try getting RSC cache instead:
     // @ts-ignore
-    const cache = React.unstable_getCacheForType(shopifyProviderRSC);
-    context = cache ? cache.get(shopifyProviderRSC.key) : null;
+    const cache = React.unstable_getCacheForType(contextCache);
+    context = cache ? cache.get(SHOPIFY_PROVIDER_CONTEXT_KEY) : null;
   }
 
   if (!context) {

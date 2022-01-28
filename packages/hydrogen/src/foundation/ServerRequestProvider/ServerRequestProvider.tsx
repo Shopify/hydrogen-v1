@@ -2,6 +2,7 @@ import React, {createContext, useContext} from 'react';
 import {hashKey} from '../../framework/cache';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
+import {contextCache} from '../contextCache';
 
 // Context to inject current request in SSR
 export const RequestContextSSR = createContext<ServerComponentRequest>({
@@ -12,12 +13,7 @@ export const RequestContextSSR = createContext<ServerComponentRequest>({
   ctx: {cache: new Map()},
 } as ServerComponentRequest);
 
-// Cache to inject current request in RSC
-function requestCacheRSC() {
-  return new Map();
-}
-
-requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
+const REQUEST_CONTEXT_KEY = Symbol.for('HYDROGEN_REQUEST');
 
 type ServerRequestProviderProps = {
   isRSC: boolean;
@@ -35,9 +31,9 @@ export function ServerRequestProvider({
     // scoped to this current rendering.
 
     // @ts-ignore
-    const requestCache = React.unstable_getCacheForType(requestCacheRSC);
+    const requestCache = React.unstable_getCacheForType(contextCache);
 
-    requestCache.set(requestCacheRSC.key, request);
+    requestCache.set(REQUEST_CONTEXT_KEY, request);
 
     return children;
   }
@@ -60,8 +56,8 @@ export function useServerRequest() {
     // If normal context failed it means this is not an SSR request.
     // Try getting RSC cache instead:
     // @ts-ignore
-    const cache = React.unstable_getCacheForType(requestCacheRSC);
-    request = cache ? cache.get(requestCacheRSC.key) : null;
+    const cache = React.unstable_getCacheForType(contextCache);
+    request = cache ? cache.get(REQUEST_CONTEXT_KEY) : null;
   }
 
   if (!request) {
