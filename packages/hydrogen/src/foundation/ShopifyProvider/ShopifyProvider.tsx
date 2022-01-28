@@ -7,6 +7,7 @@ import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig} from '../../types';
 import {RequestContextSSR} from '../ServerRequestProvider';
+import {contextCache} from '../contextCache';
 
 export const ShopifyContext = createContext<ShopifyContextValue | null>(null);
 
@@ -19,11 +20,7 @@ function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   };
 }
 
-export function shopifyProviderRSC() {
-  return new Map();
-}
-
-shopifyProviderRSC.key = Symbol.for('SHOPIFY_PROVIDER_RSC');
+export const SHOPIFY_PROVIDER_CONTEXT_KEY = Symbol.for('SHOPIFY_PROVIDER_RSC');
 
 /**
  * The `ShopifyProvider` component wraps your entire app and provides support for hooks.
@@ -42,9 +39,12 @@ export function ShopifyProvider({
 
   if (isRSC()) {
     const shopifyProviderCache =
-    // @ts-ignore
-      React.unstable_getCacheForType(shopifyProviderRSC);
-    shopifyProviderCache.set(shopifyProviderRSC.key, shopifyProviderValue);
+      // @ts-ignore
+      React.unstable_getCacheForType(contextCache);
+    shopifyProviderCache.set(
+      SHOPIFY_PROVIDER_CONTEXT_KEY,
+      shopifyProviderValue
+    );
     return <>{children}</>;
   }
 
