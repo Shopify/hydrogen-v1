@@ -2,7 +2,7 @@
 
 **Requirements:**
 
-- Node v14+
+- Node.js version 16.5.0 or higher
 - Yarn
 
 ```bash
