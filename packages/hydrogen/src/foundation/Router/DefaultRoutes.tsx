@@ -1,5 +1,6 @@
 import React, {ReactElement, useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
+import BoomerangPageTemplate from '../Boomerang/BoomerangPageTemplate.client';
 import type {Logger} from '../../utilities/log/log';
 
 import type {ImportGlobEagerOutput} from '../../types';
@@ -40,9 +41,24 @@ export function DefaultRoutes({
   }
 
   return foundRoute ? (
-    <foundRoute.component params={foundRouteDetails.params} {...serverState} />
+    <>
+      <foundRoute.component
+        params={foundRouteDetails.params}
+        {...serverState}
+      />
+      <BoomerangPageTemplate pageTemplate={foundRoute.component.name} />
+    </>
   ) : (
-    fallback
+    <>
+      {fallback}
+      <BoomerangPageTemplate
+        pageTemplate={
+          typeof fallback?.type === 'function'
+            ? fallback?.type.name
+            : fallback?.type
+        }
+      />
+    </>
   );
 }
 

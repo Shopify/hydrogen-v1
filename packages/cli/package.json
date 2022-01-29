@@ -13,7 +13,9 @@
   "main": "./dist/index.js",
   "bin": {
     "hydrogen": "./bin/hydrogen",
-    "h2": "./bin/hydrogen"
+    "h2": "./bin/hydrogen",
+    "create-hydrogen": "./bin/create-hydrogen",
+    "create-hydrogen-app": "./bin/create-hydrogen"
   },
   "scripts": {
     "test": "jest",
