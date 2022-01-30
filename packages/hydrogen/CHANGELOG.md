@@ -11,6 +11,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - New React hook `useScriptLoader` is available to more easily load external scripts
 - DX: Update types and docs for `useCart()` hook and `<CartProvider>`
 - Track page load performance
+- Implement predefined response classes for API Routes. See [#575](https://github.com/Shopify/hydrogen/pull/575)
 
 ## 0.10.1 - 2022-01-26
 
