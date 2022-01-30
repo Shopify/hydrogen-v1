@@ -65,205 +65,202 @@ import {
   LoopDetectedResponse,
   NotExtendedResponse,
   NetworkAuthenticationRequiredResponse,
-  NetworkConnectTimeoutErrorResponse
-
+  NetworkConnectTimeoutErrorResponse,
 } from '@shopify/hydrogen';
-
 
 export async function api(request, {params: {handle}}) {
   const statusResponse = {
-
     /* 2×× Success */
-    '200': () => {
+    200: () => {
       throw new OKResponse();
     },
-    '201': () => {
+    201: () => {
       throw new CreatedResponse();
     },
-    '202': () => {
+    202: () => {
       throw new AcceptedResponse();
     },
-    '203': () => {
+    203: () => {
       throw new NonAuthorativeInformationResponse();
     },
-    '204': () => {
+    204: () => {
       throw new NoContentResponse();
     },
-    '205': () => {
+    205: () => {
       throw new ResetContentResponse();
     },
-    '206': () => {
+    206: () => {
       throw new PartialContentResponse();
     },
-    '207': () => {
+    207: () => {
       throw new MultiStatusResponse();
     },
-    '208': () => {
+    208: () => {
       throw new AlreadyReportedResponse();
     },
-    '226': () => {
+    226: () => {
       throw new IMUsedResponse();
     },
 
     /* 3×× Redirection */
-    '300': () => {
+    300: () => {
       throw new MultipleChoicesResponse();
     },
-    '301': () => {
+    301: () => {
       throw new MovedPermanentlyResponse();
     },
-    '302': () => {
+    302: () => {
       throw new FoundResponse();
     },
-    '303': () => {
+    303: () => {
       throw new SeeOtherResponse();
     },
-    '304': () => {
+    304: () => {
       throw new NotModifiedResponse();
     },
-    '306': () => {
+    305: () => {
       throw new UseProxyResponse();
     },
-    '307': () => {
+    307: () => {
       throw new TemporaryRedirectResponse();
     },
-    '308': () => {
+    308: () => {
       throw new PermanentRedirectResponse();
     },
 
     /* 4×× Client Error */
-    '400': () => {
+    400: () => {
       throw new BadRequestResponse();
     },
-    '401': () => {
+    401: () => {
       throw new UnauthorizedResponse();
     },
-    '402': () => {
+    402: () => {
       throw new PaymentRequiredResponse();
     },
-    '403': () => {
+    403: () => {
       throw new ForbiddenResponse();
     },
-    '404': () => {
+    404: () => {
       throw new NotFoundResponse();
     },
-    '405': () => {
+    405: () => {
       throw new MethodNotAllowedResponse();
     },
-    '406': () => {
+    406: () => {
       throw new NotAcceptableResponse();
     },
-    '407': () => {
+    407: () => {
       throw new ProxyAuthenticationRequiredResponse();
     },
-    '408': () => {
+    408: () => {
       throw new RequestTimeoutResponse();
     },
-    '409': () => {
+    409: () => {
       throw new ConflictResponse();
     },
-    '410': () => {
+    410: () => {
       throw new GoneResponse();
     },
-    '411': () => {
+    411: () => {
       throw new LengthRequiredResponse();
     },
-    '412': () => {
+    412: () => {
       throw new PreconditionFailedResponse();
     },
-    '413': () => {
+    413: () => {
       throw new PayloadTooLargeResponse();
     },
-    '414': () => {
+    414: () => {
       throw new RequestURITooLongResponse();
     },
-    '415': () => {
+    415: () => {
       throw new UnsupportedMediaTypeResponse();
     },
-    '416': () => {
+    416: () => {
       throw new RequestedRangeNotSatisfiableResponse();
     },
-    '417': () => {
+    417: () => {
       throw new ExpecationFailedResponse();
     },
-    '418': () => {
+    418: () => {
       throw new TeapotResponse();
     },
-    '421': () => {
+    421: () => {
       throw new MisdirectedRequestResponse();
     },
-    '422': () => {
+    422: () => {
       throw new UnprocessableEntityResponse();
     },
-    '423': () => {
+    423: () => {
       throw new LockedResponse();
     },
-    '424': () => {
+    424: () => {
       throw new FailedDependencyResponse();
     },
-    '426': () => {
+    426: () => {
       throw new UpgradeRequiredResponse();
     },
-    '428': () => {
+    428: () => {
       throw new PreconditionRequiredResponse();
     },
-    '429': () => {
+    429: () => {
       throw new TooManyRequestsResponse();
     },
-    '431': () => {
+    431: () => {
       throw new RequestHeaderFieldsTooLargeResponse();
     },
-    '444': () => {
+    444: () => {
       throw new ConnectionClosedWithoutResponseResponse();
     },
-    '451': () => {
+    451: () => {
       throw new UnavailableForLegalReasonsResponse();
     },
-    '499': () => {
+    /*'499': () => {
       throw new ClientClosedRequestResponse();
-    },
+    },*/
 
     /* 5×× Server Error */
-    '500': () => {
+    500: () => {
       throw new UnknownResponse();
     },
-    '501': () => {
+    501: () => {
       throw new NotImplementedResponse();
     },
-    '502': () => {
+    502: () => {
       throw new BadGatewayResponse();
     },
-    '503': () => {
+    503: () => {
       throw new ServiceUnavailableResponse();
     },
-    '504': () => {
+    504: () => {
       throw new GatewayTimeoutResponse();
     },
-    '505': () => {
+    505: () => {
       throw new HTTPVersionNotSupportedResponse();
     },
-    '506': () => {
+    506: () => {
       throw new VariantAlsoNegotiatesResponse();
     },
-    '507': () => {
+    507: () => {
       throw new InsufficientStorageResponse();
     },
-    '508': () => {
+    508: () => {
       throw new LoopDetectedResponse();
     },
-    '510': () => {
+    510: () => {
       throw new NotExtendedResponse();
     },
-    '511': () => {
+    511: () => {
       throw new NetworkAuthenticationRequiredResponse();
     },
-    '599': () => {
+    /*'599': () => {
       throw new NetworkConnectTimeoutErrorResponse();
-    },
+    },*/
 
-    'default': () => {
-      return new Response('OK', {status: 200})
-    }
+    default: () => {
+      return new Response('OK', {status: 200});
+    },
   };
 
   return statusResponse[handle]();
