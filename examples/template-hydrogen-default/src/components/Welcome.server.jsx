@@ -73,7 +73,7 @@ function StorefrontInfo() {
       )}
       <hr className="my-4" />
       <a
-        href="https://shopify.dev/custom-storefronts/hydrogen/getting-started#step-2-update-information-about-your-shopify-storefront"
+        href="https://shopify.dev/custom-storefronts/hydrogen/getting-started/create#step-2-update-information-about-your-shopify-storefront"
         className="text-md inline-flex items-center text-blue-700 font-medium hover:underline"
         target="_blank"
         rel="noreferrer"
