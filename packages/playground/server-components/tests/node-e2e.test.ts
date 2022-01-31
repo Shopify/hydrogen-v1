@@ -161,3 +161,11 @@ it.skip('supports form request on API routes', async () => {
   await page.click('#fsubmit');
   expect(await page.textContent('*')).toContain('fname=sometext');
 });
+
+it('should render server state in client component', async () => {
+  await page.goto(viteTestUrl + '/test-server-state');
+  expect(await page.textContent('h1')).toContain('Test Server State');
+  expect(await page.textContent('#server-state')).toContain(
+    'Pathname: /test-server-state'
+  );
+});
