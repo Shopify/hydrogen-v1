@@ -9,6 +9,10 @@ export enum Template {
   Default = 'Default Hydrogen starter',
 }
 
+const renameFiles = {
+  _gitignore: '.gitignore',
+};
+
 /**
  * Create a new `@shopify/hydrogen` app.
  */
@@ -50,12 +54,24 @@ export async function init(env: Env) {
   }
 
   if (template === Template.Default) {
-    const templateDir = join(__dirname, 'templates', 'template-hydrogen');
+    const templateDir = join(
+      __dirname,
+      'templates',
+      'template-hydrogen-default'
+    );
     const files = readdirSync(templateDir);
 
     for await (const file of files) {
       const srcPath = fs.join(templateDir, file);
-      const destPath = fs.join(workspace.root(), file);
+      const destPath = renameFiles[file as keyof typeof renameFiles]
+        ? fs.join(
+            workspace.root(),
+            renameFiles[file as keyof typeof renameFiles]
+          )
+        : fs.join(workspace.root(), file);
+      const overwritten = await fs.exists(destPath);
+
+      ui.printFile({path: relative(process.cwd(), destPath), overwritten});
       await copy(srcPath, destPath);
     }
 

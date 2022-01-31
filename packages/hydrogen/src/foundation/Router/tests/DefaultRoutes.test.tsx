@@ -42,6 +42,52 @@ it('handles index pages', () => {
   ]);
 });
 
+it('handles nested index pages', () => {
+  const pages: ImportGlobEagerOutput = {
+    './pages/products/index.server.jsx': STUB_MODULE,
+    './pages/products/[handle].server.jsx': STUB_MODULE,
+    './pages/blogs/index.server.jsx': STUB_MODULE,
+    './pages/products/snowboards/fastones/index.server.jsx': STUB_MODULE,
+    './pages/articles/index.server.jsx': STUB_MODULE,
+    './pages/articles/[...handle].server.jsx': STUB_MODULE,
+  };
+
+  const routes = createRoutesFromPages(pages);
+
+  expect(routes).toEqual([
+    {
+      path: '/products',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+    {
+      path: '/blogs',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+    {
+      path: '/products/snowboards/fastones',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+    {
+      path: '/articles',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+    {
+      path: '/products/:handle',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+    {
+      path: '/articles/:handle',
+      component: STUB_MODULE.default,
+      exact: false,
+    },
+  ]);
+});
+
 it('handles dynamic paths', () => {
   const pages: ImportGlobEagerOutput = {
     './pages/contact.server.jsx': STUB_MODULE,

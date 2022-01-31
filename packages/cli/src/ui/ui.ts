@@ -120,7 +120,10 @@ export class Cli implements Ui {
       ? chalk.redBright`• Overwrote`
       : chalk.greenBright`• Wrote new`;
 
-    const difference = diff ? `` : chalk.cyanBright`• No change`;
+    const difference =
+      !overwritten || diff === undefined || false
+        ? ``
+        : chalk.cyanBright`• No change`;
 
     this.say(
       [overwrote, difference, chalk.underline.whiteBright(path)].join(' ')
