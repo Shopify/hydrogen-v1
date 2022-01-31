@@ -25,6 +25,7 @@ import {setShop} from './foundation/useShop';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
+import {ServerStateProvider} from './foundation/ServerStateProvider';
 
 // @ts-ignore
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
@@ -70,7 +71,9 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
 
     let html = await renderToBufferedString(
       <Html template={template}>
-        <ReactApp />
+        <ServerStateProvider serverState={state} setServerState={() => {}}>
+          <ReactApp />
+        </ServerStateProvider>
       </Html>,
       {log, nonce}
     );
@@ -157,7 +160,9 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
 
     const ReactAppSSR = (
       <Html template={template} htmlAttrs={{lang: 'en'}}>
-        <RscConsumer />
+        <ServerStateProvider serverState={state} setServerState={() => {}}>
+          <RscConsumer />
+        </ServerStateProvider>
       </Html>
     );
 

@@ -15,6 +15,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - feat: Add `totalQuantity` to the returned object from `useCart()`
 - Track page load performance
 - dx: Export `ProductPrice` and `ProductMetafield` standalone components
+- Fix missing server state on SSR pass
 
 ## 0.10.1 - 2022-01-26
 
