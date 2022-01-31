@@ -1,8 +1,8 @@
-import {Model3D} from '@shopify/hydrogen';
+import {ModelViewer} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${Model3D.Fragment}
+  ${ModelViewer.Fragment}
 
   query Products {
     products(first: 5) {
@@ -32,6 +32,6 @@ export default function MyProductModel() {
 
   const firstMediaElement = data.products.edges[0].node.media.edges[0].node;
   if (firstMediaElement.mediaContentType === 'MODEL_3D') {
-    return <Model3D model={firstMediaElement} />;
+    return <ModelViewer model={firstMediaElement} />;
   }
 }

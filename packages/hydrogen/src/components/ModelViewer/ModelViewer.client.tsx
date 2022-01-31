@@ -14,8 +14,8 @@ import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
 import {Model3DFragment as Fragment} from '../../graphql/graphql-constants';
 import {Props} from '../types';
 
-export interface Model3DProps {
-  /** A function that takes an object return by the `useMoney` hook and returns a `ReactNode`. */
+export interface ModelViewerProps {
+  /** Any ReactNode elements. */
   children?: ReactNode;
   /** An object with the same fields as the [GraphQL fragment](#graphql-fragment). */
   model: {
@@ -142,11 +142,11 @@ declare global {
 }
 
 /**
- * The `Model3D` component renders a 3D model (with the `model-viewer` tag) for
+ * The `ModelViewer` component renders a 3D model (with the `model-viewer` tag) for
  * the Storefront API's [`Model3d` object](/api/storefront/reference/products/model3d).
  */
-export function Model3D<TTag extends ElementType>(
-  props: Props<TTag, PropsWeControl> & Model3DProps
+export function ModelViewer<TTag extends ElementType>(
+  props: Props<TTag, PropsWeControl> & ModelViewerProps
 ) {
   const [modelViewer, setModelViewer] = useState<undefined | HTMLElement>(
     undefined
@@ -348,5 +348,5 @@ export function Model3D<TTag extends ElementType>(
   );
 }
 
-Model3D.Fragment = Fragment;
+ModelViewer.Fragment = Fragment;
 export const Model3DFragment = Fragment;

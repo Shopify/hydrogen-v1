@@ -29,11 +29,11 @@ Primitive components and hooks are the building blocks for different component t
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/primitive/mediafile">MediaFile</a></td>
-    <td>Renders the media for the Storefront API's <a href="/api/storefront/reference/products/media">Media object</a>. It either renders an <code>Image</code>, a <code>Video</code>, an <code>ExternalVideo</code>, or a <code>Model3D</code> depending on the <code>mediaContentType</code> of the media provided as a prop.</td>
+    <td>Renders the media for the Storefront API's <a href="/api/storefront/reference/products/media">Media object</a>. It either renders an <code>Image</code>, a <code>Video</code>, an <code>ExternalVideo</code>, or a <code>ModelViewer</code> depending on the <code>mediaContentType</code> of the media provided as a prop.</td>
     <td>Not applicable</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/primitive/model3d">Model3D</a></td>
+    <td><a href="/api/hydrogen/components/primitive/modelviewer">ModelViewer</a></td>
     <td>Renders a 3D model (with the <code>model-viewer</code> tag) for the Storefront API's <a href="/api/storefront/reference/products/model3d">Model3d object</a>.</td>
     <td>Not applicable</td>
   </tr>

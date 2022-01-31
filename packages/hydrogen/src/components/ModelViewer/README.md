@@ -1,16 +1,16 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Model3D and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ModelViewer and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
-The `Model3D` component renders a 3D model (with the `model-viewer` tag) for
+The `ModelViewer` component renders a 3D model (with the `model-viewer` tag) for
 the Storefront API's [`Model3d` object](/api/storefront/reference/products/model3d).
 
 ## Example code
 
 ```tsx
-import {Model3D} from '@shopify/hydrogen';
+import {ModelViewer} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${Model3D.Fragment}
+  ${ModelViewer.Fragment}
 
   query Products {
     products(first: 5) {
@@ -40,7 +40,7 @@ export default function MyProductModel() {
 
   const firstMediaElement = data.products.edges[0].node.media.edges[0].node;
   if (firstMediaElement.mediaContentType === 'MODEL_3D') {
-    return <Model3D model={firstMediaElement} />;
+    return <ModelViewer model={firstMediaElement} />;
   }
 }
 ```
@@ -49,7 +49,7 @@ export default function MyProductModel() {
 
 | Name                        | Type                                                                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                              |
 | --------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| children?                   | <code>ReactNode</code>                                                                                 | A function that takes an object return by the `useMoney` hook and returns a `ReactNode`.                                                                                                                                                                                                                                                                                                                                 |
+| children?                   | <code>ReactNode</code>                                                                                 | Any ReactNode elements.                                                                                                                                                                                                                                                                                                                                                                                                  |
 | model                       | <code>Unknown<<wbr>UndocumentedType, UndocumentedType, UndocumentedType, UndocumentedType<wbr>></code> | An object with the same fields as the [GraphQL fragment](#graphql-fragment).                                                                                                                                                                                                                                                                                                                                             |
 | loading?                    | <code>"auto" &#124; "lazy" &#124; "eager"</code>                                                       | A string of either `auto`, `lazy`, or `eager` to indicate the conditions for preloading. Refer to [`loading` in the &lt;model-viewer&gt; documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-loading).                                                                                                                                                                                   |
 | poster?                     | <code>string</code>                                                                                    | A url to display an image instead of the model, useful for showing the user something before a model is loaded and ready to render. If none is provided, [Model3d.previewImage](https://shopify.dev/api/storefront/reference/products/model3d#previewimage-2021-10) is used. Refer to [`poster` in the &lt;model-viewer&gt; documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-poster). |
@@ -106,11 +106,11 @@ export default function MyProductModel() {
 
 ## Component type
 
-The `Model3D` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `ModelViewer` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## GraphQL fragment
 
-The following fragment is available as a string for your GraphQL query using `Model3DFragment` or `Model3D.Fragment`. Using this fragment ensures that you have all the data necessary for rendering the `Model3D` component.
+The following fragment is available as a string for your GraphQL query using `Model3DFragment` or `ModelViewer.Fragment`. Using this fragment ensures that you have all the data necessary for rendering the `Model3D` component.
 
 ```graphql
 fragment Model3DFragment on Model3d {
