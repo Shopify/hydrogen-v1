@@ -8,8 +8,12 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - `<Model3D>` has been renamed to `<ModelViewer>`
+- Fix index routes. See [#562](https://github.com/Shopify/hydrogen/issues/562)
 - dx: Correct Typescript issue where `as` was a default prop for all components when it should not be
 - New React hook `useScriptLoader` is available to more easily load external scripts
+- DX: Update types and docs for `useCart()` hook and `<CartProvider>`
+- Track page load performance
+- dx: Export `ProductPrice` and `ProductMetafield` standalone components
 
 ## 0.10.1 - 2022-01-26
 

@@ -7,7 +7,7 @@ import {formatFile} from '../utilities';
 export interface FileResult {
   path: string;
   overwritten: boolean;
-  diff: boolean;
+  diff?: boolean;
 }
 
 export class Fs {

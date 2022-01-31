@@ -1,5 +1,6 @@
 import React, {ReactElement, useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
+import BoomerangPageTemplate from '../Boomerang/BoomerangPageTemplate.client';
 import type {Logger} from '../../utilities/log/log';
 
 import type {ImportGlobEagerOutput} from '../../types';
@@ -40,9 +41,24 @@ export function DefaultRoutes({
   }
 
   return foundRoute ? (
-    <foundRoute.component params={foundRouteDetails.params} {...serverState} />
+    <>
+      <foundRoute.component
+        params={foundRouteDetails.params}
+        {...serverState}
+      />
+      <BoomerangPageTemplate pageTemplate={foundRoute.component.name} />
+    </>
   ) : (
-    fallback
+    <>
+      {fallback}
+      <BoomerangPageTemplate
+        pageTemplate={
+          typeof fallback?.type === 'function'
+            ? fallback?.type.name
+            : fallback?.type
+        }
+      />
+    </>
   );
 }
 
@@ -61,7 +77,7 @@ export function createRoutesFromPages(
 
   const routes = Object.keys(pages)
     .map((key) => {
-      const path = key
+      let path = key
         .replace('./pages', '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
@@ -80,6 +96,9 @@ export function createRoutesFromPages(
           /\[(?:[.]{3})?(\w+?)\]/g,
           (_match, param: string) => `:${param}`
         );
+
+      if (path.endsWith('/') && path !== '/')
+        path = path.substring(0, path.length - 1);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
