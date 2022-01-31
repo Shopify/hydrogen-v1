@@ -39,10 +39,7 @@ export const CART_WITH_ACTIONS: CartWithActions = {
   buyerIdentityUpdate: () => {},
   cartAttributesUpdate: () => {},
   discountCodesUpdate: () => {},
-  cartLinesTotalQuantity: CART_WITH_LINES_FLATTENED.lines.reduce(
-    (prev, curr) => {
-      return prev + curr.quantity;
-    },
-    0
-  ),
+  totalQuantity: CART_WITH_LINES_FLATTENED.lines.reduce((prev, curr) => {
+    return prev + curr.quantity;
+  }, 0),
 };

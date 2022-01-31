@@ -11,11 +11,11 @@ jest.mock('../hooks', () => {
 });
 
 describe(`CartProvider.client`, () => {
-  describe(`cartLinesTotalQuantity`, () => {
-    let CartLinesTotalQuantity = () => (
+  describe(`totalQuantity`, () => {
+    let TotalQuantity = () => (
       <CartContext.Consumer>
         {(cartContext) => {
-          return <div>{cartContext?.cartLinesTotalQuantity}</div>;
+          return <div>{cartContext?.totalQuantity}</div>;
         }}
       </CartContext.Consumer>
     );
@@ -25,7 +25,7 @@ describe(`CartProvider.client`, () => {
     });
 
     it(`should start with 1`, () => {
-      const mount = mountWithCartProvider(<CartLinesTotalQuantity />);
+      const mount = mountWithCartProvider(<TotalQuantity />);
       expect(mount).toContainReactText(`1`);
     });
 
@@ -44,12 +44,12 @@ describe(`CartProvider.client`, () => {
         },
       });
 
-      CartLinesTotalQuantity = () => (
+      TotalQuantity = () => (
         <CartContext.Consumer>
           {(cartContext) => {
             return (
               <div>
-                <span id="quantity">{cartContext?.cartLinesTotalQuantity}</span>
+                <span id="quantity">{cartContext?.totalQuantity}</span>
                 <button
                   onClick={() => {
                     cartContext?.linesAdd([newLine]);
@@ -63,7 +63,7 @@ describe(`CartProvider.client`, () => {
         </CartContext.Consumer>
       );
 
-      const mount = mountWithCartProvider(<CartLinesTotalQuantity />);
+      const mount = mountWithCartProvider(<TotalQuantity />);
       mount.act(() => mount.find('button')?.trigger('onClick'));
       expect(mount.find('span')).toContainReactText(`2`);
     });

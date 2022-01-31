@@ -10,7 +10,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - dx: Correct Typescript issue where `as` was a default prop for all components when it should not be
 - New React hook `useScriptLoader` is available to more easily load external scripts
 - DX: Update types and docs for `useCart()` hook and `<CartProvider>`
-- feat: Add `cartLinesTotalQuantity` to the returned object from `useCart()`
+- feat: Add `totalQuantity` to the returned object from `useCart()`
 
 ## 0.10.1 - 2022-01-26
 

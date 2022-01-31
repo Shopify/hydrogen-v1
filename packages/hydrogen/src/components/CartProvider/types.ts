@@ -53,7 +53,7 @@ export interface CartWithActions extends Cart {
   /** A callback that updates the cart's discount codes. Expects the same `codes` input that you would provide to the Storefront API's `cartDiscountCodesUpdate` mutation. */
   discountCodesUpdate: (discountCodes: string[]) => void;
   /** The total number of items in the cart, across all lines. If there are no lines, then the value is 0. */
-  cartLinesTotalQuantity: number;
+  totalQuantity: number;
 }
 
 export type State =
