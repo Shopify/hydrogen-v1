@@ -16,6 +16,8 @@ var vite = require('vite');
 var fs = require('fs');
 var path = require('path');
 
+var rscViteFileRE = /\/react-server-dom-vite.js/;
+
 // $FlowFixMe[module-missing]
 function ReactFlightVitePlugin() {
   var _ref =
@@ -37,6 +39,10 @@ function ReactFlightVitePlugin() {
     enforce: 'pre',
     configResolved: function (_config) {
       config = _config;
+
+      // By pushing this plugin at the end of the existing array,
+      // we enforce running this *after* Vite resolves import.meta.glob.
+      config.plugins.push(hashImportsPlugin);
     },
     resolveId: async function (source, importer) {
       if (!importer) return null;
@@ -84,7 +90,7 @@ function ReactFlightVitePlugin() {
        * If the paths are relative to the root instead, Vite won't add the querystring
        * and we will have duplicated files in the browser (with duplicated contexts, etc).
        */
-      if (/\/react-server-dom-vite.js/.test(id)) {
+      if (rscViteFileRE.test(id)) {
         const INJECTING_RE =
           /\{\s*__INJECTED_CLIENT_IMPORTERS__[:\s]*null[,\s]*\}\s*;/;
 
@@ -130,39 +136,52 @@ function ReactFlightVitePlugin() {
               var glob = _ref3[0],
                 prefix = _ref3[1];
               return (
-                "__vncp(import.meta.glob('" +
+                // The prefix is used later to turn relative imports
+                // into absolute imports, and then into hashes.
+                `/* HASH_BEGIN ${vite.normalizePath(
+                  prefix
+                )} */ import.meta.glob('` +
                 vite.normalizePath(glob) +
-                "'), '" +
-                vite.normalizePath(prefix) +
-                "')"
+                "') /* HASH_END */"
               );
             })
             .join(', ') +
           ');';
-        return code.replace(
-          INJECTING_RE,
-          injectedGlobs + serializedNormalizePaths()
-        );
+        return code.replace(INJECTING_RE, injectedGlobs);
       }
     },
   };
 }
 
-var serializedNormalizePaths = function () {
-  return "\nfunction __vncp(obj, prefix) {\n  const nestedRE = /\\.\\.\\//gm;\n  return Object.keys(obj).reduce(function (acc, key) {\n    acc[prefix.slice(0, -1) + key.replace(nestedRE, '')] = obj[key];\n    return acc;\n  }, {});\n}\n";
-};
+const btoa = (hash) => Buffer.from(String(hash), 'binary').toString('base64');
+function hash(value) {
+  let hash = 0;
+  for (var i = 0; i < value.length; i++) {
+    var char = value.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
 
-async function proxyClientComponent(id, src) {
+  return btoa(hash).replace(/=+/, '');
+}
+
+const getComponentFilename = (filepath) =>
+  filepath.split('/').pop().split('.').shift();
+
+const getComponentId = (filepath) =>
+  `${getComponentFilename(filepath)}-${hash(filepath)}`;
+
+async function proxyClientComponent(filepath, src) {
   var DEFAULT_EXPORT = 'default'; // Modify the import ID to avoid infinite wraps
 
-  var importFrom = id + '?no-proxy';
+  var importFrom = filepath + '?no-proxy';
   await esModuleLexer.init;
 
   if (!src) {
-    src = await fs.promises.readFile(id, 'utf-8');
+    src = await fs.promises.readFile(filepath, 'utf-8');
   }
 
-  var _await$transformWithE = await vite.transformWithEsbuild(src, id),
+  var _await$transformWithE = await vite.transformWithEsbuild(src, filepath),
     code = _await$transformWithE.code;
 
   var _parse = esModuleLexer.parse(code),
@@ -174,16 +193,14 @@ async function proxyClientComponent(id, src) {
 
   exportStatements.forEach(function (key) {
     var isDefault = key === DEFAULT_EXPORT;
-    var componentName = isDefault
-      ? id.split('/').pop().split('.').shift()
-      : key;
+    var componentName = isDefault ? getComponentFilename(filepath) : key;
     proxyCode +=
       'export ' +
       (isDefault ? DEFAULT_EXPORT : 'const ' + componentName + ' =') +
       " wrapInClientProxy({ name: '" +
       componentName +
       "', id: '" +
-      id +
+      getComponentId(filepath) +
       "', component: allImports['" +
       key +
       "'], named: " + // eslint-disable-next-line react-internal/safe-string-coercion
@@ -192,5 +209,30 @@ async function proxyClientComponent(id, src) {
   });
   return proxyCode;
 }
+
+var hashImportsPlugin = {
+  name: 'vite-plugin-react-server-components-hash-imports',
+  enforce: 'post',
+  transform: function (code, id) {
+    // Turn relative import paths to lossy hashes
+    if (rscViteFileRE.test(id)) {
+      const nestedRE = /\.\.\//gm;
+
+      return code.replace(
+        /\/\*\s*HASH_BEGIN\s*(.+?)\s*\*\/\s*(.+?)\/\*\s*HASH_END\s*\*\//gms,
+        function (_, prefix, imports) {
+          return imports
+            .trim()
+            .replace(/"([^"]+?)":/gms, function (__, relativePath) {
+              const absolutePath =
+                prefix.slice(0, -1) + relativePath.replace(nestedRE, '');
+
+              return `"${getComponentId(absolutePath)}":`;
+            });
+        }
+      );
+    }
+  },
+};
 
 module.exports = ReactFlightVitePlugin;
