@@ -252,11 +252,7 @@ Hydrogen includes the following cart components and hooks:
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartprovider">CartProvider</a></td>
     <td>Creates a context for using a cart.</td>
-    <td>
-      <ul>
-        <li><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></li>
-      </ul>
-    </td>
+    <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartshoppaybutton">CartShopPayButton</a></td>
