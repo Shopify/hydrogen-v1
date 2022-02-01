@@ -16,6 +16,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Track page load performance
 - dx: Export `ProductPrice` and `ProductMetafield` standalone components
 - Fix missing server state on SSR pass
+- Fix mobile navigation in example that scrolls the body underneath when shown
 
 ## 0.10.1 - 2022-01-26
 
