@@ -7,8 +7,6 @@ import {TitleSeo} from '../TitleSeo.client';
 import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 
-const mockUrl = 'https://test.com';
-
 jest.mock('react-helmet-async', () => ({
   Helmet({children}) {
     return children;
@@ -18,9 +16,6 @@ jest.mock('react-helmet-async', () => ({
 jest.mock('../../../foundation', () => ({
   useShop() {
     return {locale: 'fr-CA'};
-  },
-  useServerRequest() {
-    return {url: mockUrl};
   },
 }));
 
@@ -45,6 +40,7 @@ jest.mock('../TwitterSeo.client', () => ({
 const defaultProps = {
   title: 'default title',
   description: 'default description',
+  url: 'https://store-name.com',
 };
 
 describe('<DefaultPageSeo />', () => {
@@ -71,7 +67,7 @@ describe('<DefaultPageSeo />', () => {
 
       expect(wrapper).toContainReactComponent('meta', {
         property: 'og:url',
-        content: mockUrl,
+        content: defaultProps.url,
       });
     });
   });

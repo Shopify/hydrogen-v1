@@ -16,7 +16,7 @@ export default function Page({params}) {
 
   return (
     <Layout>
-      <Seo page={page} />
+      <Seo type="page" data={page} />
       <h1 className="text-2xl font-bold">{page.title}</h1>
       <RawHtml string={page.body} className="prose mt-8" />
     </Layout>

@@ -2,15 +2,21 @@ The Hydrogen framework includes `<Seo>` client and server components. This guide
 
 ## How SEO works
 
-The Hydrogen framework work with Seo by inspects the user-agent for every request, and buffer the response to fully render the response on server side instead.
+The Hydrogen framework supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side instead.
 
 To emulate this behaviour, add `?_bot` query param at the end of url.
 
-## What Hydrogen provides
+## How SEO works in Hydrogen
 
-The Hydrogen framework supplies a `<DefaultSeo>` server component, which is responsible for fetching your `shop.name` and `shop.description` to act as default seo values for every page on your website.
+The Hydrogen framework supplies a `<DefaultSeo>` server component, which fetches your `shop.name` and `shop.description`, to provides the default SEO values for every page on your website.
 
-The Hydrogen package also includes a `<Seo>` client component that are being use on home, product, collection, and page server entry components that output the SEO-related tags in your document `head` and override the default values.
+Hydrogen also includes a `<Seo>` client component in the starter template that you can use to output the SEO-related tags in your document `head` and override the default values on the following pages:
+
+- [Default page](../../../../../examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
+- [Home page](../../../../../examples/template-hydrogen-default/src/pages/index.server.jsx)
+- [Product page](../../../../../examples/template-hydrogen-default/src/pages/products/[handle].server.jsx)
+- [Collection page](../../../../../examples/template-hydrogen-default/src/pages/collections/[handle].server.jsx)
+- [Pages page](../../../../../examples/template-hydrogen-default/src/pages/pages/[handle].server.jsx)
 
 ## Client component examples
 
@@ -19,25 +25,7 @@ The following example shows how to pass a `product` prop to the component to gen
 {% codeblock file %}
 
 ```jsx
-<Seo product={product} />
-```
-
-{% endcodeblock %}
-
-This component can also be use for simple SEO tags such as adding image Seo to a shipping page for example.
-
-{% codeblock file %}
-
-```jsx
-<Seo
-  page={{
-    title: 'Shipping',
-    description: 'This page explains the shipping policy.',
-  }}
-  image={{
-    url: 'https://shop-name.com/shipping.png';
-  }}
-/>
+<Seo type="product" data={product} />
 ```
 
 {% endcodeblock %}
@@ -52,6 +40,7 @@ If you want to add more custom `head` tags, then you can import `Helmet` from Hy
 import {Helmet} from '@shopify/hydrogen/client';
 
 return (
+  <Seo type="product" data={product} />
   <Helmet>
     <meta property="something" content="else" />
   </Helmet>
@@ -75,13 +64,13 @@ import NotFound from './components/NotFound.server';
 import AppClient from './App.client';
 import LoadingFallback from './components/LoadingFallback';
 
-export default function App({log, url, ...serverState}) {
+export default function App({log, ...serverState}) {
   const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
 
   return (
     <Suspense fallback={<LoadingFallback />}>
       <AppClient helmetContext={serverState.helmetContext}>
-        <DefaultSeo url={url} />
+        <DefaultSeo />
         <DefaultRoutes
           pages={pages}
           serverState={serverState}

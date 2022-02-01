@@ -1,8 +1,6 @@
 import React from 'react';
 import {Helmet} from 'react-helmet-async';
 
-import {useServerRequest} from '../../foundation';
-
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
 import {TwitterSeo} from './TwitterSeo.client';
@@ -11,18 +9,16 @@ import {ImageSeo} from './ImageSeo.client';
 import {Product} from './types';
 
 export function ProductSeo({
+  url,
   title,
   description,
   seo,
-  handle,
   vendor,
   images,
   variants,
 }: Product) {
   const seoTitle = seo?.title ?? title;
   const seoDescription = seo?.description ?? description;
-
-  const {url} = useServerRequest();
 
   let firstVariantPrice;
   let firstImage;

@@ -8,17 +8,9 @@ import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 import {ImageSeo} from '../ImageSeo.client';
 
-const mockUrl = 'https://test.com/product/123';
-
 jest.mock('react-helmet-async', () => ({
   Helmet({children}) {
     return children;
-  },
-}));
-
-jest.mock('../../../foundation', () => ({
-  useServerRequest() {
-    return {url: mockUrl};
   },
 }));
 
@@ -47,6 +39,7 @@ jest.mock('../ImageSeo.client', () => ({
 }));
 
 const defaultProps = {
+  url: 'https://test.com/product/123',
   title: 'default title',
   description: 'default description',
   seo: {},
@@ -143,7 +136,7 @@ describe('<ProductSeo />', () => {
             '@type': 'Thing',
             name: defaultProps.vendor,
           },
-          url: mockUrl,
+          url: 'https://test.com/product/123',
         }),
       });
     });
@@ -170,7 +163,7 @@ describe('<ProductSeo />', () => {
             '@type': 'Thing',
             name: defaultProps.vendor,
           },
-          url: mockUrl,
+          url: 'https://test.com/product/123',
           image: image.url,
         }),
       });
@@ -210,7 +203,7 @@ describe('<ProductSeo />', () => {
             '@type': 'Thing',
             name: defaultProps.vendor,
           },
-          url: mockUrl,
+          url: 'https://test.com/product/123',
           sku: variant.sku,
           offers: [
             {

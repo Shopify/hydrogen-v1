@@ -1,6 +1,6 @@
 import React from 'react';
 import {Helmet} from 'react-helmet-async';
-import {useShop, useServerRequest} from '../../foundation';
+import {useShop} from '../../foundation';
 
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
@@ -18,8 +18,6 @@ export function DefaultPageSeo({
   const {locale} = useShop();
   const fallBacklang = locale.split(/[-_]/)[0];
 
-  const {url: requestUrl} = useServerRequest();
-
   return (
     <>
       <Helmet
@@ -29,7 +27,7 @@ export function DefaultPageSeo({
         <html lang={lang ?? fallBacklang} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={title} />
-        <meta property="og:url" content={url ?? requestUrl} />
+        <meta property="og:url" content={url} />
       </Helmet>
       <TitleSeo title={title} />
       <DescriptionSeo description={description} />

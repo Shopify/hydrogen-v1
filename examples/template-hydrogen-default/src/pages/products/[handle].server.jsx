@@ -1,4 +1,9 @@
-import {useShopQuery, ProductProviderFragment, Seo} from '@shopify/hydrogen';
+import {
+  useShopQuery,
+  ProductProviderFragment,
+  Seo,
+  useServerRequest,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
@@ -18,13 +23,15 @@ export default function Product({country = {isoCode: 'US'}, params}) {
     },
   });
 
+  const {url} = useServerRequest();
+
   if (!product) {
     return <NotFound />;
   }
 
   return (
     <Layout>
-      <Seo product={product} />
+      <Seo type="product" data={{url, ...product}} />
       <ProductDetails product={product} />
     </Layout>
   );

@@ -18,7 +18,7 @@ export interface Image {
 export interface DefaultPage {
   title: Title;
   description: Description;
-  url?: string;
+  url: string;
   titleTemplate?: string;
   lang?: string;
 }
@@ -30,13 +30,13 @@ export interface HomePage {
 }
 
 export interface Product {
+  url: string;
   title: Title;
   description: Description;
   seo: {
     title?: Title;
     description?: Description;
   };
-  handle: string;
   vendor: string;
   images: {edges: {node: Image}[]};
   variants: {

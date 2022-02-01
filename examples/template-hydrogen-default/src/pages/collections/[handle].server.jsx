@@ -38,7 +38,7 @@ export default function Collection({
 
   return (
     <Layout>
-      <Seo collection={collection} />
+      <Seo type="collection" data={collection} />
       <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
         {collection.title}
       </h1>

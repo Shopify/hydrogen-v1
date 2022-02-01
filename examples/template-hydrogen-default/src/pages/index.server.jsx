@@ -32,7 +32,8 @@ export default function Index({country = {isoCode: 'US'}}) {
   return (
     <Layout hero={<GradientBackground />}>
       <Seo
-        homePage={{
+        type="homepage"
+        data={{
           title: shopName,
           url: shopUrl,
         }}

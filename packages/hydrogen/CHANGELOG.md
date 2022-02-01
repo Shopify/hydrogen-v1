@@ -30,11 +30,11 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartNoteUpdateCallback`
 - Feat: Transition away from deprecated currency selector in favor of country selector
 - Fix: add charset to content type in HTML responses
+- The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
 
 ## 0.10.1 - 2022-01-26
 
 - Fix: hot reload for newly added page files
-- Seo.client component had been moved from `src/components` to `@shopify/hydrogen. The props of this components also changed for default usage. See [doc] (../src/components/Seo/README.md) for the details. [#539](https://github.com/Shopify/hydrogen/pull/539)
 
 ## 0.10.0 - 2022-01-25
 
