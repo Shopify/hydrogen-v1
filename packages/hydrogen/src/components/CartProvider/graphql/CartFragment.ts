@@ -70,6 +70,6 @@ export type CartFragmentFragment = {__typename?: 'Cart'} & Pick<
       {__typename?: 'Attribute'} & Pick<Types.Attribute, 'key' | 'value'>
     >;
     discountCodes: Array<
-      {__typename?: 'CartDiscountCode'} & Pick<Types.CartDiscountCode, 'code'>
+      {__typename?: 'CartDiscountCode'} & Pick<Types.CartDiscountCode, 'code' | 'applicable'>
     >;
   };
