@@ -16,6 +16,17 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Track page load performance
 - dx: Export `ProductPrice` and `ProductMetafield` standalone components
 - Fix missing server state on SSR pass
+- Remove the following hooks. (All the same functionality can be retreived through the `useCart()` hook)
+  - `useCartAttributesUpdateCallback`
+  - `useCartBuyerIdentityUpdateCallback`
+  - `useCartCheckoutUrl`
+  - `useCartCreateCallback`
+  - `useCartDiscountCodesUpdateCallback`
+  - `useCartLinesAddCallback`
+  - `useCartLinesRemoveCallback`
+  - `useCartLinesTotalQuantity`
+  - `useCartLinesUpdateCallback`
+  - `useCartNoteUpdateCallback`
 
 ## 0.10.1 - 2022-01-26
 

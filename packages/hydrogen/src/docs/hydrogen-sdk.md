@@ -197,7 +197,7 @@ Hydrogen includes the following cart components and hooks:
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartcheckoutbutton">CartCheckoutButton</a></td>
     <td>Renders a button that redirects to the checkout URL for the cart.</td>
-    <td><a href="/api/hydrogen/hooks/cart/usecartcheckouturl">useCartCheckoutUrl</a></td>
+    <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartestimatedcost">CartEstimatedCost</a></td>
@@ -255,14 +255,6 @@ Hydrogen includes the following cart components and hooks:
     <td>
       <ul>
         <li><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartbuyeridentityupdatecallback">useCartBuyerIdentityUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartdiscountcodesupdatecallback">useCartDiscountCodesUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesaddcallback">useCartLinesAddCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesremovecallback">useCartLinesRemoveCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesupdatecallback">useCartLinesUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartcheckouturl">useCartCheckoutUrl</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartcreatecallback">useCartCreateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinestotalquantity">useCartLinesTotalQuantity</a></li>
       </ul>
     </td>
   </tr>
