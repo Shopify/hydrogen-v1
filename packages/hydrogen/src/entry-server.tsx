@@ -21,7 +21,6 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
-import {setShop} from './foundation/useShop';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
@@ -31,6 +30,7 @@ import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
 // @ts-ignore
 import {createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.client';
 
 declare global {
   // This is provided by a Vite plugin
@@ -47,8 +47,6 @@ declare global {
 const STREAM_ABORT_TIMEOUT_MS = 3000;
 
 const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
-  setShop(shopifyConfig);
-
   /**
    * The render function is responsible for turning the provided `App` into an HTML string,
    * and returning any initial state that needs to be hydrated into the client version of the app.
@@ -471,6 +469,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
     hydrate,
     getApiRoute,
     log: noContextLogger,
+    shopifyConfig,
   };
 };
 
@@ -525,7 +524,9 @@ function buildReactApp({
   const ReactApp = (props: any) => {
     const AppContent = (
       <ServerRequestProvider request={request} isRSC={isRSC}>
-        <App {...state} {...props} {...hydrogenServerProps} pages={pages} />
+        <ShopifyProvider shopifyConfig={request.ctx.shopifyConfig}>
+          <App {...state} {...props} {...hydrogenServerProps} pages={pages} />
+        </ShopifyProvider>
       </ServerRequestProvider>
     );
 

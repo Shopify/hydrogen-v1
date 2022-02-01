@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import {ShopifyContext, makeShopifyContext} from './ShopifyContext';
-import type {ShopifyProviderProps} from './types';
+import type {ShopifyContextValue, ShopifyProviderProps} from './types';
 
 /**
  * The `ShopifyProvider` component wraps your entire app and provides support for hooks.
@@ -13,9 +13,12 @@ export function ShopifyProvider({
   children,
 }: ShopifyProviderProps) {
   const shopifyProviderValue = useMemo(
-    () => makeShopifyContext(shopifyConfig),
+    () =>
+      (shopifyConfig as ShopifyContextValue).locale
+        ? shopifyConfig
+        : makeShopifyContext(shopifyConfig),
     [shopifyConfig]
-  );
+  ) as ShopifyContextValue;
 
   return (
     <ShopifyContext.Provider value={shopifyProviderValue}>

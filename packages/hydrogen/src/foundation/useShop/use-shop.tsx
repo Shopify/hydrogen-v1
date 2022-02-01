@@ -1,24 +1,20 @@
 import {useContext} from 'react';
-import {
-  ShopifyContext,
-  makeShopifyContext,
-} from '../ShopifyProvider/ShopifyContext';
 import type {ShopifyContextValue} from '../ShopifyProvider/types';
 import type {ShopifyConfig} from '../../types';
-
-let contextValue: ShopifyContextValue | null = null;
+import {useServerRequest} from '../ServerRequestProvider';
+import {DEFAULT_LOCALE} from '../constants';
+import {ShopifyContext} from '../ShopifyProvider/ShopifyContext';
 
 /**
  * The `useShop` hook provides access to values within `shopify.config.js`. It must be a descendent of a `ShopifyProvider` component.
  */
 export function useShop(): ShopifyContextValue {
-  /**
-   * During RSC, context is not (yet) allowed on Server Component, so we should be calling `setShop`
-   * in server and returning the object here.
-   */
-  if (contextValue) {
-    return contextValue;
-  }
+  const {
+    ctx: {shopifyConfig},
+  } = useServerRequest();
+
+  // This should be available in RSC
+  if (shopifyConfig) return shopifyConfig;
 
   const context = useContext(ShopifyContext);
 
@@ -29,6 +25,13 @@ export function useShop(): ShopifyContextValue {
   return context;
 }
 
-export function setShop(shopifyConfig: ShopifyConfig) {
-  contextValue = makeShopifyContext(shopifyConfig);
+export function makeShopifyContext(
+  shopifyConfig: ShopifyConfig
+): ShopifyContextValue {
+  return {
+    locale: shopifyConfig.defaultLocale ?? DEFAULT_LOCALE,
+    storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
+    storefrontToken: shopifyConfig.storefrontToken,
+    storefrontApiVersion: shopifyConfig.storefrontApiVersion,
+  };
 }

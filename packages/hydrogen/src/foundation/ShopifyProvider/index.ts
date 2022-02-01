@@ -1,1 +1,1 @@
-export {ShopifyProvider} from './ShopifyProvider';
+export {ShopifyProvider} from './ShopifyProvider.client';

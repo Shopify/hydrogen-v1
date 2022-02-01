@@ -1,7 +1,7 @@
 import React from 'react';
 // eslint-disable-next-line node/no-extraneous-import
 import {mount} from '@shopify/react-testing';
-import {ShopifyProvider} from '../ShopifyProvider';
+import {ShopifyProvider} from '../ShopifyProvider.client';
 import {ShopifyContext} from '../ShopifyContext';
 import {DEFAULT_LOCALE} from '../../constants';
 import {SHOPIFY_CONFIG} from './fixtures';

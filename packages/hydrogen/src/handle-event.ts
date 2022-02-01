@@ -4,6 +4,7 @@ import type {ServerComponentRequest} from './framework/Hydration/ServerComponent
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
 import {renderApiRoute} from './utilities/apiRoutes';
+import {makeShopifyContext} from './foundation/useShop/use-shop';
 
 interface HydrogenFetchEvent {
   /**
@@ -63,8 +64,14 @@ export default async function handleEvent(
   ) {
     return assetHandler(event, url);
   }
-  const {render, hydrate, stream, getApiRoute, log}: EntryServerHandler =
-    entrypoint.default || entrypoint;
+  const {
+    render,
+    hydrate,
+    stream,
+    getApiRoute,
+    log,
+    shopifyConfig,
+  }: EntryServerHandler = entrypoint.default || entrypoint;
 
   // @ts-ignore
   if (dev && !(render && hydrate && stream && getApiRoute)) {
@@ -72,6 +79,12 @@ export default async function handleEvent(
       `entry-server.jsx could not be loaded. This likely occurred because of a Vite compilation error.\n` +
         `Please check your server logs for more information.`
     );
+  }
+
+  if (typeof shopifyConfig === 'function') {
+    request.ctx.shopifyConfig = makeShopifyContext(shopifyConfig(url));
+  } else {
+    request.ctx.shopifyConfig = makeShopifyContext(shopifyConfig);
   }
 
   if (!isReactHydrationRequest) {

@@ -39,6 +39,7 @@ export type EntryServerHandler = {
   render: Renderer;
   stream: Streamer;
   hydrate: Hydrator;
+  shopifyConfig: ShopifyConfig | ((url: URL) => ShopifyConfig);
   getApiRoute: (url: URL) => ApiRouteMatch | null;
   log: Logger;
 };
@@ -61,7 +62,7 @@ export type ImportGlobEagerOutput = Record<
 
 export type ServerHandlerConfig = {
   pages?: ImportGlobEagerOutput;
-  shopifyConfig: ShopifyConfig;
+  shopifyConfig: ShopifyConfig | ((url: URL) => ShopifyConfig);
 };
 
 export type ClientHandlerConfig = {
