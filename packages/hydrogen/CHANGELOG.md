@@ -5,7 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-<!-- ## Unreleased -->
+## Unreleased
+
+- `<Model3D>` has been renamed to `<ModelViewer>`
+- Fix index routes. See [#562](https://github.com/Shopify/hydrogen/issues/562)
+- dx: Correct Typescript issue where `as` was a default prop for all components when it should not be
+- New React hook `useScriptLoader` is available to more easily load external scripts
+- DX: Update types and docs for `useCart()` hook and `<CartProvider>`
+- feat: Add `totalQuantity` to the returned object from `useCart()`
+- Track page load performance
+- dx: Export `ProductPrice` and `ProductMetafield` standalone components
+- Fix missing server state on SSR pass
+
+## 0.10.1 - 2022-01-26
+
+- Fix: hot reload for newly added page files
+
+## 0.10.0 - 2022-01-25
+
+- Warn instead of error when a page server component is missing valid exports
+- Adopt upstream version of React Server Components. See [#498](https://github.com/Shopify/hydrogen/pull/498) for breaking changes.
+- The 'locale' option in shopify.config.js had been renamed to 'defaultLocale'
+- dx: rename `graphqlApiVersion` to `storefrontApiVersion` in `shopify.config.js`
+- Bump to latest version of React experimental to include [upstream context bugfix](https://github.com/facebook/react/issues/23089)
+- feature: improve API routes by allowing [strings and JS objects](https://github.com/Shopify/hydrogen/issues/476) to be returned.
+- fix: make sure that API routes [hot reload properly](https://github.com/Shopify/hydrogen/issues/497)
+
+## 0.9.1 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.9.0 - 2022-01-20
+
+- feature: API routes 🎉
+- feature: move to undici instead of node-fetch
 
 ## 0.8.3 - 2022-01-13
 

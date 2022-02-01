@@ -106,7 +106,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/Image',
         'components/MediaFile',
         'components/Metafield',
-        'components/Model3D',
+        'components/ModelViewer',
         'components/Money',
         'components/RawHtml',
         'components/ShopPayButton',
@@ -225,7 +225,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       title: 'Primitive hooks',
       description: 'Learn about the primitive hooks offered in Hydrogen.',
       url: '/api/hydrogen/hooks/primitive/index.md',
-      entry: ['hooks/useMoney'],
+      entry: ['hooks/useMoney', 'hooks/useLoadScript'],
       intro:
         'Primitive hooks are the building blocks for different component types, including products, variants, and cart.',
       tables: [
@@ -357,8 +357,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     generator.section({
       title: 'Built-in CSS support',
-      description:
-        'Learn about the CSS support built into Hydrogen apps and how you can customize the styles in your app.',
+      description: 'Learn about the CSS support built into Hydrogen apps.',
       url: '/custom-storefronts/hydrogen/framework/css-support.md',
       entry: 'framework/docs/css-support.md',
     }),

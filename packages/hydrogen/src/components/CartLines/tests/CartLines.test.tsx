@@ -4,7 +4,7 @@ import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {CartLineProductTitle} from '../../CartLineProductTitle';
 import {CART} from '../../CartProvider/tests/fixtures';
 import {CartProvider} from '../../CartProvider';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('CartLines', () => {
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('CartLines', () => {
   });
 
   it('renders items', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={cart}>
         <CartLines>
           <CartLineProductTitle />
@@ -33,7 +33,7 @@ describe('CartLines', () => {
   });
 
   it('renders items in li if ul is provided as tag', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={cart}>
         <CartLines as="ul">
           <CartLineProductTitle />
@@ -46,7 +46,7 @@ describe('CartLines', () => {
   });
 
   it('uses render props if provided', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider cart={cart}>
         <CartLines>
           {(line) => <p>{line.merchandise.product.title}</p>}

@@ -3,7 +3,7 @@ import * as Types from '../../graphql/types/types';
 import {ImageFragmentFragment} from '../Image/ImageFragment';
 import {VideoFragmentFragment} from '../Video/VideoFragment';
 import {ExternalVideoFragmentFragment} from '../ExternalVideo/ExternalVideoFragment';
-import {Model3DFragmentFragment} from '../Model3D/Model3DFragment';
+import {Model3DFragmentFragment} from '../ModelViewer/Model3DFragment';
 export type MediaFileFragment_ExternalVideo_Fragment = {
   __typename?: 'ExternalVideo';
 } & Pick<Types.ExternalVideo, 'mediaContentType'> &

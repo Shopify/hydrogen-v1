@@ -1,5 +1,6 @@
 // @ts-check
 const fs = require('fs');
+const bodyParser = require('body-parser');
 const path = require('path');
 const express = require('express');
 
@@ -18,6 +19,8 @@ async function createServer() {
       index: false,
     }),
   );
+
+  app.use('*', bodyParser.raw({type: '*/*'}));
 
   app.use(
     '*',

@@ -1,5 +1,5 @@
 import React from 'react';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement';
 import {getPrice} from '../../../utilities/tests/price';
 import {UnitPrice} from '../UnitPrice.client';
@@ -9,7 +9,7 @@ const unitPriceMeasurement = getUnitPriceMeasurement();
 
 describe('<UnitPrice />', () => {
   it('renders unit price measurement for product in correct format', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <UnitPrice
         unitPrice={unitPrice}
         unitPriceMeasurement={unitPriceMeasurement}
@@ -21,7 +21,7 @@ describe('<UnitPrice />', () => {
   });
 
   it('allows pass-through props to the wrapping component', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <UnitPrice
         className="unitPriceMeasurement"
         unitPrice={unitPrice}

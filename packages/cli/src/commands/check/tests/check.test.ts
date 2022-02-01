@@ -148,7 +148,7 @@ describe('check', () => {
           `
             {
               "engines": {
-                "node":"14.0.0"
+                "node":"14"
               }
             }
           `

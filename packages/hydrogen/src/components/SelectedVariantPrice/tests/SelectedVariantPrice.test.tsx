@@ -1,6 +1,6 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {Money} from '../../Money';
 import {ProductProvider} from '../../ProductProvider';
 import {SelectedVariantPrice} from '../SelectedVariantPrice.client';
@@ -9,7 +9,7 @@ describe('<SelectedVariantPrice />', () => {
   it('renders <Money /> with the selected variant regular price by default', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice />
       </ProductProvider>
@@ -23,7 +23,7 @@ describe('<SelectedVariantPrice />', () => {
   it('renders <Money /> with the selected variant compareAt price when `priceType` is `compareAt`', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice priceType="compareAt" />
       </ProductProvider>
@@ -37,7 +37,7 @@ describe('<SelectedVariantPrice />', () => {
   it('renders its children', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice>
           {({amount}) => {
@@ -55,7 +55,7 @@ describe('<SelectedVariantPrice />', () => {
   it('supports passthrough props', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice className="strikethrough" />
       </ProductProvider>

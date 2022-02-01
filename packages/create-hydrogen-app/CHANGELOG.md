@@ -7,6 +7,22 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- ## Unreleased -->
 
+## 0.10.1 - 2022-01-26
+
+- fix: Wrong prop in HelmetProvider breaking SEO
+
+## 0.10.0 - 2022-01-25
+
+- fix: Update Node 14 to Node 16 in DevContainer
+
+## 0.9.1 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.9.0 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
 ## 0.8.3 - 2022-01-13
 
 - No updates. Transitive dependency bump.

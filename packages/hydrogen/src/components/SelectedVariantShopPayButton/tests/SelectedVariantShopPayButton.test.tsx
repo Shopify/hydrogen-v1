@@ -1,7 +1,7 @@
 import React from 'react';
 import {CartProvider} from '../../CartProvider';
 import {getProduct} from '../../../utilities/tests/product';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
 import {ShopPayButton} from '../../ShopPayButton';
 import {SelectedVariantShopPayButton} from '../SelectedVariantShopPayButton.client';
@@ -17,7 +17,7 @@ describe('<SelectedVariantShopPayButton />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
 
-    const button = await mountWithShopifyProvider(
+    const button = await mountWithProviders(
       <CartProvider>
         <ProductProvider
           product={product}

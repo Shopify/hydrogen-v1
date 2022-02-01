@@ -3,7 +3,7 @@ import React from 'react';
 import {CartProvider} from '../../CartProvider';
 import {CART} from '../../CartProvider/tests/fixtures';
 import {AddToCartButton} from '../AddToCartButton.client';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 const mockCreateCart = jest.fn();
 const mockAddLines = jest.fn();
@@ -32,7 +32,7 @@ describe('AddToCartButton', () => {
   });
 
   it('renders a button', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <CartProvider>
         <AddToCartButton variantId="123">Add to cart</AddToCartButton>
       </CartProvider>
@@ -44,7 +44,7 @@ describe('AddToCartButton', () => {
   });
 
   it('allows passthrough props', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <CartProvider>
         <AddToCartButton variantId="123" className="bg-blue-600">
           Add to cart
@@ -59,7 +59,7 @@ describe('AddToCartButton', () => {
 
   describe('when the button is clicked', () => {
     it('disables the button', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <CartProvider>
           <AddToCartButton variantId="123" className="bg-blue-600">
             Add to cart
@@ -75,7 +75,7 @@ describe('AddToCartButton', () => {
     });
 
     it('renders a message for screen readers when an accessible label is provided', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <CartProvider>
           <AddToCartButton
             accessibleAddingToCartLabel="Adding product to your cart"
@@ -98,7 +98,7 @@ describe('AddToCartButton', () => {
 
     describe('and a Cart ID is present', () => {
       it('calls useCartLinesAddCallback', () => {
-        const component = mountWithShopifyProvider(
+        const component = mountWithProviders(
           <CartProvider cart={CART}>
             <AddToCartButton
               attributes={[{key: 'size', value: 'large'}]}
@@ -127,7 +127,7 @@ describe('AddToCartButton', () => {
 
     describe('and a Cart ID is not present', () => {
       it('calls useCartCreateCallback', () => {
-        const component = mountWithShopifyProvider(
+        const component = mountWithProviders(
           <CartProvider>
             <AddToCartButton
               attributes={[{key: 'size', value: 'large'}]}

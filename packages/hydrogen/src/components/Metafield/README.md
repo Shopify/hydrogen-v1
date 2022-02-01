@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Metafield and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Metafield and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `Metafield` component renders the value of a Storefront
 API's [Metafield object](/api/storefront/reference/common-objects/metafield).
@@ -40,10 +40,11 @@ export function ProductWithRenderProp({product}) {
 
 ## Props
 
-| Name      | Type                                                  | Description                                                                                               |
-| --------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| metafield | <code>ParsedMetafield</code>                          | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.         |
-| children? | <code>(value: ParsedMetafield) => ReactElement</code> | A render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props). |
+| Name      | Type                                                  | Description                                                                                                                                           |
+| --------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| metafield | <code>ParsedMetafield</code>                          | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.                                                     |
+| children? | <code>(value: ParsedMetafield) => ReactElement</code> | A render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props).                                             |
+| as?       | <code>ElementType</code>                              | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/definitions/types). |
 
 ## Default output
 

@@ -1,10 +1,10 @@
 {
   "name": "@shopify/hydrogen-cli",
-  "version": "0.8.3",
+  "version": "0.10.1",
   "description": "Command line interface for hydrogen",
   "license": "MIT",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14"
   },
   "publishConfig": {
     "access": "public",
@@ -13,7 +13,9 @@
   "main": "./dist/index.js",
   "bin": {
     "hydrogen": "./bin/hydrogen",
-    "h2": "./bin/hydrogen"
+    "h2": "./bin/hydrogen",
+    "create-hydrogen": "./bin/create-hydrogen",
+    "create-hydrogen-app": "./bin/create-hydrogen"
   },
   "scripts": {
     "test": "jest",
@@ -29,35 +31,44 @@
     "directory": "packages/cli"
   },
   "dependencies": {
+    "@miniflare/cache": "^2.2.0",
+    "@miniflare/core": "^2.2.0",
+    "@miniflare/runner-vm": "^2.2.0",
+    "@miniflare/shared": "^2.2.0",
+    "@miniflare/storage-memory": "^2.2.0",
+    "@miniflare/web-sockets": "^2.2.0",
     "@shopify/ast-utilities": "^1.2.0",
     "@shopify/prettier-config": "^1.1.2",
     "@types/debug": "^4.1.7",
     "chalk": "^4.1.2",
     "change-case": "^4.1.2",
+    "connect": "^3.7.0",
     "cosmiconfig": "^7.0.1",
     "debug": "^4.3.2",
     "fs-extra": "^10.0.0",
+    "get-port": "^5.1.1",
     "glob": "^7.2.0",
+    "glob-promise": "^4.2.2",
     "inquirer": "^8.1.2",
+    "mime": "^3.0.0",
     "minimist": "^1.2.5",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "sirv": "^1.0.14"
   },
   "devDependencies": {
     "@types/change-case": "^2.3.1",
     "@types/faker": "^5.5.7",
     "@types/fs-extra": "^9.0.12",
     "@types/inquirer": "^7.3.3",
+    "@types/mime": "^2.0.3",
     "@types/minimist": "^1.2.2",
     "@types/semver": "^7.3.9",
     "change-case": "^4.1.2",
     "faker": "^5.5.3",
-    "get-port": "^5.1.1",
-    "inquirer": "^8.1.2",
     "playwright-chromium": "^1.13.0",
     "semver": "^7.3.5",
-    "sirv": "^1.0.14",
     "typescript": "^4.2.3",
-    "vite": "^2.7.0"
+    "vite": "^2.7.1"
   },
   "files": [
     "dist",

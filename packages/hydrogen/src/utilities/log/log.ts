@@ -26,7 +26,8 @@ export type LoggerOptions = {
 
 const defaultLogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(...args);
+    // Re-enable following line to show trace debugging information
+    // console.log(context.id, ...args);
   },
   debug(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(...args);
@@ -85,8 +86,14 @@ export const log: Logger = {
   },
 };
 
+const SERVER_RESPONSE_MAP: Record<string, string> = {
+  str: 'streaming SSR',
+  rsc: 'server Components',
+  ssr: 'buffered SSR',
+};
+
 export function logServerResponse(
-  type: 'str' | 'rsc' | 'ssr',
+  type: 'str' | 'rsc' | 'ssr' | 'api',
   log: Logger,
   request: ServerComponentRequest,
   responseStatus: number
@@ -100,12 +107,8 @@ export function logServerResponse(
       ? lightBlue(responseStatus)
       : green(responseStatus);
 
-  const fullType =
-    type === 'str'
-      ? 'streaming SSR'
-      : type === 'rsc'
-      ? 'server components'
-      : 'buffered SSR';
+  const fullType: string = SERVER_RESPONSE_MAP[type] || type;
+
   const styledType = italic(pad(fullType, '                 '));
   const paddedTiming = pad(
     (getTime() - request.time).toFixed(2) + ' ms',
