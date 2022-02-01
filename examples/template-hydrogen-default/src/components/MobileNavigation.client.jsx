@@ -1,4 +1,4 @@
-import {Fragment, useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from 'react';
 import {Link} from '@shopify/hydrogen/client';
 import {FocusTrap} from '@headlessui/react';
 
@@ -16,9 +16,9 @@ export default function MobileNavigation({collections, isOpen, setIsOpen}) {
   useEffect(() => {
     if (isOpen) {
       setTopScrollOffset(window.scrollY);
-      document.body.style.position = "fixed";
+      document.body.style.position = 'fixed';
     } else {
-      document.body.style.position = "";
+      document.body.style.position = '';
       window.scrollTo(0, parseInt(topScrollOffset, 10));
     }
   }, [isOpen]);
