@@ -1,4 +1,5 @@
-/** @license React vundefined
+/**
+ * @license React
  * react-server-dom-vite-plugin.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -16,9 +17,8 @@ var vite = require('vite');
 var fs = require('fs');
 var path = require('path');
 
-var rscViteFileRE = /\/react-server-dom-vite.js/;
-
 // $FlowFixMe[module-missing]
+var rscViteFileRE = /\/react-server-dom-vite.js/;
 function ReactFlightVitePlugin() {
   var _ref =
       arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -38,10 +38,9 @@ function ReactFlightVitePlugin() {
     name: 'vite-plugin-react-server-components',
     enforce: 'pre',
     configResolved: function (_config) {
-      config = _config;
+      config = _config; // By pushing this plugin at the end of the existing array,
+      // we enforce running it *after* Vite resolves import.meta.glob.
 
-      // By pushing this plugin at the end of the existing array,
-      // we enforce running this *after* Vite resolves import.meta.glob.
       config.plugins.push(hashImportsPlugin);
     },
     resolveId: async function (source, importer) {
@@ -80,7 +79,10 @@ function ReactFlightVitePlugin() {
 
       return null;
     },
-    transform: function (code, id, options) {
+    transform: function (code, id) {
+      var options =
+        arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
       /**
        * In order to allow dynamic component imports from RSC, we use Vite's import.meta.glob.
        * This hook replaces the glob placeholders with resolved paths to all client components.
@@ -91,10 +93,12 @@ function ReactFlightVitePlugin() {
        * and we will have duplicated files in the browser (with duplicated contexts, etc).
        */
       if (rscViteFileRE.test(id)) {
-        const INJECTING_RE =
+        var INJECTING_RE =
           /\{\s*__INJECTED_CLIENT_IMPORTERS__[:\s]*null[,\s]*\}\s*;/;
 
         if (options && options.ssr) {
+          // In SSR, directly use components already discovered by RSC
+          // instead of globs to avoid bundling unused components.
           return code.replace(INJECTING_RE, 'globalThis.__COMPONENT_INDEX');
         }
 
@@ -118,7 +122,6 @@ function ReactFlightVitePlugin() {
           'src',
           CLIENT_COMPONENT_GLOB
         );
-
         var importers = [[userGlob, userPrefix]];
         clientComponentPaths.forEach(function (componentPath) {
           var libPrefix = componentPath + path.sep;
@@ -135,13 +138,15 @@ function ReactFlightVitePlugin() {
               var glob = _ref3[0],
                 prefix = _ref3[1];
               return (
+                // Mark the globs to modify the result after Vite resolves them.
                 // The prefix is used later to turn relative imports
                 // into absolute imports, and then into hashes.
-                `/* HASH_BEGIN ${vite.normalizePath(
-                  prefix
-                )} */ import.meta.glob('` +
-                vite.normalizePath(glob) +
-                "') /* HASH_END */"
+                '/* HASH_BEGIN ' +
+                vite.normalizePath(prefix) +
+                ' */ ' +
+                ("import.meta.glob('" +
+                  vite.normalizePath(glob) +
+                  "') /* HASH_END */")
               );
             })
             .join(', ') +
@@ -152,24 +157,33 @@ function ReactFlightVitePlugin() {
   };
 }
 
-const btoa = (hash) => Buffer.from(String(hash), 'binary').toString('base64');
-function hash(value) {
-  let hash = 0;
+var btoa = function (hash) {
+  return (
+    // eslint-disable-next-line react-internal/safe-string-coercion
+    Buffer.from(String(hash), 'binary').toString('base64')
+  );
+}; // Quick, lossy hash function: https://stackoverflow.com/a/8831937/4468962
+// Prevents leaking path information in the browser, and minifies RSC responses.
+
+function hashCode(value) {
+  var hash = 0;
+
   for (var i = 0; i < value.length; i++) {
     var char = value.charCodeAt(i);
     hash = (hash << 5) - hash + char;
-    hash = hash & hash;
+    hash &= hash;
   }
 
   return btoa(hash).replace(/=+/, '');
 }
 
-const getComponentFilename = (filepath) =>
-  filepath.split('/').pop().split('.').shift();
+var getComponentFilename = function (filepath) {
+  return filepath.split('/').pop().split('.').shift();
+};
 
-const getComponentId = (filepath) =>
-  `${getComponentFilename(filepath)}-${hash(filepath)}`;
-
+var getComponentId = function (filepath) {
+  return getComponentFilename(filepath) + '-' + hashCode(filepath);
+};
 async function proxyClientComponent(filepath, src) {
   var DEFAULT_EXPORT = 'default'; // Modify the import ID to avoid infinite wraps
 
@@ -208,23 +222,21 @@ async function proxyClientComponent(filepath, src) {
   });
   return proxyCode;
 }
-
 var hashImportsPlugin = {
   name: 'vite-plugin-react-server-components-hash-imports',
   enforce: 'post',
   transform: function (code, id) {
     // Turn relative import paths to lossy hashes
     if (rscViteFileRE.test(id)) {
-      const nestedRE = /\.\.\//gm;
-
+      var nestedRE = /\.\.\//gm;
       return code.replace(
-        /\/\*\s*HASH_BEGIN\s*(.+?)\s*\*\/\s*(.+?)\/\*\s*HASH_END\s*\*\//gms,
+        /\/\*\s*HASH_BEGIN\s*(.+?)\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm,
         function (_, prefix, imports) {
           return imports
             .trim()
-            .replace(/"([^"]+?)":/gms, function (__, relativePath) {
-              const absolutePath = prefix + relativePath.replace(nestedRE, '');
-              return `"${getComponentId(absolutePath)}":`;
+            .replace(/"([^"]+?)":/gm, function (__, relativePath) {
+              var absolutePath = prefix + relativePath.replace(nestedRE, '');
+              return '"' + getComponentId(absolutePath) + '":';
             });
         }
       );
