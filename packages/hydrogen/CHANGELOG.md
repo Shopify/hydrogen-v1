@@ -27,6 +27,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartLinesTotalQuantity`
   - `useCartLinesUpdateCallback`
   - `useCartNoteUpdateCallback`
+- Feat: Transition away from deprecated currency selector in favor of country selector
 
 ## 0.10.1 - 2022-01-26
 
