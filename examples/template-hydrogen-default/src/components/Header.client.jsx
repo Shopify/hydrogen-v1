@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Link} from '@shopify/hydrogen/client';
 
 import CartToggle from './CartToggle.client';
-import CurrencySelector from './CurrencySelector.client';
+import CountrySelector from './CountrySelector.client';
 import Navigation from './Navigation.client';
 import MobileNavigation from './MobileNavigation.client';
 
@@ -21,7 +21,7 @@ export default function Header({collections, storeName}) {
       >
         <div className="h-full flex lg:flex-col place-content-between">
           <div className="text-center w-full flex justify-between items-center">
-            <CurrencySelector />
+            <CountrySelector />
             <MobileNavigation
               collections={collections}
               isOpen={isMobileNavOpen}
