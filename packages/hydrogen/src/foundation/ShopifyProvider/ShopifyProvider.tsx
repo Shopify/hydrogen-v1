@@ -1,4 +1,4 @@
-import React, {useMemo, useContext} from 'react';
+import React, {useMemo} from 'react';
 // import {ShopifyContext, makeShopifyContext} from './ShopifyContext';
 import type {ShopifyProviderProps} from './types';
 
@@ -6,8 +6,10 @@ import {createContext} from 'react';
 import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig} from '../../types';
-import {RequestContextSSR} from '../ServerRequestProvider';
-import {contextCache} from '../contextCache';
+import {
+  NoServerRequestContext,
+  useServerRequest,
+} from '../ServerRequestProvider';
 
 export const ShopifyContext = createContext<ShopifyContextValue | null>(null);
 
@@ -37,15 +39,17 @@ export function ShopifyProvider({
     [shopifyConfig]
   );
 
-  if (isRSC()) {
-    const shopifyProviderCache =
-      // @ts-ignore
-      React.unstable_getCacheForType(contextCache);
-    shopifyProviderCache.set(
-      SHOPIFY_PROVIDER_CONTEXT_KEY,
-      shopifyProviderValue
-    );
-    return <>{children}</>;
+  try {
+    const request = useServerRequest();
+
+    if (request) {
+      request.ctx.shopifyConfig = shopifyProviderValue;
+      return <>{children}</>;
+    }
+  } catch (e) {
+    if (!(e instanceof NoServerRequestContext)) {
+      throw e;
+    }
   }
 
   return (
@@ -53,14 +57,4 @@ export function ShopifyProvider({
       {children}
     </ShopifyContext.Provider>
   );
-}
-
-function isRSC() {
-  if (typeof window !== 'undefined') return false;
-  try {
-    useContext(RequestContextSSR);
-    return false;
-  } catch (error) {
-    return true;
-  }
 }
