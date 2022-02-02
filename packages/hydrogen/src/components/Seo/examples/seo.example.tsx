@@ -14,13 +14,15 @@ const QUERY = gql`
   }
 `;
 
-export function Page({params}) {
+export default function Page({params}) {
   const {handle} = params;
   const {data} = useShopQuery({query: QUERY, variables: {handle}});
 
-  if (data && data.page) {
-    return <Seo page={data.page} />;
+  if (!data.pageByHandle) {
+    return <NotFound />;
   }
 
-  return null;
+  const page = data.pageByHandle;
+
+  return <Seo type="page" data={page} />;
 }

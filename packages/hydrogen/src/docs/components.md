@@ -67,6 +67,11 @@ Primitive components are the building blocks for different component types, incl
     <td>Shared</td>
     <td>Renders a <code>video</code> for the Storefront API's <a href="/api/storefront/reference/products/video">Video object</a>.</td>
   </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
+    <td>Shared</td>
+    <td>Renders SEO information on a webpage.</td>
+  </tr>
 </table>
 
 ## Global components

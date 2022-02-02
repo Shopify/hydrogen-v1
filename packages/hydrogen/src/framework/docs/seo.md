@@ -4,7 +4,7 @@ The Hydrogen framework includes `<Seo>` client and server components. This guide
 
 The Hydrogen framework supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side instead.
 
-To emulate this behaviour, add `?_bot` query param at the end of url.
+To imitate the behaviour of a SEO robot and show the page content fully from server render, add the ?\_bot query parameter at the end of the webpage's URL.
 
 ## How SEO works in Hydrogen
 
@@ -12,11 +12,11 @@ The Hydrogen framework supplies a `<DefaultSeo>` server component, which fetches
 
 Hydrogen also includes a `<Seo>` client component in the starter template that you can use to output the SEO-related tags in your document `head` and override the default values on the following pages:
 
-- [Default page](../../../../../examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
-- [Home page](../../../../../examples/template-hydrogen-default/src/pages/index.server.jsx)
-- [Product page](../../../../../examples/template-hydrogen-default/src/pages/products/[handle].server.jsx)
-- [Collection page](../../../../../examples/template-hydrogen-default/src/pages/collections/[handle].server.jsx)
-- [Pages page](../../../../../examples/template-hydrogen-default/src/pages/pages/[handle].server.jsx)
+- [Default page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
+- [Home page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/index.server.jsx)
+- [Product page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/products/[handle].server.jsx)
+- [Collection page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/collections/[handle].server.jsx)
+- [Pages page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/pages/[handle].server.jsx)
 
 ## Client component examples
 

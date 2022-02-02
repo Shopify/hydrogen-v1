@@ -67,6 +67,11 @@ Primitive components and hooks are the building blocks for different component t
     <td>Renders a <code>video</code> for the Storefront API's <a href="/api/storefront/reference/products/video">Video object</a>.</td>
     <td>Not applicable</td>
   </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
+    <td>Renders SEO information on a webpage.</td>
+    <td>Not applicable</td>
+  </tr>
 </table>
 
 ## Global components and hooks

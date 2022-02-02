@@ -5,15 +5,37 @@ The `Seo` component renders SEO information on a webpage.
 ## Example code
 
 ```tsx
-// This is a first level page component.
-import {Seo} from '@shopify/hydrogen';
+import {Seo, useShopQuery} from '@shopify/hydrogen';
+import gql from 'graphql-tag';
 
-export function MyPageComponent() {
-  return <Seo type="product" data={product} />;
+const QUERY = gql`
+  query PageDetails($handle: String!) {
+    page(handle: $handle) {
+      title
+      body
+      seo {
+        title
+        description
+      }
+    }
+  }
+`;
+
+export default function Page({params}) {
+  const {handle} = params;
+  const {data} = useShopQuery({query: QUERY, variables: {handle}});
+
+  if (!data.pageByHandle) {
+    return <NotFound />;
+  }
+
+  const page = data.pageByHandle;
+
+  return <Seo type="page" data={page} />;
 }
 ```
 
-## Props
+## Props (detail descriptions)
 
 <Seo /> has two props `type` & `data`. `type` accepts string `defaultSeo`, `homepage`, `product`, `collection` or `page`. Each with different expected `data` shape listed below.
 
