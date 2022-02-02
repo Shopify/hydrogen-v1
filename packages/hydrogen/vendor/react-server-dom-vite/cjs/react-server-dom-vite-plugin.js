@@ -118,11 +118,10 @@ function ReactFlightVitePlugin() {
           'src',
           CLIENT_COMPONENT_GLOB
         );
-        // Fix for windows: avoid ending strings in backslash
-        var dummySuffix = '#';
-        var importers = [[userGlob, userPrefix + dummySuffix]];
+
+        var importers = [[userGlob, userPrefix]];
         clientComponentPaths.forEach(function (componentPath) {
-          var libPrefix = componentPath + path.sep + dummySuffix;
+          var libPrefix = componentPath + path.sep;
           var libGlob = path.join(
             path.relative(importerPath, componentPath),
             CLIENT_COMPONENT_GLOB
@@ -224,9 +223,7 @@ var hashImportsPlugin = {
           return imports
             .trim()
             .replace(/"([^"]+?)":/gms, function (__, relativePath) {
-              const absolutePath =
-                prefix.slice(0, -1) + relativePath.replace(nestedRE, '');
-
+              const absolutePath = prefix + relativePath.replace(nestedRE, '');
               return `"${getComponentId(absolutePath)}":`;
             });
         }
