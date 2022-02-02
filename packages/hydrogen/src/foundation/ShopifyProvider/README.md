@@ -1,7 +1,9 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/foundation/ShopifyProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/foundation/ShopifyProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `ShopifyProvider` component wraps your entire app and provides support for hooks.
 You should place it in your app's entry point component. For example, `&lt;App&gt;`.
+If you're using the Hydrogen framework, you don't need to add this provider
+because it's automatically wrapped around your app in `renderHydrogen()`.
 
 ## Example code
 
@@ -17,6 +19,13 @@ export default function App() {
   );
 }
 ```
+
+## Props
+
+| Props           | Description                              |
+| --------------- | ---------------------------------------- |
+| `shopifyConfig` | The content of `shopify.config.js` file. |
+| `children`      | The rest of the application.             |
 
 ## Component type
 

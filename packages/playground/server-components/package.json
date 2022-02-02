@@ -1,7 +1,7 @@
 {
   "name": "test-server-components",
   "private": true,
-  "version": "0.8.1",
+  "version": "0.10.1",
   "scripts": {
     "dev": "vite",
     "build": "yarn build:client && yarn build:server",
@@ -12,9 +12,9 @@
     "vite": "2.8.0-beta.0"
   },
   "dependencies": {
-    "@shopify/hydrogen": "^0.8.1",
-    "react": "0.0.0-experimental-0cc724c77-20211125",
-    "react-dom": "0.0.0-experimental-0cc724c77-20211125",
+    "@shopify/hydrogen": "^0.10.1",
+    "react": "0.0.0-experimental-529dc3ce8-20220124",
+    "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
     "react-router-dom": "^5.2.0"
   }
 }

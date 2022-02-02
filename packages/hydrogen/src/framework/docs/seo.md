@@ -43,29 +43,29 @@ The following example shows how to include a catch-all SEO component (`<DefaultS
 {% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
-import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
+import {DefaultRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-import shopifyConfig from '../shopify.config';
+
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
+import AppClient from './App.client';
+import LoadingFallback from './components/LoadingFallback';
 
-export default function App({...serverState}) {
+export default function App({log, ...serverState}) {
   const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
 
   return (
-    <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
-      <Suspense fallback="Loading...">
+    <Suspense fallback={<LoadingFallback />}>
+      <AppClient helmetContext={serverState.helmetContext}>
         <DefaultSeo />
-        <Switch>
-          <DefaultRoutes
-            pages={pages}
-            serverState={serverState}
-            fallback={<NotFound />}
-          />
-        </Switch>
-      </Suspense>
-    </ShopifyServerProvider>
+        <DefaultRoutes
+          pages={pages}
+          serverState={serverState}
+          log={log}
+          fallback={<NotFound />}
+        />
+      </AppClient>
+    </Suspense>
   );
 }
 ```

@@ -1,6 +1,5 @@
 import {createMountableHook} from '../../../utilities/tests/createMountableHook';
 import {CurrencyCode} from '../../../graphql/types/types';
-
 import {useMoney} from '../hooks';
 
 const mountUseMoney = createMountableHook(useMoney);

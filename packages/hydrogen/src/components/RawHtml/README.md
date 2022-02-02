@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/RawHtml and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/RawHtml and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `RawHtml` component renders an HTML string as HTML DOM elements. This should be used for
 displaying rich text-like descriptions associated with a product.
@@ -19,10 +19,11 @@ export function MyComponent() {
 
 ## Props
 
-| Name         | Type                 | Description                                                              |
-| ------------ | -------------------- | ------------------------------------------------------------------------ |
-| string       | <code>string</code>  | An HTML string.                                                          |
-| unsanitized? | <code>boolean</code> | Whether the HTML string should be sanitized with `isomorphic-dompurify`. |
+| Name         | Type                     | Description                                                                   |
+| ------------ | ------------------------ | ----------------------------------------------------------------------------- |
+| string       | <code>string</code>      | An HTML string.                                                               |
+| unsanitized? | <code>boolean</code>     | Whether the HTML string should be sanitized with `isomorphic-dompurify`.      |
+| as?          | <code>ElementType</code> | An HTML tag to be rendered as the base element wrapper. The default is `div`. |
 
 ## Component type
 

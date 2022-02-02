@@ -7,11 +7,6 @@ import {getTime} from '../timing';
  * component. Using the latter is ideal, because it will ty your log to the current request in progress.
  */
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __hlogger: Logger;
-}
-
 export interface Logger {
   trace: (...args: Array<any>) => void;
   debug: (...args: Array<any>) => void;
@@ -20,21 +15,10 @@ export interface Logger {
   fatal: (...args: Array<any>) => void;
 }
 
-export function getLoggerFromContext(context: any): Logger {
-  return {
-    trace: (...args) => globalThis.__hlogger.trace(context, ...args),
-    debug: (...args) => globalThis.__hlogger.debug(context, ...args),
-    warn: (...args) => globalThis.__hlogger.warn(context, ...args),
-    error: (...args) => globalThis.__hlogger.error(context, ...args),
-    fatal: (...args) => globalThis.__hlogger.fatal(context, ...args),
-  };
-}
-
-// @todo - multiple instances of log.ts are loaded, we utilitze the
-// global in order to make sure that the logger is a singleton
-const defaultLogger = (globalThis.__hlogger = {
+const defaultLogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(...args);
+    // Re-enable following line to show trace debugging information
+    // console.log(context.id, ...args);
   },
   debug(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(...args);
@@ -48,36 +32,54 @@ const defaultLogger = (globalThis.__hlogger = {
   fatal(context: {[key: string]: any}, ...args: Array<any>) {
     console.error(red('FATAL: '), ...args);
   },
-});
+};
 
-export function setLogger(_logger: Logger) {
-  globalThis.__hlogger = _logger;
+let logger = defaultLogger as Logger;
+
+export function getLoggerFromContext(context: any): Logger {
+  return {
+    trace: (...args) => logger.trace(context, ...args),
+    debug: (...args) => logger.debug(context, ...args),
+    warn: (...args) => logger.warn(context, ...args),
+    error: (...args) => logger.error(context, ...args),
+    fatal: (...args) => logger.fatal(context, ...args),
+  };
+}
+
+export function setLogger(newLogger: Logger) {
+  logger = newLogger;
 }
 
 export function resetLogger() {
-  globalThis.__hlogger = defaultLogger;
+  logger = defaultLogger;
 }
 
 export const log: Logger = {
   trace(...args) {
-    return globalThis.__hlogger.trace({}, ...args);
+    return logger.trace({}, ...args);
   },
   debug(...args) {
-    return globalThis.__hlogger.debug({}, ...args);
+    return logger.debug({}, ...args);
   },
   warn(...args) {
-    return globalThis.__hlogger.warn({}, ...args);
+    return logger.warn({}, ...args);
   },
   error(...args) {
-    return globalThis.__hlogger.error({}, ...args);
+    return logger.error({}, ...args);
   },
   fatal(...args) {
-    return globalThis.__hlogger.fatal({}, ...args);
+    return logger.fatal({}, ...args);
   },
 };
 
+const SERVER_RESPONSE_MAP: Record<string, string> = {
+  str: 'streaming SSR',
+  rsc: 'server Components',
+  ssr: 'buffered SSR',
+};
+
 export function logServerResponse(
-  type: 'str' | 'rsc' | 'ssr',
+  type: 'str' | 'rsc' | 'ssr' | 'api',
   log: Logger,
   request: ServerComponentRequest,
   responseStatus: number
@@ -91,7 +93,9 @@ export function logServerResponse(
       ? lightBlue(responseStatus)
       : green(responseStatus);
 
-  const styledType = italic(type);
+  const fullType: string = SERVER_RESPONSE_MAP[type] || type;
+
+  const styledType = italic(pad(fullType, '                 '));
   const paddedTiming = pad(
     (getTime() - request.time).toFixed(2) + ' ms',
     '          '

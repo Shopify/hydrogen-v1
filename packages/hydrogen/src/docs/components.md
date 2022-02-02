@@ -1,7 +1,7 @@
 <aside class="note beta">
 <h4>Developer preview</h4>
 
-<p>This is a developer preview of Hydrogen. The documentation will be updated as Shopify introduces <a href="https://github.com/Shopify/hydrogen/releases">new features and refines existing functionality</a>. Production launches of Hydrogen custom storefronts aren't yet supported as Shopify is evolving the Hydrogen framework.</p>
+<p>This is a developer preview of Hydrogen. The documentation will be updated as Shopify introduces <a href="https://github.com/Shopify/hydrogen/releases">new features and refines existing functionality</a>.</p>
 
 </aside>
 
@@ -30,7 +30,7 @@ Primitive components are the building blocks for different component types, incl
   <tr>
     <td><a href="/api/hydrogen/components/primitive/mediafile">MediaFile</a></td>
     <td>Shared</td>
-    <td>Renders the media for the Storefront API's <a href="/api/storefront/reference/products/media">Media object</a>. It either renders an <code>Image</code>, a <code>Video</code>, an <code>ExternalVideo</code>, or a <code>Model3D</code> depending on the <code>mediaContentType</code> of the media provided as a prop.</td>
+    <td>Renders the media for the Storefront API's <a href="/api/storefront/reference/products/media">Media object</a>. It either renders an <code>Image</code>, a <code>Video</code>, an <code>ExternalVideo</code>, or a <code>ModelViewer</code> depending on the <code>mediaContentType</code> of the media provided as a prop.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/primitive/metafield">Metafield</a></td>
@@ -38,7 +38,7 @@ Primitive components are the building blocks for different component types, incl
     <td>Renders the value of the Storefront API's <a href="/api/storefront/reference/common-objects/metafield">Metafield object</a>.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/primitive/model3d">Model3D</a></td>
+    <td><a href="/api/hydrogen/components/primitive/modelviewer">ModelViewer</a></td>
     <td>Client</td>
     <td>Renders a 3D model (with the <code>model-viewer</code> tag) for the Storefront API's <a href="/api/storefront/reference/products/model3d">Model3d object</a>.</td>
   </tr>

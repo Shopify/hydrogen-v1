@@ -21,7 +21,7 @@ Visit the project running at http://localhost:8080.
 
 Runs the Hydrogen dev project on the port specified as `$PORT`, defaulting to `8080`.
 
-Inside the `hydrogen/packages/dev` directory:
+Inside your app directory:
 
 ```bash
 docker build .
@@ -44,6 +44,8 @@ account_id = ""
 workers_dev = true
 route = ""
 zone_id = ""
+compatibility_date = "2022-01-28"
+compatibility_flags = ["streams_enable_constructors"]
 
 [site]
 bucket = "dist/client"

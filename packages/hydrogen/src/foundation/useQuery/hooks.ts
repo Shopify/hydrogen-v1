@@ -1,5 +1,5 @@
 import type {CacheOptions, QueryKey} from '../../types';
-import {log} from '../../utilities';
+import {log} from '../../utilities/log';
 import {
   deleteItemFromCache,
   getItemFromCache,
@@ -7,9 +7,8 @@ import {
   setItemInCache,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
-import {useRenderCacheData} from '../RenderCacheProvider/hook';
+import {useRequestCacheData} from '../ServerRequestProvider';
 
-import type {RenderCacheResult} from '../RenderCacheProvider/types';
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
 }
@@ -26,10 +25,11 @@ export function useQuery<T>(
   queryFn: () => Promise<T>,
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
-): RenderCacheResult<T> {
-  return useRenderCacheData<T>(
-    key,
-    cachedQueryFnBuilder(key, queryFn, queryOptions)
+) {
+  const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
+  return useRequestCacheData<T>(
+    withCacheIdKey,
+    cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
   );
 }
 

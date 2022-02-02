@@ -1,13 +1,13 @@
 import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
 import {ProductTitle} from '../ProductTitle.client';
 
 describe('<ProductTitle />', () => {
   it('renders the product title in a <span> by default', () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductTitle />
       </ProductProvider>
@@ -20,7 +20,7 @@ describe('<ProductTitle />', () => {
 
   it('renders the product title in the HTML element specified by the `as` prop', () => {
     const product = getProduct();
-    const price = mountWithShopifyProvider(
+    const price = mountWithProviders(
       <ProductProvider product={product} initialVariantId="">
         <ProductTitle as="p" />
       </ProductProvider>

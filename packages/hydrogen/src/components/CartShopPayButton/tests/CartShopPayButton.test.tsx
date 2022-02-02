@@ -1,11 +1,9 @@
 import React from 'react';
 import {CartShopPayButton} from '../CartShopPayButton.client';
 import {CartProvider} from '../../CartProvider';
-import {SHOPIFY_CONFIG} from '../../../foundation/ShopifyProvider/tests/fixtures';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures';
 import {ShopPayButton} from '../../ShopPayButton';
-import {ShopifyProvider} from '../../../foundation';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('CartShopPayButton', () => {
   beforeEach(() => {
@@ -21,12 +19,10 @@ describe('CartShopPayButton', () => {
   });
 
   it('renders a ShopPayButton', () => {
-    const wrapper = mountWithShopifyProvider(
-      <ShopifyProvider shopifyConfig={SHOPIFY_CONFIG}>
-        <CartProvider cart={CART_WITH_LINES}>
-          <CartShopPayButton />
-        </CartProvider>
-      </ShopifyProvider>
+    const wrapper = mountWithProviders(
+      <CartProvider cart={CART_WITH_LINES}>
+        <CartShopPayButton />
+      </CartProvider>
     );
 
     expect(wrapper).toContainReactComponent(ShopPayButton, {

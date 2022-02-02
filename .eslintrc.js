@@ -24,6 +24,12 @@ module.exports = {
         allowModules: ['@shopify/hydrogen', '@shopify/react-testing'],
       },
     ],
+    'node/no-extraneous-require': [
+      'error',
+      {
+        allowModules: ['@shopify/hydrogen'],
+      },
+    ],
     'node/no-unpublished-import': 'off',
     'node/no-unsupported-features/es-syntax': 'off',
     'node/no-unsupported-features/es-builtins': [

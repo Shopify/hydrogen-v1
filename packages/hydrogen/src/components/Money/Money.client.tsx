@@ -5,7 +5,7 @@ import {MoneyV2} from '../../graphql/types/types';
 import {MoneyFragment as Fragment} from '../../graphql/graphql-constants';
 
 export interface MoneyProps {
-  /** A `ReactNode` element. */
+  /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: ElementType;
   /** A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2). */
   money: MoneyV2;
@@ -16,7 +16,7 @@ export interface MoneyProps {
 /**
  * The `Money` component renders a string of the Storefront API's
  * [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) according to the
- * locale in the `shopify.config.js` file. If `children` is a function, then it will
+ * `defaultLocale` in the `shopify.config.js` file. If `children` is a function, then it will
  * provide render props for the `children` corresponding to the object returned by the `useMoney` hook.
  */
 export function Money<TTag extends ElementType>(

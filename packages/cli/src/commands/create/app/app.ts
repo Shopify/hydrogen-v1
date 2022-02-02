@@ -1,6 +1,7 @@
 import {Env} from '../../../types';
 import {Feature, ifFeature} from '../../../utilities/feature';
-
+import addShopifyConfig from '../../add/shopifyConfig';
+import addEslint from '../../add/eslint';
 /**
  * Configure, modify and scaffold new `@shopify/hydrogen` apps.
  */
@@ -9,39 +10,20 @@ export async function app(env: Env<{name: string}>) {
   const {name} = context || {};
 
   const features = await ui.ask<Feature>('Select the features you would like', {
-    choices: [
-      Feature.Pwa,
-      Feature.Eslint,
-      Feature.Stylelint,
-      Feature.Tailwind,
-      Feature.GraphQL,
-      Feature.Prettier,
-      Feature.CustomServer,
-    ],
+    choices: [Feature.TypeScript, Feature.Tailwind],
     name: 'features',
     multiple: true,
   });
 
-  const storeDomain = await ui.ask('What is your myshopify.com store domain?', {
-    default: 'hydrogen-preview.myshopify.com',
-    name: 'storeDomain',
-  });
-
-  const storefrontToken = await ui.ask('What is your storefront token?', {
-    default: '3b580e70970c4528da70c98e097c2fa0',
-    name: 'storeFrontToken',
-  });
+  await addShopifyConfig(env);
 
   const templateArgs = {
     ifFeature: ifFeature(features),
     features,
-    storeDomain: storeDomain?.replace(/^https?:\/\//i, ''),
-    storefrontToken,
     name,
   };
 
   await Promise.all([
-    render('shopify.config.js', './templates/shopify-config-js'),
     render('index.html', './templates/index-html'),
     render('vite.config.js', './templates/vite-config-js'),
     render('src/index.css', './templates/index-css'),
@@ -50,64 +32,56 @@ export async function app(env: Env<{name: string}>) {
     render('src/entry-server.jsx', './templates/entry-server-jsx'),
     render('src/pages/Index.server.jsx', './templates/Index-server-jsx'),
     render('src/pages/About.server.jsx', './templates/About-server-jsx'),
-    render('src/components/Link.client.jsx', './templates/Link-client-jsx'),
+    render(
+      'src/components/Welcome.server.jsx',
+      './templates/Welcome-server-jsx'
+    ),
+    render('src/components/Loading.jsx', './templates/Loading-jsx'),
+    render(
+      'src/components/NotFound.server.jsx',
+      './templates/NotFound-server-jsx'
+    ),
   ]);
 
-  if (features.includes(Feature.CustomServer)) {
-    await render('server.js', './templates/server-js');
-    workspace.install('express');
-  }
+  await render('.stylelintrc.js', './templates/stylelintrc-js');
+  workspace.install('stylelint', {dev: true, version: '^13.13.0'});
+  workspace.install('@shopify/stylelint-plugin', {
+    dev: true,
+    version: '^10.0.1',
+  });
 
-  if (features.includes(Feature.Stylelint)) {
-    await render('.stylelintrc.js', './templates/stylelintrc-js');
-    workspace.install('stylelint', {dev: true});
-    workspace.install('@shopify/stylelint-plugin', {dev: true});
-  }
-
-  if (features.includes(Feature.Eslint)) {
-    await render('.eslintrc.js', './templates/eslintrc-js');
-    workspace.install('eslint');
-    // TODO: Replace with hydrogen plugin when available
-    workspace.install('@shopify/eslint-plugin');
-  }
+  await addEslint(env);
 
   if (features.includes(Feature.Tailwind)) {
     await render('tailwind.config.js', './templates/tailwind-config-js');
     await render('postcss.config.js', './templates/postcss-config-js');
-    workspace.install('autoprefixer', {dev: true});
-    workspace.install('postcss', {dev: true});
-    workspace.install('tailwindcss', {dev: true});
-    workspace.install('@tailwindcss/typography', {dev: true});
-  }
-
-  if (features.includes(Feature.Pwa)) {
-    await render('public/sw.js', './templates/sw-js');
-    workspace.install('vite-plugin-pwa', {version: '^0.8.1'});
-  }
-
-  if (features.includes(Feature.Prettier)) {
+    workspace.install('autoprefixer', {dev: true, version: '^10.4.1'});
+    workspace.install('postcss', {dev: true, version: '^8.4.5'});
+    workspace.install('tailwindcss', {dev: true, version: '^3.0.0'});
+    workspace.install('@tailwindcss/typography', {
+      dev: true,
+      version: '^0.5.0',
+    });
     await render('postcss.config.js', './templates/postcss-config-js');
-    workspace.install('prettier');
-    workspace.install('@shopify/prettier-config', {dev: true});
   }
 
-  if (features.includes(Feature.GraphQL)) {
-    workspace.install('graphql-tag');
-  }
+  workspace.install('prettier', {dev: true, version: '^2.3.2'});
+  workspace.install('@shopify/prettier-config', {dev: true, version: '^1.1.2'});
+
+  workspace.install('graphql-tag', {version: '^2.12.4'});
 
   workspace.install('react', {
-    version: '0.0.0-experimental-0cc724c77-20211125',
+    version: '0.0.0-experimental-529dc3ce8-20220124',
   });
   workspace.install('react-dom', {
-    version: '0.0.0-experimental-0cc724c77-20211125',
+    version: '0.0.0-experimental-529dc3ce8-20220124',
   });
   workspace.install('react-router-dom', {version: '^5.2.0'});
-  workspace.install('@shopify/hydrogen');
-  workspace.install('vite', {dev: true, version: '^2.7.0'});
-  workspace.install('@vitejs/plugin-react-refresh', {
-    dev: true,
-    version: '^1.3.2',
-  });
+  workspace.install('@shopify/hydrogen', {version: '^0.9.1'});
+  workspace.install('@shopify/hydrogen-cli', {version: '^0.9.1'});
+  workspace.install('vite', {dev: true, version: '^2.7.1'});
+
+  await workspace.commit();
 
   async function render(path: string, templatePath: string) {
     fs.write(

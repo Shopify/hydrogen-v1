@@ -1,6 +1,10 @@
 import {Link} from '@shopify/hydrogen';
 import ClientEnv from '../components/ClientEnv.client';
 
+export function api() {
+  return new Response('some api response');
+}
+
 export default function Index() {
   return (
     <>

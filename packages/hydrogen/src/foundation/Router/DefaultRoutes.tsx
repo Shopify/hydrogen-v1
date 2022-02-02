@@ -1,8 +1,9 @@
 import React, {ReactElement, useMemo} from 'react';
-import {Route, Switch, useRouteMatch} from 'react-router-dom';
-import {Logger} from '../../utilities/log/log';
+import {matchPath} from '../../utilities/matchPath';
+import BoomerangPageTemplate from '../Boomerang/BoomerangPageTemplate.client';
+import type {Logger} from '../../utilities/log/log';
 
-export type ImportGlobEagerOutput = Record<string, Record<'default', any>>;
+import type {ImportGlobEagerOutput} from '../../types';
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -21,21 +22,43 @@ export function DefaultRoutes({
   fallback?: ReactElement;
   log: Logger;
 }) {
-  const {path} = useRouteMatch();
+  const basePath = '/';
+
   const routes = useMemo(
-    () => createRoutesFromPages(pages, path),
-    [pages, path]
+    () => createRoutesFromPages(pages, basePath, log),
+    [pages, basePath]
   );
 
-  return (
-    <Switch>
-      {routes.map((route) => (
-        <Route key={route.path} exact={route.exact} path={route.path}>
-          <route.component {...serverState} log={log} />
-        </Route>
-      ))}
-      {fallback && <Route path="*">{fallback}</Route>}
-    </Switch>
+  let foundRoute, foundRouteDetails;
+
+  for (let i = 0; i < routes.length; i++) {
+    foundRouteDetails = matchPath(serverState.pathname, routes[i]);
+
+    if (foundRouteDetails) {
+      foundRoute = routes[i];
+      break;
+    }
+  }
+
+  return foundRoute ? (
+    <>
+      <foundRoute.component
+        params={foundRouteDetails.params}
+        {...serverState}
+      />
+      <BoomerangPageTemplate pageTemplate={foundRoute.component.name} />
+    </>
+  ) : (
+    <>
+      {fallback}
+      <BoomerangPageTemplate
+        pageTemplate={
+          typeof fallback?.type === 'function'
+            ? fallback?.type.name
+            : fallback?.type
+        }
+      />
+    </>
   );
 }
 
@@ -47,43 +70,55 @@ interface HydrogenRoute {
 
 export function createRoutesFromPages(
   pages: ImportGlobEagerOutput,
-  topLevelPath = '*'
+  topLevelPath = '*',
+  log: Logger | null = null
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
-  const routes = Object.keys(pages).map((key) => {
-    const path = key
-      .replace('./pages', '')
-      .replace(/\.server\.(t|j)sx?$/, '')
-      /**
-       * Replace /index with /
-       */
-      .replace(/\/index$/i, '/')
-      /**
-       * Only lowercase the first letter. This allows the developer to use camelCase
-       * dynamic paths while ensuring their standard routes are normalized to lowercase.
-       */
-      .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
-      /**
-       * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
-       */
-      .replace(
-        /\[(?:[.]{3})?(\w+?)\]/g,
-        (_match, param: string) => `:${param}`
-      );
+  const routes = Object.keys(pages)
+    .map((key) => {
+      let path = key
+        .replace('./pages', '')
+        .replace(/\.server\.(t|j)sx?$/, '')
+        /**
+         * Replace /index with /
+         */
+        .replace(/\/index$/i, '/')
+        /**
+         * Only lowercase the first letter. This allows the developer to use camelCase
+         * dynamic paths while ensuring their standard routes are normalized to lowercase.
+         */
+        .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
+        /**
+         * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
+         */
+        .replace(
+          /\[(?:[.]{3})?(\w+?)\]/g,
+          (_match, param: string) => `:${param}`
+        );
 
-    /**
-     * Catch-all routes [...handle].jsx don't need an exact match
-     * https://reactrouter.com/core/api/Route/exact-bool
-     */
-    const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
+      if (path.endsWith('/') && path !== '/')
+        path = path.substring(0, path.length - 1);
 
-    return {
-      path: topLevelPrefix + path,
-      component: pages[key].default,
-      exact,
-    };
-  });
+      /**
+       * Catch-all routes [...handle].jsx don't need an exact match
+       * https://reactrouter.com/core/api/Route/exact-bool
+       */
+      const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
+
+      if (!pages[key].default && !pages[key].api) {
+        log?.warn(
+          `${key} doesn't export a default React component or an API function`
+        );
+      }
+
+      return {
+        path: topLevelPrefix + path,
+        component: pages[key].default,
+        exact,
+      };
+    })
+    .filter((route) => route.component);
 
   /**
    * Place static paths BEFORE dynamic paths to grant priority.

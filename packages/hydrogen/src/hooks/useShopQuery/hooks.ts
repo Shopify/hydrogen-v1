@@ -1,9 +1,9 @@
 import {useShop} from '../../foundation/useShop';
-import {log} from '../../utilities';
+import {log} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';
-import {isClient, fetchBuilder, graphqlRequestBody} from '../../utilities';
+import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 
 export interface UseShopQueryResponse<T> {
@@ -19,6 +19,7 @@ export function useShopQuery<T>({
   query,
   variables = {},
   cache = {},
+  locale = '',
 }: {
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
@@ -28,15 +29,17 @@ export function useShopQuery<T>({
   variables?: Record<string, any>;
   /** An object containing cache-control options for the sub-request. */
   cache?: CacheOptions;
+  /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
+  locale?: string;
 }): UseShopQueryResponse<T> {
-  if (isClient()) {
+  if (!import.meta.env.SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
     );
   }
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {request, key} = createShopRequest(body);
+  const {request, key} = createShopRequest(body, locale);
 
   const {data, error: fetchError} = useQuery<UseShopQueryResponse<T>>(
     key,
@@ -89,10 +92,15 @@ export function useShopQuery<T>({
   return data as UseShopQueryResponse<T>;
 }
 
-function createShopRequest(body: string) {
-  const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
+function createShopRequest(body: string, locale?: string) {
+  const {
+    storeDomain,
+    storefrontToken,
+    storefrontApiVersion,
+    locale: defaultLocale,
+  } = useShop();
 
-  const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
+  const url = `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`;
 
   return {
     request: new Request(url, {
@@ -100,9 +108,10 @@ function createShopRequest(body: string) {
       headers: {
         'X-Shopify-Storefront-Access-Token': storefrontToken,
         'content-type': 'application/json',
+        'Accept-Language': (locale as string) ?? defaultLocale,
       },
       body,
     }),
-    key: [storeDomain, graphqlApiVersion, body],
+    key: [storeDomain, storefrontApiVersion, body, locale],
   };
 }

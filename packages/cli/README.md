@@ -1,10 +1,10 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/cli and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/cli and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 ## `@shopify/hydrogen-cli`
 
 `hydrogen/cli` provides interactive project scaffolding for hydrogen apps and other useful commands to help developers build on `@shopify/hydrogen`.
 
-Note: The CLI does not currently provide a full starter template. Run npx create-hydrogen-app instead to scaffold a new project with the starter template. To contribute to the starter template, update files in packages/dev.
+Note: The CLI does not currently provide a full starter template. Run npx create-hydrogen-app instead to scaffold a new project with the starter template. To contribute to the starter template, update files in examples/template-hydrogen-default.
 
 ## Installation
 
