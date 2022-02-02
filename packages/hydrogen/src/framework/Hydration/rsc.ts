@@ -88,3 +88,8 @@ export function useServerResponse(state: any) {
   cache.set(key, response);
   return response;
 }
+
+export function useRefresh() {
+  const refreshCache = unstable_useCacheRefresh();
+  refreshCache();
+}
