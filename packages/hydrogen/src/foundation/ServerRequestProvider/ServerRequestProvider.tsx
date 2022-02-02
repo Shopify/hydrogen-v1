@@ -2,18 +2,16 @@ import React, {createContext, useContext} from 'react';
 import {hashKey} from '../../framework/cache';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
-import {contextCache} from '../contextCache';
 
 // Context to inject current request in SSR
-export const RequestContextSSR = createContext<ServerComponentRequest>({
-  // Initial value is required due to a bug:
-  // https://github.com/Shopify/hydrogen/issues/415
-  time: 0,
-  id: 'initial-value',
-  ctx: {cache: new Map()},
-} as ServerComponentRequest);
+const RequestContextSSR = createContext<ServerComponentRequest | null>(null);
 
-const REQUEST_CONTEXT_KEY = Symbol.for('HYDROGEN_REQUEST');
+// Cache to inject current request in RSC
+function requestCacheRSC() {
+  return new Map();
+}
+
+requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
 
 type ServerRequestProviderProps = {
   isRSC: boolean;
@@ -31,9 +29,9 @@ export function ServerRequestProvider({
     // scoped to this current rendering.
 
     // @ts-ignore
-    const requestCache = React.unstable_getCacheForType(contextCache);
+    const requestCache = React.unstable_getCacheForType(requestCacheRSC);
 
-    requestCache.set(REQUEST_CONTEXT_KEY, request);
+    requestCache.set(requestCacheRSC.key, request);
 
     return children;
   }
@@ -48,7 +46,7 @@ export function ServerRequestProvider({
 }
 
 export function useServerRequest() {
-  let request: ServerComponentRequest;
+  let request: ServerComponentRequest | null;
   try {
     // Context only works in SSR rendering
     request = useContext(RequestContextSSR);
@@ -56,16 +54,18 @@ export function useServerRequest() {
     // If normal context failed it means this is not an SSR request.
     // Try getting RSC cache instead:
     // @ts-ignore
-    const cache = React.unstable_getCacheForType(contextCache);
-    request = cache ? cache.get(REQUEST_CONTEXT_KEY) : null;
+    const cache = React.unstable_getCacheForType(requestCacheRSC);
+    request = cache ? cache.get(requestCacheRSC.key) : null;
   }
 
   if (!request) {
-    throw new Error('No ServerRequest Context found');
+    throw new NoServerRequestContext('No ServerRequest Context found');
   }
 
   return request;
 }
+
+export class NoServerRequestContext extends Error {}
 
 type RequestCacheResult<T> =
   | {data: T; error?: never} // success
