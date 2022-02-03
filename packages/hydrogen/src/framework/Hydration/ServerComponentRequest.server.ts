@@ -1,5 +1,5 @@
 import {getTime} from '../../utilities/timing';
-import type {HelmetData} from 'react-helmet-async';
+import {HelmetData} from 'react-helmet-async';
 
 let reqCounter = 0; // For debugging
 const generateId =
@@ -24,7 +24,7 @@ export class ServerComponentRequest extends Request {
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
   public ctx: {
     cache: Map<string, any>;
-    helmet?: HelmetData;
+    helmet: HelmetData;
     [key: string]: any;
   };
 
@@ -47,7 +47,10 @@ export class ServerComponentRequest extends Request {
     this.time = getTime();
     this.id = generateId();
 
-    this.ctx = {cache: new Map()};
+    this.ctx = {
+      cache: new Map(),
+      helmet: new HelmetData({}),
+    };
     this.cookies = this.parseCookies();
   }
 

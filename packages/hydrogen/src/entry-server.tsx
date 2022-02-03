@@ -14,6 +14,7 @@ import {
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
 import type {ImportGlobEagerOutput, ServerHandler} from './types';
+import {HelmetData as HelmetDataClass} from 'react-helmet-async';
 import type {HelmetData} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {Renderer, Hydrator, Streamer} from './types';
@@ -544,7 +545,9 @@ function buildReactApp({
   return {ReactApp, componentResponse};
 }
 
-function extractHeadElements(helmet: HelmetData) {
+function extractHeadElements(helmetData: HelmetDataClass) {
+  const helmet: HelmetData = (helmetData as any).context.helmet;
+
   return helmet
     ? {
         base: helmet.base.toString(),
