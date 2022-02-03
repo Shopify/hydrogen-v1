@@ -159,9 +159,9 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
     const ReactAppSSR = (
       <Html template={template} htmlAttrs={{lang: 'en'}}>
-        <ServerStateProvider serverState={state} setServerState={() => {}}>
+        <ServerRequestProvider request={request} isRSC={false}>
           <RscConsumer />
-        </ServerStateProvider>
+        </ServerRequestProvider>
       </Html>
     );
 
