@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {Link} from '@shopify/hydrogen/client';
 
 import CartToggle from './CartToggle.client';
+import {useCartUI} from './CartUIProvider.client';
 import CurrencySelector from './CurrencySelector.client';
 import Navigation from './Navigation.client';
 import MobileNavigation from './MobileNavigation.client';
@@ -11,6 +12,7 @@ import MobileNavigation from './MobileNavigation.client';
  */
 export default function Header({collections, storeName}) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const {isCartOpen} = useCartUI();
 
   return (
     <header className="h-20 lg:h-32" role="banner">
@@ -19,7 +21,11 @@ export default function Header({collections, storeName}) {
           isMobileNavOpen ? '' : 'bg-opacity-95'
         }`}
       >
-        <div className="h-full flex lg:flex-col place-content-between">
+        <div
+          className={`h-full flex lg:flex-col place-content-between ${
+            isCartOpen ? 'pr-[16px]' : ''
+          }`}
+        >
           <div className="text-center w-full flex justify-between items-center">
             <CurrencySelector />
             <MobileNavigation
