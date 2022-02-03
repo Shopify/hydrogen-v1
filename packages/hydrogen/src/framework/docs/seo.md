@@ -2,9 +2,21 @@ The Hydrogen framework includes `<Seo>` client and server components. This guide
 
 ## How SEO works
 
-The Hydrogen framework includes a `<Seo>` client component inside your app's `components` which you can use to customize the output of SEO-related tags in your document `head`.
+The Hydrogen framework supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side instead.
 
-Hydrogen also supplies a `<DefaultSeo>` server component, which is responsible for fetching your `shop.name` and setting default values and templates for every page on your website.
+To imitate the behaviour of a SEO robot and show the page content fully from server render, add the ?\_bot query parameter at the end of the webpage's URL.
+
+## How SEO works in Hydrogen
+
+The Hydrogen framework supplies a `<DefaultSeo>` server component, which fetches your `shop.name` and `shop.description`, to provides the default SEO values for every page on your website.
+
+Hydrogen also includes a `<Seo>` client component in the starter template that you can use to output the SEO-related tags in your document `head` and override the default values on the following pages:
+
+- [Default page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
+- [Home page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/index.server.jsx)
+- [Product page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/products/[handle].server.jsx)
+- [Collection page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/collections/[handle].server.jsx)
+- [Pages page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/pages/[handle].server.jsx)
 
 ## Client component examples
 
@@ -13,12 +25,12 @@ The following example shows how to pass a `product` prop to the component to gen
 {% codeblock file %}
 
 ```jsx
-<Seo product={product} />
+<Seo type="product" data={product} />
 ```
 
 {% endcodeblock %}
 
-If you want to add custom `head` tags, then you can import `Helmet` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
+If you want to add more custom `head` tags, then you can import `Helmet` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
 
 {% codeblock file %}
 
@@ -28,6 +40,7 @@ If you want to add custom `head` tags, then you can import `Helmet` from Hydroge
 import {Helmet} from '@shopify/hydrogen/client';
 
 return (
+  <Seo type="product" data={product} />
   <Helmet>
     <meta property="something" content="else" />
   </Helmet>
