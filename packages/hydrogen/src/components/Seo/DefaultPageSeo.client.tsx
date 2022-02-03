@@ -1,6 +1,6 @@
 import React from 'react';
-import {Helmet} from 'react-helmet-async';
 import {useShop} from '../../foundation';
+import {Helmet} from '../../client';
 
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
