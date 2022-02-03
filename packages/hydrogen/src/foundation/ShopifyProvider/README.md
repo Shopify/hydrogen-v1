@@ -2,8 +2,6 @@
 
 The `ShopifyProvider` component wraps your entire app and provides support for hooks.
 You should place it in your app's entry point component. For example, `&lt;App&gt;`.
-If you're using the Hydrogen framework, you don't need to add this provider
-because it's automatically wrapped around your app in `renderHydrogen()`.
 
 ## Example code
 
@@ -30,3 +28,5 @@ export default function App() {
 ## Component type
 
 The `ShopifyProvider` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+
+Note: Context is not yet available in React Server Components. `ShopifyProvider` is a _special_ exception. If using it in the hydrogen framework, make sure that you only have one instance in your app. This is because it isn't using real context, and all instances share the same context inside React Server Components.
