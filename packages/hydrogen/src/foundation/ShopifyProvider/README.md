@@ -22,10 +22,10 @@ export default function App() {
 
 ## Props
 
-| Props           | Description                              |
-| --------------- | ---------------------------------------- |
-| `shopifyConfig` | The content of `shopify.config.js` file. |
-| `children`      | The rest of the application.             |
+| Name          | Type                                                    | Description                                   |
+| ------------- | ------------------------------------------------------- | --------------------------------------------- |
+| shopifyConfig | <code><a href="#shopifyconfig">ShopifyConfig</a></code> | The contents of the `shopify.config.js` file. |
+| children?     | <code>React</code>                                      | Any `ReactNode` elements.                     |
 
 ## Component type
 
