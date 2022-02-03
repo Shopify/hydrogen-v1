@@ -172,7 +172,7 @@ it('should render server state in client component', async () => {
   );
 });
 
-it('streams the response and includes RSC payload', async () => {
+it('streams the SSR response and includes RSC payload', async () => {
   const response = await fetch(viteTestUrl + '/stream');
   let streamedChunks = [];
 
@@ -189,6 +189,7 @@ it('streams the response and includes RSC payload', async () => {
   expect(body).toContain('var __flight=[];');
   expect(body).toContain('__flight.push(`S1:"react.suspense"');
   expect(body).toContain('<div c="5">');
+  expect(body).toContain('>footer!<');
 });
 
 it('buffers HTML for bots', async () => {
@@ -208,4 +209,29 @@ it('buffers HTML for bots', async () => {
   expect(body).toContain('var __flight=[];');
   expect(body).not.toContain('__flight.push(`S1:"react.suspense"'); // We're not including RSC
   expect(body).toContain('<div c="5">');
+  expect(body).toContain('>footer!<');
+});
+
+it('streams the RSC response', async () => {
+  const response = await fetch(
+    viteTestUrl +
+      '/react?state=' +
+      encodeURIComponent(JSON.stringify({pathname: '/stream'}))
+  );
+  let streamedChunks = [];
+
+  // This fetch response is not standard but a node-fetch polyfill.
+  // Therefore, the body is not a ReadableStream but a Node Readable.
+  // @ts-ignore
+  for await (const chunk of response.body) {
+    streamedChunks.push(chunk.toString());
+  }
+
+  // In Node we cannot control the memory for each chunk (specified by the 'highWaterMark').
+  // Therefore, it will probably come in just 1 chunk if the server has enough memory.
+  expect(streamedChunks.length).toBeGreaterThan(1);
+
+  const body = streamedChunks.join('');
+  expect(body).toContain('S1:"react.suspense"');
+  expect(body).toContain('"c":"5","children":"done"');
 });
