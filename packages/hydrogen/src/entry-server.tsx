@@ -46,6 +46,8 @@ declare global {
  */
 const STREAM_ABORT_TIMEOUT_MS = 3000;
 
+const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
+
 const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
   setShop(shopifyConfig);
 
@@ -99,7 +101,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
       });
     }
 
-    headers['Content-type'] = 'text/html';
+    headers['Content-type'] = HTML_CONTENT_TYPE;
     const params = {url, ...extractHeadElements(helmetContext)};
 
     const {bodyAttributes, htmlAttributes, ...head} = params;
@@ -624,7 +626,7 @@ function startWritingHtmlToServerResponse(
   error?: Error
 ) {
   if (!response.headersSent) {
-    response.setHeader('Content-type', 'text/html');
+    response.setHeader('Content-type', HTML_CONTENT_TYPE);
     response.write('<!DOCTYPE html>');
   }
 
@@ -640,7 +642,7 @@ function startWritingHtmlToStream(
   encoder: TextEncoder,
   error?: Error
 ) {
-  responseOptions.headers['Content-type'] = 'text/html';
+  responseOptions.headers['Content-type'] = HTML_CONTENT_TYPE;
   writable.write(encoder.encode('<!DOCTYPE html>'));
 
   if (error) {
