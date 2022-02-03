@@ -6,10 +6,7 @@ import {createContext} from 'react';
 import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig} from '../../types';
-import {
-  NoServerRequestContext,
-  useServerRequest,
-} from '../ServerRequestProvider';
+import {useServerRequest} from '../ServerRequestProvider';
 
 export const ShopifyContext = createContext<ShopifyContextValue | null>(null);
 
@@ -39,17 +36,10 @@ export function ShopifyProvider({
     [shopifyConfig]
   );
 
-  try {
+  if (import.meta.env.SSR) {
     const request = useServerRequest();
-
-    if (request) {
-      request.ctx.shopifyConfig = shopifyProviderValue;
-      return <>{children}</>;
-    }
-  } catch (e) {
-    if (!(e instanceof NoServerRequestContext)) {
-      throw e;
-    }
+    request.ctx.shopifyConfig = shopifyProviderValue;
+    return <>{children}</>;
   }
 
   return (

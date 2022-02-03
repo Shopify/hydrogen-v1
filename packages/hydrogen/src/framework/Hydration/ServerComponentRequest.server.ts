@@ -1,3 +1,4 @@
+import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 
 let reqCounter = 0; // For debugging
@@ -21,7 +22,11 @@ export class ServerComponentRequest extends Request {
   public id: string;
   public time: number;
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
-  public ctx: {cache: Map<string, any>; [key: string]: any};
+  public ctx: {
+    cache: Map<string, any>;
+    shopifyConfig?: ShopifyContextValue;
+    [key: string]: any;
+  };
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);

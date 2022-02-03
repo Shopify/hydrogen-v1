@@ -59,13 +59,11 @@ export function useServerRequest() {
   }
 
   if (!request) {
-    throw new NoServerRequestContext('No ServerRequest Context found');
+    throw new Error('No ServerRequest Context found');
   }
 
   return request;
 }
-
-export class NoServerRequestContext extends Error {}
 
 type RequestCacheResult<T> =
   | {data: T; error?: never} // success
