@@ -2,13 +2,15 @@ import {useCallback} from 'react';
 import {useAvailableCountries, useCountry} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
 
-import {ArrowIcon, CheckIcon} from './CurrencySelector.client';
+import {ArrowIcon, CheckIcon} from './CountrySelector.client';
 
 /**
- * A client component that selects the appropriate currency to display for products on a mobile storefront
+ * A client component that selects the appropriate country to display for products on a mobile storefront
  */
-export default function MobileCurrencySelector() {
-  const countries = useAvailableCountries();
+export default function MobileCountrySelector() {
+  const countries = [...useAvailableCountries()].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
   const [selectedCountry, setSelectedCountry] = useCountry();
 
   const setCountry = useCallback(
@@ -26,7 +28,7 @@ export default function MobileCurrencySelector() {
         {({open}) => (
           <>
             <Listbox.Button className="w-full flex justify-between text-sm items-center py-5 px-7">
-              {selectedCountry.currency.isoCode}
+              {selectedCountry.name}
               <ArrowIcon isOpen={open} />
             </Listbox.Button>
             <Listbox.Options className="w-full px-3 pb-2 text-lg">
@@ -34,7 +36,7 @@ export default function MobileCurrencySelector() {
                 disabled
                 className="font-medium px-4 pb-4 w-full text-left uppercase"
               >
-                Currency
+                Country
               </Listbox.Option>
               {countries.map((country) => {
                 const isSelected = country.isoCode === selectedCountry.isoCode;
@@ -46,7 +48,7 @@ export default function MobileCurrencySelector() {
                           active ? 'bg-gray-100' : null
                         }`}
                       >
-                        {country.currency.isoCode}
+                        {country.name}
                         {isSelected ? <CheckIcon /> : null}
                       </div>
                     )}

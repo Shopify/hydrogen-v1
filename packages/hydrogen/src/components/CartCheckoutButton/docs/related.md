@@ -4,4 +4,4 @@
 
 ## Related hooks
 
-- [useCartCheckoutUrl](/api/hydrogen/hooks/cart/usecartcheckouturl)
+- [useCart](/api/hydrogen/hooks/cart/usecart)
