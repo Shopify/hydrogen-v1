@@ -1,4 +1,4 @@
-import {useShopQuery, Seo, useServerRequest} from '@shopify/hydrogen';
+import {useShopQuery, Seo} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 /**
@@ -14,13 +14,10 @@ export default function DefaultSeo() {
     cache: {maxAge: 60 * 60 * 12, staleWhileRevalidate: 60 * 60 * 12},
   });
 
-  const {url} = useServerRequest();
-
   return (
     <Seo
       type="defaultSeo"
       data={{
-        url,
         title: shopName,
         description: shopDescription,
       }}
@@ -29,7 +26,7 @@ export default function DefaultSeo() {
 }
 
 const QUERY = gql`
-  query shopName {
+  query shopInfo {
     shop {
       name
       description

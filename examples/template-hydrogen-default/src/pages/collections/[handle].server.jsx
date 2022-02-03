@@ -46,6 +46,7 @@ export default function Collection({
       <p className="text-sm text-gray-500 mt-5 mb-5">
         {products.length} {products.length > 1 ? 'products' : 'product'}
       </p>
+
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
         {products.map((product) => (
           <li key={product.id}>
@@ -53,6 +54,7 @@ export default function Collection({
           </li>
         ))}
       </ul>
+
       {hasNextPage && (
         <LoadMoreProducts startingCount={collectionProductCount} />
       )}

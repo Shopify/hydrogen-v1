@@ -11,15 +11,15 @@ import type {DefaultPage, HomePage, Product, Collection, Page} from './types';
 type Props =
   | {
       type: 'defaultSeo';
-      data: DefaultPage;
+      data: Pick<DefaultPage, Exclude<keyof DefaultPage, 'url'>>;
     }
   | {
       type: 'homepage';
-      data: HomePage;
+      data: Pick<HomePage, Exclude<keyof HomePage, 'url'>>;
     }
   | {
       type: 'product';
-      data: Product;
+      data: Pick<Product, Exclude<keyof Product, 'url'>>;
     }
   | {
       type: 'collection';
@@ -34,17 +34,21 @@ type Props =
  * The `Seo` component renders SEO information on a webpage.
  */
 export function Seo({type, data}: Props) {
+  const url = typeof window === 'undefined' ? '' : window.location.href;
+
   let SeoMarkup = null;
+
+  debugger;
 
   switch (type) {
     case 'defaultSeo':
-      SeoMarkup = <DefaultPageSeo {...(data as DefaultPage)} />;
+      SeoMarkup = <DefaultPageSeo {...({url, ...data} as DefaultPage)} />;
       break;
     case 'homepage':
-      SeoMarkup = <HomePageSeo {...(data as HomePage)} />;
+      SeoMarkup = <HomePageSeo {...({url, ...data} as HomePage)} />;
       break;
     case 'product':
-      SeoMarkup = <ProductSeo {...(data as Product)} />;
+      SeoMarkup = <ProductSeo {...({url, ...data} as Product)} />;
       break;
     case 'collection':
       SeoMarkup = <CollectionSeo {...(data as Collection)} />;
@@ -52,6 +56,10 @@ export function Seo({type, data}: Props) {
     case 'page':
       SeoMarkup = <PageSeo {...(data as Page)} />;
       break;
+    default:
+      console.warn(
+        'The <Seo/> only accepts type prop with values of defaultSeo, homepage, product, collection, or page.'
+      );
   }
 
   return SeoMarkup;

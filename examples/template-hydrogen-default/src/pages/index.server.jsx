@@ -15,33 +15,15 @@ import Welcome from '../components/Welcome.server';
 import {Suspense} from 'react';
 
 export default function Index({country = {isoCode: 'US'}}) {
-  const {data} = useShopQuery({
-    query: QUERY,
-    variables: {
-      country: country.isoCode,
-    },
-  });
-
-  const {
-    shop: {
-      name: shopName,
-      primaryDomain: {url: shopUrl},
-    },
-  } = data;
-
   return (
     <Layout hero={<GradientBackground />}>
-      <Seo
-        type="homepage"
-        data={{
-          title: shopName,
-          url: shopUrl,
-        }}
-      />
+      <Suspense fallback={null}>
+        <SeoForHomepage />
+      </Suspense>
       <div className="relative mb-12">
         <Welcome />
         <Suspense fallback={<BoxFallback />}>
-          <FeaturedProductsBox data={data} />
+          <FeaturedProductsBox country={country} />
         </Suspense>
         <Suspense fallback={<BoxFallback />}>
           <FeaturedCollectionBox country={country} />
@@ -51,11 +33,42 @@ export default function Index({country = {isoCode: 'US'}}) {
   );
 }
 
+function SeoForHomepage() {
+  const {
+    data: {
+      shop: {
+        name: shopName,
+        primaryDomain: {url: shopUrl},
+      },
+    },
+  } = useShopQuery({
+    query: SEO_QUERY,
+    cache: {maxAge: 60 * 60 * 12, staleWhileRevalidate: 60 * 60 * 12},
+  });
+
+  return (
+    <Seo
+      type="homepage"
+      data={{
+        title: shopName,
+        url: shopUrl,
+      }}
+    />
+  );
+}
+
 function BoxFallback() {
   return <div className="bg-white p-12 shadow-xl rounded-xl mb-10 h-40"></div>;
 }
 
-function FeaturedProductsBox({data}) {
+function FeaturedProductsBox({country}) {
+  const {data} = useShopQuery({
+    query: QUERY,
+    variables: {
+      country: country.isoCode,
+    },
+  });
+
   const collections = data ? flattenConnection(data.collections) : [];
   const featuredProductsCollection = collections[0];
   const featuredProducts = featuredProductsCollection
@@ -170,6 +183,18 @@ function GradientBackground() {
   );
 }
 
+const SEO_QUERY = gql`
+  query shopInfo {
+    shop {
+      name
+      description
+      primaryDomain {
+        url
+      }
+    }
+  }
+`;
+
 const QUERY = gql`
   query indexContent(
     $country: CountryCode
@@ -184,13 +209,6 @@ const QUERY = gql`
     $numProductSellingPlanGroups: Int = 0
     $numProductSellingPlans: Int = 0
   ) @inContext(country: $country) {
-    shop {
-      name
-      description
-      primaryDomain {
-        url
-      }
-    }
     collections(first: $numCollections) {
       edges {
         node {

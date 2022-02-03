@@ -25,7 +25,7 @@ export default function Page({params}) {
 
 const QUERY = gql`
   query PageDetails($handle: String!) {
-    page(handle: $handle) {
+    pageByHandle(handle: $handle) {
       title
       body
       seo {

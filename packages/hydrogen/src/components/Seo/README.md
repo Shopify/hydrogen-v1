@@ -39,13 +39,13 @@ export default function Page({params}) {
 
 <Seo /> has two props `type` & `data`. `type` accepts string `defaultSeo`, `homepage`, `product`, `collection` or `page`. Each with different expected `data` shape listed below.
 
-| `type`     | `data`                                                                                                 | Description                                                                                                                                                  |
-| ---------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| defaultSeo | <code>{title: string; description: string; url: string; titleTemplate?: string; lang?: string;}</code> | Seo information that should be render as default on every single page on the site. All cases below can be use in children component to override the default. |
-| homepage   | <code>{title: Title; url: string; description?: Description;}</code>                                   | Seo information to be render on the Home Page of the site.                                                                                                   |
-| product    | <code>[Product](https://shopify.dev/api/admin-graphql/2022-01/objects/product)</code>                  | Seo information for product page. Must included url, title, description, vendor, at least one image, at least one variant, and pricing information.          |
-| collection | <code>[Collection](https://shopify.dev/api/admin-graphql/2022-01/objects/Collection)</code>            | Seo information for collection page. Must included title and description.                                                                                    |
-| page       | <code>{title: string; seo: {title?: string; description?: string;}}</code>                             | Seo information for pages (ie. about, shipping). Must included title and description.                                                                        |
+| `type`     | `data`                                                                                      | Description                                                                                                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| defaultSeo | <code>{title: string; description: string; titleTemplate?: string; lang?: string;}</code>   | Seo information that should be render as default on every single page on the site. All cases below can be use in children component to override the default. |
+| homepage   | <code>{title: Title; description?: Description;}</code>                                     | Seo information to be render on the Home Page of the site.                                                                                                   |
+| product    | <code>[Product](https://shopify.dev/api/admin-graphql/2022-01/objects/product)</code>       | Seo information for product page. Must included title, description, vendor, at least one image, at least one variant, and pricing information.               |
+| collection | <code>[Collection](https://shopify.dev/api/admin-graphql/2022-01/objects/Collection)</code> | Seo information for collection page. Must included title and description.                                                                                    |
+| page       | <code>{title: string; seo: {title?: string; description?: string;}}</code>                  | Seo information for pages (ie. about, shipping). Must included title and description.                                                                        |
 
 ## Component type
 
