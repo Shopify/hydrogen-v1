@@ -12,10 +12,7 @@ export default function App({log, pages, ...serverState}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <AppClient
-          helmetContext={serverState.helmetContext}
-          shopifyConfig={shopifyConfig}
-        >
+        <AppClient helmetContext={serverState.helmetContext}>
           <DefaultSeo />
           <DefaultRoutes
             pages={pages}
