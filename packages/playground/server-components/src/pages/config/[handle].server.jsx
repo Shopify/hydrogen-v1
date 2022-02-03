@@ -1,5 +1,4 @@
 import {ShopifyProvider, useShop} from '@shopify/hydrogen';
-import ClientConfig from '../../components/Config.client';
 
 export default function Config({params}) {
   const {handle} = params;
@@ -10,9 +9,7 @@ export default function Config({params}) {
   };
   return (
     <ShopifyProvider shopifyConfig={config}>
-      <ClientConfig shopifyConfig={config}>
-        <ReadConfig />
-      </ClientConfig>
+      <ReadConfig />
     </ShopifyProvider>
   );
 }
