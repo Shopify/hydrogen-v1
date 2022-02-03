@@ -28,6 +28,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartLinesUpdateCallback`
   - `useCartNoteUpdateCallback`
 - Feat: Transition away from deprecated currency selector in favor of country selector
+- Feat: Simplify Helmet usage and make it compatible with RSC
 
 ## 0.10.1 - 2022-01-26
 
