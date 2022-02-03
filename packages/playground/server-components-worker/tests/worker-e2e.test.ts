@@ -231,8 +231,6 @@ it('streams the RSC response', async () => {
     streamedChunks.push(chunk.toString());
   }
 
-  // In Node we cannot control the memory for each chunk (specified by the 'highWaterMark').
-  // Therefore, it will probably come in just 1 chunk if the server has enough memory.
   expect(streamedChunks.length).toBeGreaterThan(1);
 
   const body = streamedChunks.join('');

@@ -3,10 +3,10 @@ import {Suspense} from 'react';
 import Counter from '../components/Counter.client';
 import {useServerRequest} from '@shopify/hydrogen';
 
-const fakeCache = {};
-
 const createData = (key, ms) => {
-  if (!fakeCache[key]) {
+  const {cache} = useServerRequest().ctx;
+
+  if (!cache.has(key)) {
     let result;
     const deferred = defer();
     setTimeout(deferred.resolve, ms);
@@ -14,7 +14,7 @@ const createData = (key, ms) => {
       result = r;
     });
 
-    fakeCache[key] = {
+    cache.set(key, {
       read: () => {
         if (deferred.status === 'pending') {
           throw deferred.promise;
@@ -22,10 +22,10 @@ const createData = (key, ms) => {
 
         return result || 'done';
       },
-    };
+    });
   }
 
-  return fakeCache[key];
+  return cache.get(key);
 };
 
 // Page with many Suspense boundaries to test streaming
@@ -36,15 +36,9 @@ export default function Index() {
   const d4 = createData('d4', 300);
   const d5 = createData('d5', 400);
 
-  const text = useServerRequest().url.includes('/react?')
-    ? 'Long text to make RSC response heavier'.repeat(2000)
-    : '';
-
   return (
     <>
       <h1>Streaming</h1>
-
-      {text}
 
       <Suspense fallback={null}>
         <div c="1">{d1.read()}</div>
