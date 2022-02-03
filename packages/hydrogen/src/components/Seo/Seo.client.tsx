@@ -38,8 +38,6 @@ export function Seo({type, data}: Props) {
 
   let SeoMarkup = null;
 
-  debugger;
-
   switch (type) {
     case 'defaultSeo':
       SeoMarkup = <DefaultPageSeo {...({url, ...data} as DefaultPage)} />;
