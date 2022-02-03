@@ -18,14 +18,16 @@ function ProductPriceMarkup() {
   const product = useProduct();
   const variantPrice = useMoney(product.selectedVariant.priceV2);
   const variantCompareAtPrice = useMoney(
-    product.selectedVariant.compareAtPriceV2,
+    product.selectedVariant.compareAtPriceV2 ?? product.selectedVariant.priceV2,
   );
   return (
     <div className="flex md:flex-col items-end font-semibold text-lg md:items-start md:mb-4">
-      <span className="text-gray-500 line-through text-lg mr-2.5">
-        {variantCompareAtPrice.currencyNarrowSymbol}
-        {variantCompareAtPrice.amount}
-      </span>
+      {variantPrice.amount !== variantCompareAtPrice.amount && (
+        <span className="text-gray-500 line-through text-lg mr-2.5">
+          {variantCompareAtPrice.currencyNarrowSymbol}
+          {variantCompareAtPrice.amount}
+        </span>
+      )}
       <span className="text-gray-900">
         {variantPrice.currencyCode} {variantPrice.currencyNarrowSymbol}
         {variantPrice.amount}
