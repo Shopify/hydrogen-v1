@@ -21,7 +21,7 @@ export default function MobileNavigation({collections, isOpen, setIsOpen}) {
       document.body.style.position = '';
       window.scrollTo(0, parseInt(topScrollOffset, 10));
     }
-  }, [isOpen]);
+  }, [isOpen, topScrollOffset]);
 
   return (
     <div className="lg:hidden">
