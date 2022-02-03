@@ -28,6 +28,11 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartLinesUpdateCallback`
   - `useCartNoteUpdateCallback`
 - Feat: Transition away from deprecated currency selector in favor of country selector
+- dx: The following money components no longer allow the function-as-a-child (also known as "render props") pattern; see #589. For customization, use the `useMoney()` hook.
+  - `<Money>`
+  - `<CartLinePrice>`
+  - `<ProductPrice>`
+  - `<SelectedVariantPrice>`
 
 ## 0.10.1 - 2022-01-26
 

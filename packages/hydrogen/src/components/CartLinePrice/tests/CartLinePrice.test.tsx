@@ -1,5 +1,4 @@
 import React from 'react';
-import {mount} from '@shopify/react-testing';
 import {CartLineProvider} from '../../CartLineProvider';
 import {CartLinePrice} from '../CartLinePrice.client';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
@@ -75,33 +74,6 @@ describe('<CartLinePrice />', () => {
 
     expect(wrapper).toContainReactComponent(Money, {
       money: {amount: 100, currencyCode: CurrencyCode.Usd},
-    });
-  });
-
-  it('renders its children', () => {
-    const line = {
-      ...CART_LINE,
-      merchandise: {
-        ...CART_LINE.merchandise,
-        priceV2: {
-          amount: '50.0',
-          currencyCode: CurrencyCode.Usd,
-        },
-      },
-    };
-
-    const wrapper = mountWithProviders(
-      <CartLineProvider line={line}>
-        <CartLinePrice>
-          {({localizedString}) => {
-            return <p>{`The amount is ${localizedString}`}</p>;
-          }}
-        </CartLinePrice>
-      </CartLineProvider>
-    );
-
-    expect(wrapper).toContainReactComponent('p', {
-      children: `The amount is $50.00`,
     });
   });
 

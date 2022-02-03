@@ -28,19 +28,4 @@ describe('<Money />', () => {
 
     expect(component).toHaveReactProps({className: 'money'});
   });
-
-  it('allows customization through a render function', () => {
-    const money = getPrice({
-      currencyCode: CurrencyCode.Cad,
-    });
-    const component = mountWithProviders(
-      <Money money={money}>
-        {(money) => <p>{`You owe ${money.amount}!`}</p>}
-      </Money>
-    );
-
-    expect(component).toContainReactComponent('p', {
-      children: `You owe ${money.amount}!`,
-    });
-  });
 });
