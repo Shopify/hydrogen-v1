@@ -29,22 +29,7 @@ export {CartCheckoutButton} from './CartCheckoutButton';
 export {CartShopPayButton} from './CartShopPayButton';
 export {CartEstimatedCost} from './CartEstimatedCost';
 export {CartLineSelectedOptions} from './CartLineSelectedOptions';
-export {
-  CartProvider,
-  useCart,
-  useCartAttributesUpdateCallback,
-  useCartBuyerIdentityUpdateCallback,
-  useCartNoteUpdateCallback,
-  useCartCheckoutUrl,
-  useCartCreateCallback,
-  useCartDiscountCodesUpdateCallback,
-  useCartFetch,
-  useCartLinesAddCallback,
-  useCartLinesRemoveCallback,
-  useCartLinesTotalQuantity,
-  useCartLinesUpdateCallback,
-  useInstantCheckout,
-} from './CartProvider';
+export {CartProvider, useCart, useInstantCheckout} from './CartProvider';
 export type {
   State,
   Status,
