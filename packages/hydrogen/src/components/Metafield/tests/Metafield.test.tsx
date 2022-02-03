@@ -4,8 +4,8 @@ import {getParsedMetafield} from '../../../utilities/tests/metafields';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {RawHtml} from '../../RawHtml';
 import {Image} from '../../Image';
-import {StarRating} from '../components';
 import {getMediaImage} from '../../../utilities/tests/media';
+import type {Rating} from '../../../types';
 
 describe('<Metafield />', () => {
   it('renders nothing when the metafield value is undefined', () => {
@@ -1223,12 +1223,12 @@ describe('<Metafield />', () => {
   });
 
   describe('with `rating` type metafield', () => {
-    it('renders <StarRating />', () => {
+    it(`renders a 'span' with the rating inside`, () => {
       const metafield = getParsedMetafield({type: 'rating'});
       const component = mountWithProviders(<Metafield metafield={metafield} />);
 
-      expect(component).toContainReactComponent(StarRating, {
-        rating: metafield.value,
+      expect(component).toContainReactComponent('span', {
+        children: (metafield.value as Rating).value,
       });
     });
 
@@ -1270,7 +1270,7 @@ describe('<Metafield />', () => {
           className="emphasized"
         />
       );
-      expect(component).toContainReactComponent(StarRating, {
+      expect(component).toContainReactComponent('span', {
         className: 'emphasized',
       });
     });
