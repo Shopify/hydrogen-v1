@@ -2,7 +2,6 @@ export * from './components';
 export * from './hooks';
 export * from './foundation/useServerState';
 export * from './foundation/useShop';
-export * from './foundation/ShopifyProvider';
 export {Boomerang} from './foundation/Boomerang/Boomerang.client';
 export * from './foundation/ServerStateProvider';
 export {ServerStateRouter} from './foundation/Router/ServerStateRouter.client';

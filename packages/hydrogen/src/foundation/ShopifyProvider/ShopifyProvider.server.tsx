@@ -1,14 +1,11 @@
 import React, {useMemo} from 'react';
-// import {ShopifyContext, makeShopifyContext} from './ShopifyContext';
+import {ShopifyProviderClient} from './ShopifyProvider.client';
 import type {ShopifyProviderProps} from './types';
 
-import {createContext} from 'react';
 import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig} from '../../types';
 import {useServerRequest} from '../ServerRequestProvider';
-
-export const ShopifyContext = createContext<ShopifyContextValue | null>(null);
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   return {
@@ -36,15 +33,12 @@ export function ShopifyProvider({
     [shopifyConfig]
   );
 
-  if (import.meta.env.SSR) {
-    const request = useServerRequest();
-    request.ctx.shopifyConfig = shopifyProviderValue;
-    return <>{children}</>;
-  }
+  const request = useServerRequest();
+  request.ctx.shopifyConfig = shopifyProviderValue;
 
   return (
-    <ShopifyContext.Provider value={shopifyProviderValue}>
+    <ShopifyProviderClient shopifyConfig={shopifyProviderValue}>
       {children}
-    </ShopifyContext.Provider>
+    </ShopifyProviderClient>
   );
 }
