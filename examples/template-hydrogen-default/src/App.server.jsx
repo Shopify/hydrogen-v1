@@ -1,4 +1,4 @@
-import {DefaultRoutes, Boomerang, BoomerangPage} from '@shopify/hydrogen';
+import {DefaultRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import shopifyConfig from '../shopify.config';
@@ -18,14 +18,8 @@ export default function App({log, pages, ...serverState}) {
             pages={pages}
             serverState={serverState}
             log={log}
-            pageMetrics={(route) => (
-              <BoomerangPage
-                pageTemplate={route ? route.component.name : 'Not found'}
-              />
-            )}
             fallback={<NotFound />}
           />
-          <Boomerang />
         </AppClient>
       </ShopifyProvider>
     </Suspense>

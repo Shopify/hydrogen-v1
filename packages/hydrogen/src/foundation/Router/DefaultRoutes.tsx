@@ -3,6 +3,7 @@ import {matchPath} from '../../utilities/matchPath';
 import type {Logger} from '../../utilities/log/log';
 
 import type {ImportGlobEagerOutput} from '../../types';
+import {BoomerangPage} from '../Boomerang/BoomerangPageTemplate.client';
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -13,13 +14,11 @@ import type {ImportGlobEagerOutput} from '../../types';
 export function DefaultRoutes({
   pages,
   serverState,
-  pageMetrics,
   fallback,
   log,
 }: {
   pages: ImportGlobEagerOutput;
   serverState: Record<string, any>;
-  pageMetrics?: (route?: HydrogenRoute) => ReactElement;
   fallback?: ReactElement;
   log: Logger;
 }) {
@@ -47,12 +46,18 @@ export function DefaultRoutes({
         params={foundRouteDetails.params}
         {...serverState}
       />
-      {pageMetrics ? pageMetrics(foundRoute) : null}
+      <BoomerangPage pageTemplate={foundRoute.component.name} />
     </>
   ) : (
     <>
       {fallback}
-      {pageMetrics ? pageMetrics() : null}
+      <BoomerangPage
+        pageTemplate={
+          typeof fallback?.type === 'function'
+            ? fallback?.type.name
+            : fallback?.type
+        }
+      />
     </>
   );
 }

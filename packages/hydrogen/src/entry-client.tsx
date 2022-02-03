@@ -6,6 +6,7 @@ import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerStateProvider, ServerStateRouter} from './client';
+import {Boomerang} from './foundation/Boomerang/Boomerang.client';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   const root = document.getElementById('root');
@@ -43,7 +44,10 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
     >
       <BrowserRouter>
         <ServerStateRouter />
-        <ClientWrapper>{response.readRoot()}</ClientWrapper>
+        <ClientWrapper>
+          {response.readRoot()}
+          <Boomerang />
+        </ClientWrapper>
       </BrowserRouter>
     </ServerStateProvider>
   );
