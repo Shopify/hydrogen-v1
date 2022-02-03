@@ -59,6 +59,13 @@ export function useServerRequest() {
   }
 
   if (!request) {
+    // @ts-ignore
+    if (__DEV__ && typeof jest !== 'undefined') {
+      // Unit tests are not wrapped in ServerRequestProvider.
+      // This mocks it, instead of providing it in every test.
+      return {ctx: {}} as ServerComponentRequest;
+    }
+
     throw new Error('No ServerRequest Context found');
   }
 
