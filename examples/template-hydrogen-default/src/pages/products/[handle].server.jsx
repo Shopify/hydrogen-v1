@@ -1,4 +1,4 @@
-import {useShopQuery, ProductProviderFragment} from '@shopify/hydrogen';
+import {useShopQuery, ProductProviderFragment, Seo} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
@@ -8,7 +8,9 @@ import Layout from '../../components/Layout.server';
 export default function Product({country = {isoCode: 'US'}, params}) {
   const {handle} = params;
 
-  const {data} = useShopQuery({
+  const {
+    data: {product},
+  } = useShopQuery({
     query: QUERY,
     variables: {
       country: country.isoCode,
@@ -16,13 +18,14 @@ export default function Product({country = {isoCode: 'US'}, params}) {
     },
   });
 
-  if (!data.product) {
+  if (!product) {
     return <NotFound />;
   }
 
   return (
     <Layout>
-      <ProductDetails product={data.product} />
+      <Seo type="product" data={product} />
+      <ProductDetails product={product} />
     </Layout>
   );
 }
@@ -42,6 +45,7 @@ const QUERY = gql`
   ) @inContext(country: $country) {
     product: product(handle: $handle) {
       id
+      description
       vendor
       seo {
         title
@@ -51,6 +55,9 @@ const QUERY = gql`
         edges {
           node {
             url
+            height
+            width
+            altText
           }
         }
       }
