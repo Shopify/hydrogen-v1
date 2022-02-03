@@ -1,9 +1,9 @@
 import React, {ElementType} from 'react';
 import {useProduct} from '../ProductProvider';
-import {Money} from '../Money';
+import {Money, MoneyProps} from '../Money';
 import {Props} from '../types';
 
-export interface SelectedVariantPriceProps {
+export interface SelectedVariantPriceProps extends Omit<MoneyProps, 'money'> {
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
 }
@@ -33,9 +33,5 @@ export function SelectedVariantPrice<TTag extends ElementType>(
     return null;
   }
 
-  return (
-    <Money {...passthroughProps} money={price}>
-      {props.children}
-    </Money>
-  );
+  return <Money {...passthroughProps} money={price} />;
 }
