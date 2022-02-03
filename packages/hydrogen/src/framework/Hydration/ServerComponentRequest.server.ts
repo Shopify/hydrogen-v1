@@ -1,4 +1,5 @@
 import {getTime} from '../../utilities/timing';
+import type {HelmetData} from 'react-helmet-async';
 
 let reqCounter = 0; // For debugging
 const generateId =
@@ -21,7 +22,11 @@ export class ServerComponentRequest extends Request {
   public id: string;
   public time: number;
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
-  public ctx: {cache: Map<string, any>; [key: string]: any};
+  public ctx: {
+    cache: Map<string, any>;
+    helmet?: HelmetData;
+    [key: string]: any;
+  };
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
