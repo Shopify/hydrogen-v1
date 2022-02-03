@@ -1,4 +1,6 @@
 import React, {createContext, useContext} from 'react';
+import {HelmetData} from 'react-helmet-async';
+
 import {hashKey} from '../../framework/cache';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
@@ -9,7 +11,10 @@ const RequestContextSSR = createContext<ServerComponentRequest>({
   // https://github.com/Shopify/hydrogen/issues/415
   time: 0,
   id: 'initial-value',
-  ctx: {cache: new Map()},
+  ctx: {
+    cache: new Map(),
+    helmet: new HelmetData({}),
+  },
 } as ServerComponentRequest);
 
 // Cache to inject current request in RSC
