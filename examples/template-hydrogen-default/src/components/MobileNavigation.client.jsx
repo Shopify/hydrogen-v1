@@ -1,4 +1,4 @@
-import {Fragment} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {Link} from '@shopify/hydrogen/client';
 import {FocusTrap} from '@headlessui/react';
 
@@ -11,6 +11,18 @@ import OpenIcon from './OpenIcon';
 export default function MobileNavigation({collections, isOpen, setIsOpen}) {
   const OpenFocusTrap = isOpen ? FocusTrap : Fragment;
 
+  const [topScrollOffset, setTopScrollOffset] = useState(0);
+
+  useEffect(() => {
+    if (isOpen) {
+      setTopScrollOffset(window.scrollY);
+      document.body.style.position = 'fixed';
+    } else {
+      document.body.style.position = '';
+      window.scrollTo(0, parseInt(topScrollOffset, 10));
+    }
+  }, [isOpen, topScrollOffset]);
+
   return (
     <div className="lg:hidden">
       <OpenFocusTrap>
@@ -22,7 +34,7 @@ export default function MobileNavigation({collections, isOpen, setIsOpen}) {
           {isOpen ? <CloseIcon /> : <OpenIcon />}
         </button>
         {isOpen ? (
-          <div className="absolute -left-0 top-20 w-full h-screen z-10 bg-gray-50 px-4 md:px-12 py-7">
+          <div className="fixed -left-0 top-20 w-full h-screen z-10 bg-gray-50 px-4 md:px-12 py-7">
             <ul>
               {collections.map((collection) => (
                 <li className="border-b border-gray-200" key={collection.id}>
