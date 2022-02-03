@@ -16,6 +16,20 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Track page load performance
 - dx: Export `ProductPrice` and `ProductMetafield` standalone components
 - Fix missing server state on SSR pass
+- Use hashes as client component ids instead of absolute paths
+- Remove the following hooks. (All the same functionality can be retrieved through the `useCart()` hook)
+  - `useCartAttributesUpdateCallback`
+  - `useCartBuyerIdentityUpdateCallback`
+  - `useCartCheckoutUrl`
+  - `useCartCreateCallback`
+  - `useCartDiscountCodesUpdateCallback`
+  - `useCartLinesAddCallback`
+  - `useCartLinesRemoveCallback`
+  - `useCartLinesTotalQuantity`
+  - `useCartLinesUpdateCallback`
+  - `useCartNoteUpdateCallback`
+- Feat: Transition away from deprecated currency selector in favor of country selector
+- Fix: add charset to content type in HTML responses
 - Fix header shift when cart is opened by @Francismori7 in #600
 
 ## 0.10.1 - 2022-01-26
