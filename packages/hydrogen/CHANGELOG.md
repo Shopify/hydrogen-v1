@@ -28,11 +28,11 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartLinesUpdateCallback`
   - `useCartNoteUpdateCallback`
 - Feat: Transition away from deprecated currency selector in favor of country selector
+- Fix: add charset to content type in HTML responses
 
 ## 0.10.1 - 2022-01-26
 
 - Fix: hot reload for newly added page files
-- Fix: add charset to content type in HTML responses
 
 ## 0.10.0 - 2022-01-25
 
