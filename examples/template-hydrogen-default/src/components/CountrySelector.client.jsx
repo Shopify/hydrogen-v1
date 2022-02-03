@@ -1,12 +1,18 @@
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 import {useAvailableCountries, useCountry} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
 
 /**
- * A client component that selects the appropriate currency to display for products on a website
+ * A client component that selects the appropriate country to display for products on a website
  */
-export default function CurrencySelector() {
-  const countries = useAvailableCountries();
+export default function CountrySelector() {
+  const availableCountries = useAvailableCountries();
+
+  const countries = useMemo(
+    () => [...availableCountries].sort((a, b) => a.name.localeCompare(b.name)),
+    [availableCountries],
+  );
+
   const [selectedCountry, setSelectedCountry] = useCountry();
 
   const setCountry = useCallback(
@@ -24,7 +30,7 @@ export default function CurrencySelector() {
         {({open}) => (
           <>
             <Listbox.Button className="font-medium text-sm h-8 p-2 flex items-center">
-              <span className="mr-4">{selectedCountry.currency.isoCode}</span>
+              <span className="mr-4">{selectedCountry.name}</span>
               <ArrowIcon isOpen={open} />
             </Listbox.Button>
 
@@ -34,7 +40,7 @@ export default function CurrencySelector() {
                   disabled
                   className="p-2 text-md text-left font-medium uppercase"
                 >
-                  Currency
+                  Country
                 </Listbox.Option>
                 {countries.map((country) => {
                   const isSelected =
@@ -49,7 +55,7 @@ export default function CurrencySelector() {
                           className={`w-36 py-2 px-3 flex justify-between items-center text-left cursor-pointer rounded
                           ${active ? 'bg-gray-200' : null}`}
                         >
-                          {country.currency.isoCode}
+                          {country.name}
                           {isSelected ? <CheckIcon /> : null}
                         </div>
                       )}

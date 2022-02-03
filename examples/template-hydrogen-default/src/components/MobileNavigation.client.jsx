@@ -2,7 +2,7 @@ import {Fragment, useEffect, useState} from 'react';
 import {Link} from '@shopify/hydrogen/client';
 import {FocusTrap} from '@headlessui/react';
 
-import MobileCurrencySelector from './MobileCurrencySelector.client';
+import MobileCountrySelector from './MobileCountrySelector.client';
 import OpenIcon from './OpenIcon';
 
 /**
@@ -49,7 +49,7 @@ export default function MobileNavigation({collections, isOpen, setIsOpen}) {
                 </li>
               ))}
             </ul>
-            <MobileCurrencySelector />
+            <MobileCountrySelector />
           </div>
         ) : null}
       </OpenFocusTrap>
