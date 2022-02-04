@@ -1,5 +1,6 @@
 import React, {useCallback} from 'react';
 import {useRouter} from '../Router';
+import {createPath} from 'history';
 import {useServerState} from '../../foundation/useServerState';
 
 interface LinkProps
@@ -14,23 +15,54 @@ interface LinkProps
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   (props, ref) => {
     const navigate = useNavigate();
+    const {location} = useRouter();
+    const {
+      reloadDocument,
+      target,
+      replace: _replace,
+      to,
+      onClick,
+      serverState,
+      clientState,
+    } = props;
 
-    const onClick = useCallback(
+    const internalClick = useCallback(
       (e) => {
-        if (!props.reloadDocument) {
+        if (onClick) onClick(e);
+        if (
+          !e.defaultPrevented && // the custom onClick handler might prevent default
+          !reloadDocument && // do regular browser stuff
+          e.button === 0 && // Ignore everything but left clicks
+          (!target || target === '_self') && // Let browser handle "target=_blank"
+          !isModifiedEvent(e) // Ignore modifier key clicks
+        ) {
           e.preventDefault();
+
+          // If the URL hasn't changed, the regular <a> will do a replace
+          const replace =
+            !!_replace || createPath(location) === createPath({pathname: to});
+
           navigate(props.to, {
-            replace: props.replace,
-            reloadDocument: props.reloadDocument,
-            clientState: props.clientState,
+            replace,
+            serverState,
+            clientState,
           });
         }
       },
-      [props]
+      [
+        reloadDocument,
+        target,
+        _replace,
+        to,
+        serverState,
+        clientState,
+        onClick,
+        location,
+      ]
     );
 
     return (
-      <a ref={ref} onClick={onClick} href={props.to} {...props}>
+      <a {...props} ref={ref} onClick={internalClick} href={props.to}>
         {props.children}
       </a>
     );
@@ -62,4 +94,8 @@ export function useNavigate() {
       ...(options.serverState || {}),
     });
   };
+}
+
+function isModifiedEvent(event: React.MouseEvent) {
+  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }

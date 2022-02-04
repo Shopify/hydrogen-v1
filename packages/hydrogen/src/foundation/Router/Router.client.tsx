@@ -14,7 +14,7 @@ type RouterContextValue = {
   location: Location;
 };
 
-const RouterContext = createContext<RouterContextValue | null>(null);
+const RouterContext = createContext<RouterContextValue | {}>({});
 
 export const Router: FC = ({children}) => {
   const history = useMemo(() => createBrowserHistory(), []);
@@ -53,7 +53,13 @@ export const Router: FC = ({children}) => {
 };
 
 export function useRouter() {
-  return useContext(RouterContext) as RouterContextValue;
+  const router = useContext<RouterContextValue | {}>(RouterContext);
+
+  if (!router && !import.meta.env.SSR) {
+    throw new Error('useRouter must be used within a <Router> component');
+  }
+
+  return router as RouterContextValue;
 }
 
 export function useLocation() {
