@@ -40,6 +40,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Fix: add charset to content type in HTML responses
 - Feat: Simplify Helmet usage and make it compatible with RSC
 - The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
+- Fix: Ensure the client entrypoint script path referenced in `index.html` is used to render the app (defaults to `entry-client.jsx`)
 
 ## 0.10.1 - 2022-01-26
 

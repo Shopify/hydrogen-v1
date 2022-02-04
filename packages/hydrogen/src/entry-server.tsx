@@ -30,6 +30,7 @@ import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydr
 // @ts-ignore
 import {createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import type {RealHelmetData} from './foundation/Helmet/Helmet';
+import {getScriptsFromTemplate} from './utilities/template';
 
 declare global {
   // This is provided by a Vite plugin
@@ -145,6 +146,9 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       pages,
     });
 
+    const {bootstrapScripts, bootstrapModules} =
+      getScriptsFromTemplate(template);
+
     const [rscReadableForFizz, rscReadableForFlight] = (
       rscRenderToReadableStream(<ReactAppRSC />) as ReadableStream<Uint8Array>
     ).tee();
@@ -193,6 +197,8 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       const ssrReadable: ReadableStream = renderToReadableStream(ReactAppSSR, {
         nonce,
+        bootstrapScripts,
+        bootstrapModules,
         onCompleteShell() {
           log.trace('worker ready to stream');
 
@@ -317,6 +323,8 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       const {pipe} = renderToPipeableStream(ReactAppSSR, {
         nonce,
+        bootstrapScripts,
+        bootstrapModules,
         onCompleteShell() {
           log.trace('node ready to stream');
           /**
