@@ -1,4 +1,5 @@
 import React from 'react';
+import {useCurrentUrl} from '../../foundation';
 
 import {DefaultPageSeo} from './DefaultPageSeo.client';
 import {HomePageSeo} from './HomePageSeo.client';
@@ -34,7 +35,7 @@ type Props =
  * The `Seo` component renders SEO information on a webpage.
  */
 export function Seo({type, data}: Props) {
-  const url = typeof window === 'undefined' ? '' : window.location.href;
+  const url = useCurrentUrl().href;
 
   let SeoMarkup = null;
 
