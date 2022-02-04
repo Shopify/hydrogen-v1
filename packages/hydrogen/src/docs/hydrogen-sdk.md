@@ -78,6 +78,8 @@ Primitive components and hooks are the building blocks for different component t
 
 [ShopifyProvider](/api/hydrogen/components/global/shopifyprovider) is a global Hydrogen component that wraps your entire app. You should place it in your app's entry point component. For example, your app's entry point component might be `<App>`.
 
+The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+
 The `ShopifyProvider` component relates to the following global hooks that you can use to fetch data from server components:
 
 <table>
