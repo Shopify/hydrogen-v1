@@ -1,15 +1,15 @@
-import React, {ElementType, ReactNode} from 'react';
+import React, {ElementType} from 'react';
 import {Props} from '../types';
 import {useProduct} from '../../hooks/useProduct/useProduct';
 import {Metafield} from '../Metafield';
+import {MetafieldProps} from '../Metafield/Metafield.client';
 
-export interface SelectedVariantMetafieldProps {
+export interface SelectedVariantMetafieldProps
+  extends Omit<MetafieldProps, 'metafield'> {
   /** A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the selected variant's metafield. */
   keyName: string;
   /** A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the selected variant's metafield. */
   namespace: string;
-  /** A render function that takes a `Metafield` object as its argument. */
-  children?: ReactNode;
 }
 
 /**
@@ -34,7 +34,13 @@ export function SelectedVariantMetafield<TTag extends ElementType>(
     }
   )?.node;
 
-  return metafield ? (
-    <Metafield metafield={metafield} {...passthroughProps} />
-  ) : null;
+  if (metafield === null || metafield === undefined) {
+    console.warn(
+      `Product does not have a value for metafield. ProductID:${product.id} namespace:${namespace} keyName:${keyName}`
+    );
+
+    return null;
+  }
+
+  return <Metafield metafield={metafield} {...passthroughProps} />;
 }

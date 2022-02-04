@@ -19,32 +19,14 @@ export function Product({product}) {
     </ProductProvider>
   );
 }
-
-export function ProductWithRenderProp({product}) {
-  return (
-    <ProductProvider product={product}>
-      <SelectedVariantMetafield
-        namespace="my_fields"
-        keyName="manufacture_date"
-      >
-        {({value}) => {
-          return (
-            <p>This variant was manufactured on {value.toLocaleDateString()}</p>
-          );
-        }}
-      </SelectedVariantMetafield>
-    </ProductProvider>
-  );
-}
 ```
 
 ## Props
 
-| Name      | Type                   | Description                                                                                                                        |
-| --------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| keyName   | <code>string</code>    | A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the selected variant's metafield.       |
-| namespace | <code>string</code>    | A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the selected variant's metafield. |
-| children? | <code>ReactNode</code> | A render function that takes a `Metafield` object as its argument.                                                                 |
+| Name      | Type                | Description                                                                                                                        |
+| --------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| keyName   | <code>string</code> | A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the selected variant's metafield.       |
+| namespace | <code>string</code> | A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the selected variant's metafield. |
 
 ## Component type
 

@@ -61,40 +61,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'date'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'date'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The date is {(value as Date).toLocaleDateString()}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [
-          `The date is `,
-          (metafield.value as Date).toLocaleDateString(),
-        ],
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -138,37 +104,6 @@ describe('<Metafield />', () => {
 
       expect(component).toContainReactComponent('p', {
         children: (metafield.value as Date).toLocaleString(),
-      });
-    });
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'date_time'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'date_time'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The date is {(value as Date).toLocaleString()}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The date is `, (metafield.value as Date).toLocaleString()],
       });
     });
 
@@ -224,36 +159,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'weight'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithProviders(
-        <Metafield metafield={getParsedMetafield({type: 'weight'})}>
-          {() => {
-            return <p>The weight is 10 lbs</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `The weight is 10 lbs`,
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -303,36 +208,6 @@ describe('<Metafield />', () => {
 
       expect(component).toContainReactComponent('p', {
         children: '10 L',
-      });
-    });
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'volume'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithProviders(
-        <Metafield metafield={getParsedMetafield({type: 'volume'})}>
-          {() => {
-            return <p>The volume is 10 l</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `The volume is 10 l`,
       });
     });
 
@@ -388,36 +263,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'dimension'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithProviders(
-        <Metafield metafield={getParsedMetafield({type: 'dimension'})}>
-          {() => {
-            return <p>The length is 5 cm</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `The length is 5 cm`,
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -451,38 +296,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'single_line_text_field'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithProviders(
-        <Metafield
-          metafield={getParsedMetafield({type: 'single_line_text_field'})}
-        >
-          {() => {
-            return <p>Hello world</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `Hello world`,
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -500,38 +313,6 @@ describe('<Metafield />', () => {
 
   describe('with `multi_line_text_field` type metafield', () => {
     it.todo('renders the text in a `RawHtml` by default');
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'multi_line_text_field'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithProviders(
-        <Metafield
-          metafield={getParsedMetafield({type: 'multi_line_text_field'})}
-        >
-          {() => {
-            return <p>Hello world</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `Hello world`,
-      });
-    });
 
     it('allows passthrough props', () => {
       const component = mountWithProviders(
@@ -559,36 +340,6 @@ describe('<Metafield />', () => {
       expect(component).toContainReactComponent('a', {
         children: metafield.value,
         href: metafield.value as string,
-      });
-    });
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'url'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithProviders(
-        <Metafield metafield={getParsedMetafield({type: 'url'})}>
-          {() => {
-            return <p>Hello world</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `Hello world`,
       });
     });
 
@@ -626,37 +377,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'json'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'json'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The value is {JSON.stringify(value)}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The value is `, JSON.stringify(metafield.value)],
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -688,37 +408,6 @@ describe('<Metafield />', () => {
 
       expect(component).toContainReactComponent('p', {
         children: metafield.value,
-      });
-    });
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'color'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'color'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The color is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The color is `, metafield.value],
       });
     });
 
@@ -756,37 +445,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'product_reference'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'product_reference'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The reference is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The reference is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -821,37 +479,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'page_reference'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'page_reference'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The reference is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The reference is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -883,37 +510,6 @@ describe('<Metafield />', () => {
 
       expect(component).toContainReactComponent('p', {
         children: metafield.value,
-      });
-    });
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'variant_reference'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'variant_reference'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The reference is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The reference is `, metafield.value],
       });
     });
 
@@ -982,37 +578,6 @@ describe('<Metafield />', () => {
         });
       });
 
-      it('passes the metafield as a render prop to the children render function', () => {
-        const children = jest.fn().mockImplementation(() => {
-          return null;
-        });
-        const metafield = getParsedMetafield({type: 'file_reference'});
-
-        mountWithProviders(
-          <Metafield metafield={metafield}>{children}</Metafield>
-        );
-
-        expect(children).toHaveBeenCalledWith({
-          ...metafield,
-          value: metafield.value,
-        });
-      });
-
-      it('renders its children', () => {
-        const metafield = getParsedMetafield({type: 'file_reference'});
-        const component = mountWithProviders(
-          <Metafield metafield={metafield}>
-            {({value}) => {
-              return <p>The reference is {value}</p>;
-            }}
-          </Metafield>
-        );
-
-        expect(component).toContainReactComponent('p', {
-          children: [`The reference is `, metafield.value],
-        });
-      });
-
       it('allows passthrough props', () => {
         const component = mountWithProviders(
           <Metafield
@@ -1045,37 +610,6 @@ describe('<Metafield />', () => {
 
       expect(component).toContainReactComponent('p', {
         children: (metafield.value as boolean).toString(),
-      });
-    });
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'boolean'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'boolean'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The value is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The value is `, metafield.value],
       });
     });
 
@@ -1113,37 +647,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'number_integer'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'number_integer'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The int is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The int is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -1178,37 +681,6 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'number_decimal'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'number_decimal'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The number is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The number is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
@@ -1229,37 +701,6 @@ describe('<Metafield />', () => {
 
       expect(component).toContainReactComponent('span', {
         children: (metafield.value as Rating).value,
-      });
-    });
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'rating'});
-
-      mountWithProviders(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'rating'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The rating is {(value as any)!.value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The rating is `, (metafield.value as any).value],
       });
     });
 
