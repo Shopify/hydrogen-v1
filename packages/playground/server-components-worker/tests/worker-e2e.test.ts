@@ -30,6 +30,15 @@ it('follows synchronous redirects', async () => {
   expect(await page.textContent('h1')).toContain('About');
 });
 
+it('renders `<ShopifyProvider>` dynamically in RSC and on the client', async () => {
+  // "someDynamicValue should get injected into the response config paylout"
+  await page.goto(url + '/config/someDynamicValue');
+
+  expect(await page.textContent('#root > div')).toContain(
+    '{"locale":"en-us","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
+  );
+});
+
 it('should support API route on a serve component for POST methods', async () => {
   const response = await page.request.post(url + '/', {
     headers: {

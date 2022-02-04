@@ -1,3 +1,4 @@
+import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import {HelmetData} from 'react-helmet-async';
 import type {RealHelmetData} from '../../foundation/Helmet/Helmet';
@@ -26,6 +27,7 @@ export class ServerComponentRequest extends Request {
   public ctx: {
     cache: Map<string, any>;
     helmet: RealHelmetData;
+    shopifyConfig?: ShopifyContextValue;
     [key: string]: any;
   };
 

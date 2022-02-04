@@ -36,3 +36,8 @@ jest.mock('@shopify/react-testing/build/cjs/compat.js', () => {
     },
   };
 });
+
+// TODO Remove when Jest supports import.meta
+jest.mock('./packages/hydrogen/src/utilities/meta-env-ssr', () => ({
+  META_ENV_SSR: false,
+}));

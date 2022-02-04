@@ -1,1 +1,1 @@
-export {useShop, setShop} from './use-shop';
+export {useShop} from './use-shop';
