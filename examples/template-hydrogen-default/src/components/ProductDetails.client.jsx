@@ -1,5 +1,9 @@
-import {Product, flattenConnection, useProduct} from '@shopify/hydrogen/client';
-
+import {
+  Product,
+  flattenConnection,
+  useProduct,
+  useMoney,
+} from '@shopify/hydrogen/client';
 import ProductOptions from './ProductOptions.client';
 import Gallery from './Gallery.client';
 import {
@@ -11,19 +15,23 @@ import {
  * A client component that displays detailed information about a product to allow buyers to make informed decisions
  */
 function ProductPriceMarkup() {
+  const product = useProduct();
+  const variantPrice = useMoney(product.selectedVariant.priceV2);
+  const variantCompareAtPrice = useMoney(
+    product.selectedVariant.compareAtPriceV2 ?? product.selectedVariant.priceV2,
+  );
   return (
     <div className="flex md:flex-col items-end font-semibold text-lg md:items-start md:mb-4">
-      <Product.SelectedVariant.Price
-        priceType="compareAt"
-        className="text-gray-500 line-through text-lg mr-2.5"
-      >
-        {({amount, currencyNarrowSymbol}) => `${currencyNarrowSymbol}${amount}`}
-      </Product.SelectedVariant.Price>
-      <Product.SelectedVariant.Price className="text-gray-900">
-        {({currencyCode, amount, currencyNarrowSymbol}) =>
-          `${currencyCode} ${currencyNarrowSymbol}${amount}`
-        }
-      </Product.SelectedVariant.Price>
+      {variantPrice.amount !== variantCompareAtPrice.amount && (
+        <span className="text-gray-500 line-through text-lg mr-2.5">
+          {variantCompareAtPrice.currencyNarrowSymbol}
+          {variantCompareAtPrice.amount}
+        </span>
+      )}
+      <span className="text-gray-900">
+        {variantPrice.currencyCode} {variantPrice.currencyNarrowSymbol}
+        {variantPrice.amount}
+      </span>
       <Product.SelectedVariant.UnitPrice className="text-gray-500">
         {({currencyCode, amount, currencyNarrowSymbol, referenceUnit}) =>
           `${currencyCode} ${currencyNarrowSymbol}${amount}/${referenceUnit}`

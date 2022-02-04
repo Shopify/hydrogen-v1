@@ -1,10 +1,10 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {Helmet} from 'react-helmet-async';
+import {Helmet} from '../../../client';
 
 import {ImageSeo} from '../ImageSeo.client';
 
-jest.mock('react-helmet-async', () => ({
+jest.mock('../../../client', () => ({
   Helmet({children}) {
     return children;
   },

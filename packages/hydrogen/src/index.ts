@@ -14,8 +14,6 @@ export {
 export {ShopifyProvider} from './foundation/ShopifyProvider';
 export {log, setLogger, Logger} from './utilities/log';
 
-export {Helmet} from 'react-helmet-async';
-
 // This is exported here because it contains a Server Component
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
 

@@ -8,7 +8,7 @@ import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 import {ImageSeo} from '../ImageSeo.client';
 
-jest.mock('react-helmet-async', () => ({
+jest.mock('../../../client', () => ({
   Helmet({children}) {
     return children;
   },

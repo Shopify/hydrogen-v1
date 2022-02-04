@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 it('shows the homepage, navigates to about, and increases the count', async () => {
   expect(await page.textContent('h1')).toContain('Home');
   expect(await page.textContent('.secrets')).toContain('PRIVATE_VARIABLE:42');
@@ -177,4 +179,66 @@ it('should render server state in client component', async () => {
   expect(await page.textContent('#server-state')).toContain(
     'Pathname: /test-server-state'
   );
+});
+
+it('streams the SSR response and includes RSC payload', async () => {
+  const response = await fetch(viteTestUrl + '/stream');
+  let streamedChunks = [];
+
+  // This fetch response is not standard but a node-fetch polyfill.
+  // Therefore, the body is not a ReadableStream but a Node Readable.
+  // @ts-ignore
+  for await (const chunk of response.body) {
+    streamedChunks.push(chunk.toString());
+  }
+
+  expect(streamedChunks.length).toBeGreaterThan(1); // Streamed more than 1 chunk
+
+  const body = streamedChunks.join('');
+  expect(body).toContain('var __flight=[];');
+  expect(body).toContain('__flight.push(`S1:"react.suspense"');
+  expect(body).toContain('<div c="5">');
+  expect(body).toContain('>footer!<');
+});
+
+it('buffers HTML for bots', async () => {
+  const response = await fetch(viteTestUrl + '/stream?_bot');
+  let streamedChunks = [];
+
+  // This fetch response is not standard but a node-fetch polyfill.
+  // Therefore, the body is not a ReadableStream but a Node Readable.
+  // @ts-ignore
+  for await (const chunk of response.body) {
+    streamedChunks.push(chunk.toString());
+  }
+
+  expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
+
+  const body = streamedChunks.join('');
+  expect(body).toContain('var __flight=[];');
+  expect(body).not.toContain('__flight.push(`S1:"react.suspense"'); // We're not including RSC
+  expect(body).toContain('<div c="5">');
+  expect(body).toContain('>footer!<');
+});
+
+it('streams the RSC response', async () => {
+  const response = await fetch(
+    viteTestUrl +
+      '/react?state=' +
+      encodeURIComponent(JSON.stringify({pathname: '/stream'}))
+  );
+  let streamedChunks = [];
+
+  // This fetch response is not standard but a node-fetch polyfill.
+  // Therefore, the body is not a ReadableStream but a Node Readable.
+  // @ts-ignore
+  for await (const chunk of response.body) {
+    streamedChunks.push(chunk.toString());
+  }
+
+  expect(streamedChunks.length).toBeGreaterThan(1);
+
+  const body = streamedChunks.join('');
+  expect(body).toContain('S1:"react.suspense"');
+  expect(body).toContain('"c":"5","children":"done"');
 });

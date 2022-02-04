@@ -31,8 +31,14 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartLinesUpdateCallback`
   - `useCartNoteUpdateCallback`
 - Feat: Transition away from deprecated currency selector in favor of country selector
+- dx: The following money components no longer allow the function-as-a-child (also known as "render props") pattern; see #589. For customization, use the `useMoney()` hook.
+  - `<Money>`
+  - `<CartLinePrice>`
+  - `<ProductPrice>`
+  - `<SelectedVariantPrice>`
 - refactor: `<Metafield>` now renders `ratings` as a `<span>` with text instead of stars; `multi_line_text_field` inside of a `<span>` instead of a `<div>`
 - Fix: add charset to content type in HTML responses
+- Feat: Simplify Helmet usage and make it compatible with RSC
 - The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
 
 ## 0.10.1 - 2022-01-26
