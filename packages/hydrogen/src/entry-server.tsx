@@ -19,7 +19,7 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
-import type {ServerResponse} from 'http';
+import type {ServerResponse, IncomingMessage} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {
   getApiRouteFromURL,
@@ -29,11 +29,8 @@ import {
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
 import type {HelmetData as HeadData} from 'react-helmet-async';
-
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
-import type {IncomingMessage} from 'http';
-
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -44,6 +41,7 @@ import {
   bufferReadableStream,
 } from './streaming.server';
 import {RSC_PATHNAME} from './constants';
+import {getScriptsFromTemplate} from './utilities/template';
 
 declare global {
   // This is provided by a Vite plugin
@@ -286,6 +284,8 @@ async function stream(
     },
   });
 
+  const {bootstrapScripts, bootstrapModules} = getScriptsFromTemplate(template);
+
   let didError: Error | undefined;
 
   if (__WORKER__) {
@@ -297,6 +297,8 @@ async function stream(
 
     const ssrReadable = ssrRenderToReadableStream(AppSSR, {
       nonce,
+      bootstrapScripts,
+      bootstrapModules,
       onCompleteShell() {
         log.trace('worker ready to stream');
 
@@ -423,6 +425,8 @@ async function stream(
 
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
+      bootstrapScripts,
+      bootstrapModules,
       onCompleteShell() {
         log.trace('node ready to stream');
         /**
