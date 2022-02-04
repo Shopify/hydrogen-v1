@@ -1,1 +1,1 @@
-export {Link} from './Link.client';
+export {Link, useNavigate} from './Link.client';

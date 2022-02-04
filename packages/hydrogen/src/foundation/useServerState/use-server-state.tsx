@@ -1,5 +1,8 @@
 import {useContext} from 'react';
-import {ServerStateContext} from '../ServerStateProvider';
+import {
+  ServerStateContext,
+  ServerStateContextValue,
+} from '../ServerStateProvider';
 
 /**
  * The `useServerState` hook allows you to [manage server state](/custom-storefronts/hydrogen/framework/server-state) when using Hydrogen as a React Server Component framework.
@@ -15,6 +18,6 @@ import {ServerStateContext} from '../ServerStateProvider';
  * | `pending`        | Whether a [transition is pending](https://github.com/reactwg/react-18/discussions/41). |
  *
  */
-export function useServerState() {
-  return useContext(ServerStateContext) ?? {};
+export function useServerState(): ServerStateContextValue {
+  return useContext<ServerStateContextValue>(ServerStateContext) ?? {};
 }
