@@ -1,4 +1,4 @@
-import testCases from '../../e2e-test-cases';
+import testCases from './e2e-test-cases';
 
 describe('Node.js development', () => {
   // @ts-ignore

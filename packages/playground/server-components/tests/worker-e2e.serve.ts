@@ -2,40 +2,17 @@
 // the default e2e test serve behavior
 
 import {resolve} from 'path';
-import {build} from 'vite';
+import {execSync} from 'child_process';
 
 export const port = 9528;
 
 export async function serve(root: string, isProd: boolean) {
   // we build first, regardless of whether it's prod/build mode
   // because Vite doesn't support the concept of a "webworker server"
-
-  process.env.PUBLIC_VARIABLE = '42-public';
-
-  // client build
-  await build({
-    root,
-    logLevel: 'silent',
-    build: {
-      outDir: 'dist/client',
-      manifest: true,
-    },
-  });
-
-  process.env.WORKER = 'true';
-
-  // worker build
-  await build({
-    root,
-    logLevel: 'silent',
-    build: {
-      ssr: 'worker.js',
-      outDir: 'dist/worker',
-    },
-  });
-
-  delete process.env.WORKER;
-  delete process.env.PUBLIC_VARIABLE;
+  execSync(
+    'yarn build:client --logLevel silent && yarn build:worker --logLevel silent',
+    {cwd: root}
+  );
 
   const {createServer} = await import(resolve(root, 'start-worker.js'));
   const {app} = await createServer(root, isProd);
