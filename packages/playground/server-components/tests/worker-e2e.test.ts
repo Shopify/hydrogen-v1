@@ -1,4 +1,4 @@
-import {port} from './serve';
+import {port} from './worker-e2e.serve';
 import testCases from '../../e2e-test-cases';
 
 describe('Worker', () => {

@@ -1,6 +1,6 @@
 import {copy, existsSync} from 'fs-extra';
 import * as http from 'http';
-import {resolve, dirname} from 'path';
+import {resolve, dirname, basename} from 'path';
 import sirv from 'sirv';
 import {
   createServer,
@@ -10,7 +10,7 @@ import {
   PluginOption,
   ResolvedConfig,
 } from 'vite';
-import {Page} from 'playwright-chromium';
+
 // eslint-disable-next-line node/no-extraneous-import
 import {RollupWatcher, RollupWatcherEvent} from 'rollup';
 
@@ -39,90 +39,76 @@ beforeAll(async () => {
     page.on('console', onConsole);
 
     const testPath = expect.getState().testPath;
-    const testName = slash(testPath).match(/playground\/([\w-]+)\//)?.[1];
+    const [, rootDir, testName] =
+      slash(testPath).match(/(.*?\/playground\/([\w-]+)\/)/) || []; //?.[1];
 
-    // if this is a test placed under playground/xxx/tests
-    // start a vite server in that directory.
-    if (testName) {
-      const playgroundRoot = resolve(__dirname, '../packages/playground');
-      const srcDir = resolve(playgroundRoot, testName);
-      tempDir = resolve(__dirname, '../temp', testName);
-      await copy(srcDir, tempDir, {
-        dereference: true,
-        filter(file) {
-          file = slash(file);
-          return (
-            !file.includes('tests') &&
-            !file.includes('node_modules') &&
-            !file.match(/dist(\/|$)/)
-          );
+    if (!testName) return;
+
+    // If this is a test placed under playground/xxx/tests
+    // start a server in that directory.
+
+    const testCustomServe = resolve(
+      testPath.replace(/\.test\.([jt]s)$/, '.serve.$1')
+    );
+
+    if (existsSync(testCustomServe)) {
+      // test has custom server configuration.
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const {serve} = await import(testCustomServe);
+      server = await serve(rootDir, isBuildTest);
+      return;
+    }
+
+    const options: UserConfig = {
+      root: rootDir,
+      logLevel: 'silent',
+      server: {
+        watch: {
+          // During tests we edit the files too fast and sometimes chokidar
+          // misses change events, so enforce polling for consistency
+          usePolling: true,
+          interval: 100,
+        },
+        host: true,
+        fs: {
+          strict: !isBuildTest,
+        },
+      },
+      build: {
+        // skip transpilation during tests to make it faster
+        target: 'esnext',
+      },
+    };
+
+    if (!isBuildTest) {
+      process.env.VITE_INLINE = 'inline-serve';
+      server = await (await createServer(options)).listen();
+      // use resolved port/base from server
+      const base = server.config.base === '/' ? '' : server.config.base;
+      const url = ((
+        global as any
+      ).viteTestUrl = `http://localhost:${server.config.server.port}${base}`);
+      await page.goto(url);
+    } else {
+      process.env.VITE_INLINE = 'inline-build';
+      // determine build watch
+      let resolvedConfig: ResolvedConfig;
+      const resolvedPlugin: () => PluginOption = () => ({
+        name: 'vite-plugin-watcher',
+        configResolved(config) {
+          resolvedConfig = config;
         },
       });
-
-      // when `root` dir is present, use it as vite's root
-      const testCustomRoot = resolve(tempDir, 'root');
-      rootDir = existsSync(testCustomRoot) ? testCustomRoot : tempDir;
-
-      const testCustomServe = resolve(dirname(testPath), 'serve.js');
-      if (existsSync(testCustomServe)) {
-        // test has custom server configuration.
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const {serve} = require(testCustomServe);
-        server = await serve(rootDir, isBuildTest);
-        return;
+      options.plugins = [resolvedPlugin()];
+      const rollupOutput = await build(options);
+      const isWatch = !!resolvedConfig!.build.watch;
+      // in build watch,call startStaticServer after the build is complete
+      if (isWatch) {
+        (global as any).watcher = rollupOutput as RollupWatcher;
+        await notifyRebuildComplete((global as any).watcher);
       }
-
-      const options: UserConfig = {
-        root: rootDir,
-        logLevel: 'silent',
-        server: {
-          watch: {
-            // During tests we edit the files too fast and sometimes chokidar
-            // misses change events, so enforce polling for consistency
-            usePolling: true,
-            interval: 100,
-          },
-          host: true,
-          fs: {
-            strict: !isBuildTest,
-          },
-        },
-        build: {
-          // skip transpilation during tests to make it faster
-          target: 'esnext',
-        },
-      };
-
-      if (!isBuildTest) {
-        process.env.VITE_INLINE = 'inline-serve';
-        server = await (await createServer(options)).listen();
-        // use resolved port/base from server
-        const base = server.config.base === '/' ? '' : server.config.base;
-        const url = ((
-          global as any
-        ).viteTestUrl = `http://localhost:${server.config.server.port}${base}`);
-        await page.goto(url);
-      } else {
-        process.env.VITE_INLINE = 'inline-build';
-        // determine build watch
-        let resolvedConfig: ResolvedConfig;
-        const resolvedPlugin: () => PluginOption = () => ({
-          name: 'vite-plugin-watcher',
-          configResolved(config) {
-            resolvedConfig = config;
-          },
-        });
-        options.plugins = [resolvedPlugin()];
-        const rollupOutput = await build(options);
-        const isWatch = !!resolvedConfig!.build.watch;
-        // in build watch,call startStaticServer after the build is complete
-        if (isWatch) {
-          (global as any).watcher = rollupOutput as RollupWatcher;
-          await notifyRebuildComplete((global as any).watcher);
-        }
-        const url = ((global as any).viteTestUrl = await startStaticServer());
-        await page.goto(url);
-      }
+      const url = ((global as any).viteTestUrl = await startStaticServer());
+      await page.goto(url);
     }
   } catch (e) {
     // jest doesn't exit if our setup has error here

@@ -17,6 +17,6 @@ setLogger({
   },
 });
 
-const pages = import.meta.globEager('./pages/**/*.server.[jt]s[x]');
+const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
 
 export default renderHydrogen(App, {shopifyConfig, pages});

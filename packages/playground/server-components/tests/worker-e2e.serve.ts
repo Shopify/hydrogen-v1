@@ -1,19 +1,14 @@
-// @ts-check
-// this is automtically detected by scripts/jest-e2e-setup-test.ts and will replace
+// This is automtically detected by scripts/jest-e2e-setup-test.ts and will replace
 // the default e2e test serve behavior
 
-const path = require('path');
+import {resolve} from 'path';
+import {build} from 'vite';
 
-const port = (exports.port = 9528);
+export const port = 9528;
 
-/**
- * @param {string} root
- * @param {boolean} isProd
- */
-exports.serve = async function serve(root, isProd) {
+export async function serve(root: string, isProd: boolean) {
   // we build first, regardless of whether it's prod/build mode
   // because Vite doesn't support the concept of a "webworker server"
-  const {build} = require('vite');
 
   process.env.PUBLIC_VARIABLE = '42-public';
 
@@ -42,7 +37,7 @@ exports.serve = async function serve(root, isProd) {
   delete process.env.WORKER;
   delete process.env.PUBLIC_VARIABLE;
 
-  const {createServer} = require(path.resolve(root, 'start-worker.js'));
+  const {createServer} = await import(resolve(root, 'start-worker.js'));
   const {app} = await createServer(root, isProd);
 
   return new Promise((resolve, reject) => {
@@ -61,4 +56,4 @@ exports.serve = async function serve(root, isProd) {
       reject(e);
     }
   });
-};
+}
