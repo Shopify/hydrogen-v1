@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import {useRouter} from '../Router';
 import {useServerState} from '../../foundation/useServerState';
 
@@ -11,29 +11,31 @@ interface LinkProps
   serverState?: Record<string, string>;
 }
 
-export const Link: FC<LinkProps> = function Link(props) {
-  const navigate = useNavigate();
+export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
+  (props, ref) => {
+    const navigate = useNavigate();
 
-  const onClick = useCallback(
-    (e) => {
-      if (!props.reloadDocument) {
-        e.preventDefault();
-        navigate(props.to, {
-          replace: props.replace,
-          reloadDocument: props.reloadDocument,
-          clientState: props.clientState,
-        });
-      }
-    },
-    [props]
-  );
+    const onClick = useCallback(
+      (e) => {
+        if (!props.reloadDocument) {
+          e.preventDefault();
+          navigate(props.to, {
+            replace: props.replace,
+            reloadDocument: props.reloadDocument,
+            clientState: props.clientState,
+          });
+        }
+      },
+      [props]
+    );
 
-  return (
-    <a onClick={onClick} href={props.to} {...props}>
-      {props.children}
-    </a>
-  );
-};
+    return (
+      <a ref={ref} onClick={onClick} href={props.to} {...props}>
+        {props.children}
+      </a>
+    );
+  }
+);
 
 type NavigationOptions = {
   replace?: boolean;
