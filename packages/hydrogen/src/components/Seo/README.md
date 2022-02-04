@@ -35,17 +35,17 @@ export default function Page({params}) {
 }
 ```
 
-## Props (detail descriptions)
+## Props
 
-<Seo /> has two props `type` & `data`. `type` accepts string `defaultSeo`, `homepage`, `product`, `collection` or `page`. Each with different expected `data` shape listed below.
+The `Seo` component has two props: `type` and `data`. The `type` prop accepts `defaultSeo`, `homepage`, `product`, `collection`, or `page`. Each `type` expects a different `data` shape.
 
-| `type`     | `data`                                                                                      | Description                                                                                                                                                  |
+| Type     | Data                                                                                      | Description                                                                                                                                                  |
 | ---------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| defaultSeo | <code>{title: string; description: string; titleTemplate?: string; lang?: string;}</code>   | Seo information that should be render as default on every single page on the site. All cases below can be use in children component to override the default. |
-| homepage   | <code>{title: Title; description?: Description;}</code>                                     | Seo information to be render on the Home Page of the site.                                                                                                   |
-| product    | <code>[Product](https://shopify.dev/api/admin-graphql/2022-01/objects/product)</code>       | Seo information for product page. Must included title, description, vendor, at least one image, at least one variant, and pricing information.               |
-| collection | <code>[Collection](https://shopify.dev/api/admin-graphql/2022-01/objects/Collection)</code> | Seo information for collection page. Must included title and description.                                                                                    |
-| page       | <code>{title: string; seo: {title?: string; description?: string;}}</code>                  | Seo information for pages (ie. about, shipping). Must included title and description.                                                                        |
+| defaultSeo | <pre>{ <br> title: Title; <br> description?: Description;<br> titleTemplate?: string;<br> lang?: string;<br>}</pre>  | The SEO information to render as default on every page of the website. You can specify `homepage`, `product`, `collection`, or `page` in children components to override the default. |
+| homepage   | <pre>{ <br> title: Title; <br> description?: Description;<br>}</pre>                                     | The SEO information to render on the home page of the website.                                                                                                 |
+| product    | The Storefront API [Product](/api/storefront/latest/objects/product) object.      | The SEO information to render on the product page. Must included `title`, `description`, `vendor`, at least one image, at least one variant, and pricing information.               |
+| collection | The Storefront API [Collection](/api/storefront/latest/objects/Collection) object. | The SEO information to render on the collection page. Must included `title` and `description`.                                                                                    |
+| page       | <pre>{ <br> title: string; <br> seo: <br>  { <br>    title?: string;  <br>    description?: string;<br>  }<br>}</pre>                  | The SEO information to render on pages (For example, "About" or "Shipping"). Must include `title` and `description`.                                                                        |
 
 ## Component type
 
