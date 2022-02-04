@@ -53,6 +53,11 @@ Primitive components are the building blocks for different component types, incl
     <td>Renders an HTML string as HTML DOM elements.</td>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
+    <td>Shared</td>
+    <td>Renders SEO information on a webpage.</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/components/primitive/shoppaybutton">ShopPayButton</a></td>
     <td>Client</td>
     <td>Renders a button that redirects to the Shop Pay checkout.</td>
@@ -66,11 +71,6 @@ Primitive components are the building blocks for different component types, incl
     <td><a href="/api/hydrogen/components/primitive/video">Video</a></td>
     <td>Shared</td>
     <td>Renders a <code>video</code> for the Storefront API's <a href="/api/storefront/reference/products/video">Video object</a>.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
-    <td>Shared</td>
-    <td>Renders SEO information on a webpage.</td>
   </tr>
 </table>
 

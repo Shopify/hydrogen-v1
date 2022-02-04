@@ -53,6 +53,11 @@ Primitive components and hooks are the building blocks for different component t
     <td>Not applicable</td>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
+    <td>Renders SEO information on a webpage.</td>
+    <td>Not applicable</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/components/primitive/shoppaybutton">ShopPayButton</a></td>
     <td>Renders a button that redirects to the Shop Pay checkout.</td>
     <td>Not applicable</td>
@@ -65,11 +70,6 @@ Primitive components and hooks are the building blocks for different component t
   <tr>
     <td><a href="/api/hydrogen/components/primitive/video">Video</a></td>
     <td>Renders a <code>video</code> for the Storefront API's <a href="/api/storefront/reference/products/video">Video object</a>.</td>
-    <td>Not applicable</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
-    <td>Renders SEO information on a webpage.</td>
     <td>Not applicable</td>
   </tr>
 </table>
