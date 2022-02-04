@@ -17,7 +17,7 @@ export default function Header({collections, storeName}) {
 
   useEffect(() => {
     if (isCartOpen) {
-      let scrollbarWidth =
+      const scrollbarWidth =
         window.innerWidth - document.documentElement.clientWidth;
 
       setScrollbarWidth(scrollbarWidth);
