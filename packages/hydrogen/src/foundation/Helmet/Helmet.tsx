@@ -6,12 +6,15 @@ import {
 } from 'react-helmet-async';
 import {useServerRequest} from '../ServerRequestProvider';
 
-const clientHelmetData = new HelmetData({});
+export type RealHelmetData = {context: {helmet: HelmetData}};
+
+const clientHelmetData = new HelmetData({}) as unknown as RealHelmetData;
 
 export function Helmet({
   children,
   ...props
 }: HelmetProps & {children: React.ReactNode}) {
+  // @ts-ignore
   const helmetData = import.meta.env.SSR
     ? useServerRequest().ctx.helmet
     : clientHelmetData;

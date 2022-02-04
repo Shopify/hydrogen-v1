@@ -14,12 +14,10 @@ import {
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
 import type {ImportGlobEagerOutput, ServerHandler} from './types';
-import {HelmetData as HelmetDataClass} from 'react-helmet-async';
-import type {HelmetData} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
 import {setShop} from './foundation/useShop';
@@ -32,6 +30,7 @@ import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
 // @ts-ignore
 import {createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import type {RealHelmetData} from './foundation/Helmet/Helmet';
 
 declare global {
   // This is provided by a Vite plugin
@@ -103,21 +102,19 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
     }
 
     headers['Content-type'] = HTML_CONTENT_TYPE;
-    html = html.replace('</head>', `${flightContainer({init: true, nonce})}$&`);
+    const {bodyAttributes, htmlAttributes, ...head} = extractHeadElements(
+      request.ctx.helmet
+    );
 
-    if (request.ctx.helmet) {
-      const params = {url, ...extractHeadElements(request.ctx.helmet)};
+    head.script = (head.script || '') + flightContainer({init: true, nonce});
 
-      const {bodyAttributes, htmlAttributes, ...head} = params;
-
-      html = html
-        .replace(
-          /<head>(.*?)<\/head>/s,
-          generateHeadTag(head as Record<string, any>)
-        )
-        .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
-        .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&');
-    }
+    html = html
+      .replace(
+        /<head>(.*?)<\/head>/s,
+        generateHeadTag(head as Record<string, any>)
+      )
+      .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
+      .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&');
 
     logServerResponse('ssr', log, request, status);
 
@@ -545,9 +542,7 @@ function buildReactApp({
   return {ReactApp, componentResponse};
 }
 
-function extractHeadElements(helmetData: HelmetDataClass) {
-  const helmet: HelmetData = (helmetData as any).context.helmet;
-
+function extractHeadElements({context: {helmet}}: RealHelmetData) {
   return helmet
     ? {
         base: helmet.base.toString(),
