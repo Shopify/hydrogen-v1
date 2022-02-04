@@ -1,11 +1,11 @@
-import {port} from './worker-e2e.serve';
+import {port} from './node-prod-e2e.serve';
 import testCases from './e2e-test-cases';
 
-describe('Worker', () => {
+describe('Node.js production', () => {
   // @ts-ignore
   testCases({
     getServerUrl: () => `http://localhost:${port}`,
-    isWorker: true,
+    isWorker: false,
     isBuild: true,
   });
 });

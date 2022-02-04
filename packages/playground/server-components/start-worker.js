@@ -1,16 +1,13 @@
 // @ts-check
 const path = require('path');
 const {Miniflare} = require('miniflare');
-
-const isDev = process.env.DEV;
+const {loadProdEnv} = require('./utils');
 
 async function createServer(root = process.cwd()) {
   const mf = new Miniflare({
     scriptPath: path.resolve(root, 'dist/worker/worker.js'),
     sitePath: path.resolve(root, 'dist/client'),
-    bindings: {
-      PRIVATE_VARIABLE: '42-private',
-    },
+    bindings: await loadProdEnv(),
   });
 
   const app = mf.createServer();
@@ -18,7 +15,7 @@ async function createServer(root = process.cwd()) {
   return {app};
 }
 
-if (isDev) {
+if (require.main === module) {
   createServer().then(({app}) =>
     app.listen(3000, () => {
       console.log('http://localhost:3000');
