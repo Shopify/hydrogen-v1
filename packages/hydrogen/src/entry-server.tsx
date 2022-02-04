@@ -14,11 +14,10 @@ import {
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
 import type {ImportGlobEagerOutput, ServerHandler} from './types';
-import type {FilledContext} from 'react-helmet-async';
 import {Html} from './framework/Hydration/Html';
 import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
 import {setShop} from './foundation/useShop';
@@ -31,6 +30,7 @@ import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
 // @ts-ignore
 import {createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import type {RealHelmetData} from './foundation/Helmet/Helmet';
 
 declare global {
   // This is provided by a Vite plugin
@@ -63,7 +63,7 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
     const log = getLoggerFromContext(request);
     const state = {pathname: url.pathname, search: url.search};
 
-    const {ReactApp, helmetContext, componentResponse} = buildReactApp({
+    const {ReactApp, componentResponse} = buildReactApp({
       App,
       state,
       request,
@@ -102,9 +102,10 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
     }
 
     headers['Content-type'] = HTML_CONTENT_TYPE;
-    const params = {url, ...extractHeadElements(helmetContext)};
+    const {bodyAttributes, htmlAttributes, ...head} = extractHeadElements(
+      request.ctx.helmet
+    );
 
-    const {bodyAttributes, htmlAttributes, ...head} = params;
     head.script = (head.script || '') + flightContainer({init: true, nonce});
 
     html = html
@@ -162,9 +163,11 @@ const renderHydrogen: ServerHandler = (App, {shopifyConfig, pages}) => {
 
     const ReactAppSSR = (
       <Html template={template} htmlAttrs={{lang: 'en'}}>
-        <ServerStateProvider serverState={state} setServerState={() => {}}>
-          <RscConsumer />
-        </ServerStateProvider>
+        <ServerRequestProvider request={request} isRSC={false}>
+          <ServerStateProvider serverState={state} setServerState={() => {}}>
+            <RscConsumer />
+          </ServerStateProvider>
+        </ServerRequestProvider>
       </Html>
     );
 
@@ -515,12 +518,10 @@ function buildReactApp({
   isRSC?: boolean;
   pages?: ImportGlobEagerOutput;
 }) {
-  const helmetContext = {} as FilledContext;
   const componentResponse = new ServerComponentResponse();
   const hydrogenServerProps = {
     request,
     response: componentResponse,
-    helmetContext,
     log,
   };
 
@@ -538,12 +539,10 @@ function buildReactApp({
     return <React.Suspense fallback={null}>{AppContent}</React.Suspense>;
   };
 
-  return {helmetContext, ReactApp, componentResponse};
+  return {ReactApp, componentResponse};
 }
 
-function extractHeadElements(helmetContext: FilledContext) {
-  const {helmet} = helmetContext;
-
+function extractHeadElements({context: {helmet}}: RealHelmetData) {
   return helmet
     ? {
         base: helmet.base.toString(),
