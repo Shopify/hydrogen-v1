@@ -108,7 +108,7 @@ React developers commonly use [`Context`](https://reactjs.org/docs/context.html)
 Currently, you can't use `Context` inside server components because server context isn't yet available in React. However, you can use `Context` inside client components.
 
 > Note:
-> The `[ShopifyProvider`](/api/hydrogen/components/global/shopifyprovider) component is a special server component because it acts like a shared component - it's available to both server and client components, and it renders in both `App.server.jsx` and `App.client.jsx`. You can't support the same functionality with your own context providers until Server Context is introduced in React.
+> The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. `ShopifyProvider` is specific to Hydrogen and currently doesn't work in Next.js or other frameworks.
 
 ### Example
 
