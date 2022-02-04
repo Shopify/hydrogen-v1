@@ -18,7 +18,7 @@ When you add or remove pages, the [XML sitemap](https://github.com/Shopify/hydro
 
 ### Imitating SEO robot behavior
 
-Hydrogen supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side. To imitate the behaviour of a SEO robot and show the page content fully from server render, add the `?\_bot` query parameter at the end of the webpage's URL.
+Hydrogen supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side. To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?\_bot` query parameter at the end of the webpage's URL.
 
 ## Client component examples
 
