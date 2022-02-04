@@ -19,5 +19,8 @@ import {
  *
  */
 export function useServerState(): ServerStateContextValue {
-  return useContext<ServerStateContextValue>(ServerStateContext) ?? {};
+  return (
+    useContext<ServerStateContextValue>(ServerStateContext) ??
+    ({} as ServerStateContextValue)
+  );
 }
