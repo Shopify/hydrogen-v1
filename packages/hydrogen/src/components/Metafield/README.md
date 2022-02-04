@@ -3,11 +3,7 @@
 The `Metafield` component renders the value of a Storefront
 API's [Metafield object](/api/storefront/reference/common-objects/metafield).
 
-When a render function is provided, it passes the Metafield object with a value
-that was parsed according to the Metafield's `type` field. For more information,
-refer to the [Render props](#render-props) section.
-
-When no render function is provided, it renders a smart default of the
+Renders a smart default of the
 Metafield's `value`. For more information, refer to the [Default Output](#default-output) section.
 
 ## Example code
@@ -20,31 +16,14 @@ export function Product({product}) {
 
   return <Metafield metafield={metafield} />;
 }
-
-export function ProductWithRenderProp({product}) {
-  const metafield = product.metafields.edges.map(({node}) => node)[0];
-
-  return (
-    <Metafield metafield={metafield}>
-      {(metafield) => {
-        return (
-          <p>
-            {metafield.namespace} {metafield.key}: {metafield.value}
-          </p>
-        );
-      }}
-    </Metafield>
-  );
-}
 ```
 
 ## Props
 
-| Name      | Type                                                  | Description                                                                                                                                           |
-| --------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| metafield | <code>ParsedMetafield</code>                          | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.                                                     |
-| children? | <code>(value: ParsedMetafield) => ReactElement</code> | A render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props).                                             |
-| as?       | <code>ElementType</code>                              | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/definitions/types). |
+| Name      | Type                         | Description                                                                                                                                           |
+| --------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| metafield | <code>ParsedMetafield</code> | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.                                                     |
+| as?       | <code>ElementType</code>     | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/definitions/types). |
 
 ## Default output
 
