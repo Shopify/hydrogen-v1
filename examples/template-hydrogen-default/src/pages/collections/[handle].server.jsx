@@ -4,6 +4,7 @@ import {
   useShopQuery,
   flattenConnection,
   RawHtml,
+  Seo,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -37,6 +38,7 @@ export default function Collection({
 
   return (
     <Layout>
+      <Seo type="collection" data={collection} />
       <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
         {collection.title}
       </h1>
@@ -77,8 +79,13 @@ const QUERY = gql`
     collection(handle: $handle) {
       id
       title
+      description
       descriptionHtml
-
+      image {
+        url
+        width
+        height
+      }
       products(first: $numProducts) {
         edges {
           node {

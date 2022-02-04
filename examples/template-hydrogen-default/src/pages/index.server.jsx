@@ -4,6 +4,7 @@ import {
   ProductProviderFragment,
   Image,
   Link,
+  Seo,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -16,6 +17,9 @@ import {Suspense} from 'react';
 export default function Index({country = {isoCode: 'US'}}) {
   return (
     <Layout hero={<GradientBackground />}>
+      <Suspense fallback={null}>
+        <SeoForHomepage />
+      </Suspense>
       <div className="relative mb-12">
         <Welcome />
         <Suspense fallback={<BoxFallback />}>
@@ -26,6 +30,30 @@ export default function Index({country = {isoCode: 'US'}}) {
         </Suspense>
       </div>
     </Layout>
+  );
+}
+
+function SeoForHomepage() {
+  const {
+    data: {
+      shop: {
+        name: shopName,
+        primaryDomain: {url: shopUrl},
+      },
+    },
+  } = useShopQuery({
+    query: SEO_QUERY,
+    cache: {maxAge: 60 * 60 * 12, staleWhileRevalidate: 60 * 60 * 12},
+  });
+
+  return (
+    <Seo
+      type="homepage"
+      data={{
+        title: shopName,
+        url: shopUrl,
+      }}
+    />
   );
 }
 
@@ -154,6 +182,18 @@ function GradientBackground() {
     </div>
   );
 }
+
+const SEO_QUERY = gql`
+  query shopInfo {
+    shop {
+      name
+      description
+      primaryDomain {
+        url
+      }
+    }
+  }
+`;
 
 const QUERY = gql`
   query indexContent(
