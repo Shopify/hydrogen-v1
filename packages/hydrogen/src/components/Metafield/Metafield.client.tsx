@@ -2,7 +2,6 @@ import React, {ElementType, ReactElement} from 'react';
 import {Props} from '../types';
 import {useShop} from '../../foundation';
 import {getMeasurementAsString} from '../../utilities';
-import {StarRating} from './components/StarRating';
 import {RawHtml} from '../RawHtml';
 import {ParsedMetafield, Measurement, Rating} from '../../types';
 import {MetafieldFragment as Fragment} from '../../graphql/graphql-constants';
@@ -72,8 +71,11 @@ export function Metafield<TTag extends ElementType>(
       );
     }
     case 'rating': {
+      const Wrapper = as ?? 'span';
       return (
-        <StarRating rating={metafield.value as Rating} {...passthroughProps} />
+        <Wrapper {...passthroughProps}>
+          {(metafield.value as Rating).value}
+        </Wrapper>
       );
     }
     case 'single_line_text_field': {
@@ -89,7 +91,7 @@ export function Metafield<TTag extends ElementType>(
       return (
         <RawHtml
           {...(passthroughProps as any)}
-          as={as}
+          as={as ?? 'span'}
           string={(metafield.value as string).split('\n').join('<br/>')}
         />
       );

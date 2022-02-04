@@ -1,7 +1,7 @@
 import {defer} from '@shopify/hydrogen/dist/esnext/utilities/defer';
 import {Suspense} from 'react';
 import Counter from '../components/Counter.client';
-import {useServerRequest} from '@shopify/hydrogen';
+import {useServerRequest} from '@shopify/hydrogen/dist/esnext/foundation/ServerRequestProvider';
 
 const createData = (key, ms) => {
   const {cache} = useServerRequest().ctx;

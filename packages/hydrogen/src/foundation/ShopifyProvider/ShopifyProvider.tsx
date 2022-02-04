@@ -1,6 +1,13 @@
 import React, {useMemo} from 'react';
 import {ShopifyContext, makeShopifyContext} from './ShopifyContext';
-import type {ShopifyProviderProps} from './types';
+import {ShopifyConfig} from '../../types';
+
+interface ShopifyProviderProps {
+  /** The contents of the `shopify.config.js` file. */
+  shopifyConfig: ShopifyConfig;
+  /** Any `ReactNode` elements. */
+  children?: React.ReactNode;
+}
 
 /**
  * The `ShopifyProvider` component wraps your entire app and provides support for hooks.

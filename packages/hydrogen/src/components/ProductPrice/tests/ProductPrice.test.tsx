@@ -58,22 +58,6 @@ describe('<ProductPrice />', () => {
     });
   });
 
-  it('renders its children', () => {
-    const product = getProduct();
-    const children = ({amount}) => {
-      return <p>{`The amount is ${amount}`}</p>;
-    };
-    const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId="">
-        <ProductPrice>{children}</ProductPrice>
-      </ProductProvider>
-    );
-
-    expect(price).toContainReactComponent('p', {
-      children: `The amount is ${product.priceRange.minVariantPrice.amount}`,
-    });
-  });
-
   it('supports passthrough props', () => {
     const price = mountWithProviders(
       <ProductProvider product={getProduct()} initialVariantId="">
