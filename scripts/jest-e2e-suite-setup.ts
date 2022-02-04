@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import {copy, existsSync} from 'fs-extra';
 import * as http from 'http';
 import {resolve, dirname} from 'path';
 import sirv from 'sirv';
@@ -47,7 +47,7 @@ beforeAll(async () => {
       const playgroundRoot = resolve(__dirname, '../packages/playground');
       const srcDir = resolve(playgroundRoot, testName);
       tempDir = resolve(__dirname, '../temp', testName);
-      await fs.copy(srcDir, tempDir, {
+      await copy(srcDir, tempDir, {
         dereference: true,
         filter(file) {
           file = slash(file);
@@ -61,10 +61,10 @@ beforeAll(async () => {
 
       // when `root` dir is present, use it as vite's root
       const testCustomRoot = resolve(tempDir, 'root');
-      rootDir = fs.existsSync(testCustomRoot) ? testCustomRoot : tempDir;
+      rootDir = existsSync(testCustomRoot) ? testCustomRoot : tempDir;
 
       const testCustomServe = resolve(dirname(testPath), 'serve.js');
-      if (fs.existsSync(testCustomServe)) {
+      if (existsSync(testCustomServe)) {
         // test has custom server configuration.
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const {serve} = require(testCustomServe);
