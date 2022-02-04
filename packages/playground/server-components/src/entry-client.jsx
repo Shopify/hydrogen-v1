@@ -1,11 +1,7 @@
-import {ShopifyProvider} from '@shopify/hydrogen/client';
 import renderHydrogen from '@shopify/hydrogen/entry-client';
-import shopifyConfig from '../shopify.config';
 
 function ClientApp({children}) {
-  return (
-    <ShopifyProvider shopifyConfig={shopifyConfig}>{children}</ShopifyProvider>
-  );
+  return children;
 }
 
 export default renderHydrogen(ClientApp, {});
