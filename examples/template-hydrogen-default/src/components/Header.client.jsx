@@ -16,12 +16,10 @@ export default function Header({collections, storeName}) {
   const {isCartOpen} = useCartUI();
 
   useEffect(() => {
-    if (isCartOpen) {
-      const scrollbarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
-      setScrollbarWidth(scrollbarWidth);
-    }
+    setScrollbarWidth(scrollbarWidth);
   }, [isCartOpen]);
 
   return (
