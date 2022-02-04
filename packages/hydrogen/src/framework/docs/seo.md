@@ -69,7 +69,7 @@ export default function App({log, ...serverState}) {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <AppClient helmetContext={serverState.helmetContext}>
+      <AppClient>
         <DefaultSeo />
         <DefaultRoutes
           pages={pages}

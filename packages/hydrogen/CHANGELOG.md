@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - `<Model3D>` has been renamed to `<ModelViewer>`
 - Fix index routes. See [#562](https://github.com/Shopify/hydrogen/issues/562)
+- Feature - `<ShopifyProvider>` can again be used in server components
 - dx: Correct Typescript issue where `as` was a default prop for all components when it should not be
 - New React hook `useScriptLoader` is available to more easily load external scripts
 - DX: Update types and docs for `useCart()` hook and `<CartProvider>`
@@ -38,6 +39,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - refactor: `<Metafield>` now renders `ratings` as a `<span>` with text instead of stars; `multi_line_text_field` inside of a `<span>` instead of a `<div>`
 - Fix: add charset to content type in HTML responses
 - Fix header shift when cart is opened by @Francismori7 in #600
+- Feat: Simplify Helmet usage and make it compatible with RSC
 - The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
 
 ## 0.10.1 - 2022-01-26
