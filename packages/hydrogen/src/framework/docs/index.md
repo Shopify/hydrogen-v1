@@ -19,6 +19,7 @@ The SSR and hydration middleware is similar to existing [Vite SSR](https://vitej
 When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Hydrogen starter template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store. Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
 
 - A set of boilerplate [`components`](/custom-storefronts/hydrogen/getting-started#components) and [`pages`](/custom-storefronts/hydrogen/getting-started#pages)
+- An app component used to set up client-side context (`App.client.jsx`)
 - The main app component, which includes boilerplate code for the app and routing (`App.server.jsx`)
 - The Hydrogen app's two entry points, which are based on environment:
 
@@ -34,7 +35,7 @@ When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/cr
     ├── components
         └── Button.client.jsx
         └── Cart.client.jsx
-        └── CartIcon.client.jsx
+        └── CartIcon.jsx
         └── ...
     ├── pages
         └── collections
@@ -44,7 +45,9 @@ When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/cr
         └── products
             └── [handle].server.jsx
         └── index.server.jsx
+        └── redirect.server.jsx
         └── sitemap.xml.server.jsx
+    ├── App.client.jsx
     ├── App.server.jsx
     ├── entry-client.jsx
     ├── entry-server.jsx
