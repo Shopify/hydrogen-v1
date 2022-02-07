@@ -77,7 +77,6 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       </Html>,
       {log, nonce}
     );
-    logCacheControlHeaders(log, request, componentResponse);
 
     const {headers, status, statusText} = getResponseOptions(componentResponse);
 
@@ -92,6 +91,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       // This can be used to return sitemap.xml or any other custom response.
 
       logServerResponse('ssr', log, request, status);
+      logCacheControlHeaders('ssr', log, request, componentResponse);
 
       return new Response(await componentResponse.customBody, {
         status,
