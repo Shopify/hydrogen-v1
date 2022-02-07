@@ -11,7 +11,7 @@ import {
   logCacheControlHeaders,
   getLoggerFromContext,
   log as noContextLogger,
-} from './utilities/log/log';
+} from './utilities/log';
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
 import type {ImportGlobEagerOutput, ServerHandler} from './types';
@@ -77,7 +77,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       </Html>,
       {log, nonce}
     );
-    logCacheControlHeaders(request, componentResponse);
+    logCacheControlHeaders(log, request, componentResponse);
 
     const {headers, status, statusText} = getResponseOptions(componentResponse);
 
@@ -361,7 +361,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           log.trace('node complete stream');
           clearTimeout(streamTimeout);
 
-          logCacheControlHeaders(request, componentResponse);
+          logCacheControlHeaders('str', log, request, componentResponse);
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
@@ -462,6 +462,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       stream.on('finish', function () {
         logServerResponse('rsc', log, request, response!.statusCode);
+        logCacheControlHeaders('rsc', log, request);
       });
     }
   };

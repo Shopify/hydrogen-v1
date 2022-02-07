@@ -9,7 +9,7 @@ import {
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData} from '../ServerRequestProvider';
-import {collectQueryCacheControlHeaders} from '../../utilities/log/log';
+import {collectQueryCacheControlHeaders} from '../../utilities/log';
 
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;

@@ -7,3 +7,7 @@ export {
   getLoggerFromContext,
   resetLogger,
 } from './log';
+export {
+  collectQueryCacheControlHeaders,
+  logCacheControlHeaders,
+} from './cache-header-log';
