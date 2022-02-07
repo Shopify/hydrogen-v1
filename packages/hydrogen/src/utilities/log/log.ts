@@ -89,7 +89,7 @@ export const log: Logger = {
 
 const SERVER_RESPONSE_MAP: Record<string, string> = {
   str: 'streaming SSR',
-  rsc: 'server Components',
+  rsc: 'Server Components',
   ssr: 'buffered SSR',
 };
 
