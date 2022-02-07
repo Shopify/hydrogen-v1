@@ -1,6 +1,9 @@
 import {META_ENV_SSR} from '../../utilities/meta-env-ssr';
 import {useServerRequest} from '../ServerRequestProvider';
 
+/**
+ * Use to get current url in server or client component.
+ */
 export function useCurrentUrl(): URL {
   if (META_ENV_SSR) {
     const serverUrl = new URL(useServerRequest().url);

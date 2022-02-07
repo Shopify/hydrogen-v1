@@ -11,7 +11,6 @@ export {
   getTime,
 } from './utilities';
 
-export {ShopifyProvider} from './foundation/ShopifyProvider';
 export {log, setLogger, Logger} from './utilities/log';
 
 // This is exported here because it contains a Server Component
