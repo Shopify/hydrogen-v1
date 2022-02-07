@@ -139,5 +139,5 @@ export interface CacheOptions {
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
   purgeQueryCacheOnBuild?: boolean;
-  srcDirectory?: string;
+  srcDir?: string;
 }

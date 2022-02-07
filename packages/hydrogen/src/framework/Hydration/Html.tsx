@@ -11,7 +11,7 @@ type HtmlOptions = {
 export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
   const head = template.match(/<head>(.+?)<\/head>/s)![1] || '';
 
-  // TODO: find a way to reference vite config or shopify config, use to set the script src dir
+  // TODO: find a way to reference vite config or shopify config, use to set the script src dir in line 23
   return (
     <html {...htmlAttrs}>
       <head dangerouslySetInnerHTML={{__html: head}} />
