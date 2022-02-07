@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 
-export default function BoomerangPageTemplate({
+export function BoomerangPage({
   pageTemplate = 'fallback_not_set',
 }: {
   pageTemplate: string | undefined;

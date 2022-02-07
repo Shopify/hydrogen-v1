@@ -16,29 +16,14 @@ export function Product({product}) {
     </ProductProvider>
   );
 }
-
-export function ProductWithRenderProp({product}) {
-  return (
-    <ProductProvider product={product}>
-      <ProductMetafield namespace="my_fields" keyName="manufacture_date">
-        {({value}) => {
-          return (
-            <p>This product was manufactured on {value.toLocaleDateString()}</p>
-          );
-        }}
-      </ProductMetafield>
-    </ProductProvider>
-  );
-}
 ```
 
 ## Props
 
-| Name      | Type                   | Description                                                                                                               |
-| --------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| keyName   | <code>string</code>    | A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's metafield.       |
-| namespace | <code>string</code>    | A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the product's metafield. |
-| children? | <code>ReactNode</code> | A render function that takes a `Metafield` object as its argument.                                                        |
+| Name      | Type                | Description                                                                                                               |
+| --------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| keyName   | <code>string</code> | A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's metafield.       |
+| namespace | <code>string</code> | A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the product's metafield. |
 
 ## Component type
 

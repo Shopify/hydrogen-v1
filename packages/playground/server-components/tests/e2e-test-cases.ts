@@ -27,6 +27,15 @@ export default async function testCases({getServerUrl}: TestOptions) {
     expect(await page.textContent('.count')).toBe('Count is 1');
   });
 
+  it('renders `<ShopifyProvider>` dynamically in RSC and on the client', async () => {
+    // "someDynamicValue should get injected into the response config paylout"
+    await page.goto(getServerUrl() + '/config/someDynamicValue');
+
+    expect(await page.textContent('#root > div')).toContain(
+      '{"locale":"en-us","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
+    );
+  });
+
   it('follows synchronous redirects', async () => {
     await page.goto(getServerUrl() + '/redirected');
     expect(await page.url()).toContain('/about');

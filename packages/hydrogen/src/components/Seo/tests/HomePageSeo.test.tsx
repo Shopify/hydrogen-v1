@@ -6,7 +6,7 @@ import {HomePageSeo} from '../HomePageSeo.client';
 import {TitleSeo} from '../TitleSeo.client';
 import {DescriptionSeo} from '../DescriptionSeo.client';
 
-jest.mock('react-helmet-async', () => ({
+jest.mock('../../../client', () => ({
   Helmet({children}) {
     return children;
   },

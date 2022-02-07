@@ -53,6 +53,11 @@ Primitive components are the building blocks for different component types, incl
     <td>Renders an HTML string as HTML DOM elements.</td>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
+    <td>Shared</td>
+    <td>Renders SEO information on a webpage.</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/components/primitive/shoppaybutton">ShopPayButton</a></td>
     <td>Client</td>
     <td>Renders a button that redirects to the Shop Pay checkout.</td>
@@ -67,16 +72,13 @@ Primitive components are the building blocks for different component types, incl
     <td>Shared</td>
     <td>Renders a <code>video</code> for the Storefront API's <a href="/api/storefront/reference/products/video">Video object</a>.</td>
   </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
-    <td>Shared</td>
-    <td>Renders SEO information on a webpage.</td>
-  </tr>
 </table>
 
 ## Global components
 
-[ShopifyProvider](/api/hydrogen/components/global/shopifyprovider) is a global Hydrogen component that wraps your entire app. The `ShopifyProvider` component is a shared component, which means that it renders on both the server and the client.
+[ShopifyProvider](/api/hydrogen/components/global/shopifyprovider) is a global Hydrogen component that wraps your entire app. You should place it in your app's entry point component. For example, your app's entry point component might be `<App>`.
+
+The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Product and variant components
 
