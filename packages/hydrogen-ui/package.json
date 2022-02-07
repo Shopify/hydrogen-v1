@@ -1,0 +1,38 @@
+{
+  "name": "@shopify/hydrogen-ui",
+  "version": "2022.04.0-alpha",
+  "description": "Components for modern custom Shopify storefronts",
+  "homepage": "https://github.com/Shopify/hydrogen#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "main": "./dist/hydrogen-ui.umd.min.js",
+  "module": "./dist/hydrogen-ui.es.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/hydrogen-ui.es.min.js",
+      "require": "./dist/hydrogen-ui.umd.min.js",
+      "default": "./dist/hydrogen-ui.es.min.js"
+    }
+  },
+  "types": "types/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^1.1.4",
+    "vite": "^2.7.2"
+  },
+  "peerDependencies": {
+    "react": "0.0.0-experimental-529dc3ce8-20220124",
+    "react-dom": "0.0.0-experimental-529dc3ce8-20220124"
+  }
+}
