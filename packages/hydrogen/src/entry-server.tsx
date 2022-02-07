@@ -55,23 +55,21 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
   ) {
     const {log, state, componentResponse} = setupCurrentRequest(url, request);
 
-    const AppRSC = buildAppRSC({
-      App,
-      state,
-      request,
-      response: componentResponse,
-      log,
-      pages,
-    });
-
-    const [rscReadableForFizz, rscReadableForFlight] =
-      rscRenderToReadableStream(AppRSC).tee();
-
-    const AppSSR = buildAppSSR(rscReadableForFizz, {state, request, template});
+    const {AppSSR, rscReadable} = buildAppSSR(
+      {
+        App,
+        state,
+        request,
+        response: componentResponse,
+        pages,
+        log,
+      },
+      {template}
+    );
 
     let [html, flight] = await Promise.all([
       renderToBufferedString(AppSSR, {log, nonce}),
-      bufferReadableStream(rscReadableForFlight.getReader()),
+      bufferReadableStream(rscReadable.getReader()),
     ]);
 
     const {headers, status, statusText} = getResponseOptions(componentResponse);
@@ -134,32 +132,27 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     const {log, state, componentResponse} = setupCurrentRequest(url, request);
     log.trace('start stream');
 
-    // App for RSC rendering
-    const AppRSC = buildAppRSC({
-      App,
-      state,
-      request,
-      response: componentResponse,
-      log,
-      pages,
-    });
-
-    const [rscReadableForFizz, rscReadableForFlight] =
-      rscRenderToReadableStream(AppRSC).tee();
-
-    const AppSSR = buildAppSSR(rscReadableForFizz, {
-      state,
-      request,
-      template,
-      htmlAttrs: {lang: 'en'},
-    });
+    const {AppSSR, rscReadable} = buildAppSSR(
+      {
+        App,
+        state,
+        request,
+        response: componentResponse,
+        log,
+        pages,
+      },
+      {
+        template,
+        htmlAttrs: {lang: 'en'},
+      }
+    );
 
     const rscToScriptTagReadable = new ReadableStream({
       start(controller) {
         log.trace('rsc start chunks');
         let init = true;
         const encoder = new TextEncoder();
-        bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
+        bufferReadableStream(rscReadable.getReader(), (chunk) => {
           const scriptTag = flightContainer({init, chunk, nonce});
           controller.enqueue(encoder.encode(scriptTag));
           init = false;
@@ -406,7 +399,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
   ) {
     const {log, state, componentResponse} = setupCurrentRequest(url, request);
 
-    const AppRSC = buildAppRSC({
+    const {AppRSC} = buildAppRSC({
       App,
       state,
       request,
@@ -485,6 +478,15 @@ async function bufferReadableStream(
   return result;
 }
 
+type BuildAppOptions = {
+  App: React.JSXElementConstructor<any>;
+  state?: object | null;
+  request: ServerComponentRequest;
+  response: ServerComponentResponse;
+  log: Logger;
+  pages?: ImportGlobEagerOutput;
+};
+
 function buildAppRSC({
   App,
   state,
@@ -492,41 +494,44 @@ function buildAppRSC({
   response,
   log,
   pages,
-}: {
-  App: React.JSXElementConstructor<any>;
-  state?: object | null;
-  request: ServerComponentRequest;
-  response: ServerComponentResponse;
-  log: Logger;
-  pages?: ImportGlobEagerOutput;
-}) {
+}: BuildAppOptions) {
   const hydrogenServerProps = {request, response, log};
 
-  return (
+  const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
       <App {...state} {...hydrogenServerProps} pages={pages} />
     </ServerRequestProvider>
   );
+
+  return {AppRSC};
 }
 
 function buildAppSSR(
-  readableStream: ReadableStream<Uint8Array>,
-  {
-    request,
-    state,
-    ...htmlOptions
-  }: Omit<Parameters<typeof Html>[0], 'children'> & {
-    request: ServerComponentRequest;
-    state: any;
-  }
+  {App, state, request, response, log, pages}: BuildAppOptions,
+  htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
-  const rscResponse = createFromReadableStream(readableStream);
+  const {AppRSC} = buildAppRSC({
+    App,
+    state,
+    request,
+    response,
+    log,
+    pages,
+  });
+
+  const [rscReadableForFizz, rscReadableForFlight] =
+    rscRenderToReadableStream(AppRSC).tee();
+
+  const rscResponse = createFromReadableStream(rscReadableForFizz);
   const RscConsumer = () => rscResponse.readRoot();
 
-  return (
+  const AppSSR = (
     <Html {...htmlOptions}>
       <ServerRequestProvider request={request} isRSC={false}>
-        <ServerStateProvider serverState={state} setServerState={() => {}}>
+        <ServerStateProvider
+          serverState={state as any}
+          setServerState={() => {}}
+        >
           <React.Suspense fallback={null}>
             <RscConsumer />
           </React.Suspense>
@@ -534,6 +539,8 @@ function buildAppSSR(
       </ServerRequestProvider>
     </Html>
   );
+
+  return {AppSSR, rscReadable: rscReadableForFlight};
 }
 
 function extractHeadElements({context: {helmet}}: RealHelmetData) {
