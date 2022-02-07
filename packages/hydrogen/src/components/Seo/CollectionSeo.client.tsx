@@ -8,8 +8,8 @@ import {ImageSeo} from './ImageSeo.client';
 import {Collection} from './types';
 
 export function CollectionSeo({title, description, seo, image}: Collection) {
-  const seoTitle = (seo && seo.title) ?? title;
-  const seoDescription = (seo && seo.description) ?? description;
+  const seoTitle = seo.title ?? title;
+  const seoDescription = seo.description ?? description;
 
   return (
     <>

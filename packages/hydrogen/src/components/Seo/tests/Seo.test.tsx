@@ -105,6 +105,7 @@ describe('<Seo />', () => {
     const collection = {
       title: 'default title',
       description: 'default description',
+      seo: {},
     };
     const wrapper = mount(<Seo type="collection" data={collection} />);
 

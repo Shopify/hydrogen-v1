@@ -81,6 +81,10 @@ const QUERY = gql`
       title
       description
       descriptionHtml
+      seo {
+        title
+        description
+      }
       image {
         url
         width

@@ -46,6 +46,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
 - feat: added `useUrl` hook that allows the consumer to get the current url in server or client component
 - fix: fix bug where search param is not being pass along during RSC streaming call [#623](https://github.com/Shopify/hydrogen/pull/623)
+- feat: expect collection seo by default
 
 ## 0.10.1 - 2022-01-26
 
