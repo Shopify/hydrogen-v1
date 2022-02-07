@@ -5,11 +5,7 @@ import indexHtml from './dist/client/index.html?raw';
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 
 // Mock Oxygen global
-globalThis.Oxygen = {
-  env: {
-    PRIVATE_VARIABLE: globalThis.PRIVATE_VARIABLE,
-  },
-};
+globalThis.Oxygen = {env: globalThis};
 
 async function assetHandler(event, url) {
   const response = await getAssetFromKV(event, {});
