@@ -53,8 +53,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         ref={ref}
         onClick={internalClick}
         href={props.to}
-        // @ts-ignore
-        to={undefined}
       >
         {props.children}
       </a>

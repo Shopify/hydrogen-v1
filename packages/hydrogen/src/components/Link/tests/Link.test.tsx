@@ -88,32 +88,6 @@ describe('<Link />', () => {
     });
   });
 
-  it('updates server state on back/forward', (done) => {
-    global.window.scrollTo = jest.fn();
-
-    const setServerState = jest.fn((args) => {
-      try {
-        expect(args()).toEqual({
-          pathname: '/products/hydrogen',
-        });
-        done();
-      } catch (e) {
-        done(e);
-      }
-    });
-
-    const component = mountWithProviders(
-      <Link to="/products/hydrogen">Link</Link>,
-      {
-        setServerState,
-      }
-    );
-
-    component.act(() => {
-      component?.domNode?.click();
-    });
-  });
-
   it('forces a page reload', () => {
     const component = mountWithProviders(
       <Link reloadDocument to="/products/hydrogen">
