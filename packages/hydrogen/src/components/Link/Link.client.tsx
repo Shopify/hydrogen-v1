@@ -11,7 +11,7 @@ interface LinkProps
 }
 
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
-  (props, ref) => {
+  function Link(props, ref) {
     const navigate = useNavigate();
     const {location} = useRouter();
     const {
