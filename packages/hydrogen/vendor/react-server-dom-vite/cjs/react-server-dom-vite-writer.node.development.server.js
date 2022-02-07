@@ -1,4 +1,5 @@
-/** @license React vundefined
+/**
+ * @license React
  * react-server-dom-vite-writer.node.development.server.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.

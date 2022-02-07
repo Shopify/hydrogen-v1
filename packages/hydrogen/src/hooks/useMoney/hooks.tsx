@@ -73,7 +73,7 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
     currencyDisplay: 'narrowSymbol',
   }).formatToParts(amount);
 
-  const moneyValue = useMemo(
+  const moneyValue = useMemo<UseMoneyValue>(
     () => ({
       currencyCode: money.currencyCode,
       currencyName:

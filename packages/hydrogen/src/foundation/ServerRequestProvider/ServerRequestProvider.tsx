@@ -1,16 +1,11 @@
 import React, {createContext, useContext} from 'react';
+
 import {hashKey} from '../../framework/cache';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
 
 // Context to inject current request in SSR
-const RequestContextSSR = createContext<ServerComponentRequest>({
-  // Initial value is required due to a bug:
-  // https://github.com/Shopify/hydrogen/issues/415
-  time: 0,
-  id: 'initial-value',
-  ctx: {cache: new Map()},
-} as ServerComponentRequest);
+const RequestContextSSR = createContext<ServerComponentRequest | null>(null);
 
 // Cache to inject current request in RSC
 function requestCacheRSC() {
@@ -52,7 +47,7 @@ export function ServerRequestProvider({
 }
 
 export function useServerRequest() {
-  let request: ServerComponentRequest;
+  let request: ServerComponentRequest | null;
   try {
     // Context only works in SSR rendering
     request = useContext(RequestContextSSR);
@@ -65,6 +60,13 @@ export function useServerRequest() {
   }
 
   if (!request) {
+    // @ts-ignore
+    if (__DEV__ && typeof jest !== 'undefined') {
+      // Unit tests are not wrapped in ServerRequestProvider.
+      // This mocks it, instead of providing it in every test.
+      return {ctx: {}} as ServerComponentRequest;
+    }
+
     throw new Error('No ServerRequest Context found');
   }
 

@@ -112,6 +112,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/ShopPayButton',
         'components/UnitPrice',
         'components/Video',
+        'components/Seo',
       ],
       tables: [primitiveComponentsTable],
     }),
@@ -277,20 +278,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the Hydrogen cart hooks included in Hydrogen.',
       url: '/api/hydrogen/hooks/cart/index.md',
-      entry: [
-        'hooks/useCart',
-        'hooks/useCartAttributesUpdateCallback',
-        'hooks/useCartBuyerIdentityUpdateCallback',
-        'hooks/useCartCheckoutUrl',
-        'hooks/useCartCreateCallback',
-        'hooks/useCartDiscountCodesUpdateCallback',
-        'hooks/useCartLine',
-        'hooks/useCartLinesAddCallback',
-        'hooks/useCartLinesRemoveCallback',
-        'hooks/useCartLinesTotalQuantity',
-        'hooks/useCartLinesUpdateCallback',
-        'hooks/useCartNoteUpdateCallback',
-      ],
+      entry: ['hooks/useCart', 'hooks/useCartLine'],
       intro:
         'A cart contains the merchandise that a customer intends to purchase and the estimated cost associated with the cart. When a customer is ready to purchase their items, they can proceed to checkout.',
       tables: [

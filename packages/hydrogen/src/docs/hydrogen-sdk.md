@@ -53,6 +53,11 @@ Primitive components and hooks are the building blocks for different component t
     <td>Not applicable</td>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
+    <td>Renders SEO information on a webpage.</td>
+    <td>Not applicable</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/components/primitive/shoppaybutton">ShopPayButton</a></td>
     <td>Renders a button that redirects to the Shop Pay checkout.</td>
     <td>Not applicable</td>
@@ -72,6 +77,8 @@ Primitive components and hooks are the building blocks for different component t
 ## Global components and hooks
 
 [ShopifyProvider](/api/hydrogen/components/global/shopifyprovider) is a global Hydrogen component that wraps your entire app. You should place it in your app's entry point component. For example, your app's entry point component might be `<App>`.
+
+The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
 The `ShopifyProvider` component relates to the following global hooks that you can use to fetch data from server components:
 
@@ -197,7 +204,7 @@ Hydrogen includes the following cart components and hooks:
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartcheckoutbutton">CartCheckoutButton</a></td>
     <td>Renders a button that redirects to the checkout URL for the cart.</td>
-    <td><a href="/api/hydrogen/hooks/cart/usecartcheckouturl">useCartCheckoutUrl</a></td>
+    <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartestimatedcost">CartEstimatedCost</a></td>
@@ -252,19 +259,7 @@ Hydrogen includes the following cart components and hooks:
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartprovider">CartProvider</a></td>
     <td>Creates a context for using a cart.</td>
-    <td>
-      <ul>
-        <li><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartbuyeridentityupdatecallback">useCartBuyerIdentityUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartdiscountcodesupdatecallback">useCartDiscountCodesUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesaddcallback">useCartLinesAddCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesremovecallback">useCartLinesRemoveCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesupdatecallback">useCartLinesUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartcheckouturl">useCartCheckoutUrl</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartcreatecallback">useCartCreateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinestotalquantity">useCartLinesTotalQuantity</a></li>
-      </ul>
-    </td>
+    <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartshoppaybutton">CartShopPayButton</a></td>

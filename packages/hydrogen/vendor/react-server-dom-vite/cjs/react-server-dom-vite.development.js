@@ -1,4 +1,5 @@
-/** @license React vundefined
+/**
+ * @license React
  * react-server-dom-vite.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -52,7 +53,9 @@ if (process.env.NODE_ENV !== 'production') {
         );
       }
 
-      return modImport();
+      return typeof modImport === 'function'
+        ? modImport()
+        : Promise.resolve(modImport);
     } // The module cache contains all the modules we've preloaded so far.
     // If they're still pending they're a thenable.
 

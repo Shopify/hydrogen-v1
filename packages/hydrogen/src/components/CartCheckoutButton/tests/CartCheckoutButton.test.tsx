@@ -1,14 +1,10 @@
 import React from 'react';
 import {CartProvider} from '../../CartProvider';
 import {CartCheckoutButton} from '../CartCheckoutButton.client';
-import {CART} from '../../CartProvider/tests/fixtures';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 jest.mock('../../CartProvider', () => ({
   ...(jest.requireActual('../../CartProvider') as {}),
-  useCartCheckoutUrl: () => {
-    return CART['checkoutUrl'];
-  },
   useCart: () => {
     return {
       status: 'idle',
