@@ -7,6 +7,7 @@ import React, {
   FC,
   useEffect,
 } from 'react';
+import {META_ENV_SSR} from '../../utilities/meta-env-ssr';
 import {useServerState} from '../useServerState';
 
 type RouterContextValue = {
@@ -16,8 +17,11 @@ type RouterContextValue = {
 
 const RouterContext = createContext<RouterContextValue | {}>({});
 
-export const Router: FC = ({children}) => {
-  const history = useMemo(() => createBrowserHistory(), []);
+export const Router: FC<{history?: BrowserHistory}> = ({
+  history: pHistory,
+  children,
+}) => {
+  const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [firstLoad, setFirstLoad] = useState(true);
   const [location, setLocation] = useState(history.location);
 
@@ -34,9 +38,7 @@ export const Router: FC = ({children}) => {
 
   useEffect(() => {
     const unlisten = history.listen(({location: newLocation}) => {
-      if (location.key !== newLocation.key) {
-        setServerState({pathname: newLocation.pathname});
-      }
+      setServerState({pathname: newLocation.pathname});
 
       setLocation(newLocation);
     });
@@ -59,7 +61,7 @@ export const Router: FC = ({children}) => {
 export function useRouter() {
   const router = useContext<RouterContextValue | {}>(RouterContext);
 
-  if (!router && !import.meta.env.SSR) {
+  if (!router && META_ENV_SSR) {
     throw new Error('useRouter must be used within a <Router> component');
   }
 

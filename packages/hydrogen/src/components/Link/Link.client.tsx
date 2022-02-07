@@ -27,7 +27,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       (e) => {
         if (onClick) onClick(e);
         if (
-          !e.defaultPrevented && // the custom onClick handler might prevent default
           !reloadDocument && // do regular browser stuff
           e.button === 0 && // Ignore everything but left clicks
           (!target || target === '_self') && // Let browser handle "target=_blank"
@@ -49,7 +48,14 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     );
 
     return (
-      <a {...props} ref={ref} onClick={internalClick} href={props.to}>
+      <a
+        {...without(props, ['to', 'replace', 'clientState', 'reloadDocument'])}
+        ref={ref}
+        onClick={internalClick}
+        href={props.to}
+        // @ts-ignore
+        to={undefined}
+      >
         {props.children}
       </a>
     );
@@ -78,4 +84,14 @@ export function useNavigate() {
 
 function isModifiedEvent(event: React.MouseEvent) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
+}
+
+function without(obj: Record<string, any>, props: Array<string>) {
+  const newObj: Record<string, any> = {};
+  for (const key of Object.keys(obj)) {
+    if (!props.includes(key)) {
+      newObj[key] = obj[key];
+    }
+  }
+  return newObj;
 }
