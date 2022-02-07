@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 import {useRouter} from '../Router';
 import {createPath} from 'history';
-import {useServerState} from '../../foundation/useServerState';
 
 interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -9,7 +8,6 @@ interface LinkProps
   clientState?: any;
   to: string;
   reloadDocument?: boolean;
-  serverState?: Record<string, string>;
 }
 
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
@@ -22,7 +20,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       replace: _replace,
       to,
       onClick,
-      serverState,
       clientState,
     } = props;
 
@@ -44,21 +41,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
           navigate(props.to, {
             replace,
-            serverState,
             clientState,
           });
         }
       },
-      [
-        reloadDocument,
-        target,
-        _replace,
-        to,
-        serverState,
-        clientState,
-        onClick,
-        location,
-      ]
+      [reloadDocument, target, _replace, to, clientState, onClick, location]
     );
 
     return (
@@ -72,13 +59,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 type NavigationOptions = {
   replace?: boolean;
   reloadDocument?: boolean;
-  serverState?: Record<string, string>;
   clientState?: any;
 };
 
 export function useNavigate() {
   const router = useRouter();
-  const {setServerState} = useServerState();
 
   return (
     path: string,
@@ -88,11 +73,6 @@ export function useNavigate() {
     if (options?.replace)
       router.history.replace(path, options?.clientState || {});
     else router.history.push(path, options?.clientState || {});
-
-    setServerState({
-      pathname: path,
-      ...(options.serverState || {}),
-    });
   };
 }
 

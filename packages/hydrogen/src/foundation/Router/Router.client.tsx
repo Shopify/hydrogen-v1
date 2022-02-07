@@ -21,7 +21,7 @@ export const Router: FC = ({children}) => {
   const [firstLoad, setFirstLoad] = useState(true);
   const [location, setLocation] = useState(history.location);
 
-  const {pending} = useServerState();
+  const {pending, setServerState} = useServerState();
 
   useEffect(() => {
     // The app has just loaded
@@ -33,8 +33,12 @@ export const Router: FC = ({children}) => {
   }, [pending]);
 
   useEffect(() => {
-    const unlisten = history.listen(({location}) => {
-      setLocation(location);
+    const unlisten = history.listen(({location: newLocation}) => {
+      if (location.key !== newLocation.key) {
+        setServerState({pathname: newLocation.pathname});
+      }
+
+      setLocation(newLocation);
     });
 
     return () => unlisten();
