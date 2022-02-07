@@ -112,7 +112,7 @@ export function logServerResponse(
 
   const styledType = italic(fullType.padEnd(17));
   const paddedTiming = ((getTime() - request.time).toFixed(2) + ' ms').padEnd(
-    11
+    10
   );
   const url = parseUrl(type, request.url);
 
