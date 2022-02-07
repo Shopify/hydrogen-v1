@@ -1,11 +1,5 @@
 import React from 'react';
 import {
-  // @ts-ignore
-  renderToPipeableStream, // Only available in Node context
-  // @ts-ignore
-  renderToReadableStream, // Only available in Browser/Worker context
-} from 'react-dom/server';
-import {
   Logger,
   logServerResponse,
   getLoggerFromContext,
@@ -26,10 +20,12 @@ import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import type {RealHelmetData} from './foundation/Helmet';
 
-// @ts-ignore
-import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
-// @ts-ignore
-import {createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import {
+  ssrRenderToPipeableStream,
+  ssrRenderToReadableStream,
+  rscRenderToReadableStream,
+  createFromReadableStream,
+} from './streaming.server';
 
 declare global {
   // This is provided by a Vite plugin
@@ -68,9 +64,8 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       pages,
     });
 
-    const [rscReadableForFizz, rscReadableForFlight] = (
-      rscRenderToReadableStream(AppRSC) as ReadableStream<Uint8Array>
-    ).tee();
+    const [rscReadableForFizz, rscReadableForFlight] =
+      rscRenderToReadableStream(AppRSC).tee();
 
     const AppSSR = buildAppSSR(rscReadableForFizz, {state, request, template});
 
@@ -149,9 +144,8 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       pages,
     });
 
-    const [rscReadableForFizz, rscReadableForFlight] = (
-      rscRenderToReadableStream(AppRSC) as ReadableStream<Uint8Array>
-    ).tee();
+    const [rscReadableForFizz, rscReadableForFlight] =
+      rscRenderToReadableStream(AppRSC).tee();
 
     const AppSSR = buildAppSSR(rscReadableForFizz, {
       state,
@@ -185,7 +179,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       const writable = transform.writable.getWriter();
       const responseOptions = {} as ResponseOptions;
 
-      const ssrReadable: ReadableStream = renderToReadableStream(AppSSR, {
+      const ssrReadable = ssrRenderToReadableStream(AppSSR, {
         nonce,
         onCompleteShell() {
           log.trace('worker ready to stream');
@@ -247,7 +241,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
           deferredShouldReturnApp.resolve(true);
         },
-        onError(error: any) {
+        onError(error) {
           didError = error;
 
           if (dev && deferredShouldReturnApp.status === 'pending') {
@@ -309,7 +303,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     } else if (response) {
       response.socket!.on('error', log.fatal);
 
-      const {pipe} = renderToPipeableStream(AppSSR, {
+      const {pipe} = ssrRenderToPipeableStream(AppSSR, {
         nonce,
         onCompleteShell() {
           log.trace('node ready to stream');
@@ -422,17 +416,15 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     });
 
     if (__WORKER__) {
-      const readable = rscRenderToReadableStream(
-        AppRSC
-      ) as ReadableStream<Uint8Array>;
+      const rscReadable = rscRenderToReadableStream(AppRSC);
 
       if (isStreamable && (await isStreamingSupported())) {
         logServerResponse('rsc', log, request, 200);
-        return new Response(readable);
+        return new Response(rscReadable);
       }
 
       // Note: CFW does not support reader.piteTo nor iterable syntax
-      const bufferedBody = await bufferReadableStream(readable.getReader());
+      const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
       logServerResponse('rsc', log, request, 200);
 
@@ -571,7 +563,7 @@ async function renderToBufferedString(
 
     if (__WORKER__) {
       const deferred = defer();
-      const readable = renderToReadableStream(ReactApp, {
+      const readable = ssrRenderToReadableStream(ReactApp, {
         nonce,
         onCompleteAll() {
           clearTimeout(errorTimeout);
@@ -587,7 +579,7 @@ async function renderToBufferedString(
           log.error(error);
           deferred.reject(error);
         },
-      }) as ReadableStream<Uint8Array>;
+      });
 
       await deferred.promise.catch(reject);
 
@@ -595,7 +587,7 @@ async function renderToBufferedString(
     } else {
       const writer = await createNodeWriter();
 
-      const {pipe} = renderToPipeableStream(ReactApp, {
+      const {pipe} = ssrRenderToPipeableStream(ReactApp, {
         nonce,
         /**
          * When hydrating, we have to wait until `onCompleteAll` to avoid having
