@@ -57,13 +57,13 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     url,
     {request, template, nonce, dev}
   ) {
-    const log = getLoggerFromContext(request);
-    const state = {pathname: url.pathname, search: url.search};
+    const {log, state, componentResponse} = setupCurrentRequest(url, request);
 
-    const {ReactApp, componentResponse} = buildReactApp({
+    const ReactApp = buildReactApp({
       App,
       state,
       request,
+      response: componentResponse,
       log,
       pages,
     });
@@ -130,16 +130,15 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     url: URL,
     {request, response, template, nonce, dev}
   ) {
-    const log = getLoggerFromContext(request);
+    const {log, state, componentResponse} = setupCurrentRequest(url, request);
     log.trace('start stream');
-    const state = {pathname: url.pathname, search: url.search};
-    let didError: Error | undefined;
 
     // App for RSC rendering
-    const {ReactApp: ReactAppRSC, componentResponse} = buildReactApp({
+    const ReactAppRSC = buildReactApp({
       App,
       state,
       request,
+      response: componentResponse,
       log,
       isRSC: true,
       pages,
@@ -183,6 +182,8 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
         });
       },
     });
+
+    let didError: Error | undefined;
 
     if (__WORKER__) {
       const deferredShouldReturnApp = defer<boolean>();
@@ -416,13 +417,13 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     url: URL,
     {request, response, isStreamable, dev}
   ) {
-    const log = getLoggerFromContext(request);
-    const state = JSON.parse(url.searchParams.get('state') || '{}');
+    const {log, state, componentResponse} = setupCurrentRequest(url, request);
 
-    const {ReactApp} = buildReactApp({
+    const ReactApp = buildReactApp({
       App,
       state,
       request,
+      response: componentResponse,
       log,
       isRSC: true,
       pages,
@@ -504,6 +505,7 @@ function buildReactApp({
   App,
   state,
   request,
+  response,
   log,
   isRSC = false,
   pages,
@@ -511,16 +513,12 @@ function buildReactApp({
   App: ComponentType;
   state?: object | null;
   request: ServerComponentRequest;
+  response: ServerComponentResponse;
   log: Logger;
   isRSC?: boolean;
   pages?: ImportGlobEagerOutput;
 }) {
-  const componentResponse = new ServerComponentResponse();
-  const hydrogenServerProps = {
-    request,
-    response: componentResponse,
-    log,
-  };
+  const hydrogenServerProps = {request, response, log};
 
   const ReactApp = (props: any) => {
     const AppContent = (
@@ -536,7 +534,7 @@ function buildReactApp({
     return <React.Suspense fallback={null}>{AppContent}</React.Suspense>;
   };
 
-  return {ReactApp, componentResponse};
+  return ReactApp;
 }
 
 function extractHeadElements({context: {helmet}}: RealHelmetData) {
@@ -783,4 +781,16 @@ async function isStreamingSupported() {
   }
 
   return cachedStreamingSupport;
+}
+
+function setupCurrentRequest(url: URL, request: ServerComponentRequest) {
+  const log = getLoggerFromContext(request);
+  const state =
+    url.pathname === '/react'
+      ? JSON.parse(url.searchParams.get('state') || '{}')
+      : {pathname: url.pathname, search: url.search};
+
+  const componentResponse = new ServerComponentResponse();
+
+  return {log, state, componentResponse};
 }
