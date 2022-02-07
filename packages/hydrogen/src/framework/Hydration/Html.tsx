@@ -19,7 +19,7 @@ export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
         {/* In production, Vite bundles the entrypoint JS inside <head> */}
         {/* @ts-ignore because module=commonjs doesn't allow this */}
         {import.meta.env.DEV && (
-          <script type="module" src="/src/entry-client.jsx"></script>
+          <script type="module" src="@shopify/hydrogen/entry-client"></script>
         )}
       </body>
     </html>

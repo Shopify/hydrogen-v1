@@ -73,10 +73,7 @@ export type ServerHandler = (
   config: ServerHandlerConfig
 ) => EntryServerHandler;
 
-export type ClientHandler = (
-  App: any,
-  config: ClientHandlerConfig
-) => Promise<void>;
+export type ClientHandler = (App: any) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];

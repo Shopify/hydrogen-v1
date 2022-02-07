@@ -29,7 +29,9 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
 export default renderHydrogen;
 
-function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
+function Content({
+  clientWrapper: ClientWrapper = ({children}: any) => children,
+}) {
   const [serverState, setServerState] = useState({
     pathname: window.location.pathname,
     search: window.location.search,

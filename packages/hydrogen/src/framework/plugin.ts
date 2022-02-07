@@ -26,9 +26,26 @@ export default (
         ),
       ],
       isServerComponentImporterAllowed(importer: string) {
-        return /(handle-worker-event|index)\.js/.test(importer);
+        return /(handle-worker-event|index|worker|server)\.js/.test(importer);
       },
     }),
+
+    {
+      name: 'hydrogen-hydration-auto-import',
+      resolveId(id: string, importer: string) {
+        if (
+          id.includes('@shopify/hydrogen/entry-client') &&
+          importer?.endsWith('/index.html')
+        ) {
+          return id + '?virtual';
+        }
+      },
+      load(id) {
+        if (id.includes('@shopify/hydrogen/entry-client?virtual')) {
+          return `import renderHydrogen from '@shopify/hydrogen/entry-client';\n\nrenderHydrogen();`;
+        }
+      },
+    },
 
     pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ] as Plugin[];
