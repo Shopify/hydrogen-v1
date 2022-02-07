@@ -1,0 +1,28 @@
+{
+  "name": "sand-devil",
+  "scripts": {
+    "dev": "vite",
+    "build": "yarn build:client && yarn build:server",
+    "build:client": "vite build --outDir dist/client --manifest",
+    "build:server": "vite build --outDir dist/server --ssr src/entry-server.jsx",
+    "lint": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src && stylelint ./src/**/*.{css,sass,scss}"
+  },
+  "dependencies": {
+    "graphql-tag": "^2.12.4",
+    "react": "0.0.0-experimental-529dc3ce8-20220124",
+    "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
+    "react-router-dom": "^5.2.0",
+    "@shopify/hydrogen": "^0.9.1",
+    "@shopify/hydrogen-cli": "^0.9.1"
+  },
+  "devDependencies": {
+    "stylelint": "^13.13.0",
+    "@shopify/stylelint-plugin": "^10.0.1",
+    "eslint": "^7.31.0",
+    "eslint-plugin-hydrogen": "^0.6.2",
+    "prettier": "^2.3.2",
+    "@shopify/prettier-config": "^1.1.2",
+    "vite": "^2.7.1"
+  },
+  "prettier": "@shopify/prettier-config"
+}
