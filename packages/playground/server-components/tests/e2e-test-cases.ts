@@ -257,4 +257,19 @@ export default async function testCases({getServerUrl}: TestOptions) {
     expect(body).toContain('S1:"react.suspense"');
     expect(body).toContain('"c":"5","children":"done"');
   });
+
+  it('shows SEO tags for bots', async () => {
+    const response = await fetch(getServerUrl() + '/seo?_bot');
+    const body = await response.text();
+
+    expect(body).toContain('<html lang="ja"');
+    expect(body).toContain('<body data-test="true"');
+    expect(body).toMatch(
+      /<meta\s+.*?property="og:url"\s+content="example.com"\s*\/>/
+    );
+    // This one comes after Suspense delay
+    expect(body).toMatch(
+      /<meta\s+.*?property="type"\s+content="website"\s*\/>/
+    );
+  });
 }
