@@ -68,13 +68,16 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       pages,
     });
 
-    const rscReadableForFizz = rscRenderToReadableStream(
-      AppRSC
-    ) as ReadableStream<Uint8Array>;
+    const [rscReadableForFizz, rscReadableForFlight] = (
+      rscRenderToReadableStream(AppRSC) as ReadableStream<Uint8Array>
+    ).tee();
 
     const AppSSR = buildAppSSR(rscReadableForFizz, {state, request, template});
 
-    let html = await renderToBufferedString(AppSSR, {log, nonce});
+    let [html, flight] = await Promise.all([
+      renderToBufferedString(AppSSR, {log, nonce}),
+      bufferReadableStream(rscReadableForFlight.getReader()),
+    ]);
 
     const {headers, status, statusText} = getResponseOptions(componentResponse);
 
@@ -102,15 +105,19 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       request.ctx.helmet
     );
 
-    head.script = (head.script || '') + flightContainer({init: true, nonce});
-
     html = html
       .replace(
         /<head>(.*?)<\/head>/s,
         generateHeadTag(head as Record<string, any>)
       )
+      .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&')
       .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
-      .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&');
+      .replace(
+        '</body>',
+        flight
+          ? `${flightContainer({init: true, nonce, chunk: flight})}</body>`
+          : '$&'
+      );
 
     logServerResponse('ssr', log, request, status);
 
@@ -405,7 +412,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
   ) {
     const {log, state, componentResponse} = setupCurrentRequest(url, request);
 
-    const ReactApp = buildAppRSC({
+    const AppRSC = buildAppRSC({
       App,
       state,
       request,
@@ -416,7 +423,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
     if (__WORKER__) {
       const readable = rscRenderToReadableStream(
-        ReactApp
+        AppRSC
       ) as ReadableStream<Uint8Array>;
 
       if (isStreamable && (await isStreamingSupported())) {
@@ -439,7 +446,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       );
 
       const stream = rscWriter
-        .renderToPipeableStream(ReactApp)
+        .renderToPipeableStream(AppRSC)
         .pipe(response) as Writable;
 
       stream.on('finish', function () {
@@ -511,7 +518,7 @@ function buildAppRSC({
 }
 
 function buildAppSSR(
-  readableStream: ReadableStream,
+  readableStream: ReadableStream<Uint8Array>,
   {
     request,
     state,
