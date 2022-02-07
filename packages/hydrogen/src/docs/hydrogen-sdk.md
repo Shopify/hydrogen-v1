@@ -88,6 +88,10 @@ The `ShopifyProvider` component relates to the following global hooks that you c
     <th>Description</th>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
+    <td>Use to get current url in server or client component.</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
     <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
   </tr>

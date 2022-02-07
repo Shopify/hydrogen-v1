@@ -44,6 +44,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Fix header shift when cart is opened by @Francismori7 in #600
 - Feat: Simplify Helmet usage and make it compatible with RSC
 - The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
+- feat: added `useUrl` hook that allows the consumer to get the current url in server or client component
 
 ## 0.10.1 - 2022-01-26
 
