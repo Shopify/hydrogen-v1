@@ -76,51 +76,11 @@ Hydrogen includes the following cart hooks:
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
-    <td>Provides access to the Storefront API's <a href="/api/storefront/reference/cart/cart">Cart object</a>.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartattributesupdatecallback">useCartAttributesUpdateCallback</a></td>
-    <td>Returns a callback that can be used to update the cart's attributes.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartbuyeridentityupdatecallback">useCartBuyerIdentityUpdateCallback</a></td>
-    <td>Returns a callback that can be used to update the cart's buyer identity.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartcheckouturl">useCartCheckoutUrl</a></td>
-    <td>Returns a string of the checkout URL for the cart.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartcreatecallback">useCartCreateCallback</a></td>
-    <td>Returns a callback that can be used to create a cart.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartdiscountcodesupdatecallback">useCartDiscountCodesUpdateCallback</a></td>
-    <td>Returns a callback that can be used to update the cart's discount codes.</td>
+    <td>Provides access to the Storefront API's <a href="/api/storefront/reference/cart/cart">Cart object</a> and related callbacks to manipulate the cart.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/cart/usecartline">useCartLine</a></td>
     <td>Provides access to the Storefront API's <a href="/api/storefront/reference/cart/cartline">CartLine object</a>.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartlinesaddcallback">useCartLinesAddCallback</a></td>
-    <td>Returns a callback that can be used to add lines to a cart. If a cart doesn't already exist, then it will create the cart for you.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartlinesremovecallback">useCartLinesRemoveCallback</a></td>
-    <td>Returns a callback that can be used to remove lines from a cart.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartlinestotalquantity">useCartLinesTotalQuantity</a></td>
-    <td>Returns the total amount of items in the cart.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartlinesupdatecallback">useCartLinesUpdateCallback</a></td>
-    <td>Returns a callback that can be used to update lines in a cart.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/cart/usecartnoteupdatecallback">useCartNoteUpdateCallback</a></td>
-    <td>Returns a callback that can be used to update the cart's note.</td>
   </tr>
 </table>
 

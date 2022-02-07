@@ -34,24 +34,6 @@ describe('<SelectedVariantPrice />', () => {
     });
   });
 
-  it('renders its children', () => {
-    const product = getProduct();
-    const selectedVariant = product.variants.edges[0].node;
-    const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
-        <SelectedVariantPrice>
-          {({amount}) => {
-            return <p>{`The amount is ${amount}`}</p>;
-          }}
-        </SelectedVariantPrice>
-      </ProductProvider>
-    );
-
-    expect(price).toContainReactComponent('p', {
-      children: `The amount is ${selectedVariant.priceV2.amount}`,
-    });
-  });
-
   it('supports passthrough props', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;

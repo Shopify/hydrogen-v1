@@ -11,7 +11,7 @@ import {Localization} from '../../graphql/graphql-constants';
  *
  * Any descendents of this provider can use the `useCountry` and `useAvailableCountries` hooks.
  * The `isoCode` of the `country` can be used in the Storefront API's
- * [`@inContext`](/api/storefront/reference/directives/incontext) directive as the `country` value.
+ * `@inContext` directive as the `country` value.
  */
 export function LocalizationProvider({children}: {children: ReactNode}) {
   const {

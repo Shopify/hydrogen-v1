@@ -1,9 +1,10 @@
 import React, {ElementType} from 'react';
-import {Money} from '../Money';
+import {MoneyV2} from '../../graphql/types/types';
+import {Money, MoneyProps} from '../Money';
 import {useProduct} from '../ProductProvider';
 import {Props} from '../types';
 
-export interface ProductPriceProps {
+export interface ProductPriceProps extends Omit<MoneyProps, 'money'> {
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
   /** The type of value. Valid values: `min` (default) or `max`. */
@@ -24,7 +25,7 @@ export function ProductPrice<TTag extends ElementType>(
     throw new Error('Expected a ProductProvider context, but none was found');
   }
 
-  let price;
+  let price: MoneyV2 | undefined;
 
   if (priceType === 'compareAt') {
     if (valueType === 'max') {
@@ -44,9 +45,5 @@ export function ProductPrice<TTag extends ElementType>(
     return null;
   }
 
-  return (
-    <Money {...passthroughProps} money={price}>
-      {props.children}
-    </Money>
-  );
+  return <Money {...passthroughProps} money={price} />;
 }

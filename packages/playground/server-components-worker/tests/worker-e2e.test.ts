@@ -1,4 +1,5 @@
 import {port} from './serve';
+import fetch from 'node-fetch';
 
 const url = `http://localhost:${port}`;
 
@@ -27,6 +28,15 @@ it('follows synchronous redirects', async () => {
   await page.goto(url + '/redirected');
   expect(await page.url()).toContain('/about');
   expect(await page.textContent('h1')).toContain('About');
+});
+
+it('renders `<ShopifyProvider>` dynamically in RSC and on the client', async () => {
+  // "someDynamicValue should get injected into the response config paylout"
+  await page.goto(url + '/config/someDynamicValue');
+
+  expect(await page.textContent('#root > div')).toContain(
+    '{"locale":"en-us","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
+  );
 });
 
 it('should support API route on a serve component for POST methods', async () => {
@@ -173,4 +183,66 @@ it('supports form request on API routes', async () => {
   await page.type('#fname', 'sometext');
   await page.click('#fsubmit');
   expect(await page.textContent('*')).toContain('fname=sometext');
+});
+
+it('streams the SSR response and includes RSC payload', async () => {
+  const response = await fetch(url + '/stream');
+  let streamedChunks = [];
+
+  // This fetch response is not standard but a node-fetch polyfill.
+  // Therefore, the body is not a ReadableStream but a Node Readable.
+  // @ts-ignore
+  for await (const chunk of response.body) {
+    streamedChunks.push(chunk.toString());
+  }
+
+  expect(streamedChunks.length).toBeGreaterThan(1); // Streamed more than 1 chunk
+
+  const body = streamedChunks.join('');
+  expect(body).toContain('var __flight=[];');
+  expect(body).toContain('__flight.push(`S1:"react.suspense"');
+  expect(body).toContain('<div c="5">');
+  expect(body).toContain('>footer!<');
+});
+
+it('buffers HTML for bots', async () => {
+  const response = await fetch(url + '/stream?_bot');
+  let streamedChunks = [];
+
+  // This fetch response is not standard but a node-fetch polyfill.
+  // Therefore, the body is not a ReadableStream but a Node Readable.
+  // @ts-ignore
+  for await (const chunk of response.body) {
+    streamedChunks.push(chunk.toString());
+  }
+
+  expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
+
+  const body = streamedChunks.join('');
+  expect(body).toContain('var __flight=[];');
+  expect(body).not.toContain('__flight.push(`S1:"react.suspense"'); // We're not including RSC
+  expect(body).toContain('<div c="5">');
+  expect(body).toContain('>footer!<');
+});
+
+it('streams the RSC response', async () => {
+  const response = await fetch(
+    url +
+      '/react?state=' +
+      encodeURIComponent(JSON.stringify({pathname: '/stream'}))
+  );
+  let streamedChunks = [];
+
+  // This fetch response is not standard but a node-fetch polyfill.
+  // Therefore, the body is not a ReadableStream but a Node Readable.
+  // @ts-ignore
+  for await (const chunk of response.body) {
+    streamedChunks.push(chunk.toString());
+  }
+
+  expect(streamedChunks.length).toBeGreaterThan(1);
+
+  const body = streamedChunks.join('');
+  expect(body).toContain('S1:"react.suspense"');
+  expect(body).toContain('"c":"5","children":"done"');
 });

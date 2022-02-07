@@ -1,9 +1,10 @@
 import React, {ReactElement, useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
-import BoomerangPageTemplate from '../Boomerang/BoomerangPageTemplate.client';
 import type {Logger} from '../../utilities/log/log';
 
 import type {ImportGlobEagerOutput} from '../../types';
+import {BoomerangPage} from '../Boomerang/BoomerangPageTemplate.client';
+import {Boomerang} from '../Boomerang/Boomerang.client';
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -46,12 +47,14 @@ export function DefaultRoutes({
         params={foundRouteDetails.params}
         {...serverState}
       />
-      <BoomerangPageTemplate pageTemplate={foundRoute.component.name} />
+      <Boomerang />
+      <BoomerangPage pageTemplate={foundRoute.component.name} />
     </>
   ) : (
     <>
       {fallback}
-      <BoomerangPageTemplate
+      <Boomerang />
+      <BoomerangPage
         pageTemplate={
           typeof fallback?.type === 'function'
             ? fallback?.type.name

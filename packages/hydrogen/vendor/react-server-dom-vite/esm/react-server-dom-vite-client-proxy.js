@@ -1,4 +1,5 @@
-/** @license React vundefined
+/**
+ * @license React
  * react-server-dom-vite-client-proxy.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -9,36 +10,23 @@
 
 import {createElement} from 'react';
 
+// eslint-disable-next-line no-unused-vars
+
+/*global globalThis*/
+// This is a store of components discovered during RSC
+// to load them later when consuming the response in SSR.
 globalThis.__COMPONENT_INDEX = {};
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true,
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
 function isReactComponent(component, name) {
-  if (component) {
-    return (
-      // Workaround for hooks
-      !/^use[A-Z]/.test(name) &&
-      (typeof component === 'function' ||
-        typeof component.render === 'function' ||
-        component.$$typeof === Symbol.for('react.element'))
-    );
-  }
-
-  return false;
-}
+  if (!component) return false;
+  return (
+    (typeof component === 'function' && /^[A-Z]/.test(name)) ||
+    typeof component.render === 'function' ||
+    component.$$typeof === Symbol.for('react.element')
+  );
+} // A ClientProxy behaves as a module reference for the Flight
+// runtime (RSC) and as a real component for the Fizz runtime (SSR).
+// Note that this is not used in browser environments.
 
 function wrapInClientProxy(_ref) {
   var id = _ref.id,
@@ -47,40 +35,44 @@ function wrapInClientProxy(_ref) {
     component = _ref.component;
 
   if (!isReactComponent(component, name)) {
-    // This is not a React component, return it as is.
+    // This is not a React component, do not wrap it.
     return component;
-  } // Use object syntax here to make sure the function name
-  // comes from the meta params for better error stacks.
+  }
 
-  var render = _defineProperty({}, name, function (props) {
+  var render = function (props) {
     return createElement(component, props);
-  })[name];
+  };
+
+  Object.defineProperty(render, 'name', {
+    value: name,
+  });
 
   {
     render.displayName = name;
-  } // React accesses the `render` function directly when encountring this type
+  } // Fizz runtime accesses the `render` method directly when encountering a forward_ref
 
   var componentRef = Object.create(null);
   componentRef.$$typeof = Symbol.for('react.forward_ref');
-  componentRef.render = render; // This custom type is checked in RSC renderer
+  componentRef.render = render; // Flight runtime will check this custom typeof to decide wether this is a module ref
 
-  var rscDescriptor = Object.create(null);
-  rscDescriptor.$$typeof_rsc = Symbol.for('react.module.reference');
-  rscDescriptor.filepath = id;
-  rscDescriptor.name = named ? name : 'default';
+  var moduleRef = Object.create(null);
+  moduleRef.$$typeof_rsc = Symbol.for('react.module.reference');
+  moduleRef.filepath = id;
+  moduleRef.name = named ? name : 'default'; // Store component in a global index during RSC to use them later in SSR
 
-  if (!__COMPONENT_INDEX[id]) {
-    // Store a loader function to find components during SSR when consuming RSC
-    __COMPONENT_INDEX[id] = () =>
-      Promise.resolve({[rscDescriptor.name]: component});
-  }
-
+  globalThis.__COMPONENT_INDEX[id] = Object.defineProperty(
+    globalThis.__COMPONENT_INDEX[id] || Object.create(null),
+    moduleRef.name,
+    {
+      value: component,
+    }
+  );
   return new Proxy(componentRef, {
     get: function (target, prop) {
       return (
         // 1. Let React access the element/ref and type in SSR
-        target[prop] || // 2. Check descriptor properties for RSC requests
-        rscDescriptor[prop] || // 3. Fallback to custom component properties such as `ImageComponent.Fragment`
+        target[prop] || // 2. Check module properties for RSC requests
+        moduleRef[prop] || // 3. Fallback to custom component properties such as `ImageComponent.Fragment`
         component[prop]
       );
     },

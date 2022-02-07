@@ -1,9 +1,11 @@
-import React, {ElementType, ReactNode} from 'react';
+import React, {ElementType} from 'react';
 import {Metafield} from '../Metafield';
 import {useProduct} from '../../hooks/useProduct/useProduct';
 import {Props} from '../types';
+import {MetafieldProps} from '../Metafield/Metafield.client';
 
-export interface ProductMetafieldProps {
+export interface ProductMetafieldProps
+  extends Omit<MetafieldProps, 'metafield'> {
   /** A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's
    * metafield.
    */
@@ -12,8 +14,6 @@ export interface ProductMetafieldProps {
    * product's metafield.
    */
   namespace: string;
-  /** A render function that takes a `Metafield` object as its argument. */
-  children?: ReactNode;
 }
 
 /**
@@ -42,5 +42,12 @@ export function ProductMetafield<TTag extends ElementType>(
       metafield.namespace === namespace && metafield.key === keyName
   );
 
-  return field ? <Metafield metafield={field} {...passthroughProps} /> : null;
+  if (field === null || field === undefined) {
+    console.warn(
+      `Product does not have a value for metafield. ProductID:${product.id} namespace:${namespace} keyName:${keyName}`
+    );
+    return null;
+  }
+
+  return <Metafield metafield={field} {...passthroughProps} />;
 }

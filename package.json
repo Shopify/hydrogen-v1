@@ -28,6 +28,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test-e2e": "jest --config jest-e2e.config.ts",
+    "test:vite-ci": "jest && jest --config jest-e2e.config.ts",
     "bump-version": "lerna version --force-publish create-hydrogen-app",
     "version": "node -p \"'export const LIB_VERSION = \\'' + require('./lerna.json').version + '\\';'\" > packages/hydrogen/src/version.ts && git add packages/hydrogen/src/version.ts && node scripts/update-changelogs-on-version.js",
     "hydrogen": "./packages/cli/bin/hydrogen",

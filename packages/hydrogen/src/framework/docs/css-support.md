@@ -69,7 +69,7 @@ If you don't want to build with Tailwind's library and instead want to write you
    yarn dev
    ```
 
-   ```bash?filename: 'Terminal', title: 'npm'
+   ```bash?filename: 'Terminal', title: 'npm or npx'
    // Switch to your app's directory
    cd <directory>
 
