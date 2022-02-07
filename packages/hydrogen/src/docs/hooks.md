@@ -23,7 +23,7 @@ Hydrogen provides the following global hooks that you can use to fetch data from
     <th>Description</th>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/hooks/global/usecurrentUrl">useCurrentUrl</a></td>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
     <td>Use to get current url in server or client component.</td>
   </tr>
   <tr>

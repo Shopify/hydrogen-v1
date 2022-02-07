@@ -4,7 +4,7 @@ import {useServerRequest} from '../ServerRequestProvider';
 /**
  * Use to get current url in server or client component.
  */
-export function useCurrentUrl(): URL {
+export function useUrl(): URL {
   if (META_ENV_SSR) {
     const serverUrl = new URL(useServerRequest().url);
 

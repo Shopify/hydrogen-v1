@@ -12,7 +12,7 @@ import {PageSeo} from '../PageSeo.client';
 const mockUrl = 'https://store-name.com/';
 
 jest.mock('../../../foundation', () => ({
-  useCurrentUrl: () => new URL(mockUrl),
+  useUrl: () => new URL(mockUrl),
 }));
 
 jest.mock('../DefaultPageSeo.client', () => ({

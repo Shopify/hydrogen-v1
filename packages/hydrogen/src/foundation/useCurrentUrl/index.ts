@@ -1,1 +1,0 @@
-export {useCurrentUrl} from './useCurrentUrl';

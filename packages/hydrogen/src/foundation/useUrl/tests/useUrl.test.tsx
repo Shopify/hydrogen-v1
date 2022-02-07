@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
 
-import {useCurrentUrl} from '../useCurrentUrl';
+import {useUrl} from '../useUrl';
 
 jest.mock('../../ServerRequestProvider', () => ({
   useServerRequest: jest.fn(),
@@ -12,12 +12,12 @@ const useServerRequestMock = jest.requireMock(
 ).useServerRequest;
 
 function FakeComponent({callbackSpy}: {callbackSpy: jest.Mock<any, any>}) {
-  const url = useCurrentUrl();
+  const url = useUrl();
   callbackSpy(url);
   return null;
 }
 
-describe('useCurrentUrl()', () => {
+describe('useUrl()', () => {
   beforeEach(() => {
     useServerRequestMock.mockReset();
   });
