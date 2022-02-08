@@ -15,7 +15,7 @@ export interface HydrogenUseQueryOptions {
 
 /**
  * The `useQuery` hook is a wrapper around Suspense calls and
- * global runtime's Cache if it exist.
+ * global runtime's Cache if it exists.
  * It supports Suspense calls on the server and on the client.
  */
 export function useQuery<T>(
