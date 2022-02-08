@@ -1,4 +1,4 @@
-import React, {cloneElement, ReactNode, ElementType, Fragment} from 'react';
+import React, {ReactNode, ElementType, Fragment} from 'react';
 import {Cart, useCart} from '../CartProvider';
 import {CartLineProvider} from '../CartLineProvider';
 import {Props} from '../types';
@@ -30,11 +30,7 @@ export function CartLines<TTag extends ElementType>(
       {lines.map((line) => {
         return (
           <ChildWrapper key={line.id}>
-            <CartLineProvider line={line}>
-              {typeof children === 'function'
-                ? cloneElement(children(line))
-                : children}
-            </CartLineProvider>
+            <CartLineProvider line={line}>{children}</CartLineProvider>
           </ChildWrapper>
         );
       })}
