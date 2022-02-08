@@ -20,7 +20,7 @@ navigator.geolocation.getCurrentPosition((data) => {
 
 ## Managing server state
 
-The most basic example of `state` is the `page` prop, which Hydrogen manages for you whenever your URL location changes. The server state is passed as a prop to page components. However, you can set any state that you want within client components using the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook:
+The most basic example of `state` is the `pathname` and `search` prop, which Hydrogen manages for you whenever your URL location changes. The server state is passed as a prop to page components. However, you can set any state that you want within client components using the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook:
 
 ```js
 import {useServerState} from '@shopify/hydrogen/client';

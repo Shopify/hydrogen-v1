@@ -395,7 +395,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
    */
   const hydrate: Hydrator = async function (
     url: URL,
-    {request, response, isStreamable, dev}
+    {request, response, isStreamable}
   ) {
     const {log, state, componentResponse} = setupCurrentRequest(url, request);
 
