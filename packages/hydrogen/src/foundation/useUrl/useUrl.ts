@@ -2,7 +2,7 @@ import {META_ENV_SSR} from '../../utilities/meta-env-ssr';
 import {useServerRequest} from '../ServerRequestProvider';
 
 /**
- * Use to get current url in server or client component.
+ * The `useUrl` hook retrieves the current URL in a server or client component.
  */
 export function useUrl(): URL {
   if (META_ENV_SSR) {
