@@ -414,7 +414,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
    */
   const hydrate: Hydrator = async function (
     url: URL,
-    {request, response, isStreamable, dev}
+    {request, response, isStreamable}
   ) {
     const log = getLoggerFromContext(request);
     const state = JSON.parse(url.searchParams.get('state') || '{}');

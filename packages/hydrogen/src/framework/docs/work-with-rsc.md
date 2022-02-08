@@ -83,19 +83,19 @@ Sharing state information between the client and server is important for common 
 
 ![A diagram that illustrates the workflow for sharing state information between client and server](/assets/custom-storefronts/hydrogen/hydrogen-sharing-state-information.png)
 
-1. `App.server.jsx` relies on the `page` state to choose the correct route to render. To change routes, the client updates the `page` state:
+1. `App.server.jsx` relies on the `pathname` and `search` state to choose the correct route to render. To change routes, the client updates the `page` state:
 
    {% codeblock file, filename: 'ProductDetails.client.jsx' %}
 
    ```js
    useEffect(() => {
-     setServerState('page', location.pathname);
-   }, [location.pathname, setServerState]);
+     setServerState({pathname: location.pathname, search: location.search});
+   }, [location.pathname, location.search, setServerState]);
    ```
 
    {% endcodeblock %}
 
-2. The `page` state is sent to the server. This happens through a `useServerResponse` fetch call. It's a special server endpoint called `/react` which accepts `state` as a query parameter.
+2. The `pathname` and `search` state is sent to the server. This happens through a `useServerResponse` fetch call. It's a special server endpoint called `/react` which accepts `state` as a query parameter.
 3. The `/react` endpoint returns the wire representation for the new state.
 4. The state is partially hydrated (made interactive) and rendered into the DOM, similar to how the initial page was made interactive.
 

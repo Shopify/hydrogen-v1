@@ -15,11 +15,14 @@ export function ServerStateRouter() {
   const location = useLocation();
 
   useEffect(() => {
-    if (serverState.pathname !== location.pathname) {
+    if (
+      serverState.pathname !== location.pathname ||
+      serverState.search !== location.search
+    ) {
       setIsNavigating(true);
-      setServerState('pathname', location.pathname);
+      setServerState({pathname: location.pathname, search: location.search});
     }
-  }, [location.pathname, setServerState]);
+  }, [location.pathname, location.search, setServerState]);
 
   useEffect(() => {
     /**
