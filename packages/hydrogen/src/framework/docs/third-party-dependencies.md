@@ -10,7 +10,7 @@ To install third party dependencies, run the following command:
 yarn add <dependency>
 ```
 
-```bash?filename: 'Terminal', title: 'npm or npx'
+```bash?filename: 'Terminal', title: 'npm'
 npm install <dependency>
 ```
 
