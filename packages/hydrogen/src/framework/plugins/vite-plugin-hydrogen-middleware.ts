@@ -26,7 +26,7 @@ export default (
         return await server.transformIndexHtml(url, indexHtml);
       }
 
-      await polyfillOxygenEnv(server.config);
+      const {HYDROGEN_SERVER_ENTRY} = await polyfillOxygenEnv(server.config);
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
       // By running this middleware first, we avoid that.
@@ -46,7 +46,9 @@ export default (
             shopifyConfig,
             indexTemplate: getIndexTemplate,
             getServerEntrypoint: async () =>
-              await server.ssrLoadModule('/src/entry-server'),
+              await server.ssrLoadModule(
+                HYDROGEN_SERVER_ENTRY || '/src/entry-server'
+              ),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)
@@ -76,4 +78,6 @@ async function polyfillOxygenEnv(config: ResolvedConfig) {
   }
 
   globalThis.Oxygen = {env};
+
+  return env;
 }
