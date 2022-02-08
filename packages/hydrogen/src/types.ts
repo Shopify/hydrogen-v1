@@ -129,12 +129,29 @@ export interface Measurement {
 
 export type QueryKey = string | readonly unknown[];
 
-export interface CacheOptions {
-  private?: boolean;
+export type NoStoreStrategy = {
+  mode: string;
+};
+
+export interface BaseCachingStrategy {
+  mode: string;
+  maxAge: number;
+  staleWhileRevalidate: number;
+  sMaxAge?: number;
+}
+
+export interface AllCacheOptions {
+  mode: string;
   maxAge?: number;
   staleWhileRevalidate?: number;
-  noStore?: boolean;
+  sMaxAge?: number;
+  staleIfError?: number;
 }
+
+export type CachingStrategy =
+  | NoStoreStrategy
+  | BaseCachingStrategy
+  | AllCacheOptions;
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;

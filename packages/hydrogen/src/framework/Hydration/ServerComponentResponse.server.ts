@@ -1,10 +1,10 @@
 import {renderToString} from 'react-dom/server';
-import {CacheOptions} from '../../types';
-import {generateCacheControlHeader} from '../cache';
+import {TenSecondCache, generateCacheControlHeader} from '../CachingStrategy';
+import type {CachingStrategy} from '../../types';
 
 export class ServerComponentResponse extends Response {
   private wait = false;
-  private cacheOptions?: CacheOptions;
+  private cacheOptions?: CachingStrategy;
 
   public customStatus?: {code?: number; text?: string};
 
@@ -25,17 +25,12 @@ export class ServerComponentResponse extends Response {
     return !this.wait;
   }
 
-  cache(options: CacheOptions) {
+  cache(options: CachingStrategy) {
     this.cacheOptions = options;
   }
 
   get cacheControlHeader(): string {
-    const options = {
-      ...DEFAULT_CACHE_OPTIONS,
-      ...(this.cacheOptions ?? {}),
-    };
-
-    return generateCacheControlHeader(options);
+    return generateCacheControlHeader(TenSecondCache(this.cacheOptions));
   }
 
   writeHead({
@@ -79,8 +74,3 @@ export class ServerComponentResponse extends Response {
     return null;
   }
 }
-
-const DEFAULT_CACHE_OPTIONS: CacheOptions = {
-  maxAge: 60 * 60,
-  staleWhileRevalidate: 23 * 60 * 60,
-};

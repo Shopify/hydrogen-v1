@@ -22,3 +22,12 @@ export * from './hooks/useShopQuery';
 // Export server-only CartQuery here instead of `CartProvider.client` to prevent
 // it from being bundled with other client components
 export {CartQuery} from './graphql/graphql-constants';
+
+export {
+  generateCacheControlHeader,
+  NoStore,
+  TenSecondCache,
+  OneHourCache,
+  OneDayCache,
+  OneMonthCache,
+} from './framework/CachingStrategy';

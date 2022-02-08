@@ -1,4 +1,4 @@
-import type {CacheOptions, QueryKey} from '../../types';
+import type {CachingStrategy, QueryKey} from '../../types';
 import {log} from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -12,7 +12,7 @@ import {useRequestCacheData} from '../ServerRequestProvider';
 import {collectQueryCacheControlHeaders} from '../../utilities/log';
 
 export interface HydrogenUseQueryOptions {
-  cache: CacheOptions;
+  cache: CachingStrategy | undefined;
 }
 
 /**

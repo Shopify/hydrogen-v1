@@ -2,7 +2,7 @@ import {useShop} from '../../foundation/useShop';
 import {log} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
-import type {CacheOptions} from '../../types';
+import type {CachingStrategy} from '../../types';
 import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 
@@ -18,7 +18,7 @@ export interface UseShopQueryResponse<T> {
 export function useShopQuery<T>({
   query,
   variables = {},
-  cache = {},
+  cache,
   locale = '',
 }: {
   /** A string of the GraphQL query.
@@ -28,7 +28,7 @@ export function useShopQuery<T>({
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
   /** An object containing cache-control options for the sub-request. */
-  cache?: CacheOptions;
+  cache?: CachingStrategy;
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
 }): UseShopQueryResponse<T> {
