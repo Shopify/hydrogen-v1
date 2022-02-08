@@ -231,7 +231,7 @@ export default async function testCases({getServerUrl}: TestOptions) {
 
     const body = streamedChunks.join('');
     expect(body).toContain('var __flight=[];');
-    expect(body).not.toContain('__flight.push(`S1:"react.suspense"'); // We're not including RSC
+    expect(body).toContain('__flight.push(`S1:"react.suspense"');
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
