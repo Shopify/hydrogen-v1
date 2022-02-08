@@ -141,7 +141,7 @@ export interface BaseCachingStrategy {
 }
 
 export interface AllCacheOptions {
-  mode: string;
+  mode?: string;
   maxAge?: number;
   staleWhileRevalidate?: number;
   sMaxAge?: number;

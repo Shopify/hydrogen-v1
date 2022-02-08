@@ -30,7 +30,7 @@ export class ServerComponentResponse extends Response {
   }
 
   get cacheControlHeader(): string {
-    return generateCacheControlHeader(TenSecondCache(this.cacheOptions));
+    return generateCacheControlHeader(this.cacheOptions || TenSecondCache());
   }
 
   writeHead({

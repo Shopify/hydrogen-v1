@@ -8,7 +8,7 @@ import {
 export function generateSubRequestCacheControlHeader(
   userCacheOptions?: CachingStrategy
 ): string {
-  return generateCacheControlHeader(TenSecondCache(userCacheOptions));
+  return generateCacheControlHeader(userCacheOptions || TenSecondCache());
 }
 
 /**
