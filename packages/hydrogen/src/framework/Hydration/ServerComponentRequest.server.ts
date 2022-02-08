@@ -1,7 +1,7 @@
 import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import {HelmetData} from 'react-helmet-async';
-import type {RealHelmetData} from '../../foundation/Helmet/Helmet';
+import type {RealHelmetData} from '../../foundation/Helmet';
 
 let reqCounter = 0; // For debugging
 const generateId =

@@ -29,7 +29,7 @@ import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {renderToReadableStream as rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
 // @ts-ignore
 import {createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
-import type {RealHelmetData} from './foundation/Helmet/Helmet';
+import type {RealHelmetData} from './foundation/Helmet';
 
 declare global {
   // This is provided by a Vite plugin
