@@ -2,7 +2,7 @@ import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import {HelmetData} from 'react-helmet-async';
 import type {RealHelmetData} from '../../foundation/Helmet';
-import {QueryCacheControlHeaders} from '../../utilities/log/cache-header-log';
+import {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 
 let reqCounter = 0; // For debugging
 const generateId =
