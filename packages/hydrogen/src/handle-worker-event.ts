@@ -1,5 +1,4 @@
-import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import handleEvent, {HandleEventOptions} from './handle-event';
+import handleEvent from './handle-event';
 
 interface FetchEvent {
   request: Request;
@@ -12,13 +11,11 @@ interface FetchEvent {
  */
 export default async function handleWorkerEvent(
   event: FetchEvent,
-  options: HandleEventOptions
+  options: Parameters<typeof handleEvent>[1]
 ) {
-  const request = new ServerComponentRequest(event.request);
-
   /**
    * Note: We need to pass `request` as a separate option since Cloudflare (and other Worker
    * runtimes, presumably) does not like when `event` is mutated.
    */
-  return handleEvent(event, {...options, request});
+  return handleEvent(event, {...options, request: event.request});
 }

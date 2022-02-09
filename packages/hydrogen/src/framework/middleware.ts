@@ -106,6 +106,7 @@ export function hydrogenMiddleware({
           streamableResponse: response,
           dev,
           cache,
+          event: {},
         }
       );
 
