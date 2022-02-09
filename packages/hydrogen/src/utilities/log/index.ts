@@ -10,4 +10,5 @@ export {
 export {
   collectQueryCacheControlHeaders,
   logCacheControlHeaders,
-} from './cache-header-log';
+} from './log-cache-header';
+export {logCacheApiStatus} from './log-cache-api-status';

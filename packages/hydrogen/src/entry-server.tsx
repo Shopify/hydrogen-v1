@@ -27,6 +27,7 @@ import {
   rscRenderToReadableStream,
   createFromReadableStream,
 } from './streaming.server';
+import {setRuntimeLogger} from './framework/runtime';
 
 declare global {
   // This is provided by a Vite plugin
@@ -86,7 +87,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       // This can be used to return sitemap.xml or any other custom response.
 
       logServerResponse('ssr', log, request, status);
-      logCacheControlHeaders('ssr', log, request, componentResponse);
+      logCacheControlHeaders('ssr', request, componentResponse);
 
       return new Response(await componentResponse.customBody, {
         status,
@@ -342,7 +343,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           log.trace('node complete stream');
           clearTimeout(streamTimeout);
 
-          logCacheControlHeaders('str', log, request, componentResponse);
+          logCacheControlHeaders('str', request, componentResponse);
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
@@ -440,7 +441,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       stream.on('finish', function () {
         logServerResponse('rsc', log, request, response!.statusCode);
-        logCacheControlHeaders('rsc', log, request, componentResponse);
+        logCacheControlHeaders('rsc', request, componentResponse);
       });
     }
   };
@@ -796,6 +797,7 @@ async function isStreamingSupported() {
 
 function setupCurrentRequest(url: URL, request: ServerComponentRequest) {
   const log = getLoggerFromContext(request);
+  setRuntimeLogger(log);
   const state =
     url.pathname === '/react'
       ? JSON.parse(url.searchParams.get('state') || '{}')

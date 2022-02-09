@@ -120,10 +120,3 @@ export function logServerResponse(
     `${request.method} ${styledType} ${coloredResponseStatus} ${paddedTiming} ${url}`
   );
 }
-
-export function logCacheApiStatus(...args: Array<any>) {
-  if (!logger.options?.showCacheApiStatus) {
-    return;
-  }
-  log.debug({}, ...args);
-}

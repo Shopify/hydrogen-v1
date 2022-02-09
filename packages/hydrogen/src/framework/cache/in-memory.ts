@@ -1,4 +1,4 @@
-import {logCacheApiStatus} from '../../utilities/log/log';
+import {logCacheApiStatus} from '../../utilities/log';
 
 /**
  * This is an in-memory implementation of `Cache` that *barely*
@@ -12,7 +12,7 @@ export class InMemoryCache {
   }
 
   put(request: Request, response: Response) {
-    logCacheApiStatus(`[Cache] PUT ${request.url.slice(0, 100)}`);
+    logCacheApiStatus('PUT', request.url);
     this.store.set(request.url, {
       value: response,
       date: new Date(),
@@ -23,7 +23,7 @@ export class InMemoryCache {
     const match = this.store.get(request.url);
 
     if (!match) {
-      logCacheApiStatus(`[Cache] MISS ${request.url.slice(0, 100)}`);
+      logCacheApiStatus('MISS', request.url);
       return;
     }
 
@@ -39,7 +39,7 @@ export class InMemoryCache {
 
     const isMiss = age > maxAge + swr;
     if (isMiss) {
-      logCacheApiStatus(`[Cache] MISS ${request.url.slice(0, 100)}`);
+      logCacheApiStatus('MISS', request.url);
       this.store.delete(request.url);
       return;
     }
@@ -49,9 +49,7 @@ export class InMemoryCache {
     const headers = new Headers(value.headers);
     headers.set('cache', isStale ? 'STALE' : 'HIT');
     headers.set('date', date.toGMTString());
-    logCacheApiStatus(
-      `[Cache] ${headers.get('cache')} ${request.url.slice(0, 100)}`
-    );
+    logCacheApiStatus(headers.get('cache'), request.url);
 
     const response = new Response(value.body, {
       headers,
@@ -62,6 +60,6 @@ export class InMemoryCache {
 
   delete(request: Request) {
     this.store.delete(request.url);
-    logCacheApiStatus(`[Cache] DELETE ${request.url.slice(0, 100)}`);
+    logCacheApiStatus('DELETE', request.url);
   }
 }
