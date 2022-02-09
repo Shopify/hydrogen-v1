@@ -6,7 +6,6 @@ import {
 } from '../index';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 import {ServerComponentResponse} from '../../../framework/Hydration/ServerComponentResponse.server';
-import {setRuntimeLogger} from '../../../framework/runtime';
 
 let mockLogger: jest.Mocked<Logger>;
 
@@ -27,8 +26,6 @@ describe('cache header log', () => {
       },
     };
 
-    setRuntimeLogger(mockLogger);
-
     resetLogger();
   });
 
@@ -43,7 +40,7 @@ describe('cache header log', () => {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
 
-    logCacheControlHeaders('str', request, response);
+    logCacheControlHeaders('str', mockLogger, request, response);
 
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
@@ -66,7 +63,7 @@ describe('cache header log', () => {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
 
-    logCacheControlHeaders('rsc', request, response);
+    logCacheControlHeaders('rsc', mockLogger, request, response);
 
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
@@ -94,7 +91,7 @@ describe('cache header log', () => {
       QUERY_1,
       'public, max-age=1, stale-while-revalidate=9'
     );
-    logCacheControlHeaders('str', request, response);
+    logCacheControlHeaders('str', mockLogger, request, response);
 
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
@@ -136,7 +133,7 @@ describe('cache header log', () => {
       QUERY_3,
       'public, max-age=3, stale-while-revalidate=11'
     );
-    logCacheControlHeaders('str', request, response);
+    logCacheControlHeaders('str', mockLogger, request, response);
 
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(

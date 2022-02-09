@@ -87,7 +87,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       // This can be used to return sitemap.xml or any other custom response.
 
       logServerResponse('ssr', log, request, status);
-      logCacheControlHeaders('ssr', request, componentResponse);
+      logCacheControlHeaders('ssr', log, request, componentResponse);
 
       return new Response(await componentResponse.customBody, {
         status,
@@ -343,7 +343,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           log.trace('node complete stream');
           clearTimeout(streamTimeout);
 
-          logCacheControlHeaders('str', request, componentResponse);
+          logCacheControlHeaders('str', log, request, componentResponse);
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
@@ -441,7 +441,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       stream.on('finish', function () {
         logServerResponse('rsc', log, request, response!.statusCode);
-        logCacheControlHeaders('rsc', request, componentResponse);
+        logCacheControlHeaders('rsc', log, request, componentResponse);
       });
     }
   };

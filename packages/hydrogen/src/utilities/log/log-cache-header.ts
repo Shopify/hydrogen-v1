@@ -4,8 +4,7 @@ import {QueryKey} from '../../types';
 import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
 
-import type {RenderType} from './log';
-import {getRuntimeLogger} from '../../framework/runtime';
+import type {Logger, RenderType} from './log';
 
 export type QueryCacheControlHeaders = {
   name: string;
@@ -25,10 +24,10 @@ export function collectQueryCacheControlHeaders(
 
 export function logCacheControlHeaders(
   type: RenderType,
+  log: Logger,
   request: ServerComponentRequest,
   response?: ServerComponentResponse
 ) {
-  const log = getRuntimeLogger();
   if (!log?.options?.showCacheControlHeader) {
     return;
   }
