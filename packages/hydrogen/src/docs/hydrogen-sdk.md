@@ -347,7 +347,7 @@ Hydrogen includes the following utilities to help speed up your development proc
   </tr>
   <tr>
     <td><a href="/api/hydrogen/utilities/log">log</a></td>
-    <td>A utility for logging debugging, warning, and error information about the application</td>
+    <td>Logs debugging, warning, and error information about the application.</td>
   </tr>
 </table>
 

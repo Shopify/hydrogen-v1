@@ -34,7 +34,7 @@ Hydrogen includes the following utilities:
   </tr>
   <tr>
     <td><a href="/api/hydrogen/utilities/log">log</a></td>
-    <td>A utility for logging debugging, warning, and error information about the application</td>
+    <td>Logs debugging, warning, and error information about the application.</td>
   </tr>
 </table>
 
