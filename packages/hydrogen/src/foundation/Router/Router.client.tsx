@@ -38,13 +38,16 @@ export const Router: FC<{history?: BrowserHistory}> = ({
 
   useEffect(() => {
     const unlisten = history.listen(({location: newLocation}) => {
-      setServerState({pathname: newLocation.pathname});
+      setServerState({
+        pathname: newLocation.pathname,
+        search: location.search || undefined,
+      });
 
       setLocation(newLocation);
     });
 
     return () => unlisten();
-  }, []);
+  }, [history]);
 
   return (
     <RouterContext.Provider
