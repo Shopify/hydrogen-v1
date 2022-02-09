@@ -423,7 +423,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     const log = getLoggerFromContext(request);
     const state = JSON.parse(url.searchParams.get('state') || '{}');
 
-    const {ReactApp} = buildReactApp({
+    const {ReactApp, componentResponse} = buildReactApp({
       App,
       state,
       request,
@@ -462,7 +462,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       stream.on('finish', function () {
         logServerResponse('rsc', log, request, response!.statusCode);
-        logCacheControlHeaders('rsc', log, request);
+        logCacheControlHeaders('rsc', log, request, componentResponse);
       });
     }
   };
