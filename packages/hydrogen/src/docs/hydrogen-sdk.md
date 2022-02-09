@@ -330,6 +330,10 @@ Hydrogen includes the following utilities to help speed up your development proc
     <th>Description</th>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/utilities/flattenconnection">flattenConnection</a></td>
+    <td>Transforms a connection object into a flat array.</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/utilities/isclient">isClient</a></td>
     <td>Indicates if the code executed on the client.</td>
   </tr>
@@ -338,16 +342,12 @@ Hydrogen includes the following utilities to help speed up your development proc
     <td>Indicates if the code executed on the server.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/utilities/flattenconnection">flattenConnection</a></td>
-    <td>Transforms a connection object into a flat array.</td>
+    <td><a href="/api/hydrogen/utilities/log">log</a></td>
+    <td>Logs debugging, warning, and error information about the application.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/utilities/parsemetafieldvalue">parseMetafieldValue</a></td>
     <td>Parses a metafield's value from a string to a sensible type corresponding to the metafield's type.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/utilities/log">log</a></td>
-    <td>Logs debugging, warning, and error information about the application.</td>
   </tr>
 </table>
 

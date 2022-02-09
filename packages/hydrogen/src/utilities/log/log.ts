@@ -3,7 +3,7 @@ import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 
 /** The `log` utility is a function that's used for logging debugging, warning, and error information about the application.
- * Use this utility by importing `log` or `@shopify/hydrogen`, or by using a `log` prop passed to each page
+ * Use this utility by importing `log` from `@shopify/hydrogen`, or by using a `log` prop passed to each page
  * component. We recommend using a `log` prop passed to each page because it will associated your log to the
  * current request in progress.
  */
