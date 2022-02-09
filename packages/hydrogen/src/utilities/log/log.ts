@@ -2,9 +2,10 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 
-/** A utility for logging debugging, warning, and error information about the application.
- * Use by importing `log` `@shopify/hydrogen` or by using a `log` prop passed to each page
- * component. Using the latter is ideal, because it will ty your log to the current request in progress.
+/** The `log` utility is a function that's used for logging debugging, warning, and error information about the application.
+ * Use this utility by importing `log` or `@shopify/hydrogen`, or by using a `log` prop passed to each page
+ * component. We recommend using a `log` prop passed to each page because it will associated your log to the
+ * current request in progress.
  */
 
 export interface Logger {

@@ -1,6 +1,6 @@
 ## Swap logger implementation
 
-Hydrogen includes a default logger implementation that can be swapped for a logger of your choice. Simply call `setLogger` with your own implementation.
+Hydrogen includes a default logger implementation that can be swapped for a logger of your choice. You can call `setLogger` with your own implementation.
 The first argument of each log method will contain a `request` object if the log was called in the same context as a request:
 
 ```js
