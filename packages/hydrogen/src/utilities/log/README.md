@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/utilities/isServer and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
-The `log` utility is a function that's used for logging debugging, warning, and error information about the application. Use this utility by importing `log` from `@shopify/hydrogen`, or by using a `log` prop passed to each page component. We recommend using a `log` prop passed to each page because it will associate your log to the current request in progress.
+The `log` utility is a function that's used for logging debugging, warning, and error information about the application. Use this utility by importing `log` from `@shopify/hydrogen`, or by using a `log` prop passed to each page component. We recommend using the `log` prop passed to each page because it will associate your log to the current request in progress.
 
 ## Example code
 
@@ -44,19 +44,19 @@ import {setLogger} from '@shopify/hydrogen';
 import App from './App.server';
 
 setLogger({
-  trace({request}, ...args) {
+  trace(request, ...args) {
     // Call your own logger.
   },
-  debug({request}, ...args) {
+  debug(request, ...args) {
     // Call your own logger.
   },
-  warn({request}, ...args) {
+  warn(request, ...args) {
     // Call your own logger.
   },
-  error({request}, ...args) {
+  error(request, ...args) {
     // Call your own logger.
   },
-  fatal({request}, ...args) {
+  fatal(request, ...args) {
     // Call your own logger.
   },
 });

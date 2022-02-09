@@ -8,19 +8,19 @@ import {setLogger} from '@shopify/hydrogen';
 import App from './App.server';
 
 setLogger({
-  trace({request}, ...args) {
+  trace(request, ...args) {
     // Call your own logger.
   },
-  debug({request}, ...args) {
+  debug(request, ...args) {
     // Call your own logger.
   },
-  warn({request}, ...args) {
+  warn(request, ...args) {
     // Call your own logger.
   },
-  error({request}, ...args) {
+  error(request, ...args) {
     // Call your own logger.
   },
-  fatal({request}, ...args) {
+  fatal(request, ...args) {
     // Call your own logger.
   },
 });
