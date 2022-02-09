@@ -14,14 +14,13 @@ export function ProductSeo({
   description,
   seo,
   vendor,
-  images,
+  featuredImage,
   variants,
 }: Product) {
   const seoTitle = seo?.title ?? title;
   const seoDescription = seo?.description ?? description;
 
   let firstVariantPrice;
-  let firstImage;
 
   const productSchema = {
     '@context': 'http://schema.org/',
@@ -35,10 +34,7 @@ export function ProductSeo({
     url,
   } as any;
 
-  if (images.edges.length > 0) {
-    firstImage = images.edges[0]?.node;
-    productSchema.image = firstImage.url;
-  }
+  productSchema.image = featuredImage.url;
 
   if (variants.edges.length > 0) {
     const firstVariant = variants.edges[0].node;
@@ -94,7 +90,7 @@ export function ProductSeo({
       <TitleSeo title={seoTitle} />
       <DescriptionSeo description={seoDescription} />
       <TwitterSeo title={seoTitle} description={seoDescription} />
-      {firstImage && <ImageSeo {...firstImage} />}
+      {featuredImage && <ImageSeo {...featuredImage} />}
     </>
   );
 }

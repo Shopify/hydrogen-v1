@@ -38,7 +38,7 @@ export interface Product {
     description?: Description;
   };
   vendor: string;
-  images: {edges: {node: Image}[]};
+  featuredImage: Image;
   variants: {
     edges: {
       node: {
