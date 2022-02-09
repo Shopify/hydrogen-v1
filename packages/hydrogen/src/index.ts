@@ -1,6 +1,7 @@
 export * from './foundation/';
 export * from './components/';
 export * from './hooks/';
+export * from './handle-request';
 
 export {
   flattenConnection,

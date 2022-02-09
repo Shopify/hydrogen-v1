@@ -3,7 +3,7 @@ import http from 'http';
 import {ViteDevServer} from 'vite';
 import {ShopifyConfig} from '../types';
 import {graphiqlHtml} from './graphiql';
-import handleEvent from '../handle-event';
+import {handleRequest} from '../handle-request';
 
 type HydrogenMiddlewareArgs = {
   dev?: boolean;
@@ -86,36 +86,20 @@ export function hydrogenMiddleware({
         });
       }
 
-      /**
-       * Dynamically import ServerComponentResponse after the `fetch`
-       * polyfill has loaded above.
-       */
-      const {ServerComponentRequest} = await import(
-        './Hydration/ServerComponentRequest.server'
-      );
-
-      const eventResponse = await handleEvent(
-        /**
-         * Mimic a `FetchEvent`
-         */
-        {},
-        {
-          request: new ServerComponentRequest(request),
-          entrypoint: await getServerEntrypoint(),
-          indexTemplate,
-          streamableResponse: response,
-          dev,
-          cache,
-          event: {},
-        }
-      );
+      const eventResponse = await handleRequest(request, {
+        dev,
+        cache,
+        indexTemplate,
+        streamableResponse: response,
+        entrypoint: await getServerEntrypoint(),
+      });
 
       /**
        * If a `Response` was returned, that means it was not streamed.
        * Convert the response into a proper Node.js response.
        */
       if (eventResponse) {
-        eventResponse.headers.forEach((value, key) => {
+        eventResponse.headers.forEach((value: string, key: string) => {
           response.setHeader(key, value);
         });
 

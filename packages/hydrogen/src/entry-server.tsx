@@ -67,8 +67,7 @@ interface HandleEventOptions {
   context?: RuntimeContext;
   nonce?: string;
   entrypoint: any;
-  event: any;
-  assetHandler?: (event: any, url: URL) => Promise<Response>;
+  assetHandler?: (url: URL) => Promise<Response>;
 }
 
 export interface HandleRequest {
@@ -88,7 +87,6 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
       context,
       nonce,
       assetHandler,
-      event,
     }
   ) {
     const request = new ServerComponentRequest(rawRequest);
@@ -97,7 +95,7 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
     const componentResponse = new ServerComponentResponse();
 
     if (/\.(png|jpe?g|gif|css|js|svg|ico|map)$/i.test(url.pathname)) {
-      if (assetHandler) return assetHandler(event, url);
+      if (assetHandler) return assetHandler(url);
       log.warn('Asset file detected but assetHandler was not provided');
 
       if (__WORKER__) return new Response(null, {status: 404});
