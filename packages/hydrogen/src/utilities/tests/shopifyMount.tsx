@@ -30,6 +30,6 @@ export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {
     locale: config.defaultLocale ?? DEFAULT_LOCALE,
     storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
     storefrontToken: config.storefrontToken ?? 'abc123',
-    storefrontApiVersion: config.storefrontApiVersion ?? 'unstable',
+    storefrontApiVersion: config.storefrontApiVersion ?? '2022-01',
   };
 }
