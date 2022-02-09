@@ -198,7 +198,7 @@ import LoadingFallback from './components/LoadingFallback';
 export default function App({log, pages, ...serverState}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <AppClient helmetContext={serverState.helmetContext}>
+      <AppClient>
         <DefaultSeo />
         <DefaultRoutes
           pages={pages}

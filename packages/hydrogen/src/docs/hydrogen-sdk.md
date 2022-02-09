@@ -53,6 +53,11 @@ Primitive components and hooks are the building blocks for different component t
     <td>Not applicable</td>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
+    <td>Renders SEO information on a webpage.</td>
+    <td>Not applicable</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/components/primitive/shoppaybutton">ShopPayButton</a></td>
     <td>Renders a button that redirects to the Shop Pay checkout.</td>
     <td>Not applicable</td>
@@ -73,6 +78,8 @@ Primitive components and hooks are the building blocks for different component t
 
 [ShopifyProvider](/api/hydrogen/components/global/shopifyprovider) is a global Hydrogen component that wraps your entire app. You should place it in your app's entry point component. For example, your app's entry point component might be `<App>`.
 
+The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+
 The `ShopifyProvider` component relates to the following global hooks that you can use to fetch data from server components:
 
 <table>
@@ -81,8 +88,8 @@ The `ShopifyProvider` component relates to the following global hooks that you c
     <th>Description</th>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
-    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
+    <td>Use to get current url in server or client component.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useserverstate">useServerState</a></td>
@@ -95,6 +102,14 @@ The `ShopifyProvider` component relates to the following global hooks that you c
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshopquery">useShopQuery</a></td>
     <td>Make server-only GraphQL queries to the <a href="/api/storefront">Storefront API</a>.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
+    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
+    <td>Retrieve the current URL in a server or client component.</td>
   </tr>
 </table>
 

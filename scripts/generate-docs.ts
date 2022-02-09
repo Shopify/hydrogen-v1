@@ -112,6 +112,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/ShopPayButton',
         'components/UnitPrice',
         'components/Video',
+        'components/Seo',
       ],
       tables: [primitiveComponentsTable],
     }),
@@ -207,6 +208,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'foundation/useServerState',
         'foundation/useShop',
         'foundation/useQuery',
+        'foundation/useUrl',
         'hooks/useShopQuery',
       ],
       intro:

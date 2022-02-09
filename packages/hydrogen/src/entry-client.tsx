@@ -2,20 +2,12 @@ import React, {Suspense, useState} from 'react';
 // @ts-ignore
 import {hydrateRoot} from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
-import type {ClientHandler, ShopifyConfig} from './types';
+import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
-import {
-  ServerStateProvider,
-  ServerStateRouter,
-  ShopifyProvider,
-} from './client';
-import Boomerang from './foundation/Boomerang/Boomerang.client';
+import {ServerStateProvider, ServerStateRouter} from './client';
 
-const renderHydrogen: ClientHandler = async (
-  ClientWrapper,
-  {shopifyConfig}
-) => {
+const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   const root = document.getElementById('root');
 
   if (!root) {
@@ -29,7 +21,7 @@ const renderHydrogen: ClientHandler = async (
     root,
     <ErrorBoundary FallbackComponent={Error}>
       <Suspense fallback={null}>
-        <Content clientWrapper={ClientWrapper} shopifyConfig={shopifyConfig} />
+        <Content clientWrapper={ClientWrapper} />
       </Suspense>
     </ErrorBoundary>
   );
@@ -37,13 +29,7 @@ const renderHydrogen: ClientHandler = async (
 
 export default renderHydrogen;
 
-function Content({
-  clientWrapper: ClientWrapper,
-  shopifyConfig,
-}: {
-  clientWrapper: any;
-  shopifyConfig: ShopifyConfig;
-}) {
+function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
   const [serverState, setServerState] = useState({
     pathname: window.location.pathname,
     search: window.location.search,
@@ -51,18 +37,15 @@ function Content({
   const response = useServerResponse(serverState);
 
   return (
-    <ShopifyProvider shopifyConfig={shopifyConfig}>
-      <ServerStateProvider
-        serverState={serverState}
-        setServerState={setServerState}
-      >
-        <BrowserRouter>
-          <ServerStateRouter />
-          <ClientWrapper>{response.readRoot()}</ClientWrapper>
-        </BrowserRouter>
-        <Boomerang storeDomain={shopifyConfig.storeDomain} />
-      </ServerStateProvider>
-    </ShopifyProvider>
+    <ServerStateProvider
+      serverState={serverState}
+      setServerState={setServerState}
+    >
+      <BrowserRouter>
+        <ServerStateRouter />
+        <ClientWrapper>{response.readRoot()}</ClientWrapper>
+      </BrowserRouter>
+    </ServerStateProvider>
   );
 }
 

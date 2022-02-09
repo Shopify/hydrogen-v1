@@ -23,8 +23,8 @@ Hydrogen provides the following global hooks that you can use to fetch data from
     <th>Description</th>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
-    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
+    <td>Use to get current url in server or client component.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useserverstate">useServerState</a></td>
@@ -37,6 +37,14 @@ Hydrogen provides the following global hooks that you can use to fetch data from
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshopquery">useShopQuery</a></td>
     <td>Make server-only GraphQL queries to the <a href="/api/storefront">Storefront API</a>.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
+    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
+    <td>Retrieve the current URL in a server or client component.</td>
   </tr>
 </table>
 

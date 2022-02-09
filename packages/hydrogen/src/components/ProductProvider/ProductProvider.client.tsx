@@ -1,7 +1,7 @@
 import React, {ReactNode, useMemo} from 'react';
 import {useProductOptions, useParsedMetafields} from '../../hooks';
 import {flattenConnection} from '../../utilities';
-import {ProductContext} from './context';
+import {ProductContext, ProductContextType} from './context';
 import {Product} from './types';
 import {ProductProviderFragment as Fragment} from '../../graphql/graphql-constants';
 
@@ -42,7 +42,7 @@ export function ProductProvider({
   });
   const metafields = useParsedMetafields(product.metafields);
 
-  const providerValue = useMemo(() => {
+  const providerValue = useMemo<ProductContextType>(() => {
     return {
       ...product,
       metafields,
