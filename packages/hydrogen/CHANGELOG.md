@@ -61,6 +61,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: ensure youtube external videos are embed compatible urls
 - feat: pass HYDROGEN_ASSET_BASE_URL into config to set base URL for compiled assets
 - dx [breaking change]: `<Product />` and `<CartLine />` aliases have been removed; use the original components `<ProductProvider />` and `<CartLineProvider />` instead. Their nested component aliases, such as `<Product.Image />`, have also been removed; in this example you should use `<ProductImage />`.
+- feat: remove React Router on the client and introduce Hydrogen the `<Link>` componenent and `useNavigate` hook
 
 ## 0.10.1 - 2022-01-26
 
