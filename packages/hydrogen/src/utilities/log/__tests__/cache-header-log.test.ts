@@ -26,9 +26,6 @@ describe('cache header log', () => {
       },
     };
 
-    global.Date.now = () => 2100;
-    global.performance.now = () => 2100;
-
     resetLogger();
   });
 
@@ -48,6 +45,29 @@ describe('cache header log', () => {
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
       `"┌── Cache control header for http://localhost:3000/"`
+    );
+    expect(mockLogger.debug.mock.calls[1][0]).toMatchInlineSnapshot(
+      `"│ public, max-age=1, stale-while-revalidate=9"`
+    );
+    expect(mockLogger.debug.mock.calls[2][0]).toMatchInlineSnapshot(`"└──"`);
+  });
+
+  it('should log cache control header for sub request', () => {
+    const request = {
+      url: 'http://localhost:3000/react?state=%7B%22pathname%22%3A%22%2F%22%2C%22search%22%3A%22%22%7D',
+      ctx: {
+        queryCacheControl: [],
+      },
+    } as ServerComponentRequest;
+    const response = {
+      cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
+    } as ServerComponentResponse;
+
+    logCacheControlHeaders('rsc', mockLogger, request, response);
+
+    expect(mockLogger.debug).toHaveBeenCalled();
+    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
+      `"┌── Cache control header for {\\"pathname\\":\\"/\\",\\"search\\":\\"\\"}"`
     );
     expect(mockLogger.debug.mock.calls[1][0]).toMatchInlineSnapshot(
       `"│ public, max-age=1, stale-while-revalidate=9"`
