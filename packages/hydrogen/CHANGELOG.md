@@ -47,6 +47,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - feat: added `useUrl` hook that allows the consumer to get the current url in server or client component
 - fix: fix bug where search param is not being pass along during RSC streaming call [#623](https://github.com/Shopify/hydrogen/pull/623)
 - feat: expect collection seo by default
+- fix: Clear browser fetch cache by @wizardlyhel in #591
 
 ## 0.10.1 - 2022-01-26
 
