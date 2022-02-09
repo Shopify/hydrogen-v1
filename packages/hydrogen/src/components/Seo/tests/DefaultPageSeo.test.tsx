@@ -60,7 +60,7 @@ describe('<DefaultPageSeo />', () => {
     jest.spyOn(console, 'error').mockImplementation((...args: any[]) => {
       const [firstArgument] = args;
 
-      // If the first argument is an error, and it doesn't match our regex.
+      // If the first argument is an error, and it matches our regex.
       if (
         typeof firstArgument === 'string' &&
         ERROR_TO_IGNORE.test(firstArgument)
