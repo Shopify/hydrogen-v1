@@ -23,17 +23,18 @@ describe('useUrl()', () => {
   });
 
   describe('SSR', () => {
+    let mockUrl = '';
+
     beforeAll(() => {
-      jest.doMock('../../../utilities/meta-env-ssr', () => ({
+      jest.doMock('../../ssr-interop', () => ({
         META_ENV_SSR: true,
+        useEnvContext: () => ({url: mockUrl}),
       }));
     });
 
     it('returns url object using useServerRequest url', () => {
-      const mockUrl =
+      mockUrl =
         'https://hydrogen-preview.myshopify.com/collections/freestyle-collection';
-
-      useServerRequestMock.mockReturnValue({url: mockUrl});
 
       const callbackSpy = jest.fn();
 
@@ -42,10 +43,8 @@ describe('useUrl()', () => {
     });
 
     it('returns url object using a parsed url from state param when the pathname is /react', () => {
-      const mockUrl =
+      mockUrl =
         'https://hydrogen-preview.myshopify.com/react?state=%7B%22pathname%22%3A%22%2Fproducts%2Fmail-it-in-freestyle-snowboard%3Ftest%3D123%26something-else%3Danother';
-
-      useServerRequestMock.mockReturnValue({url: mockUrl});
 
       const callbackSpy = jest.fn();
 
@@ -60,11 +59,6 @@ describe('useUrl()', () => {
 
   describe('non SSR', () => {
     const oldLocation = window.location;
-    beforeAll(() => {
-      jest.doMock('../../../utilities/meta-env-ssr', () => ({
-        META_ENV_SSR: false,
-      }));
-    });
 
     beforeEach(() => {
       Object.defineProperty(window, 'location', {
