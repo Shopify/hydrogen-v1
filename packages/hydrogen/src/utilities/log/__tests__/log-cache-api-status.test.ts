@@ -29,7 +29,7 @@ describe('cache header log', () => {
 
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"[Cache] HIT    query shopInfo"`
+      `"[90m[Cache] HIT    query shopInfo[39m"`
     );
   });
 });
