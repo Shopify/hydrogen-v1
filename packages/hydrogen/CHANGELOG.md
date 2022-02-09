@@ -51,6 +51,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: Clear browser fetch cache by @wizardlyhel in [#591](https://github.com/Shopify/hydrogen/pull/591)
 - refactor: use featureImage instead of images(first:1) on product query
 - fix: target future release to use '2022-01' API Version
+- feat: pass HYDROGEN_ASSET_BASE_URL into config to set base URL for compiled assets
 
 ## 0.10.1 - 2022-01-26
 
