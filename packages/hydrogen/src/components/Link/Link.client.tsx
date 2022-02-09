@@ -1,15 +1,25 @@
 import React, {useCallback} from 'react';
 import {useRouter} from '../Router';
 import {createPath} from 'history';
+import {useNavigate} from '../../hooks/useNavigate';
 
-interface LinkProps
+export interface LinkProps
+  /** All properties available to an `<a>` element are available. See [anchor element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).*/
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  replace?: boolean;
-  clientState?: any;
+  /** The destination URL that the Link points to. This will be the `href` attribute of the underlying `<a>` element. */
   to: string;
+  /** Instead of pushing state, replace state. See [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). */
+  replace?: boolean;
+  /** Pass custom client state with the navigation. */
+  clientState?: any;
+  /** Reload the whole document on navigation. */
   reloadDocument?: boolean;
 }
 
+/**
+ * The Link component lets your users navigate from one page to another.
+ * It renders an accessible `<a>` element. Blah
+ */
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   function Link(props, ref) {
     const navigate = useNavigate();
@@ -59,26 +69,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     );
   }
 );
-
-type NavigationOptions = {
-  replace?: boolean;
-  reloadDocument?: boolean;
-  clientState?: any;
-};
-
-export function useNavigate() {
-  const router = useRouter();
-
-  return (
-    path: string,
-    options: NavigationOptions = {replace: false, reloadDocument: false}
-  ) => {
-    // @todo wait for RSC and then change focus for a11y?
-    if (options?.replace)
-      router.history.replace(path, options?.clientState || {});
-    else router.history.push(path, options?.clientState || {});
-  };
-}
 
 function isModifiedEvent(event: React.MouseEvent) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);

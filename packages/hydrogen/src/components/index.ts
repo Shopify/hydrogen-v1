@@ -1,4 +1,4 @@
-export {Link, useNavigate} from './Link';
+export {Link} from './Link';
 export type {MediaFileProps} from './MediaFile';
 export {MediaFile, MediaFileFragment} from './MediaFile';
 export type {VideoProps} from './Video';
@@ -62,3 +62,4 @@ export {ShopPayButton} from './ShopPayButton';
 export {useAvailableCountries} from '../hooks/useAvailableCountries';
 export {useCountry} from '../hooks/useCountry';
 export {Seo} from './Seo';
+export {useNavigate} from '../hooks/useNavigate';

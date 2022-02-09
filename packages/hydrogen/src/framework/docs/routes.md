@@ -74,6 +74,63 @@ export default function({request}) {
 
 {% endcodeblock %}
 
+## Navigating
+
+### Navigating between routes with `<Link>`
+
+Used the `Link` component to navigate between routes. The `link` component renders an underlying `<a>` element. Because of this, all properties available to an `<a>` element are also available to `Link`. See [`<a>` element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).
+
+Additional props for `link`:
+
+| Name            | Type                 | Description                                                                                                                                               |
+| --------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| to              | <code>string</code>  | The destination URL that the Link points to. This will be the `href` attribute of the underlying `<a>` element.                                           |
+| replace?        | <code>boolean</code> | Instead of pushing state, replace state. See [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). |
+| clientState?    | <code>any</code>     | Pass custom client state with the navigation.                                                                                                             |
+| reloadDocument? | <code>boolean</code> | Reload the whole document on navigation.                                                                                                                  |
+
+{% codeblock file, filename: 'index.server.jsx' %}
+
+```jsx
+import {Link} from '@shopify/hydrogen';
+
+export default function Index() {
+  return <Link to="/products/hydrogen">Hydrogen</Link>;
+}
+```
+
+{% endcodeblock %}
+
+### Navigating between routes with `useNavigate`
+
+Use the `useNavigate` hook to imperativly navigate between routes. Make sure to use this only where appropriate. Generally you should use `<Link>` instead, because it provides standard browser accessibility functionality, like cmd+click and right click to open.
+
+`useNavigate` is a hook that returns a function. That function takes two parameters:
+
+`path` - The path you wish to navigate to
+`options` - An config object that can have `replace`, `reloadDocument`, and `clientState`. Similar to the options available in `<Link>`
+
+{% codeblock file, filename: 'component.client.jsx' %}
+
+```jsx
+import {useNavigate} from '@shopify/hydrogen/client';
+
+function addToCart() { ... }
+
+export default function ClientComponent() {
+  const navigate = useNavigate();
+
+  async function clickAddToCart() {
+    await addToCart();
+    navigate('/success', {replace: true});
+  }
+
+  return <Button onClick={clickAddToCart}>Add to Cart</Button>;
+}
+```
+
+{% endcodeblock %}
+
 ## API routes
 
 > Note:
