@@ -39,6 +39,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `<Metafield>` Use `useParsedMetafields()` for customization
   - `<ProductMetafield>` Use `useParsedMetafields()` for customization
   - `<SelectedVariantMetafield>` Use `useParsedMetafields()` for customization
+  - `<UnitPrice>` Use `useMoney()` for customization
 - refactor: `<Metafield>` now renders `ratings` as a `<span>` with text instead of stars; `multi_line_text_field` inside of a `<span>` instead of a `<div>`
 - Fix: add charset to content type in HTML responses
 - Fix header shift when cart is opened by @Francismori7 in #600
