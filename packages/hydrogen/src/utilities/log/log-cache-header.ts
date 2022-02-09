@@ -3,6 +3,7 @@ import {ServerComponentResponse} from '../../framework/Hydration/ServerComponent
 import {QueryKey} from '../../types';
 import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
+import {gray} from 'kolorist';
 
 import type {Logger, RenderType} from './log';
 
@@ -32,9 +33,11 @@ export function logCacheControlHeaders(
     return;
   }
 
-  log.debug(`┌── Cache control header for ${parseUrl(type, request.url)}`);
+  log.debug(
+    gray(`┌── Cache control header for ${parseUrl(type, request.url)}`)
+  );
   if (response) {
-    log.debug(`│ ${response.cacheControlHeader}`);
+    log.debug(gray(`│ ${response.cacheControlHeader}`));
   }
 
   const queryList = request.ctx.queryCacheControl;
@@ -45,15 +48,17 @@ export function logCacheControlHeaders(
   );
 
   if (queryList.length > 0) {
-    log.debug('│');
+    log.debug(gray('│'));
     queryList.forEach((query: QueryCacheControlHeaders) => {
       log.debug(
-        `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${
-          query.header
-        }`
+        gray(
+          `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${
+            query.header
+          }`
+        )
       );
     });
   }
 
-  log.debug('└──');
+  log.debug(gray('└──'));
 }
