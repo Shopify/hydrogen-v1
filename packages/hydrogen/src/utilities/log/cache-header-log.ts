@@ -39,13 +39,14 @@ export function logCacheControlHeaders(
 
   const queryList = request.ctx.queryCacheControl;
   const longestQueryNameLength = queryList.reduce(
-    (max, {name}) => Math.max(max, name.length),
+    (max: number, query: QueryCacheControlHeaders) =>
+      Math.max(max, query.name.length),
     0
   );
 
   if (queryList.length > 0) {
     log.debug('│');
-    queryList.forEach((query) => {
+    queryList.forEach((query: QueryCacheControlHeaders) => {
       log.debug(
         `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${
           query.header
