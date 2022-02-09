@@ -8,7 +8,7 @@ import {
   setItemInCache,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
-import {useRequestCacheData} from '../ServerRequestProvider';
+import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 import {collectQueryCacheControlHeaders} from '../../utilities/log';
 
 export interface HydrogenUseQueryOptions {
@@ -48,6 +48,10 @@ function cachedQueryFnBuilder<T>(
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
   async function cachedQueryFn() {
+    // Call this hook before running any async stuff
+    // to prevent losing the current React cycle.
+    const request = useServerRequest();
+
     const cacheResponse = await getItemFromCache(key);
 
     async function generateNewOutput() {
@@ -58,6 +62,7 @@ function cachedQueryFnBuilder<T>(
       const [output, response] = cacheResponse;
 
       collectQueryCacheControlHeaders(
+        request,
         key,
         response.headers.get('cache-control')
       );
@@ -102,6 +107,7 @@ function cachedQueryFnBuilder<T>(
     );
 
     collectQueryCacheControlHeaders(
+      request,
       key,
       generateSubRequestCacheControlHeader(resolvedQueryOptions?.cache)
     );

@@ -6,31 +6,20 @@ import {findQueryName, parseUrl} from './utils';
 
 import type {Logger, RenderType} from './log';
 
-type QueryCacheControlHeaders = {
-  [key: string]: {
-    name: string;
-    header: string | null;
-  };
+export type QueryCacheControlHeaders = {
+  name: string;
+  header: string | null;
 };
 
-let queryCacheControlHeaders: QueryCacheControlHeaders = {};
-let longestQueryNameLength = 0;
-
 export function collectQueryCacheControlHeaders(
+  request: ServerComponentRequest,
   queryKey: QueryKey,
   cacheControlHeader: string | null
 ) {
-  const cacheKey = hashKey(queryKey);
-  const queryName = findQueryName(cacheKey);
-
-  longestQueryNameLength =
-    longestQueryNameLength < queryName.length
-      ? queryName.length
-      : longestQueryNameLength;
-  queryCacheControlHeaders[cacheKey] = {
-    name: queryName,
+  request.ctx.queryCacheControl.push({
+    name: findQueryName(hashKey(queryKey)),
     header: cacheControlHeader,
-  };
+  });
 }
 
 export function logCacheControlHeaders(
@@ -48,11 +37,15 @@ export function logCacheControlHeaders(
     log.debug(`│ ${response.cacheControlHeader}`);
   }
 
-  const queryList = Object.keys(queryCacheControlHeaders);
+  const queryList = request.ctx.queryCacheControl;
+  const longestQueryNameLength = queryList.reduce(
+    (max, {name}) => Math.max(max, name.length),
+    0
+  );
+
   if (queryList.length > 0) {
     log.debug('│');
-    queryList.forEach((cacheKey) => {
-      const query = queryCacheControlHeaders[cacheKey];
+    queryList.forEach((query) => {
       log.debug(
         `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${
           query.header
@@ -62,5 +55,4 @@ export function logCacheControlHeaders(
   }
 
   log.debug('└──');
-  queryCacheControlHeaders = {};
 }
