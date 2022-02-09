@@ -26,7 +26,7 @@ export default (
         return await server.transformIndexHtml(url, indexHtml);
       }
 
-      const {HYDROGEN_SERVER_ENTRY} = await polyfillOxygenEnv(server.config);
+      await polyfillOxygenEnv(server.config);
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
       // By running this middleware first, we avoid that.
@@ -47,7 +47,7 @@ export default (
             indexTemplate: getIndexTemplate,
             getServerEntrypoint: async () =>
               await server.ssrLoadModule(
-                HYDROGEN_SERVER_ENTRY || '/src/entry-server'
+                process.env.HYDROGEN_SERVER_ENTRY || '/src/entry-server'
               ),
             devServer: server,
             cache: pluginOptions?.devCache
@@ -78,6 +78,4 @@ async function polyfillOxygenEnv(config: ResolvedConfig) {
   }
 
   globalThis.Oxygen = {env};
-
-  return env;
 }
