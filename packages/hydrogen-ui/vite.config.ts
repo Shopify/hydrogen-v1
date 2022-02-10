@@ -6,9 +6,12 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
+      // We overwrite this later in "rollupOptions.input", but it's required here so we can't remove it / comment it out
+      entry: path.resolve(__dirname, 'src/index.client.ts'),
       name: 'hydrogen-ui',
-      fileName: (format) => `hydrogen-ui.${format}.min.js`,
+      // put [name] at the end, so that we preserve the ".client.js" and ".server.js" naming conventions required for RSC
+      fileName: () => `[name].js`,
+      formats: ['es'],
     },
     sourcemap: true,
     // TODO: use browserslist as the source, parse it, and generate these strings
@@ -17,6 +20,8 @@ export default defineConfig({
     rollupOptions: {
       // don't bundle these packages into our lib
       external: ['react', 'react-dom'],
+      // the true entry points to the bundles
+      input: ['./src/index.client.ts', './src/index.server.ts'],
     },
   },
   plugins: [react()],
