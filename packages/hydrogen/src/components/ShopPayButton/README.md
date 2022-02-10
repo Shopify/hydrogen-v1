@@ -12,13 +12,6 @@ export function MyProduct({variantId}) {
 }
 ```
 
-## Props
-
-| Name       | Type                  | Description                                                               |
-| ---------- | --------------------- | ------------------------------------------------------------------------- |
-| variantIds | <code>string[]</code> | An array of IDs of the variants to purchase with Shop Pay.                |
-| className? | <code>string</code>   | A string of classes to apply to the `div` that wraps the Shop Pay button. |
-
 ## Component type
 
 The `ShopPayButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
