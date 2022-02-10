@@ -137,7 +137,7 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-To turn on logging for cache api status, call `setLoggerOptions` and set `showCacheApiStatus: true`
+To enable logging for the cache API status, call `setLoggerOptions` and set `showCacheApiStatus` to `true`:
 
 {% codeblock file, filename: '/src/entry-server.jsx' %}
 
