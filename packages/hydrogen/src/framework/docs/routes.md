@@ -76,6 +76,9 @@ export default function({request}) {
 
 ## API routes
 
+> Note:
+> If you want to use a third-party data source to render Hydrogen components, then refer to [Third-party data source](/custom-storefronts/hydrogen/data-sources#third-party-data-source). If you want to use a third-party data source and render your own component, then refer to the [useQuery](/api/hydrogen/hooks/global/usequery) hook.
+
 API routes allow you to build your API in Hydrogen. Any server component within the `src/pages` directory that exports an API function will become an API route. The following examples show some common use cases for implementing API routes.
 
 ### Examples

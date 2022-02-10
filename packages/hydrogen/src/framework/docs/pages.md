@@ -279,13 +279,9 @@ const QUERY = gql`
         node {
           updatedAt
           handle
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
+          featuredImage {
+            url
+            altText
           }
         }
       }
@@ -325,13 +321,9 @@ const QUERY = gql`
         node {
           updatedAt
           handle
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
+          featuredImage {
+            url
+            altText
           }
         }
       }
@@ -460,12 +452,8 @@ const QUERY = gql`
       title
       handle
       description
-      images(first: 1) {
-        edges {
-          node {
-            url
-          }
-        }
+      featuredImage {
+        url
       }
     }
   }

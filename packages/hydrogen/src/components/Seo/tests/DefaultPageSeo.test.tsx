@@ -44,6 +44,36 @@ const defaultProps = {
 };
 
 describe('<DefaultPageSeo />', () => {
+  beforeAll(() => {
+    // TODO: we may want to move this to our global jest setup if we find that
+    // we need to ignore a number of errors across multiple test files.
+
+    // When we mount the Helmet component in our wrapper it is rendered in a <div />.
+    // Nesting an <html /> component inside a <div /> is invalid HTML and React complains
+    // Since it’s only in test, we can safely ignore this error.
+    const ERROR_TO_IGNORE = /Warning: validateDOMNesting(...)/;
+
+    // Cache the original console error so we can pass errors through
+    // by calling it with errors that don't match our regex check.
+    const originalTestConsoleError = console.error.bind(console);
+
+    jest.spyOn(console, 'error').mockImplementation((...args: any[]) => {
+      const [firstArgument] = args;
+
+      // If the first argument is an error, and it matches our regex.
+      if (
+        typeof firstArgument === 'string' &&
+        ERROR_TO_IGNORE.test(firstArgument)
+      ) {
+        // Ignore the error by returning early.
+        return;
+      }
+
+      // Continue to report all other errors
+      originalTestConsoleError(...args);
+    });
+  });
+
   describe('default', () => {
     it("renders <meta /> with property='og:type'", () => {
       const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
