@@ -7,7 +7,9 @@ const DIR = join(tmpdir(), 'jest_playwright_global_setup');
 
 export default async function () {
   const browserServer = await chromium.launchServer({
-    headless: !process.env.VITE_DEBUG_SERVE,
+    // Change to `false` to see the chromium browser during tests
+    headless: true,
+
     args: process.env.CI
       ? ['--no-sandbox', '--disable-setuid-sandbox']
       : undefined,
