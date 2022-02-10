@@ -55,7 +55,7 @@ export function ShopPayButton({
 
   if (variantIds && variantIdsAndQuantities) {
     throw new Error(
-      `You must either pass in variantIds or variantIdsAndQuantities, but not both`
+      `You must provide either a variantIds or variantIdsAndQuantities prop, but not both in the ShopPayButton component`
     );
   }
 
