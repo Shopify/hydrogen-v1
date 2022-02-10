@@ -180,8 +180,8 @@ export default renderHydrogen(App, () => {
 
 {% endcodeblock %}
 
-You will see a cache control header report per page request and the associated queries
-that built this request and their cache control headers.
+A cache control header report displays for each page request. The report includes the associated queries
+that built the request and the cache control headers:
 
 ```sh
 ┌── Cache control header for http://localhost:3000/collections/freestyle-collection
