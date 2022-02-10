@@ -65,6 +65,7 @@ function wrapInClientProxy(_ref) {
     moduleRef.name,
     {
       value: component,
+      writable: true,
     }
   );
   return new Proxy(componentRef, {
