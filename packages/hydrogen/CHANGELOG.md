@@ -32,6 +32,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartNoteUpdateCallback`
 - Feat: Transition away from deprecated currency selector in favor of country selector
 - dx: The following money components no longer allow the function-as-a-child (also known as "render props") pattern; see #589.
+
   - `<Money>` Use `useMoney()` for customization
   - `<CartLinePrice>` Use `useMoney()` for customization
   - `<ProductPrice>` Use `useMoney()` for customization
@@ -40,6 +41,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `<ProductMetafield>` Use `useParsedMetafields()` for customization
   - `<SelectedVariantMetafield>` Use `useParsedMetafields()` for customization
   - `<UnitPrice>` Use `useMoney()` for customization
+  - `<CartLines>` Use `useCart()` for customization
+
 - refactor: `<Metafield>` now renders `ratings` as a `<span>` with text instead of stars; `multi_line_text_field` inside of a `<span>` instead of a `<div>`
 - Fix: add charset to content type in HTML responses
 - Fix header shift when cart is opened by @Francismori7 in #600
