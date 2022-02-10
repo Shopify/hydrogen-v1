@@ -163,7 +163,7 @@ The status of the cache updates on each query:
 [Cache] MISS   query Localization
 ```
 
-To turn on logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader: true`
+To enable logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader` to `true`:
 
 {% codeblock file, filename: '/src/entry-server.jsx' %}
 
