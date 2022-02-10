@@ -94,7 +94,7 @@ export function ShopPayButton({
 }
 
 /**
- * Takes in a string in the format of "gid://shopify/ProductVariant/41007289630776" and returns just the a string of the ID part at the end: "41007289630776"
+ * Takes a string in the format of "gid://shopify/ProductVariant/41007289630776" and returns a string of the ID part at the end: "41007289630776"
  */
 function getIdFromGid(id: string) {
   // atob() required for SFAPI 2022-01. Remove atob() when upgrading to 2022-04
