@@ -1,5 +1,8 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import fetch from 'node-fetch';
+import {resolve} from 'path';
+
+import {edit, untilUpdated} from '../../utilities';
 
 type TestOptions = {
   getServerUrl: () => string;
@@ -272,5 +275,29 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     expect(body).toMatch(
       /<meta\s+.*?property="type"\s+content="website"\s*\/>/
     );
+  });
+
+  describe('HMR', () => {
+    it('updates the contents when a server component file changes', async () => {
+      if (isBuild) {
+        return;
+      }
+
+      const fullPath = resolve(__dirname, '../', 'src/pages/index.server.jsx');
+      const newheading = 'Snow Devil';
+
+      await page.goto(getServerUrl());
+
+      // Assert that we have the default heading (h1)
+      await untilUpdated(() => page.textContent('h1'), 'Home');
+
+      // Edit the heading (h1) in the JSX code
+      // Assert the page updated with the new heading
+      await edit(
+        fullPath,
+        (code) => code.replace('<h1>Home', `<h1>${newheading}`),
+        async () => await untilUpdated(() => page.textContent('h1'), newheading)
+      );
+    });
   });
 }
