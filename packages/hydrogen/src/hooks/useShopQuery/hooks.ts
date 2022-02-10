@@ -57,7 +57,7 @@ export function useShopQuery<T>({
     const errorMessage = `Failed to fetch the Storefront API. ${
       // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
       fetchError.status === 403
-        ? `You may have a bad value in 'shopify.config.js'`
+        ? `Failed to fetch the Storefront API. Check that 'shopify.config.js' is using the correct API token. Also check your Hydrogen storefront settings in the Shopify admin to ensure your token has the required permissions.`
         : `${fetchError.statusText}`
     }`;
 
