@@ -116,12 +116,8 @@ const QUERY = gql`
         title
         description
       }
-      images(first: 1) {
-        edges {
-          node {
-            url
-          }
-        }
+      featuredImage {
+        url
       }
       ...ProductProviderFragment
     }

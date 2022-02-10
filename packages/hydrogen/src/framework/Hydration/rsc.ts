@@ -84,13 +84,12 @@ export function useServerResponse(state: any) {
     );
   }
 
+  cache.clear();
   cache.set(key, response);
   return response;
 }
 
 export function useRefresh() {
   const refreshCache = unstable_useCacheRefresh();
-  return function refresh(key: string, seededResponse: any) {
-    refreshCache(createResponseCache, new Map([[key, seededResponse]]));
-  };
+  refreshCache();
 }
