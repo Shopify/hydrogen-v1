@@ -13,7 +13,7 @@ export type ShopPayButtonProps = {
   className?: string;
 } & (
   | {
-      /** An array of IDs of the variants to purchase with Shop Pay. Will only ever have a quantity of 1 for each variant; if you want to use other quantities, use 'variantIdsAndQuantities' */
+      /** An array of IDs of the variants to purchase with Shop Pay. This will only ever have a quantity of 1 for each variant. If you want to use other quantities, then use 'variantIdsAndQuantities'. */
       variantIds: string[];
       /** An array of IDs and quantities to purchase with Shop Pay. */
       variantIdsAndQuantities?: never;
