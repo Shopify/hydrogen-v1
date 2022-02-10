@@ -23,7 +23,7 @@ export function Product({product}) {
 | Name      | Type                         | Description                                                                                                                                           |
 | --------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | metafield | <code>ParsedMetafield</code> | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.                                                     |
-| as?       | <code>ElementType</code>     | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/definitions/types). |
+| as?       | <code>ElementType</code>     | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](/apps/metafields/types). |
 
 ## Default output
 
