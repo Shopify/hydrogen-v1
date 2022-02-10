@@ -154,7 +154,7 @@ export default renderHydrogen(App, () => {
 
 {% endcodeblock %}
 
-You will get cache status updates on each query.
+The status of the cache updates on each query:
 
 ```sh
 [Cache] MISS   query shopInfo
