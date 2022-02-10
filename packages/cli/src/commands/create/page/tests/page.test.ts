@@ -1,6 +1,6 @@
 import {withCli} from '../../../../testing';
 
-describe('page', () => {
+describe.skip('page', () => {
   it('scaffolds a basic JSX page with a name', async () => {
     await withCli(async ({run, fs}) => {
       await run('create page', {
