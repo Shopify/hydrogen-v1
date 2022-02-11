@@ -47,7 +47,7 @@ export default async function handleEvent(
   setContext(context);
   setConfig({dev});
 
-  const isReactHydrationRequest = url.pathname === '/react';
+  const isReactHydrationRequest = url.pathname === '/__rsc';
 
   const template =
     typeof indexTemplate === 'function'

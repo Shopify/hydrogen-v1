@@ -80,7 +80,7 @@ export function useServerResponse(state: any) {
 
     // Request a new flight response.
     response = createFromFetch(
-      fetch('/react?state=' + encodeURIComponent(key))
+      fetch('/__rsc?state=' + encodeURIComponent(key))
     );
   }
 
