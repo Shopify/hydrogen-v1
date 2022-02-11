@@ -12,9 +12,17 @@ export function CartShopPayButton({
 }: Omit<ShopPayButtonProps, 'variantIds'>) {
   const {lines} = useCart();
 
-  const ids = useMemo(() => {
-    return lines.map((line) => line.merchandise.id);
+  const idsAndQuantities = useMemo(() => {
+    return lines.map((line) => ({
+      id: line.merchandise.id,
+      quantity: line.quantity,
+    }));
   }, [lines]);
 
-  return <ShopPayButton className={className} variantIds={ids}></ShopPayButton>;
+  return (
+    <ShopPayButton
+      className={className}
+      variantIdsAndQuantities={idsAndQuantities}
+    ></ShopPayButton>
+  );
 }
