@@ -1,9 +1,9 @@
-import {getRuntimeLogger} from '../../framework/runtime';
 import {findQueryName} from './utils';
 import {gray} from 'kolorist';
+import {getLogger} from '.';
 
 export function logCacheApiStatus(status: string | null, url: string) {
-  const log = getRuntimeLogger();
+  const log = getLogger();
   if (!log?.options?.showCacheApiStatus) {
     return;
   }

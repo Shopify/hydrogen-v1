@@ -1,5 +1,5 @@
 import type {CacheOptions, QueryKey} from '../../types';
-import {log} from '../../utilities/log';
+import {getLoggerWithContext} from '../../utilities/log';
 import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
@@ -51,6 +51,7 @@ function cachedQueryFnBuilder<T>(
     // Call this hook before running any async stuff
     // to prevent losing the current React cycle.
     const request = useServerRequest();
+    const log = getLoggerWithContext(request);
 
     const cacheResponse = await getItemFromCache(key);
 

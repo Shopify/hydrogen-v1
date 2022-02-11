@@ -34,7 +34,7 @@ export function getCache(): Cache | undefined {
   return globalThis.__cache;
 }
 
-export function setRuntimeLogger(logger?: Logger) {
+export function setRuntimeLogger(logger: Logger) {
   globalThis.__logger = logger;
 }
 

@@ -3,8 +3,8 @@ import {
   Logger,
   logServerResponse,
   logCacheControlHeaders,
-  getLoggerFromContext,
-  log as noContextLogger,
+  getLoggerWithContext,
+  getLogger,
 } from './utilities/log';
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
@@ -27,7 +27,6 @@ import {
   rscRenderToReadableStream,
   createFromReadableStream,
 } from './streaming.server';
-import {setRuntimeLogger} from './framework/runtime';
 
 declare global {
   // This is provided by a Vite plugin
@@ -86,8 +85,8 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     if (componentResponse.customBody) {
       // This can be used to return sitemap.xml or any other custom response.
 
-      logServerResponse('ssr', log, request, status);
-      logCacheControlHeaders('ssr', log, request, componentResponse);
+      logServerResponse('ssr', request, status);
+      logCacheControlHeaders('ssr', request, componentResponse);
 
       return new Response(await componentResponse.customBody, {
         status,
@@ -115,7 +114,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           : '$&'
       );
 
-    logServerResponse('ssr', log, request, status);
+    logServerResponse('ssr', request, status);
 
     return new Response(html, {
       status,
@@ -280,11 +279,11 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
         Promise.all([writingSSR, writingRSC]).then(() => {
           // Last SSR write might be pending, delay closing the writable one tick
           setTimeout(() => writable.close(), 0);
-          logServerResponse('str', log, request, responseOptions.status);
+          logServerResponse('str', request, responseOptions.status);
         });
       } else {
         writable.close();
-        logServerResponse('str', log, request, responseOptions.status);
+        logServerResponse('str', request, responseOptions.status);
       }
 
       if (await isStreamingSupported()) {
@@ -315,7 +314,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
           writeHeadToServerResponse(response, componentResponse, log, didError);
 
-          logServerResponse('str', log, request, response.statusCode);
+          logServerResponse('str', request, response.statusCode);
 
           if (isRedirect(response)) {
             // Return redirects early without further rendering/streaming
@@ -343,13 +342,13 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           log.trace('node complete stream');
           clearTimeout(streamTimeout);
 
-          logCacheControlHeaders('str', log, request, componentResponse);
+          logCacheControlHeaders('str', request, componentResponse);
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
           writeHeadToServerResponse(response, componentResponse, log, didError);
 
-          logServerResponse('str', log, request, response.statusCode);
+          logServerResponse('str', request, response.statusCode);
 
           if (isRedirect(response)) {
             // Redirects found after any async code
@@ -417,14 +416,14 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       const rscReadable = rscRenderToReadableStream(AppRSC);
 
       if (isStreamable && (await isStreamingSupported())) {
-        logServerResponse('rsc', log, request, 200);
+        logServerResponse('rsc', request, 200);
         return new Response(rscReadable);
       }
 
       // Note: CFW does not support reader.piteTo nor iterable syntax
       const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-      logServerResponse('rsc', log, request, 200);
+      logServerResponse('rsc', request, 200);
 
       return new Response(bufferedBody);
     } else if (response) {
@@ -440,8 +439,8 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
         .pipe(response) as Writable;
 
       stream.on('finish', function () {
-        logServerResponse('rsc', log, request, response!.statusCode);
-        logCacheControlHeaders('rsc', log, request, componentResponse);
+        logServerResponse('rsc', request, response!.statusCode);
+        logCacheControlHeaders('rsc', request, componentResponse);
       });
     }
   };
@@ -456,7 +455,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     stream,
     hydrate,
     getApiRoute,
-    log: noContextLogger,
+    log: getLogger(),
   };
 };
 
@@ -796,8 +795,7 @@ async function isStreamingSupported() {
 }
 
 function setupCurrentRequest(url: URL, request: ServerComponentRequest) {
-  const log = getLoggerFromContext(request);
-  setRuntimeLogger(log);
+  const log = getLoggerWithContext(request);
   const state =
     url.pathname === '/react'
       ? JSON.parse(url.searchParams.get('state') || '{}')

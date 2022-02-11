@@ -2,6 +2,7 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 import {parseUrl} from './utils';
+import {getRuntimeLogger, setRuntimeLogger} from '../../framework/runtime';
 
 /** A utility for logging debugging, warning, and error information about the application.
  * Use by importing `log` `@shopify/hydrogen` or by using a `log` prop passed to each page
@@ -46,46 +47,45 @@ const defaultLogger = {
 
 let logger = defaultLogger as Logger;
 
-export function getLoggerFromContext(context: any): Logger {
+function buildLogger(this: any): Logger {
   return {
-    trace: (...args) => logger.trace(context, ...args),
-    debug: (...args) => logger.debug(context, ...args),
-    warn: (...args) => logger.warn(context, ...args),
-    error: (...args) => logger.error(context, ...args),
-    fatal: (...args) => logger.fatal(context, ...args),
+    trace: (...args) => logger.trace(this, ...args),
+    debug: (...args) => logger.debug(this, ...args),
+    warn: (...args) => logger.warn(this, ...args),
+    error: (...args) => logger.error(this, ...args),
+    fatal: (...args) => logger.fatal(this, ...args),
     options: logger.options,
   };
 }
 
+export function getLogger(): Logger {
+  let runtimeLogger = getRuntimeLogger();
+  if (!runtimeLogger) {
+    runtimeLogger = buildLogger.call({});
+    setRuntimeLogger(runtimeLogger);
+  }
+
+  return runtimeLogger;
+}
+
+export function getLoggerWithContext(context: any = {}): Logger {
+  return buildLogger.call(context);
+}
+
 export function setLogger(newLogger: Logger) {
   logger = newLogger;
+  setRuntimeLogger(buildLogger.call({}));
 }
 
 export function setLoggerOptions(options: LoggerOptions) {
   logger.options = options;
+  setRuntimeLogger(buildLogger.call({}));
 }
 
 export function resetLogger() {
   logger = defaultLogger;
+  setRuntimeLogger(buildLogger.call({}));
 }
-
-export const log: Logger = {
-  trace(...args) {
-    return logger.trace({}, ...args);
-  },
-  debug(...args) {
-    return logger.debug({}, ...args);
-  },
-  warn(...args) {
-    return logger.warn({}, ...args);
-  },
-  error(...args) {
-    return logger.error({}, ...args);
-  },
-  fatal(...args) {
-    return logger.fatal({}, ...args);
-  },
-};
 
 const SERVER_RESPONSE_MAP: Record<string, string> = {
   str: 'streaming SSR',
@@ -95,10 +95,10 @@ const SERVER_RESPONSE_MAP: Record<string, string> = {
 
 export function logServerResponse(
   type: RenderType,
-  log: Logger,
   request: ServerComponentRequest,
   responseStatus: number
 ) {
+  const log = getLoggerWithContext(request);
   const coloredResponseStatus =
     responseStatus >= 500
       ? red(responseStatus)

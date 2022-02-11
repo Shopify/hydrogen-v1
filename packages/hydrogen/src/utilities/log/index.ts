@@ -1,10 +1,10 @@
 export {
-  log,
   setLogger,
   setLoggerOptions,
+  getLoggerWithContext,
+  getLogger,
   Logger,
   logServerResponse,
-  getLoggerFromContext,
   resetLogger,
 } from './log';
 export {

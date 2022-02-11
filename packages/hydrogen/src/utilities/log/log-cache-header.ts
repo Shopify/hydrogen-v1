@@ -4,8 +4,11 @@ import {QueryKey} from '../../types';
 import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
 import {gray} from 'kolorist';
+import {getLoggerWithContext} from './log';
 
-import type {Logger, RenderType} from './log';
+import type {RenderType} from './log';
+
+const color = gray;
 
 export type QueryCacheControlHeaders = {
   name: string;
@@ -25,19 +28,19 @@ export function collectQueryCacheControlHeaders(
 
 export function logCacheControlHeaders(
   type: RenderType,
-  log: Logger,
   request: ServerComponentRequest,
   response?: ServerComponentResponse
 ) {
+  const log = getLoggerWithContext(request);
   if (!log?.options?.showCacheControlHeader) {
     return;
   }
 
   log.debug(
-    gray(`┌── Cache control header for ${parseUrl(type, request.url)}`)
+    color(`┌── Cache control header for ${parseUrl(type, request.url)}`)
   );
   if (response) {
-    log.debug(gray(`│ ${response.cacheControlHeader}`));
+    log.debug(color(`│ ${response.cacheControlHeader}`));
   }
 
   const queryList = request.ctx.queryCacheControl;
@@ -48,10 +51,10 @@ export function logCacheControlHeaders(
   );
 
   if (queryList.length > 0) {
-    log.debug(gray('│'));
+    log.debug(color('│'));
     queryList.forEach((query: QueryCacheControlHeaders) => {
       log.debug(
-        gray(
+        color(
           `│ query ${query.name.padEnd(longestQueryNameLength + 1)}${
             query.header
           }`
@@ -60,5 +63,5 @@ export function logCacheControlHeaders(
     });
   }
 
-  log.debug(gray('└──'));
+  log.debug(color('└──'));
 }
