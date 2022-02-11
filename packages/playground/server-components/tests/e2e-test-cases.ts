@@ -239,7 +239,7 @@ export default async function testCases({getServerUrl}: TestOptions) {
   it('streams the RSC response', async () => {
     const response = await fetch(
       getServerUrl() +
-        '/react?state=' +
+        '/__rsc?state=' +
         encodeURIComponent(JSON.stringify({pathname: '/stream'}))
     );
     let streamedChunks = [];
