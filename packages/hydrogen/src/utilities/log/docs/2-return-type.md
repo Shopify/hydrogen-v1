@@ -2,10 +2,10 @@
 
 Return an object with methods for logging information at different priorities:
 
-| Log method    | Priority                                                                       |
-| ------------- | ------------------------------------------------------------------------------ |
-| `log.trace()` | Lowest priority and very verbose.                                              |
-| `log.debug()` | Normal logging priority. Used internally for logging route timing information. |
-| `log.warn()`  | High priority warnings, that may or may not cause the application to fail.     |
-| `log.error()` | Use for errors or invalid application state                                    |
-| `log.fatal()` | Intended to be used just prior to the process exiting                          |
+| Log method    | Description                                                                       |
+| ------------- | --------------------------------------------------------------------------------- |
+| `log.trace()` | The lowest priority logs. These logs are very verbose.                            |
+| `log.debug()` | The normal priority logs. Used internally for logging route timing information.   |
+| `log.warn()`  | The high priority warnings that might or might not cause the application to fail. |
+| `log.error()` | The logging used for errors or invalid application state.                         |
+| `log.fatal()` | The logging used just prior to the process exiting.                               |

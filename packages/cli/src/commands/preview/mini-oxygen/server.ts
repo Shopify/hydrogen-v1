@@ -27,14 +27,24 @@ function createAssetMiddleware(assets: string[]): NextHandleFunction {
   };
 }
 
-function createRequestMiddleware(mf: MiniOxygen): any {
-  return async (req: any, res: any) => {
+function createRequestMiddleware(mf: MiniOxygen): NextHandleFunction {
+  return async (req, res) => {
     let response;
     let status = 500;
     let headers = {};
 
+    const reqHeaders: Record<string, string> = {};
+    for (const key in req.headers) {
+      const val = req.headers[key];
+      if (Array.isArray(val)) {
+        reqHeaders[key] = val.join(',');
+      } else if (val !== undefined) {
+        reqHeaders[key] = val;
+      }
+    }
     const request = new Request(urlFromRequest(req), {
-      ...req,
+      method: req.method,
+      headers: reqHeaders,
     });
 
     try {

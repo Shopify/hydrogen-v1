@@ -1,15 +1,9 @@
 export function getErrorMarkup(error: Error) {
-  return `<script>
-    import('/@vite/client')
-        .then(() => {
-            const err = new Error(\`${error.message}\`);
-            err.stack = \`${error.stack}\`;
-            const ErrorOverlay = customElements.get('vite-error-overlay')
-            // don't open outside vite environment
-            if (!ErrorOverlay) {return}
-            console.log(err)
-            const overlay = new ErrorOverlay(err)
-            document.body.appendChild(overlay)
-        })
+  return `<script type="module">
+    import {ErrorOverlay} from '/@vite/client';
+    document.body.appendChild(new ErrorOverlay(${JSON.stringify(
+      error,
+      Object.getOwnPropertyNames(error)
+    ).replace(/</g, '\\u003c')}));
 </script>`;
 }
