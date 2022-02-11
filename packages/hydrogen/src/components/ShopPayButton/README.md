@@ -14,8 +14,6 @@ export function MyProduct({variantId}) {
 
 ## Props
 
-## Props
-
 The `variantIds` and `variantIdsAndQuantities` props are mutually exclusive. You must pass either `variantIds` or `variantIdsAndQuantities` to the component - not both.
 
 | Name                    | Type                                                                                             | Description                                                                                                                                                                                    |
