@@ -18,10 +18,6 @@ export function ProductDetails({product}) {
 }
 ```
 
-## Alias
-
-The `SelectedVariantShopPayButton` component is aliased by the `Product.SelectedVariant.ShopPayButton` component. You can use whichever component you prefer.
-
 ## Component type
 
 The `SelectedVariantShopPayButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
