@@ -115,6 +115,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       );
 
     logServerResponse('ssr', request, status);
+    logCacheControlHeaders('ssr', request, componentResponse);
 
     return new Response(html, {
       status,
@@ -280,10 +281,12 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           // Last SSR write might be pending, delay closing the writable one tick
           setTimeout(() => writable.close(), 0);
           logServerResponse('str', request, responseOptions.status);
+          logCacheControlHeaders('str', request, componentResponse);
         });
       } else {
         writable.close();
         logServerResponse('str', request, responseOptions.status);
+        logCacheControlHeaders('str', request, componentResponse);
       }
 
       if (await isStreamingSupported()) {
@@ -349,6 +352,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           writeHeadToServerResponse(response, componentResponse, log, didError);
 
           logServerResponse('str', request, response.statusCode);
+          logCacheControlHeaders('str', request, componentResponse);
 
           if (isRedirect(response)) {
             // Redirects found after any async code
@@ -417,6 +421,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       if (isStreamable && (await isStreamingSupported())) {
         logServerResponse('rsc', request, 200);
+        logCacheControlHeaders('rsc', request, componentResponse);
         return new Response(rscReadable);
       }
 
@@ -424,6 +429,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
       logServerResponse('rsc', request, 200);
+      logCacheControlHeaders('rsc', request, componentResponse);
 
       return new Response(bufferedBody);
     } else if (response) {
