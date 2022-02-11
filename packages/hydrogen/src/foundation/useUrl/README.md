@@ -6,8 +6,10 @@ The `useUrl` hook retrieves the current URL in a server or client component.
 
 ```tsx
 import {useUrl} from '@shopify/hydrogen';
+
 export default function Page() {
   const url = useUrl();
+
   return <h1>Current Url is: {url.href}</h1>;
 }
 ```

@@ -1,6 +1,6 @@
 import {withCli} from '../../../../testing';
 
-describe('create', () => {
+describe.skip('create', () => {
   it('scaffolds a basic app with default snow-devil name', async () => {
     await withCli(
       async ({run}) => {

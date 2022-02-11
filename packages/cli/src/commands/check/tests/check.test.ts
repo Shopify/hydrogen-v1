@@ -5,7 +5,7 @@ import {withCli} from '../../../testing';
 // We should investigate and remove this increase.
 jest.setTimeout(30000);
 
-describe('check', () => {
+describe.skip('check', () => {
   describe('eslint', () => {
     it('fails in an empty project', async () => {
       await withCli(async ({run}) => {
