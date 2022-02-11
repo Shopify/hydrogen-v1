@@ -55,6 +55,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: Clear browser fetch cache by @wizardlyhel in [#591](https://github.com/Shopify/hydrogen/pull/591)
 - refactor: use featureImage instead of images(first:1) on product query
 - fix: target future release to use '2022-01' API Version
+- fix: render error in `Gallery.client.jsx` component when product resource has an external video or no images.
+- fix: ensure youtube external videos are embed compatible urls
 
 ## 0.10.1 - 2022-01-26
 
