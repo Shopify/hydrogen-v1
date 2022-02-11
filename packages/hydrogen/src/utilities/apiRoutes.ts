@@ -132,12 +132,7 @@ export async function renderApiRoute(
     response = new Response('Error processing: ' + request.url, {status: 500});
   }
 
-  logServerResponse(
-    'api',
-    log,
-    request as ServerComponentRequest,
-    response.status
-  );
+  logServerResponse('api', request as ServerComponentRequest, response.status);
 
   return response;
 }
