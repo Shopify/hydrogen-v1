@@ -137,7 +137,7 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-To turn on logging for cache api status, call `setLoggerOptions` and set `showCacheApiStatus: true`
+To enable logging for the cache API status, call `setLoggerOptions` and set `showCacheApiStatus` to `true`:
 
 {% codeblock file, filename: '/src/entry-server.jsx' %}
 
@@ -154,7 +154,7 @@ export default renderHydrogen(App, () => {
 
 {% endcodeblock %}
 
-You will get cache status updates on each query.
+The status of the cache updates on each query:
 
 ```sh
 [Cache] MISS   query shopInfo
@@ -163,7 +163,7 @@ You will get cache status updates on each query.
 [Cache] MISS   query Localization
 ```
 
-To turn on logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader: true`
+To enable logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader` to `true`:
 
 {% codeblock file, filename: '/src/entry-server.jsx' %}
 
@@ -180,8 +180,8 @@ export default renderHydrogen(App, () => {
 
 {% endcodeblock %}
 
-You will see a cache control header report per page request and the associated queries
-that built this request and their cache control headers.
+A cache control header report displays for each page request. The report includes the associated queries
+that built the request and the cache control headers:
 
 ```sh
 ┌── Cache control header for http://localhost:3000/collections/freestyle-collection
