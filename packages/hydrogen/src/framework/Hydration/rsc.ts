@@ -8,6 +8,7 @@ import {
   createFromReadableStream,
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import {REACT_HYDRATION_REQUEST} from '../../constants';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -80,7 +81,7 @@ export function useServerResponse(state: any) {
 
     // Request a new flight response.
     response = createFromFetch(
-      fetch('/__rsc?state=' + encodeURIComponent(key))
+      fetch(`${REACT_HYDRATION_REQUEST}?state=` + encodeURIComponent(key))
     );
   }
 

@@ -4,6 +4,7 @@ import type {ServerComponentRequest} from './framework/Hydration/ServerComponent
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
 import {renderApiRoute} from './utilities/apiRoutes';
+import {REACT_HYDRATION_REQUEST} from './constants';
 
 interface HydrogenFetchEvent {
   /**
@@ -47,7 +48,7 @@ export default async function handleEvent(
   setContext(context);
   setConfig({dev});
 
-  const isReactHydrationRequest = url.pathname === '/__rsc';
+  const isReactHydrationRequest = url.pathname === REACT_HYDRATION_REQUEST;
 
   const template =
     typeof indexTemplate === 'function'
