@@ -1,5 +1,8 @@
 import type {CacheOptions, QueryKey} from '../../types';
-import {getLoggerWithContext} from '../../utilities/log';
+import {
+  getLoggerWithContext,
+  collectQueryCacheControlHeaders,
+} from '../../utilities/log';
 import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
@@ -9,7 +12,6 @@ import {
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {collectQueryCacheControlHeaders} from '../../utilities/log';
 
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;

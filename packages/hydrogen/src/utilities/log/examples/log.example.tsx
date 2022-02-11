@@ -1,5 +1,6 @@
-import {log} from '@shopify/hydrogen';
+import {getLogger} from '@shopify/hydrogen';
 
+const log = getLogger();
 log.debug('app started'); // Statically log some information.
 
 export default function Product({country = {isoCode: 'US'}, log}) {

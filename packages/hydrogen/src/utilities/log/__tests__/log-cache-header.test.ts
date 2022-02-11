@@ -1,5 +1,6 @@
 import {
   Logger,
+  setLogger,
   logCacheControlHeaders,
   collectQueryCacheControlHeaders,
   resetLogger,
@@ -27,6 +28,7 @@ describe('cache header log', () => {
     };
 
     resetLogger();
+    setLogger(mockLogger);
   });
 
   it('should log cache control header for main request', () => {
@@ -40,16 +42,17 @@ describe('cache header log', () => {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
 
-    logCacheControlHeaders('str', mockLogger, request, response);
+    logCacheControlHeaders('str', request, response);
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m┌── Cache control header for http://localhost:3000/[39m"`
     );
-    expect(mockLogger.debug.mock.calls[1][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[1][1]).toMatchInlineSnapshot(
       `"[90m│ public, max-age=1, stale-while-revalidate=9[39m"`
     );
-    expect(mockLogger.debug.mock.calls[2][0]).toMatchInlineSnapshot(`"[90m└──[39m"`);
+    expect(mockLogger.debug.mock.calls[2][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
   });
 
   it('should log cache control header for sub request', () => {
@@ -63,16 +66,17 @@ describe('cache header log', () => {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
 
-    logCacheControlHeaders('rsc', mockLogger, request, response);
+    logCacheControlHeaders('rsc', request, response);
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m┌── Cache control header for {\\"pathname\\":\\"/\\",\\"search\\":\\"\\"}[39m"`
     );
-    expect(mockLogger.debug.mock.calls[1][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[1][1]).toMatchInlineSnapshot(
       `"[90m│ public, max-age=1, stale-while-revalidate=9[39m"`
     );
-    expect(mockLogger.debug.mock.calls[2][0]).toMatchInlineSnapshot(`"[90m└──[39m"`);
+    expect(mockLogger.debug.mock.calls[2][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
   });
 
   it('should log cache control header for main request and sub query request', () => {
@@ -91,20 +95,21 @@ describe('cache header log', () => {
       QUERY_1,
       'public, max-age=1, stale-while-revalidate=9'
     );
-    logCacheControlHeaders('str', mockLogger, request, response);
+    logCacheControlHeaders('str', request, response);
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m┌── Cache control header for http://localhost:3000/[39m"`
     );
-    expect(mockLogger.debug.mock.calls[1][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[1][1]).toMatchInlineSnapshot(
       `"[90m│ public, max-age=1, stale-while-revalidate=9[39m"`
     );
-    expect(mockLogger.debug.mock.calls[2][0]).toMatchInlineSnapshot(`"[90m│[39m"`);
-    expect(mockLogger.debug.mock.calls[3][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[2][1]).toMatchInlineSnapshot(`"[90m│[39m"`);
+    expect(mockLogger.debug.mock.calls[3][1]).toMatchInlineSnapshot(
       `"[90m│ query test1 public, max-age=1, stale-while-revalidate=9[39m"`
     );
-    expect(mockLogger.debug.mock.calls[4][0]).toMatchInlineSnapshot(`"[90m└──[39m"`);
+    expect(mockLogger.debug.mock.calls[4][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
   });
 
   it('should log cache control header for main request and several sub query requests', () => {
@@ -133,25 +138,26 @@ describe('cache header log', () => {
       QUERY_3,
       'public, max-age=3, stale-while-revalidate=11'
     );
-    logCacheControlHeaders('str', mockLogger, request, response);
+    logCacheControlHeaders('str', request, response);
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m┌── Cache control header for http://localhost:3000/[39m"`
     );
-    expect(mockLogger.debug.mock.calls[1][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[1][1]).toMatchInlineSnapshot(
       `"[90m│ public, max-age=1, stale-while-revalidate=9[39m"`
     );
-    expect(mockLogger.debug.mock.calls[2][0]).toMatchInlineSnapshot(`"[90m│[39m"`);
-    expect(mockLogger.debug.mock.calls[3][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[2][1]).toMatchInlineSnapshot(`"[90m│[39m"`);
+    expect(mockLogger.debug.mock.calls[3][1]).toMatchInlineSnapshot(
       `"[90m│ query test1     public, max-age=1, stale-while-revalidate=9[39m"`
     );
-    expect(mockLogger.debug.mock.calls[4][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[4][1]).toMatchInlineSnapshot(
       `"[90m│ query testing2  public, max-age=2, stale-while-revalidate=10[39m"`
     );
-    expect(mockLogger.debug.mock.calls[5][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[5][1]).toMatchInlineSnapshot(
       `"[90m│ query testable3 public, max-age=3, stale-while-revalidate=11[39m"`
     );
-    expect(mockLogger.debug.mock.calls[6][0]).toMatchInlineSnapshot(`"[90m└──[39m"`);
+    expect(mockLogger.debug.mock.calls[6][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
   });
 });

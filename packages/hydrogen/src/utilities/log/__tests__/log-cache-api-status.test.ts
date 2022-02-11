@@ -1,5 +1,4 @@
-import {Logger, logCacheApiStatus, resetLogger} from '../index';
-import {setRuntimeLogger} from '../../../framework/runtime';
+import {Logger, setLogger, logCacheApiStatus, resetLogger} from '../index';
 
 let mockLogger: jest.Mocked<Logger>;
 
@@ -16,9 +15,8 @@ describe('cache header log', () => {
       },
     };
 
-    setRuntimeLogger(mockLogger);
-
     resetLogger();
+    setLogger(mockLogger);
   });
 
   it('should log cache api status', () => {
@@ -28,7 +26,8 @@ describe('cache header log', () => {
     );
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][0]).toMatchInlineSnapshot(
+    expect(mockLogger.debug.mock.calls[0][0]).toEqual({});
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m[Cache] HIT    query shopInfo[39m"`
     );
   });

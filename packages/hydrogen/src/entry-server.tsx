@@ -4,7 +4,6 @@ import {
   logServerResponse,
   logCacheControlHeaders,
   getLoggerWithContext,
-  getLogger,
 } from './utilities/log';
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
@@ -461,7 +460,6 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     stream,
     hydrate,
     getApiRoute,
-    log: getLogger(),
   };
 };
 

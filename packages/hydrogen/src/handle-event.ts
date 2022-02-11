@@ -63,7 +63,7 @@ export default async function handleEvent(
   ) {
     return assetHandler(event, url);
   }
-  const {render, hydrate, stream, getApiRoute, log}: EntryServerHandler =
+  const {render, hydrate, stream, getApiRoute}: EntryServerHandler =
     entrypoint.default || entrypoint;
 
   // @ts-ignore
@@ -83,7 +83,7 @@ export default async function handleEvent(
       apiRoute &&
       (!apiRoute.hasServerComponent || request.method !== 'GET')
     ) {
-      return renderApiRoute(request, apiRoute, log);
+      return renderApiRoute(request, apiRoute);
     }
   }
 
