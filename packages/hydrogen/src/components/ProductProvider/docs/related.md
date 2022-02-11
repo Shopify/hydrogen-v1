@@ -5,7 +5,6 @@
 - [`ProductPrice`](/api/hydrogen/components/product-variant/productprice)
 - [`SelectedVariantPrice`](/api/hydrogen/components/product-variant/selectedvariantprice)
 - [`SelectedVariantImage`](/api/hydrogen/components/product-variant/selectedvariantimage)
-- [`SelectedVariantAddToCartButton`](/api/hydrogen/components/product-variant/selectedvariantaddtocartbutton)
 
 ## Related hooks
 

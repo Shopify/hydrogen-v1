@@ -141,7 +141,6 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/ProductPrice',
         'components/ProductProvider',
         'components/ProductTitle',
-        'components/SelectedVariantAddToCartButton',
         'components/SelectedVariantBuyNowButton',
         'components/SelectedVariantImage',
         'components/SelectedVariantMetafield',
