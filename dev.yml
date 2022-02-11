@@ -1,7 +1,7 @@
 # This is only used for CI. You should not need to run `dev up` locally.
 up:
   - node:
-      version: v16.5.0
+      version: v16.13.0
       yarn: 1.22.5
 
 commands:
