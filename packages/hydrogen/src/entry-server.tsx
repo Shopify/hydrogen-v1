@@ -792,7 +792,7 @@ async function isStreamingSupported() {
 function setupCurrentRequest(url: URL, request: ServerComponentRequest) {
   const log = getLoggerFromContext(request);
   const state =
-    url.pathname === '/react'
+    url.pathname === '/__rsc'
       ? JSON.parse(url.searchParams.get('state') || '{}')
       : {pathname: url.pathname, search: url.search};
 

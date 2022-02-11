@@ -8,7 +8,7 @@ export function useUrl(): URL {
   if (META_ENV_SSR) {
     const serverUrl = new URL(useServerRequest().url);
 
-    if (serverUrl.pathname === '/react') {
+    if (serverUrl.pathname === '/__rsc') {
       const state = JSON.parse(serverUrl.searchParams.get('state') || '{}');
 
       const parsedUrl = `${serverUrl.origin}/${state.pathname ?? ''}${
