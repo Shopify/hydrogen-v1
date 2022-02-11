@@ -299,5 +299,27 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
         async () => await untilUpdated(() => page.textContent('h1'), newheading)
       );
     });
+
+    it('updates the contents when a client component file changes', async () => {
+      if (isBuild) {
+        return;
+      }
+
+      const fullPath = resolve(
+        __dirname,
+        '../',
+        'src/components/Counter.client.jsx'
+      );
+      const newButtonText = 'add';
+
+      await page.goto(`${getServerUrl()}/about`);
+      await untilUpdated(() => page.textContent('button'), 'increase');
+      await edit(
+        fullPath,
+        (code) => code.replace('increase', newButtonText),
+        async () =>
+          await untilUpdated(() => page.textContent('button'), newButtonText)
+      );
+    });
   });
 }
