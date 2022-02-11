@@ -11,7 +11,7 @@ export {
   getTime,
 } from './utilities';
 
-export {log, setLogger, setLoggerOptions, Logger} from './utilities/log';
+export {getLogger, setLogger, setLoggerOptions, Logger} from './utilities/log';
 
 // This is exported here because it contains a Server Component
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
