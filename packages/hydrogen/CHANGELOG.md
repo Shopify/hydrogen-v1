@@ -58,6 +58,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - fix: `ShopPayButton` supports quantities greater than 1. Also fixed issues with IDs in Storefront API version 2022-01
 - fix: render error in `Gallery.client.jsx` component when product resource has an external video or no images.
 - fix: ensure youtube external videos are embed compatible urls
+- feat: pass HYDROGEN_ASSET_BASE_URL into config to set base URL for compiled assets
 
 ## 0.10.1 - 2022-01-26
 
