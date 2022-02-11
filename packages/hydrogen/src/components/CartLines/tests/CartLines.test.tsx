@@ -44,19 +44,6 @@ describe('CartLines', () => {
     expect(wrapper).toContainReactComponent('ul');
     expect(wrapper).toContainReactComponent('li');
   });
-
-  it('uses render props if provided', () => {
-    const wrapper = mountWithProviders(
-      <CartProvider cart={cart}>
-        <CartLines>
-          {(line) => <p>{line.merchandise.product.title}</p>}
-        </CartLines>
-      </CartProvider>
-    );
-
-    expect(wrapper).toContainReactComponent('p', {children: 'Product 1'});
-    expect(wrapper).toContainReactComponent('p', {children: 'Product 2'});
-  });
 });
 
 const cart = {

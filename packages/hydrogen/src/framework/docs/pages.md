@@ -222,9 +222,6 @@ Custom responses provide the following benefits:
 
 The following example shows how to create a custom sitemap by adding a new server component called `pages/sitemap.xml.server.jsx`. The custom response object returns the sitemap.
 
-> Tip:
-> Hydrogen's starter includes a `pages/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`.
-
 {% codeblock file, filename: '/pages/my-products.server.jsx' %}
 
 ```jsx
@@ -291,6 +288,18 @@ const QUERY = gql`
 ```
 
 {% endcodeblock %}
+
+#### Limitations and considerations
+
+The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) includes a `pages/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
+
+- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources.
+
+- When you add or remove pages, the sitemap is automatically updated within one day. Similarly, if you unpublish a product, then the product is removed automatically from the sitemap.
+
+- The sitemap is cached for 24 hours.
+
+- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Hydrogen starter template URL structure, which is based on resource's handle.
 
 ### Build a JSON API
 

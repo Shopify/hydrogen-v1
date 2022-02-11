@@ -32,6 +32,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartNoteUpdateCallback`
 - Feat: Transition away from deprecated currency selector in favor of country selector
 - dx: The following money components no longer allow the function-as-a-child (also known as "render props") pattern; see #589.
+
   - `<Money>` Use `useMoney()` for customization
   - `<CartLinePrice>` Use `useMoney()` for customization
   - `<ProductPrice>` Use `useMoney()` for customization
@@ -39,6 +40,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `<Metafield>` Use `useParsedMetafields()` for customization
   - `<ProductMetafield>` Use `useParsedMetafields()` for customization
   - `<SelectedVariantMetafield>` Use `useParsedMetafields()` for customization
+  - `<UnitPrice>` Use `useMoney()` for customization
+  - `<CartLines>` Use `useCart()` for customization
+
 - refactor: `<Metafield>` now renders `ratings` as a `<span>` with text instead of stars; `multi_line_text_field` inside of a `<span>` instead of a `<div>`
 - Fix: add charset to content type in HTML responses
 - Fix header shift when cart is opened by @Francismori7 in #600
@@ -52,6 +56,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - refactor: use featureImage instead of images(first:1) on product query
 - fix: target future release to use '2022-01' API Version
 - fix: `ShopPayButton` supports quantities greater than 1. Also fixed issues with IDs in Storefront API version 2022-01
+- fix: render error in `Gallery.client.jsx` component when product resource has an external video or no images.
+- fix: ensure youtube external videos are embed compatible urls
 
 ## 0.10.1 - 2022-01-26
 
