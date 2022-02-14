@@ -62,3 +62,4 @@ export {ShopPayButton} from './ShopPayButton';
 export {useAvailableCountries} from '../hooks/useAvailableCountries';
 export {useCountry} from '../hooks/useCountry';
 export {Seo} from './Seo';
+export {useNavigate} from '../hooks/useNavigate';
