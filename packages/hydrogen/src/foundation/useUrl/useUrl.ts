@@ -1,4 +1,4 @@
-import {REACT_HYDRATION_REQUEST} from '../../constants';
+import {RSC_PATHNAME} from '../../constants';
 import {useEnvContext, META_ENV_SSR} from '../ssr-interop';
 
 /**
@@ -8,7 +8,7 @@ export function useUrl(): URL {
   if (META_ENV_SSR) {
     const serverUrl = new URL(useEnvContext((req) => req.url));
 
-    if (serverUrl.pathname === REACT_HYDRATION_REQUEST) {
+    if (serverUrl.pathname === RSC_PATHNAME) {
       const state = JSON.parse(serverUrl.searchParams.get('state') || '{}');
 
       const parsedUrl = `${serverUrl.origin}/${state.pathname ?? ''}${

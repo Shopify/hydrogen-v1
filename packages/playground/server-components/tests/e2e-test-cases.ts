@@ -1,4 +1,4 @@
-import {REACT_HYDRATION_REQUEST} from '../../../hydrogen/src/constants';
+import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import fetch from 'node-fetch';
 
 type TestOptions = {
@@ -240,7 +240,7 @@ export default async function testCases({getServerUrl}: TestOptions) {
   it('streams the RSC response', async () => {
     const response = await fetch(
       getServerUrl() +
-        `${REACT_HYDRATION_REQUEST}?state=` +
+        `${RSC_PATHNAME}?state=` +
         encodeURIComponent(JSON.stringify({pathname: '/stream'}))
     );
     let streamedChunks = [];

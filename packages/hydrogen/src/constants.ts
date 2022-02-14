@@ -1,1 +1,1 @@
-export const REACT_HYDRATION_REQUEST = '/__rsc';
+export const RSC_PATHNAME = '/__rsc';
