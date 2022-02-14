@@ -17,8 +17,8 @@ export interface LinkProps
 }
 
 /**
- * The Link component lets your users navigate from one page to another.
- * It renders an accessible `<a>` element. Blah
+ * The `Link` component lets users navigate from one page to another.
+ * It renders an accessible `<a>` element.
  */
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   function Link(props, ref) {
