@@ -74,26 +74,20 @@ export default function({request}) {
 
 {% endcodeblock %}
 
-## Navigating
+## Navigating between routes
 
-### Navigating between routes with `<Link>`
+You can navigate between routes using the `Link` component or the `useNavigate` hook.
 
-Used the `Link` component to navigate between routes. The `link` component renders an underlying `<a>` element. Because of this, all properties available to an `<a>` element are also available to `Link`. See [`<a>` element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).
+### Link component
 
-Additional props for `link`:
+The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component. For more information, refer to the [`<a>` element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).
 
-| Name            | Type                 | Description                                                                                                                                               |
-| --------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| to              | <code>string</code>  | The destination URL that the Link points to. This will be the `href` attribute of the underlying `<a>` element.                                           |
-| replace?        | <code>boolean</code> | Instead of pushing state, replace state. See [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). |
-| clientState?    | <code>any</code>     | Pass custom client state with the navigation.                                                                                                             |
-| reloadDocument? | <code>boolean</code> | Reload the whole document on navigation.                                                                                                                  |
+#### Example code
 
 {% codeblock file, filename: 'index.server.jsx' %}
 
 ```jsx
 import {Link} from '@shopify/hydrogen';
-
 export default function Index() {
   return <Link to="/products/hydrogen">Hydrogen</Link>;
 }
@@ -101,35 +95,46 @@ export default function Index() {
 
 {% endcodeblock %}
 
-### Navigating between routes with `useNavigate`
+#### Props
 
-Use the `useNavigate` hook to imperativly navigate between routes. Make sure to use this only where appropriate. Generally you should use `<Link>` instead, because it provides standard browser accessibility functionality, like cmd+click and right click to open.
+| Name            | Type                 | Description                                                                                                                                                                                       |
+| --------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| to              | <code>string</code>  | The destination URL that the link points to. This is the `href` attribute of the underlying `<a>` element.                                                                                        |
+| replace?        | <code>boolean</code> | Whether to update the state object or URL of the current history entry. Refer to the [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). |
+| clientState?    | <code>any</code>     | The custom client state with the navigation.                                                                                                                                                      |
+| reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                               |
 
-`useNavigate` is a hook that returns a function. That function takes two parameters:
+### useNavigate hook
 
-`path` - The path you wish to navigate to
-`options` - An config object that can have `replace`, `reloadDocument`, and `clientState`. Similar to the options available in `<Link>`
+The `useNavigate` hook imperatively navigates between routes. Consider using the `useNavigate` hook only where appropriate. Generally, you should use the `Link` component instead, because it provides standard browser accessibility functionality, like `cmd+click` and right-click to open.
+
+#### Example code
 
 {% codeblock file, filename: 'component.client.jsx' %}
 
 ```jsx
 import {useNavigate} from '@shopify/hydrogen/client';
-
 function addToCart() { ... }
-
 export default function ClientComponent() {
   const navigate = useNavigate();
-
   async function clickAddToCart() {
     await addToCart();
     navigate('/success', {replace: true});
   }
-
   return <Button onClick={clickAddToCart}>Add to Cart</Button>;
 }
 ```
 
 {% endcodeblock %}
+
+#### Return values
+
+The `useNavigate` hook returns the following values:
+
+| Name    | Description                                                                                                                                                             |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| path    | The path you want to navigate to.                                                                                                                                       |
+| options | The options for the configuration object: `replace`, `reloadDocument`, `clientState`. For more information the options, refer to the [Link component](#link-component). |
 
 ## API routes
 
