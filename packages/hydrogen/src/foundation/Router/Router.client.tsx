@@ -7,7 +7,7 @@ import React, {
   FC,
   useEffect,
 } from 'react';
-import {META_ENV_SSR} from '../../utilities/meta-env-ssr';
+import {META_ENV_SSR} from '../ssr-interop';
 import {useServerState} from '../useServerState';
 
 type RouterContextValue = {
