@@ -6,7 +6,7 @@ import {useNavigate} from '../../hooks/useNavigate';
 export interface LinkProps
   /** All properties available to an `<a>` element are available. See [anchor element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).*/
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  /** The destination URL that the Link points to. This will be the `href` attribute of the underlying `<a>` element. */
+  /** The destination URL that the link points to. This is the `href` attribute of the underlying `<a>` element. */
   to: string;
   /** Instead of pushing state, replace state. See [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). */
   replace?: boolean;
