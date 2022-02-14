@@ -10,7 +10,7 @@ export interface LinkProps
   to: string;
   /** Whether to update the state object or URL of the current history entry. Refer to the [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). */
   replace?: boolean;
-  /** Pass custom client state with the navigation. */
+  /** The custom client state with the navigation. */
   clientState?: any;
   /** Reload the whole document on navigation. */
   reloadDocument?: boolean;
