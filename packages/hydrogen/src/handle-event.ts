@@ -64,7 +64,9 @@ export default async function handleEvent(
     return assetHandler(event, url);
   }
   const {render, hydrate, stream, getApiRoute, log}: EntryServerHandler =
-    entrypoint.default || entrypoint;
+    await (entrypoint.default
+      ? entrypoint.default(request)
+      : entrypoint(request));
 
   // @ts-ignore
   if (dev && !(render && hydrate && stream && getApiRoute)) {

@@ -47,7 +47,7 @@ const STREAM_ABORT_TIMEOUT_MS = 3000;
 
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
-const renderHydrogen: ServerHandler = (App, {pages}) => {
+const renderHydrogen: ServerHandler = async (App, {pages}) => {
   /**
    * The render function is responsible for turning the provided `App` into an HTML string,
    * and returning any initial state that needs to be hydrated into the client version of the app.

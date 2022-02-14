@@ -71,7 +71,7 @@ export type ClientHandlerConfig = {
 export type ServerHandler = (
   App: any,
   config: ServerHandlerConfig
-) => EntryServerHandler;
+) => Promise<EntryServerHandler>;
 
 export type ClientHandler = (App: any) => Promise<void>;
 
