@@ -53,8 +53,6 @@ const defaultLogger = {
 
 globalThis.__logger = defaultLogger as Logger;
 
-// let logger = globalThis.__logger;
-
 function buildLogger(this: any): Logger {
   return {
     trace: (...args) => globalThis.__logger.trace(this, ...args),
@@ -65,8 +63,6 @@ function buildLogger(this: any): Logger {
     options: globalThis.__logger.options,
   };
 }
-
-// export const log = buildLogger.call(this);
 
 export const log: Logger = {
   trace(...args) {
@@ -85,7 +81,7 @@ export const log: Logger = {
     return globalThis.__logger.fatal({}, ...args);
   },
   options: () => {
-    return globalThis.__logger.options ? globalThis.__logger.options() : {};
+    return globalThis.__logger.options();
   },
 };
 
@@ -95,17 +91,14 @@ export function getLoggerWithContext(context: any = {}): Logger {
 
 export function setLogger(newLogger: Logger) {
   globalThis.__logger = newLogger;
-  // setRuntimeLogger(buildLogger.call({}));
 }
 
 export function setLoggerOptions(options: LoggerOptions) {
   globalThis.__logger.options = () => options;
-  // setRuntimeLogger(buildLogger.call({}));
 }
 
 export function resetLogger() {
   globalThis.__logger = defaultLogger;
-  // setRuntimeLogger(buildLogger.call({}));
 }
 
 const SERVER_RESPONSE_MAP: Record<string, string> = {
