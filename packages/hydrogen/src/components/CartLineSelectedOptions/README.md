@@ -44,10 +44,6 @@ The `CartLineSelectedOptions` components provides an object with the following k
 
 The `CartLineSelectedOptions` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## Alias
-
-The `CartLineSelectedOptions` component is aliased by the `CartLine.SelectedOptions` component. You can use whichever component you prefer.
-
 ## Related components
 
 - [`CartLineProvider`](/api/hydrogen/components/cart/cartlineprovider)

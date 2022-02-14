@@ -33,10 +33,6 @@ export function App() {
 }
 ```
 
-## Alias
-
-The `CartLineQuantityAdjustButton` component is aliased by the `CartLine.QuantityAdjust` component. You can use whichever component you prefer.
-
 ## Component type
 
 The `CartLineQuantityAdjustButton` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
