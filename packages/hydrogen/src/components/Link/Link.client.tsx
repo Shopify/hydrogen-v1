@@ -12,7 +12,7 @@ export interface LinkProps
   replace?: boolean;
   /** The custom client state with the navigation. */
   clientState?: any;
-  /** Reload the whole document on navigation. */
+  /** Whether to reload the whole document on navigation. */
   reloadDocument?: boolean;
 }
 
