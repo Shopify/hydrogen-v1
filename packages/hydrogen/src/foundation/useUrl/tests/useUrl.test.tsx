@@ -3,14 +3,6 @@ import {mount} from '@shopify/react-testing';
 
 import {useUrl} from '../useUrl';
 
-jest.mock('../../ServerRequestProvider', () => ({
-  useServerRequest: jest.fn(),
-}));
-
-const useServerRequestMock = jest.requireMock(
-  '../../ServerRequestProvider'
-).useServerRequest;
-
 function FakeComponent({callbackSpy}: {callbackSpy: jest.Mock<any, any>}) {
   const url = useUrl();
   callbackSpy(url);
@@ -18,10 +10,6 @@ function FakeComponent({callbackSpy}: {callbackSpy: jest.Mock<any, any>}) {
 }
 
 describe('useUrl()', () => {
-  beforeEach(() => {
-    useServerRequestMock.mockReset();
-  });
-
   describe('SSR', () => {
     let mockUrl = '';
 
