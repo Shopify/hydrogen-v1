@@ -1,7 +1,7 @@
 import type {Env} from 'types';
 import {MiniOxygen} from './mini-oxygen/core';
 import path from 'path';
-import {tree, HelpfulError} from '../../utilities';
+import {HelpfulError} from '../../utilities';
 
 export async function preview(env: Env) {
   const {fs, ui, workspace} = env;
@@ -17,18 +17,16 @@ export async function preview(env: Env) {
     });
   }
 
-  const {files} = await tree(fs.join(root, 'dist/client'), {
-    recursive: true,
-  });
-
   const mf = new MiniOxygen({
     buildCommand: 'yarn build',
     globals: {Oxygen: {}},
     scriptPath: path.resolve(root, 'dist/worker/worker.js'),
-    sitePath: path.resolve(root, 'dist/client'),
+    watch: true,
+    buildWatchPaths: ['./src'],
+    liveReload: true,
   });
 
-  const app = await mf.createServer({assets: files});
+  const app = await mf.createServer();
 
   app.listen(port, () => {
     ui.say(

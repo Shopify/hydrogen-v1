@@ -1,25 +1,46 @@
+import http from "http";
+import https from "https";
+import vm from 'vm';
+
 import {
   CorePlugin,
-  CorePluginSignatures,
   MiniflareCore,
   MiniflareCoreOptions,
+  BuildPlugin,
 } from '@miniflare/core';
+import {createServer, HTTPPlugin} from '@miniflare/http-server';
 import {CachePlugin} from '@miniflare/cache';
 import {VMScriptRunner} from '@miniflare/runner-vm';
 import {Log, LogLevel} from '@miniflare/shared';
 
-import {createServer} from './server';
+// import {createServer} from './server';
 import {StorageFactory} from './storage';
 
-export class MiniOxygen extends MiniflareCore<CorePluginSignatures> {
-  constructor(options: MiniflareCoreOptions<CorePluginSignatures>) {
+const PLUGINS = {
+  CorePlugin,
+  HTTPPlugin,
+  BuildPlugin,
+  CachePlugin,
+};
+
+type Plugins = typeof PLUGINS;
+
+export type MiniOxygenOptions = MiniflareCoreOptions<Plugins> & {globals?: {[key: string | symbol]: any}};
+
+export class MiniOxygen extends MiniflareCore<Plugins> {
+  constructor(options: MiniOxygenOptions) {
     const storageFactory = new StorageFactory();
+
+    // Extract globals for script runner
+    const globals = options.globals;
+    delete options.globals;
+
     super(
       PLUGINS,
       {
         log: new Log(LogLevel.VERBOSE),
         storageFactory,
-        scriptRunner: new VMScriptRunner(),
+        scriptRunner: new VMScriptRunner(vm.createContext(globals)),
       },
       {
         ...options,
@@ -31,12 +52,9 @@ export class MiniOxygen extends MiniflareCore<CorePluginSignatures> {
     return super.dispose();
   }
 
-  createServer({assets = []}: {assets?: string[]} = {}) {
-    return createServer(this, {assets});
+  createServer(
+    options?: http.ServerOptions & https.ServerOptions
+  ): Promise<http.Server | https.Server> {
+    return createServer(this, options);
   }
 }
-
-const PLUGINS = {
-  CorePlugin,
-  CachePlugin,
-};
