@@ -7,6 +7,7 @@ import {
 } from '../index';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 import {ServerComponentResponse} from '../../../framework/Hydration/ServerComponentResponse.server';
+import {setLoggerOptions} from '../log';
 
 let mockLogger: jest.Mocked<Logger>;
 
@@ -22,13 +23,14 @@ describe('cache header log', () => {
       warn: jest.fn(),
       error: jest.fn(),
       fatal: jest.fn(),
-      options: {
-        showCacheControlHeader: true,
-      },
+      options: jest.fn(),
     };
 
     resetLogger();
     setLogger(mockLogger);
+    setLoggerOptions({
+      showCacheControlHeader: true,
+    });
   });
 
   it('should log cache control header for main request', () => {

@@ -1,4 +1,5 @@
 import {Logger, setLogger, logCacheApiStatus, resetLogger} from '../index';
+import {LoggerOptions, setLoggerOptions} from '../log';
 
 let mockLogger: jest.Mocked<Logger>;
 
@@ -10,13 +11,14 @@ describe('cache header log', () => {
       warn: jest.fn(),
       error: jest.fn(),
       fatal: jest.fn(),
-      options: {
-        showCacheApiStatus: true,
-      },
+      options: jest.fn(),
     };
 
     resetLogger();
     setLogger(mockLogger);
+    setLoggerOptions({
+      showCacheApiStatus: true,
+    });
   });
 
   it('should log cache api status', () => {

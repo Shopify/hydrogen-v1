@@ -2,7 +2,6 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 import {parseUrl} from './utils';
-import {getRuntimeLogger, setRuntimeLogger} from '../../framework/runtime';
 
 /** The `log` utility is a function that's used for logging debugging, warning, and error information about the application.
  * Use this utility by importing `log` from `@shopify/hydrogen`, or by using a `log` prop passed to each page
@@ -10,13 +9,19 @@ import {getRuntimeLogger, setRuntimeLogger} from '../../framework/runtime';
  * current request in progress.
  */
 
+/* eslint-disable no-var */
+/* eslint-disable @typescript-eslint/no-namespace */
+declare namespace globalThis {
+  var __logger: Logger;
+}
+
 export interface Logger {
   trace: (...args: Array<any>) => void;
   debug: (...args: Array<any>) => void;
   warn: (...args: Array<any>) => void;
   error: (...args: Array<any>) => void;
   fatal: (...args: Array<any>) => void;
-  options?: LoggerOptions;
+  options: () => LoggerOptions;
 }
 
 export type LoggerOptions = {
@@ -43,49 +48,64 @@ const defaultLogger = {
   fatal(context: {[key: string]: any}, ...args: Array<any>) {
     console.error(red('FATAL: '), ...args);
   },
-  options: {},
+  options: () => ({}),
 };
 
-let logger = defaultLogger as Logger;
+globalThis.__logger = defaultLogger as Logger;
+
+// let logger = globalThis.__logger;
 
 function buildLogger(this: any): Logger {
   return {
-    trace: (...args) => logger.trace(this, ...args),
-    debug: (...args) => logger.debug(this, ...args),
-    warn: (...args) => logger.warn(this, ...args),
-    error: (...args) => logger.error(this, ...args),
-    fatal: (...args) => logger.fatal(this, ...args),
-    options: logger.options,
+    trace: (...args) => globalThis.__logger.trace(this, ...args),
+    debug: (...args) => globalThis.__logger.debug(this, ...args),
+    warn: (...args) => globalThis.__logger.warn(this, ...args),
+    error: (...args) => globalThis.__logger.error(this, ...args),
+    fatal: (...args) => globalThis.__logger.fatal(this, ...args),
+    options: globalThis.__logger.options,
   };
 }
 
-export function getLogger(): Logger {
-  let runtimeLogger = getRuntimeLogger();
-  if (!runtimeLogger) {
-    runtimeLogger = buildLogger.call({});
-    setRuntimeLogger(runtimeLogger);
-  }
+// export const log = buildLogger.call(this);
 
-  return runtimeLogger;
-}
+export const log: Logger = {
+  trace(...args) {
+    return globalThis.__logger.trace({}, ...args);
+  },
+  debug(...args) {
+    return globalThis.__logger.debug({}, ...args);
+  },
+  warn(...args) {
+    return globalThis.__logger.warn({}, ...args);
+  },
+  error(...args) {
+    return globalThis.__logger.error({}, ...args);
+  },
+  fatal(...args) {
+    return globalThis.__logger.fatal({}, ...args);
+  },
+  options: () => {
+    return globalThis.__logger.options ? globalThis.__logger.options() : {};
+  },
+};
 
 export function getLoggerWithContext(context: any = {}): Logger {
   return buildLogger.call(context);
 }
 
 export function setLogger(newLogger: Logger) {
-  logger = newLogger;
-  setRuntimeLogger(buildLogger.call({}));
+  globalThis.__logger = newLogger;
+  // setRuntimeLogger(buildLogger.call({}));
 }
 
 export function setLoggerOptions(options: LoggerOptions) {
-  logger.options = options;
-  setRuntimeLogger(buildLogger.call({}));
+  globalThis.__logger.options = () => options;
+  // setRuntimeLogger(buildLogger.call({}));
 }
 
 export function resetLogger() {
-  logger = defaultLogger;
-  setRuntimeLogger(buildLogger.call({}));
+  globalThis.__logger = defaultLogger;
+  // setRuntimeLogger(buildLogger.call({}));
 }
 
 const SERVER_RESPONSE_MAP: Record<string, string> = {

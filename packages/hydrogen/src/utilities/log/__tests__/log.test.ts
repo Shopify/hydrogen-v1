@@ -1,8 +1,8 @@
 import {
+  log,
   setLogger,
   Logger,
   logServerResponse,
-  getLogger,
   getLoggerWithContext,
   resetLogger,
 } from '../log';
@@ -10,7 +10,7 @@ import {ServerComponentRequest} from '../../../framework/Hydration/ServerCompone
 import {setLoggerOptions} from '..';
 
 let mockLogger: jest.Mocked<Logger>;
-let log: Logger;
+// let log: Logger;
 
 describe('log', () => {
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('log', () => {
       warn: jest.fn(),
       error: jest.fn(),
       fatal: jest.fn(),
-      options: {},
+      options: jest.fn(),
     };
 
     global.Date.now = () => 2100;
@@ -28,12 +28,11 @@ describe('log', () => {
 
     resetLogger();
     setLogger(mockLogger);
-    log = getLogger();
   });
 
-  it('should return the wrapped mockLogger instance when getLogger() is called', () => {
-    const log2 = getLogger();
-    log2.debug('test');
+  it('should return the wrapped mockLogger instance when log is called', () => {
+    log.debug('test');
+    expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual({});
     expect(mockLogger.debug.mock.calls[0][1]).toEqual('test');
   });
@@ -42,8 +41,7 @@ describe('log', () => {
     setLoggerOptions({
       showCacheControlHeader: true,
     });
-    const log2 = getLogger();
-    expect(log2.options).toEqual({
+    expect(log.options()).toEqual({
       showCacheControlHeader: true,
     });
   });
@@ -52,9 +50,25 @@ describe('log', () => {
     setLoggerOptions({
       showCacheApiStatus: true,
     });
-    const log2 = getLogger();
-    expect(log2.options).toEqual({
+    expect(log.options()).toEqual({
       showCacheApiStatus: true,
+    });
+  });
+
+  it('should return the correct options when setLoggerOptions is set multiple times', () => {
+    setLoggerOptions({
+      showCacheControlHeader: true,
+    });
+    expect(log.options()).toEqual({
+      showCacheControlHeader: true,
+    });
+    setLoggerOptions({
+      showCacheApiStatus: true,
+      showCacheControlHeader: true,
+    });
+    expect(log.options()).toEqual({
+      showCacheApiStatus: true,
+      showCacheControlHeader: true,
     });
   });
 
@@ -116,8 +130,6 @@ describe('log', () => {
 
   ['trace', 'debug', 'warn', 'error', 'fatal'].forEach((method) => {
     it(`logs ${method}`, () => {
-      setLogger(mockLogger);
-
       (log as any)[method](`hydrogen: ${method}`);
       expect((mockLogger as any)[method]).toHaveBeenCalled();
       expect(((mockLogger as any)[method] as any).mock.calls[0][0]).toEqual({});
@@ -127,7 +139,6 @@ describe('log', () => {
     });
 
     it('gets logger for a given context', () => {
-      setLogger(mockLogger);
       const clog = getLoggerWithContext({some: 'data'});
 
       (clog as any)[method](`hydrogen: ${method}`);

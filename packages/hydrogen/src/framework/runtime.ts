@@ -1,12 +1,8 @@
 /* eslint-disable no-var */
-
-import {Logger} from '../utilities/log';
-
 /* eslint-disable @typescript-eslint/no-namespace */
 declare namespace globalThis {
   var __ctx: RuntimeContext | undefined;
   var __cache: Cache | undefined;
-  var __logger: Logger | undefined;
 }
 
 export interface RuntimeContext {
@@ -32,14 +28,6 @@ export function setCache(cache?: Cache) {
 
 export function getCache(): Cache | undefined {
   return globalThis.__cache;
-}
-
-export function setRuntimeLogger(logger: Logger) {
-  globalThis.__logger = logger;
-}
-
-export function getRuntimeLogger(): Logger | undefined {
-  return globalThis.__logger;
 }
 
 export function runDelayedFunction(fn: () => Promise<any>) {

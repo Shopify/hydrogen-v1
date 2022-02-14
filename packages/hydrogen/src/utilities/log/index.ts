@@ -1,8 +1,8 @@
 export {
+  log,
   setLogger,
   setLoggerOptions,
   getLoggerWithContext,
-  getLogger,
   Logger,
   logServerResponse,
   resetLogger,

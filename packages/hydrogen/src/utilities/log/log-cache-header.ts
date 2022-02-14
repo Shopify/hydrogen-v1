@@ -32,7 +32,7 @@ export function logCacheControlHeaders(
   response?: ServerComponentResponse
 ) {
   const log = getLoggerWithContext(request);
-  if (!log?.options?.showCacheControlHeader) {
+  if (!log.options().showCacheControlHeader) {
     return;
   }
 
