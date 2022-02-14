@@ -19,7 +19,7 @@ describe('log', () => {
       warn: jest.fn(),
       error: jest.fn(),
       fatal: jest.fn(),
-      options: jest.fn(),
+      options: jest.fn(() => ({})),
     };
 
     global.Date.now = () => 2100;
@@ -32,8 +32,31 @@ describe('log', () => {
   it('should return the wrapped mockLogger instance when log is called', () => {
     log.debug('test');
     expect(mockLogger.debug).toHaveBeenCalled();
+    expect(log.options()).toEqual({});
     expect(mockLogger.debug.mock.calls[0][0]).toEqual({});
     expect(mockLogger.debug.mock.calls[0][1]).toEqual('test');
+  });
+
+  it('should return the mockLogger2 instance when setLogger is called', () => {
+    const mockLogger2: jest.Mocked<Logger> = {
+      trace: jest.fn(),
+      debug: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      fatal: jest.fn(),
+      options: jest.fn(() => ({
+        showCacheControlHeader: true,
+      })),
+    };
+    setLogger(mockLogger2);
+
+    log.debug('test');
+    expect(mockLogger2.debug).toHaveBeenCalled();
+    expect(log.options()).toEqual({
+      showCacheControlHeader: true,
+    });
+    expect(mockLogger2.debug.mock.calls[0][0]).toEqual({});
+    expect(mockLogger2.debug.mock.calls[0][1]).toEqual('test');
   });
 
   it('should set showCacheControlHeader option when setLoggerOptions is called', () => {

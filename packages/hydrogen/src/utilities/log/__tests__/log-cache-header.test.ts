@@ -23,7 +23,7 @@ describe('cache header log', () => {
       warn: jest.fn(),
       error: jest.fn(),
       fatal: jest.fn(),
-      options: jest.fn(),
+      options: jest.fn(() => ({})),
     };
 
     resetLogger();
