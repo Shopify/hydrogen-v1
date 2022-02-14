@@ -4,10 +4,10 @@ import {
   logCacheControlHeaders,
   collectQueryCacheControlHeaders,
   resetLogger,
+  setLoggerOptions,
 } from '../index';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 import {ServerComponentResponse} from '../../../framework/Hydration/ServerComponentResponse.server';
-import {setLoggerOptions} from '../log';
 
 let mockLogger: jest.Mocked<Logger>;
 

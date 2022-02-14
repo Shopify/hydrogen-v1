@@ -1,5 +1,10 @@
-import {Logger, setLogger, logCacheApiStatus, resetLogger} from '../index';
-import {LoggerOptions, setLoggerOptions} from '../log';
+import {
+  Logger,
+  setLogger,
+  logCacheApiStatus,
+  resetLogger,
+  setLoggerOptions,
+} from '../index';
 
 let mockLogger: jest.Mocked<Logger>;
 

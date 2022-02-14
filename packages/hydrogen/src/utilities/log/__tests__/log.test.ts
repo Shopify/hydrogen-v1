@@ -10,7 +10,6 @@ import {ServerComponentRequest} from '../../../framework/Hydration/ServerCompone
 import {setLoggerOptions} from '..';
 
 let mockLogger: jest.Mocked<Logger>;
-// let log: Logger;
 
 describe('log', () => {
   beforeEach(() => {
