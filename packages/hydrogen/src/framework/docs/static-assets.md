@@ -4,6 +4,23 @@ When building your custom storefront, it can be useful to have access to static 
 
 Static assets are files your app downloads from a server. [Vite serves static assets](https://vitejs.dev/guide/assets.html) at the root path `/`. For example, you can create a file called `public/icon.png` and reference it in your code as `/icon.png`.
 
+### Changing the base URL
+
+If you want to serve your static assets from a different domain or path, then you can specify the `HYDROGEN_ASSET_BASE_URL` environment variable when building your project.
+
+For example, running the following command will cause references to `/icon.png` to instead reference `https://mycdn.example/path/to/folder/icon.png` in the compiled code.
+
+{% codeblock terminal %}
+
+```bash
+$ HYDROGEN_ASSET_BASE_URL=https://mycdn.example/path/to/folder yarn build
+```
+
+{% endcodeblock %}
+
+> Note:
+> Make sure to check the `dist/client/index.html` file to verify that the URLs point to the provided URL.
+
 ## Where to place static assets
 
 You should place static assets in the `/public` directory if the following apply:

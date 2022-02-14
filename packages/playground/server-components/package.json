@@ -21,7 +21,6 @@
     "express": "^4.17.1",
     "miniflare": "^1.3.3",
     "react": "0.0.0-experimental-529dc3ce8-20220124",
-    "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
-    "react-router-dom": "^5.2.0"
+    "react-dom": "0.0.0-experimental-529dc3ce8-20220124"
   }
 }
