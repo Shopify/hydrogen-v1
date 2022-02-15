@@ -4,7 +4,7 @@ import {
   Helmet as ActualHelmet,
   HelmetData,
 } from 'react-helmet-async';
-import {useServerRequest} from '../ServerRequestProvider';
+import {useEnvContext} from '../ssr-interop';
 
 export type RealHelmetData = {context: {helmet: HelmetData}};
 
@@ -14,10 +14,7 @@ export function Helmet({
   children,
   ...props
 }: HelmetProps & {children: React.ReactNode}) {
-  // @ts-ignore
-  const helmetData = import.meta.env.SSR
-    ? useServerRequest().ctx.helmet
-    : clientHelmetData;
+  const helmetData = useEnvContext((req) => req.ctx.helmet, clientHelmetData);
 
   return (
     // @ts-ignore

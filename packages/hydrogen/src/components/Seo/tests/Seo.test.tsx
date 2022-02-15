@@ -9,6 +9,12 @@ import {ProductSeo} from '../ProductSeo.client';
 import {CollectionSeo} from '../CollectionSeo.client';
 import {PageSeo} from '../PageSeo.client';
 
+const mockUrl = 'https://store-name.com/';
+
+jest.mock('../../../foundation', () => ({
+  useUrl: () => new URL(mockUrl),
+}));
+
 jest.mock('../DefaultPageSeo.client', () => ({
   DefaultPageSeo() {
     return null;
@@ -53,14 +59,6 @@ describe('<Seo />', () => {
   });
 
   it('renders <DefaultPageSeo /> if type is defaultSeo', () => {
-    const url = 'https://store-name.com';
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: url,
-      },
-      writable: true,
-    });
-
     const defaultPage = {
       title: 'test title',
       description: 'test description',
@@ -69,54 +67,49 @@ describe('<Seo />', () => {
 
     expect(wrapper).toContainReactComponent(DefaultPageSeo, {
       ...defaultPage,
-      url,
+      url: mockUrl,
     });
   });
 
   it('renders <HomePageSeo /> type is homepage', () => {
-    const url = 'https://store-name.com';
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: url,
-      },
-      writable: true,
-    });
-
     const homePage = {title: 'test title'};
     const wrapper = mount(<Seo type="homepage" data={homePage} />);
 
-    expect(wrapper).toContainReactComponent(HomePageSeo, {...homePage, url});
+    expect(wrapper).toContainReactComponent(HomePageSeo, {
+      ...homePage,
+      url: mockUrl,
+    });
   });
 
   it('renders <ProductSeo /> if type is product', () => {
-    const url = 'https://store-name.com';
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: url,
-      },
-      writable: true,
-    });
-
     const product = {
       title: 'default title',
       description: 'default description',
       seo: {},
       handle: 'default handle',
       vendor: 'default vendor',
-      images: {edges: []},
+      featuredImage: {
+        url: 'https://test-123/image.png',
+        width: 1200,
+        height: 600,
+      },
       variants: {
         edges: [],
       },
     };
     const wrapper = mount(<Seo type="product" data={product} />);
 
-    expect(wrapper).toContainReactComponent(ProductSeo, {...product, url});
+    expect(wrapper).toContainReactComponent(ProductSeo, {
+      ...product,
+      url: mockUrl,
+    });
   });
 
   it('renders <CollectionSeo /> if type is collection', () => {
     const collection = {
       title: 'default title',
       description: 'default description',
+      seo: {},
     };
     const wrapper = mount(<Seo type="collection" data={collection} />);
 

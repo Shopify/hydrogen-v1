@@ -11,6 +11,9 @@ const CONTENT_DIRECTORY_NAME = 'docs';
 const PRETTIER_CONFIG = {
   ...require('@shopify/prettier-config'),
   parser: 'markdown',
+  tabWidth: 2,
+  printWidth: 80,
+  trailingComma: 'es5',
 };
 
 export class FileResult {

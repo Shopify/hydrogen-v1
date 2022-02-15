@@ -23,10 +23,6 @@ export function ProductDetails({product}) {
 | ---------- | ----------------------------------------- | -------------------------------------------------------------------- |
 | priceType? | <code>"regular" &#124; "compareAt"</code> | The type of price. Valid values: `regular` (default) or `compareAt`. |
 
-## Alias
-
-The `SelectedVariantPrice` component is aliased by the `Product.SelectedVariant.Price` component. You can use whichever component you prefer.
-
 ## Component type
 
 The `SelectedVariantPrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).

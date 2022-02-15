@@ -74,7 +74,72 @@ export default function({request}) {
 
 {% endcodeblock %}
 
+## Navigating between routes
+
+You can navigate between routes using the `Link` component or the `useNavigate` hook.
+
+### Link component
+
+The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all properties available to the `<a>` element are also available to the `Link` component. For more information, refer to the [`<a>` element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).
+
+#### Example code
+
+{% codeblock file, filename: 'index.server.jsx' %}
+
+```jsx
+import {Link} from '@shopify/hydrogen';
+export default function Index() {
+  return <Link to="/products/hydrogen">Hydrogen</Link>;
+}
+```
+
+{% endcodeblock %}
+
+#### Props
+
+| Name            | Type                 | Description                                                                                                                                                                                       |
+| --------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| to              | <code>string</code>  | The destination URL that the link points to. This is the `href` attribute of the underlying `<a>` element.                                                                                        |
+| replace?        | <code>boolean</code> | Whether to update the state object or URL of the current history entry. Refer to the [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). |
+| clientState?    | <code>any</code>     | The custom client state with the navigation.                                                                                                                                                      |
+| reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                               |
+
+### useNavigate hook
+
+The `useNavigate` hook imperatively navigates between routes. Consider using the `useNavigate` hook only where appropriate. Generally, you should use the `Link` component instead, because it provides standard browser accessibility functionality, like `cmd+click` and right-click to open. `useNavigate` is only available in client components.
+
+#### Example code
+
+{% codeblock file, filename: 'component.client.jsx' %}
+
+```jsx
+import {useNavigate} from '@shopify/hydrogen/client';
+function addToCart() { ... }
+export default function ClientComponent() {
+  const navigate = useNavigate();
+  async function clickAddToCart() {
+    await addToCart();
+    navigate('/success', {replace: true});
+  }
+  return <Button onClick={clickAddToCart}>Add to Cart</Button>;
+}
+```
+
+{% endcodeblock %}
+
+#### Return values
+
+The `useNavigate` hook returns the following values:
+
+| Name    | Description                                                                                                                                                             |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| path    | The path you want to navigate to.                                                                                                                                       |
+| options | The options for the configuration object: `replace`, `reloadDocument`, `clientState`. For more information the options, refer to the [Link component](#link-component). |
+
 ## API routes
+
+> Note:
+> If you want to use a third-party data source to render Hydrogen components, then refer to [Third-party data source](/custom-storefronts/hydrogen/data-sources#third-party-data-source). If you want to use a third-party data source and render your own component, then refer to the [useQuery](/api/hydrogen/hooks/global/usequery) hook.
 
 API routes allow you to build your API in Hydrogen. Any server component within the `src/pages` directory that exports an API function will become an API route. The following examples show some common use cases for implementing API routes.
 

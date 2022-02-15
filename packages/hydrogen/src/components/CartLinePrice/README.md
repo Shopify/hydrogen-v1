@@ -27,10 +27,6 @@ export function App() {
 | ---------- | ----------------------------------------- | ------------------------------------------------------------------- |
 | priceType? | <code>"regular" &#124; "compareAt"</code> | The type of price. Valid values:`regular` (default) or `compareAt`. |
 
-## Alias
-
-The `CartLinePrice` component is aliased by the `CartLine.Price` component. You can use whichever component you prefer.
-
 ## Component type
 
 The `CartLinePrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).

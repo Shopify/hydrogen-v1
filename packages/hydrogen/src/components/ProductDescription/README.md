@@ -18,10 +18,6 @@ export function Product({product}) {
 }
 ```
 
-## Alias
-
-The `ProductDescription` component is aliased by `Product.Description`. You can use whichever component you prefer.
-
 ## Component type
 
 The `ProductDescription` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).

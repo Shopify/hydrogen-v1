@@ -28,10 +28,6 @@ export function Product() {
 }
 ```
 
-## Alias
-
-The `ProductProvider` component is aliased by the `Product` component. You can use whichever component you prefer.
-
 ## Component type
 
 The `ProductProvider` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
@@ -154,12 +150,8 @@ const QUERY = gql`
         title
         description
       }
-      images(first: 1) {
-        edges {
-          node {
-            url
-          }
-        }
+      featuredImage {
+        url
       }
       ...ProductProviderFragment
     }

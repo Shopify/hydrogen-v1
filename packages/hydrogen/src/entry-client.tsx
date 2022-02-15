@@ -1,11 +1,11 @@
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
 import {hydrateRoot} from 'react-dom';
-import {BrowserRouter} from 'react-router-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
-import {ServerStateProvider, ServerStateRouter} from './client';
+import {ServerStateProvider} from './client';
+import {Router} from './foundation/Router/Router.client';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   const root = document.getElementById('root');
@@ -43,10 +43,9 @@ function Content({
       serverState={serverState}
       setServerState={setServerState}
     >
-      <BrowserRouter>
-        <ServerStateRouter />
+      <Router>
         <ClientWrapper>{response.readRoot()}</ClientWrapper>
-      </BrowserRouter>
+      </Router>
     </ServerStateProvider>
   );
 }

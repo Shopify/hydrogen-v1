@@ -1,3 +1,4 @@
+import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import fetch from 'node-fetch';
 
 type TestOptions = {
@@ -231,7 +232,7 @@ export default async function testCases({getServerUrl}: TestOptions) {
 
     const body = streamedChunks.join('');
     expect(body).toContain('var __flight=[];');
-    expect(body).not.toContain('__flight.push(`S1:"react.suspense"'); // We're not including RSC
+    expect(body).toContain('__flight.push(`S1:"react.suspense"');
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -239,7 +240,7 @@ export default async function testCases({getServerUrl}: TestOptions) {
   it('streams the RSC response', async () => {
     const response = await fetch(
       getServerUrl() +
-        '/react?state=' +
+        `${RSC_PATHNAME}?state=` +
         encodeURIComponent(JSON.stringify({pathname: '/stream'}))
     );
     let streamedChunks = [];
@@ -256,5 +257,20 @@ export default async function testCases({getServerUrl}: TestOptions) {
     const body = streamedChunks.join('');
     expect(body).toContain('S1:"react.suspense"');
     expect(body).toContain('"c":"5","children":"done"');
+  });
+
+  it('shows SEO tags for bots', async () => {
+    const response = await fetch(getServerUrl() + '/seo?_bot');
+    const body = await response.text();
+
+    expect(body).toContain('<html lang="ja"');
+    expect(body).toContain('<body data-test="true"');
+    expect(body).toMatch(
+      /<meta\s+.*?property="og:url"\s+content="example.com"\s*\/>/
+    );
+    // This one comes after Suspense delay
+    expect(body).toMatch(
+      /<meta\s+.*?property="type"\s+content="website"\s*\/>/
+    );
   });
 }

@@ -51,6 +51,7 @@ export {SelectedVariantAddToCartButton} from './SelectedVariantAddToCartButton';
 export {SelectedVariantBuyNowButton} from './SelectedVariantBuyNowButton';
 export {SelectedVariantShopPayButton} from './SelectedVariantShopPayButton';
 export {SelectedVariantImage} from './SelectedVariantImage';
+export {SelectedVariantUnitPrice} from './SelectedVariantUnitPrice';
 export type {
   BuyNowButtonProps,
   BuyNowButtonPropsWeControl,
@@ -60,59 +61,5 @@ export type {ShopPayButtonProps} from './ShopPayButton';
 export {ShopPayButton} from './ShopPayButton';
 export {useAvailableCountries} from '../hooks/useAvailableCountries';
 export {useCountry} from '../hooks/useCountry';
-
-/**
- * Provide namespaced aliases for the `Product` group.
- */
-
-import {ProductProvider} from './ProductProvider';
-import {ProductPrice} from './ProductPrice';
-import {ProductDescription} from './ProductDescription';
-import {ProductTitle} from './ProductTitle';
-import {ProductMetafield} from './ProductMetafield';
-import {SelectedVariantAddToCartButton} from './SelectedVariantAddToCartButton';
-import {SelectedVariantBuyNowButton} from './SelectedVariantBuyNowButton';
-import {SelectedVariantShopPayButton} from './SelectedVariantShopPayButton';
-import {SelectedVariantImage} from './SelectedVariantImage';
-import {SelectedVariantPrice} from './SelectedVariantPrice';
-import {SelectedVariantUnitPrice} from './SelectedVariantUnitPrice';
-import {SelectedVariantMetafield} from './SelectedVariantMetafield';
-
-export const Product: Function & Record<string, any> = ProductProvider;
-Product.Description = ProductDescription;
-Product.Price = ProductPrice;
-Product.Title = ProductTitle;
-Product.Metafield = ProductMetafield;
-Product.SelectedVariant = {
-  AddToCartButton: SelectedVariantAddToCartButton,
-  BuyNowButton: SelectedVariantBuyNowButton,
-  ShopPayButton: SelectedVariantShopPayButton,
-  Price: SelectedVariantPrice,
-  Image: SelectedVariantImage,
-  UnitPrice: SelectedVariantUnitPrice,
-  Metafield: SelectedVariantMetafield,
-};
-
-/**
- * Provide namespaced aliases for the `CartLine` group.
- */
-
-import {CartLineProvider} from './CartLineProvider';
-import {CartLineImage} from './CartLineImage';
-import {CartLinePrice} from './CartLinePrice';
-import {CartLineProductTitle} from './CartLineProductTitle';
-import {CartLineQuantity} from './CartLineQuantity';
-import {CartLineQuantityAdjustButton} from './CartLineQuantityAdjustButton';
-import {CartLineSelectedOptions} from './CartLineSelectedOptions';
-import {CartLineAttributes} from './CartLineAttributes';
-
-export const CartLine: Function & Record<string, any> = CartLineProvider;
-CartLine.Image = CartLineImage;
-CartLine.Price = CartLinePrice;
-CartLine.ProductTitle = CartLineProductTitle;
-CartLine.Quantity = CartLineQuantity;
-CartLine.QuantityAdjustButton = CartLineQuantityAdjustButton;
-CartLine.SelectedOptions = CartLineSelectedOptions;
-CartLine.Attributes = CartLineAttributes;
-
 export {Seo} from './Seo';
+export {useNavigate} from '../hooks/useNavigate';
