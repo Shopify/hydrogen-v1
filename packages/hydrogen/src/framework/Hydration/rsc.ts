@@ -8,6 +8,7 @@ import {
   createFromReadableStream,
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import {RSC_PATHNAME} from '../../constants';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -80,7 +81,7 @@ export function useServerResponse(state: any) {
 
     // Request a new flight response.
     response = createFromFetch(
-      fetch('/react?state=' + encodeURIComponent(key))
+      fetch(`${RSC_PATHNAME}?state=` + encodeURIComponent(key))
     );
   }
 

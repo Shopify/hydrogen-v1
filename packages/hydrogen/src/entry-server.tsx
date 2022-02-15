@@ -26,6 +26,7 @@ import {
   rscRenderToReadableStream,
   createFromReadableStream,
 } from './streaming.server';
+import {RSC_PATHNAME} from './constants';
 
 declare global {
   // This is provided by a Vite plugin
@@ -792,7 +793,7 @@ async function isStreamingSupported() {
 function setupCurrentRequest(url: URL, request: ServerComponentRequest) {
   const log = getLoggerFromContext(request);
   const state =
-    url.pathname === '/react'
+    url.pathname === RSC_PATHNAME
       ? JSON.parse(url.searchParams.get('state') || '{}')
       : {pathname: url.pathname, search: url.search};
 
