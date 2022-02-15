@@ -10,7 +10,7 @@ export type Media = Pick<MediaType, 'mediaContentType'>;
 
 type MediaImageMedia = Media & MediaImageProps;
 type ModelViewerMedia = Media & ModelViewerProps['model'];
-type ExternalVideoMedia = Media & ExternalVideoProps['video'];
+type ExternalVideoMedia = Media & ExternalVideoProps['data'];
 type VideoMedia = Media & VideoProps['video'];
 
 export interface MediaFileProps {
@@ -53,7 +53,7 @@ export function MediaFile({
       return (
         <ExternalVideo
           {...passthroughProps}
-          video={media as ExternalVideoMedia}
+          data={media as ExternalVideoMedia}
           options={options as ExternalVideoProps['options']}
         />
       );
