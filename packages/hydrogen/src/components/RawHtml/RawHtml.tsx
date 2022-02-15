@@ -13,6 +13,8 @@ export interface RawHtmlProps {
   string: string;
   /** Whether the HTML string should be sanitized with `isomorphic-dompurify`. */
   unsanitized?: boolean;
+  /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
+  as?: ElementType;
 }
 
 /**
@@ -35,7 +37,7 @@ export function RawHtml<TTag extends ElementType>(
 
     // TODO: Re-enable when we find a way to support Worker runtime
     // return DOMPurify.sanitize(text, DOMPURIFY_CONFIG);
-  }, [string, unsanitized]);
+  }, [string, !!unsanitized]);
 
   return (
     <Wrapper

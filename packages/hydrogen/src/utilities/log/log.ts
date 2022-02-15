@@ -2,9 +2,10 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 
-/** A utility for logging debugging, warning, and error information about the application.
- * Use by importing `log` `@shopify/hydrogen` or by using a `log` prop passed to each page
- * component. Using the latter is ideal, because it will ty your log to the current request in progress.
+/** The `log` utility is a function that's used for logging debugging, warning, and error information about the application.
+ * Use this utility by importing `log` from `@shopify/hydrogen`, or by using a `log` prop passed to each page
+ * component. We recommend using the `log` prop passed to each page because it will associated your log to the
+ * current request in progress.
  */
 
 export interface Logger {
@@ -17,7 +18,8 @@ export interface Logger {
 
 const defaultLogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(...args);
+    // Re-enable following line to show trace debugging information
+    // console.log(context.id, ...args);
   },
   debug(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(...args);
@@ -71,8 +73,14 @@ export const log: Logger = {
   },
 };
 
+const SERVER_RESPONSE_MAP: Record<string, string> = {
+  str: 'streaming SSR',
+  rsc: 'Server Components',
+  ssr: 'buffered SSR',
+};
+
 export function logServerResponse(
-  type: 'str' | 'rsc' | 'ssr',
+  type: 'str' | 'rsc' | 'ssr' | 'api',
   log: Logger,
   request: ServerComponentRequest,
   responseStatus: number
@@ -86,12 +94,8 @@ export function logServerResponse(
       ? lightBlue(responseStatus)
       : green(responseStatus);
 
-  const fullType =
-    type === 'str'
-      ? 'streaming SSR'
-      : type === 'rsc'
-      ? 'server components'
-      : 'buffered SSR';
+  const fullType: string = SERVER_RESPONSE_MAP[type] || type;
+
   const styledType = italic(pad(fullType, '                 '));
   const paddedTiming = pad(
     (getTime() - request.time).toFixed(2) + ' ms',

@@ -1,4 +1,16 @@
+import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
+import {HelmetData} from 'react-helmet-async';
+import type {RealHelmetData} from '../../foundation/Helmet';
+
+let reqCounter = 0; // For debugging
+const generateId =
+  typeof crypto !== 'undefined' &&
+  // @ts-ignore
+  !!crypto.randomUUID
+    ? // @ts-ignore
+      () => crypto.randomUUID() as string
+    : () => `req${++reqCounter}`;
 
 /**
  * This augments the `Request` object from the Fetch API:
@@ -9,7 +21,15 @@ import {getTime} from '../../utilities/timing';
  */
 export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
+  public id: string;
   public time: number;
+  // CFW Request has a reserved 'context' property, use 'ctx' instead.
+  public ctx: {
+    cache: Map<string, any>;
+    helmet: RealHelmetData;
+    shopifyConfig?: ShopifyContextValue;
+    [key: string]: any;
+  };
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -20,10 +40,20 @@ export class ServerComponentRequest extends Request {
       super(getUrlFromNodeRequest(input), {
         headers: new Headers(input.headers as {[key: string]: string}),
         method: input.method,
+        body:
+          input.method !== 'GET' && input.method !== 'HEAD'
+            ? input.body
+            : undefined,
       });
     }
-    this.time = getTime();
 
+    this.time = getTime();
+    this.id = generateId();
+
+    this.ctx = {
+      cache: new Map(),
+      helmet: new HelmetData({}) as unknown as RealHelmetData,
+    };
     this.cookies = this.parseCookies();
   }
 

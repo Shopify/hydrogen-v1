@@ -29,11 +29,11 @@ Primitive components and hooks are the building blocks for different component t
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/primitive/mediafile">MediaFile</a></td>
-    <td>Renders the media for the Storefront API's <a href="/api/storefront/reference/products/media">Media object</a>. It either renders an <code>Image</code>, a <code>Video</code>, an <code>ExternalVideo</code>, or a <code>Model3D</code> depending on the <code>mediaContentType</code> of the media provided as a prop.</td>
+    <td>Renders the media for the Storefront API's <a href="/api/storefront/reference/products/media">Media object</a>. It either renders an <code>Image</code>, a <code>Video</code>, an <code>ExternalVideo</code>, or a <code>ModelViewer</code> depending on the <code>mediaContentType</code> of the media provided as a prop.</td>
     <td>Not applicable</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/primitive/model3d">Model3D</a></td>
+    <td><a href="/api/hydrogen/components/primitive/modelviewer">ModelViewer</a></td>
     <td>Renders a 3D model (with the <code>model-viewer</code> tag) for the Storefront API's <a href="/api/storefront/reference/products/model3d">Model3d object</a>.</td>
     <td>Not applicable</td>
   </tr>
@@ -50,6 +50,11 @@ Primitive components and hooks are the building blocks for different component t
   <tr>
     <td><a href="/api/hydrogen/components/primitive/rawhtml">RawHtml</a></td>
     <td>Renders an HTML string as HTML DOM elements.</td>
+    <td>Not applicable</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
+    <td>Renders SEO information on a webpage.</td>
     <td>Not applicable</td>
   </tr>
   <tr>
@@ -73,6 +78,8 @@ Primitive components and hooks are the building blocks for different component t
 
 [ShopifyProvider](/api/hydrogen/components/global/shopifyprovider) is a global Hydrogen component that wraps your entire app. You should place it in your app's entry point component. For example, your app's entry point component might be `<App>`.
 
+The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+
 The `ShopifyProvider` component relates to the following global hooks that you can use to fetch data from server components:
 
 <table>
@@ -81,8 +88,8 @@ The `ShopifyProvider` component relates to the following global hooks that you c
     <th>Description</th>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
-    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
+    <td>Use to get current url in server or client component.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useserverstate">useServerState</a></td>
@@ -95,6 +102,14 @@ The `ShopifyProvider` component relates to the following global hooks that you c
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshopquery">useShopQuery</a></td>
     <td>Make server-only GraphQL queries to the <a href="/api/storefront">Storefront API</a>.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
+    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
+    <td>Retrieve the current URL in a server or client component.</td>
   </tr>
 </table>
 
@@ -197,7 +212,7 @@ Hydrogen includes the following cart components and hooks:
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartcheckoutbutton">CartCheckoutButton</a></td>
     <td>Renders a button that redirects to the checkout URL for the cart.</td>
-    <td><a href="/api/hydrogen/hooks/cart/usecartcheckouturl">useCartCheckoutUrl</a></td>
+    <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartestimatedcost">CartEstimatedCost</a></td>
@@ -252,19 +267,7 @@ Hydrogen includes the following cart components and hooks:
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartprovider">CartProvider</a></td>
     <td>Creates a context for using a cart.</td>
-    <td>
-      <ul>
-        <li><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartbuyeridentityupdatecallback">useCartBuyerIdentityUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartdiscountcodesupdatecallback">useCartDiscountCodesUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesaddcallback">useCartLinesAddCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesremovecallback">useCartLinesRemoveCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinesupdatecallback">useCartLinesUpdateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartcheckouturl">useCartCheckoutUrl</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartcreatecallback">useCartCreateCallback</a></li>
-        <li><a href="/api/hydrogen/hooks/cart/usecartlinestotalquantity">useCartLinesTotalQuantity</a></li>
-      </ul>
-    </td>
+    <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartshoppaybutton">CartShopPayButton</a></td>
@@ -327,6 +330,10 @@ Hydrogen includes the following utilities to help speed up your development proc
     <th>Description</th>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/utilities/flattenconnection">flattenConnection</a></td>
+    <td>Transforms a connection object into a flat array.</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/utilities/isclient">isClient</a></td>
     <td>Indicates if the code executed on the client.</td>
   </tr>
@@ -335,16 +342,12 @@ Hydrogen includes the following utilities to help speed up your development proc
     <td>Indicates if the code executed on the server.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/utilities/flattenconnection">flattenConnection</a></td>
-    <td>Transforms a connection object into a flat array.</td>
+    <td><a href="/api/hydrogen/utilities/log">log</a></td>
+    <td>Logs debugging, warning, and error information about the application.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/utilities/parsemetafieldvalue">parseMetafieldValue</a></td>
     <td>Parses a metafield's value from a string to a sensible type corresponding to the metafield's type.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/utilities/log">log</a></td>
-    <td>A utility for logging debugging, warning, and error information about the application</td>
   </tr>
 </table>
 

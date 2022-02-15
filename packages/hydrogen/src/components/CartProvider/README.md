@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 ## Example code
 
@@ -23,11 +23,3 @@ The `CartProvider` component is a client component, which means that it renders 
 ## Related hooks
 
 - [`useCart`](/api/hydrogen/hooks/cart/usecart)
-- [`useCartBuyerIdentityUpdateCallback`](/api/hydrogen/hooks/cart/usecartbuyeridentityupdatecallback)
-- [`useCartCheckoutUrl`](/api/hydrogen/hooks/cart/usecartcheckouturl)
-- [`useCartCreateCallback`](/api/hydrogen/hooks/cart/usecartcreatecallback)
-- [`useCartDiscountCodesUpdateCallback`](/api/hydrogen/hooks/cart/usecartdiscountcodesupdatecallback)
-- [`useCartLinesAddCallback`](/api/hydrogen/hooks/cart/usecartlinesaddcallback)
-- [`useCartLinesRemoveCallback`](/api/hydrogen/hooks/cart/usecartlinesremovecallback)
-- [`useCartLinesTotalQuantity`](/api/hydrogen/hooks/cart/usecartlinestotalquantity)
-- [`useCartLinesUpdateCallback`](/api/hydrogen/hooks/cart/usecartlinesupdatecallback)

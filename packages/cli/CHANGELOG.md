@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-<!-- ## Unreleased -->
+## Unreleased
+
+- Improves some types, avoid using `any` in `mini-oxygen`
+
+## 0.10.1 - 2022-01-26
+
+- Adds command hooks `onCommit` and `onUpdateFile`
+
+## 0.10.0 - 2022-01-25
+
+- Adds `dev` command for running Hydrogen apps locally with vite
+- Adds `preview` command for running Hydrogen apps in a local Worker runtime
+- Prevent CLI commands from unintentionally mutating the app code
+- Adds cache support for `preview` command
+
+## 0.9.1 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.9.0 - 2022-01-20
+
+- No updates. Transitive dependency bump.
 
 ## 0.8.3 - 2022-01-13
 

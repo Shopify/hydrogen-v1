@@ -1,18 +1,9 @@
 import React from 'react';
-
-import {CartProvider} from '../../CartProvider';
+import {CartProvider, useCart} from '../../CartProvider';
 import {CART} from '../../CartProvider/tests/fixtures';
 import {AddToCartButton} from '../AddToCartButton.client';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
-
-const mockCreateCart = jest.fn();
-const mockAddLines = jest.fn();
-
-jest.mock('../../CartProvider', () => ({
-  ...(jest.requireActual('../../CartProvider') as {}),
-  useCartCreateCallback: () => mockCreateCart,
-  useCartLinesAddCallback: () => mockAddLines,
-}));
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {CartContext} from '../../CartProvider/context';
 
 describe('AddToCartButton', () => {
   beforeEach(() => {
@@ -32,7 +23,7 @@ describe('AddToCartButton', () => {
   });
 
   it('renders a button', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <CartProvider>
         <AddToCartButton variantId="123">Add to cart</AddToCartButton>
       </CartProvider>
@@ -44,7 +35,7 @@ describe('AddToCartButton', () => {
   });
 
   it('allows passthrough props', () => {
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <CartProvider>
         <AddToCartButton variantId="123" className="bg-blue-600">
           Add to cart
@@ -59,7 +50,7 @@ describe('AddToCartButton', () => {
 
   describe('when the button is clicked', () => {
     it('disables the button', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <CartProvider>
           <AddToCartButton variantId="123" className="bg-blue-600">
             Add to cart
@@ -75,7 +66,7 @@ describe('AddToCartButton', () => {
     });
 
     it('renders a message for screen readers when an accessible label is provided', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <CartProvider>
           <AddToCartButton
             accessibleAddingToCartLabel="Adding product to your cart"
@@ -97,16 +88,40 @@ describe('AddToCartButton', () => {
     });
 
     describe('and a Cart ID is present', () => {
-      it('calls useCartLinesAddCallback', () => {
-        const component = mountWithShopifyProvider(
-          <CartProvider cart={CART}>
-            <AddToCartButton
-              attributes={[{key: 'size', value: 'large'}]}
-              variantId="123"
-              className="bg-blue-600"
+      it('calls useCart() linesAdd callback', () => {
+        const mockAddLines = jest.fn();
+
+        /**
+         * This CustomUseCartProvider allows us to override what is returned when 'useCart()' is called.
+         * We do this by essentially copying the default return value of 'useCart()' and then providing our own CartContext.Provider with our value mixed in.
+         * Relying on the fact that React will always use the closest context provider for a given context.
+         */
+        const CustomUseCartProvider = ({
+          children,
+        }: {
+          children: React.ReactNode;
+        }) => {
+          const useCartDefault = useCart();
+          return (
+            <CartContext.Provider
+              value={{...useCartDefault, linesAdd: mockAddLines}}
             >
-              Add to cart
-            </AddToCartButton>
+              {children}
+            </CartContext.Provider>
+          );
+        };
+
+        const component = mountWithProviders(
+          <CartProvider cart={CART}>
+            <CustomUseCartProvider>
+              <AddToCartButton
+                attributes={[{key: 'size', value: 'large'}]}
+                variantId="123"
+                className="bg-blue-600"
+              >
+                Add to cart
+              </AddToCartButton>
+            </CustomUseCartProvider>
           </CartProvider>
         );
 
@@ -126,16 +141,40 @@ describe('AddToCartButton', () => {
     });
 
     describe('and a Cart ID is not present', () => {
-      it('calls useCartCreateCallback', () => {
-        const component = mountWithShopifyProvider(
-          <CartProvider>
-            <AddToCartButton
-              attributes={[{key: 'size', value: 'large'}]}
-              variantId="123"
-              className="bg-blue-600"
+      it('calls useCart() cartCreate callback', () => {
+        const mockCreateCart = jest.fn();
+
+        /**
+         * This CustomUseCartProvider allows us to override what is returned when 'useCart()' is called.
+         * We do this by essentially copying the default return value of 'useCart()' and then providing our own CartContext.Provider with our value mixed in.
+         * Relying on the fact that React will always use the closest context provider for a given context.
+         */
+        const CustomUseCartProvider = ({
+          children,
+        }: {
+          children: React.ReactNode;
+        }) => {
+          const useCartDefault = useCart();
+          return (
+            <CartContext.Provider
+              value={{...useCartDefault, cartCreate: mockCreateCart}}
             >
-              Add to cart
-            </AddToCartButton>
+              {children}
+            </CartContext.Provider>
+          );
+        };
+
+        const component = mountWithProviders(
+          <CartProvider onCreate={mockCreateCart}>
+            <CustomUseCartProvider>
+              <AddToCartButton
+                attributes={[{key: 'size', value: 'large'}]}
+                variantId="123"
+                className="bg-blue-600"
+              >
+                Add to cart
+              </AddToCartButton>
+            </CustomUseCartProvider>
           </CartProvider>
         );
 

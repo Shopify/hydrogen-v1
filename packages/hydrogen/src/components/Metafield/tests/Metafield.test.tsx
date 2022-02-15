@@ -1,17 +1,17 @@
 import React from 'react';
 import {Metafield} from '../Metafield.client';
 import {getParsedMetafield} from '../../../utilities/tests/metafields';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {RawHtml} from '../../RawHtml';
 import {Image} from '../../Image';
-import {StarRating} from '../components';
 import {getMediaImage} from '../../../utilities/tests/media';
+import type {Rating} from '../../../types';
 
 describe('<Metafield />', () => {
   it('renders nothing when the metafield value is undefined', () => {
     console.warn = jest.fn();
 
-    const component = mountWithShopifyProvider(
+    const component = mountWithProviders(
       <Metafield metafield={{type: 'color', value: undefined}} />
     );
     expect(component.html()).toBeFalsy();
@@ -21,7 +21,7 @@ describe('<Metafield />', () => {
     console.warn = jest.fn();
 
     const metafield = {type: 'color', value: undefined};
-    mountWithShopifyProvider(<Metafield metafield={metafield} />);
+    mountWithProviders(<Metafield metafield={metafield} />);
 
     expect(console.warn).toHaveBeenCalledWith(
       `No metafield value for ${metafield}`
@@ -31,11 +31,11 @@ describe('<Metafield />', () => {
   describe('with `date` type metafield', () => {
     it('renders the localized date as a string in a `time` by default', () => {
       const metafield = getParsedMetafield({type: 'date'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -47,11 +47,11 @@ describe('<Metafield />', () => {
 
     it('renders the date as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'date'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -61,42 +61,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'date'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'date'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The date is {(value as Date).toLocaleDateString()}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [
-          `The date is `,
-          (metafield.value as Date).toLocaleDateString(),
-        ],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'date'})}
           className="emphasized"
@@ -111,11 +77,11 @@ describe('<Metafield />', () => {
   describe('with `date_time` type metafield', () => {
     it('renders the date as a string in a `time` by default', () => {
       const metafield = getParsedMetafield({type: 'date_time'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -127,11 +93,11 @@ describe('<Metafield />', () => {
 
     it('renders the date as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'date_time'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -141,39 +107,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'date_time'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'date_time'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The date is {(value as Date).toLocaleString()}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The date is `, (metafield.value as Date).toLocaleString()],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'date_time'})}
           className="emphasized"
@@ -191,11 +126,11 @@ describe('<Metafield />', () => {
         type: 'weight',
         value: JSON.stringify({value: 10, unit: 'kg'}),
       });
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -210,11 +145,11 @@ describe('<Metafield />', () => {
         type: 'weight',
         value: JSON.stringify({value: 10, unit: 'kg'}),
       });
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -224,38 +159,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'weight'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={getParsedMetafield({type: 'weight'})}>
-          {() => {
-            return <p>The weight is 10 lbs</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `The weight is 10 lbs`,
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'weight'})}
           className="emphasized"
@@ -273,11 +178,11 @@ describe('<Metafield />', () => {
         type: 'volume',
         value: JSON.stringify({value: 10, unit: 'l'}),
       });
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -292,11 +197,11 @@ describe('<Metafield />', () => {
         type: 'volume',
         value: JSON.stringify({value: 10, unit: 'l'}),
       });
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -306,38 +211,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'volume'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={getParsedMetafield({type: 'volume'})}>
-          {() => {
-            return <p>The volume is 10 l</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `The volume is 10 l`,
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'volume'})}
           className="emphasized"
@@ -355,11 +230,11 @@ describe('<Metafield />', () => {
         type: 'dimension',
         value: JSON.stringify({value: 5, unit: 'cm'}),
       });
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -374,11 +249,11 @@ describe('<Metafield />', () => {
         type: 'dimension',
         value: JSON.stringify({value: 5, unit: 'cm'}),
       });
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -388,38 +263,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'dimension'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={getParsedMetafield({type: 'dimension'})}>
-          {() => {
-            return <p>The length is 5 cm</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `The length is 5 cm`,
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'dimension'})}
           className="emphasized"
@@ -437,11 +282,11 @@ describe('<Metafield />', () => {
         type: 'single_line_text_field',
         value: 'hello world',
       });
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} />,
         {
           shopifyConfig: {
-            locale: 'en-us',
+            defaultLocale: 'en-us',
           },
         }
       );
@@ -451,40 +296,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'single_line_text_field'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithShopifyProvider(
-        <Metafield
-          metafield={getParsedMetafield({type: 'single_line_text_field'})}
-        >
-          {() => {
-            return <p>Hello world</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `Hello world`,
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'single_line_text_field'})}
           className="emphasized"
@@ -501,40 +314,8 @@ describe('<Metafield />', () => {
   describe('with `multi_line_text_field` type metafield', () => {
     it.todo('renders the text in a `RawHtml` by default');
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'multi_line_text_field'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithShopifyProvider(
-        <Metafield
-          metafield={getParsedMetafield({type: 'multi_line_text_field'})}
-        >
-          {() => {
-            return <p>Hello world</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `Hello world`,
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'multi_line_text_field'})}
           className="emphasized"
@@ -554,9 +335,7 @@ describe('<Metafield />', () => {
         type: 'url',
         value: 'https://www.example.com',
       });
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('a', {
         children: metafield.value,
@@ -564,38 +343,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return <p>Hello world</p>;
-      });
-      const metafield = getParsedMetafield({type: 'url'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={getParsedMetafield({type: 'url'})}>
-          {() => {
-            return <p>Hello world</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: `Hello world`,
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'url'})}
           className="emphasized"
@@ -610,9 +359,7 @@ describe('<Metafield />', () => {
   describe('with `json` type metafield', () => {
     it('renders the json as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'json'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: JSON.stringify(metafield.value),
@@ -621,7 +368,7 @@ describe('<Metafield />', () => {
 
     it('renders the json as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'json'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />
       );
 
@@ -630,39 +377,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'json'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'json'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The value is {JSON.stringify(value)}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The value is `, JSON.stringify(metafield.value)],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'json'})}
           className="emphasized"
@@ -677,9 +393,7 @@ describe('<Metafield />', () => {
   describe('with `color` type metafield', () => {
     it('renders the color as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'color'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: metafield.value,
@@ -688,7 +402,7 @@ describe('<Metafield />', () => {
 
     it('renders the color as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'color'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />
       );
 
@@ -697,39 +411,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'color'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'color'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The color is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The color is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'color'})}
           className="emphasized"
@@ -744,9 +427,7 @@ describe('<Metafield />', () => {
   describe('with `product_reference` type metafield', () => {
     it('renders the product reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'product_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: metafield.value,
@@ -755,7 +436,7 @@ describe('<Metafield />', () => {
 
     it('renders the product reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'product_reference'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />
       );
 
@@ -764,39 +445,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'product_reference'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'product_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The reference is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The reference is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'product_reference'})}
           className="emphasized"
@@ -811,9 +461,7 @@ describe('<Metafield />', () => {
   describe('with `page_reference` type metafield', () => {
     it('renders the page reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'page_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: metafield.value,
@@ -822,7 +470,7 @@ describe('<Metafield />', () => {
 
     it('renders the page reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'page_reference'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />
       );
 
@@ -831,39 +479,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'page_reference'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'page_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The reference is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The reference is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'page_reference'})}
           className="emphasized"
@@ -878,9 +495,7 @@ describe('<Metafield />', () => {
   describe('with `variant_reference` type metafield', () => {
     it('renders the variant reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'variant_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: metafield.value,
@@ -889,7 +504,7 @@ describe('<Metafield />', () => {
 
     it('renders the variant reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'variant_reference'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />
       );
 
@@ -898,39 +513,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'variant_reference'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'variant_reference'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The reference is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The reference is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'variant_reference'})}
           className="emphasized"
@@ -949,7 +533,7 @@ describe('<Metafield />', () => {
           type: 'file_reference',
           reference: {__typename: 'MediaImage', ...getMediaImage()},
         });
-        const component = mountWithShopifyProvider(
+        const component = mountWithProviders(
           <Metafield metafield={metafield} />
         );
 
@@ -961,7 +545,7 @@ describe('<Metafield />', () => {
           type: 'file_reference',
           reference: {__typename: 'MediaImage', ...getMediaImage()},
         });
-        const component = mountWithShopifyProvider(
+        const component = mountWithProviders(
           <Metafield metafield={metafield} className="rounded-md" />
         );
 
@@ -974,7 +558,7 @@ describe('<Metafield />', () => {
     describe('when the reference type is not a MediaImage', () => {
       it('renders the file reference as a string in a `span` by default', () => {
         const metafield = getParsedMetafield({type: 'file_reference'});
-        const component = mountWithShopifyProvider(
+        const component = mountWithProviders(
           <Metafield metafield={metafield} />
         );
 
@@ -985,7 +569,7 @@ describe('<Metafield />', () => {
 
       it('renders the file reference as a string in the element specified by the `as` prop', () => {
         const metafield = getParsedMetafield({type: 'file_reference'});
-        const component = mountWithShopifyProvider(
+        const component = mountWithProviders(
           <Metafield metafield={metafield} as="p" />
         );
 
@@ -994,39 +578,8 @@ describe('<Metafield />', () => {
         });
       });
 
-      it('passes the metafield as a render prop to the children render function', () => {
-        const children = jest.fn().mockImplementation(() => {
-          return null;
-        });
-        const metafield = getParsedMetafield({type: 'file_reference'});
-
-        mountWithShopifyProvider(
-          <Metafield metafield={metafield}>{children}</Metafield>
-        );
-
-        expect(children).toHaveBeenCalledWith({
-          ...metafield,
-          value: metafield.value,
-        });
-      });
-
-      it('renders its children', () => {
-        const metafield = getParsedMetafield({type: 'file_reference'});
-        const component = mountWithShopifyProvider(
-          <Metafield metafield={metafield}>
-            {({value}) => {
-              return <p>The reference is {value}</p>;
-            }}
-          </Metafield>
-        );
-
-        expect(component).toContainReactComponent('p', {
-          children: [`The reference is `, metafield.value],
-        });
-      });
-
       it('allows passthrough props', () => {
-        const component = mountWithShopifyProvider(
+        const component = mountWithProviders(
           <Metafield
             metafield={getParsedMetafield({type: 'file_reference'})}
             className="emphasized"
@@ -1042,9 +595,7 @@ describe('<Metafield />', () => {
   describe('with `boolean` type metafield', () => {
     it('renders the boolean value as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'boolean'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: (metafield.value as boolean).toString(),
@@ -1053,7 +604,7 @@ describe('<Metafield />', () => {
 
     it('renders the boolean as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'boolean'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />
       );
 
@@ -1062,39 +613,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'boolean'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'boolean'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The value is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The value is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'boolean'})}
           className="emphasized"
@@ -1109,9 +629,7 @@ describe('<Metafield />', () => {
   describe('with `number_integer` type metafield', () => {
     it('renders the integer value as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'number_integer'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: (metafield.value as number).toString(),
@@ -1120,7 +638,7 @@ describe('<Metafield />', () => {
 
     it('renders the boolean as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'number_integer'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />
       );
 
@@ -1129,39 +647,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'number_integer'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'number_integer'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The int is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The int is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'number_integer'})}
           className="emphasized"
@@ -1176,9 +663,7 @@ describe('<Metafield />', () => {
   describe('with `number_decimal` type metafield', () => {
     it('renders the number as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'number_decimal'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: (metafield.value as number).toString(),
@@ -1187,7 +672,7 @@ describe('<Metafield />', () => {
 
     it('renders the number as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'number_decimal'});
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield metafield={metafield} as="p" />
       );
 
@@ -1196,39 +681,8 @@ describe('<Metafield />', () => {
       });
     });
 
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'number_decimal'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'number_decimal'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The number is {value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The number is `, metafield.value],
-      });
-    });
-
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'number_decimal'})}
           className="emphasized"
@@ -1241,56 +695,23 @@ describe('<Metafield />', () => {
   });
 
   describe('with `rating` type metafield', () => {
-    it('renders <StarRating />', () => {
+    it(`renders a 'span' with the rating inside`, () => {
       const metafield = getParsedMetafield({type: 'rating'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield} />
-      );
+      const component = mountWithProviders(<Metafield metafield={metafield} />);
 
-      expect(component).toContainReactComponent(StarRating, {
-        rating: metafield.value,
-      });
-    });
-
-    it('passes the metafield as a render prop to the children render function', () => {
-      const children = jest.fn().mockImplementation(() => {
-        return null;
-      });
-      const metafield = getParsedMetafield({type: 'rating'});
-
-      mountWithShopifyProvider(
-        <Metafield metafield={metafield}>{children}</Metafield>
-      );
-
-      expect(children).toHaveBeenCalledWith({
-        ...metafield,
-        value: metafield.value,
-      });
-    });
-
-    it('renders its children', () => {
-      const metafield = getParsedMetafield({type: 'rating'});
-      const component = mountWithShopifyProvider(
-        <Metafield metafield={metafield}>
-          {({value}) => {
-            return <p>The rating is {(value as any)!.value}</p>;
-          }}
-        </Metafield>
-      );
-
-      expect(component).toContainReactComponent('p', {
-        children: [`The rating is `, (metafield.value as any).value],
+      expect(component).toContainReactComponent('span', {
+        children: (metafield.value as Rating).value,
       });
     });
 
     it('allows passthrough props', () => {
-      const component = mountWithShopifyProvider(
+      const component = mountWithProviders(
         <Metafield
           metafield={getParsedMetafield({type: 'rating'})}
           className="emphasized"
         />
       );
-      expect(component).toContainReactComponent(StarRating, {
+      expect(component).toContainReactComponent('span', {
         className: 'emphasized',
       });
     });

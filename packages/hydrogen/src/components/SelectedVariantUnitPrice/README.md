@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/SelectedVariantUnitPrice and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/SelectedVariantUnitPrice and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `SelectedVariantUnitPrice` component renders a `UnitPrice` component for the product's selected variant's unit price.
 It must be a descendent of a `ProductProvider`.
@@ -16,10 +16,6 @@ export function ProductDetails({product}) {
   );
 }
 ```
-
-## Alias
-
-The `SelectedVariantUnitPrice` component is aliased by the `Product.SelectedVariant.UnitPrice` component. You can use whichever component you prefer.
 
 ## Component type
 

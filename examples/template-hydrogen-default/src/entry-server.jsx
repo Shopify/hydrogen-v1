@@ -1,7 +1,6 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-
 import App from './App.server';
 
-export default renderHydrogen(App, () => {
-  // Custom hook
-});
+const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
+
+export default renderHydrogen(App, {pages});

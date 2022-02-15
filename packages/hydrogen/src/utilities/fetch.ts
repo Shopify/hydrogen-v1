@@ -39,6 +39,15 @@ export function graphqlRequestBody(
 }
 
 export function decodeShopifyId(id: string) {
+  // Start fix: for SFAPI 2022-01. Remove when upgrading to 2022-04
+  if (!id.startsWith('gid://')) {
+    id =
+      typeof btoa !== 'undefined'
+        ? btoa(id)
+        : Buffer.from(id, 'base64').toString('ascii');
+  }
+  // End fix
+
   if (!id.startsWith('gid://')) {
     throw new Error('invalid Shopify ID');
   }

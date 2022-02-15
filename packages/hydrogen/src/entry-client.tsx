@@ -1,12 +1,11 @@
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
-import {createRoot} from 'react-dom';
-import {BrowserRouter} from 'react-router-dom';
+import {hydrateRoot} from 'react-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
-import {HelmetProvider} from 'react-helmet-async';
-import {useServerResponse} from './framework/Hydration/Cache.client';
-import {ServerStateProvider, ServerStateRouter} from './client';
+import {useServerResponse} from './framework/Hydration/rsc';
+import {ServerStateProvider} from './client';
+import {Router} from './foundation/Router/Router.client';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   const root = document.getElementById('root');
@@ -18,7 +17,8 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     return;
   }
 
-  createRoot(root, {hydrate: true}).render(
+  hydrateRoot(
+    root,
     <ErrorBoundary FallbackComponent={Error}>
       <Suspense fallback={null}>
         <Content clientWrapper={ClientWrapper} />
@@ -41,13 +41,9 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
       serverState={serverState}
       setServerState={setServerState}
     >
-      <HelmetProvider>
-        <BrowserRouter>
-          <ServerStateRouter />
-          {/* @ts-ignore */}
-          <ClientWrapper>{response.read()}</ClientWrapper>
-        </BrowserRouter>
-      </HelmetProvider>
+      <Router>
+        <ClientWrapper>{response.readRoot()}</ClientWrapper>
+      </Router>
     </ServerStateProvider>
   );
 }

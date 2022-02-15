@@ -1,4 +1,5 @@
 import {Plugin, loadEnv, ResolvedConfig} from 'vite';
+import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
@@ -36,6 +37,8 @@ export default (
         })
       );
 
+      server.middlewares.use(bodyParser.raw({type: '*/*'}));
+
       return () =>
         server.middlewares.use(
           hydrogenMiddleware({
@@ -43,7 +46,9 @@ export default (
             shopifyConfig,
             indexTemplate: getIndexTemplate,
             getServerEntrypoint: async () =>
-              await server.ssrLoadModule(resolve('./src/entry-server')),
+              await server.ssrLoadModule(
+                process.env.HYDROGEN_SERVER_ENTRY || '/src/entry-server'
+              ),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)

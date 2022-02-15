@@ -1,5 +1,5 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {useCart, useCartCheckoutUrl} from '../CartProvider';
+import {useCart} from '../CartProvider';
 import {Props} from '../types';
 
 type PropsWeControl = 'onClick';
@@ -15,15 +15,14 @@ export function CartCheckoutButton<TTag extends React.ElementType = 'a'>(
   }
 ) {
   const [requestedCheckout, setRequestedCheckout] = useState(false);
-  const {status} = useCart();
-  const url = useCartCheckoutUrl();
+  const {status, checkoutUrl} = useCart();
   const {children, ...passthroughProps} = props;
 
   useEffect(() => {
-    if (requestedCheckout && url && status === 'idle') {
-      window.location.href = url;
+    if (requestedCheckout && checkoutUrl && status === 'idle') {
+      window.location.href = checkoutUrl;
     }
-  }, [requestedCheckout, status, url]);
+  }, [requestedCheckout, status, checkoutUrl]);
 
   return (
     <button

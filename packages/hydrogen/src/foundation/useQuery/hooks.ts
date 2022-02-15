@@ -7,16 +7,15 @@ import {
   setItemInCache,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
-import {useRenderCacheData} from '../RenderCacheProvider/hook';
+import {useRequestCacheData} from '../ServerRequestProvider';
 
-import type {RenderCacheResult} from '../RenderCacheProvider/types';
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
 }
 
 /**
  * The `useQuery` hook is a wrapper around Suspense calls and
- * global runtime's Cache if it exist.
+ * global runtime's Cache if it exists.
  * It supports Suspense calls on the server and on the client.
  */
 export function useQuery<T>(
@@ -26,9 +25,9 @@ export function useQuery<T>(
   queryFn: () => Promise<T>,
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
-): RenderCacheResult<T> {
+) {
   const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
-  return useRenderCacheData<T>(
+  return useRequestCacheData<T>(
     withCacheIdKey,
     cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
   );

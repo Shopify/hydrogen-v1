@@ -83,19 +83,19 @@ Sharing state information between the client and server is important for common 
 
 ![A diagram that illustrates the workflow for sharing state information between client and server](/assets/custom-storefronts/hydrogen/hydrogen-sharing-state-information.png)
 
-1. `App.server.jsx` relies on the `page` state to choose the correct route to render. To change routes, the client updates the `page` state:
+1. `App.server.jsx` relies on the `pathname` and `search` state to choose the correct route to render. To change routes, the client updates the `page` state:
 
    {% codeblock file, filename: 'ProductDetails.client.jsx' %}
 
    ```js
    useEffect(() => {
-     setServerState('page', location.pathname);
-   }, [location.pathname, setServerState]);
+     setServerState({pathname: location.pathname, search: location.search});
+   }, [location.pathname, location.search, setServerState]);
    ```
 
    {% endcodeblock %}
 
-2. The `page` state is sent to the server. This happens through a `useServerResponse` fetch call. It's a special server endpoint called `/react` which accepts `state` as a query parameter.
+2. The `pathname` and `search` state is sent to the server. This happens through a `useServerResponse` fetch call. It's a special server endpoint called `/react` which accepts `state` as a query parameter.
 3. The `/react` endpoint returns the wire representation for the new state.
 4. The state is partially hydrated (made interactive) and rendered into the DOM, similar to how the initial page was made interactive.
 
@@ -103,34 +103,20 @@ Sharing state information between the client and server is important for common 
 
 ## Using `Context` in React Server Components
 
-> Note:
-> The functionality described in this section is unique to Hydrogen's React Server Components implementation and will change when server context is implemented upstream in React.
-
 React developers commonly use [`Context`](https://reactjs.org/docs/context.html) to share state among many different components in a render tree, without having to drill props down to each individual component.
 
-Server context support is [on the React team's roadmap](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#how-do-you-do-routing), but it is not yet implemented. In order to share context between server components and client components, Hydrogen provides a workaround mechanism.
+Currently, you can't use `Context` inside server components because server context isn't yet available in React. However, you can use `Context` inside client components.
 
-### `Provider` components
-
-Any client component with a name that ends in `Provider` receives special treatment during server-rendering and client hydration. This allows server components to share context during the server-side rendering and makes sure that the context is initialized as a client component on the client.
-
-### Rules
-
-The following rules apply to `Provider` components:
-
-- You can't fetch server-only data from within `Provider` components. Instead, fetch data within server components and pass the data as props to the `Provider`.
-- You can pass props to the `Provider` from server components, but they must be JSON-serializable.
-- You need to split `Context` and `Provider` into separate files due to the way that components are dynamically loaded on the client.
+> Note:
+> The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. `ShopifyProvider` is specific to Hydrogen and currently doesn't work in Next.js or other frameworks.
 
 ### Example
 
-The following example shows the implementation of a `Provider` component:
+The following example shows how to use `Context` in the `CartProvider` client component:
 
 {% codeblock file, filename: 'CartContext.client.jsx' %}
 
 ```js
-// This must be a separate client component from your special `Provider` component.
-
 const CartAppContext = createContext();
 
 export default CartAppContext;

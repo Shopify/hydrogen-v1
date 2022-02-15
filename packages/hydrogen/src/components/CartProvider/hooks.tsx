@@ -10,7 +10,7 @@ import {
 import {Cart} from './types';
 
 export function useCartFetch() {
-  const {storeDomain, graphqlApiVersion, storefrontToken} = useShop();
+  const {storeDomain, storefrontApiVersion, storefrontToken} = useShop();
 
   return React.useCallback(
     <T, K>({
@@ -21,7 +21,7 @@ export function useCartFetch() {
       variables: T;
     }): Promise<{data: K | undefined; error: any}> => {
       return fetch(
-        `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`,
+        `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
         {
           method: 'POST',
           headers: {
@@ -42,7 +42,7 @@ export function useCartFetch() {
           };
         });
     },
-    [storeDomain, graphqlApiVersion, storefrontToken]
+    [storeDomain, storefrontApiVersion, storefrontToken]
   );
 }
 

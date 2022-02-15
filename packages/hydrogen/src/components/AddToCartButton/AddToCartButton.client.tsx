@@ -1,9 +1,5 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {
-  useCartLinesAddCallback,
-  useCart,
-  useCartCreateCallback,
-} from '../CartProvider';
+import {useCart} from '../CartProvider';
 import {Props} from '../types';
 
 export interface AddToCartButtonProps {
@@ -41,9 +37,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
     accessibleAddingToCartLabel,
     ...passthroughProps
   } = props;
-  const {status, id} = useCart();
-  const createCart = useCartCreateCallback();
-  const addLines = useCartLinesAddCallback();
+  const {status, id, cartCreate, linesAdd} = useCart();
 
   useEffect(() => {
     if (addingItem && status === 'idle') {
@@ -59,7 +53,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
         onClick={() => {
           setAddingItem(true);
           if (!id) {
-            createCart({
+            cartCreate({
               lines: [
                 {
                   quantity: quantity,
@@ -69,7 +63,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
               ],
             });
           } else {
-            addLines([
+            linesAdd([
               {
                 quantity: quantity,
                 merchandiseId: variantId,

@@ -3,7 +3,7 @@ import {log} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';
-import {isClient, fetchBuilder, graphqlRequestBody} from '../../utilities';
+import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 
 export interface UseShopQueryResponse<T> {
@@ -32,7 +32,7 @@ export function useShopQuery<T>({
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
 }): UseShopQueryResponse<T> {
-  if (isClient()) {
+  if (!import.meta.env.SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
     );
@@ -96,11 +96,11 @@ function createShopRequest(body: string, locale?: string) {
   const {
     storeDomain,
     storefrontToken,
-    graphqlApiVersion,
+    storefrontApiVersion,
     locale: defaultLocale,
   } = useShop();
 
-  const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
+  const url = `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`;
 
   return {
     request: new Request(url, {
@@ -112,6 +112,6 @@ function createShopRequest(body: string, locale?: string) {
       },
       body,
     }),
-    key: [storeDomain, graphqlApiVersion, body, locale],
+    key: [storeDomain, storefrontApiVersion, body, locale],
   };
 }

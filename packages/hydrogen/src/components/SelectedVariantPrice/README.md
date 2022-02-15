@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/SelectedVariantPrice and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/SelectedVariantPrice and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `SelectedVariantPrice` component renders a `Money` component for the product's selected variant's price or compare at price.
 It must be a descendent of a `ProductProvider` component.
@@ -22,10 +22,6 @@ export function ProductDetails({product}) {
 | Name       | Type                                      | Description                                                          |
 | ---------- | ----------------------------------------- | -------------------------------------------------------------------- |
 | priceType? | <code>"regular" &#124; "compareAt"</code> | The type of price. Valid values: `regular` (default) or `compareAt`. |
-
-## Alias
-
-The `SelectedVariantPrice` component is aliased by the `Product.SelectedVariant.Price` component. You can use whichever component you prefer.
 
 ## Component type
 
