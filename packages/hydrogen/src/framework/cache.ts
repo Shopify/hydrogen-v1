@@ -1,14 +1,14 @@
 import type {QueryKey, CachingStrategy} from '../types';
 import {getCache} from './runtime';
 import {
-  TenSecondCache,
+  CacheSeconds,
   generateCacheControlHeader,
 } from '../framework/CachingStrategy';
 
 export function generateSubRequestCacheControlHeader(
   userCacheOptions?: CachingStrategy
 ): string {
-  return generateCacheControlHeader(userCacheOptions || TenSecondCache());
+  return generateCacheControlHeader(userCacheOptions || CacheSeconds());
 }
 
 /**

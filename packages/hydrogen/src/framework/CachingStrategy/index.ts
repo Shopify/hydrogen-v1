@@ -1,6 +1,6 @@
 import type {
   CachingStrategy,
-  BaseCachingStrategy,
+  AllCacheOptions,
   NoStoreStrategy,
 } from '../../types';
 
@@ -17,17 +17,17 @@ const optionMapping: {
   staleIfError: 'stale-if-error',
 };
 
-export function generateCacheControlHeader(cacheOptions: any): string {
+export function generateCacheControlHeader(
+  cacheOptions: CachingStrategy
+): string {
   let cacheControl: string[] = [];
   Object.keys(cacheOptions).forEach((key: string) => {
     if (key === 'mode') {
-      cacheControl.push(cacheOptions[key]);
+      cacheControl.push(cacheOptions[key] as string);
     } else if (optionMapping[key]) {
       cacheControl.push(
         `${optionMapping[key]}=${cacheOptions[key as keyof CachingStrategy]}`
       );
-    } else {
-      cacheControl.push(`${key}=${cacheOptions[key]}`);
     }
   });
   return cacheControl.join(', ');
@@ -45,13 +45,13 @@ function guardExpirableModeType(overrideOptions?: CachingStrategy) {
     overrideOptions?.mode !== PUBLIC &&
     overrideOptions?.mode !== PRIVATE
   ) {
-    throw Error("mode must be either 'public' or 'private'");
+    throw Error("'mode' must be either 'public' or 'private'");
   }
 }
 
-export function TenSecondCache(
+export function CacheSeconds(
   overrideOptions?: CachingStrategy
-): BaseCachingStrategy {
+): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
     mode: PUBLIC,
@@ -61,9 +61,7 @@ export function TenSecondCache(
   };
 }
 
-export function OneHourCache(
-  overrideOptions?: CachingStrategy
-): BaseCachingStrategy {
+export function CacheHours(overrideOptions?: CachingStrategy): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
     mode: PUBLIC,
@@ -73,9 +71,7 @@ export function OneHourCache(
   };
 }
 
-export function OneDayCache(
-  overrideOptions?: CachingStrategy
-): BaseCachingStrategy {
+export function CacheDays(overrideOptions?: CachingStrategy): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
     mode: PUBLIC,
@@ -85,9 +81,9 @@ export function OneDayCache(
   };
 }
 
-export function OneMonthCache(
+export function CacheMonths(
   overrideOptions?: CachingStrategy
-): BaseCachingStrategy {
+): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
     mode: PUBLIC,
@@ -95,4 +91,8 @@ export function OneMonthCache(
     staleWhileRevalidate: 1296000,
     ...overrideOptions,
   };
+}
+
+export function CacheCustom(overrideOptions: CachingStrategy): AllCacheOptions {
+  return overrideOptions as AllCacheOptions;
 }

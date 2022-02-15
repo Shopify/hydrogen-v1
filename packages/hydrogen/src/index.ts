@@ -26,8 +26,9 @@ export {CartQuery} from './graphql/graphql-constants';
 export {
   generateCacheControlHeader,
   NoStore,
-  TenSecondCache,
-  OneHourCache,
-  OneDayCache,
-  OneMonthCache,
+  CacheSeconds,
+  CacheHours,
+  CacheDays,
+  CacheMonths,
+  CacheCustom,
 } from './framework/CachingStrategy';

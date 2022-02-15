@@ -1,4 +1,4 @@
-import {useShopQuery, Seo, OneDayCache} from '@shopify/hydrogen';
+import {useShopQuery, Seo, CacheDays} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 /**
@@ -11,7 +11,7 @@ export default function DefaultSeo() {
     },
   } = useShopQuery({
     query: QUERY,
-    cache: OneDayCache(),
+    cache: CacheDays(),
   });
 
   return (

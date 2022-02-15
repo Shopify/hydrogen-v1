@@ -1,5 +1,5 @@
 import {renderToString} from 'react-dom/server';
-import {TenSecondCache, generateCacheControlHeader} from '../CachingStrategy';
+import {CacheSeconds, generateCacheControlHeader} from '../CachingStrategy';
 import type {CachingStrategy} from '../../types';
 
 export class ServerComponentResponse extends Response {
@@ -30,7 +30,7 @@ export class ServerComponentResponse extends Response {
   }
 
   get cacheControlHeader(): string {
-    return generateCacheControlHeader(this.cacheOptions || TenSecondCache());
+    return generateCacheControlHeader(this.cacheOptions || CacheSeconds());
   }
 
   writeHead({

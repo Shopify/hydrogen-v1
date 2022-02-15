@@ -5,7 +5,7 @@ import {
   Image,
   Link,
   Seo,
-  OneDayCache,
+  CacheDays,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -44,7 +44,7 @@ function SeoForHomepage() {
     },
   } = useShopQuery({
     query: SEO_QUERY,
-    cache: OneDayCache(),
+    cache: CacheDays(),
   });
 
   return (

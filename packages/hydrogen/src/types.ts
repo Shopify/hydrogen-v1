@@ -131,13 +131,6 @@ export type NoStoreStrategy = {
   mode: string;
 };
 
-export interface BaseCachingStrategy {
-  mode: string;
-  maxAge: number;
-  staleWhileRevalidate: number;
-  sMaxAge?: number;
-}
-
 export interface AllCacheOptions {
   mode?: string;
   maxAge?: number;
@@ -146,10 +139,7 @@ export interface AllCacheOptions {
   staleIfError?: number;
 }
 
-export type CachingStrategy =
-  | NoStoreStrategy
-  | BaseCachingStrategy
-  | AllCacheOptions;
+export type CachingStrategy = NoStoreStrategy | AllCacheOptions;
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;

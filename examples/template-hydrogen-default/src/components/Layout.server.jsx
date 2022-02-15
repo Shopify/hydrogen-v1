@@ -3,7 +3,7 @@ import {
   useShopQuery,
   flattenConnection,
   LocalizationProvider,
-  OneHourCache,
+  CacheHours,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -21,7 +21,7 @@ export default function Layout({children, hero}) {
     variables: {
       numCollections: 3,
     },
-    cache: OneHourCache(),
+    cache: CacheHours(),
   });
   const collections = data ? flattenConnection(data.collections) : null;
   const products = data ? flattenConnection(data.products) : null;

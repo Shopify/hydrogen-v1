@@ -18,17 +18,18 @@ cache control header to set.
 Example usage:
 
 ```jsx
-import {TenSecondCache} from '@shopify/hydrogen';
+import {CacheSeconds} from '@shopify/hydrogen';
 
-response.cache(TenSecondCache());
+response.cache(CacheSeconds());
 ```
 
-| Caching Strategy   | Cache Control Header                                      |
-| ------------------ | --------------------------------------------------------- |
-| `TenSecondCache()` | `public, max-age=1, stale-while-revalidate=9`             |
-| `OneHourCache()`   | `public, max-age=1800, stale-while-revalidate=1800`       |
-| `OneDayCache()`    | `public, max-age=3600, stale-while-revalidate=82800`      |
-| `OneMonthCache()`  | `public, max-age=1296000, stale-while-revalidate=1296000` |
+| Caching Strategy | Cache Control Header                                      |
+| ---------------- | --------------------------------------------------------- |
+| `CacheSeconds()` | `public, max-age=1, stale-while-revalidate=9`             |
+| `CacheHours()`   | `public, max-age=1800, stale-while-revalidate=1800`       |
+| `CacheDays()`    | `public, max-age=3600, stale-while-revalidate=82800`      |
+| `CacheMonths()`  | `public, max-age=1296000, stale-while-revalidate=1296000` |
+| `CacheCustom()`  | Define your own cache control header                      |
 
 ## Build your own Caching Strategies
 
@@ -38,28 +39,10 @@ strategies that you can use across your project.
 For example, you want to create a cache control header of `max-age=30, must-revalidate, no-transform`
 
 ```tsx
-import type {
-  CachingStrategy,
-  AllCacheOptions,
-} from '@shopify/hydrogen/dist/esnext/types';
-
-export function MustRevalidateNoTransform(
-  overrideOptions?: CachingStrategy
-): AllCacheOptions {
-  return {
+response.cache(
+  CacheCustom({
     mode: 'must-revalidate, no-transform',
     maxAge: 30,
-    ...overrideOptions,
-  };
-}
-
-// Elsewhere in project
-response.cache(MustRevalidateNoTransform());
-
-// Overide option to get `max-age=60, must-revalidate, no-transform`
-response.cache(
-  MustRevalidateNoTransform({
-    maxAge: 60,
   })
 );
 ```
@@ -108,7 +91,7 @@ The following example shows how to implement [`useShopQuery` for Shopify Storefr
 // Use a Shopify recommend strategy
 const {data} = useShopQuery({
   query: QUERY,
-  cache: OneHourCache(),
+  cache: CacheHours(),
 });
 ```
 
@@ -124,7 +107,7 @@ const {data} = useQuery(
   'cache-key',
   async () => await fetch('https://my.3p.com/data.json').then(res => res.json()),
   {
-    cache: OneHourCache(),
+    cache: CacheHours(),
   }
 });
 ```
@@ -144,7 +127,7 @@ To modify full-page caching options, use the `response` property passed to the p
 
 ```jsx
 export default function MyProducts({response}) {
-  response.cache(OneDayCache());
+  response.cache(CacheDays());
 }
 ```
 

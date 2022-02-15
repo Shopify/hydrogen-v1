@@ -3,7 +3,7 @@ import LocalizationClientProvider from './LocalizationClientProvider.client';
 import {useShopQuery} from '../../hooks/useShopQuery';
 import {LocalizationQuery} from './LocalizationQuery';
 import {Localization} from '../../graphql/graphql-constants';
-import {OneDayCache} from '../../framework/CachingStrategy';
+import {CacheDays} from '../../framework/CachingStrategy';
 
 /**
  * The `LocalizationProvider` component automatically queries the Storefront API's
@@ -19,7 +19,7 @@ export function LocalizationProvider({children}: {children: ReactNode}) {
     data: {localization},
   } = useShopQuery<LocalizationQuery>({
     query: Localization,
-    cache: OneDayCache(),
+    cache: CacheDays(),
   });
 
   return (
