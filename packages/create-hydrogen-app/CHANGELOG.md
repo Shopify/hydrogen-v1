@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - feat: update favicon
 - feat: HelmetProvider has been removed
+- fix: Footer date update
 
 ## 0.10.1 - 2022-01-26
 

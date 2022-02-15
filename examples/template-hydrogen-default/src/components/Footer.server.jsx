@@ -96,7 +96,7 @@ export default function Footer({collection, product}) {
         </div>
       </div>
       <div className="py-6 px-4 md:px-8 bg-gray-50">
-        <p className="text-gray-600">© 2021 Shopify</p>
+        <p className="text-gray-600">© 2022 Shopify</p>
       </div>
     </footer>
   );
