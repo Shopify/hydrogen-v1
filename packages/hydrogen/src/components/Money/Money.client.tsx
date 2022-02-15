@@ -8,7 +8,7 @@ export interface MoneyProps {
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: ElementType;
   /** A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2). */
-  money: MoneyV2;
+  data: MoneyV2;
 }
 
 /**
@@ -19,8 +19,8 @@ export interface MoneyProps {
 export function Money<TTag extends ElementType>(
   props: Props<TTag> & MoneyProps
 ) {
-  const {money, as, ...passthroughProps} = props;
-  const moneyObject = useMoney(money);
+  const {data, as, ...passthroughProps} = props;
+  const moneyObject = useMoney(data);
   const Wrapper = as ?? 'div';
 
   return <Wrapper {...passthroughProps}>{moneyObject.localizedString}</Wrapper>;

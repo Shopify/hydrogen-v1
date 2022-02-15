@@ -16,7 +16,7 @@ describe('<SelectedVariantPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: selectedVariant.priceV2,
+      data: selectedVariant.priceV2,
     });
   });
 
@@ -30,7 +30,7 @@ describe('<SelectedVariantPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: selectedVariant.compareAtPriceV2,
+      data: selectedVariant.compareAtPriceV2,
     });
   });
 

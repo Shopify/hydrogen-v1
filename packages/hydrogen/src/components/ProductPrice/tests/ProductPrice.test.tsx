@@ -15,7 +15,7 @@ describe('<ProductPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: product.priceRange.minVariantPrice,
+      data: product.priceRange.minVariantPrice,
     });
   });
 
@@ -28,7 +28,7 @@ describe('<ProductPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: product.priceRange.maxVariantPrice,
+      data: product.priceRange.maxVariantPrice,
     });
   });
 
@@ -41,7 +41,7 @@ describe('<ProductPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: product.compareAtPriceRange.minVariantPrice,
+      data: product.compareAtPriceRange.minVariantPrice,
     });
   });
 
@@ -54,7 +54,7 @@ describe('<ProductPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: product.compareAtPriceRange.maxVariantPrice,
+      data: product.compareAtPriceRange.maxVariantPrice,
     });
   });
 
