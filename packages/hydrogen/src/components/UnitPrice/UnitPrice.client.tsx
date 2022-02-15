@@ -6,9 +6,9 @@ import {UnitPriceFragment as Fragment} from '../../graphql/graphql-constants';
 
 export interface UnitPriceProps {
   /** A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2). */
-  unitPrice: MoneyV2;
+  data: MoneyV2;
   /** A [`UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement). */
-  unitPriceMeasurement: UnitPriceMeasurement;
+  measurement: UnitPriceMeasurement;
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: ElementType;
 }
@@ -20,12 +20,12 @@ export interface UnitPriceProps {
 export function UnitPrice<TTag extends ElementType>(
   props: Props<TTag> & UnitPriceProps
 ) {
-  const {unitPrice, unitPriceMeasurement, as, ...passthroughProps} = props;
+  const {data, measurement, as, ...passthroughProps} = props;
   const Wrapper: any = as ?? 'div';
 
   return (
     <Wrapper {...passthroughProps}>
-      <Money data={unitPrice} />/{unitPriceMeasurement.referenceUnit}
+      <Money data={data} />/{measurement.referenceUnit}
     </Wrapper>
   );
 }

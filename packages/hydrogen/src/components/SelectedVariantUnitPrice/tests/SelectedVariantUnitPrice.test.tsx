@@ -16,8 +16,8 @@ describe('<SelectedVariantUnitPrice />', () => {
     );
 
     expect(component).toContainReactComponent(UnitPrice, {
-      unitPrice: selectedVariant.unitPrice,
-      unitPriceMeasurement: selectedVariant.unitPriceMeasurement,
+      data: selectedVariant.unitPrice,
+      measurement: selectedVariant.unitPriceMeasurement,
     });
   });
 });
