@@ -11,8 +11,8 @@ export type {RawHtmlProps} from './RawHtml';
 export {RawHtml} from './RawHtml';
 export type {AddToCartButtonProps} from './AddToCartButton';
 export {AddToCartButton} from './AddToCartButton';
-export type {Model3DProps} from './Model3D';
-export {Model3D} from './Model3D';
+export type {ModelViewerProps} from './ModelViewer';
+export {ModelViewer} from './ModelViewer';
 export type {MoneyProps} from './Money';
 export {Money} from './Money';
 export {Metafield} from './Metafield';
@@ -29,22 +29,7 @@ export {CartCheckoutButton} from './CartCheckoutButton';
 export {CartShopPayButton} from './CartShopPayButton';
 export {CartEstimatedCost} from './CartEstimatedCost';
 export {CartLineSelectedOptions} from './CartLineSelectedOptions';
-export {
-  CartProvider,
-  useCart,
-  useCartAttributesUpdateCallback,
-  useCartBuyerIdentityUpdateCallback,
-  useCartNoteUpdateCallback,
-  useCartCheckoutUrl,
-  useCartCreateCallback,
-  useCartDiscountCodesUpdateCallback,
-  useCartFetch,
-  useCartLinesAddCallback,
-  useCartLinesRemoveCallback,
-  useCartLinesTotalQuantity,
-  useCartLinesUpdateCallback,
-  useInstantCheckout,
-} from './CartProvider';
+export {CartProvider, useCart, useInstantCheckout} from './CartProvider';
 export type {
   State,
   Status,
@@ -59,11 +44,14 @@ export {
 } from './ProductProvider';
 export {ProductDescription} from './ProductDescription';
 export {ProductTitle} from './ProductTitle';
+export {ProductPrice} from './ProductPrice';
+export {ProductMetafield} from './ProductMetafield';
 export {SelectedVariantPrice} from './SelectedVariantPrice';
 export {SelectedVariantAddToCartButton} from './SelectedVariantAddToCartButton';
 export {SelectedVariantBuyNowButton} from './SelectedVariantBuyNowButton';
 export {SelectedVariantShopPayButton} from './SelectedVariantShopPayButton';
 export {SelectedVariantImage} from './SelectedVariantImage';
+export {SelectedVariantUnitPrice} from './SelectedVariantUnitPrice';
 export type {
   BuyNowButtonProps,
   BuyNowButtonPropsWeControl,
@@ -73,57 +61,5 @@ export type {ShopPayButtonProps} from './ShopPayButton';
 export {ShopPayButton} from './ShopPayButton';
 export {useAvailableCountries} from '../hooks/useAvailableCountries';
 export {useCountry} from '../hooks/useCountry';
-
-/**
- * Provide namespaced aliases for the `Product` group.
- */
-
-import {ProductProvider} from './ProductProvider';
-import {ProductPrice} from './ProductPrice';
-import {ProductDescription} from './ProductDescription';
-import {ProductTitle} from './ProductTitle';
-import {ProductMetafield} from './ProductMetafield';
-import {SelectedVariantAddToCartButton} from './SelectedVariantAddToCartButton';
-import {SelectedVariantBuyNowButton} from './SelectedVariantBuyNowButton';
-import {SelectedVariantShopPayButton} from './SelectedVariantShopPayButton';
-import {SelectedVariantImage} from './SelectedVariantImage';
-import {SelectedVariantPrice} from './SelectedVariantPrice';
-import {SelectedVariantUnitPrice} from './SelectedVariantUnitPrice';
-import {SelectedVariantMetafield} from './SelectedVariantMetafield';
-
-export const Product: Function & Record<string, any> = ProductProvider;
-Product.Description = ProductDescription;
-Product.Price = ProductPrice;
-Product.Title = ProductTitle;
-Product.Metafield = ProductMetafield;
-Product.SelectedVariant = {
-  AddToCartButton: SelectedVariantAddToCartButton,
-  BuyNowButton: SelectedVariantBuyNowButton,
-  ShopPayButton: SelectedVariantShopPayButton,
-  Price: SelectedVariantPrice,
-  Image: SelectedVariantImage,
-  UnitPrice: SelectedVariantUnitPrice,
-  Metafield: SelectedVariantMetafield,
-};
-
-/**
- * Provide namespaced aliases for the `CartLine` group.
- */
-
-import {CartLineProvider} from './CartLineProvider';
-import {CartLineImage} from './CartLineImage';
-import {CartLinePrice} from './CartLinePrice';
-import {CartLineProductTitle} from './CartLineProductTitle';
-import {CartLineQuantity} from './CartLineQuantity';
-import {CartLineQuantityAdjustButton} from './CartLineQuantityAdjustButton';
-import {CartLineSelectedOptions} from './CartLineSelectedOptions';
-import {CartLineAttributes} from './CartLineAttributes';
-
-export const CartLine: Function & Record<string, any> = CartLineProvider;
-CartLine.Image = CartLineImage;
-CartLine.Price = CartLinePrice;
-CartLine.ProductTitle = CartLineProductTitle;
-CartLine.Quantity = CartLineQuantity;
-CartLine.QuantityAdjustButton = CartLineQuantityAdjustButton;
-CartLine.SelectedOptions = CartLineSelectedOptions;
-CartLine.Attributes = CartLineAttributes;
+export {Seo} from './Seo';
+export {useNavigate} from '../hooks/useNavigate';

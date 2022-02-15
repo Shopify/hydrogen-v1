@@ -1,8 +1,8 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Money and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Money and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `Money` component renders a string of the Storefront API's
 [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) according to the
-locale in the `shopify.config.js` file. If `children` is a function, then it will
+`defaultLocale` in the `shopify.config.js` file. If `children` is a function, then it will
 provide render props for the `children` corresponding to the object returned by the `useMoney` hook.
 
 ## Example code

@@ -1,5 +1,5 @@
-import React, {cloneElement, ReactNode, ElementType, Fragment} from 'react';
-import {Cart, useCart} from '../CartProvider';
+import React, {ReactNode, ElementType, Fragment} from 'react';
+import {useCart} from '../CartProvider';
 import {CartLineProvider} from '../CartLineProvider';
 import {Props} from '../types';
 
@@ -8,13 +8,13 @@ export interface CartLinesProps {
    * be wrapped with a `li` element.
    */
   as?: 'ul';
-  /** A `ReactNode` element or a function that takes a cart line as an argument and returns a `ReactNode`. */
-  children: ReactNode | ((line: Cart['lines'][1]) => ReactNode);
+  /** A `ReactNode` element */
+  children: ReactNode;
 }
 
 /**
  * The `CartLines` component iterates over each cart line and renders its `children` within
- * a `CartLineProvider` for each cart line. It also provides render props in the case where `children` is a function.
+ * a `CartLineProvider` for each cart line.
  */
 export function CartLines<TTag extends ElementType>(
   props: Props<TTag> & CartLinesProps
@@ -30,11 +30,7 @@ export function CartLines<TTag extends ElementType>(
       {lines.map((line) => {
         return (
           <ChildWrapper key={line.id}>
-            <CartLineProvider line={line}>
-              {typeof children === 'function'
-                ? cloneElement(children(line))
-                : children}
-            </CartLineProvider>
+            <CartLineProvider line={line}>{children}</CartLineProvider>
           </ChildWrapper>
         );
       })}

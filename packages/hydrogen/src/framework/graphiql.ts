@@ -1,10 +1,4 @@
-import {DEFAULT_API_VERSION} from '../foundation/ShopifyProvider/consts';
-
-export function graphiqlHtml(
-  shop: string,
-  token: string,
-  apiVersion = DEFAULT_API_VERSION
-) {
+export function graphiqlHtml(shop: string, token: string, apiVersion: string) {
   return `<html>
   <head>
     <title>Shopify Storefront API</title>

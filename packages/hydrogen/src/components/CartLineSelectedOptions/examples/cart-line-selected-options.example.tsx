@@ -1,4 +1,8 @@
-import {CartLineProvider, useCart, CartLineSelectedOptions} from '@shopify/hydrogen';
+import {
+  CartLineProvider,
+  useCart,
+  CartLineSelectedOptions,
+} from '@shopify/hydrogen';
 
 export function App() {
   const {lines} = useCart();
@@ -14,6 +18,6 @@ export function App() {
           )}
         </CartLineSelectedOptions>
       </CartLineProvider>
-    )
+    );
   });
 }

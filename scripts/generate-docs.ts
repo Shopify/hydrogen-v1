@@ -106,12 +106,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/Image',
         'components/MediaFile',
         'components/Metafield',
-        'components/Model3D',
+        'components/ModelViewer',
         'components/Money',
         'components/RawHtml',
         'components/ShopPayButton',
         'components/UnitPrice',
         'components/Video',
+        'components/Seo',
       ],
       tables: [primitiveComponentsTable],
     }),
@@ -207,6 +208,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'foundation/useServerState',
         'foundation/useShop',
         'foundation/useQuery',
+        'foundation/useUrl',
         'hooks/useShopQuery',
       ],
       intro:
@@ -225,7 +227,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       title: 'Primitive hooks',
       description: 'Learn about the primitive hooks offered in Hydrogen.',
       url: '/api/hydrogen/hooks/primitive/index.md',
-      entry: ['hooks/useMoney'],
+      entry: ['hooks/useMoney', 'hooks/useLoadScript'],
       intro:
         'Primitive hooks are the building blocks for different component types, including products, variants, and cart.',
       tables: [
@@ -248,7 +250,8 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       tables: [
         await generator.table({
           title: 'Reference',
-          description: 'Hydrogen includes the following product and variant hooks:',
+          description:
+            'Hydrogen includes the following product and variant hooks:',
           columns: ['Hook name', Column.Description],
         }),
       ],
@@ -276,20 +279,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the Hydrogen cart hooks included in Hydrogen.',
       url: '/api/hydrogen/hooks/cart/index.md',
-      entry: [
-        'hooks/useCart',
-        'hooks/useCartAttributesUpdateCallback',
-        'hooks/useCartBuyerIdentityUpdateCallback',
-        'hooks/useCartCheckoutUrl',
-        'hooks/useCartCreateCallback',
-        'hooks/useCartDiscountCodesUpdateCallback',
-        'hooks/useCartLine',
-        'hooks/useCartLinesAddCallback',
-        'hooks/useCartLinesRemoveCallback',
-        'hooks/useCartLinesTotalQuantity',
-        'hooks/useCartLinesUpdateCallback',
-        'hooks/useCartNoteUpdateCallback',
-      ],
+      entry: ['hooks/useCart', 'hooks/useCartLine'],
       intro:
         'A cart contains the merchandise that a customer intends to purchase and the estimated cost associated with the cart. When a customer is ready to purchase their items, they can proceed to checkout.',
       tables: [
@@ -356,8 +346,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     generator.section({
       title: 'Built-in CSS support',
-      description:
-        'Learn about the CSS support built into Hydrogen apps and how you can customize the styles in your app.',
+      description: 'Learn about the CSS support built into Hydrogen apps.',
       url: '/custom-storefronts/hydrogen/framework/css-support.md',
       entry: 'framework/docs/css-support.md',
     }),
@@ -388,11 +377,11 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/pages.md',
     }),
     generator.section({
-      title: 'Secrets',
+      title: 'Environment variables',
       description:
         'Learn how to store sensitive information in your Hydrogen project.',
-      url: '/custom-storefronts/hydrogen/framework/secrets.md',
-      entry: 'framework/docs/secrets.md',
+      url: '/custom-storefronts/hydrogen/framework/environment-variables.md',
+      entry: 'framework/docs/environment-variables.md',
     }),
     generator.section({
       title: 'SEO',

@@ -1,4 +1,5 @@
 import type {CacheOptions, QueryKey} from '../../types';
+import {log} from '../../utilities/log';
 import {
   deleteItemFromCache,
   getItemFromCache,
@@ -6,16 +7,15 @@ import {
   setItemInCache,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
-import {useRenderCacheData} from '../RenderCacheProvider/hook';
+import {useRequestCacheData} from '../ServerRequestProvider';
 
-import type {RenderCacheResult} from '../RenderCacheProvider/types';
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
 }
 
 /**
  * The `useQuery` hook is a wrapper around Suspense calls and
- * global runtime's Cache if it exist.
+ * global runtime's Cache if it exists.
  * It supports Suspense calls on the server and on the client.
  */
 export function useQuery<T>(
@@ -25,10 +25,11 @@ export function useQuery<T>(
   queryFn: () => Promise<T>,
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
-): RenderCacheResult<T> {
-  return useRenderCacheData<T>(
-    key,
-    cachedQueryFnBuilder(key, queryFn, queryOptions)
+) {
+  const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
+  return useRequestCacheData<T>(
+    withCacheIdKey,
+    cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
   );
 }
 
@@ -58,13 +59,13 @@ function cachedQueryFnBuilder<T>(
        * Important: Do this async
        */
       if (isStale(response)) {
-        console.log(
+        log.debug(
           '[useQuery] cache stale; generating new response in background'
         );
         const lockKey = `lock-${key}`;
 
         runDelayedFunction(async () => {
-          console.log(`[stale regen] fetching cache lock`);
+          log.debug(`[stale regen] fetching cache lock`);
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
@@ -73,7 +74,7 @@ function cachedQueryFnBuilder<T>(
             const output = await generateNewOutput();
             await setItemInCache(key, output, resolvedQueryOptions?.cache);
           } catch (e: any) {
-            console.error(`Error generating async response: ${e.message}`);
+            log.error(`Error generating async response: ${e.message}`);
           } finally {
             await deleteItemFromCache(lockKey);
           }

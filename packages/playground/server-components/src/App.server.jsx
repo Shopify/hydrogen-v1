@@ -1,22 +1,18 @@
-import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
-import shopifyConfig from '../shopify.config';
+import {DefaultRoutes} from '@shopify/hydrogen';
+import {ShopifyProvider} from '@shopify/hydrogen';
+import shopifyConfig from '..//shopify.config';
 import {Suspense} from 'react';
 
 export default function App({...serverState}) {
-  const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
-
   return (
-    <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
-      <Suspense fallback={'Loading...'}>
-        <Switch>
-          <DefaultRoutes
-            pages={pages}
-            serverState={serverState}
-            fallback="Not Found"
-          />
-        </Switch>
-      </Suspense>
-    </ShopifyServerProvider>
+    <Suspense fallback={'Loading...'}>
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <DefaultRoutes
+          pages={serverState.pages}
+          serverState={serverState}
+          fallback="Not Found"
+        />
+      </ShopifyProvider>
+    </Suspense>
   );
 }

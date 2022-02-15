@@ -2,7 +2,7 @@
 
 **Requirements:**
 
-- Node v14+
+- Node.js version 16.5.0 or higher
 - Yarn
 
 ```bash
@@ -18,7 +18,7 @@ yarn dev-server
 
 Visit the dev environment at http://localhost:3000.
 
-To make changes to the starter template, edit the files in `packages/dev`.
+To make changes to the starter template, edit the files in `examples/template-hydrogen-default`.
 
 To modify Hydrogen framework, components, and hooks, edit the files in `packages/hydrogen`.
 
@@ -28,10 +28,11 @@ You can [inspect Vite plugin](https://github.com/antfu/vite-plugin-inspect) tran
 
 Hydrogen is a Yarn v1 monorepo. It consists of several key packages:
 
-- `hydrogen`: The Hydrogen React framework & SDK
-- `dev`: The starter template and local development playground
-- `create-hydrogen-app`: The CLI used to scaffold new projects
-- `playground`: Test cases used for both manual testing and automated end-to-end tests
+- `examples/template-hydrogen-default`: The starter template
+- `packages/hydrogen`: The Hydrogen React framework & SDK
+- `packages/create-hydrogen-app`: The CLI used to scaffold new projects
+- `packages/cli`: The CLI used to perform tasks in a Hydrogen app
+- `packages/playground`: Test cases used for both manual testing and automated end-to-end tests
 
 For more information, check out the following resources:
 
@@ -50,6 +51,25 @@ To manually lint and format:
 yarn lint
 yarn format
 ```
+
+## Naming conventions
+
+Hydrogen follows common React naming conventions for filenames, component names, classes, constants, and more.
+
+- For component **filenames** and **class names**, always use `PascalCase`.
+- For **non-component filenames**, always use fully lowercase `kebab-case`.
+- For **test filenames**, append `.test` before the file extension.
+- When declaring **instances** of components, always use `camelCase`.
+- When declaring **exported constants**, always use `SCREAMING_SNAKE_CASE`.
+
+| &nbsp;                       | ✅ Valid                                        | 🚫 Invalid                                                                          |
+| ---------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **Component filenames:**     | `ProductTitle.tsx`<br>`ProductTitle.client.tsx` | `productTitle.tsx`<br>`product_title.tsx`<br>`product-title.client.tsx`             |
+| **Non-component filenames:** | `client.ts`<br>`handle-event.ts`                | `Client.ts`<br>`handleEvent.ts`<br>`handle_event.ts`                                |
+| **Test filenames:**          | `ExternalVideo.test.tsx`                        | `ExternalVideo-test.tsx`<br>`ExternalVideo_test.tsx`<br>`ExternalVideoTest.tsx`     |
+| **Component classes:**       | `<AddToCartButton />`                           | `<addToCartButton />`                                                               |
+| **Component instances:**     | `const cartSelector = <CartSelector />`         | `const CartSelector = <CartSelector />`<br>`const cart_selector = <CartSelector />` |
+| **Exported constants:**      | `export const CART_COOKIE_TTL_DAYS = 14;`       | `export const CartCookieTTLDays = 14;`<br>`export const cart_cookie_ttl_days = 14;` |
 
 ## Commit Messages
 
@@ -87,7 +107,7 @@ Next, choose an option below.
 
 ### Option 1: `localdev` package
 
-This option creates a new Hydrogen app similar to `dev` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
+This option creates a new Hydrogen app similar to `examples/template-hydrogen-default` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
 
 ```terminal
 create-hydrogen packages/localdev
@@ -182,6 +202,16 @@ When finished, push up your changes.
 Next, visit the Shipit page for Hydrogen and click **Deploy**.
 
 After Shipit has released your version, visit the [releases page on GitHub](https://github.com/Shopify/hydrogen/releases), click on the version number you just released, and select "Create release from tag." Then, select "Auto-generate release notes." At this point, edit the release notes as you see fit (e.g. call out any breaking changes or upgrade guides). Finally, click "Publish release."
+
+## Releasing experimental versions
+
+Releasing an experimental version of Hydrogen to GitHub can be useful if you want to test the new version in existing apps.
+
+To release an experimental version, merge your changes into the `experimental` branch.
+
+Then, run `yarn bump-version` locally while in the branch. Be sure to select a pre-release that contains `v.X.X-experimental.N` or enter a custom version.
+
+After running the script, go to Shipit and find "Hydrogen Experimental." Run a deploy against the commit containing your new version, and this should release your experimental version on NPM with the `experimental` tag.
 
 ## Testing changes in another project
 

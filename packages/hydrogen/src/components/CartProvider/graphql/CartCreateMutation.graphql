@@ -1,6 +1,10 @@
 #import './CartFragment.graphql'
 
-mutation CartCreate($input: CartInput!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
+mutation CartCreate(
+  $input: CartInput!
+  $numCartLines: Int = 250
+  $country: CountryCode = ZZ
+) @inContext(country: $country) {
   cartCreate(input: $input) {
     cart {
       ...CartFragment

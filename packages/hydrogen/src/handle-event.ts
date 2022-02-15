@@ -1,9 +1,10 @@
 import {EntryServerHandler} from './types';
 import {ServerResponse} from 'http';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import {getCacheControlHeader} from './framework/cache';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
+import {renderApiRoute} from './utilities/apiRoutes';
+import {RSC_PATHNAME} from './constants';
 
 interface HydrogenFetchEvent {
   /**
@@ -18,9 +19,10 @@ export interface HandleEventOptions {
   indexTemplate: string | ((url: string) => Promise<string>);
   assetHandler?: (event: HydrogenFetchEvent, url: URL) => Promise<Response>;
   cache?: Cache;
-  streamableResponse: ServerResponse;
+  streamableResponse?: ServerResponse;
   dev?: boolean;
   context?: RuntimeContext;
+  nonce?: string;
 }
 
 export default async function handleEvent(
@@ -34,6 +36,7 @@ export default async function handleEvent(
     dev,
     cache,
     context,
+    nonce,
   }: HandleEventOptions
 ) {
   const url = new URL(request.url);
@@ -45,7 +48,7 @@ export default async function handleEvent(
   setContext(context);
   setConfig({dev});
 
-  const isReactHydrationRequest = url.pathname === '/react';
+  const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
   const template =
     typeof indexTemplate === 'function'
@@ -61,18 +64,42 @@ export default async function handleEvent(
   ) {
     return assetHandler(event, url);
   }
-  const {render, hydrate, stream}: EntryServerHandler =
+  const {render, hydrate, stream, getApiRoute, log}: EntryServerHandler =
     entrypoint.default || entrypoint;
 
   // @ts-ignore
-  if (dev && !(render && hydrate && stream)) {
+  if (dev && !(render && hydrate && stream && getApiRoute)) {
     throw new Error(
       `entry-server.jsx could not be loaded. This likely occurred because of a Vite compilation error.\n` +
         `Please check your server logs for more information.`
     );
   }
 
-  const isStreamable = streamableResponse && isStreamableRequest(url);
+  if (!isReactHydrationRequest) {
+    const apiRoute = getApiRoute(url);
+
+    // The API Route might have a default export, making it also a server component
+    // If it does, only render the API route if the request method is GET
+    if (
+      apiRoute &&
+      (!apiRoute.hasServerComponent || request.method !== 'GET')
+    ) {
+      return renderApiRoute(request, apiRoute, log);
+    }
+  }
+
+  const isStreamable =
+    !isBotUA(url, request.headers.get('user-agent')) &&
+    (!!streamableResponse || supportsReadableStream());
+
+  if (isReactHydrationRequest) {
+    return hydrate(url, {
+      request,
+      response: streamableResponse,
+      isStreamable,
+      dev,
+    });
+  }
 
   /**
    * Stream back real-user responses, but for bots/etc,
@@ -80,118 +107,87 @@ export default async function handleEvent(
    * things for SEO reasons.
    */
   if (isStreamable) {
-    if (isReactHydrationRequest) {
-      hydrate(url, {
-        context: {},
-        request,
-        response: streamableResponse,
-        dev,
-      });
-    } else {
-      stream(url, {
-        context: {},
-        request,
-        response: streamableResponse,
-        template,
-        dev,
-      });
-    }
-    return;
-  }
-
-  const {body, bodyAttributes, htmlAttributes, componentResponse, ...head} =
-    await render(url, {
+    return stream(url, {
       request,
-      context: {},
-      isReactHydrationRequest,
+      response: streamableResponse,
+      template,
+      nonce,
       dev,
     });
-
-  const headers = componentResponse.headers;
-
-  /**
-   * TODO: Also add `Vary` headers for `accept-language` and any other keys
-   * we want to shard our full-page cache for all Hydrogen storefronts.
-   */
-  headers.set(
-    getCacheControlHeader({dev}),
-    componentResponse.cacheControlHeader
-  );
-
-  if (componentResponse.customBody) {
-    const {status, customStatus} = componentResponse;
-
-    return new Response(await componentResponse.customBody, {
-      status: customStatus?.code ?? status ?? 200,
-      statusText: customStatus?.text,
-      headers,
-    });
   }
 
-  let response;
-
-  if (isReactHydrationRequest) {
-    response = new Response(body, {
-      status: componentResponse.status ?? 200,
-      headers,
-    });
-  } else {
-    const html = template
-      .replace(
-        `<div id="root"></div>`,
-        `<div id="root" data-server-rendered="true">${body}</div>`
-      )
-      .replace(/<head>(.*?)<\/head>/s, generateHeadTag(head))
-      .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
-      .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&');
-
-    headers.append('content-type', 'text/html');
-
-    const {status, customStatus} = componentResponse;
-
-    response = new Response(html, {
-      status: customStatus?.code ?? status ?? 200,
-      statusText: customStatus?.text,
-      headers,
-    });
-  }
-
-  return response;
-}
-
-function isStreamableRequest(url: URL) {
-  /**
-   * TODO: Add UA detection.
-   */
-  const isBot = url.searchParams.has('_bot');
-
-  return !isBot;
+  return render(url, {
+    request,
+    template,
+    nonce,
+    dev,
+  });
 }
 
 /**
- * Generate the contents of the `head` tag, and update the existing `<title>` tag
- * if one exists, and if a title is passed.
+ * Determines if the request is from a bot, using the URL and User Agent
  */
-function generateHeadTag(head: Record<string, string>) {
-  const headProps = ['base', 'meta', 'style', 'noscript', 'script', 'link'];
-  const {title, ...rest} = head;
+function isBotUA(url: URL, userAgent: string | null): boolean {
+  return (
+    url.searchParams.has('_bot') || (!!userAgent && botUARegex.test(userAgent))
+  );
+}
 
-  const otherHeadProps = headProps
-    .map((prop) => rest[prop])
-    .filter(Boolean)
-    .join('\n');
+/**
+ * An alphabetized list of User Agents of known bots, combined from lists found at:
+ * https://github.com/vercel/next.js/blob/d87dc2b5a0b3fdbc0f6806a47be72bad59564bd0/packages/next/server/utils.ts#L18-L22
+ * https://github.com/GoogleChrome/rendertron/blob/6f681688737846b28754fbfdf5db173846a826df/middleware/src/middleware.ts#L24-L41
+ */
+const botUserAgents = [
+  'AdsBot-Google',
+  'applebot',
+  'Baiduspider',
+  'baiduspider',
+  'bingbot',
+  'Bingbot',
+  'BingPreview',
+  'bitlybot',
+  'Discordbot',
+  'DuckDuckBot',
+  'Embedly',
+  'facebookcatalog',
+  'facebookexternalhit',
+  'Google-PageRenderer',
+  'Googlebot',
+  'googleweblight',
+  'ia_archive',
+  'LinkedInBot',
+  'Mediapartners-Google',
+  'outbrain',
+  'pinterest',
+  'quora link preview',
+  'redditbot',
+  'rogerbot',
+  'showyoubot',
+  'SkypeUriPreview',
+  'Slackbot',
+  'Slurp',
+  'sogou',
+  'Storebot-Google',
+  'TelegramBot',
+  'tumblr',
+  'Twitterbot',
+  'vkShare',
+  'W3C_Validator',
+  'WhatsApp',
+  'yandex',
+];
 
-  return (_outerHtml: string, innerHtml: string) => {
-    let headHtml = otherHeadProps + innerHtml;
+/**
+ * Creates a regex based on the botUserAgents array
+ */
+const botUARegex = new RegExp(botUserAgents.join('|'), 'i');
 
-    if (title) {
-      if (headHtml.includes('<title>')) {
-        headHtml = headHtml.replace(/(<title>(?:.|\n)*?<\/title>)/, title);
-      } else {
-        headHtml += title;
-      }
-    }
-
-    return `<head>${headHtml}</head>`;
-  };
+function supportsReadableStream() {
+  try {
+    new ReadableStream();
+    return true;
+  } catch (_) {
+    return false;
+  }
 }

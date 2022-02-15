@@ -7,10 +7,109 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- feat: change `/react` RSC path to `/__rsc`
+- `<Model3D>` has been renamed to `<ModelViewer>`
+- Fix index routes. See [#562](https://github.com/Shopify/hydrogen/issues/562)
+- Feature - `<ShopifyProvider>` can again be used in server components
+- dx: Correct Typescript issue where `as` was a default prop for all components when it should not be
+- New React hook `useScriptLoader` is available to more easily load external scripts
+- DX: Update types and docs for `useCart()` hook and `<CartProvider>`
+- feat: Add `totalQuantity` to the returned object from `useCart()`
+- Track page load performance
+- dx: Export `ProductPrice` and `ProductMetafield` standalone components
+- Fix missing server state on SSR pass
+- Fix mobile navigation in example that scrolls the body underneath when shown by @Francismori7 in #582
+- Use hashes as client component ids instead of absolute paths
+- Remove the following hooks. (All the same functionality can be retrieved through the `useCart()` hook)
+  - `useCartAttributesUpdateCallback`
+  - `useCartBuyerIdentityUpdateCallback`
+  - `useCartCheckoutUrl`
+  - `useCartCreateCallback`
+  - `useCartDiscountCodesUpdateCallback`
+  - `useCartLinesAddCallback`
+  - `useCartLinesRemoveCallback`
+  - `useCartLinesTotalQuantity`
+  - `useCartLinesUpdateCallback`
+  - `useCartNoteUpdateCallback`
+- Feat: Transition away from deprecated currency selector in favor of country selector
+- dx: The following money components no longer allow the function-as-a-child (also known as "render props") pattern; see #589.
+
+  - `<Money>` Use `useMoney()` for customization
+  - `<CartLinePrice>` Use `useMoney()` for customization
+  - `<ProductPrice>` Use `useMoney()` for customization
+  - `<SelectedVariantPrice>` Use `useMoney()` for customization
+  - `<Metafield>` Use `useParsedMetafields()` for customization
+  - `<ProductMetafield>` Use `useParsedMetafields()` for customization
+  - `<SelectedVariantMetafield>` Use `useParsedMetafields()` for customization
+  - `<UnitPrice>` Use `useMoney()` for customization
+  - `<CartLines>` Use `useCart()` for customization
+
+- refactor: `<Metafield>` now renders `ratings` as a `<span>` with text instead of stars; `multi_line_text_field` inside of a `<span>` instead of a `<div>`
+- Fix: add charset to content type in HTML responses
+- Fix header shift when cart is opened by @Francismori7 in #600
+- Feat: Simplify Helmet usage and make it compatible with RSC
+- The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
+- feat: added `useUrl` hook that allows the consumer to get the current url in server or client component
+- fix: fix bug where search param is not being pass along during RSC streaming call [#623](https://github.com/Shopify/hydrogen/pull/623)
+- feat: expect collection seo by default
+- fix: allow custom entry-client filenames
+- fix: Clear browser fetch cache by @wizardlyhel in [#591](https://github.com/Shopify/hydrogen/pull/591)
+- refactor: use featureImage instead of images(first:1) on product query
+- fix: target future release to use '2022-01' API Version
+- fix: cannot redefine property error when updating client components
+- fix: `ShopPayButton` supports quantities greater than 1. Also fixed issues with IDs in Storefront API version 2022-01
+- fix: render error in `Gallery.client.jsx` component when product resource has an external video or no images.
+- fix: ensure youtube external videos are embed compatible urls
+- feat: pass HYDROGEN_ASSET_BASE_URL into config to set base URL for compiled assets
+- dx [breaking change]: `<Product />` and `<CartLine />` aliases have been removed; use the original components `<ProductProvider />` and `<CartLineProvider />` instead. Their nested component aliases, such as `<Product.Image />`, have also been removed; in this example you should use `<ProductImage />`.
+- feat: remove React Router on the client and introduce Hydrogen the `<Link>` component and `useNavigate` hook
+
+## 0.10.1 - 2022-01-26
+
+- Fix: hot reload for newly added page files
+
+## 0.10.0 - 2022-01-25
+
+- Warn instead of error when a page server component is missing valid exports
+- Adopt upstream version of React Server Components. See [#498](https://github.com/Shopify/hydrogen/pull/498) for breaking changes.
+- The 'locale' option in shopify.config.js had been renamed to 'defaultLocale'
+- dx: rename `graphqlApiVersion` to `storefrontApiVersion` in `shopify.config.js`
+- Bump to latest version of React experimental to include [upstream context bugfix](https://github.com/facebook/react/issues/23089)
+- feature: improve API routes by allowing [strings and JS objects](https://github.com/Shopify/hydrogen/issues/476) to be returned.
+- fix: make sure that API routes [hot reload properly](https://github.com/Shopify/hydrogen/issues/497)
+
+## 0.9.1 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.9.0 - 2022-01-20
+
+- feature: API routes 🎉
+- feature: move to undici instead of node-fetch
+
+## 0.8.3 - 2022-01-13
+
+- fix: replace log abbreviations with full text.
+- feature: add optional `locale` param to `useShopQuery` to be used as `Accept-Language` in the store Storefront API query
+- feature: Optional purge query cache per build
+
+## 0.8.2 - 2022-01-07
+
+- fix: load logger only once.
+- fix: warn when requests take longer than 3000ms instead of erroring
+- feat: `useQuery` returns an error if the query's fetch was unsuccessful
+- feat: `useShopQuery` will give error hints to look at `shopify.config.js` when the Storefront API responds with a 403
+- fix: do not attempt to decode product IDs, as they are no longer base64-encoded in `unstable`
+
+## 0.8.1 - 2022-01-04
+
+- feat: Detect bot user agents and give bots a non-streamed response.
 - feat: Add global `Oxygen.env` for server-only environment variables.
 - fix: cart decrease button removes at zero quantity
 - feat: upgrade to latest React 18 experimental version
 - docs: product provider tweaks
+- docs: Document naming conventions
+- feat: logging abstraction with default timing information
 
 ## 0.8.0 - 2021-12-07
 

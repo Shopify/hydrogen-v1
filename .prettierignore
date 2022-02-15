@@ -1,0 +1,4 @@
+# built files
+**/dist/**
+# Lerna creates its own commit when publishing, and doesn't format things like prettier wants. For now, just ignore it and let Lerna format that file as it wants
+lerna.json

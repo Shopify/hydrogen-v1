@@ -1,10 +1,16 @@
-import {SelectedVariantAddToCartButton, ProductProvider, useProduct} from '@shopify/hydrogen';
+import {
+  SelectedVariantAddToCartButton,
+  ProductProvider,
+  useProduct,
+} from '@shopify/hydrogen';
 
 export function ProductDetails({product}) {
   return (
     <ProductProvider value={product}>
       <ProductOptions />
-      <SelectedVariantAddToCartButton>Add to cart</SelectedVariantAddToCartButton>
+      <SelectedVariantAddToCartButton>
+        Add to cart
+      </SelectedVariantAddToCartButton>
     </ProductProvider>
   );
 }

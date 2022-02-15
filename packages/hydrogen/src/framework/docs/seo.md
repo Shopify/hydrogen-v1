@@ -1,10 +1,20 @@
-The Hydrogen framework includes `<Seo>` client and server components. This guide describes how to customize the output of SEO-related tags in your Hydrogen client and server components.
+Hydrogen includes `<Seo>` client and server components. This guide describes how to customize the output of SEO-related tags in your Hydrogen client and server components.
 
-## How SEO works
+## How SEO works in Hydrogen
 
-The Hydrogen framework includes a `<Seo>` client component inside your app's `components` which you can use to customize the output of SEO-related tags in your document `head`.
+The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) provides a [`<DefaultSeo>`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx) server component that fetches your `shop.name` and `shop.description`. This component provides the default SEO values for every page on your website.
 
-Hydrogen also supplies a `<DefaultSeo>` server component, which is responsible for fetching your `shop.name` and setting default values and templates for every page on your website.
+Hydrogen also includes a [`<Seo>`](/api/hydrogen/components/primitive/seo) client component that you can use to output the SEO-related tags in your document `head` and override the default values on the following pages:
+
+- [Default page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
+- [Home page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/index.server.jsx)
+- [Product page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/products/[handle].server.jsx)
+- [Collection page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/collections/[handle].server.jsx)
+- [Pages page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/pages/[handle].server.jsx)
+
+### Imitating SEO robot behavior
+
+Hydrogen supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side. To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?\_bot` query parameter at the end of the webpage's URL.
 
 ## Client component examples
 
@@ -13,12 +23,12 @@ The following example shows how to pass a `product` prop to the component to gen
 {% codeblock file %}
 
 ```jsx
-<Seo product={product} />
+<Seo type="product" data={product} />
 ```
 
 {% endcodeblock %}
 
-If you want to add custom `head` tags, then you can import `Helmet` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
+If you want to add more custom `head` tags, then you can import `Helmet` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
 
 {% codeblock file %}
 
@@ -28,6 +38,7 @@ If you want to add custom `head` tags, then you can import `Helmet` from Hydroge
 import {Helmet} from '@shopify/hydrogen/client';
 
 return (
+  <Seo type="product" data={product} />
   <Helmet>
     <meta property="something" content="else" />
   </Helmet>
@@ -43,34 +54,46 @@ The following example shows how to include a catch-all SEO component (`<DefaultS
 {% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
-import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
+import {DefaultRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-import shopifyConfig from '../shopify.config';
+
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
+import AppClient from './App.client';
+import LoadingFallback from './components/LoadingFallback';
 
-export default function App({...serverState}) {
+export default function App({log, ...serverState}) {
   const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
 
   return (
-    <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
-      <Suspense fallback="Loading...">
+    <Suspense fallback={<LoadingFallback />}>
+      <AppClient>
         <DefaultSeo />
-        <Switch>
-          <DefaultRoutes
-            pages={pages}
-            serverState={serverState}
-            fallback={<NotFound />}
-          />
-        </Switch>
-      </Suspense>
-    </ShopifyServerProvider>
+        <DefaultRoutes
+          pages={pages}
+          serverState={serverState}
+          log={log}
+          fallback={<NotFound />}
+        />
+      </AppClient>
+    </Suspense>
   );
 }
 ```
 
 {% endcodeblock %}
+
+## Limitations and considerations
+
+The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
+
+- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources.
+
+- When you add or remove pages, the sitemap is automatically updated within one day. Similarly, if you unpublish a product, then the product is removed automatically from the sitemap.
+
+- The sitemap is cached for 24 hours.
+
+- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Hydrogen starter template URL structure, which is based on resource's handle.
 
 ## Next steps
 

@@ -1,7 +1,7 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartLines and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartLines and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `CartLines` component iterates over each cart line and renders its `children` within
-a `CartLineProvider` for each cart line. It also provides render props in the case where `children` is a function.
+a `CartLineProvider` for each cart line.
 
 ## Example code
 
@@ -39,10 +39,10 @@ export function MyComponentWithRenderProps() {
 
 ## Props
 
-| Name     | Type                                                                | Description                                                                                                             |
-| -------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| as?      | <code>"ul"</code>                                                   | A `ReactNode` element. Valid values: `ul` or `undefined`. If `ul`, then each child will be wrapped with a `li` element. |
-| children | <code>ReactNode &#124; (line: UndocumentedType) => ReactNode</code> | A `ReactNode` element or a function that takes a cart line as an argument and returns a `ReactNode`.                    |
+| Name     | Type                   | Description                                                                                                             |
+| -------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| as?      | <code>"ul"</code>      | A `ReactNode` element. Valid values: `ul` or `undefined`. If `ul`, then each child will be wrapped with a `li` element. |
+| children | <code>ReactNode</code> | A `ReactNode` element                                                                                                   |
 
 ## Component type
 

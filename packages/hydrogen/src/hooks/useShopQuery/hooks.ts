@@ -1,8 +1,9 @@
 import {useShop} from '../../foundation/useShop';
+import {log} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';
-import {isClient, fetchBuilder, graphqlRequestBody} from '../../utilities';
+import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 
 export interface UseShopQueryResponse<T> {
@@ -18,6 +19,7 @@ export function useShopQuery<T>({
   query,
   variables = {},
   cache = {},
+  locale = '',
 }: {
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
@@ -27,17 +29,19 @@ export function useShopQuery<T>({
   variables?: Record<string, any>;
   /** An object containing cache-control options for the sub-request. */
   cache?: CacheOptions;
+  /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
+  locale?: string;
 }): UseShopQueryResponse<T> {
-  if (isClient()) {
+  if (!import.meta.env.SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
     );
   }
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {request, key} = createShopRequest(body);
+  const {request, key} = createShopRequest(body, locale);
 
-  const {data} = useQuery<UseShopQueryResponse<T>>(
+  const {data, error: fetchError} = useQuery<UseShopQueryResponse<T>>(
     key,
     query
       ? fetchBuilder<UseShopQueryResponse<T>>(request)
@@ -47,28 +51,56 @@ export function useShopQuery<T>({
   );
 
   /**
+   * The fetch request itself failed, so we handle that differently than a GraphQL error
+   */
+  if (fetchError) {
+    const errorMessage = `Failed to fetch the Storefront API. ${
+      // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
+      fetchError.status === 403
+        ? `You may have a bad value in 'shopify.config.js'`
+        : `${fetchError.statusText}`
+    }`;
+
+    log.error(errorMessage);
+
+    if (getConfig().dev) {
+      throw new Error(errorMessage);
+    } else {
+      // in non-dev environments, we probably don't want super-detailed error messages for the user
+      throw new Error(
+        `The fetch attempt failed; there was an issue connecting to the data source.`
+      );
+    }
+  }
+
+  /**
    * GraphQL errors get printed to the console but ultimately
    * get returned to the consumer.
    */
   if (data?.errors) {
     const errors = data.errors instanceof Array ? data.errors : [data.errors];
     for (const error of errors) {
-      console.error('GraphQL Error', error);
-
       if (getConfig().dev) {
         throw new Error(error.message);
+      } else {
+        log.error('GraphQL Error', error);
       }
     }
-    console.error(`GraphQL errors: ${errors.length}`);
+    log.error(`GraphQL errors: ${errors.length}`);
   }
 
   return data as UseShopQueryResponse<T>;
 }
 
-function createShopRequest(body: string) {
-  const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
+function createShopRequest(body: string, locale?: string) {
+  const {
+    storeDomain,
+    storefrontToken,
+    storefrontApiVersion,
+    locale: defaultLocale,
+  } = useShop();
 
-  const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
+  const url = `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`;
 
   return {
     request: new Request(url, {
@@ -76,9 +108,10 @@ function createShopRequest(body: string) {
       headers: {
         'X-Shopify-Storefront-Access-Token': storefrontToken,
         'content-type': 'application/json',
+        'Accept-Language': (locale as string) ?? defaultLocale,
       },
       body,
     }),
-    key: [storeDomain, graphqlApiVersion, body],
+    key: [storeDomain, storefrontApiVersion, body, locale],
   };
 }

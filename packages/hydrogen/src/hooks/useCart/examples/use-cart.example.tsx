@@ -5,7 +5,7 @@ export function MyComponent() {
     <CartProvider>
       <CartLineItems />
     </CartProvider>
-  )
+  );
 }
 
 export function CartLineItems() {
@@ -14,8 +14,10 @@ export function CartLineItems() {
   return (
     <>
       {lines.map((line) => {
-        return {/* your JSX*/}
+        return {
+          /* your JSX*/
+        };
       })}
     </>
-  )
+  );
 }

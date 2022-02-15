@@ -7,7 +7,7 @@ import {formatFile} from '../utilities';
 export interface FileResult {
   path: string;
   overwritten: boolean;
-  diff: boolean;
+  diff?: boolean;
 }
 
 export class Fs {
@@ -52,8 +52,8 @@ export class Fs {
     }
   }
 
-  async exists(path: string) {
-    return await pathExists(this.fullPath(path));
+  exists(path: string) {
+    return pathExists(this.fullPath(path));
   }
 
   async *commit(): AsyncIterableIterator<FileResult> {
@@ -65,16 +65,22 @@ export class Fs {
       }
 
       const oldFile = this.readCache.get(path);
-      const formattedFile = formatFile(contents);
-      const diff = oldFile ? formatFile(oldFile) !== formattedFile : false;
+      const formattedFile = await formatFile(path, contents);
+      const diff = oldFile
+        ? (await formatFile(path, oldFile)) !== formattedFile
+        : false;
 
-      await writeFile(path, formatFile(formattedFile));
+      await writeFile(path, formattedFile);
       yield {path: this.relativePath(path), overwritten: exists, diff: diff};
     }
   }
 
   write(path: string, contents: string) {
     this.files.set(this.fullPath(path), contents);
+  }
+
+  makeDir(dir: string) {
+    return mkdirp(dir);
   }
 
   fullPath(path: string) {

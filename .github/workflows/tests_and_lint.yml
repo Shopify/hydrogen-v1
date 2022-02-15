@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        node-version: [14.x, 15.x, 16.x]
+        node-version: [16.x, 17.x]
 
     name: OS ${{ matrix.os }} / NodeJS ${{ matrix.node-version }}
 
@@ -25,17 +25,21 @@ jobs:
           cache: 'yarn'
 
       - name: Install the packages
-        run: yarn install --frozen-lockfile --ignore-engines
+        # Bump yarn timeout to fix an issue with Windows CI downloading the Playwright/Chromium stuff
+        run: yarn install --frozen-lockfile --ignore-engines --network-timeout 36000
 
       - name: Build the code
         run: yarn build
+
+      - name: Check formatting
+        run: yarn format:check
 
       - name: Lint the framework code
         run: yarn lint
 
       - name: Lint the template code
         run: yarn lint
-        working-directory: ./packages/dev
+        working-directory: ./examples/template-hydrogen-default
 
       - name: Run the unit tests
         run: yarn test

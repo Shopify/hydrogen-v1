@@ -8,9 +8,10 @@ export {
   graphqlRequestBody,
   decodeShopifyId,
   isClient,
+  getTime,
 } from './utilities';
 
-export {Helmet} from 'react-helmet-async';
+export {log, setLogger, Logger} from './utilities/log';
 
 // This is exported here because it contains a Server Component
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';

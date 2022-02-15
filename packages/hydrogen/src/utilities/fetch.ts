@@ -14,12 +14,16 @@ export function fetchBuilder<T>(request: Request) {
     }
   }
 
+  let body: string;
+
   return async () => {
     // Since a request's body can't be consumed more than once,
     // and throws at the attempt afterwards,
-    // and this function can be cached and re-used, we clone
-    // the request each time:
-    const clonedRequest = request.clone();
+    // and this function can be cached and re-used, we cache
+    // the body in the outer scope.
+    if (!body) {
+      body = await request.text();
+    }
 
     // Oxygen's fetch is a Go implementation which
     // currently doesn't process some the call
@@ -33,19 +37,20 @@ export function fetchBuilder<T>(request: Request) {
     // Oxygen aims at being eventually compliant
     // with the Fetch API, making these quirks redundant.
 
-    // We can only consume body as plain text
-    const body = await clonedRequest.text();
     // Headers must be a plain object unless the whole second argument is instanceof Request
-    const headers: {[key: string]: string} = {};
-    clonedRequest.headers.forEach((hVal, hName) => {
-      headers[hName] = hVal;
-    });
+    // @ts-ignore
+    const headers = Object.fromEntries(request.headers.entries());
 
-    const response = await fetch(clonedRequest.url, {
+    const response = await fetch(request.url, {
       body,
       headers,
-      method: clonedRequest.method,
+      method: request.method,
     });
+
+    if (!response.ok) {
+      throw response;
+    }
+
     const data = await response.json();
 
     return data as T;
@@ -64,12 +69,15 @@ export function graphqlRequestBody(
 }
 
 export function decodeShopifyId(id: string) {
+  // Start fix: for SFAPI 2022-01. Remove when upgrading to 2022-04
   if (!id.startsWith('gid://')) {
     id =
       typeof btoa !== 'undefined'
         ? btoa(id)
         : Buffer.from(id, 'base64').toString('ascii');
   }
+  // End fix
+
   if (!id.startsWith('gid://')) {
     throw new Error('invalid Shopify ID');
   }

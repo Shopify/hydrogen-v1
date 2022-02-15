@@ -1,18 +1,11 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/LocalizationProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/LocalizationProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
-The `LocalizationProvider` component automatically queries the Storefront API's [`localization`](/api/storefront/reference/common-objects/queryroot) field for the `isoCode` and `name` of the `country` and `availableCountries` and keeps this information in a context.
-
-Any descendents of this provider can use the `useCountry` and `useAvailableCountries` hooks. The `isoCode` of the `country` can be used in the Storefront API's [`@inContext`](/api/storefront/reference/directives/incontext) directive as the `country` value.
-
-## Component type
-
-The `LocalizationProvider` component is a server component, which means that it renders on the server. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `useCountry` hook returns a tuple of the current localization country and a function for updating it.
+It must be a descendent of a `LocalizationProvider` component.
 
 ## Example code
 
-{% codeblock file %}
-
-```jsx
+```tsx
 import {LocalizationProvider} from '@shopify/hydrogen';
 
 export function Component() {
@@ -20,7 +13,9 @@ export function Component() {
 }
 ```
 
-{% endcodeblock %}
+## Component type
+
+The `LocalizationProvider` component is a server component, which means that it renders on the server. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related hooks
 
