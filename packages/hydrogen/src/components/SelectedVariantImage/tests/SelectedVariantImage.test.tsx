@@ -10,7 +10,7 @@ describe('<SelectedVariantImage />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const wrapper = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage />
       </ProductProvider>
     );
@@ -24,7 +24,7 @@ describe('<SelectedVariantImage />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const wrapper = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage className="w-full" />
       </ProductProvider>
     );
@@ -41,7 +41,7 @@ describe('<SelectedVariantImage />', () => {
     selectedVariant.image = undefined;
 
     const wrapper = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage />
       </ProductProvider>
     );
