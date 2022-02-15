@@ -20,7 +20,7 @@ describe('<CartEstimatedCost />', () => {
 
   it('renders a <Money />', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost />
       </CartProvider>
     );
@@ -40,7 +40,7 @@ describe('<CartEstimatedCost />', () => {
 
   it('renders a totalAmount when total is the amountType', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="total" />
       </CartProvider>
     );
@@ -53,7 +53,7 @@ describe('<CartEstimatedCost />', () => {
 
   it('renders a subtotalAmount when subtotal is the amountType', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="subtotal" />
       </CartProvider>
     );
@@ -66,7 +66,7 @@ describe('<CartEstimatedCost />', () => {
 
   it('renders a totalTaxAmount when tax is the amountType', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="tax" />
       </CartProvider>
     );
@@ -79,7 +79,7 @@ describe('<CartEstimatedCost />', () => {
 
   it('renders a totalDutyAmount when duty is the amountType', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="duty" />
       </CartProvider>
     );

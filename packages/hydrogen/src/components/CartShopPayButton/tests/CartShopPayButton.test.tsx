@@ -20,7 +20,7 @@ describe('CartShopPayButton', () => {
 
   it('renders a ShopPayButton', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartShopPayButton />
       </CartProvider>
     );

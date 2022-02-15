@@ -160,7 +160,7 @@ export default function App() {
   const {data} = useShopQuery({query: QUERY});
 
   return (
-    <CartProvider items={data.items}>
+    <CartProvider data={data.cart}>
       <p>Your app here</p>
     </CartProvider>
   );
