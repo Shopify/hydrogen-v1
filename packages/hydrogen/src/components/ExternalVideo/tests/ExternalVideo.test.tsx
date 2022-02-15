@@ -65,4 +65,19 @@ describe('<ExternalVideo />', () => {
       className: 'fancy',
     });
   });
+
+  it('transforms a valid youtube shortened url to an embed compatibile url', () => {
+    const invalidUrl = 'https://youtu.be/a2YSgfwXc9c';
+    const validUrl = invalidUrl.replace(/youtu\.be/, 'www.youtube.com/embed');
+    const component = mount(
+      <ExternalVideo
+        video={getExternalVideo({
+          embeddedUrl: invalidUrl,
+        })}
+      />
+    );
+    expect(component).toContainReactComponent('iframe', {
+      src: validUrl,
+    });
+  });
 });

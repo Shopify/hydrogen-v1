@@ -76,7 +76,6 @@ export async function app(env: Env<{name: string}>) {
   workspace.install('react-dom', {
     version: '0.0.0-experimental-529dc3ce8-20220124',
   });
-  workspace.install('react-router-dom', {version: '^5.2.0'});
   workspace.install('@shopify/hydrogen', {version: '^0.9.1'});
   workspace.install('@shopify/hydrogen-cli', {version: '^0.9.1'});
   workspace.install('vite', {dev: true, version: '^2.7.1'});

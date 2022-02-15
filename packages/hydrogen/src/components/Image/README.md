@@ -15,12 +15,8 @@ const QUERY = gql`
   ${Image.Fragment}
 
   productByHandle(handle: "my-product") {
-    images(first: 1) {
-      edges {
-        node {
-          ...ImageFragment
-        }
-      }
+    featuredImage {
+      ...ImageFragment
     }
   }
 `;

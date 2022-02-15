@@ -11,7 +11,7 @@ import {MediaImage} from '../../types';
 export interface MetafieldProps {
   /** A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API. */
   metafield: ParsedMetafield;
-  /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/definitions/types). */
+  /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](/apps/metafields/types). */
   as?: ElementType;
 }
 

@@ -1,14 +1,14 @@
-import {META_ENV_SSR} from '../../utilities/meta-env-ssr';
-import {useServerRequest} from '../ServerRequestProvider';
+import {RSC_PATHNAME} from '../../constants';
+import {useEnvContext, META_ENV_SSR} from '../ssr-interop';
 
 /**
- * Use to get current url in server or client component.
+ * The `useUrl` hook retrieves the current URL in a server or client component.
  */
 export function useUrl(): URL {
   if (META_ENV_SSR) {
-    const serverUrl = new URL(useServerRequest().url);
+    const serverUrl = new URL(useEnvContext((req) => req.url));
 
-    if (serverUrl.pathname === '/react') {
+    if (serverUrl.pathname === RSC_PATHNAME) {
       const state = JSON.parse(serverUrl.searchParams.get('state') || '{}');
 
       const parsedUrl = `${serverUrl.origin}/${state.pathname ?? ''}${

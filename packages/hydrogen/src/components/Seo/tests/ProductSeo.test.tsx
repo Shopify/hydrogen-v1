@@ -45,7 +45,7 @@ const defaultProps = {
   seo: {},
   handle: 'default handle',
   vendor: 'default vendor',
-  images: {edges: []},
+  featuredImage: {url: 'https://test-123/image.png', width: 1200, height: 600},
   variants: {
     edges: [],
   },
@@ -107,7 +107,7 @@ describe('<ProductSeo />', () => {
     });
   });
 
-  it('renders <ImageSeo /> with the first node of images prop', () => {
+  it('renders <ImageSeo /> with the first node of featuredImage prop', () => {
     const image = {
       url: 'url-123',
       width: 1200,
@@ -115,7 +115,7 @@ describe('<ProductSeo />', () => {
       altText: 'alt text',
     };
     const wrapper = mount(
-      <ProductSeo {...defaultProps} images={{edges: [{node: image}]}} />
+      <ProductSeo {...defaultProps} featuredImage={image} />
     );
 
     expect(wrapper).toContainReactComponent(ImageSeo, image);
@@ -137,6 +137,7 @@ describe('<ProductSeo />', () => {
             name: defaultProps.vendor,
           },
           url: 'https://test.com/product/123',
+          image: 'https://test-123/image.png',
         }),
       });
     });
@@ -149,7 +150,7 @@ describe('<ProductSeo />', () => {
       };
 
       const wrapper = mount(
-        <ProductSeo {...defaultProps} images={{edges: [{node: image}]}} />
+        <ProductSeo {...defaultProps} featuredImage={image} />
       );
 
       expect(wrapper).toContainReactComponent('script', {
@@ -204,6 +205,7 @@ describe('<ProductSeo />', () => {
             name: defaultProps.vendor,
           },
           url: 'https://test.com/product/123',
+          image: 'https://test-123/image.png',
           sku: variant.sku,
           offers: [
             {

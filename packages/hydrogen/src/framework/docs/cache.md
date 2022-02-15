@@ -176,6 +176,63 @@ export default defineConfig({
 
 {% endcodeblock %}
 
+To enable logging for the cache API status, call `setLoggerOptions` and set `showCacheApiStatus` to `true`:
+
+{% codeblock file, filename: '/src/entry-server.jsx' %}
+
+```js
+import {setLoggerOptions} from '@shopify/hydrogen';
+import App from './App.server';
+
+setLoggerOptions({showCacheApiStatus: true});
+
+export default renderHydrogen(App, () => {
+  // Custom hook
+});
+```
+
+{% endcodeblock %}
+
+The status of the cache updates on each query:
+
+```sh
+[Cache] MISS   query shopInfo
+[Cache] MISS   query indexContent
+[Cache] PUT    query indexContent
+[Cache] MISS   query Localization
+```
+
+To enable logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader` to `true`:
+
+{% codeblock file, filename: '/src/entry-server.jsx' %}
+
+```js
+import {setLoggerOptions} from '@shopify/hydrogen';
+import App from './App.server';
+
+setLoggerOptions({showCacheControlHeader: true});
+
+export default renderHydrogen(App, () => {
+  // Custom hook
+});
+```
+
+{% endcodeblock %}
+
+A cache control header report displays for each page request. The report includes the associated queries
+that built the request and the cache control headers:
+
+```sh
+┌── Cache control header for http://localhost:3000/collections/freestyle-collection
+│ public, max-age=3600, stale-while-revalidate=82800
+│
+│ query shopInfo          public, max-age=43200, stale-while-revalidate=43200
+│ query CollectionDetails public, max-age=1, stale-while-revalidate=9
+│ query indexContent      public, max-age=60, stale-while-revalidate=600
+│ query Localization      public, max-age=3600, stale-while-revalidate=82800
+└──
+```
+
 You can also preview the full-page caching headers in the network tab of your browser’s developer tools. The response header used is `cache-control-preview`.
 
 ![A screenshot of the response headers](/assets/custom-storefronts/hydrogen/response-headers.png)

@@ -1,7 +1,8 @@
 import type {RenderType} from './log';
 
 export function findQueryName(key: string) {
-  const match = key.match(/query ([^\s\()]*)\s?(|\(\{)/);
+  const decodeKey = decodeURIComponent(key);
+  const match = decodeKey.match(/query ([^\s\()]*)\s?(|\(\{)/);
   if (match && match.length > 1) {
     return match[1];
   }

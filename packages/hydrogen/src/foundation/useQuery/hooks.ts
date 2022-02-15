@@ -1,5 +1,8 @@
 import type {CachingStrategy, QueryKey} from '../../types';
-import {log} from '../../utilities/log';
+import {
+  getLoggerWithContext,
+  collectQueryCacheControlHeaders,
+} from '../../utilities/log';
 import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
@@ -8,8 +11,7 @@ import {
   setItemInCache,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
-import {useRequestCacheData} from '../ServerRequestProvider';
-import {collectQueryCacheControlHeaders} from '../../utilities/log';
+import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
   cache: CachingStrategy | undefined;
@@ -17,7 +19,7 @@ export interface HydrogenUseQueryOptions {
 
 /**
  * The `useQuery` hook is a wrapper around Suspense calls and
- * global runtime's Cache if it exist.
+ * global runtime's Cache if it exists.
  * It supports Suspense calls on the server and on the client.
  */
 export function useQuery<T>(
@@ -48,6 +50,11 @@ function cachedQueryFnBuilder<T>(
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
   async function cachedQueryFn() {
+    // Call this hook before running any async stuff
+    // to prevent losing the current React cycle.
+    const request = useServerRequest();
+    const log = getLoggerWithContext(request);
+
     const cacheResponse = await getItemFromCache(key);
 
     async function generateNewOutput() {
@@ -58,6 +65,7 @@ function cachedQueryFnBuilder<T>(
       const [output, response] = cacheResponse;
 
       collectQueryCacheControlHeaders(
+        request,
         key,
         response.headers.get('cache-control')
       );
@@ -102,6 +110,7 @@ function cachedQueryFnBuilder<T>(
     );
 
     collectQueryCacheControlHeaders(
+      request,
       key,
       generateSubRequestCacheControlHeader(resolvedQueryOptions?.cache)
     );
