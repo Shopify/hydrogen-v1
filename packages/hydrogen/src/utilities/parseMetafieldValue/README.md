@@ -42,7 +42,7 @@ export function Product({handle}) {
   return (
     <>
       {parsedMetafields.map((metafield) => {
-        return <Metafield metafield={metafield} key={metafield.id} />;
+        return <Metafield data={metafield} key={metafield.id} />;
       })}
     </>
   );
