@@ -77,20 +77,6 @@
     "vite": "^2.8.0",
     "yorkie": "^2.0.0"
   },
-  "turbo": {
-    "baseBranch": "origin/main",
-    "pipeline": {
-      "test": {
-        "outputs": []
-      },
-      "lint": {
-        "outputs": []
-      },
-      "dev": {
-        "cache": false
-      }
-    }
-  },
   "gitHooks": {
     "pre-commit": "lint-staged",
     "commit-msg": "node scripts/verify-commit.js"

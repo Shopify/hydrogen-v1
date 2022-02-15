@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.10.1",
   "scripts": {
-    "dev": "vite",
+    "_dev": "vite",
     "start:node": "node start-node",
     "start:worker": "node start-worker",
     "build": "yarn build:client && yarn build:server && yarn build:worker",
