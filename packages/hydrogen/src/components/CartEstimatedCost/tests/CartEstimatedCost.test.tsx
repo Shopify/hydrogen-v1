@@ -47,7 +47,7 @@ describe('<CartEstimatedCost />', () => {
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
@@ -60,7 +60,7 @@ describe('<CartEstimatedCost />', () => {
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.subtotalAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
@@ -73,7 +73,7 @@ describe('<CartEstimatedCost />', () => {
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalTaxAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
@@ -86,7 +86,7 @@ describe('<CartEstimatedCost />', () => {
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalDutyAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 });

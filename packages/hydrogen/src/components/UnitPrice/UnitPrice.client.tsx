@@ -25,7 +25,7 @@ export function UnitPrice<TTag extends ElementType>(
 
   return (
     <Wrapper {...passthroughProps}>
-      <Money money={unitPrice} />/{unitPriceMeasurement.referenceUnit}
+      <Money data={unitPrice} />/{unitPriceMeasurement.referenceUnit}
     </Wrapper>
   );
 }

@@ -19,5 +19,5 @@ const QUERY = gql`
 export default function Product() {
   const {data} = useShopQuery({query: QUERY});
 
-  return <Money money={data.product.variants.edges[0].node.priceV2} />;
+  return <Money data={data.product.variants.edges[0].node.priceV2} />;
 }
