@@ -66,7 +66,7 @@ And update your `worker.js` to pass an `assetHandler` to `handleEvent`:
 
 ```js
 import handleEvent from '@shopify/hydrogen/worker';
-import entrypoint from './src/entry-server.jsx';
+import entrypoint from './src/App.server.jsx';
 // eslint-disable-next-line node/no-missing-import
 import indexHtml from './dist/client/index.html?raw';
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
