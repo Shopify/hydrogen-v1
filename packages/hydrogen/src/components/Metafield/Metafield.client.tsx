@@ -98,8 +98,8 @@ export function Metafield<TTag extends ElementType>(
     case 'file_reference': {
       if (data.reference?.__typename === 'MediaImage') {
         const ref = data.reference as MediaImage;
-        return ref.image ? (
-          <Image image={ref.image} {...passthroughProps} />
+        return ref.data ? (
+          <Image data={ref.data} {...passthroughProps} />
         ) : null;
       }
     }

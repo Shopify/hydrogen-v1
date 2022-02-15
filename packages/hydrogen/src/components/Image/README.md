@@ -22,11 +22,11 @@ const QUERY = gql`
 `;
 
 export default function Product() {
-  const {data, fetching} = useShopQuery({query: QUERY});
+  const {data} = useShopQuery({query: QUERY});
 
-  const image = data.productByHandle.images.edges[0].node;
+  const image = data.productByHandle.featuredImage;
 
-  return <Image image={image} />;
+  return <Image data={image} />;
 }
 ```
 

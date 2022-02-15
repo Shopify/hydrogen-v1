@@ -16,7 +16,7 @@ describe('<SelectedVariantImage />', () => {
     );
 
     expect(wrapper).toContainReactComponent(Image, {
-      image: selectedVariant.image,
+      data: selectedVariant.image,
     });
   });
 
@@ -30,7 +30,7 @@ describe('<SelectedVariantImage />', () => {
     );
 
     expect(wrapper).toContainReactComponent(Image, {
-      image: selectedVariant.image,
+      data: selectedVariant.image,
       className: 'w-full',
     });
   });
