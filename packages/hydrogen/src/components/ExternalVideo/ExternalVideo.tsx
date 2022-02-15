@@ -8,7 +8,7 @@ export interface ExternalVideoProps {
   /** An object with the keys `host`, `embeddedUrl`, and `id`. Refer to the Storefront API's
    * [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).
    */
-  video: Pick<ExternalVideoType, 'host' | 'embeddedUrl' | 'id'>;
+  data: Pick<ExternalVideoType, 'host' | 'embeddedUrl' | 'id'>;
   /** An object containing the options available for either
    * [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or
    * [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters).
@@ -26,16 +26,16 @@ export function ExternalVideo<TTag extends React.ElementType = 'iframe'>(
   props: Props<TTag, PropsWeControl> & ExternalVideoProps
 ) {
   const {
-    video,
+    data,
     options,
-    id = video.id,
+    id = data.id,
     frameBorder = '0',
     allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
     allowFullScreen = true,
     ...passthroughProps
   } = props;
 
-  const url = useEmbeddedVideoUrl(video.embeddedUrl, options);
+  const url = useEmbeddedVideoUrl(data.embeddedUrl, options);
 
   return (
     <iframe
