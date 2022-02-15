@@ -35,13 +35,6 @@ declare global {
   var __WORKER__: boolean;
 }
 
-/**
- * If a query is taking too long, or something else went wrong,
- * send back a response containing the Suspense fallback and rely
- * on the client to hydrate and build the React tree.
- */
-const STREAM_ABORT_TIMEOUT_MS = 3000;
-
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 const renderHydrogen: ServerHandler = (App, {pages}) => {
@@ -343,7 +336,6 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
         },
         async onCompleteAll() {
           log.trace('node complete stream');
-          clearTimeout(streamTimeout);
 
           logCacheControlHeaders('str', request, componentResponse);
 
@@ -389,12 +381,6 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           log.error(error);
         },
       });
-
-      const streamTimeout = setTimeout(() => {
-        log.warn(
-          `The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`
-        );
-      }, STREAM_ABORT_TIMEOUT_MS);
     }
   };
 
@@ -574,16 +560,11 @@ async function renderToBufferedString(
   {log, nonce}: {log: Logger; nonce?: string}
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
-    const errorTimeout = setTimeout(() => {
-      log.warn(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`);
-    }, STREAM_ABORT_TIMEOUT_MS);
-
     if (__WORKER__) {
       const deferred = defer();
       const readable = ssrRenderToReadableStream(ReactApp, {
         nonce,
         onCompleteAll() {
-          clearTimeout(errorTimeout);
           /**
            * We want to wait until `onCompleteAll` has been called before fetching the
            * stream body. Otherwise, React 18's streaming JS script/template tags
@@ -611,8 +592,6 @@ async function renderToBufferedString(
          * `template` and `script` tags inserted and rendered as part of the hydration response.
          */
         onCompleteAll() {
-          clearTimeout(errorTimeout);
-
           let data = '';
           writer.on('data', (chunk) => (data += chunk.toString()));
           writer.once('error', reject);
