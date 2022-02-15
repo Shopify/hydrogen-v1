@@ -28,8 +28,6 @@ export async function app(env: Env<{name: string}>) {
     render('vite.config.js', './templates/vite-config-js'),
     render('src/index.css', './templates/index-css'),
     render('src/App.server.jsx', './templates/App-server-jsx'),
-    render('src/entry-client.jsx', './templates/entry-client-jsx'),
-    render('src/entry-server.jsx', './templates/entry-server-jsx'),
     render('src/pages/Index.server.jsx', './templates/Index-server-jsx'),
     render('src/pages/About.server.jsx', './templates/About-server-jsx'),
     render(

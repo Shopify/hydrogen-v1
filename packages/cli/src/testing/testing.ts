@@ -238,7 +238,7 @@ async function createBuild(directory: string) {
     root: directory,
     build: {
       outDir: `dist/server`,
-      ssr: 'src/entry-server.jsx',
+      ssr: 'src/App.server.jsx',
     },
   };
 
