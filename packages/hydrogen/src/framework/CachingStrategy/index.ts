@@ -20,7 +20,7 @@ const optionMapping: {
 export function generateCacheControlHeader(
   cacheOptions: CachingStrategy
 ): string {
-  let cacheControl: string[] = [];
+  const cacheControl: string[] = [];
   Object.keys(cacheOptions).forEach((key: string) => {
     if (key === 'mode') {
       cacheControl.push(cacheOptions[key] as string);
