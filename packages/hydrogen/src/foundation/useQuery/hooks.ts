@@ -1,13 +1,17 @@
 import type {CacheOptions, QueryKey} from '../../types';
-import {log} from '../../utilities/log';
+import {
+  getLoggerWithContext,
+  collectQueryCacheControlHeaders,
+} from '../../utilities/log';
 import {
   deleteItemFromCache,
+  generateSubRequestCacheControlHeader,
   getItemFromCache,
   isStale,
   setItemInCache,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
-import {useRequestCacheData} from '../ServerRequestProvider';
+import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
   cache: CacheOptions;
@@ -46,6 +50,11 @@ function cachedQueryFnBuilder<T>(
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
   async function cachedQueryFn() {
+    // Call this hook before running any async stuff
+    // to prevent losing the current React cycle.
+    const request = useServerRequest();
+    const log = getLoggerWithContext(request);
+
     const cacheResponse = await getItemFromCache(key);
 
     async function generateNewOutput() {
@@ -54,6 +63,12 @@ function cachedQueryFnBuilder<T>(
 
     if (cacheResponse) {
       const [output, response] = cacheResponse;
+
+      collectQueryCacheControlHeaders(
+        request,
+        key,
+        response.headers.get('cache-control')
+      );
 
       /**
        * Important: Do this async
@@ -92,6 +107,12 @@ function cachedQueryFnBuilder<T>(
     runDelayedFunction(
       async () =>
         await setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+    );
+
+    collectQueryCacheControlHeaders(
+      request,
+      key,
+      generateSubRequestCacheControlHeader(resolvedQueryOptions?.cache)
     );
 
     return newOutput;

@@ -14,6 +14,7 @@ setLogger({
   fatal(context, ...args) {
     console.error(...args);
   },
+  options: () => ({}),
 });
 
 const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');

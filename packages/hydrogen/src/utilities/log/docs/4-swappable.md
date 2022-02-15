@@ -23,6 +23,10 @@ setLogger({
   fatal(request, ...args) {
     // Call your own logger.
   },
+  options: () => ({
+    showCacheApiStatus: true,
+    showCacheControlHeader: true,
+  }),
 });
 
 export default renderHydrogen(App, () => {
