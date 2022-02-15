@@ -31,6 +31,6 @@ export default function MyProductVideo() {
 
   const firstMediaElement = data.products.edges[0].node.media.edges[0].node;
   if (firstMediaElement.mediaContentType === 'VIDEO') {
-    return <Video video={firstMediaElement} />;
+    return <Video data={firstMediaElement} />;
   }
 }
