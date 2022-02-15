@@ -9,6 +9,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - feat: update favicon
 - feat: HelmetProvider has been removed
+- feat: `/src/entry-server.jsx` file has been merged into `App.server.jsx`. The latter is the new default entry point for the server
+- feat: `/src/entry-client.jsx` file has been removed. The new entry point in for the client in `index.html` is `@shopify/hydrogen/entry-client`. Custom entry points are still supported
 
 ## 0.10.1 - 2022-01-26
 
