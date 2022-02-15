@@ -14,7 +14,7 @@ export function getMediaImage(image: Partial<MediaImage> = {}) {
   return {
     id: image.id ?? faker.random.words(),
     mediaContentType: MediaContentType.Image,
-    image: getPreviewImage(image.previewImage),
+    data: getPreviewImage(image.previewImage),
   };
 }
 

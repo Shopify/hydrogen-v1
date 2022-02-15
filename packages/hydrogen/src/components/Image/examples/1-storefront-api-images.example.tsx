@@ -18,5 +18,5 @@ export default function Product() {
 
   const image = data.productByHandle.featuredImage;
 
-  return <Image image={image} />;
+  return <Image data={image} />;
 }

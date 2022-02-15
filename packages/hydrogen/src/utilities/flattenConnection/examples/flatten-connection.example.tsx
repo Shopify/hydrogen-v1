@@ -27,7 +27,7 @@ export function Product({handle}) {
   return (
     <>
       {media.map((mediaFile) => {
-        return <MediaFile media={mediaFile} key={mediaFile.id} />;
+        return <MediaFile data={mediaFile} key={mediaFile.id} />;
       })}
     </>
   );

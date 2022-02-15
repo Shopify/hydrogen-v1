@@ -8,14 +8,14 @@ import {Media as MediaType} from '../../graphql/types/types';
 
 export type Media = Pick<MediaType, 'mediaContentType'>;
 
-type MediaImageMedia = Media & MediaImageProps;
+type MediaImageMedia = Media & MediaImageProps['data'];
 type ModelViewerMedia = Media & ModelViewerProps['data'];
 type ExternalVideoMedia = Media & ExternalVideoProps['data'];
 type VideoMedia = Media & VideoProps['data'];
 
 export interface MediaFileProps {
   /** A [Media object](/api/storefront/reference/products/media). */
-  media: MediaImageMedia | ModelViewerMedia | ExternalVideoMedia | VideoMedia;
+  data: MediaImageMedia | ModelViewerMedia | ExternalVideoMedia | VideoMedia;
   /** The options for the `Image`, `Video`, `ExternalVideo`, or `ModelViewer` components. */
   options?: VideoProps['options'] | ExternalVideoProps['options'];
 }
@@ -27,16 +27,16 @@ export interface MediaFileProps {
  * `media` provided as a prop.
  */
 export function MediaFile({
-  media,
+  data,
   options,
   ...passthroughProps
 }: MediaFileProps) {
-  switch (media.mediaContentType) {
+  switch (data.mediaContentType) {
     case 'IMAGE': {
       return (
         <Image
           {...passthroughProps}
-          image={(media as MediaImageMedia).image}
+          data={data as MediaImageMedia}
           options={options as MediaImageProps['options']}
         />
       );
@@ -45,7 +45,7 @@ export function MediaFile({
       return (
         <Video
           {...passthroughProps}
-          data={media as VideoMedia}
+          data={data as VideoMedia}
           options={options as VideoProps['options']}
         />
       );
@@ -53,13 +53,13 @@ export function MediaFile({
       return (
         <ExternalVideo
           {...passthroughProps}
-          data={media as ExternalVideoMedia}
+          data={data as ExternalVideoMedia}
           options={options as ExternalVideoProps['options']}
         />
       );
     case 'MODEL_3D':
       return (
-        <ModelViewer {...passthroughProps} data={media as ModelViewerMedia} />
+        <ModelViewer {...passthroughProps} data={data as ModelViewerMedia} />
       );
     default:
       return null;
