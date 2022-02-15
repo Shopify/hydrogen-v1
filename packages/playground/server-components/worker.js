@@ -1,5 +1,5 @@
 import handleEvent from '@shopify/hydrogen/worker';
-import entrypoint from './src/entry-server.jsx';
+import entrypoint from './src/App.server';
 // eslint-disable-next-line node/no-missing-import
 import indexHtml from './dist/client/index.html?raw';
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
