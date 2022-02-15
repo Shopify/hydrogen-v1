@@ -11,7 +11,7 @@ export type Media = Pick<MediaType, 'mediaContentType'>;
 type MediaImageMedia = Media & MediaImageProps;
 type ModelViewerMedia = Media & ModelViewerProps['model'];
 type ExternalVideoMedia = Media & ExternalVideoProps['data'];
-type VideoMedia = Media & VideoProps['video'];
+type VideoMedia = Media & VideoProps['data'];
 
 export interface MediaFileProps {
   /** A [Media object](/api/storefront/reference/products/media). */
@@ -45,7 +45,7 @@ export function MediaFile({
       return (
         <Video
           {...passthroughProps}
-          video={media as VideoMedia}
+          data={media as VideoMedia}
           options={options as VideoProps['options']}
         />
       );

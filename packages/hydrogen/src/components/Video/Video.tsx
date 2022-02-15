@@ -11,7 +11,7 @@ import {
 
 export interface VideoProps {
   /** An object corresponding to the [GraphQL fragment](#graphql-fragment). */
-  video: {
+  data: {
     id?: VideoType['id'];
     previewImage?: Pick<Image, 'url'>;
     sources: Pick<VideoSource, 'url' | 'mimeType'>[];
@@ -27,15 +27,15 @@ export function Video<TTag extends React.ElementType = 'video'>(
   props: Props<TTag> & VideoProps
 ) {
   const {
-    video,
+    data,
     options,
-    id = video.id,
+    id = data.id,
     playsInline = true,
     controls = true,
     ...passthroughProps
   } = props;
 
-  const posterUrl = useImageUrl(video.previewImage?.url, options);
+  const posterUrl = useImageUrl(data.previewImage?.url, options);
 
   return (
     <video
@@ -45,7 +45,7 @@ export function Video<TTag extends React.ElementType = 'video'>(
       controls={controls}
       poster={posterUrl}
     >
-      {video.sources.map((source) => (
+      {data.sources.map((source) => (
         <source
           key={source.url}
           src={source.url}

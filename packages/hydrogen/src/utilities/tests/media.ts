@@ -31,7 +31,7 @@ export function getPreviewImage(image: Partial<Image> = {}) {
   };
 }
 
-export function getVideo(video: Partial<Video> = {}) {
+export function getVideoData(video: Partial<Video> = {}) {
   return {
     id: video.id ?? faker.random.words(),
     mediaContentType: MediaContentType.Video,
@@ -79,7 +79,7 @@ export function getAnyMedia() {
       return getMediaImage();
     }
     case 2: {
-      return getVideo();
+      return getVideoData();
     }
     case 3: {
       return getExternalVideoData();
