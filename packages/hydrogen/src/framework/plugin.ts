@@ -6,6 +6,7 @@ import hydrogenMiddleware from './plugins/vite-plugin-hydrogen-middleware';
 import rsc from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
 import ssrInterop from './plugins/vite-plugin-ssr-interop';
 import purgeQueryCache from './plugins/vite-plugin-purge-query-cache';
+import hydrationAutoImport from './plugins/vite-plugin-hydration-auto-import';
 import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -20,6 +21,7 @@ export default (
     hydrogenConfig(),
     hydrogenMiddleware(shopifyConfig, pluginOptions),
     react(),
+    hydrationAutoImport(),
     ssrInterop(),
     rsc({
       clientComponentPaths: [
@@ -31,23 +33,6 @@ export default (
         return /(handle-worker-event|index|worker|server)\.js/.test(importer);
       },
     }),
-
-    {
-      name: 'hydrogen-hydration-auto-import',
-      resolveId(id: string, importer: string) {
-        if (
-          id.includes('@shopify/hydrogen/entry-client') &&
-          importer?.endsWith('/index.html')
-        ) {
-          return id + '?virtual';
-        }
-      },
-      load(id) {
-        if (id.includes('@shopify/hydrogen/entry-client?virtual')) {
-          return `import renderHydrogen from '@shopify/hydrogen/entry-client';\n\nrenderHydrogen();`;
-        }
-      },
-    },
 
     pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ] as Plugin[];
