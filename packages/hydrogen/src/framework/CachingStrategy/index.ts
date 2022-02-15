@@ -49,6 +49,7 @@ function guardExpirableModeType(overrideOptions?: CachingStrategy) {
   }
 }
 
+// 10 seconds
 export function CacheSeconds(
   overrideOptions?: CachingStrategy
 ): AllCacheOptions {
@@ -61,6 +62,20 @@ export function CacheSeconds(
   };
 }
 
+// 30 minutes
+export function CacheMinutes(
+  overrideOptions?: CachingStrategy
+): AllCacheOptions {
+  guardExpirableModeType(overrideOptions);
+  return {
+    mode: PUBLIC,
+    maxAge: 900,
+    staleWhileRevalidate: 900,
+    ...overrideOptions,
+  };
+}
+
+// 1 hour
 export function CacheHours(overrideOptions?: CachingStrategy): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
@@ -71,6 +86,7 @@ export function CacheHours(overrideOptions?: CachingStrategy): AllCacheOptions {
   };
 }
 
+// 1 day
 export function CacheDays(overrideOptions?: CachingStrategy): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
@@ -81,6 +97,18 @@ export function CacheDays(overrideOptions?: CachingStrategy): AllCacheOptions {
   };
 }
 
+// 2 weeks
+export function CacheWeeks(overrideOptions?: CachingStrategy): AllCacheOptions {
+  guardExpirableModeType(overrideOptions);
+  return {
+    mode: PUBLIC,
+    maxAge: 604800,
+    staleWhileRevalidate: 604800,
+    ...overrideOptions,
+  };
+}
+
+// 1 month
 export function CacheMonths(
   overrideOptions?: CachingStrategy
 ): AllCacheOptions {

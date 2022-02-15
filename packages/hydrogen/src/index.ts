@@ -27,8 +27,10 @@ export {
   generateCacheControlHeader,
   NoStore,
   CacheSeconds,
+  CacheMinutes,
   CacheHours,
   CacheDays,
+  CacheWeeks,
   CacheMonths,
   CacheCustom,
 } from './framework/CachingStrategy';

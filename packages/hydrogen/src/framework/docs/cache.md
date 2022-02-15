@@ -23,13 +23,15 @@ import {CacheSeconds} from '@shopify/hydrogen';
 response.cache(CacheSeconds());
 ```
 
-| Caching Strategy | Cache Control Header                                      |
-| ---------------- | --------------------------------------------------------- |
-| `CacheSeconds()` | `public, max-age=1, stale-while-revalidate=9`             |
-| `CacheHours()`   | `public, max-age=1800, stale-while-revalidate=1800`       |
-| `CacheDays()`    | `public, max-age=3600, stale-while-revalidate=82800`      |
-| `CacheMonths()`  | `public, max-age=1296000, stale-while-revalidate=1296000` |
-| `CacheCustom()`  | Define your own cache control header                      |
+| Caching Strategy | Cache Control Header                                      | Cache duration |
+| ---------------- | --------------------------------------------------------- | -------------- |
+| `CacheSeconds()` | `public, max-age=1, stale-while-revalidate=9`             | 10 seconds     |
+| `CacheMinutes()` | `public, max-age=900, stale-while-revalidate=900`         | 30 minutes     |
+| `CacheHours()`   | `public, max-age=1800, stale-while-revalidate=1800`       | 1 hour         |
+| `CacheDays()`    | `public, max-age=3600, stale-while-revalidate=82800`      | 1 Day          |
+| `CacheWeeks()`   | `public, max-age=604800, stale-while-revalidate=604800`   | 2 Weeks        |
+| `CacheMonths()`  | `public, max-age=1296000, stale-while-revalidate=1296000` | 1 Month        |
+| `CacheCustom()`  | Define your own cache control header                      | Custom         |
 
 ## Build your own Caching Strategies
 
@@ -81,7 +83,7 @@ However, Hydrogen server does not send a 304 status on a request.
 ## Sub-request caching
 
 While rendering a page in your Hydrogen app, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users.
-All sub-request have the default `TenSecondCache` strategy.
+All sub-request have the default `CacheSeconds` strategy.
 
 The following example shows how to implement [`useShopQuery` for Shopify Storefront API queries](/api/hydrogen/hooks/global/useshopquery):
 
@@ -119,7 +121,7 @@ When the cached entry becomes stale, if the age of the entry is still within the
 ## Full-page caching
 
 In addition to sub-request caching, it’s helpful to cache the entire page response at the network edge and in the browser. This is the most useful for pages without dynamic or personalized data, like marketing pages or blog content.
-All sub-request have the default `TenSecondCache` strategy.
+All sub-request have the default `CacheSeconds` strategy.
 
 To modify full-page caching options, use the `response` property passed to the page server component:
 
