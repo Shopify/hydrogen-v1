@@ -7,7 +7,7 @@ type TestOptions = {
   isBuild?: boolean;
 };
 
-export default async function testCases({getServerUrl}: TestOptions) {
+export default async function testCases({getServerUrl, isBuild}: TestOptions) {
   it('shows the homepage, navigates to about, and increases the count', async () => {
     await page.goto(getServerUrl());
 
@@ -17,6 +17,12 @@ export default async function testCases({getServerUrl}: TestOptions) {
     expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
     const secretsClient = await page.textContent('.secrets-client');
     expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
+
+    if (!isBuild) {
+      // TODO use `untilUpdated` when merged to main
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for Hydration
+    }
+
     expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
 
     await page.click('.btn');
