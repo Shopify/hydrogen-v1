@@ -60,30 +60,11 @@ function buildLogger(this: any): Logger {
     warn: (...args) => globalThis.__logger.warn(this, ...args),
     error: (...args) => globalThis.__logger.error(this, ...args),
     fatal: (...args) => globalThis.__logger.fatal(this, ...args),
-    options: globalThis.__logger.options,
+    options: () => globalThis.__logger.options(),
   };
 }
 
-export const log: Logger = {
-  trace(...args) {
-    return globalThis.__logger.trace({}, ...args);
-  },
-  debug(...args) {
-    return globalThis.__logger.debug({}, ...args);
-  },
-  warn(...args) {
-    return globalThis.__logger.warn({}, ...args);
-  },
-  error(...args) {
-    return globalThis.__logger.error({}, ...args);
-  },
-  fatal(...args) {
-    return globalThis.__logger.fatal({}, ...args);
-  },
-  options: () => {
-    return globalThis.__logger.options();
-  },
-};
+export const log: Logger = buildLogger.call({});
 
 export function getLoggerWithContext(context: any = {}): Logger {
   return buildLogger.call(context);
