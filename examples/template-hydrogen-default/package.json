@@ -1,7 +1,7 @@
 {
   "name": "template-hydrogen-default",
   "description": "This the default template for Hydrogen",
-  "version": "0.10.1",
+  "version": "0.11.0-experimental.1",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.4.1",
-    "@shopify/hydrogen": "^0.10.1",
+    "@shopify/hydrogen": "^0.11.0-experimental.1",
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
     "express": "^4.17.1",
