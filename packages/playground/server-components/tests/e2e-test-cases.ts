@@ -312,11 +312,11 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
       );
       const newButtonText = 'add';
 
-      await page.goto(`${getServerUrl()}/about`);
+      await page.goto(getServerUrl() + '/about');
       await untilUpdated(() => page.textContent('button'), 'increase');
       await edit(
         fullPath,
-        (code) => code.replace('increase', newButtonText),
+        (code) => code.replace('increase count', newButtonText),
         async () =>
           await untilUpdated(() => page.textContent('button'), newButtonText)
       );
