@@ -10,7 +10,7 @@ describe('<SelectedVariantPrice />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice />
       </ProductProvider>
     );
@@ -24,7 +24,7 @@ describe('<SelectedVariantPrice />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice priceType="compareAt" />
       </ProductProvider>
     );
@@ -38,7 +38,7 @@ describe('<SelectedVariantPrice />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice className="strikethrough" />
       </ProductProvider>
     );

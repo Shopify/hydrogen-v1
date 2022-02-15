@@ -13,10 +13,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
 
     const button = mountWithProviders(
       <CartProvider>
-        <ProductProvider
-          product={product}
-          initialVariantId={selectedVariant.id}
-        >
+        <ProductProvider data={product} initialVariantId={selectedVariant.id}>
           <SelectedVariantAddToCartButton>
             Add to cart
           </SelectedVariantAddToCartButton>
@@ -38,10 +35,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
 
     const button = mountWithProviders(
       <CartProvider>
-        <ProductProvider
-          product={product}
-          initialVariantId={selectedVariant.id}
-        >
+        <ProductProvider data={product} initialVariantId={selectedVariant.id}>
           <SelectedVariantAddToCartButton quantity={5}>
             Add to cart
           </SelectedVariantAddToCartButton>
@@ -57,7 +51,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
   it('renders a disabled <AddToCartButton /> when there is no selected variant', () => {
     const button = mountWithProviders(
       <CartProvider>
-        <ProductProvider product={getProduct()} initialVariantId="">
+        <ProductProvider data={getProduct()} initialVariantId="">
           <SelectedVariantAddToCartButton>
             Add to cart
           </SelectedVariantAddToCartButton>
@@ -75,7 +69,7 @@ describe('<SelectedVariantAddToCartButton />', () => {
     const attributes = [{key: 'hello', value: 'world'}];
     const button = mountWithProviders(
       <CartProvider>
-        <ProductProvider product={getProduct()} initialVariantId="">
+        <ProductProvider data={getProduct()} initialVariantId="">
           <SelectedVariantAddToCartButton attributes={attributes}>
             Add to cart
           </SelectedVariantAddToCartButton>

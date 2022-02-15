@@ -19,10 +19,7 @@ describe('<SelectedVariantShopPayButton />', () => {
 
     const button = await mountWithProviders(
       <CartProvider>
-        <ProductProvider
-          product={product}
-          initialVariantId={selectedVariant.id}
-        >
+        <ProductProvider data={product} initialVariantId={selectedVariant.id}>
           <SelectedVariantShopPayButton />
         </ProductProvider>
       </CartProvider>

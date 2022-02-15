@@ -23,10 +23,18 @@ export function Product() {
   const {data} = useShopQuery({query: QUERY});
 
   return (
-    <ProductProvider product={data.product}>{/* Your JSX */}</ProductProvider>
+    <ProductProvider data={data.product}>{/* Your JSX */}</ProductProvider>
   );
 }
 ```
+
+## Props
+
+| Name               | Required | Description                                                                                                                         |
+| ------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `children`         | Yes      | A `ReactNode` element.                                                                                                              |
+| `data`             | Yes      | A [Product object](/api/storefront/reference/products/product).                                                                     |
+| `initialVariantId` | No       | The initially selected variant. This is required only if you're using a `SelectedVariantX` hook in the `ProductProvider` component. |
 
 ## Component type
 

@@ -15,7 +15,7 @@ import {
 
 export function ProductDetails({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <ProductOptions />
       <SelectedVariantAddToCartButton>
         Add to cart
