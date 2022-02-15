@@ -7,6 +7,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- feat: remove `fetch` workaround
 - feat: change `/react` RSC path to `/__rsc`
 - `<Model3D>` has been renamed to `<ModelViewer>`
 - Fix index routes. See [#562](https://github.com/Shopify/hydrogen/issues/562)
