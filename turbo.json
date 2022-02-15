@@ -2,6 +2,7 @@
   "$schema": "https://turborepo.org/schema.json",
   "baseBranch": "origin/main",
   "pipeline": {
+    "build": {},
     "test": {
       "outputs": []
     },
@@ -9,7 +10,8 @@
       "outputs": []
     },
     "dev": {
-      "cache": false
+      "cache": false,
+      "dependsOn": ["@shopify/hydrogen#build"]
     }
   }
 }

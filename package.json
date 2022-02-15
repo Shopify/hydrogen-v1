@@ -1,6 +1,7 @@
 {
   "name": "hydrogen-monorepo",
   "private": true,
+  "packageManager": "yarn@1.22.17",
   "workspaces": [
     "examples/*",
     "packages/*",
@@ -10,17 +11,8 @@
     "node": ">=14"
   },
   "scripts": {
-    "dev": "yarn turbo run dev --parallel --continue",
-    "dev-lib": "yarn workspace @shopify/hydrogen dev",
-    "dev-cli": "yarn workspace @shopify/hydrogen-cli dev",
-    "dev-server": "yarn dev-hydrogen-template",
-    "dev-hydrogen-template": "yarn workspace template-hydrogen-default dev",
-    "build": "run-s build-lib build-dev build-cli build-lint",
-    "build-lib": "yarn workspace @shopify/hydrogen build",
-    "build-cli": "yarn workspace @shopify/hydrogen-cli build",
-    "build-dev": "yarn build-hydrogen-template",
-    "build-hydrogen-template": "yarn workspace template-hydrogen-default build",
-    "build-lint": "yarn workspace eslint-plugin-hydrogen build",
+    "dev": "yarn turbo run dev --parallel --continue --ignore='packages/playground'",
+    "build": "yarn turbo run build",
     "lint": "run-p lint:js lint:language",
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src",
     "lint:language": "alex .",
