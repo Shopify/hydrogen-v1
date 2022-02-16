@@ -77,7 +77,6 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `<UnitPrice>`: renamed unitPrice prop to data, unitPriceMeasurement prop to measurement
   - `<ProductProvider>`: renamed product prop to data
   - `<CartProvider>`: renamed cart prop to data
-  - fix: broken images in demo store
 
 ## 0.10.1 - 2022-01-26
 
