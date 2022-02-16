@@ -3,7 +3,7 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 import {QueryKey} from '../../types';
 import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
-import {gray, yellow} from 'kolorist';
+import {gray, green, red, yellow} from 'kolorist';
 import {getLoggerWithContext} from './log';
 import {getTime} from '..';
 
@@ -54,6 +54,7 @@ export function logQueryTimings(
   if (queryList.length > 0) {
     const requestStartTime = request.time;
     const detectSuspenseWaterfall: {[key: string]: boolean} = {};
+    let suspenseWaterfallDetectedCount = 0;
 
     queryList.forEach((query: QueryTiming, index: number) => {
       if (query.timingType === 'load') {
@@ -64,7 +65,7 @@ export function logQueryTimings(
 
       log.debug(
         color(
-          `│ ${`(${(query.timestamp - requestStartTime).toFixed(2)}ms)`.padEnd(
+          `│ ${`${(query.timestamp - requestStartTime).toFixed(2)}ms`.padEnd(
             11
           )} ${TIMING_MAPPING[query.timingType].padEnd(6)} ${query.name}${
             query.timingType === 'data'
@@ -90,7 +91,12 @@ export function logQueryTimings(
         queryList.length >= index + 4 &&
         Object.keys(detectSuspenseWaterfall).length === 0
       ) {
-        log.debug(`${color(`│ `)}${yellow(`Suspense waterfall detected`)}`);
+        suspenseWaterfallDetectedCount++;
+        const warningColor =
+          suspenseWaterfallDetectedCount === 1 ? yellow : red;
+        log.debug(
+          `${color(`│ `)}${warningColor(`Suspense waterfall detected`)}`
+        );
       }
     });
   }
