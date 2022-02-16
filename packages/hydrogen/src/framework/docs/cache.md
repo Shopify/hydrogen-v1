@@ -69,7 +69,7 @@ You can use `mode` to set options that don't need a duration:
 - `private`: The response is cached in a user’s browser but not at the hosting or edge layer. This is useful for private or customized data.
 - `must-revalidate`: The response must revalidate with the server when `max-age` time is expired.
 
-> Note: 
+> Note:
 > There are other available cache control headers, but some of them aren't applicable to Hydrogen. For example, the `no-cache` option instructs the browser to not use the cached entry until it returns a `304 (Not Modified)` status from server. However, the Hydrogen server doesn't send a 304 status on a request.
 
 | Name                   | Description                                                                                                                                                                                                                |
