@@ -29,7 +29,6 @@ cache control header to set.
 
 ```jsx
 import {CacheSeconds} from '@shopify/hydrogen';
-
 response.cache(CacheSeconds());
 ```
 
