@@ -8,7 +8,7 @@ import {Media as MediaType} from '../../graphql/types/types';
 
 export type Media = Pick<MediaType, 'mediaContentType'>;
 
-type MediaImageMedia = Media & MediaImageProps['data'];
+type MediaImageMedia = Media & {image: MediaImageProps['data']};
 type ModelViewerMedia = Media & ModelViewerProps['data'];
 type ExternalVideoMedia = Media & ExternalVideoProps['data'];
 type VideoMedia = Media & VideoProps['data'];
@@ -36,7 +36,7 @@ export function MediaFile({
       return (
         <Image
           {...passthroughProps}
-          data={data as MediaImageMedia}
+          data={(data as MediaImageMedia).image}
           options={options as MediaImageProps['options']}
         />
       );
