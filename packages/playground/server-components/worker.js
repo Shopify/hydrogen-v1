@@ -6,29 +6,10 @@ import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 // Mock Oxygen global
 globalThis.Oxygen = {env: globalThis};
 
-addEventListener('fetch', (event) => {
-  try {
-    event.respondWith(
-      handleRequest(event.request, {
-        indexTemplate: indexHtml,
-        assetHandler,
-        cache: caches.default,
-        context: {
-          waitUntil: event.waitUntil ? (p) => event.waitUntil(p) : undefined,
-        },
-      })
-    );
-  } catch (error) {
-    event.respondWith(
-      new Response(error.message || error.toString(), {
-        status: 500,
-      })
-    );
-  }
-
-  async function assetHandler(url) {
+async function handleAsset(event) {
+  const url = new URL(event.request.url);
+  if (/\.(png|jpe?g|gif|css|js|svg|ico|map)$/i.test(url.pathname)) {
     const response = await getAssetFromKV(event, {});
-
     if (response.status < 400) {
       const filename = url.pathname.split('/').pop();
 
@@ -42,4 +23,21 @@ addEventListener('fetch', (event) => {
 
     return response;
   }
-});
+}
+
+async function handleEvent(event) {
+  try {
+    return (
+      (await handleAsset(event)) ||
+      (await handleRequest(event.request, {
+        indexTemplate: indexHtml,
+        cache: caches.default,
+        context: event,
+      }))
+    );
+  } catch (error) {
+    return new Response(error.message || error.toString(), {status: 500});
+  }
+}
+
+addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));

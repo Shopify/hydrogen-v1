@@ -66,7 +66,6 @@ interface RequestHandlerOptions {
   dev?: boolean;
   context?: RuntimeContext;
   nonce?: string;
-  assetHandler?: (url: URL) => Promise<Response>;
 }
 
 export interface RequestHandler {
@@ -78,32 +77,12 @@ export interface RequestHandler {
 export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
-    {
-      indexTemplate,
-      streamableResponse,
-      dev,
-      cache,
-      context,
-      nonce,
-      assetHandler,
-    }
+    {indexTemplate, streamableResponse, dev, cache, context, nonce}
   ) {
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
     const log = getLoggerFromContext(request);
     const componentResponse = new ServerComponentResponse();
-
-    if (/\.(png|jpe?g|gif|css|js|svg|ico|map)$/i.test(url.pathname)) {
-      if (assetHandler) return assetHandler(url);
-      log.warn('Asset file detected but assetHandler was not provided');
-
-      if (__WORKER__) return new Response(null, {status: 404});
-      if (streamableResponse) {
-        streamableResponse.statusCode = 404;
-        streamableResponse.end();
-        return;
-      }
-    }
 
     /**
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
