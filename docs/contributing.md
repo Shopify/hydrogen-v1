@@ -8,12 +8,7 @@
 ```bash
 git clone git@github.com:Shopify/hydrogen.git
 yarn
-
-# Start the library dev server first
-yarn dev-lib
-
-# In a new tab, start the dev server
-yarn dev-server
+yarn dev
 ```
 
 Visit the dev environment at http://localhost:3000.
