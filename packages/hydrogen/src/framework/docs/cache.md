@@ -12,7 +12,7 @@ Hydrogen also includes [default values for each mechanism](#default-values).
 
 ## Caching strategies
 
-Shopify provides recommended caching strategies to ease the process of determining what
+Hydrogen includes recommended caching strategies to help you determine which
 cache control header to set.
 
 Example usage:
