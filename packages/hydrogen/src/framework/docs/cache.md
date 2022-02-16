@@ -104,7 +104,8 @@ The following example shows how to implement [`useQuery` for third-party request
 {% codeblock file, filename: '/pages/my-products.server.jsx' %}
 
 ```jsx
-// Use a Shopify recommend strategy
+// Use a caching strategy provided by Hydrogen
+
 const {data} = useQuery(
   'cache-key',
   async () => await fetch('https://my.3p.com/data.json').then(res => res.json()),
