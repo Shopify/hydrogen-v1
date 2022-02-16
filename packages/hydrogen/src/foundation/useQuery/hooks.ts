@@ -1,4 +1,4 @@
-import type {CacheOptions, QueryKey} from '../../types';
+import type {CachingStrategy, QueryKey} from '../../types';
 import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
@@ -14,7 +14,7 @@ import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
-  cache: CacheOptions;
+  cache?: CachingStrategy;
 }
 
 /**

@@ -1,32 +1,14 @@
-import type {CacheOptions, QueryKey} from '../types';
+import type {QueryKey, CachingStrategy} from '../types';
 import {getCache} from './runtime';
-
-const DEFAULT_SUBREQUEST_CACHE_OPTIONS: CacheOptions = {
-  maxAge: 1,
-  staleWhileRevalidate: 9,
-};
-
-export function generateCacheControlHeader(options: CacheOptions): string {
-  if (options.noStore) {
-    return 'no-store';
-  }
-
-  return [
-    options.private ? 'private' : 'public',
-    `max-age=${options.maxAge}`,
-    `stale-while-revalidate=${options.staleWhileRevalidate}`,
-  ].join(', ');
-}
+import {
+  CacheSeconds,
+  generateCacheControlHeader,
+} from '../framework/CachingStrategy';
 
 export function generateSubRequestCacheControlHeader(
-  userCacheOptions?: CacheOptions
+  userCacheOptions?: CachingStrategy
 ): string {
-  const cacheOptions = {
-    ...DEFAULT_SUBREQUEST_CACHE_OPTIONS,
-    ...(userCacheOptions ?? {}),
-  };
-
-  return generateCacheControlHeader(cacheOptions);
+  return generateCacheControlHeader(userCacheOptions || CacheSeconds());
 }
 
 /**
@@ -82,7 +64,7 @@ export async function getItemFromCache(
 export async function setItemInCache(
   key: QueryKey,
   value: any,
-  userCacheOptions?: CacheOptions
+  userCacheOptions?: CachingStrategy
 ) {
   const cache = getCache();
   if (!cache) {
