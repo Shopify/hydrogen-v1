@@ -15,7 +15,7 @@ Hydrogen also includes [default values for each mechanism](#default-values).
 Hydrogen includes recommended caching strategies to help you determine which
 cache control header to set.
 
-Example usage:
+### Example
 
 ```jsx
 import {CacheSeconds} from '@shopify/hydrogen';
