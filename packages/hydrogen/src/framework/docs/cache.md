@@ -159,24 +159,20 @@ export default defineConfig({
 
 Sub-request caching uses an instance of [Cache](https://developer.mozilla.org/en-US/docs/Web/API/Cache) passed to the entry point.
 
-For Worker-based runtimes, you can provide a `cache` option to `handleEvent`:
+For Worker-based runtimes, you can provide a `cache` option to `handleRequest`:
 
 {% codeblock file, filename: '/worker.js' %}
 
 ```js
 addEventListener('fetch', (event) => {
-  try {
-    event.respondWith(
-      handleEvent(event, {
-        // Your implementation of `Cache`. Defaults to `caches.default` for Oxygen support.
-        cache: caches.default,
+  event.respondWith(
+    handleEvent(event, {
+      // Your implementation of `Cache`. Defaults to `caches.default` for Oxygen support.
+      cache: caches.default,
 
-        // ...
-      })
-    );
-  } catch (error) {
-    // ...
-  }
+      // ...
+    })
+  );
 });
 ```
 

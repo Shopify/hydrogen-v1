@@ -62,54 +62,52 @@ Install Cloudflare's KV asset handler:
 npm install @cloudflare/kv-asset-handler
 ```
 
-And update your `worker.js` to pass an `assetHandler` to `handleEvent`:
+With the previous configuration, your `dist/client` built static files are uploaded to Workers KV. Therefore, you need to handle the asset requests accordingly in the worker entry point. For this, update your `worker.js` to create a new `handleAsset` function and call it before falling back to `handleRequest`:
 
 ```js
-import handleEvent from '@shopify/hydrogen/worker';
-import entrypoint from './src/entry-server.jsx';
+import handleRequest from './src/entry-server.jsx';
 // eslint-disable-next-line node/no-missing-import
 import indexHtml from './dist/client/index.html?raw';
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 
-async function assetHandler(event, url) {
-  const response = await getAssetFromKV(event, {});
+async function handleAsset(event) {
+  const url = new URL(event.request.url);
+  if (/\.(png|jpe?g|gif|css|js|svg|ico|map)$/i.test(url.pathname)) {
+    const response = await getAssetFromKV(event, {});
+    if (response.status < 400) {
+      const filename = url.pathname.split('/').pop();
 
-  if (response.status < 400) {
-    const filename = url.pathname.split('/').pop();
+      const maxAge =
+        filename.split('.').length > 2
+          ? 31536000 // hashed asset, will never be updated
+          : 86400; // favico and other public assets
 
-    const maxAge =
-      filename.split('.').length > 2
-        ? 31536000 // hashed asset, will never be updated
-        : 86400; // favico and other public assets
+      response.headers.append('cache-control', `public, max-age=${maxAge}`);
+    }
 
-    response.headers.append('cache-control', `public, max-age=${maxAge}`);
+    return response;
   }
-
-  return response;
 }
 
-addEventListener('fetch', (event) => {
+async function handleEvent(event) {
   try {
-    event.respondWith(
-      handleEvent(event, {
-        entrypoint,
+    return (
+      (await handleAsset(event)) ||
+      (await handleRequest(event.request, {
         indexTemplate: indexHtml,
-        assetHandler,
         cache: caches.default,
         context: event,
-      })
+      }))
     );
   } catch (error) {
-    event.respondWith(
-      new Response(error.message || error.toString(), {
-        status: 500,
-      })
-    );
+    return new Response(error.message || error.toString(), {status: 500});
   }
-});
+}
+
+addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));
 ```
 
-Update `package.json` to include a `main` key:
+Finally, update `package.json` to include a `main` key pointing to the built worker:
 
 ```
 "main": "dist/worker/worker.js"
