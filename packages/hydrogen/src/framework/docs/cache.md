@@ -33,7 +33,7 @@ import {CacheSeconds} from '@shopify/hydrogen';
 response.cache(CacheSeconds());
 ```
 
-## Build your own Caching Strategies
+## Build your own caching strategies
 
 If you don't want to use the caching strategies provided by Hydrogen, then you can create your own to use in your project.
 
