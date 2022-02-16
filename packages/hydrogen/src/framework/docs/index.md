@@ -47,7 +47,7 @@ When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/cr
 
 {% endcodeblock %}
 
-Note that Hydrogen's default client entry point (for hydration) is `@shopify/hydrogen/entry-client`, which is included in `index.html`. If you need control over the entry point, create a new file such as `/src/entry-client.jsx` with the following content and update the path in `index.html`:
+Note that Hydrogen's default client entry point (for hydration) is `/@shopify/hydrogen/entry-client`, which is included in `index.html`. If you need control over the entry point, create a new file such as `/src/entry-client.jsx` with the following content and update the path in `index.html`:
 
 {% codeblock file, filename: '/src/entry-client.jsx' %}
 

@@ -64,7 +64,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - dx [breaking change]: `<Product />` and `<CartLine />` aliases have been removed; use the original components `<ProductProvider />` and `<CartLineProvider />` instead. Their nested component aliases, such as `<Product.Image />`, have also been removed; in this example you should use `<ProductImage />`.
 - feat: remove React Router on the client and introduce Hydrogen the `<Link>` component and `useNavigate` hook
 - feat [breaking change]: Merge `/src/entry-server.jsx` entry point into `App.server.jsx`
-- feat: add a default virtual entry-client in `@shopify/hydrogen/entry-client` that can be used in `index.html`
+- feat: add a default virtual entry-client in `/@shopify/hydrogen/entry-client` that can be used in `index.html`
 
 ## 0.10.1 - 2022-01-26
 

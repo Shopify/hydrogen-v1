@@ -13,7 +13,7 @@ export default function ({ifFeature}: TemplateOptions) {
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="@shopify/hydrogen/entry-client"></script>
+    <script type="module" src="/@shopify/hydrogen/entry-client"></script>
   </body>
 </html>
 `;
