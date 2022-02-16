@@ -57,3 +57,7 @@ jobs:
 
       - name: Run the E2E tests
         run: yarn test-e2e
+
+      - name: Run the template code tests
+        run: yarn test
+        working-directory: ./examples/template-hydrogen-default
