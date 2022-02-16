@@ -3,6 +3,7 @@ import {
   Logger,
   logServerResponse,
   logCacheControlHeaders,
+  logQueryTimings,
   getLoggerWithContext,
 } from './utilities/log';
 import {getErrorMarkup} from './utilities/error';
@@ -80,6 +81,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       logServerResponse('ssr', request, status);
       logCacheControlHeaders('ssr', request, componentResponse);
+      logQueryTimings('ssr', request);
 
       return new Response(await componentResponse.customBody, {
         status,
@@ -109,6 +111,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
     logServerResponse('ssr', request, status);
     logCacheControlHeaders('ssr', request, componentResponse);
+    logQueryTimings('ssr', request);
 
     return new Response(html, {
       status,
@@ -275,11 +278,13 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           setTimeout(() => writable.close(), 0);
           logServerResponse('str', request, responseOptions.status);
           logCacheControlHeaders('str', request, componentResponse);
+          logQueryTimings('str', request);
         });
       } else {
         writable.close();
         logServerResponse('str', request, responseOptions.status);
         logCacheControlHeaders('str', request, componentResponse);
+        logQueryTimings('str', request);
       }
 
       if (await isStreamingSupported()) {
@@ -338,6 +343,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           log.trace('node complete stream');
 
           logCacheControlHeaders('str', request, componentResponse);
+          logQueryTimings('str', request);
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
@@ -345,6 +351,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
           logServerResponse('str', request, response.statusCode);
           logCacheControlHeaders('str', request, componentResponse);
+          logQueryTimings('str', request);
 
           if (isRedirect(response)) {
             // Redirects found after any async code
@@ -408,6 +415,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       if (isStreamable && (await isStreamingSupported())) {
         logServerResponse('rsc', request, 200);
         logCacheControlHeaders('rsc', request, componentResponse);
+        logQueryTimings('rsc', request);
         return new Response(rscReadable);
       }
 
@@ -416,6 +424,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
       logServerResponse('rsc', request, 200);
       logCacheControlHeaders('rsc', request, componentResponse);
+      logQueryTimings('rsc', request);
 
       return new Response(bufferedBody);
     } else if (response) {
@@ -433,6 +442,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       stream.on('finish', function () {
         logServerResponse('rsc', request, response!.statusCode);
         logCacheControlHeaders('rsc', request, componentResponse);
+        logQueryTimings('rsc', request);
       });
     }
   };
