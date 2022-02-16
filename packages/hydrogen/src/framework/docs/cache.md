@@ -10,20 +10,12 @@ Hydrogen also includes [default values for each mechanism](#default-values).
 > Note:
 > If you’re interacting with personalized or private data, then you need to override these defaults to meet your needs.
 
-## Caching Strategies
+## Caching strategies
 
-Shopify provides recommended caching strategies to ease the process of determining what
+Hydrogen includes recommended caching strategies to help you determine which
 cache control header to set.
 
-Example usage:
-
-```jsx
-import {CacheSeconds} from '@shopify/hydrogen';
-
-response.cache(CacheSeconds());
-```
-
-| Caching Strategy | Cache Control Header                                      | Cache duration |
+| Caching strategy | Cache control header                                      | Cache duration |
 | ---------------- | --------------------------------------------------------- | -------------- |
 | `CacheSeconds()` | `public, max-age=1, stale-while-revalidate=9`             | 10 seconds     |
 | `CacheMinutes()` | `public, max-age=900, stale-while-revalidate=900`         | 30 minutes     |
@@ -33,12 +25,18 @@ response.cache(CacheSeconds());
 | `CacheMonths()`  | `public, max-age=1296000, stale-while-revalidate=1296000` | 1 Month        |
 | `CacheCustom()`  | Define your own cache control header                      | Custom         |
 
-## Build your own Caching Strategies
+### Example
 
-If the above caching strategies doesn't work for you, you can create your own caching
-strategies that you can use across your project.
+```jsx
+import {CacheSeconds} from '@shopify/hydrogen';
+response.cache(CacheSeconds());
+```
 
-For example, you want to create a cache control header of `max-age=30, must-revalidate, no-transform`
+## Build your own caching strategies
+
+If you don't want to use the caching strategies provided by Hydrogen, then you can create your own to use in your project.
+
+For example, you can create a cache control header with `max-age=30, must-revalidate, no-transform`:
 
 ```tsx
 response.cache(
@@ -63,34 +61,27 @@ export interface AllCacheOptions {
 }
 ```
 
-`mode` option is for setting options that doesn't need a duration
+| Name                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `mode`                 | Sets options that don't need a duration: <ul><li>`no-store`: The response is prevented from being cached at any layer. This is useful for private or time-sensitive data.</li><li>`private`: The response is cached in a user’s browser but not at the hosting or edge layer. This is useful for private or customized data.</li><li>`must-revalidate`: The response must revalidate with the server when `max-age` time is expired. |
+| `maxAge`               | Correlates with the `max-age` cache control header. Instructs the cache how long to store an entry.                                                                                                                                                                                                                                                                                                                                  |
+| `staleWhileRevalidate` | Correlates with the `stale-while-revalidate` cache control header. Instructs the cache how long after an entry’s `max-Age` is acceptable to serve a stale entry. Another request for fresh data is made in the background.                                                                                                                                                                                                           |
+| `sMaxAge`              | Correlates with the `s-maxage` cache control header. Instructs the cache how long to store an entry on CDN or proxy caches.                                                                                                                                                                                                                                                                                                          |
+| `staleIfError`         | Correlates with the `stale-if-error` cache control header. Instructs how long browser is allow to use cached entry when entry returns a 5xx status error.                                                                                                                                                                                                                                                                            |
 
-- `no-store` - The response is prevented from being cached at any layer. This is useful for private or time-sensitive data.
-- `private` - The response is cached in a user’s browser but not at the hosting or edge layer. This is useful for private or customized data.
-- `must-revalidate` - The response must revalidate with server when `max-age` time is expired.
-
-**Note:** There are other available cache control headers but some of them doesn't make sense to be used with Hydrogen. For example,
-`no-cache` option instructs the browser to not use the cached entry until it obtained a 304 (Not Modified) status from server.
-However, Hydrogen server does not send a 304 status on a request.
-
-| Name                   | Description                                                                                                                                                                                                                |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `maxAge`               | Correlates with the `max-age` cache control header. Instructs the cache how long to store an entry.                                                                                                                        |
-| `staleWhileRevalidate` | Correlates with the `stale-while-revalidate` cache control header. Instructs the cache how long after an entry’s `max-Age` is acceptable to serve a stale entry. Another request for fresh data is made in the background. |
-| `sMaxAge`              | Correlates with the `s-maxage` cache control header. Instructs the cache how long to store an entry on CDN or proxy caches.                                                                                                |
-| `staleIfError`         | Correlates with the `stale-if-error` cache control header. Instructs how long browser is allow to use cached entry when entry returns a 5xx status error.                                                                  |
+> Note:
+> There are other available cache control headers, but some of them aren't applicable to Hydrogen. For example, the `no-cache` option instructs the browser to not use the cached entry until it returns a `304 (Not Modified)` status from server. However, the Hydrogen server doesn't send a 304 status on a request.
 
 ## Sub-request caching
 
-While rendering a page in your Hydrogen app, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users.
-All sub-request have the default `CacheSeconds` strategy.
+While rendering a page in your Hydrogen app, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheSeconds` strategy.
 
 The following example shows how to implement [`useShopQuery` for Shopify Storefront API queries](/api/hydrogen/hooks/global/useshopquery):
 
 {% codeblock file, filename: '/pages/my-products.server.jsx' %}
 
 ```jsx
-// Use a Shopify recommend strategy
+// Use a caching strategy provided by Hydrogen
 const {data} = useShopQuery({
   query: QUERY,
   cache: CacheHours(),
@@ -104,7 +95,7 @@ The following example shows how to implement [`useQuery` for third-party request
 {% codeblock file, filename: '/pages/my-products.server.jsx' %}
 
 ```jsx
-// Use a Shopify recommend strategy
+// Use a caching strategy provided by Hydrogen
 const {data} = useQuery(
   'cache-key',
   async () => await fetch('https://my.3p.com/data.json').then(res => res.json()),
@@ -120,8 +111,7 @@ When the cached entry becomes stale, if the age of the entry is still within the
 
 ## Full-page caching
 
-In addition to sub-request caching, it’s helpful to cache the entire page response at the network edge and in the browser. This is the most useful for pages without dynamic or personalized data, like marketing pages or blog content.
-All sub-request have the default `CacheSeconds` strategy.
+In addition to sub-request caching, it’s helpful to cache the entire page response at the network edge and in the browser. This is the most useful for pages without dynamic or personalized data, like marketing pages or blog content. All sub-requests implement a default `CacheSeconds()` strategy.
 
 To modify full-page caching options, use the `response` property passed to the page server component:
 
@@ -141,7 +131,7 @@ Hydrogen provides sensible defaults for all sub-requests and full-page requests 
 
 By default, each full-page and sub-request receives the following cache options:
 
-```
+```js
 public, max-age=1, stale-while-revalidate=9
 ```
 
