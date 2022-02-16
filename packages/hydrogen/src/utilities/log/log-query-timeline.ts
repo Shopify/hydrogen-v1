@@ -53,17 +53,13 @@ export function logQueryTimings(
   const queryList = request.ctx.queryTimings;
   if (queryList.length > 0) {
     const requestStartTime = request.time;
-    let lastRenderTimestamp: number;
-    queryList.forEach((query: QueryTiming) => {
-      if (query.timingType === 'render') {
-        lastRenderTimestamp = query.timestamp;
-      }
+    const detectSuspenseWaterfall: {[key: string]: boolean} = {};
 
-      if (
-        query.timingType === 'data' &&
-        query.timestamp - lastRenderTimestamp > 50
-      ) {
-        log.debug(`${color(`│ `)}${yellow(`Suspense waterfall detected`)}`);
+    queryList.forEach((query: QueryTiming, index: number) => {
+      if (query.timingType === 'load') {
+        detectSuspenseWaterfall[query.name] = true;
+      } else if (query.timingType === 'render') {
+        delete detectSuspenseWaterfall[query.name];
       }
 
       log.debug(
@@ -77,6 +73,25 @@ export function logQueryTimings(
           }`
         )
       );
+
+      // SSR + RSC render path generates 2 `load` and `render` for each query
+      // We want to avoid falsely identifying a suspense waterfall near the end
+      // of the query list
+      //
+      // The (index + 4) is detecting that near the end of list.
+      // A complete set of events for a given query is 4 entries
+      // │ (639.62ms)  Load   Localization
+      // │ (993.33ms)  Fetch  Localization (Took 353.66ms)
+      // │ (993.96ms)  Load   Localization      <-- second time React tries to load
+      // │ (994.03ms)  Render Localization
+      //
+      // so the end of list index range is 3 (one less from a set entry) + 1 (zero index)
+      if (
+        queryList.length >= index + 4 &&
+        Object.keys(detectSuspenseWaterfall).length === 0
+      ) {
+        log.debug(`${color(`│ `)}${yellow(`Suspense waterfall detected`)}`);
+      }
     });
   }
 
