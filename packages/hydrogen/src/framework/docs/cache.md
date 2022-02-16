@@ -23,7 +23,7 @@ import {CacheSeconds} from '@shopify/hydrogen';
 response.cache(CacheSeconds());
 ```
 
-| Caching Strategy | Cache Control Header                                      | Cache duration |
+| Caching strategy | Cache control header                                      | Cache duration |
 | ---------------- | --------------------------------------------------------- | -------------- |
 | `CacheSeconds()` | `public, max-age=1, stale-while-revalidate=9`             | 10 seconds     |
 | `CacheMinutes()` | `public, max-age=900, stale-while-revalidate=900`         | 30 minutes     |
