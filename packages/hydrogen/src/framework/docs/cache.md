@@ -63,11 +63,11 @@ export interface AllCacheOptions {
 }
 ```
 
-`mode` option is for setting options that doesn't need a duration
+You can use `mode` to set options that don't need a duration:
 
-- `no-store` - The response is prevented from being cached at any layer. This is useful for private or time-sensitive data.
-- `private` - The response is cached in a user’s browser but not at the hosting or edge layer. This is useful for private or customized data.
-- `must-revalidate` - The response must revalidate with server when `max-age` time is expired.
+- `no-store`: The response is prevented from being cached at any layer. This is useful for private or time-sensitive data.
+- `private`: The response is cached in a user’s browser but not at the hosting or edge layer. This is useful for private or customized data.
+- `must-revalidate`: The response must revalidate with the server when `max-age` time is expired.
 
 > Note: 
 > There are other available cache control headers, but some of them aren't applicable to Hydrogen. For example, the `no-cache` option instructs the browser to not use the cached entry until it returns a `304 (Not Modified)` status from server. However, the Hydrogen server doesn't send a 304 status on a request.
