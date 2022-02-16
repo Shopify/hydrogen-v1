@@ -1,15 +1,15 @@
-import {IncomingMessage, NextFunction} from 'connect';
-import http from 'http';
-import {ViteDevServer} from 'vite';
-import {ShopifyConfig} from '../types';
+import type {RequestHandler} from '../entry-server';
+import type {IncomingMessage, NextFunction} from 'connect';
+import type {ServerResponse} from 'http';
+import type {ViteDevServer} from 'vite';
+import type {ShopifyConfig} from '../types';
 import {graphiqlHtml} from './graphiql';
-import {handleRequest} from '../handle-request';
 
 type HydrogenMiddlewareArgs = {
   dev?: boolean;
   shopifyConfig?: ShopifyConfig;
   indexTemplate: string | ((url: string) => Promise<string>);
-  getServerEntrypoint: () => Record<string, any> | Promise<Record<string, any>>;
+  getServerEntrypoint: () => RequestHandler | Promise<RequestHandler>;
   devServer?: ViteDevServer;
   cache?: Cache;
 };
@@ -23,7 +23,7 @@ export function graphiqlMiddleware({
 }) {
   return async function (
     request: IncomingMessage,
-    response: http.ServerResponse,
+    response: ServerResponse,
     next: NextFunction
   ) {
     const graphiqlRequest = dev && isGraphiqlRequest(request);
@@ -49,10 +49,12 @@ export function hydrogenMiddleware({
 }: HydrogenMiddlewareArgs) {
   return async function (
     request: IncomingMessage,
-    response: http.ServerResponse,
+    response: ServerResponse,
     next: NextFunction
   ) {
-    const url = new URL('http://' + request.headers.host + request.originalUrl);
+    const url = new URL(
+      'http://' + request.headers.host + (request.originalUrl ?? request.url)
+    );
 
     try {
       /**
@@ -86,12 +88,13 @@ export function hydrogenMiddleware({
         });
       }
 
+      const handleRequest = await getServerEntrypoint();
+
       const eventResponse = await handleRequest(request, {
         dev,
         cache,
         indexTemplate,
         streamableResponse: response,
-        entrypoint: await getServerEntrypoint(),
       });
 
       /**
@@ -151,7 +154,7 @@ function isGraphiqlRequest(request: IncomingMessage) {
 }
 
 async function respondWithGraphiql(
-  response: http.ServerResponse,
+  response: ServerResponse,
   shopifyConfig?: ShopifyConfig
 ) {
   if (!shopifyConfig) {

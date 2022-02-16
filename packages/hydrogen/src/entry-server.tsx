@@ -31,7 +31,7 @@ import type {RealHelmetData} from './foundation/Helmet';
 
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
-import type {IncomingMessage} from 'connect';
+import type {IncomingMessage} from 'http';
 
 import {
   ssrRenderToPipeableStream,
@@ -59,25 +59,24 @@ const STREAM_ABORT_TIMEOUT_MS = 3000;
 
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
-interface HandleEventOptions {
+interface RequestHandlerOptions {
   indexTemplate: string | ((url: string) => Promise<string>);
   cache?: Cache;
   streamableResponse?: ServerResponse;
   dev?: boolean;
   context?: RuntimeContext;
   nonce?: string;
-  entrypoint: any;
   assetHandler?: (url: URL) => Promise<Response>;
 }
 
-export interface HandleRequest {
-  (request: Request | IncomingMessage, options: HandleEventOptions): Promise<
+export interface RequestHandler {
+  (request: Request | IncomingMessage, options: RequestHandlerOptions): Promise<
     Response | undefined
   >;
 }
 
 export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
-  const handleRequest: HandleRequest = async function (
+  const handleRequest: RequestHandler = async function (
     rawRequest,
     {
       indexTemplate,

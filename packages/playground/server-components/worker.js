@@ -1,5 +1,4 @@
-import {handleRequest} from '@shopify/hydrogen';
-import entrypoint from './src/entry-server.jsx';
+import handleRequest from './src/entry-server.jsx';
 // eslint-disable-next-line node/no-missing-import
 import indexHtml from './dist/client/index.html?raw';
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
@@ -11,7 +10,6 @@ addEventListener('fetch', (event) => {
   try {
     event.respondWith(
       handleRequest(event.request, {
-        entrypoint,
         indexTemplate: indexHtml,
         assetHandler,
         cache: caches.default,
