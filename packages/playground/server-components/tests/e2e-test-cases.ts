@@ -1,8 +1,5 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import fetch from 'node-fetch';
-import {resolve} from 'path';
-
-import {edit, untilUpdated} from '../../utilities';
 
 type TestOptions = {
   getServerUrl: () => string;
@@ -10,7 +7,7 @@ type TestOptions = {
   isBuild?: boolean;
 };
 
-export default async function testCases({getServerUrl, isBuild}: TestOptions) {
+export default async function testCases({getServerUrl}: TestOptions) {
   it('shows the homepage, navigates to about, and increases the count', async () => {
     await page.goto(getServerUrl());
 
@@ -276,42 +273,4 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
       /<meta\s+.*?property="type"\s+content="website"\s*\/>/
     );
   });
-
-  if (!isBuild) {
-    it('updates the contents when a client component file changes', async () => {
-      const fullPath = resolve(
-        __dirname,
-        '../',
-        'src/components/Counter.client.jsx'
-      );
-      const newButtonText = 'add';
-
-      await page.goto(getServerUrl() + '/about');
-      await untilUpdated(() => page.textContent('button'), 'increase');
-      await edit(
-        fullPath,
-        (code) => code.replace('increase count', newButtonText),
-        async () =>
-          await untilUpdated(() => page.textContent('button'), newButtonText)
-      );
-    });
-
-    it('updates the contents when a server component file changes', async () => {
-      const fullPath = resolve(__dirname, '../', 'src/pages/index.server.jsx');
-      const newheading = 'Snow Devil';
-
-      await page.goto(getServerUrl());
-
-      // Assert that we have the default heading (h1)
-      await untilUpdated(() => page.textContent('h1'), 'Home');
-
-      // Edit the heading (h1) in the JSX code
-      // Assert the page updated with the new heading
-      await edit(
-        fullPath,
-        (code) => code.replace('<h1>Home', `<h1>${newheading}`),
-        async () => await untilUpdated(() => page.textContent('h1'), newheading)
-      );
-    });
-  }
 }
