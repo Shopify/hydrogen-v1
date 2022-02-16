@@ -22,6 +22,10 @@ setLogger({
   fatal(request, ...args) {
     // Call your own logger.
   },
+  options: () => ({
+    showCacheApiStatus: true,
+    showCacheControlHeader: true,
+  }),
 });
 
 function App() {

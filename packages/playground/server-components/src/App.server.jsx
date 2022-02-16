@@ -15,6 +15,7 @@ setLogger({
   fatal(context, ...args) {
     console.error(...args);
   },
+  options: () => ({}),
 });
 
 function App({...serverState}) {

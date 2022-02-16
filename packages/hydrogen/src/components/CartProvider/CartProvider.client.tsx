@@ -230,7 +230,7 @@ export function CartProvider({
   onBuyerIdentityUpdate,
   onAttributesUpdate,
   onDiscountCodesUpdate,
-  cart,
+  data: cart,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -254,7 +254,7 @@ export function CartProvider({
   /**
    * A cart object from the Storefront API to populate the initial state of the provider.
    */
-  cart?: CartFragmentFragment;
+  data?: CartFragmentFragment;
 }) {
   const {serverState} = useServerState() as ServerStateContextValue;
   const countryCode = serverState?.country?.isoCode;

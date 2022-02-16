@@ -18,6 +18,17 @@ export function generateCacheControlHeader(options: CacheOptions): string {
   ].join(', ');
 }
 
+export function generateSubRequestCacheControlHeader(
+  userCacheOptions?: CacheOptions
+): string {
+  const cacheOptions = {
+    ...DEFAULT_SUBREQUEST_CACHE_OPTIONS,
+    ...(userCacheOptions ?? {}),
+  };
+
+  return generateCacheControlHeader(cacheOptions);
+}
+
 /**
  * Use a preview header during development.
  * TODO: Support an override of this to force the cache
@@ -80,14 +91,8 @@ export async function setItemInCache(
 
   const url = getKeyUrl(hashKey(key));
   const request = new Request(url);
-
-  const cacheOptions = {
-    ...DEFAULT_SUBREQUEST_CACHE_OPTIONS,
-    ...(userCacheOptions ?? {}),
-  };
-
   const headers = new Headers({
-    'cache-control': generateCacheControlHeader(cacheOptions),
+    'cache-control': generateSubRequestCacheControlHeader(userCacheOptions),
   });
 
   const response = new Response(JSON.stringify(value), {headers});

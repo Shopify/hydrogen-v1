@@ -6,7 +6,7 @@ import {
 
 export function ProductDetails({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <SelectedVariantBuyNowButton>Buy it now</SelectedVariantBuyNowButton>
     </ProductProvider>
   );

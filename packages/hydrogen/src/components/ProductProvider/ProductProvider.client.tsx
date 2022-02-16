@@ -5,24 +5,26 @@ import {ProductContext, ProductContextType} from './context';
 import {Product} from './types';
 import {ProductProviderFragment as Fragment} from '../../graphql/graphql-constants';
 
+export interface ProductProviderProps {
+  /** A `ReactNode` element. */
+  children: ReactNode;
+  /** A [Product object](/api/storefront/reference/products/product). */
+  data: Product;
+  /** The initially selected variant. This is required only if you're using a `SelectedVariantX` hook in the `ProductProvider` component.*/
+  initialVariantId?: Parameters<
+    typeof useProductOptions
+  >['0']['initialVariantId'];
+}
+
 /**
  * The `ProductProvider` component sets up a context with product details. Descendents of
  * this component can use the `useProduct` hook and the related `ProductX` or `SelectedVariantX` hooks.
  */
 export function ProductProvider({
   children,
-  product,
+  data: product,
   initialVariantId,
-}: {
-  /** A `ReactNode` element. */
-  children: ReactNode;
-  /** A [Product object](/api/storefront/reference/products/product). */
-  product: Product;
-  /** The initially selected variant. This is required only if you're using a `SelectedVariantX` hook in the `ProductProvider` component.*/
-  initialVariantId?: Parameters<
-    typeof useProductOptions
-  >['0']['initialVariantId'];
-}) {
+}: ProductProviderProps) {
   const {
     variants,
     options,

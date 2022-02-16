@@ -10,10 +10,7 @@ const unitPriceMeasurement = getUnitPriceMeasurement();
 describe('<UnitPrice />', () => {
   it('renders unit price measurement for product in correct format', () => {
     const component = mountWithProviders(
-      <UnitPrice
-        unitPrice={unitPrice}
-        unitPriceMeasurement={unitPriceMeasurement}
-      />
+      <UnitPrice data={unitPrice} measurement={unitPriceMeasurement} />
     );
 
     const expectedUnitPrice = `CA$${unitPrice.amount}/${unitPriceMeasurement.referenceUnit}`;
@@ -24,8 +21,8 @@ describe('<UnitPrice />', () => {
     const component = mountWithProviders(
       <UnitPrice
         className="unitPriceMeasurement"
-        unitPrice={unitPrice}
-        unitPriceMeasurement={unitPriceMeasurement}
+        data={unitPrice}
+        measurement={unitPriceMeasurement}
       />
     );
 

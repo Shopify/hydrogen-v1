@@ -4,6 +4,7 @@ import type {Plugin} from 'vite';
 import hydrogenMiddleware, {
   HYDROGEN_DEFAULT_SERVER_ENTRY,
 } from './plugins/vite-plugin-hydrogen-middleware';
+import hydrogenClientMiddleware from './plugins/vite-plugin-hydrogen-client-middleware';
 // @ts-ignore
 import rsc from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
 import ssrInterop from './plugins/vite-plugin-ssr-interop';
@@ -21,6 +22,7 @@ export default (
     process.env.VITE_INSPECT && inspect(),
 
     hydrogenConfig(),
+    hydrogenClientMiddleware(),
     hydrogenMiddleware(shopifyConfig, pluginOptions),
     react(),
     hydrationAutoImport(),

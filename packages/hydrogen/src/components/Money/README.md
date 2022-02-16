@@ -29,14 +29,14 @@ const QUERY = gql`
 export default function Product() {
   const {data} = useShopQuery({query: QUERY});
 
-  return <Money money={data.product.variants.edges[0].node.priceV2} />;
+  return <Money data={data.product.variants.edges[0].node.priceV2} />;
 }
 
 export default function ProductWithCustomMoney() {
   const {data} = useShopQuery({query: QUERY});
 
   return (
-    <Money money={data.product.variants.edges[0].node.priceV2}>
+    <Money data={data.product.variants.edges[0].node.priceV2}>
       {({amount, currencyCode, currencyNarrowSymbol}) => {
         return (
           <>
@@ -55,7 +55,7 @@ export default function ProductWithCustomMoney() {
 | Name      | Type                     | Description                                                                              |
 | --------- | ------------------------ | ---------------------------------------------------------------------------------------- |
 | as?       | <code>ElementType</code> | A `ReactNode` element.                                                                   |
-| money     | <code>MoneyV2</code>     | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                  |
+| data      | <code>MoneyV2</code>     | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                  |
 | children? | <code>ReactNode</code>   | A function that takes an object return by the `useMoney` hook and returns a `ReactNode`. |
 
 ## Component type
