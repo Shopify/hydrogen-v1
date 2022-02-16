@@ -122,7 +122,7 @@ When the cached entry becomes stale, if the age of the entry is still within the
 ## Full-page caching
 
 In addition to sub-request caching, it’s helpful to cache the entire page response at the network edge and in the browser. This is the most useful for pages without dynamic or personalized data, like marketing pages or blog content.
-All sub-request have the default `CacheSeconds` strategy.
+All sub-requests implement a default `CacheSeconds()` strategy.
 
 To modify full-page caching options, use the `response` property passed to the page server component:
 
