@@ -164,7 +164,7 @@ describe('AddToCartButton', () => {
 
           const component = extendedMount(
             <ProductProvider
-              product={product}
+              data={product}
               initialVariantId={selectedVariant.id}
             >
               <AddToCartButton>Add to cart</AddToCartButton>
@@ -191,7 +191,7 @@ describe('AddToCartButton', () => {
 
           const component = extendedMount(
             <ProductProvider
-              product={product}
+              data={product}
               initialVariantId={selectedVariant.id}
             >
               <AddToCartButton>Add to cart</AddToCartButton>
@@ -231,7 +231,7 @@ describe('AddToCartButton', () => {
           });
 
           const component = extendedMount(
-            <ProductProvider product={product}>
+            <ProductProvider data={product}>
               <AddToCartButton>Add to cart</AddToCartButton>
             </ProductProvider>,
             {mockLinesAdd, cart: CART}
@@ -283,7 +283,7 @@ describe('AddToCartButton', () => {
           });
 
           const component = extendedMount(
-            <ProductProvider product={product}>
+            <ProductProvider data={product}>
               <AddToCartButton>Add to cart</AddToCartButton>
             </ProductProvider>,
             {mockCreateCart}
@@ -323,7 +323,7 @@ describe('AddToCartButton', () => {
           });
 
           const component = extendedMount(
-            <ProductProvider product={product}>
+            <ProductProvider data={product}>
               <AddToCartButton>Add to cart</AddToCartButton>
             </ProductProvider>,
             {mockCreateCart}
@@ -349,7 +349,7 @@ describe('AddToCartButton', () => {
         const product = getProduct();
 
         const component = extendedMount(
-          <ProductProvider product={product} initialVariantId={null}>
+          <ProductProvider data={product} initialVariantId={null}>
             <AddToCartButton>Add to cart</AddToCartButton>
           </ProductProvider>,
           {mockLinesAdd, cart: CART}
