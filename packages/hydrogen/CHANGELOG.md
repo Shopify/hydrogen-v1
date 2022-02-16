@@ -67,7 +67,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - dx [breaking change]: `<Product />` and `<CartLine />` aliases have been removed; use the original components `<ProductProvider />` and `<CartLineProvider />` instead. Their nested component aliases, such as `<Product.Image />`, have also been removed; in this example you should use `<ProductImage />`.
 - feat: remove React Router on the client and introduce Hydrogen the `<Link>` component and `useNavigate` hook
 - fix: prevent client components from being cached during development
-- refactor: the following components had their prop name renamed. Refer to the documentation or [#627](https://github.com/Shopify/hydrogen/issues/627] for more details.
+- refactor: the following components had their prop name renamed. Refer to the documentation or [#627](https://github.com/Shopify/hydrogen/issues/627) for more details.
   - `<ExternalVideo />`: renamed video prop to data
   - `<Video />`: renamed video prop to data
   - `<Image>`: renamed image prop to data
