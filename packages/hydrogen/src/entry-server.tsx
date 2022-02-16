@@ -98,17 +98,6 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
         ? await indexTemplate(url.toString())
         : indexTemplate;
 
-    // const {render, hydrate, stream, getApiRoute, log}: EntryServerHandler =
-    //   entrypoint.default || entrypoint;
-
-    // @ts-ignore
-    if (dev && !(render && hydrate && stream && getApiRoute)) {
-      throw new Error(
-        `entry-server.jsx could not be loaded. This likely occurred because of a Vite compilation error.\n` +
-          `Please check your server logs for more information.`
-      );
-    }
-
     if (!isReactHydrationRequest && pages) {
       const apiRoute = getApiRoute(url, {pages});
 

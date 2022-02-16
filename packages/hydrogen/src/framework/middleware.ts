@@ -9,7 +9,7 @@ type HydrogenMiddlewareArgs = {
   dev?: boolean;
   shopifyConfig?: ShopifyConfig;
   indexTemplate: string | ((url: string) => Promise<string>);
-  getServerEntrypoint: () => RequestHandler | Promise<RequestHandler>;
+  getServerEntrypoint: () => any;
   devServer?: ViteDevServer;
   cache?: Cache;
 };
@@ -88,7 +88,8 @@ export function hydrogenMiddleware({
         });
       }
 
-      const handleRequest = await getServerEntrypoint();
+      const entrypoint = await getServerEntrypoint();
+      const handleRequest: RequestHandler = entrypoint.default ?? entrypoint;
 
       const eventResponse = await handleRequest(request, {
         dev,

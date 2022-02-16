@@ -45,8 +45,8 @@ export default (
             dev: true,
             shopifyConfig,
             indexTemplate: getIndexTemplate,
-            getServerEntrypoint: async () =>
-              (await server.ssrLoadModule('/src/entry-server')).default,
+            getServerEntrypoint: () =>
+              server.ssrLoadModule('/src/entry-server'),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)
