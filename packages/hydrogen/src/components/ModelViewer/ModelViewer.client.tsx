@@ -154,8 +154,13 @@ export function ModelViewer<TTag extends ElementType>(
   const callbackRef = useCallback((node) => {
     setModelViewer(node);
   }, []);
-
-  const {id, children, className, data: model, ...passthroughProps} = props;
+  const {
+    model,
+    id = model.id,
+    children,
+    className,
+    ...passthroughProps
+  } = props;
 
   const modelViewerLoadedStatus = useLoadScript(
     'https://unpkg.com/@google/model-viewer@v1.8.0/dist/model-viewer.min.js',

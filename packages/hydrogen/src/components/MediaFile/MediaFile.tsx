@@ -9,7 +9,7 @@ import {Media as MediaType} from '../../graphql/types/types';
 export type Media = Pick<MediaType, 'mediaContentType'>;
 
 type MediaImageMedia = Media & MediaImageProps['data'];
-type ModelViewerMedia = Media & {model: ModelViewerProps['data']};
+type ModelViewerMedia = Media & ModelViewerProps['data'];
 type ExternalVideoMedia = Media & ExternalVideoProps['data'];
 type VideoMedia = Media & VideoProps['data'];
 
@@ -59,10 +59,7 @@ export function MediaFile({
       );
     case 'MODEL_3D':
       return (
-        <ModelViewer
-          {...passthroughProps}
-          data={(data as ModelViewerMedia).model}
-        />
+        <ModelViewer {...passthroughProps} data={data as ModelViewerMedia} />
       );
     default:
       return null;
