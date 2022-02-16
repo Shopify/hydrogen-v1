@@ -1,8 +1,10 @@
 import React, {createContext, useContext} from 'react';
+import {getTime} from '../..';
 
 import {hashKey} from '../../framework/cache';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
+import {collectQueryTimings} from '../../utilities/log';
 
 // Context to inject current request in SSR
 const RequestContextSSR = createContext<ServerComponentRequest | null>(null);
@@ -85,18 +87,26 @@ export function useRequestCacheData<T>(
   key: QueryKey,
   fetcher: () => Promise<T>
 ): RequestCacheResult<T> {
-  const {cache} = useServerRequest().ctx;
+  const request = useServerRequest();
+  const cache = request.ctx.cache;
   const cacheKey = hashKey(key);
 
   if (!cache.has(cacheKey)) {
     let data: RequestCacheResult<T>;
-    let promise: Promise<RequestCacheResult<T>>;
+    let promise: Promise<RequestCacheResult<T> | void>;
 
     cache.set(cacheKey, () => {
-      if (data !== undefined) return data;
+      if (data !== undefined) {
+        collectQueryTimings(request, key, 'render');
+        return data;
+      }
       if (!promise) {
+        const startApiTime = getTime();
         promise = fetcher().then(
-          (r) => (data = {data: r}),
+          (r) => {
+            data = {data: r};
+            collectQueryTimings(request, key, 'data', getTime() - startApiTime);
+          },
           (e) => (data = {error: e})
         );
       }

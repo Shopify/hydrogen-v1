@@ -3,6 +3,7 @@ import {getTime} from '../../utilities/timing';
 import {HelmetData} from 'react-helmet-async';
 import type {RealHelmetData} from '../../foundation/Helmet';
 import {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
+import {QueryTiming} from '../../utilities/log/log-query-timeline';
 
 let reqCounter = 0; // For debugging
 const generateId =
@@ -30,6 +31,7 @@ export class ServerComponentRequest extends Request {
     helmet: RealHelmetData;
     shopifyConfig?: ShopifyContextValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
+    queryTimings: Array<QueryTiming>;
     [key: string]: any;
   };
 
@@ -56,6 +58,7 @@ export class ServerComponentRequest extends Request {
       cache: new Map(),
       helmet: new HelmetData({}) as unknown as RealHelmetData,
       queryCacheControl: [],
+      queryTimings: [],
     };
     this.cookies = this.parseCookies();
   }

@@ -2,6 +2,7 @@ import type {CachingStrategy, QueryKey} from '../../types';
 import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
+  collectQueryTimings,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -30,7 +31,11 @@ export function useQuery<T>(
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
 ) {
+  const request = useServerRequest();
   const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
+
+  collectQueryTimings(request, withCacheIdKey, 'load');
+
   return useRequestCacheData<T>(
     withCacheIdKey,
     cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
