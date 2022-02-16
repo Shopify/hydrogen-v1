@@ -10,7 +10,7 @@ Hydrogen also includes [default values for each mechanism](#default-values).
 > Note:
 > If you’re interacting with personalized or private data, then you need to override these defaults to meet your needs.
 
-## Caching Strategies
+## Caching strategies
 
 Shopify provides recommended caching strategies to ease the process of determining what
 cache control header to set.
