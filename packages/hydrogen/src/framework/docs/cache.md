@@ -142,7 +142,7 @@ Hydrogen provides sensible defaults for all sub-requests and full-page requests 
 
 By default, each full-page and sub-request receives the following cache options:
 
-```
+```js
 public, max-age=1, stale-while-revalidate=9
 ```
 
