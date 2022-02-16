@@ -32,7 +32,7 @@ export function MyComponent() {
   return (
     <ul>
       {data?.products?.map((product) => {
-        return <MediaFile media={product.node.media.edges[0].node} />;
+        return <MediaFile data={product.node.media.edges[0].node} />;
       })}
     </ul>
   );

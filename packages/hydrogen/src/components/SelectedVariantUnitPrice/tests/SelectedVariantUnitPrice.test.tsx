@@ -10,14 +10,14 @@ describe('<SelectedVariantUnitPrice />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const component = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantUnitPrice />
       </ProductProvider>
     );
 
     expect(component).toContainReactComponent(UnitPrice, {
-      unitPrice: selectedVariant.unitPrice,
-      unitPriceMeasurement: selectedVariant.unitPriceMeasurement,
+      data: selectedVariant.unitPrice,
+      measurement: selectedVariant.unitPriceMeasurement,
     });
   });
 });

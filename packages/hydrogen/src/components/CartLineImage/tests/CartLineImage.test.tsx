@@ -26,7 +26,7 @@ it('displays the image', () => {
   );
 
   expect(wrapper).toContainReactComponent(Image, {
-    image: line.merchandise.image,
+    data: line.merchandise.image,
   });
 });
 
@@ -49,7 +49,7 @@ it('allows passthrough props', () => {
   );
 
   expect(wrapper).toContainReactComponent(Image, {
-    image: line.merchandise.image,
+    data: line.merchandise.image,
     className: 'w-full',
   });
 });

@@ -16,7 +16,7 @@ export function Product(product) {
       {metafields.map((field) => {
         return (
           <li>
-            <Metafield metafield={field} />
+            <Metafield data={field} />
           </li>
         );
       })}

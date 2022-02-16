@@ -7,7 +7,7 @@ import {Money} from '../Money.client';
 describe('<Money />', () => {
   it('renders a formatted money string', () => {
     const money = getPrice({currencyCode: CurrencyCode.Usd});
-    const component = mountWithProviders(<Money money={money} />);
+    const component = mountWithProviders(<Money data={money} />);
 
     expect(component).toContainReactText(`$${money.amount}`);
   });
@@ -16,14 +16,14 @@ describe('<Money />', () => {
     const money = getPrice({
       currencyCode: CurrencyCode.Eur,
     });
-    const component = mountWithProviders(<Money money={money} />);
+    const component = mountWithProviders(<Money data={money} />);
 
     expect(component).toContainReactText(`€${money.amount}`);
   });
 
   it('allows pass-through props to the wrapping component', () => {
     const component = mountWithProviders(
-      <Money money={getPrice()} className="money" />
+      <Money data={getPrice()} className="money" />
     );
 
     expect(component).toHaveReactProps({className: 'money'});

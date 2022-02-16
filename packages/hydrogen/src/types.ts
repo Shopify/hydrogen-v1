@@ -84,7 +84,7 @@ export interface MediaImage {
   __typename?: string;
   id?: string;
   mediaContentType?: MediaContentType;
-  image?: Pick<Image, 'altText' | 'url' | 'id' | 'width' | 'height'>;
+  data?: Pick<Image, 'altText' | 'url' | 'id' | 'width' | 'height'>;
 }
 
 interface ProductVariant {

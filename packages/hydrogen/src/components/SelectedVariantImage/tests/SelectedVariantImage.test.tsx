@@ -10,13 +10,13 @@ describe('<SelectedVariantImage />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const wrapper = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage />
       </ProductProvider>
     );
 
     expect(wrapper).toContainReactComponent(Image, {
-      image: selectedVariant.image,
+      data: selectedVariant.image,
     });
   });
 
@@ -24,13 +24,13 @@ describe('<SelectedVariantImage />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const wrapper = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage className="w-full" />
       </ProductProvider>
     );
 
     expect(wrapper).toContainReactComponent(Image, {
-      image: selectedVariant.image,
+      data: selectedVariant.image,
       className: 'w-full',
     });
   });
@@ -41,7 +41,7 @@ describe('<SelectedVariantImage />', () => {
     selectedVariant.image = undefined;
 
     const wrapper = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantImage />
       </ProductProvider>
     );

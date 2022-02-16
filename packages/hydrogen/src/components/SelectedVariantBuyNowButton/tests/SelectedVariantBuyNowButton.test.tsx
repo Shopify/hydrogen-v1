@@ -16,10 +16,7 @@ describe('<SelectedVariantBuyNowButton />', () => {
 
     const button = mountWithProviders(
       <CartProvider>
-        <ProductProvider
-          product={product}
-          initialVariantId={selectedVariant.id}
-        >
+        <ProductProvider data={product} initialVariantId={selectedVariant.id}>
           <SelectedVariantBuyNowButton>Add to cart</SelectedVariantBuyNowButton>
         </ProductProvider>
       </CartProvider>
@@ -36,7 +33,7 @@ describe('<SelectedVariantBuyNowButton />', () => {
   it('renders the <BuyNowButton /> with a custom quantity when the `quantity` prop is provided', () => {
     const button = mountWithProviders(
       <CartProvider>
-        <ProductProvider product={getProduct()} initialVariantId="">
+        <ProductProvider data={getProduct()} initialVariantId="">
           <SelectedVariantBuyNowButton quantity={10}>
             Add to cart
           </SelectedVariantBuyNowButton>
@@ -52,7 +49,7 @@ describe('<SelectedVariantBuyNowButton />', () => {
   it('renders a disabled <BuyNowButton /> when there is no selected variant', () => {
     const button = mountWithProviders(
       <CartProvider>
-        <ProductProvider product={getProduct()} initialVariantId="">
+        <ProductProvider data={getProduct()} initialVariantId="">
           <SelectedVariantBuyNowButton>Add to cart</SelectedVariantBuyNowButton>
         </ProductProvider>
       </CartProvider>
@@ -68,7 +65,7 @@ describe('<SelectedVariantBuyNowButton />', () => {
     const attributes = [{key: 'hello', value: 'world'}];
     const button = mountWithProviders(
       <CartProvider>
-        <ProductProvider product={getProduct()} initialVariantId="">
+        <ProductProvider data={getProduct()} initialVariantId="">
           <SelectedVariantBuyNowButton attributes={attributes}>
             Add to cart
           </SelectedVariantBuyNowButton>

@@ -24,7 +24,7 @@ export interface MediaImageProps extends BaseImageProps {
   /** An object with the keys `url`, `altText`, `id`, `width` and `height`. Refer to the
    * Storefront API's [`Image` object](/api/storefront/reference/common-objects/image).
    */
-  image: Pick<ImageType, 'altText' | 'url' | 'id' | 'width' | 'height'>;
+  data: Pick<ImageType, 'altText' | 'url' | 'id' | 'width' | 'height'>;
   /** An object of image size options for Shopify CDN images. */
   options?: ImageSizeOptions;
 }
@@ -43,15 +43,15 @@ export type ImageProps = MediaImageProps | ExternalImageProps;
 type PropsWeControl = 'src' | 'width' | 'height';
 
 function convertShopifyImageData({
-  image,
+  data,
   options,
   loader,
   loaderOptions,
   id: propId,
   alt,
 }: MediaImageProps & {id?: string; alt?: string}) {
-  const {url: src, altText, id} = image;
-  const {width, height} = getShopifyImageDimensions(image, options);
+  const {url: src, altText, id} = data;
+  const {width, height} = getShopifyImageDimensions(data, options);
   return {
     src,
     id: propId ? propId : id,
@@ -71,7 +71,7 @@ export function Image<TTag extends React.ElementType = 'img'>(
   props: Props<TTag, PropsWeControl> & ImageProps
 ) {
   const {
-    image,
+    data,
     options,
     src,
     id,
@@ -83,21 +83,21 @@ export function Image<TTag extends React.ElementType = 'img'>(
     ...passthroughProps
   } = props;
 
-  if (!image && !src) {
+  if (!data && !src) {
     throw new Error(
       'Image component: requires either an `image` or `src` prop'
     );
   }
 
-  if (!image && src && (!width || !height)) {
+  if (!data && src && (!width || !height)) {
     throw new Error(
       `Image component: when 'src' is provided, 'width' and 'height' are required and needs to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
     );
   }
 
-  const imgProps = image
+  const imgProps = data
     ? convertShopifyImageData({
-        image,
+        data,
         options,
         loader,
         loaderOptions,

@@ -37,7 +37,7 @@ export function CartEstimatedCost<TTag extends ElementType>(
   }
 
   return (
-    <Money {...passthroughProps} money={amount}>
+    <Money {...passthroughProps} data={amount}>
       {children}
     </Money>
   );
