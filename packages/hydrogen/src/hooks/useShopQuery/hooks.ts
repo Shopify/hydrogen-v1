@@ -1,10 +1,11 @@
 import {useShop} from '../../foundation/useShop';
-import {log} from '../../utilities/log';
+import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
 import type {CacheOptions} from '../../types';
 import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
+import {useServerRequest} from '../../foundation/ServerRequestProvider';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -37,6 +38,9 @@ export function useShopQuery<T>({
       'Shopify Storefront API requests should only be made from the server.'
     );
   }
+
+  const serverRequest = useServerRequest();
+  const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
   const {request, key} = createShopRequest(body, locale);

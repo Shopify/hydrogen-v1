@@ -20,7 +20,7 @@ describe('<CartEstimatedCost />', () => {
 
   it('renders a <Money />', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost />
       </CartProvider>
     );
@@ -40,53 +40,53 @@ describe('<CartEstimatedCost />', () => {
 
   it('renders a totalAmount when total is the amountType', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="total" />
       </CartProvider>
     );
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
   it('renders a subtotalAmount when subtotal is the amountType', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="subtotal" />
       </CartProvider>
     );
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.subtotalAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
   it('renders a totalTaxAmount when tax is the amountType', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="tax" />
       </CartProvider>
     );
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalTaxAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
   it('renders a totalDutyAmount when duty is the amountType', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="duty" />
       </CartProvider>
     );
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalDutyAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 });

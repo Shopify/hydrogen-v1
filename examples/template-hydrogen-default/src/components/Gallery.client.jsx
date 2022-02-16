@@ -46,7 +46,7 @@ export default function Gallery() {
             tabIndex="0"
             key={med.id || med.image.id}
             className="w-[80vw] md:w-auto h-full md:h-auto object-cover object-center transition-all snap-start border border-gray-200 flex-shrink-0 rounded-lg"
-            media={med}
+            data={med}
             options={{
               height: '485',
               crop: 'center',

@@ -9,7 +9,7 @@ describe('<ProductDescription/>', () => {
   it('renders <RawHtml /> with the product’s descriptionHtml', () => {
     const product = getProduct();
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId="">
+      <ProductProvider data={product} initialVariantId="">
         <ProductDescription />
       </ProductProvider>
     );

@@ -3,7 +3,7 @@ import {useProduct} from '../ProductProvider';
 import {Money, MoneyProps} from '../Money';
 import {Props} from '../types';
 
-export interface SelectedVariantPriceProps extends Omit<MoneyProps, 'money'> {
+export interface SelectedVariantPriceProps extends Omit<MoneyProps, 'data'> {
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
 }
@@ -33,5 +33,5 @@ export function SelectedVariantPrice<TTag extends ElementType>(
     return null;
   }
 
-  return <Money {...passthroughProps} money={price} />;
+  return <Money {...passthroughProps} data={price} />;
 }

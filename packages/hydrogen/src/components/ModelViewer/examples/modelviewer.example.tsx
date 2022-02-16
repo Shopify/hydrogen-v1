@@ -32,6 +32,6 @@ export default function MyProductModel() {
 
   const firstMediaElement = data.products.edges[0].node.media.edges[0].node;
   if (firstMediaElement.mediaContentType === 'MODEL_3D') {
-    return <ModelViewer model={firstMediaElement} />;
+    return <ModelViewer data={firstMediaElement} />;
   }
 }

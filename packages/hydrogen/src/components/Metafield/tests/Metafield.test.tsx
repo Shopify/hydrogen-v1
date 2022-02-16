@@ -12,7 +12,7 @@ describe('<Metafield />', () => {
     console.warn = jest.fn();
 
     const component = mountWithProviders(
-      <Metafield metafield={{type: 'color', value: undefined}} />
+      <Metafield data={{type: 'color', value: undefined}} />
     );
     expect(component.html()).toBeFalsy();
   });
@@ -21,7 +21,7 @@ describe('<Metafield />', () => {
     console.warn = jest.fn();
 
     const metafield = {type: 'color', value: undefined};
-    mountWithProviders(<Metafield metafield={metafield} />);
+    mountWithProviders(<Metafield data={metafield} />);
 
     expect(console.warn).toHaveBeenCalledWith(
       `No metafield value for ${metafield}`
@@ -31,14 +31,11 @@ describe('<Metafield />', () => {
   describe('with `date` type metafield', () => {
     it('renders the localized date as a string in a `time` by default', () => {
       const metafield = getParsedMetafield({type: 'date'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield} />,
-        {
-          shopifyConfig: {
-            defaultLocale: 'en-us',
-          },
-        }
-      );
+      const component = mountWithProviders(<Metafield data={metafield} />, {
+        shopifyConfig: {
+          defaultLocale: 'en-us',
+        },
+      });
 
       expect(component).toContainReactComponent('time', {
         children: (metafield.value as Date).toLocaleDateString(),
@@ -48,7 +45,7 @@ describe('<Metafield />', () => {
     it('renders the date as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'date'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />,
+        <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
             defaultLocale: 'en-us',
@@ -64,7 +61,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'date'})}
+          data={getParsedMetafield({type: 'date'})}
           className="emphasized"
         />
       );
@@ -77,14 +74,11 @@ describe('<Metafield />', () => {
   describe('with `date_time` type metafield', () => {
     it('renders the date as a string in a `time` by default', () => {
       const metafield = getParsedMetafield({type: 'date_time'});
-      const component = mountWithProviders(
-        <Metafield metafield={metafield} />,
-        {
-          shopifyConfig: {
-            defaultLocale: 'en-us',
-          },
-        }
-      );
+      const component = mountWithProviders(<Metafield data={metafield} />, {
+        shopifyConfig: {
+          defaultLocale: 'en-us',
+        },
+      });
 
       expect(component).toContainReactComponent('time', {
         children: (metafield.value as Date).toLocaleString(),
@@ -94,7 +88,7 @@ describe('<Metafield />', () => {
     it('renders the date as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'date_time'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />,
+        <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
             defaultLocale: 'en-us',
@@ -110,7 +104,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'date_time'})}
+          data={getParsedMetafield({type: 'date_time'})}
           className="emphasized"
         />
       );
@@ -126,14 +120,11 @@ describe('<Metafield />', () => {
         type: 'weight',
         value: JSON.stringify({value: 10, unit: 'kg'}),
       });
-      const component = mountWithProviders(
-        <Metafield metafield={metafield} />,
-        {
-          shopifyConfig: {
-            defaultLocale: 'en-us',
-          },
-        }
-      );
+      const component = mountWithProviders(<Metafield data={metafield} />, {
+        shopifyConfig: {
+          defaultLocale: 'en-us',
+        },
+      });
 
       expect(component).toContainReactComponent('span', {
         children: '10 kg',
@@ -146,7 +137,7 @@ describe('<Metafield />', () => {
         value: JSON.stringify({value: 10, unit: 'kg'}),
       });
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />,
+        <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
             defaultLocale: 'en-us',
@@ -162,7 +153,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'weight'})}
+          data={getParsedMetafield({type: 'weight'})}
           className="emphasized"
         />
       );
@@ -178,14 +169,11 @@ describe('<Metafield />', () => {
         type: 'volume',
         value: JSON.stringify({value: 10, unit: 'l'}),
       });
-      const component = mountWithProviders(
-        <Metafield metafield={metafield} />,
-        {
-          shopifyConfig: {
-            defaultLocale: 'en-us',
-          },
-        }
-      );
+      const component = mountWithProviders(<Metafield data={metafield} />, {
+        shopifyConfig: {
+          defaultLocale: 'en-us',
+        },
+      });
 
       expect(component).toContainReactComponent('span', {
         children: '10 L',
@@ -198,7 +186,7 @@ describe('<Metafield />', () => {
         value: JSON.stringify({value: 10, unit: 'l'}),
       });
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />,
+        <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
             defaultLocale: 'en-us',
@@ -214,7 +202,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'volume'})}
+          data={getParsedMetafield({type: 'volume'})}
           className="emphasized"
         />
       );
@@ -230,14 +218,11 @@ describe('<Metafield />', () => {
         type: 'dimension',
         value: JSON.stringify({value: 5, unit: 'cm'}),
       });
-      const component = mountWithProviders(
-        <Metafield metafield={metafield} />,
-        {
-          shopifyConfig: {
-            defaultLocale: 'en-us',
-          },
-        }
-      );
+      const component = mountWithProviders(<Metafield data={metafield} />, {
+        shopifyConfig: {
+          defaultLocale: 'en-us',
+        },
+      });
 
       expect(component).toContainReactComponent('span', {
         children: '5 cm',
@@ -250,7 +235,7 @@ describe('<Metafield />', () => {
         value: JSON.stringify({value: 5, unit: 'cm'}),
       });
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />,
+        <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
             defaultLocale: 'en-us',
@@ -266,7 +251,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'dimension'})}
+          data={getParsedMetafield({type: 'dimension'})}
           className="emphasized"
         />
       );
@@ -282,14 +267,11 @@ describe('<Metafield />', () => {
         type: 'single_line_text_field',
         value: 'hello world',
       });
-      const component = mountWithProviders(
-        <Metafield metafield={metafield} />,
-        {
-          shopifyConfig: {
-            defaultLocale: 'en-us',
-          },
-        }
-      );
+      const component = mountWithProviders(<Metafield data={metafield} />, {
+        shopifyConfig: {
+          defaultLocale: 'en-us',
+        },
+      });
 
       expect(component).toContainReactComponent(RawHtml, {
         string: metafield.value,
@@ -299,7 +281,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'single_line_text_field'})}
+          data={getParsedMetafield({type: 'single_line_text_field'})}
           className="emphasized"
           as="p"
         />
@@ -317,7 +299,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'multi_line_text_field'})}
+          data={getParsedMetafield({type: 'multi_line_text_field'})}
           className="emphasized"
           as="p"
         />
@@ -335,7 +317,7 @@ describe('<Metafield />', () => {
         type: 'url',
         value: 'https://www.example.com',
       });
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('a', {
         children: metafield.value,
@@ -346,7 +328,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'url'})}
+          data={getParsedMetafield({type: 'url'})}
           className="emphasized"
         />
       );
@@ -359,7 +341,7 @@ describe('<Metafield />', () => {
   describe('with `json` type metafield', () => {
     it('renders the json as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'json'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: JSON.stringify(metafield.value),
@@ -369,7 +351,7 @@ describe('<Metafield />', () => {
     it('renders the json as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'json'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />
+        <Metafield data={metafield} as="p" />
       );
 
       expect(component).toContainReactComponent('p', {
@@ -380,7 +362,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'json'})}
+          data={getParsedMetafield({type: 'json'})}
           className="emphasized"
         />
       );
@@ -393,7 +375,7 @@ describe('<Metafield />', () => {
   describe('with `color` type metafield', () => {
     it('renders the color as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'color'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: metafield.value,
@@ -403,7 +385,7 @@ describe('<Metafield />', () => {
     it('renders the color as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'color'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />
+        <Metafield data={metafield} as="p" />
       );
 
       expect(component).toContainReactComponent('p', {
@@ -414,7 +396,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'color'})}
+          data={getParsedMetafield({type: 'color'})}
           className="emphasized"
         />
       );
@@ -427,7 +409,7 @@ describe('<Metafield />', () => {
   describe('with `product_reference` type metafield', () => {
     it('renders the product reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'product_reference'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: metafield.value,
@@ -437,7 +419,7 @@ describe('<Metafield />', () => {
     it('renders the product reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'product_reference'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />
+        <Metafield data={metafield} as="p" />
       );
 
       expect(component).toContainReactComponent('p', {
@@ -448,7 +430,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'product_reference'})}
+          data={getParsedMetafield({type: 'product_reference'})}
           className="emphasized"
         />
       );
@@ -461,7 +443,7 @@ describe('<Metafield />', () => {
   describe('with `page_reference` type metafield', () => {
     it('renders the page reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'page_reference'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: metafield.value,
@@ -471,7 +453,7 @@ describe('<Metafield />', () => {
     it('renders the page reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'page_reference'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />
+        <Metafield data={metafield} as="p" />
       );
 
       expect(component).toContainReactComponent('p', {
@@ -482,7 +464,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'page_reference'})}
+          data={getParsedMetafield({type: 'page_reference'})}
           className="emphasized"
         />
       );
@@ -495,7 +477,7 @@ describe('<Metafield />', () => {
   describe('with `variant_reference` type metafield', () => {
     it('renders the variant reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'variant_reference'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: metafield.value,
@@ -505,7 +487,7 @@ describe('<Metafield />', () => {
     it('renders the variant reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'variant_reference'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />
+        <Metafield data={metafield} as="p" />
       );
 
       expect(component).toContainReactComponent('p', {
@@ -516,7 +498,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'variant_reference'})}
+          data={getParsedMetafield({type: 'variant_reference'})}
           className="emphasized"
         />
       );
@@ -533,9 +515,7 @@ describe('<Metafield />', () => {
           type: 'file_reference',
           reference: {__typename: 'MediaImage', ...getMediaImage()},
         });
-        const component = mountWithProviders(
-          <Metafield metafield={metafield} />
-        );
+        const component = mountWithProviders(<Metafield data={metafield} />);
 
         expect(component).toContainReactComponent(Image);
       });
@@ -546,7 +526,7 @@ describe('<Metafield />', () => {
           reference: {__typename: 'MediaImage', ...getMediaImage()},
         });
         const component = mountWithProviders(
-          <Metafield metafield={metafield} className="rounded-md" />
+          <Metafield data={metafield} className="rounded-md" />
         );
 
         expect(component).toContainReactComponent(Image, {
@@ -558,9 +538,7 @@ describe('<Metafield />', () => {
     describe('when the reference type is not a MediaImage', () => {
       it('renders the file reference as a string in a `span` by default', () => {
         const metafield = getParsedMetafield({type: 'file_reference'});
-        const component = mountWithProviders(
-          <Metafield metafield={metafield} />
-        );
+        const component = mountWithProviders(<Metafield data={metafield} />);
 
         expect(component).toContainReactComponent('span', {
           children: metafield.value,
@@ -570,7 +548,7 @@ describe('<Metafield />', () => {
       it('renders the file reference as a string in the element specified by the `as` prop', () => {
         const metafield = getParsedMetafield({type: 'file_reference'});
         const component = mountWithProviders(
-          <Metafield metafield={metafield} as="p" />
+          <Metafield data={metafield} as="p" />
         );
 
         expect(component).toContainReactComponent('p', {
@@ -581,7 +559,7 @@ describe('<Metafield />', () => {
       it('allows passthrough props', () => {
         const component = mountWithProviders(
           <Metafield
-            metafield={getParsedMetafield({type: 'file_reference'})}
+            data={getParsedMetafield({type: 'file_reference'})}
             className="emphasized"
           />
         );
@@ -595,7 +573,7 @@ describe('<Metafield />', () => {
   describe('with `boolean` type metafield', () => {
     it('renders the boolean value as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'boolean'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: (metafield.value as boolean).toString(),
@@ -605,7 +583,7 @@ describe('<Metafield />', () => {
     it('renders the boolean as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'boolean'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />
+        <Metafield data={metafield} as="p" />
       );
 
       expect(component).toContainReactComponent('p', {
@@ -616,7 +594,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'boolean'})}
+          data={getParsedMetafield({type: 'boolean'})}
           className="emphasized"
         />
       );
@@ -629,7 +607,7 @@ describe('<Metafield />', () => {
   describe('with `number_integer` type metafield', () => {
     it('renders the integer value as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'number_integer'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: (metafield.value as number).toString(),
@@ -639,7 +617,7 @@ describe('<Metafield />', () => {
     it('renders the boolean as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'number_integer'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />
+        <Metafield data={metafield} as="p" />
       );
 
       expect(component).toContainReactComponent('p', {
@@ -650,7 +628,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'number_integer'})}
+          data={getParsedMetafield({type: 'number_integer'})}
           className="emphasized"
         />
       );
@@ -663,7 +641,7 @@ describe('<Metafield />', () => {
   describe('with `number_decimal` type metafield', () => {
     it('renders the number as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'number_decimal'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: (metafield.value as number).toString(),
@@ -673,7 +651,7 @@ describe('<Metafield />', () => {
     it('renders the number as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'number_decimal'});
       const component = mountWithProviders(
-        <Metafield metafield={metafield} as="p" />
+        <Metafield data={metafield} as="p" />
       );
 
       expect(component).toContainReactComponent('p', {
@@ -684,7 +662,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'number_decimal'})}
+          data={getParsedMetafield({type: 'number_decimal'})}
           className="emphasized"
         />
       );
@@ -697,7 +675,7 @@ describe('<Metafield />', () => {
   describe('with `rating` type metafield', () => {
     it(`renders a 'span' with the rating inside`, () => {
       const metafield = getParsedMetafield({type: 'rating'});
-      const component = mountWithProviders(<Metafield metafield={metafield} />);
+      const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
         children: (metafield.value as Rating).value,
@@ -707,7 +685,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
-          metafield={getParsedMetafield({type: 'rating'})}
+          data={getParsedMetafield({type: 'rating'})}
           className="emphasized"
         />
       );

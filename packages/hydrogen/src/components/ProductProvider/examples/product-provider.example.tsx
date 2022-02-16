@@ -15,6 +15,6 @@ export function Product() {
   const {data} = useShopQuery({query: QUERY});
 
   return (
-    <ProductProvider product={data.product}>{/* Your JSX */}</ProductProvider>
+    <ProductProvider data={data.product}>{/* Your JSX */}</ProductProvider>
   );
 }

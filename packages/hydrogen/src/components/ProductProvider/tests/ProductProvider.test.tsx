@@ -9,7 +9,7 @@ describe('<ProductProvider />', () => {
   it('sets up a product context for the provided product', () => {
     const product = getProduct();
     const productProvider = mountWithProviders(
-      <ProductProvider product={product} initialVariantId="">
+      <ProductProvider data={product} initialVariantId="">
         Hello world
       </ProductProvider>
     );
@@ -45,7 +45,7 @@ describe('<ProductProvider />', () => {
   it('renders its children', () => {
     const Children = () => null;
     const productProvider = mountWithProviders(
-      <ProductProvider product={getProduct()} initialVariantId="">
+      <ProductProvider data={getProduct()} initialVariantId="">
         <Children />
       </ProductProvider>
     );
