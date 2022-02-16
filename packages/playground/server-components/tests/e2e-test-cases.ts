@@ -1,3 +1,4 @@
+import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import fetch from 'node-fetch';
 
 type TestOptions = {
@@ -239,7 +240,7 @@ export default async function testCases({getServerUrl}: TestOptions) {
   it('streams the RSC response', async () => {
     const response = await fetch(
       getServerUrl() +
-        '/react?state=' +
+        `${RSC_PATHNAME}?state=` +
         encodeURIComponent(JSON.stringify({pathname: '/stream'}))
     );
     let streamedChunks = [];

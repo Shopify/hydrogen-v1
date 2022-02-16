@@ -46,7 +46,9 @@ export default (
             shopifyConfig,
             indexTemplate: getIndexTemplate,
             getServerEntrypoint: () =>
-              server.ssrLoadModule('/src/entry-server'),
+              server.ssrLoadModule(
+                process.env.HYDROGEN_SERVER_ENTRY || '/src/entry-server'
+              ),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)

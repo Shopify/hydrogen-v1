@@ -21,7 +21,7 @@ const VIDEO_PROPS = {
 
 describe('<Video />', () => {
   it('renders a video tag', () => {
-    const video = mount(<Video video={VIDEO_PROPS} />);
+    const video = mount(<Video data={VIDEO_PROPS} />);
 
     expect(video).toContainReactComponent('video', {
       id: VIDEO_PROPS.id,
@@ -32,7 +32,7 @@ describe('<Video />', () => {
   });
 
   it('renders source tags for each source', () => {
-    const video = mount(<Video video={VIDEO_PROPS} />);
+    const video = mount(<Video data={VIDEO_PROPS} />);
 
     expect(video).toContainReactComponentTimes('source', 2);
     expect(
@@ -50,7 +50,7 @@ describe('<Video />', () => {
   });
 
   it('allows passthrough props', () => {
-    const video = mount(<Video video={VIDEO_PROPS} className="testClass" />);
+    const video = mount(<Video data={VIDEO_PROPS} className="testClass" />);
 
     expect(video).toContainReactComponent('video', {
       className: 'testClass',

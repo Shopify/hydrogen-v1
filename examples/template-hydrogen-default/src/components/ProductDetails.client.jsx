@@ -1,9 +1,14 @@
 import {
-  Product,
   flattenConnection,
   useProduct,
   useMoney,
   useParsedMetafields,
+  ProductProvider,
+  ProductTitle,
+  ProductDescription,
+  SelectedVariantUnitPrice,
+  SelectedVariantAddToCartButton,
+  SelectedVariantBuyNowButton,
 } from '@shopify/hydrogen/client';
 import ProductOptions from './ProductOptions.client';
 import Gallery from './Gallery.client';
@@ -33,11 +38,11 @@ function ProductPriceMarkup() {
         {variantPrice.currencyCode} {variantPrice.currencyNarrowSymbol}
         {variantPrice.amount}
       </span>
-      <Product.SelectedVariant.UnitPrice className="text-gray-500">
+      <SelectedVariantUnitPrice className="text-gray-500">
         {({currencyCode, amount, currencyNarrowSymbol, referenceUnit}) =>
           `${currencyCode} ${currencyNarrowSymbol}${amount}/${referenceUnit}`
         }
-      </Product.SelectedVariant.UnitPrice>
+      </SelectedVariantUnitPrice>
     </div>
   );
 }
@@ -48,20 +53,18 @@ function AddToCartMarkup() {
 
   return (
     <div className="space-y-2 mb-8">
-      <Product.SelectedVariant.AddToCartButton
+      <SelectedVariantAddToCartButton
         className={BUTTON_PRIMARY_CLASSES}
         disabled={isOutOfStock}
       >
         {isOutOfStock ? 'Out of stock' : 'Add to bag'}
-      </Product.SelectedVariant.AddToCartButton>
+      </SelectedVariantAddToCartButton>
       {isOutOfStock ? (
         <p className="text-black text-center">Available in 2-3 weeks</p>
       ) : (
-        <Product.SelectedVariant.BuyNowButton
-          className={BUTTON_SECONDARY_CLASSES}
-        >
+        <SelectedVariantBuyNowButton className={BUTTON_SECONDARY_CLASSES}>
           Buy it now
-        </Product.SelectedVariant.BuyNowButton>
+        </SelectedVariantBuyNowButton>
       )}
     </div>
   );
@@ -135,10 +138,10 @@ export default function ProductDetails({product}) {
 
   return (
     <>
-      <Product product={product} initialVariantId={initialVariant.id}>
+      <ProductProvider data={product} initialVariantId={initialVariant.id}>
         <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-x-8 my-16">
           <div className="md:hidden mt-5 mb-8">
-            <Product.Title
+            <ProductTitle
               as="h1"
               className="text-4xl font-bold text-black mb-4"
             />
@@ -157,7 +160,7 @@ export default function ProductDetails({product}) {
 
           <div>
             <div className="hidden md:block">
-              <Product.Title
+              <ProductTitle
                 as="h1"
                 className="text-5xl font-bold text-black mb-4"
               />
@@ -228,7 +231,7 @@ export default function ProductDetails({product}) {
               </div>
             </div>
             {/* Product Description */}
-            <Product.Description className="prose border-t border-gray-200 pt-6 text-black text-md" />
+            <ProductDescription className="prose border-t border-gray-200 pt-6 text-black text-md" />
             {sizeChartMetafield?.value && (
               <div className="border-t border-gray-200">
                 <SizeChart />
@@ -236,7 +239,7 @@ export default function ProductDetails({product}) {
             )}
           </div>
         </div>
-      </Product>
+      </ProductProvider>
     </>
   );
 }

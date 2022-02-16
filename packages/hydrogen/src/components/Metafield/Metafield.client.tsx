@@ -10,8 +10,8 @@ import {MediaImage} from '../../types';
 
 export interface MetafieldProps {
   /** A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API. */
-  metafield: ParsedMetafield;
-  /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/definitions/types). */
+  data: ParsedMetafield;
+  /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](/apps/metafields/types). */
   as?: ElementType;
 }
 
@@ -25,20 +25,20 @@ export interface MetafieldProps {
 export function Metafield<TTag extends ElementType>(
   props: Props<TTag> & MetafieldProps
 ) {
-  const {metafield, children, as, ...passthroughProps} = props;
+  const {data, children, as, ...passthroughProps} = props;
   const {locale} = useShop();
 
-  if (metafield.value == null) {
-    console.warn(`No metafield value for ${metafield}`);
+  if (data.value == null) {
+    console.warn(`No metafield value for ${data}`);
     return null;
   }
 
-  switch (metafield.type) {
+  switch (data.type) {
     case 'date': {
       const Wrapper = as ?? 'time';
       return (
         <Wrapper {...passthroughProps}>
-          {(metafield.value as Date).toLocaleDateString(locale)}
+          {(data.value as Date).toLocaleDateString(locale)}
         </Wrapper>
       );
     }
@@ -46,7 +46,7 @@ export function Metafield<TTag extends ElementType>(
       const Wrapper = as ?? 'time';
       return (
         <Wrapper {...passthroughProps}>
-          {(metafield.value as Date).toLocaleString(locale)}
+          {(data.value as Date).toLocaleString(locale)}
         </Wrapper>
       );
     }
@@ -56,16 +56,14 @@ export function Metafield<TTag extends ElementType>(
       const Wrapper = as ?? 'span';
       return (
         <Wrapper {...passthroughProps}>
-          {getMeasurementAsString(metafield.value as Measurement, locale)}
+          {getMeasurementAsString(data.value as Measurement, locale)}
         </Wrapper>
       );
     }
     case 'rating': {
       const Wrapper = as ?? 'span';
       return (
-        <Wrapper {...passthroughProps}>
-          {(metafield.value as Rating).value}
-        </Wrapper>
+        <Wrapper {...passthroughProps}>{(data.value as Rating).value}</Wrapper>
       );
     }
     case 'single_line_text_field': {
@@ -73,7 +71,7 @@ export function Metafield<TTag extends ElementType>(
         <RawHtml
           {...(passthroughProps as any)}
           as={as ?? 'span'}
-          string={metafield.value as string}
+          string={data.value as string}
         />
       );
     }
@@ -82,36 +80,32 @@ export function Metafield<TTag extends ElementType>(
         <RawHtml
           {...(passthroughProps as any)}
           as={as ?? 'span'}
-          string={(metafield.value as string).split('\n').join('<br/>')}
+          string={(data.value as string).split('\n').join('<br/>')}
         />
       );
     }
     case 'url':
       return (
-        <a href={metafield.value as string} {...passthroughProps}>
-          {metafield.value}
+        <a href={data.value as string} {...passthroughProps}>
+          {data.value}
         </a>
       );
     case 'json':
       const Wrapper = as ?? 'span';
       return (
-        <Wrapper {...passthroughProps}>
-          {JSON.stringify(metafield.value)}
-        </Wrapper>
+        <Wrapper {...passthroughProps}>{JSON.stringify(data.value)}</Wrapper>
       );
     case 'file_reference': {
-      if (metafield.reference?.__typename === 'MediaImage') {
-        const ref = metafield.reference as MediaImage;
-        return ref.image ? (
-          <Image image={ref.image} {...passthroughProps} />
+      if (data.reference?.__typename === 'MediaImage') {
+        const ref = data.reference as MediaImage;
+        return ref.data ? (
+          <Image data={ref.data} {...passthroughProps} />
         ) : null;
       }
     }
     default: {
       const Wrapper = as ?? 'span';
-      return (
-        <Wrapper {...passthroughProps}>{metafield.value.toString()}</Wrapper>
-      );
+      return <Wrapper {...passthroughProps}>{data.value.toString()}</Wrapper>;
     }
   }
 }

@@ -49,5 +49,5 @@ export function ProductMetafield<TTag extends ElementType>(
     return null;
   }
 
-  return <Metafield metafield={field} {...passthroughProps} />;
+  return <Metafield data={field} {...passthroughProps} />;
 }

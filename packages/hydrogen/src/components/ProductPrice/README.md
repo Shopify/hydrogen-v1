@@ -10,7 +10,7 @@ import {ProductPrice, ProductProvider} from '@shopify/hydrogen';
 
 export function Product({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <ProductPrice priceType="compareAt" valueType="max" />
     </ProductProvider>
   );
@@ -23,10 +23,6 @@ export function Product({product}) {
 | ---------- | ----------------------------------------- | -------------------------------------------------------------------- |
 | priceType? | <code>"regular" &#124; "compareAt"</code> | The type of price. Valid values: `regular` (default) or `compareAt`. |
 | valueType? | <code>"max" &#124; "min"</code>           | The type of value. Valid values: `min` (default) or `max`.           |
-
-## Alias
-
-The `ProductPrice` component is aliased by the `Product.Price` component. You can use whichever component you prefer.
 
 ## Component type
 

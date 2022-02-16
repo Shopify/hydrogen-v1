@@ -10,12 +10,13 @@ import {
 export default function Gallery() {
   const {media, selectedVariant} = useProduct();
 
-  const featuredMedia = selectedVariant.image || media[0].image;
-  const featuredMediaSrc = featuredMedia.url.split('?')[0];
+  const featuredMedia = selectedVariant.image || media[0]?.image;
+  const featuredMediaSrc = featuredMedia?.url.split('?')[0];
   const galleryMedia = media.filter((med) => {
     if (
       med.mediaContentType === MODEL_3D_TYPE ||
-      med.mediaContentType === VIDEO_TYPE
+      med.mediaContentType === VIDEO_TYPE ||
+      med.mediaContentType === EXTERNAL_VIDEO_TYPE
     ) {
       return true;
     }
@@ -45,7 +46,7 @@ export default function Gallery() {
             tabIndex="0"
             key={med.id || med.image.id}
             className="w-[80vw] md:w-auto h-full md:h-auto object-cover object-center transition-all snap-start border border-gray-200 flex-shrink-0 rounded-lg"
-            media={med}
+            data={med}
             options={{
               height: '485',
               crop: 'center',
@@ -63,3 +64,4 @@ const MODEL_3D_PROPS = {
   interactionPromptThreshold: '0',
 };
 const VIDEO_TYPE = 'VIDEO';
+const EXTERNAL_VIDEO_TYPE = 'EXTERNAL_VIDEO';

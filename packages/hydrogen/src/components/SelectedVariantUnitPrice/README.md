@@ -10,16 +10,12 @@ import {SelectedVariantUnitPrice, ProductProvider} from '@shopify/hydrogen';
 
 export function ProductDetails({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <SelectedVariantUnitPrice />
     </ProductProvider>
   );
 }
 ```
-
-## Alias
-
-The `SelectedVariantUnitPrice` component is aliased by the `Product.SelectedVariant.UnitPrice` component. You can use whichever component you prefer.
 
 ## Component type
 

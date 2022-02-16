@@ -12,10 +12,13 @@ Runs the Hydrogen dev project on the port specified as `$PORT`, defaulting to `8
 ```bash
 yarn build
 
-yarn workspace dev serve
+yarn serve
 ```
 
-Visit the project running at http://localhost:8080.
+> Note:
+> Depending on the platform you deploy to (for example, Heroku, Google Cloud Platform, or Vercel), you might need to modify the configuration of `server.js`.
+
+If you're using the default port, then the production version of your app will be running at http://localhost:8080.
 
 ### Platform: Docker
 
@@ -55,6 +58,8 @@ entry-point = "."
 upload.format = "service-worker"
 command = "yarn && yarn build"
 ```
+
+For more information about the configurable properties in the `wrangler.toml` file, refer to Cloudflare's [configuration](https://developers.cloudflare.com/workers/cli-wrangler/configuration) and [compatibility dates](https://developers.cloudflare.com/workers/platform/compatibility-dates) documentation.
 
 Install Cloudflare's KV asset handler:
 

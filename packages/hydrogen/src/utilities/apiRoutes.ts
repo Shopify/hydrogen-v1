@@ -1,6 +1,6 @@
 import {ImportGlobEagerOutput} from '../types';
 import {matchPath} from './matchPath';
-import {Logger, logServerResponse} from '../utilities/log/log';
+import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 
 let memoizedRoutes: Array<HydrogenApiRoute> = [];
@@ -108,10 +108,10 @@ export function getApiRouteFromURL(
 
 export async function renderApiRoute(
   request: Request,
-  route: ApiRouteMatch,
-  log: Logger
+  route: ApiRouteMatch
 ): Promise<Response> {
   let response;
+  const log = getLoggerWithContext(request);
 
   try {
     response = await route.resource(request, {params: route.params});
@@ -132,12 +132,7 @@ export async function renderApiRoute(
     response = new Response('Error processing: ' + request.url, {status: 500});
   }
 
-  logServerResponse(
-    'api',
-    log,
-    request as ServerComponentRequest,
-    response.status
-  );
+  logServerResponse('api', request as ServerComponentRequest, response.status);
 
   return response;
 }

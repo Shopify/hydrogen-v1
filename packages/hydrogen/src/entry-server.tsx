@@ -2,8 +2,9 @@ import React from 'react';
 import {
   Logger,
   logServerResponse,
-  getLoggerFromContext,
-} from './utilities/log/log';
+  logCacheControlHeaders,
+  getLoggerWithContext,
+} from './utilities/log';
 import {getErrorMarkup} from './utilities/error';
 import {defer} from './utilities/defer';
 import type {
@@ -42,6 +43,7 @@ import {
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
+import {RSC_PATHNAME} from './constants';
 
 declare global {
   // This is provided by a Vite plugin
@@ -49,13 +51,6 @@ declare global {
   // eslint-disable-next-line no-var
   var __WORKER__: boolean;
 }
-
-/**
- * If a query is taking too long, or something else went wrong,
- * send back a response containing the Suspense fallback and rely
- * on the client to hydrate and build the React tree.
- */
-const STREAM_ABORT_TIMEOUT_MS = 3000;
 
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
@@ -81,7 +76,7 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
   ) {
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
-    const log = getLoggerFromContext(request);
+    const log = getLoggerWithContext(request);
     const componentResponse = new ServerComponentResponse();
 
     /**
@@ -91,7 +86,7 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
     setContext(context);
     setConfig({dev});
 
-    const isReactHydrationRequest = url.pathname === '/react';
+    const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
     const template =
       typeof indexTemplate === 'function'
@@ -107,7 +102,7 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        return renderApiRoute(request, apiRoute, log);
+        return renderApiRoute(request, apiRoute);
       }
     }
 
@@ -200,7 +195,8 @@ async function render(
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
 
-    logServerResponse('ssr', log, request, status);
+    logServerResponse('ssr', request, status);
+    logCacheControlHeaders('ssr', request, componentResponse);
 
     return new Response(await componentResponse.customBody, {
       status,
@@ -228,7 +224,8 @@ async function render(
         : '$&'
     );
 
-  logServerResponse('ssr', log, request, status);
+  logServerResponse('ssr', request, status);
+  logCacheControlHeaders('ssr', request, componentResponse);
 
   return new Response(html, {
     status,
@@ -403,11 +400,13 @@ async function stream(
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => writable.close(), 0);
-        logServerResponse('str', log, request, responseOptions.status);
+        logServerResponse('str', request, responseOptions.status);
+        logCacheControlHeaders('str', request, componentResponse);
       });
     } else {
       writable.close();
-      logServerResponse('str', log, request, responseOptions.status);
+      logServerResponse('str', request, responseOptions.status);
+      logCacheControlHeaders('str', request, componentResponse);
     }
 
     if (await isStreamingSupported()) {
@@ -438,7 +437,7 @@ async function stream(
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
-        logServerResponse('str', log, request, response.statusCode);
+        logServerResponse('str', request, response.statusCode);
 
         if (isRedirect(response)) {
           // Return redirects early without further rendering/streaming
@@ -461,13 +460,15 @@ async function stream(
       },
       async onCompleteAll() {
         log.trace('node complete stream');
-        clearTimeout(streamTimeout);
+
+        logCacheControlHeaders('str', request, componentResponse);
 
         if (componentResponse.canStream() || response.writableEnded) return;
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
-        logServerResponse('str', log, request, response.statusCode);
+        logServerResponse('str', request, response.statusCode);
+        logCacheControlHeaders('str', request, componentResponse);
 
         if (isRedirect(response)) {
           // Redirects found after any async code
@@ -501,10 +502,6 @@ async function stream(
         log.error(error);
       },
     });
-
-    const streamTimeout = setTimeout(() => {
-      log.warn(`The app failed to stream after ${STREAM_ABORT_TIMEOUT_MS} ms`);
-    }, STREAM_ABORT_TIMEOUT_MS);
   }
 }
 
@@ -538,14 +535,16 @@ async function hydrate(
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      logServerResponse('rsc', log, request, 200);
+      logServerResponse('rsc', request, 200);
+      logCacheControlHeaders('rsc', request, componentResponse);
       return new Response(rscReadable);
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    logServerResponse('rsc', log, request, 200);
+    logServerResponse('rsc', request, 200);
+    logCacheControlHeaders('rsc', request, componentResponse);
 
     return new Response(bufferedBody);
   } else if (response) {
@@ -561,7 +560,8 @@ async function hydrate(
       .pipe(response) as Writable;
 
     stream.on('finish', function () {
-      logServerResponse('rsc', log, request, response!.statusCode);
+      logServerResponse('rsc', request, response.statusCode);
+      logCacheControlHeaders('rsc', request, componentResponse);
     });
   }
 }
@@ -652,16 +652,11 @@ async function renderToBufferedString(
   {log, nonce}: {log: Logger; nonce?: string}
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
-    const errorTimeout = setTimeout(() => {
-      log.warn(`The app failed to SSR after ${STREAM_ABORT_TIMEOUT_MS} ms`);
-    }, STREAM_ABORT_TIMEOUT_MS);
-
     if (__WORKER__) {
       const deferred = defer();
       const readable = ssrRenderToReadableStream(ReactApp, {
         nonce,
         onCompleteAll() {
-          clearTimeout(errorTimeout);
           /**
            * We want to wait until `onCompleteAll` has been called before fetching the
            * stream body. Otherwise, React 18's streaming JS script/template tags
@@ -689,8 +684,6 @@ async function renderToBufferedString(
          * `template` and `script` tags inserted and rendered as part of the hydration response.
          */
         onCompleteAll() {
-          clearTimeout(errorTimeout);
-
           let data = '';
           writer.on('data', (chunk) => (data += chunk.toString()));
           writer.once('error', reject);

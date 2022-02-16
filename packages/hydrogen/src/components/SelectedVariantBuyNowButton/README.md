@@ -15,16 +15,12 @@ import {
 
 export function ProductDetails({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <SelectedVariantBuyNowButton>Buy it now</SelectedVariantBuyNowButton>
     </ProductProvider>
   );
 }
 ```
-
-## Alias
-
-The `SelectedVariantBuyNowButton` component is aliased by the `Product.SelectedVariant.BuyNowButton` component. You can use whichever component you prefer.
 
 ## Component type
 

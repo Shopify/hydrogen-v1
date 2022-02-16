@@ -10,7 +10,7 @@ import {SelectedVariantPrice, ProductProvider} from '@shopify/hydrogen';
 
 export function ProductDetails({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <SelectedVariantPrice priceType="compareAt" />
     </ProductProvider>
   );
@@ -22,10 +22,6 @@ export function ProductDetails({product}) {
 | Name       | Type                                      | Description                                                          |
 | ---------- | ----------------------------------------- | -------------------------------------------------------------------- |
 | priceType? | <code>"regular" &#124; "compareAt"</code> | The type of price. Valid values: `regular` (default) or `compareAt`. |
-
-## Alias
-
-The `SelectedVariantPrice` component is aliased by the `Product.SelectedVariant.Price` component. You can use whichever component you prefer.
 
 ## Component type
 

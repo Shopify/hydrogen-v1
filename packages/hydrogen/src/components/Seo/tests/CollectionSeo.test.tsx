@@ -41,6 +41,7 @@ jest.mock('../../../client', () => ({
 const defaultProps = {
   title: 'default title',
   description: 'default description',
+  seo: {},
 };
 
 describe('<CollectionSeo />', () => {

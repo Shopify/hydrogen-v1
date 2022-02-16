@@ -10,17 +10,13 @@ import {SelectedVariantShopPayButton, ProductProvider} from '@shopify/hydrogen';
 
 export function ProductDetails({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       {/* Code for selecting the product variant */}
       <SelectedVariantShopPayButton />
     </ProductProvider>
   );
 }
 ```
-
-## Alias
-
-The `SelectedVariantShopPayButton` component is aliased by the `Product.SelectedVariant.ShopPayButton` component. You can use whichever component you prefer.
 
 ## Component type
 

@@ -15,7 +15,7 @@ import {
 
 export function ProductDetails({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <ProductOptions />
       <SelectedVariantAddToCartButton>
         Add to cart
@@ -53,10 +53,6 @@ function ProductOptions() {
   });
 }
 ```
-
-## Alias
-
-The `SelectedVariantAddToCartButton` component is aliased by the `Product.SelectedVariant.AddToCartButton` component. You can use whichever component you prefer.
 
 ## Component type
 

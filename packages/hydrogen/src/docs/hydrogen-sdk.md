@@ -92,10 +92,6 @@ The `ShopifyProvider` component relates to the following global hooks that you c
     <td>Use to get current url in server or client component.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
-    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/hooks/global/useserverstate">useServerState</a></td>
     <td>Manage a server state when using Hydrogen as a React Server Component framework.</td>
   </tr>
@@ -106,6 +102,14 @@ The `ShopifyProvider` component relates to the following global hooks that you c
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshopquery">useShopQuery</a></td>
     <td>Make server-only GraphQL queries to the <a href="/api/storefront">Storefront API</a>.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
+    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
+    <td>Retrieve the current URL in a server or client component.</td>
   </tr>
 </table>
 
@@ -326,6 +330,10 @@ Hydrogen includes the following utilities to help speed up your development proc
     <th>Description</th>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/utilities/flattenconnection">flattenConnection</a></td>
+    <td>Transforms a connection object into a flat array.</td>
+  </tr>
+  <tr>
     <td><a href="/api/hydrogen/utilities/isclient">isClient</a></td>
     <td>Indicates if the code executed on the client.</td>
   </tr>
@@ -334,16 +342,12 @@ Hydrogen includes the following utilities to help speed up your development proc
     <td>Indicates if the code executed on the server.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/utilities/flattenconnection">flattenConnection</a></td>
-    <td>Transforms a connection object into a flat array.</td>
+    <td><a href="/api/hydrogen/utilities/log">log</a></td>
+    <td>Logs debugging, warning, and error information about the application.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/utilities/parsemetafieldvalue">parseMetafieldValue</a></td>
     <td>Parses a metafield's value from a string to a sensible type corresponding to the metafield's type.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/utilities/log">log</a></td>
-    <td>A utility for logging debugging, warning, and error information about the application</td>
   </tr>
 </table>
 

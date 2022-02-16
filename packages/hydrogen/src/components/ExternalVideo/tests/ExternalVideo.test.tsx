@@ -1,12 +1,12 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
 import {ExternalVideo} from '../ExternalVideo';
-import {getExternalVideo} from '../../../utilities/tests/media';
+import {getExternalVideoData} from '../../../utilities/tests/media';
 
 describe('<ExternalVideo />', () => {
   it('renders an iframe element with sensible defaults', () => {
-    const video = getExternalVideo();
-    const component = mount(<ExternalVideo video={video} />);
+    const video = getExternalVideoData();
+    const component = mount(<ExternalVideo data={video} />);
 
     expect(component).toContainReactComponent('iframe', {
       src: video.embeddedUrl,
@@ -21,7 +21,7 @@ describe('<ExternalVideo />', () => {
   it('allows defaults to be overridden', () => {
     const component = mount(
       <ExternalVideo
-        video={getExternalVideo()}
+        data={getExternalVideoData()}
         id="hello"
         allow="autoplay"
         allowFullScreen={false}
@@ -44,7 +44,7 @@ describe('<ExternalVideo />', () => {
     };
     const component = mount(
       <ExternalVideo
-        video={getExternalVideo({
+        data={getExternalVideoData({
           embeddedUrl: 'https://www.youtube.com/embed/a2YSgfwXc9c',
         })}
         options={options}
@@ -58,11 +58,26 @@ describe('<ExternalVideo />', () => {
 
   it('allows passthrough props', () => {
     const component = mount(
-      <ExternalVideo video={getExternalVideo()} className="fancy" />
+      <ExternalVideo data={getExternalVideoData()} className="fancy" />
     );
 
     expect(component).toContainReactComponent('iframe', {
       className: 'fancy',
+    });
+  });
+
+  it('transforms a valid youtube shortened url to an embed compatibile url', () => {
+    const invalidUrl = 'https://youtu.be/a2YSgfwXc9c';
+    const validUrl = invalidUrl.replace(/youtu\.be/, 'www.youtube.com/embed');
+    const component = mount(
+      <ExternalVideo
+        data={getExternalVideoData({
+          embeddedUrl: invalidUrl,
+        })}
+      />
+    );
+    expect(component).toContainReactComponent('iframe', {
+      src: validUrl,
     });
   });
 });

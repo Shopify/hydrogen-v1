@@ -10,16 +10,12 @@ import {SelectedVariantImage, ProductProvider} from '@shopify/hydrogen';
 
 export function ProductDetails({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <SelectedVariantImage />
     </ProductProvider>
   );
 }
 ```
-
-## Alias
-
-The `SelectedVariantImage` component is aliased by the `Product.SelectedVariant.Image` component. You can use whichever component you prefer.
 
 ## Component type
 

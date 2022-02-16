@@ -20,13 +20,18 @@ describe('CartShopPayButton', () => {
 
   it('renders a ShopPayButton', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={CART_WITH_LINES}>
+      <CartProvider data={CART_WITH_LINES}>
         <CartShopPayButton />
       </CartProvider>
     );
 
     expect(wrapper).toContainReactComponent(ShopPayButton, {
-      variantIds: [CART_WITH_LINES.lines.edges[0].node.merchandise.id],
+      variantIdsAndQuantities: [
+        {
+          id: CART_WITH_LINES.lines.edges[0].node.merchandise.id,
+          quantity: CART_WITH_LINES.lines.edges[0].node.quantity,
+        },
+      ],
     });
   });
 });

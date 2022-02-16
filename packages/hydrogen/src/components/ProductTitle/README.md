@@ -11,16 +11,12 @@ import {ProductTitle, ProductProvider} from '@shopify/hydrogen';
 
 export function Product({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <ProductTitle />
     </ProductProvider>
   );
 }
 ```
-
-## Alias
-
-The `ProductTitle` component is aliased by the `Product.Title` component. You can use whichever component you prefer.
 
 ## Component type
 

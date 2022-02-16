@@ -88,7 +88,11 @@ describe('<Seo />', () => {
       seo: {},
       handle: 'default handle',
       vendor: 'default vendor',
-      images: {edges: []},
+      featuredImage: {
+        url: 'https://test-123/image.png',
+        width: 1200,
+        height: 600,
+      },
       variants: {
         edges: [],
       },
@@ -105,6 +109,7 @@ describe('<Seo />', () => {
     const collection = {
       title: 'default title',
       description: 'default description',
+      seo: {},
     };
     const wrapper = mount(<Seo type="collection" data={collection} />);
 

@@ -20,8 +20,8 @@ export function SelectedVariantUnitPrice<TTag extends ElementType>(
     product.selectedVariant?.unitPriceMeasurement ? (
     <UnitPrice
       {...props}
-      unitPrice={product.selectedVariant.unitPrice}
-      unitPriceMeasurement={product.selectedVariant.unitPriceMeasurement}
+      data={product.selectedVariant.unitPrice}
+      measurement={product.selectedVariant.unitPriceMeasurement}
     />
   ) : null;
 }

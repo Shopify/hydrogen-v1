@@ -3,9 +3,6 @@
 The `UnitPrice` component renders a string with a [UnitPrice](/themes/pricing-payments/unit-pricing) as the
 [Storefront API's `MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) with a reference unit from the [Storefront API's `UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement).
 
-If `children` is a function, then it will provide render props for the `children` corresponding to the object
-returned by the `useMoney` hook and the `UnitPriceMeasurement` object.
-
 ## Example code
 
 ```tsx
@@ -40,42 +37,20 @@ export default function Product() {
 
   return (
     <UnitPrice
-      unitPrice={selectedVariant.unitPrice}
-      unitPriceMeasurement={selectedVariant.unitPriceMeasurement}
+      data={selectedVariant.unitPrice}
+      measurement={selectedVariant.unitPriceMeasurement}
     />
-  );
-}
-
-export default function ProductWithCustomUnitPrice() {
-  const {data} = useShopQuery({query: QUERY});
-  const selectedVariant = data.product.variants.edges[0].node;
-
-  return (
-    <UnitPrice
-      unitPrice={selectedVariant.unitPrice}
-      unitPriceMeasurement={selectedVariant.unitPriceMeasurement}
-    >
-      {({amount, currencyCode, currencyNarrowSymbol, referenceUnit}) => {
-        return (
-          <>
-            <span>{`${currencyNarrowSymbol}${amount}/${referenceUnit}`}</span>
-            <span>{currencyCode}</span>
-          </>
-        );
-      }}
-    </UnitPrice>
   );
 }
 ```
 
 ## Props
 
-| Name                 | Type                              | Description                                                                                      |
-| -------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------ |
-| unitPrice            | <code>MoneyV2</code>              | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                          |
-| unitPriceMeasurement | <code>UnitPriceMeasurement</code> | A [`UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement).      |
-| children?            | <code>ReactNode</code>            | A function that takes an object returned by the `UnitPrice` component and returns a `ReactNode`. |
-| as?                  | <code>ElementType</code>          | An HTML tag to be rendered as the base element wrapper. The default is `div`.                    |
+| Name        | Type                              | Description                                                                                 |
+| ----------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
+| data        | <code>MoneyV2</code>              | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                     |
+| measurement | <code>UnitPriceMeasurement</code> | A [`UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement). |
+| as?         | <code>ElementType</code>          | An HTML tag to be rendered as the base element wrapper. The default is `div`.               |
 
 ## Component type
 

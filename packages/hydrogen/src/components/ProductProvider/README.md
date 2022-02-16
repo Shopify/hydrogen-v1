@@ -23,14 +23,18 @@ export function Product() {
   const {data} = useShopQuery({query: QUERY});
 
   return (
-    <ProductProvider product={data.product}>{/* Your JSX */}</ProductProvider>
+    <ProductProvider data={data.product}>{/* Your JSX */}</ProductProvider>
   );
 }
 ```
 
-## Alias
+## Props
 
-The `ProductProvider` component is aliased by the `Product` component. You can use whichever component you prefer.
+| Name               | Required | Description                                                                                                                         |
+| ------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `children`         | Yes      | A `ReactNode` element.                                                                                                              |
+| `data`             | Yes      | A [Product object](/api/storefront/reference/products/product).                                                                     |
+| `initialVariantId` | No       | The initially selected variant. This is required only if you're using a `SelectedVariantX` hook in the `ProductProvider` component. |
 
 ## Component type
 
@@ -154,12 +158,8 @@ const QUERY = gql`
         title
         description
       }
-      images(first: 1) {
-        edges {
-          node {
-            url
-          }
-        }
+      featuredImage {
+        url
       }
       ...ProductProviderFragment
     }

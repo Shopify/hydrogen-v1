@@ -61,7 +61,6 @@ export default () => {
            */
           'react',
           'react-dom',
-          'react-router-dom',
           'react-server-dom-vite/client-proxy',
         ],
       },
@@ -72,6 +71,7 @@ export default () => {
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],
+      base: process.env.HYDROGEN_ASSET_BASE_URL,
     }),
 
     // TODO: Remove when react-dom/fizz is fixed

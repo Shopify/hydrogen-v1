@@ -38,7 +38,7 @@ export interface Product {
     description?: Description;
   };
   vendor: string;
-  images: {edges: {node: Image}[]};
+  featuredImage: Image;
   variants: {
     edges: {
       node: {
@@ -56,7 +56,7 @@ export interface Product {
 export interface Collection {
   title: Title;
   description: Description;
-  seo?: {
+  seo: {
     title?: Title;
     description?: Description;
   };

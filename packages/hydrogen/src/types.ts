@@ -1,4 +1,4 @@
-import {ServerResponse} from 'http';
+import type {ServerResponse} from 'http';
 import type {Logger} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -67,7 +67,7 @@ export interface MediaImage {
   __typename?: string;
   id?: string;
   mediaContentType?: MediaContentType;
-  image?: Pick<Image, 'altText' | 'url' | 'id' | 'width' | 'height'>;
+  data?: Pick<Image, 'altText' | 'url' | 'id' | 'width' | 'height'>;
 }
 
 interface ProductVariant {

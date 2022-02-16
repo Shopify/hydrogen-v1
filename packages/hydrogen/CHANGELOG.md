@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- feat: remove `fetch` workaround
+- feat: change `/react` RSC path to `/__rsc`
 - `<Model3D>` has been renamed to `<ModelViewer>`
 - Fix index routes. See [#562](https://github.com/Shopify/hydrogen/issues/562)
 - Feature - `<ShopifyProvider>` can again be used in server components
@@ -32,6 +34,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `useCartNoteUpdateCallback`
 - Feat: Transition away from deprecated currency selector in favor of country selector
 - dx: The following money components no longer allow the function-as-a-child (also known as "render props") pattern; see #589.
+
   - `<Money>` Use `useMoney()` for customization
   - `<CartLinePrice>` Use `useMoney()` for customization
   - `<ProductPrice>` Use `useMoney()` for customization
@@ -39,6 +42,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `<Metafield>` Use `useParsedMetafields()` for customization
   - `<ProductMetafield>` Use `useParsedMetafields()` for customization
   - `<SelectedVariantMetafield>` Use `useParsedMetafields()` for customization
+  - `<UnitPrice>` Use `useMoney()` for customization
+  - `<CartLines>` Use `useCart()` for customization
+
 - refactor: `<Metafield>` now renders `ratings` as a `<span>` with text instead of stars; `multi_line_text_field` inside of a `<span>` instead of a `<div>`
 - Fix: add charset to content type in HTML responses
 - Fix header shift when cart is opened by @Francismori7 in #600
@@ -46,6 +52,31 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
 - feat: added `useUrl` hook that allows the consumer to get the current url in server or client component
 - fix: fix bug where search param is not being pass along during RSC streaming call [#623](https://github.com/Shopify/hydrogen/pull/623)
+- feat: expect collection seo by default
+- feat: Added logging option `showCacheApiStatus` and `cacheControlHeader` by @wizardlyhel in #472
+- fix: allow custom entry-client filenames
+- fix: Clear browser fetch cache by @wizardlyhel in [#591](https://github.com/Shopify/hydrogen/pull/591)
+- refactor: use featureImage instead of images(first:1) on product query
+- fix: target future release to use '2022-01' API Version
+- fix: cannot redefine property error when updating client components
+- fix: `ShopPayButton` supports quantities greater than 1. Also fixed issues with IDs in Storefront API version 2022-01
+- fix: render error in `Gallery.client.jsx` component when product resource has an external video or no images.
+- fix: ensure youtube external videos are embed compatible urls
+- feat: pass HYDROGEN_ASSET_BASE_URL into config to set base URL for compiled assets
+- dx [breaking change]: `<Product />` and `<CartLine />` aliases have been removed; use the original components `<ProductProvider />` and `<CartLineProvider />` instead. Their nested component aliases, such as `<Product.Image />`, have also been removed; in this example you should use `<ProductImage />`.
+- feat: remove React Router on the client and introduce Hydrogen the `<Link>` component and `useNavigate` hook
+- fix: prevent client components from being cached during development
+- refactor: the following components had their prop name renamed. Refer to the documentation or [#627](https://github.com/Shopify/hydrogen/issues/627] for more details.
+  - `<ExternalVideo />`: renamed video prop to data
+  - `<Video />`: renamed video prop to data
+  - `<Image>`: renamed image prop to data
+  - `<MediaFile>`: renamed media prop to data
+  - `<ModelViewer>`: renamed model prop to data
+  - `<Metafield>`: renamed metafield prop to data
+  - `<Money>`: renamed money prop to data
+  - `<UnitPrice>`: renamed unitPrice prop to data, unitPriceMeasurement prop to measurement
+  - `<ProductProvider>`: renamed product prop to data
+  - `<CartProvider>`: renamed cart prop to data
 
 ## 0.10.1 - 2022-01-26
 

@@ -3,7 +3,7 @@ import {useCartLine} from '../CartLineProvider';
 import {Money, MoneyProps} from '../Money';
 import {Props} from '../types';
 
-export interface CartLinePriceProps extends Omit<MoneyProps, 'money'> {
+export interface CartLinePriceProps extends Omit<MoneyProps, 'data'> {
   /** The type of price. Valid values:`regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
 }
@@ -30,7 +30,7 @@ export function CartLinePrice<TTag extends ElementType>(
   return (
     <Money
       {...passthroughProps}
-      money={{
+      data={{
         amount: price.amount * cartLine.quantity,
         currencyCode: price.currencyCode,
       }}

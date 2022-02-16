@@ -113,11 +113,7 @@ function ReactFlightVitePlugin() {
             importerToRootNested.replace(/\/?$/, path.sep)
           )
         );
-        var userGlob = path.join(
-          importerToRootPath,
-          'src',
-          CLIENT_COMPONENT_GLOB
-        );
+        var userGlob = path.join(importerToRootPath, CLIENT_COMPONENT_GLOB);
         var importers = [[userGlob, userPrefix]];
         clientComponentPaths.forEach(function (componentPath) {
           var libPrefix = componentPath + path.sep;

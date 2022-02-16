@@ -1,6 +1,6 @@
 import React, {ElementType} from 'react';
 import {useCartLine} from '../CartLineProvider';
-import {Image as ImageComponent} from '../Image';
+import {Image} from '../Image';
 import {Props} from '../types';
 import {ImageSizeOptions} from '../../utilities';
 
@@ -16,9 +16,9 @@ export function CartLineImage<TTag extends ElementType = 'img'>(
   const {options, ...passthroughProps} = props;
 
   return cartLine.merchandise.image ? (
-    <ImageComponent
+    <Image
       {...passthroughProps}
-      image={cartLine.merchandise.image}
+      data={cartLine.merchandise.image}
       options={options}
     />
   ) : null;

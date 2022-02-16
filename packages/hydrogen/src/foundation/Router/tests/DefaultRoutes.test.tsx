@@ -291,7 +291,12 @@ it('factors in the top-level path prefix', () => {
 });
 
 it("errors routes don't have a default or api export", () => {
-  const log: Logger = {...console, fatal: jest.fn(), warn: jest.fn()};
+  const log: Logger = {
+    ...console,
+    fatal: jest.fn(),
+    warn: jest.fn(),
+    options: jest.fn(),
+  };
   const pages: ImportGlobEagerOutput = {
     './pages/contact.server.jsx': {} as any,
   };
