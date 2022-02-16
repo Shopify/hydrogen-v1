@@ -14,7 +14,7 @@ import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
-  cache: CachingStrategy | undefined;
+  cache?: CachingStrategy;
 }
 
 /**
