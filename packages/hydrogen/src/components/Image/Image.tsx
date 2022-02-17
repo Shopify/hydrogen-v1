@@ -85,7 +85,7 @@ export function Image<TTag extends React.ElementType = 'img'>(
 
   if (!data && !src) {
     throw new Error(
-      'Image component: requires either an `image` or `src` prop'
+      'Image component: requires either an `data` or `src` prop.'
     );
   }
 
