@@ -47,7 +47,9 @@ When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/cr
 
 {% endcodeblock %}
 
-Note that Hydrogen's default client entry point (for hydration) is `/@shopify/hydrogen/entry-client`, which is included in `index.html`. If you need control over the entry point, create a new file such as `/src/entry-client.jsx` with the following content and update the path in `index.html`:
+## Configuring default entry points
+
+Hydrogen's default client entry point is `/@shopify/hydrogen/entry-client`, which is included in `index.html` and used for hydration purposes. If you need to configure the entry point, then create a new file such as `/src/entry-client.jsx` with the following content and update the path in `index.html`:
 
 {% codeblock file, filename: '/src/entry-client.jsx' %}
 
@@ -61,7 +63,7 @@ export default renderHydrogen(ClientWrapper);
 
 {% endcodeblock %}
 
-For changing Hydrogen's default server entry point (`/src/App.server.jsx`), pass an environment variable `HYDROGEN_SERVER_ENTRY` to the development command (`HYDROGEN_SERVER_ENTRY=/my/path/MyApp.server vite`) or use the `--ssr` flag when building (`vite build --ssr /my/path/MyApp.server`).
+To change Hydrogen's default server entry point (`/src/App.server.jsx`), pass an environment variable `HYDROGEN_SERVER_ENTRY` to the development command (`HYDROGEN_SERVER_ENTRY=/my/path/MyApp.server vite`) or use the `--ssr` flag when building (`vite build --ssr /my/path/MyApp.server`).
 
 ## Request workflow for Hydrogen apps
 

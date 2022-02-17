@@ -225,9 +225,9 @@ export async function api(request, {params}) {
 
 If you created a Hydrogen app before January 19, 2022, and you want to implement an API route, then you need to make the following changes:
 
-1. Place `const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');` in `App.server.jsx` outside of `App` component.
+1. Place `const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');` in `App.server.jsx` outside of the `App` component.
 2. Pass the `pages` constant to the `renderHydrogen` function.
-3. Make sure that `App` component receives `pages` as a prop.
+3. Make sure that the `App` component receives `pages` as a prop.
 
 > Note:
 > All Hydrogen apps created after January 19, 2022 automatically include these changes.
