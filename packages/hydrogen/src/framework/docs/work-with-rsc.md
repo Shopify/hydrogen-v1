@@ -12,6 +12,8 @@ Hydrogen provides the following ways to fetch data from server components:
 - [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery): A hook that allows you to make server-only GraphQL queries to the Storefront API.
 - [`useQuery`](/api/hydrogen/hooks/global/usequery): A simple wrapper around `fetch` that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs.
 
+To learn how to fetch data from third-party sources, refer to [Data sources](/custom-storefronts/hydrogen/data-sources).
+
 ### Example
 
 The following example shows a server component (`Product.server.jsx`) that uses the `useShopQuery` hook to fetch data. The data is passed to a client component (`WishListButton.client.jsx`) that uses state:
@@ -95,11 +97,11 @@ Sharing state information between the client and server is important for common 
 
    {% endcodeblock %}
 
-2. The `pathname` and `search` state is sent to the server. This happens through a `useServerResponse` fetch call. It's a special server endpoint called `/react` which accepts `state` as a query parameter.
-3. The `/react` endpoint returns the wire representation for the new state.
+2. The `pathname` and `search` state is sent to the server. This happens through a `useServerResponse` fetch call. It's a special server endpoint called `/__rsc` which accepts `state` as a query parameter.
+3. The `/__rsc` endpoint returns the wire representation for the new state.
 4. The state is partially hydrated (made interactive) and rendered into the DOM, similar to how the initial page was made interactive.
 
-   Hydrogen uses `/react` for routing, but also for any other state that needs to be synced to the server.
+   Hydrogen uses `/__rsc` for routing, but also for any other state that needs to be synced to the server.
 
 ## Using `Context` in React Server Components
 

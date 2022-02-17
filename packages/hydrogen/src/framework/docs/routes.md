@@ -139,7 +139,7 @@ The `useNavigate` hook returns the following values:
 ## API routes
 
 > Note:
-> If you want to use a third-party data source to render Hydrogen components, then refer to [Third-party data source](/custom-storefronts/hydrogen/data-sources#third-party-data-source). If you want to use a third-party data source and render your own component, then refer to the [useQuery](/api/hydrogen/hooks/global/usequery) hook.
+> If you want to use a third-party data source to render Hydrogen components, then refer to [Using Hydrogen components with a third-party data source](/custom-storefronts/hydrogen/data-sources#using-hydrogen-components-with-a-third-party-data-source). If you want to fetch data that goes alongside your Shopify product data and shopping experience, then refer to [Fetching supplementary data](/custom-storefronts/hydrogen/data-sources#fetching-supplementary-data).
 
 API routes allow you to build your API in Hydrogen. Any server component within the `src/pages` directory that exports an API function will become an API route. The following examples show some common use cases for implementing API routes.
 

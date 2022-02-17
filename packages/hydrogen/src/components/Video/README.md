@@ -47,7 +47,7 @@ export default function MyProductVideo() {
 
 | Name     | Type                                                                                 | Description                                                           |
 | -------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| data     | <code>Unknown<<wbr>UndocumentedType, UndocumentedType, UndocumentedType<wbr>></code> | An object corresponding to the [GraphQL fragment](#graphql-fragment). |
+| data     | <code>Object<<wbr>VideoType, Pick<<wbr>Image, Pick<<wbr>VideoSource><wbr></code> | An object corresponding to the [GraphQL fragment](#graphql-fragment). |
 | options? | <code>ImageSizeOptions</code>                                                        | An object of image size options for the video's `previewImage`.       |
 
 ## Component type

@@ -42,7 +42,7 @@ export function MyComponentWithRenderProps() {
 | Name     | Type                   | Description                                                                                                             |
 | -------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | as?      | <code>"ul"</code>      | A `ReactNode` element. Valid values: `ul` or `undefined`. If `ul`, then each child will be wrapped with a `li` element. |
-| children | <code>ReactNode</code> | A `ReactNode` element                                                                                                   |
+| children | <code>ReactNode</code> | A `ReactNode` element.                                                                                                   |
 
 ## Component type
 

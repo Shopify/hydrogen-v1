@@ -12,8 +12,7 @@ Hydrogen also includes [default values for each mechanism](#default-values).
 
 ## Caching strategies
 
-Hydrogen includes recommended caching strategies to help you determine which
-cache control header to set.
+Hydrogen includes recommended caching strategies to help you determine which cache control header to set. The following table lists the available caching strategies and their associated cache control headers and cache durations:
 
 | Caching strategy | Cache control header                                      | Cache duration |
 | ---------------- | --------------------------------------------------------- | -------------- |
@@ -32,7 +31,7 @@ import {CacheSeconds} from '@shopify/hydrogen';
 response.cache(CacheSeconds());
 ```
 
-## Build your own caching strategies
+### Build your own caching strategies
 
 If you don't want to use the caching strategies provided by Hydrogen, then you can create your own to use in your project.
 
