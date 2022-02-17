@@ -28,7 +28,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
-import type {RealHelmetData} from './foundation/Helmet';
+import type {HelmetData} from 'react-helmet-async';
 
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
@@ -631,7 +631,7 @@ function buildAppSSR(
   return {AppSSR, rscReadable: rscReadableForFlight};
 }
 
-function extractHeadElements({context: {helmet}}: RealHelmetData) {
+function extractHeadElements({context: {helmet}}: HelmetData) {
   return helmet
     ? {
         base: helmet.base.toString(),
