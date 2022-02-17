@@ -117,7 +117,11 @@ export function useRequestCacheData<T>(
     });
   }
 
-  return cache.get(cacheKey).call() as RequestCacheResult<T>;
+  // Making sure the promise has returned data because it can be initated by a preload request,
+  // otherwise, we throw the promise
+  const result = cache.get(cacheKey).call();
+  if (result instanceof Promise) throw result;
+  return result as RequestCacheResult<T>;
 }
 
 export function preloadRequestCacheData(
@@ -127,6 +131,8 @@ export function preloadRequestCacheData(
   const cache = request.ctx.cache;
 
   preloadQueries?.forEach((preloadQuery, cacheKey) => {
+    collectQueryTimings(request, preloadQuery.key, 'preload');
+
     if (!cache.has(cacheKey)) {
       let data: unknown;
       let promise: Promise<unknown>;
@@ -144,7 +150,7 @@ export function preloadRequestCacheData(
               collectQueryTimings(
                 request,
                 preloadQuery.key,
-                'preload',
+                'data',
                 getTime() - startApiTime
               );
             },

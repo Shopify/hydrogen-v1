@@ -44,7 +44,10 @@ export function useQuery<T>(
   collectQueryTimings(request, withCacheIdKey, 'load');
 
   if (queryOptions?.preload) {
-    request.ctx.preloadQueries.set(hashKey(key), {key, fetcher});
+    request.ctx.preloadQueries.set(hashKey(withCacheIdKey), {
+      key: withCacheIdKey,
+      fetcher,
+    });
   }
 
   return useRequestCacheData<T>(withCacheIdKey, fetcher);

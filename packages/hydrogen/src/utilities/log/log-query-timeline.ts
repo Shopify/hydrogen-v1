@@ -3,7 +3,7 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 import {QueryKey} from '../../types';
 import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
-import {gray, red, yellow} from 'kolorist';
+import {gray, red, yellow, green} from 'kolorist';
 import {getLoggerWithContext} from './log';
 import {getTime} from '..';
 
@@ -64,11 +64,15 @@ export function logQueryTimings(
         delete detectSuspenseWaterfall[query.name];
       }
 
+      loadColor = query.timingType === 'preload' ? green : color;
+
       log.debug(
         color(
           `│ ${`${(query.timestamp - requestStartTime).toFixed(2)}ms`.padEnd(
             11
-          )} ${TIMING_MAPPING[query.timingType].padEnd(7)} ${query.name}${
+          )} ${loadColor(TIMING_MAPPING[query.timingType].padEnd(7))} ${
+            query.name
+          }${
             query.timingType === 'data'
               ? ` (Took ${query.duration?.toFixed(2)}ms)`
               : ''
