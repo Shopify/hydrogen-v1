@@ -19,7 +19,7 @@ The following example shows Tailwind classes in use:
 
 {% codeblock file, filename: 'src/components/Welcome.server.jsx' %}
 
-```js
+```html
 // The text is centered.
 <div class="text-center">
   // The heading is larger than normal text, has a small margin below it, and is
