@@ -19,7 +19,7 @@ export default () => {
 
       if (
         /^\/?@shopify\/hydrogen\/entry-client$/.test(id) &&
-        importer?.endsWith('/index.html')
+        importer?.endsWith(path.sep + 'index.html')
       ) {
         // Make this virtual import look like a local project file
         // to enable React Refresh normally.
