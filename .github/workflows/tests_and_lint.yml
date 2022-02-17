@@ -31,18 +31,18 @@ jobs:
       - name: Build the code
         run: yarn build
 
-      - name: Check formatting
-        run: yarn format:check
+      # - name: Check formatting
+      #   run: yarn format:check
 
-      - name: Lint the framework code
-        run: yarn lint
+      # - name: Lint the framework code
+      #   run: yarn lint
 
-      - name: Lint the template code
-        run: yarn lint
-        working-directory: ./examples/template-hydrogen-default
+      # - name: Lint the template code
+      #   run: yarn lint
+      #   working-directory: ./examples/template-hydrogen-default
 
-      - name: Run the unit tests
-        run: yarn test
+      # - name: Run the unit tests
+      #   run: yarn test
 
       - name: Run the E2E tests
         run: yarn test-e2e
