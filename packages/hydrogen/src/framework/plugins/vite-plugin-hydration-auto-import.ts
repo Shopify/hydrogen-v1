@@ -1,4 +1,4 @@
-import type {Plugin, ResolvedConfig} from 'vite';
+import {Plugin, ResolvedConfig, normalizePath} from 'vite';
 import path from 'path';
 import MagicString from 'magic-string';
 
@@ -15,7 +15,7 @@ export default () => {
     resolveId(id, importer) {
       if (
         /^\/?@shopify\/hydrogen\/entry-client$/.test(id) &&
-        importer?.endsWith('/index.html')
+        normalizePath(importer || '').endsWith('/index.html')
       ) {
         // Make this virtual import look like a local project file
         // to enable React Refresh normally.
