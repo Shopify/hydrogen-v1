@@ -61,7 +61,7 @@ beforeAll(async () => {
 
     const options: UserConfig = {
       root: rootDir,
-      logLevel: 'silent',
+      // logLevel: 'silent',
       server: {
         watch: {
           // During tests we edit the files too fast and sometimes chokidar

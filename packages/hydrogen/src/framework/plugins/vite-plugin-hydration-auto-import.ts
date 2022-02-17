@@ -1,4 +1,4 @@
-import type {Plugin, ResolvedConfig} from 'vite';
+import {Plugin, ResolvedConfig, normalizePath} from 'vite';
 import path from 'path';
 import MagicString from 'magic-string';
 
@@ -13,6 +13,10 @@ export default () => {
       config = _config;
     },
     resolveId(id, importer) {
+      if (id.includes('entry-client')) {
+        console.log('\n---', id, normalizePath(id), importer);
+      }
+
       if (
         /^\/?@shopify\/hydrogen\/entry-client$/.test(id) &&
         importer?.endsWith('/index.html')
