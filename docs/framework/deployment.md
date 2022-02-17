@@ -29,7 +29,7 @@ Inside your app directory:
 ```bash
 docker build .
 
-docker run -p 8080
+docker run -p 8080:8080
 ```
 
 Visit the project running at http://localhost:8080.
