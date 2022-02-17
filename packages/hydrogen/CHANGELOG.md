@@ -7,6 +7,57 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Removed
+
+- <CartLineSelectedOptions /> and <CartLineAttributes /> components. These components used the “function-as-a-child” pattern which doesn’t allow the `children` prop to be serialized, preventing them from being rendered within Server components.
+
+_Migration_
+
+The functionality provided by these components can be replicated using the `useCartLine()` hook instead.
+
+_Example_
+
+```tsx
+// Before
+function SomeComponent() {
+  return (
+    <>
+      <CartLineSelectedOptions as="ul" className="text-xs space-y-1">
+        {({name, value}) => (
+          <>
+            {name}: {value}
+          </>
+        )}
+      </CartLineSelectedOptions>
+      <CartLineAttributes as="ul" className="text-sm space-y-1">
+        {({key, value}) => (
+          <>
+            {key}: {value}
+          </>
+        )}
+      </CartLineAttributes>
+    </>
+  );
+}
+
+// After
+function SomeComponent() {
+  const {merchandise} = useCartLine();
+
+  return (
+    <>
+      <ul className="text-xs space-y-1">
+        {merchandise.selectedOptions.map(({name, value}) => (
+          <li key={name}>
+            {name}: {value}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+```
+
 - feat: remove `fetch` workaround
 - feat: change `/react` RSC path to `/__rsc`
 - `<Model3D>` has been renamed to `<ModelViewer>`
