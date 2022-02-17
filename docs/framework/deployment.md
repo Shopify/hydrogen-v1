@@ -67,7 +67,7 @@ Install Cloudflare's KV asset handler:
 npm install @cloudflare/kv-asset-handler
 ```
 
-With the previous configuration, your `dist/client` built static files are uploaded to Workers KV. Therefore, you need to handle the asset requests accordingly in the worker entry point. For this, update your `worker.js` to create a new `handleAsset` function and call it before falling back to `handleRequest`:
+Your static files are now uploaded to Workers KV. To handle the asset requests in the worker entry point, update `worker.js` to include a new `handleAsset` function and call it before falling back to `handleRequest`:
 
 ```js
 import handleRequest from './src/entry-server.jsx';
@@ -85,7 +85,7 @@ async function handleAsset(event) {
       const maxAge =
         filename.split('.').length > 2
           ? 31536000 // hashed asset, will never be updated
-          : 86400; // favico and other public assets
+          : 86400; // favicon and other public assets
 
       response.headers.append('cache-control', `public, max-age=${maxAge}`);
     }
@@ -112,7 +112,7 @@ async function handleEvent(event) {
 addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));
 ```
 
-Finally, update `package.json` to include a `main` key pointing to the built worker:
+Finally, update `package.json` to include a `main` key pointing to the generated worker file:
 
 ```
 "main": "dist/worker/worker.js"

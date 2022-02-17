@@ -16,7 +16,7 @@ async function handleAsset(event) {
       const maxAge =
         filename.split('.').length > 2
           ? 31536000 // hashed asset, will never be updated
-          : 86400; // favico and other public assets
+          : 86400; // favicon and other public assets
 
       response.headers.append('cache-control', `public, max-age=${maxAge}`);
     }
