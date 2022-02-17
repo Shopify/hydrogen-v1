@@ -364,7 +364,7 @@ async function stream(
           writable.write(getErrorMarkup(error));
         }
 
-        console.error(error);
+        log.error(error);
       },
     });
 
