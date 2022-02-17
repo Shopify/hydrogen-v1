@@ -160,11 +160,6 @@ Hydrogen includes the following product and variant components and hooks:
     <td>Not applicable</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantimage">SelectedVariantImage</a></td>
-    <td>Renders an <code>Image</code> component for the product's selected variant's image.</td>
-    <td><a href="/api/hydrogen/hooks/product-variant/useproductoptions">useProductOptions</a></td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantmetafield">SelectedVariantMetafield</a></td>
     <td>Renders a <code>Metafield</code> component for the product's selected variant's <a href="/api/storefront/reference/common-objects/metafield">metafield</a>.</td>
     <td>Not applicable</td>

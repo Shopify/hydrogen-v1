@@ -127,11 +127,6 @@ Hydrogen includes the following product and variant components:
     <td>Renders a <code>BuyNowButton</code> component for the product's selected variant.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantimage">SelectedVariantImage</a></td>
-    <td>Client</td>
-    <td>Renders an <code>Image</code> component for the product's selected variant's image.</td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantmetafield">SelectedVariantMetafield</a></td>
     <td>Client</td>
     <td>Renders a <code>Metafield</code> component for the product's selected variant's <a href="/api/storefront/reference/common-objects/metafield">metafield</a>.</td>
