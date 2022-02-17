@@ -153,17 +153,19 @@ export default defineConfig({
 
 To enable logging for the cache API status, call `setLoggerOptions` and set `showCacheApiStatus` to `true`:
 
-{% codeblock file, filename: '/src/entry-server.jsx' %}
+{% codeblock file, filename: '/src/App.server.jsx' %}
 
 ```js
+import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLoggerOptions} from '@shopify/hydrogen';
-import App from './App.server';
 
 setLoggerOptions({showCacheApiStatus: true});
 
-export default renderHydrogen(App, () => {
-  // Custom hook
-});
+function App() {
+  /* ... */
+}
+// ...
+export default renderHydrogen(App, {pages});
 ```
 
 {% endcodeblock %}
@@ -179,17 +181,19 @@ The status of the cache updates on each query:
 
 To enable logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader` to `true`:
 
-{% codeblock file, filename: '/src/entry-server.jsx' %}
+{% codeblock file, filename: '/src/App.server.jsx' %}
 
 ```js
+import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLoggerOptions} from '@shopify/hydrogen';
-import App from './App.server';
 
 setLoggerOptions({showCacheControlHeader: true});
 
-export default renderHydrogen(App, () => {
-  // Custom hook
-});
+function App() {
+  /* ... */
+}
+// ...
+export default renderHydrogen(App, {pages});
 ```
 
 {% endcodeblock %}
