@@ -78,6 +78,8 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `<UnitPrice>`: renamed unitPrice prop to data, unitPriceMeasurement prop to measurement
   - `<ProductProvider>`: renamed product prop to data
   - `<CartProvider>`: renamed cart prop to data
+- feat [breaking change]: remove `handleEvent` in favor of `handleRequest`.
+- feat [breaking change]: remove `assetHandler` parameter in the new `handleRequest`.
 
 ## 0.10.1 - 2022-01-26
 
