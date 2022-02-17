@@ -47,8 +47,8 @@ export default (
             dev: true,
             shopifyConfig,
             indexTemplate: getIndexTemplate,
-            getServerEntrypoint: async () =>
-              await server.ssrLoadModule(
+            getServerEntrypoint: () =>
+              server.ssrLoadModule(
                 process.env.HYDROGEN_SERVER_ENTRY ||
                   HYDROGEN_DEFAULT_SERVER_ENTRY
               ),

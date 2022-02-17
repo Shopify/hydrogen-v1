@@ -1,15 +1,15 @@
-import {IncomingMessage, NextFunction} from 'connect';
-import http from 'http';
-import {ViteDevServer} from 'vite';
-import {ShopifyConfig} from '../types';
+import type {RequestHandler} from '../entry-server';
+import type {IncomingMessage, NextFunction} from 'connect';
+import type {ServerResponse} from 'http';
+import type {ViteDevServer} from 'vite';
+import type {ShopifyConfig} from '../types';
 import {graphiqlHtml} from './graphiql';
-import handleEvent from '../handle-event';
 
 type HydrogenMiddlewareArgs = {
   dev?: boolean;
   shopifyConfig?: ShopifyConfig;
   indexTemplate: string | ((url: string) => Promise<string>);
-  getServerEntrypoint: () => Record<string, any> | Promise<Record<string, any>>;
+  getServerEntrypoint: () => any;
   devServer?: ViteDevServer;
   cache?: Cache;
 };
@@ -23,7 +23,7 @@ export function graphiqlMiddleware({
 }) {
   return async function (
     request: IncomingMessage,
-    response: http.ServerResponse,
+    response: ServerResponse,
     next: NextFunction
   ) {
     const graphiqlRequest = dev && isGraphiqlRequest(request);
@@ -49,10 +49,12 @@ export function hydrogenMiddleware({
 }: HydrogenMiddlewareArgs) {
   return async function (
     request: IncomingMessage,
-    response: http.ServerResponse,
+    response: ServerResponse,
     next: NextFunction
   ) {
-    const url = new URL('http://' + request.headers.host + request.originalUrl);
+    const url = new URL(
+      'http://' + request.headers.host + (request.originalUrl ?? request.url)
+    );
 
     try {
       /**
@@ -86,35 +88,22 @@ export function hydrogenMiddleware({
         });
       }
 
-      /**
-       * Dynamically import ServerComponentResponse after the `fetch`
-       * polyfill has loaded above.
-       */
-      const {ServerComponentRequest} = await import(
-        './Hydration/ServerComponentRequest.server'
-      );
+      const entrypoint = await getServerEntrypoint();
+      const handleRequest: RequestHandler = entrypoint.default ?? entrypoint;
 
-      const eventResponse = await handleEvent(
-        /**
-         * Mimic a `FetchEvent`
-         */
-        {},
-        {
-          request: new ServerComponentRequest(request),
-          entrypoint: await getServerEntrypoint(),
-          indexTemplate,
-          streamableResponse: response,
-          dev,
-          cache,
-        }
-      );
+      const eventResponse = await handleRequest(request, {
+        dev,
+        cache,
+        indexTemplate,
+        streamableResponse: response,
+      });
 
       /**
        * If a `Response` was returned, that means it was not streamed.
        * Convert the response into a proper Node.js response.
        */
       if (eventResponse) {
-        eventResponse.headers.forEach((value, key) => {
+        eventResponse.headers.forEach((value: string, key: string) => {
           response.setHeader(key, value);
         });
 
@@ -166,7 +155,7 @@ function isGraphiqlRequest(request: IncomingMessage) {
 }
 
 async function respondWithGraphiql(
-  response: http.ServerResponse,
+  response: ServerResponse,
   shopifyConfig?: ShopifyConfig
 ) {
   if (!shopifyConfig) {

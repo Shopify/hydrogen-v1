@@ -1,44 +1,32 @@
-import {ServerResponse} from 'http';
+import type {ServerResponse} from 'http';
+import type {Logger} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
-import {ApiRouteMatch} from './utilities/apiRoutes';
 
-export type Renderer = (
-  url: URL,
-  options: {
-    request: ServerComponentRequest;
-    template: string;
-    nonce?: string;
-    dev?: boolean;
-  }
-) => Promise<Response>;
+type CommonOptions = {
+  App: any;
+  pages?: ImportGlobEagerOutput;
+  request: ServerComponentRequest;
+  componentResponse: ServerComponentResponse;
+  log: Logger;
+  dev?: boolean;
+};
 
-export type Streamer = (
-  url: URL,
-  options: {
-    request: ServerComponentRequest;
-    response?: ServerResponse;
-    template: string;
-    nonce?: string;
-    dev?: boolean;
-  }
-) => void;
+export type RendererOptions = CommonOptions & {
+  template: string;
+  nonce?: string;
+};
 
-export type Hydrator = (
-  url: URL,
-  options: {
-    request: ServerComponentRequest;
-    response?: ServerResponse;
-    isStreamable: boolean;
-    dev?: boolean;
-  }
-) => void;
+export type StreamerOptions = CommonOptions & {
+  response?: ServerResponse;
+  template: string;
+  nonce?: string;
+};
 
-export type EntryServerHandler = {
-  render: Renderer;
-  stream: Streamer;
-  hydrate: Hydrator;
-  getApiRoute: (url: URL) => ApiRouteMatch | null;
+export type HydratorOptions = CommonOptions & {
+  response?: ServerResponse;
+  isStreamable: boolean;
 };
 
 export type ShopifyConfig = {
@@ -66,12 +54,10 @@ export type ClientHandlerConfig = {
   shopifyConfig: ShopifyConfig;
 };
 
-export type ServerHandler = (
+export type ClientHandler = (
   App: any,
-  config: ServerHandlerConfig
-) => EntryServerHandler;
-
-export type ClientHandler = (App: any) => Promise<void>;
+  config: ClientHandlerConfig
+) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
@@ -124,12 +110,19 @@ export interface Measurement {
 
 export type QueryKey = string | readonly unknown[];
 
-export interface CacheOptions {
-  private?: boolean;
+export type NoStoreStrategy = {
+  mode: string;
+};
+
+export interface AllCacheOptions {
+  mode?: string;
   maxAge?: number;
   staleWhileRevalidate?: number;
-  noStore?: boolean;
+  sMaxAge?: number;
+  staleIfError?: number;
 }
+
+export type CachingStrategy = NoStoreStrategy | AllCacheOptions;
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
