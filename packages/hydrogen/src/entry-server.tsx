@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {
   Logger,
   logServerResponse,
@@ -14,7 +14,10 @@ import {Renderer, Hydrator, Streamer} from './types';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
-import {ServerRequestProvider} from './foundation/ServerRequestProvider';
+import {
+  preloadRequestCacheData,
+  ServerRequestProvider,
+} from './foundation/ServerRequestProvider';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {getApiRouteFromURL, getApiRoutesFromPages} from './utilities/apiRoutes';
@@ -82,6 +85,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       logServerResponse('ssr', request, status);
       logCacheControlHeaders('ssr', request, componentResponse);
       logQueryTimings('ssr', request);
+      request.savePreloadQueries();
 
       return new Response(await componentResponse.customBody, {
         status,
@@ -112,6 +116,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     logServerResponse('ssr', request, status);
     logCacheControlHeaders('ssr', request, componentResponse);
     logQueryTimings('ssr', request);
+    request.savePreloadQueries();
 
     return new Response(html, {
       status,
@@ -279,12 +284,14 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           logServerResponse('str', request, responseOptions.status);
           logCacheControlHeaders('str', request, componentResponse);
           logQueryTimings('str', request);
+          request.savePreloadQueries();
         });
       } else {
         writable.close();
         logServerResponse('str', request, responseOptions.status);
         logCacheControlHeaders('str', request, componentResponse);
         logQueryTimings('str', request);
+        request.savePreloadQueries();
       }
 
       if (await isStreamingSupported()) {
@@ -344,6 +351,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
           logCacheControlHeaders('str', request, componentResponse);
           logQueryTimings('str', request);
+          request.savePreloadQueries();
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
@@ -352,6 +360,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           logServerResponse('str', request, response.statusCode);
           logCacheControlHeaders('str', request, componentResponse);
           logQueryTimings('str', request);
+          request.savePreloadQueries();
 
           if (isRedirect(response)) {
             // Redirects found after any async code
@@ -416,6 +425,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
         logServerResponse('rsc', request, 200);
         logCacheControlHeaders('rsc', request, componentResponse);
         logQueryTimings('rsc', request);
+        request.savePreloadQueries();
         return new Response(rscReadable);
       }
 
@@ -425,6 +435,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       logServerResponse('rsc', request, 200);
       logCacheControlHeaders('rsc', request, componentResponse);
       logQueryTimings('rsc', request);
+      request.savePreloadQueries();
 
       return new Response(bufferedBody);
     } else if (response) {
@@ -443,6 +454,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
         logServerResponse('rsc', request, response!.statusCode);
         logCacheControlHeaders('rsc', request, componentResponse);
         logQueryTimings('rsc', request);
+        request.savePreloadQueries();
       });
     }
   };
@@ -538,15 +550,29 @@ function buildAppSSR(
           serverState={state as any}
           setServerState={() => {}}
         >
-          <React.Suspense fallback={null}>
-            <RscConsumer />
-          </React.Suspense>
+          <PreloadQueries request={request}>
+            <React.Suspense fallback={null}>
+              <RscConsumer />
+            </React.Suspense>
+          </PreloadQueries>
         </ServerStateProvider>
       </ServerRequestProvider>
     </Html>
   );
 
   return {AppSSR, rscReadable: rscReadableForFlight};
+}
+
+function PreloadQueries({
+  request,
+  children,
+}: {
+  request: ServerComponentRequest;
+  children: ReactElement;
+}) {
+  const preloadQueries = request.getPreloadQueries();
+  preloadRequestCacheData(request, preloadQueries);
+  return children;
 }
 
 function extractHeadElements({context: {helmet}}: RealHelmetData) {

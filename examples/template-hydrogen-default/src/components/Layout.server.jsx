@@ -22,6 +22,8 @@ export default function Layout({children, hero}) {
       numCollections: 3,
     },
     cache: CacheHours(),
+    preload: true,
+    // add a preload key like 'all', 'product', 'home'
   });
   const collections = data ? flattenConnection(data.collections) : null;
   const products = data ? flattenConnection(data.products) : null;

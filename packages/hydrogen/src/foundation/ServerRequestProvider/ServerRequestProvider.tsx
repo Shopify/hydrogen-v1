@@ -2,7 +2,10 @@ import React, {createContext, useContext} from 'react';
 import {getTime} from '../..';
 
 import {hashKey} from '../../framework/cache';
-import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
+import type {
+  PreloadQueries,
+  ServerComponentRequest,
+} from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
 import {collectQueryTimings} from '../../utilities/log';
 
@@ -115,4 +118,43 @@ export function useRequestCacheData<T>(
   }
 
   return cache.get(cacheKey).call() as RequestCacheResult<T>;
+}
+
+export function preloadRequestCacheData(
+  request: ServerComponentRequest,
+  preloadQueries?: PreloadQueries
+): void {
+  const cache = request.ctx.cache;
+
+  preloadQueries?.forEach((preloadQuery, cacheKey) => {
+    if (!cache.has(cacheKey)) {
+      let data: unknown;
+      let promise: Promise<unknown>;
+
+      cache.set(cacheKey, () => {
+        if (data !== undefined) {
+          collectQueryTimings(request, preloadQuery.key, 'render');
+          return data;
+        }
+        if (!promise) {
+          const startApiTime = getTime();
+          promise = preloadQuery.fetcher().then(
+            (r) => {
+              data = {data: r};
+              collectQueryTimings(
+                request,
+                preloadQuery.key,
+                'preload',
+                getTime() - startApiTime
+              );
+            },
+            (e) => (data = {error: e})
+          );
+        }
+        return promise;
+      });
+    }
+
+    cache.get(cacheKey).call();
+  });
 }

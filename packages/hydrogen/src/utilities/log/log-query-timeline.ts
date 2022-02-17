@@ -9,7 +9,7 @@ import {getTime} from '..';
 
 import type {RenderType} from './log';
 
-export type TimingType = 'load' | 'render' | 'data';
+export type TimingType = 'load' | 'render' | 'data' | 'preload';
 
 export type QueryTiming = {
   name: string;
@@ -23,6 +23,7 @@ const TIMING_MAPPING = {
   load: 'Load',
   render: 'Render',
   data: 'Fetch',
+  preload: 'Preload',
 };
 
 export function collectQueryTimings(
@@ -57,7 +58,7 @@ export function logQueryTimings(
     let suspenseWaterfallDetectedCount = 0;
 
     queryList.forEach((query: QueryTiming, index: number) => {
-      if (query.timingType === 'load') {
+      if (query.timingType === 'load' || query.timingType === 'preload') {
         detectSuspenseWaterfall[query.name] = true;
       } else if (query.timingType === 'render') {
         delete detectSuspenseWaterfall[query.name];
@@ -67,7 +68,7 @@ export function logQueryTimings(
         color(
           `│ ${`${(query.timestamp - requestStartTime).toFixed(2)}ms`.padEnd(
             11
-          )} ${TIMING_MAPPING[query.timingType].padEnd(6)} ${query.name}${
+          )} ${TIMING_MAPPING[query.timingType].padEnd(7)} ${query.name}${
             query.timingType === 'data'
               ? ` (Took ${query.duration?.toFixed(2)}ms)`
               : ''

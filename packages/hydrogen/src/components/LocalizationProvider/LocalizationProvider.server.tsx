@@ -20,6 +20,7 @@ export function LocalizationProvider({children}: {children: ReactNode}) {
   } = useShopQuery<LocalizationQuery>({
     query: Localization,
     cache: CacheDays(),
+    preload: true,
   });
 
   return (

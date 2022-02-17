@@ -2,8 +2,15 @@ import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import {HelmetData} from 'react-helmet-async';
 import type {RealHelmetData} from '../../foundation/Helmet';
-import {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
-import {QueryTiming} from '../../utilities/log/log-query-timeline';
+import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
+import type {QueryTiming} from '../../utilities/log/log-query-timeline';
+import type {QueryKey} from '../../types';
+
+export type PreloadQuery = {
+  key: QueryKey;
+  fetcher: () => Promise<unknown>;
+};
+export type PreloadQueries = Map<string, PreloadQuery>;
 
 let reqCounter = 0; // For debugging
 const generateId =
@@ -13,6 +20,8 @@ const generateId =
     ? // @ts-ignore
       () => crypto.randomUUID() as string
     : () => `req${++reqCounter}`;
+
+const preloadCache = new Map<string, PreloadQueries>();
 
 /**
  * This augments the `Request` object from the Fetch API:
@@ -32,6 +41,7 @@ export class ServerComponentRequest extends Request {
     shopifyConfig?: ShopifyContextValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
+    preloadQueries: PreloadQueries;
     [key: string]: any;
   };
 
@@ -59,6 +69,7 @@ export class ServerComponentRequest extends Request {
       helmet: new HelmetData({}) as unknown as RealHelmetData,
       queryCacheControl: [],
       queryTimings: [],
+      preloadQueries: new Map(),
     };
     this.cookies = this.parseCookies();
   }
@@ -71,6 +82,16 @@ export class ServerComponentRequest extends Request {
         .split(';')
         .map((chunk) => chunk.trim().split(/=(.+)/) as [string, string])
     );
+  }
+
+  public getPreloadQueries() {
+    if (preloadCache.has(this.url)) {
+      return preloadCache.get(this.url);
+    }
+  }
+
+  public savePreloadQueries() {
+    preloadCache.set(this.url, this.ctx.preloadQueries);
   }
 }
 

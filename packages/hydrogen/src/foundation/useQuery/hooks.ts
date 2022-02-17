@@ -8,6 +8,7 @@ import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
   getItemFromCache,
+  hashKey,
   isStale,
   setItemInCache,
 } from '../../framework/cache';
@@ -16,6 +17,7 @@ import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
   cache?: CachingStrategy;
+  preload?: boolean;
 }
 
 /**
@@ -33,13 +35,19 @@ export function useQuery<T>(
 ) {
   const request = useServerRequest();
   const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
+  const fetcher = cachedQueryFnBuilder<T>(
+    withCacheIdKey,
+    queryFn,
+    queryOptions
+  );
 
   collectQueryTimings(request, withCacheIdKey, 'load');
 
-  return useRequestCacheData<T>(
-    withCacheIdKey,
-    cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
-  );
+  if (queryOptions?.preload) {
+    request.ctx.preloadQueries.set(hashKey(key), {key, fetcher});
+  }
+
+  return useRequestCacheData<T>(withCacheIdKey, fetcher);
 }
 
 function cachedQueryFnBuilder<T>(
