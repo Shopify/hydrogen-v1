@@ -8,7 +8,7 @@
     "start:worker": "node start-worker",
     "build": "yarn build:client && yarn build:server && yarn build:worker",
     "build:client": "vite build --outDir dist/client --manifest",
-    "build:server": "vite build --outDir dist/server --ssr src/entry-server.jsx",
+    "build:server": "vite build --outDir dist/server --ssr src/App.server",
     "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker.js"
   },
   "devDependencies": {

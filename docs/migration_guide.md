@@ -4,6 +4,56 @@ This file is a living document that gathers required changes to user application
 
 ## Unreleased
 
+### Entry points have been simplified
+
+Since `/src/entry-server.jsx` and `/src/client-server.jsx` were not updated often, we have simplified the setup a bit. To update, merge the content of `/src/entry-server.jsx` into `App.server.jsx`. The latter becomes the new default entry point for the server environment:
+
+```diff
++import renderHydrogen from '@shopify/hydrogen/entry-server';
+import {DefaultRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import shopifyConfig from '../shopify.config';
+// ...
+
+- export default function App({log, pages, ...serverState}) {
++ function App({log, pages, ...serverState}) {
+  return ({/* ... */});
+}
+
++ const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
++ export default renderHydrogen(App, {pages});
+```
+
+This change affects the generated files during server build. Therefore, in places where we import generated files, such as in `server.js`, we need to update the path:
+
+```diff
+  hydrogenMiddleware({
+-    getServerEntrypoint: () => require('./dist/server/entry-server'),
++    getServerEntrypoint: () => require('./dist/server/App.server'),
+    indexTemplate,
+  }),
+```
+
+Also, make sure to update the `package.json` scripts:
+
+```diff
+  "build:client": "vite build --outDir dist/client --manifest",
+- "build:server": "vite build --outDir dist/server --ssr src/entry-client.jsx",
++ "build:server": "vite build --outDir dist/server --ssr src/App.server",
+  "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker.js",
+```
+
+Optionally, remove also `/src/entry-client.jsx` and update `index.html`:
+
+```diff
+  <body>
+    <div id="root"></div>
+-   <script type="module" src="/src/entry-client.jsx"></script>
++   <script type="module" src="/@shopify/hydrogen/entry-client"></script>
+  </body>
+```
+
+Any stylesheet imported in `/src/entry-client.jsx` can directly be imported in `index.html` using `<link>` tags.
+
 ### Worker entry file now imports `handleRequest` and needs manual asset handling.
 
 `renderHydrogen` now returns a `handleRequest` function that must be called once per request. Therefore, in the Worker entry file we must use it directly instead of importing `handleEvent`.
@@ -12,7 +62,7 @@ This file is a living document that gathers required changes to user application
 // worker.js
 - import handleEvent from '@shopify/hydrogen/worker';
 - import entrypoint from './src/entry-server.jsx';
-+ import handleRequest from './src/entry-server.jsx';
++ import handleRequest from './src/App.server';
 import indexTemplate from './dist/client/index.html?raw';
 
 // ...

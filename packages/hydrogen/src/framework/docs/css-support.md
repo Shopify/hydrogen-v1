@@ -5,7 +5,7 @@ Hydrogen's [starter template](/custom-storefronts/hydrogen/getting-started) is s
 You can build with Tailwind's library or use other methods of styling like vanilla CSS files or a third-party CSS-in-JS framework. Hydrogen is powered by Vite, which natively supports several different [methods of CSS injection](https://vitejs.dev/guide/features.html#css).
 
 > Note:
-> Make sure to import your stylesheets from a `*.client.jsx` component, or from your client entrypoint at `src/entry-client.jsx`.
+> Make sure to import your stylesheets from a `*.client.jsx` component, or directly from `index.html`.
 
 ## Benefits of Tailwind
 

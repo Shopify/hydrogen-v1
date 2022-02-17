@@ -1,4 +1,4 @@
-import handleRequest from './src/entry-server.jsx';
+import handleRequest from './src/App.server';
 // eslint-disable-next-line node/no-missing-import
 import indexHtml from './dist/client/index.html?raw';
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';

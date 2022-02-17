@@ -70,7 +70,7 @@ npm install @cloudflare/kv-asset-handler
 Your static files are now uploaded to Workers KV. To handle the asset requests in the worker entry point, update `worker.js` to include a new `handleAsset` function and call it before falling back to `handleRequest`:
 
 ```js
-import handleRequest from './src/entry-server.jsx';
+import handleRequest from './src/App.server';
 // eslint-disable-next-line node/no-missing-import
 import indexHtml from './dist/client/index.html?raw';
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';

@@ -117,6 +117,8 @@ function SomeComponent() {
 - feat: pass HYDROGEN_ASSET_BASE_URL into config to set base URL for compiled assets
 - dx [breaking change]: `<Product />` and `<CartLine />` aliases have been removed; use the original components `<ProductProvider />` and `<CartLineProvider />` instead. Their nested component aliases, such as `<Product.Image />`, have also been removed; in this example you should use `<ProductImage />`.
 - feat: remove React Router on the client and introduce Hydrogen the `<Link>` component and `useNavigate` hook
+- feat [breaking change]: Merge `/src/entry-server.jsx` entry point into `App.server.jsx`
+- feat: add a default virtual entry-client in `/@shopify/hydrogen/entry-client` that can be used in `index.html`
 - fix: prevent client components from being cached during development
 - refactor: the following components had their prop name renamed. Refer to the documentation or [#627](https://github.com/Shopify/hydrogen/issues/627) for more details.
   - `<ExternalVideo />`: renamed video prop to data
