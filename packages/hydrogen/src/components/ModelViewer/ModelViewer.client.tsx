@@ -155,7 +155,7 @@ export function ModelViewer<TTag extends ElementType>(
     setModelViewer(node);
   }, []);
   const {
-    model,
+    data: model,
     id = model.id,
     children,
     className,

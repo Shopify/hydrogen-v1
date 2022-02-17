@@ -10,7 +10,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "jest",
-    "dev": "yarn build -w",
+    "dev": "yarn build --preserveWatchOutput -w",
     "build": "tsc -p .",
     "prepack": "yarn build"
   },
