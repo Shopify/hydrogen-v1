@@ -1,4 +1,4 @@
-import type {Plugin, ResolvedConfig} from 'vite';
+import {Plugin, ResolvedConfig, normalizePath} from 'vite';
 import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
 import MagicString from 'magic-string';
 import path from 'path';
@@ -15,7 +15,7 @@ export default () => {
       config = _config;
     },
     resolveId(source, importer) {
-      if (source.includes('@shopify/hydrogen/platforms/')) {
+      if (normalizePath(source).includes('@shopify/hydrogen/platforms/')) {
         const hydrogenPath = path.dirname(
           require.resolve('@shopify/hydrogen/package.json')
         );
@@ -36,7 +36,9 @@ export default () => {
       return null;
     },
     transform(code, id) {
-      if (id.includes('@shopify/hydrogen/dist/esnext/platforms/')) {
+      if (
+        normalizePath(id).includes('@shopify/hydrogen/dist/esnext/platforms/')
+      ) {
         code = code
           .replace(
             '__SERVER_ENTRY__',
@@ -44,12 +46,14 @@ export default () => {
           )
           .replace(
             '__INDEX_TEMPLATE__',
-            path.resolve(
-              config.root,
-              config.build.outDir,
-              '..',
-              'client',
-              'index.html'
+            normalizePath(
+              path.resolve(
+                config.root,
+                config.build.outDir,
+                '..',
+                'client',
+                'index.html'
+              )
             )
           );
 
