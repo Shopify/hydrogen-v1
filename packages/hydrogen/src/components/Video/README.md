@@ -38,17 +38,17 @@ export default function MyProductVideo() {
 
   const firstMediaElement = data.products.edges[0].node.media.edges[0].node;
   if (firstMediaElement.mediaContentType === 'VIDEO') {
-    return <Video video={firstMediaElement} />;
+    return <Video data={firstMediaElement} />;
   }
 }
 ```
 
 ## Props
 
-| Name     | Type                                                                                 | Description                                                           |
-| -------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| video    | <code>Unknown<<wbr>UndocumentedType, UndocumentedType, UndocumentedType<wbr>></code> | An object corresponding to the [GraphQL fragment](#graphql-fragment). |
-| options? | <code>ImageSizeOptions</code>                                                        | An object of image size options for the video's `previewImage`.       |
+| Name     | Type                                                                             | Description                                                           |
+| -------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| data     | <code>Object<<wbr>VideoType, Pick<<wbr>Image, Pick<<wbr>VideoSource><wbr></code> | An object corresponding to the [GraphQL fragment](#graphql-fragment). |
+| options? | <code>ImageSizeOptions</code>                                                    | An object of image size options for the video's `previewImage`.       |
 
 ## Component type
 

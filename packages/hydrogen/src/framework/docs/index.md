@@ -19,13 +19,7 @@ The SSR and hydration middleware is similar to existing [Vite SSR](https://vitej
 When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Hydrogen starter template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store. Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
 
 - A set of boilerplate [`components`](/custom-storefronts/hydrogen/getting-started#components) and [`pages`](/custom-storefronts/hydrogen/getting-started#pages)
-- An app component used to set up client-side context (`App.client.jsx`)
-- The main app component, which includes boilerplate code for the app and routing (`App.server.jsx`)
-- The Hydrogen app's two entry points, which are based on environment:
-
-  - **Server**: `entry-server.jsx`
-  - **Client**: `entry-client.jsx`
-
+- The main app component in `App.server.jsx`, which includes boilerplate code for the app and routing. This file is also the main entry point for the server.
 - Basic styles provided by Tailwind CSS (`index.css`)
 
 {% codeblock file, filename: "File structure of the Hydrogen starter template" %}
@@ -47,14 +41,29 @@ When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/cr
         └── index.server.jsx
         └── redirect.server.jsx
         └── sitemap.xml.server.jsx
-    ├── App.client.jsx
     ├── App.server.jsx
-    ├── entry-client.jsx
-    ├── entry-server.jsx
     ├── index.css
 ```
 
 {% endcodeblock %}
+
+## Configuring default entry points
+
+Hydrogen's default client entry point is `/@shopify/hydrogen/entry-client`, which is included in `index.html` and used for hydration purposes. If you need to configure the entry point, then create a new file such as `/src/entry-client.jsx` with the following content and update the path in `index.html`:
+
+{% codeblock file, filename: '/src/entry-client.jsx' %}
+
+```jsx
+import renderHydrogen from '@shopify/hydrogen/entry-client';
+
+const ClientWrapper = (props) => props.children;
+
+export default renderHydrogen(ClientWrapper);
+```
+
+{% endcodeblock %}
+
+To change Hydrogen's default server entry point (`/src/App.server.jsx`), pass an environment variable `HYDROGEN_SERVER_ENTRY` to the development command (`HYDROGEN_SERVER_ENTRY=/my/path/MyApp.server vite`) or use the `--ssr` flag when building (`vite build --ssr /my/path/MyApp.server`).
 
 ## Request workflow for Hydrogen apps
 

@@ -6,9 +6,7 @@ import {
 } from 'react-helmet-async';
 import {useEnvContext} from '../ssr-interop';
 
-export type RealHelmetData = {context: {helmet: HelmetData}};
-
-const clientHelmetData = new HelmetData({}) as unknown as RealHelmetData;
+const clientHelmetData = new HelmetData({});
 
 export function Helmet({
   children,

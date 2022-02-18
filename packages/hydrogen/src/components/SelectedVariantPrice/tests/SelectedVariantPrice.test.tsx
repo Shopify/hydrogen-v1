@@ -10,13 +10,13 @@ describe('<SelectedVariantPrice />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice />
       </ProductProvider>
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: selectedVariant.priceV2,
+      data: selectedVariant.priceV2,
     });
   });
 
@@ -24,13 +24,13 @@ describe('<SelectedVariantPrice />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice priceType="compareAt" />
       </ProductProvider>
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: selectedVariant.compareAtPriceV2,
+      data: selectedVariant.compareAtPriceV2,
     });
   });
 
@@ -38,7 +38,7 @@ describe('<SelectedVariantPrice />', () => {
     const product = getProduct();
     const selectedVariant = product.variants.edges[0].node;
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId={selectedVariant.id}>
+      <ProductProvider data={product} initialVariantId={selectedVariant.id}>
         <SelectedVariantPrice className="strikethrough" />
       </ProductProvider>
     );

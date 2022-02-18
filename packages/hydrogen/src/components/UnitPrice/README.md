@@ -37,8 +37,8 @@ export default function Product() {
 
   return (
     <UnitPrice
-      unitPrice={selectedVariant.unitPrice}
-      unitPriceMeasurement={selectedVariant.unitPriceMeasurement}
+      data={selectedVariant.unitPrice}
+      measurement={selectedVariant.unitPriceMeasurement}
     />
   );
 }
@@ -46,11 +46,11 @@ export default function Product() {
 
 ## Props
 
-| Name                 | Type                              | Description                                                                                 |
-| -------------------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
-| unitPrice            | <code>MoneyV2</code>              | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                     |
-| unitPriceMeasurement | <code>UnitPriceMeasurement</code> | A [`UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement). |
-| as?                  | <code>ElementType</code>          | An HTML tag to be rendered as the base element wrapper. The default is `div`.               |
+| Name        | Type                              | Description                                                                                 |
+| ----------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
+| data        | <code>MoneyV2</code>              | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                     |
+| measurement | <code>UnitPriceMeasurement</code> | A [`UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement). |
+| as?         | <code>ElementType</code>          | An HTML tag to be rendered as the base element wrapper. The default is `div`.               |
 
 ## Component type
 

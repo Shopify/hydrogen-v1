@@ -1,9 +1,24 @@
-import {DefaultRoutes} from '@shopify/hydrogen';
-import {ShopifyProvider} from '@shopify/hydrogen';
+import renderHydrogen from '@shopify/hydrogen/entry-server';
+import {DefaultRoutes, ShopifyProvider, setLogger} from '@shopify/hydrogen';
 import shopifyConfig from '..//shopify.config';
 import {Suspense} from 'react';
 
-export default function App({...serverState}) {
+setLogger({
+  trace() {},
+  debug() {},
+  warn(context, ...args) {
+    console.warn(...args);
+  },
+  error(context, ...args) {
+    console.error(...args);
+  },
+  fatal(context, ...args) {
+    console.error(...args);
+  },
+  options: () => ({}),
+});
+
+function App({...serverState}) {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
@@ -16,3 +31,7 @@ export default function App({...serverState}) {
     </Suspense>
   );
 }
+
+const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
+
+export default renderHydrogen(App, {pages});

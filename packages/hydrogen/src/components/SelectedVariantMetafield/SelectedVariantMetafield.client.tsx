@@ -42,5 +42,5 @@ export function SelectedVariantMetafield<TTag extends ElementType>(
     return null;
   }
 
-  return <Metafield metafield={metafield} {...passthroughProps} />;
+  return <Metafield data={metafield} {...passthroughProps} />;
 }

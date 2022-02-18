@@ -112,7 +112,7 @@ describe('AddToCartButton', () => {
         };
 
         const component = mountWithProviders(
-          <CartProvider cart={CART}>
+          <CartProvider data={CART}>
             <CustomUseCartProvider>
               <AddToCartButton
                 attributes={[{key: 'size', value: 'large'}]}

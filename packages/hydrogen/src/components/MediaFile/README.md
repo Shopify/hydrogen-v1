@@ -42,7 +42,7 @@ export function MyComponent() {
   return (
     <ul>
       {data?.products?.map((product) => {
-        return <MediaFile media={product.node.media.edges[0].node} />;
+        return <MediaFile data={product.node.media.edges[0].node} />;
       })}
     </ul>
   );
@@ -53,7 +53,7 @@ export function MyComponent() {
 
 | Name     | Type                                                                                             | Description                                                                         |
 | -------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| media    | <code>MediaImageMedia &#124; ModelViewerMedia &#124; ExternalVideoMedia &#124; VideoMedia</code> | A [Media object](/api/storefront/reference/products/media).                         |
+| data     | <code>MediaImageMedia &#124; ModelViewerMedia &#124; ExternalVideoMedia &#124; VideoMedia</code> | A [Media object](/api/storefront/reference/products/media).                         |
 | options? | <code>UndocumentedType &#124; UndocumentedType</code>                                            | The options for the `Image`, `Video`, `ExternalVideo`, or `ModelViewer` components. |
 
 ## Component type

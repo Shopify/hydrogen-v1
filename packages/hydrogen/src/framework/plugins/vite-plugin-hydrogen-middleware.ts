@@ -6,6 +6,8 @@ import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
 import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
 
+export const HYDROGEN_DEFAULT_SERVER_ENTRY = '/src/App.server';
+
 export default (
   shopifyConfig: ShopifyConfig,
   pluginOptions: HydrogenVitePluginOptions
@@ -45,9 +47,10 @@ export default (
             dev: true,
             shopifyConfig,
             indexTemplate: getIndexTemplate,
-            getServerEntrypoint: async () =>
-              await server.ssrLoadModule(
-                process.env.HYDROGEN_SERVER_ENTRY || '/src/entry-server'
+            getServerEntrypoint: () =>
+              server.ssrLoadModule(
+                process.env.HYDROGEN_SERVER_ENTRY ||
+                  HYDROGEN_DEFAULT_SERVER_ENTRY
               ),
             devServer: server,
             cache: pluginOptions?.devCache

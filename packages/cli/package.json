@@ -19,7 +19,7 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "yarn build -w",
+    "dev": "yarn build --preserveWatchOutput -w",
     "build": "tsc -p . ",
     "prepack": "yarn build && node scripts/copy-templates.js",
     "hydrogen": "./bin/hydrogen",

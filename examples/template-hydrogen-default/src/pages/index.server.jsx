@@ -5,6 +5,7 @@ import {
   Image,
   Link,
   Seo,
+  CacheDays,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -43,7 +44,7 @@ function SeoForHomepage() {
     },
   } = useShopQuery({
     query: SEO_QUERY,
-    cache: {maxAge: 60 * 60 * 12, staleWhileRevalidate: 60 * 60 * 12},
+    cache: CacheDays(),
   });
 
   return (
@@ -184,7 +185,7 @@ function GradientBackground() {
 }
 
 const SEO_QUERY = gql`
-  query shopInfo {
+  query homeShopInfo {
     shop {
       name
       description

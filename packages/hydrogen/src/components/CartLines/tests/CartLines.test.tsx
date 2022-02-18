@@ -21,7 +21,7 @@ describe('CartLines', () => {
 
   it('renders items', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={cart}>
+      <CartProvider data={cart}>
         <CartLines>
           <CartLineProductTitle />
         </CartLines>
@@ -34,7 +34,7 @@ describe('CartLines', () => {
 
   it('renders items in li if ul is provided as tag', () => {
     const wrapper = mountWithProviders(
-      <CartProvider cart={cart}>
+      <CartProvider data={cart}>
         <CartLines as="ul">
           <CartLineProductTitle />
         </CartLines>

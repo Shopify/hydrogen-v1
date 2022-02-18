@@ -59,7 +59,6 @@ import {Suspense} from 'react';
 
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
-import AppClient from './App.client';
 import LoadingFallback from './components/LoadingFallback';
 
 export default function App({log, ...serverState}) {
@@ -67,15 +66,13 @@ export default function App({log, ...serverState}) {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <AppClient>
-        <DefaultSeo />
-        <DefaultRoutes
-          pages={pages}
-          serverState={serverState}
-          log={log}
-          fallback={<NotFound />}
-        />
-      </AppClient>
+      <DefaultSeo />
+      <DefaultRoutes
+        pages={pages}
+        serverState={serverState}
+        log={log}
+        fallback={<NotFound />}
+      />
     </Suspense>
   );
 }
@@ -87,7 +84,7 @@ export default function App({log, ...serverState}) {
 
 The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
 
-- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources.
+- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources. If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.
 
 - When you add or remove pages, the sitemap is automatically updated within one day. Similarly, if you unpublish a product, then the product is removed automatically from the sitemap.
 

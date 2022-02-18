@@ -18,7 +18,7 @@ export interface ModelViewerProps {
   /** Any ReactNode elements. */
   children?: ReactNode;
   /** An object with the same fields as the [GraphQL fragment](#graphql-fragment). */
-  model: {
+  data: {
     id?: Model3DType['id'];
     alt: Model3DType['alt'];
     previewImage?: Pick<Image, 'url'>;
@@ -155,7 +155,7 @@ export function ModelViewer<TTag extends ElementType>(
     setModelViewer(node);
   }, []);
   const {
-    model,
+    data: model,
     id = model.id,
     children,
     className,

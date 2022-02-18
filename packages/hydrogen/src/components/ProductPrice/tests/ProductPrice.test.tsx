@@ -9,58 +9,58 @@ describe('<ProductPrice />', () => {
   it("renders <Money /> with the product's minimum regular price by default", () => {
     const product = getProduct();
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId="">
+      <ProductProvider data={product} initialVariantId="">
         <ProductPrice />
       </ProductProvider>
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: product.priceRange.minVariantPrice,
+      data: product.priceRange.minVariantPrice,
     });
   });
 
   it("renders <Money /> with the product's maximum regular price when `valueType` is `max`", () => {
     const product = getProduct();
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId="">
+      <ProductProvider data={product} initialVariantId="">
         <ProductPrice valueType="max" />
       </ProductProvider>
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: product.priceRange.maxVariantPrice,
+      data: product.priceRange.maxVariantPrice,
     });
   });
 
   it("renders <Money /> with the product's minimum compareAt price when the `priceType` is `compareAt`", () => {
     const product = getProduct();
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId="">
+      <ProductProvider data={product} initialVariantId="">
         <ProductPrice priceType="compareAt" />
       </ProductProvider>
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: product.compareAtPriceRange.minVariantPrice,
+      data: product.compareAtPriceRange.minVariantPrice,
     });
   });
 
   it("renders <Money /> with the product's maximum compareAt price when `valueType` is `max` and `priceType` is `compareAt`", () => {
     const product = getProduct();
     const price = mountWithProviders(
-      <ProductProvider product={product} initialVariantId="">
+      <ProductProvider data={product} initialVariantId="">
         <ProductPrice valueType="max" priceType="compareAt" />
       </ProductProvider>
     );
 
     expect(price).toContainReactComponent(Money, {
-      money: product.compareAtPriceRange.maxVariantPrice,
+      data: product.compareAtPriceRange.maxVariantPrice,
     });
   });
 
   it('supports passthrough props', () => {
     const price = mountWithProviders(
-      <ProductProvider product={getProduct()} initialVariantId="">
+      <ProductProvider data={getProduct()} initialVariantId="">
         <ProductPrice className="emphasized" />
       </ProductProvider>
     );

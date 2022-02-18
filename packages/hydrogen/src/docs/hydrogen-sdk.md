@@ -220,11 +220,6 @@ Hydrogen includes the following cart components and hooks:
     <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineattributes">CartLineAttributes</a></td>
-    <td>Takes a function as a child and calls that function for each of the cart line's attributes.</td>
-    <td>Not applicable</td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/components/cart/cartlineimage">CartLineImage</a></td>
     <td>Renders an <code>Image</code> component for the cart line merchandise's image.</td>
     <td>Not applicable</td>
@@ -258,11 +253,6 @@ Hydrogen includes the following cart components and hooks:
     <td><a href="/api/hydrogen/components/cart/cartlines">CartLines</a></td>
     <td>Iterates over each cart line and renders its children within a <code>CartLineProvider</code> for each cart line.</td>
     <td><a href="/api/hydrogen/hooks/cart/usecartline">useCartLine</a></td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineselectedoptions">CartLineSelectedOptions</a></td>
-    <td>Takes a function as a child and calls that function for each of the cart line merchandise's selected options.</td>
-    <td>Not applicable</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartprovider">CartProvider</a></td>

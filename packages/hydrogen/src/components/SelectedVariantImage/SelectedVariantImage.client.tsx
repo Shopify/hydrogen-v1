@@ -21,7 +21,7 @@ export function SelectedVariantImage<TTag extends ElementType = 'img'>(
 
   return product.selectedVariant?.image ? (
     <Image
-      image={product.selectedVariant.image}
+      data={product.selectedVariant.image}
       options={options}
       {...passthroughProps}
     />

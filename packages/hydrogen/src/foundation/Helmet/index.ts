@@ -1,1 +1,1 @@
-export {Helmet, RealHelmetData} from './Helmet.client';
+export {Helmet} from './Helmet.client';

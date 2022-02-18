@@ -1,7 +1,6 @@
 import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import {HelmetData} from 'react-helmet-async';
-import type {RealHelmetData} from '../../foundation/Helmet';
 import {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 
 let reqCounter = 0; // For debugging
@@ -27,7 +26,7 @@ export class ServerComponentRequest extends Request {
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
   public ctx: {
     cache: Map<string, any>;
-    helmet: RealHelmetData;
+    helmet: HelmetData;
     shopifyConfig?: ShopifyContextValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
     [key: string]: any;
@@ -54,7 +53,7 @@ export class ServerComponentRequest extends Request {
 
     this.ctx = {
       cache: new Map(),
-      helmet: new HelmetData({}) as unknown as RealHelmetData,
+      helmet: new HelmetData({}),
       queryCacheControl: [],
     };
     this.cookies = this.parseCookies();

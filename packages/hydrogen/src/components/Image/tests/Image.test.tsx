@@ -10,7 +10,7 @@ describe('<Image />', () => {
       const image = getPreviewImage();
       const {url: src, altText, id, width, height} = image;
 
-      const component = mount(<Image image={image} />);
+      const component = mount(<Image data={image} />);
 
       expect(component).toContainReactComponent('img', {
         src,
@@ -26,7 +26,7 @@ describe('<Image />', () => {
       const image = getPreviewImage();
       const id = 'catImage';
 
-      const component = mount(<Image image={image} id={id} />);
+      const component = mount(<Image data={image} id={id} />);
 
       expect(component).toContainReactComponent('img', {
         id,
@@ -37,7 +37,7 @@ describe('<Image />', () => {
       const image = getPreviewImage();
       const loading = 'eager';
 
-      const component = mount(<Image image={image} loading={loading} />);
+      const component = mount(<Image data={image} loading={loading} />);
 
       expect(component).toContainReactComponent('img', {
         loading,
@@ -57,7 +57,7 @@ describe('<Image />', () => {
         .spyOn(utilities, 'getShopifyImageDimensions')
         .mockReturnValue(mockDimensions);
 
-      const component = mount(<Image image={image} options={options} />);
+      const component = mount(<Image data={image} options={options} />);
 
       expect(component).toContainReactComponent('img', {
         width: mockDimensions.width,
@@ -78,7 +78,7 @@ describe('<Image />', () => {
       jest
         .spyOn(utilities, 'getShopifyImageDimensions')
         .mockReturnValue(mockDimensions);
-      const component = mount(<Image image={image} options={options} />);
+      const component = mount(<Image data={image} options={options} />);
 
       const img = component.find('img');
       expect(img?.prop('width')).toBeUndefined();
@@ -100,7 +100,7 @@ describe('<Image />', () => {
           .spyOn(utilities, 'shopifyImageLoader')
           .mockReturnValue(transformedSrc);
 
-        const component = mount(<Image image={image} options={options} />);
+        const component = mount(<Image data={image} options={options} />);
 
         expect(shopifyImageLoaderSpy).toHaveBeenCalledWith({
           src: image.url,
@@ -126,7 +126,7 @@ describe('<Image />', () => {
 
         const component = mount(
           <Image
-            image={image}
+            data={image}
             options={options}
             loader={loaderMock}
             loaderOptions={loaderOptions}
@@ -149,12 +149,7 @@ describe('<Image />', () => {
         url: 'https://cdn.shopify.com/someimage.jpg',
       });
       const component = mount(
-        <Image
-          image={image}
-          className="fancyImage"
-          id="123"
-          alt="Fancy image"
-        />
+        <Image data={image} className="fancyImage" id="123" alt="Fancy image" />
       );
 
       expect(component).toContainReactComponent('img', {

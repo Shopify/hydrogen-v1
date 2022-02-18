@@ -7,7 +7,7 @@ type TestOptions = {
   isBuild?: boolean;
 };
 
-export default async function testCases({getServerUrl}: TestOptions) {
+export default async function testCases({getServerUrl, isBuild}: TestOptions) {
   it('shows the homepage, navigates to about, and increases the count', async () => {
     await page.goto(getServerUrl());
 
