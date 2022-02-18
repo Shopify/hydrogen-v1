@@ -39,7 +39,7 @@ Primitive components and hooks are the building blocks for different component t
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/primitive/money">Money</a></td>
-    <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a> according to the <code>defaultLocale</code> in the <code>shopify.config.js</code> file.</td>
+    <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a>.</td>
     <td><a href="/api/hydrogen/hooks/primitive/usemoney">useMoney</a></td>
   </tr>
   <tr>
@@ -141,19 +141,9 @@ Product and variant components and hooks relate to the goods, digital downloads,
     <td>Not applicable</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantaddtocartbutton">SelectedVariantAddToCartButton</a></td>
-    <td>Renders an <code>AddToCartButton</code> component for the product's selected variant.</td>
-    <td><a href="/api/hydrogen/hooks/product-variant/useproductoptions">useProductOptions</a></td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantbuynowbutton">SelectedVariantBuyNowButton</a></td>
     <td>Renders a <code>BuyNowButton</code> component for the product's selected variant.</td>
     <td>Not applicable</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantimage">SelectedVariantImage</a></td>
-    <td>Renders an <code>Image</code> component for the product's selected variant's image.</td>
-    <td><a href="/api/hydrogen/hooks/product-variant/useproductoptions">useProductOptions</a></td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantmetafield">SelectedVariantMetafield</a></td>
@@ -208,11 +198,6 @@ Cart components and hooks relate to the merchandise that a customer intends to p
     <td><a href="/api/hydrogen/hooks/cart/usecart">useCart</a></td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineattributes">CartLineAttributes</a></td>
-    <td>Takes a function as a child and calls that function for each of the cart line's attributes.</td>
-    <td>Not applicable</td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/components/cart/cartlineimage">CartLineImage</a></td>
     <td>Renders an <code>Image</code> component for the cart line merchandise's image.</td>
     <td>Not applicable</td>
@@ -246,11 +231,6 @@ Cart components and hooks relate to the merchandise that a customer intends to p
     <td><a href="/api/hydrogen/components/cart/cartlines">CartLines</a></td>
     <td>Iterates over each cart line and renders its children within a <code>CartLineProvider</code> for each cart line.</td>
     <td><a href="/api/hydrogen/hooks/cart/usecartline">useCartLine</a></td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineselectedoptions">CartLineSelectedOptions</a></td>
-    <td>Takes a function as a child and calls that function for each of the cart line merchandise's selected options.</td>
-    <td>Not applicable</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartprovider">CartProvider</a></td>

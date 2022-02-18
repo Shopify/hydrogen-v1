@@ -45,7 +45,7 @@ Primitive components are the building blocks for different component types, incl
   <tr>
     <td><a href="/api/hydrogen/components/primitive/money">Money</a></td>
     <td>Client</td>
-    <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a> according to the <code>defaultLocale</code> in the <code>shopify.config.js</code> file.</td>
+    <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a>.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/primitive/rawhtml">RawHtml</a></td>
@@ -89,7 +89,7 @@ Product and variant components relate to the goods, digital downloads, services,
     <th>Description</th>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/productdescription">ProductDescription</a><br><strong>Alias</strong>: <code>Product.Description</code></td>
+    <td><a href="/api/hydrogen/components/product-variant/productdescription">ProductDescription</a></td>
     <td>Client</td>
     <td>Renders a <code>RawHtml</code> component with the product's <a href="/api/storefront/reference/products/product">descriptionHtml</a>.</td>
   </tr>
@@ -99,34 +99,24 @@ Product and variant components relate to the goods, digital downloads, services,
     <td>Renders a <code>Metafield</code> component with a product <a href="/api/storefront/reference/common-objects/metafield">metafield</a>.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/productprice">ProductPrice</a><br><strong>Alias</strong>: <code>Product.Price</code></td>
+    <td><a href="/api/hydrogen/components/product-variant/productprice">ProductPrice</a></td>
     <td>Client</td>
     <td>Renders a <code>Money</code> component with the product <a href="/api/storefront/reference/products/product">priceRange</a>'s <code>maxVariantPrice</code> or <code>minVariantPrice</code>, or the product <a href="/api/storefront/reference/products/product">compareAtPriceRange</a>'s <code>maxVariantPrice</code> or <code>minVariantPrice</code>.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/productprovider">ProductProvider</a><br><strong>Alias</strong>: <code>Product</code></td>
+    <td><a href="/api/hydrogen/components/product-variant/productprovider">ProductProvider</a></td>
     <td>Client</td>
     <td>Sets up a context with product details.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/producttitle">ProductTitle</a><br><strong>Alias</strong>: <code>Product.Title</code></td>
+    <td><a href="/api/hydrogen/components/product-variant/producttitle">ProductTitle</a></td>
     <td>Client</td>
     <td>Renders a <code>span</code> element with the product's title.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantaddtocartbutton">SelectedVariantAddToCartButton</a><br><strong>Alias</strong>: <code>Product.SelectedVariant.AddToCartButton</code></td>
-    <td>Client</td>
-    <td>Renders an <code>AddToCartButton</code> component for the product's selected variant.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantbuynowbutton">SelectedVariantBuyNowButton</a><br><strong>Alias</strong>: <code>Product.SelectedVariant.BuyNowButton</code></td>
+    <td><a href="/api/hydrogen/components/product-variant/selectedvariantbuynowbutton">SelectedVariantBuyNowButton</a></td>
     <td>Client</td>
     <td>Renders a <code>BuyNowButton</code> component for the product's selected variant.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantimage">SelectedVariantImage</a><br><strong>Alias</strong>: <code>Product.SelectedVariant.Image</code></td>
-    <td>Client</td>
-    <td>Renders an <code>Image</code> component for the product's selected variant's image.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantmetafield">SelectedVariantMetafield</a></td>
@@ -134,17 +124,17 @@ Product and variant components relate to the goods, digital downloads, services,
     <td>Renders a <code>Metafield</code> component for the product's selected variant's <a href="/api/storefront/reference/common-objects/metafield">metafield</a>.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantprice">SelectedVariantPrice</a><br><strong>Alias</strong>: <code>Product.SelectedVariant.Price</code></td>
+    <td><a href="/api/hydrogen/components/product-variant/selectedvariantprice">SelectedVariantPrice</a></td>
     <td>Client</td>
     <td>Renders a <code>Money</code> component for the product's selected variant regular or compare at price.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantshoppaybutton">SelectedVariantShopPayButton</a><br><strong>Alias</strong>: <code>Product.SelectedVariant.ShopPayButton</code></td>
+    <td><a href="/api/hydrogen/components/product-variant/selectedvariantshoppaybutton">SelectedVariantShopPayButton</a></td>
     <td>Client</td>
     <td>Renders a <code>ShopPayButton</code> component for the product's selected variant.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantunitprice">SelectedVariantUnitPrice</a><br><strong>Alias</strong>: <code>Product.SelectedVariant.UnitPrice</code></td>
+    <td><a href="/api/hydrogen/components/product-variant/selectedvariantunitprice">SelectedVariantUnitPrice</a></td>
     <td>Client</td>
     <td>Renders a <code>UnitPrice</code> component for the product's selected variant's unit price.</td>
   </tr>
@@ -181,37 +171,32 @@ Cart components relate to the merchandise that a customer intends to purchase.
     <td>Renders a <code>Money</code> component for various amount types related to cart.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineattributes">CartLineAttributes</a><br><strong>Alias</strong>: <code>CartLine.Attributes</code></td>
-    <td>Client</td>
-    <td>Takes a function as a child and calls that function for each of the cart line's attributes.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineimage">CartLineImage</a><br><strong>Alias</strong>: <code>CartLine.Image</code></td>
+    <td><a href="/api/hydrogen/components/cart/cartlineimage">CartLineImage</a></td>
     <td>Client</td>
     <td>Renders an <code>Image</code> component for the cart line merchandise's image.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineprice">CartLinePrice</a><br><strong>Alias</strong>: <code>CartLine.Price</code></td>
+    <td><a href="/api/hydrogen/components/cart/cartlineprice">CartLinePrice</a></td>
     <td>Client</td>
     <td>Renders a <code>Money</code> component for the cart line merchandise's price or compare at price.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineproducttitle">CartLineProductTitle</a><br><strong>Alias</strong>: <code>CartLine.ProductTitle</code></td>
+    <td><a href="/api/hydrogen/components/cart/cartlineproducttitle">CartLineProductTitle</a></td>
     <td>Client</td>
     <td>Renders a <code>span</code> element (or the type of HTML element specified by the <code>as</code> prop) with the cart line merchandise's title.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineprovider">CartLineProvider</a><br><strong>Alias</strong>: <code>CartLine</code></td>
+    <td><a href="/api/hydrogen/components/cart/cartlineprovider">CartLineProvider</a></td>
     <td>Client</td>
     <td>Creates a context for using a cart line.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlinequantity">CartLineQuantity</a><br><strong>Alias</strong>: <code>CartLine.Quantity</code></td>
+    <td><a href="/api/hydrogen/components/cart/cartlinequantity">CartLineQuantity</a></td>
     <td>Client</td>
     <td>Renders a <code>span</code> element (or the type of HTML element specified by the as prop) with the cart line's quantity.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlinequantityadjustbutton">CartLineQuantityAdjustButton</a><br><strong>Alias</strong>: <code>CartLine.QuantityAdjust</code></td>
+    <td><a href="/api/hydrogen/components/cart/cartlinequantityadjustbutton">CartLineQuantityAdjustButton</a></td>
     <td>Shared</td>
     <td>Renders a button that adjusts the cart line's quantity when pressed.</td>
   </tr>
@@ -219,11 +204,6 @@ Cart components relate to the merchandise that a customer intends to purchase.
     <td><a href="/api/hydrogen/components/cart/cartlines">CartLines</a></td>
     <td>Shared</td>
     <td>Iterates over each cart line and renders its children within a <code>CartLineProvider</code> for each cart line.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/cart/cartlineselectedoptions">CartLineSelectedOptions</a><br><strong>Alias</strong>: <code>CartLine.SelectedOptions</code></td>
-    <td>Client</td>
-    <td>Takes a function as a child and calls that function for each of the cart line merchandise's selected options.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/cart/cartprovider">CartProvider</a></td>
