@@ -1,5 +1,8 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import fetch from 'node-fetch';
+import {resolve} from 'path';
+
+import {edit, untilUpdated} from '../../utilities';
 
 type TestOptions = {
   getServerUrl: () => string;
@@ -272,5 +275,52 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     expect(body).toMatch(
       /<meta\s+.*?property="type"\s+content="website"\s*\/>/
     );
+  });
+
+  describe('HMR', () => {
+    it('updates the contents when a client component file changes', async () => {
+      if (isBuild) {
+        return;
+      }
+
+      const fullPath = resolve(
+        __dirname,
+        '../',
+        'src/components/Counter.client.jsx'
+      );
+      const newButtonText = 'add';
+
+      await page.goto(getServerUrl() + '/about');
+      await untilUpdated(() => page.textContent('button'), 'increase');
+      await edit(
+        fullPath,
+        (code) => code.replace('increase count', newButtonText),
+        async () =>
+          await untilUpdated(() => page.textContent('button'), newButtonText)
+      );
+    });
+
+    // TODO: This test is flaky in CI. It's not clear why, but this is what we know:
+    //  - Any test after we use the edit/untilUpdated combo will fail
+    //  - In other words, this test will pass if we put it before the previous one
+    //  - If we do the previous point, the last test will fail instead
+    it.skip('updates the contents when a server component file changes', async () => {
+      if (isBuild) {
+        return;
+      }
+
+      const fullPath = resolve(__dirname, '../', 'src/pages/index.server.jsx');
+      const newheading = 'Snow Devil';
+
+      await page.goto(getServerUrl());
+
+      await untilUpdated(() => page.textContent('h1'), 'Home');
+
+      await edit(
+        fullPath,
+        (code) => code.replace('<h1>Home', `<h1>${newheading}`),
+        async () => await untilUpdated(() => page.textContent('h1'), newheading)
+      );
+    });
   });
 }
