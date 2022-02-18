@@ -13,30 +13,30 @@ import {Boomerang} from '../Boomerang/Boomerang.client';
  * @see https://vitejs.dev/guide/features.html#glob-import
  */
 export function DefaultRoutes({
-  pages,
+  routes,
   serverState,
   fallback,
   log,
 }: {
-  pages: ImportGlobEagerOutput;
+  routes: ImportGlobEagerOutput;
   serverState: Record<string, any>;
   fallback?: ReactElement;
   log: Logger;
 }) {
   const basePath = '/';
 
-  const routes = useMemo(
-    () => createRoutesFromPages(pages, basePath, log),
-    [pages, basePath]
+  const pageRoutes = useMemo(
+    () => createPageRoutes(routes, basePath, log),
+    [routes, basePath]
   );
 
   let foundRoute, foundRouteDetails;
 
-  for (let i = 0; i < routes.length; i++) {
-    foundRouteDetails = matchPath(serverState.pathname, routes[i]);
+  for (let i = 0; i < pageRoutes.length; i++) {
+    foundRouteDetails = matchPath(serverState.pathname, pageRoutes[i]);
 
     if (foundRouteDetails) {
-      foundRoute = routes[i];
+      foundRoute = pageRoutes[i];
       break;
     }
   }
@@ -71,7 +71,7 @@ interface HydrogenRoute {
   exact: boolean;
 }
 
-export function createRoutesFromPages(
+export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
   log: Logger | null = null
@@ -81,7 +81,7 @@ export function createRoutesFromPages(
   const routes = Object.keys(pages)
     .map((key) => {
       let path = key
-        .replace('./pages', '')
+        .replace('./routes', '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
          * Replace /index with /

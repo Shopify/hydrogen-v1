@@ -7,14 +7,14 @@ import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 
-function App({log, pages, ...serverState}) {
+function App({log, routes, ...serverState}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         <CartProvider>
           <DefaultSeo />
           <DefaultRoutes
-            pages={pages}
+            routes={routes}
             serverState={serverState}
             log={log}
             fallback={<NotFound />}
@@ -25,6 +25,6 @@ function App({log, pages, ...serverState}) {
   );
 }
 
-const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
+const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {pages});
+export default renderHydrogen(App, {routes});
