@@ -85,7 +85,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       logServerResponse('ssr', request, status);
       logCacheControlHeaders('ssr', request, componentResponse);
       logQueryTimings('ssr', request);
-      request.savePreloadQueries();
+      request.savePreloadQueries(componentResponse);
 
       return new Response(await componentResponse.customBody, {
         status,
@@ -116,7 +116,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
     logServerResponse('ssr', request, status);
     logCacheControlHeaders('ssr', request, componentResponse);
     logQueryTimings('ssr', request);
-    request.savePreloadQueries();
+    request.savePreloadQueries(componentResponse);
 
     return new Response(html, {
       status,
@@ -284,14 +284,14 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           logServerResponse('str', request, responseOptions.status);
           logCacheControlHeaders('str', request, componentResponse);
           logQueryTimings('str', request);
-          request.savePreloadQueries();
+          request.savePreloadQueries(componentResponse);
         });
       } else {
         writable.close();
         logServerResponse('str', request, responseOptions.status);
         logCacheControlHeaders('str', request, componentResponse);
         logQueryTimings('str', request);
-        request.savePreloadQueries();
+        request.savePreloadQueries(componentResponse);
       }
 
       if (await isStreamingSupported()) {
@@ -351,7 +351,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
 
           logCacheControlHeaders('str', request, componentResponse);
           logQueryTimings('str', request);
-          request.savePreloadQueries();
+          request.savePreloadQueries(componentResponse);
 
           if (componentResponse.canStream() || response.writableEnded) return;
 
@@ -360,7 +360,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
           logServerResponse('str', request, response.statusCode);
           logCacheControlHeaders('str', request, componentResponse);
           logQueryTimings('str', request);
-          request.savePreloadQueries();
+          request.savePreloadQueries(componentResponse);
 
           if (isRedirect(response)) {
             // Redirects found after any async code
@@ -425,7 +425,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
         logServerResponse('rsc', request, 200);
         logCacheControlHeaders('rsc', request, componentResponse);
         logQueryTimings('rsc', request);
-        request.savePreloadQueries();
+        request.savePreloadQueries(componentResponse);
         return new Response(rscReadable);
       }
 
@@ -435,7 +435,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
       logServerResponse('rsc', request, 200);
       logCacheControlHeaders('rsc', request, componentResponse);
       logQueryTimings('rsc', request);
-      request.savePreloadQueries();
+      request.savePreloadQueries(componentResponse);
 
       return new Response(bufferedBody);
     } else if (response) {
@@ -454,7 +454,7 @@ const renderHydrogen: ServerHandler = (App, {pages}) => {
         logServerResponse('rsc', request, response!.statusCode);
         logCacheControlHeaders('rsc', request, componentResponse);
         logQueryTimings('rsc', request);
-        request.savePreloadQueries();
+        request.savePreloadQueries(componentResponse);
       });
     }
   };
@@ -517,7 +517,9 @@ function buildAppRSC({
 
   const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
-      <App {...state} {...hydrogenServerProps} pages={pages} />
+      <PreloadQueries request={request}>
+        <App {...state} {...hydrogenServerProps} pages={pages} />
+      </PreloadQueries>
     </ServerRequestProvider>
   );
 

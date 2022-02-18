@@ -5,12 +5,23 @@ import type {RealHelmetData} from '../../foundation/Helmet';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
 import type {QueryKey} from '../../types';
+import {ServerComponentResponse} from './ServerComponentResponse.server';
+import {hashKey} from '../cache';
 
 export type PreloadQuery = {
   key: QueryKey;
   fetcher: () => Promise<unknown>;
+  preload?: boolean | string | Array<string>;
 };
+
 export type PreloadQueries = Map<string, PreloadQuery>;
+
+export type PreloadSetQueries = {
+  queries: PreloadQueries;
+  setName?: string;
+};
+
+export type PreloadSetQueriesMap = Map<string, PreloadSetQueries>;
 
 let reqCounter = 0; // For debugging
 const generateId =
@@ -21,7 +32,13 @@ const generateId =
       () => crypto.randomUUID() as string
     : () => `req${++reqCounter}`;
 
-const preloadCache = new Map<string, PreloadQueries>();
+// Stores queries by url
+// <url, Map<hashkey(QueryKey), fetcher>
+const preloadCache: PreloadSetQueriesMap = new Map();
+
+// Stores queries by preload set
+// <'product', Map<hashkey(QueryKey), fetcher>
+const preloadSetCache: PreloadSetQueriesMap = new Map();
 
 /**
  * This augments the `Request` object from the Fetch API:
@@ -34,6 +51,7 @@ export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
   public id: string;
   public time: number;
+  public originalUrl: string;
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
   public ctx: {
     cache: Map<string, any>;
@@ -72,6 +90,7 @@ export class ServerComponentRequest extends Request {
       preloadQueries: new Map(),
     };
     this.cookies = this.parseCookies();
+    this.originalUrl = this.headers.get('shopify-original-url') || this.url;
   }
 
   private parseCookies() {
@@ -84,15 +103,66 @@ export class ServerComponentRequest extends Request {
     );
   }
 
-  public getPreloadQueries() {
-    if (preloadCache.has(this.url)) {
-      return preloadCache.get(this.url);
+  public savePreloadQuery(query: PreloadQuery) {
+    if (typeof query.preload === 'string') {
+      saveToPreloadSetQueries(query.preload, query);
+    } else if (query.preload instanceof Array) {
+      query.preload.forEach((preloadSet) => {
+        saveToPreloadSetQueries(preloadSet, query);
+      });
+    } else {
+      this.ctx.preloadQueries.set(hashKey(query.key), query);
     }
   }
 
-  public savePreloadQueries() {
-    preloadCache.set(this.url, this.ctx.preloadQueries);
+  public getPreloadQueries(): PreloadQueries | undefined {
+    if (preloadCache.has(this.originalUrl)) {
+      let combinedPreloadQueries: PreloadQueries = new Map();
+      const urlCache = preloadCache.get(this.originalUrl);
+
+      mergeMapEntries(combinedPreloadQueries, urlCache?.queries);
+      mergeMapEntries(
+        combinedPreloadQueries,
+        preloadSetCache.get('*')?.queries
+      );
+
+      if (urlCache?.setName) {
+        mergeMapEntries(
+          combinedPreloadQueries,
+          preloadSetCache.get(urlCache?.setName)?.queries
+        );
+      }
+
+      return combinedPreloadQueries;
+    } else if (preloadSetCache.has('*')) {
+      return preloadSetCache.get('*')?.queries;
+    }
   }
+
+  public savePreloadQueries(response: ServerComponentResponse) {
+    preloadCache.set(this.originalUrl, {
+      setName: response.preloadSet,
+      queries: this.ctx.preloadQueries,
+    });
+  }
+}
+
+function mergeMapEntries(
+  map1: PreloadQueries,
+  map2: PreloadQueries | undefined
+) {
+  map2 && map2.forEach((v, k) => map1.set(k, v));
+}
+
+function saveToPreloadSetQueries(preloadSet: string, query: PreloadQuery) {
+  let setCache = preloadSetCache.get(preloadSet)?.queries;
+  if (!setCache) {
+    setCache = new Map();
+  }
+  setCache?.set(hashKey(query.key), query);
+  preloadSetCache.set(preloadSet, {
+    queries: setCache,
+  });
 }
 
 /**

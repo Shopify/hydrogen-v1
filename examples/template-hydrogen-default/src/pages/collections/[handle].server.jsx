@@ -17,7 +17,10 @@ export default function Collection({
   country = {isoCode: 'US'},
   collectionProductCount = 24,
   params,
+  response,
 }) {
+  response.preload('collection');
+
   const {handle} = params;
   const {data} = useShopQuery({
     query: QUERY,

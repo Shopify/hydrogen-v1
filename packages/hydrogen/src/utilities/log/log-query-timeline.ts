@@ -1,5 +1,4 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
-// import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
 import {QueryKey} from '../../types';
 import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
@@ -64,7 +63,7 @@ export function logQueryTimings(
         delete detectSuspenseWaterfall[query.name];
       }
 
-      loadColor = query.timingType === 'preload' ? green : color;
+      const loadColor = query.timingType === 'preload' ? green : color;
 
       log.debug(
         color(

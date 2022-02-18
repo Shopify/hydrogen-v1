@@ -2,7 +2,7 @@ import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
-import type {CachingStrategy} from '../../types';
+import type {CachingStrategy, PreloadOptions} from '../../types';
 import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
@@ -34,7 +34,7 @@ export function useShopQuery<T>({
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
   /** Whether to preload this query */
-  preload?: boolean;
+  preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
   if (!import.meta.env.SSR) {
     throw new Error(

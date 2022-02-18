@@ -5,6 +5,7 @@ import type {CachingStrategy} from '../../types';
 export class ServerComponentResponse extends Response {
   private wait = false;
   private cacheOptions?: CachingStrategy;
+  private preloadSetName?: string;
 
   public customStatus?: {code?: number; text?: string};
 
@@ -31,6 +32,14 @@ export class ServerComponentResponse extends Response {
 
   get cacheControlHeader(): string {
     return generateCacheControlHeader(this.cacheOptions || CacheSeconds());
+  }
+
+  preload(name: string) {
+    this.preloadSetName = name;
+  }
+
+  get preloadSet(): string | undefined {
+    return this.preloadSetName;
   }
 
   writeHead({

@@ -1,4 +1,4 @@
-import type {CachingStrategy, QueryKey} from '../../types';
+import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types';
 import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
@@ -8,7 +8,6 @@ import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
   getItemFromCache,
-  hashKey,
   isStale,
   setItemInCache,
 } from '../../framework/cache';
@@ -17,7 +16,7 @@ import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
   cache?: CachingStrategy;
-  preload?: boolean;
+  preload?: PreloadOptions;
 }
 
 /**
@@ -44,7 +43,8 @@ export function useQuery<T>(
   collectQueryTimings(request, withCacheIdKey, 'load');
 
   if (queryOptions?.preload) {
-    request.ctx.preloadQueries.set(hashKey(withCacheIdKey), {
+    request.savePreloadQuery({
+      preload: queryOptions?.preload,
       key: withCacheIdKey,
       fetcher,
     });
