@@ -39,7 +39,7 @@ function BoxFallback() {
 }
 
 function StorefrontInfo() {
-  const {data} = useShopQuery({query: QUERY});
+  const {data} = useShopQuery({query: QUERY, preload: true});
   const shopName = data ? data.shop.name : '';
   const products = data && flattenConnection(data.products);
   const collections = data && flattenConnection(data.collections);
@@ -86,7 +86,7 @@ function StorefrontInfo() {
 }
 
 function TemplateLinks() {
-  const {data} = useShopQuery({query: QUERY});
+  const {data} = useShopQuery({query: QUERY, preload: true});
   const products = data && flattenConnection(data.products);
   const collections = data && flattenConnection(data.collections);
 
