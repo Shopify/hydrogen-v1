@@ -79,9 +79,15 @@
     "rimraf": "^3.0.2"
   },
   "peerDependencies": {
+    "@cloudflare/kv-asset-handle": "^0.2.0",
     "react": "0.0.0-experimental-529dc3ce8-20220124",
     "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
     "vite": "^2.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@cloudflare/kv-asset-handle": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@vitejs/plugin-react": "^1.1.1",
