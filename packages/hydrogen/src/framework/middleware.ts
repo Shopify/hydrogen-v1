@@ -61,31 +61,8 @@ export function hydrogenMiddleware({
        * We're running in the Node.js runtime without access to `fetch`,
        * which is needed for proxy requests and server-side API requests.
        */
-      if (!globalThis.fetch) {
-        const fetch = await import('node-fetch');
-        const {default: AbortController} = await import('abort-controller');
-        // @ts-ignore
-        globalThis.fetch = fetch;
-        // @ts-ignore
-        globalThis.Request = fetch.Request;
-        // @ts-ignore
-        globalThis.Response = fetch.Response;
-        // @ts-ignore
-        globalThis.Headers = fetch.Headers;
-        // @ts-ignore
-        globalThis.AbortController = AbortController;
-      }
-
-      if (!globalThis.ReadableStream) {
-        const {ReadableStream, WritableStream, TransformStream} = await import(
-          'web-streams-polyfill/ponyfill'
-        );
-
-        Object.assign(globalThis, {
-          ReadableStream,
-          WritableStream,
-          TransformStream,
-        });
+      if (!globalThis.fetch || !globalThis.ReadableStream) {
+        await import('../utilities/web-api-polyfill');
       }
 
       const entrypoint = await getServerEntrypoint();
