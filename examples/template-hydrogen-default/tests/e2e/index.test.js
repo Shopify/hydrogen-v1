@@ -1,4 +1,4 @@
-import {startHydrogenNodeServer} from './utils';
+import {startHydrogenNodeServer} from '../utils';
 
 describe('index', async () => {
   let hydrogen;
@@ -11,7 +11,7 @@ describe('index', async () => {
     await hydrogen.cleanUp();
   });
 
-  test('should have the correct title', async () => {
+  it('should have the correct title', async () => {
     await hydrogen.visit('/');
     const heading = await hydrogen.page.$('h1');
     expect(heading).not.toBeNull();

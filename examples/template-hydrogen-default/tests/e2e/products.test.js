@@ -1,6 +1,6 @@
-import {startHydrogenNodeServer} from './utils';
+import {startHydrogenNodeServer} from '../utils';
 
-describe('product', async () => {
+describe('products', async () => {
   let hydrogen;
 
   beforeAll(async () => {
@@ -11,7 +11,7 @@ describe('product', async () => {
     await hydrogen.cleanUp();
   });
 
-  test('shows the correct product title', async () => {
+  it('shows the correct product title', async () => {
     await hydrogen.visit('/products/snowboard');
     const heading = await hydrogen.page.$('h1');
     expect(heading).not.toBeNull();
