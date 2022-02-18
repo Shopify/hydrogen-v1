@@ -12,4 +12,4 @@ COPY --from=build-env /app /app
 EXPOSE ${PORT:-8080}
 
 WORKDIR /app
-CMD ["server.js"]
+CMD ["dist/server/index.js"]
