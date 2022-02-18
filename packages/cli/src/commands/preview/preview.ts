@@ -10,7 +10,7 @@ export async function preview(env: Env) {
 
   if (!(await fs.exists('dist/worker/index.js'))) {
     throw new HelpfulError({
-      title: 'worker.js not found',
+      title: 'worker not found',
       content: 'A worker build is required for this command.',
       suggestion: ({workspace}) =>
         `Run \`${workspace.packageManager} run build\` to generate a worker build and try again.`,

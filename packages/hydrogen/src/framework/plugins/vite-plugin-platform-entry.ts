@@ -2,6 +2,7 @@ import type {Plugin, ResolvedConfig} from 'vite';
 import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
 import MagicString from 'magic-string';
 import path from 'path';
+import fs from 'fs';
 
 const SSR_BUNDLE_NAME = 'index.js';
 
@@ -65,7 +66,29 @@ export default () => {
         delete bundle[key];
         value.fileName = SSR_BUNDLE_NAME;
         bundle[SSR_BUNDLE_NAME] = value;
-        options.entryFileNames = SSR_BUNDLE_NAME;
+      }
+    },
+    writeBundle(options) {
+      if (config.build.ssr && options.dir) {
+        const {output = {}} = config.build.rollupOptions || {};
+        const {format = ''} =
+          (Array.isArray(output) ? output[0] : output) || {};
+
+        const mainFile = `./${SSR_BUNDLE_NAME}`;
+        const packageJson = {
+          type:
+            process.env.WORKER || ['es', 'esm'].includes(format)
+              ? 'module'
+              : 'commonjs',
+          main: mainFile,
+          exports: {'.': mainFile, mainFile},
+        };
+
+        fs.writeFileSync(
+          path.join(options.dir, 'package.json'),
+          JSON.stringify(packageJson, null, 2),
+          'utf-8'
+        );
       }
     },
   } as Plugin;
