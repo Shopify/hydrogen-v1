@@ -12,7 +12,7 @@ Hydrogen includes a [`Seo`](/api/hydrogen/components/primitive/seo) client compo
 
 ### `Seo` client component
 
-The [`Seo`](/api/hydrogen/components/primitive/seo) client component uses the Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](/api/storefront/2022-01/objects/Product) is used to generate the `<head>` tags for the products page.
+The [`Seo`](/api/hydrogen/components/primitive/seo) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](/api/storefront/2022-01/objects/Product) is used to generate the `<head>` tags for the products page.
 
 You can customize the `<head>` tags at the route level:
 
@@ -46,7 +46,7 @@ const customData = {
 
 The following example shows how to pass a `product` prop to the component to generate standard SEO-related tags for your product page:
 
-{% codeblock file, filename: 'Product.client.jsx' %}
+{% codeblock file, filename: '/products/[handle].server.jsx' %}
 
 ```jsx
 <Seo type="product" data={product} />
@@ -56,7 +56,7 @@ The following example shows how to pass a `product` prop to the component to gen
 
 If you want to add more custom `head` tags, then you can import `Helmet` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
 
-{% codeblock file, filename: 'Product.client.jsx' %}
+{% codeblock file, filename: '/products/[handle].server.jsx' %}
 
 ```jsx
 // Import only client components.
