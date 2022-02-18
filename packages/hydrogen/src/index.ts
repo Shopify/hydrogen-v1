@@ -34,3 +34,5 @@ export {
   CacheMonths,
   CacheCustom,
 } from './framework/CachingStrategy';
+
+export type {HydrogenAPIRoute, HydrogenPage} from './types';

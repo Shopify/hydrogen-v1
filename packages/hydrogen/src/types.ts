@@ -1,8 +1,9 @@
-import type {ServerResponse} from 'http';
+import type {RequestOptions, ServerResponse} from 'http';
 import type {Logger} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
+import type {ServerState} from '.';
 
 type CommonOptions = {
   App: any;
@@ -128,3 +129,23 @@ export interface HydrogenVitePluginOptions {
   devCache?: boolean;
   purgeQueryCacheOnBuild?: boolean;
 }
+type JSONValue = string | number | boolean | JSONObject | JSONArray;
+
+interface JSONObject {
+  [x: string]: JSONValue;
+}
+
+interface JSONArray extends Array<JSONValue> {}
+
+export type HydrogenAPIRoute = (
+  request: Request,
+  options: RequestOptions
+) => Promise<Response | string | JSONObject>;
+
+export type HydrogenPageProps = ServerState & {
+  params: Record<string, any>;
+  request: ServerComponentRequest;
+  response: ServerComponentResponse;
+};
+
+export type HydrogenPage = (props: HydrogenPageProps) => JSX.Element;
