@@ -270,8 +270,10 @@ export function CartProvider({
 
   const cartFetch = useCallback(
     async (cartId: string) => {
+      console.log(' !!! in cartFetch !!!');
       dispatch({type: 'cartFetch'});
 
+      console.log(' !!! BEFORE !!!');
       const {data} = await fetchCart<CartQueryQueryVariables, CartQueryQuery>({
         query: CartQuery,
         variables: {
@@ -280,6 +282,8 @@ export function CartProvider({
           country: countryCode,
         },
       });
+
+      console.log(' !!! AFTER !!!');
 
       if (!data?.cart) {
         window.localStorage.removeItem(CART_ID_STORAGE_KEY);
@@ -608,6 +612,7 @@ export function CartProvider({
   const didFetchCart = useRef(false);
 
   useEffect(() => {
+    console.log(' !!! in useEffect !!!');
     if (
       localStorage.getItem(CART_ID_STORAGE_KEY) &&
       state.status === 'uninitialized' &&
@@ -679,6 +684,8 @@ export function CartProvider({
     cartAttributesUpdate,
     discountCodesUpdate,
   ]);
+
+  console.log('!!! cartContextValue !!!', cartContextValue);
 
   return (
     <CartContext.Provider value={cartContextValue}>
