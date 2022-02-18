@@ -139,6 +139,60 @@ async function handleEvent(event) {
 addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));
 ```
 
+### Components renamed props that takes in Storefront API object as `data`
+
+See [#627](https://github.com/Shopify/hydrogen/issues/627) for more details, but here are all the components with breaking change in prop name.
+
+```diff
+- <ExternalVideo video={firstMediaElement} />
++ <ExternalVideo data={firstMediaElement} />
+```
+
+```diff
+- <Video video={firstMediaElement}/>
++ <Video data={firstMediaElement}/>
+```
+
+```diff
+- <Image width="622" height="465" image={collection.image} />
++ <Image width="622" height="465" data={collection.image} />
+```
+
+```diff
+- <MediaFile media={product.node.media.edges[0].node} />
++ <MediaFile data={product.node.media.edges[0].node} />
+```
+
+```diff
+- <ModelViewer model={firstMediaElement} />
++ <ModelViewer data={firstMediaElement} />
+```
+
+```diff
+- <Metafield metafield={metafield} />
++ <Metafield data={metafield} />
+```
+
+```diff
+- <Money money={amount} />
++ <Money data={amount} />
+```
+
+```diff
+- <UnitPrice unitPrice={product.selectedVariant.unitPrice} unitPriceMeasurement={product.selectedVariant.unitPriceMeasurement} />
++ <UnitPrice data={product.selectedVariant.unitPrice} measurement={product.selectedVariant.unitPriceMeasurement} />
+```
+
+```diff
+- <ProductProvider product={product} initialVariantId={initialVariant.id}>
++ <ProductProvider data={product} initialVariantId={initialVariant.id}>
+```
+
+```diff
+- <CartProvider cart={CART_WITH_LINES}>
++ <CartProvider data={CART_WITH_LINES}>
+```
+
 ## Older versions
 
 Please see the the [release notes on GitHub](https://github.com/Shopify/hydrogen/releases) for more details about older versions.
