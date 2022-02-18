@@ -133,7 +133,8 @@ function SomeComponent() {
   - `<CartProvider>`: renamed cart prop to data
 - feat [breaking change]: remove `handleEvent` in favor of `handleRequest`.
 - feat [breaking change]: remove `assetHandler` parameter in the new `handleRequest`.
-- deps: update `react-helmet-async` to 1.2.3 and remove our custome type
+- deps: update `react-helmet-async` to 1.2.3 and remove our custom types
+- dx [breaking change]: `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
 
 ## 0.10.1 - 2022-01-26
 

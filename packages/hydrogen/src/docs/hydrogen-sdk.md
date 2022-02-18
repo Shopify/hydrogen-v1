@@ -151,7 +151,6 @@ Hydrogen includes the following product and variant components and hooks:
     <td>Not applicable</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantaddtocartbutton">SelectedVariantAddToCartButton</a></td>
     <td>Renders an <code>AddToCartButton</code> component for the product's selected variant.</td>
     <td><a href="/api/hydrogen/hooks/product-variant/useproductoptions">useProductOptions</a></td>
   </tr>

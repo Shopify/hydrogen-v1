@@ -7,7 +7,7 @@ import {
   ProductTitle,
   ProductDescription,
   SelectedVariantUnitPrice,
-  SelectedVariantAddToCartButton,
+  AddToCartButton,
   SelectedVariantBuyNowButton,
 } from '@shopify/hydrogen/client';
 import ProductOptions from './ProductOptions.client';
@@ -53,12 +53,12 @@ function AddToCartMarkup() {
 
   return (
     <div className="space-y-2 mb-8">
-      <SelectedVariantAddToCartButton
+      <AddToCartButton
         className={BUTTON_PRIMARY_CLASSES}
         disabled={isOutOfStock}
       >
         {isOutOfStock ? 'Out of stock' : 'Add to bag'}
-      </SelectedVariantAddToCartButton>
+      </AddToCartButton>
       {isOutOfStock ? (
         <p className="text-black text-center">Available in 2-3 weeks</p>
       ) : (

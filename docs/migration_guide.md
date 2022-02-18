@@ -54,6 +54,10 @@ Optionally, remove also `/src/entry-client.jsx` and update `index.html`:
 
 Any stylesheet imported in `/src/entry-client.jsx` can directly be imported in `index.html` using `<link>` tags.
 
+### Removed <SelectedVariantX /> components ([Issue 592](https://github.com/Shopify/hydrogen/issues/592))
+
+The components prefixed with `SelectedVariant` have been removed and we have made modifications to the corresponding non-`SelectedVariant` component counterparts to support better default functionality. For example, `<SelectedVariantAddToCartButton />` has been removed and `<AddToCartButton />` will now use the `selectedVariant` by default when no `variantId` prop is provided. A full list of the changes can be found in [Issue 592](https://github.com/Shopify/hydrogen/issues/592).
+
 ### Worker entry file now imports `handleRequest` and needs manual asset handling.
 
 `renderHydrogen` now returns a `handleRequest` function that must be called once per request. Therefore, in the Worker entry file we must use it directly instead of importing `handleEvent`.

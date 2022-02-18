@@ -118,7 +118,6 @@ Hydrogen includes the following product and variant components:
     <td>Renders a <code>span</code> element with the product's title.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantaddtocartbutton">SelectedVariantAddToCartButton</a></td>
     <td>Client</td>
     <td>Renders an <code>AddToCartButton</code> component for the product's selected variant.</td>
   </tr>
