@@ -31,7 +31,7 @@ async function createServer(root = process.cwd()) {
     hydrogenMiddleware({
       getServerEntrypoint: () =>
         // @ts-ignore
-        require(path.resolve(root, 'dist/server/App.server.js')),
+        require(path.resolve(root, 'dist/server/index')),
       indexTemplate: indexProd,
     })
   );

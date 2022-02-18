@@ -115,7 +115,7 @@ addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));
 Finally, update `package.json` to include a `main` key pointing to the generated worker file:
 
 ```
-"main": "dist/worker/worker.js"
+"main": "dist/worker/index.js"
 ```
 
 Then you can deploy your project with [Wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update):

@@ -5,7 +5,7 @@ const {loadProdEnv} = require('./utils');
 
 async function createServer(root = process.cwd()) {
   const mf = new Miniflare({
-    scriptPath: path.resolve(root, 'dist/worker/cfw-event.js'),
+    scriptPath: path.resolve(root, 'dist/worker/index.js'),
     sitePath: path.resolve(root, 'dist/client'),
     bindings: await loadProdEnv(),
   });

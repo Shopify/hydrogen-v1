@@ -8,7 +8,7 @@ export async function preview(env: Env) {
   const root = workspace.root();
   const port = 3000;
 
-  if (!(await fs.exists('dist/worker/worker.js'))) {
+  if (!(await fs.exists('dist/worker/index.js'))) {
     throw new HelpfulError({
       title: 'worker.js not found',
       content: 'A worker build is required for this command.',
@@ -24,7 +24,7 @@ export async function preview(env: Env) {
   const mf = new MiniOxygen({
     buildCommand: 'yarn build',
     globals: {Oxygen: {}},
-    scriptPath: path.resolve(root, 'dist/worker/worker.js'),
+    scriptPath: path.resolve(root, 'dist/worker/index.js'),
     sitePath: path.resolve(root, 'dist/client'),
   });
 

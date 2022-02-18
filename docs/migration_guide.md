@@ -28,7 +28,7 @@ This change affects the generated files during server build. Therefore, in place
 ```diff
   hydrogenMiddleware({
 -    getServerEntrypoint: () => require('./dist/server/entry-server'),
-+    getServerEntrypoint: () => require('./dist/server/App.server'),
++    getServerEntrypoint: () => require('./dist/server/index'),
     indexTemplate,
   }),
 ```

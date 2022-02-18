@@ -3,6 +3,8 @@ import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
 import MagicString from 'magic-string';
 import path from 'path';
 
+const SSR_BUNDLE_NAME = 'index.js';
+
 export default () => {
   let config: ResolvedConfig;
   return {
@@ -55,6 +57,15 @@ export default () => {
           code: ms.toString(),
           map: ms.generateMap({file: id, source: id}),
         };
+      }
+    },
+    generateBundle(options, bundle) {
+      if (config.build.ssr) {
+        const [[key, value]] = Object.entries(bundle);
+        delete bundle[key];
+        value.fileName = SSR_BUNDLE_NAME;
+        bundle[SSR_BUNDLE_NAME] = value;
+        options.entryFileNames = SSR_BUNDLE_NAME;
       }
     },
   } as Plugin;
