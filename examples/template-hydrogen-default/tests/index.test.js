@@ -1,6 +1,6 @@
 import {startHydrogenNodeServer} from './utils';
 
-describe('product', async () => {
+describe('index', async () => {
   let hydrogen;
 
   beforeAll(async () => {
