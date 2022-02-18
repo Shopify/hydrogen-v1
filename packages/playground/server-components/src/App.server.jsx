@@ -1,5 +1,11 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {DefaultRoutes, ShopifyProvider, setLogger} from '@shopify/hydrogen';
+import {
+  Router,
+  DefaultRoutes,
+  ShopifyProvider,
+  setLogger,
+  Route,
+} from '@shopify/hydrogen';
 import shopifyConfig from '..//shopify.config';
 import {Suspense} from 'react';
 
@@ -22,11 +28,13 @@ function App({...serverState}) {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <DefaultRoutes
-          routes={serverState.routes}
-          serverState={serverState}
-          fallback="Not Found"
-        />
+        <Router>
+          <DefaultRoutes
+            routes={serverState.routes}
+            serverState={serverState}
+            fallback="Not Found"
+          />
+        </Router>
       </ShopifyProvider>
     </Suspense>
   );
