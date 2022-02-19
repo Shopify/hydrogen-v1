@@ -28,7 +28,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
-import type {HelmetData} from 'react-helmet-async';
+import type {HeadData} from 'react-helmet-async';
 
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
@@ -207,7 +207,7 @@ async function render(
 
   headers['Content-type'] = HTML_CONTENT_TYPE;
   const {bodyAttributes, htmlAttributes, ...head} = extractHeadElements(
-    request.ctx.helmet
+    request.ctx.head
   );
 
   html = html
@@ -631,18 +631,18 @@ function buildAppSSR(
   return {AppSSR, rscReadable: rscReadableForFlight};
 }
 
-function extractHeadElements({context: {helmet}}: HelmetData) {
-  return helmet
+function extractHeadElements({context: {head}}: HeadData) {
+  return head
     ? {
-        base: helmet.base.toString(),
-        bodyAttributes: helmet.bodyAttributes.toString(),
-        htmlAttributes: helmet.htmlAttributes.toString(),
-        link: helmet.link.toString(),
-        meta: helmet.meta.toString(),
-        noscript: helmet.noscript.toString(),
-        script: helmet.script.toString(),
-        style: helmet.style.toString(),
-        title: helmet.title.toString(),
+        base: head.base.toString(),
+        bodyAttributes: head.bodyAttributes.toString(),
+        htmlAttributes: head.htmlAttributes.toString(),
+        link: head.link.toString(),
+        meta: head.meta.toString(),
+        noscript: head.noscript.toString(),
+        script: head.script.toString(),
+        style: head.style.toString(),
+        title: head.title.toString(),
       }
     : {};
 }
