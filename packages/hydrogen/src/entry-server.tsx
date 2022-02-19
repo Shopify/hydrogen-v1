@@ -28,7 +28,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
-import type {HeadData} from 'react-helmet-async';
+import type {HelmetData as HeadData} from 'react-helmet-async';
 
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
@@ -631,18 +631,18 @@ function buildAppSSR(
   return {AppSSR, rscReadable: rscReadableForFlight};
 }
 
-function extractHeadElements({context: {head}}: HeadData) {
-  return head
+function extractHeadElements({context: {helmet}}: HeadData) {
+  return helmet
     ? {
-        base: head.base.toString(),
-        bodyAttributes: head.bodyAttributes.toString(),
-        htmlAttributes: head.htmlAttributes.toString(),
-        link: head.link.toString(),
-        meta: head.meta.toString(),
-        noscript: head.noscript.toString(),
-        script: head.script.toString(),
-        style: head.style.toString(),
-        title: head.title.toString(),
+        base: helmet.base.toString(),
+        bodyAttributes: helmet.bodyAttributes.toString(),
+        htmlAttributes: helmet.htmlAttributes.toString(),
+        link: helmet.link.toString(),
+        meta: helmet.meta.toString(),
+        noscript: helmet.noscript.toString(),
+        script: helmet.script.toString(),
+        style: helmet.style.toString(),
+        title: helmet.title.toString(),
       }
     : {};
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  HeadProps,
-  Head as ActualHead,
-  HeadData,
+  HelmetProps as HeadProps,
+  Helmet as ActualHead,
+  HelmetData as HeadData,
 } from 'react-helmet-async';
 import {useEnvContext} from '../ssr-interop';
 
