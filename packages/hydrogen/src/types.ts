@@ -143,7 +143,7 @@ export type HydrogenAPIRoute = (
 ) => Promise<Response | string | JSONObject>;
 
 export type HydrogenPageProps = ServerState & {
-  params: Record<string, any>;
+  params: Record<string, unknown>;
   request: ServerComponentRequest;
   response: ServerComponentResponse;
 };
