@@ -1,6 +1,6 @@
 import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
-import {HeadData} from 'react-helmet-async';
+import {HeadData} from '../../foundation/Head';
 import {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 
 let reqCounter = 0; // For debugging

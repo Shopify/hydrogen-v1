@@ -28,7 +28,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
-import type {HeadData} from 'react-helmet-async';
+import type {HeadData} from './foundation/Head';
 
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
