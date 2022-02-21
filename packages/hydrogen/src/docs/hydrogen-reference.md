@@ -141,12 +141,6 @@ Product and variant components and hooks relate to the goods, digital downloads,
     <td>Not applicable</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantbuynowbutton">SelectedVariantBuyNowButton</a></td>
-    <td>Renders a <code>BuyNowButton</code> component for the product's selected variant.</td>
-    <td>Not applicable</td>
-  </tr>
-
-  <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantprice">SelectedVariantPrice</a></td>
     <td>Renders a <code>Money</code> component for the product's selected variant regular or compare at price.</td>
     <td><a href="/api/hydrogen/hooks/product-variant/useproductoptions">useProductOptions</a></td>
