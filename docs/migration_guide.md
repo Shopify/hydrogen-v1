@@ -28,7 +28,7 @@ This change affects the generated files during server build. Therefore, in place
 ```diff
   hydrogenMiddleware({
 -    getServerEntrypoint: () => require('./dist/server/entry-server'),
-+    getServerEntrypoint: () => require('./dist/server/index'),
++    getServerEntrypoint: () => require('./dist/server'),
     indexTemplate,
   }),
 ```
@@ -77,56 +77,54 @@ Furthermore, the new `handleRequest` function does not have access to static ass
 
 ```js
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
-
 // ...
-
 event.respondWith(
-  isAsset(event)
-    ? getAssetFromKv(event)
-    : handleRequest(event.request, {
-        /* ... */
-      })
+  isAsset(event) ? getAssetFromKv(event) : handleRequest(event.request, {})
 );
 ```
 
 #### Full example of a worker entry file (`/src/worker.js`)
 
 ```js
-import handleRequest from './src/entry-server.jsx';
+import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
+import handleRequest from './src/App.server';
 // eslint-disable-next-line node/no-missing-import
 import indexHtml from './dist/client/index.html?raw';
-import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 
-// Custom asset handling logic
-async function handleAsset(event) {
-  const url = new URL(event.request.url);
-  if (/\.(png|jpe?g|gif|css|js|svg|ico|map)$/i.test(url.pathname)) {
-    const response = await getAssetFromKV(event, {});
-    if (response.status < 400) {
-      const filename = url.pathname.split('/').pop();
+function isAsset(url) {
+  return /\.(png|jpe?g|gif|css|js|svg|ico|map)$/i.test(url.pathname);
+}
 
-      const maxAge =
-        filename.split('.').length > 2
-          ? 31536000 // hashed asset, will never be updated
-          : 86400; // favicon and other public assets
+async function handleAsset(url, event) {
+  const response = await getAssetFromKV(event, {});
 
-      response.headers.append('cache-control', `public, max-age=${maxAge}`);
-    }
+  if (response.status < 400) {
+    const filename = url.pathname.split('/').pop();
 
-    return response;
+    const maxAge =
+      filename.split('.').length > 2
+        ? 31536000 // hashed asset, will never be updated
+        : 86400; // favicon and other public assets
+
+    response.headers.append('cache-control', `public, max-age=${maxAge}`);
   }
+
+  return response;
 }
 
 async function handleEvent(event) {
   try {
-    return (
-      (await handleAsset(event)) ||
-      (await handleRequest(event.request, {
-        indexTemplate: indexHtml,
-        cache: caches.default,
-        context: event,
-      }))
-    );
+    const url = new URL(event.request.url);
+
+    if (isAsset(url)) {
+      return await handleAsset(url, event);
+    }
+
+    return await handleRequest(event.request, {
+      indexTemplate: indexHtml,
+      cache: caches.default,
+      context: event,
+    });
   } catch (error) {
     return new Response(error.message || error.toString(), {status: 500});
   }
