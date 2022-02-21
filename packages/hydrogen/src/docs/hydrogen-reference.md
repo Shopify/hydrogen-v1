@@ -145,11 +145,7 @@ Product and variant components and hooks relate to the goods, digital downloads,
     <td>Renders a <code>BuyNowButton</code> component for the product's selected variant.</td>
     <td>Not applicable</td>
   </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantmetafield">SelectedVariantMetafield</a></td>
-    <td>Renders a <code>Metafield</code> component for the product's selected variant's <a href="/api/storefront/reference/common-objects/metafield">metafield</a>.</td>
-    <td>Not applicable</td>
-  </tr>
+
   <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantprice">SelectedVariantPrice</a></td>
     <td>Renders a <code>Money</code> component for the product's selected variant regular or compare at price.</td>
