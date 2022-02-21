@@ -139,6 +139,7 @@ function SomeComponent() {
 - fix: backticks in HTML break RSC hydration.
 - feat [breaking change]: Helmet component has been renamed to Head
 - feat: enable early hydration when streaming
+- feat: add variantId prop to `<ProductMetafield />` component
 
 ## 0.10.1 - 2022-01-26
 
