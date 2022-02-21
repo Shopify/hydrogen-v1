@@ -1,7 +1,6 @@
 import {
   flattenConnection,
   useProduct,
-  useMoney,
   useParsedMetafields,
   ProductProvider,
   ProductTitle,
