@@ -8,7 +8,7 @@ import {
   ProductDescription,
   SelectedVariantUnitPrice,
   AddToCartButton,
-  SelectedVariantBuyNowButton,
+  BuyNowButton,
 } from '@shopify/hydrogen/client';
 import ProductOptions from './ProductOptions.client';
 import Gallery from './Gallery.client';
@@ -62,9 +62,12 @@ function AddToCartMarkup() {
       {isOutOfStock ? (
         <p className="text-black text-center">Available in 2-3 weeks</p>
       ) : (
-        <SelectedVariantBuyNowButton className={BUTTON_SECONDARY_CLASSES}>
+        <BuyNowButton
+          variantId={selectedVariant.id}
+          className={BUTTON_SECONDARY_CLASSES}
+        >
           Buy it now
-        </SelectedVariantBuyNowButton>
+        </BuyNowButton>
       )}
     </div>
   );
