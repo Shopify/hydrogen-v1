@@ -47,23 +47,22 @@ export function hydrogenMiddleware({
   getServerEntrypoint,
   devServer,
 }: HydrogenMiddlewareArgs) {
+  /**
+   * We're running in the Node.js runtime without access to `fetch`,
+   * which is needed for proxy requests and server-side API requests.
+   */
+  const webPolyfills =
+    !globalThis.fetch || !globalThis.ReadableStream
+      ? import('../utilities/web-api-polyfill')
+      : undefined;
+
   return async function (
     request: IncomingMessage,
     response: ServerResponse,
     next: NextFunction
   ) {
-    const url = new URL(
-      'http://' + request.headers.host + (request.originalUrl ?? request.url)
-    );
-
     try {
-      /**
-       * We're running in the Node.js runtime without access to `fetch`,
-       * which is needed for proxy requests and server-side API requests.
-       */
-      if (!globalThis.fetch || !globalThis.ReadableStream) {
-        await import('../utilities/web-api-polyfill');
-      }
+      await webPolyfills;
 
       const entrypoint = await getServerEntrypoint();
       const handleRequest: RequestHandler = entrypoint.default ?? entrypoint;
@@ -106,7 +105,7 @@ export function hydrogenMiddleware({
       try {
         const template =
           typeof indexTemplate === 'function'
-            ? await indexTemplate(url.toString())
+            ? await indexTemplate(request.originalUrl ?? request.url ?? '')
             : indexTemplate;
         const html = template.replace(
           `<div id="root"></div>`,

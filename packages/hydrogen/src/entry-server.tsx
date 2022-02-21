@@ -55,7 +55,9 @@ declare global {
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 interface RequestHandlerOptions {
-  indexTemplate: string | ((url: string) => Promise<string>);
+  indexTemplate:
+    | string
+    | ((url: string) => Promise<string | {default: string}>);
   cache?: Cache;
   streamableResponse?: ServerResponse;
   dev?: boolean;
@@ -88,10 +90,14 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    const template =
+    let template =
       typeof indexTemplate === 'function'
         ? await indexTemplate(url.toString())
         : indexTemplate;
+
+    if (template && typeof template !== 'string') {
+      template = template.default;
+    }
 
     if (!isReactHydrationRequest && pages) {
       const apiRoute = getApiRoute(url, {pages});
