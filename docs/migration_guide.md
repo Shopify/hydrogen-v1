@@ -54,6 +54,10 @@ Optionally, remove also `/src/entry-client.jsx` and update `index.html`:
 
 Any stylesheet imported in `/src/entry-client.jsx` can directly be imported in `index.html` using `<link>` tags.
 
+### Removed <SelectedVariantX /> components ([Issue 592](https://github.com/Shopify/hydrogen/issues/592))
+
+The components prefixed with `SelectedVariant` have been removed and we have made modifications to the corresponding non-`SelectedVariant` component counterparts to support better default functionality. For example, `<SelectedVariantAddToCartButton />` has been removed and `<AddToCartButton />` will now use the `selectedVariant` by default when no `variantId` prop is provided. A full list of the changes can be found in [Issue 592](https://github.com/Shopify/hydrogen/issues/592).
+
 ### Worker entry file now imports `handleRequest` and needs manual asset handling.
 
 `renderHydrogen` now returns a `handleRequest` function that must be called once per request. Therefore, in the Worker entry file we must use it directly instead of importing `handleEvent`.
@@ -131,6 +135,60 @@ async function handleEvent(event) {
 }
 
 addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));
+```
+
+### Components renamed props that takes in Storefront API object as `data`
+
+See [#627](https://github.com/Shopify/hydrogen/issues/627) for more details, but here are all the components with breaking change in prop name.
+
+```diff
+- <ExternalVideo video={firstMediaElement} />
++ <ExternalVideo data={firstMediaElement} />
+```
+
+```diff
+- <Video video={firstMediaElement}/>
++ <Video data={firstMediaElement}/>
+```
+
+```diff
+- <Image width="622" height="465" image={collection.image} />
++ <Image width="622" height="465" data={collection.image} />
+```
+
+```diff
+- <MediaFile media={product.node.media.edges[0].node} />
++ <MediaFile data={product.node.media.edges[0].node} />
+```
+
+```diff
+- <ModelViewer model={firstMediaElement} />
++ <ModelViewer data={firstMediaElement} />
+```
+
+```diff
+- <Metafield metafield={metafield} />
++ <Metafield data={metafield} />
+```
+
+```diff
+- <Money money={amount} />
++ <Money data={amount} />
+```
+
+```diff
+- <UnitPrice unitPrice={product.selectedVariant.unitPrice} unitPriceMeasurement={product.selectedVariant.unitPriceMeasurement} />
++ <UnitPrice data={product.selectedVariant.unitPrice} measurement={product.selectedVariant.unitPriceMeasurement} />
+```
+
+```diff
+- <ProductProvider product={product} initialVariantId={initialVariant.id}>
++ <ProductProvider data={product} initialVariantId={initialVariant.id}>
+```
+
+```diff
+- <CartProvider cart={CART_WITH_LINES}>
++ <CartProvider data={CART_WITH_LINES}>
 ```
 
 ## Older versions

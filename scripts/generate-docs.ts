@@ -141,9 +141,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/ProductPrice',
         'components/ProductProvider',
         'components/ProductTitle',
-        'components/SelectedVariantAddToCartButton',
         'components/SelectedVariantBuyNowButton',
-        'components/SelectedVariantImage',
         'components/SelectedVariantMetafield',
         'components/SelectedVariantPrice',
         'components/SelectedVariantShopPayButton',
@@ -319,7 +317,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the set of Shopify-specific commerce components, hooks, and utilities included in Hydrogen.',
       url: '/api/hydrogen/index.md',
-      entry: 'docs/hydrogen-sdk.md',
+      entry: 'docs/hydrogen-reference.md',
     }),
     // Framework
     generator.section({

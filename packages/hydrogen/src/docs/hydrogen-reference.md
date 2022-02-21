@@ -9,7 +9,7 @@ Hydrogen contains a set of Shopify-specific commerce components, hooks, and util
 
 ## Primitive components and hooks
 
-Primitive components and hooks are the building blocks for different component types, including products, variants, and cart. Hydrogen includes the following primitive components and hooks:
+Primitive components and hooks are the building blocks for different component types, including products, variants, and cart.
 
 <table>
   <tr>
@@ -76,20 +76,12 @@ Primitive components and hooks are the building blocks for different component t
 
 ## Global components and hooks
 
-[ShopifyProvider](/api/hydrogen/components/global/shopifyprovider) is a global Hydrogen component that wraps your entire app. You should place it in your app's entry point component. For example, your app's entry point component might be `<App>`.
-
-The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
-
-The `ShopifyProvider` component relates to the following global hooks that you can use to fetch data from server components:
+Global components wrap around your entire app. Hydrogen includes the [ShopifyProvider](/api/hydrogen/components/global/shopifyprovider) component. The `ShopifyProvider` component relates to the following hooks that are used to fetch data from server components:
 
 <table>
   <tr>
     <th>Hook name</th>
     <th>Description</th>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
-    <td>Use to get current url in server or client component.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useserverstate">useServerState</a></td>
@@ -115,9 +107,7 @@ The `ShopifyProvider` component relates to the following global hooks that you c
 
 ## Product and variant components and hooks
 
-{% include hydrogen/products-and-variants.md %}
-
-Hydrogen includes the following product and variant components and hooks:
+Product and variant components and hooks relate to the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options.
 
 <table>
   <tr>
@@ -151,19 +141,9 @@ Hydrogen includes the following product and variant components and hooks:
     <td>Not applicable</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantaddtocartbutton">SelectedVariantAddToCartButton</a></td>
-    <td>Renders an <code>AddToCartButton</code> component for the product's selected variant.</td>
-    <td><a href="/api/hydrogen/hooks/product-variant/useproductoptions">useProductOptions</a></td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantbuynowbutton">SelectedVariantBuyNowButton</a></td>
     <td>Renders a <code>BuyNowButton</code> component for the product's selected variant.</td>
     <td>Not applicable</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantimage">SelectedVariantImage</a></td>
-    <td>Renders an <code>Image</code> component for the product's selected variant's image.</td>
-    <td><a href="/api/hydrogen/hooks/product-variant/useproductoptions">useProductOptions</a></td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantmetafield">SelectedVariantMetafield</a></td>
@@ -189,9 +169,7 @@ Hydrogen includes the following product and variant components and hooks:
 
 ## Cart components and hooks
 
-{% include hydrogen/cart.md %}
-
-Hydrogen includes the following cart components and hooks:
+Cart components and hooks relate to the merchandise that a customer intends to purchase.
 
 <table>
   <tr>
@@ -268,10 +246,7 @@ Hydrogen includes the following cart components and hooks:
 
 ## Localization components and hooks
 
-{% include hydrogen/localization.md %}
-
-The [LocalizationProvider](/api/hydrogen/components/localization/localizationprovider) component automatically queries the Storefront API's [`localization`](/api/storefront/reference/common-objects/queryroot) field for the ISO code, name of the country, and available countries, and keeps this information in a context.
-
+Localization components and hooks relate to creating shopping experiences for a global audience in local languages and currencies. Hydrogen includes a [LocalizationProvider](/api/hydrogen/components/localization/localizationprovider) component.
 The `LocalizationProvider` component relates to the following localization hooks:
 
 <table>
@@ -291,9 +266,7 @@ The `LocalizationProvider` component relates to the following localization hooks
 
 ## Metafield components and hooks
 
-{% include hydrogen/metafields.md %}
-
-Hydrogen includes the following metafield components and hooks:
+Metafield components and hooks relate to attaching specialized information to Shopify resources, such as part numbers or release dates.
 
 <table>
   <tr>
@@ -340,9 +313,3 @@ Hydrogen includes the following utilities to help speed up your development proc
     <td>Parses a metafield's value from a string to a sensible type corresponding to the metafield's type.</td>
   </tr>
 </table>
-
-## Next steps
-
-- [Get started](/custom-storefronts/hydrogen/getting-started/create) with Hydrogen and begin building a custom storefront.
-- Learn about [Hydrogen's architecture and framework](/custom-storefronts/hydrogen/framework).
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
