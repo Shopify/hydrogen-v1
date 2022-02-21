@@ -3,7 +3,7 @@ const path = require('path');
 const {Miniflare} = require('miniflare');
 const {loadProdEnv} = require('./utils');
 
-async function createServer(root = process.cwd()) {
+async function createServer({port = 8080, root = process.cwd()} = {}) {
   const mf = new Miniflare({
     scriptPath: path.resolve(root, 'dist/worker/index.js'),
     sitePath: path.resolve(root, 'dist/client'),
@@ -12,13 +12,13 @@ async function createServer(root = process.cwd()) {
 
   const app = mf.createServer();
 
-  return {app};
+  return {app, port};
 }
 
 if (require.main === module) {
-  createServer().then(({app}) =>
-    app.listen(3000, () => {
-      console.log('http://localhost:3000');
+  createServer().then(({app, port}) =>
+    app.listen(port, () => {
+      console.log(`http://localhost:${port}`);
     })
   );
 }

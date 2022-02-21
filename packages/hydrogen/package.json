@@ -79,7 +79,6 @@
     "rimraf": "^3.0.2"
   },
   "peerDependencies": {
-    "@cloudflare/kv-asset-handle": "^0.2.0",
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
     "react": "0.0.0-experimental-529dc3ce8-20220124",
@@ -88,9 +87,6 @@
     "vite": "^2.8.0"
   },
   "peerDependenciesMeta": {
-    "@cloudflare/kv-asset-handle": {
-      "optional": true
-    },
     "body-parser": {
       "optional": true
     },
