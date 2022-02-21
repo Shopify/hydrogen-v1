@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   HelmetProps as HeadProps,
-  Helmet as ActualHead,
+  Helmet,
   HelmetData as HeadData,
 } from 'react-helmet-async';
 import {useEnvContext} from '../ssr-interop';
@@ -16,8 +16,8 @@ export function Head({
 
   return (
     // @ts-ignore
-    <ActualHead {...props} headData={headData}>
+    <Helmet {...props} helmetData={headData}>
       {children}
-    </ActualHead>
+    </Helmet>
   );
 }
