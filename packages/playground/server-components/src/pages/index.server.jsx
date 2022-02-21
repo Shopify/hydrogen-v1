@@ -10,6 +10,8 @@ export default function Index() {
     <>
       <h1>Home</h1>
 
+      <div>Quotes should not make it crash: ` ' "</div>
+
       <div className="secrets-server">
         <div>PUBLIC_VARIABLE:{import.meta.env.PUBLIC_VARIABLE || ''}|</div>
         <div>PRIVATE_VARIABLE:{Oxygen.env.PRIVATE_VARIABLE || ''}|</div>
