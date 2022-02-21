@@ -8,11 +8,21 @@ const SSR_BUNDLE_NAME = 'index.js';
 
 export default () => {
   let config: ResolvedConfig;
+  let isESM: boolean;
+
   return {
     name: 'vite-plugin-platform-entry',
     enforce: 'pre',
     configResolved(_config) {
       config = _config;
+
+      if (config.build.ssr) {
+        const {output = {}} = config.build.rollupOptions || {};
+        const {format = ''} =
+          (Array.isArray(output) ? output[0] : output) || {};
+
+        isESM = Boolean(process.env.WORKER) || ['es', 'esm'].includes(format);
+      }
     },
     resolveId(source, importer) {
       if (normalizePath(source).includes('@shopify/hydrogen/platforms/')) {
@@ -70,20 +80,23 @@ export default () => {
         delete bundle[key];
         value.fileName = SSR_BUNDLE_NAME;
         bundle[SSR_BUNDLE_NAME] = value;
+
+        // This ensures the file has a proper
+        // default export instead of exporting an
+        // object containing a 'default' property.
+        if (value.type === 'chunk' && !isESM) {
+          value.code = value.code.replace(
+            /((^|;)[\s]*)exports\[['"]default['"]\]\s*=/m,
+            '$1module.exports ='
+          );
+        }
       }
     },
     writeBundle(options) {
       if (config.build.ssr && options.dir) {
-        const {output = {}} = config.build.rollupOptions || {};
-        const {format = ''} =
-          (Array.isArray(output) ? output[0] : output) || {};
-
         const mainFile = `./${SSR_BUNDLE_NAME}`;
         const packageJson = {
-          type:
-            process.env.WORKER || ['es', 'esm'].includes(format)
-              ? 'module'
-              : 'commonjs',
+          type: isESM ? 'module' : 'commonjs',
           main: mainFile,
           exports: {'.': mainFile, mainFile},
         };
