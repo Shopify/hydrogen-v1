@@ -27,17 +27,6 @@ describe('<ProductProvider />', () => {
         variants: flattenConnection(product.variants as any),
         priceRange: product.priceRange,
         compareAtPriceRange: product.compareAtPriceRange,
-        options: expect.any(Object),
-        selectedVariant: undefined,
-        selectedOptions: expect.any(Object),
-        selectedSellingPlan: undefined,
-        selectedSellingPlanAllocation: undefined,
-        sellingPlanGroups: [],
-        setSelectedVariant: expect.any(Function),
-        setSelectedOptions: expect.any(Function),
-        setSelectedOption: expect.any(Function),
-        isOptionInStock: expect.any(Function),
-        setSelectedSellingPlan: expect.any(Function),
       })
     );
   });

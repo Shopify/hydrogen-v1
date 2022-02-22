@@ -16,7 +16,7 @@ export async function serve(root: string, isProd: boolean) {
 
   // @ts-ignore
   const {createServer} = await import(resolve(root, 'start-node.js'));
-  const {app} = await createServer(root, isProd);
+  const {app} = await createServer(port);
 
   return new Promise((resolve, reject) => {
     try {

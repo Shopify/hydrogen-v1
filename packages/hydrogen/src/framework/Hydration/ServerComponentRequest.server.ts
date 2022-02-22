@@ -1,12 +1,11 @@
 import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
-import {HelmetData} from 'react-helmet-async';
-import type {RealHelmetData} from '../../foundation/Helmet';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
 import type {QueryKey} from '../../types';
 import {ServerComponentResponse} from './ServerComponentResponse.server';
 import {hashKey} from '../cache';
+import {HelmetData as HeadData} from 'react-helmet-async';
 
 export type PreloadQuery = {
   key: QueryKey;
@@ -55,7 +54,7 @@ export class ServerComponentRequest extends Request {
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
   public ctx: {
     cache: Map<string, any>;
-    helmet: RealHelmetData;
+    head: HeadData;
     shopifyConfig?: ShopifyContextValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
@@ -84,7 +83,7 @@ export class ServerComponentRequest extends Request {
 
     this.ctx = {
       cache: new Map(),
-      helmet: new HelmetData({}) as unknown as RealHelmetData,
+      head: new HeadData({}),
       queryCacheControl: [],
       queryTimings: [],
       preloadQueries: new Map(),

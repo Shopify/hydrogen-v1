@@ -1,5 +1,5 @@
 import React from 'react';
-import {Helmet} from '../../client';
+import {Head} from '../../client';
 
 import type {Description} from './types';
 
@@ -9,9 +9,9 @@ export function DescriptionSeo({description}: {description?: Description}) {
   }
 
   return (
-    <Helmet>
+    <Head>
       <meta name="description" content={description} />
       <meta property="og:description" content={description} />
-    </Helmet>
+    </Head>
   );
 }

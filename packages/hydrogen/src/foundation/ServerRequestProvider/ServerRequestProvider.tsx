@@ -1,5 +1,5 @@
 import React, {createContext, useContext} from 'react';
-import {getTime} from '../..';
+import {getTime} from '../../utilities/timing';
 
 import {hashKey} from '../../framework/cache';
 import type {

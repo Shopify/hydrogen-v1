@@ -1,6 +1,8 @@
 name: Tests and Lint
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -29,7 +31,7 @@ jobs:
         run: yarn install --frozen-lockfile --ignore-engines --network-timeout 36000
 
       - name: Build the code
-        run: yarn build
+        run: yarn build --force
 
       - name: Check formatting
         run: yarn format:check

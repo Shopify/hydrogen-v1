@@ -54,10 +54,10 @@ readChangelogs().forEach(({packageChangelogPath, packageChangelog}) => {
       // - An Unreleased header, that is immediatly preceded by a bullet ("- ...")
       // - A commented out Unreleased header, that is immediatly preceded by a level 2 heading (Version info)
 
-      const unreleasedHeaderWithContent = /^## Unreleased\n\n- /gm;
-      const unreleasedHeaderWithSubHeader = /^## Unreleased\n\n### /gm;
+      const unreleasedHeaderWithContent = /^## \[?Unreleased\]?\n\n- /gm;
+      const unreleasedHeaderWithSubHeader = /^## \[?Unreleased\]?\n\n### /gm;
       const commentedUnreleasedHeaderWithNoContent =
-        /^<!-- ## Unreleased -->\n\n## /gm;
+        /^<!-- ## \[?Unreleased\]? -->\n\n## /gm;
 
       expect([
         unreleasedHeaderWithContent.test(packageChangelog) ||
@@ -70,7 +70,8 @@ readChangelogs().forEach(({packageChangelogPath, packageChangelog}) => {
       const headerLines = packageChangelog
         .split('\n')
         .filter(
-          (line) => HEADER_START_REGEX.exec(line) || /## Unreleased/.exec(line)
+          (line) =>
+            HEADER_START_REGEX.exec(line) || /## \[?Unreleased\]?/.exec(line)
         )
         .sort();
       const uniqueHeaderLines = headerLines.filter(
@@ -84,12 +85,13 @@ readChangelogs().forEach(({packageChangelogPath, packageChangelog}) => {
 
 const allowedHeaders = [
   '# Changelog',
-  '## Unreleased',
-  /^## \d+\.\d+\.\d-\w+\.\d+ - \d\d\d\d-\d\d-\d\d$/, // -alpha.x releases
-  /^## \d+\.\d+\.\d+ - \d\d\d\d-\d\d-\d\d$/,
-  '### Fixed',
+  /^## \[?Unreleased\]?$/,
+  /^## \[?\d+\.\d+\.\d-\w+\.\d+\]? - \d\d\d\d-\d\d-\d\d$/, // -alpha.x releases
+  /^## \[?\d+\.\d+\.\d+\]? - \d\d\d\d-\d\d-\d\d$/,
   '### Added',
+  '### Breaking Change',
   '### Changed',
+  '### Fixed',
   '### Deprecated',
   '### Removed',
   '### Security',

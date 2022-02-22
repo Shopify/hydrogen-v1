@@ -19,9 +19,9 @@ export type QueryTiming = {
 
 const color = gray;
 const TIMING_MAPPING = {
-  load: 'Load',
+  load: 'Get',
   render: 'Render',
-  data: 'Fetch',
+  data: 'Data',
   preload: 'Preload',
 };
 

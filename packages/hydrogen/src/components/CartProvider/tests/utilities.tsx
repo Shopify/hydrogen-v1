@@ -1,8 +1,8 @@
 import React from 'react';
 import {createMount} from '@shopify/react-testing';
 import {CartContext} from '../context';
-import {CartWithActions} from '../types';
-import {CART_WITH_ACTIONS} from './fixtures';
+import {CartWithActions, Cart} from '../types';
+import {CART_ACTIONS} from './fixtures';
 
 export const mountWithCartProvider = createMount<
   CartProviderOptions,
@@ -16,11 +16,19 @@ export const mountWithCartProvider = createMount<
   ),
 });
 
-function getCartConfig(config: CartProviderOptions = {}): CartWithActions {
-  return {
-    ...CART_WITH_ACTIONS,
+function getCartConfig({
+  cart = {},
+  ...config
+}: CartProviderOptions = {}): CartWithActions {
+  const finalConfig = {
+    ...CART_ACTIONS,
+    ...cart,
     ...config,
   };
+
+  return finalConfig;
 }
 
-type CartProviderOptions = Partial<CartWithActions>;
+type CartProviderOptions = {
+  cart?: Partial<Cart>;
+} & Partial<CartWithActions>;
