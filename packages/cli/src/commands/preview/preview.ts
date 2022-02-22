@@ -19,7 +19,7 @@ export async function preview(env: Env) {
 
   const mf = new MiniOxygen({
     buildCommand: 'yarn build',
-    globals: {Oxygen: {}},
+    globals: {},
     scriptPath: path.resolve(root, 'dist/worker/worker.js'),
     watch: true,
     buildWatchPaths: ['./src'],

@@ -1,6 +1,5 @@
 import http from "http";
 import https from "https";
-import vm from 'vm';
 
 import {
   CorePlugin,
@@ -32,7 +31,6 @@ export class MiniOxygen extends MiniflareCore<Plugins> {
     const storageFactory = new StorageFactory();
 
     // Extract globals for script runner
-    const globals = options.globals;
     delete options.globals;
 
     super(
@@ -40,7 +38,7 @@ export class MiniOxygen extends MiniflareCore<Plugins> {
       {
         log: new Log(LogLevel.VERBOSE),
         storageFactory,
-        scriptRunner: new VMScriptRunner(vm.createContext(globals)),
+        scriptRunner: new VMScriptRunner(),
       },
       {
         ...options,
