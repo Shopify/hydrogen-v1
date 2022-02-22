@@ -1,4 +1,4 @@
-# Migration Guide
+# Migration guide
 
 This file is a living document that gathers required changes to user applications for every release. These changes must be applied incrementally: when upgrading from version A to C, changes for version B must also be considered unless stated otherwise. If a version is missing from this guide, it should be safe to upgrade without changing the app code.
 
@@ -191,6 +191,15 @@ See [#627](https://github.com/Shopify/hydrogen/issues/627) for more details, but
 ```diff
 - <CartProvider cart={CART_WITH_LINES}>
 + <CartProvider data={CART_WITH_LINES}>
+```
+
+## Helmet component has been renamed to Head
+
+We renamed the Helmet component that's exported from `@shopify/hydrogen/client`. Update your imports to reference `<Head>` instead of `<Helmet>`. Refer to [#720](https://github.com/Shopify/hydrogen/issues/720) for more details.
+
+```diff
+- import {Helmet} from '@shopify/hydrogen/client';
++ import {Head} from '@shopify/hydrogen/client';
 ```
 
 ## Older versions

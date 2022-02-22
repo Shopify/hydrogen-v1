@@ -1,5 +1,5 @@
 import React from 'react';
-import {Helmet} from '../../client';
+import {Head} from '../../client';
 
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
@@ -23,7 +23,7 @@ export function HomePageSeo({title, description, url}: HomePage) {
 
   return (
     <>
-      <Helmet>
+      <Head>
         <meta property="og:url" content={url} />
 
         <script type="application/ld+json">
@@ -33,7 +33,7 @@ export function HomePageSeo({title, description, url}: HomePage) {
         <script type="application/ld+json">
           {JSON.stringify(webSiteSchema)}
         </script>
-      </Helmet>
+      </Head>
       <TitleSeo title={title} />
       {description && <DescriptionSeo description={description} />}
     </>

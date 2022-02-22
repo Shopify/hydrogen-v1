@@ -54,20 +54,20 @@ The following example shows how to pass a `product` prop to the component to gen
 
 {% endcodeblock %}
 
-If you want to add more custom `head` tags, then you can import `Helmet` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
+If you want to add more custom `head` tags, then you can import `Head` from Hydrogen on any client component and use the syntax described by the [underlying Helmet library](https://github.com/nfl/react-helmet):
 
 {% codeblock file, filename: '/products/[handle].server.jsx' %}
 
 ```jsx
 // Import only client components.
 
-import {Helmet} from '@shopify/hydrogen/client';
+import {Head} from '@shopify/hydrogen/client';
 
 return (
   <Seo type="product" data={product} />
-  <Helmet>
+  <Head>
     <meta property="something" content="else" />
-  </Helmet>
+  </Head>
 );
 ```
 

@@ -136,6 +136,7 @@ function SomeComponent() {
 - deps: update `react-helmet-async` to 1.2.3 and remove our custom types
 - dx [breaking change]: `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
 - dx [breaking change]: remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
+- feat [breaking change]: Helmet component has been renamed to Head
 
 ## 0.10.1 - 2022-01-26
 
