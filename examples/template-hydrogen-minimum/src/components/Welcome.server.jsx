@@ -23,7 +23,7 @@ export default function Welcome() {
       <p>
         Get started by editing <strong>pages/Index.server.jsx</strong>,
         <br />
-        reading our{' '}
+        reading the{' '}
         <a
           target="_blank"
           href="https://shopify.dev/custom-storefronts/hydrogen"
