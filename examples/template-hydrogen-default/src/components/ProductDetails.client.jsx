@@ -1,12 +1,11 @@
 import {
   flattenConnection,
   useProduct,
-  useMoney,
   useParsedMetafields,
   ProductProvider,
   ProductTitle,
   ProductDescription,
-  SelectedVariantUnitPrice,
+  ProductPrice,
   AddToCartButton,
   BuyNowButton,
 } from '@shopify/hydrogen/client';
@@ -16,36 +15,6 @@ import {
   BUTTON_PRIMARY_CLASSES,
   BUTTON_SECONDARY_CLASSES,
 } from './Button.client';
-
-/**
- * A client component that displays detailed information about a product to allow buyers to make informed decisions
- */
-function ProductPriceMarkup() {
-  const product = useProduct();
-  const variantPrice = useMoney(product.selectedVariant.priceV2);
-  const variantCompareAtPrice = useMoney(
-    product.selectedVariant.compareAtPriceV2 ?? product.selectedVariant.priceV2,
-  );
-  return (
-    <div className="flex md:flex-col items-end font-semibold text-lg md:items-start md:mb-4">
-      {variantPrice.amount !== variantCompareAtPrice.amount && (
-        <span className="text-gray-500 line-through text-lg mr-2.5">
-          {variantCompareAtPrice.currencyNarrowSymbol}
-          {variantCompareAtPrice.amount}
-        </span>
-      )}
-      <span className="text-gray-900">
-        {variantPrice.currencyCode} {variantPrice.currencyNarrowSymbol}
-        {variantPrice.amount}
-      </span>
-      <SelectedVariantUnitPrice className="text-gray-500">
-        {({currencyCode, amount, currencyNarrowSymbol, referenceUnit}) =>
-          `${currencyCode} ${currencyNarrowSymbol}${amount}/${referenceUnit}`
-        }
-      </SelectedVariantUnitPrice>
-    </div>
-  );
-}
 
 function AddToCartMarkup() {
   const {selectedVariant} = useProduct();
@@ -155,7 +124,15 @@ export default function ProductDetails({product}) {
             )}
             <span />
             <div className="flex justify-between md:block">
-              <ProductPriceMarkup />
+              <ProductPrice
+                className="text-gray-500 line-through text-lg font-semibold"
+                priceType="compareAt"
+                variantId={initialVariant.id}
+              />
+              <ProductPrice
+                className="text-gray-900 text-lg font-semibold"
+                variantId={initialVariant.id}
+              />
             </div>
           </div>
 
@@ -172,7 +149,15 @@ export default function ProductDetails({product}) {
                   {product.vendor}
                 </div>
               )}
-              <ProductPriceMarkup />
+              <ProductPrice
+                className="text-gray-500 line-through text-lg font-semibold"
+                priceType="compareAt"
+                variantId={initialVariant.id}
+              />
+              <ProductPrice
+                className="text-gray-900 text-lg font-semibold"
+                variantId={initialVariant.id}
+              />
             </div>
             {/* Product Options */}
             <div className="mt-8">
