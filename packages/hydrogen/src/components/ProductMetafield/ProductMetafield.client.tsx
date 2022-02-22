@@ -15,7 +15,7 @@ export interface ProductMetafieldProps
    * product's metafield.
    */
   namespace: string;
-  /** If provided, use this variant's metafield corresponding to this Id instead of the product's metafield. */
+  /** The ID of the variant. If provided, then use the metafield corresponding to the variant ID instead of the product's metafield. */
   variantId?: string;
 }
 
