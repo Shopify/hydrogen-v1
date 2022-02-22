@@ -43,6 +43,7 @@ import {
 } from './streaming.server';
 import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
+import {RenderType} from './utilities/log/log';
 
 declare global {
   // This is provided by a Vite plugin
@@ -200,9 +201,7 @@ async function render(
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
 
-    logServerResponse('ssr', request, status);
-    logCacheControlHeaders('ssr', request, componentResponse);
-    logQueryTimings('ssr', request);
+    logInfo('ssr', status, request, componentResponse);
 
     return new Response(await componentResponse.customBody, {
       status,
@@ -411,15 +410,11 @@ async function stream(
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => writable.close(), 0);
-        logServerResponse('str', request, responseOptions.status);
-        logCacheControlHeaders('str', request, componentResponse);
-        logQueryTimings('rsc', request);
+        logInfo('str', responseOptions.status, request, componentResponse);
       });
     } else {
       writable.close();
-      logServerResponse('str', request, responseOptions.status);
-      logCacheControlHeaders('str', request, componentResponse);
-      logQueryTimings('rsc', request);
+      logInfo('str', responseOptions.status, request, componentResponse);
     }
 
     if (await isStreamingSupported()) {
@@ -477,15 +472,13 @@ async function stream(
         log.trace('node complete stream');
 
         logCacheControlHeaders('str', request, componentResponse);
-        logQueryTimings('rsc', request);
+        logQueryTimings('str', request);
 
         if (componentResponse.canStream() || response.writableEnded) return;
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
-        logServerResponse('str', request, response.statusCode);
-        logCacheControlHeaders('str', request, componentResponse);
-        logQueryTimings('rsc', request);
+        logInfo('str', response.statusCode, request, componentResponse);
 
         if (isRedirect(response)) {
           // Redirects found after any async code
@@ -552,18 +545,14 @@ async function hydrate(
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      logServerResponse('rsc', request, 200);
-      logCacheControlHeaders('rsc', request, componentResponse);
-      logQueryTimings('rsc', request);
+      logInfo('rsc', 200, request, componentResponse);
       return new Response(rscReadable);
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    logServerResponse('rsc', request, 200);
-    logCacheControlHeaders('rsc', request, componentResponse);
-    logQueryTimings('rsc', request);
+    logInfo('rsc', 200, request, componentResponse);
 
     return new Response(bufferedBody);
   } else if (response) {
@@ -579,9 +568,7 @@ async function hydrate(
       .pipe(response) as Writable;
 
     stream.on('finish', function () {
-      logServerResponse('rsc', request, response.statusCode);
-      logCacheControlHeaders('rsc', request, componentResponse);
-      logQueryTimings('rsc', request);
+      logInfo('rsc', response.statusCode, request, componentResponse);
     });
   }
 }
@@ -870,4 +857,15 @@ function flightContainer({
   }
 
   return script + '</script>';
+}
+
+function logInfo(
+  type: RenderType,
+  status: number,
+  request: ServerComponentRequest,
+  componentResponse: ServerComponentResponse
+) {
+  logServerResponse(type, request, status);
+  logCacheControlHeaders(type, request, componentResponse);
+  logQueryTimings(type, request);
 }
