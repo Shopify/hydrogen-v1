@@ -6,6 +6,37 @@ import {ProductProvider} from '../../ProductProvider';
 import {ProductPrice} from '../ProductPrice.client';
 
 describe('<ProductPrice />', () => {
+  describe('variantId prop is provided', () => {
+    it("renders <Money /> with the variant's price", () => {
+      const product = getProduct();
+      const price = mountWithProviders(
+        <ProductProvider data={product} initialVariantId="">
+          <ProductPrice variantId={product.variants.edges[0].node.id} />
+        </ProductProvider>
+      );
+
+      expect(price).toContainReactComponent(Money, {
+        data: product.variants.edges[0].node.priceV2,
+      });
+    });
+
+    it("renders <Money /> with the  variant's minimum compareAt price", () => {
+      const product = getProduct();
+      const price = mountWithProviders(
+        <ProductProvider data={product} initialVariantId="">
+          <ProductPrice
+            priceType="compareAt"
+            variantId={product.variants.edges[0].node.id}
+          />
+        </ProductProvider>
+      );
+
+      expect(price).toContainReactComponent(Money, {
+        data: product.variants.edges[0].node.compareAtPriceV2,
+      });
+    });
+  });
+
   it("renders <Money /> with the product's minimum regular price by default", () => {
     const product = getProduct();
     const price = mountWithProviders(

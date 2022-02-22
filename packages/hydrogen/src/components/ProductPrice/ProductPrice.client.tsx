@@ -9,6 +9,8 @@ export interface ProductPriceProps extends Omit<MoneyProps, 'data'> {
   priceType?: 'regular' | 'compareAt';
   /** The type of value. Valid values: `min` (default) or `max`. */
   valueType?: 'max' | 'min';
+  /** The ID of the variant. */
+  variantId?: string;
 }
 
 /**
@@ -19,22 +21,35 @@ export function ProductPrice<TTag extends ElementType>(
   props: Props<TTag> & ProductPriceProps
 ) {
   const product = useProduct();
-  const {priceType = 'regular', valueType = 'min', ...passthroughProps} = props;
+  const {
+    priceType = 'regular',
+    variantId,
+    valueType = 'min',
+    ...passthroughProps
+  } = props;
 
   if (product == null) {
     throw new Error('Expected a ProductProvider context, but none was found');
   }
 
-  let price: MoneyV2 | undefined;
+  let price: MoneyV2 | undefined | null;
+
+  const variant = variantId
+    ? product?.variants?.find((variant) => variant.id === variantId)
+    : null;
 
   if (priceType === 'compareAt') {
-    if (valueType === 'max') {
-      price = product.compareAtPriceRange?.maxVariantPrice;
+    if (variantId && variant) {
+      price = variant?.compareAtPriceV2;
+    } else if (valueType === 'max') {
+      price = product?.compareAtPriceRange?.maxVariantPrice;
     } else {
-      price = product.compareAtPriceRange?.minVariantPrice;
+      price = product?.compareAtPriceRange?.minVariantPrice;
     }
   } else {
-    if (valueType === 'max') {
+    if (variantId && variant) {
+      price = variant?.priceV2;
+    } else if (valueType === 'max') {
       price = product.priceRange?.maxVariantPrice;
     } else {
       price = product.priceRange?.minVariantPrice;

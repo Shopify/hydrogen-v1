@@ -19,6 +19,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Add a default virtual entry-client in `/@shopify/hydrogen/entry-client` that can be used in `index.html`
 - Enable early hydration when streaming
 - Add variantId prop to `<ProductMetafield />` component [#730](https://github.com/Shopify/hydrogen/pull/730)
+- Add variantId prop to `<ProductPrice />` component
 
 ### Breaking Change
 
@@ -42,6 +43,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
 - Remove the `<SelectedVariantMetafield />` component in favour of using `<ProductMetafield variantId={product.selectedVariant.id} />`
 - Remove the `<SelectedVariantShopPayButton />` component in favour of using `<ShopPayButton variantId={product.selectedVariant.id} />`
+- Remove the `<SelectedVariantPrice/>` component in favour of using `<ProductPrice variantId={product.selectedVariant.id} />`
 
 ### Changed
 
