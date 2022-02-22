@@ -150,6 +150,7 @@ function SomeComponent() {
 - Remove `assetHandler` parameter in the new `handleRequest`
 - `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
 - Remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
+- Remove the `<SelectedVariantMetafield />` component in favour of using `<ProductMetafield variantId={product.selectedVariant.id} />`
 
 ## [0.10.1] - 2022-01-26
 
