@@ -63,6 +63,13 @@ function updateChangelogForPackage(packageLocation) {
   const newVersion = JSON.parse(readFileSync(packageJsonPath)).version;
   const changelogContent = readFileSync(changelogPath, 'utf8');
 
+  if (newVersion.includes('-')) {
+    console.log(
+      `- ${relativeChangelogPath}: Skipping as ${newVersion} is a prerelease`
+    );
+    return '';
+  }
+
   if (changelogContent.includes(`\n## ${newVersion}`)) {
     console.log(
       `- ${relativeChangelogPath}: Skipping as ${newVersion} header is already present`
