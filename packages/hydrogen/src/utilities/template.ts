@@ -13,7 +13,7 @@ export function getScriptsFromTemplate(template: string): {
 
   if (body) {
     const scripts = body.matchAll(
-      /<script.+?src="(?<script>([\\/\w-_\.]+?))".*?><\/script>/g
+      /<script.+?src="(?<script>([^"]+?))".*?><\/script>/g
     );
 
     for (const match of scripts) {
