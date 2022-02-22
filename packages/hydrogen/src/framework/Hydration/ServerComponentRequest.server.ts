@@ -3,7 +3,6 @@ import {getTime} from '../../utilities/timing';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
 import type {PreloadOptions, QueryKey} from '../../types';
-import {ServerComponentResponse} from './ServerComponentResponse.server';
 import {hashKey} from '../cache';
 import {HelmetData as HeadData} from 'react-helmet-async';
 
@@ -113,7 +112,7 @@ export class ServerComponentRequest extends Request {
     }
   }
 
-  public savePreloadQueries(response: ServerComponentResponse) {
+  public savePreloadQueries() {
     preloadCache.set(this.originalUrl, this.ctx.preloadQueries);
   }
 }

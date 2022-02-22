@@ -887,5 +887,5 @@ function logInfo(
   logServerResponse(type, request, status);
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
-  request.savePreloadQueries(componentResponse);
+  request.savePreloadQueries();
 }
