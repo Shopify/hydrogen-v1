@@ -26,7 +26,7 @@ export default function Welcome() {
         reading the{' '}
         <a
           target="_blank"
-          href="https://shopify.dev/custom-storefronts/hydrogen"
+          href="https://shopify.dev/custom-storefronts/hydrogen/getting-started/create"
         >
           getting started guide
         </a>{' '}
