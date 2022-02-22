@@ -129,4 +129,4 @@ export interface HydrogenVitePluginOptions {
   purgeQueryCacheOnBuild?: boolean;
 }
 
-export type PreloadOptions = boolean | string | Array<string>;
+export type PreloadOptions = boolean | string;

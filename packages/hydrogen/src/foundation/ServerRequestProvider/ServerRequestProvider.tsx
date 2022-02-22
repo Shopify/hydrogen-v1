@@ -3,7 +3,7 @@ import {getTime} from '../../utilities/timing';
 
 import {hashKey} from '../../framework/cache';
 import type {
-  PreloadQueries,
+  PreloadQueriesByURL,
   ServerComponentRequest,
 } from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
@@ -126,7 +126,7 @@ export function useRequestCacheData<T>(
 
 export function preloadRequestCacheData(
   request: ServerComponentRequest,
-  preloadQueries?: PreloadQueries
+  preloadQueries?: PreloadQueriesByURL
 ): void {
   const cache = request.ctx.cache;
 

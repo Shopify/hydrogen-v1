@@ -15,7 +15,7 @@ import ProductCard from '../components/ProductCard';
 import Welcome from '../components/Welcome.server';
 import {Suspense} from 'react';
 
-export default function Index({response, country = {isoCode: 'US'}}) {
+export default function Index({country = {isoCode: 'US'}}) {
   return (
     <Layout hero={<GradientBackground />}>
       <Suspense fallback={null}>

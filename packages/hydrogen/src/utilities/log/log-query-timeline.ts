@@ -103,6 +103,13 @@ export function logQueryTimings(
         );
       }
     });
+
+    const unusedQueries = Object.keys(detectSuspenseWaterfall);
+    if (unusedQueries.length > 0) {
+      unusedQueries.forEach((queryName: string) => {
+        log.debug(`${yellow(`Unused query detected: ${queryName}`)}`);
+      });
+    }
   }
 
   log.debug(color('└──'));
