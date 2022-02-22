@@ -1,5 +1,4 @@
 import {readFile, writeFile} from 'fs-extra';
-import path from 'path';
 
 export async function untilUpdated(
   testFunction: () => string | Promise<string>,
@@ -21,15 +20,22 @@ export async function untilUpdated(
 export async function edit(
   filename: string,
   replacer: (str: string) => string,
-  cb: () => void = () => {}
+  cbBefore: () => void = () => {},
+  cbAfter: () => void = () => {}
 ) {
-  const content = await readFile(filename, 'utf-8');
-  const modified = await replacer(content);
+  await cbBefore();
+  const originalContent = await readFile(filename, 'utf-8');
+  const modifiedContent = await replacer(originalContent);
 
   try {
-    await writeFile(filename, modified);
-    await cb();
+    await writeFile(filename, modifiedContent);
+    await cbAfter();
   } finally {
-    await writeFile(filename, content);
+    await writeFile(filename, originalContent);
+    try {
+      // Wait until file has been refreshed again to
+      // its original content in the browser
+      await cbBefore();
+    } catch {}
   }
 }
