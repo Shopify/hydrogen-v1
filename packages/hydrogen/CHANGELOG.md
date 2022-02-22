@@ -153,56 +153,7 @@ function SomeComponent() {
 
 ## [0.10.1] - 2022-01-26
 
-<<<<<<< HEAD
-
-- refactor: `<Metafield>` now renders `ratings` as a `<span>` with text instead of stars; `multi_line_text_field` inside of a `<span>` instead of a `<div>`
-- Fix: add charset to content type in HTML responses
-- Fix header shift when cart is opened by @Francismori7 in #600
-- Feat: Simplify Helmet usage and make it compatible with RSC
-- The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
-- feat: added `useUrl` hook that allows the consumer to get the current url in server or client component
-- fix: fix bug where search param is not being pass along during RSC streaming call [#623](https://github.com/Shopify/hydrogen/pull/623)
-- feat: Standardize cache control header into caching strategies by @wizardlyhel in #629
-- feat: expect collection seo by default
-- feat: Added logging option `showCacheApiStatus` and `cacheControlHeader` by @wizardlyhel in #472
-- fix: allow custom entry-client filenames
-- fix: Clear browser fetch cache by @wizardlyhel in [#591](https://github.com/Shopify/hydrogen/pull/591)
-- refactor: use featureImage instead of images(first:1) on product query
-- fix: target future release to use '2022-01' API Version
-- fix: cannot redefine property error when updating client components
-- fix: `ShopPayButton` supports quantities greater than 1. Also fixed issues with IDs in Storefront API version 2022-01
-- fix: render error in `Gallery.client.jsx` component when product resource has an external video or no images.
-- fix: ensure youtube external videos are embed compatible urls
-- feat: pass HYDROGEN_ASSET_BASE_URL into config to set base URL for compiled assets
-- dx [breaking change]: `<Product />` and `<CartLine />` aliases have been removed; use the original components `<ProductProvider />` and `<CartLineProvider />` instead. Their nested component aliases, such as `<Product.Image />`, have also been removed; in this example you should use `<ProductImage />`.
-- feat: remove React Router on the client and introduce Hydrogen the `<Link>` component and `useNavigate` hook
-- feat [breaking change]: Merge `/src/entry-server.jsx` entry point into `App.server.jsx`
-- feat: add a default virtual entry-client in `/@shopify/hydrogen/entry-client` that can be used in `index.html`
-- fix: prevent client components from being cached during development
-- refactor [breaking change]: the following components had their prop name renamed. Refer to the documentation or [#627](https://github.com/Shopify/hydrogen/issues/627) for more details.
-  - `<ExternalVideo />`: renamed video prop to data
-  - `<Video />`: renamed video prop to data
-  - `<Image>`: renamed image prop to data
-  - `<MediaFile>`: renamed media prop to data
-  - `<ModelViewer>`: renamed model prop to data
-  - `<Metafield>`: renamed metafield prop to data
-  - `<Money>`: renamed money prop to data
-  - `<UnitPrice>`: renamed unitPrice prop to data, unitPriceMeasurement prop to measurement
-  - `<ProductProvider>`: renamed product prop to data
-  - `<CartProvider>`: renamed cart prop to data
-- feat [breaking change]: remove `handleEvent` in favor of `handleRequest`.
-- feat [breaking change]: remove `assetHandler` parameter in the new `handleRequest`.
-- deps: update `react-helmet-async` to 1.2.3 and remove our custom types
-- dx [breaking change]: `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
-- dx [breaking change]: remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
-- fix: backticks in HTML break RSC hydration.
-- feat [breaking change]: Helmet component has been renamed to Head
-- feat: enable early hydration when streaming
-- # feat: add variantId prop to `<ProductMetafield />` component
-
 ### Fixed
-
-> > > > > > > 8a468652 (docs: add headers to CHANGELOG)
 
 - Hot reload for newly added page files
 
