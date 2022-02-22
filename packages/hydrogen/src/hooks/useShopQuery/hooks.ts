@@ -6,6 +6,7 @@ import type {CachingStrategy} from '../../types';
 import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
+import {META_ENV_SSR} from '../../foundation/ssr-interop';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -33,7 +34,7 @@ export function useShopQuery<T>({
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
 }): UseShopQueryResponse<T> {
-  if (!import.meta.env.SSR) {
+  if (!META_ENV_SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
     );

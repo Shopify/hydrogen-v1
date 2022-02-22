@@ -23,12 +23,10 @@ export {CartLinePrice} from './CartLinePrice';
 export {CartLineProductTitle} from './CartLineProductTitle';
 export {CartLineQuantity} from './CartLineQuantity';
 export {CartLineQuantityAdjustButton} from './CartLineQuantityAdjustButton';
-export {CartLineAttributes} from './CartLineAttributes';
 export {CartLines} from './CartLines';
 export {CartCheckoutButton} from './CartCheckoutButton';
 export {CartShopPayButton} from './CartShopPayButton';
 export {CartEstimatedCost} from './CartEstimatedCost';
-export {CartLineSelectedOptions} from './CartLineSelectedOptions';
 export {CartProvider, useCart, useInstantCheckout} from './CartProvider';
 export type {
   State,
@@ -47,10 +45,8 @@ export {ProductTitle} from './ProductTitle';
 export {ProductPrice} from './ProductPrice';
 export {ProductMetafield} from './ProductMetafield';
 export {SelectedVariantPrice} from './SelectedVariantPrice';
-export {SelectedVariantAddToCartButton} from './SelectedVariantAddToCartButton';
 export {SelectedVariantBuyNowButton} from './SelectedVariantBuyNowButton';
 export {SelectedVariantShopPayButton} from './SelectedVariantShopPayButton';
-export {SelectedVariantImage} from './SelectedVariantImage';
 export {SelectedVariantUnitPrice} from './SelectedVariantUnitPrice';
 export type {
   BuyNowButtonProps,

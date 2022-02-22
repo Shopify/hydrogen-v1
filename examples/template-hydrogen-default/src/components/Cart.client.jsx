@@ -5,8 +5,6 @@ import {
   CartLines,
   CartLineImage,
   CartLineProductTitle,
-  CartLineSelectedOptions,
-  CartLineAttributes,
   CartLineQuantityAdjustButton,
   CartLinePrice,
   CartLineQuantity,
@@ -114,20 +112,13 @@ function LineInCart() {
         >
           <CartLineProductTitle className="text-lg font-medium" />
         </Link>
-        <CartLineSelectedOptions as="ul" className="text-xs space-y-1">
-          {({name, value}) => (
-            <>
+        <ul className="text-xs space-y-1">
+          {merchandise.selectedOptions.map(({name, value}) => (
+            <li key={name}>
               {name}: {value}
-            </>
-          )}
-        </CartLineSelectedOptions>
-        <CartLineAttributes as="ul" className="text-sm space-y-1">
-          {({key, value}) => (
-            <>
-              {key}: {value}
-            </>
-          )}
-        </CartLineAttributes>
+            </li>
+          ))}
+        </ul>
         <CartItemQuantity />
       </div>
       <div role="cell" className="flex flex-col justify-between items-end">

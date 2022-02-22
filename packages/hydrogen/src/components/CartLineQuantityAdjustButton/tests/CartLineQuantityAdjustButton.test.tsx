@@ -18,6 +18,7 @@ describe('CartLineQuantityAdjustButton', () => {
       </Cart>,
       {
         linesUpdate: linesUpdateMock,
+        cart: {lines: [CART_LINE]},
       }
     );
 
@@ -77,6 +78,9 @@ describe('CartLineQuantityAdjustButton', () => {
       </Cart>,
       {
         linesRemove: linesRemoveMock,
+        cart: {
+          lines: [CART_LINE],
+        },
       }
     );
 
@@ -99,6 +103,7 @@ describe('CartLineQuantityAdjustButton', () => {
       </Cart>,
       {
         linesRemove: linesRemoveMock,
+        lines: [CART_LINE],
       }
     );
 

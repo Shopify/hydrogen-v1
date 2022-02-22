@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {Helmet} from '../../../client';
+import {Head} from '../../../client';
 
 import {DefaultPageSeo} from '../DefaultPageSeo.client';
 import {TitleSeo} from '../TitleSeo.client';
@@ -8,7 +8,7 @@ import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 
 jest.mock('../../../client', () => ({
-  Helmet({children}) {
+  Head({children}) {
     return children;
   },
 }));
@@ -48,7 +48,7 @@ describe('<DefaultPageSeo />', () => {
     // TODO: we may want to move this to our global jest setup if we find that
     // we need to ignore a number of errors across multiple test files.
 
-    // When we mount the Helmet component in our wrapper it is rendered in a <div />.
+    // When we mount the Head component in our wrapper it is rendered in a <div />.
     // Nesting an <html /> component inside a <div /> is invalid HTML and React complains
     // Since it’s only in test, we can safely ignore this error.
     const ERROR_TO_IGNORE = /Warning: validateDOMNesting(...)/;
@@ -103,18 +103,18 @@ describe('<DefaultPageSeo />', () => {
   });
 
   describe('title prop', () => {
-    it('renders <Helmet /> with defaultTitle using title prop', () => {
+    it('renders <Head /> with defaultTitle using title prop', () => {
       const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
 
-      expect(wrapper).toContainReactComponent(Helmet, {
+      expect(wrapper).toContainReactComponent(Head, {
         defaultTitle: defaultProps.title,
       });
     });
 
-    it('renders <Helmet /> with titleTemplate using default value and title prop', () => {
+    it('renders <Head /> with titleTemplate using default value and title prop', () => {
       const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
 
-      expect(wrapper).toContainReactComponent(Helmet, {
+      expect(wrapper).toContainReactComponent(Head, {
         titleTemplate: `%s - ${defaultProps.title}`,
       });
     });
@@ -177,13 +177,13 @@ describe('<DefaultPageSeo />', () => {
   });
 
   describe('titleTemplate prop', () => {
-    it('renders <Helmet /> with titleTemplate using titleTemplate prop', () => {
+    it('renders <Head /> with titleTemplate using titleTemplate prop', () => {
       const titleTemplate = '%s - default_title';
       const wrapper = mount(
         <DefaultPageSeo {...defaultProps} titleTemplate={titleTemplate} />
       );
 
-      expect(wrapper).toContainReactComponent(Helmet, {
+      expect(wrapper).toContainReactComponent(Head, {
         titleTemplate: titleTemplate,
       });
     });

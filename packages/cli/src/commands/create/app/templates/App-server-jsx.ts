@@ -1,12 +1,15 @@
 export default function () {
   return `
+import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {DefaultRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import NotFound from './components/NotFound.server';
 import Loading from './components/Loading';
 
-export default function App({log, pages, ...serverState}) {
+import shopifyConfig from '../shopify.config';
+
+function App({log, pages, ...serverState}) {
   return (
     <Suspense fallback={<Loading />}>
       <DefaultRoutes
@@ -18,5 +21,8 @@ export default function App({log, pages, ...serverState}) {
     </Suspense>
   );
 }
+
+const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
+export default renderHydrogen(App, {shopifyConfig, pages});
 `;
 }

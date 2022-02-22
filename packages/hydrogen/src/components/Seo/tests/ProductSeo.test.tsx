@@ -9,7 +9,7 @@ import {TwitterSeo} from '../TwitterSeo.client';
 import {ImageSeo} from '../ImageSeo.client';
 
 jest.mock('../../../client', () => ({
-  Helmet({children}) {
+  Head({children}) {
     return children;
   },
 }));

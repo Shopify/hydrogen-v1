@@ -5,7 +5,7 @@ import {mount} from '@shopify/react-testing';
 import {TwitterSeo} from '../TwitterSeo.client';
 
 jest.mock('../../../client', () => ({
-  Helmet({children}) {
+  Head({children}) {
     return children;
   },
 }));

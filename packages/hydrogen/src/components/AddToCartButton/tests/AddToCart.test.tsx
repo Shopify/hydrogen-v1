@@ -1,9 +1,12 @@
 import React from 'react';
-import {CartProvider, useCart} from '../../CartProvider';
+import {CartProvider} from '../../CartProvider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {mountWithCartProvider} from '../../CartProvider/tests/utilities';
+
+import {ProductProvider} from '../../ProductProvider';
 import {CART} from '../../CartProvider/tests/fixtures';
 import {AddToCartButton} from '../AddToCartButton.client';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {CartContext} from '../../CartProvider/context';
+import {getProduct, getVariant} from '../../../utilities/tests/product';
 
 describe('AddToCartButton', () => {
   beforeEach(() => {
@@ -48,21 +51,279 @@ describe('AddToCartButton', () => {
     });
   });
 
+  describe('when variantId is set explicity', () => {
+    it('renders a disabled button if the variantId is null', () => {
+      const component = mountWithCartProvider(
+        <AddToCartButton variantId={null}>Add to cart</AddToCartButton>
+      );
+
+      expect(component).toContainReactComponentTimes('button', 1, {
+        disabled: true,
+      });
+    });
+
+    describe('and a Cart Id is present', () => {
+      it('calls linesAdd with the variantId', () => {
+        const mockLinesAdd = jest.fn();
+        const id = '123';
+        const component = mountWithCartProvider(
+          <AddToCartButton variantId={id}>Add to cart</AddToCartButton>,
+          {linesAdd: mockLinesAdd}
+        );
+        component.find('button')?.trigger('onClick');
+
+        expect(mockLinesAdd).toHaveBeenCalledTimes(1);
+        expect(mockLinesAdd).toHaveBeenCalledWith([
+          expect.objectContaining({
+            merchandiseId: id,
+          }),
+        ]);
+      });
+    });
+
+    describe('and a Cart Id is not present', () => {
+      it('calls createCart with the variantId', () => {
+        const mockCreateCart = jest.fn();
+        const id = '123';
+        const component = mountWithCartProvider(
+          <AddToCartButton variantId={id}>Add to cart</AddToCartButton>,
+          {cartCreate: mockCreateCart}
+        );
+        component.find('button')?.trigger('onClick');
+
+        expect(mockCreateCart).toHaveBeenCalledTimes(1);
+        expect(mockCreateCart).toHaveBeenCalledWith({
+          lines: [
+            expect.objectContaining({
+              merchandiseId: id,
+            }),
+          ],
+        });
+      });
+    });
+  });
+
+  describe('when inside a ProductProvider', () => {
+    describe('and an initialVariantId is present', () => {
+      describe('and a Cart ID is present', () => {
+        it('calls linesAdd with the initialVariantId', () => {
+          const mockLinesAdd = jest.fn();
+          const product = getProduct();
+          const selectedVariant = product.variants.edges[0].node;
+
+          const component = mountWithCartProvider(
+            <ProductProvider
+              data={product}
+              initialVariantId={selectedVariant.id}
+            >
+              <AddToCartButton>Add to cart</AddToCartButton>
+            </ProductProvider>,
+            {linesAdd: mockLinesAdd}
+          );
+
+          component.find('button')?.trigger('onClick');
+
+          expect(mockLinesAdd).toHaveBeenCalledTimes(1);
+          expect(mockLinesAdd).toHaveBeenCalledWith([
+            expect.objectContaining({
+              merchandiseId: selectedVariant.id,
+            }),
+          ]);
+        });
+      });
+
+      describe('and a Cart Id is not present', () => {
+        it('calls createCart with the initialVariantId', () => {
+          const mockCreateCart = jest.fn();
+          const product = getProduct();
+          const selectedVariant = product.variants.edges[0].node;
+
+          const component = mountWithCartProvider(
+            <ProductProvider
+              data={product}
+              initialVariantId={selectedVariant.id}
+            >
+              <AddToCartButton>Add to cart</AddToCartButton>
+            </ProductProvider>,
+            {cartCreate: mockCreateCart}
+          );
+
+          component.find('button')?.trigger('onClick');
+
+          expect(mockCreateCart).toHaveBeenCalledTimes(1);
+          expect(mockCreateCart).toHaveBeenCalledWith({
+            lines: [
+              expect.objectContaining({
+                merchandiseId: selectedVariant.id,
+              }),
+            ],
+          });
+        });
+      });
+    });
+
+    describe('and the initialVariantId is omitted', () => {
+      describe('and a Cart Id is present', () => {
+        it('calls linesAdd with the first available variant', () => {
+          const mockLinesAdd = jest.fn();
+          const product = getProduct({
+            variants: {
+              edges: [
+                {
+                  node: getVariant({
+                    availableForSale: true,
+                    id: 'some variant id',
+                  }) as any,
+                },
+              ],
+            },
+          });
+
+          const component = mountWithCartProvider(
+            <ProductProvider data={product}>
+              <AddToCartButton>Add to cart</AddToCartButton>
+            </ProductProvider>,
+            {linesAdd: mockLinesAdd}
+          );
+
+          component.find('button')?.trigger('onClick');
+
+          expect(mockLinesAdd).toHaveBeenCalledTimes(1);
+          expect(mockLinesAdd).toHaveBeenCalledWith([
+            expect.objectContaining({
+              merchandiseId: 'some variant id',
+            }),
+          ]);
+        });
+      });
+
+      describe('and a Cart ID is not present', () => {
+        it('calls createCart with the first available variant', () => {
+          const mockCreateCart = jest.fn();
+          const product = getProduct({
+            variants: {
+              edges: [
+                {
+                  node: getVariant({
+                    availableForSale: false,
+                    id: 'some-unavailable-variant-id',
+                  }) as any,
+                },
+                {
+                  node: getVariant({
+                    availableForSale: true,
+                    id: 'an-available-variant-id',
+                  }) as any,
+                },
+                {
+                  node: getVariant({
+                    availableForSale: false,
+                    id: 'another-unavailable-variant-id',
+                  }) as any,
+                },
+                {
+                  node: getVariant({
+                    availableForSale: true,
+                    id: 'another-available-variant-id',
+                  }) as any,
+                },
+              ],
+            },
+          });
+
+          const component = mountWithCartProvider(
+            <ProductProvider data={product}>
+              <AddToCartButton>Add to cart</AddToCartButton>
+            </ProductProvider>,
+            {cartCreate: mockCreateCart}
+          );
+
+          component.find('button')?.trigger('onClick');
+
+          expect(mockCreateCart).toHaveBeenCalledTimes(1);
+          expect(mockCreateCart).toHaveBeenCalledWith({
+            lines: [
+              expect.objectContaining({
+                merchandiseId: 'an-available-variant-id',
+              }),
+            ],
+          });
+        });
+
+        it.only('calls createCart with the first variant when non are available', () => {
+          const mockCreateCart = jest.fn();
+          const product = getProduct({
+            variants: {
+              edges: [
+                {
+                  node: getVariant({
+                    availableForSale: false,
+                    id: 'some-unavailable-variant-id',
+                  }) as any,
+                },
+                {
+                  node: getVariant({
+                    availableForSale: false,
+                    id: 'another-unavailable-variant-id',
+                  }) as any,
+                },
+              ],
+            },
+          });
+
+          const component = mountWithCartProvider(
+            <ProductProvider data={product}>
+              <AddToCartButton>Add to cart</AddToCartButton>
+            </ProductProvider>,
+            {cartCreate: mockCreateCart, cart: null}
+          );
+
+          component.find('button')?.trigger('onClick');
+
+          expect(mockCreateCart).toHaveBeenCalledTimes(1);
+          expect(mockCreateCart).toHaveBeenCalledWith({
+            lines: [
+              expect.objectContaining({
+                merchandiseId: 'some-unavailable-variant-id',
+              }),
+            ],
+          });
+        });
+      });
+    });
+
+    describe('and the initialVariantId is explicity set to null', () => {
+      it('disables the button', () => {
+        const mockLinesAdd = jest.fn();
+        const product = getProduct();
+
+        const component = mountWithCartProvider(
+          <ProductProvider data={product} initialVariantId={null}>
+            <AddToCartButton>Add to cart</AddToCartButton>
+          </ProductProvider>,
+          {linesAdd: mockLinesAdd}
+        );
+
+        expect(component).toContainReactComponentTimes('button', 1, {
+          disabled: true,
+        });
+      });
+    });
+  });
+
   describe('when the button is clicked', () => {
     it('disables the button', () => {
       const component = mountWithProviders(
         <CartProvider>
-          <AddToCartButton variantId="123" className="bg-blue-600">
-            Add to cart
-          </AddToCartButton>
+          <AddToCartButton variantId="123">Add to cart</AddToCartButton>
         </CartProvider>
       );
 
-      component.act(() => {
-        component.find('button')?.trigger('onClick');
-      });
+      component.find('button')?.trigger('onClick');
 
-      expect(component.find('button')).toHaveReactProps({disabled: true});
+      expect(component).toContainReactComponentTimes('button', 1, {
+        disabled: true,
+      });
     });
 
     it('renders a message for screen readers when an accessible label is provided', () => {
@@ -71,127 +332,16 @@ describe('AddToCartButton', () => {
           <AddToCartButton
             accessibleAddingToCartLabel="Adding product to your cart"
             variantId="123"
-            className="bg-blue-600"
           >
             Add to cart
           </AddToCartButton>
         </CartProvider>
       );
 
-      component.act(() => {
-        component.find('button')?.trigger('onClick');
-      });
+      component.find('button')?.trigger('onClick');
 
       expect(component).toContainReactComponent('p', {
         children: 'Adding product to your cart',
-      });
-    });
-
-    describe('and a Cart ID is present', () => {
-      it('calls useCart() linesAdd callback', () => {
-        const mockAddLines = jest.fn();
-
-        /**
-         * This CustomUseCartProvider allows us to override what is returned when 'useCart()' is called.
-         * We do this by essentially copying the default return value of 'useCart()' and then providing our own CartContext.Provider with our value mixed in.
-         * Relying on the fact that React will always use the closest context provider for a given context.
-         */
-        const CustomUseCartProvider = ({
-          children,
-        }: {
-          children: React.ReactNode;
-        }) => {
-          const useCartDefault = useCart();
-          return (
-            <CartContext.Provider
-              value={{...useCartDefault, linesAdd: mockAddLines}}
-            >
-              {children}
-            </CartContext.Provider>
-          );
-        };
-
-        const component = mountWithProviders(
-          <CartProvider data={CART}>
-            <CustomUseCartProvider>
-              <AddToCartButton
-                attributes={[{key: 'size', value: 'large'}]}
-                variantId="123"
-                className="bg-blue-600"
-              >
-                Add to cart
-              </AddToCartButton>
-            </CustomUseCartProvider>
-          </CartProvider>
-        );
-
-        component.act(() => {
-          component.find('button')?.trigger('onClick');
-        });
-
-        expect(mockAddLines).toHaveBeenCalledTimes(1);
-        expect(mockAddLines).toHaveBeenCalledWith([
-          {
-            quantity: 1,
-            merchandiseId: '123',
-            attributes: [{key: 'size', value: 'large'}],
-          },
-        ]);
-      });
-    });
-
-    describe('and a Cart ID is not present', () => {
-      it('calls useCart() cartCreate callback', () => {
-        const mockCreateCart = jest.fn();
-
-        /**
-         * This CustomUseCartProvider allows us to override what is returned when 'useCart()' is called.
-         * We do this by essentially copying the default return value of 'useCart()' and then providing our own CartContext.Provider with our value mixed in.
-         * Relying on the fact that React will always use the closest context provider for a given context.
-         */
-        const CustomUseCartProvider = ({
-          children,
-        }: {
-          children: React.ReactNode;
-        }) => {
-          const useCartDefault = useCart();
-          return (
-            <CartContext.Provider
-              value={{...useCartDefault, cartCreate: mockCreateCart}}
-            >
-              {children}
-            </CartContext.Provider>
-          );
-        };
-
-        const component = mountWithProviders(
-          <CartProvider onCreate={mockCreateCart}>
-            <CustomUseCartProvider>
-              <AddToCartButton
-                attributes={[{key: 'size', value: 'large'}]}
-                variantId="123"
-                className="bg-blue-600"
-              >
-                Add to cart
-              </AddToCartButton>
-            </CustomUseCartProvider>
-          </CartProvider>
-        );
-
-        component.act(() => {
-          component.find('button')?.trigger('onClick');
-        });
-
-        expect(mockCreateCart).toHaveBeenCalledTimes(1);
-        expect(mockCreateCart).toHaveBeenCalledWith({
-          lines: [
-            {
-              quantity: 1,
-              merchandiseId: '123',
-              attributes: [{key: 'size', value: 'large'}],
-            },
-          ],
-        });
       });
     });
   });

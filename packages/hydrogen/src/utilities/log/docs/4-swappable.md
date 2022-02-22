@@ -5,7 +5,6 @@ Hydrogen includes a default logger implementation that can be swapped for a logg
 ```js
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLogger} from '@shopify/hydrogen';
-import App from './App.server';
 
 setLogger({
   trace(request, ...args) {
@@ -29,7 +28,9 @@ setLogger({
   }),
 });
 
-export default renderHydrogen(App, () => {
-  // Custom hook
-});
+function App() {
+  /*...*/
+}
+
+export default renderHydrogen(App);
 ```

@@ -12,8 +12,7 @@ Hydrogen also includes [default values for each mechanism](#default-values).
 
 ## Caching strategies
 
-Hydrogen includes recommended caching strategies to help you determine which
-cache control header to set.
+Hydrogen includes recommended caching strategies to help you determine which cache control header to set. The following table lists the available caching strategies and their associated cache control headers and cache durations:
 
 | Caching strategy | Cache control header                                      | Cache duration |
 | ---------------- | --------------------------------------------------------- | -------------- |
@@ -32,7 +31,7 @@ import {CacheSeconds} from '@shopify/hydrogen';
 response.cache(CacheSeconds());
 ```
 
-## Build your own caching strategies
+### Build your own caching strategies
 
 If you don't want to use the caching strategies provided by Hydrogen, then you can create your own to use in your project.
 
@@ -153,17 +152,19 @@ export default defineConfig({
 
 To enable logging for the cache API status, call `setLoggerOptions` and set `showCacheApiStatus` to `true`:
 
-{% codeblock file, filename: '/src/entry-server.jsx' %}
+{% codeblock file, filename: '/src/App.server.jsx' %}
 
 ```js
+import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLoggerOptions} from '@shopify/hydrogen';
-import App from './App.server';
 
 setLoggerOptions({showCacheApiStatus: true});
 
-export default renderHydrogen(App, () => {
-  // Custom hook
-});
+function App() {
+  /* ... */
+}
+// ...
+export default renderHydrogen(App, {pages});
 ```
 
 {% endcodeblock %}
@@ -179,17 +180,19 @@ The status of the cache updates on each query:
 
 To enable logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader` to `true`:
 
-{% codeblock file, filename: '/src/entry-server.jsx' %}
+{% codeblock file, filename: '/src/App.server.jsx' %}
 
 ```js
+import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLoggerOptions} from '@shopify/hydrogen';
-import App from './App.server';
 
 setLoggerOptions({showCacheControlHeader: true});
 
-export default renderHydrogen(App, () => {
-  // Custom hook
-});
+function App() {
+  /* ... */
+}
+// ...
+export default renderHydrogen(App, {pages});
 ```
 
 {% endcodeblock %}
@@ -230,24 +233,20 @@ export default defineConfig({
 
 Sub-request caching uses an instance of [Cache](https://developer.mozilla.org/en-US/docs/Web/API/Cache) passed to the entry point.
 
-For Worker-based runtimes, you can provide a `cache` option to `handleEvent`:
+For Worker-based runtimes, you can provide a `cache` option to `handleRequest`:
 
 {% codeblock file, filename: '/worker.js' %}
 
 ```js
 addEventListener('fetch', (event) => {
-  try {
-    event.respondWith(
-      handleEvent(event, {
-        // Your implementation of `Cache`. Defaults to `caches.default` for Oxygen support.
-        cache: caches.default,
+  event.respondWith(
+    handleEvent(event, {
+      // Your implementation of `Cache`. Defaults to `caches.default` for Oxygen support.
+      cache: caches.default,
 
-        // ...
-      })
-    );
-  } catch (error) {
-    // ...
-  }
+      // ...
+    })
+  );
 });
 ```
 
