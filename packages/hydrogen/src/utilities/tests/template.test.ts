@@ -1,15 +1,19 @@
-import {getScriptsFromTemplate} from '../template';
+import {stripScriptsFromTemplate} from '../template';
 
 describe('getScriptsFromTemplate', () => {
   it('identifies scripts and modules in a template', () => {
-    const template = `<html><body>
+    const template = `<html><head>
       <script src="/foo.js"></script>
+    </head>
+    <body>
       <script src="/bar.js"></script>
       <script src="/module.js" type="module"></script>
     </body></html>`;
 
-    const {bootstrapScripts, bootstrapModules} =
-      getScriptsFromTemplate(template);
+    const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
+      stripScriptsFromTemplate(template);
+
+    expect(noScriptTemplate).not.toMatch('<script');
 
     expect(bootstrapScripts).toHaveLength(2);
     expect(bootstrapScripts[0]).toBe('/foo.js');
@@ -23,9 +27,10 @@ describe('getScriptsFromTemplate', () => {
       <script type="module" src="/src/entry-client.tsx"></script>
     </body></html>`;
 
-    const {bootstrapScripts, bootstrapModules} =
-      getScriptsFromTemplate(template);
+    const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
+      stripScriptsFromTemplate(template);
 
+    expect(noScriptTemplate).not.toMatch('<script');
     expect(bootstrapScripts).toHaveLength(0);
     expect(bootstrapModules).toHaveLength(1);
     expect(bootstrapModules[0]).toBe('/src/entry-client.tsx');
@@ -34,9 +39,10 @@ describe('getScriptsFromTemplate', () => {
   it('does not crash if no script tags', () => {
     const template = `<html><body></body></html>`;
 
-    const {bootstrapScripts, bootstrapModules} =
-      getScriptsFromTemplate(template);
+    const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
+      stripScriptsFromTemplate(template);
 
+    expect(noScriptTemplate).not.toMatch('<script');
     expect(bootstrapScripts).toHaveLength(0);
     expect(bootstrapModules).toHaveLength(0);
   });

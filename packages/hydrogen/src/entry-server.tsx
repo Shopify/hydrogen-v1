@@ -41,7 +41,7 @@ import {
   bufferReadableStream,
 } from './streaming.server';
 import {RSC_PATHNAME} from './constants';
-import {getScriptsFromTemplate} from './utilities/template';
+import {stripScriptsFromTemplate} from './utilities/template';
 
 declare global {
   // This is provided by a Vite plugin
@@ -253,6 +253,9 @@ async function stream(
   const state = {pathname: url.pathname, search: url.search};
   log.trace('start stream');
 
+  const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
+    stripScriptsFromTemplate(template);
+
   const {AppSSR, rscReadable} = buildAppSSR(
     {
       App,
@@ -263,7 +266,7 @@ async function stream(
       pages,
     },
     {
-      template,
+      template: noScriptTemplate,
       htmlAttrs: {lang: 'en'},
     }
   );
@@ -283,8 +286,6 @@ async function stream(
       });
     },
   });
-
-  const {bootstrapScripts, bootstrapModules} = getScriptsFromTemplate(template);
 
   let didError: Error | undefined;
 

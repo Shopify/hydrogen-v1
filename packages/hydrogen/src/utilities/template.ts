@@ -2,32 +2,27 @@
  * Strip out script `src` values from <script> tags in a given HTML template.
  * Returns two lists of scripts, split based on whether they are `type="module"`.
  */
-export function getScriptsFromTemplate(template: string): {
-  bootstrapScripts: string[];
-  bootstrapModules: string[];
-} {
+export function stripScriptsFromTemplate(template: string) {
   const bootstrapScripts = [] as string[];
   const bootstrapModules = [] as string[];
 
-  const body = template.match(/<body>(.+)<\/body>/s)?.[1];
+  const scripts = template.matchAll(
+    /<script.+?src="(?<script>([^"]+?))".*?><\/script>/g
+  );
 
-  if (body) {
-    const scripts = body.matchAll(
-      /<script.+?src="(?<script>([^"]+?))".*?><\/script>/g
-    );
+  for (const match of scripts) {
+    const scriptName = match.groups?.script;
 
-    for (const match of scripts) {
-      const scriptName = match.groups?.script;
+    if (!scriptName) continue;
 
-      if (!scriptName) continue;
-
-      if (match[0].includes(`type="module"`)) {
-        bootstrapModules.push(scriptName);
-      } else {
-        bootstrapScripts.push(scriptName);
-      }
+    if (match[0].includes(`type="module"`)) {
+      bootstrapModules.push(scriptName);
+    } else {
+      bootstrapScripts.push(scriptName);
     }
+
+    template = template.replace(match[0], '');
   }
 
-  return {bootstrapScripts, bootstrapModules};
+  return {noScriptTemplate: template, bootstrapScripts, bootstrapModules};
 }
