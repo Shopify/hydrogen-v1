@@ -66,9 +66,17 @@ Hydrogen follows common React naming conventions for filenames, component names,
 | **Component instances:**     | `const cartSelector = <CartSelector />`         | `const CartSelector = <CartSelector />`<br>`const cart_selector = <CartSelector />` |
 | **Exported constants:**      | `export const CART_COOKIE_TTL_DAYS = 14;`       | `export const CartCookieTTLDays = 14;`<br>`export const cart_cookie_ttl_days = 14;` |
 
-## Commit Messages
+## Changesets
 
-Commit messages must follow the [commit message convention](../.github/commit-convention.md) so that changelogs can be more easily generated. Commit messages are automatically validated before commit (by invoking [Git Hooks](https://git-scm.com/docs/githooks) via [yorkie](https://github.com/yyx990803/yorkie)).
+If you are contributing a noteworthy change to Hydrogen that should be noted in the changelog, you should include a changeset with your PR.
+
+To add a changeset, run this script locally:
+
+```bash
+yarn changeset add
+```
+
+Follow the prompts to select which package(s) are affected by your change, and whether the change is a major, minor or patch change. This will create a file in the `.changesets` directory of the repo. This change should be committed and included with your PR.
 
 ## Headless components
 
