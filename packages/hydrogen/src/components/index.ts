@@ -44,6 +44,7 @@ export {ProductDescription} from './ProductDescription';
 export {ProductTitle} from './ProductTitle';
 export {ProductPrice} from './ProductPrice';
 export {ProductMetafield} from './ProductMetafield';
+export {SelectedVariantUnitPrice} from './SelectedVariantUnitPrice';
 export type {
   BuyNowButtonProps,
   BuyNowButtonPropsWeControl,

@@ -9,7 +9,7 @@ export interface ProductPriceProps extends Omit<MoneyProps, 'data'> {
   priceType?: 'regular' | 'compareAt';
   /** The type of value. Valid values: `min` (default) or `max`. */
   valueType?: 'max' | 'min';
-/** The ID of the variant. */
+  /** The ID of the variant. */
   variantId?: string;
 }
 
