@@ -19,6 +19,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Add a default virtual entry-client in `/@shopify/hydrogen/entry-client` that can be used in `index.html`
 - Enable early hydration when streaming
 - Add variantId prop to `<ProductMetafield />` component [#730](https://github.com/Shopify/hydrogen/pull/730)
+- Add query timing logging option `showQueryTiming` [#699](https://github.com/Shopify/hydrogen/pull/699)
 
 ### Breaking Change
 
