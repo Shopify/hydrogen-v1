@@ -86,7 +86,7 @@ const indexTemplate = fs.readFileSync('./dist/client/index.html', 'utf-8');
 module.exports = function (request, response) {
   handleRequest(request, {
     indexTemplate,
-    stremeableResponse: response,
+    streamableResponse: response,
   });
 };
 ```
