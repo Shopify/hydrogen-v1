@@ -14,7 +14,8 @@ export default () => {
     },
     resolveId(id, importer) {
       if (
-        /^\/?@shopify\/hydrogen\/entry-client$/.test(id) &&
+        (/^\/?@shopify\/hydrogen\/entry-client$/.test(id) ||
+          id.endsWith(path.sep + HYDROGEN_ENTRY_FILE)) &&
         normalizePath(importer || '').endsWith('/index.html')
       ) {
         // Make this virtual import look like a local project file
