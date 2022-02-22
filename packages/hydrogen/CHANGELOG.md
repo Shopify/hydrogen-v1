@@ -37,6 +37,10 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `<ProductProvider>`: renamed product prop to data
   - `<CartProvider>`: renamed cart prop to data
 - Helmet component has been renamed to Head
+- Remove the `<SelectedVariantBuyNowButton />` component in favour of using `<BuyNowButton variantId={product.selectedVariant.id} />`
+- `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
+- Remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
+- Remove the `<SelectedVariantMetafield />` component in favour of using `<ProductMetafield variantId={product.selectedVariant.id} />`
 
 ### Changed
 
@@ -151,6 +155,7 @@ function SomeComponent() {
 - `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
 - Remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
 - Remove the `<SelectedVariantMetafield />` component in favour of using `<ProductMetafield variantId={product.selectedVariant.id} />`
+- Remove the `<SelectedVariantBuyNowButton />` component in favour of using `<BuyNowButton variantId={product.selectedVariant.id} />`
 
 ## [0.10.1] - 2022-01-26
 

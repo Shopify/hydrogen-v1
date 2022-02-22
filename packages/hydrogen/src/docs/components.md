@@ -114,12 +114,6 @@ Product and variant components relate to the goods, digital downloads, services,
     <td>Renders a <code>span</code> element with the product's title.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantbuynowbutton">SelectedVariantBuyNowButton</a></td>
-    <td>Client</td>
-    <td>Renders a <code>BuyNowButton</code> component for the product's selected variant.</td>
-  </tr>
-
-  <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantprice">SelectedVariantPrice</a></td>
     <td>Client</td>
     <td>Renders a <code>Money</code> component for the product's selected variant regular or compare at price.</td>
