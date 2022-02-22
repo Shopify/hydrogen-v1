@@ -17,7 +17,7 @@ function App({log, pages, ...serverState}) {
             pages={pages}
             serverState={serverState}
             log={log}
-            fallback={<NotFound />}
+            fallback={<NotFound response={serverState.response} />}
           />
         </CartProvider>
       </ShopifyProvider>
