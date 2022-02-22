@@ -15,7 +15,7 @@ yarn build
 yarn serve
 ```
 
-When using the default server entry point in `build:server` script (`@shopify/hydrogen/platforms/node`), the generated server bundle (`dist/server/index.js`) consists of simple Node.js server that uses [Connect](https://github.com/senchalabs/connect) middleware. This bundle also exports `createServer` function, in case you want to call it programmatically to apply extra middlewares:
+If you're using the default server entry point in the `build:server` script (`@shopify/hydrogen/platforms/node`), then the generated server bundle (`dist/server/index.js`) consists of a simple Node.js server that uses [Connect](https://github.com/senchalabs/connect) middleware. This bundle also exports the `createServer` function, which you can call programmatically to apply extra middleware:
 
 ```js
 const {createServer} = require('./dist/server');
@@ -29,7 +29,7 @@ createServer().then(({app}) => {
 });
 ```
 
-If you want to use a different Node.js framework like Express or Fastify, create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
+If you want to use a different Node.js framework like [Express](https://expressjs.com/) or [Fastify](https://www.fastify.io/), create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
 
 ```js
 import {hydrogenMiddleware} from '@shopify/hydrogen/middleware';
@@ -56,16 +56,16 @@ app.use(
 app.listen(/* ... */);
 ```
 
-Then update the scripts in `package.json` to specify your new entrypoint. Assuming it is located in `<root>/server.js`:
+Update the scripts in `package.json` to specify your new entry point. If the scripts are located in `<root>/server.js`, then the changes would look like the following:
 
 ```diff
 - "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
 + "build:server": "vite build --outDir dist/server --ssr server",
 ```
 
-The generated server bundle runs with `yarn serve` or `node dist/server`.
+Run the server bundle with `yarn serve` or `node dist/server`.
 
-Alternatively, if your server is not compatible with Connect middleware or your are deploying to a serverless platform, you can directly use `App.server.jsx` file as the server entry point:
+Alternatively, if your server isn't compatible with [Connect](https://github.com/senchalabs/connect) middleware or you're deploying to a serverless platform, then you can directly use the `App.server.jsx` file as the server entry point:
 
 ```diff
 - "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
@@ -93,7 +93,7 @@ module.exports = function (request, response) {
 
 ### Platform: Docker
 
-Assuming a Node.js server has been generated from one of the methods in the previous section, it is possible to run it inside a Docker container.
+If you've [generated a Node.js server](#platform:-node-js), then you can run it inside a Docker container.
 
 Install [Docker](https://www.docker.com/) and create a `Dockerfile` in your project root with the following content:
 
@@ -115,7 +115,7 @@ WORKDIR /app
 CMD ["dist/server/index.js"]
 ```
 
-Then run Docker inside your app directory:
+Run Docker inside your app directory:
 
 ```bash
 docker build .
@@ -158,9 +158,13 @@ Install Cloudflare's KV asset handler:
 npm install @cloudflare/kv-asset-handler
 ```
 
-Create a new Worker entry file (for example, `worker.js`) in your project. If the request path matches any of your assets, use `getAssetFromKV` function from `@cloudflare/kv-asset-handler` to serve it. Otherwise, call `handleRequest` function, imported from your `App.server.jsx`, to return a Hydrogen response:
+Create a new Worker entry file (for example, `worker.js`) in your project.
 
 ```js
+// If the request path matches any of your assets, then use the `getAssetFromKV`
+// function from `@cloudflare/kv-asset-handler` to serve it. Otherwise, call the
+// `handleRequest` function, which is imported from your `App.server.jsx` file,
+// to return a Hydrogen response.
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 import handleRequest from './src/App.server';
 import indexTemplate from './dist/client/index.html?raw';
@@ -209,7 +213,7 @@ async function handleEvent(event) {
 addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));
 ```
 
-Finally, update `package.json` to specify the new Worker entry point. Assuming the entry point is in `<root>/worker.js`, make the following change:
+Update `package.json` to specify the new Worker entry point. If the entry point is in `<root>/worker.js`, then the changes look like the following:
 
 ```diff
 - "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker-event",
