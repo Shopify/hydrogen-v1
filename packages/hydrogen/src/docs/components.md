@@ -113,31 +113,6 @@ Product and variant components relate to the goods, digital downloads, services,
     <td>Client</td>
     <td>Renders a <code>span</code> element with the product's title.</td>
   </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantbuynowbutton">SelectedVariantBuyNowButton</a></td>
-    <td>Client</td>
-    <td>Renders a <code>BuyNowButton</code> component for the product's selected variant.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantmetafield">SelectedVariantMetafield</a></td>
-    <td>Client</td>
-    <td>Renders a <code>Metafield</code> component for the product's selected variant's <a href="/api/storefront/reference/common-objects/metafield">metafield</a>.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantprice">SelectedVariantPrice</a></td>
-    <td>Client</td>
-    <td>Renders a <code>Money</code> component for the product's selected variant regular or compare at price.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantshoppaybutton">SelectedVariantShopPayButton</a></td>
-    <td>Client</td>
-    <td>Renders a <code>ShopPayButton</code> component for the product's selected variant.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantunitprice">SelectedVariantUnitPrice</a></td>
-    <td>Client</td>
-    <td>Renders a <code>UnitPrice</code> component for the product's selected variant's unit price.</td>
-  </tr>
 </table>
 
 ## Cart components

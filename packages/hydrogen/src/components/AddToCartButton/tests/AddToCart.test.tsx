@@ -68,7 +68,7 @@ describe('AddToCartButton', () => {
         const id = '123';
         const component = mountWithCartProvider(
           <AddToCartButton variantId={id}>Add to cart</AddToCartButton>,
-          {linesAdd: mockLinesAdd}
+          {linesAdd: mockLinesAdd, cart: {id: '456'}}
         );
         component.find('button')?.trigger('onClick');
 
@@ -118,7 +118,7 @@ describe('AddToCartButton', () => {
             >
               <AddToCartButton>Add to cart</AddToCartButton>
             </ProductProvider>,
-            {linesAdd: mockLinesAdd}
+            {linesAdd: mockLinesAdd, cart: {id: '456'}}
           );
 
           component.find('button')?.trigger('onClick');
@@ -183,7 +183,7 @@ describe('AddToCartButton', () => {
             <ProductProvider data={product}>
               <AddToCartButton>Add to cart</AddToCartButton>
             </ProductProvider>,
-            {linesAdd: mockLinesAdd}
+            {linesAdd: mockLinesAdd, cart: {id: '456'}}
           );
 
           component.find('button')?.trigger('onClick');
@@ -250,7 +250,7 @@ describe('AddToCartButton', () => {
           });
         });
 
-        it.only('calls createCart with the first variant when non are available', () => {
+        it('calls createCart with the first variant when non are available', () => {
           const mockCreateCart = jest.fn();
           const product = getProduct({
             variants: {

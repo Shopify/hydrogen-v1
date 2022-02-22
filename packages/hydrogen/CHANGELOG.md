@@ -20,6 +20,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Enable early hydration when streaming
 - Add variantId prop to `<ProductMetafield />` component [#730](https://github.com/Shopify/hydrogen/pull/730)
 - Add query timing logging option `showQueryTiming` [#699](https://github.com/Shopify/hydrogen/pull/699)
+- Add variantId prop to `<ProductPrice />` component
 
 ### Breaking Change
 
@@ -38,6 +39,12 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
   - `<ProductProvider>`: renamed product prop to data
   - `<CartProvider>`: renamed cart prop to data
 - Helmet component has been renamed to Head
+- Remove the `<SelectedVariantBuyNowButton />` component in favour of using `<BuyNowButton variantId={product.selectedVariant.id} />`
+- `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
+- Remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
+- Remove the `<SelectedVariantMetafield />` component in favour of using `<ProductMetafield variantId={product.selectedVariant.id} />`
+- Remove the `<SelectedVariantShopPayButton />` component in favour of using `<ShopPayButton variantId={product.selectedVariant.id} />`
+- Remove the `<SelectedVariantPrice/>` and `<SelectedVariantUnitPrice/>` component in favour of using `<ProductPrice variantId={product.selectedVariant.id} />`
 
 ### Changed
 
@@ -151,6 +158,9 @@ function SomeComponent() {
 - Remove `assetHandler` parameter in the new `handleRequest`
 - `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
 - Remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
+- Remove the `<SelectedVariantMetafield />` component in favour of using `<ProductMetafield variantId={product.selectedVariant.id} />`
+- Remove the `<SelectedVariantBuyNowButton />` component in favour of using `<BuyNowButton variantId={product.selectedVariant.id} />`
+- Remove the `<SelectedVariantShopPayButton />` component in favour of using `<ShopPayButton variantId={product.selectedVariant.id} />`
 
 ## [0.10.1] - 2022-01-26
 
