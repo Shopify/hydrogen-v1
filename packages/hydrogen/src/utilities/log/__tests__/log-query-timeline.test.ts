@@ -59,8 +59,8 @@ describe('cache header log', () => {
     expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m┌── Query timings for http://localhost:3000/[39m"`
     );
-    expectTiming(mockLogger.debug.mock.calls[1][1], 'Load', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[2][1], 'Fetch', 'test1', 100);
+    expectTiming(mockLogger.debug.mock.calls[1][1], 'Get', 'test1');
+    expectTiming(mockLogger.debug.mock.calls[2][1], 'Data', 'test1', 100);
     expect(mockLogger.debug.mock.calls[3][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
   });
 
@@ -87,16 +87,16 @@ describe('cache header log', () => {
     expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m┌── Query timings for http://localhost:3000/[39m"`
     );
-    expectTiming(mockLogger.debug.mock.calls[1][1], 'Load', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[2][1], 'Fetch', 'test1', 100);
-    expectTiming(mockLogger.debug.mock.calls[3][1], 'Load', 'test1');
+    expectTiming(mockLogger.debug.mock.calls[1][1], 'Get', 'test1');
+    expectTiming(mockLogger.debug.mock.calls[2][1], 'Data', 'test1', 100);
+    expectTiming(mockLogger.debug.mock.calls[3][1], 'Get', 'test1');
     expectTiming(mockLogger.debug.mock.calls[4][1], 'Render', 'test1');
     expect(mockLogger.debug.mock.calls[5][1]).toMatchInlineSnapshot(
       `"[90m│ [39m[33mSuspense waterfall detected[39m"`
     );
-    expectTiming(mockLogger.debug.mock.calls[6][1], 'Load', 'testing2');
-    expectTiming(mockLogger.debug.mock.calls[7][1], 'Fetch', 'testing2', 100);
-    expectTiming(mockLogger.debug.mock.calls[8][1], 'Load', 'testing2');
+    expectTiming(mockLogger.debug.mock.calls[6][1], 'Get', 'testing2');
+    expectTiming(mockLogger.debug.mock.calls[7][1], 'Data', 'testing2', 100);
+    expectTiming(mockLogger.debug.mock.calls[8][1], 'Get', 'testing2');
     expectTiming(mockLogger.debug.mock.calls[9][1], 'Render', 'testing2');
     expect(mockLogger.debug.mock.calls[10][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
   });
