@@ -840,7 +840,12 @@ function flightContainer({
   }
 
   if (chunk) {
-    const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
+    const normalizedChunk = chunk
+      // 1. Duplicate the escape char (\) for already escaped characters (e.g. \n or \").
+      .replace(/\\/g, String.raw`\\`)
+      // 2. Escape existing backticks to allow wrapping the whole thing in `...`.
+      .replace(/`/g, String.raw`\``);
+
     script += `__flight.push(\`${normalizedChunk}\`)`;
   }
 
