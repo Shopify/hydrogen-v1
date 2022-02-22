@@ -41,6 +41,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - `<SelectedVariantAddToCartButton />` has been removed; the `<AddToCartButton />` will now use the selectedVariant by default.
 - Remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
 - Remove the `<SelectedVariantMetafield />` component in favour of using `<ProductMetafield variantId={product.selectedVariant.id} />`
+- Remove the `<SelectedVariantShopPayButton />` component in favour of using `<ShopPayButton variantId={product.selectedVariant.id} />`
 
 ### Changed
 
@@ -156,6 +157,7 @@ function SomeComponent() {
 - Remove the `<SelectedVariantImage />` component in favour of using `<Image data={product.selectedVariant.image} />`
 - Remove the `<SelectedVariantMetafield />` component in favour of using `<ProductMetafield variantId={product.selectedVariant.id} />`
 - Remove the `<SelectedVariantBuyNowButton />` component in favour of using `<BuyNowButton variantId={product.selectedVariant.id} />`
+- Remove the `<SelectedVariantShopPayButton />` component in favour of using `<ShopPayButton variantId={product.selectedVariant.id} />`
 
 ## [0.10.1] - 2022-01-26
 

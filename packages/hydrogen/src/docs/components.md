@@ -118,11 +118,7 @@ Product and variant components relate to the goods, digital downloads, services,
     <td>Client</td>
     <td>Renders a <code>Money</code> component for the product's selected variant regular or compare at price.</td>
   </tr>
-  <tr>
-    <td><a href="/api/hydrogen/components/product-variant/selectedvariantshoppaybutton">SelectedVariantShopPayButton</a></td>
-    <td>Client</td>
-    <td>Renders a <code>ShopPayButton</code> component for the product's selected variant.</td>
-  </tr>
+  
   <tr>
     <td><a href="/api/hydrogen/components/product-variant/selectedvariantunitprice">SelectedVariantUnitPrice</a></td>
     <td>Client</td>
