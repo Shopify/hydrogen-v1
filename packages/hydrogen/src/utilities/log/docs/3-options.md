@@ -1,6 +1,6 @@
 ## Logger options
 
-Logger has options to turn on/off certain log type informations:
+Logger has the following Boolean options:
 
 | Log options              | Description                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------------ |
