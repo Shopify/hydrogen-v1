@@ -18,12 +18,20 @@ export interface ExternalVideoProps {
 
 type PropsWeControl = 'src';
 
+type ExternalVideoComponentProps<TTag extends React.ElementType = 'iframe'> =
+  Props<TTag, PropsWeControl> & ExternalVideoProps;
+
+export type ExternalVideoComponentPassthroughProps = Omit<
+  ExternalVideoComponentProps,
+  PropsWeControl | 'data' | 'options'
+>;
+
 /**
  * The `ExternalVideo` component renders an embedded video for the Storefront
  * API's [`ExternalVideo` object](/api/storefront/reference/products/externalvideo).
  */
 export function ExternalVideo<TTag extends React.ElementType = 'iframe'>(
-  props: Props<TTag, PropsWeControl> & ExternalVideoProps
+  props: ExternalVideoComponentProps<TTag>
 ) {
   const {
     data,

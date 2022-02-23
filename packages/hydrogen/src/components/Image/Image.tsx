@@ -24,18 +24,18 @@ export interface MediaImageProps extends BaseImageProps {
   /** An object with the keys `url`, `altText`, `id`, `width` and `height`. Refer to the
    * Storefront API's [`Image` object](/api/storefront/reference/common-objects/image).
    */
-  data: Pick<ImageType, 'altText' | 'url' | 'id' | 'width' | 'height'>;
+  data: Omit<ImageType, 'originalSrc' | 'src' | 'transformedSrc'>;
   /** An object of image size options for Shopify CDN images. */
   options?: ImageSizeOptions;
 }
 
 export interface ExternalImageProps extends BaseImageProps {
   /** A URL string. This string can be an absolute path or a relative path depending on the `loader`. */
-  src: string;
+  src: HTMLImageElement['src'];
   /** The integer value for the width of the image. This is a required prop when `src` is present. */
-  width: number;
+  width: HTMLImageElement['width'];
   /** The integer value for the height of the image. This is a required prop when `src` is present. */
-  height: number;
+  height: HTMLImageElement['height'];
 }
 
 export type ImageProps = MediaImageProps | ExternalImageProps;
@@ -63,12 +63,23 @@ function convertShopifyImageData({
   };
 }
 
+type ImageComponentProps<TTag extends React.ElementType = 'img'> = Props<
+  TTag,
+  PropsWeControl
+> &
+  ImageProps;
+
+export type ImageComponentPassthroughProps = Omit<
+  ImageComponentProps,
+  keyof ImageProps | PropsWeControl
+>;
+
 /**
  * The `Image` component renders an image for the Storefront API's
  * [`Image` object](/api/storefront/reference/common-objects/image).
  */
 export function Image<TTag extends React.ElementType = 'img'>(
-  props: Props<TTag, PropsWeControl> & ImageProps
+  props: ImageComponentProps<TTag>
 ) {
   const {
     data,

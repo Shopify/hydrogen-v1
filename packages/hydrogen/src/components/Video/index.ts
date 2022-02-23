@@ -1,2 +1,2 @@
-export type {VideoProps} from './Video';
+export type {VideoProps, VideoComponentPassthroughProps} from './Video';
 export {Video, VideoFragment} from './Video';

@@ -141,12 +141,20 @@ declare global {
   }
 }
 
+type ModelViewerComponentProps<TTag extends ElementType = 'model-viewer'> =
+  Props<TTag, PropsWeControl> & ModelViewerProps;
+
+export type ModelViewerComponentPassthroughProps = Omit<
+  ModelViewerComponentProps,
+  PropsWeControl
+>;
+
 /**
  * The `ModelViewer` component renders a 3D model (with the `model-viewer` tag) for
  * the Storefront API's [`Model3d` object](/api/storefront/reference/products/model3d).
  */
-export function ModelViewer<TTag extends ElementType>(
-  props: Props<TTag, PropsWeControl> & ModelViewerProps
+export function ModelViewer<TTag extends ElementType = 'model-viewer'>(
+  props: ModelViewerComponentProps<TTag>
 ) {
   const [modelViewer, setModelViewer] = useState<undefined | HTMLElement>(
     undefined

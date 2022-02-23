@@ -20,11 +20,19 @@ export interface VideoProps {
   options?: ImageSizeOptions;
 }
 
+type VideoComponentProps<TTag extends React.ElementType = 'video'> =
+  Props<TTag> & VideoProps;
+
+export type VideoComponentPassthroughProps = Omit<
+  VideoComponentProps,
+  'data' | 'options'
+>;
+
 /**
  * The `Video` component renders a `video` for the Storefront API's [`Video` object](/api/storefront/reference/products/video).
  */
 export function Video<TTag extends React.ElementType = 'video'>(
-  props: Props<TTag> & VideoProps
+  props: VideoComponentProps<TTag>
 ) {
   const {
     data,

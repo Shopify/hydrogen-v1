@@ -47,8 +47,10 @@ export default function Gallery() {
             className="w-[80vw] md:w-auto h-full md:h-auto object-cover object-center transition-all snap-start border border-gray-200 flex-shrink-0 rounded-lg"
             data={med}
             options={{
-              height: '485',
-              crop: 'center',
+              image: {
+                height: '485',
+                crop: 'center',
+              },
             }}
             {...extraProps}
           />

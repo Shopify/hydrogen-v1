@@ -1,5 +1,6 @@
 export {
   ExternalVideo,
-  ExternalVideoProps,
+  type ExternalVideoProps,
   ExternalVideoFragment,
+  type ExternalVideoComponentPassthroughProps,
 } from './ExternalVideo';

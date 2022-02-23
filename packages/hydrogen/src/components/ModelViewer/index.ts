@@ -1,1 +1,5 @@
-export {ModelViewer, ModelViewerProps} from './ModelViewer.client';
+export {
+  ModelViewer,
+  type ModelViewerProps,
+  type ModelViewerComponentPassthroughProps,
+} from './ModelViewer.client';
