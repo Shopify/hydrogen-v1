@@ -6,7 +6,7 @@ name: Changelog Reminder
 jobs:
   remind:
     name: Changeset Reminder
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     if: ${{ !github.event.pull_request.draft }}
     steps:
       - uses: actions/checkout@v2
