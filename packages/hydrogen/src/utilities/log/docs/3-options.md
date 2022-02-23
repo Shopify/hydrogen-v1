@@ -4,9 +4,9 @@ Logger has the following Boolean options:
 
 | Log options              | Description                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------------ |
-| `showCacheApiStatus`     | Logs the cache status of each stored entries (PUT/HIT/MISS/STALE)                    |
-| `showCacheControlHeader` | Logs the cache control headers of the main document and its sub queries              |
-| `showQueryTiming`        | Logs the timeline of when queries are being loaded, requested, fetched, and rendered |
+| `showCacheApiStatus`     | Logs the cache status of each stored entry: `PUT`, `HIT`, MISS` or `STALE`.                    |
+| `showCacheControlHeader` | Logs the cache control headers of the main document and its sub queries.              |
+| `showQueryTiming`        | Logs the timeline of when queries are being loaded, requested, fetched, and rendered. |
 
 ```js
 import renderHydrogen from '@shopify/hydrogen/entry-server';
