@@ -21,6 +21,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Add variantId prop to `<ProductMetafield />` component [#730](https://github.com/Shopify/hydrogen/pull/730)
 - Add query timing logging option `showQueryTiming` [#699](https://github.com/Shopify/hydrogen/pull/699)
 - Add variantId prop to `<ProductPrice />` component
+- Add `preload` option to `useQuery` and `useShopQuery` [#700](https://github.com/Shopify/hydrogen/pull/700)
 
 ### Breaking Change
 

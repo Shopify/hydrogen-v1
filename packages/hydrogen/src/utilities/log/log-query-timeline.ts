@@ -54,6 +54,7 @@ export function logQueryTimings(
   if (queryList.length > 0) {
     const requestStartTime = request.time;
     const detectSuspenseWaterfall: {[key: string]: boolean} = {};
+    const detectMultipleDataLoad: {[key: string]: number} = {};
     let suspenseWaterfallDetectedCount = 0;
 
     queryList.forEach((query: QueryTiming, index: number) => {
@@ -61,6 +62,10 @@ export function logQueryTimings(
         detectSuspenseWaterfall[query.name] = true;
       } else if (query.timingType === 'render') {
         delete detectSuspenseWaterfall[query.name];
+      } else if (query.timingType === 'data') {
+        detectMultipleDataLoad[query.name] = detectMultipleDataLoad[query.name]
+          ? detectMultipleDataLoad[query.name] + 1
+          : 1;
       }
 
       const loadColor = query.timingType === 'preload' ? green : color;
@@ -107,9 +112,22 @@ export function logQueryTimings(
     const unusedQueries = Object.keys(detectSuspenseWaterfall);
     if (unusedQueries.length > 0) {
       unusedQueries.forEach((queryName: string) => {
-        log.debug(`${yellow(`Unused query detected: ${queryName}`)}`);
+        log.debug(
+          `${color(`│ `)}${yellow(`Unused query detected: ${queryName}`)}`
+        );
       });
     }
+
+    Object.keys(detectMultipleDataLoad).forEach((queryName: string) => {
+      const count = detectMultipleDataLoad[queryName];
+      if (count > 1) {
+        log.debug(
+          `${color(`│ `)}${yellow(
+            `Multiple data loads detected: ${queryName}`
+          )}`
+        );
+      }
+    });
   }
 
   log.debug(color('└──'));
