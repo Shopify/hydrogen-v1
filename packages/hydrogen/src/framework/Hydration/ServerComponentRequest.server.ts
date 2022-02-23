@@ -78,8 +78,7 @@ export class ServerComponentRequest extends Request {
     };
     this.cookies = this.parseCookies();
 
-    const referer = this.headers.get('referer');
-    this.preloadURL = referer && referer !== '' ? referer : this.url;
+    this.preloadURL = this.headers.get('shopify-original-url') || this.url;
   }
 
   private parseCookies() {

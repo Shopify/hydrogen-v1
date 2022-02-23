@@ -144,7 +144,7 @@ export function preloadRequestCacheData(
 
       cache.set(cacheKey, () => {
         if (data !== undefined) {
-          collectQueryTimings(request, preloadQuery.key, 'render');
+          collectQueryTimings(request, preloadQuery.key, 'rendered');
           return data;
         }
         if (!promise) {
@@ -155,7 +155,7 @@ export function preloadRequestCacheData(
               collectQueryTimings(
                 request,
                 preloadQuery.key,
-                'data',
+                'resolved',
                 getTime() - startApiTime
               );
             },

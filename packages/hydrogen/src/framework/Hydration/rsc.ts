@@ -81,7 +81,11 @@ export function useServerResponse(state: any) {
 
     // Request a new flight response.
     response = createFromFetch(
-      fetch(`${RSC_PATHNAME}?state=` + encodeURIComponent(key))
+      fetch(`${RSC_PATHNAME}?state=` + encodeURIComponent(key), {
+        headers: {
+          'shopify-original-url': window.location.href,
+        },
+      })
     );
   }
 
