@@ -481,8 +481,12 @@ async function stream(
         log.trace('node complete stream');
 
         if (componentResponse.canStream() || response.writableEnded) {
-          logCacheControlHeaders('str', request, componentResponse);
-          logQueryTimings('str', request);
+          postRequestTasks(
+            'str',
+            response.statusCode,
+            request,
+            componentResponse
+          );
           return;
         }
 
