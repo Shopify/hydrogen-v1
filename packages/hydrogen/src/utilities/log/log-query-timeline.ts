@@ -53,7 +53,7 @@ export function logQueryTimings(
   const queryList = request.ctx.queryTimings;
   if (queryList.length > 0) {
     const requestStartTime = request.time;
-    const detectSuspenseWaterfall: {[key: string]: boolean} = {};
+    const detectSuspenseWaterfall: Record<string, boolean> = {};
     let suspenseWaterfallDetectedCount = 0;
 
     queryList.forEach((query: QueryTiming, index: number) => {

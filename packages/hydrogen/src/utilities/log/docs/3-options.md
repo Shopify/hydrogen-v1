@@ -2,11 +2,11 @@
 
 Logger has options to turn on/off certain log type informations:
 
-| Log options              | Description                                                                      |
-| ------------------------ | -------------------------------------------------------------------------------- |
-| `showCacheApiStatus`     | Logs the cache status of each stored entries (PUT/HIT/MISS/STALE)                |
-| `showCacheControlHeader` | Logs the cache control headers of the main document and its sub queries          |
-| `showQueryTiming`        | Logs the timeline of when queries are loadbeing requested, fetched, and rendered |
+| Log options              | Description                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------ |
+| `showCacheApiStatus`     | Logs the cache status of each stored entries (PUT/HIT/MISS/STALE)                    |
+| `showCacheControlHeader` | Logs the cache control headers of the main document and its sub queries              |
+| `showQueryTiming`        | Logs the timeline of when queries are being loaded, requested, fetched, and rendered |
 
 ```js
 import renderHydrogen from '@shopify/hydrogen/entry-server';
