@@ -2,5 +2,4 @@ deploy:
   override:
     - >-
       yarn workspace @shopify/hydrogen build --force &&
-      git diff &&
       node_modules/.bin/changeset publish
