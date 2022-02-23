@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: mskelton/changelog-reminder-action@v2
         with:
-          changelogRegex: "\.changeset"
+          changelogRegex: "\\.changeset"
           message: |
             We detected some changes at packages/*/src and there are no updates in the .changeset.
             If the changes are user-facing, run "yarn changeset add" to track your changes and include them in the next release CHANGELOG.
