@@ -97,7 +97,7 @@ export function useRequestCacheData<T>(
 
     cache.set(cacheKey, () => {
       if (data !== undefined) {
-        collectQueryTimings(request, key, 'render');
+        collectQueryTimings(request, key, 'rendered');
         return data;
       }
       if (!promise) {
@@ -105,7 +105,12 @@ export function useRequestCacheData<T>(
         promise = fetcher().then(
           (r) => {
             data = {data: r};
-            collectQueryTimings(request, key, 'data', getTime() - startApiTime);
+            collectQueryTimings(
+              request,
+              key,
+              'resolved',
+              getTime() - startApiTime
+            );
           },
           (e) => (data = {error: e})
         );

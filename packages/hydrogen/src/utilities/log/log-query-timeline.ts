@@ -1,15 +1,14 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
-// import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
 import {QueryKey} from '../../types';
 import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
 import {gray, red, yellow} from 'kolorist';
 import {getLoggerWithContext} from './log';
-import {getTime} from '..';
+import {getTime} from '../timing';
 
 import type {RenderType} from './log';
 
-export type TimingType = 'load' | 'render' | 'data';
+export type TimingType = 'requested' | 'resolved' | 'rendered';
 
 export type QueryTiming = {
   name: string;
@@ -20,9 +19,9 @@ export type QueryTiming = {
 
 const color = gray;
 const TIMING_MAPPING = {
-  load: 'Get',
-  render: 'Render',
-  data: 'Data',
+  requested: 'Requested',
+  rendered: 'Rendered',
+  resolved: 'Resolved',
 };
 
 export function collectQueryTimings(
@@ -57,9 +56,9 @@ export function logQueryTimings(
     let suspenseWaterfallDetectedCount = 0;
 
     queryList.forEach((query: QueryTiming, index: number) => {
-      if (query.timingType === 'load') {
+      if (query.timingType === 'requested') {
         detectSuspenseWaterfall[query.name] = true;
-      } else if (query.timingType === 'render') {
+      } else if (query.timingType === 'rendered') {
         delete detectSuspenseWaterfall[query.name];
       }
 
@@ -67,8 +66,8 @@ export function logQueryTimings(
         color(
           `│ ${`${(query.timestamp - requestStartTime).toFixed(2)}ms`.padEnd(
             11
-          )} ${TIMING_MAPPING[query.timingType].padEnd(6)} ${query.name}${
-            query.timingType === 'data'
+          )} ${TIMING_MAPPING[query.timingType].padEnd(10)} ${query.name}${
+            query.timingType === 'resolved'
               ? ` (Took ${query.duration?.toFixed(2)}ms)`
               : ''
           }`
@@ -81,10 +80,10 @@ export function logQueryTimings(
       //
       // The (index + 4) is detecting that near the end of list.
       // A complete set of events for a given query is 4 entries
-      // │ (639.62ms)  Load   Localization
-      // │ (993.33ms)  Fetch  Localization (Took 353.66ms)
-      // │ (993.96ms)  Load   Localization      <-- second time React tries to load
-      // │ (994.03ms)  Render Localization
+      // │ (639.62ms)  Requested  Localization
+      // │ (993.33ms)  Resolved   Localization (Took 353.66ms)
+      // │ (993.96ms)  Requested  Localization      <-- second time React tries to load
+      // │ (994.03ms)  Rendered   Localization
       //
       // so the end of list index range is 3 (one less from a set entry) + 1 (zero index)
       if (

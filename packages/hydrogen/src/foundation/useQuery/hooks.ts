@@ -34,7 +34,7 @@ export function useQuery<T>(
   const request = useServerRequest();
   const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
 
-  collectQueryTimings(request, withCacheIdKey, 'load');
+  collectQueryTimings(request, withCacheIdKey, 'requested');
 
   return useRequestCacheData<T>(
     withCacheIdKey,
