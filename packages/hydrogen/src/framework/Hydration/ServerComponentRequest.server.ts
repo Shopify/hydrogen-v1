@@ -5,6 +5,7 @@ import type {QueryTiming} from '../../utilities/log/log-query-timeline';
 import type {PreloadOptions, QueryKey} from '../../types';
 import {hashKey} from '../cache';
 import {HelmetData as HeadData} from 'react-helmet-async';
+import {RSC_PATHNAME} from '../../constants';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
@@ -78,7 +79,9 @@ export class ServerComponentRequest extends Request {
     };
     this.cookies = this.parseCookies();
 
-    this.preloadURL = this.headers.get('shopify-original-url') || this.url;
+    const referer = this.headers.get('referer');
+    this.preloadURL =
+      this.isRscRequest() && referer && referer !== '' ? referer : this.url;
   }
 
   private parseCookies() {
@@ -91,6 +94,11 @@ export class ServerComponentRequest extends Request {
     );
   }
 
+  public isRscRequest() {
+    const url = new URL(this.url);
+    return url.pathname === RSC_PATHNAME;
+  }
+
   public savePreloadQuery(query: PreloadQueryEntry) {
     if (typeof query.preload === 'string' && query.preload === PRELOAD_ALL) {
       saveToPreloadAllPreload(query);
@@ -101,7 +109,7 @@ export class ServerComponentRequest extends Request {
 
   public getPreloadQueries(): PreloadQueriesByURL | undefined {
     if (preloadCache.has(this.preloadURL)) {
-      let combinedPreloadQueries: PreloadQueriesByURL = new Map();
+      const combinedPreloadQueries: PreloadQueriesByURL = new Map();
       const urlPreloadCache = preloadCache.get(this.preloadURL);
 
       mergeMapEntries(combinedPreloadQueries, urlPreloadCache);
