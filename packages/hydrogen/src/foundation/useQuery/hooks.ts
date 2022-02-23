@@ -40,7 +40,7 @@ export function useQuery<T>(
     queryOptions
   );
 
-  collectQueryTimings(request, withCacheIdKey, 'load');
+  collectQueryTimings(request, withCacheIdKey, 'requested');
 
   if (queryOptions?.preload) {
     request.savePreloadQuery({

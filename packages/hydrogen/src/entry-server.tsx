@@ -204,7 +204,7 @@ async function render(
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
 
-    logInfo('ssr', status, request, componentResponse);
+    postRequestTasks('ssr', status, request, componentResponse);
 
     return new Response(await componentResponse.customBody, {
       status,
@@ -232,8 +232,7 @@ async function render(
         : '$&'
     );
 
-  logServerResponse('ssr', request, status);
-  logCacheControlHeaders('ssr', request, componentResponse);
+  postRequestTasks('ssr', status, request, componentResponse);
 
   return new Response(html, {
     status,
@@ -413,11 +412,21 @@ async function stream(
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => writable.close(), 0);
-        logInfo('str', responseOptions.status, request, componentResponse);
+        postRequestTasks(
+          'str',
+          responseOptions.status,
+          request,
+          componentResponse
+        );
       });
     } else {
       writable.close();
-      logInfo('str', responseOptions.status, request, componentResponse);
+      postRequestTasks(
+        'str',
+        responseOptions.status,
+        request,
+        componentResponse
+      );
     }
 
     if (await isStreamingSupported()) {
@@ -474,14 +483,24 @@ async function stream(
       async onCompleteAll() {
         log.trace('node complete stream');
 
-        logCacheControlHeaders('str', request, componentResponse);
-        logQueryTimings('str', request);
-
-        if (componentResponse.canStream() || response.writableEnded) return;
+        if (componentResponse.canStream() || response.writableEnded) {
+          postRequestTasks(
+            'str',
+            response.statusCode,
+            request,
+            componentResponse
+          );
+          return;
+        }
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
-        logInfo('str', response.statusCode, request, componentResponse);
+        postRequestTasks(
+          'str',
+          response.statusCode,
+          request,
+          componentResponse
+        );
 
         if (isRedirect(response)) {
           // Redirects found after any async code
@@ -548,14 +567,14 @@ async function hydrate(
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      logInfo('rsc', 200, request, componentResponse);
+      postRequestTasks('rsc', 200, request, componentResponse);
       return new Response(rscReadable);
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    logInfo('rsc', 200, request, componentResponse);
+    postRequestTasks('rsc', 200, request, componentResponse);
 
     return new Response(bufferedBody);
   } else if (response) {
@@ -571,7 +590,7 @@ async function hydrate(
       .pipe(response) as Writable;
 
     stream.on('finish', function () {
-      logInfo('rsc', response.statusCode, request, componentResponse);
+      postRequestTasks('rsc', response.statusCode, request, componentResponse);
     });
   }
 }
@@ -878,7 +897,7 @@ function flightContainer({
   return script + '</script>';
 }
 
-function logInfo(
+function postRequestTasks(
   type: RenderType,
   status: number,
   request: ServerComponentRequest,

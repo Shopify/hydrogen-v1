@@ -12,12 +12,12 @@ function expectTiming(mockCall, method, queryName, duration?) {
   if (duration) {
     regex = new RegExp(
       `│ -?[0-9]+\.[0-9]{2}ms ${method.padEnd(
-        6
+        10
       )} ${queryName} \\\(Took ${duration}\.00ms\\\)`
     );
   } else {
     regex = new RegExp(
-      `│ -?[0-9]+\.[0-9]{2}ms ${method.padEnd(6)} ${queryName}`
+      `│ -?[0-9]+\.[0-9]{2}ms ${method.padEnd(10)} ${queryName}`
     );
   }
 
@@ -50,8 +50,8 @@ describe('cache header log', () => {
       },
       time: Date.now(),
     } as ServerComponentRequest;
-    collectQueryTimings(request, QUERY_1, 'load');
-    collectQueryTimings(request, QUERY_1, 'data', 100);
+    collectQueryTimings(request, QUERY_1, 'requested');
+    collectQueryTimings(request, QUERY_1, 'resolved', 100);
 
     logQueryTimings('ssr', request);
 
@@ -59,8 +59,8 @@ describe('cache header log', () => {
     expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m┌── Query timings for http://localhost:3000/[39m"`
     );
-    expectTiming(mockLogger.debug.mock.calls[1][1], 'Get', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[2][1], 'Data', 'test1', 100);
+    expectTiming(mockLogger.debug.mock.calls[1][1], 'Requested', 'test1');
+    expectTiming(mockLogger.debug.mock.calls[2][1], 'Resolved', 'test1', 100);
     expect(mockLogger.debug.mock.calls[3][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
   });
 
@@ -72,14 +72,14 @@ describe('cache header log', () => {
       },
       time: Date.now(),
     } as ServerComponentRequest;
-    collectQueryTimings(request, QUERY_1, 'load');
-    collectQueryTimings(request, QUERY_1, 'data', 100);
-    collectQueryTimings(request, QUERY_1, 'load');
-    collectQueryTimings(request, QUERY_1, 'render');
-    collectQueryTimings(request, QUERY_2, 'load');
-    collectQueryTimings(request, QUERY_2, 'data', 100);
-    collectQueryTimings(request, QUERY_2, 'load');
-    collectQueryTimings(request, QUERY_2, 'render');
+    collectQueryTimings(request, QUERY_1, 'requested');
+    collectQueryTimings(request, QUERY_1, 'resolved', 100);
+    collectQueryTimings(request, QUERY_1, 'requested');
+    collectQueryTimings(request, QUERY_1, 'rendered');
+    collectQueryTimings(request, QUERY_2, 'requested');
+    collectQueryTimings(request, QUERY_2, 'resolved', 100);
+    collectQueryTimings(request, QUERY_2, 'requested');
+    collectQueryTimings(request, QUERY_2, 'rendered');
 
     logQueryTimings('ssr', request);
 
@@ -87,17 +87,22 @@ describe('cache header log', () => {
     expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
       `"[90m┌── Query timings for http://localhost:3000/[39m"`
     );
-    expectTiming(mockLogger.debug.mock.calls[1][1], 'Get', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[2][1], 'Data', 'test1', 100);
-    expectTiming(mockLogger.debug.mock.calls[3][1], 'Get', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[4][1], 'Render', 'test1');
+    expectTiming(mockLogger.debug.mock.calls[1][1], 'Requested', 'test1');
+    expectTiming(mockLogger.debug.mock.calls[2][1], 'Resolved', 'test1', 100);
+    expectTiming(mockLogger.debug.mock.calls[3][1], 'Requested', 'test1');
+    expectTiming(mockLogger.debug.mock.calls[4][1], 'Rendered', 'test1');
     expect(mockLogger.debug.mock.calls[5][1]).toMatchInlineSnapshot(
       `"[90m│ [39m[33mSuspense waterfall detected[39m"`
     );
-    expectTiming(mockLogger.debug.mock.calls[6][1], 'Get', 'testing2');
-    expectTiming(mockLogger.debug.mock.calls[7][1], 'Data', 'testing2', 100);
-    expectTiming(mockLogger.debug.mock.calls[8][1], 'Get', 'testing2');
-    expectTiming(mockLogger.debug.mock.calls[9][1], 'Render', 'testing2');
+    expectTiming(mockLogger.debug.mock.calls[6][1], 'Requested', 'testing2');
+    expectTiming(
+      mockLogger.debug.mock.calls[7][1],
+      'Resolved',
+      'testing2',
+      100
+    );
+    expectTiming(mockLogger.debug.mock.calls[8][1], 'Requested', 'testing2');
+    expectTiming(mockLogger.debug.mock.calls[9][1], 'Rendered', 'testing2');
     expect(mockLogger.debug.mock.calls[10][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
   });
 });

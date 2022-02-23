@@ -4,11 +4,11 @@ import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
 import {gray, red, yellow, green} from 'kolorist';
 import {getLoggerWithContext} from './log';
-import {getTime} from '..';
+import {getTime} from '../timing';
 
 import type {RenderType} from './log';
 
-export type TimingType = 'load' | 'render' | 'data' | 'preload';
+export type TimingType = 'requested' | 'resolved' | 'rendered' | 'preload';
 
 export type QueryTiming = {
   name: string;
@@ -19,9 +19,9 @@ export type QueryTiming = {
 
 const color = gray;
 const TIMING_MAPPING = {
-  load: 'Get',
-  render: 'Render',
-  data: 'Data',
+  requested: 'Requested',
+  rendered: 'Rendered',
+  resolved: 'Resolved',
   preload: 'Preload',
 };
 
@@ -53,16 +53,16 @@ export function logQueryTimings(
   const queryList = request.ctx.queryTimings;
   if (queryList.length > 0) {
     const requestStartTime = request.time;
-    const detectSuspenseWaterfall: {[key: string]: boolean} = {};
-    const detectMultipleDataLoad: {[key: string]: number} = {};
+    const detectSuspenseWaterfall: Record<string, boolean> = {};
+    const detectMultipleDataLoad: Record<string, number> = {};
     let suspenseWaterfallDetectedCount = 0;
 
     queryList.forEach((query: QueryTiming, index: number) => {
-      if (query.timingType === 'load' || query.timingType === 'preload') {
+      if (query.timingType === 'requested' || query.timingType === 'preload') {
         detectSuspenseWaterfall[query.name] = true;
-      } else if (query.timingType === 'render') {
+      } else if (query.timingType === 'rendered') {
         delete detectSuspenseWaterfall[query.name];
-      } else if (query.timingType === 'data') {
+      } else if (query.timingType === 'resolved') {
         detectMultipleDataLoad[query.name] = detectMultipleDataLoad[query.name]
           ? detectMultipleDataLoad[query.name] + 1
           : 1;
@@ -77,7 +77,7 @@ export function logQueryTimings(
           )} ${loadColor(TIMING_MAPPING[query.timingType].padEnd(7))} ${
             query.name
           }${
-            query.timingType === 'data'
+            query.timingType === 'resolved'
               ? ` (Took ${query.duration?.toFixed(2)}ms)`
               : ''
           }`
@@ -90,10 +90,10 @@ export function logQueryTimings(
       //
       // The (index + 4) is detecting that near the end of list.
       // A complete set of events for a given query is 4 entries
-      // │ (639.62ms)  Load   Localization
-      // │ (993.33ms)  Fetch  Localization (Took 353.66ms)
-      // │ (993.96ms)  Load   Localization      <-- second time React tries to load
-      // │ (994.03ms)  Render Localization
+      // │ (639.62ms)  Requested  Localization
+      // │ (993.33ms)  Resolved   Localization (Took 353.66ms)
+      // │ (993.96ms)  Requested  Localization      <-- second time React tries to load
+      // │ (994.03ms)  Rendered   Localization
       //
       // so the end of list index range is 3 (one less from a set entry) + 1 (zero index)
       if (
