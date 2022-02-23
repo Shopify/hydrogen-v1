@@ -229,8 +229,7 @@ async function render(
         : '$&'
     );
 
-  logServerResponse('ssr', request, status);
-  logCacheControlHeaders('ssr', request, componentResponse);
+  postRequestTasks('ssr', status, request, componentResponse);
 
   return new Response(html, {
     status,
