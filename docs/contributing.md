@@ -68,7 +68,7 @@ Hydrogen follows common React naming conventions for filenames, component names,
 
 ## Changesets
 
-If you are contributing a noteworthy change to Hydrogen that should be noted in the changelog, you should include a changeset with your PR.
+If you are contributing a user-facing or noteworthy change to Hydrogen that should be added to the changelog, you should include a changeset with your PR.
 
 To add a changeset, run this script locally:
 
@@ -207,7 +207,7 @@ Releasing an experimental version of Hydrogen to GitHub can be useful if you wan
 
 To release an experimental version, merge your changes into the `experimental` branch.
 
-Then, run `yarn changeset pre enter experimental` locally while in the branch. This will modify changeset's files to begin tracking changesets as an experimental release.
+Then, run `yarn changeset pre enter experimental` locally while in the branch. This will modify changesets' files to begin tracking changesets as an experimental release.
 
 When you are ready to release an experimental version to NPM, run `yarn changeset version`. Commit these changes, and push them to your remote `experimental` branch.
 
