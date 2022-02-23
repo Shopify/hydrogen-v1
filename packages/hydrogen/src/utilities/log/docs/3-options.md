@@ -2,7 +2,7 @@
 
 Logger has the following Boolean options:
 
-| Log options              | Description                                                                          |
+| Option              | Description                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------------ |
 | `showCacheApiStatus`     | Logs the cache status of each stored entry: `PUT`, `HIT`, MISS` or `STALE`.                    |
 | `showCacheControlHeader` | Logs the cache control headers of the main document and its sub queries.              |
