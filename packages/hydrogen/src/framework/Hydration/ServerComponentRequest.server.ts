@@ -2,6 +2,7 @@ import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
+import {QueryTiming} from '../../utilities/log/log-query-timeline';
 
 let reqCounter = 0; // For debugging
 const generateId =
@@ -29,6 +30,7 @@ export class ServerComponentRequest extends Request {
     head: HeadData;
     shopifyConfig?: ShopifyContextValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
+    queryTimings: Array<QueryTiming>;
     [key: string]: any;
   };
 
@@ -55,6 +57,7 @@ export class ServerComponentRequest extends Request {
       cache: new Map(),
       head: new HeadData({}),
       queryCacheControl: [],
+      queryTimings: [],
     };
     this.cookies = this.parseCookies();
   }

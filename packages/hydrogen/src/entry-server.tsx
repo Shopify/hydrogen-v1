@@ -3,6 +3,7 @@ import {
   Logger,
   logServerResponse,
   logCacheControlHeaders,
+  logQueryTimings,
   getLoggerWithContext,
 } from './utilities/log';
 import {getErrorMarkup} from './utilities/error';
@@ -42,6 +43,7 @@ import {
 } from './streaming.server';
 import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
+import {RenderType} from './utilities/log/log';
 
 declare global {
   // This is provided by a Vite plugin
@@ -199,8 +201,7 @@ async function render(
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
 
-    logServerResponse('ssr', request, status);
-    logCacheControlHeaders('ssr', request, componentResponse);
+    postRequestTasks('ssr', status, request, componentResponse);
 
     return new Response(await componentResponse.customBody, {
       status,
@@ -228,8 +229,7 @@ async function render(
         : '$&'
     );
 
-  logServerResponse('ssr', request, status);
-  logCacheControlHeaders('ssr', request, componentResponse);
+  postRequestTasks('ssr', status, request, componentResponse);
 
   return new Response(html, {
     status,
@@ -409,13 +409,21 @@ async function stream(
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => writable.close(), 0);
-        logServerResponse('str', request, responseOptions.status);
-        logCacheControlHeaders('str', request, componentResponse);
+        postRequestTasks(
+          'str',
+          responseOptions.status,
+          request,
+          componentResponse
+        );
       });
     } else {
       writable.close();
-      logServerResponse('str', request, responseOptions.status);
-      logCacheControlHeaders('str', request, componentResponse);
+      postRequestTasks(
+        'str',
+        responseOptions.status,
+        request,
+        componentResponse
+      );
     }
 
     if (await isStreamingSupported()) {
@@ -472,14 +480,24 @@ async function stream(
       async onCompleteAll() {
         log.trace('node complete stream');
 
-        logCacheControlHeaders('str', request, componentResponse);
-
-        if (componentResponse.canStream() || response.writableEnded) return;
+        if (componentResponse.canStream() || response.writableEnded) {
+          postRequestTasks(
+            'str',
+            response.statusCode,
+            request,
+            componentResponse
+          );
+          return;
+        }
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
-        logServerResponse('str', request, response.statusCode);
-        logCacheControlHeaders('str', request, componentResponse);
+        postRequestTasks(
+          'str',
+          response.statusCode,
+          request,
+          componentResponse
+        );
 
         if (isRedirect(response)) {
           // Redirects found after any async code
@@ -546,16 +564,14 @@ async function hydrate(
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      logServerResponse('rsc', request, 200);
-      logCacheControlHeaders('rsc', request, componentResponse);
+      postRequestTasks('rsc', 200, request, componentResponse);
       return new Response(rscReadable);
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    logServerResponse('rsc', request, 200);
-    logCacheControlHeaders('rsc', request, componentResponse);
+    postRequestTasks('rsc', 200, request, componentResponse);
 
     return new Response(bufferedBody);
   } else if (response) {
@@ -571,8 +587,7 @@ async function hydrate(
       .pipe(response) as Writable;
 
     stream.on('finish', function () {
-      logServerResponse('rsc', request, response.statusCode);
-      logCacheControlHeaders('rsc', request, componentResponse);
+      postRequestTasks('rsc', response.statusCode, request, componentResponse);
     });
   }
 }
@@ -861,4 +876,15 @@ function flightContainer({
   }
 
   return script + '</script>';
+}
+
+function postRequestTasks(
+  type: RenderType,
+  status: number,
+  request: ServerComponentRequest,
+  componentResponse: ServerComponentResponse
+) {
+  logServerResponse(type, request, status);
+  logCacheControlHeaders(type, request, componentResponse);
+  logQueryTimings(type, request);
 }
