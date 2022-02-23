@@ -195,7 +195,7 @@ You can run a single E2E test by passing a keyword, which is matched using regex
 
 Hydrogen versions are determined exclusively by [changesets](https://github.com/changesets/changesets). When new changesets are merged into `main`, a new PR will be automatically created containing the proposed version.
 
-This PR can remain open and will be continously updated by the changesets bot until you are ready to merge.
+This PR can stay open and will be continously updated by the changesets bot until you are ready to merge.
 
 When you are ready to release a new version of Hydrogen, merge the PR created by the changesets bot. This will convert all changesets into appropriate `CHANGELOG` files, add Git tags, and create GitHub releases for each package contained in the release.
 
