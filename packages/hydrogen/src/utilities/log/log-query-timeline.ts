@@ -73,8 +73,8 @@ export function logQueryTimings(
       log.debug(
         color(
           `│ ${`${(query.timestamp - requestStartTime).toFixed(2)}ms`.padEnd(
-            11
-          )} ${loadColor(TIMING_MAPPING[query.timingType].padEnd(7))} ${
+            10
+          )} ${loadColor(TIMING_MAPPING[query.timingType].padEnd(10))} ${
             query.name
           }${
             query.timingType === 'resolved'
