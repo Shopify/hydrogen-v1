@@ -20,10 +20,11 @@ export function Product({product}) {
 
 ## Props
 
-| Name      | Type                | Description                                                                                                               |
-| --------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| keyName   | <code>string</code> | A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's metafield.       |
-| namespace | <code>string</code> | A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the product's metafield. |
+| Name       | Type                | Description                                                                                                                    |
+| ---------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| keyName    | <code>string</code> | A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's metafield.            |
+| namespace  | <code>string</code> | A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the product's metafield.      |
+| variantId? | <code>string</code> | The ID of the variant. If provided, then use the metafield corresponding to the variant ID instead of the product's metafield. |
 
 ## Component type
 

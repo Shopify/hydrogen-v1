@@ -44,12 +44,6 @@ export {ProductDescription} from './ProductDescription';
 export {ProductTitle} from './ProductTitle';
 export {ProductPrice} from './ProductPrice';
 export {ProductMetafield} from './ProductMetafield';
-export {SelectedVariantPrice} from './SelectedVariantPrice';
-export {SelectedVariantAddToCartButton} from './SelectedVariantAddToCartButton';
-export {SelectedVariantBuyNowButton} from './SelectedVariantBuyNowButton';
-export {SelectedVariantShopPayButton} from './SelectedVariantShopPayButton';
-export {SelectedVariantImage} from './SelectedVariantImage';
-export {SelectedVariantUnitPrice} from './SelectedVariantUnitPrice';
 export type {
   BuyNowButtonProps,
   BuyNowButtonPropsWeControl,

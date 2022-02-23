@@ -2,10 +2,56 @@ import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {Money} from '../../Money';
+import {UnitPrice} from '../../UnitPrice';
 import {ProductProvider} from '../../ProductProvider';
 import {ProductPrice} from '../ProductPrice.client';
 
 describe('<ProductPrice />', () => {
+  describe('variantId prop is provided', () => {
+    it("renders <Money /> with the variant's price", () => {
+      const product = getProduct();
+      const variant = product.variants.edges[0].node;
+      const price = mountWithProviders(
+        <ProductProvider data={product} initialVariantId="">
+          <ProductPrice variantId={variant.id} />
+        </ProductProvider>
+      );
+
+      expect(price).toContainReactComponent(Money, {
+        data: variant.priceV2,
+      });
+    });
+
+    it("renders <Money /> with the variant's minimum compareAt price", () => {
+      const product = getProduct();
+      const variant = product.variants.edges[0].node;
+      const price = mountWithProviders(
+        <ProductProvider data={product} initialVariantId="">
+          <ProductPrice priceType="compareAt" variantId={variant.id} />
+        </ProductProvider>
+      );
+
+      expect(price).toContainReactComponent(Money, {
+        data: variant.compareAtPriceV2,
+      });
+    });
+
+    it('renders <UnitPrice /> when valueType is `unit`', () => {
+      const product = getProduct();
+      const variant = product.variants.edges[0].node;
+      const component = mountWithProviders(
+        <ProductProvider data={product}>
+          <ProductPrice valueType="unit" variantId={variant.id} />
+        </ProductProvider>
+      );
+
+      expect(component).toContainReactComponent(UnitPrice, {
+        data: variant.unitPrice,
+        measurement: variant.unitPriceMeasurement,
+      });
+    });
+  });
+
   it("renders <Money /> with the product's minimum regular price by default", () => {
     const product = getProduct();
     const price = mountWithProviders(

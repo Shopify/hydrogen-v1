@@ -1,14 +1,17 @@
 import React, {ElementType} from 'react';
-import {MoneyV2} from '../../graphql/types/types';
+import {MoneyV2, UnitPriceMeasurement} from '../../graphql/types/types';
 import {Money, MoneyProps} from '../Money';
 import {useProduct} from '../ProductProvider';
 import {Props} from '../types';
+import {UnitPrice} from '../UnitPrice';
 
 export interface ProductPriceProps extends Omit<MoneyProps, 'data'> {
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
-  /** The type of value. Valid values: `min` (default) or `max`. */
-  valueType?: 'max' | 'min';
+  /** The type of value. Valid values: `min` (default), `max` or `unit`. */
+  valueType?: 'max' | 'min' | 'unit';
+  /** The ID of the variant. */
+  variantId?: string;
 }
 
 /**
@@ -19,22 +22,43 @@ export function ProductPrice<TTag extends ElementType>(
   props: Props<TTag> & ProductPriceProps
 ) {
   const product = useProduct();
-  const {priceType = 'regular', valueType = 'min', ...passthroughProps} = props;
+  const {
+    priceType = 'regular',
+    variantId,
+    valueType = 'min',
+    ...passthroughProps
+  } = props;
 
   if (product == null) {
     throw new Error('Expected a ProductProvider context, but none was found');
   }
 
-  let price: MoneyV2 | undefined;
+  let price: MoneyV2 | undefined | null;
+  let measurement: UnitPriceMeasurement | undefined | null;
+
+  const variant = variantId
+    ? product?.variants?.find((variant) => variant.id === variantId)
+    : null;
 
   if (priceType === 'compareAt') {
-    if (valueType === 'max') {
-      price = product.compareAtPriceRange?.maxVariantPrice;
+    if (variantId && variant) {
+      if (variant.compareAtPriceV2?.amount === variant.priceV2?.amount) {
+        return null;
+      }
+      price = variant.compareAtPriceV2;
+    } else if (valueType === 'max') {
+      price = product?.compareAtPriceRange?.maxVariantPrice;
     } else {
-      price = product.compareAtPriceRange?.minVariantPrice;
+      price = product?.compareAtPriceRange?.minVariantPrice;
     }
   } else {
-    if (valueType === 'max') {
+    if (variantId && variant) {
+      price = variant.priceV2;
+      if (valueType === 'unit') {
+        price = variant.unitPrice;
+        measurement = variant.unitPriceMeasurement;
+      }
+    } else if (valueType === 'max') {
       price = product.priceRange?.maxVariantPrice;
     } else {
       price = product.priceRange?.minVariantPrice;
@@ -43,6 +67,12 @@ export function ProductPrice<TTag extends ElementType>(
 
   if (price == null) {
     return null;
+  }
+
+  if (measurement) {
+    return (
+      <UnitPrice {...passthroughProps} data={price} measurement={measurement} />
+    );
   }
 
   return <Money {...passthroughProps} data={price} />;

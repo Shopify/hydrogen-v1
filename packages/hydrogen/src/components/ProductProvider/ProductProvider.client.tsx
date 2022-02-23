@@ -4,6 +4,7 @@ import {flattenConnection} from '../../utilities';
 import {ProductContext, ProductContextType} from './context';
 import {Product} from './types';
 import {ProductProviderFragment as Fragment} from '../../graphql/graphql-constants';
+import {ProductOptionsProvider} from './ProductOptionsProvider.client';
 
 export interface ProductProviderProps {
   /** A `ReactNode` element. */
@@ -25,23 +26,6 @@ export function ProductProvider({
   data: product,
   initialVariantId,
 }: ProductProviderProps) {
-  const {
-    variants,
-    options,
-    selectedVariant,
-    setSelectedVariant,
-    selectedOptions,
-    setSelectedOption,
-    setSelectedOptions,
-    isOptionInStock,
-    selectedSellingPlan,
-    selectedSellingPlanAllocation,
-    setSelectedSellingPlan,
-    sellingPlanGroups,
-  } = useProductOptions({
-    variants: product.variants,
-    initialVariantId: initialVariantId,
-  });
   const metafields = useParsedMetafields(product.metafields);
 
   const providerValue = useMemo<ProductContextType>(() => {
@@ -51,7 +35,9 @@ export function ProductProvider({
       metafieldsConnection: product.metafields,
       media: product.media ? flattenConnection(product.media) : undefined,
       mediaConnection: product.media,
-      variants: variants,
+      variants: product.variants
+        ? flattenConnection(product.variants)
+        : undefined,
       variantsConnection: product.variants,
       images: product.images ? flattenConnection(product.images) : undefined,
       imagesConnection: product.images,
@@ -59,38 +45,14 @@ export function ProductProvider({
         ? flattenConnection(product.collections)
         : undefined,
       collectionsConnection: product.collections,
-      options,
-      selectedVariant,
-      setSelectedVariant,
-      selectedOptions,
-      setSelectedOption,
-      setSelectedOptions,
-      isOptionInStock,
-      selectedSellingPlan,
-      selectedSellingPlanAllocation,
-      setSelectedSellingPlan,
-      sellingPlanGroups,
     };
-  }, [
-    isOptionInStock,
-    metafields,
-    options,
-    product,
-    selectedOptions,
-    selectedSellingPlan,
-    selectedSellingPlanAllocation,
-    selectedVariant,
-    sellingPlanGroups,
-    setSelectedOption,
-    setSelectedOptions,
-    setSelectedSellingPlan,
-    setSelectedVariant,
-    variants,
-  ]);
+  }, [metafields, product]);
 
   return (
     <ProductContext.Provider value={providerValue}>
-      {children}
+      <ProductOptionsProvider initialVariantId={initialVariantId}>
+        {children}
+      </ProductOptionsProvider>
     </ProductContext.Provider>
   );
 }

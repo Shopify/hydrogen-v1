@@ -1,6 +1,6 @@
 import React from 'react';
 import {useShop} from '../../foundation';
-import {Helmet} from '../../client';
+import {Head} from '../../client';
 
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
@@ -20,7 +20,7 @@ export function DefaultPageSeo({
 
   return (
     <>
-      <Helmet
+      <Head
         defaultTitle={title}
         titleTemplate={titleTemplate ?? `%s - ${title}`}
       >
@@ -28,7 +28,7 @@ export function DefaultPageSeo({
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={title} />
         <meta property="og:url" content={url} />
-      </Helmet>
+      </Head>
       <TitleSeo title={title} />
       <DescriptionSeo description={description} />
       <TwitterSeo title={title} description={description} />

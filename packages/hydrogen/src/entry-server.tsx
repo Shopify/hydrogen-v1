@@ -19,7 +19,7 @@ import {ServerComponentResponse} from './framework/Hydration/ServerComponentResp
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {ServerRequestProvider} from './foundation/ServerRequestProvider';
-import type {ServerResponse} from 'http';
+import type {ServerResponse, IncomingMessage} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {
   getApiRouteFromURL,
@@ -28,12 +28,9 @@ import {
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
-import type {HelmetData} from 'react-helmet-async';
-
+import type {HelmetData as HeadData} from 'react-helmet-async';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
-import type {IncomingMessage} from 'http';
-
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -44,6 +41,7 @@ import {
   bufferReadableStream,
 } from './streaming.server';
 import {RSC_PATHNAME} from './constants';
+import {stripScriptsFromTemplate} from './utilities/template';
 
 declare global {
   // This is provided by a Vite plugin
@@ -55,7 +53,9 @@ declare global {
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 interface RequestHandlerOptions {
-  indexTemplate: string | ((url: string) => Promise<string>);
+  indexTemplate:
+    | string
+    | ((url: string) => Promise<string | {default: string}>);
   cache?: Cache;
   streamableResponse?: ServerResponse;
   dev?: boolean;
@@ -88,10 +88,14 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    const template =
+    let template =
       typeof indexTemplate === 'function'
         ? await indexTemplate(url.toString())
         : indexTemplate;
+
+    if (template && typeof template !== 'string') {
+      template = template.default;
+    }
 
     if (!isReactHydrationRequest && pages) {
       const apiRoute = getApiRoute(url, {pages});
@@ -207,7 +211,7 @@ async function render(
 
   headers['Content-type'] = HTML_CONTENT_TYPE;
   const {bodyAttributes, htmlAttributes, ...head} = extractHeadElements(
-    request.ctx.helmet
+    request.ctx.head
   );
 
   html = html
@@ -255,6 +259,9 @@ async function stream(
   const state = {pathname: url.pathname, search: url.search};
   log.trace('start stream');
 
+  const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
+    stripScriptsFromTemplate(template);
+
   const {AppSSR, rscReadable} = buildAppSSR(
     {
       App,
@@ -265,7 +272,7 @@ async function stream(
       pages,
     },
     {
-      template,
+      template: noScriptTemplate,
       htmlAttrs: {lang: 'en'},
     }
   );
@@ -297,6 +304,8 @@ async function stream(
 
     const ssrReadable = ssrRenderToReadableStream(AppSSR, {
       nonce,
+      bootstrapScripts,
+      bootstrapModules,
       onCompleteShell() {
         log.trace('worker ready to stream');
 
@@ -423,6 +432,8 @@ async function stream(
 
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
+      bootstrapScripts,
+      bootstrapModules,
       onCompleteShell() {
         log.trace('node ready to stream');
         /**
@@ -631,7 +642,7 @@ function buildAppSSR(
   return {AppSSR, rscReadable: rscReadableForFlight};
 }
 
-function extractHeadElements({context: {helmet}}: HelmetData) {
+function extractHeadElements({context: {helmet}}: HeadData) {
   return helmet
     ? {
         base: helmet.base.toString(),
@@ -840,7 +851,12 @@ function flightContainer({
   }
 
   if (chunk) {
-    const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
+    const normalizedChunk = chunk
+      // 1. Duplicate the escape char (\) for already escaped characters (e.g. \n or \").
+      .replace(/\\/g, String.raw`\\`)
+      // 2. Escape existing backticks to allow wrapping the whole thing in `...`.
+      .replace(/`/g, String.raw`\``);
+
     script += `__flight.push(\`${normalizedChunk}\`)`;
   }
 

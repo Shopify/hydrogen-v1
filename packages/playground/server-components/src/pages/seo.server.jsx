@@ -1,6 +1,6 @@
 import {Suspense} from 'react';
 import {createData} from '../utils';
-import {Helmet} from '@shopify/hydrogen/client';
+import {Head} from '@shopify/hydrogen/client';
 
 // Page with many Suspense boundaries to test streaming
 export default function Index() {
@@ -10,19 +10,19 @@ export default function Index() {
     <>
       <h1>SEO</h1>
 
-      <Helmet>
+      <Head>
         <html lang="ja" />
         <meta property="og:url" content="example.com" />
         <body data-test={true} />
-      </Helmet>
+      </Head>
 
       <Suspense fallback={null}>
         <div c="1">{d1.read()}</div>
         <span>stuff</span>
 
-        <Helmet>
+        <Head>
           <meta property="type" content="website" />
-        </Helmet>
+        </Head>
       </Suspense>
 
       <footer>footer!</footer>

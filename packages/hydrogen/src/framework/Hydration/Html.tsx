@@ -9,20 +9,16 @@ type HtmlOptions = {
 };
 
 export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
-  const head = template.match(/<head>(.+?)<\/head>/s)![1] || '';
-
-  let devEntryPoint = '';
+  let head = template.match(/<head>(.+?)<\/head>/s)![1] || '';
 
   // @ts-ignore
   if (import.meta.env.DEV) {
-    devEntryPoint =
-      template
-        .substring(template.lastIndexOf('<script type="module"'))
-        .match(/src="(.*?)">/i)?.[1] || '';
-
-    if (!devEntryPoint) {
-      throw new Error('Could not find entry-client module in index.html');
-    }
+    // Fix React Refresh for async scripts.
+    // https://github.com/vitejs/vite/issues/6759
+    head = head.replace(
+      />(\s*?import[\s\w]+?['"]\/@react-refresh)/,
+      ' async="">$1'
+    );
   }
 
   return (
@@ -30,11 +26,6 @@ export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
       <head dangerouslySetInnerHTML={{__html: head}} />
       <body {...bodyAttrs}>
         <div id="root">{children}</div>
-        {/* In production, Vite bundles the entrypoint JS inside <head> */}
-        {/* @ts-ignore because module=commonjs doesn't allow this */}
-        {import.meta.env.DEV && (
-          <script type="module" src={devEntryPoint}></script>
-        )}
       </body>
     </html>
   );

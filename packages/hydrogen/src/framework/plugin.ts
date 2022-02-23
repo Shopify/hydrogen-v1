@@ -5,6 +5,7 @@ import hydrogenMiddleware, {
   HYDROGEN_DEFAULT_SERVER_ENTRY,
 } from './plugins/vite-plugin-hydrogen-middleware';
 import hydrogenClientMiddleware from './plugins/vite-plugin-hydrogen-client-middleware';
+import platformEntry from './plugins/vite-plugin-platform-entry';
 // @ts-ignore
 import rsc from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
 import ssrInterop from './plugins/vite-plugin-ssr-interop';
@@ -46,7 +47,7 @@ export default (
         );
       },
     }),
-
+    platformEntry(),
     pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ] as Plugin[];
 };
