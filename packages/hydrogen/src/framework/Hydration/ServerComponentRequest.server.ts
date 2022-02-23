@@ -38,7 +38,7 @@ export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
   public id: string;
   public time: number;
-  public originalUrl: string;
+  public preloadURL: string;
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
   public ctx: {
     cache: Map<string, any>;
@@ -77,7 +77,9 @@ export class ServerComponentRequest extends Request {
       preloadQueries: new Map(),
     };
     this.cookies = this.parseCookies();
-    this.originalUrl = this.headers.get('shopify-original-url') || this.url;
+
+    const referer = this.headers.get('referer');
+    this.preloadURL = referer && referer !== '' ? referer : this.url;
   }
 
   private parseCookies() {
@@ -99,9 +101,9 @@ export class ServerComponentRequest extends Request {
   }
 
   public getPreloadQueries(): PreloadQueriesByURL | undefined {
-    if (preloadCache.has(this.originalUrl)) {
+    if (preloadCache.has(this.preloadURL)) {
       let combinedPreloadQueries: PreloadQueriesByURL = new Map();
-      const urlPreloadCache = preloadCache.get(this.originalUrl);
+      const urlPreloadCache = preloadCache.get(this.preloadURL);
 
       mergeMapEntries(combinedPreloadQueries, urlPreloadCache);
       mergeMapEntries(combinedPreloadQueries, preloadCache.get(PRELOAD_ALL));
@@ -113,7 +115,7 @@ export class ServerComponentRequest extends Request {
   }
 
   public savePreloadQueries() {
-    preloadCache.set(this.originalUrl, this.ctx.preloadQueries);
+    preloadCache.set(this.preloadURL, this.ctx.preloadQueries);
   }
 }
 
