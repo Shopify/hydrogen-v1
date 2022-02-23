@@ -14,9 +14,7 @@ function expectTiming(mockCall, method, queryName, duration?) {
       `│ -?[0-9]+\.[0-9]{2}ms.*${method}.*${queryName} \\\(Took ${duration}\.00ms\\\)`
     );
   } else {
-    regex = new RegExp(
-      `│ -?[0-9]+\.[0-9]{2}ms.*${method.padEnd(10)}.*${queryName}`
-    );
+    regex = new RegExp(`│ -?[0-9]+\.[0-9]{2}ms.*${method}.*${queryName}`);
   }
 
   expect(mockCall).toEqual(expect.stringMatching(regex));
