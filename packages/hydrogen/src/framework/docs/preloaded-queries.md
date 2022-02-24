@@ -1,8 +1,18 @@
-Preloaded queries allow your Hydrogen app to start fetching data before a user interacts with a page. They can also be used to pre-fetch data for your homepage as soon as your Hydrogen app loads.
-
 This guide provides information on how preloaded queries work and how to configure them in your Hydrogen app.
 
 ## How preloaded queries work
+
+Preloaded queries allow your Hydrogen app to discover and preload nested queries within a page.
+
+In the following diagram, none of the queries (`shopInfo`, `CollectionDetails`, `layoutContent`, or `Localization`) have been preloaded:
+
+![Shows a diagram of queries that haven't been preloaded](/assets/custom-storefronts/hydrogen/preload-queries-none-set.png)
+
+However, if you set the `layoutContent` and `Localization` queries to preload, then the Hydrogen app discovers these queries and loads them faster:
+
+![Shows a diagram of queries that have been preloaded](/assets/custom-storefronts/hydrogen/preload-queries-set.png)
+
+### Add an option to preload a query
 
 You can add an option to preload queries anywhere in your Hydrogen app.
 
