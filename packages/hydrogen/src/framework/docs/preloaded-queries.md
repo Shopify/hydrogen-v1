@@ -94,6 +94,21 @@ The first time a user visits `/collections/freestyle-collection`, no queries wil
 
 ## Troubleshooting
 
+To test preloaded queries, enable the `showQueryTiming` property in `App.server.js`. The [`showQueryTiming`](/api/hydrogen/utilities/log#logger-options) property logs the timeline of when queries are being requested, resolved, and rendered.
+
+{% codeblock file, filename: "App.server.js" %}
+
+```js
+import {setLoggerOptions} from '@shopify/hydrogen';
+...
+
+setLoggerOptions({
+  showQueryTiming: true
+})
+```
+
+{% endcodeblock %}
+
 If a query is preloaded, but isn't being used, then a warning displays in the server log:
 
 ![Shows a screenshot of preloaded query warning](/assets/custom-storefronts/hydrogen/preload-query-warning.png)

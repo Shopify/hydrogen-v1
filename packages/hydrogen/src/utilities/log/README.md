@@ -54,6 +54,7 @@ import App from './App.server';
 setLoggerOptions({
   showCacheApiStatus: true,
   showCacheControlHeader: true,
+  showQueryTiming: true,
 });
 
 export default renderHydrogen(App, () => {
