@@ -12,9 +12,54 @@ However, if you set the `layoutContent` and `Localization` queries to preload, t
 
 ![Shows a diagram of queries that have been preloaded](/assets/custom-storefronts/hydrogen/preload-queries-set.png)
 
-### Add an option to preload a query
+### No preloaded queries
 
-You can add an option to preload queries anywhere in your Hydrogen app.
+Preloaded queries work by storing the query fetcher for the next time the same URL is requested. For example, on the `/` URL, Shopify fetches queries for the following:
+
+- `shopInfo`
+- `layoutContent`
+- `localization`
+- `homeShopInfo`
+- `welcomeContent`
+- `indexContent`
+
+If you don't set any of these queries with `preload: true`, then no queries will be preloaded:
+
+![Shows a screenshot of no preloaded queries](/assets/custom-storefronts/hydrogen/no-preloaded-queries.png)
+
+### Some preloaded queries
+
+If you set a some queries to preload, then on the first time `/` is requested, no queries will be preloaded. However, all requests to `/` afterwards will preload `homeShopInfo`, `welcomeContent` and `indexContent` queries:
+
+- `shopInfo`
+- `layoutContent`
+- `localization`
+- `homeShopInfo` - `preload: true`
+- `welcomeContent` - `preload: true`
+- `indexContent` - `preload: true`
+
+![Shows a screenshot of some preloaded queries](/assets/custom-storefronts/hydrogen/some-preloaded-queries.png)
+
+### Wildcard routes
+
+Preloaded queries work similarly for wildcard routes like `Product` and `Collection`, except that each URL has its own preload queries.
+
+#### Example
+
+You've set `CollectionDetails` to preload queries:
+
+- `shopInfo`
+- `layoutContent`
+- `localization`
+- `CollectionDetails` - `preload: true`
+
+The first time a user visits `/collections/freestyle-collection`, no queries will be preloaded. Similarly, the first time a user visits `/collections/backcountry-collection`, no queries will be preloaded. However, the second time that a user visits `/collections/freestyle-collection`, `CollectionDetails` will be preloaded.
+
+![Shows a screenshot of preloaded queries in wildcard routes](/assets/custom-storefronts/hydrogen/wild-card-preloaded-queries.png)
+
+## Preload a query
+
+You can add an option to preload a query anywhere in your Hydrogen app.
 
 The `preload` property takes a Boolean value or a string:
 
@@ -57,61 +102,15 @@ const {data} = useQuery(
 
 {% endcodeblock %}
 
-## No preloaded queries
+## Test a preloaded query
 
-Preloaded queries work by storing the query fetcher for the next time the same URL is requested. For example, on the `/` URL, Shopify fetches queries for the following:
-
-- `shopInfo`
-- `layoutContent`
-- `localization`
-- `homeShopInfo`
-- `welcomeContent`
-- `indexContent`
-
-If you don't set any of these queries with `preload: true`, then no queries will be preloaded:
-
-![Shows a screenshot of no preloaded queries](/assets/custom-storefronts/hydrogen/no-preloaded-queries.png)
-
-## Some preloaded queries
-
-If you set a some queries to preload, then on the first time `/` is requested, no queries will be preloaded. However, all requests to `/` afterwards will preload `homeShopInfo`, `welcomeContent` and `indexContent` queries:
-
-- `shopInfo`
-- `layoutContent`
-- `localization`
-- `homeShopInfo` - `preload: true`
-- `welcomeContent` - `preload: true`
-- `indexContent` - `preload: true`
-
-![Shows a screenshot of some preloaded queries](/assets/custom-storefronts/hydrogen/some-preloaded-queries.png)
-
-## Wildcard routes
-
-Preloaded queries work similarly for wildcard routes like `Product` and `Collection`, except that each URL has its own preload queries.
-
-### Example
-
-You've set `CollectionDetails` to preload queries:
-
-- `shopInfo`
-- `layoutContent`
-- `localization`
-- `CollectionDetails` - `preload: true`
-
-The first time a user visits `/collections/freestyle-collection`, no queries will be preloaded. Similarly, the first time a user visits `/collections/backcountry-collection`, no queries will be preloaded. However, the second time that a user visits `/collections/freestyle-collection`, `CollectionDetails` will be preloaded.
-
-![Shows a screenshot of preloaded queries in wildcard routes](/assets/custom-storefronts/hydrogen/wild-card-preloaded-queries.png)
-
-## Troubleshooting
-
-To test preloaded queries, enable the `showQueryTiming` property in `App.server.js`. The [`showQueryTiming`](/api/hydrogen/utilities/log#logger-options) property logs the timeline of when queries are being requested, resolved, and rendered.
+To test a preloaded query, enable the `showQueryTiming` property in `App.server.js`. The [`showQueryTiming`](/api/hydrogen/utilities/log#logger-options) property logs the timeline of when queries are being requested, resolved, and rendered.
 
 {% codeblock file, filename: "App.server.js" %}
 
 ```js
 import {setLoggerOptions} from '@shopify/hydrogen';
 ...
-
 setLoggerOptions({
   showQueryTiming: true
 })
