@@ -19,8 +19,9 @@ export interface HydrogenUseQueryOptions {
    * determine which cache control header to set.
    */
   cache?: CachingStrategy;
-  /** Whether to preload the query. Defaults to `false`. Specify `true` to
-   * preload the query for the URL or `'*'` to preload the query for all requests.
+  /** Whether to [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries).
+   * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
+   * to preload the query for all requests.
    */
   preload?: PreloadOptions;
 }

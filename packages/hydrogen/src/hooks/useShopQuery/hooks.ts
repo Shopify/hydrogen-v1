@@ -35,8 +35,9 @@ export function useShopQuery<T>({
   cache?: CachingStrategy;
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
-  /** Whether to preload the query. Defaults to `false`. Specify `true` to
-   * preload the query for the URL or `'*'` to preload the query for all requests.
+  /** Whether to[preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries).
+   * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
+   * to preload the query for all requests.
    */
   preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {

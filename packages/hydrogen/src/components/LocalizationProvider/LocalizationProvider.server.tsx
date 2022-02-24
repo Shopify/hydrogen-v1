@@ -11,7 +11,8 @@ export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
   children: ReactNode;
   /** Whether to preload the query. Defaults to `false`. Specify `true` to
-   * preload the query for the URL or `'*'` to preload the query for all requests.
+   * [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries) for the URL
+   * or `'*'` to preload the query for all requests.
    */
   preload: PreloadOptions;
 }
