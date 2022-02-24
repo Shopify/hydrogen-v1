@@ -2,10 +2,10 @@
 
 The `useShopQuery` takes an object as its only argument, with the following keys:
 
-| Key         | Required | Description                                                                                                |
-| ----------- | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `query`     | Yes      | A string of the GraphQL query.                                                                             |
-| `variables` | No       | An object of the variables for the GraphQL query.                                                          |
-| `cache`     | No       | An object describing the [cache policy](/custom-storefronts/hydrogen/framework/cache) for the request.     |
-| `locale`    | No       | A string corresponding to a valid locale identifier that's used to make the request. For example, `en-us`. |
-| `preload`   | No       | A boolean or string to preload this query                                                                  |
+| Key         | Required | Description                                                                                                                                        |
+| ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `query`     | Yes      | A string of the GraphQL query.                                                                                                                     |
+| `variables` | No       | An object of the variables for the GraphQL query.                                                                                                  |
+| `cache`     | No       | An object describing the [cache policy](/custom-storefronts/hydrogen/framework/cache) for the request.                                             |
+| `locale`    | No       | A string corresponding to a valid locale identifier that's used to make the request. For example, `en-us`.                                         |
+| `preload`   | No       | Whether to preload the query. Defaults to `false`. Specify `true` to preload the query for the URL or `'*'` to preload the query for all requests. |

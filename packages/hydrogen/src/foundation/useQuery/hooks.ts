@@ -15,7 +15,13 @@ import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
+  /** The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
+   * determine which cache control header to set.
+   */
   cache?: CachingStrategy;
+  /** Whether to preload the query. Defaults to `false`. Specify `true` to
+   * preload the query for the URL or `'*'` to preload the query for all requests.
+   */
   preload?: PreloadOptions;
 }
 
@@ -29,7 +35,7 @@ export function useQuery<T>(
   key: QueryKey,
   /** An asynchronous query function like `fetch` which returns data. */
   queryFn: () => Promise<T>,
-  /** Options including `cache` to manage the cache behavior of the sub-request. */
+  /** The options to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
 ) {
   const request = useServerRequest();

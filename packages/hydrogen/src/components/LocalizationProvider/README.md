@@ -13,6 +13,13 @@ export function Component() {
 }
 ```
 
+## Props
+
+| Name       | Required | Description                                                                                                                                        |
+| ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children` | Yes      | A `ReactNode` element.                                                                                                                             |
+| `preload`  | No       | Whether to preload the query. Defaults to `false`. Specify `true` to preload the query for the URL or `'*'` to preload the query for all requests. |
+
 ## Component type
 
 The `LocalizationProvider` component is a server component, which means that it renders on the server. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
