@@ -26,7 +26,7 @@
     "marker.js",
     "middleware.js",
     "middleware.d.ts",
-    "worker.js"
+    "web-polyfills.js"
   ],
   "scripts": {
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
