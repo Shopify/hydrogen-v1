@@ -1,7 +1,8 @@
-import type {CachingStrategy, QueryKey} from '../../types';
+import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types';
 import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
+  collectQueryTimings,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -15,6 +16,7 @@ import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
   cache?: CachingStrategy;
+  preload?: PreloadOptions;
 }
 
 /**
@@ -30,11 +32,25 @@ export function useQuery<T>(
   /** Options including `cache` to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
 ) {
+  const request = useServerRequest();
   const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
-  return useRequestCacheData<T>(
+  const fetcher = cachedQueryFnBuilder<T>(
     withCacheIdKey,
-    cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
+    queryFn,
+    queryOptions
   );
+
+  collectQueryTimings(request, withCacheIdKey, 'requested');
+
+  if (queryOptions?.preload) {
+    request.savePreloadQuery({
+      preload: queryOptions?.preload,
+      key: withCacheIdKey,
+      fetcher,
+    });
+  }
+
+  return useRequestCacheData<T>(withCacheIdKey, fetcher);
 }
 
 function cachedQueryFnBuilder<T>(

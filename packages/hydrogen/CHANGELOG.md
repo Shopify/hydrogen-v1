@@ -7,6 +7,12 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Make `featuredImage` optional and handle it in <Seo />
+
+## [0.11.0] - 2022-02-24
+
 ### Added
 
 - New React hook `useScriptLoader` is available to more easily load external scripts
@@ -19,7 +25,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Add a default virtual entry-client in `/@shopify/hydrogen/entry-client` that can be used in `index.html`
 - Enable early hydration when streaming
 - Add variantId prop to `<ProductMetafield />` component [#730](https://github.com/Shopify/hydrogen/pull/730)
+- Add query timing logging option `showQueryTiming` [#699](https://github.com/Shopify/hydrogen/pull/699)
 - Add variantId prop to `<ProductPrice />` component
+- Add `preload` option to `useQuery` and `useShopQuery` [#700](https://github.com/Shopify/hydrogen/pull/700)
 
 ### Breaking Change
 
@@ -484,4 +492,5 @@ function SomeComponent() {
 [0.9.1]: https://github.com/Shopify/hydrogen/releases/tag/v0.9.1
 [0.10.0]: https://github.com/Shopify/hydrogen/releases/tag/v0.10.0
 [0.10.1]: https://github.com/Shopify/hydrogen/releases/tag/v0.10.1
-[unreleased]: https://github.com/Shopify/hydrogen/compare/v0.10.1...HEAD
+[0.11.0]: https://github.com/Shopify/hydrogen/releases/tag/v0.11.0
+[unreleased]: https://github.com/Shopify/hydrogen/compare/v0.11.0...HEAD
