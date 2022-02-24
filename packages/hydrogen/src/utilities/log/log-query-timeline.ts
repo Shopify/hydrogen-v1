@@ -2,13 +2,13 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 import {QueryKey} from '../../types';
 import {hashKey} from '../../framework/cache';
 import {findQueryName, parseUrl} from './utils';
-import {gray, red, yellow} from 'kolorist';
+import {gray, red, yellow, green} from 'kolorist';
 import {getLoggerWithContext} from './log';
 import {getTime} from '../timing';
 
 import type {RenderType} from './log';
 
-export type TimingType = 'requested' | 'resolved' | 'rendered';
+export type TimingType = 'requested' | 'resolved' | 'rendered' | 'preload';
 
 export type QueryTiming = {
   name: string;
@@ -22,6 +22,7 @@ const TIMING_MAPPING = {
   requested: 'Requested',
   rendered: 'Rendered',
   resolved: 'Resolved',
+  preload: 'Preload',
 };
 
 export function collectQueryTimings(
@@ -53,20 +54,29 @@ export function logQueryTimings(
   if (queryList.length > 0) {
     const requestStartTime = request.time;
     const detectSuspenseWaterfall: Record<string, boolean> = {};
+    const detectMultipleDataLoad: Record<string, number> = {};
     let suspenseWaterfallDetectedCount = 0;
 
     queryList.forEach((query: QueryTiming, index: number) => {
-      if (query.timingType === 'requested') {
+      if (query.timingType === 'requested' || query.timingType === 'preload') {
         detectSuspenseWaterfall[query.name] = true;
       } else if (query.timingType === 'rendered') {
         delete detectSuspenseWaterfall[query.name];
+      } else if (query.timingType === 'resolved') {
+        detectMultipleDataLoad[query.name] = detectMultipleDataLoad[query.name]
+          ? detectMultipleDataLoad[query.name] + 1
+          : 1;
       }
+
+      const loadColor = query.timingType === 'preload' ? green : color;
 
       log.debug(
         color(
           `│ ${`${(query.timestamp - requestStartTime).toFixed(2)}ms`.padEnd(
-            11
-          )} ${TIMING_MAPPING[query.timingType].padEnd(10)} ${query.name}${
+            10
+          )} ${loadColor(TIMING_MAPPING[query.timingType].padEnd(10))} ${
+            query.name
+          }${
             query.timingType === 'resolved'
               ? ` (Took ${query.duration?.toFixed(2)}ms)`
               : ''
@@ -95,6 +105,26 @@ export function logQueryTimings(
           suspenseWaterfallDetectedCount === 1 ? yellow : red;
         log.debug(
           `${color(`│ `)}${warningColor(`Suspense waterfall detected`)}`
+        );
+      }
+    });
+
+    const unusedQueries = Object.keys(detectSuspenseWaterfall);
+    if (unusedQueries.length > 0) {
+      unusedQueries.forEach((queryName: string) => {
+        log.debug(
+          `${color(`│ `)}${yellow(`Unused query detected: ${queryName}`)}`
+        );
+      });
+    }
+
+    Object.keys(detectMultipleDataLoad).forEach((queryName: string) => {
+      const count = detectMultipleDataLoad[queryName];
+      if (count > 1) {
+        log.debug(
+          `${color(`│ `)}${yellow(
+            `Multiple data loads detected: ${queryName}`
+          )}`
         );
       }
     });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {
   Logger,
   logServerResponse,
@@ -19,7 +19,10 @@ import {Html} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
-import {ServerRequestProvider} from './foundation/ServerRequestProvider';
+import {
+  preloadRequestCacheData,
+  ServerRequestProvider,
+} from './foundation/ServerRequestProvider';
 import type {ServerResponse, IncomingMessage} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {
@@ -613,7 +616,9 @@ function buildAppRSC({
 
   const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
-      <App {...state} {...hydrogenServerProps} pages={pages} />
+      <PreloadQueries request={request}>
+        <App {...state} {...hydrogenServerProps} pages={pages} />
+      </PreloadQueries>
     </ServerRequestProvider>
   );
 
@@ -646,15 +651,29 @@ function buildAppSSR(
           serverState={state as any}
           setServerState={() => {}}
         >
-          <React.Suspense fallback={null}>
-            <RscConsumer />
-          </React.Suspense>
+          <PreloadQueries request={request}>
+            <React.Suspense fallback={null}>
+              <RscConsumer />
+            </React.Suspense>
+          </PreloadQueries>
         </ServerStateProvider>
       </ServerRequestProvider>
     </Html>
   );
 
   return {AppSSR, rscReadable: rscReadableForFlight};
+}
+
+function PreloadQueries({
+  request,
+  children,
+}: {
+  request: ServerComponentRequest;
+  children: ReactElement;
+}) {
+  const preloadQueries = request.getPreloadQueries();
+  preloadRequestCacheData(request, preloadQueries);
+  return children;
 }
 
 function extractHeadElements({context: {helmet}}: HeadData) {
@@ -887,4 +906,5 @@ function postRequestTasks(
   logServerResponse(type, request, status);
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
+  request.savePreloadQueries();
 }

@@ -45,6 +45,7 @@ function SeoForHomepage() {
   } = useShopQuery({
     query: SEO_QUERY,
     cache: CacheDays(),
+    preload: true,
   });
 
   return (
@@ -68,6 +69,7 @@ function FeaturedProductsBox({country}) {
     variables: {
       country: country.isoCode,
     },
+    preload: true,
   });
 
   const collections = data ? flattenConnection(data.collections) : [];
@@ -120,6 +122,7 @@ function FeaturedCollectionBox({country}) {
     variables: {
       country: country.isoCode,
     },
+    preload: true,
   });
 
   const collections = data ? flattenConnection(data.collections) : [];

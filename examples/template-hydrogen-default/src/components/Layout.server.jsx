@@ -22,13 +22,14 @@ export default function Layout({children, hero}) {
       numCollections: 3,
     },
     cache: CacheHours(),
+    preload: '*',
   });
   const collections = data ? flattenConnection(data.collections) : null;
   const products = data ? flattenConnection(data.products) : null;
   const storeName = data ? data.shop.name : '';
 
   return (
-    <LocalizationProvider>
+    <LocalizationProvider preload="*">
       <div className="absolute top-0 left-0">
         <a
           href="#mainContent"

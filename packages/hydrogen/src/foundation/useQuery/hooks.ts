@@ -1,4 +1,4 @@
-import type {CachingStrategy, QueryKey} from '../../types';
+import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types';
 import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
@@ -16,6 +16,7 @@ import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
   cache?: CachingStrategy;
+  preload?: PreloadOptions;
 }
 
 /**
@@ -33,13 +34,23 @@ export function useQuery<T>(
 ) {
   const request = useServerRequest();
   const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
+  const fetcher = cachedQueryFnBuilder<T>(
+    withCacheIdKey,
+    queryFn,
+    queryOptions
+  );
 
   collectQueryTimings(request, withCacheIdKey, 'requested');
 
-  return useRequestCacheData<T>(
-    withCacheIdKey,
-    cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
-  );
+  if (queryOptions?.preload) {
+    request.savePreloadQuery({
+      preload: queryOptions?.preload,
+      key: withCacheIdKey,
+      fetcher,
+    });
+  }
+
+  return useRequestCacheData<T>(withCacheIdKey, fetcher);
 }
 
 function cachedQueryFnBuilder<T>(
