@@ -29,7 +29,9 @@ export function useShopQuery<T>({
   query?: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
-  /** An object containing cache-control options for the sub-request. */
+  /** The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to
+   * help you determine which cache control header to set.
+   */
   cache?: CachingStrategy;
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
