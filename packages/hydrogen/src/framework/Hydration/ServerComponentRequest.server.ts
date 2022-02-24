@@ -102,7 +102,7 @@ export class ServerComponentRequest extends Request {
   public savePreloadQuery(query: PreloadQueryEntry) {
     if (typeof query.preload === 'string' && query.preload === PRELOAD_ALL) {
       saveToPreloadAllPreload(query);
-    } else {
+    } else if (query.preload) {
       this.ctx.preloadQueries.set(hashKey(query.key), query);
     }
   }
