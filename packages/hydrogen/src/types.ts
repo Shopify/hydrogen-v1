@@ -52,10 +52,12 @@ export type ServerHandlerConfig = {
 
 export type ClientHandlerConfig = {
   shopifyConfig: ShopifyConfig;
+  /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
+  strictMode?: boolean;
 };
 
 export type ClientHandler = (
-  App: any,
+  App: React.ElementType,
   config: ClientHandlerConfig
 ) => Promise<void>;
 
