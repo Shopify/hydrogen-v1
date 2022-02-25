@@ -55,6 +55,8 @@ declare global {
   var __WORKER__: boolean;
 }
 
+const DOCTYPE = '<!DOCTYPE html>';
+const CONTENT_TYPE = 'Content-Type';
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 interface RequestHandlerOptions {
@@ -188,9 +190,15 @@ async function render(
     {template}
   );
 
+  function onErrorShell(error: Error) {
+    log.error(error);
+    componentResponse.writeHead({status: 500});
+    return template;
+  }
+
   let [html, flight] = await Promise.all([
-    renderToBufferedString(AppSSR, {log, nonce}),
-    bufferReadableStream(rscReadable.getReader()),
+    renderToBufferedString(AppSSR, {log, nonce}).catch(onErrorShell),
+    bufferReadableStream(rscReadable.getReader()).catch(() => null),
   ]);
 
   const {headers, status, statusText} = getResponseOptions(componentResponse);
@@ -213,7 +221,7 @@ async function render(
     });
   }
 
-  headers['Content-type'] = HTML_CONTENT_TYPE;
+  headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
   const {bodyAttributes, htmlAttributes, ...head} = extractHeadElements(
     request.ctx.head
   );
@@ -299,88 +307,88 @@ async function stream(
   let didError: Error | undefined;
 
   if (__WORKER__) {
-    const deferredShouldReturnApp = defer<boolean>();
+    const onCompleteAll = defer<true>();
     const encoder = new TextEncoder();
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
 
-    const ssrReadable = ssrRenderToReadableStream(AppSSR, {
-      nonce,
-      bootstrapScripts,
-      bootstrapModules,
-      onCompleteShell() {
-        log.trace('worker ready to stream');
+    let ssrReadable: ReadableStream<Uint8Array>;
 
-        Object.assign(
-          responseOptions,
-          getResponseOptions(componentResponse, didError)
-        );
+    try {
+      ssrReadable = await ssrRenderToReadableStream(AppSSR, {
+        nonce,
+        bootstrapScripts,
+        bootstrapModules,
+        onCompleteAll() {
+          log.trace('worker complete stream');
+          onCompleteAll.resolve(true);
+        },
+        onError(error) {
+          didError = error;
 
-        /**
-         * TODO: This assumes `response.cache()` has been called _before_ any
-         * queries which might be caught behind Suspense. Clarify this or add
-         * additional checks downstream?
-         */
-        responseOptions.headers[getCacheControlHeader({dev})] =
-          componentResponse.cacheControlHeader;
+          if (dev && !writable.closed && !!responseOptions.status) {
+            writable.write(getErrorMarkup(error));
+          }
 
-        if (isRedirect(responseOptions)) {
-          // Return redirects early without further rendering/streaming
-          return deferredShouldReturnApp.resolve(false);
+          log.error(error);
+        },
+      });
+    } catch (error: unknown) {
+      log.error(error);
+
+      return new Response(
+        template + (dev ? getErrorMarkup(error as Error) : ''),
+        {
+          status: 500,
+          headers: {[CONTENT_TYPE]: HTML_CONTENT_TYPE},
         }
+      );
+    }
 
-        if (!componentResponse.canStream()) return;
+    log.trace('worker ready to stream');
 
-        startWritingHtmlToStream(
-          responseOptions,
-          writable,
-          encoder,
-          dev ? didError : undefined
-        );
+    async function prepareForStreaming(flush: boolean) {
+      Object.assign(
+        responseOptions,
+        getResponseOptions(componentResponse, didError)
+      );
 
-        deferredShouldReturnApp.resolve(true);
-      },
-      async onCompleteAll() {
-        log.trace('worker complete stream');
-        if (componentResponse.canStream()) return;
+      /**
+       * TODO: This assumes `response.cache()` has been called _before_ any
+       * queries which might be caught behind Suspense. Clarify this or add
+       * additional checks downstream?
+       */
+      responseOptions.headers[getCacheControlHeader({dev})] =
+        componentResponse.cacheControlHeader;
 
-        Object.assign(
-          responseOptions,
-          getResponseOptions(componentResponse, didError)
-        );
+      if (isRedirect(responseOptions)) {
+        return false;
+      }
 
-        if (isRedirect(responseOptions)) {
-          // Redirects found after any async code
-          return deferredShouldReturnApp.resolve(false);
-        }
-
+      if (flush) {
         if (componentResponse.customBody) {
           writable.write(encoder.encode(await componentResponse.customBody));
-          return deferredShouldReturnApp.resolve(false);
+          return false;
         }
 
-        startWritingHtmlToStream(
-          responseOptions,
-          writable,
-          encoder,
-          dev ? didError : undefined
-        );
+        responseOptions.headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+        writable.write(encoder.encode(DOCTYPE));
 
-        deferredShouldReturnApp.resolve(true);
-      },
-      onError(error) {
-        didError = error;
-
-        if (dev && deferredShouldReturnApp.status === 'pending') {
-          writable.write(getErrorMarkup(error));
+        if (didError) {
+          // This error was delayed until the headers were properly sent.
+          writable.write(encoder.encode(getErrorMarkup(didError)));
         }
 
-        log.error(error);
-      },
-    });
+        return true;
+      }
+    }
 
-    if (await deferredShouldReturnApp.promise) {
+    const shouldReturnApp =
+      (await prepareForStreaming(componentResponse.canStream())) ??
+      (await onCompleteAll.promise.then(prepareForStreaming));
+
+    if (shouldReturnApp) {
       let bufferedSsr = '';
       let isPendingSsrWrite = false;
       const writingSSR = bufferReadableStream(
@@ -521,6 +529,17 @@ async function stream(
             pipe(response);
           }
         );
+      },
+      onErrorShell(error: any) {
+        log.error(error);
+
+        if (!response.writableEnded) {
+          writeHeadToServerResponse(response, componentResponse, log, error);
+          startWritingHtmlToServerResponse(response, dev ? error : undefined);
+
+          response.write(template);
+          response.end();
+        }
       },
       onError(error: any) {
         didError = error;
@@ -698,27 +717,27 @@ async function renderToBufferedString(
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     if (__WORKER__) {
-      const deferred = defer();
-      const readable = ssrRenderToReadableStream(ReactApp, {
-        nonce,
-        onCompleteAll() {
-          /**
-           * We want to wait until `onCompleteAll` has been called before fetching the
-           * stream body. Otherwise, React 18's streaming JS script/template tags
-           * will be included in the output and cause issues when loading
-           * the Client Components in the browser.
-           */
-          deferred.resolve(null);
-        },
-        onError(error: any) {
-          log.error(error);
-          deferred.reject(error);
-        },
-      });
+      const onCompleteAll = defer();
 
-      await deferred.promise.catch(reject);
+      try {
+        const ssrReadable = await ssrRenderToReadableStream(ReactApp, {
+          nonce,
+          onCompleteAll: () => onCompleteAll.resolve(null),
+          onError: (error) => log.error(error),
+        });
 
-      resolve(await bufferReadableStream(readable.getReader()));
+        /**
+         * We want to wait until `onCompleteAll` has been called before fetching the
+         * stream body. Otherwise, React 18's streaming JS script/template tags
+         * will be included in the output and cause issues when loading
+         * the Client Components in the browser.
+         */
+        await onCompleteAll.promise;
+
+        resolve(bufferReadableStream(ssrReadable.getReader()));
+      } catch (error: unknown) {
+        reject(error);
+      }
     } else {
       const writer = await createNodeWriter();
 
@@ -736,10 +755,8 @@ async function renderToBufferedString(
           // Tell React to start writing to the writer
           pipe(writer);
         },
-        onError(error: any) {
-          log.error(error);
-          reject(error);
-        },
+        onErrorShell: reject,
+        onError: (error) => log.error(error),
       });
     }
   });
@@ -752,28 +769,13 @@ function startWritingHtmlToServerResponse(
   error?: Error
 ) {
   if (!response.headersSent) {
-    response.setHeader('Content-type', HTML_CONTENT_TYPE);
-    response.write('<!DOCTYPE html>');
+    response.setHeader(CONTENT_TYPE, HTML_CONTENT_TYPE);
+    response.write(DOCTYPE);
   }
 
   if (error) {
     // This error was delayed until the headers were properly sent.
     response.write(getErrorMarkup(error));
-  }
-}
-
-function startWritingHtmlToStream(
-  responseOptions: ResponseOptions,
-  writable: WritableStreamDefaultWriter,
-  encoder: TextEncoder,
-  error?: Error
-) {
-  responseOptions.headers['Content-type'] = HTML_CONTENT_TYPE;
-  writable.write(encoder.encode('<!DOCTYPE html>'));
-
-  if (error) {
-    // This error was delayed until the headers were properly sent.
-    writable.write(encoder.encode(getErrorMarkup(error)));
   }
 }
 
