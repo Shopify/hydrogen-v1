@@ -6,6 +6,7 @@ import {RawHtml} from '../../RawHtml';
 import {Image} from '../../Image';
 import {getMediaImage} from '../../../utilities/tests/media';
 import type {Rating} from '../../../types';
+import {Link} from '../../Link/index';
 
 describe('<Metafield />', () => {
   it('renders nothing when the metafield value is undefined', () => {
@@ -26,6 +27,19 @@ describe('<Metafield />', () => {
     expect(console.warn).toHaveBeenCalledWith(
       `No metafield value for ${metafield}`
     );
+  });
+
+  it(`validates props when a component is passed to the 'as' prop`, () => {
+    const component = mountWithProviders(
+      <Metafield
+        data={getParsedMetafield({type: 'number_integer'})}
+        as={Link}
+        to="/test"
+      />
+    );
+    expect(component).toContainReactComponent(Link, {
+      to: '/test',
+    });
   });
 
   describe('with `date` type metafield', () => {
