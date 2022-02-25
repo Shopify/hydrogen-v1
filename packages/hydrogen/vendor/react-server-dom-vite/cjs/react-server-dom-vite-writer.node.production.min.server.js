@@ -9,28 +9,20 @@
  */
 'use strict';
 var h = require('react'),
-  n = JSON.stringify,
+  p = JSON.stringify,
   q = Symbol.for('react.module.reference'),
-  r = 60103,
-  t = 60107,
-  u = 60112,
-  v = 60115,
-  w = 60116;
-if ('function' === typeof Symbol && Symbol.for) {
-  var x = Symbol.for;
-  r = x('react.element');
-  t = x('react.fragment');
-  u = x('react.forward_ref');
-  v = x('react.memo');
-  w = x('react.lazy');
-}
-var y = Array.isArray,
-  z =
+  r = Symbol.for('react.element'),
+  t = Symbol.for('react.fragment'),
+  u = Symbol.for('react.forward_ref'),
+  v = Symbol.for('react.memo'),
+  w = Symbol.for('react.lazy'),
+  x = Array.isArray,
+  y =
     h.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher;
-function A(a) {
+function z(a) {
   console.error(a);
 }
-function D(a, c, d) {
+function C(a, c, d) {
   var b = [],
     e = {
       status: 0,
@@ -46,17 +38,17 @@ function D(a, c, d) {
       completedErrorChunks: [],
       writtenSymbols: new Map(),
       writtenModules: new Map(),
-      onError: void 0 === d ? A : d,
+      onError: void 0 === d ? z : d,
       toJSON: function (a, b) {
-        return E(e, this, a, b);
+        return D(e, this, a, b);
       },
     };
   e.pendingChunks++;
-  a = F(e, a);
+  a = E(e, a);
   b.push(a);
   return e;
 }
-function G(a, c, d, b) {
+function F(a, c, d, b) {
   if (null !== d && void 0 !== d)
     throw Error(
       'Refs cannot be used in server components, nor passed to client components.'
@@ -70,10 +62,10 @@ function G(a, c, d, b) {
       case u:
         return (a = a.render), a(b, void 0);
       case v:
-        return G(a.type, c, d, b);
+        return F(a.type, c, d, b);
     }
   }
-  throw Error('Unsupported server component type: ' + H(a));
+  throw Error('Unsupported server component type: ' + G(a));
 }
 function I(a, c) {
   var d = a.pingedSegments;
@@ -83,7 +75,7 @@ function I(a, c) {
       return J(a);
     });
 }
-function F(a, c) {
+function E(a, c) {
   var d = {
     id: a.nextChunkId++,
     model: c,
@@ -104,12 +96,12 @@ function L(a) {
   var c = JSON.stringify(a);
   return '"' + a + '"' === c ? a : c;
 }
-function H(a) {
+function G(a) {
   switch (typeof a) {
     case 'string':
       return JSON.stringify(10 >= a.length ? a : a.substr(0, 10) + '...');
     case 'object':
-      if (y(a)) return '[...]';
+      if (x(a)) return '[...]';
       a = K(a);
       return 'Object' === a ? '{...}' : a;
     case 'function':
@@ -118,8 +110,8 @@ function H(a) {
       return String(a);
   }
 }
-function N(a, c) {
-  if (y(a)) {
+function M(a, c) {
+  if (x(a)) {
     for (var d = '[', b = 0; b < a.length; b++) {
       0 < b && (d += ', ');
       if (6 < b) {
@@ -129,8 +121,8 @@ function N(a, c) {
       var e = a[b];
       d =
         '' + b === c && 'object' === typeof e && null !== e
-          ? d + N(e)
-          : d + H(e);
+          ? d + M(e)
+          : d + G(e);
     }
     return d + ']';
   }
@@ -145,11 +137,11 @@ function N(a, c) {
     var f = b[e];
     d += L(f) + ': ';
     var k = a[f];
-    d = f === c && 'object' === typeof k && null !== k ? d + N(k) : d + H(k);
+    d = f === c && 'object' === typeof k && null !== k ? d + M(k) : d + G(k);
   }
   return d + '}';
 }
-function E(a, c, d, b) {
+function D(a, c, d, b) {
   switch (b) {
     case r:
       return '$';
@@ -159,20 +151,20 @@ function E(a, c, d, b) {
   for (; 'object' === typeof b && null !== b && b.$$typeof === r; ) {
     var e = b;
     try {
-      b = G(e.type, e.key, e.ref, e.props);
+      b = F(e.type, e.key, e.ref, e.props);
     } catch (m) {
       if ('object' === typeof m && null !== m && 'function' === typeof m.then)
         return (
           a.pendingChunks++,
-          (a = F(a, b)),
+          (a = E(a, b)),
           (c = a.ping),
           m.then(c, c),
           '@' + a.id.toString(16)
         );
-      O(a, m);
+      N(a, m);
       a.pendingChunks++;
       c = a.nextChunkId++;
-      P(a, c, m);
+      O(a, c, m);
       return '@' + c.toString(16);
     }
   }
@@ -190,9 +182,9 @@ function E(a, c, d, b) {
         var l = {id: b.filepath, name: b.name};
         a.pendingChunks++;
         var g = a.nextChunkId++,
-          B = n(l);
-        var C = 'M' + g.toString(16) + ':' + B + '\n';
-        a.completedModuleChunks.push(C);
+          A = p(l);
+        var B = 'M' + g.toString(16) + ':' + A + '\n';
+        a.completedModuleChunks.push(B);
         f.set(e, g);
         return c[0] === r && '1' === d
           ? '@' + g.toString(16)
@@ -201,7 +193,7 @@ function E(a, c, d, b) {
         return (
           a.pendingChunks++,
           (c = a.nextChunkId++),
-          P(a, c, m),
+          O(a, c, m),
           '$' + c.toString(16)
         );
       }
@@ -222,7 +214,7 @@ function E(a, c, d, b) {
         'Event handlers cannot be passed to client component props. Remove ' +
           (L(d) +
             ' from these props if possible: ' +
-            N(c) +
+            M(c) +
             '\nIf you need interactivity, consider converting part of this to a client component.')
       );
     throw Error(
@@ -231,7 +223,7 @@ function E(a, c, d, b) {
           ' (' +
           (b.displayName || b.name || 'function') +
           ') from this object, or avoid the entire object: ' +
-          N(c))
+          M(c))
     );
   }
   if ('symbol' === typeof b) {
@@ -243,11 +235,11 @@ function E(a, c, d, b) {
       throw Error(
         'Only global symbols received from Symbol.for(...) can be passed to client components. The symbol Symbol.for(' +
           (b.description + ') cannot be found among global symbols. Remove ') +
-          (L(d) + ' from this object, or avoid the entire object: ' + N(c))
+          (L(d) + ' from this object, or avoid the entire object: ' + M(c))
       );
     a.pendingChunks++;
     c = a.nextChunkId++;
-    d = n(g);
+    d = p(g);
     d = 'S' + c.toString(16) + ':' + d + '\n';
     a.completedModuleChunks.push(d);
     l.set(b, c);
@@ -258,25 +250,25 @@ function E(a, c, d, b) {
       'BigInt (' +
         b +
         ') is not yet supported in client component props. Remove ' +
-        (L(d) + ' from this object or use a plain number instead: ' + N(c))
+        (L(d) + ' from this object or use a plain number instead: ' + M(c))
     );
   throw Error(
     'Type ' +
       typeof b +
       ' is not supported in client component props. Remove ' +
-      (L(d) + ' from this object, or avoid the entire object: ' + N(c))
+      (L(d) + ' from this object, or avoid the entire object: ' + M(c))
   );
 }
-function O(a, c) {
+function N(a, c) {
   a = a.onError;
   a(c);
 }
-function Q(a, c) {
+function P(a, c) {
   null !== a.destination
     ? ((a.status = 2), a.destination.destroy(c))
     : ((a.status = 1), (a.fatalError = c));
 }
-function P(a, c, d) {
+function O(a, c, d) {
   var b = '';
   try {
     if (d instanceof Error) {
@@ -287,14 +279,14 @@ function P(a, c, d) {
     e = 'An error occurred but serializing the error message failed.';
   }
   d = {message: e, stack: b};
-  c = 'E' + c.toString(16) + ':' + n(d) + '\n';
+  c = 'E' + c.toString(16) + ':' + p(d) + '\n';
   a.completedErrorChunks.push(c);
 }
 function J(a) {
-  var c = z.current,
-    d = R;
-  z.current = S;
-  R = a.cache;
+  var c = y.current,
+    d = Q;
+  y.current = R;
+  Q = a.cache;
   try {
     var b = a.pingedSegments;
     a.pingedSegments = [];
@@ -309,31 +301,31 @@ function J(a) {
         ) {
           var g = l;
           f.model = l;
-          l = G(g.type, g.key, g.ref, g.props);
+          l = F(g.type, g.key, g.ref, g.props);
         }
-        var B = f.id,
-          C = n(l, k.toJSON);
-        var m = 'J' + B.toString(16) + ':' + C + '\n';
+        var A = f.id,
+          B = p(l, k.toJSON);
+        var m = 'J' + A.toString(16) + ':' + B + '\n';
         k.completedJSONChunks.push(m);
-      } catch (p) {
+      } catch (n) {
         if (
-          'object' === typeof p &&
-          null !== p &&
-          'function' === typeof p.then
+          'object' === typeof n &&
+          null !== n &&
+          'function' === typeof n.then
         ) {
-          var M = f.ping;
-          p.then(M, M);
-        } else O(k, p), P(k, f.id, p);
+          var H = f.ping;
+          n.then(H, H);
+        } else N(k, n), O(k, f.id, n);
       }
     }
-    null !== a.destination && T(a, a.destination);
-  } catch (p) {
-    O(a, p), Q(a, p);
+    null !== a.destination && S(a, a.destination);
+  } catch (n) {
+    N(a, n), P(a, n);
   } finally {
-    (z.current = c), (R = d);
+    (y.current = c), (Q = d);
   }
 }
-function T(a, c) {
+function S(a, c) {
   'function' === typeof c.cork && c.cork();
   try {
     for (var d = a.completedModuleChunks, b = 0; b < d.length; b++)
@@ -365,31 +357,31 @@ function T(a, c) {
   'function' === typeof c.flush && c.flush();
   0 === a.pendingChunks && c.end();
 }
-function U(a) {
+function T(a) {
   setImmediate(function () {
     return J(a);
   });
 }
-function V(a, c) {
+function U(a, c) {
   if (1 === a.status) (a.status = 2), c.destroy(a.fatalError);
-  else if (2 !== a.status) {
+  else if (2 !== a.status && null === a.destination) {
     a.destination = c;
     try {
-      T(a, c);
+      S(a, c);
     } catch (d) {
-      O(a, d), Q(a, d);
+      N(a, d), P(a, d);
     }
   }
 }
-function W() {
+function V() {
   throw Error('This Hook is not supported in Server Components.');
 }
-function X() {
-  if (!R)
+function W() {
+  if (!Q)
     throw Error('Refreshing the cache is not supported in Server Components.');
 }
-var R = null,
-  S = {
+var Q = null,
+  R = {
     useMemo: function (a) {
       return a();
     },
@@ -397,40 +389,40 @@ var R = null,
       return a;
     },
     useDebugValue: function () {},
-    useDeferredValue: W,
-    useTransition: W,
+    useDeferredValue: V,
+    useTransition: V,
     getCacheForType: function (a) {
-      if (!R)
+      if (!Q)
         throw Error('Reading the cache is only supported while rendering.');
-      var c = R.get(a);
-      void 0 === c && ((c = a()), R.set(a, c));
+      var c = Q.get(a);
+      void 0 === c && ((c = a()), Q.set(a, c));
       return c;
     },
-    readContext: W,
-    useContext: W,
-    useReducer: W,
-    useRef: W,
-    useState: W,
-    useInsertionEffect: W,
-    useLayoutEffect: W,
-    useImperativeHandle: W,
-    useEffect: W,
-    useId: W,
-    useMutableSource: W,
-    useSyncExternalStore: W,
+    readContext: V,
+    useContext: V,
+    useReducer: V,
+    useRef: V,
+    useState: V,
+    useInsertionEffect: V,
+    useLayoutEffect: V,
+    useImperativeHandle: V,
+    useEffect: V,
+    useId: V,
+    useMutableSource: V,
+    useSyncExternalStore: V,
     useCacheRefresh: function () {
-      return X;
+      return W;
     },
   };
-function Y(a, c) {
+function X(a, c) {
   return function () {
-    return V(c, a);
+    return U(c, a);
   };
 }
 exports.renderToPipeableStream = function (a, c) {
-  var d = D(a, {}, c ? c.onError : void 0),
+  var d = C(a, {}, c ? c.onError : void 0),
     b = !1;
-  U(d);
+  T(d);
   return {
     pipe: function (a) {
       if (b)
@@ -438,8 +430,8 @@ exports.renderToPipeableStream = function (a, c) {
           'React currently only supports piping to one writable stream.'
         );
       b = !0;
-      V(d, a);
-      a.on('drain', Y(a, d));
+      U(d, a);
+      a.on('drain', X(a, d));
       return a;
     },
   };

@@ -80,7 +80,7 @@ if (process.env.NODE_ENV !== 'production') {
         destination.cork();
       }
     }
-    function writeChunk(destination, chunk) {
+    function writeChunkAndReturn(destination, chunk) {
       var nodeBuffer = chunk; // close enough
 
       return destination.write(nodeBuffer);
@@ -151,46 +151,12 @@ if (process.env.NODE_ENV !== 'production') {
     // ATTENTION
     // When adding new symbols to this file,
     // Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
-    // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
-    // nor polyfill, then a plain number is used for performance.
-    var REACT_ELEMENT_TYPE = 0xeac7;
-    var REACT_PORTAL_TYPE = 0xeaca;
-    var REACT_FRAGMENT_TYPE = 0xeacb;
-    var REACT_STRICT_MODE_TYPE = 0xeacc;
-    var REACT_PROFILER_TYPE = 0xead2;
-    var REACT_PROVIDER_TYPE = 0xeacd;
-    var REACT_CONTEXT_TYPE = 0xeace;
-    var REACT_FORWARD_REF_TYPE = 0xead0;
-    var REACT_SUSPENSE_TYPE = 0xead1;
-    var REACT_SUSPENSE_LIST_TYPE = 0xead8;
-    var REACT_MEMO_TYPE = 0xead3;
-    var REACT_LAZY_TYPE = 0xead4;
-    var REACT_SCOPE_TYPE = 0xead7;
-    var REACT_DEBUG_TRACING_MODE_TYPE = 0xeae1;
-    var REACT_OFFSCREEN_TYPE = 0xeae2;
-    var REACT_LEGACY_HIDDEN_TYPE = 0xeae3;
-    var REACT_CACHE_TYPE = 0xeae4;
-
-    if (typeof Symbol === 'function' && Symbol.for) {
-      var symbolFor = Symbol.for;
-      REACT_ELEMENT_TYPE = symbolFor('react.element');
-      REACT_PORTAL_TYPE = symbolFor('react.portal');
-      REACT_FRAGMENT_TYPE = symbolFor('react.fragment');
-      REACT_STRICT_MODE_TYPE = symbolFor('react.strict_mode');
-      REACT_PROFILER_TYPE = symbolFor('react.profiler');
-      REACT_PROVIDER_TYPE = symbolFor('react.provider');
-      REACT_CONTEXT_TYPE = symbolFor('react.context');
-      REACT_FORWARD_REF_TYPE = symbolFor('react.forward_ref');
-      REACT_SUSPENSE_TYPE = symbolFor('react.suspense');
-      REACT_SUSPENSE_LIST_TYPE = symbolFor('react.suspense_list');
-      REACT_MEMO_TYPE = symbolFor('react.memo');
-      REACT_LAZY_TYPE = symbolFor('react.lazy');
-      REACT_SCOPE_TYPE = symbolFor('react.scope');
-      REACT_DEBUG_TRACING_MODE_TYPE = symbolFor('react.debug_trace_mode');
-      REACT_OFFSCREEN_TYPE = symbolFor('react.offscreen');
-      REACT_LEGACY_HIDDEN_TYPE = symbolFor('react.legacy_hidden');
-      REACT_CACHE_TYPE = symbolFor('react.cache');
-    }
+    // The Symbol used to tag the ReactElement-like types.
+    var REACT_ELEMENT_TYPE = Symbol.for('react.element');
+    var REACT_FRAGMENT_TYPE = Symbol.for('react.fragment');
+    var REACT_FORWARD_REF_TYPE = Symbol.for('react.forward_ref');
+    var REACT_MEMO_TYPE = Symbol.for('react.memo');
+    var REACT_LAZY_TYPE = Symbol.for('react.lazy');
 
     var isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
 
@@ -551,7 +517,7 @@ if (process.env.NODE_ENV !== 'production') {
             x.then(ping, ping);
             return serializeByRefID(newSegment.id);
           } else {
-            reportError(request, x); // Something errored. We'll still send everything we have up until this point.
+            logRecoverableError(request, x); // Something errored. We'll still send everything we have up until this point.
             // We'll replace this element with a lazy reference that throws on the client
             // once it gets rendered.
 
@@ -748,7 +714,7 @@ if (process.env.NODE_ENV !== 'production') {
       );
     }
 
-    function reportError(request, error) {
+    function logRecoverableError(request, error) {
       var onError = request.onError;
       onError(error);
     }
@@ -834,7 +800,7 @@ if (process.env.NODE_ENV !== 'production') {
           x.then(ping, ping);
           return;
         } else {
-          reportError(request, x); // This errored, we need to serialize this error to the
+          logRecoverableError(request, x); // This errored, we need to serialize this error to the
 
           emitErrorChunk(request, segment.id, x);
         }
@@ -860,7 +826,7 @@ if (process.env.NODE_ENV !== 'production') {
           flushCompletedChunks(request, request.destination);
         }
       } catch (error) {
-        reportError(request, error);
+        logRecoverableError(request, error);
         fatalError(request, error);
       } finally {
         ReactCurrentDispatcher.current = prevDispatcher;
@@ -880,8 +846,9 @@ if (process.env.NODE_ENV !== 'production') {
         for (; i < moduleChunks.length; i++) {
           request.pendingChunks--;
           var chunk = moduleChunks[i];
+          var keepWriting = writeChunkAndReturn(destination, chunk);
 
-          if (!writeChunk(destination, chunk)) {
+          if (!keepWriting) {
             request.destination = null;
             i++;
             break;
@@ -897,7 +864,9 @@ if (process.env.NODE_ENV !== 'production') {
           request.pendingChunks--;
           var _chunk = jsonChunks[i];
 
-          if (!writeChunk(destination, _chunk)) {
+          var _keepWriting = writeChunkAndReturn(destination, _chunk);
+
+          if (!_keepWriting) {
             request.destination = null;
             i++;
             break;
@@ -915,7 +884,9 @@ if (process.env.NODE_ENV !== 'production') {
           request.pendingChunks--;
           var _chunk2 = errorChunks[i];
 
-          if (!writeChunk(destination, _chunk2)) {
+          var _keepWriting2 = writeChunkAndReturn(destination, _chunk2);
+
+          if (!_keepWriting2) {
             request.destination = null;
             i++;
             break;
@@ -951,12 +922,17 @@ if (process.env.NODE_ENV !== 'production') {
         return;
       }
 
+      if (request.destination !== null) {
+        // We're already flowing.
+        return;
+      }
+
       request.destination = destination;
 
       try {
         flushCompletedChunks(request, destination);
       } catch (error) {
-        reportError(request, error);
+        logRecoverableError(request, error);
         fatalError(request, error);
       }
     }
