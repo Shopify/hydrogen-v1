@@ -88,19 +88,6 @@ export default () => {
               /\((\w+)\.locked\)/gm,
               '($1 && $1.locked)'
             );
-
-            // `renderToReadableStream` is bugged in React.
-            // This adds a workaround until these issues are fixed:
-            // https://github.com/facebook/react/issues/22772
-            // https://github.com/facebook/react/issues/23113
-            workerBundle.code = workerBundle.code.replace(
-              /var \w+\s*=\s*(\w+)\.completedRootSegment;/g,
-              'if($1.status===5)return\n$1.status=5;\n$&'
-            );
-            workerBundle.code = workerBundle.code.replace(
-              /(\w+)\.allPendingTasks\s*={2,3}\s*0\s*\&\&\s*\w+\.pingedTasks\.length/g,
-              '$1.status=0;\n$&'
-            );
           }
         }
       : undefined,
