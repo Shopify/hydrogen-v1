@@ -29,11 +29,16 @@ export function useShopQuery<T>({
   query?: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
-  /** An object containing cache-control options for the sub-request. */
+  /** The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to
+   * help you determine which cache control header to set.
+   */
   cache?: CachingStrategy;
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
-  /** Whether to preload this query */
+  /** Whether to[preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries).
+   * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
+   * to preload the query for all requests.
+   */
   preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
   if (!import.meta.env.SSR) {

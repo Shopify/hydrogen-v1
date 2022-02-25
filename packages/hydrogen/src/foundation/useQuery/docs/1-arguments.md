@@ -2,15 +2,15 @@
 
 The `useQuery` hook takes the following arguments:
 
-| Key        | Required | Description                                          |
-| ---------- | -------- | ---------------------------------------------------- |
-| `cacheKey` | Yes      | A string or an array to uniquely identify the query. |
-| `queryFn`  | Yes      | An asynchronous function that returns data.          |
-| `options`  | No       | An object describing the options for the request.    |
+| Key            | Required | Description                                                     |
+| -------------- | -------- | --------------------------------------------------------------- |
+| `key`          | Yes      | A string or an array to uniquely identify the query.            |
+| `queryFn`      | Yes      | An asynchronous query function like `fetch` which returns data. |
+| `queryOptions` | No       | The options to manage the cache behavior of the sub-request.    |
 
-The `options` object accepts the following properties:
+The `queryOptions` object accepts the following properties:
 
-| Key       | Required | Description                                                                                            |
-| --------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| `cache`   | No       | An object describing the [cache policy](/custom-storefronts/hydrogen/framework/cache) for the request. |
-| `preload` | No       | A boolean or string to preload this query                                                              |
+| Key       | Required | Description                                                                                                                                                                                                    |
+| --------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cache`   | No       | The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you determine which cache control header to set.                                                               |
+| `preload` | No       | Whether to [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries). Defaults to `false`. Specify `true` to preload the query for the URL or `'*'` to preload the query for all requests. |
