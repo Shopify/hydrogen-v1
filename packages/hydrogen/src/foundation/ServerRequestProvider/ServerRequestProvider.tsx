@@ -105,25 +105,18 @@ export function useRequestCacheData<T>(
       }
       if (!promise) {
         const startApiTime = getTime();
-        try {
-          promise = fetcher().then(
-            (r) => {
-              data = {data: r};
-              collectQueryTimings(
-                request,
-                key,
-                'resolved',
-                getTime() - startApiTime
-              );
-            },
-            (e) => {
-              console.log('useRequestCacheData: fetcher error', e);
-              data = {error: e};
-            }
-          );
-        } catch (e) {
-          console.log('useRequestCacheData', e);
-        }
+        promise = fetcher().then(
+          (r) => {
+            data = {data: r};
+            collectQueryTimings(
+              request,
+              key,
+              'resolved',
+              getTime() - startApiTime
+            );
+          },
+          (e) => (data = {error: e})
+        );
       }
       throw promise;
     });
@@ -167,14 +160,8 @@ export function preloadRequestCacheData(
               );
             },
             (e) => {
-              // The preload query failed for some reason, could be due to Cloudfare such as:
-              //
-              // Error: Cannot perform I/O on behalf of a different request. I/O objects (such as streams,
-              // request/response bodies, and others) created in the context of one request handler cannot
-              // be accessed from a different request's handler. This is a limitation of Cloudflare Workers
-              // which allows us to improve overall performance.
-              //
-              // On Cloudfare, this happens when a Cache item has expired (max-age)
+              // The preload query failed for some reason:
+              // On Cloudfare, this happens when a Cache item has expired at max-age
               //
               // We need to remove this entry from cache so that render cycle will retry on its own
               cache.delete(cacheKey);
