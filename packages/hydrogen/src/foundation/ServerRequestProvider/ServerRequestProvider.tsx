@@ -7,6 +7,7 @@ import type {
   ServerComponentRequest,
 } from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
+import {collectQueryTimings} from '../../utilities/log';
 
 // Context to inject current request in SSR
 const RequestContextSSR = createContext<ServerComponentRequest | null>(null);
