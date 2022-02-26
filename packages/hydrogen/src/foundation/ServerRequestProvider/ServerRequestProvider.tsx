@@ -7,7 +7,6 @@ import type {
   ServerComponentRequest,
 } from '../../framework/Hydration/ServerComponentRequest.server';
 import type {QueryKey} from '../../types';
-import {collectQueryTimings} from '../../utilities/log';
 
 // Context to inject current request in SSR
 const RequestContextSSR = createContext<ServerComponentRequest | null>(null);
@@ -105,18 +104,25 @@ export function useRequestCacheData<T>(
       }
       if (!promise) {
         const startApiTime = getTime();
-        promise = fetcher().then(
-          (r) => {
-            data = {data: r};
-            collectQueryTimings(
-              request,
-              key,
-              'resolved',
-              getTime() - startApiTime
-            );
-          },
-          (e) => (data = {error: e})
-        );
+        try {
+          promise = fetcher().then(
+            (r) => {
+              data = {data: r};
+              collectQueryTimings(
+                request,
+                key,
+                'resolved',
+                getTime() - startApiTime
+              );
+            },
+            (e) => {
+              console.log('useRequestCacheData: fetcher error', e);
+              data = {error: e};
+            }
+          );
+        } catch (e) {
+          console.log('useRequestCacheData', e);
+        }
       }
       throw promise;
     });
@@ -159,7 +165,25 @@ export function preloadRequestCacheData(
                 getTime() - startApiTime
               );
             },
-            (e) => (data = {error: e})
+            (e) => {
+              // The preload query failed for some reason, could be due to Cloudfare such as:
+              //
+              // Error: Cannot perform I/O on behalf of a different request. I/O objects (such as streams,
+              // request/response bodies, and others) created in the context of one request handler cannot
+              // be accessed from a different request's handler. This is a limitation of Cloudflare Workers
+              // which allows us to improve overall performance.
+              //
+              // On Cloudfare, this happens when a Cache item has expired (max-age)
+              //
+              // We need to remove this entry from cache so that render cycle will retry on its own
+              cache.delete(cacheKey);
+              collectQueryTimings(
+                request,
+                preloadQuery.key,
+                'expired',
+                getTime() - startApiTime
+              );
+            }
           );
         }
         return promise;
