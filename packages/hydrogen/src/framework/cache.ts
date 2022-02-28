@@ -83,7 +83,7 @@ export async function setItemInCache(
    * WARNING: Cloudflare's Cache API does not support `stale-while-revalidate`
    * so this implementation will not work as expected on that platform.
    */
-  cache.put(request, response);
+  await cache.put(request, response);
 }
 
 export async function deleteItemFromCache(key: QueryKey) {
