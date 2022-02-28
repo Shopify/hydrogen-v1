@@ -1,14 +1,18 @@
 import type {Env} from 'types';
 import {MiniOxygen} from './mini-oxygen/core';
 import path from 'path';
-import {tree, HelpfulError} from '../../utilities';
+import {HelpfulError} from '../../utilities';
 
 export async function preview(env: Env) {
   const {fs, ui, workspace} = env;
   const root = workspace.root();
   const port = 3000;
 
-  if (!(await fs.exists('dist/worker/index.js'))) {
+  // We should get these from a config file, along with env variables
+  const workerPath = 'dist/worker/index.js';
+  const assetsDir = 'dist/client';
+
+  if (!(await fs.exists(workerPath))) {
     throw new HelpfulError({
       title: 'worker not found',
       content: 'A worker build is required for this command.',
@@ -17,18 +21,16 @@ export async function preview(env: Env) {
     });
   }
 
-  const {files} = await tree(fs.join(root, 'dist/client'), {
-    recursive: true,
-  });
-
   const mf = new MiniOxygen({
     buildCommand: 'yarn build',
+    // I think globals requires the Bindings Plugin, so we'll have to do this a different way
     globals: {Oxygen: {}},
-    scriptPath: path.resolve(root, 'dist/worker/index.js'),
-    sitePath: path.resolve(root, 'dist/client'),
+    scriptPath: path.resolve(root, workerPath),
+    watch: true,
+    buildWatchPaths: ['./src'],
   });
 
-  const app = await mf.createServer({assets: files});
+  const app = await mf.createServer({assetsDir});
 
   app.listen(port, () => {
     ui.say(

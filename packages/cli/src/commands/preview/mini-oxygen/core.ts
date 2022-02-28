@@ -3,13 +3,20 @@ import {
   CorePluginSignatures,
   MiniflareCore,
   MiniflareCoreOptions,
+  BuildPlugin,
 } from '@miniflare/core';
 import {CachePlugin} from '@miniflare/cache';
 import {VMScriptRunner} from '@miniflare/runner-vm';
 import {Log, LogLevel} from '@miniflare/shared';
 
-import {createServer} from './server';
+import {createServer, MiniOxygenServerOptions} from './server';
 import {StorageFactory} from './storage';
+
+const PLUGINS = {
+  CorePlugin,
+  CachePlugin,
+  BuildPlugin,
+};
 
 export class MiniOxygen extends MiniflareCore<CorePluginSignatures> {
   constructor(options: MiniflareCoreOptions<CorePluginSignatures>) {
@@ -31,12 +38,7 @@ export class MiniOxygen extends MiniflareCore<CorePluginSignatures> {
     return super.dispose();
   }
 
-  createServer({assets = []}: {assets?: string[]} = {}) {
-    return createServer(this, {assets});
+  createServer(options: MiniOxygenServerOptions) {
+    return createServer(this, options);
   }
 }
-
-const PLUGINS = {
-  CorePlugin,
-  CachePlugin,
-};
