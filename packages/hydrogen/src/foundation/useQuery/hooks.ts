@@ -27,9 +27,10 @@ export interface HydrogenUseQueryOptions {
 }
 
 /**
- * The `useQuery` hook is a wrapper around Suspense calls and
- * global runtime's Cache if it exists.
- * It supports Suspense calls on the server and on the client.
+ * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
+ * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based
+ * on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this
+ * hook to call any third-party APIs.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
