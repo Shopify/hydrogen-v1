@@ -205,13 +205,16 @@ Next, visit the Shipit page for Hydrogen and click **Deploy** on the merge commi
 
 Releasing an experimental version of Hydrogen to GitHub can be useful if you want to test the new version in existing apps.
 
-To release an experimental version, merge your changes into the `experimental` branch.
+To release an experimental version:
 
-Then, run `yarn changeset pre enter experimental` locally while in the branch. This will modify changesets' files to begin tracking changesets as an experimental release.
+- Merge your changes into the `experimental` branch.
+- Run `yarn changeset pre enter experimental` locally while in the branch. This will modify changesets' files to begin tracking changesets as an experimental release.
+- Change `.changeset/config.json` to `"changelog": "@changesets/cli/changelog"`in order to run the next command locally.
+- Run`yarn changeset version` when you are ready to release an experimental version to NPM.
+- Commit these changes, and push them to your remote `experimental` branch.
+- Go to Shipit and find "Hydrogen Experimental." Run a deploy against the commit containing your new version.
 
-When you are ready to release an experimental version to NPM, run `yarn changeset version`. Commit these changes, and push them to your remote `experimental` branch.
-
-After running the script, go to Shipit and find "Hydrogen Experimental." Run a deploy against the commit containing your new version, and this should release your experimental version on NPM with the `experimental` tag.
+This should release your experimental version on NPM with the `experimental` tag.
 
 ## Testing changes in another project
 
