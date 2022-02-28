@@ -1,14 +1,14 @@
 import React, {ElementType} from 'react';
 import {useMoney} from '../../hooks';
 import {Props} from '../types';
-import {MoneyV2} from '../../graphql/types/types';
+import type {MoneyFragmentFragment} from './MoneyFragment';
 import {MoneyFragment as Fragment} from '../../graphql/graphql-constants';
 
 export interface MoneyProps {
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: ElementType;
   /** A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2). */
-  data: MoneyV2;
+  data: MoneyFragmentFragment;
 }
 
 /**

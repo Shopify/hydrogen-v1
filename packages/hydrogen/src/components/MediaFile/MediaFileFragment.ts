@@ -1,30 +1,47 @@
+/**
+ * THIS FILE IS AUTO-GENERATED, DO NOT EDIT.
+ * Instead, you can edit the associated .graphql file to query for additional fields and this file will be updated when you run `yarn graphql-types`
+ */
+// @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-import {ImageFragmentFragment} from '../Image/ImageFragment';
-import {VideoFragmentFragment} from '../Video/VideoFragment';
-import {ExternalVideoFragmentFragment} from '../ExternalVideo/ExternalVideoFragment';
-import {Model3DFragmentFragment} from '../ModelViewer/Model3DFragment';
 export type MediaFileFragment_ExternalVideo_Fragment = {
   __typename?: 'ExternalVideo';
-} & Pick<Types.ExternalVideo, 'mediaContentType'> &
-  ExternalVideoFragmentFragment;
+  mediaContentType: Types.MediaContentType;
+  id: string;
+  embeddedUrl: any;
+  host: Types.MediaHost;
+};
 
 export type MediaFileFragment_MediaImage_Fragment = {
   __typename?: 'MediaImage';
-} & Pick<Types.MediaImage, 'mediaContentType'> & {
-    image?: Types.Maybe<{__typename?: 'Image'} & ImageFragmentFragment>;
-  };
+  mediaContentType: Types.MediaContentType;
+  image?: {
+    __typename?: 'Image';
+    id?: string | null;
+    url: any;
+    altText?: string | null;
+    width?: number | null;
+    height?: number | null;
+  } | null;
+};
 
 export type MediaFileFragment_Model3d_Fragment = {
   __typename?: 'Model3d';
-} & Pick<Types.Model3d, 'mediaContentType'> &
-  Model3DFragmentFragment;
+  mediaContentType: Types.MediaContentType;
+  id: string;
+  alt?: string | null;
+  previewImage?: {__typename?: 'Image'; url: any} | null;
+  sources: Array<{__typename?: 'Model3dSource'; url: string}>;
+};
 
-export type MediaFileFragment_Video_Fragment = {__typename?: 'Video'} & Pick<
-  Types.Video,
-  'mediaContentType'
-> &
-  VideoFragmentFragment;
+export type MediaFileFragment_Video_Fragment = {
+  __typename?: 'Video';
+  mediaContentType: Types.MediaContentType;
+  id: string;
+  previewImage?: {__typename?: 'Image'; url: any} | null;
+  sources: Array<{__typename?: 'VideoSource'; mimeType: string; url: string}>;
+};
 
 export type MediaFileFragmentFragment =
   | MediaFileFragment_ExternalVideo_Fragment

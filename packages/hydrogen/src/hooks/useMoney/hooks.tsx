@@ -54,7 +54,7 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
     [money.currencyCode]
   );
 
-  const amount = parseFloat(money.amount);
+  const amount = parseFloat(money.amount as string);
 
   const value = useMemo(
     () => new Intl.NumberFormat(locale, options).format(amount),

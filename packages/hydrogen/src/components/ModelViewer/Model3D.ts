@@ -5,9 +5,11 @@
 // @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-export type VideoFragmentFragment = {
-  __typename?: 'Video';
+export type Model3DFragmentFragment = {
+  __typename?: 'Model3d';
   id: string;
+  alt?: string | null;
+  mediaContentType: Types.MediaContentType;
   previewImage?: {__typename?: 'Image'; url: any} | null;
-  sources: Array<{__typename?: 'VideoSource'; mimeType: string; url: string}>;
+  sources: Array<{__typename?: 'Model3dSource'; url: string}>;
 };

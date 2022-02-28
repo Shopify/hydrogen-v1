@@ -1,5 +1,9 @@
 overwrite: true
-schema: ['src/graphql/schema.json']
+schema:
+  - https://hydrogen-preview.myshopify.com/api/2022-01/graphql.json:
+      headers:
+        X-Shopify-Storefront-Access-Token: 3b580e70970c4528da70c98e097c2fa0
+        content-type: application/json
 documents:
   [
     'src/components/**/*.graphql',
@@ -7,27 +11,42 @@ documents:
     'src/hooks/**/*.graphql',
   ]
 generates:
+  # the base types that are generated
   src/graphql/types/types.ts:
-    config:
-      withComponents: false
-      withHooks: false
-      withHOC: false
-      useTypeImports: true
     plugins:
-      - 'typescript'
+      - add:
+          content:
+            - '/** '
+            - ' * THIS FILE IS AUTO-GENERATED, DO NOT EDIT'
+            - ' * If changes need to happen to the types defined in this file, then generally the Storefront API needs to update, and then you can run `yarn graphql-types`'
+            - ' */'
+      - typescript:
+          useTypeImports: true
+          # If a default type for a scalar isn't set, then instead of 'any' let's set to 'unknown' for better type safety.
+          defaultScalarType: unknown
+          useImplementingTypes: true
+  # generates the files next to where they're used
   src/:
     preset: near-operation-file
     config:
       documentMode: string
-      withHooks: false
     presetConfig:
+      # is the same as the base type file path above
       baseTypesPath: graphql/types/types.ts
+      # perhaps think about changing the extension in the future?
       extension: .ts
     plugins:
+      - add:
+          content:
+            - '/** '
+            - ' * THIS FILE IS AUTO-GENERATED, DO NOT EDIT.'
+            - ' * Instead, you can edit the associated .graphql file to query for additional fields and this file will be updated when you run `yarn graphql-types`'
+            - ' */'
+            # Because these are generated files, we don't want TS to fail on TS-related issues in these files. For example, sometimes a file is imported but not used in these files
+            - '// @ts-nocheck'
       - typescript-operations
+  # the schema file, which is the local representation of the graphql endpoint
   ./graphql.schema.json:
     plugins:
-      - 'introspection'
-  ./src/graphql/graphql-constants.ts:
-    plugins:
-      - './codegen-hydrogen-plugin.js'
+      - 'introspection':
+          minify: true
