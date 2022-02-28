@@ -11,10 +11,6 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 - Make `featuredImage` optional and handle it in <Seo />
 
-### Fixed
-
-- Preload queries breaking fetch on Cloudfare [#764](https://github.com/Shopify/hydrogen/pull/764)
-
 ## [0.11.0] - 2022-02-24
 
 ### Added
