@@ -4,13 +4,13 @@ import {UnitPriceMeasurement, MoneyV2} from '../../graphql/types/types';
 import {Money} from '../Money';
 import {UnitPriceFragment as Fragment} from '../../graphql/graphql-constants';
 
-export interface UnitPriceProps {
+export interface UnitPriceProps<TTag> {
   /** A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2). */
   data: MoneyV2;
   /** A [`UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement). */
   measurement: UnitPriceMeasurement;
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
-  as?: ElementType;
+  as?: TTag;
 }
 
 /**
@@ -18,7 +18,7 @@ export interface UnitPriceProps {
  * [Storefront API's `MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) with a reference unit from the [Storefront API's `UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement).
  */
 export function UnitPrice<TTag extends ElementType>(
-  props: Props<TTag> & UnitPriceProps
+  props: Props<TTag> & UnitPriceProps<TTag>
 ) {
   const {data, measurement, as, ...passthroughProps} = props;
   const Wrapper: any = as ?? 'div';
