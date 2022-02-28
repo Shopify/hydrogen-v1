@@ -8,11 +8,11 @@ import {MetafieldFragment as Fragment} from '../../graphql/graphql-constants';
 import {Image} from '../Image';
 import {MediaImage} from '../../types';
 
-export interface MetafieldProps {
+export interface MetafieldProps<TTag> {
   /** A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API. */
   data: ParsedMetafield;
   /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](/apps/metafields/types). */
-  as?: ElementType;
+  as?: TTag;
 }
 
 /**
@@ -23,7 +23,7 @@ export interface MetafieldProps {
  * Metafield's `value`. For more information, refer to the [Default Output](#default-output) section.
  */
 export function Metafield<TTag extends ElementType>(
-  props: Props<TTag> & MetafieldProps
+  props: Props<TTag> & MetafieldProps<TTag>
 ) {
   const {data, children, as, ...passthroughProps} = props;
   const {locale} = useShop();

@@ -8,9 +8,12 @@ import {PreloadOptions} from '../../types';
 import {Props} from '../types';
 
 export interface LocalizationProviderProps {
-  /** Any ReactNode elements. */
+  /** A `ReactNode` element. */
   children: ReactNode;
-  /** `true` to preload the localization query for the url or `'*'` to preload the localization query for all urls */
+  /** Whether to preload the query. Defaults to `false`. Specify `true` to
+   * [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries) for the URL
+   * or `'*'` to preload the query for all requests.
+   */
   preload: PreloadOptions;
 }
 

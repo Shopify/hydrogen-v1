@@ -348,6 +348,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/cache.md',
     }),
     generator.section({
+      title: 'Preloaded queries',
+      description:
+        'Learn how to configure queries to preload in your Hydrogen app.',
+      url: '/custom-storefronts/hydrogen/framework/preloaded-queries.md',
+      entry: 'framework/docs/preloaded-queries.md',
+    }),
+    generator.section({
       title: 'Server state',
       description:
         'Learn how to update the state on the server when you are building your Hydrogen app.',
