@@ -12,10 +12,10 @@ import type {ImportGlobEagerOutput} from '../../types';
  */
 export function FileRoutes({
   routes,
-  serverState,
+  serverProps,
 }: {
   routes: ImportGlobEagerOutput;
-  serverState: Record<string, any>;
+  serverProps: Record<string, any>;
 }) {
   const basePath = '/';
 
@@ -27,7 +27,7 @@ export function FileRoutes({
   let foundRoute, foundRouteDetails;
 
   for (let i = 0; i < pageRoutes.length; i++) {
-    foundRouteDetails = matchPath(serverState.pathname, pageRoutes[i]);
+    foundRouteDetails = matchPath(serverProps.pathname, pageRoutes[i]);
 
     if (foundRouteDetails) {
       foundRoute = pageRoutes[i];
@@ -36,7 +36,7 @@ export function FileRoutes({
   }
 
   return foundRoute ? (
-    <foundRoute.component params={foundRouteDetails.params} {...serverState} />
+    <foundRoute.component params={foundRouteDetails.params} {...serverProps} />
   ) : null;
 }
 

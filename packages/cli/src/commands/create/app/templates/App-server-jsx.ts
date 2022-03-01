@@ -9,11 +9,11 @@ import Loading from './components/Loading';
 
 import shopifyConfig from '../shopify.config';
 
-function App({routes, ...serverState}) {
+function App({routes, ...serverProps}) {
   return (
     <Suspense fallback={<Loading />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <Router fallback={<NotFound />} serverState={serverState}>
+        <Router fallback={<NotFound />} serverProps={serverProps}>
           <FileRoutes routes={routes} />
         </Router>
       <ShopifyProvider />

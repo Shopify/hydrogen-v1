@@ -238,30 +238,32 @@ Your `App.server.jsx` file should look similar to the following:
 
 ```jsx
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {FileRoutes} from '@shopify/hydrogen';
+import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-
+import shopifyConfig from '../shopify.config';
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
-import shopifyConfig from '../shopify.config';
+import CartProvider from './components/CartProvider.client';
 
-function App({log, pages, ...serverState}) {
+function App({routes, ...serverProps}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <DefaultSeo />
-      <FileRoutes
-        pages={pages}
-        serverState={serverState}
-        log={log}
-        fallback={<NotFound />}
-      />
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <CartProvider>
+          <DefaultSeo />
+          <Router fallback={<NotFound />} serverProps={serverProps}>
+            <FileRoutes routes={routes} />
+          </Router>
+        </CartProvider>
+      </ShopifyProvider>
     </Suspense>
   );
 }
 
-const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
-export default renderHydrogen(App, {shopifyConfig, pages});
+const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+
+export default renderHydrogen(App, {routes});
 ```
 
 {% endcodeblock %}
