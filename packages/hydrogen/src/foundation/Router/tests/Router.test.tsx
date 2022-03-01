@@ -7,9 +7,6 @@ import {ServerRequestProvider} from '../../ServerRequestProvider';
 import {useParams} from '../useParams';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 
-jest.mock('../../Boomerang/BoomerangPageTemplate.client', () => ({
-  BoomerangPage: () => null,
-}));
 jest.mock('../../Boomerang/Boomerang.client', () => ({
   Boomerang: () => null,
 }));
