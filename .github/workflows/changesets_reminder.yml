@@ -1,7 +1,8 @@
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    paths: ['packages/*/src/**', 'packages/*/package.json']
+    paths:
+      ['packages/*/src/**', 'packages/*/package.json', '!*.test.*', '!*.md']
 name: Changelog Reminder
 jobs:
   remind:
