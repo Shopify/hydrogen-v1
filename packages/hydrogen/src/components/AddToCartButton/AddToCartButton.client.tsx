@@ -40,12 +40,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
   } = props;
   const {status, id, cartCreate, linesAdd} = useCart();
   const product = useProduct();
-  const variantId =
-    explicitVariantId ??
-    product?.selectedVariant?.id ??
-    product?.variants?.find((variant) => variant.availableForSale)?.id ??
-    product?.variants?.[0]?.id ??
-    '';
+  const variantId = explicitVariantId ?? product?.selectedVariant?.id ?? '';
   const disabled =
     explicitVariantId === null ||
     variantId === '' ||
