@@ -12,13 +12,10 @@ declare global {
 const URL =
   'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
 
-export function Boomerang({
-  pageTemplate = 'not_set',
-}: {
-  pageTemplate: string | undefined;
-}) {
+export function Boomerang({pageTemplate}: {pageTemplate: string | null}) {
   const {storeDomain} = useShop();
-  const templateName = pageTemplate.toLowerCase();
+  const templateName =
+    pageTemplate !== null ? pageTemplate.toLowerCase() : 'not-set';
 
   useEffect(() => {
     (function () {
