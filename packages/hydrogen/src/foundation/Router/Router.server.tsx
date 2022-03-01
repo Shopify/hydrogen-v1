@@ -4,7 +4,6 @@ import {Route} from './Route.server';
 import {FileRoutes} from './FileRoutes';
 import {matchPath} from '../../utilities/matchPath';
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
-import {BoomerangPage} from '../Boomerang/BoomerangPageTemplate.client';
 import {Boomerang} from '../Boomerang/Boomerang.client';
 
 type RouterProps = {
@@ -37,10 +36,7 @@ function recurseChildren(
         return (
           <>
             {fileRoutingResult}
-            <Boomerang />
-            <BoomerangPage
-              pageTemplate={child.props.page?.name ?? child.props.page}
-            />
+            <Boomerang pageTemplate={fileRoutingResult.type.name} />
           </>
         );
     }
@@ -60,8 +56,7 @@ function recurseChildren(
               params: match.useParams,
               ...serverProps,
             })}
-            <Boomerang />
-            <BoomerangPage
+            <Boomerang
               pageTemplate={child.props.page?.name ?? child.props.page}
             />
           </>
@@ -91,8 +86,7 @@ function recurseChildren(
   return (
     <>
       {fallback}
-      <Boomerang />
-      <BoomerangPage
+      <Boomerang
         pageTemplate={fallback.props.page?.name ?? fallback.props.page}
       />
     </>
