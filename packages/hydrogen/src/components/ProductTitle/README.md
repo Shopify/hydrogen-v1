@@ -18,6 +18,12 @@ export function Product({product}) {
 }
 ```
 
+## Props
+
+| Name | Type              | Description                                                                                     |
+| ---- | ----------------- | ----------------------------------------------------------------------------------------------- |
+| `as` | <code>TTag</code> | An HTML tag to wrap the title. If not specified, then the title is wrapped in a `span` element. |
+
 ## Component type
 
 The `ProductTitle` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).

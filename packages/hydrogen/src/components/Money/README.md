@@ -52,11 +52,10 @@ export default function ProductWithCustomMoney() {
 
 ## Props
 
-| Name      | Type                     | Description                                                                              |
-| --------- | ------------------------ | ---------------------------------------------------------------------------------------- |
-| as?       | <code>ElementType</code> | A `ReactNode` element.                                                                   |
-| data      | <code>MoneyV2</code>     | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                  |
-| children? | <code>ReactNode</code>   | A function that takes an object return by the `useMoney` hook and returns a `ReactNode`. |
+| Name | Type                 | Description                                                                   |
+| ---- | -------------------- | ----------------------------------------------------------------------------- |
+| as?  | <code>TTag</code>    | An HTML tag to be rendered as the base element wrapper. The default is `div`. |
+| data | <code>MoneyV2</code> | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).       |
 
 ## Component type
 
