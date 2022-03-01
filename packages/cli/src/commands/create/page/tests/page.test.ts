@@ -8,9 +8,9 @@ describe.skip('page', () => {
         url: 'products',
       });
 
-      expect(await fs.read('src/pages/products.server.jsx')).toBe(
+      expect(await fs.read('src/routes/products.server.jsx')).toBe(
         `export default function Products({request, response, ...serverState}) {
-  return <div>Products component at \`src/pages/products.server.jsx\`</div>;
+  return <div>Products component at \`src/routes/products.server.jsx\`</div>;
 }
 `
       );
@@ -25,9 +25,9 @@ describe.skip('page', () => {
         url: 'collections',
       });
 
-      expect(await fs.read('src/pages/collections.server.tsx')).toBe(
+      expect(await fs.read('src/routes/collections.server.tsx')).toBe(
         `export default function Collections({request, response, ...serverState}) {
-  return <div>Collections component at \`src/pages/collections.server.tsx\`</div>;
+  return <div>Collections component at \`src/routes/collections.server.tsx\`</div>;
 }
 `
       );
@@ -42,11 +42,11 @@ describe.skip('page', () => {
         url: 'products/[handle]',
       });
 
-      expect(await fs.read('src/pages/products/[handle].server.tsx')).toBe(
+      expect(await fs.read('src/routes/products/[handle].server.tsx')).toBe(
         `export default function ProductDetails({request, response, ...serverState}) {
   return (
     <div>
-      ProductDetails component at \`src/pages/products/[handle].server.tsx\`
+      ProductDetails component at \`src/routes/products/[handle].server.tsx\`
     </div>
   );
 }
