@@ -50,7 +50,16 @@ export type ServerHandlerConfig = {
   shopifyConfig: ShopifyConfig;
 };
 
-export type ClientHandler = (App: any) => Promise<void>;
+export type ClientHandlerConfig = {
+  shopifyConfig: ShopifyConfig;
+  /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
+  strictMode?: boolean;
+};
+
+export type ClientHandler = (
+  App: React.ElementType,
+  config: ClientHandlerConfig
+) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
