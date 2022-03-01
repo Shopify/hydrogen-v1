@@ -21,7 +21,5 @@ setLoggerOptions({
   showQueryTiming: true,
 });
 
-export default renderHydrogen(App, () => {
-  // Custom hook
-});
+export default renderHydrogen(App, {shopifyConfig, pages});
 ```

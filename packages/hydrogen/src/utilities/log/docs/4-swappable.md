@@ -31,6 +31,5 @@ setLogger({
 function App() {
   /*...*/
 }
-
-export default renderHydrogen(App);
+export default renderHydrogen(App, {shopifyConfig, pages});
 ```

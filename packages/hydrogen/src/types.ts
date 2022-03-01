@@ -50,14 +50,7 @@ export type ServerHandlerConfig = {
   shopifyConfig: ShopifyConfig;
 };
 
-export type ClientHandlerConfig = {
-  shopifyConfig: ShopifyConfig;
-};
-
-export type ClientHandler = (
-  App: any,
-  config: ClientHandlerConfig
-) => Promise<void>;
+export type ClientHandler = (App: any) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];

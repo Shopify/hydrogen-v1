@@ -34,4 +34,4 @@ function App({...serverState}) {
 
 const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {pages});
+export default renderHydrogen(App, {shopifyConfig, pages});

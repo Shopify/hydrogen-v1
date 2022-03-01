@@ -57,9 +57,7 @@ setLoggerOptions({
   showQueryTiming: true,
 });
 
-export default renderHydrogen(App, () => {
-  // Custom hook
-});
+export default renderHydrogen(App, {shopifyConfig, pages});
 ```
 
 ## Swap logger implementation
@@ -92,5 +90,5 @@ function App() {
   /*...*/
 }
 
-export default renderHydrogen(App);
+export default renderHydrogen(App, {shopifyConfig, pages});
 ```

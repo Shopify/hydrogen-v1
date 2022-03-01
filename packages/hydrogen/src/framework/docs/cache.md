@@ -164,7 +164,7 @@ function App() {
   /* ... */
 }
 // ...
-export default renderHydrogen(App, {pages});
+export default renderHydrogen(App, {shopifyConfig, pages});
 ```
 
 {% endcodeblock %}
@@ -192,7 +192,7 @@ function App() {
   /* ... */
 }
 // ...
-export default renderHydrogen(App, {pages});
+export default renderHydrogen(App, {shopifyConfig, pages});
 ```
 
 {% endcodeblock %}
