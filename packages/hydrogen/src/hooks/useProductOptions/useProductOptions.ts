@@ -18,7 +18,7 @@ import {GraphQLConnection} from '../../types';
 export function useProductOptions({
   variants: variantsConnection,
   sellingPlanGroups: sellingPlanGroupsConnection,
-  initialVariantId,
+  initialVariantId: explicitVariantId,
 }: {
   /** The product's `VariantConnection`. */
   variants?: GraphQLConnection<Variant>;
@@ -36,17 +36,19 @@ export function useProductOptions({
   // All the options available for a product, based on all the variants
   const options = useMemo(() => getOptions(variants), [variants]);
 
+  const initialVariantId =
+    explicitVariantId === null
+      ? (explicitVariantId as null)
+      : variants.find((variant) => variant.id === explicitVariantId) ||
+        variants.find((variant) => variant.availableForSale) ||
+        variants[0];
   /**
    * Track the selectedVariant within the hook. If `initialVariantId`
    * is passed, use that as an initial value.
    */
   const [selectedVariant, setSelectedVariant] = useState<
     Variant | undefined | null
-  >(
-    initialVariantId == null
-      ? (initialVariantId as null | undefined)
-      : variants.find((variant) => variant.id === initialVariantId)
-  );
+  >(initialVariantId);
 
   /**
    * Track the selectedOptions within the hook. If a `initialVariantId`
@@ -68,11 +70,7 @@ export function useProductOptions({
    * values.
    */
   useEffect(() => {
-    const selectedVariant =
-      initialVariantId == null
-        ? (initialVariantId as null | undefined)
-        : variants.find((variant) => variant.id === initialVariantId);
-    setSelectedVariant(selectedVariant);
+    setSelectedVariant(initialVariantId);
 
     const selectedOptions = selectedVariant?.selectedOptions
       ? selectedVariant.selectedOptions.reduce((memo, optionSet) => {
