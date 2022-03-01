@@ -27,7 +27,7 @@ function App({routes, ...serverProps}) {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <Router fallback={<NotFound />} serverProps={serverProps}>
+        <Router fallback="Not found" serverProps={serverProps}>
           <FileRoutes routes={routes} />
         </Router>
       </ShopifyProvider>
