@@ -11,7 +11,10 @@ export interface ProductProviderProps {
   children: ReactNode;
   /** A [Product object](/api/storefront/reference/products/product). */
   data: Product;
-  /** The initially selected variant. This is required only if you're using a `SelectedVariantX` hook in the `ProductProvider` component.*/
+  /** The initially selected variant. If this is missing, then `selectedVariantId`
+   * in the returned `object` from the `useProduct` hook uses the first available variant
+   * or the first variant (if none are available).
+   */
   initialVariantId?: Parameters<
     typeof useProductOptions
   >['0']['initialVariantId'];
@@ -19,7 +22,7 @@ export interface ProductProviderProps {
 
 /**
  * The `ProductProvider` component sets up a context with product details. Descendents of
- * this component can use the `useProduct` hook and the related `ProductX` or `SelectedVariantX` hooks.
+ * this component can use the `useProduct` hook.
  */
 export function ProductProvider({
   children,
