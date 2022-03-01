@@ -6,9 +6,9 @@ Hydrogen includes a [`Seo`](/api/hydrogen/components/primitive/seo) client compo
 
 - [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
 
-- [`Sitemap.xml.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/sitemap.xml.server.jsx): A file that generates all products, collections, and pages URLs using the Storefront API
+- [`Sitemap.xml.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx): A file that generates all products, collections, and pages URLs using the Storefront API
 
-- [`Robots.txt.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
+- [`Robots.txt.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
 
 ### `Seo` client component
 
@@ -17,10 +17,10 @@ The [`Seo`](/api/hydrogen/components/primitive/seo) client component uses the da
 You can customize the `<head>` tags at the route level:
 
 - [Default page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
-- [Home page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/index.server.jsx)
-- [Pages page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/pages/[handle].server.jsx)
-- [Product page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/products/[handle].server.jsx)
-- [Collection page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/collections/[handle].server.jsx)
+- [Home page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/index.server.jsx)
+- [Pages page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/pages/[handle].server.jsx)
+- [Product page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/products/[handle].server.jsx)
+- [Collection page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/collections/[handle].server.jsx)
 
 ### `DefaultSeo` server component
 
@@ -80,25 +80,16 @@ The following example shows how to include a catch-all SEO component (`<DefaultS
 {% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
-import {DefaultRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import DefaultSeo from './components/DefaultSeo.server';
-import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 
 export default function App({log, ...serverState}) {
-  const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
-
   return (
     <Suspense fallback={<LoadingFallback />}>
       <DefaultSeo />
-      <DefaultRoutes
-        pages={pages}
-        serverState={serverState}
-        log={log}
-        fallback={<NotFound />}
-      />
+      {/** ... */}
     </Suspense>
   );
 }
@@ -114,7 +105,7 @@ To imitate the behaviour of a SEO robot and show the page content fully from ser
 
 ## Limitations and considerations
 
-The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
+The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
 
 - The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources.
 

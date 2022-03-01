@@ -1,7 +1,7 @@
 export default function () {
   return `
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {DefaultRoutes} from '@shopify/hydrogen';
+import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import NotFound from './components/NotFound.server';
@@ -9,20 +9,19 @@ import Loading from './components/Loading';
 
 import shopifyConfig from '../shopify.config';
 
-function App({log, pages, ...serverState}) {
+function App({routes, ...serverProps}) {
   return (
     <Suspense fallback={<Loading />}>
-      <DefaultRoutes
-        pages={pages}
-        serverState={serverState}
-        log={log}
-        fallback={<NotFound />}
-      />
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <Router fallback={<NotFound />} serverProps={serverProps}>
+          <FileRoutes routes={routes} />
+        </Router>
+      <ShopifyProvider />
     </Suspense>
   );
 }
 
-const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
-export default renderHydrogen(App, {shopifyConfig, pages});
+const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+export default renderHydrogen(App, {routes});
 `;
 }

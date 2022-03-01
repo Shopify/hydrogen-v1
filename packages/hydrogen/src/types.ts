@@ -6,7 +6,7 @@ import type {Metafield, Image, MediaContentType} from './graphql/types/types';
 
 type CommonOptions = {
   App: any;
-  pages?: ImportGlobEagerOutput;
+  routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
   componentResponse: ServerComponentResponse;
   log: Logger;
@@ -46,7 +46,7 @@ export type ImportGlobEagerOutput = Record<
 >;
 
 export type ServerHandlerConfig = {
-  pages?: ImportGlobEagerOutput;
+  routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
 };
 

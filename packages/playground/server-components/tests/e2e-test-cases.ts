@@ -305,7 +305,7 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
         return;
       }
 
-      const fullPath = resolve(__dirname, '../', 'src/pages/index.server.jsx');
+      const fullPath = resolve(__dirname, '../', 'src/routes/index.server.jsx');
       const newheading = 'Snow Devil';
 
       await page.goto(getServerUrl());

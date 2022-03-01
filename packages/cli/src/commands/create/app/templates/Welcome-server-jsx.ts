@@ -24,7 +24,7 @@ export default function () {
           storefronts.
         </p>
         <p>
-          Get started by editing <strong>pages/Index.server.jsx</strong>
+          Get started by editing <strong>routes/Index.server.jsx</strong>
           <br /> or reading our{" "}
           <a target="_blank" href="https://hydrogen.shopify.dev/">
             getting started guide
