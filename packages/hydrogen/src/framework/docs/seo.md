@@ -80,25 +80,16 @@ The following example shows how to include a catch-all SEO component (`<DefaultS
 {% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
-import {FileRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import DefaultSeo from './components/DefaultSeo.server';
-import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 
 export default function App({log, ...serverState}) {
-  const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
-
   return (
     <Suspense fallback={<LoadingFallback />}>
       <DefaultSeo />
-      <FileRoutes
-        pages={pages}
-        serverState={serverState}
-        log={log}
-        fallback={<NotFound />}
-      />
+      {/** ... */}
     </Suspense>
   );
 }

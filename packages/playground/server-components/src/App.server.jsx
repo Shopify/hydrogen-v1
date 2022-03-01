@@ -4,9 +4,8 @@ import {
   FileRoutes,
   ShopifyProvider,
   setLogger,
-  Route,
 } from '@shopify/hydrogen';
-import shopifyConfig from '..//shopify.config';
+import shopifyConfig from '../shopify.config';
 import {Suspense} from 'react';
 
 setLogger({
@@ -24,12 +23,12 @@ setLogger({
   options: () => ({}),
 });
 
-function App({...serverState}) {
+function App({routes, ...serverProps}) {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <Router fallback="Not Found" serverState={serverState}>
-          <FileRoutes routes={serverState.routes} />
+        <Router fallback={<NotFound />} serverProps={serverProps}>
+          <FileRoutes routes={routes} />
         </Router>
       </ShopifyProvider>
     </Suspense>

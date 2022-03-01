@@ -17,7 +17,7 @@ jest.mock('../../Boomerang/Boomerang.client', () => ({
 function renderRoutes(
   url: string,
   routes: Array<ReactElement> | ReactElement,
-  serverState = {}
+  serverProps = {}
 ) {
   //@ts-ignore
   const nodeRequest = new IncomingMessage();
@@ -25,7 +25,7 @@ function renderRoutes(
   const request = new ServerComponentRequest(nodeRequest);
   return mount(
     <ServerRequestProvider request={request} isRSC={false}>
-      <Router fallback={<h1>Not found!</h1>} serverState={serverState}>
+      <Router fallback={<h1>Not found!</h1>} serverProps={serverProps}>
         {routes}
       </Router>
     </ServerRequestProvider>
