@@ -77,7 +77,7 @@ function recurseChildren(
           serverProps,
           fallback,
           currentPath,
-          (child.type as any)(child.props) // is this a grevious hack?
+          (child.type as any)(child.props)
         );
       }
     }
