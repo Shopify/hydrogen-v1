@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.11.1
+
+### Patch Changes
+
+- [#782](https://github.com/Shopify/hydrogen/pull/782) [`72144ff`](https://github.com/Shopify/hydrogen/commit/72144ffae98054b7165579062f0e8e521ad0d032) Thanks [@michenly](https://github.com/michenly)! - Removes the duplicate bin keys in the hydrogen-cli package.json
+
 ## 0.11.0 - 2022-02-24
 
 - Improves some types, avoid using `any` in `mini-oxygen`
