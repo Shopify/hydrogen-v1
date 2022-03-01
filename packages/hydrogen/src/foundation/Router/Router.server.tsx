@@ -40,11 +40,10 @@ function recurseChildren(
     }
   }
 
-  const fallbackName = fallback.type.toString().match(/function ([^\(]+)/);
   return (
     <>
       {fallback}
-      <Boomerang pageTemplate={fallbackName && fallbackName[1]} />
+      <Boomerang pageTemplate={'fallback'} />
     </>
   );
 }
