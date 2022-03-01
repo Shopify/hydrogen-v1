@@ -2,18 +2,18 @@ The Hydrogen framework uses a file-based routing system. This guide provides an 
 
 ## How routes work
 
-All components added to the `src/pages` directory are registered as routes in `App.server.jsx`. Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
+All components added to the `src/routes` directory are registered as routes in `App.server.jsx`. Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
 
 ### Example
 
-You have following components in your `src/pages` directory:
+You have following components in your `src/routes` directory:
 
-{% codeblock file, filename: 'src/pages' %}
+{% codeblock file, filename: 'src/routes' %}
 
 ```
-/pages/index.server.jsx
-/pages/custom-page.server.jsx
-/pages/products/[handle].server.jsx
+/routes/index.server.jsx
+/routes/custom-page.server.jsx
+/routes/products/[handle].server.jsx
 ```
 
 {% endcodeblock %}
@@ -47,11 +47,11 @@ export default function Product({params}) {
 
 You can also provide a custom static implementation of a dynamic page to override the default. Any requests to `/products/hoodie` are rendered using `hoodie.server.jsx` instead of `[handle].server.jsx`:
 
-{% codeblock file, filename: 'src/pages' %}
+{% codeblock file, filename: 'src/routes' %}
 
 ```
-/pages/products/hoodie.server.jsx
-/pages/products/[handle].server.jsx
+/routes/products/hoodie.server.jsx
+/routes/products/[handle].server.jsx
 ```
 
 {% endcodeblock %}
@@ -141,7 +141,7 @@ The `useNavigate` hook returns the following values:
 > Note:
 > If you want to use a third-party data source to render Hydrogen components, then refer to [Using Hydrogen components with a third-party data source](/custom-storefronts/hydrogen/data-sources#using-hydrogen-components-with-a-third-party-data-source). If you want to fetch data that goes alongside your Shopify product data and shopping experience, then refer to [Fetching supplementary data](/custom-storefronts/hydrogen/data-sources#fetching-supplementary-data).
 
-API routes allow you to build your API in Hydrogen. Any server component within the `src/pages` directory that exports an API function will become an API route. The following examples show some common use cases for implementing API routes.
+API routes allow you to build your API in Hydrogen. Any server component within the `src/routes` directory that exports an API function will become an API route. The following examples show some common use cases for implementing API routes.
 
 ### Examples
 
@@ -238,30 +238,32 @@ Your `App.server.jsx` file should look similar to the following:
 
 ```jsx
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {DefaultRoutes} from '@shopify/hydrogen';
+import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-
+import shopifyConfig from '../shopify.config';
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
-import shopifyConfig from '../shopify.config';
+import CartProvider from './components/CartProvider.client';
 
-function App({log, pages, ...serverState}) {
+function App({routes, ...serverProps}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <DefaultSeo />
-      <DefaultRoutes
-        pages={pages}
-        serverState={serverState}
-        log={log}
-        fallback={<NotFound />}
-      />
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <CartProvider>
+          <DefaultSeo />
+          <Router fallback={<NotFound />} serverProps={serverProps}>
+            <FileRoutes routes={routes} />
+          </Router>
+        </CartProvider>
+      </ShopifyProvider>
     </Suspense>
   );
 }
 
-const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
-export default renderHydrogen(App, {shopifyConfig, pages});
+const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+
+export default renderHydrogen(App, {routes});
 ```
 
 {% endcodeblock %}

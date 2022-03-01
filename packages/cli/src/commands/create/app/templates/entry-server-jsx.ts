@@ -1,13 +1,11 @@
 export default function () {
   return `
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import shopifyConfig from '../shopify.config';
-
 import App from './App.server';
 
-const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');
+const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {shopifyConfig, pages});
+export default renderHydrogen(App, {routes});
 
 `;
 }
