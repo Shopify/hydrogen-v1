@@ -1,7 +1,7 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ProductProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
-The `useProduct` hook returns the product object of the nearest `ProductProvider`. It must be a descendent of
-a `ProductProvider` component.
+The `ProductProvider` component sets up a context with product details. Descendents of
+this component can use the `useProduct` hook.
 
 ## Example code
 
@@ -30,11 +30,11 @@ export function Product() {
 
 ## Props
 
-| Name               | Required | Description                                                                                                                         |
-| ------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `children`         | Yes      | A `ReactNode` element.                                                                                                              |
-| `data`             | Yes      | A [Product object](/api/storefront/reference/products/product).                                                                     |
-| `initialVariantId` | No       | The initially selected variant. This is required only if you're using a `SelectedVariantX` hook in the `ProductProvider` component. |
+| Name               | Required | Description                                                                                                                                                                                                     |
+| ------------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`         | Yes      | A `ReactNode` element.                                                                                                                                                                                          |
+| `data`             | Yes      | A [Product object](/api/storefront/reference/products/product).                                                                                                                                                 |
+| `initialVariantId` | No       | The initially selected variant. If this is missing, then `selectedVariantId` in the returned `object` from the `useProduct` hook uses the first available variant or the first variant (if none are available). |
 
 ## Component type
 
