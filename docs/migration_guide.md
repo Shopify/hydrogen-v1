@@ -2,7 +2,48 @@
 
 This file is a living document that gathers required changes to user applications for every release. These changes must be applied incrementally: when upgrading from version A to C, changes for version B must also be considered unless stated otherwise. If a version is missing from this guide, it should be safe to upgrade without changing the app code.
 
-<!-- ## Unreleased -->
+## Unreleased
+
+### Changes in routing
+
+We have implemented part of the changes from the [Custom Routes proposal](https://github.com/Shopify/hydrogen/discussions/569). Follow these steps to upgrade your `App.server.jsx` file:
+
+1. Rename the parameter `pages` to `routes` when calling `renderHydrogen`.
+1. Rename the `DefaultRoutes` component to `FileRoutes`.
+1. Add the new `Router` component as a parent of `FileRoutes` and pass `fallback` and `serverState` props (previously in `DefaultRoutes`).
+
+Optionally, rename `src/pages` directory to `src/routes` and update the glob import in `App.server.jsx` to `import.meta.globEager('./routes/**/*.server.[jt](s|sx)')`.
+
+#### Full example of `App.server.jsx`
+
+```jsx
+import renderHydrogen from '@shopify/hydrogen/entry-server';
+import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import {Suspense} from 'react';
+import shopifyConfig from '../shopify.config';
+import DefaultSeo from './components/DefaultSeo.server';
+import NotFound from './components/NotFound.server';
+import LoadingFallback from './components/LoadingFallback';
+import CartProvider from './components/CartProvider.client';
+
+function App({routes, ...serverState}) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <CartProvider>
+          <DefaultSeo />
+          <Router fallback={<NotFound />} serverState={serverState}>
+            <FileRoutes routes={routes} />
+          </Router>
+        </CartProvider>
+      </ShopifyProvider>
+    </Suspense>
+  );
+}
+
+const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+export default renderHydrogen(App, {routes});
+```
 
 ## 0.11.0 - 2022-02-24
 
