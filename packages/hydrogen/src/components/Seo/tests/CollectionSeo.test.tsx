@@ -33,7 +33,7 @@ jest.mock('../ImageSeo.client', () => ({
 }));
 
 jest.mock('../../../client', () => ({
-  Helmet({children}) {
+  Head({children}) {
     return children;
   },
 }));

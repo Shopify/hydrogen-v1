@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {
   Logger,
   logServerResponse,
   logCacheControlHeaders,
+  logQueryTimings,
   getLoggerWithContext,
 } from './utilities/log';
 import {getErrorMarkup} from './utilities/error';
@@ -18,8 +19,11 @@ import {Html} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
-import {ServerRequestProvider} from './foundation/ServerRequestProvider';
-import type {ServerResponse} from 'http';
+import {
+  preloadRequestCacheData,
+  ServerRequestProvider,
+} from './foundation/ServerRequestProvider';
+import type {ServerResponse, IncomingMessage} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {
   getApiRouteFromURL,
@@ -28,12 +32,9 @@ import {
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
-import type {HelmetData} from 'react-helmet-async';
-
+import type {HelmetData as HeadData} from 'react-helmet-async';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
-import type {IncomingMessage} from 'http';
-
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -44,6 +45,8 @@ import {
   bufferReadableStream,
 } from './streaming.server';
 import {RSC_PATHNAME} from './constants';
+import {stripScriptsFromTemplate} from './utilities/template';
+import {RenderType} from './utilities/log/log';
 
 declare global {
   // This is provided by a Vite plugin
@@ -55,7 +58,9 @@ declare global {
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 interface RequestHandlerOptions {
-  indexTemplate: string | ((url: string) => Promise<string>);
+  indexTemplate:
+    | string
+    | ((url: string) => Promise<string | {default: string}>);
   cache?: Cache;
   streamableResponse?: ServerResponse;
   dev?: boolean;
@@ -88,10 +93,14 @@ export const renderHydrogen = (App: any, {routes}: ServerHandlerConfig) => {
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    const template =
+    let template =
       typeof indexTemplate === 'function'
         ? await indexTemplate(url.toString())
         : indexTemplate;
+
+    if (template && typeof template !== 'string') {
+      template = template.default;
+    }
 
     if (!isReactHydrationRequest && routes) {
       const apiRoute = getApiRoute(url, {routes});
@@ -195,8 +204,7 @@ async function render(
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
 
-    logServerResponse('ssr', request, status);
-    logCacheControlHeaders('ssr', request, componentResponse);
+    postRequestTasks('ssr', status, request, componentResponse);
 
     return new Response(await componentResponse.customBody, {
       status,
@@ -207,7 +215,7 @@ async function render(
 
   headers['Content-type'] = HTML_CONTENT_TYPE;
   const {bodyAttributes, htmlAttributes, ...head} = extractHeadElements(
-    request.ctx.helmet
+    request.ctx.head
   );
 
   html = html
@@ -224,8 +232,7 @@ async function render(
         : '$&'
     );
 
-  logServerResponse('ssr', request, status);
-  logCacheControlHeaders('ssr', request, componentResponse);
+  postRequestTasks('ssr', status, request, componentResponse);
 
   return new Response(html, {
     status,
@@ -255,6 +262,9 @@ async function stream(
   const state = {pathname: url.pathname, search: url.search};
   log.trace('start stream');
 
+  const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
+    stripScriptsFromTemplate(template);
+
   const {AppSSR, rscReadable} = buildAppSSR(
     {
       App,
@@ -265,7 +275,7 @@ async function stream(
       routes,
     },
     {
-      template,
+      template: noScriptTemplate,
       htmlAttrs: {lang: 'en'},
     }
   );
@@ -297,6 +307,8 @@ async function stream(
 
     const ssrReadable = ssrRenderToReadableStream(AppSSR, {
       nonce,
+      bootstrapScripts,
+      bootstrapModules,
       onCompleteShell() {
         log.trace('worker ready to stream');
 
@@ -400,13 +412,21 @@ async function stream(
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => writable.close(), 0);
-        logServerResponse('str', request, responseOptions.status);
-        logCacheControlHeaders('str', request, componentResponse);
+        postRequestTasks(
+          'str',
+          responseOptions.status,
+          request,
+          componentResponse
+        );
       });
     } else {
       writable.close();
-      logServerResponse('str', request, responseOptions.status);
-      logCacheControlHeaders('str', request, componentResponse);
+      postRequestTasks(
+        'str',
+        responseOptions.status,
+        request,
+        componentResponse
+      );
     }
 
     if (await isStreamingSupported()) {
@@ -423,6 +443,8 @@ async function stream(
 
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
+      bootstrapScripts,
+      bootstrapModules,
       onCompleteShell() {
         log.trace('node ready to stream');
         /**
@@ -461,14 +483,24 @@ async function stream(
       async onCompleteAll() {
         log.trace('node complete stream');
 
-        logCacheControlHeaders('str', request, componentResponse);
-
-        if (componentResponse.canStream() || response.writableEnded) return;
+        if (componentResponse.canStream() || response.writableEnded) {
+          postRequestTasks(
+            'str',
+            response.statusCode,
+            request,
+            componentResponse
+          );
+          return;
+        }
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
-        logServerResponse('str', request, response.statusCode);
-        logCacheControlHeaders('str', request, componentResponse);
+        postRequestTasks(
+          'str',
+          response.statusCode,
+          request,
+          componentResponse
+        );
 
         if (isRedirect(response)) {
           // Redirects found after any async code
@@ -535,16 +567,14 @@ async function hydrate(
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      logServerResponse('rsc', request, 200);
-      logCacheControlHeaders('rsc', request, componentResponse);
+      postRequestTasks('rsc', 200, request, componentResponse);
       return new Response(rscReadable);
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    logServerResponse('rsc', request, 200);
-    logCacheControlHeaders('rsc', request, componentResponse);
+    postRequestTasks('rsc', 200, request, componentResponse);
 
     return new Response(bufferedBody);
   } else if (response) {
@@ -560,8 +590,7 @@ async function hydrate(
       .pipe(response) as Writable;
 
     stream.on('finish', function () {
-      logServerResponse('rsc', request, response.statusCode);
-      logCacheControlHeaders('rsc', request, componentResponse);
+      postRequestTasks('rsc', response.statusCode, request, componentResponse);
     });
   }
 }
@@ -587,7 +616,9 @@ function buildAppRSC({
 
   const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
-      <App {...state} {...hydrogenServerProps} routes={routes} />
+      <PreloadQueries request={request}>
+        <App {...state} {...hydrogenServerProps} routes={routes} />
+      </PreloadQueries>
     </ServerRequestProvider>
   );
 
@@ -620,9 +651,11 @@ function buildAppSSR(
           serverState={state as any}
           setServerState={() => {}}
         >
-          <React.Suspense fallback={null}>
-            <RscConsumer />
-          </React.Suspense>
+          <PreloadQueries request={request}>
+            <React.Suspense fallback={null}>
+              <RscConsumer />
+            </React.Suspense>
+          </PreloadQueries>
         </ServerStateProvider>
       </ServerRequestProvider>
     </Html>
@@ -631,7 +664,19 @@ function buildAppSSR(
   return {AppSSR, rscReadable: rscReadableForFlight};
 }
 
-function extractHeadElements({context: {helmet}}: HelmetData) {
+function PreloadQueries({
+  request,
+  children,
+}: {
+  request: ServerComponentRequest;
+  children: ReactElement;
+}) {
+  const preloadQueries = request.getPreloadQueries();
+  preloadRequestCacheData(request, preloadQueries);
+  return children;
+}
+
+function extractHeadElements({context: {helmet}}: HeadData) {
   return helmet
     ? {
         base: helmet.base.toString(),
@@ -840,9 +885,26 @@ function flightContainer({
   }
 
   if (chunk) {
-    const normalizedChunk = chunk?.replace(/\\/g, String.raw`\\`);
+    const normalizedChunk = chunk
+      // 1. Duplicate the escape char (\) for already escaped characters (e.g. \n or \").
+      .replace(/\\/g, String.raw`\\`)
+      // 2. Escape existing backticks to allow wrapping the whole thing in `...`.
+      .replace(/`/g, String.raw`\``);
+
     script += `__flight.push(\`${normalizedChunk}\`)`;
   }
 
   return script + '</script>';
+}
+
+function postRequestTasks(
+  type: RenderType,
+  status: number,
+  request: ServerComponentRequest,
+  componentResponse: ServerComponentResponse
+) {
+  logServerResponse(type, request, status);
+  logCacheControlHeaders(type, request, componentResponse);
+  logQueryTimings(type, request);
+  request.savePreloadQueries();
 }

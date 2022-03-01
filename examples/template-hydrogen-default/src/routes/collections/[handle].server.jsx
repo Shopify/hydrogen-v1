@@ -26,6 +26,7 @@ export default function Collection({
       country: country.isoCode,
       numProducts: collectionProductCount,
     },
+    preload: true,
   });
 
   if (data?.collection == null) {

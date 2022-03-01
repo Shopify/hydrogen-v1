@@ -25,7 +25,7 @@ export function useProductOptions({
   /** The product's `SellingPlanGroups`. */
   sellingPlanGroups?: GraphQLConnection<SellingPlanGroup>; // This comes from the Product
   /** The initially selected variant. */
-  initialVariantId?: Variant['id'];
+  initialVariantId?: Variant['id'] | null;
 }): ProductOptionsHookValue {
   // The flattened variants
   const variants = useMemo(
@@ -40,10 +40,12 @@ export function useProductOptions({
    * Track the selectedVariant within the hook. If `initialVariantId`
    * is passed, use that as an initial value.
    */
-  const [selectedVariant, setSelectedVariant] = useState<Variant | undefined>(
-    initialVariantId
-      ? variants.find((variant) => variant.id === initialVariantId)
-      : undefined
+  const [selectedVariant, setSelectedVariant] = useState<
+    Variant | undefined | null
+  >(
+    initialVariantId == null
+      ? (initialVariantId as null | undefined)
+      : variants.find((variant) => variant.id === initialVariantId)
   );
 
   /**
@@ -66,9 +68,10 @@ export function useProductOptions({
    * values.
    */
   useEffect(() => {
-    const selectedVariant = initialVariantId
-      ? variants.find((variant) => variant.id === initialVariantId)
-      : undefined;
+    const selectedVariant =
+      initialVariantId == null
+        ? (initialVariantId as null | undefined)
+        : variants.find((variant) => variant.id === initialVariantId);
     setSelectedVariant(selectedVariant);
 
     const selectedOptions = selectedVariant?.selectedOptions

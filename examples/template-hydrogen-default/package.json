@@ -1,7 +1,7 @@
 {
   "name": "template-hydrogen-default",
   "description": "This the default template for Hydrogen",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -11,9 +11,9 @@
     "lint:css": "stylelint ./src/**/*.{css,sass,scss}",
     "build": "yarn build:client && yarn build:server && yarn build:worker",
     "build:client": "vite build --outDir dist/client --manifest",
-    "build:server": "vite build --outDir dist/server --ssr src/App.server",
-    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker.js",
-    "serve": "node --enable-source-maps server",
+    "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
+    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker-event",
+    "serve": "node --enable-source-maps dist/server",
     "preview": "npx @shopify/hydrogen-cli@latest preview"
   },
   "prettier": "@shopify/prettier-config",
@@ -34,10 +34,9 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.4.1",
-    "@shopify/hydrogen": "^0.10.1",
+    "@shopify/hydrogen": "^0.11.0",
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
-    "express": "^4.17.1",
     "graphql-tag": "^2.12.4",
     "path-to-regexp": "^6.2.0",
     "react": "0.0.0-experimental-529dc3ce8-20220124",

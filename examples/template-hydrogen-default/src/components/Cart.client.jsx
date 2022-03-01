@@ -95,7 +95,7 @@ function LineInCart() {
       className="flex py-7 border-b last:border-b-0 border-gray-300 text-gray-900"
     >
       <div role="cell" className="flex-shrink-0 mr-7">
-        <Link to={`products/${merchandise.product.handle}`}>
+        <Link to={`/products/${merchandise.product.handle}`}>
           <CartLineImage
             className="bg-white border border-black border-opacity-5 rounded-xl "
             options={{width: 98, height: 98, crop: 'center'}}
@@ -107,7 +107,7 @@ function LineInCart() {
         className="flex flex-col w-full justify-between items-start flex-grow-1 mr-4"
       >
         <Link
-          to={`products/${merchandise.product.handle}`}
+          to={`/products/${merchandise.product.handle}`}
           className="hover:underline"
         >
           <CartLineProductTitle className="text-lg font-medium" />

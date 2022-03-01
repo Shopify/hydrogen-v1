@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -26,7 +26,7 @@
     "marker.js",
     "middleware.js",
     "middleware.d.ts",
-    "worker.js"
+    "web-polyfills.js"
   ],
   "scripts": {
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
@@ -79,9 +79,23 @@
     "rimraf": "^3.0.2"
   },
   "peerDependencies": {
+    "body-parser": "^1.19.1",
+    "compression": "^1.7.4",
     "react": "0.0.0-experimental-529dc3ce8-20220124",
     "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
+    "serve-static": "^1.14.1",
     "vite": "^2.8.0"
+  },
+  "peerDependenciesMeta": {
+    "body-parser": {
+      "optional": true
+    },
+    "compression": {
+      "optional": true
+    },
+    "serve-static": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@vitejs/plugin-react": "^1.1.1",

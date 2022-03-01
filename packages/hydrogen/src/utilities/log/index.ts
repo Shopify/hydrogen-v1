@@ -12,3 +12,4 @@ export {
   logCacheControlHeaders,
 } from './log-cache-header';
 export {logCacheApiStatus} from './log-cache-api-status';
+export {collectQueryTimings, logQueryTimings} from './log-query-timeline';

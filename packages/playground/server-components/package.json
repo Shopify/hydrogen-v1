@@ -1,15 +1,15 @@
 {
   "name": "test-server-components",
   "private": true,
-  "version": "0.10.1",
+  "version": "0.11.0",
   "scripts": {
     "_dev": "vite",
     "start:node": "node start-node",
     "start:worker": "node start-worker",
     "build": "yarn build:client && yarn build:server && yarn build:worker",
     "build:client": "vite build --outDir dist/client --manifest",
-    "build:server": "vite build --outDir dist/server --ssr src/App.server",
-    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker.js"
+    "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
+    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
@@ -17,8 +17,7 @@
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "*",
-    "@shopify/hydrogen": "^0.10.1",
-    "express": "^4.17.1",
+    "@shopify/hydrogen": "^0.11.0",
     "miniflare": "^1.3.3",
     "react": "0.0.0-experimental-529dc3ce8-20220124",
     "react-dom": "0.0.0-experimental-529dc3ce8-20220124"

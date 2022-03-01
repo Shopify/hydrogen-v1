@@ -5,14 +5,14 @@ import {Rating} from '../../../../types';
 export const STAR_EMPTY = '☆';
 export const STAR_FILLED = '★';
 
-export interface StarRatingProps {
+export interface StarRatingProps<TTag> {
   rating: Rating;
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
-  as?: ElementType;
+  as?: TTag;
 }
 
 export function StarRating<TTag extends ElementType>(
-  props: Props<TTag> & StarRatingProps
+  props: Props<TTag> & StarRatingProps<TTag>
 ) {
   const {as, rating, ...passthroughProps} = props;
 

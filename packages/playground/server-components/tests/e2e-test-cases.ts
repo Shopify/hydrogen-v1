@@ -1,5 +1,8 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import fetch from 'node-fetch';
+import {resolve} from 'path';
+
+import {edit, untilUpdated} from '../../utilities';
 
 type TestOptions = {
   getServerUrl: () => string;
@@ -272,5 +275,47 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     expect(body).toMatch(
       /<meta\s+.*?property="type"\s+content="website"\s*\/>/
     );
+  });
+
+  describe('HMR', () => {
+    it('updates the contents when a client component file changes', async () => {
+      if (isBuild) {
+        return;
+      }
+
+      const fullPath = resolve(
+        __dirname,
+        '../',
+        'src/components/Counter.client.jsx'
+      );
+      const newButtonText = 'add';
+
+      await page.goto(getServerUrl() + '/about');
+
+      await edit(
+        fullPath,
+        (code) => code.replace('increase count', newButtonText),
+        () => untilUpdated(() => page.textContent('button'), 'increase'),
+        () => untilUpdated(() => page.textContent('button'), newButtonText)
+      );
+    });
+
+    it('updates the contents when a server component file changes', async () => {
+      if (isBuild) {
+        return;
+      }
+
+      const fullPath = resolve(__dirname, '../', 'src/pages/index.server.jsx');
+      const newheading = 'Snow Devil';
+
+      await page.goto(getServerUrl());
+
+      await edit(
+        fullPath,
+        (code) => code.replace('<h1>Home', `<h1>${newheading}`),
+        () => untilUpdated(() => page.textContent('h1'), 'Home'),
+        () => untilUpdated(() => page.textContent('h1'), newheading)
+      );
+    });
   });
 }

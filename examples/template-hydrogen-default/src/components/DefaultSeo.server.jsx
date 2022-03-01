@@ -12,6 +12,7 @@ export default function DefaultSeo() {
   } = useShopQuery({
     query: QUERY,
     cache: CacheDays(),
+    preload: '*',
   });
 
   return (

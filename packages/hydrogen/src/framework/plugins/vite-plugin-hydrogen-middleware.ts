@@ -64,7 +64,7 @@ export default (
 
 declare global {
   // eslint-disable-next-line no-var
-  var Oxygen: {env: Record<string, string | undefined>; [key: string]: any};
+  var Oxygen: {env: any; [key: string]: any};
 }
 
 async function polyfillOxygenEnv(config: ResolvedConfig) {

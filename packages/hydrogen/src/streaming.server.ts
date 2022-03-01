@@ -8,6 +8,7 @@ import {
 import {renderToReadableStream as _rscRenderToReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite/writer.browser.server';
 // @ts-ignore
 import {createFromReadableStream as _createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import type {Writable} from 'stream';
 
 export const rscRenderToReadableStream = _rscRenderToReadableStream as (
   App: JSX.Element
@@ -19,15 +20,23 @@ export const createFromReadableStream = _createFromReadableStream as (
   readRoot: () => JSX.Element;
 };
 
-export const ssrRenderToPipeableStream = _ssrRenderToPipeableStream;
+type StreamOptions = {
+  nonce?: string;
+  onCompleteShell?: () => void;
+  onCompleteAll?: () => void;
+  onError?: (error: Error) => void;
+  bootstrapScripts?: string[];
+  bootstrapModules?: string[];
+};
+
+export const ssrRenderToPipeableStream = _ssrRenderToPipeableStream as (
+  App: JSX.Element,
+  options: StreamOptions
+) => {pipe: Writable['pipe']};
+
 export const ssrRenderToReadableStream = _ssrRenderToReadableStream as (
   App: JSX.Element,
-  options: {
-    nonce?: string;
-    onCompleteShell?: () => void;
-    onCompleteAll?: () => void;
-    onError?: (error: Error) => void;
-  }
+  options: StreamOptions
 ) => ReadableStream<Uint8Array>;
 
 export function supportsReadableStream() {
