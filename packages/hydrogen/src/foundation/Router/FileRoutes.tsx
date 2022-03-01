@@ -10,7 +10,7 @@ import type {ImportGlobEagerOutput} from '../../types';
  *
  * @see https://vitejs.dev/guide/features.html#glob-import
  */
-export function DefaultRoutes({
+export function FileRoutes({
   routes,
   serverState,
 }: {

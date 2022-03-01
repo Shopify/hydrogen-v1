@@ -1,5 +1,5 @@
 import {ImportGlobEagerOutput} from '../../../types';
-import {createPageRoutes} from '../DefaultRoutes';
+import {createPageRoutes} from '../FileRoutes';
 
 const STUB_MODULE = {default: {}, api: null};
 

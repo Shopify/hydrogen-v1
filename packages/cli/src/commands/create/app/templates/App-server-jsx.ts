@@ -1,7 +1,7 @@
 export default function () {
   return `
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, DefaultRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import NotFound from './components/NotFound.server';
@@ -14,7 +14,7 @@ function App({routes, ...serverState}) {
     <Suspense fallback={<Loading />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         <Router fallback={<NotFound />} serverState={serverState}>
-          <DefaultRoutes routes={routes} />
+          <FileRoutes routes={routes} />
         </Router>
       <ShopifyProvider />
     </Suspense>

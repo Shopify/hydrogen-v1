@@ -1,7 +1,7 @@
 import React, {ReactElement, Children, cloneElement} from 'react';
 import {useServerRequest} from '../ServerRequestProvider';
 import {Route} from './Route.server';
-import {DefaultRoutes} from './DefaultRoutes';
+import {FileRoutes} from './FileRoutes';
 import {matchPath} from '../../utilities/matchPath';
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import {BoomerangPage} from '../Boomerang/BoomerangPageTemplate.client';
@@ -31,7 +31,7 @@ function recurseChildren(
   children: Array<ReactElement> | ReactElement
 ): ReactElement | null {
   for (const child of Children.toArray(children) as Array<ReactElement>) {
-    if (child.type === DefaultRoutes) {
+    if (child.type === FileRoutes) {
       const fileRoutingResult = child.type({...child.props, serverState}); // grevious hack?
       if (fileRoutingResult)
         return (

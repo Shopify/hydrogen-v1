@@ -238,7 +238,7 @@ Your `App.server.jsx` file should look similar to the following:
 
 ```jsx
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {DefaultRoutes} from '@shopify/hydrogen';
+import {FileRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import DefaultSeo from './components/DefaultSeo.server';
@@ -250,7 +250,7 @@ function App({log, pages, ...serverState}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <DefaultSeo />
-      <DefaultRoutes
+      <FileRoutes
         pages={pages}
         serverState={serverState}
         log={log}

@@ -80,7 +80,7 @@ The following example shows how to include a catch-all SEO component (`<DefaultS
 {% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
-import {DefaultRoutes} from '@shopify/hydrogen';
+import {FileRoutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import DefaultSeo from './components/DefaultSeo.server';
@@ -93,7 +93,7 @@ export default function App({log, ...serverState}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <DefaultSeo />
-      <DefaultRoutes
+      <FileRoutes
         pages={pages}
         serverState={serverState}
         log={log}

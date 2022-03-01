@@ -11,7 +11,7 @@ export {
   getTime,
 } from './utilities';
 
-export {DefaultRoutes} from './foundation/Router/DefaultRoutes';
+export {FileRoutes} from './foundation/Router/FileRoutes';
 export {Route} from './foundation/Router/Route.server';
 export {Router} from './foundation/Router/Router.server';
 export {log, setLogger, setLoggerOptions, Logger} from './utilities/log';

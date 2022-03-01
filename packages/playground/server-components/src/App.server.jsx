@@ -1,7 +1,7 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
   Router,
-  DefaultRoutes,
+  FileRoutes,
   ShopifyProvider,
   setLogger,
   Route,
@@ -29,7 +29,7 @@ function App({...serverState}) {
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         <Router fallback="Not Found" serverState={serverState}>
-          <DefaultRoutes routes={serverState.routes} />
+          <FileRoutes routes={serverState.routes} />
         </Router>
       </ShopifyProvider>
     </Suspense>

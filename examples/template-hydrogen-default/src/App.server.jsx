@@ -1,5 +1,5 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, DefaultRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
 import DefaultSeo from './components/DefaultSeo.server';
@@ -14,7 +14,7 @@ function App({routes, ...serverState}) {
         <CartProvider>
           <DefaultSeo />
           <Router fallback={<NotFound />} serverState={serverState}>
-            <DefaultRoutes routes={routes} />
+            <FileRoutes routes={routes} />
           </Router>
         </CartProvider>
       </ShopifyProvider>
