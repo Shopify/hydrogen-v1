@@ -47,17 +47,13 @@ Logger has the following Boolean options:
 ### Example
 
 ```js
-import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLoggerOptions} from '@shopify/hydrogen';
-import App from './App.server';
 
 setLoggerOptions({
   showCacheApiStatus: true,
   showCacheControlHeader: true,
   showQueryTiming: true,
 });
-
-export default renderHydrogen(App, {shopifyConfig, pages});
 ```
 
 ## Swap logger implementation
@@ -65,7 +61,6 @@ export default renderHydrogen(App, {shopifyConfig, pages});
 Hydrogen includes a default logger implementation that can be swapped for a logger of your choice. You can call `setLogger` with your own implementation. The first argument of each log method will contain a `request` object if the log was called in the same context as a request:
 
 ```js
-import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLogger} from '@shopify/hydrogen';
 
 setLogger({
@@ -85,10 +80,4 @@ setLogger({
     // Call your own logger.
   },
 });
-
-function App() {
-  /*...*/
-}
-
-export default renderHydrogen(App, {shopifyConfig, pages});
 ```

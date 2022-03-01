@@ -26,6 +26,6 @@ export default function api(request, {queryShop}) {
 **Important**: In order to use `queryShop`, you should pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`:
 
 ```diff
--export default renderHydrogen(App, {pages});
-+export default renderHydrogen(App, {shopifyConfig, pages});
+-export default renderHydrogen(App, {routes});
++export default renderHydrogen(App, {shopifyConfig, routes});
 ```
