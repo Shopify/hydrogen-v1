@@ -9,14 +9,18 @@ Hydrogen includes a framework that offers a set of best practices and scaffoldin
 
 ## What's the Hydrogen framework?
 
-Hydrogen is the approach you use to build a custom storefront. It includes a [Vite](https://vitejs.dev/) plugin that offers server-side rendering (SSR) and hydration middleware, as well as server and client component code transformations.
-The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations.
+Hydrogen is the approach you use to build a custom storefront. The Hydrogen framework includes a [Vite](https://vitejs.dev/) plugin that offers server-side rendering (SSR), hydration middleware, and client component code transformations.
 
-![A diagram that illustrates Vite's offering of server-side rendering (SSR) and hydration middleware, and server and client component code transformations](/assets/custom-storefronts/hydrogen/hydrogen-framework-overview.png)
+![A diagram that illustrates Vite's offering of server-side rendering (SSR) and hydration middleware, and client component code transformations](/assets/custom-storefronts/hydrogen/hydrogen-framework-overview.png)
+
+> Note:
+> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), which affects SSR.
 
 ## Hydrogen project structure
 
-When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Hydrogen starter template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store. Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
+When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Hydrogen starter template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store.
+
+Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
 
 - A set of boilerplate [`components`](/custom-storefronts/hydrogen/getting-started#components) and [`pages`](/custom-storefronts/hydrogen/getting-started#pages)
 - The main app component in `App.server.jsx`, which includes boilerplate code for the app and routing. This file is also the main entry point for the server.
@@ -47,11 +51,36 @@ When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/cr
 
 {% endcodeblock %}
 
+## Request workflow for Hydrogen apps
+
+The following diagram shows the request workflow for Hydrogen apps, based on the platform where Hydrogen is being hosted:
+
+![A diagram that illustrates the request workflow for Hydrogen apps, based on the platform where Hydrogen is being hosted](/assets/custom-storefronts/hydrogen/hydrogen-server-entry-points.png)
+
+### Node.js runtime
+
+The Hydrogen app is hosted on a Node.js platform like Heroku, Vercel, or Netlify. If you've [generated a Node.js server](/custom-storefronts/hydrogen/deployment#deploy-to-node-js), then you can run it inside a [Docker container](/custom-storefronts/hydrogen/deployment#deploy-to-docker) like GCP, AWS, Azure, or Fly.io.
+
+By default, Hydrogen includes a [`@shopify/hydrogen/platforms/node`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) package, which is a [Connect-based](https://github.com/senchalabs/connect) Node.js server. Alternatively, you can use your own server.
+
+### Worker (v8) runtime
+
+The Hydrogen app is hosted on a worker platform like [Oxygen](/custom-storefronts/hydrogen/deployment#deploy-to-cloudflare-workers) or [Cloudflare](/custom-storefronts/hydrogen/deployment#deploy-to-oxygen).
+
+By default, Hydrogen includes a [`@shopify/hydrogen/platforms/worker-event`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/worker-event.ts) package for server-side rendering. The Cache API and KV API are powered by Oxygen, Cloudflare, or another runtime adapter.
+
 ## Configuring default entry points
 
-Hydrogen's default client entry point is `/@shopify/hydrogen/entry-client`, which is included in `index.html` and used for hydration purposes. If you need to configure the entry point, then create a new file such as `/src/entry-client.jsx` with the following content and update the path in `index.html`:
+Hydrogen's includes the following default entry points for your app:
 
-{% codeblock file, filename: '/src/entry-client.jsx' %}
+- **Client entry point**: [`@shopify/hydrogen/entry-client`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/entry-client.tsx), which is included in [`index.html`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/index.html) and used for hydration purposes
+- **Server entry point**: [`App.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/App.server.jsx)
+
+### Change the client entry point
+
+If you need to change the client entry point, then create a new file such as `src/entry-client.jsx` with the following code and update the path in `index.html`:
+
+{% codeblock file, filename: 'src/entry-client.jsx' %}
 
 ```jsx
 import renderHydrogen from '@shopify/hydrogen/entry-client';
@@ -63,21 +92,33 @@ export default renderHydrogen(ClientWrapper);
 
 {% endcodeblock %}
 
-To change Hydrogen's default server entry point (`/src/App.server.jsx`), pass an environment variable `HYDROGEN_SERVER_ENTRY` to the development command (`HYDROGEN_SERVER_ENTRY=/my/path/MyApp.server vite`) or use the `--ssr` flag when building (`vite build --ssr /my/path/MyApp.server`).
+{% codeblock file, filename: 'index.html' %}
 
-## Request workflow for Hydrogen apps
+```html
+<script type="module" src="/src/entry-client"></script>
+```
 
-The following diagram shows the request workflow for Hydrogen apps, based on the platform where Hydrogen is being hosted:
+{% endcodeblock %}
 
-![A diagram that illustrates the request workflow for Hydrogen apps, based on the platform where Hydrogen is being hosted](/assets/custom-storefronts/hydrogen/hydrogen-server-entry-points.png)
+### Change the server entry point
 
-### Node.js runtime
+If you need to change the server entry point, then make the following updates in the `package.json` file:
 
-The Hydrogen app is hosted on a Node.js platform (for example, Heroku, Vercel, or Netlify). Optionally, a Docker container can be used (for example, GCP, AWS, Azure, or Fly.io). The app uses `server.js` and a Vite development server for server-side rendering, and `Node.js` middleware.
+- **Development**: Pass a `HYDROGEN_SERVER_ENTRY` environment variable to the development command.
+- **Production**: Use a `--ssr` flag when building your app.
 
-### Worker (v8) runtime
+{% codeblock file, filename: 'package.json' %}
 
-The Hydrogen app is hosted on a worker platform (for example, Oxygen or Cloudflare). The app uses `worker.js` for server-side rendering. The Cache API and KV API are powered by Oxygen, Cloudflare, or another runtime adapter.
+```json
+"scripts": {
+  "dev": "HYDROGEN_SERVER_ENTRY=/my/path/MyApp.server vite",
+  ...
+  "build:server": "vite build --ssr /my/path/MyApp.server",
+  ...
+},
+```
+
+{% endcodeblock %}
 
 ## Next steps
 

@@ -4,7 +4,6 @@ import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {mountWithCartProvider} from '../../CartProvider/tests/utilities';
 
 import {ProductProvider} from '../../ProductProvider';
-import {CART} from '../../CartProvider/tests/fixtures';
 import {AddToCartButton} from '../AddToCartButton.client';
 import {getProduct, getVariant} from '../../../utilities/tests/product';
 

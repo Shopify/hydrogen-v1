@@ -3,6 +3,7 @@ import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {CurrencyCode} from '../../../graphql/types/types';
 import {getPrice} from '../../../utilities/tests/price';
 import {Money} from '../Money.client';
+import {Link} from '../../Link/index';
 
 describe('<Money />', () => {
   it('renders a formatted money string', () => {
@@ -27,5 +28,13 @@ describe('<Money />', () => {
     );
 
     expect(component).toHaveReactProps({className: 'money'});
+  });
+
+  it(`validates props when a component is passed to the 'as' prop`, () => {
+    const component = mountWithProviders(
+      <Money data={getPrice()} as={Link} to="/test" />
+    );
+
+    expect(component).toContainReactComponent(Link, {to: '/test'});
   });
 });

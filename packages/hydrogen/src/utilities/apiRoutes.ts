@@ -27,7 +27,7 @@ export type ApiRouteMatch = {
   params: RouteParams;
 };
 
-export function getApiRoutesFromPages(
+export function getApiRoutes(
   pages: ImportGlobEagerOutput | undefined,
   topLevelPath = '*'
 ): Array<HydrogenApiRoute> {
@@ -39,7 +39,7 @@ export function getApiRoutesFromPages(
     .filter((key) => pages[key].api)
     .map((key) => {
       const path = key
-        .replace('./pages', '')
+        .replace('./routes', '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
          * Replace /index with /

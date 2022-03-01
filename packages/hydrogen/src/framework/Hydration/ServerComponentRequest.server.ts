@@ -149,12 +149,13 @@ function saveToPreloadAllPreload(query: PreloadQueryEntry) {
  * URL pathname is. We want to use that if it's present, so we union type this to `any`.
  */
 function getUrlFromNodeRequest(request: any) {
+  const url: string = request.originalUrl ?? request.url;
+  if (url && !url.startsWith('/')) return url;
+
   // TODO: Find out how to determine https from `request` object without forwarded proto
   const secure = request.headers['x-forwarded-proto'] === 'https';
 
   return new URL(
-    `${secure ? 'https' : 'http'}://${
-      request.headers.host! + (request.originalUrl ?? request.url)
-    }`
+    `${secure ? 'https' : 'http'}://${request.headers.host! + url}`
   ).toString();
 }

@@ -28,7 +28,7 @@ import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
-  getApiRoutesFromPages,
+  getApiRoutes,
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
@@ -74,7 +74,7 @@ export interface RequestHandler {
   >;
 }
 
-export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
+export const renderHydrogen = (App: any, {routes}: ServerHandlerConfig) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
     {indexTemplate, streamableResponse, dev, cache, context, nonce}
@@ -102,8 +102,8 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
       template = template.default;
     }
 
-    if (!isReactHydrationRequest && pages) {
-      const apiRoute = getApiRoute(url, {pages});
+    if (!isReactHydrationRequest && routes) {
+      const apiRoute = getApiRoute(url, {routes});
 
       // The API Route might have a default export, making it also a server component
       // If it does, only render the API route if the request method is GET
@@ -123,7 +123,7 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
       App,
       log,
       dev,
-      pages,
+      routes,
       nonce,
       request,
       template,
@@ -151,9 +151,9 @@ export const renderHydrogen = (App: any, {pages}: ServerHandlerConfig) => {
   return handleRequest;
 };
 
-function getApiRoute(url: URL, {pages}: {pages: ImportGlobEagerOutput}) {
-  const routes = getApiRoutesFromPages(pages);
-  return getApiRouteFromURL(url, routes);
+function getApiRoute(url: URL, {routes}: {routes: ImportGlobEagerOutput}) {
+  const apiRoutes = getApiRoutes(routes);
+  return getApiRouteFromURL(url, apiRoutes);
 }
 
 /**
@@ -165,7 +165,7 @@ async function render(
   url: URL,
   {
     App,
-    pages,
+    routes,
     request,
     componentResponse,
     log,
@@ -182,7 +182,7 @@ async function render(
       state,
       request,
       response: componentResponse,
-      pages,
+      routes,
       log,
     },
     {template}
@@ -249,7 +249,7 @@ async function stream(
   url: URL,
   {
     App,
-    pages,
+    routes,
     request,
     response,
     componentResponse,
@@ -272,7 +272,7 @@ async function stream(
       request,
       response: componentResponse,
       log,
-      pages,
+      routes,
     },
     {
       template: noScriptTemplate,
@@ -544,7 +544,7 @@ async function hydrate(
   url: URL,
   {
     App,
-    pages,
+    routes,
     request,
     response,
     componentResponse,
@@ -560,7 +560,7 @@ async function hydrate(
     request,
     response: componentResponse,
     log,
-    pages,
+    routes,
   });
 
   if (__WORKER__) {
@@ -601,7 +601,7 @@ type BuildAppOptions = {
   request: ServerComponentRequest;
   response: ServerComponentResponse;
   log: Logger;
-  pages?: ImportGlobEagerOutput;
+  routes?: ImportGlobEagerOutput;
 };
 
 function buildAppRSC({
@@ -610,14 +610,14 @@ function buildAppRSC({
   request,
   response,
   log,
-  pages,
+  routes,
 }: BuildAppOptions) {
   const hydrogenServerProps = {request, response, log};
 
   const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
-        <App {...state} {...hydrogenServerProps} pages={pages} />
+        <App {...state} {...hydrogenServerProps} routes={routes} />
       </PreloadQueries>
     </ServerRequestProvider>
   );
@@ -626,7 +626,7 @@ function buildAppRSC({
 }
 
 function buildAppSSR(
-  {App, state, request, response, log, pages}: BuildAppOptions,
+  {App, state, request, response, log, routes}: BuildAppOptions,
   htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
   const {AppRSC} = buildAppRSC({
@@ -635,7 +635,7 @@ function buildAppSSR(
     request,
     response,
     log,
-    pages,
+    routes,
   });
 
   const [rscReadableForFizz, rscReadableForFlight] =
