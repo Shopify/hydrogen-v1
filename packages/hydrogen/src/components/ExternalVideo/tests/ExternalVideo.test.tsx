@@ -9,7 +9,7 @@ describe('<ExternalVideo />', () => {
     const component = mount(<ExternalVideo data={video} />);
 
     expect(component).toContainReactComponent('iframe', {
-      src: video.embeddedUrl as string,
+      src: video.embeddedUrl,
       id: video.id,
       allow:
         'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',

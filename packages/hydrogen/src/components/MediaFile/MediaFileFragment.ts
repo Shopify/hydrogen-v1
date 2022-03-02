@@ -7,41 +7,44 @@ import * as Types from '../../graphql/types/types';
 
 export type MediaFileFragment_ExternalVideo_Fragment = {
   __typename?: 'ExternalVideo';
-  mediaContentType: Types.MediaContentType;
-  id: string;
-  embeddedUrl: any;
-  host: Types.MediaHost;
-};
+} & Pick<
+  Types.ExternalVideo,
+  'mediaContentType' | 'id' | 'embeddedUrl' | 'host'
+>;
 
 export type MediaFileFragment_MediaImage_Fragment = {
   __typename?: 'MediaImage';
-  mediaContentType: Types.MediaContentType;
-  image?: {
-    __typename?: 'Image';
-    id?: string | null;
-    url: any;
-    altText?: string | null;
-    width?: number | null;
-    height?: number | null;
-  } | null;
-};
+} & Pick<Types.MediaImage, 'mediaContentType'> & {
+    image?: Types.Maybe<
+      {__typename?: 'Image'} & Pick<
+        Types.Image,
+        'id' | 'url' | 'altText' | 'width' | 'height'
+      >
+    >;
+  };
 
 export type MediaFileFragment_Model3d_Fragment = {
   __typename?: 'Model3d';
-  mediaContentType: Types.MediaContentType;
-  id: string;
-  alt?: string | null;
-  previewImage?: {__typename?: 'Image'; url: any} | null;
-  sources: Array<{__typename?: 'Model3dSource'; url: string}>;
-};
+} & Pick<Types.Model3d, 'mediaContentType' | 'id' | 'alt'> & {
+    previewImage?: Types.Maybe<
+      {__typename?: 'Image'} & Pick<Types.Image, 'url'>
+    >;
+    sources: Array<
+      {__typename?: 'Model3dSource'} & Pick<Types.Model3dSource, 'url'>
+    >;
+  };
 
-export type MediaFileFragment_Video_Fragment = {
-  __typename?: 'Video';
-  mediaContentType: Types.MediaContentType;
-  id: string;
-  previewImage?: {__typename?: 'Image'; url: any} | null;
-  sources: Array<{__typename?: 'VideoSource'; mimeType: string; url: string}>;
-};
+export type MediaFileFragment_Video_Fragment = {__typename?: 'Video'} & Pick<
+  Types.Video,
+  'mediaContentType' | 'id'
+> & {
+    previewImage?: Types.Maybe<
+      {__typename?: 'Image'} & Pick<Types.Image, 'url'>
+    >;
+    sources: Array<
+      {__typename?: 'VideoSource'} & Pick<Types.VideoSource, 'mimeType' | 'url'>
+    >;
+  };
 
 export type MediaFileFragmentFragment =
   | MediaFileFragment_ExternalVideo_Fragment

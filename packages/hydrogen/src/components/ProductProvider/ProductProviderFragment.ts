@@ -5,327 +5,342 @@
 // @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-export type ProductProviderFragmentFragment = {
-  __typename?: 'Product';
-  descriptionHtml: any;
-  handle: string;
-  id: string;
-  title: string;
-  compareAtPriceRange: {
-    __typename?: 'ProductPriceRange';
-    maxVariantPrice: {
-      __typename?: 'MoneyV2';
-      currencyCode: Types.CurrencyCode;
-      amount: any;
+export type ProductProviderFragmentFragment = {__typename?: 'Product'} & Pick<
+  Types.Product,
+  'descriptionHtml' | 'handle' | 'id' | 'title'
+> & {
+    compareAtPriceRange: {__typename?: 'ProductPriceRange'} & {
+      maxVariantPrice: {__typename?: 'MoneyV2'} & Pick<
+        Types.MoneyV2,
+        'currencyCode' | 'amount'
+      >;
+      minVariantPrice: {__typename?: 'MoneyV2'} & Pick<
+        Types.MoneyV2,
+        'currencyCode' | 'amount'
+      >;
     };
-    minVariantPrice: {
-      __typename?: 'MoneyV2';
-      currencyCode: Types.CurrencyCode;
-      amount: any;
+    media: {__typename?: 'MediaConnection'} & {
+      edges: Array<
+        {__typename?: 'MediaEdge'} & {
+          node:
+            | ({__typename?: 'ExternalVideo'} & Pick<
+                Types.ExternalVideo,
+                'mediaContentType' | 'id' | 'embeddedUrl' | 'host'
+              >)
+            | ({__typename?: 'MediaImage'} & Pick<
+                Types.MediaImage,
+                'mediaContentType'
+              > & {
+                  image?: Types.Maybe<
+                    {__typename?: 'Image'} & Pick<
+                      Types.Image,
+                      'id' | 'url' | 'altText' | 'width' | 'height'
+                    >
+                  >;
+                })
+            | ({__typename?: 'Model3d'} & Pick<
+                Types.Model3d,
+                'mediaContentType' | 'id' | 'alt'
+              > & {
+                  previewImage?: Types.Maybe<
+                    {__typename?: 'Image'} & Pick<Types.Image, 'url'>
+                  >;
+                  sources: Array<
+                    {__typename?: 'Model3dSource'} & Pick<
+                      Types.Model3dSource,
+                      'url'
+                    >
+                  >;
+                })
+            | ({__typename?: 'Video'} & Pick<
+                Types.Video,
+                'mediaContentType' | 'id'
+              > & {
+                  previewImage?: Types.Maybe<
+                    {__typename?: 'Image'} & Pick<Types.Image, 'url'>
+                  >;
+                  sources: Array<
+                    {__typename?: 'VideoSource'} & Pick<
+                      Types.VideoSource,
+                      'mimeType' | 'url'
+                    >
+                  >;
+                });
+        }
+      >;
     };
-  };
-  media: {
-    __typename?: 'MediaConnection';
-    edges: Array<{
-      __typename?: 'MediaEdge';
-      node:
-        | {
-            __typename?: 'ExternalVideo';
-            mediaContentType: Types.MediaContentType;
-            id: string;
-            embeddedUrl: any;
-            host: Types.MediaHost;
-          }
-        | {
-            __typename?: 'MediaImage';
-            mediaContentType: Types.MediaContentType;
-            image?: {
-              __typename?: 'Image';
-              id?: string | null;
-              url: any;
-              altText?: string | null;
-              width?: number | null;
-              height?: number | null;
-            } | null;
-          }
-        | {
-            __typename?: 'Model3d';
-            mediaContentType: Types.MediaContentType;
-            id: string;
-            alt?: string | null;
-            previewImage?: {__typename?: 'Image'; url: any} | null;
-            sources: Array<{__typename?: 'Model3dSource'; url: string}>;
-          }
-        | {
-            __typename?: 'Video';
-            mediaContentType: Types.MediaContentType;
-            id: string;
-            previewImage?: {__typename?: 'Image'; url: any} | null;
-            sources: Array<{
-              __typename?: 'VideoSource';
-              mimeType: string;
-              url: string;
-            }>;
-          };
-    }>;
-  };
-  metafields: {
-    __typename?: 'MetafieldConnection';
-    edges: Array<{
-      __typename?: 'MetafieldEdge';
-      node: {
-        __typename?: 'Metafield';
-        id: string;
-        type: string;
-        namespace: string;
-        key: string;
-        value: string;
-        createdAt: any;
-        updatedAt: any;
-        description?: string | null;
-        reference?:
-          | {
-              __typename: 'MediaImage';
-              id: string;
-              mediaContentType: Types.MediaContentType;
-              image?: {
-                __typename?: 'Image';
-                id?: string | null;
-                url: any;
-                altText?: string | null;
-                width?: number | null;
-                height?: number | null;
-              } | null;
-            }
-          | {__typename: 'Page'}
-          | {__typename: 'Product'}
-          | {__typename: 'ProductVariant'}
-          | null;
-      };
-    }>;
-  };
-  priceRange: {
-    __typename?: 'ProductPriceRange';
-    maxVariantPrice: {
-      __typename?: 'MoneyV2';
-      currencyCode: Types.CurrencyCode;
-      amount: any;
-    };
-    minVariantPrice: {
-      __typename?: 'MoneyV2';
-      currencyCode: Types.CurrencyCode;
-      amount: any;
-    };
-  };
-  variants: {
-    __typename?: 'ProductVariantConnection';
-    edges: Array<{
-      __typename?: 'ProductVariantEdge';
-      node: {
-        __typename?: 'ProductVariant';
-        id: string;
-        title: string;
-        availableForSale: boolean;
-        image?: {
-          __typename?: 'Image';
-          id?: string | null;
-          url: any;
-          altText?: string | null;
-          width?: number | null;
-          height?: number | null;
-        } | null;
-        priceV2: {
-          __typename?: 'MoneyV2';
-          currencyCode: Types.CurrencyCode;
-          amount: any;
-        };
-        compareAtPriceV2?: {
-          __typename?: 'MoneyV2';
-          currencyCode: Types.CurrencyCode;
-          amount: any;
-        } | null;
-        selectedOptions: Array<{
-          __typename?: 'SelectedOption';
-          name: string;
-          value: string;
-        }>;
-        metafields: {
-          __typename?: 'MetafieldConnection';
-          edges: Array<{
-            __typename?: 'MetafieldEdge';
-            node: {
-              __typename?: 'Metafield';
-              id: string;
-              type: string;
-              namespace: string;
-              key: string;
-              value: string;
-              createdAt: any;
-              updatedAt: any;
-              description?: string | null;
-              reference?:
-                | {
-                    __typename: 'MediaImage';
-                    id: string;
-                    mediaContentType: Types.MediaContentType;
-                    image?: {
-                      __typename?: 'Image';
-                      id?: string | null;
-                      url: any;
-                      altText?: string | null;
-                      width?: number | null;
-                      height?: number | null;
-                    } | null;
-                  }
+    metafields: {__typename?: 'MetafieldConnection'} & {
+      edges: Array<
+        {__typename?: 'MetafieldEdge'} & {
+          node: {__typename?: 'Metafield'} & Pick<
+            Types.Metafield,
+            | 'id'
+            | 'type'
+            | 'namespace'
+            | 'key'
+            | 'value'
+            | 'createdAt'
+            | 'updatedAt'
+            | 'description'
+          > & {
+              reference?: Types.Maybe<
+                | ({__typename: 'MediaImage'} & Pick<
+                    Types.MediaImage,
+                    'id' | 'mediaContentType'
+                  > & {
+                      image?: Types.Maybe<
+                        {__typename?: 'Image'} & Pick<
+                          Types.Image,
+                          'id' | 'url' | 'altText' | 'width' | 'height'
+                        >
+                      >;
+                    })
                 | {__typename: 'Page'}
                 | {__typename: 'Product'}
                 | {__typename: 'ProductVariant'}
-                | null;
+              >;
             };
-          }>;
-        };
-        sellingPlanAllocations: {
-          __typename?: 'SellingPlanAllocationConnection';
-          edges: Array<{
-            __typename?: 'SellingPlanAllocationEdge';
-            node: {
-              __typename?: 'SellingPlanAllocation';
-              priceAdjustments: Array<{
-                __typename?: 'SellingPlanAllocationPriceAdjustment';
-                compareAtPrice: {
-                  __typename?: 'MoneyV2';
-                  currencyCode: Types.CurrencyCode;
-                  amount: any;
-                };
-                perDeliveryPrice: {
-                  __typename?: 'MoneyV2';
-                  currencyCode: Types.CurrencyCode;
-                  amount: any;
-                };
-                price: {
-                  __typename?: 'MoneyV2';
-                  currencyCode: Types.CurrencyCode;
-                  amount: any;
-                };
-                unitPrice?: {
-                  __typename?: 'MoneyV2';
-                  currencyCode: Types.CurrencyCode;
-                  amount: any;
-                } | null;
-              }>;
-              sellingPlan: {
-                __typename?: 'SellingPlan';
-                id: string;
-                description?: string | null;
-                name: string;
-                recurringDeliveries: boolean;
-                options: Array<{
-                  __typename?: 'SellingPlanOption';
-                  name?: string | null;
-                  value?: string | null;
-                }>;
-                priceAdjustments: Array<{
-                  __typename?: 'SellingPlanPriceAdjustment';
-                  orderCount?: number | null;
-                  adjustmentValue:
-                    | {
-                        __typename?: 'SellingPlanFixedAmountPriceAdjustment';
-                        adjustmentAmount: {
-                          __typename?: 'MoneyV2';
-                          currencyCode: Types.CurrencyCode;
-                          amount: any;
-                        };
-                      }
-                    | {
-                        __typename?: 'SellingPlanFixedPriceAdjustment';
-                        price: {
-                          __typename?: 'MoneyV2';
-                          currencyCode: Types.CurrencyCode;
-                          amount: any;
-                        };
-                      }
-                    | {
-                        __typename?: 'SellingPlanPercentagePriceAdjustment';
-                        adjustmentPercentage: number;
+        }
+      >;
+    };
+    priceRange: {__typename?: 'ProductPriceRange'} & {
+      maxVariantPrice: {__typename?: 'MoneyV2'} & Pick<
+        Types.MoneyV2,
+        'currencyCode' | 'amount'
+      >;
+      minVariantPrice: {__typename?: 'MoneyV2'} & Pick<
+        Types.MoneyV2,
+        'currencyCode' | 'amount'
+      >;
+    };
+    variants: {__typename?: 'ProductVariantConnection'} & {
+      edges: Array<
+        {__typename?: 'ProductVariantEdge'} & {
+          node: {__typename?: 'ProductVariant'} & Pick<
+            Types.ProductVariant,
+            'id' | 'title' | 'availableForSale'
+          > & {
+              image?: Types.Maybe<
+                {__typename?: 'Image'} & Pick<
+                  Types.Image,
+                  'id' | 'url' | 'altText' | 'width' | 'height'
+                >
+              >;
+              priceV2: {__typename?: 'MoneyV2'} & Pick<
+                Types.MoneyV2,
+                'currencyCode' | 'amount'
+              >;
+              compareAtPriceV2?: Types.Maybe<
+                {__typename?: 'MoneyV2'} & Pick<
+                  Types.MoneyV2,
+                  'currencyCode' | 'amount'
+                >
+              >;
+              selectedOptions: Array<
+                {__typename?: 'SelectedOption'} & Pick<
+                  Types.SelectedOption,
+                  'name' | 'value'
+                >
+              >;
+              metafields: {__typename?: 'MetafieldConnection'} & {
+                edges: Array<
+                  {__typename?: 'MetafieldEdge'} & {
+                    node: {__typename?: 'Metafield'} & Pick<
+                      Types.Metafield,
+                      | 'id'
+                      | 'type'
+                      | 'namespace'
+                      | 'key'
+                      | 'value'
+                      | 'createdAt'
+                      | 'updatedAt'
+                      | 'description'
+                    > & {
+                        reference?: Types.Maybe<
+                          | ({__typename: 'MediaImage'} & Pick<
+                              Types.MediaImage,
+                              'id' | 'mediaContentType'
+                            > & {
+                                image?: Types.Maybe<
+                                  {__typename?: 'Image'} & Pick<
+                                    Types.Image,
+                                    | 'id'
+                                    | 'url'
+                                    | 'altText'
+                                    | 'width'
+                                    | 'height'
+                                  >
+                                >;
+                              })
+                          | {__typename: 'Page'}
+                          | {__typename: 'Product'}
+                          | {__typename: 'ProductVariant'}
+                        >;
                       };
-                }>;
+                  }
+                >;
               };
-            };
-          }>;
-        };
-        unitPriceMeasurement?: {
-          __typename?: 'UnitPriceMeasurement';
-          measuredType?: Types.UnitPriceMeasurementMeasuredType | null;
-          quantityUnit?: Types.UnitPriceMeasurementMeasuredUnit | null;
-          quantityValue: number;
-          referenceUnit?: Types.UnitPriceMeasurementMeasuredUnit | null;
-          referenceValue: number;
-        } | null;
-        unitPrice?: {
-          __typename?: 'MoneyV2';
-          currencyCode: Types.CurrencyCode;
-          amount: any;
-        } | null;
-      };
-    }>;
-  };
-  sellingPlanGroups: {
-    __typename?: 'SellingPlanGroupConnection';
-    edges: Array<{
-      __typename?: 'SellingPlanGroupEdge';
-      node: {
-        __typename?: 'SellingPlanGroup';
-        appName?: string | null;
-        name: string;
-        sellingPlans: {
-          __typename?: 'SellingPlanConnection';
-          edges: Array<{
-            __typename?: 'SellingPlanEdge';
-            node: {
-              __typename?: 'SellingPlan';
-              id: string;
-              description?: string | null;
-              name: string;
-              recurringDeliveries: boolean;
-              options: Array<{
-                __typename?: 'SellingPlanOption';
-                name?: string | null;
-                value?: string | null;
-              }>;
-              priceAdjustments: Array<{
-                __typename?: 'SellingPlanPriceAdjustment';
-                orderCount?: number | null;
-                adjustmentValue:
-                  | {
-                      __typename?: 'SellingPlanFixedAmountPriceAdjustment';
-                      adjustmentAmount: {
-                        __typename?: 'MoneyV2';
-                        currencyCode: Types.CurrencyCode;
-                        amount: any;
-                      };
-                    }
-                  | {
-                      __typename?: 'SellingPlanFixedPriceAdjustment';
-                      price: {
-                        __typename?: 'MoneyV2';
-                        currencyCode: Types.CurrencyCode;
-                        amount: any;
-                      };
-                    }
-                  | {
-                      __typename?: 'SellingPlanPercentagePriceAdjustment';
-                      adjustmentPercentage: number;
+              sellingPlanAllocations: {
+                __typename?: 'SellingPlanAllocationConnection';
+              } & {
+                edges: Array<
+                  {__typename?: 'SellingPlanAllocationEdge'} & {
+                    node: {__typename?: 'SellingPlanAllocation'} & {
+                      priceAdjustments: Array<
+                        {
+                          __typename?: 'SellingPlanAllocationPriceAdjustment';
+                        } & {
+                          compareAtPrice: {__typename?: 'MoneyV2'} & Pick<
+                            Types.MoneyV2,
+                            'currencyCode' | 'amount'
+                          >;
+                          perDeliveryPrice: {__typename?: 'MoneyV2'} & Pick<
+                            Types.MoneyV2,
+                            'currencyCode' | 'amount'
+                          >;
+                          price: {__typename?: 'MoneyV2'} & Pick<
+                            Types.MoneyV2,
+                            'currencyCode' | 'amount'
+                          >;
+                          unitPrice?: Types.Maybe<
+                            {__typename?: 'MoneyV2'} & Pick<
+                              Types.MoneyV2,
+                              'currencyCode' | 'amount'
+                            >
+                          >;
+                        }
+                      >;
+                      sellingPlan: {__typename?: 'SellingPlan'} & Pick<
+                        Types.SellingPlan,
+                        'id' | 'description' | 'name' | 'recurringDeliveries'
+                      > & {
+                          options: Array<
+                            {__typename?: 'SellingPlanOption'} & Pick<
+                              Types.SellingPlanOption,
+                              'name' | 'value'
+                            >
+                          >;
+                          priceAdjustments: Array<
+                            {__typename?: 'SellingPlanPriceAdjustment'} & Pick<
+                              Types.SellingPlanPriceAdjustment,
+                              'orderCount'
+                            > & {
+                                adjustmentValue:
+                                  | ({
+                                      __typename?: 'SellingPlanFixedAmountPriceAdjustment';
+                                    } & {
+                                      adjustmentAmount: {
+                                        __typename?: 'MoneyV2';
+                                      } & Pick<
+                                        Types.MoneyV2,
+                                        'currencyCode' | 'amount'
+                                      >;
+                                    })
+                                  | ({
+                                      __typename?: 'SellingPlanFixedPriceAdjustment';
+                                    } & {
+                                      price: {__typename?: 'MoneyV2'} & Pick<
+                                        Types.MoneyV2,
+                                        'currencyCode' | 'amount'
+                                      >;
+                                    })
+                                  | ({
+                                      __typename?: 'SellingPlanPercentagePriceAdjustment';
+                                    } & Pick<
+                                      Types.SellingPlanPercentagePriceAdjustment,
+                                      'adjustmentPercentage'
+                                    >);
+                              }
+                          >;
+                        };
                     };
-              }>;
+                  }
+                >;
+              };
+              unitPriceMeasurement?: Types.Maybe<
+                {__typename?: 'UnitPriceMeasurement'} & Pick<
+                  Types.UnitPriceMeasurement,
+                  | 'measuredType'
+                  | 'quantityUnit'
+                  | 'quantityValue'
+                  | 'referenceUnit'
+                  | 'referenceValue'
+                >
+              >;
+              unitPrice?: Types.Maybe<
+                {__typename?: 'MoneyV2'} & Pick<
+                  Types.MoneyV2,
+                  'currencyCode' | 'amount'
+                >
+              >;
             };
-          }>;
-        };
-        options: Array<{
-          __typename?: 'SellingPlanGroupOption';
-          name: string;
-          values: Array<string>;
-        }>;
-      };
-    }>;
+        }
+      >;
+    };
+    sellingPlanGroups: {__typename?: 'SellingPlanGroupConnection'} & {
+      edges: Array<
+        {__typename?: 'SellingPlanGroupEdge'} & {
+          node: {__typename?: 'SellingPlanGroup'} & Pick<
+            Types.SellingPlanGroup,
+            'appName' | 'name'
+          > & {
+              sellingPlans: {__typename?: 'SellingPlanConnection'} & {
+                edges: Array<
+                  {__typename?: 'SellingPlanEdge'} & {
+                    node: {__typename?: 'SellingPlan'} & Pick<
+                      Types.SellingPlan,
+                      'id' | 'description' | 'name' | 'recurringDeliveries'
+                    > & {
+                        options: Array<
+                          {__typename?: 'SellingPlanOption'} & Pick<
+                            Types.SellingPlanOption,
+                            'name' | 'value'
+                          >
+                        >;
+                        priceAdjustments: Array<
+                          {__typename?: 'SellingPlanPriceAdjustment'} & Pick<
+                            Types.SellingPlanPriceAdjustment,
+                            'orderCount'
+                          > & {
+                              adjustmentValue:
+                                | ({
+                                    __typename?: 'SellingPlanFixedAmountPriceAdjustment';
+                                  } & {
+                                    adjustmentAmount: {
+                                      __typename?: 'MoneyV2';
+                                    } & Pick<
+                                      Types.MoneyV2,
+                                      'currencyCode' | 'amount'
+                                    >;
+                                  })
+                                | ({
+                                    __typename?: 'SellingPlanFixedPriceAdjustment';
+                                  } & {
+                                    price: {__typename?: 'MoneyV2'} & Pick<
+                                      Types.MoneyV2,
+                                      'currencyCode' | 'amount'
+                                    >;
+                                  })
+                                | ({
+                                    __typename?: 'SellingPlanPercentagePriceAdjustment';
+                                  } & Pick<
+                                    Types.SellingPlanPercentagePriceAdjustment,
+                                    'adjustmentPercentage'
+                                  >);
+                            }
+                        >;
+                      };
+                  }
+                >;
+              };
+              options: Array<
+                {__typename?: 'SellingPlanGroupOption'} & Pick<
+                  Types.SellingPlanGroupOption,
+                  'name' | 'values'
+                >
+              >;
+            };
+        }
+      >;
+    };
   };
-};

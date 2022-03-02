@@ -7,54 +7,56 @@ import * as Types from '../../graphql/types/types';
 
 export type SellingPlanGroupsFragmentFragment = {
   __typename?: 'SellingPlanGroup';
-  appName?: string | null;
-  name: string;
-  sellingPlans: {
-    __typename?: 'SellingPlanConnection';
-    edges: Array<{
-      __typename?: 'SellingPlanEdge';
-      node: {
-        __typename?: 'SellingPlan';
-        id: string;
-        description?: string | null;
-        name: string;
-        recurringDeliveries: boolean;
-        options: Array<{
-          __typename?: 'SellingPlanOption';
-          name?: string | null;
-          value?: string | null;
-        }>;
-        priceAdjustments: Array<{
-          __typename?: 'SellingPlanPriceAdjustment';
-          orderCount?: number | null;
-          adjustmentValue:
-            | {
-                __typename?: 'SellingPlanFixedAmountPriceAdjustment';
-                adjustmentAmount: {
-                  __typename?: 'MoneyV2';
-                  currencyCode: Types.CurrencyCode;
-                  amount: any;
-                };
-              }
-            | {
-                __typename?: 'SellingPlanFixedPriceAdjustment';
-                price: {
-                  __typename?: 'MoneyV2';
-                  currencyCode: Types.CurrencyCode;
-                  amount: any;
-                };
-              }
-            | {
-                __typename?: 'SellingPlanPercentagePriceAdjustment';
-                adjustmentPercentage: number;
-              };
-        }>;
-      };
-    }>;
+} & Pick<Types.SellingPlanGroup, 'appName' | 'name'> & {
+    sellingPlans: {__typename?: 'SellingPlanConnection'} & {
+      edges: Array<
+        {__typename?: 'SellingPlanEdge'} & {
+          node: {__typename?: 'SellingPlan'} & Pick<
+            Types.SellingPlan,
+            'id' | 'description' | 'name' | 'recurringDeliveries'
+          > & {
+              options: Array<
+                {__typename?: 'SellingPlanOption'} & Pick<
+                  Types.SellingPlanOption,
+                  'name' | 'value'
+                >
+              >;
+              priceAdjustments: Array<
+                {__typename?: 'SellingPlanPriceAdjustment'} & Pick<
+                  Types.SellingPlanPriceAdjustment,
+                  'orderCount'
+                > & {
+                    adjustmentValue:
+                      | ({
+                          __typename?: 'SellingPlanFixedAmountPriceAdjustment';
+                        } & {
+                          adjustmentAmount: {__typename?: 'MoneyV2'} & Pick<
+                            Types.MoneyV2,
+                            'currencyCode' | 'amount'
+                          >;
+                        })
+                      | ({__typename?: 'SellingPlanFixedPriceAdjustment'} & {
+                          price: {__typename?: 'MoneyV2'} & Pick<
+                            Types.MoneyV2,
+                            'currencyCode' | 'amount'
+                          >;
+                        })
+                      | ({
+                          __typename?: 'SellingPlanPercentagePriceAdjustment';
+                        } & Pick<
+                          Types.SellingPlanPercentagePriceAdjustment,
+                          'adjustmentPercentage'
+                        >);
+                  }
+              >;
+            };
+        }
+      >;
+    };
+    options: Array<
+      {__typename?: 'SellingPlanGroupOption'} & Pick<
+        Types.SellingPlanGroupOption,
+        'name' | 'values'
+      >
+    >;
   };
-  options: Array<{
-    __typename?: 'SellingPlanGroupOption';
-    name: string;
-    values: Array<string>;
-  }>;
-};

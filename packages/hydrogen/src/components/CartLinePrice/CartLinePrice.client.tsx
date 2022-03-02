@@ -32,7 +32,7 @@ export function CartLinePrice<TTag extends ElementType>(
     <Money
       {...passthroughProps}
       data={{
-        amount: price.amount * cartLine.quantity,
+        amount: `${parseFloat(price.amount) * cartLine.quantity}`,
         currencyCode: price.currencyCode,
       }}
     />

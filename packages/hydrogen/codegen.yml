@@ -25,6 +25,13 @@ generates:
           # If a default type for a scalar isn't set, then instead of 'any' let's set to 'unknown' for better type safety.
           defaultScalarType: unknown
           useImplementingTypes: true
+          # Define how the SFAPI's custom scalars map to TS types
+          scalars:
+            DateTime: string
+            Decimal: string
+            HTML: string
+            Money: string
+            URL: string
   # generates the files next to where they're used
   src/:
     preset: near-operation-file
@@ -44,7 +51,9 @@ generates:
             - ' */'
             # Because these are generated files, we don't want TS to fail on TS-related issues in these files. For example, sometimes a file is imported but not used in these files
             - '// @ts-nocheck'
-      - typescript-operations
+      - 'typescript-operations':
+          # in order for our custom scalar TS types to be picked up in the local files, we have to set this to false for the time being. See https://github.com/dotansimha/graphql-code-generator/issues/6914
+          preResolveTypes: false
   # the schema file, which is the local representation of the graphql endpoint
   ./graphql.schema.json:
     plugins:

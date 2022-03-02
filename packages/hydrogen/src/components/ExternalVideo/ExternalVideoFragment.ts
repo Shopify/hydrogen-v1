@@ -7,7 +7,4 @@ import * as Types from '../../graphql/types/types';
 
 export type ExternalVideoFragmentFragment = {
   __typename?: 'ExternalVideo';
-  id: string;
-  embeddedUrl: any;
-  host: Types.MediaHost;
-};
+} & Pick<Types.ExternalVideo, 'id' | 'embeddedUrl' | 'host'>;

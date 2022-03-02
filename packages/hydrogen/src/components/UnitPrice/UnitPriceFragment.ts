@@ -5,19 +5,18 @@
 // @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-export type UnitPriceFragmentFragment = {
-  __typename?: 'ProductVariant';
-  unitPriceMeasurement?: {
-    __typename?: 'UnitPriceMeasurement';
-    measuredType?: Types.UnitPriceMeasurementMeasuredType | null;
-    quantityUnit?: Types.UnitPriceMeasurementMeasuredUnit | null;
-    quantityValue: number;
-    referenceUnit?: Types.UnitPriceMeasurementMeasuredUnit | null;
-    referenceValue: number;
-  } | null;
-  unitPrice?: {
-    __typename?: 'MoneyV2';
-    currencyCode: Types.CurrencyCode;
-    amount: any;
-  } | null;
+export type UnitPriceFragmentFragment = {__typename?: 'ProductVariant'} & {
+  unitPriceMeasurement?: Types.Maybe<
+    {__typename?: 'UnitPriceMeasurement'} & Pick<
+      Types.UnitPriceMeasurement,
+      | 'measuredType'
+      | 'quantityUnit'
+      | 'quantityValue'
+      | 'referenceUnit'
+      | 'referenceValue'
+    >
+  >;
+  unitPrice?: Types.Maybe<
+    {__typename?: 'MoneyV2'} & Pick<Types.MoneyV2, 'currencyCode' | 'amount'>
+  >;
 };

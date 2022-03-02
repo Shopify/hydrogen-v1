@@ -11,102 +11,99 @@ export type CartQueryQueryVariables = Types.Exact<{
   country?: Types.InputMaybe<Types.CountryCode>;
 }>;
 
-export type CartQueryQuery = {
-  __typename?: 'QueryRoot';
-  cart?: {
-    __typename?: 'Cart';
-    id: string;
-    checkoutUrl: any;
-    note?: string | null;
-    buyerIdentity: {
-      __typename?: 'CartBuyerIdentity';
-      countryCode?: Types.CountryCode | null;
-      email?: string | null;
-      phone?: string | null;
-      customer?: {
-        __typename?: 'Customer';
-        id: string;
-        email?: string | null;
-        firstName?: string | null;
-        lastName?: string | null;
-        displayName: string;
-      } | null;
-    };
-    lines: {
-      __typename?: 'CartLineConnection';
-      edges: Array<{
-        __typename?: 'CartLineEdge';
-        node: {
-          __typename?: 'CartLine';
-          id: string;
-          quantity: number;
-          attributes: Array<{
-            __typename?: 'Attribute';
-            key: string;
-            value?: string | null;
-          }>;
-          merchandise: {
-            __typename?: 'ProductVariant';
-            id: string;
-            availableForSale: boolean;
-            requiresShipping: boolean;
-            title: string;
-            compareAtPriceV2?: {
-              __typename?: 'MoneyV2';
-              currencyCode: Types.CurrencyCode;
-              amount: any;
-            } | null;
-            priceV2: {
-              __typename?: 'MoneyV2';
-              currencyCode: Types.CurrencyCode;
-              amount: any;
-            };
-            image?: {
-              __typename?: 'Image';
-              id?: string | null;
-              url: any;
-              altText?: string | null;
-              width?: number | null;
-              height?: number | null;
-            } | null;
-            product: {__typename?: 'Product'; handle: string; title: string};
-            selectedOptions: Array<{
-              __typename?: 'SelectedOption';
-              name: string;
-              value: string;
-            }>;
+export type CartQueryQuery = {__typename?: 'QueryRoot'} & {
+  cart?: Types.Maybe<
+    {__typename?: 'Cart'} & Pick<Types.Cart, 'id' | 'checkoutUrl' | 'note'> & {
+        buyerIdentity: {__typename?: 'CartBuyerIdentity'} & Pick<
+          Types.CartBuyerIdentity,
+          'countryCode' | 'email' | 'phone'
+        > & {
+            customer?: Types.Maybe<
+              {__typename?: 'Customer'} & Pick<
+                Types.Customer,
+                'id' | 'email' | 'firstName' | 'lastName' | 'displayName'
+              >
+            >;
           };
+        lines: {__typename?: 'CartLineConnection'} & {
+          edges: Array<
+            {__typename?: 'CartLineEdge'} & {
+              node: {__typename?: 'CartLine'} & Pick<
+                Types.CartLine,
+                'id' | 'quantity'
+              > & {
+                  attributes: Array<
+                    {__typename?: 'Attribute'} & Pick<
+                      Types.Attribute,
+                      'key' | 'value'
+                    >
+                  >;
+                  merchandise: {__typename?: 'ProductVariant'} & Pick<
+                    Types.ProductVariant,
+                    'id' | 'availableForSale' | 'requiresShipping' | 'title'
+                  > & {
+                      compareAtPriceV2?: Types.Maybe<
+                        {__typename?: 'MoneyV2'} & Pick<
+                          Types.MoneyV2,
+                          'currencyCode' | 'amount'
+                        >
+                      >;
+                      priceV2: {__typename?: 'MoneyV2'} & Pick<
+                        Types.MoneyV2,
+                        'currencyCode' | 'amount'
+                      >;
+                      image?: Types.Maybe<
+                        {__typename?: 'Image'} & Pick<
+                          Types.Image,
+                          'id' | 'url' | 'altText' | 'width' | 'height'
+                        >
+                      >;
+                      product: {__typename?: 'Product'} & Pick<
+                        Types.Product,
+                        'handle' | 'title'
+                      >;
+                      selectedOptions: Array<
+                        {__typename?: 'SelectedOption'} & Pick<
+                          Types.SelectedOption,
+                          'name' | 'value'
+                        >
+                      >;
+                    };
+                };
+            }
+          >;
         };
-      }>;
-    };
-    estimatedCost: {
-      __typename?: 'CartEstimatedCost';
-      subtotalAmount: {
-        __typename?: 'MoneyV2';
-        currencyCode: Types.CurrencyCode;
-        amount: any;
-      };
-      totalAmount: {
-        __typename?: 'MoneyV2';
-        currencyCode: Types.CurrencyCode;
-        amount: any;
-      };
-      totalDutyAmount?: {
-        __typename?: 'MoneyV2';
-        currencyCode: Types.CurrencyCode;
-        amount: any;
-      } | null;
-      totalTaxAmount?: {
-        __typename?: 'MoneyV2';
-        currencyCode: Types.CurrencyCode;
-        amount: any;
-      } | null;
-    };
-    attributes: Array<{
-      __typename?: 'Attribute';
-      key: string;
-      value?: string | null;
-    }>;
-    discountCodes: Array<{__typename?: 'CartDiscountCode'; code: string}>;
-  } | null;
+        estimatedCost: {__typename?: 'CartEstimatedCost'} & {
+          subtotalAmount: {__typename?: 'MoneyV2'} & Pick<
+            Types.MoneyV2,
+            'currencyCode' | 'amount'
+          >;
+          totalAmount: {__typename?: 'MoneyV2'} & Pick<
+            Types.MoneyV2,
+            'currencyCode' | 'amount'
+          >;
+          totalDutyAmount?: Types.Maybe<
+            {__typename?: 'MoneyV2'} & Pick<
+              Types.MoneyV2,
+              'currencyCode' | 'amount'
+            >
+          >;
+          totalTaxAmount?: Types.Maybe<
+            {__typename?: 'MoneyV2'} & Pick<
+              Types.MoneyV2,
+              'currencyCode' | 'amount'
+            >
+          >;
+        };
+        attributes: Array<
+          {__typename?: 'Attribute'} & Pick<Types.Attribute, 'key' | 'value'>
+        >;
+        discountCodes: Array<
+          {__typename?: 'CartDiscountCode'} & Pick<
+            Types.CartDiscountCode,
+            'code'
+          >
+        >;
+      }
+  >;
 };

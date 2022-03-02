@@ -13,7 +13,7 @@ describe('<Image />', () => {
       const component = mount(<Image data={image} />);
 
       expect(component).toContainReactComponent('img', {
-        src: src as string,
+        src: src,
         alt: altText,
         id,
         width,
@@ -164,17 +164,11 @@ describe('<Image />', () => {
     it('renders an `img` element', () => {
       const {url: src, altText, id, width, height} = getPreviewImage();
       const component = mount(
-        <Image
-          src={src as string}
-          alt={altText}
-          id={id}
-          width={width}
-          height={height}
-        />
+        <Image src={src} alt={altText} id={id} width={width} height={height} />
       );
 
       expect(component).toContainReactComponent('img', {
-        src: src as string,
+        src: src,
         alt: altText,
         id: id,
         width: width,
@@ -188,7 +182,7 @@ describe('<Image />', () => {
       const loading = 'eager';
       const component = mount(
         <Image
-          src={src as string}
+          src={src}
           id={id}
           width={width}
           height={height}
@@ -219,9 +213,7 @@ describe('<Image />', () => {
         const height = 100;
 
         expect(() => {
-          mount(
-            <Image src={src as string} id={id} width={width} height={height} />
-          );
+          mount(<Image src={src} id={id} width={width} height={height} />);
         }).toThrowError(
           `Image component: when 'src' is provided, 'width' and 'height' are required and needs to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
         );
@@ -233,9 +225,7 @@ describe('<Image />', () => {
         const height = 0;
 
         expect(() => {
-          mount(
-            <Image src={src as string} id={id} width={width} height={height} />
-          );
+          mount(<Image src={src} id={id} width={width} height={height} />);
         }).toThrowError(
           `Image component: when 'src' is provided, 'width' and 'height' are required and needs to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
         );
@@ -261,7 +251,7 @@ describe('<Image />', () => {
 
       const component = mount(
         <Image
-          src={src as string}
+          src={src}
           id={id}
           width={width}
           height={height}
@@ -284,7 +274,7 @@ describe('<Image />', () => {
       const {url: src, width, height} = getPreviewImage();
       const component = mount(
         <Image
-          src={src as string}
+          src={src}
           alt="Fancy image"
           width={width}
           height={height}

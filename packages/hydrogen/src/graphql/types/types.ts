@@ -24,14 +24,14 @@ export type Scalars = {
    * represented as `"2019-09-07T15:50:00Z`".
    *
    */
-  DateTime: unknown;
+  DateTime: string;
   /**
    * A signed decimal number, which supports arbitrary precision and is serialized as a string.
    *
    * Example values: `"29.99"`, `"29.999"`.
    *
    */
-  Decimal: unknown;
+  Decimal: string;
   /**
    * A string containing HTML code. Refer to the [HTML spec](https://html.spec.whatwg.org/#elements-3) for a
    * complete list of HTML elements.
@@ -39,7 +39,7 @@ export type Scalars = {
    * Example value: `"<p>Grey cotton knit sweater.</p>"`.
    *
    */
-  HTML: unknown;
+  HTML: string;
   /**
    * A [JSON](https://www.json.org/json-en.html) object.
    *
@@ -58,7 +58,7 @@ export type Scalars = {
    */
   JSON: unknown;
   /** A monetary value string without a currency symbol or code. Example value: `"100.57"`. */
-  Money: unknown;
+  Money: string;
   /**
    * Represents an [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) and
    * [RFC 3987](https://datatracker.ietf.org/doc/html/rfc3987)-compliant URI string.
@@ -67,7 +67,7 @@ export type Scalars = {
    * (`johns-apparel.myshopify.com`).
    *
    */
-  URL: unknown;
+  URL: string;
 };
 
 /**
