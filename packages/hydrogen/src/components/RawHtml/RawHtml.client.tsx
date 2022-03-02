@@ -1,4 +1,4 @@
-import React, {ElementType} from 'react';
+import React, {ElementType, useEffect, useState} from 'react';
 import {Props} from '../types';
 import DOMPurify from 'dompurify';
 
@@ -32,18 +32,20 @@ export function RawHtml<TTag extends ElementType>(
 ) {
   const {string, unsanitized, as, dompurifyConfig, ...passthroughProps} = props;
   const Wrapper = as ?? 'div';
+  const [sanitizedString, setSanitizedString] = useState('');
 
-  const sanitizedString = React.useMemo(() => {
-    if (unsanitized) {
-      return string;
+  useEffect(() => {
+    if (!unsanitized) {
+      setSanitizedString(
+        DOMPurify.sanitize(
+          string,
+          dompurifyConfig || DOMPURIFY_CONFIG
+        ).toString()
+      );
+    } else {
+      setSanitizedString(string);
     }
-
-    // TODO: Re-enable when we find a way to support Worker runtime
-    return DOMPurify.sanitize(
-      string,
-      dompurifyConfig || DOMPURIFY_CONFIG
-    ).toString();
-  }, [string, !!unsanitized]);
+  }, [string, unsanitized]);
 
   return (
     <Wrapper
