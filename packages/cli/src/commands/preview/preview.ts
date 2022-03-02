@@ -21,14 +21,16 @@ export async function preview(env: Env) {
     });
   }
 
-  const mf = new MiniOxygen({
-    buildCommand: 'yarn build',
-    // I think globals requires the Bindings Plugin, so we'll have to do this a different way
-    globals: {Oxygen: {}},
-    scriptPath: path.resolve(root, workerPath),
-    watch: true,
-    buildWatchPaths: ['./src'],
-  });
+  const mf = new MiniOxygen(
+    {
+      buildCommand: 'yarn build',
+      // I think globals requires the Bindings Plugin, so we'll have to do this a different way
+      scriptPath: path.resolve(root, workerPath),
+      watch: true,
+      buildWatchPaths: ['./src'],
+    },
+    {}
+  );
 
   const app = await mf.createServer({assetsDir});
 
