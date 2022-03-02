@@ -6,7 +6,7 @@ describe('preview', () => {
       const result = await run('preview');
       const output = result.output.stdout.join('');
 
-      expect(output).toContain('worker.js not found');
+      expect(output).toContain('worker not found');
       expect(output).toContain(
         'Run `yarn run build` to generate a worker build and try again.'
       );

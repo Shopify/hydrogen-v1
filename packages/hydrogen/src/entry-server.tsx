@@ -74,7 +74,10 @@ export interface RequestHandler {
   >;
 }
 
-export const renderHydrogen = (App: any, {routes}: ServerHandlerConfig) => {
+export const renderHydrogen = (
+  App: any,
+  {shopifyConfig, routes}: ServerHandlerConfig
+) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
     {indexTemplate, streamableResponse, dev, cache, context, nonce}
@@ -111,7 +114,7 @@ export const renderHydrogen = (App: any, {routes}: ServerHandlerConfig) => {
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        return renderApiRoute(request, apiRoute);
+        return renderApiRoute(request, apiRoute, shopifyConfig);
       }
     }
 

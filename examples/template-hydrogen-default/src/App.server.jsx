@@ -24,4 +24,4 @@ function App({routes, ...serverProps}) {
 
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {routes});
+export default renderHydrogen(App, {shopifyConfig, routes});

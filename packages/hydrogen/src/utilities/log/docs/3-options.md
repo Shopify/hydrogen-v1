@@ -11,17 +11,11 @@ Logger has the following Boolean options:
 ### Example
 
 ```js
-import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLoggerOptions} from '@shopify/hydrogen';
-import App from './App.server';
 
 setLoggerOptions({
   showCacheApiStatus: true,
   showCacheControlHeader: true,
   showQueryTiming: true,
-});
-
-export default renderHydrogen(App, () => {
-  // Custom hook
 });
 ```
