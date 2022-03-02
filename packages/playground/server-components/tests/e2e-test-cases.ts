@@ -278,8 +278,11 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     const response = await fetch(getServerUrl() + '/seo?_bot');
     const body = await response.text();
 
-    expect(body).toContain('<html lang="ja"');
-    expect(body).toContain('<body data-test="true"');
+    expect(body).toContain('<html lang="ja">');
+    // Overwrites "class" and appends "data-test"
+    expect(body).toContain(
+      '<body data-my-attr=" some spaces here " class="pb-2" data-style="color: red" data-test="true">'
+    );
     expect(body).toMatch(
       /<meta\s+.*?property="og:url"\s+content="example.com"\s*\/>/
     );
