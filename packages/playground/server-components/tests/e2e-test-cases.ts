@@ -10,7 +10,11 @@ type TestOptions = {
   isBuild?: boolean;
 };
 
-export default async function testCases({getServerUrl, isBuild}: TestOptions) {
+export default async function testCases({
+  getServerUrl,
+  isBuild,
+  isWorker,
+}: TestOptions) {
   it('shows the homepage, navigates to about, and increases the count', async () => {
     await page.goto(getServerUrl());
 
@@ -202,7 +206,7 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
 
   it('streams the SSR response and includes RSC payload', async () => {
     const response = await fetch(getServerUrl() + '/stream');
-    let streamedChunks = [];
+    const streamedChunks = [];
 
     // This fetch response is not standard but a node-fetch polyfill.
     // Therefore, the body is not a ReadableStream but a Node Readable.
@@ -222,7 +226,7 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
 
   it('buffers HTML for bots', async () => {
     const response = await fetch(getServerUrl() + '/stream?_bot');
-    let streamedChunks = [];
+    const streamedChunks = [];
 
     // This fetch response is not standard but a node-fetch polyfill.
     // Therefore, the body is not a ReadableStream but a Node Readable.
@@ -246,7 +250,8 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
         `${RSC_PATHNAME}?state=` +
         encodeURIComponent(JSON.stringify({pathname: '/stream'}))
     );
-    let streamedChunks = [];
+
+    const streamedChunks = [];
 
     // This fetch response is not standard but a node-fetch polyfill.
     // Therefore, the body is not a ReadableStream but a Node Readable.
@@ -277,12 +282,31 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     );
   });
 
-  describe('HMR', () => {
-    it('updates the contents when a client component file changes', async () => {
-      if (isBuild) {
-        return;
-      }
+  it('returns headers in response correctly', async () => {
+    const response = await fetch(getServerUrl() + '/headers');
 
+    expect(response.status).toEqual(201);
+    // statusText cannot be modified in workers
+    expect(response.statusText).toEqual(isWorker ? 'Created' : 'hey');
+
+    expect(response.headers.get('Accept-Encoding')).toBe('deflate, gzip');
+    expect(response.headers.get('Set-Cookie')).toBe(
+      'hello=world, hello2=world2'
+    );
+  });
+
+  it('uses the provided custom body', async () => {
+    const response = await fetch(getServerUrl() + '/custom-body');
+    const body = await response.text();
+
+    expect(response.headers.get('Content-Type')).toEqual('text/plain');
+    expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
+  });
+
+  describe('HMR', () => {
+    if (isBuild) return;
+
+    it('updates the contents when a client component file changes', async () => {
       const fullPath = resolve(
         __dirname,
         '../',
@@ -301,10 +325,6 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     });
 
     it('updates the contents when a server component file changes', async () => {
-      if (isBuild) {
-        return;
-      }
-
       const fullPath = resolve(__dirname, '../', 'src/routes/index.server.jsx');
       const newheading = 'Snow Devil';
 
