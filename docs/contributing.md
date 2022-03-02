@@ -95,7 +95,6 @@ If you are building or making changes to a component, be sure to read [What are 
 If you make changes to or add any new `.graphql` files within Hydrogen, you will need to run the following commands in order to generate the type definitions and Graphql documents for the newly added/updated files:
 
 ```bash
-cd packages/hydrogen
 yarn graphql-types
 ```
 
@@ -112,8 +111,8 @@ We use `graphql-codegen` to automatically generate types for all of the Storefro
 In order to update the supported Storefront API version:
 
 1. Update the URL in `codegen.yml`
-1. Run `yarn graphql-types` in the `packages/hydrogen` repo.
-1. Fix any Typescript errors that now appear (one fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up)
+1. Run `yarn graphql-types`
+1. Fix any Typescript errors that now appear (one fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up, another way is to run the tests with `yarn test`)
 
 For context, updating the `codegen.yml` file and running the script does the following:
 

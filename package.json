@@ -28,7 +28,8 @@
     "update-docs-on-version": "ts-node --project ./tsconfig.json ./scripts/update-docs-on-version.ts",
     "generate-docs": "ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
     "generate-docs:debug": "node --inspect-brk ./node_modules/.bin/ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
-    "tophat": "node ./scripts/tophat"
+    "tophat": "node ./scripts/tophat",
+    "graphql-types": "yarn --cwd \"packages/hydrogen\" graphql-types"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.3",

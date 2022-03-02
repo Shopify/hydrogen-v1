@@ -3434,7 +3434,7 @@ export type ImageTransformInput = {
 /** Information about the localized experiences configured for the shop. */
 export type Localization = {
   __typename?: 'Localization';
-  /** List of countries with enabled localized experiences. */
+  /** The list of countries with enabled localized experiences. */
   availableCountries: Array<Country>;
   /** The country of the active localized experience. Use the `@inContext` directive to change this value. */
   country: Country;
