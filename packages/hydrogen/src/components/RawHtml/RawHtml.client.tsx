@@ -2,7 +2,9 @@ import React, {ElementType} from 'react';
 import {Props} from '../types';
 import DOMPurify from 'dompurify';
 
-const DOMPURIFY_CONFIG = {
+import type {Config as DOMPurifyConfig} from 'dompurify';
+
+const DOMPURIFY_CONFIG: DOMPurifyConfig = {
   FORBID_ATTR: ['style'],
 };
 
@@ -14,7 +16,7 @@ export interface RawHtmlProps<TTag> {
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: TTag;
   /** A config object for DOMPurify. Defaults to `{ FORBID_ATTR: ['style'] }` */
-  dompurifyConfig?: any;
+  dompurifyConfig?: DOMPurifyConfig;
 }
 
 /**
