@@ -2,13 +2,13 @@ import * as React from 'react';
 import {YouTube, Vimeo, useEmbeddedVideoUrl} from '../../utilities';
 import {Props} from '../types';
 import {ExternalVideoFragment as Fragment} from '../../graphql/graphql-constants';
-import {ExternalVideo as ExternalVideoType} from '../../graphql/types/types';
+import type {ExternalVideoFragmentFragment} from './ExternalVideoFragment';
 
 export interface ExternalVideoProps {
   /** An object with the keys `host`, `embeddedUrl`, and `id`. Refer to the Storefront API's
    * [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).
    */
-  data: Pick<ExternalVideoType, 'host' | 'embeddedUrl' | 'id'>;
+  data: ExternalVideoFragmentFragment;
   /** An object containing the options available for either
    * [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or
    * [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters).

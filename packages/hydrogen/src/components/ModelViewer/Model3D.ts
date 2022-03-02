@@ -5,14 +5,14 @@
 // @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-export type VideoFragmentFragment = {__typename?: 'Video'} & Pick<
-  Types.Video,
-  'id'
+export type Model3DFragmentFragment = {__typename?: 'Model3d'} & Pick<
+  Types.Model3d,
+  'id' | 'alt' | 'mediaContentType'
 > & {
     previewImage?: Types.Maybe<
       {__typename?: 'Image'} & Pick<Types.Image, 'url'>
     >;
     sources: Array<
-      {__typename?: 'VideoSource'} & Pick<Types.VideoSource, 'mimeType' | 'url'>
+      {__typename?: 'Model3dSource'} & Pick<Types.Model3dSource, 'url'>
     >;
   };

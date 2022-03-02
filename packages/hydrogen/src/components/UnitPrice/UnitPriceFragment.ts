@@ -1,6 +1,10 @@
+/**
+ * THIS FILE IS AUTO-GENERATED, DO NOT EDIT.
+ * Instead, you can edit the associated .graphql file to query for additional fields and this file will be updated when you run `yarn graphql-types`
+ */
+// @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-import {MoneyFragmentFragment} from '../Money/MoneyFragment';
 export type UnitPriceFragmentFragment = {__typename?: 'ProductVariant'} & {
   unitPriceMeasurement?: Types.Maybe<
     {__typename?: 'UnitPriceMeasurement'} & Pick<
@@ -12,5 +16,7 @@ export type UnitPriceFragmentFragment = {__typename?: 'ProductVariant'} & {
       | 'referenceValue'
     >
   >;
-  unitPrice?: Types.Maybe<{__typename?: 'MoneyV2'} & MoneyFragmentFragment>;
+  unitPrice?: Types.Maybe<
+    {__typename?: 'MoneyV2'} & Pick<Types.MoneyV2, 'currencyCode' | 'amount'>
+  >;
 };

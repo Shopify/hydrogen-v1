@@ -1,18 +1,26 @@
+/**
+ * THIS FILE IS AUTO-GENERATED, DO NOT EDIT.
+ * Instead, you can edit the associated .graphql file to query for additional fields and this file will be updated when you run `yarn graphql-types`
+ */
+// @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-import {ImageFragmentFragment} from '../../components/Image/ImageFragment';
-import {UnitPriceFragmentFragment} from '../../components/UnitPrice/UnitPriceFragment';
-import {MoneyFragmentFragment} from '../../components/Money/MoneyFragment';
-import {MetafieldFragmentFragment} from '../../components/Metafield/MetafieldFragment';
-import {SellingPlanFragmentFragment} from './SellingPlanFragment';
 export type VariantFragmentFragment = {__typename?: 'ProductVariant'} & Pick<
   Types.ProductVariant,
   'id' | 'title' | 'availableForSale'
 > & {
-    image?: Types.Maybe<{__typename?: 'Image'} & ImageFragmentFragment>;
-    priceV2: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
+    image?: Types.Maybe<
+      {__typename?: 'Image'} & Pick<
+        Types.Image,
+        'id' | 'url' | 'altText' | 'width' | 'height'
+      >
+    >;
+    priceV2: {__typename?: 'MoneyV2'} & Pick<
+      Types.MoneyV2,
+      'currencyCode' | 'amount'
+    >;
     compareAtPriceV2?: Types.Maybe<
-      {__typename?: 'MoneyV2'} & MoneyFragmentFragment
+      {__typename?: 'MoneyV2'} & Pick<Types.MoneyV2, 'currencyCode' | 'amount'>
     >;
     selectedOptions: Array<
       {__typename?: 'SelectedOption'} & Pick<
@@ -23,7 +31,34 @@ export type VariantFragmentFragment = {__typename?: 'ProductVariant'} & Pick<
     metafields: {__typename?: 'MetafieldConnection'} & {
       edges: Array<
         {__typename?: 'MetafieldEdge'} & {
-          node: {__typename?: 'Metafield'} & MetafieldFragmentFragment;
+          node: {__typename?: 'Metafield'} & Pick<
+            Types.Metafield,
+            | 'id'
+            | 'type'
+            | 'namespace'
+            | 'key'
+            | 'value'
+            | 'createdAt'
+            | 'updatedAt'
+            | 'description'
+          > & {
+              reference?: Types.Maybe<
+                | ({__typename: 'MediaImage'} & Pick<
+                    Types.MediaImage,
+                    'id' | 'mediaContentType'
+                  > & {
+                      image?: Types.Maybe<
+                        {__typename?: 'Image'} & Pick<
+                          Types.Image,
+                          'id' | 'url' | 'altText' | 'width' | 'height'
+                        >
+                      >;
+                    })
+                | {__typename: 'Page'}
+                | {__typename: 'Product'}
+                | {__typename: 'ProductVariant'}
+              >;
+            };
         }
       >;
     };
@@ -33,23 +68,80 @@ export type VariantFragmentFragment = {__typename?: 'ProductVariant'} & Pick<
           node: {__typename?: 'SellingPlanAllocation'} & {
             priceAdjustments: Array<
               {__typename?: 'SellingPlanAllocationPriceAdjustment'} & {
-                compareAtPrice: {
-                  __typename?: 'MoneyV2';
-                } & MoneyFragmentFragment;
-                perDeliveryPrice: {
-                  __typename?: 'MoneyV2';
-                } & MoneyFragmentFragment;
-                price: {__typename?: 'MoneyV2'} & MoneyFragmentFragment;
+                compareAtPrice: {__typename?: 'MoneyV2'} & Pick<
+                  Types.MoneyV2,
+                  'currencyCode' | 'amount'
+                >;
+                perDeliveryPrice: {__typename?: 'MoneyV2'} & Pick<
+                  Types.MoneyV2,
+                  'currencyCode' | 'amount'
+                >;
+                price: {__typename?: 'MoneyV2'} & Pick<
+                  Types.MoneyV2,
+                  'currencyCode' | 'amount'
+                >;
                 unitPrice?: Types.Maybe<
-                  {__typename?: 'MoneyV2'} & MoneyFragmentFragment
+                  {__typename?: 'MoneyV2'} & Pick<
+                    Types.MoneyV2,
+                    'currencyCode' | 'amount'
+                  >
                 >;
               }
             >;
-            sellingPlan: {
-              __typename?: 'SellingPlan';
-            } & SellingPlanFragmentFragment;
+            sellingPlan: {__typename?: 'SellingPlan'} & Pick<
+              Types.SellingPlan,
+              'id' | 'description' | 'name' | 'recurringDeliveries'
+            > & {
+                options: Array<
+                  {__typename?: 'SellingPlanOption'} & Pick<
+                    Types.SellingPlanOption,
+                    'name' | 'value'
+                  >
+                >;
+                priceAdjustments: Array<
+                  {__typename?: 'SellingPlanPriceAdjustment'} & Pick<
+                    Types.SellingPlanPriceAdjustment,
+                    'orderCount'
+                  > & {
+                      adjustmentValue:
+                        | ({
+                            __typename?: 'SellingPlanFixedAmountPriceAdjustment';
+                          } & {
+                            adjustmentAmount: {__typename?: 'MoneyV2'} & Pick<
+                              Types.MoneyV2,
+                              'currencyCode' | 'amount'
+                            >;
+                          })
+                        | ({__typename?: 'SellingPlanFixedPriceAdjustment'} & {
+                            price: {__typename?: 'MoneyV2'} & Pick<
+                              Types.MoneyV2,
+                              'currencyCode' | 'amount'
+                            >;
+                          })
+                        | ({
+                            __typename?: 'SellingPlanPercentagePriceAdjustment';
+                          } & Pick<
+                            Types.SellingPlanPercentagePriceAdjustment,
+                            'adjustmentPercentage'
+                          >);
+                    }
+                >;
+              };
           };
         }
       >;
     };
-  } & UnitPriceFragmentFragment;
+    unitPriceMeasurement?: Types.Maybe<
+      {__typename?: 'UnitPriceMeasurement'} & Pick<
+        Types.UnitPriceMeasurement,
+        | 'measuredType'
+        | 'quantityUnit'
+        | 'quantityValue'
+        | 'referenceUnit'
+        | 'referenceValue'
+      >
+    >;
+    unitPrice?: Types.Maybe<
+      {__typename?: 'MoneyV2'} & Pick<Types.MoneyV2, 'currencyCode' | 'amount'>
+    >;
+  };

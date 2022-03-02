@@ -5,25 +5,16 @@ import React, {
   ElementType,
   useCallback,
 } from 'react';
-import {
-  Model3d as Model3DType,
-  Model3dSource,
-  Image,
-} from '../../graphql/types/types';
 import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
 import {Model3DFragment as Fragment} from '../../graphql/graphql-constants';
 import {Props} from '../types';
+import type {Model3DFragmentFragment} from './Model3D';
 
 export interface ModelViewerProps {
   /** Any ReactNode elements. */
   children?: ReactNode;
   /** An object with the same fields as the [GraphQL fragment](#graphql-fragment). */
-  data: {
-    id?: Model3DType['id'];
-    alt: Model3DType['alt'];
-    previewImage?: Pick<Image, 'url'>;
-    sources: Pick<Model3dSource, 'url'>[];
-  };
+  data: Model3DFragmentFragment;
   /** A string of either `auto`, `lazy`, or `eager` to indicate the conditions for preloading. Refer to [`loading` in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-loading). */
   loading?: 'auto' | 'lazy' | 'eager';
   /** A url to display an image instead of the model, useful for showing the user something before a model is loaded and ready to render. If none is provided, [Model3d.previewImage](https://shopify.dev/api/storefront/reference/products/model3d#previewimage-2021-10) is used. Refer to [`poster` in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-poster). */

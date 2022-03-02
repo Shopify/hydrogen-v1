@@ -1,6 +1,10 @@
+/**
+ * THIS FILE IS AUTO-GENERATED, DO NOT EDIT.
+ * Instead, you can edit the associated .graphql file to query for additional fields and this file will be updated when you run `yarn graphql-types`
+ */
+// @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-import {ImageFragmentFragment} from '../Image/ImageFragment';
 export type MetafieldFragmentFragment = {__typename?: 'Metafield'} & Pick<
   Types.Metafield,
   | 'id'
@@ -17,7 +21,12 @@ export type MetafieldFragmentFragment = {__typename?: 'Metafield'} & Pick<
           Types.MediaImage,
           'id' | 'mediaContentType'
         > & {
-            image?: Types.Maybe<{__typename?: 'Image'} & ImageFragmentFragment>;
+            image?: Types.Maybe<
+              {__typename?: 'Image'} & Pick<
+                Types.Image,
+                'id' | 'url' | 'altText' | 'width' | 'height'
+              >
+            >;
           })
       | {__typename: 'Page'}
       | {__typename: 'Product'}

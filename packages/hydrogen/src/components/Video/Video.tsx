@@ -35,7 +35,10 @@ export function Video<TTag extends React.ElementType = 'video'>(
     ...passthroughProps
   } = props;
 
-  const posterUrl = useImageUrl(data.previewImage?.url, options);
+  const posterUrl = useImageUrl(
+    data.previewImage?.url as string | undefined,
+    options
+  );
 
   return (
     <video
