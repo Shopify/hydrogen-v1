@@ -2,7 +2,7 @@ import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ProductProvider} from '../../ProductProvider';
-import {RawHtml} from '../../RawHtml';
+import {RawHtml} from '../../RawHtml/RawHtml.client';
 import {ProductDescription} from '../ProductDescription.client';
 
 describe('<ProductDescription/>', () => {

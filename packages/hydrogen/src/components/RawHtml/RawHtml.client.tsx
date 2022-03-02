@@ -1,20 +1,20 @@
 import React, {ElementType} from 'react';
 import {Props} from '../types';
+import DOMPurify from 'dompurify';
 
-// TODO: Revisit with Worker runtime
-// import * as DOMPurify from 'isomorphic-dompurify';
-
-// const DOMPURIFY_CONFIG = {
-//   FORBID_ATTR: ['style'],
-// };
+const DOMPURIFY_CONFIG = {
+  FORBID_ATTR: ['style'],
+};
 
 export interface RawHtmlProps<TTag> {
   /** An HTML string. */
   string: string;
-  /** Whether the HTML string should be sanitized with `isomorphic-dompurify`. */
+  /** Whether the HTML string should be sanitized with `DOMPurify`. */
   unsanitized?: boolean;
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: TTag;
+  /** A config object for DOMPurify. Defaults to `{ FORBID_ATTR: ['style'] }` */
+  dompurifyConfig?: any;
 }
 
 /**
@@ -22,21 +22,25 @@ export interface RawHtmlProps<TTag> {
  * displaying rich text-like descriptions associated with a product.
  *
  * The string passed to `RawHtml` is sanitized with
- * [isomorphic-dompurify](https://github.com/kkomelin/isomorphic-dompurify) by default.
+ * [DOMPurify](https://github.com/cure53/DOMPurify) by default.
  * To keep the text unsanitized, set the `unsanitized` prop to `true`.
  */
 export function RawHtml<TTag extends ElementType>(
   props: Props<TTag> & RawHtmlProps<TTag>
 ) {
-  const {string, unsanitized, as, ...passthroughProps} = props;
+  const {string, unsanitized, as, dompurifyConfig, ...passthroughProps} = props;
   const Wrapper = as ?? 'div';
+
   const sanitizedString = React.useMemo(() => {
-    if (unsanitized || true) {
+    if (unsanitized) {
       return string;
     }
 
     // TODO: Re-enable when we find a way to support Worker runtime
-    // return DOMPurify.sanitize(text, DOMPURIFY_CONFIG);
+    return DOMPurify.sanitize(
+      string,
+      dompurifyConfig || DOMPURIFY_CONFIG
+    ).toString();
   }, [string, !!unsanitized]);
 
   return (

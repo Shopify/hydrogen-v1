@@ -98,15 +98,16 @@
     }
   },
   "dependencies": {
+    "@types/dompurify": "^2.3.3",
     "@vitejs/plugin-react": "^1.1.1",
     "abort-controller": "^3.0.0",
     "body-parser": "^1.19.1",
     "connect": "^3.7.0",
+    "dompurify": "^2.3.6",
     "es-module-lexer": "^0.9.0",
     "fast-glob": "^3.2.5",
     "graphql": "^16.0.1",
     "history": "^5.2.0",
-    "isomorphic-dompurify": "^0.13.0",
     "kolorist": "^1.5.1",
     "magic-string": "^0.25.7",
     "node-fetch": "^2.6.7",

@@ -2,7 +2,7 @@ import React, {ElementType} from 'react';
 import {Props} from '../types';
 import {useShop} from '../../foundation';
 import {getMeasurementAsString} from '../../utilities';
-import {RawHtml} from '../RawHtml';
+import {RawHtml} from '../RawHtml/RawHtml.client';
 import {ParsedMetafield, Measurement, Rating} from '../../types';
 import {MetafieldFragment as Fragment} from '../../graphql/graphql-constants';
 import {Image} from '../Image';

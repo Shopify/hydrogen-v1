@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {RawHtml} from '../RawHtml';
+import {RawHtml} from '../RawHtml.client';
 import {Link} from '../../Link/index';
 
 describe('<RawHtml />', () => {

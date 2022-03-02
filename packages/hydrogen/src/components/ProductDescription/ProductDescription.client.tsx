@@ -1,5 +1,5 @@
 import React, {ElementType} from 'react';
-import {RawHtml} from '../RawHtml';
+import {RawHtml} from '../RawHtml/RawHtml.client';
 import {useProduct} from '../ProductProvider';
 import {Props} from '../types';
 

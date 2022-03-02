@@ -3,9 +3,9 @@ import {
   ProductProviderFragment,
   useShopQuery,
   flattenConnection,
-  RawHtml,
   Seo,
 } from '@shopify/hydrogen';
+import {RawHtml} from '@shopify/hydrogen/client';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';

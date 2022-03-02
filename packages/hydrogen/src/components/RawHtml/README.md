@@ -10,7 +10,7 @@ To keep the text unsanitized, set the `unsanitized` prop to `true`.
 ## Example code
 
 ```tsx
-import {RawHtml} from '@shopify/hydrogen';
+import {RawHtml} from '@shopify/hydrogen/client';
 
 export function MyComponent() {
   return <RawHtml string="<p>Hello world</p>" />;
