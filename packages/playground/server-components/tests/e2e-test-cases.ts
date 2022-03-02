@@ -15,6 +15,13 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     await page.goto(getServerUrl());
 
     expect(await page.textContent('h1')).toContain('Home');
+
+    expect(await page.getAttribute('body', 'class')).toEqual('pb-1');
+    expect(await page.getAttribute('body', 'style')).toEqual(null); // Style is ignored
+    expect(await page.getAttribute('body', 'data-my-attr')).toEqual(
+      ' some spaces here '
+    );
+
     await page.click('.btn');
 
     expect(await page.textContent('body')).toContain('About');
