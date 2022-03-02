@@ -15,13 +15,6 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     await page.goto(getServerUrl());
 
     expect(await page.textContent('h1')).toContain('Home');
-    const secretsServer = await page.textContent('.secrets-server');
-    expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');
-    expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
-    const secretsClient = await page.textContent('.secrets-client');
-    expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
-    expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
-
     await page.click('.btn');
 
     expect(await page.textContent('body')).toContain('About');
@@ -44,6 +37,18 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     await page.goto(getServerUrl() + '/redirected');
     expect(await page.url()).toContain('/about');
     expect(await page.textContent('h1')).toContain('About');
+  });
+
+  it('has access to environment variables', async () => {
+    await page.goto(getServerUrl() + '/env');
+    expect(await page.textContent('h1')).toContain('Env');
+
+    const secretsServer = await page.textContent('.secrets-server');
+    expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');
+    expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
+    const secretsClient = await page.textContent('.secrets-client');
+    expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
+    expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
   it('should support API route on a server component for POST methods', async () => {
