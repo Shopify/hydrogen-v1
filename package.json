@@ -15,7 +15,7 @@
     "build": "yarn turbo run build",
     "lint": "run-p lint:js lint:language",
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src",
-    "lint:language": "alex .",
+    "lint:language": "alex {.,.changeset}",
     "format": "prettier --write --ignore-unknown .",
     "format:check": "prettier --check --ignore-unknown .",
     "test": "jest",
