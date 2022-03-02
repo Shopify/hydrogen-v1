@@ -13,11 +13,17 @@ export interface MiniOxygenServerOptions {
   assetsDir: string;
 }
 
-function createAssetMiddleware({assetsDir}: {assetsDir: string}): NextHandleFunction {
+function createAssetMiddleware({
+  assetsDir,
+}: {
+  assetsDir: string;
+}): NextHandleFunction {
   return (req, res, next) => {
-    const filePath = path.join(assetsDir, req.url!);
-  
-    if (req.url !== '/' && fs.existsSync(filePath)) {
+    const url = new URL(req.url || '/', `http://${req.headers.host}`);
+    const pathname = url.pathname.substring(1);
+    const filePath = path.join(assetsDir, pathname);
+
+    if (pathname !== '' && fs.existsSync(filePath)) {
       const rs = fs.createReadStream(filePath);
       const {size} = fs.statSync(filePath);
 
