@@ -274,10 +274,7 @@ async function stream(
       log,
       routes,
     },
-    {
-      template: noScriptTemplate,
-      htmlAttrs: {lang: 'en'},
-    }
+    {template: noScriptTemplate}
   );
 
   const rscToScriptTagReadable = new ReadableStream({
