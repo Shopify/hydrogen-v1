@@ -17,19 +17,20 @@ type RouterContextValue = {
 
 const RouterContext = createContext<RouterContextValue | {}>({});
 
+let isFirstLoad = true;
+
 export const Router: FC<{history?: BrowserHistory}> = ({
   history: pHistory,
   children,
 }) => {
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
-  const [firstLoad, setFirstLoad] = useState(true);
   const [location, setLocation] = useState(history.location);
 
   const {pending, setServerState} = useServerState();
 
   useEffect(() => {
     // The app has just loaded
-    if (firstLoad) setFirstLoad(false);
+    if (isFirstLoad) isFirstLoad = false;
     // A navigation event has just happened
     else if (!pending) {
       window.scrollTo(0, 0);
