@@ -60,7 +60,7 @@ export default () => {
            * at server start to avoid posterior page reloads and issues (#429 #430).
            */
           'react',
-          'react-dom/client',
+          'react-dom',
           'react-server-dom-vite/client-proxy',
         ],
       },
