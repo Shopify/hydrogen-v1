@@ -2,20 +2,22 @@ import * as React from 'react';
 import {Image, MediaImageProps} from '../Image';
 import {Video, VideoProps} from '../Video';
 import {ExternalVideo, ExternalVideoProps} from '../ExternalVideo';
-import {ModelViewer, ModelViewerProps} from '../ModelViewer';
+import {ModelViewer} from '../ModelViewer';
 import {MediaFileFragment as Fragment} from '../../graphql/graphql-constants';
-import {Media as MediaType} from '../../graphql/types/types';
+// import {Media as MediaType} from '../../graphql/types/types';
+import type {
+  MediaFileFragmentFragment,
+  MediaFileFragment_ExternalVideo_Fragment,
+  MediaFileFragment_MediaImage_Fragment,
+  MediaFileFragment_Model3d_Fragment,
+  MediaFileFragment_Video_Fragment,
+} from './MediaFileFragment';
 
-export type Media = Pick<MediaType, 'mediaContentType'>;
-
-type MediaImageMedia = Media & {image: MediaImageProps['data']};
-type ModelViewerMedia = Media & ModelViewerProps['data'];
-type ExternalVideoMedia = Media & ExternalVideoProps['data'];
-type VideoMedia = Media & VideoProps['data'];
+// export type Media = Pick<MediaType, 'mediaContentType'>;
 
 export interface MediaFileProps {
   /** A [Media object](/api/storefront/reference/products/media). */
-  data: MediaImageMedia | ModelViewerMedia | ExternalVideoMedia | VideoMedia;
+  data: MediaFileFragmentFragment;
   /** The options for the `Image`, `Video`, `ExternalVideo`, or `ModelViewer` components. */
   options?: VideoProps['options'] | ExternalVideoProps['options'];
 }
@@ -33,10 +35,17 @@ export function MediaFile({
 }: MediaFileProps) {
   switch (data.mediaContentType) {
     case 'IMAGE': {
+      const dataImage = (data as MediaFileFragment_MediaImage_Fragment).image;
+      if (!dataImage) {
+        console.warn(
+          `No "image" property was found on the "data" prop for <MediaFile/>, for the "type='image'"`
+        );
+        return null;
+      }
       return (
         <Image
           {...passthroughProps}
-          data={(data as MediaImageMedia).image}
+          data={dataImage}
           options={options as MediaImageProps['options']}
         />
       );
@@ -45,7 +54,7 @@ export function MediaFile({
       return (
         <Video
           {...passthroughProps}
-          data={data as VideoMedia}
+          data={data as MediaFileFragment_Video_Fragment}
           options={options as VideoProps['options']}
         />
       );
@@ -53,13 +62,16 @@ export function MediaFile({
       return (
         <ExternalVideo
           {...passthroughProps}
-          data={data as ExternalVideoMedia}
+          data={data as MediaFileFragment_ExternalVideo_Fragment}
           options={options as ExternalVideoProps['options']}
         />
       );
     case 'MODEL_3D':
       return (
-        <ModelViewer {...passthroughProps} data={data as ModelViewerMedia} />
+        <ModelViewer
+          {...passthroughProps}
+          data={data as MediaFileFragment_Model3d_Fragment}
+        />
       );
     default:
       return null;

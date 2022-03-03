@@ -1541,6 +1541,8 @@ export type Collection = HasMetafields &
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** List of products in the collection. */
     products: ProductConnection;
+    /** The collection's SEO information. */
+    seo: Seo;
     /** The collection’s name. Limit of 255 characters. */
     title: Scalars['String'];
     /** The date and time when the collection was last modified. */
@@ -3144,6 +3146,8 @@ export type ExternalVideo = Media &
     __typename?: 'ExternalVideo';
     /** A word or phrase to share the nature or contents of a media. */
     alt?: Maybe<Scalars['String']>;
+    /** The embed URL of the video for the respective host. */
+    embedUrl: Scalars['URL'];
     /**
      * The URL.
      * @deprecated Use `originUrl` instead
@@ -3155,6 +3159,8 @@ export type ExternalVideo = Media &
     id: Scalars['ID'];
     /** The media content type. */
     mediaContentType: MediaContentType;
+    /** The origin URL of the video on the respective host. */
+    originUrl: Scalars['URL'];
     /** The preview image for the media. */
     previewImage?: Maybe<Image>;
   };
@@ -5430,6 +5436,7 @@ export type QueryRoot = {
     | Product
     | ProductOption
     | ProductVariant
+    | Shop
     | ShopPolicy
     | Video
   >;
@@ -5457,6 +5464,7 @@ export type QueryRoot = {
       | Product
       | ProductOption
       | ProductVariant
+      | Shop
       | ShopPolicy
       | Video
     >
@@ -5898,39 +5906,42 @@ export type ShippingRate = {
 };
 
 /** Shop represents a collection of the general settings and information about the shop. */
-export type Shop = HasMetafields & {
-  __typename?: 'Shop';
-  /** A description of the shop. */
-  description?: Maybe<Scalars['String']>;
-  /** Returns a metafield found by namespace and key. */
-  metafield?: Maybe<Metafield>;
-  /**
-   * A paginated list of metafields associated with the resource.
-   * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
-   *
-   */
-  metafields: MetafieldConnection;
-  /** A string representing the way currency is formatted when the currency isn’t specified. */
-  moneyFormat: Scalars['String'];
-  /** The shop’s name. */
-  name: Scalars['String'];
-  /** Settings related to payments. */
-  paymentSettings: PaymentSettings;
-  /** The shop’s primary domain. */
-  primaryDomain: Domain;
-  /** The shop’s privacy policy. */
-  privacyPolicy?: Maybe<ShopPolicy>;
-  /** The shop’s refund policy. */
-  refundPolicy?: Maybe<ShopPolicy>;
-  /** The shop’s shipping policy. */
-  shippingPolicy?: Maybe<ShopPolicy>;
-  /** Countries that the shop ships to. */
-  shipsToCountries: Array<CountryCode>;
-  /** The shop’s subscription policy. */
-  subscriptionPolicy?: Maybe<ShopPolicyWithDefault>;
-  /** The shop’s terms of service. */
-  termsOfService?: Maybe<ShopPolicy>;
-};
+export type Shop = HasMetafields &
+  Node & {
+    __typename?: 'Shop';
+    /** A description of the shop. */
+    description?: Maybe<Scalars['String']>;
+    /** A globally-unique identifier. */
+    id: Scalars['ID'];
+    /** Returns a metafield found by namespace and key. */
+    metafield?: Maybe<Metafield>;
+    /**
+     * A paginated list of metafields associated with the resource.
+     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     *
+     */
+    metafields: MetafieldConnection;
+    /** A string representing the way currency is formatted when the currency isn’t specified. */
+    moneyFormat: Scalars['String'];
+    /** The shop’s name. */
+    name: Scalars['String'];
+    /** Settings related to payments. */
+    paymentSettings: PaymentSettings;
+    /** The shop’s primary domain. */
+    primaryDomain: Domain;
+    /** The shop’s privacy policy. */
+    privacyPolicy?: Maybe<ShopPolicy>;
+    /** The shop’s refund policy. */
+    refundPolicy?: Maybe<ShopPolicy>;
+    /** The shop’s shipping policy. */
+    shippingPolicy?: Maybe<ShopPolicy>;
+    /** Countries that the shop ships to. */
+    shipsToCountries: Array<CountryCode>;
+    /** The shop’s subscription policy. */
+    subscriptionPolicy?: Maybe<ShopPolicyWithDefault>;
+    /** The shop’s terms of service. */
+    termsOfService?: Maybe<ShopPolicy>;
+  };
 
 /** Shop represents a collection of the general settings and information about the shop. */
 export type ShopMetafieldArgs = {

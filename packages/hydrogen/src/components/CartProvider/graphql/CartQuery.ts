@@ -101,7 +101,7 @@ export type CartQueryQuery = {__typename?: 'QueryRoot'} & {
         discountCodes: Array<
           {__typename?: 'CartDiscountCode'} & Pick<
             Types.CartDiscountCode,
-            'code'
+            'code' | 'applicable'
           >
         >;
       }

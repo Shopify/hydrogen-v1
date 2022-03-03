@@ -1,72 +1,22 @@
-export type Title = string;
+import type {SeoFragment} from './SeoFragment';
+import type {Scalars} from '../../graphql/types/types';
 
-export type Description = string;
+export type Title = SeoFragment['title'];
+export type Description = SeoFragment['description'];
 
 export interface Twitter {
   site: string;
-  title: string;
-  description: string;
-}
-
-export interface Image {
-  url: string;
-  width: Number;
-  height: Number;
-  altText?: string;
-}
-
-export interface DefaultPage {
   title: Title;
   description: Description;
-  url: string;
-  titleTemplate?: string;
-  lang?: string;
 }
 
 export interface HomePage {
   title: Title;
-  url: string;
-  description?: Description;
-}
-
-export interface Product {
-  url: string;
-  title: Title;
   description: Description;
-  seo: {
-    title?: Title;
-    description?: Description;
-  };
-  vendor: string;
-  featuredImage?: Image;
-  variants: {
-    edges: {
-      node: {
-        image: {
-          url: Image['url'];
-        };
-        availableForSale: Boolean;
-        priceV2: {amount: Number; currencyCode: string};
-        sku?: string;
-      };
-    }[];
-  };
+  url: Scalars['URL'];
 }
 
-export interface Collection {
-  title: Title;
-  description: Description;
-  seo: {
-    title?: Title;
-    description?: Description;
-  };
-  image?: Image;
-}
-
-export interface Page {
-  title: Title;
-  seo: {
-    title?: Title;
-    description?: Description;
-  };
+export interface DefaultPage extends HomePage {
+  titleTemplate?: string;
+  lang?: string;
 }
