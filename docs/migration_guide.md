@@ -145,7 +145,7 @@ The following aliases have been removed. Use each component's original name:
 - `Product.SelectedVariant.BuyNowButton`: Use [`SelectedVariantBuyNowButton`](https://shopify.dev/api/hydrogen/components/product-variant/selectedvariantbuynowbutton) instead.
 - `Product.SelectedVariant.ShopPayButton`: Use [`SelectedVariantShopPayButton`](https://shopify.dev/api/hydrogen/components/product-variant/selectedvariantshoppaybutton) instead.
 - `Product.SelectedVariant.Price`: Use [`SelectedVariantPrice`](https://shopify.dev/api/hydrogen/components/product-variant/selectedvariantprice) instead.
-- `Product.SelectedVariant.Image` Use [`SelectedVariantImage`](https://shopify.dev/api/hydrogen/components/product-variant/selectedvariantimage) instead.
+- `Product.SelectedVariant.Image` Use [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image) instead.
 - `Product.SelectedVariant.UnitPrice`: Use [`SelectedVariantUnitPrice`](https://shopify.dev/api/hydrogen/components/product-variant/selectedvariantunitprice) instead.
 - `Product.SelectedVariant.Metafield`: Use [`SelectedVariantMetafield`](https://shopify.dev/api/hydrogen/components/product-variant/selectedvariantmetafield) instead.
 - `Cart`: Use [`CartProvider`](https://shopify.dev/api/hydrogen/components/cart/cartprovider) instead.
@@ -167,7 +167,7 @@ The following aliases have been removed. Use each component's original name:
 -   <Product.Image/>
 - </Product>
 + <ProductProvider>
-+  <ProductImage/>
++  <Image data={product.selectedVariant.image} />
 + </ProductProvider>
 ```
 
