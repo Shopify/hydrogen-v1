@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   useShopQuery,
   ProductProviderFragment,
@@ -23,11 +24,13 @@ function NotFoundHero() {
           We couldn’t find the page you’re looking for. Try checking the URL or
           heading back to the home page.
         </p>
-        <Button
-          className="w-full md:mx-auto md:w-96"
-          url="/"
-          label="Take me to the home page"
-        />
+        <Suspense fallback={null}>
+          <Button
+            className="w-full md:mx-auto md:w-96"
+            url="/"
+            label="Take me to the home page"
+          />
+        </Suspense>
       </div>
     </div>
   );
