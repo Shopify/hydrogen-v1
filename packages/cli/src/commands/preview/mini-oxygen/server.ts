@@ -11,7 +11,19 @@ import type {MiniOxygen} from './core';
 
 export interface MiniOxygenServerOptions {
   assetsDir: string;
+  autoReload: boolean;
 }
+
+const SSEUrl = '/events';
+const autoReloadScript = `<script defer type="application/javascript">
+(function () {
+  // MiniOxygen Auto Reload
+  var source = new EventSource('${SSEUrl}');
+  source.addEventListener('open', function(e) { console.log('Auto Reload Enabled') }, false);
+  source.onmessage = function(e) { if (e.data === 'connected') {console.log('Listening for events...');} else if (e.data === 'reload') {location.reload();} };
+})();
+</script>`;
+const autoReloadScriptLength = Buffer.byteLength(autoReloadScript);
 
 function createAssetMiddleware({assetsDir}: {assetsDir: string}): NextHandleFunction {
   return (req, res, next) => {
@@ -31,11 +43,35 @@ function createAssetMiddleware({assetsDir}: {assetsDir: string}): NextHandleFunc
   };
 }
 
-function createRequestMiddleware(mf: MiniOxygen): NextHandleFunction {
+function writeSSE(res: http.ServerResponse, data: string) {
+  const id = (new Date()).toLocaleTimeString();
+  res.write(`id: ${id}` + '\n');
+  res.write(`data: ${data}` + '\n\n');
+}
+
+function createAutoReloadMiddleware(mf: MiniOxygen): NextHandleFunction {
+  return async (req, res) => {
+    if (req.headers.accept && req.headers.accept == 'text/event-stream') {
+      mf.addEventListener('reload', () => writeSSE(res, 'reload'));
+
+      res.writeHead(200, {
+        'Content-Type' : 'text/event-stream',
+        'Cache-Control' : 'no-cache',
+        'Connection' : 'keep-alive'
+      });
+    
+      return writeSSE(res, 'connected');
+    } else {
+      res.writeHead(400).end("Bad Request");
+    }
+  }
+}
+ 
+function createRequestMiddleware(mf: MiniOxygen, autoReload: boolean): NextHandleFunction {
   return async (req, res) => {
     let response;
     let status = 500;
-    let headers = {};
+    const headers: http.OutgoingHttpHeaders = {};
 
     const reqHeaders: Record<string, string> = {};
     for (const key in req.headers) {
@@ -46,6 +82,7 @@ function createRequestMiddleware(mf: MiniOxygen): NextHandleFunction {
         reqHeaders[key] = val;
       }
     }
+
     const request = new Request(urlFromRequest(req), {
       method: req.method,
       headers: reqHeaders,
@@ -54,12 +91,32 @@ function createRequestMiddleware(mf: MiniOxygen): NextHandleFunction {
     try {
       response = await mf.dispatchFetch(request);
       status = response.status;
-      headers = response.headers;
+
+      for (const key in req.headers) {
+        const val = req.headers[key];
+        if (Array.isArray(val)) {
+          headers[key] = val.join(',');
+        } else if (val !== undefined) {
+          headers[key] = val;
+        }
+      }
+      
+      if (autoReload) {
+        const contentLength = response.headers.get('content-length');
+        if (contentLength) {
+          headers['content-length'] = parseInt(contentLength, 10) + autoReloadScriptLength;
+        }
+      }
+
       res.writeHead(status, headers);
 
       if (response.body) {
         for await (const chunk of response.body) {
           if (chunk) res.write(chunk);
+        }
+
+        if (autoReload) {
+          res.write(autoReloadScript);
         }
       }
 
@@ -75,12 +132,16 @@ function createRequestMiddleware(mf: MiniOxygen): NextHandleFunction {
 
 export async function createServer(
   mf: MiniOxygen,
-  {assetsDir}: MiniOxygenServerOptions
+  {assetsDir, autoReload}: MiniOxygenServerOptions
 ) {
   const app = connect();
 
   app.use(createAssetMiddleware({assetsDir}));
-  app.use(createRequestMiddleware(mf));
+  if (autoReload) {
+    app.use(SSEUrl, createAutoReloadMiddleware(mf));
+  }
+
+  app.use(createRequestMiddleware(mf, autoReload));
 
   const server = http.createServer(app);
 

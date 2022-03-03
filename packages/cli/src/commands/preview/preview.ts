@@ -18,7 +18,7 @@ export async function preview(env: Env) {
     buildWatchPaths: ['./src'],
   });
 
-  const app = await mf.createServer({assetsDir});
+  const app = await mf.createServer({assetsDir, autoReload: true});
 
   app.listen(port, () => {
     ui.say(
