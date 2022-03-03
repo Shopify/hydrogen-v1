@@ -7,7 +7,7 @@ import {
   shopifyImageLoader,
   getShopifyImageDimensions,
 } from '../../utilities';
-import {Image as ImageType} from '../../graphql/types/types';
+import type {ImageFragmentFragment} from './ImageFragment';
 
 export interface BaseImageProps {
   /** A custom function that generates the image URL. Parameters passed into this function includes
@@ -24,7 +24,7 @@ export interface MediaImageProps extends BaseImageProps {
   /** An object with the keys `url`, `altText`, `id`, `width` and `height`. Refer to the
    * Storefront API's [`Image` object](/api/storefront/reference/common-objects/image).
    */
-  data: Pick<ImageType, 'altText' | 'url' | 'id' | 'width' | 'height'>;
+  data: ImageFragmentFragment;
   /** An object of image size options for Shopify CDN images. */
   options?: ImageSizeOptions;
 }

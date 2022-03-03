@@ -1,11 +1,10 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 0.11.1
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+### Patch Changes
 
-<!-- ## Unreleased -->
+- [#782](https://github.com/Shopify/hydrogen/pull/782) [`72144ff`](https://github.com/Shopify/hydrogen/commit/72144ffae98054b7165579062f0e8e521ad0d032) Thanks [@michenly](https://github.com/michenly)! - Removes the duplicate bin keys in the hydrogen-cli package.json
 
 ## 0.11.0 - 2022-02-24
 

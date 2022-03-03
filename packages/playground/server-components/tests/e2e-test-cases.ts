@@ -10,17 +10,21 @@ type TestOptions = {
   isBuild?: boolean;
 };
 
-export default async function testCases({getServerUrl, isBuild}: TestOptions) {
+export default async function testCases({
+  getServerUrl,
+  isBuild,
+  isWorker,
+}: TestOptions) {
   it('shows the homepage, navigates to about, and increases the count', async () => {
     await page.goto(getServerUrl());
 
     expect(await page.textContent('h1')).toContain('Home');
-    const secretsServer = await page.textContent('.secrets-server');
-    expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');
-    expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
-    const secretsClient = await page.textContent('.secrets-client');
-    expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
-    expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
+
+    expect(await page.getAttribute('body', 'class')).toEqual('pb-1');
+    expect(await page.getAttribute('body', 'style')).toEqual(null); // Style is ignored
+    expect(await page.getAttribute('body', 'data-my-attr')).toEqual(
+      ' some spaces here '
+    );
 
     await page.click('.btn');
 
@@ -44,6 +48,18 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     await page.goto(getServerUrl() + '/redirected');
     expect(await page.url()).toContain('/about');
     expect(await page.textContent('h1')).toContain('About');
+  });
+
+  it('has access to environment variables', async () => {
+    await page.goto(getServerUrl() + '/env');
+    expect(await page.textContent('h1')).toContain('Env');
+
+    const secretsServer = await page.textContent('.secrets-server');
+    expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');
+    expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
+    const secretsClient = await page.textContent('.secrets-client');
+    expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
+    expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
   it('should support API route on a server component for POST methods', async () => {
@@ -185,6 +201,14 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     expect(json).toEqual({some: 'json'});
   });
 
+  it('should support queryShop in API functions', async () => {
+    const response = await page.request.get(getServerUrl() + '/api-queryshop');
+    const data = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(data).toEqual({data: {shop: {name: 'Snowdevil'}}});
+  });
+
   it.skip('supports form request on API routes', async () => {
     await page.goto(getServerUrl() + '/form');
     await page.type('#fname', 'sometext');
@@ -202,7 +226,7 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
 
   it('streams the SSR response and includes RSC payload', async () => {
     const response = await fetch(getServerUrl() + '/stream');
-    let streamedChunks = [];
+    const streamedChunks = [];
 
     // This fetch response is not standard but a node-fetch polyfill.
     // Therefore, the body is not a ReadableStream but a Node Readable.
@@ -222,7 +246,7 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
 
   it('buffers HTML for bots', async () => {
     const response = await fetch(getServerUrl() + '/stream?_bot');
-    let streamedChunks = [];
+    const streamedChunks = [];
 
     // This fetch response is not standard but a node-fetch polyfill.
     // Therefore, the body is not a ReadableStream but a Node Readable.
@@ -246,7 +270,8 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
         `${RSC_PATHNAME}?state=` +
         encodeURIComponent(JSON.stringify({pathname: '/stream'}))
     );
-    let streamedChunks = [];
+
+    const streamedChunks = [];
 
     // This fetch response is not standard but a node-fetch polyfill.
     // Therefore, the body is not a ReadableStream but a Node Readable.
@@ -266,8 +291,11 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     const response = await fetch(getServerUrl() + '/seo?_bot');
     const body = await response.text();
 
-    expect(body).toContain('<html lang="ja"');
-    expect(body).toContain('<body data-test="true"');
+    expect(body).toContain('<html lang="ja">');
+    // Overwrites "class" and appends "data-test"
+    expect(body).toContain(
+      '<body data-my-attr=" some spaces here " class="pb-2" data-style="color: red" data-test="true">'
+    );
     expect(body).toMatch(
       /<meta\s+.*?property="og:url"\s+content="example.com"\s*\/>/
     );
@@ -277,12 +305,31 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     );
   });
 
-  describe('HMR', () => {
-    it('updates the contents when a client component file changes', async () => {
-      if (isBuild) {
-        return;
-      }
+  it('returns headers in response correctly', async () => {
+    const response = await fetch(getServerUrl() + '/headers');
 
+    expect(response.status).toEqual(201);
+    // statusText cannot be modified in workers
+    expect(response.statusText).toEqual(isWorker ? 'Created' : 'hey');
+
+    expect(response.headers.get('Accept-Encoding')).toBe('deflate, gzip');
+    expect(response.headers.get('Set-Cookie')).toBe(
+      'hello=world, hello2=world2'
+    );
+  });
+
+  it('uses the provided custom body', async () => {
+    const response = await fetch(getServerUrl() + '/custom-body');
+    const body = await response.text();
+
+    expect(response.headers.get('Content-Type')).toEqual('text/plain');
+    expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
+  });
+
+  describe('HMR', () => {
+    if (isBuild) return;
+
+    it('updates the contents when a client component file changes', async () => {
       const fullPath = resolve(
         __dirname,
         '../',
@@ -301,11 +348,7 @@ export default async function testCases({getServerUrl, isBuild}: TestOptions) {
     });
 
     it('updates the contents when a server component file changes', async () => {
-      if (isBuild) {
-        return;
-      }
-
-      const fullPath = resolve(__dirname, '../', 'src/pages/index.server.jsx');
+      const fullPath = resolve(__dirname, '../', 'src/routes/index.server.jsx');
       const newheading = 'Snow Devil';
 
       await page.goto(getServerUrl());

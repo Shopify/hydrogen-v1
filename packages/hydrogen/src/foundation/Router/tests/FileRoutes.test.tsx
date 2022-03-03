@@ -1,15 +1,14 @@
-import {createRoutesFromPages} from '../DefaultRoutes';
 import {ImportGlobEagerOutput} from '../../../types';
-import {Logger} from '../../..';
+import {createPageRoutes} from '../FileRoutes';
 
 const STUB_MODULE = {default: {}, api: null};
 
 it('converts normal pages to routes', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.jsx': STUB_MODULE,
+    './routes/contact.server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
 
   expect(routes).toEqual([
     {
@@ -22,11 +21,11 @@ it('converts normal pages to routes', () => {
 
 it('handles index pages', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.jsx': STUB_MODULE,
-    './pages/index.server.jsx': STUB_MODULE,
+    './routes/contact.server.jsx': STUB_MODULE,
+    './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
 
   expect(routes).toEqual([
     {
@@ -44,15 +43,15 @@ it('handles index pages', () => {
 
 it('handles nested index pages', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/products/index.server.jsx': STUB_MODULE,
-    './pages/products/[handle].server.jsx': STUB_MODULE,
-    './pages/blogs/index.server.jsx': STUB_MODULE,
-    './pages/products/snowboards/fastones/index.server.jsx': STUB_MODULE,
-    './pages/articles/index.server.jsx': STUB_MODULE,
-    './pages/articles/[...handle].server.jsx': STUB_MODULE,
+    './routes/products/index.server.jsx': STUB_MODULE,
+    './routes/products/[handle].server.jsx': STUB_MODULE,
+    './routes/blogs/index.server.jsx': STUB_MODULE,
+    './routes/products/snowboards/fastones/index.server.jsx': STUB_MODULE,
+    './routes/articles/index.server.jsx': STUB_MODULE,
+    './routes/articles/[...handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
 
   expect(routes).toEqual([
     {
@@ -90,12 +89,12 @@ it('handles nested index pages', () => {
 
 it('handles dynamic paths', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.jsx': STUB_MODULE,
-    './pages/index.server.jsx': STUB_MODULE,
-    './pages/products/[handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.jsx': STUB_MODULE,
+    './routes/index.server.jsx': STUB_MODULE,
+    './routes/products/[handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
   expect(routes).toEqual([
     {
       path: '/contact',
@@ -117,12 +116,12 @@ it('handles dynamic paths', () => {
 
 it('handles catch all routes', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.jsx': STUB_MODULE,
-    './pages/index.server.jsx': STUB_MODULE,
-    './pages/products/[...handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.jsx': STUB_MODULE,
+    './routes/index.server.jsx': STUB_MODULE,
+    './routes/products/[...handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
   expect(routes).toEqual([
     {
       path: '/contact',
@@ -144,14 +143,14 @@ it('handles catch all routes', () => {
 
 it('handles nested dynamic paths', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.jsx': STUB_MODULE,
-    './pages/index.server.jsx': STUB_MODULE,
-    './pages/products/[handle].server.jsx': STUB_MODULE,
-    './pages/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
-    './pages/blogs/[handle]/[...articleHandle].server.jsx': STUB_MODULE,
+    './routes/contact.server.jsx': STUB_MODULE,
+    './routes/index.server.jsx': STUB_MODULE,
+    './routes/products/[handle].server.jsx': STUB_MODULE,
+    './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
+    './routes/blogs/[handle]/[...articleHandle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
 
   expect(routes).toEqual([
     {
@@ -184,15 +183,15 @@ it('handles nested dynamic paths', () => {
 
 it('prioritizes overrides next to dynamic paths', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.jsx': STUB_MODULE,
-    './pages/index.server.jsx': STUB_MODULE,
-    './pages/products/[handle].server.jsx': STUB_MODULE,
+    './routes/contact.server.jsx': STUB_MODULE,
+    './routes/index.server.jsx': STUB_MODULE,
+    './routes/products/[handle].server.jsx': STUB_MODULE,
     // Alphabetically, `hoodie` will likely come after `[handle]`
-    './pages/products/hoodie.server.jsx': STUB_MODULE,
-    './pages/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
+    './routes/products/hoodie.server.jsx': STUB_MODULE,
+    './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
 
   expect(routes).toEqual([
     {
@@ -226,11 +225,11 @@ it('prioritizes overrides next to dynamic paths', () => {
 
 it('handles typescript paths', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.tsx': STUB_MODULE,
-    './pages/index.server.jsx': STUB_MODULE,
+    './routes/contact.server.tsx': STUB_MODULE,
+    './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
 
   expect(routes).toEqual([
     {
@@ -248,11 +247,11 @@ it('handles typescript paths', () => {
 
 it('lowercases routes', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/Contact.server.jsx': STUB_MODULE,
-    './pages/index.server.jsx': STUB_MODULE,
+    './routes/Contact.server.jsx': STUB_MODULE,
+    './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages);
+  const routes = createPageRoutes(pages);
 
   expect(routes).toEqual([
     {
@@ -270,11 +269,11 @@ it('lowercases routes', () => {
 
 it('factors in the top-level path prefix', () => {
   const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.jsx': STUB_MODULE,
-    './pages/index.server.jsx': STUB_MODULE,
+    './routes/contact.server.jsx': STUB_MODULE,
+    './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = createRoutesFromPages(pages, '/foo/*');
+  const routes = createPageRoutes(pages, '/foo/*');
 
   expect(routes).toEqual([
     {
@@ -288,22 +287,4 @@ it('factors in the top-level path prefix', () => {
       exact: true,
     },
   ]);
-});
-
-it("errors routes don't have a default or api export", () => {
-  const log: Logger = {
-    ...console,
-    fatal: jest.fn(),
-    warn: jest.fn(),
-    options: jest.fn(),
-  };
-  const pages: ImportGlobEagerOutput = {
-    './pages/contact.server.jsx': {} as any,
-  };
-
-  createRoutesFromPages(pages, '*', log);
-
-  expect(log.warn).toBeCalledWith(
-    `./pages/contact.server.jsx doesn't export a default React component or an API function`
-  );
 });

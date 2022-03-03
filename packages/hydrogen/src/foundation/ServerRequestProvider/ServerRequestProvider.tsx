@@ -159,7 +159,19 @@ export function preloadRequestCacheData(
                 getTime() - startApiTime
               );
             },
-            (e) => (data = {error: e})
+            (e) => {
+              // The preload query failed for some reason:
+              // On Cloudfare, this happens when a Cache item has expired at max-age
+              //
+              // We need to remove this entry from cache so that render cycle will retry on its own
+              cache.delete(cacheKey);
+              collectQueryTimings(
+                request,
+                preloadQuery.key,
+                'expired',
+                getTime() - startApiTime
+              );
+            }
           );
         }
         return promise;

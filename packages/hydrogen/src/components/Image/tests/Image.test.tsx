@@ -13,7 +13,7 @@ describe('<Image />', () => {
       const component = mount(<Image data={image} />);
 
       expect(component).toContainReactComponent('img', {
-        src,
+        src: src,
         alt: altText,
         id,
         width,
@@ -168,7 +168,7 @@ describe('<Image />', () => {
       );
 
       expect(component).toContainReactComponent('img', {
-        src,
+        src: src,
         alt: altText,
         id: id,
         width: width,

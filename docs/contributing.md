@@ -90,12 +90,36 @@ If you are building or making changes to a component, be sure to read [What are 
 
 ## GraphQL Types
 
+### Updating the auto-generated Typescript types, or updating the `.graphql` files
+
 If you make changes to or add any new `.graphql` files within Hydrogen, you will need to run the following commands in order to generate the type definitions and Graphql documents for the newly added/updated files:
 
 ```bash
-cd packages/hydrogen
 yarn graphql-types
 ```
+
+The Typescript types are then automatically generated from the `.graphql` query in those files.
+
+### Creating Typescript types for Storefront API objects without a `.graphql` file
+
+If you would like to use a type for a Storefront API object without using a GraphQL query / fragment to generate it, you can directly import the Typescript type from `/packages/src/graphql/types/types.ts` which will match the full shape of the object from the Storefront API. From there, you can use things like Typescript's `Pick` or `Omit` helpers to create the shape you need.
+
+### Updating GraphQL and Typescript types to a new Storefront API version
+
+We use `graphql-codegen` to automatically generate types for all of the Storefront API objects for a given version, and that version can be found in the `codegen.yml` file.
+
+In order to update the supported Storefront API version:
+
+1. Update the URL in `codegen.yml`
+1. Run `yarn graphql-types`
+1. Fix any Typescript errors that now appear (one fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up, another way is to run the tests with `yarn test`)
+
+For context, updating the `codegen.yml` file and running the script does the following:
+
+1. Automatically hits the Storefront API, and use an introspection query to get the latest info
+1. Uses the results of that query to generate a new `graphql.schema.json` (which is a local representation of the Storefront API)
+1. Generates / updates the new types in `/packages/src/graphql/types/types.ts` based on the `graphql.schema.json`
+1. Generates / updates the types in each `[Name]Fragment.ts` file
 
 ## Running a local version of Hydrogen in a Hydrogen app
 
@@ -205,13 +229,16 @@ Next, visit the Shipit page for Hydrogen and click **Deploy** on the merge commi
 
 Releasing an experimental version of Hydrogen to GitHub can be useful if you want to test the new version in existing apps.
 
-To release an experimental version, merge your changes into the `experimental` branch.
+To release an experimental version:
 
-Then, run `yarn changeset pre enter experimental` locally while in the branch. This will modify changesets' files to begin tracking changesets as an experimental release.
+- Merge your changes into the `experimental` branch.
+- Run `yarn changeset pre enter experimental` locally while in the branch. This will modify changesets' files to begin tracking changesets as an experimental release.
+- Change `.changeset/config.json` to `"changelog": "@changesets/cli/changelog"`in order to run the next command locally.
+- Run`yarn changeset version` when you are ready to release an experimental version to NPM.
+- Commit these changes, and push them to your remote `experimental` branch.
+- Go to Shipit and find "Hydrogen Experimental." Run a deploy against the commit containing your new version.
 
-When you are ready to release an experimental version to NPM, run `yarn changeset version`. Commit these changes, and push them to your remote `experimental` branch.
-
-After running the script, go to Shipit and find "Hydrogen Experimental." Run a deploy against the commit containing your new version, and this should release your experimental version on NPM with the `experimental` tag.
+This should release your experimental version on NPM with the `experimental` tag.
 
 ## Testing changes in another project
 

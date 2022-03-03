@@ -5,8 +5,8 @@ import {Props} from '../types';
 import {MetafieldProps} from '../Metafield/Metafield.client';
 import {flattenConnection} from '../../utilities';
 
-export interface ProductMetafieldProps
-  extends Omit<MetafieldProps, 'metafield'> {
+export interface ProductMetafieldProps<TTag>
+  extends Omit<MetafieldProps<TTag>, 'metafield'> {
   /** A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's
    * metafield.
    */
@@ -25,7 +25,7 @@ export interface ProductMetafieldProps
  * It must be a descendent of a `ProductProvider` component.
  */
 export function ProductMetafield<TTag extends ElementType>(
-  props: Props<TTag> & Omit<ProductMetafieldProps, 'data'>
+  props: Props<TTag> & Omit<ProductMetafieldProps<TTag>, 'data'>
 ) {
   const product = useProduct();
 

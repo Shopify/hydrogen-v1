@@ -5,7 +5,8 @@ import {useProduct} from '../ProductProvider';
 import {Props} from '../types';
 import {UnitPrice} from '../UnitPrice';
 
-export interface ProductPriceProps extends Omit<MoneyProps, 'data'> {
+export interface ProductPriceProps<TTag>
+  extends Omit<MoneyProps<TTag>, 'data'> {
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
   /** The type of value. Valid values: `min` (default), `max` or `unit`. */
@@ -19,7 +20,7 @@ export interface ProductPriceProps extends Omit<MoneyProps, 'data'> {
  * [`priceRange`](/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
  */
 export function ProductPrice<TTag extends ElementType>(
-  props: Props<TTag> & ProductPriceProps
+  props: Props<TTag> & ProductPriceProps<TTag>
 ) {
   const product = useProduct();
   const {

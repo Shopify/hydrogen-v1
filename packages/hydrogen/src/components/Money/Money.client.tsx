@@ -1,14 +1,14 @@
 import React, {ElementType} from 'react';
 import {useMoney} from '../../hooks';
 import {Props} from '../types';
-import {MoneyV2} from '../../graphql/types/types';
+import type {MoneyFragmentFragment} from './MoneyFragment';
 import {MoneyFragment as Fragment} from '../../graphql/graphql-constants';
 
-export interface MoneyProps {
+export interface MoneyProps<TTag> {
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
-  as?: ElementType;
+  as?: TTag;
   /** A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2). */
-  data: MoneyV2;
+  data: MoneyFragmentFragment;
 }
 
 /**
@@ -17,7 +17,7 @@ export interface MoneyProps {
  * `defaultLocale` in the `shopify.config.js` file.
  */
 export function Money<TTag extends ElementType>(
-  props: Props<TTag> & MoneyProps
+  props: Props<TTag> & MoneyProps<TTag>
 ) {
   const {data, as, ...passthroughProps} = props;
   const moneyObject = useMoney(data);

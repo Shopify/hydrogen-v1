@@ -26,7 +26,7 @@ describe('<CartLinePrice />', () => {
     );
 
     expect(wrapper).toContainReactComponent(Money, {
-      data: {amount: 50, currencyCode: CurrencyCode.Usd},
+      data: {amount: '50', currencyCode: CurrencyCode.Usd},
     });
   });
 
@@ -49,7 +49,7 @@ describe('<CartLinePrice />', () => {
     );
 
     expect(wrapper).toContainReactComponent(Money, {
-      data: {amount: 60, currencyCode: CurrencyCode.Usd},
+      data: {amount: '60', currencyCode: CurrencyCode.Usd},
     });
   });
 
@@ -73,7 +73,7 @@ describe('<CartLinePrice />', () => {
     );
 
     expect(wrapper).toContainReactComponent(Money, {
-      data: {amount: 100, currencyCode: CurrencyCode.Usd},
+      data: {amount: '100', currencyCode: CurrencyCode.Usd},
     });
   });
 

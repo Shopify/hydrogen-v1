@@ -1,6 +1,6 @@
 {
   "name": "@shopify/hydrogen-cli",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Command line interface for hydrogen",
   "license": "MIT",
   "engines": {
@@ -13,9 +13,7 @@
   "main": "./dist/index.js",
   "bin": {
     "hydrogen": "./bin/hydrogen",
-    "h2": "./bin/hydrogen",
-    "create-hydrogen": "./bin/create-hydrogen",
-    "create-hydrogen-app": "./bin/create-hydrogen"
+    "h2": "./bin/hydrogen"
   },
   "scripts": {
     "test": "jest",

@@ -12,11 +12,22 @@ declare global {
 const URL =
   'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
 
-export function Boomerang() {
+export function Boomerang({pageTemplate}: {pageTemplate: string | null}) {
   const {storeDomain} = useShop();
+  const templateName =
+    pageTemplate !== null ? pageTemplate.toLowerCase() : 'not-set';
 
   useEffect(() => {
     (function () {
+      function boomerangAddVar() {
+        if (window.BOOMR && window.BOOMR.addVar) {
+          window.BOOMR.addVar('page_template', templateName);
+        }
+      }
+
+      // Executes on every mount
+      boomerangAddVar();
+
       if (
         window.BOOMR &&
         (window.BOOMR.version || window.BOOMR.snippetExecuted)
@@ -24,8 +35,10 @@ export function Boomerang() {
         return;
       }
 
+      // Executes only on first mount
       window.BOOMR = window.BOOMR || {};
       window.BOOMR.storeDomain = storeDomain;
+      window.BOOMR.pageTemplate = templateName;
 
       function boomerangSaveLoadTime(e: Event) {
         window.BOOMR_onload = (e && e.timeStamp) || Date.now();
@@ -37,6 +50,7 @@ export function Boomerang() {
           producer_url: 'https://monorail-edge.shopifysvc.com/v1/produce',
         });
         e.detail.BOOMR.t_end = Date.now();
+        boomerangAddVar();
       }
 
       if (window.addEventListener) {
@@ -58,7 +72,7 @@ export function Boomerang() {
       }
     })();
     loadScript(URL);
-  }, [storeDomain]);
+  }, [storeDomain, pageTemplate]);
 
   return null;
 }

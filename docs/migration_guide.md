@@ -2,7 +2,7 @@
 
 This file is a living document that gathers required changes to user applications for every release. These changes must be applied incrementally: when upgrading from version A to C, changes for version B must also be considered unless stated otherwise. If a version is missing from this guide, it should be safe to upgrade without changing the app code.
 
-<!-- ## Unreleased -->
+<!-- DO NOT update this file. Instead, include migration steps in your Changeset -->
 
 ## 0.11.0 - 2022-02-24
 

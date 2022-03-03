@@ -1,5 +1,11 @@
-import React, {Suspense, useState} from 'react';
-// @ts-ignore
+import React, {
+  Suspense,
+  useState,
+  StrictMode,
+  Fragment,
+  type ElementType,
+} from 'react';
+// @ts-expect-error hydrateRoot isn't on the TS types yet, but we're using React 18 so it exists
 import {hydrateRoot} from 'react-dom/client';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
@@ -7,7 +13,7 @@ import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerStateProvider} from './client';
 import {Router} from './foundation/Router/Router.client';
 
-const renderHydrogen: ClientHandler = async (ClientWrapper) => {
+const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
 
   if (!root) {
@@ -17,20 +23,28 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     return;
   }
 
+  // default to StrictMode on, unless explicitly turned off
+  const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
+
   hydrateRoot(
     root,
-    <ErrorBoundary FallbackComponent={Error}>
-      <Suspense fallback={null}>
-        <Content clientWrapper={ClientWrapper} />
-      </Suspense>
-    </ErrorBoundary>
+    <RootComponent>
+      <ErrorBoundary FallbackComponent={Error}>
+        <Suspense fallback={null}>
+          <Content clientWrapper={ClientWrapper} />
+        </Suspense>
+      </ErrorBoundary>
+    </RootComponent>
   );
 };
 
 export default renderHydrogen;
 
 function Content({
-  clientWrapper: ClientWrapper = ({children}: any) => children,
+  clientWrapper: ClientWrapper = ({children}: {children: JSX.Element}) =>
+    children,
+}: {
+  clientWrapper: ElementType;
 }) {
   const [serverState, setServerState] = useState({
     pathname: window.location.pathname,

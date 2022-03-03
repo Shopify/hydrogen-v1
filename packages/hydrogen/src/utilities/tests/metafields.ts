@@ -54,13 +54,13 @@ export function getRawMetafield(
 
   return {
     __typename: 'Metafield',
-    createdAt: metafield.createdAt ?? faker.date.recent(),
+    createdAt: metafield.createdAt ?? faker.date.recent().toString(),
     description: metafield.description ?? faker.random.words(),
     id: metafield.id ?? faker.random.words(),
     key: metafield.key ?? `${faker.random.word()}.${faker.random.word()}`,
     namespace: metafield.namespace ?? faker.random.word(),
     type,
-    updatedAt: metafield.updatedAt ?? faker.date.recent(),
+    updatedAt: metafield.updatedAt ?? faker.date.recent().toString(),
     value: metafield.value ?? getMetafieldValue(type),
     reference: metafield.reference,
   };
