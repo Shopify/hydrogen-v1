@@ -61,233 +61,80 @@ describe('AddToCartButton', () => {
       });
     });
 
-    describe('and a Cart Id is present', () => {
-      it('calls linesAdd with the variantId', () => {
-        const mockLinesAdd = jest.fn();
-        const id = '123';
-        const component = mountWithCartProvider(
-          <AddToCartButton variantId={id}>Add to cart</AddToCartButton>,
-          {linesAdd: mockLinesAdd, cart: {id: '456'}}
-        );
-        component.find('button')?.trigger('onClick');
+    it('calls linesAdd with the variantId', () => {
+      const mockLinesAdd = jest.fn();
+      const id = '123';
+      const component = mountWithCartProvider(
+        <AddToCartButton variantId={id}>Add to cart</AddToCartButton>,
+        {linesAdd: mockLinesAdd, cart: {id: '456'}}
+      );
+      component.find('button')?.trigger('onClick');
 
-        expect(mockLinesAdd).toHaveBeenCalledTimes(1);
-        expect(mockLinesAdd).toHaveBeenCalledWith([
-          expect.objectContaining({
-            merchandiseId: id,
-          }),
-        ]);
-      });
-    });
-
-    describe('and a Cart Id is not present', () => {
-      it('calls createCart with the variantId', () => {
-        const mockCreateCart = jest.fn();
-        const id = '123';
-        const component = mountWithCartProvider(
-          <AddToCartButton variantId={id}>Add to cart</AddToCartButton>,
-          {cartCreate: mockCreateCart}
-        );
-        component.find('button')?.trigger('onClick');
-
-        expect(mockCreateCart).toHaveBeenCalledTimes(1);
-        expect(mockCreateCart).toHaveBeenCalledWith({
-          lines: [
-            expect.objectContaining({
-              merchandiseId: id,
-            }),
-          ],
-        });
-      });
+      expect(mockLinesAdd).toHaveBeenCalledTimes(1);
+      expect(mockLinesAdd).toHaveBeenCalledWith([
+        expect.objectContaining({
+          merchandiseId: id,
+        }),
+      ]);
     });
   });
 
   describe('when inside a ProductProvider', () => {
     describe('and an initialVariantId is present', () => {
-      describe('and a Cart ID is present', () => {
-        it('calls linesAdd with the initialVariantId', () => {
-          const mockLinesAdd = jest.fn();
-          const product = getProduct();
-          const selectedVariant = product.variants.edges[0].node;
+      it('calls linesAdd with the initialVariantId', () => {
+        const mockLinesAdd = jest.fn();
+        const product = getProduct();
+        const selectedVariant = product.variants.edges[0].node;
 
-          const component = mountWithCartProvider(
-            <ProductProvider
-              data={product}
-              initialVariantId={selectedVariant.id}
-            >
-              <AddToCartButton>Add to cart</AddToCartButton>
-            </ProductProvider>,
-            {linesAdd: mockLinesAdd, cart: {id: '456'}}
-          );
+        const component = mountWithCartProvider(
+          <ProductProvider data={product} initialVariantId={selectedVariant.id}>
+            <AddToCartButton>Add to cart</AddToCartButton>
+          </ProductProvider>,
+          {linesAdd: mockLinesAdd, cart: {id: '456'}}
+        );
 
-          component.find('button')?.trigger('onClick');
+        component.find('button')?.trigger('onClick');
 
-          expect(mockLinesAdd).toHaveBeenCalledTimes(1);
-          expect(mockLinesAdd).toHaveBeenCalledWith([
-            expect.objectContaining({
-              merchandiseId: selectedVariant.id,
-            }),
-          ]);
-        });
-      });
-
-      describe('and a Cart Id is not present', () => {
-        it('calls createCart with the initialVariantId', () => {
-          const mockCreateCart = jest.fn();
-          const product = getProduct();
-          const selectedVariant = product.variants.edges[0].node;
-
-          const component = mountWithCartProvider(
-            <ProductProvider
-              data={product}
-              initialVariantId={selectedVariant.id}
-            >
-              <AddToCartButton>Add to cart</AddToCartButton>
-            </ProductProvider>,
-            {cartCreate: mockCreateCart}
-          );
-
-          component.find('button')?.trigger('onClick');
-
-          expect(mockCreateCart).toHaveBeenCalledTimes(1);
-          expect(mockCreateCart).toHaveBeenCalledWith({
-            lines: [
-              expect.objectContaining({
-                merchandiseId: selectedVariant.id,
-              }),
-            ],
-          });
-        });
+        expect(mockLinesAdd).toHaveBeenCalledTimes(1);
+        expect(mockLinesAdd).toHaveBeenCalledWith([
+          expect.objectContaining({
+            merchandiseId: selectedVariant.id,
+          }),
+        ]);
       });
     });
 
     describe('and the initialVariantId is omitted', () => {
-      describe('and a Cart Id is present', () => {
-        it('calls linesAdd with the first available variant', () => {
-          const mockLinesAdd = jest.fn();
-          const product = getProduct({
-            variants: {
-              edges: [
-                {
-                  node: getVariant({
-                    availableForSale: true,
-                    id: 'some variant id',
-                  }) as any,
-                },
-              ],
-            },
-          });
-
-          const component = mountWithCartProvider(
-            <ProductProvider data={product}>
-              <AddToCartButton>Add to cart</AddToCartButton>
-            </ProductProvider>,
-            {linesAdd: mockLinesAdd, cart: {id: '456'}}
-          );
-
-          component.find('button')?.trigger('onClick');
-
-          expect(mockLinesAdd).toHaveBeenCalledTimes(1);
-          expect(mockLinesAdd).toHaveBeenCalledWith([
-            expect.objectContaining({
-              merchandiseId: 'some variant id',
-            }),
-          ]);
-        });
-      });
-
-      describe('and a Cart ID is not present', () => {
-        it('calls createCart with the first available variant', () => {
-          const mockCreateCart = jest.fn();
-          const product = getProduct({
-            variants: {
-              edges: [
-                {
-                  node: getVariant({
-                    availableForSale: false,
-                    id: 'some-unavailable-variant-id',
-                  }) as any,
-                },
-                {
-                  node: getVariant({
-                    availableForSale: true,
-                    id: 'an-available-variant-id',
-                  }) as any,
-                },
-                {
-                  node: getVariant({
-                    availableForSale: false,
-                    id: 'another-unavailable-variant-id',
-                  }) as any,
-                },
-                {
-                  node: getVariant({
-                    availableForSale: true,
-                    id: 'another-available-variant-id',
-                  }) as any,
-                },
-              ],
-            },
-          });
-
-          const component = mountWithCartProvider(
-            <ProductProvider data={product}>
-              <AddToCartButton>Add to cart</AddToCartButton>
-            </ProductProvider>,
-            {cartCreate: mockCreateCart}
-          );
-
-          component.find('button')?.trigger('onClick');
-
-          expect(mockCreateCart).toHaveBeenCalledTimes(1);
-          expect(mockCreateCart).toHaveBeenCalledWith({
-            lines: [
-              expect.objectContaining({
-                merchandiseId: 'an-available-variant-id',
-              }),
+      it('calls linesAdd with the first available variant', () => {
+        const mockLinesAdd = jest.fn();
+        const product = getProduct({
+          variants: {
+            edges: [
+              {
+                node: getVariant({
+                  availableForSale: true,
+                  id: 'some variant id',
+                }) as any,
+              },
             ],
-          });
+          },
         });
 
-        it('calls createCart with the first variant when non are available', () => {
-          const mockCreateCart = jest.fn();
-          const product = getProduct({
-            variants: {
-              edges: [
-                {
-                  node: getVariant({
-                    availableForSale: false,
-                    id: 'some-unavailable-variant-id',
-                  }) as any,
-                },
-                {
-                  node: getVariant({
-                    availableForSale: false,
-                    id: 'another-unavailable-variant-id',
-                  }) as any,
-                },
-              ],
-            },
-          });
+        const component = mountWithCartProvider(
+          <ProductProvider data={product}>
+            <AddToCartButton>Add to cart</AddToCartButton>
+          </ProductProvider>,
+          {linesAdd: mockLinesAdd, cart: {id: '456'}}
+        );
 
-          const component = mountWithCartProvider(
-            <ProductProvider data={product}>
-              <AddToCartButton>Add to cart</AddToCartButton>
-            </ProductProvider>,
-            {cartCreate: mockCreateCart, cart: null}
-          );
+        component.find('button')?.trigger('onClick');
 
-          component.find('button')?.trigger('onClick');
-
-          expect(mockCreateCart).toHaveBeenCalledTimes(1);
-          expect(mockCreateCart).toHaveBeenCalledWith({
-            lines: [
-              expect.objectContaining({
-                merchandiseId: 'some-unavailable-variant-id',
-              }),
-            ],
-          });
-        });
+        expect(mockLinesAdd).toHaveBeenCalledTimes(1);
+        expect(mockLinesAdd).toHaveBeenCalledWith([
+          expect.objectContaining({
+            merchandiseId: 'some variant id',
+          }),
+        ]);
       });
     });
 

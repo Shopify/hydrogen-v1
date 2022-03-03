@@ -38,7 +38,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
     accessibleAddingToCartLabel,
     ...passthroughProps
   } = props;
-  const {status, id, cartCreate, linesAdd} = useCart();
+  const {status, linesAdd} = useCart();
   const product = useProduct();
   const variantId = explicitVariantId ?? product?.selectedVariant?.id ?? '';
   const disabled =
@@ -61,25 +61,13 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
         disabled={disabled}
         onClick={() => {
           setAddingItem(true);
-          if (!id) {
-            cartCreate({
-              lines: [
-                {
-                  quantity: quantity,
-                  merchandiseId: variantId,
-                  attributes: attributes,
-                },
-              ],
-            });
-          } else {
-            linesAdd([
-              {
-                quantity: quantity,
-                merchandiseId: variantId,
-                attributes: attributes,
-              },
-            ]);
-          }
+          linesAdd([
+            {
+              quantity: quantity,
+              merchandiseId: variantId,
+              attributes: attributes,
+            },
+          ]);
         }}
       >
         {children}
