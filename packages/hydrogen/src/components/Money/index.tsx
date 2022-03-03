@@ -1,1 +1,1 @@
-export {Money, MoneyProps, MoneyFragment} from './Money.client';
+export {Money, MoneyFragment} from './Money.client';

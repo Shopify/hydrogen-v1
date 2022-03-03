@@ -1,15 +1,14 @@
-import React, {ElementType} from 'react';
+import React from 'react';
 import {RawHtml} from '../RawHtml';
 import {useProduct} from '../ProductProvider';
-import {Props} from '../types';
 
 /**
  * The `ProductDescription` component renders a `RawHtml` component with
  * the product's [`descriptionHtml`](/api/storefront/reference/products/product).
  * It must be a descendent of the `ProductProvider` component.
  */
-export function ProductDescription<TTag extends ElementType = 'div'>(
-  props: Props<TTag>
+export function ProductDescription(
+  props: Omit<React.ComponentProps<typeof RawHtml>, 'string'>
 ) {
   const product = useProduct();
 

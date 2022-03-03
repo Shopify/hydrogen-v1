@@ -10,7 +10,7 @@ import {Model3DFragment as Fragment} from '../../graphql/graphql-constants';
 import {Props} from '../types';
 import type {Model3DFragmentFragment} from './Model3D';
 
-export interface ModelViewerProps {
+interface ModelViewerProps {
   /** Any ReactNode elements. */
   children?: ReactNode;
   /** An object with the same fields as the [GraphQL fragment](#graphql-fragment). */
