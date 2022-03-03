@@ -1,6 +1,6 @@
 import React, {Suspense, useState} from 'react';
 // @ts-ignore
-import {hydrateRoot} from 'react-dom';
+import {hydrateRoot} from 'react-dom/client';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
