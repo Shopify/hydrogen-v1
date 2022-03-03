@@ -15,7 +15,7 @@ import type {
   ImportGlobEagerOutput,
   ServerHandlerConfig,
 } from './types';
-import {Html} from './framework/Hydration/Html';
+import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
@@ -32,7 +32,6 @@ import {
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
-import type {HelmetData as HeadData} from 'react-helmet-async';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
 import {
@@ -217,23 +216,15 @@ async function render(
   }
 
   headers['Content-type'] = HTML_CONTENT_TYPE;
-  const {bodyAttributes, htmlAttributes, ...head} = extractHeadElements(
-    request.ctx.head
-  );
 
-  html = html
-    .replace(
-      /<head>(.*?)<\/head>/s,
-      generateHeadTag(head as Record<string, any>)
-    )
-    .replace('<html', htmlAttributes ? `<html ${htmlAttributes}` : '$&')
-    .replace('<body', bodyAttributes ? `<body ${bodyAttributes}` : '$&')
-    .replace(
+  html = applyHtmlHead(html, request.ctx.head, template);
+
+  if (flight) {
+    html = html.replace(
       '</body>',
-      flight
-        ? `${flightContainer({init: true, nonce, chunk: flight})}</body>`
-        : '$&'
+      `${flightContainer({init: true, nonce, chunk: flight})}</body>`
     );
+  }
 
   postRequestTasks('ssr', status, request, componentResponse);
 
@@ -277,10 +268,7 @@ async function stream(
       log,
       routes,
     },
-    {
-      template: noScriptTemplate,
-      htmlAttrs: {lang: 'en'},
-    }
+    {template: noScriptTemplate}
   );
 
   const rscToScriptTagReadable = new ReadableStream({
@@ -679,22 +667,6 @@ function PreloadQueries({
   return children;
 }
 
-function extractHeadElements({context: {helmet}}: HeadData) {
-  return helmet
-    ? {
-        base: helmet.base.toString(),
-        bodyAttributes: helmet.bodyAttributes.toString(),
-        htmlAttributes: helmet.htmlAttributes.toString(),
-        link: helmet.link.toString(),
-        meta: helmet.meta.toString(),
-        noscript: helmet.noscript.toString(),
-        script: helmet.script.toString(),
-        style: helmet.style.toString(),
-        title: helmet.title.toString(),
-      }
-    : {};
-}
-
 async function renderToBufferedString(
   ReactApp: JSX.Element,
   {log, nonce}: {log: Logger; nonce?: string}
@@ -834,33 +806,6 @@ function writeHeadToServerResponse(
 function isRedirect(response: {status?: number; statusCode?: number}) {
   const status = response.status ?? response.statusCode ?? 0;
   return status >= 300 && status < 400;
-}
-
-/**
- * Generate the contents of the `head` tag, and update the existing `<title>` tag
- * if one exists, and if a title is passed.
- */
-function generateHeadTag({title, ...rest}: Record<string, string>) {
-  const headProps = ['base', 'meta', 'style', 'noscript', 'script', 'link'];
-
-  const otherHeadProps = headProps
-    .map((prop) => rest[prop])
-    .filter(Boolean)
-    .join('\n');
-
-  return (_outerHtml: string, innerHtml: string) => {
-    let headHtml = otherHeadProps + innerHtml;
-
-    if (title) {
-      if (headHtml.includes('<title>')) {
-        headHtml = headHtml.replace(/(<title>(?:.|\n)*?<\/title>)/, title);
-      } else {
-        headHtml += title;
-      }
-    }
-
-    return `<head>${headHtml}</head>`;
-  };
 }
 
 async function createNodeWriter() {

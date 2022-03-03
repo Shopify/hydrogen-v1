@@ -19,12 +19,12 @@ export default async function testCases({
     await page.goto(getServerUrl());
 
     expect(await page.textContent('h1')).toContain('Home');
-    const secretsServer = await page.textContent('.secrets-server');
-    expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');
-    expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
-    const secretsClient = await page.textContent('.secrets-client');
-    expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
-    expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
+
+    expect(await page.getAttribute('body', 'class')).toEqual('pb-1');
+    expect(await page.getAttribute('body', 'style')).toEqual(null); // Style is ignored
+    expect(await page.getAttribute('body', 'data-my-attr')).toEqual(
+      ' some spaces here '
+    );
 
     await page.click('.btn');
 
@@ -48,6 +48,18 @@ export default async function testCases({
     await page.goto(getServerUrl() + '/redirected');
     expect(await page.url()).toContain('/about');
     expect(await page.textContent('h1')).toContain('About');
+  });
+
+  it('has access to environment variables', async () => {
+    await page.goto(getServerUrl() + '/env');
+    expect(await page.textContent('h1')).toContain('Env');
+
+    const secretsServer = await page.textContent('.secrets-server');
+    expect(secretsServer).toContain('PUBLIC_VARIABLE:42-public|');
+    expect(secretsServer).toContain('PRIVATE_VARIABLE:42-private|');
+    const secretsClient = await page.textContent('.secrets-client');
+    expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
+    expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
   it('should support API route on a server component for POST methods', async () => {
@@ -279,8 +291,11 @@ export default async function testCases({
     const response = await fetch(getServerUrl() + '/seo?_bot');
     const body = await response.text();
 
-    expect(body).toContain('<html lang="ja"');
-    expect(body).toContain('<body data-test="true"');
+    expect(body).toContain('<html lang="ja">');
+    // Overwrites "class" and appends "data-test"
+    expect(body).toContain(
+      '<body data-my-attr=" some spaces here " class="pb-2" data-style="color: red" data-test="true">'
+    );
     expect(body).toMatch(
       /<meta\s+.*?property="og:url"\s+content="example.com"\s*\/>/
     );
