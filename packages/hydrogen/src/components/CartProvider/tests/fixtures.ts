@@ -28,8 +28,9 @@ export const CART_WITH_LINES_FLATTENED = {
   lines: flattenConnection(CART_WITH_LINES.lines),
 };
 
-export const CART_WITH_ACTIONS: CartWithActions = {
-  ...CART_WITH_LINES_FLATTENED,
+export const CART_ACTIONS: CartWithActions = {
+  lines: [],
+  attributes: [],
   status: 'idle',
   cartCreate: () => {},
   linesAdd: () => {},
@@ -42,4 +43,9 @@ export const CART_WITH_ACTIONS: CartWithActions = {
   totalQuantity: CART_WITH_LINES_FLATTENED.lines.reduce((prev, curr) => {
     return prev + curr.quantity;
   }, 0),
+};
+
+export const CART_WITH_ACTIONS: CartWithActions = {
+  ...CART_ACTIONS,
+  ...CART_WITH_LINES_FLATTENED,
 };

@@ -2,12 +2,12 @@ The Hydrogen framework includes page server components. This guide describes how
 
 ## How pages work
 
-Hydrogen uses file-based routing. Any pages added to the `src/pages` directory will be automatically registered as routes by the app.
+Hydrogen uses file-based routing. Any pages added to the `src/routes` directory will be automatically registered as routes by the app.
 
-You might want to add a new page and have it display at `localhost:3000/test`. You can do this by adding a new file to `src/pages`. For example, if you add `test.server.jsx` to `src/pages`, then the page displays at `localhost:3000/test`.
+You might want to add a new page and have it display at `localhost:3000/test`. You can do this by adding a new file to `src/routes`. For example, if you add `test.server.jsx` to `src/routes`, then the page displays at `localhost:3000/test`.
 
 > Note:
-> If you add the new page to `src/pages/pages`, then the new page displays at `localhost:3000/pages/test`.
+> If you add the new page to `src/routes/pages`, then the new page displays at `localhost:3000/pages/test`.
 
 The following example shows how each `*.server.jsx` file maps to a different page route in the Hydrogen app:
 
@@ -29,7 +29,7 @@ The following example shows how each `*.server.jsx` file maps to a different pag
 
 ## Props
 
-Server components placed in the `src/pages` directory receive the following special props that you can use to create custom experiences:
+Server components placed in the `src/routes` directory receive the following special props that you can use to create custom experiences:
 
 | Prop       | Type                      |
 | ---------- | ------------------------- |
@@ -291,7 +291,7 @@ const QUERY = gql`
 
 #### Limitations and considerations
 
-The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) includes a `pages/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/pages/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
+The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) includes a `pages/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
 
 - The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources. If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.
 

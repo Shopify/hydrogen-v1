@@ -164,7 +164,6 @@ function App() {
   /* ... */
 }
 // ...
-export default renderHydrogen(App, {pages});
 ```
 
 {% endcodeblock %}
@@ -192,7 +191,6 @@ function App() {
   /* ... */
 }
 // ...
-export default renderHydrogen(App, {pages});
 ```
 
 {% endcodeblock %}

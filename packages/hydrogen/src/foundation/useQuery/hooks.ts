@@ -1,7 +1,8 @@
-import type {CachingStrategy, QueryKey} from '../../types';
+import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types';
 import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
+  collectQueryTimings,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -14,27 +15,50 @@ import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 export interface HydrogenUseQueryOptions {
+  /** The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
+   * determine which cache control header to set.
+   */
   cache?: CachingStrategy;
+  /** Whether to [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries).
+   * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
+   * to preload the query for all requests.
+   */
+  preload?: PreloadOptions;
 }
 
 /**
- * The `useQuery` hook is a wrapper around Suspense calls and
- * global runtime's Cache if it exists.
- * It supports Suspense calls on the server and on the client.
+ * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
+ * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based
+ * on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this
+ * hook to call any third-party APIs.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
   key: QueryKey,
   /** An asynchronous query function like `fetch` which returns data. */
   queryFn: () => Promise<T>,
-  /** Options including `cache` to manage the cache behavior of the sub-request. */
+  /** The options to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
 ) {
+  const request = useServerRequest();
   const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
-  return useRequestCacheData<T>(
+  const fetcher = cachedQueryFnBuilder<T>(
     withCacheIdKey,
-    cachedQueryFnBuilder(withCacheIdKey, queryFn, queryOptions)
+    queryFn,
+    queryOptions
   );
+
+  collectQueryTimings(request, withCacheIdKey, 'requested');
+
+  if (queryOptions?.preload) {
+    request.savePreloadQuery({
+      preload: queryOptions?.preload,
+      key: withCacheIdKey,
+      fetcher,
+    });
+  }
+
+  return useRequestCacheData<T>(withCacheIdKey, fetcher);
 }
 
 function cachedQueryFnBuilder<T>(

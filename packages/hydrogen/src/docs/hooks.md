@@ -5,17 +5,11 @@
 
 </aside>
 
-Hydrogen contains a set of Shopify-specific commerce hooks that help accelerate your development process. This guide provides a complete reference of Hydrogen hooks.
+Hydrogen hooks are functions that allow you to use state and other methods inside Hydrogen components.
 
 ## Primitive hooks
 
 Primitive hooks are the building blocks for different component types, including products, variants, and cart.
-
-The [`useMoney`](/api/hydrogen/hooks/primitive/usemoney) hook takes a [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) and returns a default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
-
-## Global hooks
-
-Hydrogen provides the following global hooks that you can use to fetch data from server components:
 
 <table>
   <tr>
@@ -23,38 +17,49 @@ Hydrogen provides the following global hooks that you can use to fetch data from
     <th>Description</th>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
-    <td>Use to get current url in server or client component.</td>
+    <td><a href="/api/hydrogen/hooks/primitive/useloadscript">useLoadScript</a></td>
+    <td>Loads an external script tag on the client-side.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/primitive/usemoney">useMoney</a></td>
+    <td>Takes a <a href="/api/storefront/reference/common-objects/moneyv2"><code>MoneyV2</code> object</a> and returns a default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat"><code>Intl.NumberFormat</code></a>.</td>
+  </tr>
+</table>
+
+## Global hooks
+
+Global hooks are used to fetch data from server components.
+
+<table>
+  <tr>
+    <th>Hook name</th>
+    <th>Description</th>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useserverstate">useServerState</a></td>
-    <td>Manage a server state when using Hydrogen as a React Server Component framework.</td>
+    <td><a href="/custom-storefronts/hydrogen/framework/server-state">Manages the server state</a> when using Hydrogen as a React Server Component framework.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshop">useShop</a></td>
-    <td>Access values within <code>shopify.config.js</code>.</td>
+    <td>Accesses values within <code>shopify.config.js</code>.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshopquery">useShopQuery</a></td>
-    <td>Make server-only GraphQL queries to the <a href="/api/storefront">Storefront API</a>.</td>
+    <td>Makes server-only GraphQL queries to the <a href="/api/storefront">Storefront API</a>.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
-    <td>A wrapper around <code>useQuery</code> from <code>react-query</code>. It supports Suspense calls on the server and on the client.</td>
+    <td>Executes an asynchronous operation like <code>fetch</code> in a way that supports <a href="https://reactjs.org/docs/concurrent-mode-suspense.html">Suspense</a>.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>
-    <td>Retrieve the current URL in a server or client component.</td>
+    <td>Retrieves the current URL in a server or client component.</td>
   </tr>
 </table>
 
 ## Product and variant hooks
 
-Products are the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options.
-
-Each combination of option values for a product can be a variant for that product. For example, a t-shirt might be available for purchase in blue and green. The blue t-shirt and the green t-shirt are variants.
-
-Hydrogen includes the following product and variant hooks:
+Product and variant hooks relate to the goods, digital downloads, services, and gift cards that a merchant sells. If a product has options, like size or color, then merchants can add a variant for each combination of options.
 
 <table>
   <tr>
@@ -73,9 +78,7 @@ Hydrogen includes the following product and variant hooks:
 
 ## Cart hooks
 
-A cart contains the merchandise that a customer intends to purchase and the estimated cost associated with the cart. When a customer is ready to purchase their items, they can proceed to checkout.
-
-Hydrogen includes the following cart hooks:
+Cart hooks relate to the merchandise that a customer intends to purchase.
 
 <table>
   <tr>
@@ -94,9 +97,7 @@ Hydrogen includes the following cart hooks:
 
 ## Localization hooks
 
-Localization can help merchants expand their business to a global audience by creating shopping experiences in local languages and currencies.
-
-Hydrogen includes the following localization hooks:
+Localization hooks relate to creating shopping experiences for a global audience in local languages and currencies.
 
 <table>
   <tr>
@@ -115,9 +116,7 @@ Hydrogen includes the following localization hooks:
 
 ## Metafield hooks
 
-Metafields allow you to attach specialized information to Shopify resources, such as part numbers or release dates. Merchants and other apps can retrieve and edit the data that's stored in metafields from the Shopify admin.
-
-Hydrogen includes the following metafield hooks:
+Metafield hooks relate to attaching specialized information to Shopify resources, such as part numbers or release dates.
 
 <table>
   <tr>
@@ -129,9 +128,3 @@ Hydrogen includes the following metafield hooks:
     <td>Returns an array of parsed metafields.</td>
   </tr>
 </table>
-
-## Next steps
-
-- [Get started](/custom-storefronts/hydrogen/getting-started/create) with Hydrogen and begin building a custom storefront.
-- Learn about [Hydrogen's architecture and framework](/custom-storefronts/hydrogen/framework).
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.

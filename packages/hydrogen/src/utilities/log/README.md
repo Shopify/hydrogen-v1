@@ -34,12 +34,33 @@ Return an object with methods for logging information at different priorities:
 | `log.error()` | The logging used for errors or invalid application state.                         |
 | `log.fatal()` | The logging used just prior to the process exiting.                               |
 
+## Logger options
+
+Logger has the following Boolean options:
+
+| Option                   | Description                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| `showCacheApiStatus`     | Logs the cache status of each stored entry: `PUT`, `HIT`, `MISS` or `STALE`.   |
+| `showCacheControlHeader` | Logs the cache control headers of the main document and its sub queries.       |
+| `showQueryTiming`        | Logs the timeline of when queries are being requested, resolved, and rendered. |
+
+### Example
+
+```js
+import {setLoggerOptions} from '@shopify/hydrogen';
+
+setLoggerOptions({
+  showCacheApiStatus: true,
+  showCacheControlHeader: true,
+  showQueryTiming: true,
+});
+```
+
 ## Swap logger implementation
 
 Hydrogen includes a default logger implementation that can be swapped for a logger of your choice. You can call `setLogger` with your own implementation. The first argument of each log method will contain a `request` object if the log was called in the same context as a request:
 
 ```js
-import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {setLogger} from '@shopify/hydrogen';
 
 setLogger({
@@ -59,10 +80,4 @@ setLogger({
     // Call your own logger.
   },
 });
-
-function App() {
-  /*...*/
-}
-
-export default renderHydrogen(App);
 ```

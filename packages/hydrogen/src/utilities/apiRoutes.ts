@@ -1,7 +1,9 @@
-import {ImportGlobEagerOutput} from '../types';
+import {ImportGlobEagerOutput, ShopifyConfig} from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
+import type {ASTNode} from 'graphql';
+import {fetchBuilder, graphqlRequestBody} from './fetch';
 
 let memoizedRoutes: Array<HydrogenApiRoute> = [];
 let memoizedPages: ImportGlobEagerOutput = {};
@@ -9,6 +11,7 @@ let memoizedPages: ImportGlobEagerOutput = {};
 type RouteParams = Record<string, string>;
 type RequestOptions = {
   params: RouteParams;
+  queryShop: (args: QueryShopArgs) => Promise<any>;
 };
 type ResourceGetter = (
   request: Request,
@@ -27,7 +30,7 @@ export type ApiRouteMatch = {
   params: RouteParams;
 };
 
-export function getApiRoutesFromPages(
+export function getApiRoutes(
   pages: ImportGlobEagerOutput | undefined,
   topLevelPath = '*'
 ): Array<HydrogenApiRoute> {
@@ -39,7 +42,7 @@ export function getApiRoutesFromPages(
     .filter((key) => pages[key].api)
     .map((key) => {
       const path = key
-        .replace('./pages', '')
+        .replace('./routes', '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
          * Replace /index with /
@@ -106,15 +109,58 @@ export function getApiRouteFromURL(
   };
 }
 
+interface QueryShopArgs {
+  /** A string of the GraphQL query.
+   * If no query is provided, useShopQuery will make no calls to the Storefront API.
+   */
+  query: ASTNode | string;
+  /** An object of the variables for the GraphQL query. */
+  variables?: Record<string, any>;
+  /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
+  locale?: string;
+}
+
+function queryShopBuilder(shopifyConfig: ShopifyConfig) {
+  return async function queryShop<T>({
+    query,
+    variables,
+    locale,
+  }: QueryShopArgs): Promise<T> {
+    const {storeDomain, storefrontApiVersion, storefrontToken, defaultLocale} =
+      shopifyConfig;
+
+    const request = new Request(
+      `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
+      {
+        method: 'POST',
+        headers: {
+          'X-Shopify-Storefront-Access-Token': storefrontToken,
+          'Accept-Language': (locale as string) ?? defaultLocale,
+          'Content-Type': 'application/json',
+        },
+        body: graphqlRequestBody(query, variables),
+      }
+    );
+
+    const fetcher = fetchBuilder<T>(request);
+
+    return await fetcher();
+  };
+}
+
 export async function renderApiRoute(
   request: Request,
-  route: ApiRouteMatch
+  route: ApiRouteMatch,
+  shopifyConfig: ShopifyConfig
 ): Promise<Response> {
   let response;
   const log = getLoggerWithContext(request);
 
   try {
-    response = await route.resource(request, {params: route.params});
+    response = await route.resource(request, {
+      params: route.params,
+      queryShop: queryShopBuilder(shopifyConfig),
+    });
 
     if (!(response instanceof Response)) {
       if (typeof response === 'string' || response instanceof String) {

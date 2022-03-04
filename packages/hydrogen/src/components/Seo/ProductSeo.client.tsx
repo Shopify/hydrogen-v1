@@ -1,5 +1,5 @@
 import React from 'react';
-import {Helmet} from '../../client';
+import {Head} from '../../client';
 
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
@@ -34,7 +34,9 @@ export function ProductSeo({
     url,
   } as any;
 
-  productSchema.image = featuredImage.url;
+  if (featuredImage) {
+    productSchema.image = featuredImage.url;
+  }
 
   if (variants.edges.length > 0) {
     const firstVariant = variants.edges[0].node;
@@ -68,7 +70,7 @@ export function ProductSeo({
 
   return (
     <>
-      <Helmet>
+      <Head>
         <meta property="og:type" content="og:product" />
         {firstVariantPrice && (
           <meta
@@ -86,7 +88,7 @@ export function ProductSeo({
         <script type="application/ld+json">
           {JSON.stringify(productSchema)}
         </script>
-      </Helmet>
+      </Head>
       <TitleSeo title={seoTitle} />
       <DescriptionSeo description={seoDescription} />
       <TwitterSeo title={seoTitle} description={seoDescription} />

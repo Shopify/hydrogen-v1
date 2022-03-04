@@ -69,6 +69,7 @@ export function getVariant(variant: Partial<ProductVariant> = {}) {
       {name: faker.random.word(), value: faker.random.word()},
       {name: faker.random.word(), value: faker.random.word()},
     ],
+    sellingPlanAllocations: [],
     metafields: variant.metafields ?? {
       edges: [
         {node: getRawMetafield()},

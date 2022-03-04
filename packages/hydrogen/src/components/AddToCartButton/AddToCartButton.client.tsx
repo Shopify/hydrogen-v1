@@ -1,5 +1,6 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {useCart} from '../CartProvider';
+import {useProduct} from '../ProductProvider';
 import {Props} from '../types';
 
 export interface AddToCartButtonProps {
@@ -9,7 +10,7 @@ export interface AddToCartButtonProps {
     value: string;
   }[];
   /** The ID of the variant. */
-  variantId: string;
+  variantId?: string | null;
   /** The item quantity. */
   quantity?: number;
   /** Any ReactNode elements. */
@@ -29,7 +30,7 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
 ) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {
-    variantId,
+    variantId: explicitVariantId,
     quantity = 1,
     attributes,
     children,
@@ -37,7 +38,15 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
     accessibleAddingToCartLabel,
     ...passthroughProps
   } = props;
-  const {status, id, cartCreate, linesAdd} = useCart();
+  const {status, linesAdd} = useCart();
+  const product = useProduct();
+  const variantId = explicitVariantId ?? product?.selectedVariant?.id ?? '';
+  const disabled =
+    explicitVariantId === null ||
+    variantId === '' ||
+    product?.selectedVariant === null ||
+    addingItem ||
+    passthroughProps.disabled;
 
   useEffect(() => {
     if (addingItem && status === 'idle') {
@@ -49,28 +58,16 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
     <>
       <button
         {...passthroughProps}
-        disabled={addingItem || passthroughProps.disabled}
+        disabled={disabled}
         onClick={() => {
           setAddingItem(true);
-          if (!id) {
-            cartCreate({
-              lines: [
-                {
-                  quantity: quantity,
-                  merchandiseId: variantId,
-                  attributes: attributes,
-                },
-              ],
-            });
-          } else {
-            linesAdd([
-              {
-                quantity: quantity,
-                merchandiseId: variantId,
-                attributes: attributes,
-              },
-            ]);
-          }
+          linesAdd([
+            {
+              quantity: quantity,
+              merchandiseId: variantId,
+              attributes: attributes,
+            },
+          ]);
         }}
       >
         {children}

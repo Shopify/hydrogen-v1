@@ -50,7 +50,7 @@ export default function Product() {
 | ----------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
 | data        | <code>MoneyV2</code>              | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                     |
 | measurement | <code>UnitPriceMeasurement</code> | A [`UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement). |
-| as?         | <code>ElementType</code>          | An HTML tag to be rendered as the base element wrapper. The default is `div`.               |
+| as?         | <code>TTag</code>                 | An HTML tag to be rendered as the base element wrapper. The default is `div`.               |
 
 ## Component type
 

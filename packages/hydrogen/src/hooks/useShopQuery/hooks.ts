@@ -2,7 +2,7 @@ import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import {useQuery} from '../../foundation/useQuery';
-import type {CachingStrategy} from '../../types';
+import type {CachingStrategy, PreloadOptions} from '../../types';
 import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
@@ -21,6 +21,7 @@ export function useShopQuery<T>({
   variables = {},
   cache,
   locale = '',
+  preload = false,
 }: {
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
@@ -28,10 +29,17 @@ export function useShopQuery<T>({
   query?: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
-  /** An object containing cache-control options for the sub-request. */
+  /** The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to
+   * help you determine which cache control header to set.
+   */
   cache?: CachingStrategy;
   /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
   locale?: string;
+  /** Whether to[preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries).
+   * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
+   * to preload the query for all requests.
+   */
+  preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
   if (!import.meta.env.SSR) {
     throw new Error(
@@ -51,7 +59,7 @@ export function useShopQuery<T>({
       ? fetchBuilder<UseShopQueryResponse<T>>(request)
       : // If no query, avoid calling SFAPI & return nothing
         async () => ({data: undefined as unknown as T, errors: undefined}),
-    {cache}
+    {cache, preload}
   );
 
   /**

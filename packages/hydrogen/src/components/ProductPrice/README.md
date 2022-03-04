@@ -19,10 +19,11 @@ export function Product({product}) {
 
 ## Props
 
-| Name       | Type                                      | Description                                                          |
-| ---------- | ----------------------------------------- | -------------------------------------------------------------------- |
-| priceType? | <code>"regular" &#124; "compareAt"</code> | The type of price. Valid values: `regular` (default) or `compareAt`. |
-| valueType? | <code>"max" &#124; "min"</code>           | The type of value. Valid values: `min` (default) or `max`.           |
+| Name       | Type                                          | Description                                                          |
+| ---------- | --------------------------------------------- | -------------------------------------------------------------------- |
+| priceType? | <code>"regular" &#124; "compareAt"</code>     | The type of price. Valid values: `regular` (default) or `compareAt`. |
+| valueType? | <code>"max" &#124; "min" &#124; "unit"</code> | The type of value. Valid values: `min` (default), `max`, or `unit`.  |
+| variantId? | <code>string</code>                           | The ID of the variant.                                               |
 
 ## Component type
 
