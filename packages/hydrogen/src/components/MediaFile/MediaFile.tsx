@@ -13,8 +13,6 @@ import type {
   MediaFileFragment_Video_Fragment,
 } from './MediaFileFragment';
 
-// export type Media = Pick<MediaType, 'mediaContentType'>;
-
 export interface MediaFileProps {
   /** A [Media object](/api/storefront/reference/products/media). */
   data: MediaFileFragmentFragment;

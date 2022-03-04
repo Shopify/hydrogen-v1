@@ -3,7 +3,12 @@ import {Head} from '../../client';
 
 import type {ImageSeoFragment} from './SeoFragment';
 
-export function ImageSeo({url, width, height, altText}: ImageSeoFragment) {
+export function ImageSeo({
+  url,
+  width,
+  height,
+  altText,
+}: Partial<ImageSeoFragment>) {
   return (
     <Head>
       {url && <meta property="og:image" content={url} />}

@@ -10,13 +10,17 @@ export interface Twitter {
   description: Description;
 }
 
-export interface HomePage {
+interface PageBase {
   title: Title;
-  description: Description;
   url: Scalars['URL'];
 }
 
+export interface HomePage extends PageBase {
+  description?: Description;
+}
+
 export interface DefaultPage extends HomePage {
+  description: Description;
   titleTemplate?: string;
   lang?: string;
 }

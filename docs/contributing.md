@@ -112,7 +112,9 @@ In order to update the supported Storefront API version:
 
 1. Update the URL in `codegen.yml`
 1. Run `yarn graphql-types`
-1. Fix any Typescript errors that now appear (one fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up, another way is to run the tests with `yarn test`)
+1. Fix any Typescript errors that now appear
+   1. One fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up
+   1. Another way is to clear the test cache with `yarn test --clearCache` and then run the tests with `yarn test`
 
 For context, updating the `codegen.yml` file and running the script does the following:
 
