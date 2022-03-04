@@ -14,7 +14,7 @@ export function getMediaImage(image: Partial<MediaImage> = {}) {
   return {
     id: image.id ?? faker.random.words(),
     mediaContentType: MediaContentType.Image,
-    image: getPreviewImage(image.previewImage),
+    data: getPreviewImage(image.previewImage),
   };
 }
 
@@ -31,7 +31,7 @@ export function getPreviewImage(image: Partial<Image> = {}) {
   };
 }
 
-export function getVideo(video: Partial<Video> = {}) {
+export function getVideoData(video: Partial<Video> = {}) {
   return {
     id: video.id ?? faker.random.words(),
     mediaContentType: MediaContentType.Video,
@@ -43,7 +43,9 @@ export function getVideo(video: Partial<Video> = {}) {
   };
 }
 
-export function getExternalVideo(externalVideo: Partial<ExternalVideo> = {}) {
+export function getExternalVideoData(
+  externalVideo: Partial<ExternalVideo> = {}
+) {
   return {
     id: externalVideo.id ?? faker.random.words(),
     mediaContentType: MediaContentType.ExternalVideo,
@@ -77,10 +79,10 @@ export function getAnyMedia() {
       return getMediaImage();
     }
     case 2: {
-      return getVideo();
+      return getVideoData();
     }
     case 3: {
-      return getExternalVideo();
+      return getExternalVideoData();
     }
     case 4: {
       return getModel3d();

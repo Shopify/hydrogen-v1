@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ExternalVideo and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ExternalVideo and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `ExternalVideo` component renders an embedded video for the Storefront
 API's [`ExternalVideo` object](/api/storefront/reference/products/externalvideo).
@@ -40,7 +40,7 @@ export default function MyProductVideo() {
 
   const firstMediaElement = data.products.edges[0].node.media.edges[0].node;
   if (firstMediaElement.mediaContentType === 'EXTERNAL_VIDEO') {
-    return <ExternalVideo video={firstMediaElement} />;
+    return <ExternalVideo data={firstMediaElement} />;
   }
 }
 ```

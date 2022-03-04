@@ -1,11 +1,19 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
+import {parseUrl} from './utils';
 
-/** A utility for logging debugging, warning, and error information about the application.
- * Use by importing `log` `@shopify/hydrogen` or by using a `log` prop passed to each page
- * component. Using the latter is ideal, because it will ty your log to the current request in progress.
+/** The `log` utility is a function that's used for logging debugging, warning, and error information about the application.
+ * Use this utility by importing `log` from `@shopify/hydrogen`, or by using a `log` prop passed to each page
+ * component. We recommend using the `log` prop passed to each page because it will associated your log to the
+ * current request in progress.
  */
+
+/* eslint-disable no-var */
+/* eslint-disable @typescript-eslint/no-namespace */
+declare namespace globalThis {
+  var __logger: Logger;
+}
 
 export interface Logger {
   trace: (...args: Array<any>) => void;
@@ -13,11 +21,21 @@ export interface Logger {
   warn: (...args: Array<any>) => void;
   error: (...args: Array<any>) => void;
   fatal: (...args: Array<any>) => void;
+  options: () => LoggerOptions;
 }
+
+export type LoggerOptions = {
+  showCacheControlHeader?: boolean;
+  showCacheApiStatus?: boolean;
+  showQueryTiming?: boolean;
+};
+
+export type RenderType = 'str' | 'rsc' | 'ssr' | 'api';
 
 const defaultLogger = {
   trace(context: {[key: string]: any}, ...args: Array<any>) {
-    console.log(...args);
+    // Re-enable following line to show trace debugging information
+    // console.log(context.id, ...args);
   },
   debug(context: {[key: string]: any}, ...args: Array<any>) {
     console.log(...args);
@@ -31,52 +49,52 @@ const defaultLogger = {
   fatal(context: {[key: string]: any}, ...args: Array<any>) {
     console.error(red('FATAL: '), ...args);
   },
+  options: () => ({}),
 };
 
-let logger = defaultLogger as Logger;
+globalThis.__logger = defaultLogger as Logger;
 
-export function getLoggerFromContext(context: any): Logger {
+function buildLogger(this: any): Logger {
   return {
-    trace: (...args) => logger.trace(context, ...args),
-    debug: (...args) => logger.debug(context, ...args),
-    warn: (...args) => logger.warn(context, ...args),
-    error: (...args) => logger.error(context, ...args),
-    fatal: (...args) => logger.fatal(context, ...args),
+    trace: (...args) => globalThis.__logger.trace(this, ...args),
+    debug: (...args) => globalThis.__logger.debug(this, ...args),
+    warn: (...args) => globalThis.__logger.warn(this, ...args),
+    error: (...args) => globalThis.__logger.error(this, ...args),
+    fatal: (...args) => globalThis.__logger.fatal(this, ...args),
+    options: () => globalThis.__logger.options(),
   };
 }
 
+export const log: Logger = buildLogger.call({});
+
+export function getLoggerWithContext(context: any = {}): Logger {
+  return buildLogger.call(context);
+}
+
 export function setLogger(newLogger: Logger) {
-  logger = newLogger;
+  globalThis.__logger = newLogger;
+}
+
+export function setLoggerOptions(options: LoggerOptions) {
+  globalThis.__logger.options = () => options;
 }
 
 export function resetLogger() {
-  logger = defaultLogger;
+  globalThis.__logger = defaultLogger;
 }
 
-export const log: Logger = {
-  trace(...args) {
-    return logger.trace({}, ...args);
-  },
-  debug(...args) {
-    return logger.debug({}, ...args);
-  },
-  warn(...args) {
-    return logger.warn({}, ...args);
-  },
-  error(...args) {
-    return logger.error({}, ...args);
-  },
-  fatal(...args) {
-    return logger.fatal({}, ...args);
-  },
+const SERVER_RESPONSE_MAP: Record<string, string> = {
+  str: 'streaming SSR',
+  rsc: 'Server Components',
+  ssr: 'buffered SSR',
 };
 
 export function logServerResponse(
-  type: 'str' | 'rsc' | 'ssr',
-  log: Logger,
+  type: RenderType,
   request: ServerComponentRequest,
   responseStatus: number
 ) {
+  const log = getLoggerWithContext(request);
   const coloredResponseStatus =
     responseStatus >= 500
       ? red(responseStatus)
@@ -86,27 +104,15 @@ export function logServerResponse(
       ? lightBlue(responseStatus)
       : green(responseStatus);
 
-  const fullType =
-    type === 'str'
-      ? 'streaming SSR'
-      : type === 'rsc'
-      ? 'server components'
-      : 'buffered SSR';
-  const styledType = italic(pad(fullType, '                 '));
-  const paddedTiming = pad(
-    (getTime() - request.time).toFixed(2) + ' ms',
-    '          '
+  const fullType: string = SERVER_RESPONSE_MAP[type] || type;
+
+  const styledType = italic(fullType.padEnd(17));
+  const paddedTiming = ((getTime() - request.time).toFixed(2) + ' ms').padEnd(
+    10
   );
-  const url =
-    type === 'rsc'
-      ? decodeURIComponent(request.url.substring(request.url.indexOf('=') + 1))
-      : request.url;
+  const url = parseUrl(type, request.url);
 
   log.debug(
     `${request.method} ${styledType} ${coloredResponseStatus} ${paddedTiming} ${url}`
   );
-}
-
-function pad(str: string, _pad: string) {
-  return (str + _pad).substring(0, _pad.length);
 }

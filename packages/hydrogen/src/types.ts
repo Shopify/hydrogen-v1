@@ -1,71 +1,65 @@
-import {ServerResponse} from 'http';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
+import type {ServerResponse} from 'http';
+import type {Logger} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {Metafield, Image, MediaContentType} from './graphql/types/types';
 
-export type Renderer = (
-  url: URL,
-  options: {
-    request: ServerComponentRequest;
-    context?: Record<string, any>;
-    isReactHydrationRequest?: boolean;
-    dev?: boolean;
-  }
-) => Promise<
-  {
-    body: string;
-    componentResponse: ServerComponentResponse;
-  } & Record<string, any>
->;
+type CommonOptions = {
+  App: any;
+  routes?: ImportGlobEagerOutput;
+  request: ServerComponentRequest;
+  componentResponse: ServerComponentResponse;
+  log: Logger;
+  dev?: boolean;
+};
 
-export type Streamer = (
-  url: URL,
-  options: {
-    context: any;
-    request: ServerComponentRequest;
-    response: ServerResponse;
-    template: string;
-    dev?: boolean;
-  }
-) => void;
+export type RendererOptions = CommonOptions & {
+  template: string;
+  nonce?: string;
+};
 
-export type Hydrator = (
-  url: URL,
-  options: {
-    context: any;
-    request: ServerComponentRequest;
-    response: ServerResponse;
-    dev?: boolean;
-  }
-) => void;
+export type StreamerOptions = CommonOptions & {
+  response?: ServerResponse;
+  template: string;
+  nonce?: string;
+};
 
-export type EntryServerHandler = {
-  render: Renderer;
-  stream: Streamer;
-  hydrate: Hydrator;
+export type HydratorOptions = CommonOptions & {
+  response?: ServerResponse;
+  isStreamable: boolean;
 };
 
 export type ShopifyConfig = {
-  locale?: string;
+  defaultLocale?: string;
   storeDomain: string;
   storefrontToken: string;
-  graphqlApiVersion?: string;
+  storefrontApiVersion: string;
 };
 
 export type Hook = (
   params: {url: URL} & Record<string, any>
 ) => any | Promise<any>;
 
-export type ServerHandler = (
-  App: any,
-  hook?: Hook
-) => {
-  render: Renderer;
-  stream: Streamer;
-  hydrate: Hydrator;
+export type ImportGlobEagerOutput = Record<
+  string,
+  Record<'default' | 'api', any>
+>;
+
+export type ServerHandlerConfig = {
+  routes?: ImportGlobEagerOutput;
+  shopifyConfig: ShopifyConfig;
 };
 
-export type ClientHandler = (App: any, hook?: Hook) => Promise<void>;
+export type ClientHandlerConfig = {
+  shopifyConfig: ShopifyConfig;
+  /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
+  strictMode?: boolean;
+};
+
+export type ClientHandler = (
+  App: React.ElementType,
+  config: ClientHandlerConfig
+) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
@@ -75,7 +69,7 @@ export interface MediaImage {
   __typename?: string;
   id?: string;
   mediaContentType?: MediaContentType;
-  image?: Pick<Image, 'altText' | 'url' | 'id' | 'width' | 'height'>;
+  data?: Pick<Image, 'altText' | 'url' | 'id' | 'width' | 'height'>;
 }
 
 interface ProductVariant {
@@ -118,13 +112,23 @@ export interface Measurement {
 
 export type QueryKey = string | readonly unknown[];
 
-export interface CacheOptions {
-  private?: boolean;
+export type NoStoreStrategy = {
+  mode: string;
+};
+
+export interface AllCacheOptions {
+  mode?: string;
   maxAge?: number;
   staleWhileRevalidate?: number;
-  noStore?: boolean;
+  sMaxAge?: number;
+  staleIfError?: number;
 }
+
+export type CachingStrategy = NoStoreStrategy | AllCacheOptions;
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
+  purgeQueryCacheOnBuild?: boolean;
 }
+
+export type PreloadOptions = boolean | string;

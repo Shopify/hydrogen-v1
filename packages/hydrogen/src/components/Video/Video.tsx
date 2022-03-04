@@ -2,20 +2,11 @@ import * as React from 'react';
 import {Props} from '../types';
 import {ImageSizeOptions, useImageUrl} from '../../utilities';
 import {VideoFragment as Fragment} from '../../graphql/graphql-constants';
-
-import {
-  Video as VideoType,
-  VideoSource,
-  Image,
-} from '../../graphql/types/types';
+import type {VideoFragmentFragment} from './VideoFragment';
 
 export interface VideoProps {
   /** An object corresponding to the [GraphQL fragment](#graphql-fragment). */
-  video: {
-    id?: VideoType['id'];
-    previewImage?: Pick<Image, 'url'>;
-    sources: Pick<VideoSource, 'url' | 'mimeType'>[];
-  };
+  data: VideoFragmentFragment;
   /** An object of image size options for the video's `previewImage`. */
   options?: ImageSizeOptions;
 }
@@ -27,15 +18,18 @@ export function Video<TTag extends React.ElementType = 'video'>(
   props: Props<TTag> & VideoProps
 ) {
   const {
-    video,
+    data,
     options,
-    id = video.id,
+    id = data.id,
     playsInline = true,
     controls = true,
     ...passthroughProps
   } = props;
 
-  const posterUrl = useImageUrl(video.previewImage?.url, options);
+  const posterUrl = useImageUrl(
+    data.previewImage?.url as string | undefined,
+    options
+  );
 
   return (
     <video
@@ -45,7 +39,7 @@ export function Video<TTag extends React.ElementType = 'video'>(
       controls={controls}
       poster={posterUrl}
     >
-      {video.sources.map((source) => (
+      {data.sources.map((source) => (
         <source
           key={source.url}
           src={source.url}

@@ -1,9 +1,12 @@
 import {Plugin, loadEnv, ResolvedConfig} from 'vite';
+import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
 import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
+
+export const HYDROGEN_DEFAULT_SERVER_ENTRY = '/src/App.server';
 
 export default (
   shopifyConfig: ShopifyConfig,
@@ -36,14 +39,19 @@ export default (
         })
       );
 
+      server.middlewares.use(bodyParser.raw({type: '*/*'}));
+
       return () =>
         server.middlewares.use(
           hydrogenMiddleware({
             dev: true,
             shopifyConfig,
             indexTemplate: getIndexTemplate,
-            getServerEntrypoint: async () =>
-              await server.ssrLoadModule(resolve('./src/entry-server')),
+            getServerEntrypoint: () =>
+              server.ssrLoadModule(
+                process.env.HYDROGEN_SERVER_ENTRY ||
+                  HYDROGEN_DEFAULT_SERVER_ENTRY
+              ),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)
@@ -56,7 +64,7 @@ export default (
 
 declare global {
   // eslint-disable-next-line no-var
-  var Oxygen: {env: Record<string, string | undefined>; [key: string]: any};
+  var Oxygen: {env: any; [key: string]: any};
 }
 
 async function polyfillOxygenEnv(config: ResolvedConfig) {

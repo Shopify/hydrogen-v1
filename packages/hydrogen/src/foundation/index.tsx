@@ -1,5 +1,4 @@
-export {ShopifyProvider, DEFAULT_API_VERSION} from './ShopifyProvider';
-export {ShopifyServerProvider} from './ShopifyProvider/ShopifyServerProvider.server';
 export * from './ServerStateProvider';
 export {useShop} from './useShop';
-export {DefaultRoutes} from './Router';
+export {ShopifyProvider} from './ShopifyProvider';
+export {useUrl} from './useUrl';

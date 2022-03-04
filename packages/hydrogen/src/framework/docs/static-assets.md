@@ -1,25 +1,47 @@
-When building your custom storefront, it can be useful to have access to static assets not already hosted elsewhere, like images or text documents. This guide describes how to reference and serve static assets in Hydrogen.
+When building your custom storefront, it can be useful to have access to static assets that aren't already hosted elsewhere, like images. This guide describes how to reference and serve static assets in Hydrogen.
 
 ## How static assets work
 
-Static assets are files your app downloads from a server. [Vite serves static assets](https://vitejs.dev/guide/assets.html) at the root path `/`. For example, you can create a file called `public/icon.png` and reference it in your code as `/icon.png`.
+Static assets are files that your app downloads from a server. In Hydrogen, you import a static asset into your JavaScript runtime as a URL. When you import a static asset, it returns the resolved public URL where the asset is served.
 
-## Where to place static assets
+The following example shows how to render the `/src/icon.png` image:
 
-You should place static assets in the `/public` directory if the following apply:
+{% codeblock file, filename: "src/components/Hero.client.jsx" %}
 
-- The static asset isn't served from the Shopify database.
-- The static asset isn't referenced in `robots.txt`.
-- You don't want to import an asset to a JavaScript file first to get its URL.
+```js
+import icon from '../icon.png';
+import {Image} from '@shopify/hydrogen/client';
 
-### Example
+export default function Hero() {
+  return <Image src={icon} width="100" height="50" />;
+}
+```
 
-Product images are served from the Shopify database, so you don't need to place those images in the `/public` directory. However, you might have a header for your homepage that isn't served from Shopify, so you should place that image in the `/public` directory.
+{% endcodeblock %}
+
+> Tip:
+> You can also import static assets as an explicit URL or as a string. For more information, refer to [Vite's guide](https://vitejs.dev/guide/assets.html#explicit-url-imports).
+
+## Change the base URL
+
+If you want to serve your static assets from a different domain or path, then you can specify the `HYDROGEN_ASSET_BASE_URL` environment variable when building your project.
+
+For example, running the following command will cause references to `/icon.png` to instead reference `https://mycdn.example/path/to/folder/icon.png` in the compiled code.
+
+{% codeblock terminal %}
+
+```bash
+$ HYDROGEN_ASSET_BASE_URL=https://mycdn.example/path/to/folder yarn build
+```
+
+{% endcodeblock %}
+
+> Note:
+> Make sure to check the `dist/client/index.html` file to verify that the URLs point to the provided URL.
 
 ## Considerations and limitations
 
-- Don't rename the `/public` directory as it's the only directory used to serve static assets.
-- Any files placed in the `/public` directory won’t include content hashes, so you need to add query arguments or rename them every time they change.
+You should only import assets, such as styles or images, from [client components](/custom-storefronts/hydrogen/framework/react-server-components#component-types). Any static assets that are referenced in server components, or shared components that are rendered from server components, won't display in the browser.
 
 ## Next steps
 

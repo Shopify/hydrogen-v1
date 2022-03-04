@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ProductTitle and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ProductTitle and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `ProductTitle` component renders a `span` element (or the type of
 HTML element specified by the `as` prop) with the product's [`title`](/api/storefront/reference/products/product).
@@ -11,16 +11,18 @@ import {ProductTitle, ProductProvider} from '@shopify/hydrogen';
 
 export function Product({product}) {
   return (
-    <ProductProvider value={product}>
+    <ProductProvider data={product}>
       <ProductTitle />
     </ProductProvider>
   );
 }
 ```
 
-## Alias
+## Props
 
-The `ProductTitle` component is aliased by the `Product.Title` component. You can use whichever component you prefer.
+| Name | Type              | Description                                                                                     |
+| ---- | ----------------- | ----------------------------------------------------------------------------------------------- |
+| `as` | <code>TTag</code> | An HTML tag to wrap the title. If not specified, then the title is wrapped in a `span` element. |
 
 ## Component type
 

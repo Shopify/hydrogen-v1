@@ -24,7 +24,13 @@ import getPort from 'get-port';
 const INPUT_TIMEOUT = 500;
 const execPromise = promisify(exec);
 
-type Command = 'create' | 'create component' | 'create page' | 'check';
+export type Command =
+  | 'create'
+  | 'create component'
+  | 'create page'
+  | 'check'
+  | 'preview'
+  | 'dev';
 type Input = Record<string, string | boolean | null>;
 
 interface App {
@@ -232,7 +238,7 @@ async function createBuild(directory: string) {
     root: directory,
     build: {
       outDir: `dist/server`,
-      ssr: 'src/entry-server.jsx',
+      ssr: 'src/App.server.jsx',
     },
   };
 

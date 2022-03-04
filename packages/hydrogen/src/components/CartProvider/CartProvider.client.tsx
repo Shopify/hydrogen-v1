@@ -67,6 +67,7 @@ import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
 import {useServerState} from '../../foundation/useServerState';
 import {ServerStateContextValue} from '../../foundation';
+import type {CartWithActions} from './types';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
@@ -229,31 +230,31 @@ export function CartProvider({
   onBuyerIdentityUpdate,
   onAttributesUpdate,
   onDiscountCodesUpdate,
-  cart,
+  data: cart,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
   numCartLines?: number;
-  /** A callback that is run automatically when a cart is created. */
+  /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
   onCreate?: () => void;
-  /** A callback that is run automatically when a new cart line is added. */
+  /** A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API. */
   onLineAdd?: () => void;
-  /** A callback that is run automatically when a cart line is removed. */
+  /** A callback that is invoked when the process to remove a line item to the cart begins, but before the line item is removed from the Storefront API. */
   onLineRemove?: () => void;
-  /** A callback that is run automatically when a cart line is updated. */
+  /** A callback that is invoked when the process to update a line item in the cart begins, but before the line item is updated in the Storefront API. */
   onLineUpdate?: () => void;
-  /** A callback that is run automatically when the cart note is updated. */
+  /** A callback that is invoked when the process to add or update a note in the cart begins, but before the note is added or updated in the Storefront API. */
   onNoteUpdate?: () => void;
-  /** A callback that is run automatically when the cart's buyer identity is updated. */
+  /** A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API. */
   onBuyerIdentityUpdate?: () => void;
-  /** A callback that is run automatically when the cart's buyer identity is updated. */
+  /** A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API. */
   onAttributesUpdate?: () => void;
-  /** A callback that is run automatically when the cart's discount codes are updated. */
+  /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
   /**
    * A cart object from the Storefront API to populate the initial state of the provider.
    */
-  cart?: CartFragmentFragment;
+  data?: CartFragmentFragment;
 }) {
   const {serverState} = useServerState() as ServerStateContextValue;
   const countryCode = serverState?.country?.isoCode;
@@ -624,7 +625,7 @@ export function CartProvider({
     buyerIdentityUpdate({countryCode}, state);
   }, [countryCode]);
 
-  const cartContextValue = useMemo(() => {
+  const cartContextValue = useMemo<CartWithActions>(() => {
     return {
       ...('cart' in state
         ? state.cart
@@ -635,9 +636,19 @@ export function CartProvider({
           }),
       status: state.status,
       error: 'error' in state ? state.error : undefined,
+      totalQuantity:
+        'cart' in state
+          ? state.cart.lines.reduce((previous, current) => {
+              return previous + current.quantity;
+            }, 0)
+          : 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        addLineItem(lines, state);
+        if ('cart' in state && state.cart.id) {
+          addLineItem(lines, state);
+        } else {
+          cartCreate({lines});
+        }
       },
       linesRemove(lines: string[]) {
         removeLineItem(lines, state);

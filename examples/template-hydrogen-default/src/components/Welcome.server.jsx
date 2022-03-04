@@ -1,5 +1,6 @@
 import {useShopQuery, flattenConnection, Link} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
+import {Suspense} from 'react';
 
 function ExternalIcon() {
   return (
@@ -31,7 +32,20 @@ function DocsButton({url, label}) {
   );
 }
 
-function StorefrontInfo({shopName, totalProducts, totalCollections}) {
+function BoxFallback() {
+  return (
+    <div className="bg-white p-12 shadow-xl rounded-xl text-gray-900 h-60"></div>
+  );
+}
+
+function StorefrontInfo() {
+  const {data} = useShopQuery({query: QUERY, preload: true});
+  const shopName = data ? data.shop.name : '';
+  const products = data && flattenConnection(data.products);
+  const collections = data && flattenConnection(data.collections);
+  const totalProducts = products && products.length;
+  const totalCollections = collections && collections.length;
+
   const pluralize = (count, noun, suffix = 's') =>
     `${count} ${noun}${count === 1 ? '' : suffix}`;
   return (
@@ -59,7 +73,7 @@ function StorefrontInfo({shopName, totalProducts, totalCollections}) {
       )}
       <hr className="my-4" />
       <a
-        href="https://shopify.dev/custom-storefronts/hydrogen/getting-started#update-information-about-your-shopify-storefront"
+        href="https://shopify.dev/custom-storefronts/hydrogen/getting-started/create#step-2-update-information-about-your-shopify-storefront"
         className="text-md inline-flex items-center text-blue-700 font-medium hover:underline"
         target="_blank"
         rel="noreferrer"
@@ -71,7 +85,14 @@ function StorefrontInfo({shopName, totalProducts, totalCollections}) {
   );
 }
 
-function TemplateLinks({firstProductPath, firstCollectionPath}) {
+function TemplateLinks() {
+  const {data} = useShopQuery({query: QUERY, preload: true});
+  const products = data && flattenConnection(data.products);
+  const collections = data && flattenConnection(data.collections);
+
+  const firstProduct = products && products.length ? products[0].handle : '';
+  const firstCollection = collections[0] ? collections[0].handle : '';
+
   return (
     <div className="bg-white p-12 md:p-12 shadow-xl rounded-xl text-gray-900">
       <p className="text-md font-medium uppercase mb-4">
@@ -80,7 +101,7 @@ function TemplateLinks({firstProductPath, firstCollectionPath}) {
       <ul>
         <li className="mb-4">
           <Link
-            to={`/collections/${firstCollectionPath}`}
+            to={`/collections/${firstCollection}`}
             className="text-md font-medium text-blue-700 hover:underline"
           >
             Collection template
@@ -88,7 +109,7 @@ function TemplateLinks({firstProductPath, firstCollectionPath}) {
         </li>
         <li className="mb-4">
           <Link
-            to={`/products/${firstProductPath}`}
+            to={`/products/${firstProduct}`}
             className="text-md font-medium text-blue-700 hover:underline"
           >
             Product template
@@ -111,16 +132,6 @@ function TemplateLinks({firstProductPath, firstCollectionPath}) {
  * A server component that displays the content on the homepage of the Hydrogen app
  */
 export default function Welcome() {
-  const {data} = useShopQuery({query: QUERY});
-  const shopName = data ? data.shop.name : '';
-  const products = data && flattenConnection(data.products);
-  const collections = data && flattenConnection(data.collections);
-
-  const firstProduct = products && products.length ? products[0].handle : '';
-  const totalProducts = products && products.length;
-  const firstCollection = collections[0] ? collections[0].handle : '';
-  const totalCollections = collections && collections.length;
-
   return (
     <div className="text-gray-900 pt-16 rounded-[40px] my-16 px-4 xl:px-12 bg-gradient-to-b from-white -mx-4 xl:-mx-12">
       <div className="text-center mb-16">
@@ -143,15 +154,12 @@ export default function Welcome() {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-        <StorefrontInfo
-          shopName={shopName}
-          totalProducts={totalProducts}
-          totalCollections={totalCollections}
-        />
-        <TemplateLinks
-          firstProductPath={firstProduct}
-          firstCollectionPath={firstCollection}
-        />
+        <Suspense fallback={<BoxFallback />}>
+          <StorefrontInfo />
+        </Suspense>
+        <Suspense fallback={<BoxFallback />}>
+          <TemplateLinks />
+        </Suspense>
       </div>
     </div>
   );

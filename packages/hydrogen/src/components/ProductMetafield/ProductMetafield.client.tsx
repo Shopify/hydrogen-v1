@@ -1,9 +1,12 @@
-import React, {ElementType, ReactNode} from 'react';
+import React, {ElementType} from 'react';
 import {Metafield} from '../Metafield';
 import {useProduct} from '../../hooks/useProduct/useProduct';
 import {Props} from '../types';
+import {MetafieldProps} from '../Metafield/Metafield.client';
+import {flattenConnection} from '../../utilities';
 
-export interface ProductMetafieldProps {
+export interface ProductMetafieldProps<TTag>
+  extends Omit<MetafieldProps<TTag>, 'metafield'> {
   /** A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's
    * metafield.
    */
@@ -12,8 +15,8 @@ export interface ProductMetafieldProps {
    * product's metafield.
    */
   namespace: string;
-  /** A render function that takes a `Metafield` object as its argument. */
-  children?: ReactNode;
+  /** The ID of the variant. If provided, then use the metafield corresponding to the variant ID instead of the product's metafield. */
+  variantId?: string;
 }
 
 /**
@@ -22,7 +25,7 @@ export interface ProductMetafieldProps {
  * It must be a descendent of a `ProductProvider` component.
  */
 export function ProductMetafield<TTag extends ElementType>(
-  props: Props<TTag> & ProductMetafieldProps
+  props: Props<TTag> & Omit<ProductMetafieldProps<TTag>, 'data'>
 ) {
   const product = useProduct();
 
@@ -35,12 +38,40 @@ export function ProductMetafield<TTag extends ElementType>(
     return null;
   }
 
-  const {namespace, keyName, ...passthroughProps} = props;
+  const {namespace, keyName, variantId, ...passthroughProps} = props;
 
-  const field = product.metafields.find(
+  const metafields = variantId
+    ? flattenConnection(
+        product.variants?.find(({id}) => id === variantId)?.metafields ?? {}
+      )
+    : product.metafields;
+
+  const field = metafields?.find(
     (metafield) =>
       metafield.namespace === namespace && metafield.key === keyName
   );
 
-  return field ? <Metafield metafield={field} {...passthroughProps} /> : null;
+  if (field === null || field === undefined) {
+    const message = 'does not have a value for metafield.';
+    const productOrVariant = variantId ? `Variant` : 'Product';
+
+    const logItems = {
+      variantId: variantId,
+      ProductId: product.id,
+      namespace,
+      keyName,
+    };
+
+    console.warn(
+      [
+        productOrVariant,
+        message,
+        ...Object.entries(logItems).map(([key, val]) => `${key}: ${val}`),
+      ].join(' ')
+    );
+
+    return null;
+  }
+
+  return <Metafield data={field} {...passthroughProps} />;
 }

@@ -1,53 +1,46 @@
 import React, {ReactNode, useMemo} from 'react';
 import {useProductOptions, useParsedMetafields} from '../../hooks';
 import {flattenConnection} from '../../utilities';
-import {ProductContext} from './context';
+import {ProductContext, ProductContextType} from './context';
 import {Product} from './types';
 import {ProductProviderFragment as Fragment} from '../../graphql/graphql-constants';
+import {ProductOptionsProvider} from './ProductOptionsProvider.client';
 
-/**
- * The `ProductProvider` component sets up a context with product details. Descendents of
- * this component can use the `useProduct` hook and the related `ProductX` or `SelectedVariantX` hooks.
- */
-export function ProductProvider({
-  children,
-  product,
-  initialVariantId,
-}: {
+export interface ProductProviderProps {
   /** A `ReactNode` element. */
   children: ReactNode;
   /** A [Product object](/api/storefront/reference/products/product). */
-  product: Product;
-  /** The initially selected variant. */
-  initialVariantId: string;
-}) {
-  const {
-    variants,
-    options,
-    selectedVariant,
-    setSelectedVariant,
-    selectedOptions,
-    setSelectedOption,
-    setSelectedOptions,
-    isOptionInStock,
-    selectedSellingPlan,
-    selectedSellingPlanAllocation,
-    setSelectedSellingPlan,
-    sellingPlanGroups,
-  } = useProductOptions({
-    variants: product.variants,
-    initialVariantId: initialVariantId,
-  });
+  data: Product;
+  /** The initially selected variant. If this is missing, then `selectedVariantId`
+   * in the returned `object` from the `useProduct` hook uses the first available variant
+   * or the first variant (if none are available).
+   */
+  initialVariantId?: Parameters<
+    typeof useProductOptions
+  >['0']['initialVariantId'];
+}
+
+/**
+ * The `ProductProvider` component sets up a context with product details. Descendents of
+ * this component can use the `useProduct` hook.
+ */
+export function ProductProvider({
+  children,
+  data: product,
+  initialVariantId,
+}: ProductProviderProps) {
   const metafields = useParsedMetafields(product.metafields);
 
-  const providerValue = useMemo(() => {
+  const providerValue = useMemo<ProductContextType>(() => {
     return {
       ...product,
       metafields,
       metafieldsConnection: product.metafields,
       media: product.media ? flattenConnection(product.media) : undefined,
       mediaConnection: product.media,
-      variants: variants,
+      variants: product.variants
+        ? flattenConnection(product.variants)
+        : undefined,
       variantsConnection: product.variants,
       images: product.images ? flattenConnection(product.images) : undefined,
       imagesConnection: product.images,
@@ -55,38 +48,14 @@ export function ProductProvider({
         ? flattenConnection(product.collections)
         : undefined,
       collectionsConnection: product.collections,
-      options,
-      selectedVariant,
-      setSelectedVariant,
-      selectedOptions,
-      setSelectedOption,
-      setSelectedOptions,
-      isOptionInStock,
-      selectedSellingPlan,
-      selectedSellingPlanAllocation,
-      setSelectedSellingPlan,
-      sellingPlanGroups,
     };
-  }, [
-    isOptionInStock,
-    metafields,
-    options,
-    product,
-    selectedOptions,
-    selectedSellingPlan,
-    selectedSellingPlanAllocation,
-    selectedVariant,
-    sellingPlanGroups,
-    setSelectedOption,
-    setSelectedOptions,
-    setSelectedSellingPlan,
-    setSelectedVariant,
-    variants,
-  ]);
+  }, [metafields, product]);
 
   return (
     <ProductContext.Provider value={providerValue}>
-      {children}
+      <ProductOptionsProvider initialVariantId={initialVariantId}>
+        {children}
+      </ProductOptionsProvider>
     </ProductContext.Provider>
   );
 }

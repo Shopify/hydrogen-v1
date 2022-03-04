@@ -15,37 +15,7 @@ export function fetchBuilder<T>(request: Request) {
   }
 
   return async () => {
-    // Since a request's body can't be consumed more than once,
-    // and throws at the attempt afterwards,
-    // and this function can be cached and re-used, we clone
-    // the request each time:
-    const clonedRequest = request.clone();
-
-    // Oxygen's fetch is a Go implementation which
-    // currently doesn't process some the call
-    // signatures well. Specifically, it can't
-    // consume request/response "body" property
-    // if it follows the standard and is a ReadableStream
-    // instance. It worked before because old Fetch API polyfills
-    // in Oxygen didn't follow the standard but soon they will,
-    // and we have to adjust the way we call fetch().
-
-    // Oxygen aims at being eventually compliant
-    // with the Fetch API, making these quirks redundant.
-
-    // We can only consume body as plain text
-    const body = await clonedRequest.text();
-    // Headers must be a plain object unless the whole second argument is instanceof Request
-    const headers: {[key: string]: string} = {};
-    clonedRequest.headers.forEach((hVal, hName) => {
-      headers[hName] = hVal;
-    });
-
-    const response = await fetch(clonedRequest.url, {
-      body,
-      headers,
-      method: clonedRequest.method,
-    });
+    const response = await fetch(request.url, request);
 
     if (!response.ok) {
       throw response;

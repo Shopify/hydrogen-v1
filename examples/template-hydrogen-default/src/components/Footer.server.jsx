@@ -87,8 +87,8 @@ export default function Footer({collection, product}) {
                 </a>
               </li>
               <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
-                <a href="https://shopify.dev/custom-storefronts/hydrogen/reference">
-                  Hydrogen reference
+                <a href="https://shopify.dev/custom-storefronts/hydrogen/getting-started">
+                  Hydrogen starter template
                 </a>
               </li>
             </ul>
@@ -96,7 +96,7 @@ export default function Footer({collection, product}) {
         </div>
       </div>
       <div className="py-6 px-4 md:px-8 bg-gray-50">
-        <p className="text-gray-600">© 2021 Shopify</p>
+        <p className="text-gray-600">© {new Date().getFullYear()} Shopify</p>
       </div>
     </footer>
   );

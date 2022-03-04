@@ -1,8 +1,9 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Link} from '@shopify/hydrogen/client';
 
 import CartToggle from './CartToggle.client';
-import CurrencySelector from './CurrencySelector.client';
+import {useCartUI} from './CartUIProvider.client';
+import CountrySelector from './CountrySelector.client';
 import Navigation from './Navigation.client';
 import MobileNavigation from './MobileNavigation.client';
 
@@ -11,6 +12,15 @@ import MobileNavigation from './MobileNavigation.client';
  */
 export default function Header({collections, storeName}) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [scrollbarWidth, setScrollbarWidth] = useState(0);
+  const {isCartOpen} = useCartUI();
+
+  useEffect(() => {
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+
+    setScrollbarWidth(scrollbarWidth);
+  }, [isCartOpen]);
 
   return (
     <header className="h-20 lg:h-32" role="banner">
@@ -19,9 +29,14 @@ export default function Header({collections, storeName}) {
           isMobileNavOpen ? '' : 'bg-opacity-95'
         }`}
       >
-        <div className="h-full flex lg:flex-col place-content-between">
+        <div
+          className="h-full flex lg:flex-col place-content-between"
+          style={{
+            paddingRight: isCartOpen ? scrollbarWidth : 0,
+          }}
+        >
           <div className="text-center w-full flex justify-between items-center">
-            <CurrencySelector />
+            <CountrySelector />
             <MobileNavigation
               collections={collections}
               isOpen={isMobileNavOpen}

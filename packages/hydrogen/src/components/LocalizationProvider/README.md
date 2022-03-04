@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/LocalizationProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/LocalizationProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `useCountry` hook returns a tuple of the current localization country and a function for updating it.
 It must be a descendent of a `LocalizationProvider` component.
@@ -12,6 +12,13 @@ export function Component() {
   return <LocalizationProvider>{children}</LocalizationProvider>;
 }
 ```
+
+## Props
+
+| Name       | Required | Description                                                                                                                                                                                                    |
+| ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children` | Yes      | A `ReactNode` element.                                                                                                                                                                                         |
+| `preload`  | No       | Whether to [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries). Defaults to `false`. Specify `true` to preload the query for the URL or `'*'` to preload the query for all requests. |
 
 ## Component type
 

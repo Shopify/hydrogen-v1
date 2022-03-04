@@ -1,11 +1,35 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 0.11.1
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+### Patch Changes
 
-## Unreleased
+- [#782](https://github.com/Shopify/hydrogen/pull/782) [`72144ff`](https://github.com/Shopify/hydrogen/commit/72144ffae98054b7165579062f0e8e521ad0d032) Thanks [@michenly](https://github.com/michenly)! - Removes the duplicate bin keys in the hydrogen-cli package.json
+
+## 0.11.0 - 2022-02-24
+
+- Improves some types, avoid using `any` in `mini-oxygen`
+
+## 0.10.1 - 2022-01-26
+
+- Adds command hooks `onCommit` and `onUpdateFile`
+
+## 0.10.0 - 2022-01-25
+
+- Adds `dev` command for running Hydrogen apps locally with vite
+- Adds `preview` command for running Hydrogen apps in a local Worker runtime
+- Prevent CLI commands from unintentionally mutating the app code
+- Adds cache support for `preview` command
+
+## 0.9.1 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.9.0 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.8.3 - 2022-01-13
 
 - New command: `check`, for running audits on the current project to look for common problems
 - New command: add, to run an atomic change to a project (ie: `hydrogen add lint`)

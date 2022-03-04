@@ -18,14 +18,14 @@ import {GraphQLConnection} from '../../types';
 export function useProductOptions({
   variants: variantsConnection,
   sellingPlanGroups: sellingPlanGroupsConnection,
-  initialVariantId,
+  initialVariantId: explicitVariantId,
 }: {
   /** The product's `VariantConnection`. */
   variants?: GraphQLConnection<Variant>;
   /** The product's `SellingPlanGroups`. */
   sellingPlanGroups?: GraphQLConnection<SellingPlanGroup>; // This comes from the Product
   /** The initially selected variant. */
-  initialVariantId?: Variant['id'];
+  initialVariantId?: Variant['id'] | null;
 }): ProductOptionsHookValue {
   // The flattened variants
   const variants = useMemo(
@@ -36,15 +36,19 @@ export function useProductOptions({
   // All the options available for a product, based on all the variants
   const options = useMemo(() => getOptions(variants), [variants]);
 
+  const initialVariantId =
+    explicitVariantId === null
+      ? (explicitVariantId as null)
+      : variants.find((variant) => variant.id === explicitVariantId) ||
+        variants.find((variant) => variant.availableForSale) ||
+        variants[0];
   /**
    * Track the selectedVariant within the hook. If `initialVariantId`
    * is passed, use that as an initial value.
    */
-  const [selectedVariant, setSelectedVariant] = useState<Variant | undefined>(
-    initialVariantId
-      ? variants.find((variant) => variant.id === initialVariantId)
-      : undefined
-  );
+  const [selectedVariant, setSelectedVariant] = useState<
+    Variant | undefined | null
+  >(initialVariantId);
 
   /**
    * Track the selectedOptions within the hook. If a `initialVariantId`
@@ -66,10 +70,7 @@ export function useProductOptions({
    * values.
    */
   useEffect(() => {
-    const selectedVariant = initialVariantId
-      ? variants.find((variant) => variant.id === initialVariantId)
-      : undefined;
-    setSelectedVariant(selectedVariant);
+    setSelectedVariant(initialVariantId);
 
     const selectedOptions = selectedVariant?.selectedOptions
       ? selectedVariant.selectedOptions.reduce((memo, optionSet) => {

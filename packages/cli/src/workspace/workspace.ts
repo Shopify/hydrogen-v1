@@ -72,8 +72,7 @@ export class Workspace {
       dev: 'vite',
       build: 'yarn build:client && yarn build:server',
       'build:client': 'vite build --outDir dist/client --manifest',
-      'build:server':
-        'vite build --outDir dist/server --ssr src/entry-server.jsx',
+      'build:server': 'vite build --outDir dist/server --ssr src/App.server',
     };
 
     const linters = [

@@ -21,7 +21,8 @@ export default function ({features, name}: TemplateOptions) {
     : '';
 
   return `
-import Link from '../components/Link.client';
+import {Link} from '@shopify/hydrogen';
+import Welcome from "../components/Welcome.server";
 
 export default function Index() {
   return (
@@ -31,33 +32,7 @@ export default function Index() {
           About
         </Link>
       </p>
-      <h1>
-        Welcome to{' '}
-        <a target="_blank" href="https://github.com/Shopify/hydrogen">
-          Hydrogen
-        </a>{' '}
-        💦
-      </h1>
-      <p>
-        Hydrogen is a{' '}
-        <a target="_blank" href="https://reactjs.org/">
-          React
-        </a>{' '}
-        framework and a SDK for building custom{' '}
-        <a target="_blank" href="https://shopify.com">
-          Shopify
-        </a>{' '}
-        storefronts.
-      </p>
-      <p>
-        Get started by editing <strong>pages/Index.server.jsx</strong>
-        <br /> or reading our{' '}
-        <a target="_blank" href="https://hydrogen.docs.shopify.io/">
-          getting started guide
-        </a>
-        .
-      </p>
-      <h2 className="appName">${name}</h2>
+      <Welcome />
       ${featuresMarkup}
     </div>
   );

@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require('../dist');
+const {init} = require('../dist');
+
+init();

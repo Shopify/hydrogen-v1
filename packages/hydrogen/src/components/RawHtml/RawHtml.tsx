@@ -8,11 +8,13 @@ import {Props} from '../types';
 //   FORBID_ATTR: ['style'],
 // };
 
-export interface RawHtmlProps {
+export interface RawHtmlProps<TTag> {
   /** An HTML string. */
   string: string;
   /** Whether the HTML string should be sanitized with `isomorphic-dompurify`. */
   unsanitized?: boolean;
+  /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
+  as?: TTag;
 }
 
 /**
@@ -24,7 +26,7 @@ export interface RawHtmlProps {
  * To keep the text unsanitized, set the `unsanitized` prop to `true`.
  */
 export function RawHtml<TTag extends ElementType>(
-  props: Props<TTag> & RawHtmlProps
+  props: Props<TTag> & RawHtmlProps<TTag>
 ) {
   const {string, unsanitized, as, ...passthroughProps} = props;
   const Wrapper = as ?? 'div';
@@ -35,7 +37,7 @@ export function RawHtml<TTag extends ElementType>(
 
     // TODO: Re-enable when we find a way to support Worker runtime
     // return DOMPurify.sanitize(text, DOMPURIFY_CONFIG);
-  }, [string, unsanitized]);
+  }, [string, !!unsanitized]);
 
   return (
     <Wrapper

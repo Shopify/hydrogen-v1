@@ -1,11 +1,17 @@
-import {ShopifyConfig} from '../../types';
+import type {ReactNode} from 'react';
+import type {ShopifyConfig} from '../../types';
 
-export type ShopifyProviderValue = ShopifyConfig;
+export type ShopifyContextValue = {
+  locale: string;
+  storeDomain: ShopifyConfig['storeDomain'];
+  storefrontToken: ShopifyConfig['storefrontToken'];
+  storefrontApiVersion: string;
+};
 
 export type ShopifyProviderProps = {
   /** The contents of the `shopify.config.js` file. */
   shopifyConfig: ShopifyConfig;
   /** Any `ReactNode` elements. */
-  children?: React.ReactNode;
+  children?: ReactNode;
   manager?: any;
 };

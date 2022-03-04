@@ -106,12 +106,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/Image',
         'components/MediaFile',
         'components/Metafield',
-        'components/Model3D',
+        'components/ModelViewer',
         'components/Money',
         'components/RawHtml',
         'components/ShopPayButton',
         'components/UnitPrice',
         'components/Video',
+        'components/Seo',
       ],
       tables: [primitiveComponentsTable],
     }),
@@ -140,13 +141,6 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/ProductPrice',
         'components/ProductProvider',
         'components/ProductTitle',
-        'components/SelectedVariantAddToCartButton',
-        'components/SelectedVariantBuyNowButton',
-        'components/SelectedVariantImage',
-        'components/SelectedVariantMetafield',
-        'components/SelectedVariantPrice',
-        'components/SelectedVariantShopPayButton',
-        'components/SelectedVariantUnitPrice',
       ],
       tables: [productAndVariantTable],
     }),
@@ -163,7 +157,6 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/BuyNowButton',
         'components/CartCheckoutButton',
         'components/CartEstimatedCost',
-        'components/CartLineAttributes',
         'components/CartLineImage',
         'components/CartLinePrice',
         'components/CartLineProductTitle',
@@ -171,7 +164,6 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'components/CartLineQuantity',
         'components/CartLineQuantityAdjustButton',
         'components/CartLines',
-        'components/CartLineSelectedOptions',
         'components/CartProvider',
         'components/CartShopPayButton',
       ],
@@ -207,6 +199,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'foundation/useServerState',
         'foundation/useShop',
         'foundation/useQuery',
+        'foundation/useUrl',
         'hooks/useShopQuery',
       ],
       intro:
@@ -225,7 +218,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       title: 'Primitive hooks',
       description: 'Learn about the primitive hooks offered in Hydrogen.',
       url: '/api/hydrogen/hooks/primitive/index.md',
-      entry: ['hooks/useMoney'],
+      entry: ['hooks/useMoney', 'hooks/useLoadScript'],
       intro:
         'Primitive hooks are the building blocks for different component types, including products, variants, and cart.',
       tables: [
@@ -277,20 +270,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the Hydrogen cart hooks included in Hydrogen.',
       url: '/api/hydrogen/hooks/cart/index.md',
-      entry: [
-        'hooks/useCart',
-        'hooks/useCartAttributesUpdateCallback',
-        'hooks/useCartBuyerIdentityUpdateCallback',
-        'hooks/useCartCheckoutUrl',
-        'hooks/useCartCreateCallback',
-        'hooks/useCartDiscountCodesUpdateCallback',
-        'hooks/useCartLine',
-        'hooks/useCartLinesAddCallback',
-        'hooks/useCartLinesRemoveCallback',
-        'hooks/useCartLinesTotalQuantity',
-        'hooks/useCartLinesUpdateCallback',
-        'hooks/useCartNoteUpdateCallback',
-      ],
+      entry: ['hooks/useCart', 'hooks/useCartLine'],
       intro:
         'A cart contains the merchandise that a customer intends to purchase and the estimated cost associated with the cart. When a customer is ready to purchase their items, they can proceed to checkout.',
       tables: [
@@ -332,7 +312,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the set of Shopify-specific commerce components, hooks, and utilities included in Hydrogen.',
       url: '/api/hydrogen/index.md',
-      entry: 'docs/hydrogen-sdk.md',
+      entry: 'docs/hydrogen-reference.md',
     }),
     // Framework
     generator.section({
@@ -357,8 +337,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
     }),
     generator.section({
       title: 'Built-in CSS support',
-      description:
-        'Learn about the CSS support built into Hydrogen apps and how you can customize the styles in your app.',
+      description: 'Learn about the CSS support built into Hydrogen apps.',
       url: '/custom-storefronts/hydrogen/framework/css-support.md',
       entry: 'framework/docs/css-support.md',
     }),
@@ -367,6 +346,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description: 'Learn how to manage cache options for Hydrogen apps.',
       url: '/custom-storefronts/hydrogen/framework/cache.md',
       entry: 'framework/docs/cache.md',
+    }),
+    generator.section({
+      title: 'Preloaded queries',
+      description:
+        'Learn how to configure queries to preload in your Hydrogen app.',
+      url: '/custom-storefronts/hydrogen/framework/preloaded-queries.md',
+      entry: 'framework/docs/preloaded-queries.md',
     }),
     generator.section({
       title: 'Server state',
