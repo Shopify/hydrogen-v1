@@ -1,8 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/foundation/useQuery and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
-The `useQuery` hook is a wrapper around Suspense calls and
-global runtime's Cache if it exists.
-It supports Suspense calls on the server and on the client.
+The `useQuery` hook executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this hook to call any third-party APIs.
 
 ## Example code
 
@@ -28,17 +26,18 @@ export default function Page() {
 
 The `useQuery` hook takes the following arguments:
 
-| Key        | Required | Description                                          |
-| ---------- | -------- | ---------------------------------------------------- |
-| `cacheKey` | Yes      | A string or an array to uniquely identify the query. |
-| `queryFn`  | Yes      | An asynchronous function that returns data.          |
-| `options`  | No       | An object describing the options for the request.    |
+| Key            | Required | Description                                                     |
+| -------------- | -------- | --------------------------------------------------------------- |
+| `key`          | Yes      | A string or an array to uniquely identify the query.            |
+| `queryFn`      | Yes      | An asynchronous query function like `fetch` which returns data. |
+| `queryOptions` | No       | The options to manage the cache behavior of the sub-request.    |
 
-The `options` object accepts the following properties:
+The `queryOptions` object accepts the following properties:
 
-| Key     | Required | Description                                                                                            |
-| ------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| `cache` | No       | An object describing the [cache policy](/custom-storefronts/hydrogen/framework/cache) for the request. |
+| Key       | Required | Description                                                                                                                                                                                                    |
+| --------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cache`   | No       | The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you determine which cache control header to set.                                                               |
+| `preload` | No       | Whether to [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries). Defaults to `false`. Specify `true` to preload the query for the URL or `'*'` to preload the query for all requests. |
 
 ## Related hooks
 

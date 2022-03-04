@@ -644,7 +644,11 @@ export function CartProvider({
           : 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        addLineItem(lines, state);
+        if ('cart' in state && state.cart.id) {
+          addLineItem(lines, state);
+        } else {
+          cartCreate({lines});
+        }
       },
       linesRemove(lines: string[]) {
         removeLineItem(lines, state);

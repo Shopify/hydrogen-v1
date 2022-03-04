@@ -34,7 +34,9 @@ export function ProductSeo({
     url,
   } as any;
 
-  productSchema.image = featuredImage.url;
+  if (featuredImage) {
+    productSchema.image = featuredImage.url;
+  }
 
   if (variants.edges.length > 0) {
     const firstVariant = variants.edges[0].node;

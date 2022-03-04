@@ -1,7 +1,7 @@
 import {Env, ComponentType} from '../../../types';
 import {componentName, validComponentName} from '../../../utilities';
 
-const PAGES_DIRECTORY = 'src/pages';
+const PAGES_DIRECTORY = 'src/routes';
 
 /**
  * Scaffold a new Hydrogen page.

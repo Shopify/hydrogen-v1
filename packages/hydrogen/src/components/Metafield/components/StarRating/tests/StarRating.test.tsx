@@ -3,6 +3,7 @@ import {getParsedMetafield} from '../../../../../utilities/tests/metafields';
 import {mount} from '@shopify/react-testing';
 import {StarRating, Star} from '../StarRating';
 import {Rating} from '../../../../../types';
+import {Link} from '../../../../Link/index';
 
 describe('<StarRating />', () => {
   it('renders the number of stars in the rating scale', () => {
@@ -37,6 +38,17 @@ describe('<StarRating />', () => {
     );
     expect(component).toContainReactComponentTimes(Star, 1, {
       percentFilled: partialStarFill,
+    });
+  });
+
+  it(`validates props when passed a component to the 'as' prop`, () => {
+    const rating = getParsedMetafield({type: 'rating'});
+    const component = mount(
+      <StarRating rating={rating.value as Rating} as={Link} to="/test" />
+    );
+
+    expect(component).toContainReactComponent(Link, {
+      to: '/test',
     });
   });
 });

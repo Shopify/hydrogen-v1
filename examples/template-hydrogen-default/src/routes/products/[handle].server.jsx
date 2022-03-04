@@ -16,6 +16,7 @@ export default function Product({country = {isoCode: 'US'}, params}) {
       country: country.isoCode,
       handle,
     },
+    preload: true,
   });
 
   if (!product) {

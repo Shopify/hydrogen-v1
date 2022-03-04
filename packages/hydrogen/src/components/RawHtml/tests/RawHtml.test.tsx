@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-
 import {RawHtml} from '../RawHtml';
+import {Link} from '../../Link/index';
 
 describe('<RawHtml />', () => {
   it('renders a `div` with dangerously set inner HTML', () => {
@@ -27,6 +27,16 @@ describe('<RawHtml />', () => {
       dangerouslySetInnerHTML: {
         __html: '<p>Hello, World.</p>',
       },
+    });
+  });
+
+  it(`validates props when a component is passed to the 'as' prop`, () => {
+    const component = mount(
+      <RawHtml as={Link} to="/test" string="<p>Hello, World.</p>" />
+    );
+
+    expect(component).toContainReactComponent(Link, {
+      to: '/test',
     });
   });
 });

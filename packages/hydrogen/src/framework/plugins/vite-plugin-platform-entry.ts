@@ -76,7 +76,10 @@ export default () => {
     },
     generateBundle(options, bundle) {
       if (config.build.ssr) {
-        const [[key, value]] = Object.entries(bundle);
+        const [key, value] = Object.entries(bundle).find(
+          ([, value]) => value.type === 'chunk' && value.isEntry
+        )!;
+
         delete bundle[key];
         value.fileName = SSR_BUNDLE_NAME;
         bundle[SSR_BUNDLE_NAME] = value;

@@ -13,7 +13,7 @@ export default function Index() {
       <Head>
         <html lang="ja" />
         <meta property="og:url" content="example.com" />
-        <body data-test={true} />
+        <body data-test={true} className="pb-2" />
       </Head>
 
       <Suspense fallback={null}>

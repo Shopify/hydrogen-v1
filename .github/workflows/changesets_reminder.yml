@@ -1,0 +1,20 @@
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      ['packages/*/src/**', 'packages/*/package.json', '!*.test.*', '!*.md']
+name: Changelog Reminder
+jobs:
+  remind:
+    name: Changeset Reminder
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mskelton/changelog-reminder-action@v2
+        with:
+          changelogRegex: "\\.changeset"
+          message: |
+            We detected some changes in `packages/*/package.json` or `packages/*/src`, and there are no updates in the `.changeset`.
+            If the changes are user-facing and should cause a version bump, run "yarn changeset add" to track your changes and include them in the next release CHANGELOG.
+            If you are making simple updates to examples or documentation, you do not need to add a changeset.

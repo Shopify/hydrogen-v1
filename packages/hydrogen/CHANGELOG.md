@@ -1,11 +1,32 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 0.11.1
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+### Patch Changes
 
-## [Unreleased]
+- [#770](https://github.com/Shopify/hydrogen/pull/770) [`71e0255`](https://github.com/Shopify/hydrogen/commit/71e0255ea48dc1caa34d2c05a1556cc0ce6d4ce9) Thanks [@mcvinci](https://github.com/mcvinci)! - Hydrogen docs: Framework and global hooks content updates
+
+* [#761](https://github.com/Shopify/hydrogen/pull/761) [`1142647`](https://github.com/Shopify/hydrogen/commit/114264716bc8f3027e3e6395d523714adbc92014) Thanks [@frehner](https://github.com/frehner)! - Fix issue with components that take in the `as` prop not validating other props when a component is passed to `as`.
+
+- [#752](https://github.com/Shopify/hydrogen/pull/752) [`b96179f`](https://github.com/Shopify/hydrogen/commit/b96179fdf960da52332a981e29a742b677826834) Thanks [@jplhomer](https://github.com/jplhomer)! - Ensure ProductSeo knows how to handle `featuredImage = null`
+
+* [#774](https://github.com/Shopify/hydrogen/pull/774) [`052f148`](https://github.com/Shopify/hydrogen/commit/052f148e0d33029cdc2540afa5ead32825962f3a) Thanks [@frandiox](https://github.com/frandiox)! - Fix internal url usage in platforms like Vercel, which already provides protocol and host in `request.url`.
+
+- [#744](https://github.com/Shopify/hydrogen/pull/744) [`2e487b7`](https://github.com/Shopify/hydrogen/commit/2e487b7e70fe0572538dc2a24b6b6b36ba9fc804) Thanks [@jplhomer](https://github.com/jplhomer)! - Switch to using Changesets for changelogs.
+
+* [#775](https://github.com/Shopify/hydrogen/pull/775) [`d5b7ee1`](https://github.com/Shopify/hydrogen/commit/d5b7ee1d8312f64922d1f78afc82ec5ad4a3f457) Thanks [@cartogram](https://github.com/cartogram)! - In cases where the `initialVariantId` is missing on the `<ProductProvider />`, the `selectedVariantId` in the returned `object` from `useProduct()` will now use the first available variant _or_ the first variant (if non are available).
+
+- [#773](https://github.com/Shopify/hydrogen/pull/773) [`b6a053e`](https://github.com/Shopify/hydrogen/commit/b6a053e774da443b5692dec51546f5558b3018ad) Thanks [@frandiox](https://github.com/frandiox)! - Fix server bundle name in cases where CSS or images are imported in server components.
+
+* [#764](https://github.com/Shopify/hydrogen/pull/764) [`5e55da4`](https://github.com/Shopify/hydrogen/commit/5e55da4090692369ff6a3d57fbc6d29124bdf2e9) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Preload queries breaking fetch on Cloudfare [#764](https://github.com/Shopify/hydrogen/pull/764)
+
+- [#763](https://github.com/Shopify/hydrogen/pull/763) [`ea2857a`](https://github.com/Shopify/hydrogen/commit/ea2857a515866f37f392bca5da8be1139c055a64) Thanks [@frehner](https://github.com/frehner)! - Client-side apps now have React's `StrictMode` component wrapping the whole app, with an option to disable it. If you do turn it off, it is recommended that you still include the `StrictMode` component at as high of a level as possible in your React tree.
+
+  See also [React 17's docs](https://reactjs.org/docs/strict-mode.html) on `StrictMode`, and [React 18's updates](https://github.com/reactwg/react-18/discussions/19) to `StrictMode`.
+
+* [#747](https://github.com/Shopify/hydrogen/pull/747) [`2d8ab7e`](https://github.com/Shopify/hydrogen/commit/2d8ab7e2a8038ff8b43e6e9398e0bb2da72220a0) Thanks [@mcvinci](https://github.com/mcvinci)! - Hydrogen docs: Preloaded queries and query timing
+
+## [0.11.0] - 2022-02-24
 
 - fix: respond with 404 if the route has no matches
 
@@ -21,7 +42,9 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Add a default virtual entry-client in `/@shopify/hydrogen/entry-client` that can be used in `index.html`
 - Enable early hydration when streaming
 - Add variantId prop to `<ProductMetafield />` component [#730](https://github.com/Shopify/hydrogen/pull/730)
+- Add query timing logging option `showQueryTiming` [#699](https://github.com/Shopify/hydrogen/pull/699)
 - Add variantId prop to `<ProductPrice />` component
+- Add `preload` option to `useQuery` and `useShopQuery` [#700](https://github.com/Shopify/hydrogen/pull/700)
 
 ### Breaking Change
 
@@ -54,7 +77,7 @@ and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - Use hashes as client component ids instead of absolute paths
 - Transition away from deprecated currency selector in favor of country selector
 - Simplify Helmet usage and make it compatible with RSC
-- The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference] (../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
+- The `Seo.client` component has been moved from `src/components` to `@shopify/hydrogen`. The props of the `Seo.client` component also changed to always take in `type` and `data`. Refer to the [`Seo` component reference](../src/components/Seo/README.md) for more details. [#539](https://github.com/Shopify/hydrogen/pull/539)
 - Standardize cache control header into caching strategies by @wizardlyhel in [#629](https://github.com/Shopify/hydrogen/pull/629)
 - Target future release to use '2022-01' API Version
 - Correct Typescript issue where `as` was a default prop for all components when it should not be
@@ -486,4 +509,5 @@ function SomeComponent() {
 [0.9.1]: https://github.com/Shopify/hydrogen/releases/tag/v0.9.1
 [0.10.0]: https://github.com/Shopify/hydrogen/releases/tag/v0.10.0
 [0.10.1]: https://github.com/Shopify/hydrogen/releases/tag/v0.10.1
-[unreleased]: https://github.com/Shopify/hydrogen/compare/v0.10.1...HEAD
+[0.11.0]: https://github.com/Shopify/hydrogen/releases/tag/v0.11.0
+[unreleased]: https://github.com/Shopify/hydrogen/compare/v0.11.0...HEAD

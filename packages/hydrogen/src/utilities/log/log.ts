@@ -27,6 +27,7 @@ export interface Logger {
 export type LoggerOptions = {
   showCacheControlHeader?: boolean;
   showCacheApiStatus?: boolean;
+  showQueryTiming?: boolean;
 };
 
 export type RenderType = 'str' | 'rsc' | 'ssr' | 'api';

@@ -1,10 +1,8 @@
-import React, {ReactElement, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
-import type {Logger} from '../../utilities/log/log';
+import {log} from '../../utilities/log';
 
 import type {ImportGlobEagerOutput} from '../../types';
-import {BoomerangPage} from '../Boomerang/BoomerangPageTemplate.client';
-import {Boomerang} from '../Boomerang/Boomerang.client';
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -12,57 +10,34 @@ import {Boomerang} from '../Boomerang/Boomerang.client';
  *
  * @see https://vitejs.dev/guide/features.html#glob-import
  */
-export function DefaultRoutes({
-  pages,
-  serverState,
-  fallback,
-  log,
+export function FileRoutes({
+  routes,
+  serverProps,
 }: {
-  pages: ImportGlobEagerOutput;
-  serverState: Record<string, any>;
-  fallback?: ReactElement;
-  log: Logger;
+  routes: ImportGlobEagerOutput;
+  serverProps: Record<string, any>;
 }) {
   const basePath = '/';
 
-  const routes = useMemo(
-    () => createRoutesFromPages(pages, basePath, log),
-    [pages, basePath]
+  const pageRoutes = useMemo(
+    () => createPageRoutes(routes, basePath),
+    [routes, basePath]
   );
 
   let foundRoute, foundRouteDetails;
 
-  for (let i = 0; i < routes.length; i++) {
-    foundRouteDetails = matchPath(serverState.pathname, routes[i]);
+  for (let i = 0; i < pageRoutes.length; i++) {
+    foundRouteDetails = matchPath(serverProps.pathname, pageRoutes[i]);
 
     if (foundRouteDetails) {
-      foundRoute = routes[i];
+      foundRoute = pageRoutes[i];
       break;
     }
   }
 
   return foundRoute ? (
-    <>
-      <foundRoute.component
-        params={foundRouteDetails.params}
-        {...serverState}
-      />
-      <Boomerang />
-      <BoomerangPage pageTemplate={foundRoute.component.name} />
-    </>
-  ) : (
-    <>
-      {fallback}
-      <Boomerang />
-      <BoomerangPage
-        pageTemplate={
-          typeof fallback?.type === 'function'
-            ? fallback?.type.name
-            : fallback?.type
-        }
-      />
-    </>
-  );
+    <foundRoute.component params={foundRouteDetails.params} {...serverProps} />
+  ) : null;
 }
 
 interface HydrogenRoute {
@@ -71,17 +46,16 @@ interface HydrogenRoute {
   exact: boolean;
 }
 
-export function createRoutesFromPages(
+export function createPageRoutes(
   pages: ImportGlobEagerOutput,
-  topLevelPath = '*',
-  log: Logger | null = null
+  topLevelPath = '*'
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const routes = Object.keys(pages)
     .map((key) => {
       let path = key
-        .replace('./pages', '')
+        .replace('./routes', '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
          * Replace /index with /

@@ -12,7 +12,7 @@ export function ProductTitle<TTag extends ElementType = 'span'>(
     /** An HTML tag to wrap the title. If not specified, then the
      * title is wrapped in a `span` element.
      */
-    as?: ElementType;
+    as?: TTag;
   }
 ) {
   const product = useProduct();

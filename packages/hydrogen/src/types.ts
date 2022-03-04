@@ -6,7 +6,7 @@ import type {Metafield, Image, MediaContentType} from './graphql/types/types';
 
 type CommonOptions = {
   App: any;
-  pages?: ImportGlobEagerOutput;
+  routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
   componentResponse: ServerComponentResponse;
   log: Logger;
@@ -46,16 +46,18 @@ export type ImportGlobEagerOutput = Record<
 >;
 
 export type ServerHandlerConfig = {
-  pages?: ImportGlobEagerOutput;
+  routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
 };
 
 export type ClientHandlerConfig = {
   shopifyConfig: ShopifyConfig;
+  /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
+  strictMode?: boolean;
 };
 
 export type ClientHandler = (
-  App: any,
+  App: React.ElementType,
   config: ClientHandlerConfig
 ) => Promise<void>;
 
@@ -128,3 +130,5 @@ export interface HydrogenVitePluginOptions {
   devCache?: boolean;
   purgeQueryCacheOnBuild?: boolean;
 }
+
+export type PreloadOptions = boolean | string;
