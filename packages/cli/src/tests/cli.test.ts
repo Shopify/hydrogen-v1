@@ -26,9 +26,7 @@ describe('CLI', () => {
       const result = await run('foo' as Command);
 
       expect(result.output.stdout).toStrictEqual(
-        expect.arrayContaining([
-          expect.stringMatching('Command module not found'),
-        ])
+        expect.arrayContaining([expect.stringMatching('Cannot find module')])
       );
     });
   });
