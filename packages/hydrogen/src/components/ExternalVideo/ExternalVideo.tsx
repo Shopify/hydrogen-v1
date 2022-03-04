@@ -5,7 +5,7 @@ import {ExternalVideoFragment as Fragment} from '../../graphql/graphql-constants
 import type {ExternalVideoFragmentFragment} from './ExternalVideoFragment';
 
 export interface ExternalVideoProps {
-  /** An object with the keys `host`, `embeddedUrl`, and `id`. Refer to the Storefront API's
+  /** An object with the keys `host`, `embedUrl`, and `id`. Refer to the Storefront API's
    * [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).
    */
   data: ExternalVideoFragmentFragment;
@@ -35,7 +35,7 @@ export function ExternalVideo<TTag extends React.ElementType = 'iframe'>(
     ...passthroughProps
   } = props;
 
-  const url = useEmbeddedVideoUrl(data.embeddedUrl, options);
+  const url = useEmbeddedVideoUrl(data.embedUrl, options);
 
   return (
     <iframe
