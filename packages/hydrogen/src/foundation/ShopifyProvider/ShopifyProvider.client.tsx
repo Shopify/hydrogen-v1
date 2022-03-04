@@ -10,6 +10,12 @@ export function ShopifyProviderClient({
   children: ReactNode;
   shopifyConfig: ShopifyContextValue;
 }): JSX.Element {
+  if (!shopifyConfig) {
+    throw new Error(
+      'The `shopifyConfig` prop should be passed to `ShopifyProvider`'
+    );
+  }
+
   return (
     <ShopifyContext.Provider value={shopifyConfig}>
       {children}
