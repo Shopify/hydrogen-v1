@@ -1,32 +1,14 @@
-import {createServer} from '../server';
-import puppeteer from 'puppeteer';
-import type {Browser} from 'puppeteer';
+import {chromium} from 'playwright';
 import type {Server} from 'http';
 import {createServer as createViteDevServer} from 'vite';
 
-export async function startHydrogenNodeServer() {
-  return await startHydrogenServer('node');
-}
+export async function startHydrogenServer() {
+  // @ts-ignore
+  const app = import.meta.env.WATCH
+    ? await createDevServer()
+    : await createNodeServer();
 
-export async function startHydrogenDevServer() {
-  return await startHydrogenServer('dev');
-}
-
-type ServerType = 'node' | 'dev';
-
-async function startHydrogenServer(serverType: ServerType) {
-  let app: {server: Server; port: number};
-
-  switch (serverType) {
-    case 'node':
-      app = await createNodeServer();
-      break;
-    case 'dev':
-      app = await createDevServer();
-      break;
-  }
-
-  const browser = (await puppeteer.launch()) as Browser;
+  const browser = await chromium.launch();
   const page = await browser.newPage();
 
   const cleanUp = async () => {
@@ -38,15 +20,16 @@ async function startHydrogenServer(serverType: ServerType) {
 
   const visit = async (pathname: string) => page.goto(url(pathname));
 
-  return {url, page, cleanUp, visit};
+  return {url, page, cleanUp, visit, watchForUpdates: () => {}};
 }
 
 async function createNodeServer() {
+  const {createServer} = await import('../dist/server');
   const app = (await createServer()).app;
   const server = app.listen(0) as Server;
   const port: number = await new Promise((resolve) => {
     server.on('listening', () => {
-      resolve(server.address().port);
+      resolve(getPortFromAddress(server.address()));
     });
   });
 
@@ -54,8 +37,22 @@ async function createNodeServer() {
 }
 
 async function createDevServer() {
-  const app = await createViteDevServer();
+  const app = await createViteDevServer({
+    server: {force: true},
+    logLevel: 'silent',
+  });
   const server = await app.listen(0);
 
-  return {server: server.httpServer, port: server.httpServer.address().port};
+  return {
+    server: server.httpServer,
+    port: getPortFromAddress(server.httpServer.address()),
+  };
+}
+
+function getPortFromAddress(address: string | any): number {
+  if (typeof address === 'string') {
+    return parseInt(address.split(':').pop());
+  } else {
+    return address.port;
+  }
 }

@@ -1,10 +1,12 @@
-import {startHydrogenNodeServer} from '../utils';
+import {startHydrogenServer} from '../utils';
+import Index from '../../src/routes/index.server';
 
 describe('index', async () => {
   let hydrogen;
 
   beforeAll(async () => {
-    hydrogen = await startHydrogenNodeServer();
+    hydrogen = await startHydrogenServer();
+    hydrogen.watchForUpdates(Index);
   });
 
   afterAll(async () => {

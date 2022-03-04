@@ -1,10 +1,10 @@
-import {startHydrogenNodeServer} from '../utils';
+import {startHydrogenServer} from '../utils';
 
 describe('products', async () => {
   let hydrogen;
 
   beforeAll(async () => {
-    hydrogen = await startHydrogenNodeServer();
+    hydrogen = await startHydrogenServer();
   });
 
   afterAll(async () => {
