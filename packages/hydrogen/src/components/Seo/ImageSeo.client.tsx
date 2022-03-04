@@ -1,9 +1,14 @@
 import React from 'react';
 import {Head} from '../../client';
 
-import type {Image} from './types';
+import type {ImageSeoFragment} from './SeoFragment';
 
-export function ImageSeo({url, width, height, altText}: Partial<Image>) {
+export function ImageSeo({
+  url,
+  width,
+  height,
+  altText,
+}: Partial<ImageSeoFragment>) {
   return (
     <Head>
       {url && <meta property="og:image" content={url} />}

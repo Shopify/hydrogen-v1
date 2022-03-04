@@ -33,11 +33,8 @@ describe(`ShopPayButton`, () => {
   it(`creates the correct attribute when using 'variantIds'`, () => {
     const fakeId = '123';
 
-    // TODO: SFAPI has gids in 2022-01. Remove this in 2022-04
-    const fakeGid = window.btoa('123');
-
     const component = mountWithProviders(
-      <ShopPayButton variantIds={[fakeGid]} />
+      <ShopPayButton variantIds={[fakeId]} />
     );
 
     expect(component).toContainReactComponent('shop-pay-button', {
@@ -49,12 +46,9 @@ describe(`ShopPayButton`, () => {
     const fakeId = '123';
     const fakeQuantity = 2;
 
-    // TODO: SFAPI has gids in 2022-01. Remove this in 2022-04
-    const fakeGid = window.btoa('123');
-
     const component = mountWithProviders(
       <ShopPayButton
-        variantIdsAndQuantities={[{id: fakeGid, quantity: fakeQuantity}]}
+        variantIdsAndQuantities={[{id: fakeId, quantity: fakeQuantity}]}
       />
     );
 
@@ -66,20 +60,6 @@ describe(`ShopPayButton`, () => {
   describe(`getIdFromGid`, () => {
     it(`should handle undefined`, () => {
       expect(getIdFromGid()).toBe(undefined);
-    });
-
-    it(`should handle when 'window.atob' exists, such as browsers`, () => {
-      // Test can be removed when we upgrade from SFAPI 2022-01 to 2022-04
-      expect(getIdFromGid(window.btoa('123'))).toBe('123');
-    });
-
-    it(`should handle when 'window.atob' doesn't exist, such as node / workers`, () => {
-      // Test can be removed when we upgrade from SFAPI 2022-01 to 2022-04
-      const oldAtob = window.atob;
-      // @ts-ignore
-      delete window.atob;
-      expect(getIdFromGid(window.btoa('123'))).toBe('123');
-      window.atob = oldAtob;
     });
   });
 });

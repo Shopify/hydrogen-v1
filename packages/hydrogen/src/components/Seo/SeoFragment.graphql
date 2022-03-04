@@ -1,0 +1,59 @@
+fragment ImageSeo on Image {
+  url
+  width
+  height
+  altText
+}
+
+fragment Seo on SEO {
+  description
+  title
+}
+
+fragment ProductSeo on Product {
+  title
+  description
+  seo {
+    title
+    description
+  }
+  vendor
+  featuredImage {
+    ...ImageSeo
+  }
+  variants {
+    edges {
+      node {
+        image {
+          url
+        }
+        availableForSale
+        priceV2 {
+          amount
+          currencyCode
+        }
+        sku
+      }
+    }
+  }
+}
+
+fragment CollectionSeo on Collection {
+  title
+  description
+  seo {
+    title
+    description
+  }
+  image {
+    ...ImageSeo
+  }
+}
+
+fragment PageSeo on Page {
+  title
+  seo {
+    title
+    description
+  }
+}
