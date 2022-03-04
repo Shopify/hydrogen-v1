@@ -1,14 +1,19 @@
-import React, {Suspense, useState} from 'react';
-// @ts-ignore
-import {createRoot} from 'react-dom';
-import {BrowserRouter} from 'react-router-dom';
+import React, {
+  Suspense,
+  useState,
+  StrictMode,
+  Fragment,
+  type ElementType,
+} from 'react';
+// @ts-expect-error hydrateRoot isn't on the TS types yet, but we're using React 18 so it exists
+import {hydrateRoot} from 'react-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
-import {HelmetProvider} from 'react-helmet-async';
-import {useServerResponse} from './framework/Hydration/Cache.client';
-import {ServerStateProvider, ServerStateRouter} from './client';
+import {useServerResponse} from './framework/Hydration/rsc';
+import {ServerStateProvider} from './client';
+import {Router} from './foundation/Router/Router.client';
 
-const renderHydrogen: ClientHandler = async (ClientWrapper) => {
+const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
 
   if (!root) {
@@ -18,18 +23,29 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     return;
   }
 
-  createRoot(root, {hydrate: true}).render(
-    <ErrorBoundary FallbackComponent={Error}>
-      <Suspense fallback={null}>
-        <Content clientWrapper={ClientWrapper} />
-      </Suspense>
-    </ErrorBoundary>
+  // default to StrictMode on, unless explicitly turned off
+  const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
+
+  hydrateRoot(
+    root,
+    <RootComponent>
+      <ErrorBoundary FallbackComponent={Error}>
+        <Suspense fallback={null}>
+          <Content clientWrapper={ClientWrapper} />
+        </Suspense>
+      </ErrorBoundary>
+    </RootComponent>
   );
 };
 
 export default renderHydrogen;
 
-function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
+function Content({
+  clientWrapper: ClientWrapper = ({children}: {children: JSX.Element}) =>
+    children,
+}: {
+  clientWrapper: ElementType;
+}) {
   const [serverState, setServerState] = useState({
     pathname: window.location.pathname,
     search: window.location.search,
@@ -41,13 +57,9 @@ function Content({clientWrapper: ClientWrapper}: {clientWrapper: any}) {
       serverState={serverState}
       setServerState={setServerState}
     >
-      <HelmetProvider>
-        <BrowserRouter>
-          <ServerStateRouter />
-          {/* @ts-ignore */}
-          <ClientWrapper>{response.read()}</ClientWrapper>
-        </BrowserRouter>
-      </HelmetProvider>
+      <Router>
+        <ClientWrapper>{response.readRoot()}</ClientWrapper>
+      </Router>
     </ServerStateProvider>
   );
 }

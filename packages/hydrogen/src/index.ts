@@ -11,9 +11,11 @@ export {
   getTime,
 } from './utilities';
 
-export {log, setLogger, Logger} from './utilities/log';
-
-export {Helmet} from 'react-helmet-async';
+export {FileRoutes} from './foundation/Router/FileRoutes';
+export {Route} from './foundation/Router/Route.server';
+export {Router} from './foundation/Router/Router.server';
+export {log, setLogger, setLoggerOptions, Logger} from './utilities/log';
+export {useParams} from './foundation/Router/useParams';
 
 // This is exported here because it contains a Server Component
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
@@ -24,3 +26,15 @@ export * from './hooks/useShopQuery';
 // Export server-only CartQuery here instead of `CartProvider.client` to prevent
 // it from being bundled with other client components
 export {CartQuery} from './graphql/graphql-constants';
+
+export {
+  generateCacheControlHeader,
+  NoStore,
+  CacheSeconds,
+  CacheMinutes,
+  CacheHours,
+  CacheDays,
+  CacheWeeks,
+  CacheMonths,
+  CacheCustom,
+} from './framework/CachingStrategy';

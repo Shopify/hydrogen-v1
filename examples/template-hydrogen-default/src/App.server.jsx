@@ -1,32 +1,27 @@
-import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
+import renderHydrogen from '@shopify/hydrogen/entry-server';
+import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-
 import shopifyConfig from '../shopify.config';
-
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
-import CartProvider from './components/CartProvider.client';
 import LoadingFallback from './components/LoadingFallback';
+import CartProvider from './components/CartProvider.client';
 
-export default function App({log, ...serverState}) {
-  const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
-
+function App({routes, ...serverProps}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
         <CartProvider>
           <DefaultSeo />
-          <Switch>
-            <DefaultRoutes
-              pages={pages}
-              serverState={serverState}
-              log={log}
-              fallback={<NotFound />}
-            />
-          </Switch>
+          <Router fallback={<NotFound />} serverProps={serverProps}>
+            <FileRoutes routes={routes} />
+          </Router>
         </CartProvider>
-      </ShopifyServerProvider>
+      </ShopifyProvider>
     </Suspense>
   );
 }
+
+const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+
+export default renderHydrogen(App, {shopifyConfig, routes});

@@ -1,29 +1,25 @@
-import {generateCacheControlHeader} from '../cache';
+import {generateSubRequestCacheControlHeader} from '../cache';
+import {CacheSeconds, NoStore} from '../CachingStrategy';
 
-describe('generateCacheControlHeader', () => {
-  it('defaults to public', () => {
-    const header = generateCacheControlHeader({
-      maxAge: 100,
-      staleWhileRevalidate: 50,
-    });
+describe('generateSubRequestCacheControlHeader', () => {
+  it('generates CacheSeconds caching strategy by default', () => {
+    const header = generateSubRequestCacheControlHeader();
 
-    expect(header).toBe('public, max-age=100, stale-while-revalidate=50');
+    expect(header).toBe('public, max-age=1, stale-while-revalidate=9');
   });
 
   it('override to private', () => {
-    const header = generateCacheControlHeader({
-      maxAge: 100,
-      staleWhileRevalidate: 50,
-      private: true,
-    });
+    const header = generateSubRequestCacheControlHeader(
+      CacheSeconds({
+        mode: 'private',
+      })
+    );
 
-    expect(header).toBe('private, max-age=100, stale-while-revalidate=50');
+    expect(header).toBe('private, max-age=1, stale-while-revalidate=9');
   });
 
   it('supports no-store', () => {
-    const header = generateCacheControlHeader({
-      noStore: true,
-    });
+    const header = generateSubRequestCacheControlHeader(NoStore());
 
     expect(header).toBe('no-store');
   });

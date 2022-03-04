@@ -1,8 +1,14 @@
 name: Tests and Lint
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
+
+concurrency:
+  group: hydrogen-${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -10,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        node-version: [14.x, 15.x, 16.x]
+        node-version: [16.x, 17.x]
 
     name: OS ${{ matrix.os }} / NodeJS ${{ matrix.node-version }}
 
@@ -25,10 +31,11 @@ jobs:
           cache: 'yarn'
 
       - name: Install the packages
-        run: yarn install --frozen-lockfile --ignore-engines
+        # Bump yarn timeout to fix an issue with Windows CI downloading the Playwright/Chromium stuff
+        run: yarn install --frozen-lockfile --ignore-engines --network-timeout 36000
 
       - name: Build the code
-        run: yarn build
+        run: yarn build --force
 
       - name: Check formatting
         run: yarn format:check
@@ -38,7 +45,7 @@ jobs:
 
       - name: Lint the template code
         run: yarn lint
-        working-directory: ./packages/dev
+        working-directory: ./examples/template-hydrogen-default
 
       - name: Run the unit tests
         run: yarn test

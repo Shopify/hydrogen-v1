@@ -1,8 +1,8 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Money and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Money and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `Money` component renders a string of the Storefront API's
 [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) according to the
-locale in the `shopify.config.js` file. If `children` is a function, then it will
+`defaultLocale` in the `shopify.config.js` file. If `children` is a function, then it will
 provide render props for the `children` corresponding to the object returned by the `useMoney` hook.
 
 ## Example code
@@ -29,14 +29,14 @@ const QUERY = gql`
 export default function Product() {
   const {data} = useShopQuery({query: QUERY});
 
-  return <Money money={data.product.variants.edges[0].node.priceV2} />;
+  return <Money data={data.product.variants.edges[0].node.priceV2} />;
 }
 
 export default function ProductWithCustomMoney() {
   const {data} = useShopQuery({query: QUERY});
 
   return (
-    <Money money={data.product.variants.edges[0].node.priceV2}>
+    <Money data={data.product.variants.edges[0].node.priceV2}>
       {({amount, currencyCode, currencyNarrowSymbol}) => {
         return (
           <>
@@ -52,11 +52,10 @@ export default function ProductWithCustomMoney() {
 
 ## Props
 
-| Name      | Type                     | Description                                                                              |
-| --------- | ------------------------ | ---------------------------------------------------------------------------------------- |
-| as?       | <code>ElementType</code> | A `ReactNode` element.                                                                   |
-| money     | <code>MoneyV2</code>     | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).                  |
-| children? | <code>ReactNode</code>   | A function that takes an object return by the `useMoney` hook and returns a `ReactNode`. |
+| Name | Type                 | Description                                                                   |
+| ---- | -------------------- | ----------------------------------------------------------------------------- |
+| as?  | <code>TTag</code>    | An HTML tag to be rendered as the base element wrapper. The default is `div`. |
+| data | <code>MoneyV2</code> | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).       |
 
 ## Component type
 

@@ -1,8 +1,8 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/MediaFile and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/MediaFile and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `MediaFile` component renders the media for the Storefront API's
 [Media object](/api/storefront/reference/products/media). It renders an `Image`, a
-`Video`, an `ExternalVideo`, or a `Model3D` depending on the `mediaContentType` of the
+`Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the
 `media` provided as a prop.
 
 ## Example code
@@ -42,7 +42,7 @@ export function MyComponent() {
   return (
     <ul>
       {data?.products?.map((product) => {
-        return <MediaFile media={product.node.media.edges[0].node} />;
+        return <MediaFile data={product.node.media.edges[0].node} />;
       })}
     </ul>
   );
@@ -51,10 +51,10 @@ export function MyComponent() {
 
 ## Props
 
-| Name     | Type                                                                                         | Description                                                                     |
-| -------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| media    | <code>MediaImageMedia &#124; Model3DMedia &#124; ExternalVideoMedia &#124; VideoMedia</code> | A [Media object](/api/storefront/reference/products/media).                     |
-| options? | <code>UndocumentedType &#124; UndocumentedType</code>                                        | The options for the `Image`, `Video`, `ExternalVideo`, or `Model3D` components. |
+| Name     | Type                                                                                             | Description                                                                         |
+| -------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| data     | <code>MediaImageMedia &#124; ModelViewerMedia &#124; ExternalVideoMedia &#124; VideoMedia</code> | A [Media object](/api/storefront/reference/products/media).                         |
+| options? | <code>UndocumentedType &#124; UndocumentedType</code>                                            | The options for the `Image`, `Video`, `ExternalVideo`, or `ModelViewer` components. |
 
 ## Component type
 
@@ -92,4 +92,4 @@ fragment MediaFileFragment on Media {
 - [`Image`](/api/hydrogen/components/primitive/image)
 - [`Video`](/api/hydrogen/components/primitive/video)
 - [`ExternalVideo`](/api/hydrogen/components/primitive/externalvideo)
-- [`Model3D`](/api/hydrogen/components/primitive/model3d)
+- [`ModelViewer`](/api/hydrogen/components/primitive/modelviewer)

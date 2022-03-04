@@ -75,7 +75,7 @@ export interface ProductOptionsHookValue {
   /** An array of the product's options and values. */
   options: OptionWithValues[];
   /** The selected variant. */
-  selectedVariant?: Variant;
+  selectedVariant?: Variant | null;
   /** A callback to set the selected variant to the variant passed as an argument. */
   setSelectedVariant: SelectVariantCallback;
   selectedOptions: SelectedOptions;

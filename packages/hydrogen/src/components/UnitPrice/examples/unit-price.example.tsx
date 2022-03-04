@@ -29,29 +29,8 @@ export default function Product() {
 
   return (
     <UnitPrice
-      unitPrice={selectedVariant.unitPrice}
-      unitPriceMeasurement={selectedVariant.unitPriceMeasurement}
+      data={selectedVariant.unitPrice}
+      measurement={selectedVariant.unitPriceMeasurement}
     />
-  );
-}
-
-export default function ProductWithCustomUnitPrice() {
-  const {data} = useShopQuery({query: QUERY});
-  const selectedVariant = data.product.variants.edges[0].node;
-
-  return (
-    <UnitPrice
-      unitPrice={selectedVariant.unitPrice}
-      unitPriceMeasurement={selectedVariant.unitPriceMeasurement}
-    >
-      {({amount, currencyCode, currencyNarrowSymbol, referenceUnit}) => {
-        return (
-          <>
-            <span>{`${currencyNarrowSymbol}${amount}/${referenceUnit}`}</span>
-            <span>{currencyCode}</span>
-          </>
-        );
-      }}
-    </UnitPrice>
   );
 }

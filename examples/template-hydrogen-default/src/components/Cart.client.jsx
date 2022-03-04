@@ -1,11 +1,16 @@
 import {
-  useCartLinesTotalQuantity,
+  useCart,
   CartCheckoutButton,
   Link,
   CartLines,
-  CartLine,
+  CartLineImage,
+  CartLineProductTitle,
+  CartLineQuantityAdjustButton,
+  CartLinePrice,
+  CartLineQuantity,
   CartShopPayButton,
   CartEstimatedCost,
+  useCartLine,
 } from '@shopify/hydrogen/client';
 import {Dialog} from '@headlessui/react';
 
@@ -18,27 +23,36 @@ import {BUTTON_PRIMARY_CLASSES} from './Button.client';
  */
 export default function Cart() {
   const {isCartOpen, closeCart} = useCartUI();
-  const itemCount = useCartLinesTotalQuantity();
+  const {totalQuantity} = useCart();
 
   return (
-    <Dialog open={isCartOpen} onClose={closeCart}>
-      <Dialog.Overlay className="fixed z-20 inset-0 bg-gray-50 opacity-75" />
+    <div>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
-        className={`absolute flex flex-col md:block z-20 top-0 left-0 right-0 bottom-0 md:top-7 h-full md:left-auto md:right-7 md:bottom-auto md:h-auto md:max-h-[calc(100vh-56px)] bg-gray-50 w-full md:w-[470px] rounded-b-lg shadow-2xl ${
-          itemCount === 0 ? 'overflow-hidden' : 'overflow-y-scroll'
+        className={`z-20 fixed top-0 bottom-0 left-0 right-0 bg-black transition-opacity duration-400 ${
+          isCartOpen ? 'opacity-20' : 'opacity-0 pointer-events-none'
         }`}
-      >
-        <CartHeader />
-        {itemCount === 0 ? (
-          <CartEmpty />
-        ) : (
-          <>
-            <CartItems />
-            <CartFooter />
-          </>
-        )}
-      </div>
-    </Dialog>
+        onClick={isCartOpen ? closeCart : null}
+      />
+      <Dialog open={isCartOpen} onClose={closeCart}>
+        <Dialog.Overlay className="fixed z-20 inset-0 bg-gray-50 opacity-75" />
+        <div
+          className={`absolute flex flex-col md:block z-20 top-0 left-0 right-0 bottom-0 md:top-7 h-full md:left-auto md:right-7 md:bottom-auto md:h-auto md:max-h-[calc(100vh-56px)] bg-gray-50 w-full md:w-[470px] rounded-b-lg shadow-2xl ${
+            totalQuantity === 0 ? 'overflow-hidden' : 'overflow-y-scroll'
+          }`}
+        >
+          <CartHeader />
+          {totalQuantity === 0 ? (
+            <CartEmpty />
+          ) : (
+            <>
+              <CartItems />
+              <CartFooter />
+            </>
+          )}
+        </div>
+      </Dialog>
+    </div>
   );
 }
 
@@ -67,72 +81,67 @@ function CartItems() {
         <div role="columnheader">Price</div>
       </div>
       <CartLines>
-        {({merchandise}) => (
-          <div
-            role="row"
-            className="flex py-7 border-b last:border-b-0 border-gray-300 text-gray-900"
-          >
-            <div role="cell" className="flex-shrink-0 mr-7">
-              <Link to={`products/${merchandise.product.handle}`}>
-                <CartLine.Image
-                  className="bg-white border border-black border-opacity-5 rounded-xl "
-                  options={{width: 98, height: 98, crop: 'center'}}
-                />
-              </Link>
-            </div>
-            <div
-              role="cell"
-              className="flex flex-col w-full justify-between items-start flex-grow-1 mr-4"
-            >
-              <Link
-                to={`products/${merchandise.product.handle}`}
-                className="hover:underline"
-              >
-                <CartLine.ProductTitle className="text-lg font-medium" />
-              </Link>
-              <CartLine.SelectedOptions as="ul" className="text-xs space-y-1">
-                {({name, value}) => (
-                  <>
-                    {name}: {value}
-                  </>
-                )}
-              </CartLine.SelectedOptions>
-              <CartLine.Attributes as="ul" className="text-sm space-y-1">
-                {({key, value}) => (
-                  <>
-                    {key}: {value}
-                  </>
-                )}
-              </CartLine.Attributes>
-              <CartItemQuantity />
-            </div>
-            <div
-              role="cell"
-              className="flex flex-col justify-between items-end"
-            >
-              <CartLine.QuantityAdjustButton
-                adjust="remove"
-                aria-label="Remove from cart"
-                className="disabled:pointer-events-all disabled:cursor-wait"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </CartLine.QuantityAdjustButton>
-              <CartLine.Price className="text-lg" />
-            </div>
-          </div>
-        )}
+        <LineInCart />
       </CartLines>
+    </div>
+  );
+}
+
+function LineInCart() {
+  const {merchandise} = useCartLine();
+  return (
+    <div
+      role="row"
+      className="flex py-7 border-b last:border-b-0 border-gray-300 text-gray-900"
+    >
+      <div role="cell" className="flex-shrink-0 mr-7">
+        <Link to={`/products/${merchandise.product.handle}`}>
+          <CartLineImage
+            className="bg-white border border-black border-opacity-5 rounded-xl "
+            options={{width: 98, height: 98, crop: 'center'}}
+          />
+        </Link>
+      </div>
+      <div
+        role="cell"
+        className="flex flex-col w-full justify-between items-start flex-grow-1 mr-4"
+      >
+        <Link
+          to={`/products/${merchandise.product.handle}`}
+          className="hover:underline"
+        >
+          <CartLineProductTitle className="text-lg font-medium" />
+        </Link>
+        <ul className="text-xs space-y-1">
+          {merchandise.selectedOptions.map(({name, value}) => (
+            <li key={name}>
+              {name}: {value}
+            </li>
+          ))}
+        </ul>
+        <CartItemQuantity />
+      </div>
+      <div role="cell" className="flex flex-col justify-between items-end">
+        <CartLineQuantityAdjustButton
+          adjust="remove"
+          aria-label="Remove from cart"
+          className="disabled:pointer-events-all disabled:cursor-wait"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </CartLineQuantityAdjustButton>
+        <CartLinePrice className="text-lg" />
+      </div>
     </div>
   );
 }
@@ -140,7 +149,7 @@ function CartItems() {
 function CartItemQuantity() {
   return (
     <div className="flex border rounded border-gray-300 items-center overflow-auto mt-2">
-      <CartLine.QuantityAdjustButton
+      <CartLineQuantityAdjustButton
         adjust="decrease"
         aria-label="Decrease quantity"
         className="p-2 disabled:pointer-events-all disabled:cursor-wait"
@@ -157,12 +166,12 @@ function CartItemQuantity() {
             clipRule="evenodd"
           />
         </svg>
-      </CartLine.QuantityAdjustButton>
-      <CartLine.Quantity
+      </CartLineQuantityAdjustButton>
+      <CartLineQuantity
         as="div"
         className="p-2 text-gray-900 text-xs text-center"
       />
-      <CartLine.QuantityAdjustButton
+      <CartLineQuantityAdjustButton
         adjust="increase"
         aria-label="Increase quantity"
         className="p-2 text-gray-400 disabled:pointer-events-all disabled:cursor-wait"
@@ -179,7 +188,7 @@ function CartItemQuantity() {
             clipRule="evenodd"
           />
         </svg>
-      </CartLine.QuantityAdjustButton>
+      </CartLineQuantityAdjustButton>
     </div>
   );
 }

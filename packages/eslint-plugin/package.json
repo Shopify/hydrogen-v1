@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-hydrogen",
-  "version": "0.8.0",
+  "version": "0.11.0",
   "description": "Eslint rules for hydrogen",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "yarn build -w",
+    "dev": "yarn build --preserveWatchOutput -w",
     "build": "tsc -p .",
     "prepack": "yarn build",
     "tophat": "node ./scripts/tophat"

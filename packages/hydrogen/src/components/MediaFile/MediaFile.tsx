@@ -2,41 +2,41 @@ import * as React from 'react';
 import {Image, MediaImageProps} from '../Image';
 import {Video, VideoProps} from '../Video';
 import {ExternalVideo, ExternalVideoProps} from '../ExternalVideo';
-import {Model3D, Model3DProps} from '../Model3D';
+import {ModelViewer, ModelViewerProps} from '../ModelViewer';
 import {MediaFileFragment as Fragment} from '../../graphql/graphql-constants';
 import {Media as MediaType} from '../../graphql/types/types';
 
 export type Media = Pick<MediaType, 'mediaContentType'>;
 
-type MediaImageMedia = Media & MediaImageProps;
-type Model3DMedia = Media & Model3DProps['model'];
-type ExternalVideoMedia = Media & ExternalVideoProps['video'];
-type VideoMedia = Media & VideoProps['video'];
+type MediaImageMedia = Media & {image: MediaImageProps['data']};
+type ModelViewerMedia = Media & ModelViewerProps['data'];
+type ExternalVideoMedia = Media & ExternalVideoProps['data'];
+type VideoMedia = Media & VideoProps['data'];
 
 export interface MediaFileProps {
   /** A [Media object](/api/storefront/reference/products/media). */
-  media: MediaImageMedia | Model3DMedia | ExternalVideoMedia | VideoMedia;
-  /** The options for the `Image`, `Video`, `ExternalVideo`, or `Model3D` components. */
+  data: MediaImageMedia | ModelViewerMedia | ExternalVideoMedia | VideoMedia;
+  /** The options for the `Image`, `Video`, `ExternalVideo`, or `ModelViewer` components. */
   options?: VideoProps['options'] | ExternalVideoProps['options'];
 }
 
 /**
  * The `MediaFile` component renders the media for the Storefront API's
  * [Media object](/api/storefront/reference/products/media). It renders an `Image`, a
- * `Video`, an `ExternalVideo`, or a `Model3D` depending on the `mediaContentType` of the
+ * `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the
  * `media` provided as a prop.
  */
 export function MediaFile({
-  media,
+  data,
   options,
   ...passthroughProps
 }: MediaFileProps) {
-  switch (media.mediaContentType) {
+  switch (data.mediaContentType) {
     case 'IMAGE': {
       return (
         <Image
           {...passthroughProps}
-          image={(media as MediaImageMedia).image}
+          data={(data as MediaImageMedia).image}
           options={options as MediaImageProps['options']}
         />
       );
@@ -45,7 +45,7 @@ export function MediaFile({
       return (
         <Video
           {...passthroughProps}
-          video={media as VideoMedia}
+          data={data as VideoMedia}
           options={options as VideoProps['options']}
         />
       );
@@ -53,12 +53,14 @@ export function MediaFile({
       return (
         <ExternalVideo
           {...passthroughProps}
-          video={media as ExternalVideoMedia}
+          data={data as ExternalVideoMedia}
           options={options as ExternalVideoProps['options']}
         />
       );
     case 'MODEL_3D':
-      return <Model3D {...passthroughProps} model={media as Model3DMedia} />;
+      return (
+        <ModelViewer {...passthroughProps} data={data as ModelViewerMedia} />
+      );
     default:
       return null;
   }

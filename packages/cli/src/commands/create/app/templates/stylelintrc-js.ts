@@ -2,8 +2,6 @@ import {Feature} from '../../../../utilities/feature';
 import {TemplateOptions} from '../../../../types';
 
 export default function ({features, ifFeature}: TemplateOptions) {
-  const prettier = features.includes(Feature.Prettier);
-
   const tailwindRules = ifFeature(
     Feature.Tailwind,
     `'at-rule-no-unknown': [
@@ -16,7 +14,7 @@ export default function ({features, ifFeature}: TemplateOptions) {
 
   const extendedConfigs = [
     `'@shopify/stylelint-plugin'`,
-    prettier && `'@shopify/stylelint-plugin/prettier'`,
+    `'@shopify/stylelint-plugin/prettier'`,
   ];
 
   return `

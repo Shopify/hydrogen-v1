@@ -1,36 +1,64 @@
-import type {CacheOptions, QueryKey} from '../../types';
-import {log} from '../../utilities/log';
+import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types';
+import {
+  getLoggerWithContext,
+  collectQueryCacheControlHeaders,
+  collectQueryTimings,
+} from '../../utilities/log';
 import {
   deleteItemFromCache,
+  generateSubRequestCacheControlHeader,
   getItemFromCache,
   isStale,
   setItemInCache,
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
-import {useRenderCacheData} from '../RenderCacheProvider/hook';
+import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
-import type {RenderCacheResult} from '../RenderCacheProvider/types';
 export interface HydrogenUseQueryOptions {
-  cache: CacheOptions;
+  /** The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
+   * determine which cache control header to set.
+   */
+  cache?: CachingStrategy;
+  /** Whether to [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries).
+   * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
+   * to preload the query for all requests.
+   */
+  preload?: PreloadOptions;
 }
 
 /**
- * The `useQuery` hook is a wrapper around Suspense calls and
- * global runtime's Cache if it exist.
- * It supports Suspense calls on the server and on the client.
+ * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
+ * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based
+ * on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this
+ * hook to call any third-party APIs.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
   key: QueryKey,
   /** An asynchronous query function like `fetch` which returns data. */
   queryFn: () => Promise<T>,
-  /** Options including `cache` to manage the cache behavior of the sub-request. */
+  /** The options to manage the cache behavior of the sub-request. */
   queryOptions?: HydrogenUseQueryOptions
-): RenderCacheResult<T> {
-  return useRenderCacheData<T>(
-    key,
-    cachedQueryFnBuilder(key, queryFn, queryOptions)
+) {
+  const request = useServerRequest();
+  const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
+  const fetcher = cachedQueryFnBuilder<T>(
+    withCacheIdKey,
+    queryFn,
+    queryOptions
   );
+
+  collectQueryTimings(request, withCacheIdKey, 'requested');
+
+  if (queryOptions?.preload) {
+    request.savePreloadQuery({
+      preload: queryOptions?.preload,
+      key: withCacheIdKey,
+      fetcher,
+    });
+  }
+
+  return useRequestCacheData<T>(withCacheIdKey, fetcher);
 }
 
 function cachedQueryFnBuilder<T>(
@@ -46,6 +74,11 @@ function cachedQueryFnBuilder<T>(
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
   async function cachedQueryFn() {
+    // Call this hook before running any async stuff
+    // to prevent losing the current React cycle.
+    const request = useServerRequest();
+    const log = getLoggerWithContext(request);
+
     const cacheResponse = await getItemFromCache(key);
 
     async function generateNewOutput() {
@@ -54,6 +87,12 @@ function cachedQueryFnBuilder<T>(
 
     if (cacheResponse) {
       const [output, response] = cacheResponse;
+
+      collectQueryCacheControlHeaders(
+        request,
+        key,
+        response.headers.get('cache-control')
+      );
 
       /**
        * Important: Do this async
@@ -92,6 +131,12 @@ function cachedQueryFnBuilder<T>(
     runDelayedFunction(
       async () =>
         await setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+    );
+
+    collectQueryCacheControlHeaders(
+      request,
+      key,
+      generateSubRequestCacheControlHeader(resolvedQueryOptions?.cache)
     );
 
     return newOutput;

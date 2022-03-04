@@ -3,9 +3,10 @@ import {mount} from '@shopify/react-testing';
 import {CartLineProvider} from '../../CartLineProvider';
 import {CartLineQuantity} from '../CartLineQuantity.client';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
+import {Link} from '../../Link/index';
 
 describe('<CartLineQuantity />', () => {
-  it.skip('displays the quantity', () => {
+  it('displays the quantity', () => {
     const wrapper = mount(
       <CartLineProvider line={CART_LINE}>
         <CartLineQuantity />
@@ -17,7 +18,7 @@ describe('<CartLineQuantity />', () => {
     });
   });
 
-  it.skip('allows a custom tag', () => {
+  it('allows a custom tag', () => {
     const wrapper = mount(
       <CartLineProvider line={CART_LINE}>
         <CartLineQuantity as="p" />
@@ -26,6 +27,18 @@ describe('<CartLineQuantity />', () => {
 
     expect(wrapper).toContainReactComponent('p', {
       children: CART_LINE.quantity,
+    });
+  });
+
+  it(`validates props for a component passed to the 'as' prop`, () => {
+    const wrapper = mount(
+      <CartLineProvider line={CART_LINE}>
+        <CartLineQuantity as={Link} to="/test" />
+      </CartLineProvider>
+    );
+
+    expect(wrapper).toContainReactComponent(Link, {
+      to: '/test',
     });
   });
 });

@@ -2,12 +2,12 @@ The Hydrogen framework includes page server components. This guide describes how
 
 ## How pages work
 
-Hydrogen uses file-based routing. Any pages added to the `src/pages` directory will be automatically registered as routes by the app.
+Hydrogen uses file-based routing. Any pages added to the `src/routes` directory will be automatically registered as routes by the app.
 
-You might want to add a new page and have it display at `localhost:3000/test`. You can do this by adding a new file to `src/pages`. For example, if you add `test.server.jsx` to `src/pages`, then the page displays at `localhost:3000/test`.
+You might want to add a new page and have it display at `localhost:3000/test`. You can do this by adding a new file to `src/routes`. For example, if you add `test.server.jsx` to `src/routes`, then the page displays at `localhost:3000/test`.
 
 > Note:
-> If you add the new page to `src/pages/pages`, then the new page displays at `localhost:3000/pages/test`.
+> If you add the new page to `src/routes/pages`, then the new page displays at `localhost:3000/pages/test`.
 
 The following example shows how each `*.server.jsx` file maps to a different page route in the Hydrogen app:
 
@@ -29,7 +29,7 @@ The following example shows how each `*.server.jsx` file maps to a different pag
 
 ## Props
 
-Server components placed in the `src/pages` directory receive the following special props that you can use to create custom experiences:
+Server components placed in the `src/routes` directory receive the following special props that you can use to create custom experiences:
 
 | Prop       | Type                      |
 | ---------- | ------------------------- |
@@ -222,9 +222,6 @@ Custom responses provide the following benefits:
 
 The following example shows how to create a custom sitemap by adding a new server component called `pages/sitemap.xml.server.jsx`. The custom response object returns the sitemap.
 
-> Tip:
-> Hydrogen's starter includes a `pages/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`.
-
 {% codeblock file, filename: '/pages/my-products.server.jsx' %}
 
 ```jsx
@@ -279,13 +276,9 @@ const QUERY = gql`
         node {
           updatedAt
           handle
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
+          featuredImage {
+            url
+            altText
           }
         }
       }
@@ -295,6 +288,18 @@ const QUERY = gql`
 ```
 
 {% endcodeblock %}
+
+#### Limitations and considerations
+
+The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) includes a `pages/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
+
+- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources. If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.
+
+- When you add or remove pages, the sitemap is automatically updated within one day. Similarly, if you unpublish a product, then the product is removed automatically from the sitemap.
+
+- The sitemap is cached for 24 hours.
+
+- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Hydrogen starter template URL structure, which is based on resource's handle.
 
 ### Build a JSON API
 
@@ -325,13 +330,9 @@ const QUERY = gql`
         node {
           updatedAt
           handle
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
+          featuredImage {
+            url
+            altText
           }
         }
       }
@@ -460,12 +461,8 @@ const QUERY = gql`
       title
       handle
       description
-      images(first: 1) {
-        edges {
-          node {
-            url
-          }
-        }
+      featuredImage {
+        url
       }
     }
   }

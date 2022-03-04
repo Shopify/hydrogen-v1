@@ -1,21 +1,14 @@
-import type {CacheOptions, QueryKey} from '../types';
+import type {QueryKey, CachingStrategy} from '../types';
 import {getCache} from './runtime';
+import {
+  CacheSeconds,
+  generateCacheControlHeader,
+} from '../framework/CachingStrategy';
 
-const DEFAULT_SUBREQUEST_CACHE_OPTIONS: CacheOptions = {
-  maxAge: 1,
-  staleWhileRevalidate: 9,
-};
-
-export function generateCacheControlHeader(options: CacheOptions): string {
-  if (options.noStore) {
-    return 'no-store';
-  }
-
-  return [
-    options.private ? 'private' : 'public',
-    `max-age=${options.maxAge}`,
-    `stale-while-revalidate=${options.staleWhileRevalidate}`,
-  ].join(', ');
+export function generateSubRequestCacheControlHeader(
+  userCacheOptions?: CachingStrategy
+): string {
+  return generateCacheControlHeader(userCacheOptions || CacheSeconds());
 }
 
 /**
@@ -71,7 +64,7 @@ export async function getItemFromCache(
 export async function setItemInCache(
   key: QueryKey,
   value: any,
-  userCacheOptions?: CacheOptions
+  userCacheOptions?: CachingStrategy
 ) {
   const cache = getCache();
   if (!cache) {
@@ -80,14 +73,8 @@ export async function setItemInCache(
 
   const url = getKeyUrl(hashKey(key));
   const request = new Request(url);
-
-  const cacheOptions = {
-    ...DEFAULT_SUBREQUEST_CACHE_OPTIONS,
-    ...(userCacheOptions ?? {}),
-  };
-
   const headers = new Headers({
-    'cache-control': generateCacheControlHeader(cacheOptions),
+    'cache-control': generateSubRequestCacheControlHeader(userCacheOptions),
   });
 
   const response = new Response(JSON.stringify(value), {headers});

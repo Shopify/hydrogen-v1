@@ -1,13 +1,9 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Metafield and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Metafield and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `Metafield` component renders the value of a Storefront
 API's [Metafield object](/api/storefront/reference/common-objects/metafield).
 
-When a render function is provided, it passes the Metafield object with a value
-that was parsed according to the Metafield's `type` field. For more information,
-refer to the [Render props](#render-props) section.
-
-When no render function is provided, it renders a smart default of the
+Renders a smart default of the
 Metafield's `value`. For more information, refer to the [Default Output](#default-output) section.
 
 ## Example code
@@ -18,32 +14,16 @@ import {Metafield} from '@shopify/hydrogen';
 export function Product({product}) {
   const metafield = product.metafields.edges.map(({node}) => node)[0];
 
-  return <Metafield metafield={metafield} />;
-}
-
-export function ProductWithRenderProp({product}) {
-  const metafield = product.metafields.edges.map(({node}) => node)[0];
-
-  return (
-    <Metafield metafield={metafield}>
-      {(metafield) => {
-        return (
-          <p>
-            {metafield.namespace} {metafield.key}: {metafield.value}
-          </p>
-        );
-      }}
-    </Metafield>
-  );
+  return <Metafield data={metafield} />;
 }
 ```
 
 ## Props
 
-| Name      | Type                                                  | Description                                                                                               |
-| --------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| metafield | <code>ParsedMetafield</code>                          | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.         |
-| children? | <code>(value: ParsedMetafield) => ReactElement</code> | A render function that takes a `Metafield` object as an argument. Refer to [Render props](#render-props). |
+| Name | Type                         | Description                                                                                                                               |
+| ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| data | <code>ParsedMetafield</code> | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.                                         |
+| as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/types). |
 
 ## Default output
 
@@ -60,10 +40,10 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 | `weight`                 | A `span` containing a string of the localized weight using [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).      |
 | `dimension`              | A `span` containing a string of the localized dimension using [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).   |
 | `volume`                 | A `span` containing a string of the localized volume using [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).      |
-| `rating`                 | A `div` containing filled and unfilled star characters correponding to the rating (for example, ★★★★☆).                                                                                    |
+| `rating`                 | A `span` containing a string of the rating value.                                                                                                                                          |
 | `color`                  | A `span` containing the color value as a string.                                                                                                                                           |
 | `single_line_text_field` | A `RawHtml` component with the text.                                                                                                                                                       |
-| `multi_line_text_field`  | A `RawHtml` component with the text.                                                                                                                                                       |
+| `multi_line_text_field`  | A `RawHtml` component with the text, and `as="span"`.                                                                                                                                      |
 | `product_reference`      | A `span` containing the product reference GID.                                                                                                                                             |
 | `file_reference`         | An `Image` component when the file reference is of type `MediaImage`, or a `span` containing the file reference GID for other file types.                                                  |
 | `page_reference`         | A `span` containing the page reference GID.                                                                                                                                                |

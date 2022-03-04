@@ -8,10 +8,12 @@ import {Props} from '../types';
  * It must be a descendent of the `ProductProvider` component.
  */
 export function ProductTitle<TTag extends ElementType = 'span'>(
-  /** The `as` prop is an HTML element to wrap the title. If not specified, then the
-   * title is wrapped in a `span` element.
-   */
-  props: Props<TTag>
+  props: Props<TTag> & {
+    /** An HTML tag to wrap the title. If not specified, then the
+     * title is wrapped in a `span` element.
+     */
+    as?: TTag;
+  }
 ) {
   const product = useProduct();
 

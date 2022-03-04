@@ -1,14 +1,10 @@
 import React from 'react';
 import {CartProvider} from '../../CartProvider';
 import {CartCheckoutButton} from '../CartCheckoutButton.client';
-import {CART} from '../../CartProvider/tests/fixtures';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 jest.mock('../../CartProvider', () => ({
   ...(jest.requireActual('../../CartProvider') as {}),
-  useCartCheckoutUrl: () => {
-    return CART['checkoutUrl'];
-  },
   useCart: () => {
     return {
       status: 'idle',
@@ -31,7 +27,7 @@ describe('CartCheckoutButton', () => {
 
   // TODO fix this when @shopify/react-testing supports React 18 experimental
   it.skip('redirects to checkout when clicked', () => {
-    const button = mountWithShopifyProvider(
+    const button = mountWithProviders(
       <CartProvider>
         <CartCheckoutButton>Checkout</CartCheckoutButton>
       </CartProvider>

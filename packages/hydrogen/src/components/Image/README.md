@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Image and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Image and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `Image` component renders an image for the Storefront API's
 [`Image` object](/api/storefront/reference/common-objects/image).
@@ -15,22 +15,18 @@ const QUERY = gql`
   ${Image.Fragment}
 
   productByHandle(handle: "my-product") {
-    images(first: 1) {
-      edges {
-        node {
-          ...ImageFragment
-        }
-      }
+    featuredImage {
+      ...ImageFragment
     }
   }
 `;
 
 export default function Product() {
-  const {data, fetching} = useShopQuery({query: QUERY});
+  const {data} = useShopQuery({query: QUERY});
 
-  const image = data.productByHandle.images.edges[0].node;
+  const image = data.productByHandle.featuredImage;
 
-  return <Image image={image} />;
+  return <Image data={image} />;
 }
 ```
 
@@ -62,6 +58,18 @@ export default function ExternalImageWithLoader() {
   );
 }
 ```
+
+## Props
+
+| Name            | Description                                                                                                                                                                                          |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data`          | An object with the keys `url`, `altText`, `id`, `width`, and `height`. Refer to the Storefront API's [`Image` object](/api/storefront/reference/common-objects/image).                               |
+| `options`       | An object of image size options for Shopify CDN images.                                                                                                                                              |
+| `src`           | A URL string. This string can be an absolute path or a relative path depending on the `loader`.                                                                                                      |
+| `width`         | The integer value for the width of the image. This is a required prop when `src` is present.                                                                                                         |
+| `height`        | The integer value for the height of the image. This is a required prop when `src` is present.                                                                                                        |
+| `loader`        | A custom function that generates the image URL. Parameters passed into this function includes `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values. |
+| `loaderOptions` | An object of `loader` function options. For example, if the `loader` function requires a `scale` option, then the value can be a property of the `loaderOptions` object (eg. `{scale: 2}`).          |
 
 ## Component type
 

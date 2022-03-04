@@ -71,6 +71,7 @@ web_modules/
 # dotenv environment variables file
 .env
 .env.test
+!**/playground/**/.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -110,6 +111,7 @@ dist
 
 # VSCode launch configs
 .vscode/
+!examples/*/.vscode/
 
 # yarn v2
 .yarn/cache

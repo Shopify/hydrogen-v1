@@ -1,11 +1,34 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 0.11.0 - 2022-02-24
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+- feat: update favicon
+- feat: HelmetProvider has been removed
+- feat: `/src/entry-server.jsx` file has been merged into `App.server.jsx`. The latter is the new default entry point for the server
+- feat: `/src/entry-client.jsx` file has been removed. The new entry point in for the client in `index.html` is `/@shopify/hydrogen/entry-client`. Custom entry points are still supported
+- fix: Footer date update
+- fix: product link errors in Cart.client.jsx of the example template
+- feat: Helmet component has been renamed to Head
 
-<!-- ## Unreleased -->
+## 0.10.1 - 2022-01-26
+
+- fix: Wrong prop in HelmetProvider breaking SEO
+
+## 0.10.0 - 2022-01-25
+
+- fix: Update Node 14 to Node 16 in DevContainer
+
+## 0.9.1 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.9.0 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.8.3 - 2022-01-13
+
+- No updates. Transitive dependency bump.
 
 ## 0.8.2 - 2022-01-07
 

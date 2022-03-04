@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Video and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/master/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Video and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `Video` component renders a `video` for the Storefront API's [`Video` object](/api/storefront/reference/products/video).
 
@@ -38,17 +38,17 @@ export default function MyProductVideo() {
 
   const firstMediaElement = data.products.edges[0].node.media.edges[0].node;
   if (firstMediaElement.mediaContentType === 'VIDEO') {
-    return <Video video={firstMediaElement} />;
+    return <Video data={firstMediaElement} />;
   }
 }
 ```
 
 ## Props
 
-| Name     | Type                                                                                 | Description                                                           |
-| -------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| video    | <code>Unknown<<wbr>UndocumentedType, UndocumentedType, UndocumentedType<wbr>></code> | An object corresponding to the [GraphQL fragment](#graphql-fragment). |
-| options? | <code>ImageSizeOptions</code>                                                        | An object of image size options for the video's `previewImage`.       |
+| Name     | Type                                                                             | Description                                                           |
+| -------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| data     | <code>Object<<wbr>VideoType, Pick<<wbr>Image, Pick<<wbr>VideoSource><wbr></code> | An object corresponding to the [GraphQL fragment](#graphql-fragment). |
+| options? | <code>ImageSizeOptions</code>                                                    | An object of image size options for the video's `previewImage`.       |
 
 ## Component type
 
