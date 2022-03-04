@@ -7,10 +7,7 @@ import * as Types from '../../graphql/types/types';
 
 export type MediaFileFragment_ExternalVideo_Fragment = {
   __typename?: 'ExternalVideo';
-} & Pick<
-  Types.ExternalVideo,
-  'mediaContentType' | 'id' | 'embeddedUrl' | 'host'
->;
+} & Pick<Types.ExternalVideo, 'mediaContentType' | 'id' | 'embedUrl' | 'host'>;
 
 export type MediaFileFragment_MediaImage_Fragment = {
   __typename?: 'MediaImage';

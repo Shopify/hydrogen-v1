@@ -25,7 +25,7 @@ export type ProductProviderFragmentFragment = {__typename?: 'Product'} & Pick<
           node:
             | ({__typename?: 'ExternalVideo'} & Pick<
                 Types.ExternalVideo,
-                'mediaContentType' | 'id' | 'embeddedUrl' | 'host'
+                'mediaContentType' | 'id' | 'embedUrl' | 'host'
               >)
             | ({__typename?: 'MediaImage'} & Pick<
                 Types.MediaImage,

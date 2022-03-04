@@ -35,7 +35,7 @@ export function ExternalVideo<TTag extends React.ElementType = 'iframe'>(
     ...passthroughProps
   } = props;
 
-  const url = useEmbeddedVideoUrl(data.embeddedUrl, options);
+  const url = useEmbeddedVideoUrl(data.embedUrl, options);
 
   return (
     <iframe
