@@ -28,8 +28,6 @@
 
 ## [0.11.0] - 2022-02-24
 
-- fix: respond with 404 if the route has no matches
-
 ### Added
 
 - New React hook `useScriptLoader` is available to more easily load external scripts
