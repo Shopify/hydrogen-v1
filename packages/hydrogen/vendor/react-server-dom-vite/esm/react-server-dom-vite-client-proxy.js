@@ -17,10 +17,10 @@ import {createElement} from 'react';
 // to load them later when consuming the response in SSR.
 globalThis.__COMPONENT_INDEX = {};
 
-function isReactComponent(component, name) {
+function isReactComponent(component, name, isNamed) {
   if (!component) return false;
   return (
-    (typeof component === 'function' && /^[A-Z]/.test(name)) ||
+    (typeof component === 'function' && (!isNamed || /^[A-Z]/.test(name))) ||
     typeof component.render === 'function' ||
     component.$$typeof === Symbol.for('react.element')
   );
@@ -34,7 +34,7 @@ function wrapInClientProxy(_ref) {
     named = _ref.named,
     component = _ref.component;
 
-  if (!isReactComponent(component, name)) {
+  if (!isReactComponent(component, name, named)) {
     // This is not a React component, do not wrap it.
     return component;
   }
