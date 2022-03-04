@@ -53,7 +53,7 @@ export function useShopQuery<T>({
   const body = query ? graphqlRequestBody(query, variables) : '';
   const {request, key} = createShopRequest(body, locale);
 
-  const {data, error: fetchError} = useQuery<UseShopQueryResponse<T>>(
+  const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
     key,
     query
       ? fetchBuilder<UseShopQueryResponse<T>>(request)
@@ -65,15 +65,11 @@ export function useShopQuery<T>({
   /**
    * The fetch request itself failed, so we handle that differently than a GraphQL error
    */
-  if (fetchError) {
-    const errorMessage = `Failed to fetch the Storefront API. ${
-      // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
-      fetchError.status === 403
-        ? `You may have a bad value in 'shopify.config.js'`
-        : `${fetchError.statusText}`
-    }`;
+  if (useQueryError) {
+    const errorMessage = createErrorMessage(useQueryError);
 
     log.error(errorMessage);
+    log.error(useQueryError);
 
     if (getConfig().dev) {
       throw new Error(errorMessage);
@@ -126,4 +122,17 @@ function createShopRequest(body: string, locale?: string) {
     }),
     key: [storeDomain, storefrontApiVersion, body, locale],
   };
+}
+
+function createErrorMessage(fetchError: Response | Error) {
+  if (fetchError instanceof Response) {
+    `Failed to fetch the Storefront API. ${
+      // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
+      fetchError.status === 403
+        ? `You may have a bad value in 'shopify.config.js'`
+        : `${fetchError.statusText}`
+    }`;
+  } else {
+    return `Failed to connect to the Storefront API: ${fetchError.message}`;
+  }
 }
