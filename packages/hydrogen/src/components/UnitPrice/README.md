@@ -58,7 +58,7 @@ The `UnitPrice` component is a client component, which means that it renders on 
 
 ## GraphQL fragment
 
-The following fragment is available as a string for your GraphQL query using `UnitPriceFragment` or `UnitPrice.Fragment`. Using this fragment ensures that you have all the data necessary for rendering the `UnitPrice` component.
+The following fragment is available as a string for your GraphQL query using `UnitPriceFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `UnitPrice` component.
 
 ```graphql
 fragment UnitPriceFragment on ProductVariant {

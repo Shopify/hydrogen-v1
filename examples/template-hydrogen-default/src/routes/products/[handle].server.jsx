@@ -1,4 +1,5 @@
-import {useShopQuery, ProductProviderFragment, Seo} from '@shopify/hydrogen';
+import {useShopQuery, Seo} from '@shopify/hydrogen';
+import {ProductProviderFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';

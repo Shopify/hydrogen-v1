@@ -1,8 +1,5 @@
-import {
-  useShopQuery,
-  ProductProviderFragment,
-  flattenConnection,
-} from '@shopify/hydrogen';
+import {useShopQuery, flattenConnection} from '@shopify/hydrogen';
+import {ProductProviderFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Layout from './Layout.server';

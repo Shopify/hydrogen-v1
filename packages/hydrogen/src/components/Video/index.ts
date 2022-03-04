@@ -1,1 +1,1 @@
-export {Video, VideoFragment} from './Video';
+export {Video} from './Video';

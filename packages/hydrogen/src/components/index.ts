@@ -1,5 +1,5 @@
 export {Link} from './Link';
-export {MediaFile, MediaFileFragment} from './MediaFile';
+export {MediaFile} from './MediaFile';
 export {Video} from './Video';
 export {Image} from './Image';
 export {ExternalVideo} from './ExternalVideo';
@@ -8,7 +8,7 @@ export {AddToCartButton} from './AddToCartButton';
 export {ModelViewer} from './ModelViewer';
 export {Money} from './Money';
 export {Metafield} from './Metafield';
-export type {MetafieldType, MetafieldFragmentFragment} from './Metafield';
+export type {MetafieldType} from './Metafield';
 export {CartLineProvider, useCartLine} from './CartLineProvider';
 export {CartLineImage} from './CartLineImage';
 export {CartLinePrice} from './CartLinePrice';
@@ -27,11 +27,7 @@ export type {
   CartWithActions,
   CartAction,
 } from './CartProvider';
-export {
-  ProductProvider,
-  useProduct,
-  ProductProviderFragment,
-} from './ProductProvider';
+export {ProductProvider, useProduct} from './ProductProvider';
 export {ProductDescription} from './ProductDescription';
 export {ProductTitle} from './ProductTitle';
 export {ProductPrice} from './ProductPrice';
