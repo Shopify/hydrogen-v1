@@ -1,8 +1,7 @@
 ---
-'template-hydrogen-default': minor
 '@shopify/hydrogen-cli': minor
 '@shopify/hydrogen': minor
-'test-server-components': minor
+'create-hydrogen-app': minor
 ---
 
 Upgrade default Storefront API to version '2022-04'. Some components have been updated to use the 2022-04 features and types as well.
