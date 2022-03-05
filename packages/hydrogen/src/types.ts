@@ -132,3 +132,10 @@ export interface HydrogenVitePluginOptions {
 }
 
 export type PreloadOptions = boolean | string;
+
+export type SanitizeOptions = {
+  /** String array of additional forbid tags */
+  forbidTags?: string[];
+  /** String array of additional forbid attributes */
+  forbidAttrs?: string[];
+};
