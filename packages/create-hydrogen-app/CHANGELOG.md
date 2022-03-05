@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- fix: Footer Copyright alignment
+
 ## 0.11.0 - 2022-02-24
 
 - feat: update favicon

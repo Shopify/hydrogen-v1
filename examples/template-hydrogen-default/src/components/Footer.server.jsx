@@ -95,7 +95,7 @@ export default function Footer({collection, product}) {
           </div>
         </div>
       </div>
-      <div className="py-6 px-4 md:px-8 bg-gray-50">
+      <div className="py-6 px-4 md:px-8 bg-gray-50 text-center">
         <p className="text-gray-600">© {new Date().getFullYear()} Shopify</p>
       </div>
     </footer>
