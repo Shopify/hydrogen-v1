@@ -128,7 +128,7 @@ describe('sanitize', () => {
     `);
 
     expect(result).toEqual(
-      '<div>This is a test<br></p><p>This is a test</p></div>'
+      '<div>This is a test<br><p>This is a test</p></div>'
     );
   });
 });
