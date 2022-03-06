@@ -1,1 +1,0 @@
-export {apiRoutes} from '../apiRoutes';
