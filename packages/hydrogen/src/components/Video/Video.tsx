@@ -3,14 +3,14 @@ import {ImageSizeOptions, useImageUrl} from '../../utilities';
 import type {VideoFragmentFragment} from './VideoFragment';
 
 interface VideoProps {
-  /** An object corresponding to the [GraphQL fragment](#graphql-fragment). */
+  /** An object with keys that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). */
   data: VideoFragmentFragment;
   /** An object of image size options for the video's `previewImage`. */
   options?: ImageSizeOptions;
 }
 
 /**
- * The `Video` component renders a `video` for the Storefront API's [`Video` object](/api/storefront/reference/products/video).
+ * The `Video` component renders a `video` for the Storefront API's [Video object](/api/storefront/reference/products/video).
  */
 export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
   const {

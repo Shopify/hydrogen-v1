@@ -12,7 +12,7 @@ import type {
 } from './MediaFileFragment';
 
 export interface MediaFileProps {
-  /** A [Media object](/api/storefront/reference/products/media). */
+  /** An object with keys that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). */
   data: MediaFileFragmentFragment;
   /** The options for the `Image`, `Video`, or `ExternalVideo` components. */
   options?:

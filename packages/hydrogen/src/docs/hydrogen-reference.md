@@ -287,4 +287,8 @@ Hydrogen includes the following utilities to help speed up your development proc
     <td><a href="/api/hydrogen/utilities/parsemetafieldvalue">parseMetafieldValue</a></td>
     <td>Parses a metafield's value from a string to a sensible type corresponding to the metafield's type.</td>
   </tr>
+  <tr>
+    <td><a href="/api/hydrogen/utilities/queryshop">queryShop</a></td>
+    <td>Helps you query the Storefront API.</td>
+  </tr>
 </table>
