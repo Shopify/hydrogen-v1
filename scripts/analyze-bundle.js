@@ -76,6 +76,11 @@ async function run(compareToFilePath) {
       );
       return;
     }
+
+    // TODO: Actually compare the bundle sizes
+    // TODO: Get the results of the comparison back to the GitHub Actions workflow somehow,
+    // either by writing to a file (and reading it in the workflow) or by console.logging it
+    // (but then fighting yarn's noisy console output).
   }
 }
 

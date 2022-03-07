@@ -37,5 +37,12 @@ jobs:
           name: bundle-sizes-compare
           path: ./bundle-sizes-compare.json
 
+      # TODO: Analyze (and compare, if we are in a PR)
       # - name: Analyze and compare
       #   if: github.ref != 'refs/heads/main'
+
+      # TODO: Upload results (if we are in main)
+
+      # TODO: Make all of ^^ flexible to support "latest version branches" as proposed
+      # in our new release strategy, e.g. compare against `unstable` or `v1-2022-07`
+      # depending on the head ref of the PR
