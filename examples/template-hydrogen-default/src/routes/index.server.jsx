@@ -1,12 +1,14 @@
 import {
   useShopQuery,
   flattenConnection,
-  Image,
   Link,
   Seo,
   CacheDays,
 } from '@shopify/hydrogen';
-import {ProductProviderFragment} from '@shopify/hydrogen/fragments';
+import {
+  ProductProviderFragment,
+  ImageFragment,
+} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Layout from '../components/Layout.server';
@@ -237,5 +239,5 @@ const QUERY = gql`
   }
 
   ${ProductProviderFragment}
-  ${Image.Fragment}
+  ${ImageFragment}
 `;
