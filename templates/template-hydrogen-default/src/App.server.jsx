@@ -14,10 +14,12 @@ import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 
 function App() {
+  const customerAccessToken = useCustomer();
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
-        <CartProvider>
+        <CartProvider customerAccessToken={customerAccessToken}>
           <DefaultSeo />
           <Router>
             <FileRoutes />

@@ -6,15 +6,24 @@ import CartUIProvider, {useCartUI} from './CartUIProvider.client';
 /**
  * A client component that creates a cart object and provides callbacks that can be accessed by any descendent component using the `useCart` hook and related hooks
  */
-export default function CartProvider({children, numCartLines}) {
+export default function CartProvider({
+  children,
+  numCartLines,
+  customerAccessToken,
+}) {
   return (
     <CartUIProvider>
-      <Provider numCartLines={numCartLines}>{children}</Provider>
+      <Provider
+        numCartLines={numCartLines}
+        customerAccessToken={customerAccessToken}
+      >
+        {children}
+      </Provider>
     </CartUIProvider>
   );
 }
 
-function Provider({children, numCartLines}) {
+function Provider({children, numCartLines, customerAccessToken}) {
   const {openCart} = useCartUI();
 
   const open = useCallback(() => {
@@ -24,6 +33,7 @@ function Provider({children, numCartLines}) {
   return (
     <>
       <ShopifyCartProvider
+        customerAccessToken={customerAccessToken}
         numCartLines={numCartLines}
         onLineAdd={open}
         onCreate={open}

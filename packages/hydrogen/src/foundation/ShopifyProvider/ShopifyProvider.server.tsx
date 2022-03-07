@@ -18,6 +18,7 @@ function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
     storefrontApiVersion: shopifyConfig.storefrontApiVersion,
+    multipassSecret: shopifyConfig.multipassSecret,
   };
 }
 
