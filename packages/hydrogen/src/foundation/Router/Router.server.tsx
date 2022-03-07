@@ -19,13 +19,23 @@ export function Router({
 }: RouterProps): ReactElement | null {
   const request = useServerRequest();
   const currentPath = new URL(request.url).pathname;
-  return recurseChildren(request, serverProps, fallback, currentPath, children);
+  const result = recurseChildren(request, serverProps, currentPath, children);
+
+  if (result) {
+    return result;
+  }
+
+  return (
+    <>
+      {fallback}
+      <Boomerang pageTemplate={'fallback'} />
+    </>
+  );
 }
 
 function recurseChildren(
   request: ServerComponentRequest,
   serverProps: Record<string, any>,
-  fallback: ReactElement,
   currentPath: string,
   children: Array<ReactElement> | ReactElement
 ): ReactElement | null {
@@ -39,6 +49,7 @@ function recurseChildren(
             <Boomerang pageTemplate={fileRoutingResult.type.name} />
           </>
         );
+      else continue;
     } else if (child.type === Route) {
       const match = matchPath(currentPath, {
         path: child.props.path,
@@ -51,38 +62,35 @@ function recurseChildren(
         return (
           <>
             {cloneElement(child.props.page, {
-              params: match.useParams || {},
+              params: match.params || {},
               ...serverProps,
             })}
             {name ? <Boomerang pageTemplate={name} /> : null}
           </>
         );
+      } else {
+        continue;
       }
     } else if (child.props.children) {
-      return recurseChildren(
+      const result = recurseChildren(
         request,
         serverProps,
-        fallback,
         currentPath,
         child.props.children
       );
-    } else {
-      if (typeof child.type === 'function') {
-        return recurseChildren(
-          request,
-          serverProps,
-          fallback,
-          currentPath,
-          (child.type as any)(child.props) // is this a grevious hack?
-        );
-      }
+      if (result) return result;
+    }
+
+    if (typeof child.type === 'function') {
+      const result = recurseChildren(
+        request,
+        serverProps,
+        currentPath,
+        (child.type as any)(child.props) // is this a grevious hack?
+      );
+      if (result) return result;
     }
   }
 
-  return (
-    <>
-      {fallback}
-      <Boomerang pageTemplate={'fallback'} />
-    </>
-  );
+  return null;
 }

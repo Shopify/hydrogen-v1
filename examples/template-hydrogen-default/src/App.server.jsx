@@ -18,7 +18,6 @@ function App({routes, ...serverProps}) {
             serverProps={serverProps}
           >
             <FileRoutes routes={routes} />
-            <Route path="/custom1" page={<CustomPage />} />
           </Router>
         </CartProvider>
       </ShopifyProvider>
@@ -29,7 +28,3 @@ function App({routes, ...serverProps}) {
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
 export default renderHydrogen(App, {shopifyConfig, routes});
-
-function CustomPage() {
-  return <div>Hello world!</div>;
-}
