@@ -1,7 +1,7 @@
-import * as React from 'react';
-import {Image, MediaImageProps} from '../Image';
-import {Video, VideoProps} from '../Video';
-import {ExternalVideo, ExternalVideoProps} from '../ExternalVideo';
+import React from 'react';
+import {Image} from '../Image';
+import {Video} from '../Video';
+import {ExternalVideo} from '../ExternalVideo';
 import {ModelViewer} from '../ModelViewer';
 import {MediaFileFragment as Fragment} from '../../graphql/graphql-constants';
 // import {Media as MediaType} from '../../graphql/types/types';
@@ -17,7 +17,9 @@ export interface MediaFileProps {
   /** A [Media object](/api/storefront/reference/products/media). */
   data: MediaFileFragmentFragment;
   /** The options for the `Image`, `Video`, `ExternalVideo`, or `ModelViewer` components. */
-  options?: VideoProps['options'] | ExternalVideoProps['options'];
+  options?:
+    | React.ComponentProps<typeof Video>['options']
+    | React.ComponentProps<typeof ExternalVideo>['options'];
 }
 
 /**
@@ -44,7 +46,7 @@ export function MediaFile({
         <Image
           {...passthroughProps}
           data={dataImage}
-          options={options as MediaImageProps['options']}
+          options={options as React.ComponentProps<typeof Image>['options']}
         />
       );
     }
@@ -53,7 +55,7 @@ export function MediaFile({
         <Video
           {...passthroughProps}
           data={data as MediaFileFragment_Video_Fragment}
-          options={options as VideoProps['options']}
+          options={options as React.ComponentProps<typeof Video>['options']}
         />
       );
     case 'EXTERNAL_VIDEO':
@@ -61,7 +63,9 @@ export function MediaFile({
         <ExternalVideo
           {...passthroughProps}
           data={data as MediaFileFragment_ExternalVideo_Fragment}
-          options={options as ExternalVideoProps['options']}
+          options={
+            options as React.ComponentProps<typeof ExternalVideo>['options']
+          }
         />
       );
     case 'MODEL_3D':

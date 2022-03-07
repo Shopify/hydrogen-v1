@@ -3,7 +3,7 @@ import {useShop} from '../../foundation/useShop';
 import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
 
 // By using 'never' in the "or" cases below, it makes these props "exclusive" and means that you cannot pass both of them; you must pass either one OR the other.
-export type ShopPayButtonProps = {
+type ShopPayButtonProps = {
   /** A string of classes to apply to the `div` that wraps the Shop Pay button. */
   className?: string;
 } & (

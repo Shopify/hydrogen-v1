@@ -1,1 +1,1 @@
-export {RawHtml, RawHtmlProps} from './RawHtml';
+export {RawHtml} from './RawHtml';

@@ -1,5 +1,4 @@
-import React, {ElementType} from 'react';
-import {Props} from '../types';
+import React from 'react';
 
 // TODO: Revisit with Worker runtime
 // import * as DOMPurify from 'isomorphic-dompurify';
@@ -25,8 +24,8 @@ export interface RawHtmlProps<TTag> {
  * [isomorphic-dompurify](https://github.com/kkomelin/isomorphic-dompurify) by default.
  * To keep the text unsanitized, set the `unsanitized` prop to `true`.
  */
-export function RawHtml<TTag extends ElementType>(
-  props: Props<TTag> & RawHtmlProps<TTag>
+export function RawHtml<TTag extends keyof JSX.IntrinsicElements = 'div'>(
+  props: JSX.IntrinsicElements[TTag] & RawHtmlProps<TTag>
 ) {
   const {string, unsanitized, as, ...passthroughProps} = props;
   const Wrapper = as ?? 'div';
