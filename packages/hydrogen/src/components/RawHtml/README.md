@@ -3,9 +3,9 @@
 The `RawHtml` component renders an HTML string as HTML DOM elements. This should be used for
 displaying rich text-like descriptions associated with a product.
 
-The string passed to `RawHtml` is sanitized with
-[isomorphic-dompurify](https://github.com/kkomelin/isomorphic-dompurify) by default.
-To keep the text unsanitized, set the `unsanitized` prop to `true`.
+This component uses `dangerouslySetInnerHTML`. In general, setting HTML from code is risky
+because it’s easy to inadvertently expose your users to a
+[cross-site scripting (XSS)](https://en.wikipedia.org/wiki/Cross-site_scripting) attack.
 
 ## Example code
 
@@ -13,17 +13,16 @@ To keep the text unsanitized, set the `unsanitized` prop to `true`.
 import {RawHtml} from '@shopify/hydrogen';
 
 export function MyComponent() {
-  return <RawHtml string="<p>Hello world</p>" />;
+  return <RawHtml dangerouslySetInnerHTML="<p>Hello world</p>" />;
 }
 ```
 
 ## Props
 
-| Name         | Type                 | Description                                                                   |
-| ------------ | -------------------- | ----------------------------------------------------------------------------- |
-| string       | <code>string</code>  | An HTML string.                                                               |
-| unsanitized? | <code>boolean</code> | Whether the HTML string should be sanitized with `isomorphic-dompurify`.      |
-| as?          | <code>TTag</code>    | An HTML tag to be rendered as the base element wrapper. The default is `div`. |
+| Name                    | Type                | Description                                                                   |
+| ----------------------- | ------------------- | ----------------------------------------------------------------------------- |
+| dangerouslySetInnerHTML | <code>string</code> | An HTML string.                                                               |
+| as?                     | <code>TTag</code>   | An HTML tag to be rendered as the base element wrapper. The default is `div`. |
 
 ## Component type
 

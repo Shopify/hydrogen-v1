@@ -17,6 +17,9 @@ export function ProductDescription(
   }
 
   return product.descriptionHtml ? (
-    <RawHtml string={product.descriptionHtml} {...props} />
+    <RawHtml
+      dangerouslySetInnerHTMLString={product.descriptionHtml}
+      {...props}
+    />
   ) : null;
 }

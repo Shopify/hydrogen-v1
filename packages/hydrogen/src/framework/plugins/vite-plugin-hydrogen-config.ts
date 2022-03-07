@@ -29,7 +29,6 @@ export default () => {
       },
 
       ssr: {
-        external: ['isomorphic-dompurify'],
         /**
          * Tell Vite to bundle everything when we're building for Workers.
          * Otherwise, bundle RSC plugin as a workaround to apply the vendor alias above.

@@ -5,7 +5,9 @@ import {Link} from '../../Link/index';
 
 describe('<RawHtml />', () => {
   it('renders a `div` with dangerously set inner HTML', () => {
-    const component = mount(<RawHtml string="<p>Hello, World.</p>" />);
+    const component = mount(
+      <RawHtml dangerouslySetInnerHTMLString="<p>Hello, World.</p>" />
+    );
     expect(component).toContainReactComponent('div', {
       dangerouslySetInnerHTML: {
         __html: '<p>Hello, World.</p>',
@@ -15,13 +17,18 @@ describe('<RawHtml />', () => {
 
   it('allows pass-through props', () => {
     const component = mount(
-      <RawHtml className="paragraph" string="<p>Hello, World.</p>" />
+      <RawHtml
+        className="paragraph"
+        dangerouslySetInnerHTMLString="<p>Hello, World.</p>"
+      />
     );
     expect(component).toHaveReactProps({className: 'paragraph'});
   });
 
   it('renders the element corresponding to the `as` prop', () => {
-    const component = mount(<RawHtml as="p" string="<p>Hello, World.</p>" />);
+    const component = mount(
+      <RawHtml as="p" dangerouslySetInnerHTMLString="<p>Hello, World.</p>" />
+    );
 
     expect(component).toContainReactComponent('p', {
       dangerouslySetInnerHTML: {
@@ -32,7 +39,11 @@ describe('<RawHtml />', () => {
 
   it(`validates props when a component is passed to the 'as' prop`, () => {
     const component = mount(
-      <RawHtml as={Link} to="/test" string="<p>Hello, World.</p>" />
+      <RawHtml
+        as={Link}
+        to="/test"
+        dangerouslySetInnerHTMLString="<p>Hello, World.</p>"
+      />
     );
 
     expect(component).toContainReactComponent(Link, {

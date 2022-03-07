@@ -70,7 +70,7 @@ export function Metafield<TTag extends ElementType>(
         <RawHtml
           {...(passthroughProps as any)}
           as={as ?? 'span'}
-          string={data.value as string}
+          dangerouslySetInnerHTMLString={data.value as string}
         />
       );
     }
@@ -79,7 +79,9 @@ export function Metafield<TTag extends ElementType>(
         <RawHtml
           {...(passthroughProps as any)}
           as={as ?? 'span'}
-          string={(data.value as string).split('\n').join('<br/>')}
+          dangerouslySetInnerHTMLString={(data.value as string)
+            .split('\n')
+            .join('<br/>')}
         />
       );
     }

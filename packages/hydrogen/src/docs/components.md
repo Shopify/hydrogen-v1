@@ -258,7 +258,7 @@ If you wanted to render the `div` as a `section` instead, then you could pass th
 ```js
 // Input RawHtml props
 <RawHtml
-  string={myHtml}
+  dangerouslySetInnerHTMLString={myHtml}
   as="section"
   className="text-center"
 />
