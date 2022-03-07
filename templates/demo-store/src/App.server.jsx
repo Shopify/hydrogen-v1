@@ -14,6 +14,8 @@ import LoadingFallback from './components/LoadingFallback';
 import ServerCartProvider from './components/ServerCartProvider.server';
 
 function App() {
+  const customerAccessToken = useCustomer();
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
