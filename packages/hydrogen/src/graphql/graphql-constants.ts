@@ -1980,7 +1980,7 @@ fragment ImageFragment on Image {
 *```
 * fragment ExternalVideoFragment on ExternalVideo {
 *   id
-*   embeddedUrl
+*   embedUrl
 *   host
 * }
 * 
@@ -1989,7 +1989,7 @@ fragment ImageFragment on Image {
 */
 export const ExternalVideoFragment = `fragment ExternalVideoFragment on ExternalVideo {
   id
-  embeddedUrl
+  embedUrl
   host
 }
 
@@ -2108,7 +2108,7 @@ export const Localization = `query Localization {
  *
  * fragment ExternalVideoFragment on ExternalVideo {
  *   id
- *   embeddedUrl
+ *   embedUrl
  *   host
  * }
  *
@@ -2169,7 +2169,7 @@ fragment VideoFragment on Video {
 
 fragment ExternalVideoFragment on ExternalVideo {
   id
-  embeddedUrl
+  embedUrl
   host
 }
 
@@ -2484,7 +2484,7 @@ export const MoneyFragment = `fragment MoneyFragment on MoneyV2 {
  *
  * fragment ExternalVideoFragment on ExternalVideo {
  *   id
- *   embeddedUrl
+ *   embedUrl
  *   host
  * }
  *
@@ -2792,7 +2792,7 @@ fragment VideoFragment on Video {
 
 fragment ExternalVideoFragment on ExternalVideo {
   id
-  embeddedUrl
+  embedUrl
   host
 }
 

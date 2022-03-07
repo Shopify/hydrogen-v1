@@ -92,17 +92,7 @@ export function ShopPayButton({
  */
 export function getIdFromGid(id?: string) {
   if (!id) return;
-
-  let gid: string;
-
-  // atob() / Buffer required for SFAPI 2022-01. Remove atob() when upgrading to 2022-04
-  if (typeof window?.atob !== 'undefined') {
-    gid = window.atob(id);
-  } else {
-    gid = Buffer.from(id, 'base64').toString('ascii');
-  }
-
-  return gid.split('/').pop();
+  return id.split('/').pop();
 }
 
 export const MissingPropsErrorMessage = `You must pass in either "variantIds" or "variantIdsAndQuantities" to ShopPayButton`;

@@ -110,7 +110,7 @@ export type CartLineRemoveMutation = {__typename?: 'Mutation'} & {
             discountCodes: Array<
               {__typename?: 'CartDiscountCode'} & Pick<
                 Types.CartDiscountCode,
-                'code'
+                'code' | 'applicable'
               >
             >;
           }

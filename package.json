@@ -11,7 +11,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "dev": "yarn turbo run dev --parallel --continue --ignore='packages/playground'",
+    "dev": "cross-env LOCAL_DEV=true yarn turbo run dev --parallel --continue",
     "build": "yarn turbo run build",
     "lint": "run-p lint:js lint:language",
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src",
@@ -21,7 +21,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test-e2e": "jest --config jest-e2e.config.ts",
-    "test:vite-ci": "jest && jest --config jest-e2e.config.ts",
+    "test:vite-ci": "cross-env FORCE_COLOR=true jest && jest --config jest-e2e.config.ts",
     "version": "changeset version && node -p \"'export const LIB_VERSION = \\'' + require('./packages/hydrogen/package.json').version + '\\';'\" > packages/hydrogen/src/version.ts",
     "hydrogen": "./packages/cli/bin/hydrogen",
     "h2": "./packages/cli/bin/hydrogen",

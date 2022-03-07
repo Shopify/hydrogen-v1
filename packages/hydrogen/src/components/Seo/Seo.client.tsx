@@ -7,59 +7,56 @@ import {ProductSeo} from './ProductSeo.client';
 import {CollectionSeo} from './CollectionSeo.client';
 import {PageSeo} from './PageSeo.client';
 
-import type {DefaultPage, HomePage, Product, Collection, Page} from './types';
+import type {DefaultPage, HomePage} from './types';
+import type {
+  ProductSeoFragment,
+  CollectionSeoFragment,
+  PageSeoFragment,
+} from './SeoFragment';
 
 type Props =
   | {
       type: 'defaultSeo';
-      data: Pick<DefaultPage, Exclude<keyof DefaultPage, 'url'>>;
+      data: Omit<DefaultPage, 'url'>;
     }
   | {
       type: 'homepage';
-      data: Pick<HomePage, Exclude<keyof HomePage, 'url'>>;
+      data: Omit<HomePage, 'url'>;
     }
   | {
       type: 'product';
-      data: Pick<Product, Exclude<keyof Product, 'url'>>;
+      data: ProductSeoFragment;
     }
   | {
       type: 'collection';
-      data: Collection;
+      data: CollectionSeoFragment;
     }
   | {
       type: 'page';
-      data: Page;
+      data: PageSeoFragment;
     };
 
 /**
  * The `Seo` component renders SEO information on a webpage.
  */
-export function Seo({type, data}: Props) {
+export function Seo(props: Props) {
   const url = useUrl().href;
 
-  let SeoMarkup = null;
-
-  switch (type) {
+  switch (props.type) {
     case 'defaultSeo':
-      SeoMarkup = <DefaultPageSeo {...({url, ...data} as DefaultPage)} />;
-      break;
+      return <DefaultPageSeo {...{url, ...props.data}} />;
     case 'homepage':
-      SeoMarkup = <HomePageSeo {...({url, ...data} as HomePage)} />;
-      break;
+      return <HomePageSeo {...{url, ...props.data}} />;
     case 'product':
-      SeoMarkup = <ProductSeo {...({url, ...data} as Product)} />;
-      break;
+      return <ProductSeo {...{url, ...props.data}} />;
     case 'collection':
-      SeoMarkup = <CollectionSeo {...(data as Collection)} />;
-      break;
+      return <CollectionSeo {...props.data} />;
     case 'page':
-      SeoMarkup = <PageSeo {...(data as Page)} />;
-      break;
+      return <PageSeo {...props.data} />;
     default:
       console.warn(
         'The <Seo/> only accepts type prop with values of defaultSeo, homepage, product, collection, or page.'
       );
+      return null;
   }
-
-  return SeoMarkup;
 }
