@@ -14,6 +14,7 @@ export default () => {
       },
 
       build: {
+        minify: 'esbuild',
         sourcemap: true,
         /**
          * By default, SSR dedupe logic gets bundled which runs `require('module')`.
