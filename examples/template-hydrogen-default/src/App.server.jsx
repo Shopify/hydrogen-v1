@@ -1,5 +1,5 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import {Router, FileRoutes, ShopifyProvider, Route} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
 import DefaultSeo from './components/DefaultSeo.server';
@@ -18,6 +18,7 @@ function App({routes, ...serverProps}) {
             serverProps={serverProps}
           >
             <FileRoutes routes={routes} />
+            <Route path="/custom1" page={<CustomPage />} />
           </Router>
         </CartProvider>
       </ShopifyProvider>
@@ -28,3 +29,7 @@ function App({routes, ...serverProps}) {
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
 export default renderHydrogen(App, {shopifyConfig, routes});
+
+function CustomPage() {
+  return <div>Hello world!</div>;
+}
