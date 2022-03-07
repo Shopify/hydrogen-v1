@@ -1,7 +1,7 @@
 import {startHydrogenServer} from '../utils';
 import Index from '../../src/routes/index.server';
 
-describe('index', async () => {
+describe('index', () => {
   let hydrogen;
 
   beforeAll(async () => {
