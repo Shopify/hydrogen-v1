@@ -41,6 +41,8 @@ jobs:
       # - name: Analyze and compare
       #   if: github.ref != 'refs/heads/main'
 
+      # TODO: Report comparison results as a comment in the PR
+
       # TODO: Upload results (if we are in main)
 
       # TODO: Make all of ^^ flexible to support "latest version branches" as proposed
