@@ -52,10 +52,10 @@ export function MyComponent() {
 
 ## Props
 
-| Name     | Type                                                                                             | Description                                                          |
-| -------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| data     | <code>MediaImageMedia &#124; ModelViewerMedia &#124; ExternalVideoMedia &#124; VideoMedia</code> | A [Media object](/api/storefront/reference/products/media).          |
-| options? | <code>React.ComponentProps<typeof Video>['options'] | React.ComponentProps<typeof ExternalVideo>['options'] | React.ComponentProps<typeof Image>['options']</code>                                            | The options for the `Image`, `Video`, or `ExternalVideo` components. |
+| Name     | Type                                                                                             | Description                                                 |
+| -------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------- |
+| data     | <code>MediaImageMedia &#124; ModelViewerMedia &#124; ExternalVideoMedia &#124; VideoMedia</code> | A [Media object](/api/storefront/reference/products/media). |
+| options? | <code>React.ComponentProps<typeof Video>['options']                                              | React.ComponentProps<typeof ExternalVideo>['options']       | React.ComponentProps<typeof Image>['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components. |
 
 ## Component type
 
