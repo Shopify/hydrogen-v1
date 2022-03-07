@@ -10,7 +10,7 @@ import {hydrateRoot} from 'react-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
-import {ServerStateProvider} from './client';
+import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {Router} from './foundation/Router/Router';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
