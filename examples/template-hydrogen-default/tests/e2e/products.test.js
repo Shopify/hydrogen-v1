@@ -1,10 +1,12 @@
 import {startHydrogenServer} from '../utils';
+import Product from '../../src/routes/products/[handle].server';
 
 describe('products', () => {
   let hydrogen;
 
   beforeAll(async () => {
     hydrogen = await startHydrogenServer();
+    hydrogen.watchForUpdates(Product);
   });
 
   afterAll(async () => {
