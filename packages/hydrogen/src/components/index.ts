@@ -3,7 +3,6 @@ export {MediaFile} from './MediaFile';
 export {Video} from './Video';
 export {Image} from './Image';
 export {ExternalVideo} from './ExternalVideo';
-export {RawHtml} from './RawHtml';
 export {AddToCartButton} from './AddToCartButton';
 export {ModelViewer} from './ModelViewer';
 export {Money} from './Money';

@@ -3,16 +3,14 @@
 '@shopify/hydrogen': minor
 ---
 
-Update RawHtml and its docs to remove the unsanitize option.
+Remove `RawHtml` and its docs mentions.
 
 Follow these instructions to upgrade your project:
 
-1. For anywhere you use `RawHtml` component, update `string` to `dangerouslySetInnerHTMLString`
+1. For anywhere you use `RawHtml` component, update to follow
+   [React's `dangerouslySetInnerHTML`](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml)
 
 ```jsx
-import {RawHtml} from '@shopify/hydrogen';
-
-export function MyComponent() {
-  return <RawHtml dangerouslySetInnerHTMLString="<p>Hello world</p>" />;
-}
+-(<RawHtml string="<p>Hello world</p>" />);
++(<div dangerouslySetInnerHTML={{__html: '<p>Hello world</p>'}} />);
 ```
