@@ -1676,6 +1676,8 @@ export type CommentEdge = {
 /** A country. */
 export type Country = {
   __typename?: 'Country';
+  /** The languages available for the country. */
+  availableLanguages: Array<Language>;
   /** The currency of the country. */
   currency: Currency;
   /** The ISO code of the country. */
@@ -3437,13 +3439,302 @@ export type ImageTransformInput = {
   scale?: InputMaybe<Scalars['Int']>;
 };
 
+/** A language. */
+export type Language = {
+  __typename?: 'Language';
+  /** The name of the language in the language itself. If the language uses capitalization, it is capitalized for a mid-sentence position. */
+  endonymName: Scalars['String'];
+  /** The ISO code. */
+  isoCode: LanguageCode;
+  /** The name of the language in the current language. */
+  name: Scalars['String'];
+};
+
+/** ISO 369 language codes supported by Shopify. */
+export enum LanguageCode {
+  /** Afrikaans. */
+  Af = 'AF',
+  /** Akan. */
+  Ak = 'AK',
+  /** Amharic. */
+  Am = 'AM',
+  /** Arabic. */
+  Ar = 'AR',
+  /** Assamese. */
+  As = 'AS',
+  /** Azerbaijani. */
+  Az = 'AZ',
+  /** Belarusian. */
+  Be = 'BE',
+  /** Bulgarian. */
+  Bg = 'BG',
+  /** Bambara. */
+  Bm = 'BM',
+  /** Bangla. */
+  Bn = 'BN',
+  /** Tibetan. */
+  Bo = 'BO',
+  /** Breton. */
+  Br = 'BR',
+  /** Bosnian. */
+  Bs = 'BS',
+  /** Catalan. */
+  Ca = 'CA',
+  /** Chechen. */
+  Ce = 'CE',
+  /** Czech. */
+  Cs = 'CS',
+  /** Church Slavic. */
+  Cu = 'CU',
+  /** Welsh. */
+  Cy = 'CY',
+  /** Danish. */
+  Da = 'DA',
+  /** German. */
+  De = 'DE',
+  /** Dzongkha. */
+  Dz = 'DZ',
+  /** Ewe. */
+  Ee = 'EE',
+  /** Greek. */
+  El = 'EL',
+  /** English. */
+  En = 'EN',
+  /** Esperanto. */
+  Eo = 'EO',
+  /** Spanish. */
+  Es = 'ES',
+  /** Estonian. */
+  Et = 'ET',
+  /** Basque. */
+  Eu = 'EU',
+  /** Persian. */
+  Fa = 'FA',
+  /** Fulah. */
+  Ff = 'FF',
+  /** Finnish. */
+  Fi = 'FI',
+  /** Faroese. */
+  Fo = 'FO',
+  /** French. */
+  Fr = 'FR',
+  /** Western Frisian. */
+  Fy = 'FY',
+  /** Irish. */
+  Ga = 'GA',
+  /** Scottish Gaelic. */
+  Gd = 'GD',
+  /** Galician. */
+  Gl = 'GL',
+  /** Gujarati. */
+  Gu = 'GU',
+  /** Manx. */
+  Gv = 'GV',
+  /** Hausa. */
+  Ha = 'HA',
+  /** Hebrew. */
+  He = 'HE',
+  /** Hindi. */
+  Hi = 'HI',
+  /** Croatian. */
+  Hr = 'HR',
+  /** Hungarian. */
+  Hu = 'HU',
+  /** Armenian. */
+  Hy = 'HY',
+  /** Interlingua. */
+  Ia = 'IA',
+  /** Indonesian. */
+  Id = 'ID',
+  /** Igbo. */
+  Ig = 'IG',
+  /** Sichuan Yi. */
+  Ii = 'II',
+  /** Icelandic. */
+  Is = 'IS',
+  /** Italian. */
+  It = 'IT',
+  /** Japanese. */
+  Ja = 'JA',
+  /** Javanese. */
+  Jv = 'JV',
+  /** Georgian. */
+  Ka = 'KA',
+  /** Kikuyu. */
+  Ki = 'KI',
+  /** Kazakh. */
+  Kk = 'KK',
+  /** Kalaallisut. */
+  Kl = 'KL',
+  /** Khmer. */
+  Km = 'KM',
+  /** Kannada. */
+  Kn = 'KN',
+  /** Korean. */
+  Ko = 'KO',
+  /** Kashmiri. */
+  Ks = 'KS',
+  /** Kurdish. */
+  Ku = 'KU',
+  /** Cornish. */
+  Kw = 'KW',
+  /** Kyrgyz. */
+  Ky = 'KY',
+  /** Luxembourgish. */
+  Lb = 'LB',
+  /** Ganda. */
+  Lg = 'LG',
+  /** Lingala. */
+  Ln = 'LN',
+  /** Lao. */
+  Lo = 'LO',
+  /** Lithuanian. */
+  Lt = 'LT',
+  /** Luba-Katanga. */
+  Lu = 'LU',
+  /** Latvian. */
+  Lv = 'LV',
+  /** Malagasy. */
+  Mg = 'MG',
+  /** Maori. */
+  Mi = 'MI',
+  /** Macedonian. */
+  Mk = 'MK',
+  /** Malayalam. */
+  Ml = 'ML',
+  /** Mongolian. */
+  Mn = 'MN',
+  /** Marathi. */
+  Mr = 'MR',
+  /** Malay. */
+  Ms = 'MS',
+  /** Maltese. */
+  Mt = 'MT',
+  /** Burmese. */
+  My = 'MY',
+  /** Norwegian (Bokmål). */
+  Nb = 'NB',
+  /** North Ndebele. */
+  Nd = 'ND',
+  /** Nepali. */
+  Ne = 'NE',
+  /** Dutch. */
+  Nl = 'NL',
+  /** Norwegian Nynorsk. */
+  Nn = 'NN',
+  /** Norwegian. */
+  No = 'NO',
+  /** Oromo. */
+  Om = 'OM',
+  /** Odia. */
+  Or = 'OR',
+  /** Ossetic. */
+  Os = 'OS',
+  /** Punjabi. */
+  Pa = 'PA',
+  /** Polish. */
+  Pl = 'PL',
+  /** Pashto. */
+  Ps = 'PS',
+  /** Portuguese (Brazil). */
+  PtBr = 'PT_BR',
+  /** Portuguese (Portugal). */
+  PtPt = 'PT_PT',
+  /** Quechua. */
+  Qu = 'QU',
+  /** Romansh. */
+  Rm = 'RM',
+  /** Rundi. */
+  Rn = 'RN',
+  /** Romanian. */
+  Ro = 'RO',
+  /** Russian. */
+  Ru = 'RU',
+  /** Kinyarwanda. */
+  Rw = 'RW',
+  /** Sindhi. */
+  Sd = 'SD',
+  /** Northern Sami. */
+  Se = 'SE',
+  /** Sango. */
+  Sg = 'SG',
+  /** Sinhala. */
+  Si = 'SI',
+  /** Slovak. */
+  Sk = 'SK',
+  /** Slovenian. */
+  Sl = 'SL',
+  /** Shona. */
+  Sn = 'SN',
+  /** Somali. */
+  So = 'SO',
+  /** Albanian. */
+  Sq = 'SQ',
+  /** Serbian. */
+  Sr = 'SR',
+  /** Sundanese. */
+  Su = 'SU',
+  /** Swedish. */
+  Sv = 'SV',
+  /** Swahili. */
+  Sw = 'SW',
+  /** Tamil. */
+  Ta = 'TA',
+  /** Telugu. */
+  Te = 'TE',
+  /** Tajik. */
+  Tg = 'TG',
+  /** Thai. */
+  Th = 'TH',
+  /** Tigrinya. */
+  Ti = 'TI',
+  /** Turkmen. */
+  Tk = 'TK',
+  /** Tongan. */
+  To = 'TO',
+  /** Turkish. */
+  Tr = 'TR',
+  /** Tatar. */
+  Tt = 'TT',
+  /** Uyghur. */
+  Ug = 'UG',
+  /** Ukrainian. */
+  Uk = 'UK',
+  /** Urdu. */
+  Ur = 'UR',
+  /** Uzbek. */
+  Uz = 'UZ',
+  /** Vietnamese. */
+  Vi = 'VI',
+  /** Volapük. */
+  Vo = 'VO',
+  /** Wolof. */
+  Wo = 'WO',
+  /** Xhosa. */
+  Xh = 'XH',
+  /** Yiddish. */
+  Yi = 'YI',
+  /** Yoruba. */
+  Yo = 'YO',
+  /** Chinese (Simplified). */
+  ZhCn = 'ZH_CN',
+  /** Chinese (Traditional). */
+  ZhTw = 'ZH_TW',
+  /** Zulu. */
+  Zu = 'ZU',
+}
+
 /** Information about the localized experiences configured for the shop. */
 export type Localization = {
   __typename?: 'Localization';
   /** The list of countries with enabled localized experiences. */
   availableCountries: Array<Country>;
+  /** The list of languages available for the active country. */
+  availableLanguages: Array<Language>;
   /** The country of the active localized experience. Use the `@inContext` directive to change this value. */
   country: Country;
+  /** The language of the active localized experience. Use the `@inContext` directive to change this value. */
+  language: Language;
 };
 
 /** Represents a location where product inventory is held. */
