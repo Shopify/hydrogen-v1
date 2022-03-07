@@ -6,6 +6,7 @@ import {
   ShopifyProvider,
   PerformanceMetricsServerAnalyticsConnector,
   CookieSessionStorage,
+  useCustomer,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
@@ -19,10 +20,12 @@ import {
 } from '@shopify/hydrogen/client';
 
 function App({routes}) {
+  const customerAccessToken = useCustomer();
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <CartProvider>
+        <CartProvider customerAccessToken={customerAccessToken}>
           <DefaultSeo />
           <Router>
             <FileRoutes routes={routes} />

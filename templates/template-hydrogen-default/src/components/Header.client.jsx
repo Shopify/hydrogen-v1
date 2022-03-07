@@ -3,6 +3,7 @@ import {Link} from '@shopify/hydrogen/client';
 
 import CartToggle from './CartToggle.client';
 import {useCartUI} from './CartUIProvider.client';
+import AccountIcon from './AccountIcon';
 import CountrySelector from './CountrySelector.client';
 import Navigation from './Navigation.client';
 import MobileNavigation from './MobileNavigation.client';
@@ -48,11 +49,16 @@ export default function Header({collections, storeName}) {
             >
               {storeName}
             </Link>
-            <CartToggle
-              handleClick={() => {
-                if (isMobileNavOpen) setIsMobileNavOpen(false);
-              }}
-            />
+            <div className="flex">
+              <Link to="/account" className="mr-2">
+                <AccountIcon />
+              </Link>
+              <CartToggle
+                handleClick={() => {
+                  if (isMobileNavOpen) setIsMobileNavOpen(false);
+                }}
+              />
+            </div>
           </div>
           <Navigation collections={collections} storeName={storeName} />
         </div>

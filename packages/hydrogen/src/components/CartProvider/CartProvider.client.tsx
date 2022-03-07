@@ -232,6 +232,7 @@ export function CartProvider({
   onAttributesUpdate,
   onDiscountCodesUpdate,
   data: cart,
+  customerAccessToken,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -256,6 +257,8 @@ export function CartProvider({
    * An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).
    */
   data?: CartFragmentFragment;
+  /* customer access token that is accessible on the server if there is a customer login */
+  customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
 }) {
   const {serverProps} = useServerProps() as ServerPropsContextValue;
   const countryCode = serverProps?.country?.isoCode;
@@ -304,6 +307,13 @@ export function CartProvider({
           cart.buyerIdentity = {};
         }
         cart.buyerIdentity.countryCode = countryCode;
+      }
+
+      if (customerAccessToken && !cart.buyerIdentity?.customerAccessToken) {
+        if (cart.buyerIdentity == null) {
+          cart.buyerIdentity = {};
+        }
+        cart.buyerIdentity.customerAccessToken = customerAccessToken;
       }
 
       const {data, error} = await fetchCart<
@@ -665,8 +675,8 @@ export function CartProvider({
     if (state.status !== 'idle') {
       return;
     }
-    buyerIdentityUpdate({countryCode}, state);
-  }, [countryCode]);
+    buyerIdentityUpdate({countryCode, customerAccessToken}, state);
+  }, [countryCode, customerAccessToken]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
