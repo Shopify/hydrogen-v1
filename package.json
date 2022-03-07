@@ -29,7 +29,8 @@
     "generate-docs": "ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
     "generate-docs:debug": "node --inspect-brk ./node_modules/.bin/ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
     "tophat": "node ./scripts/tophat",
-    "graphql-types": "yarn workspace @shopify/hydrogen graphql-types"
+    "graphql-types": "yarn workspace @shopify/hydrogen graphql-types",
+    "analyze": "node ./scripts/analyze-bundle"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.3",

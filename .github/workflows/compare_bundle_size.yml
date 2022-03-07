@@ -1,0 +1,41 @@
+name: Compare Bundle Size
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: hydrogen-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    name: Analyze and compare bundle size
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Install the packages
+        # Bump yarn timeout to fix an issue with Windows CI downloading the Playwright/Chromium stuff
+        run: yarn install --frozen-lockfile --ignore-engines --network-timeout 36000
+
+      - name: Build the code
+        run: yarn build --force
+
+      - name: Download previous bundle size
+        uses: actions/download-artifact
+        with:
+          name: bundle-sizes-compare
+          path: ./bundle-sizes-compare.json
+
+      # - name: Analyze and compare
+      #   if: github.ref != 'refs/heads/main'

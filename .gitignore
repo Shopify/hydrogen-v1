@@ -128,3 +128,6 @@ packages/localdev
 temp
 snow-devil
 artifacts
+
+bundle-sizes.json
+bundle-sizes-compare.json
