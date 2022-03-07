@@ -3,8 +3,6 @@ import {Image} from '../Image';
 import {Video} from '../Video';
 import {ExternalVideo} from '../ExternalVideo';
 import {ModelViewer} from '../ModelViewer';
-import {MediaFileFragment as Fragment} from '../../graphql/graphql-constants';
-// import {Media as MediaType} from '../../graphql/types/types';
 import type {
   MediaFileFragmentFragment,
   MediaFileFragment_ExternalVideo_Fragment,
@@ -79,7 +77,3 @@ export function MediaFile({
       return null;
   }
 }
-
-MediaFile.Fragment = Fragment;
-
-export const MediaFileFragment = Fragment;

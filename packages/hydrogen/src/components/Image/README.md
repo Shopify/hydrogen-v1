@@ -9,10 +9,11 @@ The `Image` component renders an image for the Storefront API's
 /** Storefront API images */
 
 import {Image} from '@shopify/hydrogen';
+import {ImageFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${Image.Fragment}
+  ${ImageFragment}
 
   productByHandle(handle: "my-product") {
     featuredImage {
@@ -77,7 +78,7 @@ The `Image` component is a shared component, which means that it renders on both
 
 ## GraphQL fragment
 
-The following fragment is available as a string for your GraphQL queries using `ImageFragment` or `Image.Fragment`. Using this fragment ensures that you have all the data necessary for rendering the `Image` component.
+The following fragment is available as a string for your GraphQL queries using `ImageFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `Image` component.
 
 ```graphql
 fragment ImageFragment on Image {

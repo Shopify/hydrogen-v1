@@ -1,1 +1,1 @@
-export {ExternalVideo, ExternalVideoFragment} from './ExternalVideo';
+export {ExternalVideo} from './ExternalVideo';

@@ -4,7 +4,6 @@ import {useShop} from '../../foundation';
 import {getMeasurementAsString} from '../../utilities';
 import {RawHtml} from '../RawHtml';
 import {ParsedMetafield, Measurement, Rating} from '../../types';
-import {MetafieldFragment as Fragment} from '../../graphql/graphql-constants';
 import {Image} from '../Image';
 import {MediaImage} from '../../types';
 
@@ -109,7 +108,3 @@ export function Metafield<TTag extends ElementType>(
     }
   }
 }
-
-Metafield.Fragment = Fragment;
-
-export const MetafieldFragment = Fragment;

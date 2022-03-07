@@ -1,6 +1,5 @@
 import React from 'react';
 import {Money} from '../Money';
-import {UnitPriceFragment as Fragment} from '../../graphql/graphql-constants';
 import type {UnitPriceFragmentFragment} from './UnitPriceFragment';
 
 export interface UnitPriceProps<TTag> {
@@ -37,6 +36,3 @@ export function UnitPrice<TTag extends keyof JSX.IntrinsicElements = 'div'>(
     </Wrapper>
   );
 }
-
-UnitPrice.Fragment = Fragment;
-export const UnitPriceFragment = Fragment;

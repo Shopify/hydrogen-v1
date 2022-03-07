@@ -1,6 +1,5 @@
 import React from 'react';
 import {YouTube, Vimeo, useEmbeddedVideoUrl} from '../../utilities';
-import {ExternalVideoFragment as Fragment} from '../../graphql/graphql-constants';
 import type {ExternalVideoFragmentFragment} from './ExternalVideoFragment';
 
 interface ExternalVideoProps {
@@ -48,7 +47,3 @@ export function ExternalVideo(
     ></iframe>
   );
 }
-
-ExternalVideo.Fragment = Fragment;
-
-export const ExternalVideoFragment = Fragment;

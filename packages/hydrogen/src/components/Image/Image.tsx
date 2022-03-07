@@ -1,6 +1,5 @@
 import React from 'react';
 import {Props} from '../types';
-import {ImageFragment as Fragment} from '../../graphql/graphql-constants';
 import {
   ImageSizeOptions,
   ImageLoaderOptions,
@@ -130,7 +129,3 @@ export function Image<TTag extends React.ElementType = 'img'>(
     />
   );
 }
-
-Image.Fragment = Fragment;
-
-export const ImageFragment = Fragment;

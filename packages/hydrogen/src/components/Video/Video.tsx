@@ -1,6 +1,5 @@
 import React from 'react';
 import {ImageSizeOptions, useImageUrl} from '../../utilities';
-import {VideoFragment as Fragment} from '../../graphql/graphql-constants';
 import type {VideoFragmentFragment} from './VideoFragment';
 
 interface VideoProps {
@@ -46,6 +45,3 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
     </video>
   );
 }
-
-Video.Fragment = Fragment;
-export const VideoFragment = Fragment;

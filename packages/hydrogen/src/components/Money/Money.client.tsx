@@ -1,7 +1,6 @@
 import React from 'react';
 import {useMoney} from '../../hooks';
 import type {MoneyFragmentFragment} from './MoneyFragment';
-import {MoneyFragment as Fragment} from '../../graphql/graphql-constants';
 
 interface MoneyProps<TTag> {
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
@@ -24,6 +23,3 @@ export function Money<TTag extends keyof JSX.IntrinsicElements = 'div'>(
 
   return <Wrapper {...passthroughProps}>{moneyObject.localizedString}</Wrapper>;
 }
-
-Money.Fragment = Fragment;
-export const MoneyFragment = Fragment;

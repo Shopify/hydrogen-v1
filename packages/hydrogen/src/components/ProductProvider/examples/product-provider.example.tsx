@@ -1,4 +1,5 @@
 import {ProductProvider} from '@shopify/hydrogen';
+import {ProductProviderFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`

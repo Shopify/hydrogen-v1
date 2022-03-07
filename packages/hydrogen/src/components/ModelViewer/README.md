@@ -7,10 +7,11 @@ the Storefront API's [`Model3d` object](/api/storefront/reference/products/model
 
 ```tsx
 import {ModelViewer} from '@shopify/hydrogen';
+import {Model3DFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${ModelViewer.Fragment}
+  ${Model3DFragment}
 
   query Products {
     products(first: 5) {
