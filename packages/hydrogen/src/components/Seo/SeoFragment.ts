@@ -5,21 +5,31 @@
 // @ts-nocheck
 import * as Types from '../../graphql/types/types';
 
-export type ImageSeoFragment = {__typename?: 'Image'} & Pick<
+export type DefaultPageSeoFragmentFragment = {__typename?: 'Shop'} & Pick<
+  Types.Shop,
+  'description'
+> & {title: Types.Shop['name']};
+
+export type HomeSeoFragmentFragment = {__typename?: 'Shop'} & Pick<
+  Types.Shop,
+  'description'
+> & {title: Types.Shop['name']};
+
+export type ImageSeoFragmentFragment = {__typename?: 'Image'} & Pick<
   Types.Image,
   'url' | 'width' | 'height' | 'altText'
 >;
 
-export type SeoFragment = {__typename?: 'SEO'} & Pick<
+export type SeoFragmentFragment = {__typename?: 'SEO'} & Pick<
   Types.Seo,
   'description' | 'title'
 >;
 
-export type ProductSeoFragment = {__typename?: 'Product'} & Pick<
+export type ProductSeoFragmentFragment = {__typename?: 'Product'} & Pick<
   Types.Product,
   'title' | 'description' | 'vendor'
 > & {
-    seo: {__typename?: 'SEO'} & Pick<Types.Seo, 'title' | 'description'>;
+    seo: {__typename?: 'SEO'} & Pick<Types.Seo, 'description' | 'title'>;
     featuredImage?: Types.Maybe<
       {__typename?: 'Image'} & Pick<
         Types.Image,
@@ -46,11 +56,11 @@ export type ProductSeoFragment = {__typename?: 'Product'} & Pick<
     };
   };
 
-export type CollectionSeoFragment = {__typename?: 'Collection'} & Pick<
+export type CollectionSeoFragmentFragment = {__typename?: 'Collection'} & Pick<
   Types.Collection,
   'title' | 'description'
 > & {
-    seo: {__typename?: 'SEO'} & Pick<Types.Seo, 'title' | 'description'>;
+    seo: {__typename?: 'SEO'} & Pick<Types.Seo, 'description' | 'title'>;
     image?: Types.Maybe<
       {__typename?: 'Image'} & Pick<
         Types.Image,
@@ -59,11 +69,11 @@ export type CollectionSeoFragment = {__typename?: 'Collection'} & Pick<
     >;
   };
 
-export type PageSeoFragment = {__typename?: 'Page'} & Pick<
+export type PageSeoFragmentFragment = {__typename?: 'Page'} & Pick<
   Types.Page,
   'title'
 > & {
     seo?: Types.Maybe<
-      {__typename?: 'SEO'} & Pick<Types.Seo, 'title' | 'description'>
+      {__typename?: 'SEO'} & Pick<Types.Seo, 'description' | 'title'>
     >;
   };

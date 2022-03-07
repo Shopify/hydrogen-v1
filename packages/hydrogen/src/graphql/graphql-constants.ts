@@ -3384,3 +3384,91 @@ fragment MoneyFragment on MoneyV2 {
   currencyCode
   amount
 }`;
+
+export const DefaultPageSeoFragment = `
+fragment DefaultPageSeoFragment on Shop {
+  title: name
+  description
+}`;
+
+export const HomeSeoFragment = `
+fragment HomeSeoFragment on Shop {
+  title: name
+  description
+}`;
+
+export const ProductSeoFragment = `
+fragment ProductSeoFragment on Product {
+  title
+  description
+  seo {
+    ...SeoFragment
+  }
+  vendor
+  featuredImage {
+    ...ImageSeoFragment
+  }
+  variants(first: $numProductVariants) {
+    edges {
+      node {
+        image {
+          url
+        }
+        availableForSale
+        priceV2 {
+          amount
+          currencyCode
+        }
+        sku
+      }
+    }
+  }
+}
+
+fragment ImageSeoFragment on Image {
+  url
+  width
+  height
+  altText
+}
+
+fragment SeoFragment on SEO {
+  description
+  title
+}`;
+
+export const CollectionSeoFragment = `
+fragment CollectionSeoFragment on Collection {
+  title
+  description
+  seo {
+    ...SeoFragment
+  }
+  image {
+    ...ImageSeoFragment
+  }
+}
+fragment ImageSeoFragment on Image {
+  url
+  width
+  height
+  altText
+}
+
+fragment SeoFragment on SEO {
+  description
+  title
+}`;
+
+export const PageSeoFragment = `
+fragment PageSeoFragment on Page {
+  title
+  seo {
+    ...SeoFragment
+  }
+}
+
+fragment SeoFragment on SEO {
+  description
+  title
+}`;
