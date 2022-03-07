@@ -1,9 +1,8 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {useCart} from '../CartProvider';
 import {useProduct} from '../ProductProvider';
-import {Props} from '../types';
 
-export interface AddToCartButtonProps {
+interface AddToCartButtonProps {
   /** An array of cart line attributes that belong to the item being added to the cart. */
   attributes?: {
     key: string;
@@ -25,8 +24,9 @@ type PropsWeControl = 'onClick';
  * The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
  * It must be a descendent of the `CartProvider` component.
  */
-export function AddToCartButton<TTag extends React.ElementType = 'button'>(
-  props: Props<TTag, PropsWeControl> & AddToCartButtonProps
+export function AddToCartButton(
+  props: Omit<JSX.IntrinsicElements['button'], PropsWeControl> &
+    AddToCartButtonProps
 ) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {
@@ -34,7 +34,6 @@ export function AddToCartButton<TTag extends React.ElementType = 'button'>(
     quantity = 1,
     attributes,
     children,
-    onAdd,
     accessibleAddingToCartLabel,
     ...passthroughProps
   } = props;
