@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.0
+
+### Minor Changes
+
+- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Upgrade default Storefront API to version '2022-04'. Some components have been updated to use the 2022-04 features and types as well.
+
+  One important change is that the `2022-04` Storefront API no longer encodes object IDs: see more [details here](https://shopify.dev/api/release-notes/2022-04#non-encoded-object-ids-in-the-graphql-storefront-api). Because of this, Hydrogen will no longer decode IDs, either, which will cause issues if you are using a previous version of the Storefront API with Hydrogen components.
+
 ## 0.11.1
 
 ### Patch Changes
