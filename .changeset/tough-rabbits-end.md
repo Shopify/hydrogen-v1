@@ -6,7 +6,7 @@
 Removed the `Rawhtml` component.
 
 Upgrade your project by replacing references to the `RawHtml` component to follow
-   [React's `dangerouslySetInnerHTML`](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml):
+[React's `dangerouslySetInnerHTML`](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml):
 
 ```jsx
 -(<RawHtml string="<p>Hello world</p>" />);
