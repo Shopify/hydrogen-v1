@@ -4,9 +4,9 @@
 
 ### Minor Changes
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the starter template.
+- [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the starter template.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Move any static `Fragment` properties on components to the entry point `@shopify/hydrogen/fragments`.
+* [#827](https://github.com/Shopify/hydrogen/pull/827) [`745e8c0`](https://github.com/Shopify/hydrogen/commit/745e8c0a87a7c41803934565e5a756295ff629c2) Thanks [@michenly](https://github.com/michenly)! - Move any static `Fragment` properties on components to the entry point `@shopify/hydrogen/fragments`.
   The migration diff are as follows:
 
   ```diff
@@ -72,13 +72,13 @@
   + import type {VideoFragmentFragment} from '@shopify/hydrogen/fragments';
   ```
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Updated the ExternalVideo component to use the new `embedUrl` Storefront API ([introduced in 2022-04](https://shopify.dev/api/release-notes/2022-04#non-encoded-object-ids-in-the-graphql-storefront-api)) on ExternalVideo.
+- [#455](https://github.com/Shopify/hydrogen/pull/455) [`81ac653`](https://github.com/Shopify/hydrogen/commit/81ac6534b8464e187b09ee13525319ed0c6c7c1d) Thanks [@johncraigcole](https://github.com/johncraigcole)! - Updated the ExternalVideo component to use the new `embedUrl` Storefront API ([introduced in 2022-04](https://shopify.dev/api/release-notes/2022-04#non-encoded-object-ids-in-the-graphql-storefront-api)) on ExternalVideo.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Upgrade default Storefront API to version '2022-04'. Some components have been updated to use the 2022-04 features and types as well.
+* [#809](https://github.com/Shopify/hydrogen/pull/809) [`47f23f9`](https://github.com/Shopify/hydrogen/commit/47f23f921873b782947aed2e54d997ad034801b8) Thanks [@frehner](https://github.com/frehner)! - Upgrade default Storefront API to version '2022-04'. Some components have been updated to use the 2022-04 features and types as well.
 
   One important change is that the `2022-04` Storefront API no longer encodes object IDs: see more [details here](https://shopify.dev/api/release-notes/2022-04#non-encoded-object-ids-in-the-graphql-storefront-api). Because of this, Hydrogen will no longer decode IDs, either, which will cause issues if you are using a previous version of the Storefront API with Hydrogen components.
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Adds `queryShop` helper to API routes. This makes it easy to query the Storefront API, similar to how `useShopQuery` is available in server components:
+- [#780](https://github.com/Shopify/hydrogen/pull/780) [`122a5c5`](https://github.com/Shopify/hydrogen/commit/122a5c5e0b70fa2a11c2c708b303da987f25fc53) Thanks [@jplhomer](https://github.com/jplhomer)! - Adds `queryShop` helper to API routes. This makes it easy to query the Storefront API, similar to how `useShopQuery` is available in server components:
 
   ```jsx
   // my-api.server.js
@@ -105,7 +105,7 @@
   +export default renderHydrogen(App, {shopifyConfig, routes});
   ```
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Routing in Hydrogen has been updated according to [Custom Routes proposal](https://github.com/Shopify/hydrogen/discussions/569). Specifically, a new `Router` component has been added, and `DefaultRoutes` has been renamed to `FileRoutes`, along with other minor changes. Custom route components are not implemented yet.
+* [#712](https://github.com/Shopify/hydrogen/pull/712) [`6368968`](https://github.com/Shopify/hydrogen/commit/6368968e4c68bb44b01b6b0b6903e403269dc233) Thanks [@blittle](https://github.com/blittle)! - Routing in Hydrogen has been updated according to [Custom Routes proposal](https://github.com/Shopify/hydrogen/discussions/569). Specifically, a new `Router` component has been added, and `DefaultRoutes` has been renamed to `FileRoutes`, along with other minor changes. Custom route components are not implemented yet.
 
   Follow these steps to upgrade your `App.server.jsx` file:
 
@@ -147,26 +147,26 @@
 
 ### Patch Changes
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Update `linesAdd` to create cart if cart does not exist.
+- [#799](https://github.com/Shopify/hydrogen/pull/799) [`350293a`](https://github.com/Shopify/hydrogen/commit/350293a9fa113fa9950aad27cf7ccaa6b535bedb) Thanks [@michenly](https://github.com/michenly)! - Update `linesAdd` to create cart if cart does not exist.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Hydrogen docs: Static assets and component props
+* [#788](https://github.com/Shopify/hydrogen/pull/788) [`9d4c43d`](https://github.com/Shopify/hydrogen/commit/9d4c43d6cc4f0b52affc33274c438a356c95ad37) Thanks [@mcvinci](https://github.com/mcvinci)! - Hydrogen docs: Static assets and component props
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Do not scroll to top if the URL pathname has not changed.
+- [#813](https://github.com/Shopify/hydrogen/pull/813) [`b1b959c`](https://github.com/Shopify/hydrogen/commit/b1b959c45ae43d7078c655b4012b6d6cd2db6491) Thanks [@frandiox](https://github.com/frandiox)! - Do not scroll to top if the URL pathname has not changed.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Add null check for ShopifyProvider
+* [#821](https://github.com/Shopify/hydrogen/pull/821) [`548979e`](https://github.com/Shopify/hydrogen/commit/548979ea7cbc38e52628d3359fd6c4edd19b41cc) Thanks [@jplhomer](https://github.com/jplhomer)! - Add null check for ShopifyProvider
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Ignore when boomerang doesn't load. This often happens when a adblocker is present on the client.
+- [#850](https://github.com/Shopify/hydrogen/pull/850) [`74b14e4`](https://github.com/Shopify/hydrogen/commit/74b14e4a66c72125bc1b372c57f305a86a2e1fe4) Thanks [@blittle](https://github.com/blittle)! - Ignore when boomerang doesn't load. This often happens when a adblocker is present on the client.
   There is no longer an uncaught promise exception in the console.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Avoid accessing undefined global \_\_flight as a side effect of another unknown error.
+* [#803](https://github.com/Shopify/hydrogen/pull/803) [`7528bf4`](https://github.com/Shopify/hydrogen/commit/7528bf4956970d76f37452bd33f9c9a692187c4f) Thanks [@frandiox](https://github.com/frandiox)! - Avoid accessing undefined global \_\_flight as a side effect of another unknown error.
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Disable worker streaming until it is properly supported.
+- [#833](https://github.com/Shopify/hydrogen/pull/833) [`214927a`](https://github.com/Shopify/hydrogen/commit/214927a071b9350d1f70fa02c74227f1e5d77238) Thanks [@frandiox](https://github.com/frandiox)! - Disable worker streaming until it is properly supported.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Minify server build output
+* [#837](https://github.com/Shopify/hydrogen/pull/837) [`2e76d66`](https://github.com/Shopify/hydrogen/commit/2e76d66ac23d84c13cf9c60e0b7aacf9eddda9ce) Thanks [@jplhomer](https://github.com/jplhomer)! - Minify server build output
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Improve logging for useShopQuery errors
+- [#819](https://github.com/Shopify/hydrogen/pull/819) [`09d9ad5`](https://github.com/Shopify/hydrogen/commit/09d9ad5d7b65942d9187c6b766bf4c60a6979453) Thanks [@jplhomer](https://github.com/jplhomer)! - Improve logging for useShopQuery errors
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - `@shopify/hydrogen` will no longer export the following types
+* [#825](https://github.com/Shopify/hydrogen/pull/825) [`1215fdb`](https://github.com/Shopify/hydrogen/commit/1215fdb02910190096c6920f533d06f00fc59a6c) Thanks [@michenly](https://github.com/michenly)! - `@shopify/hydrogen` will no longer export the following types
 
   - MediaFileProps
   - VideoProps
@@ -182,21 +182,21 @@
 
   Any Component props type should be typed instead with `React.ComponentProps<typeof MyComponent>`.
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Attributes from `<html>` and `<body>` elements in `index.html` are now included in the SSR response.
+- [#792](https://github.com/Shopify/hydrogen/pull/792) [`8aad0b5`](https://github.com/Shopify/hydrogen/commit/8aad0b561ddbef55abc598c91c6e9bd642c46d9c) Thanks [@frandiox](https://github.com/frandiox)! - Attributes from `<html>` and `<body>` elements in `index.html` are now included in the SSR response.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Support non-PascalCase filenames for client components.
+* [#811](https://github.com/Shopify/hydrogen/pull/811) [`2226b6e`](https://github.com/Shopify/hydrogen/commit/2226b6eda30a29ad79fb89c600a210b615dc5406) Thanks [@frandiox](https://github.com/frandiox)! - Support non-PascalCase filenames for client components.
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Updated graphql-codegen, which updates the Typescript types available for each Storefront API object
+- [#786](https://github.com/Shopify/hydrogen/pull/786) [`d1ecaf7`](https://github.com/Shopify/hydrogen/commit/d1ecaf7efff4595da46b0ece08c3cd94c6cdd55f) Thanks [@frehner](https://github.com/frehner)! - Updated graphql-codegen, which updates the Typescript types available for each Storefront API object
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Fix server the server to only log once for the full time it takes to stream render a page
+* [#849](https://github.com/Shopify/hydrogen/pull/849) [`e64fa17`](https://github.com/Shopify/hydrogen/commit/e64fa17c61585a7dc967bef5a2216dde40b2fc42) Thanks [@blittle](https://github.com/blittle)! - Fix server the server to only log once for the full time it takes to stream render a page
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Respond with 404 if the route has no matches.
+- [#394](https://github.com/Shopify/hydrogen/pull/394) [`818312d`](https://github.com/Shopify/hydrogen/commit/818312d72618882056d0344f069568e71766d32d) Thanks [@sahilmob](https://github.com/sahilmob)! - Respond with 404 if the route has no matches.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Update MediaFile's options prop type to included Image options.
+* [#841](https://github.com/Shopify/hydrogen/pull/841) [`0aa74cf`](https://github.com/Shopify/hydrogen/commit/0aa74cf78dae555fc111c06df3d2b73b022af4f0) Thanks [@michenly](https://github.com/michenly)! - Update MediaFile's options prop type to included Image options.
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Hydrogen docs: Strict mode
+- [#796](https://github.com/Shopify/hydrogen/pull/796) [`1dc62e2`](https://github.com/Shopify/hydrogen/commit/1dc62e2514b53411ae750d81c0a1b4f50eae9aff) Thanks [@mcvinci](https://github.com/mcvinci)! - Hydrogen docs: Strict mode
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Remove Router client-only logic from server bundle and avoid extra waterfall requests during Hydration.
+* [#813](https://github.com/Shopify/hydrogen/pull/813) [`b1b959c`](https://github.com/Shopify/hydrogen/commit/b1b959c45ae43d7078c655b4012b6d6cd2db6491) Thanks [@frandiox](https://github.com/frandiox)! - Remove Router client-only logic from server bundle and avoid extra waterfall requests during Hydration.
   Extract part of the client bundle into separate modules that can be loaded in parallel.
 
 ## 0.11.1
@@ -207,7 +207,7 @@
 
 * [#761](https://github.com/Shopify/hydrogen/pull/761) [`1142647`](https://github.com/Shopify/hydrogen/commit/114264716bc8f3027e3e6395d523714adbc92014) Thanks [@frehner](https://github.com/frehner)! - Fix issue with components that take in the `as` prop not validating other props when a component is passed to `as`.
 
-- [#752](https://github.com/Shopify/hydrogen/pull/752) [`b96179f`](https://github.com/Shopify/hydrogen/commit/b96179fdf960da52332a981e29a742b677826834) Thanks [@jplhomer](https://github.com/jplhomer)! - Ensure ProductSeo knows how to handle `featuredImage = null`
+- [#752](https://github.com/Shopify/hydrogen/pull/752) [`428aa7a`](https://github.com/Shopify/hydrogen/commit/428aa7adac179dd1efffc29bf382a7bb0a2c8971) Thanks [@michenly](https://github.com/michenly)! - Ensure ProductSeo knows how to handle `featuredImage = null`
 
 * [#774](https://github.com/Shopify/hydrogen/pull/774) [`052f148`](https://github.com/Shopify/hydrogen/commit/052f148e0d33029cdc2540afa5ead32825962f3a) Thanks [@frandiox](https://github.com/frandiox)! - Fix internal url usage in platforms like Vercel, which already provides protocol and host in `request.url`.
 
@@ -707,4 +707,3 @@ function SomeComponent() {
 [0.10.0]: https://github.com/Shopify/hydrogen/releases/tag/v0.10.0
 [0.10.1]: https://github.com/Shopify/hydrogen/releases/tag/v0.10.1
 [0.11.0]: https://github.com/Shopify/hydrogen/releases/tag/v0.11.0
-[unreleased]: https://github.com/Shopify/hydrogen/compare/v0.11.0...HEAD
