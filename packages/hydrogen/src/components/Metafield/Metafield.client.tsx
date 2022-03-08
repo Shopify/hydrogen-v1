@@ -2,7 +2,6 @@ import React, {ElementType} from 'react';
 import {Props} from '../types';
 import {useShop} from '../../foundation';
 import {getMeasurementAsString} from '../../utilities';
-import {RawHtml} from '../RawHtml';
 import {ParsedMetafield, Measurement, Rating} from '../../types';
 import {Image} from '../Image';
 import {MediaImage} from '../../types';
@@ -66,20 +65,22 @@ export function Metafield<TTag extends ElementType>(
       );
     }
     case 'single_line_text_field': {
+      const Wrapper = as ?? 'span';
       return (
-        <RawHtml
+        <Wrapper
           {...(passthroughProps as any)}
-          as={as ?? 'span'}
-          string={data.value as string}
+          dangerouslySetInnerHTML={{__html: data.value as string}}
         />
       );
     }
     case 'multi_line_text_field': {
+      const Wrapper = as ?? 'div';
       return (
-        <RawHtml
+        <Wrapper
           {...(passthroughProps as any)}
-          as={as ?? 'span'}
-          string={(data.value as string).split('\n').join('<br/>')}
+          dangerouslySetInnerHTML={{
+            __html: (data.value as string).split('\n').join('<br/>'),
+          }}
         />
       );
     }

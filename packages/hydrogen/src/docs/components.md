@@ -48,11 +48,6 @@ Primitive components are the building blocks for different component types, incl
     <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a>.</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/primitive/rawhtml">RawHtml</a></td>
-    <td>Shared</td>
-    <td>Renders an HTML string as HTML DOM elements.</td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
     <td>Shared</td>
     <td>Renders SEO information on a webpage.</td>
@@ -91,7 +86,7 @@ Product and variant components relate to the goods, digital downloads, services,
   <tr>
     <td><a href="/api/hydrogen/components/product-variant/productdescription">ProductDescription</a></td>
     <td>Client</td>
-    <td>Renders a <code>RawHtml</code> component with the product's <a href="/api/storefront/reference/products/product">descriptionHtml</a>.</td>
+    <td>Renders a <code>div</code> component with the product's <a href="/api/storefront/reference/products/product">descriptionHtml</a>.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/product-variant/productmetafield">ProductMetafield</a></td>
@@ -222,7 +217,7 @@ The [`Image`](/api/hydrogen/components/primitive/image) component by default tak
 
 {% endcodeblock %}
 
-Any attributes supported by the component's outputted HTML tag are supported, except for those explicitly controlled by the component. For example, the `src` attribute for the [`Image`](/api/hydrogen/components/primitive/image) component and the `dangerouslySetInnerHtml` attribute for the [`RawHtml`](/api/hydrogen/components/primitive/rawhtml) component are explicitly controlled by the component.
+Any attributes supported by the component's outputted HTML tag are supported, except for those explicitly controlled by the component. For example, the `src` attribute for the [`Image`](/api/hydrogen/components/primitive/image) component is explicitly controlled by the component.
 
 If you wanted to include a class name and an `onClick` function, then you could use the `className` and `onClick` props:
 
@@ -243,31 +238,6 @@ If you wanted to include a class name and an `onClick` function, then you could 
   className="border-black"
   onClick={myFunction}
 />
-```
-
-{% endcodeblock %}
-
-### `RawHtml` component example
-
-You might want to customize the HTML tag that is outputted. For example, the [`RawHtml`](/api/hydrogen/components/primitive/rawhtml) component takes a string of HTML and renders a `div` by default with its inner HTML set.
-
-If you wanted to render the `div` as a `section` instead, then you could pass the HTML tag `section` through as the `as` prop:
-
-{% codeblock file, filename: "Customized HTML tag example" %}
-
-```js
-// Input RawHtml props
-<RawHtml
-  string={myHtml}
-  as="section"
-  className="text-center"
-/>
-
-// Output customized HTML tag
-<section
-  dangerouslySetInnerHtml={myHtml}
-  className="text-center"
-></section>
 ```
 
 {% endcodeblock %}

@@ -109,7 +109,6 @@
     "fast-glob": "^3.2.5",
     "graphql": "^16.3.0",
     "history": "^5.2.0",
-    "isomorphic-dompurify": "^0.13.0",
     "kolorist": "^1.5.1",
     "magic-string": "^0.25.7",
     "node-fetch": "^2.6.7",
