@@ -5,8 +5,7 @@ name: Deployments
 on:
   workflow_dispatch:
   push:
-    # TODO: Add this back when ready to merge
-    # branches: [main]
+    branches: [main]
 
 concurrency:
   group: deployments-${{ github.head_ref }}
@@ -15,8 +14,7 @@ concurrency:
 jobs:
   deploy_cloudflare:
     runs-on: ubuntu-latest
-    # TODO: Add this back when ready to merge
-    # if: ${{ github.ref_name == 'main' && github.repository_owner == 'shopify' }}
+    if: github.repository_owner == 'shopify' }}
     name: Deploy to Cloudflare Workers
     steps:
       - name: Check out the code
