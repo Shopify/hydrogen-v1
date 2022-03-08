@@ -1,5 +1,6 @@
 import React, {ReactElement} from 'react';
 import {useServerRequest} from '../ServerRequestProvider';
+import {BrowserRouter} from './BrowserRouter.client';
 
 type RouterProps = {
   children: Array<ReactElement> | ReactElement;
@@ -11,10 +12,7 @@ export function Router({
   serverProps,
 }: RouterProps): ReactElement | null {
   const request = useServerRequest();
-  request.ctx.router = {
-    routeRendered: false,
-    serverProps,
-  };
+  request.ctx.router.serverProps = serverProps;
 
-  return <>{children}</>;
+  return <BrowserRouter>{children}</BrowserRouter>;
 }

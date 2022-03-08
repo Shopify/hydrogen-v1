@@ -48,6 +48,11 @@ export class ServerComponentRequest extends Request {
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
     preloadQueries: PreloadQueriesByURL;
+    router: {
+      routeRendered: boolean;
+      serverProps: Record<string, any>;
+      routeParams: Record<string, string>;
+    };
     [key: string]: any;
   };
 
@@ -73,6 +78,11 @@ export class ServerComponentRequest extends Request {
     this.ctx = {
       cache: new Map(),
       head: new HeadData({}),
+      router: {
+        routeRendered: false,
+        serverProps: {},
+        routeParams: {},
+      },
       queryCacheControl: [],
       queryTimings: [],
       preloadQueries: new Map(),

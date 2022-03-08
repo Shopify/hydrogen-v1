@@ -11,7 +11,6 @@ import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
-import {Router} from './foundation/Router/Router';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
@@ -57,9 +56,7 @@ function Content({
       serverState={serverState}
       setServerState={setServerState}
     >
-      <Router>
-        <ClientWrapper>{response.readRoot()}</ClientWrapper>
-      </Router>
+      <ClientWrapper>{response.readRoot()}</ClientWrapper>
     </ServerStateProvider>
   );
 }

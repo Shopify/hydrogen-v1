@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {useRouter} from '../../foundation/Router/Router';
+import {useRouter} from '../../foundation/Router/BrowserRouter.client';
 import {createPath} from 'history';
 import {useNavigate} from '../../hooks/useNavigate';
 

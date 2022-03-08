@@ -7,6 +7,7 @@ import React, {
   FC,
   useEffect,
 } from 'react';
+import {isServer} from '../../utilities';
 import {META_ENV_SSR} from '../ssr-interop';
 import {useServerState} from '../useServerState';
 
@@ -19,10 +20,12 @@ const RouterContext = createContext<RouterContextValue | {}>({});
 
 let currentPath = '';
 
-export const Router: FC<{history?: BrowserHistory}> = ({
+export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
   history: pHistory,
   children,
 }) => {
+  if (isServer()) return <>{children}</>;
+
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [firstLoad, setFirstLoad] = useState(true);
   const [location, setLocation] = useState(history.location);
