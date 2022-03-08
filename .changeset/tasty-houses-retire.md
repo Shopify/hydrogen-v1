@@ -33,11 +33,10 @@ function CustomRoute() {
 
 `<Route>` accepts two props:
 
-| Property | Type | Required | Description |
-| -------- | --------------------------------------- | -------- | :w
----------------------------------------------------------------------------- |
-| `path` | `string` | Yes | The URL path the route exists at. Can contain variables: `/products/:handle` |
-| `page` | `A rendered Server Component reference` | Yes | The component that will render for the route. |
+| Property | Type                                    | Required | Description                                                                  |
+| -------- | --------------------------------------- | -------- | ---------------------------------------------------------------------------- |
+| `path`   | `string`                                | Yes      | The URL path the route exists at. Can contain variables: `/products/:handle` |
+| `page`   | `A rendered Server Component reference` | Yes      | The component that will render for the route.                                |
 
 ## Changes to `<Router>`
 
