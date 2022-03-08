@@ -449,8 +449,6 @@ async function stream(
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
-        logServerResponse('str', request, response.statusCode);
-
         if (isRedirect(response)) {
           // Return redirects early without further rendering/streaming
           return response.end();
