@@ -14,7 +14,7 @@ concurrency:
 jobs:
   deploy_cloudflare:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'shopify' }}
+    if: ${{ github.repository_owner == 'shopify' }}
     name: Deploy to Cloudflare Workers
     steps:
       - name: Check out the code
