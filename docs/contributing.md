@@ -234,7 +234,7 @@ Hydrogen maintains an `unstable` branch as a home for features and breaking chan
 To release an unstable version:
 
 1. Merge your changes into the `unstable` branch.
-1. Visit the Shiphit page for `Hydrogen Unstable` and click **Deploy** on the commit you want to release
+1. Visit the Shipit page for `Hydrogen Unstable` and click **Deploy** on the commit you want to release
 
 A new snapshot release will be created with your changes and tagged on NPM with `unstable`. You can install the unstable version of Hydrogen using this tag:
 
