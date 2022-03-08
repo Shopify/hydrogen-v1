@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.13.0
+
+### Minor Changes
+
+- [#842](https://github.com/Shopify/hydrogen/pull/842) [`626e58e`](https://github.com/Shopify/hydrogen/commit/626e58eebe3cf994423895bbdf7754c009d701fe) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Removed the `Rawhtml` component.
+
+  Upgrade your project by replacing references to the `RawHtml` component to follow
+  [React's `dangerouslySetInnerHTML`](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml):
+
+  Change all `RawHtml` component
+
+  ```jsx
+  <RawHtml string="<p>Hello world</p>" />
+  ```
+
+  to jsx equivalent
+
+  ```jsx
+  <div dangerouslySetInnerHTML={{__html: '<p>Hello world</p>'}} />
+  ```
+
 ## 0.12.0
 
 ### Minor Changes
