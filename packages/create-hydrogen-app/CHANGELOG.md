@@ -4,11 +4,11 @@
 
 ### Minor Changes
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Upgrade default Storefront API to version '2022-04'. Some components have been updated to use the 2022-04 features and types as well.
+- [#809](https://github.com/Shopify/hydrogen/pull/809) [`47f23f9`](https://github.com/Shopify/hydrogen/commit/47f23f921873b782947aed2e54d997ad034801b8) Thanks [@frehner](https://github.com/frehner)! - Upgrade default Storefront API to version '2022-04'. Some components have been updated to use the 2022-04 features and types as well.
 
   One important change is that the `2022-04` Storefront API no longer encodes object IDs: see more [details here](https://shopify.dev/api/release-notes/2022-04#non-encoded-object-ids-in-the-graphql-storefront-api). Because of this, Hydrogen will no longer decode IDs, either, which will cause issues if you are using a previous version of the Storefront API with Hydrogen components.
 
-* [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Adds `queryShop` helper to API routes. This makes it easy to query the Storefront API, similar to how `useShopQuery` is available in server components:
+* [#780](https://github.com/Shopify/hydrogen/pull/780) [`122a5c5`](https://github.com/Shopify/hydrogen/commit/122a5c5e0b70fa2a11c2c708b303da987f25fc53) Thanks [@jplhomer](https://github.com/jplhomer)! - Adds `queryShop` helper to API routes. This makes it easy to query the Storefront API, similar to how `useShopQuery` is available in server components:
 
   ```jsx
   // my-api.server.js
@@ -35,7 +35,7 @@
   +export default renderHydrogen(App, {shopifyConfig, routes});
   ```
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Routing in Hydrogen has been updated according to [Custom Routes proposal](https://github.com/Shopify/hydrogen/discussions/569). Specifically, a new `Router` component has been added, and `DefaultRoutes` has been renamed to `FileRoutes`, along with other minor changes. Custom route components are not implemented yet.
+- [#712](https://github.com/Shopify/hydrogen/pull/712) [`6368968`](https://github.com/Shopify/hydrogen/commit/6368968e4c68bb44b01b6b0b6903e403269dc233) Thanks [@blittle](https://github.com/blittle)! - Routing in Hydrogen has been updated according to [Custom Routes proposal](https://github.com/Shopify/hydrogen/discussions/569). Specifically, a new `Router` component has been added, and `DefaultRoutes` has been renamed to `FileRoutes`, along with other minor changes. Custom route components are not implemented yet.
 
   Follow these steps to upgrade your `App.server.jsx` file:
 
@@ -77,7 +77,7 @@
 
 ### Patch Changes
 
-- [#858](https://github.com/Shopify/hydrogen/pull/858) [`eae3490`](https://github.com/Shopify/hydrogen/commit/eae3490bf630c92243e9e6820100d673e22ec421) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the starter template.
+- [#845](https://github.com/Shopify/hydrogen/pull/858) [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the starter template.
 
 * [#852](https://github.com/Shopify/hydrogen/pull/852) [`6015edf`](https://github.com/Shopify/hydrogen/commit/6015edfa01f7c8e3e7a0120db0847bdc1c068263) Thanks [@frandiox](https://github.com/frandiox)! - Update @headlessui/react version to fix Cart dialog not opening.
 
