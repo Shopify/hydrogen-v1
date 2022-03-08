@@ -1,26 +1,22 @@
-import type {SeoFragment} from './SeoFragment';
+import type {
+  SeoFragmentFragment,
+  DefaultPageSeoFragmentFragment,
+  HomeSeoFragmentFragment,
+} from './SeoFragment';
 import type {Scalars} from '../../graphql/types/types';
-
-export type Title = SeoFragment['title'];
-export type Description = SeoFragment['description'];
 
 export interface Twitter {
   site: string;
-  title: Title;
-  description: Description;
+  title: SeoFragmentFragment['title'];
+  description: SeoFragmentFragment['description'];
 }
 
-interface PageBase {
-  title: Title;
+export interface HomePage extends HomeSeoFragmentFragment {
   url: Scalars['URL'];
 }
 
-export interface HomePage extends PageBase {
-  description?: Description;
-}
-
-export interface DefaultPage extends HomePage {
-  description: Description;
+export interface DefaultPage extends DefaultPageSeoFragmentFragment {
+  url: Scalars['URL'];
   titleTemplate?: string;
   lang?: string;
 }

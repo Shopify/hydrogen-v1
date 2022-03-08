@@ -5,14 +5,14 @@ import {DescriptionSeo} from './DescriptionSeo.client';
 import {TwitterSeo} from './TwitterSeo.client';
 import {ImageSeo} from './ImageSeo.client';
 
-import type {CollectionSeoFragment} from './SeoFragment';
+import type {CollectionSeoFragmentFragment} from './SeoFragment';
 
 export function CollectionSeo({
   title,
   description,
   seo,
   image,
-}: CollectionSeoFragment) {
+}: CollectionSeoFragmentFragment) {
   const seoTitle = seo.title ?? title;
   const seoDescription = seo.description ?? description;
 
