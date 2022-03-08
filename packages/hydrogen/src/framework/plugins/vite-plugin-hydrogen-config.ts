@@ -90,11 +90,11 @@ export default () => {
           // https://github.com/facebook/react/issues/23113
           code = code.replace(
             /var \w+\s*=\s*(\w+)\.completedRootSegment;/g,
-            'if($1.status===5)return\n$1.status=5;\n$&'
+            'if($1.status===5)return;$1.status=5;\n$&'
           );
           code = code.replace(
-            /(\w+)\.allPendingTasks\s*={2,3}\s*0\s*\&\&\s*\w+\.pingedTasks\.length/g,
-            '$1.status=0;\n$&'
+            /{([^{]*?(\w+)\.pingedTasks\.length)/g,
+            '{$2.status=0;\n$1'
           );
 
           return code;
