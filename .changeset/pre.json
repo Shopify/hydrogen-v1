@@ -11,5 +11,8 @@
     "hydrogen-playground": "0.11.0",
     "test-server-components": "0.11.0"
   },
-  "changesets": []
+  "changesets": [
+    "ten-timers-bathe",
+    "tough-rabbits-end"
+  ]
 }

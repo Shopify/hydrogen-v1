@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.0.0-rc1.0
+
+### Major Changes
+
+- [`a10e166`](https://github.com/Shopify/hydrogen/commit/a10e1665a95d27525f0b07df187b1346a62850cb) Thanks [@jplhomer](https://github.com/jplhomer)! - Hydrogen v1.0 is now available as a release candidate.
+
+  Install it using the `rc1` tag for new apps:
+
+  ```bash
+  npx create-hydrogen-app@rc1
+  ```
+
+  Or update existing apps:
+
+  ```bash
+  yarn add @shopify/hydrogen@rc1
+  ```
+
+### Minor Changes
+
+- [#842](https://github.com/Shopify/hydrogen/pull/842) [`626e58e`](https://github.com/Shopify/hydrogen/commit/626e58eebe3cf994423895bbdf7754c009d701fe) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Removed the `Rawhtml` component.
+
+  Upgrade your project by replacing references to the `RawHtml` component to follow
+  [React's `dangerouslySetInnerHTML`](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml):
+
+  Change all `RawHtml` component
+
+  ```jsx
+  <RawHtml string="<p>Hello world</p>" />
+  ```
+
+  to jsx equivalent
+
+  ```jsx
+  <div dangerouslySetInnerHTML={{__html: '<p>Hello world</p>'}} />
+  ```
+
 ## 0.12.0
 
 ### Minor Changes
