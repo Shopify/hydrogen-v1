@@ -386,5 +386,10 @@ export default async function testCases({
       await page.goto(getServerUrl() + '/custom4');
       expect(await page.textContent('h1')).toContain('Custom 1');
     });
+
+    it('loads a route lazily defined', async () => {
+      await page.goto(getServerUrl() + '/lazyRoute');
+      expect(await page.textContent('#root')).toContain('Lazy Route');
+    });
   });
 }

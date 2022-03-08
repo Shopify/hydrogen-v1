@@ -10,6 +10,7 @@ import shopifyConfig from '../shopify.config';
 import {Suspense} from 'react';
 import Custom1 from './customRoutes/custom1.server';
 import Custom2 from './customRoutes/custom2.server';
+import LazyRoute from './customRoutes/lazyRoute.server';
 
 setLogger({
   trace() {},
@@ -38,6 +39,7 @@ function App({routes, ...serverProps}) {
           </HasRouteChildren>
           <HasInternalRoute />
           <FileRoutes routes={routes} />
+          <LazyRoute />
         </Router>
       </ShopifyProvider>
     </Suspense>
