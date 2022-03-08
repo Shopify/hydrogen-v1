@@ -14,14 +14,14 @@ export interface BaseImageProps {
    */
   loader?(props: ImageLoaderOptions): string;
   /** An object of `loader` function options. For example, if the `loader` function requires a `scale` option,
-   * then the value can be a property of the `loaderOptions` object (eg. `{scale: 2}`).
+   * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
    */
   loaderOptions?: ImageLoaderOptions['options'];
 }
 
 interface MediaImageProps extends BaseImageProps {
-  /** An object with the keys `url`, `altText`, `id`, `width` and `height`. Refer to the
-   * Storefront API's [`Image` object](/api/storefront/reference/common-objects/image).
+  /** An object with keys that correspond to the Storefront API's
+   * [Image object](/api/storefront/reference/common-objects/image).
    */
   data: ImageFragmentFragment;
   /** An object of image size options for Shopify CDN images. */
@@ -64,7 +64,7 @@ function convertShopifyImageData({
 
 /**
  * The `Image` component renders an image for the Storefront API's
- * [`Image` object](/api/storefront/reference/common-objects/image).
+ * [Image object](/api/storefront/reference/common-objects/image).
  */
 export function Image<TTag extends React.ElementType = 'img'>(
   props: Props<TTag, PropsWeControl> & ImageProps

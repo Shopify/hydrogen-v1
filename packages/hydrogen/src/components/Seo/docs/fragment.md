@@ -1,5 +1,7 @@
 ## GraphQL fragments
 
+The `Seo` component supports the following fragments which correspond to each type:
+
 ### `defaultSeo`
 
 The following fragment is available as a string for your GraphQL query using `DefaultPageSeoFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `<Seo type="defaultSeo" />` component.

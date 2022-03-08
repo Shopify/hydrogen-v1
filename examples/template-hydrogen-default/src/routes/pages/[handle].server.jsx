@@ -1,4 +1,4 @@
-import {useShopQuery, RawHtml, Seo} from '@shopify/hydrogen';
+import {useShopQuery, Seo} from '@shopify/hydrogen';
 import {PageSeoFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
@@ -19,7 +19,10 @@ export default function Page({params}) {
     <Layout>
       <Seo type="page" data={page} />
       <h1 className="text-2xl font-bold">{page.title}</h1>
-      <RawHtml string={page.body} className="prose mt-8" />
+      <div
+        dangerouslySetInnerHTML={{_html: page.body}}
+        className="prose mt-8"
+      />
     </Layout>
   );
 }

@@ -6,12 +6,12 @@ The `flattenConnection` utility transforms a connection object from the Storefro
 
 ```tsx
 import {
-  MediaFileFragment,
   flattenConnection,
   MediaFile,
   useShopQuery,
   MediaFile,
 } from '@shopify/hydrogen/client';
+import {MediaFileFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`

@@ -1,7 +1,7 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Image and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `Image` component renders an image for the Storefront API's
-[`Image` object](/api/storefront/reference/common-objects/image).
+[Image object](/api/storefront/reference/common-objects/image).
 
 ## Example code
 
@@ -62,15 +62,15 @@ export default function ExternalImageWithLoader() {
 
 ## Props
 
-| Name            | Description                                                                                                                                                                                          |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data`          | An object with the keys `url`, `altText`, `id`, `width`, and `height`. Refer to the Storefront API's [`Image` object](/api/storefront/reference/common-objects/image).                               |
-| `options`       | An object of image size options for Shopify CDN images.                                                                                                                                              |
-| `src`           | A URL string. This string can be an absolute path or a relative path depending on the `loader`.                                                                                                      |
-| `width`         | The integer value for the width of the image. This is a required prop when `src` is present.                                                                                                         |
-| `height`        | The integer value for the height of the image. This is a required prop when `src` is present.                                                                                                        |
-| `loader`        | A custom function that generates the image URL. Parameters passed into this function includes `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values. |
-| `loaderOptions` | An object of `loader` function options. For example, if the `loader` function requires a `scale` option, then the value can be a property of the `loaderOptions` object (eg. `{scale: 2}`).          |
+| Name           | Type                                             | Description                                                                                                                                                                                          |
+| -------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data           | <code>ImageFragmentFragment</code>               | An object with keys that correspond to the Storefront API's [Image object](/api/storefront/reference/common-objects/image).                                                                          |
+| options?       | <code>ImageSizeOptions</code>                    | An object of image size options for Shopify CDN images.                                                                                                                                              |
+| src            | <code>string</code>                              | A URL string. This string can be an absolute path or a relative path depending on the `loader`.                                                                                                      |
+| width          | <code>number</code>                              | The integer value for the width of the image. This is a required prop when `src` is present.                                                                                                         |
+| height         | <code>height</code>                              | The integer value for the height of the image. This is a required prop when `src` is present.                                                                                                        |
+| loader?        | <code>(props: ImageLoaderOptions): string</code> | A custom function that generates the image URL. Parameters passed into this function includes `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values. |
+| loaderOptions? | <code>ImageLoaderOptions['options']</code>       | An object of `loader` function options. For example, if the `loader` function requires a `scale` option, then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`). |
 
 ## Component type
 

@@ -22,7 +22,7 @@ When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/cr
 
 Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
 
-- A set of boilerplate [`components`](/custom-storefronts/hydrogen/getting-started#components) and [`pages`](/custom-storefronts/hydrogen/getting-started#pages)
+- A set of boilerplate [`components`](/custom-storefronts/hydrogen/getting-started#components) and [`routes`](/custom-storefronts/hydrogen/getting-started#routes)
 - The main app component in `App.server.jsx`, which includes boilerplate code for the app and routing. This file is also the main entry point for the server.
 - Basic styles provided by Tailwind CSS (`index.css`)
 
@@ -35,7 +35,7 @@ Most of the files that you'll work with in the Hydrogen project are located in t
         └── Cart.client.jsx
         └── CartIcon.jsx
         └── ...
-    ├── pages
+    ├── routes
         └── collections
             └── [handle].server.jsx
         └── pages

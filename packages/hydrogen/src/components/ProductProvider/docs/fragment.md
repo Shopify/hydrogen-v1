@@ -113,8 +113,7 @@ const QUERY = gql`
       id
       vendor
       seo {
-        title
-        description
+        ...SeoFragment
       }
       featuredImage {
         url
