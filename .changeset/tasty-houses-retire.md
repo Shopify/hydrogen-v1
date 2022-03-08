@@ -1,12 +1,11 @@
 ---
-'template-hydrogen-default': minor
+'create-hydrogen-app': minor
 '@shopify/hydrogen': minor
-'test-server-components': patch
 ---
 
 ## New `<Route>` Component
 
-The `<Route>` component available for routes not defined by the file system. The `<Route>` component must be used within the `<Routes>` component.
+The `<Route>` component is available for routes not defined by the file system. The `<Route>` component must be used within the `<Router>` component.
 
 ```jsx
 // app.server.jsx
@@ -66,12 +65,12 @@ function App({routes, ...serverProps}) {
 
 `<FileRoutes>` now accepts two additional optional props:
 
-| Property            | Type     | Required | Default Value | Description                                                            |
-| ------------------- | -------- | -------- | ------------- | ---------------------------------------------------------------------- |
-| `basePath`          | `string` | No       | `"/"`         | Path prepended to all file routes                                      |
-| `fileDirectoryPath` | `string` | No       | `"./routes"`  | The portion of the file route path that shouldn't be a part of the URL |
+| Property    | Type     | Required | Default Value | Description                                                            |
+| ----------- | -------- | -------- | ------------- | ---------------------------------------------------------------------- |
+| `basePath`  | `string` | No       | `"/"`         | Path prepended to all file routes                                      |
+| `dirPrefix` | `string` | No       | `"./routes"`  | The portion of the file route path that shouldn't be a part of the URL |
 
-Changing the `fileDirectoryPath` is necessary if you choose to import your routes from a location other than `src/routes`.
+Changing the `dirPrefix` is necessary if you choose to import your routes from a location other than `src/routes`.
 
 Changing `basePath` could be useful if you want to prefix all file routes, for example with a locale:
 

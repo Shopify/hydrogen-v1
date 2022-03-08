@@ -14,11 +14,11 @@ import type {ImportGlobEagerOutput} from '../../types';
 export function FileRoutes({
   routes,
   basePath = '/',
-  fileDirectoryPath = './routes',
+  dirPrefix = './routes',
 }: {
   routes: ImportGlobEagerOutput;
   basePath?: string;
-  fileDirectoryPath?: string;
+  dirPrefix?: string;
 }) {
   const request = useServerRequest();
   const {routeRendered, serverProps} = request.ctx.router;
@@ -26,7 +26,7 @@ export function FileRoutes({
   if (routeRendered) return null;
 
   const pageRoutes = useMemo(
-    () => createPageRoutes(routes, basePath, fileDirectoryPath),
+    () => createPageRoutes(routes, basePath, dirPrefix),
     [routes, basePath]
   );
 
@@ -64,14 +64,14 @@ interface HydrogenRoute {
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
-  fileDirectoryPath: string
+  dirPrefix: string
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const routes = Object.keys(pages)
     .map((key) => {
       let path = key
-        .replace(fileDirectoryPath, '')
+        .replace(dirPrefix, '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
          * Replace /index with /
