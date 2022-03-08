@@ -19,6 +19,7 @@ export {useParams} from './foundation/Router/useParams';
 
 // This is exported here because it contains a Server Component
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
+export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server';
 
 // Exported here because users shouldn't be making `useShopQuery` calls from the client
 export * from './hooks/useShopQuery';

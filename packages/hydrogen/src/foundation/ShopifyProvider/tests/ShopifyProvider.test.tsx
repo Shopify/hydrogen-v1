@@ -1,6 +1,7 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {ShopifyProvider, ShopifyContext} from '..';
+import {ShopifyContext} from '../ShopifyProvider.client';
+import {ShopifyProvider} from '../ShopifyProvider.server';
 import {DEFAULT_LOCALE} from '../../constants';
 import {SHOPIFY_CONFIG} from './fixtures';
 

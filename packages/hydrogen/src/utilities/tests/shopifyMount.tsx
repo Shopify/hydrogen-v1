@@ -4,7 +4,7 @@ import {BrowserHistory} from 'history';
 import {DEFAULT_LOCALE} from '../../foundation/constants';
 
 import {ShopifyConfig} from '../../types';
-import {ShopifyProvider} from '../../foundation/ShopifyProvider';
+import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server';
 import {Router} from '../../foundation/Router/Router';
 import {ServerState, ServerStateProvider} from '../../foundation';
 
