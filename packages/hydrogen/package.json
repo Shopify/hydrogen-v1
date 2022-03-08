@@ -52,7 +52,7 @@
     "directory": "packages/hydrogen"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.16",
+    "@babel/core": "^7.17.5",
     "@graphql-codegen/add": "^3.1.1",
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/graphql-modules-preset": "^2.3.5",

@@ -23,9 +23,9 @@
     "directory": "packages/cli"
   },
   "dependencies": {
-    "@babel/node": "^7.14.9",
-    "@babel/parser": "^7.15.3",
-    "@babel/types": "^7.15.0",
+    "@babel/node": "^7.16.8",
+    "@babel/parser": "^7.17.3",
+    "@babel/types": "^7.17.0",
     "@microsoft/tsdoc": "^0.12.20",
     "@shopify/docs-tools": "^0.0.8",
     "@shopify/prettier-config": "^1.1.2",
