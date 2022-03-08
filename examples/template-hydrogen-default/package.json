@@ -33,8 +33,8 @@
     "vite": "^2.8.0"
   },
   "dependencies": {
-    "@headlessui/react": "^1.4.1",
-    "@shopify/hydrogen": "^0.11.1",
+    "@headlessui/react": "^1.5.0",
+    "@shopify/hydrogen": "^0.12.0",
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
     "graphql-tag": "^2.12.4",

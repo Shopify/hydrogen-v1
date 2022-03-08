@@ -39,15 +39,6 @@ export const ssrRenderToReadableStream = _ssrRenderToReadableStream as (
   options: StreamOptions
 ) => ReadableStream<Uint8Array>;
 
-export function supportsReadableStream() {
-  try {
-    new ReadableStream();
-    return true;
-  } catch (_) {
-    return false;
-  }
-}
-
 let cachedStreamingSupport: boolean;
 export async function isStreamingSupported() {
   if (cachedStreamingSupport === undefined) {

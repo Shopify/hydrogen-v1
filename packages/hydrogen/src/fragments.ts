@@ -25,6 +25,21 @@ export type {MoneyFragmentFragment} from './components/Money/MoneyFragment';
 export {ProductProviderFragment} from './graphql/graphql-constants';
 export type {ProductProviderFragmentFragment} from './components/ProductProvider/ProductProviderFragment';
 
+export {
+  DefaultPageSeoFragment,
+  HomeSeoFragment,
+  ProductSeoFragment,
+  CollectionSeoFragment,
+  PageSeoFragment,
+} from './graphql/graphql-constants';
+export type {
+  DefaultPageSeoFragmentFragment,
+  HomeSeoFragmentFragment,
+  ProductSeoFragmentFragment,
+  CollectionSeoFragmentFragment,
+  PageSeoFragmentFragment,
+} from './components/Seo/SeoFragment';
+
 export {UnitPriceFragment} from './graphql/graphql-constants';
 export type {UnitPriceFragmentFragment} from './components/UnitPrice/UnitPriceFragment';
 

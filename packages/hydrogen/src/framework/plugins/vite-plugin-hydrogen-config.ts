@@ -14,6 +14,7 @@ export default () => {
       },
 
       build: {
+        minify: 'esbuild',
         sourcemap: true,
         /**
          * By default, SSR dedupe logic gets bundled which runs `require('module')`.
@@ -74,33 +75,28 @@ export default () => {
     }),
 
     // TODO: Remove when react-dom/fizz is fixed
-    generateBundle: process.env.WORKER
-      ? (options, bundle) => {
-          // There's only one key in bundle, normally `worker.js`
-          const [bundleKey] = Object.keys(bundle);
-          const workerBundle = bundle[bundleKey];
-          // It's always a chunk, this is just for TypeScript
-          if (workerBundle.type === 'chunk') {
-            // React fizz and flight try to access an undefined value.
-            // This puts a guard before accessing it.
-            workerBundle.code = workerBundle.code.replace(
-              /\((\w+)\.locked\)/gm,
-              '($1 && $1.locked)'
-            );
+    renderChunk: process.env.WORKER
+      ? (code, chunk, opts) => {
+          if (!chunk.isEntry) return null;
 
-            // `renderToReadableStream` is bugged in React.
-            // This adds a workaround until these issues are fixed:
-            // https://github.com/facebook/react/issues/22772
-            // https://github.com/facebook/react/issues/23113
-            workerBundle.code = workerBundle.code.replace(
-              /var \w+\s*=\s*(\w+)\.completedRootSegment;/g,
-              'if($1.status===5)return\n$1.status=5;\n$&'
-            );
-            workerBundle.code = workerBundle.code.replace(
-              /(\w+)\.allPendingTasks\s*={2,3}\s*0\s*\&\&\s*\w+\.pingedTasks\.length/g,
-              '$1.status=0;\n$&'
-            );
-          }
+          // React fizz and flight try to access an undefined value.
+          // This puts a guard before accessing it.
+          code = code.replace(/\((\w+)\.locked\)/gm, '($1 && $1.locked)');
+
+          // `renderToReadableStream` is bugged in React.
+          // This adds a workaround until these issues are fixed:
+          // https://github.com/facebook/react/issues/22772
+          // https://github.com/facebook/react/issues/23113
+          code = code.replace(
+            /var \w+\s*=\s*(\w+)\.completedRootSegment;/g,
+            'if($1.status===5)return;$1.status=5;\n$&'
+          );
+          code = code.replace(
+            /{([^{]*?(\w+)\.pingedTasks\.length)/g,
+            '{$2.status=0;\n$1'
+          );
+
+          return code;
         }
       : undefined,
   } as Plugin;

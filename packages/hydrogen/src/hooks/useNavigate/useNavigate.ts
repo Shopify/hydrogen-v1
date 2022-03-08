@@ -1,4 +1,4 @@
-import {useRouter} from '../../foundation/Router/Router.client';
+import {useRouter} from '../../foundation/Router/Router';
 
 type NavigationOptions = {
   /** Whether to update the state object or URL of the current history entry. Default to false */

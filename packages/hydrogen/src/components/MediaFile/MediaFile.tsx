@@ -14,8 +14,9 @@ import type {
 export interface MediaFileProps {
   /** A [Media object](/api/storefront/reference/products/media). */
   data: MediaFileFragmentFragment;
-  /** The options for the `Image`, `Video`, `ExternalVideo`, or `ModelViewer` components. */
+  /** The options for the `Image`, `Video`, or `ExternalVideo` components. */
   options?:
+    | React.ComponentProps<typeof Image>['options']
     | React.ComponentProps<typeof Video>['options']
     | React.ComponentProps<typeof ExternalVideo>['options'];
 }

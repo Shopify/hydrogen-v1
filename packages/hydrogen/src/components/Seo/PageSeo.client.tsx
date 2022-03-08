@@ -4,9 +4,9 @@ import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
 import {TwitterSeo} from './TwitterSeo.client';
 
-import {PageSeoFragment} from './SeoFragment';
+import {PageSeoFragmentFragment} from './SeoFragment';
 
-export function PageSeo({title, seo}: PageSeoFragment) {
+export function PageSeo({title, seo}: PageSeoFragmentFragment) {
   const seoTitle = seo?.title ?? title;
   const seoDescription = seo?.description;
 
