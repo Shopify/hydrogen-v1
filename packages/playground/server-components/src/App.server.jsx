@@ -30,7 +30,7 @@ function App({routes, ...serverProps}) {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <Router fallback="Not found" serverProps={serverProps}>
+        <Router serverProps={serverProps}>
           <Route path="/custom1" page={<Custom1 />} />
           <Route path="/custom2/:handle" page={<Custom2 />} />
           <HasRouteChildren>

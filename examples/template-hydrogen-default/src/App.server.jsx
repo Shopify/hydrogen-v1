@@ -1,5 +1,11 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, FileRoutes, ShopifyProvider, Route} from '@shopify/hydrogen';
+import {
+  Router,
+  Route,
+  FileRoutes,
+  ShopifyProvider,
+  setLoggerOptions,
+} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
 import DefaultSeo from './components/DefaultSeo.server';
@@ -13,17 +19,17 @@ function App({routes, ...serverProps}) {
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         <CartProvider>
           <DefaultSeo />
-          <Router
-            fallback={<NotFound response={serverProps.response} />}
-            serverProps={serverProps}
-          >
+          <Router serverProps={serverProps}>
             <FileRoutes routes={routes} />
+            <Route path="*" page={<NotFound />} />
           </Router>
         </CartProvider>
       </ShopifyProvider>
     </Suspense>
   );
 }
+
+setLoggerOptions({showQueryTiming: true});
 
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 

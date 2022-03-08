@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
 import {log} from '../../utilities/log';
+import {useServerRequest} from '../ServerRequestProvider';
 
 import type {ImportGlobEagerOutput} from '../../types';
 
@@ -12,15 +13,20 @@ import type {ImportGlobEagerOutput} from '../../types';
  */
 export function FileRoutes({
   routes,
-  serverProps,
+  basePath = '/',
+  fileDirectoryPath = './routes',
 }: {
   routes: ImportGlobEagerOutput;
-  serverProps: Record<string, any>;
+  basePath?: string;
+  fileDirectoryPath?: string;
 }) {
-  const basePath = '/';
+  const request = useServerRequest();
+  const {routeRendered, serverProps} = request.ctx.router;
+
+  if (routeRendered) return null;
 
   const pageRoutes = useMemo(
-    () => createPageRoutes(routes, basePath),
+    () => createPageRoutes(routes, basePath, fileDirectoryPath),
     [routes, basePath]
   );
 
@@ -35,9 +41,18 @@ export function FileRoutes({
     }
   }
 
-  return foundRoute ? (
-    <foundRoute.component params={foundRouteDetails.params} {...serverProps} />
-  ) : null;
+  if (foundRoute) {
+    request.ctx.router.routeRendered = true;
+    request.ctx.router.routeParams = foundRouteDetails.params;
+    return (
+      <foundRoute.component
+        params={foundRouteDetails.params}
+        {...serverProps}
+      />
+    );
+  }
+
+  return null;
 }
 
 interface HydrogenRoute {
@@ -48,14 +63,15 @@ interface HydrogenRoute {
 
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
-  topLevelPath = '*'
+  topLevelPath = '*',
+  fileDirectoryPath: string
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const routes = Object.keys(pages)
     .map((key) => {
       let path = key
-        .replace('./routes', '')
+        .replace(fileDirectoryPath, '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
          * Replace /index with /
