@@ -1,7 +1,7 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ExternalVideo and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `ExternalVideo` component renders an embedded video for the Storefront
-API's [`ExternalVideo` object](/api/storefront/reference/products/externalvideo).
+API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
 
 ## Example code
 
@@ -48,10 +48,10 @@ export default function MyProductVideo() {
 
 ## Props
 
-| Name     | Type                                                                                 | Description                                                                                                                                                                                                                       |
-| -------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| video    | <code>Pick<<wbr>ExternalVideoType, "host" &#124; "embedUrl" &#124; "id"<wbr>></code> | An object with the keys `host`, `embedUrl`, and `id`. Refer to the Storefront API's [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).                                                                     |
-| options? | <code>YouTube &#124; Vimeo</code>                                                    | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
+| Name     | Type                                       | Description                                                                                                                                                                                                                       |
+| -------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data     | <code>ExternalVideoFragmentFragment</code> | An object with keys that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).                                                                                             |
+| options? | <code>YouTube &#124; Vimeo</code>          | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
 
 ## Component type
 

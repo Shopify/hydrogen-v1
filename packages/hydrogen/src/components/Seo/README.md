@@ -14,8 +14,7 @@ const QUERY = gql`
       title
       body
       seo {
-        title
-        description
+        ...SeoFragment
       }
     }
   }
@@ -39,19 +38,21 @@ export default function Page({params}) {
 
 The `Seo` component has two props: `type` and `data`. The `type` prop accepts `defaultSeo`, `homepage`, `product`, `collection`, or `page`. Each `type` expects a different `data` shape.
 
-| Type       | Data                                                                                                            | Description                                                                                                                                                                           |
-| ---------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
-| defaultSeo | <pre>{ <br> title: string; <br> description?: string;<br> titleTemplate?: string;<br> lang?: string;<br>}</pre> | The SEO information to render as default on every page of the website. You can specify `homepage`, `product`, `collection`, or `page` in children components to override the default. |
-| homepage   | <pre>{ <br> title: string; <br> description?: Description;<br>}</pre>                                           | The SEO information to render on the home page of the website.                                                                                                                        |     |
-| product    | The Storefront API [Product](/api/storefront/reference/common-objects/product) object.                          | The SEO information to render on the product page. Must include `title`, `description`, `vendor`, `seo`, at least one variant, and pricing information.                               |
-| collection | The Storefront API [Collection](/api/storefront/reference/common-objects/collection) object.                    | The SEO information to render on the collection page. Must include `title`, `description`, and `seo`.                                                                                 |
-| page       | <pre>{ <br> title: string; <br> seo: <br> { <br> title?: string; <br> description?: string;<br> }<br>}</pre>    | The SEO information to render on pages (For example, "About" or "Shipping"). Must include `title`, `description`, and `seo`.                                                          |
+| Type       | Data                                                                                                                                                                                    | Description                                                                                                                                                                           |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| defaultSeo | <pre>{ <br> title: DefaultPageSeoFragmentFragment['title']; <br> description?: DefaultPageSeoFragmentFragment['description'];<br> titleTemplate?: string;<br> lang?: string;<br>}</pre> | The SEO information to render as default on every page of the website. You can specify `homepage`, `product`, `collection`, or `page` in children components to override the default. |
+| homepage   | <code>HomeSeoFragmentFragment</code>                                                                                                                                                    | The SEO information to render on the home page of the website.                                                                                                                        |
+| product    | <code>ProductSeoFragmentFragment</code>                                                                                                                                                 | The SEO information to render on the product page. Corresponds to the Storefront API's [Product object](/api/storefront/latest/objects/product).                                      |
+| collection | <code>CollectionSeoFragmentFragment</code>                                                                                                                                              | The SEO information to render on the collection page. Corresponds to the Storefront API's [Collection object](/api/storefront/latest/objects/collection)                              |
+| page       | <code>PageSeoFragmentFragment</code>                                                                                                                                                    | The SEO information to render on pages (for example, "About" or "Shipping"). Corresponds to the Storefront API's [Page object](/api/storefront/latest/objects/page).                  |
 
 ## Component type
 
 The `Seo` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## GraphQL fragments
+
+The `Seo` component supports the following fragments which correspond to each type:
 
 ### `defaultSeo`
 

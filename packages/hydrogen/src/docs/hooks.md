@@ -22,7 +22,7 @@ Primitive hooks are the building blocks for different component types, including
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/primitive/usemoney">useMoney</a></td>
-    <td>Takes a <a href="/api/storefront/reference/common-objects/moneyv2"><code>MoneyV2</code> object</a> and returns a default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat"><code>Intl.NumberFormat</code></a>.</td>
+    <td>Takes a <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a> and returns a default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat"><code>Intl.NumberFormat</code></a>.</td>
   </tr>
 </table>
 

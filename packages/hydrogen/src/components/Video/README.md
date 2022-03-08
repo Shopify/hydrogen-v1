@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Video and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
-The `Video` component renders a `video` for the Storefront API's [`Video` object](/api/storefront/reference/products/video).
+The `Video` component renders a `video` for the Storefront API's [Video object](/api/storefront/reference/products/video).
 
 ## Example code
 
@@ -46,10 +46,10 @@ export default function MyProductVideo() {
 
 ## Props
 
-| Name     | Type                                                                             | Description                                                           |
-| -------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| data     | <code>Object<<wbr>VideoType, Pick<<wbr>Image, Pick<<wbr>VideoSource><wbr></code> | An object corresponding to the [GraphQL fragment](#graphql-fragment). |
-| options? | <code>ImageSizeOptions</code>                                                    | An object of image size options for the video's `previewImage`.       |
+| Name     | Type                               | Description                                                                                                       |
+| -------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| data     | <code>VideoFragmentFragment</code> | An object with keys that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). |
+| options? | <code>ImageSizeOptions</code>      | An object of image size options for the video's `previewImage`.                                                   |
 
 ## Component type
 

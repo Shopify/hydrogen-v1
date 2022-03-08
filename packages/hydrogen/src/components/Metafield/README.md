@@ -4,7 +4,7 @@ The `Metafield` component renders the value of a Storefront
 API's [Metafield object](/api/storefront/reference/common-objects/metafield).
 
 Renders a smart default of the
-Metafield's `value`. For more information, refer to the [Default Output](#default-output) section.
+Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
 
 ## Example code
 
@@ -20,10 +20,10 @@ export function Product({product}) {
 
 ## Props
 
-| Name | Type                         | Description                                                                                                                               |
-| ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| data | <code>ParsedMetafield</code> | A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API.                                         |
-| as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/types). |
+| Name | Type                                   | Description                                                                                                                               |
+| ---- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| data | <code>MetafieldFragmentFragment</code> | An object with keys that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield).       |
+| as?  | <code>TTag</code>                      | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/types). |
 
 ## Default output
 

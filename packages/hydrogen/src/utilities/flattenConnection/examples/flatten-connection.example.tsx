@@ -1,10 +1,10 @@
 import {
-  MediaFileFragment,
   flattenConnection,
   MediaFile,
   useShopQuery,
   MediaFile,
 } from '@shopify/hydrogen/client';
+import {MediaFileFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`

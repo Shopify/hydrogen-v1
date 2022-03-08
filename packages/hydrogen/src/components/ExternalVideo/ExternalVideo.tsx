@@ -18,7 +18,7 @@ type PropsWeControl = 'src';
 
 /**
  * The `ExternalVideo` component renders an embedded video for the Storefront
- * API's [`ExternalVideo` object](/api/storefront/reference/products/externalvideo).
+ * API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
  */
 export function ExternalVideo(
   props: Omit<JSX.IntrinsicElements['iframe'], PropsWeControl> &

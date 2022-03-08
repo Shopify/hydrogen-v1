@@ -77,7 +77,7 @@ While rendering a page in your Hydrogen app, it’s common to make one or more s
 
 The following example shows how to implement [`useShopQuery` for Shopify Storefront API queries](/api/hydrogen/hooks/global/useshopquery):
 
-{% codeblock file, filename: '/pages/my-products.server.jsx' %}
+{% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
 ```jsx
 // Use a caching strategy provided by Hydrogen
@@ -91,7 +91,7 @@ const {data} = useShopQuery({
 
 The following example shows how to implement [`useQuery` for third-party requests](/api/hydrogen/hooks/global/usequery):
 
-{% codeblock file, filename: '/pages/my-products.server.jsx' %}
+{% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
 ```jsx
 // Use a caching strategy provided by Hydrogen
@@ -114,7 +114,7 @@ In addition to sub-request caching, it’s helpful to cache the entire page resp
 
 To modify full-page caching options, use the `response` property passed to the page server component:
 
-{% codeblock file, filename: '/pages/my-products.server.jsx' %}
+{% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
 ```jsx
 export default function MyProducts({response}) {

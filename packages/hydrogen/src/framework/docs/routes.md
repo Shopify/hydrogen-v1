@@ -30,7 +30,7 @@ The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` t
 
 {% endcodeblock %}
 
-The `handle` property is passed directly to the root server component `/pages/products/[handle].server.jsx`:
+The `handle` property is passed directly to the root server component `/routes/products/[handle].server.jsx`:
 
 {% codeblock file, filename: '[handle].server.jsx' %}
 
@@ -58,7 +58,7 @@ You can also provide a custom static implementation of a dynamic page to overrid
 
 ## Catch all routes
 
-You can extend dynamic routes to catch all paths by adding an ellipsis (...) inside the brackets. For example, `/pages/example/[...handle].server.jsx` will match `/example/a` and `/example/a/b`.
+You can extend dynamic routes to catch all paths by adding an ellipsis (...) inside the brackets. For example, `/routes/example/[...handle].server.jsx` will match `/example/a` and `/example/a/b`.
 
 ### Example
 
@@ -217,53 +217,6 @@ export async function api(request, {params}) {
 
   return new Response(null, {status: 405, headers: {Allow: 'PUT'}});
 }
-```
-
-{% endcodeblock %}
-
-### Changes for existing Hydrogen apps
-
-If you created a Hydrogen app before January 19, 2022, and you want to implement an API route, then you need to make the following changes:
-
-1. Place `const pages = import.meta.globEager('./pages/**/*.server.[jt](s|sx)');` in `App.server.jsx` outside of the `App` component.
-2. Pass the `pages` constant to the `renderHydrogen` function.
-3. Make sure that the `App` component receives `pages` as a prop.
-
-> Note:
-> All Hydrogen apps created after January 19, 2022 automatically include these changes.
-
-Your `App.server.jsx` file should look similar to the following:
-
-{% codeblock file, filename: 'App.server.jsx' %}
-
-```jsx
-import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
-import {Suspense} from 'react';
-import shopifyConfig from '../shopify.config';
-import DefaultSeo from './components/DefaultSeo.server';
-import NotFound from './components/NotFound.server';
-import LoadingFallback from './components/LoadingFallback';
-import CartProvider from './components/CartProvider.client';
-
-function App({routes, ...serverProps}) {
-  return (
-    <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <CartProvider>
-          <DefaultSeo />
-          <Router fallback={<NotFound />} serverProps={serverProps}>
-            <FileRoutes routes={routes} />
-          </Router>
-        </CartProvider>
-      </ShopifyProvider>
-    </Suspense>
-  );
-}
-
-const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
-
-export default renderHydrogen(App, {shopifyConfig, routes});
 ```
 
 {% endcodeblock %}
