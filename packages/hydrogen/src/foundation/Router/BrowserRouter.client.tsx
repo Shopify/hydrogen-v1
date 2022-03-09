@@ -7,7 +7,6 @@ import React, {
   FC,
   useEffect,
 } from 'react';
-import {isServer} from '../../utilities';
 import {META_ENV_SSR} from '../ssr-interop';
 import {useServerState} from '../useServerState';
 
@@ -25,7 +24,7 @@ export const BrowserRouter: FC<{
   history?: BrowserHistory;
   routeParams: Record<string, string>;
 }> = ({history: pHistory, routeParams, children}) => {
-  if (isServer()) return <>{children}</>;
+  if (META_ENV_SSR) return <>{children}</>;
 
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [firstLoad, setFirstLoad] = useState(true);
