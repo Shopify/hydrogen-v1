@@ -5,3 +5,4 @@ export * from './foundation/useShop';
 export * from './foundation/ServerStateProvider';
 export {Head} from './foundation/Head';
 export * from './utilities';
+export {useParams} from './foundation/Router/useParams';

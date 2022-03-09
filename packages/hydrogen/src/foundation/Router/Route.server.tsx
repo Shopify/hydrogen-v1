@@ -2,6 +2,7 @@ import React, {cloneElement, ReactElement} from 'react';
 import {useServerRequest} from '../ServerRequestProvider';
 import {matchPath} from '../../utilities/matchPath';
 import {Boomerang} from '../Boomerang/Boomerang.client';
+import {RouteParamsProvider} from './RouteParamsProvider.client';
 
 export type RouteProps = {
   path: string;
@@ -33,10 +34,10 @@ export function Route({path, page}: RouteProps): ReactElement | null {
     const name = (page?.type as any)?.name;
 
     return (
-      <>
+      <RouteParamsProvider routeParams={match.params}>
         {cloneElement(page, {params: match.params || {}, ...serverProps})}
         {name ? <Boomerang pageTemplate={name} /> : null}
-      </>
+      </RouteParamsProvider>
     );
   }
 

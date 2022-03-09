@@ -4,6 +4,7 @@ import {log} from '../../utilities/log';
 import {useServerRequest} from '../ServerRequestProvider';
 
 import type {ImportGlobEagerOutput} from '../../types';
+import {RouteParamsProvider} from './RouteParamsProvider.client';
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -45,10 +46,12 @@ export function FileRoutes({
     request.ctx.router.routeRendered = true;
     request.ctx.router.routeParams = foundRouteDetails.params;
     return (
-      <foundRoute.component
-        params={foundRouteDetails.params}
-        {...serverProps}
-      />
+      <RouteParamsProvider routeParams={foundRouteDetails.params}>
+        <foundRoute.component
+          params={foundRouteDetails.params}
+          {...serverProps}
+        />
+      </RouteParamsProvider>
     );
   }
 

@@ -14,5 +14,9 @@ export function Router({
   const request = useServerRequest();
   request.ctx.router.serverProps = serverProps;
 
-  return <BrowserRouter>{children}</BrowserRouter>;
+  return (
+    <BrowserRouter routeParams={request.ctx.router.routeParams}>
+      {children}
+    </BrowserRouter>
+  );
 }

@@ -14,16 +14,17 @@ import {useServerState} from '../useServerState';
 type RouterContextValue = {
   history: BrowserHistory;
   location: Location;
+  routerData: Record<string, string>;
 };
 
-const RouterContext = createContext<RouterContextValue | {}>({});
+export const RouterContext = createContext<RouterContextValue | {}>({});
 
 let currentPath = '';
 
-export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
-  history: pHistory,
-  children,
-}) => {
+export const BrowserRouter: FC<{
+  history?: BrowserHistory;
+  routeParams: Record<string, string>;
+}> = ({history: pHistory, routeParams, children}) => {
   if (isServer()) return <>{children}</>;
 
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
@@ -61,6 +62,7 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
       value={{
         history,
         location,
+        routeParams,
       }}
     >
       {children}

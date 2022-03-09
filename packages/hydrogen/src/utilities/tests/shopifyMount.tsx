@@ -39,7 +39,9 @@ export const mountWithProviders = createMount<
       serverState={serverState}
     >
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <BrowserRouter history={history}>{element}</BrowserRouter>
+        <BrowserRouter history={history} routeParams={{}}>
+          {element}
+        </BrowserRouter>
       </ShopifyProvider>
     </ServerStateProvider>
   ),
