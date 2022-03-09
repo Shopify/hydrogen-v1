@@ -28,11 +28,11 @@ setLogger({
   options: () => ({}),
 });
 
-function App({routes, ...serverProps}) {
+function App({routes}) {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <Router serverProps={serverProps}>
+        <Router>
           <Route path="/custom1" page={<Custom1 />} />
           <Route path="/custom2/:handle" page={<Custom2 />} />
           <HasRouteChildren>
