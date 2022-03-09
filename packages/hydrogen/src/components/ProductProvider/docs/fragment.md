@@ -108,6 +108,7 @@ const QUERY = gql`
     $numProductVariantSellingPlanAllocations: Int!
     $numProductSellingPlanGroups: Int!
     $numProductSellingPlans: Int!
+    $includeReferenceMetafieldDetails: Boolean!
   ) {
     product: product(handle: $handle) {
       id
