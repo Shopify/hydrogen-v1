@@ -671,22 +671,12 @@ async function renderToBufferedString(
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     if (__WORKER__) {
-      const onCompleteAll = defer();
-
       try {
         const ssrReadable = await ssrRenderToReadableStream(ReactApp, {
           nonce,
         });
 
-        await ssrReadable.allReady.then(() => onCompleteAll.resolve(null));
-
-        /**
-         * We want to wait until `onCompleteAll` has been called before fetching the
-         * stream body. Otherwise, React 18's streaming JS script/template tags
-         * will be included in the output and cause issues when loading
-         * the Client Components in the browser.
-         */
-        await onCompleteAll.promise;
+        await ssrReadable.allReady;
 
         resolve(bufferReadableStream(ssrReadable.getReader()));
       } catch (error: unknown) {
