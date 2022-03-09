@@ -304,26 +304,18 @@ async function stream(
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
 
-    let ssrReadable: ReadableStream<Uint8Array>;
+    let ssrReadable;
 
     try {
       ssrReadable = await ssrRenderToReadableStream(AppSSR, {
         nonce,
         bootstrapScripts,
         bootstrapModules,
-        onCompleteAll() {
-          log.trace('worker complete stream');
-          onCompleteAll.resolve(true);
-        },
-        onError(error) {
-          didError = error;
+      });
 
-          if (dev && !writable.closed && !!responseOptions.status) {
-            writable.write(getErrorMarkup(error));
-          }
-
-          log.error(error);
-        },
+      ssrReadable.allReady.then(() => {
+        log.trace('worker complete stream');
+        onCompleteAll.resolve(true);
       });
     } catch (error: unknown) {
       log.error(error);
@@ -444,7 +436,7 @@ async function stream(
       nonce,
       bootstrapScripts,
       bootstrapModules,
-      onCompleteShell() {
+      onShellReady() {
         log.trace('node ready to stream');
         /**
          * TODO: This assumes `response.cache()` has been called _before_ any
@@ -479,7 +471,7 @@ async function stream(
           return response.write(chunk);
         });
       },
-      async onCompleteAll() {
+      async onAllReady() {
         log.trace('node complete stream');
 
         if (componentResponse.canStream() || response.writableEnded) {
@@ -521,7 +513,8 @@ async function stream(
           }
         );
       },
-      onErrorShell(error: any) {
+      onShellError(error: any) {
+        didError = error;
         log.error(error);
 
         if (!response.writableEnded) {
@@ -531,17 +524,6 @@ async function stream(
           response.write(template);
           response.end();
         }
-      },
-      onError(error: any) {
-        didError = error;
-
-        if (dev && response.headersSent) {
-          // Calling write would flush headers automatically.
-          // Delay this error until headers are properly sent.
-          response.write(getErrorMarkup(error));
-        }
-
-        log.error(error);
       },
     });
   }
@@ -697,9 +679,9 @@ async function renderToBufferedString(
       try {
         const ssrReadable = await ssrRenderToReadableStream(ReactApp, {
           nonce,
-          onCompleteAll: () => onCompleteAll.resolve(null),
-          onError: (error) => log.error(error),
         });
+
+        await ssrReadable.allReady.then(() => onCompleteAll.resolve(null));
 
         /**
          * We want to wait until `onCompleteAll` has been called before fetching the
@@ -722,7 +704,7 @@ async function renderToBufferedString(
          * When hydrating, we have to wait until `onCompleteAll` to avoid having
          * `template` and `script` tags inserted and rendered as part of the hydration response.
          */
-        onCompleteAll() {
+        onAllReady() {
           let data = '';
           writer.on('data', (chunk) => (data += chunk.toString()));
           writer.once('error', reject);
@@ -730,8 +712,7 @@ async function renderToBufferedString(
           // Tell React to start writing to the writer
           pipe(writer);
         },
-        onErrorShell: reject,
-        onError: (error) => log.error(error),
+        onShellError: reject,
       });
     }
   });

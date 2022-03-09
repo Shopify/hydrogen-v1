@@ -9525,6 +9525,14 @@ react-dom@0.0.0-experimental-f468816ef-20220225:
     loose-envify "^1.1.0"
     scheduler "0.0.0-experimental-f468816ef-20220225"
 
+react-dom@^0.0.0-experimental-a59f53a60-20220308:
+  version "0.0.0-experimental-a59f53a60-20220308"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-a59f53a60-20220308.tgz#3afd9413967e51c16f621f35dfdb2b1cfe4514ac"
+  integrity sha512-D23hQatrbYlDjaeU3JNbg2PzfaB0b0nsrMod5D2wIg99RGLlZ/ZHJiFxZhNNbaqgu7kTXDYq/SaY6U6fjSB2tA==
+  dependencies:
+    loose-envify "^1.1.0"
+    scheduler "0.0.0-experimental-a59f53a60-20220308"
+
 react-error-boundary@^3.1.3:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
@@ -9576,6 +9584,13 @@ react@0.0.0-experimental-f468816ef-20220225:
   version "0.0.0-experimental-f468816ef-20220225"
   resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-f468816ef-20220225.tgz#e8bf0b631cfdd72ca1088a544676fcbc0d62ddf0"
   integrity sha512-DAFKlll/aL0Ahy1PwYvdPzoV2j298fC/s6mhblFuHQKKc4ZXSNCfnBxYeJQ6CbvQY+gg9ELHzAz7dJYPnFjopg==
+  dependencies:
+    loose-envify "^1.1.0"
+
+react@^0.0.0-experimental-a59f53a60-20220308:
+  version "0.0.0-experimental-a59f53a60-20220308"
+  resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-a59f53a60-20220308.tgz#5e2e679ea9e84311ce36a8be848c4ab5529edf89"
+  integrity sha512-Qux+GZBo5MSnOLZiOkB96KigeEh/Lgu7T3FidB5/rMkk8mWHm2D1+m6yNyktEUz53697Ek2ZM2Ul4aQJjzXspw==
   dependencies:
     loose-envify "^1.1.0"
 
@@ -10169,6 +10184,13 @@ saxes@^5.0.1:
   integrity sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==
   dependencies:
     xmlchars "^2.2.0"
+
+scheduler@0.0.0-experimental-a59f53a60-20220308:
+  version "0.0.0-experimental-a59f53a60-20220308"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.0.0-experimental-a59f53a60-20220308.tgz#ca85e503edfdf7ac57cb691c63de9440c6bccef5"
+  integrity sha512-T9drJL5OVwPi9R0CCWLjc7or73k1P/cZq15LlMzA7uUpxoHRya4AszqtO54BQ7NNA166vAY6iBQ1T4kITIADSg==
+  dependencies:
+    loose-envify "^1.1.0"
 
 scheduler@0.0.0-experimental-f468816ef-20220225:
   version "0.0.0-experimental-f468816ef-20220225"
@@ -11647,7 +11669,18 @@ unified-message-control@^3.0.0:
     unist-util-visit "^2.0.0"
     vfile-location "^3.0.0"
 
-unified@9.2.2, unified@^8.4.0, unified@^9.0.0, unified@^9.1.0:
+unified@^8.4.0:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/unified/-/unified-8.4.2.tgz#13ad58b4a437faa2751a4a4c6a16f680c500fff1"
+  integrity sha512-JCrmN13jI4+h9UAyKEoGcDZV+i1E7BLFuG7OsaDvTXI5P0qhHX+vZO/kOhz9jn8HGENDKbwSeB0nVOg4gVStGA==
+  dependencies:
+    bail "^1.0.0"
+    extend "^3.0.0"
+    is-plain-obj "^2.0.0"
+    trough "^1.0.0"
+    vfile "^4.0.0"
+
+unified@^9.0.0, unified@^9.1.0:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/unified/-/unified-9.2.2.tgz#67649a1abfc3ab85d2969502902775eb03146975"
   integrity sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==
