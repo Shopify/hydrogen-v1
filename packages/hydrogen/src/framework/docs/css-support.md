@@ -63,7 +63,7 @@ If you don't want to build with Tailwind's library and instead want to write you
    cd <directory>
 
    // Install dependencies
-   yarn install
+   yarn
 
    // Start the development server
    yarn dev

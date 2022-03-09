@@ -13,7 +13,10 @@ function App({routes, ...serverProps}) {
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         <CartProvider>
           <DefaultSeo />
-          <Router fallback={<NotFound />} serverProps={serverProps}>
+          <Router
+            fallback={<NotFound response={serverProps.response} />}
+            serverProps={serverProps}
+          >
             <FileRoutes routes={routes} />
           </Router>
         </CartProvider>

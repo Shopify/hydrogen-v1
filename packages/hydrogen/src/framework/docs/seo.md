@@ -85,7 +85,7 @@ import {Suspense} from 'react';
 import DefaultSeo from './components/DefaultSeo.server';
 import LoadingFallback from './components/LoadingFallback';
 
-export default function App({log, ...serverState}) {
+export default function App({log, ...serverProps}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <DefaultSeo />

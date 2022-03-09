@@ -1,10 +1,10 @@
 import {
-  Image,
   useShopQuery,
   flattenConnection,
   LocalizationProvider,
   CacheHours,
 } from '@shopify/hydrogen';
+import {ImageFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Header from './Header.client';
@@ -82,5 +82,5 @@ const QUERY = gql`
       }
     }
   }
-  ${Image.Fragment}
+  ${ImageFragment}
 `;

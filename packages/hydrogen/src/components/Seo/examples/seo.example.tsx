@@ -7,8 +7,7 @@ const QUERY = gql`
       title
       body
       seo {
-        title
-        description
+        ...SeoFragment
       }
     }
   }

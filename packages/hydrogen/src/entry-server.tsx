@@ -39,7 +39,6 @@ import {
   ssrRenderToReadableStream,
   rscRenderToReadableStream,
   createFromReadableStream,
-  supportsReadableStream,
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
@@ -121,7 +120,7 @@ export const renderHydrogen = (
 
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
-      (!!streamableResponse || supportsReadableStream());
+      (!!streamableResponse || (await isStreamingSupported()));
 
     const params = {
       App,
@@ -449,8 +448,6 @@ async function stream(
         );
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
-
-        logServerResponse('str', request, response.statusCode);
 
         if (isRedirect(response)) {
           // Return redirects early without further rendering/streaming

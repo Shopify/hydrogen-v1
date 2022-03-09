@@ -1,5 +1,4 @@
-import React, {useMemo, ElementType} from 'react';
-import {Props} from '../../../types';
+import React, {useMemo} from 'react';
 import {Rating} from '../../../../types';
 
 export const STAR_EMPTY = '☆';
@@ -11,8 +10,8 @@ export interface StarRatingProps<TTag> {
   as?: TTag;
 }
 
-export function StarRating<TTag extends ElementType>(
-  props: Props<TTag> & StarRatingProps<TTag>
+export function StarRating<TTag extends keyof JSX.IntrinsicElements = 'div'>(
+  props: JSX.IntrinsicElements[TTag] & StarRatingProps<TTag>
 ) {
   const {as, rating, ...passthroughProps} = props;
 

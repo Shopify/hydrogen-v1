@@ -1,26 +1,33 @@
-import React, {ElementType} from 'react';
-import {Props} from '../types';
-import {UnitPriceMeasurement, MoneyV2} from '../../graphql/types/types';
+import React from 'react';
 import {Money} from '../Money';
-import {UnitPriceFragment as Fragment} from '../../graphql/graphql-constants';
+import type {UnitPriceFragmentFragment} from './UnitPriceFragment';
 
 export interface UnitPriceProps<TTag> {
-  /** A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2). */
-  data: MoneyV2;
-  /** A [`UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement). */
-  measurement: UnitPriceMeasurement;
+  /** An object with keys that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). */
+  data: UnitPriceFragmentFragment['unitPrice'];
+  /** A [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement). */
+  measurement: UnitPriceFragmentFragment['unitPriceMeasurement'];
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: TTag;
 }
 
 /**
  * The `UnitPrice` component renders a string with a [UnitPrice](/themes/pricing-payments/unit-pricing) as the
- * [Storefront API's `MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) with a reference unit from the [Storefront API's `UnitPriceMeasurement` object](/api/storefront/reference/products/unitpricemeasurement).
+ * Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) with a reference unit from the Storefront API's [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement).
  */
-export function UnitPrice<TTag extends ElementType>(
-  props: Props<TTag> & UnitPriceProps<TTag>
+export function UnitPrice<TTag extends keyof JSX.IntrinsicElements = 'div'>(
+  props: JSX.IntrinsicElements[TTag] & UnitPriceProps<TTag>
 ) {
   const {data, measurement, as, ...passthroughProps} = props;
+
+  if (!data) {
+    console.warn(`No "data" prop was passed to <UnitPrice/>`);
+    return null;
+  }
+  if (!measurement) {
+    console.warn(`No "measurement" prop was passed to <UnitPrice/>`);
+    return null;
+  }
   const Wrapper: any = as ?? 'div';
 
   return (
@@ -29,6 +36,3 @@ export function UnitPrice<TTag extends ElementType>(
     </Wrapper>
   );
 }
-
-UnitPrice.Fragment = Fragment;
-export const UnitPriceFragment = Fragment;

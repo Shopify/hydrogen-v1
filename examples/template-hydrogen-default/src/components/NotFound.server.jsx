@@ -1,9 +1,6 @@
 import {Suspense} from 'react';
-import {
-  useShopQuery,
-  ProductProviderFragment,
-  flattenConnection,
-} from '@shopify/hydrogen';
+import {useShopQuery, flattenConnection} from '@shopify/hydrogen';
+import {ProductProviderFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
@@ -36,7 +33,10 @@ function NotFoundHero() {
   );
 }
 
-export default function NotFound({country = {isoCode: 'US'}}) {
+export default function NotFound({country = {isoCode: 'US'}, response}) {
+  response.doNotStream();
+  response.writeHead({status: 404, statusText: 'Not found'});
+
   const {data} = useShopQuery({
     query: QUERY,
     variables: {

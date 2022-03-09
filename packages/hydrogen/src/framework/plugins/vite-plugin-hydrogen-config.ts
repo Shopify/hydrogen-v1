@@ -14,6 +14,7 @@ export default () => {
       },
 
       build: {
+        minify: 'esbuild',
         sourcemap: true,
         /**
          * By default, SSR dedupe logic gets bundled which runs `require('module')`.
@@ -29,7 +30,6 @@ export default () => {
       },
 
       ssr: {
-        external: ['isomorphic-dompurify'],
         /**
          * Tell Vite to bundle everything when we're building for Workers.
          * Otherwise, bundle RSC plugin as a workaround to apply the vendor alias above.
@@ -74,22 +74,22 @@ export default () => {
       base: process.env.HYDROGEN_ASSET_BASE_URL,
     }),
 
-    // TODO: Remove when react-dom/fizz is fixed
-    generateBundle: process.env.WORKER
-      ? (options, bundle) => {
-          // There's only one key in bundle, normally `worker.js`
-          const [bundleKey] = Object.keys(bundle);
-          const workerBundle = bundle[bundleKey];
-          // It's always a chunk, this is just for TypeScript
-          if (workerBundle.type === 'chunk') {
-            // React fizz and flight try to access an undefined value.
-            // This puts a guard before accessing it.
-            workerBundle.code = workerBundle.code.replace(
-              /\((\w+)\.locked\)/gm,
-              '($1 && $1.locked)'
-            );
-          }
-        }
-      : undefined,
+    // // TODO: Remove when react-dom/fizz is fixed
+    // generateBundle: process.env.WORKER
+    //   ? (options, bundle) => {
+    //       // There's only one key in bundle, normally `worker.js`
+    //       const [bundleKey] = Object.keys(bundle);
+    //       const workerBundle = bundle[bundleKey];
+    //       // It's always a chunk, this is just for TypeScript
+    //       if (workerBundle.type === 'chunk') {
+    //         // React fizz and flight try to access an undefined value.
+    //         // This puts a guard before accessing it.
+    //         workerBundle.code = workerBundle.code.replace(
+    //           /\((\w+)\.locked\)/gm,
+    //           '($1 && $1.locked)'
+    //         );
+    //       }
+    //     }
+    //   : undefined,
   } as Plugin;
 };

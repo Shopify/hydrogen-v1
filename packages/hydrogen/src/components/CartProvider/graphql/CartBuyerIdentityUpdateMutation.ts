@@ -110,7 +110,7 @@ export type CartBuyerIdentityUpdateMutation = {__typename?: 'Mutation'} & {
             discountCodes: Array<
               {__typename?: 'CartDiscountCode'} & Pick<
                 Types.CartDiscountCode,
-                'code'
+                'code' | 'applicable'
               >
             >;
           }

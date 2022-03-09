@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+        with:
+          ref: 'v1.x-2022-07'
       - name: Rename gitignore
         run: |
           mv examples/template-hydrogen-default/_gitignore examples/template-hydrogen-default/.gitignore

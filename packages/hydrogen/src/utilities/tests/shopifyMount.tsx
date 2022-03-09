@@ -4,8 +4,8 @@ import {BrowserHistory} from 'history';
 import {DEFAULT_LOCALE} from '../../foundation/constants';
 
 import {ShopifyConfig} from '../../types';
-import {ShopifyProvider} from '../../foundation/ShopifyProvider';
-import {Router} from '../../components/Router';
+import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server';
+import {Router} from '../../foundation/Router/Router';
 import {ServerState, ServerStateProvider} from '../../foundation';
 
 type SetServerState = React.Dispatch<React.SetStateAction<ServerState>>;
@@ -50,6 +50,6 @@ export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {
     locale: config.defaultLocale ?? DEFAULT_LOCALE,
     storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
     storefrontToken: config.storefrontToken ?? 'abc123',
-    storefrontApiVersion: config.storefrontApiVersion ?? '2022-01',
+    storefrontApiVersion: config.storefrontApiVersion ?? '2022-04',
   };
 }

@@ -21,12 +21,12 @@ export function DefaultPageSeo({
   return (
     <>
       <Head
-        defaultTitle={title}
+        defaultTitle={title ?? ''}
         titleTemplate={titleTemplate ?? `%s - ${title}`}
       >
         <html lang={lang ?? fallBacklang} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content={title} />
+        <meta property="og:site_name" content={title ?? ''} />
         <meta property="og:url" content={url} />
       </Head>
       <TitleSeo title={title} />

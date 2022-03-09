@@ -8,7 +8,7 @@ describe('preview', () => {
 
       expect(output).toContain('worker not found');
       expect(output).toContain(
-        'Run `yarn run build` to generate a worker build and try again.'
+        'build` to generate a worker build and try again.'
       );
     });
   });

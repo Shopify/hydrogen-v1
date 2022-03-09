@@ -1,9 +1,8 @@
-import React, {useEffect, ElementType, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import type {ReactNode} from 'react';
 import {useInstantCheckout} from '../CartProvider';
-import {Props} from '../types';
 
-export interface BuyNowButtonProps {
+interface BuyNowButtonProps {
   /** The item quantity. Defaults to 1. */
   quantity?: number;
   /** The ID of the variant. */
@@ -17,11 +16,12 @@ export interface BuyNowButtonProps {
   children: ReactNode;
 }
 
-export type BuyNowButtonPropsWeControl = 'onClick';
+type PropsWeControl = 'onClick';
 
 /** The `BuyNowButton` component renders a button that adds an item to the cart and redirects the customer to checkout. */
-export function BuyNowButton<TTag extends ElementType = 'button'>(
-  props: Props<TTag, BuyNowButtonPropsWeControl> & BuyNowButtonProps
+export function BuyNowButton(
+  props: Omit<JSX.IntrinsicElements['button'], PropsWeControl> &
+    BuyNowButtonProps
 ) {
   const {createInstantCheckout, checkoutUrl} = useInstantCheckout();
   const [loading, setLoading] = useState<boolean>(false);

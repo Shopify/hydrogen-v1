@@ -6,7 +6,8 @@ import {DescriptionSeo} from './DescriptionSeo.client';
 import {TwitterSeo} from './TwitterSeo.client';
 import {ImageSeo} from './ImageSeo.client';
 
-import {Product} from './types';
+import type {ProductSeoFragmentFragment} from './SeoFragment';
+import type {Scalars} from '../../graphql/types/types';
 
 export function ProductSeo({
   url,
@@ -16,7 +17,7 @@ export function ProductSeo({
   vendor,
   featuredImage,
   variants,
-}: Product) {
+}: ProductSeoFragmentFragment & {url: Scalars['URL']}) {
   const seoTitle = seo?.title ?? title;
   const seoDescription = seo?.description ?? description;
 

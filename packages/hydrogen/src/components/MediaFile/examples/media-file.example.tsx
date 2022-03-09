@@ -1,8 +1,9 @@
 import {MediaFile, useShopQuery} from '@shopify/hydrogen';
+import {MediaFileFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${MediaFile.Fragment}
+  ${MediaFileFragment}
 
   query Products {
     products(first: 5) {

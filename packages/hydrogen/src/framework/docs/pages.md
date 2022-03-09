@@ -15,7 +15,7 @@ The following example shows how each `*.server.jsx` file maps to a different pag
 
 ```
 └── src
-    ├── pages
+    ├── routes
         └── collections
             └── [handle].server.jsx // localhost:3000/collections/<handle>
         └── pages
@@ -36,7 +36,7 @@ Server components placed in the `src/routes` directory receive the following spe
 | `request`  | `ServerComponentRequest`  |
 | `response` | `ServerComponentResponse` |
 
-Each page server component receives props, which includes custom versions of `request` and `response` and any `serverState` that you have passed from the client.
+Each page server component receives props, which includes custom versions of `request` and `response` and any `serverProps` that you have passed from the client.
 
 ![Shows a diagram that illustrates how page serve components receive props](/assets/custom-storefronts/hydrogen/hydrogen-pages.png)
 
@@ -220,9 +220,9 @@ Custom responses provide the following benefits:
 
 ### Create a custom sitemap
 
-The following example shows how to create a custom sitemap by adding a new server component called `pages/sitemap.xml.server.jsx`. The custom response object returns the sitemap.
+The following example shows how to create a custom sitemap by adding a new server component called `routes/sitemap.xml.server.jsx`. The custom response object returns the sitemap.
 
-{% codeblock file, filename: '/pages/my-products.server.jsx' %}
+{% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
 ```jsx
 import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
@@ -291,7 +291,7 @@ const QUERY = gql`
 
 #### Limitations and considerations
 
-The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) includes a `pages/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
+The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) includes a `routes/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
 
 - The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources. If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.
 
@@ -305,9 +305,9 @@ The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) in
 
 In modern app frameworks, it's common to create custom API endpoints in your own framework powered by the hosting platform you're using. In other frameworks, these API endpoints provide helpful ways to handle lazy-loading, Ajax type incremental data, or POST requests to mutate an external data store. For example, you might want to send a POST request to write to a custom data store after submitting a form.
 
-The following example shows how to build a JSON API with custom responses by adding a new server component called `/pages/my-products.server.jsx`. The custom response object returns the JSON API:
+The following example shows how to build a JSON API with custom responses by adding a new server component called `/routes/my-products.server.jsx`. The custom response object returns the JSON API:
 
-{% codeblock file, filename: '/pages/my-products.server.jsx' %}
+{% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
 ```jsx
 import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
@@ -347,9 +347,9 @@ const QUERY = gql`
 
 You might want to generate a spreadsheet that includes product data from your store.
 
-The following example shows how to generate comma-separated values (CSV) file by adding a new server component called `/pages/spreadsheet.csv.server.jsx`. The custom response object returns the spreadsheet:
+The following example shows how to generate comma-separated values (CSV) file by adding a new server component called `/routes/spreadsheet.csv.server.jsx`. The custom response object returns the spreadsheet:
 
-{% codeblock file, filename: '/pages/spreadsheet.csv.server.jsx' %}
+{% codeblock file, filename: '/routes/spreadsheet.csv.server.jsx' %}
 
 ```jsx
 import gql from 'graphql-tag';
@@ -396,9 +396,9 @@ The following example shows how to generate a downloadable PDF for a product in 
 yarn add @react-pdf/renderer
 ```
 
-After you've installed `@react-pdf/renderer`, create a new server component called `/pages/brochure.pdf.server.jsx`:
+After you've installed `@react-pdf/renderer`, create a new server component called `/routes/brochure.pdf.server.jsx`:
 
-{% codeblock file, filename: '/pages/brochure.pdf.server.jsx' %}
+{% codeblock file, filename: '/routes/brochure.pdf.server.jsx' %}
 
 ```jsx
 import {
