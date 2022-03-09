@@ -39,7 +39,7 @@ function CustomRoute() {
 
 ## Changes to `<Router>`
 
-You have both many `<Route>` components and multiple `<FileRoutes>` within your app. Hydrogen will only render one route for each request. Whichever it finds first. This means the `<Router>` component no longer takes `fallback` as a prop. Instead, to render a 404 not found page, just add `<Route path="*" page={<NotFound />} />` to your app. Just make sure it's the last `<Route>` defined inside your app:
+You have both many `<Route>` components and multiple `<FileRoutes>` within your app. Hydrogen will only render one route for each request. Whichever it finds first. This means the `<Router>` component no longer takes `fallback` as a prop (it also doesn't need `serverProps`). Instead, to render a 404 not found page, just add `<Route path="*" page={<NotFound />} />` to your app. Just make sure it's the last `<Route>` defined inside your app:
 
 ```diff
 function App({routes, ...serverProps}) {
@@ -51,7 +51,7 @@ function App({routes, ...serverProps}) {
 -         fallback={<NotFound response={serverProps.response} />}
 -         serverProps={serverProps}
 -       >
-+       <Router serverProps={serverProps}>
++       <Router>
           <FileRoutes routes={routes} />
 +         <Route path="*" page={<NotFound />} />
         </Router>
