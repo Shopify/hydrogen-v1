@@ -1,5 +1,4 @@
 import {useShopQuery, Seo} from '@shopify/hydrogen';
-import {PageSeoFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
@@ -29,12 +28,22 @@ export default function Page({params}) {
 
 const QUERY = gql`
   query PageDetails($handle: String!) {
-    pageByHandle(handle: $handle) {
+    page(handle: $handle) {
       title
       body
       ...PageSeoFragment
     }
   }
 
-  ${PageSeoFragment}
+  fragment PageSeoFragment on Page {
+    title
+    seo {
+      ...SeoFragment
+    }
+  }
+
+  fragment SeoFragment on SEO {
+    description
+    title
+  }
 `;
