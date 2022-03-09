@@ -1,7 +1,13 @@
 import type {ShopifyContextValue} from './types';
 import React, {createContext, ReactNode} from 'react';
 
-export const ShopifyContext = createContext<ShopifyContextValue | null>(null);
+// TODO: Two versions of context are loading again, since Vite is appending a `?t`
+// query param to some, and not to others.
+// @ts-expect-error need to define these
+globalThis.shopifyContext ||= createContext<ShopifyContextValue | null>(null);
+
+// @ts-ignore
+export const ShopifyContext = globalThis.shopifyContext;
 
 export function ShopifyProviderClient({
   children,

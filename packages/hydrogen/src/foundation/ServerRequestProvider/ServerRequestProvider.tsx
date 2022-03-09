@@ -56,6 +56,10 @@ export function useServerRequest() {
   try {
     // Context only works in SSR rendering
     request = useContext(RequestContextSSR);
+
+    // TODO: Find a more elegant way to support isomorphic server-only context,
+    // now that `useContext` no longer errors
+    if (!request) throw new Error('Resolve with RSC');
   } catch (error) {
     // If normal context failed it means this is not an SSR request.
     // Try getting RSC cache instead:

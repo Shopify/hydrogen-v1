@@ -9,5 +9,7 @@ export interface LocalizationContextValue {
   setCountry(country: Localization['country']): void;
 }
 
-export const LocalizationContext =
-  createContext<LocalizationContextValue | null>(null);
+// TODO: Two versions of context are loading again, since Vite is appending a `?t`
+// query param to some, and not to others.
+export const LocalizationContext = (globalThis.localizationContext ||=
+  createContext<LocalizationContextValue | null>(null));

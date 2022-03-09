@@ -37,7 +37,7 @@
       "require": "./writer.node.server.js",
       "import": "./esm/react-server-dom-vite-writer.node.server.js"
     },
-    "./writer.browser.server": {
+    "./writer.browser.server":  {
       "require": "./writer.browser.server.js",
       "import": "./esm/react-server-dom-vite-writer.browser.server.js"
     },
@@ -46,8 +46,8 @@
   },
   "main": "index.js",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/facebook/react.git",
+    "type" : "git",
+    "url" : "https://github.com/facebook/react.git",
     "directory": "packages/react-server-dom-vite"
   },
   "engines": {
@@ -55,7 +55,6 @@
   },
   "peerDependencies": {
     "react": "^17.0.0",
-    "react-dom": "^17.0.0",
     "vite": "^2.7.1"
   },
   "dependencies": {

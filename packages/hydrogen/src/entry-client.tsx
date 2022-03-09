@@ -5,8 +5,9 @@ import React, {
   Fragment,
   type ElementType,
 } from 'react';
+// TODO: react-dom/client doesn't seem to export `hydrateRoot`, even though we get a warning in the console.
 // @ts-expect-error hydrateRoot isn't on the TS types yet, but we're using React 18 so it exists
-import {hydrateRoot} from 'react-dom/client';
+import {hydrateRoot} from 'react-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';

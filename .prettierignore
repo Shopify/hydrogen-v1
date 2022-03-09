@@ -1,3 +1,4 @@
 # built files
 **/dist/**
 packages/hydrogen/graphql.schema.json
+packages/hydrogen/vendor
