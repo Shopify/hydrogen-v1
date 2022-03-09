@@ -31,8 +31,10 @@ function NotFoundHero() {
 }
 
 export default function NotFound({country = {isoCode: 'US'}, response}) {
-  response.doNotStream();
-  response.writeHead({status: 404, statusText: 'Not found'});
+  if (response) {
+    response.doNotStream();
+    response.writeHead({status: 404, statusText: 'Not found'});
+  }
 
   const {data} = useShopQuery({
     query: QUERY,
