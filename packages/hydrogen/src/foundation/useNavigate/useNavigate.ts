@@ -1,4 +1,4 @@
-import {useRouter} from './BrowserRouter.client';
+import {useRouter} from '../Router/BrowserRouter.client';
 
 type NavigationOptions = {
   /** Whether to update the state object or URL of the current history entry. Default to false */
@@ -11,6 +11,9 @@ type NavigationOptions = {
   clientState?: any;
 };
 
+/**
+ * The useNavigate hook imperatively navigates between routes. Consider using the useNavigate hook only where appropriate. Generally, you should use the Link component instead, because it provides standard browser accessibility functionality, like cmd+click and right-click to open. useNavigate is only available in client components.
+ */
 export function useNavigate() {
   const router = useRouter();
 

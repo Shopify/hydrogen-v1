@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {useRouter} from '../../foundation/Router/BrowserRouter.client';
 import {createPath} from 'history';
-import {useNavigate} from '../../foundation/Router/useNavigate';
+import {useNavigate} from '../../foundation/useNavigate/useNavigate';
 
 export interface LinkProps
   /** All properties available to an `<a>` element are available. See [anchor element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).*/

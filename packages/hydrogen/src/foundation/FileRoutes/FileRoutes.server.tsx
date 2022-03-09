@@ -4,7 +4,16 @@ import {log} from '../../utilities/log';
 import {useServerRequest} from '../ServerRequestProvider';
 
 import type {ImportGlobEagerOutput} from '../../types';
-import {RouteParamsProvider} from './RouteParamsProvider.client';
+import {RouteParamsProvider} from '../useParams/RouteParamsProvider.client';
+
+interface FileRoutesProps {
+  /** Routes defined by Vite's `import.meta.globEager` method */
+  routes: ImportGlobEagerOutput;
+  /** Path prepended to all file routes */
+  basePath?: string;
+  /** The portion of the file route path that shouldn't be a part of the URL. Necessary to modify if you choose to import your routes from a location other than the default `src/routes` */
+  dirPrefix?: string;
+}
 
 /**
  * Build a set of default Hydrogen routes based on the output provided by Vite's
@@ -16,11 +25,7 @@ export function FileRoutes({
   routes,
   basePath = '/',
   dirPrefix = './routes',
-}: {
-  routes: ImportGlobEagerOutput;
-  basePath?: string;
-  dirPrefix?: string;
-}) {
+}: FileRoutesProps) {
   const request = useServerRequest();
   const {routeRendered, serverProps} = request.ctx.router;
 

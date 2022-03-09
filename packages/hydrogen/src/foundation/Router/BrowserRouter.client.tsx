@@ -13,7 +13,6 @@ import {useServerState} from '../useServerState';
 type RouterContextValue = {
   history: BrowserHistory;
   location: Location;
-  routerData: Record<string, string>;
 };
 
 export const RouterContext = createContext<RouterContextValue | {}>({});
@@ -22,8 +21,7 @@ let currentPath = '';
 
 export const BrowserRouter: FC<{
   history?: BrowserHistory;
-  routeParams: Record<string, string>;
-}> = ({history: pHistory, routeParams, children}) => {
+}> = ({history: pHistory, children}) => {
   if (META_ENV_SSR) return <>{children}</>;
 
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
@@ -61,7 +59,6 @@ export const BrowserRouter: FC<{
       value={{
         history,
         location,
-        routeParams,
       }}
     >
       {children}

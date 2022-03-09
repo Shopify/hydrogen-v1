@@ -601,11 +601,14 @@ function buildAppRSC({
   routes,
 }: BuildAppOptions) {
   const hydrogenServerProps = {request, response, log};
+  const serverProps = {...state, ...hydrogenServerProps, routes};
+
+  request.ctx.router.serverProps = serverProps;
 
   const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
-        <App {...state} {...hydrogenServerProps} routes={routes} />
+        <App {...serverProps} />
       </PreloadQueries>
     </ServerRequestProvider>
   );

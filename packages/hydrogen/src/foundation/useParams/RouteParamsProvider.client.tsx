@@ -3,7 +3,7 @@ import React, {createContext, FC} from 'react';
 type RouteParamsContextValue = {routeParams: Record<string, string>};
 
 export const RouteParamsContext = createContext<RouteParamsContextValue>({
-  routeParams: {test: 'lkj'},
+  routeParams: {},
 });
 
 export const RouteParamsProvider: FC<{routeParams: Record<string, string>}> = ({

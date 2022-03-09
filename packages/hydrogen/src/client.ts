@@ -5,5 +5,5 @@ export * from './foundation/useShop';
 export * from './foundation/ServerStateProvider';
 export {Head} from './foundation/Head';
 export * from './utilities';
-export {useParams} from './foundation/Router/useParams';
-export {useNavigate} from './foundation/Router/useNavigate';
+export {useParams} from './foundation/useParams/useParams';
+export {useNavigate} from './foundation/useNavigate/useNavigate';

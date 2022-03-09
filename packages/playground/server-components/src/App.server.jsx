@@ -11,6 +11,7 @@ import {Suspense} from 'react';
 import Custom1 from './customRoutes/custom1.server';
 import Custom2 from './customRoutes/custom2.server';
 import LazyRoute from './customRoutes/lazyRoute.server';
+import ServerParams from './customRoutes/params.server';
 
 setLogger({
   trace() {},
@@ -38,6 +39,7 @@ function App({routes, ...serverProps}) {
             <Route path="/custom3" page={<Custom1 />} />
           </HasRouteChildren>
           <HasInternalRoute />
+          <Route path="/params/:handle" page={<ServerParams />} />
           <FileRoutes routes={routes} />
           <LazyRoute />
         </Router>
