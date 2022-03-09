@@ -80,3 +80,28 @@ Changing `basePath` could be useful if you want to prefix all file routes, for e
   <Route path="*" page={<NotFound />} />
 </Router>
 ```
+
+## New `useParams()` hook
+
+A new hook is available both in Server and Client components for retrieving the params of the active route:
+
+```jsx
+// products/[handle].server.jsx
+
+import {useParams} from '@shopify/hydrogen';
+
+export default function Product() {
+  const {handle} = useParams();
+  // ...
+}
+```
+
+```jsx
+// ProductDetails.client.jsx
+import {useParams} from '@shopify/hydrogen/client';
+
+export default function ProductDetails() {
+  const {handle} = useParams();
+  // ...
+}
+```
