@@ -22,7 +22,8 @@ export {LocalizationProvider} from './components/LocalizationProvider/Localizati
 export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server';
 
 // Exported here because users shouldn't be making `useShopQuery` calls from the client
-export * from './hooks/useShopQuery';
+export * from './hooks/useShopQuery/hooks';
+export * from './foundation/useQuery/hooks';
 
 // Export server-only CartQuery here instead of `CartProvider.client` to prevent
 // it from being bundled with other client components
