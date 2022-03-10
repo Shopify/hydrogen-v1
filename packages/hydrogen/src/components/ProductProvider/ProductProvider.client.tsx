@@ -1,15 +1,15 @@
 import React, {ReactNode, useMemo} from 'react';
-import {useProductOptions, useParsedMetafields} from '../../hooks';
-import {flattenConnection} from '../../utilities';
+import {useProductOptions} from '../../hooks';
 import {ProductContext, ProductContextType} from './context';
-import {Product} from './types';
+// import {Product} from './types';
+import {Product} from '../../graphql/types/types';
 import {ProductOptionsProvider} from './ProductOptionsProvider.client';
 
 export interface ProductProviderProps {
   /** A `ReactNode` element. */
   children: ReactNode;
   /** A [Product object](/api/storefront/reference/products/product). */
-  data: Product;
+  data: Partial<Product>;
   /** The initially selected variant. If this is missing, then `selectedVariantId`
    * in the returned `object` from the `useProduct` hook uses the first available variant
    * or the first variant (if none are available).
@@ -28,27 +28,11 @@ export function ProductProvider({
   data: product,
   initialVariantId,
 }: ProductProviderProps) {
-  const metafields = useParsedMetafields(product.metafields);
-
   const providerValue = useMemo<ProductContextType>(() => {
     return {
       ...product,
-      metafields,
-      metafieldsConnection: product.metafields,
-      media: product.media ? flattenConnection(product.media) : undefined,
-      mediaConnection: product.media,
-      variants: product.variants
-        ? flattenConnection(product.variants)
-        : undefined,
-      variantsConnection: product.variants,
-      images: product.images ? flattenConnection(product.images) : undefined,
-      imagesConnection: product.images,
-      collections: product.collections
-        ? flattenConnection(product.collections)
-        : undefined,
-      collectionsConnection: product.collections,
     };
-  }, [metafields, product]);
+  }, [product]);
 
   return (
     <ProductContext.Provider value={providerValue}>
