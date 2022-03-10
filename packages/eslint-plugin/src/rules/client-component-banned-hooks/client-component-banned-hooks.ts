@@ -5,7 +5,7 @@ import {
   isHook,
 } from '../../utilities';
 
-const BANNED_HOOKS = ['useQuery'];
+const BANNED_HOOKS = ['useQuery', 'useShopQuery'];
 
 export const clientComponentBannedHooks = createRule({
   name: `hydrogen/${__dirname}`,
