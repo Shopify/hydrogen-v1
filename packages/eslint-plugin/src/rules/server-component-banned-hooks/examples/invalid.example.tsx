@@ -3,7 +3,7 @@
 // MyComponent.jsx or MyComponent.server.jsx
 import {useState} from 'react';
 
-function MyNonClientComponent() {
+export function MyNonClientComponent() {
   const [state, setState] = useState();
   return null;
 }
