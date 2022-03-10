@@ -7,11 +7,11 @@ import type {ImportGlobEagerOutput} from '../../types';
 import {RouteParamsProvider} from '../useParams/RouteParamsProvider.client';
 
 interface FileRoutesProps {
-  /** Routes defined by Vite's `import.meta.globEager` method */
+  /** The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. */
   routes: ImportGlobEagerOutput;
-  /** Path prepended to all file routes */
+  /** A path that's prepended to all file routes. You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale. */
   basePath?: string;
-  /** The portion of the file route path that shouldn't be a part of the URL. Necessary to modify if you choose to import your routes from a location other than the default `src/routes` */
+  /** The portion of the file route path that shouldn't be a part of the URL. You need to modify this if you want to import routes from a location other than the default `src/routes`. */
   dirPrefix?: string;
 }
 

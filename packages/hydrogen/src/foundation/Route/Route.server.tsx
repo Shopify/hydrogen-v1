@@ -5,16 +5,16 @@ import {Boomerang} from '../Boomerang/Boomerang.client';
 import {RouteParamsProvider} from '../useParams/RouteParamsProvider.client';
 
 export type RouteProps = {
-  /** The URL path the route exists at. Can contain variables: `/products/:handle`. */
+  /** The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. */
   path: string;
-  /** A reference to a React Server Component that will be rendered when the route is active. */
+  /** A reference to a React Server Component that's rendered when the route is active. */
   page: ReactElement;
 };
 
 /**
- * `<Route>` is used to setup a hydrogen Route independent of the file system. Rotues are matched
- * in the order that they are defined. Only _one_ route will render at a time. Use `path="*"`
- * with the last defined `<Route>` to fallback render a not found page.
+ * The `Route` component is used to set up a route in Hydrogen that's independent of the file system. Routes are
+ * matched in the order that they're defined. Only one route renders at a time. Use `path="*"`
+ * with the last defined `<Route>` to implement a fallback mechanism on a "Not Found" page.
  */
 export function Route({path, page}: RouteProps): ReactElement | null {
   const request = useServerRequest();

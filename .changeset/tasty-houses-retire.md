@@ -32,14 +32,14 @@ function CustomRoute() {
 
 `<Route>` accepts two props:
 
-| Property | Type                                    | Required | Description                                                                  |
-| -------- | --------------------------------------- | -------- | ---------------------------------------------------------------------------- |
-| `path`   | `string`                                | Yes      | The URL path the route exists at. Can contain variables: `/products/:handle` |
-| `page`   | `A rendered Server Component reference` | Yes      | The component that will render for the route.                                |
+| Property | Type                                    | Required | Description                                                                                            |
+| -------- | --------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `path`   | `string`                                | Yes      | The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. |
+| `page`   | `A rendered Server Component reference` | Yes      | A reference to a React Server Component that's rendered when the route is active.                      |
 
 ## Changes to `<Router>`
 
-You have both many `<Route>` components and multiple `<FileRoutes>` within your app. Hydrogen will only render one route for each request. Whichever it finds first. This means the `<Router>` component no longer takes `fallback` as a prop (it also doesn't need `serverProps`). Instead, to render a 404 not found page, just add `<Route path="*" page={<NotFound />} />` to your app. Just make sure it's the last `<Route>` defined inside your app:
+You can have multiple `<Route>` and `<FileRoutes>` components in your app. Hydrogen will only render one route for each request — whichever it finds first. This means the `<Router>` component no longer takes `fallback` as a prop. It also doesn't need `serverProps`. Instead, to render a 404 "Not Found" page, add `<Route path="*" page={<NotFound />} />` to your app. Make sure it's the last `<Route>` defined inside your app:
 
 ```diff
 function App({routes, ...serverProps}) {
@@ -63,16 +63,16 @@ function App({routes, ...serverProps}) {
 
 ## Changes to `<FileRoutes>`
 
-`<FileRoutes>` now accepts two additional optional props:
+The `<FileRoutes>` component now accepts two additional optional props:
 
-| Property    | Type     | Required | Default Value | Description                                                            |
-| ----------- | -------- | -------- | ------------- | ---------------------------------------------------------------------- |
-| `basePath`  | `string` | No       | `"/"`         | Path prepended to all file routes                                      |
-| `dirPrefix` | `string` | No       | `"./routes"`  | The portion of the file route path that shouldn't be a part of the URL |
+| Property    | Type     | Required | Default Value | Description                                                             |
+| ----------- | -------- | -------- | ------------- | ----------------------------------------------------------------------- |
+| `basePath`  | `string` | No       | `"/"`         | A path that's prepended to all file routes.                             |
+| `dirPrefix` | `string` | No       | `"./routes"`  | The portion of the file route path that shouldn't be a part of the URL. |
 
-Changing the `dirPrefix` is necessary if you choose to import your routes from a location other than `src/routes`.
+You need to modify `dirPrefix` if you want to import routes from a location other than `src/routes`.
 
-Changing `basePath` could be useful if you want to prefix all file routes, for example with a locale:
+You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale:
 
 ```jsx
 <Router>
@@ -83,7 +83,7 @@ Changing `basePath` could be useful if you want to prefix all file routes, for e
 
 ## New `useParams()` hook
 
-A new hook is available both in Server and Client components for retrieving the params of the active route:
+You can use the `useParams()` hook to retrieve the parameters of an active route. The hook is available in both server and client components:
 
 ```jsx
 // products/[handle].server.jsx

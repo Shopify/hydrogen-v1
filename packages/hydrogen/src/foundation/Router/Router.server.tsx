@@ -6,8 +6,9 @@ type RouterProps = {
 };
 
 /**
- * The `Router` provides the context for Hydrogen Routing.
- * All `<Route>` and `<FileRoutes>` components must be children of `<Router>`
+ * The `Router` component provides the context for routing in your Hydrogen app.
+ * You should only have one `Router` component in your app.
+ * All [`FileRoutes`](#fileroutes-component) and [`Route`](#route-component) components must be children of `Router`.
  */
 export function Router({children}: RouterProps): ReactElement {
   return <BrowserRouter>{children}</BrowserRouter>;
