@@ -16,6 +16,7 @@ import {InternalServerStateContextValue} from '../ServerStateProvider/ServerStat
  * | -------------- | ------------------------------------------------------------------------------------------------------------- |
  * | `serverState`    | The current server state.                                                                                      |
  * | `setServerState` | A function used to modify server state.                                                                       |
+ * | `setPersistedServerState` | A function used to modify server state that should persist between navigations.                                                                       |
  * | `pending`        | Whether a [transition is pending](https://github.com/reactwg/react-18/discussions/41). |
  *
  */
