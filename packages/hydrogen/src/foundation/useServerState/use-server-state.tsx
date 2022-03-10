@@ -28,7 +28,7 @@ export function useServerState(): ServerStateContextValue {
   }
 
   return {
-    serverState: internalServerStateContext.serverState,
+    serverState: internalServerStateContext.userServerState,
     setServerState: internalServerStateContext.setUserServerState,
     setPersistedServerState: internalServerStateContext.setPersistedServerState,
     pending: internalServerStateContext.pending,
