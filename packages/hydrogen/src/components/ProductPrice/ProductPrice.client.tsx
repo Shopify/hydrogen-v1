@@ -1,8 +1,9 @@
 import React from 'react';
 import {MoneyV2, UnitPriceMeasurement} from '../../graphql/types/types';
 import {Money} from '../Money';
-import {useProduct} from '../ProductProvider';
 import {UnitPrice} from '../UnitPrice';
+import {flattenConnection} from '../../utilities';
+import type {Product} from '../../graphql/types/types';
 
 export interface ProductPriceProps {
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
@@ -24,24 +25,47 @@ export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
   ) &
     ProductPriceProps
 ) {
-  const product = useProduct();
-  const {
-    priceType = 'regular',
-    variantId,
-    valueType = 'min',
-    ...passthroughProps
-  } = props;
+  const {product, ...options} = props;
+  const prodPriceReturn = getProductPrice(product, options);
+  if (!prodPriceReturn) return null;
+  const {measurement, price} = prodPriceReturn;
+
+  if (measurement) {
+    return (
+      <UnitPrice<TTag>
+        {...passthroughProps}
+        data={price}
+        measurement={measurement}
+      />
+    );
+  }
+
+  return <Money<TTag> {...passthroughProps} data={price} />;
+}
+
+type getProductPriceReturn = {
+  price: MoneyV2 | undefined | null;
+  measurement: UnitPriceMeasurement | undefined | null;
+} | null;
+function getProductPrice(
+  product: Partial<Product>,
+  options: ProductPriceProps
+): getProductPriceReturn {
+  const {priceType = 'regular', variantId, valueType = 'min'} = options;
 
   if (product == null) {
-    throw new Error('Expected a ProductProvider context, but none was found');
+    throw new Error('Need a product');
   }
 
   let price: MoneyV2 | undefined | null;
   let measurement: UnitPriceMeasurement | undefined | null;
 
-  const variant = variantId
-    ? product?.variants?.find((variant) => variant.id === variantId)
-    : null;
+  const variant =
+    variantId && product.variants
+      ? flattenConnection(product?.variants).find(
+          (variant) => variant.id === variantId
+        )
+      : null;
 
   if (priceType === 'compareAt') {
     if (variantId && variant) {
@@ -72,15 +96,5 @@ export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
     return null;
   }
 
-  if (measurement) {
-    return (
-      <UnitPrice<TTag>
-        {...passthroughProps}
-        data={price}
-        measurement={measurement}
-      />
-    );
-  }
-
-  return <Money<TTag> {...passthroughProps} data={price} />;
+  return {price, measurement};
 }
