@@ -5,6 +5,8 @@ import React, {
   useCallback,
   // @ts-ignore
   useTransition,
+  useState,
+  useEffect,
 } from 'react';
 
 declare global {
@@ -14,92 +16,158 @@ declare global {
 
 const PRIVATE_PROPS = ['request', 'response'] as const;
 
-export interface ServerState {
+export interface LocationServerState {
   pathname: string;
   search: string;
+}
+
+export interface ServerState {
   [key: string]: any;
 }
 
+type ServerStateInput =
+  | ((prev: ServerState) => Partial<ServerState>)
+  | Partial<ServerState>
+  | string;
+
 export interface ServerStateSetter {
   (
-    input:
-      | ((prev: ServerState) => Partial<ServerState>)
-      | Partial<ServerState>
-      | string,
+    input: ServerStateInput,
     propValue?: any // Value when using string input
   ): void;
 }
 
-export interface ServerStateContextValue {
+interface BaseServerStateContextValue {
   pending: boolean;
+  setPersistedServerState: ServerStateSetter;
+}
+
+export interface InternalServerStateContextValue
+  extends BaseServerStateContextValue {
+  setLocationServerState: ServerStateSetter;
+  setUserServerState: ServerStateSetter;
+  userServerState: ServerState;
+  locationServerState: LocationServerState;
+}
+
+export interface ServerStateContextValue extends BaseServerStateContextValue {
   serverState: ServerState;
   setServerState: ServerStateSetter;
 }
 
-export const ServerStateContext = createContext<ServerStateContextValue>(
-  null as any
-);
+export const ServerStateContext =
+  createContext<InternalServerStateContextValue>(null as any);
 
 interface ServerStateProviderProps {
-  serverState: ServerState;
-  setServerState: React.Dispatch<React.SetStateAction<ServerState>>;
+  initialServerState: LocationServerState;
+  setServerStateForRsc: React.Dispatch<
+    React.SetStateAction<LocationServerState>
+  >;
   children: ReactNode;
 }
 
 export function ServerStateProvider({
-  serverState,
-  setServerState,
+  initialServerState,
+  setServerStateForRsc,
   children,
 }: ServerStateProviderProps) {
+  const [locationServerState, setLocationServerState] =
+    useState<LocationServerState>(initialServerState);
+  const [userServerState, setUserServerState] = useState<ServerState>({});
+  const [persistedServerState, setPersistedServerState] = useState<ServerState>(
+    {}
+  );
+
   const [pending, startTransition] = useTransition();
 
-  const setServerStateCallback = useCallback<ServerStateSetter>(
+  const setUserServerStateCallback = useCallback<ServerStateSetter>(
     (input, propValue) => {
-      /**
-       * By wrapping this state change in a transition, React renders the new state
-       * concurrently in a new "tree" instead of Suspending and showing the (blank)
-       * fallback. This is preferred behavior, though we may want to revisit how
-       * we make this decision globally for the developer - and consider providing
-       * the `pending` flag also provided by the hook to display in the UI.
-       */
-      startTransition(() => {
-        return setServerState((prev) => {
-          let newValue: Record<string, any>;
-
-          if (typeof input === 'function') {
-            newValue = input(prev);
-          } else if (typeof input === 'string') {
-            newValue = {[input]: propValue};
-          } else {
-            newValue = input;
-          }
-
-          if (__DEV__) {
-            const privateProp = PRIVATE_PROPS.find((prop) => prop in newValue);
-            if (privateProp) {
-              console.warn(
-                `Custom "${privateProp}" property in server state is ignored. Use a different name.`
-              );
-            }
-          }
-
-          return {
-            ...prev,
-            ...newValue,
-          };
-        });
-      });
+      setUserServerState((prev) => getNewValue(prev, input, propValue));
     },
-    [setServerState, startTransition]
+    []
   );
+
+  const setPersistedServerStateCallback = useCallback<ServerStateSetter>(
+    (input, propValue) => {
+      setPersistedServerState((prev) => getNewValue(prev, input, propValue));
+    },
+    []
+  );
+
+  const setLocationServerStateCallback = useCallback<ServerStateSetter>(
+    (input, propValue) => {
+      // Flush the existing user server state when location changes, leaving only the persisted state
+      setUserServerState({});
+      setLocationServerState((prev) => getNewValue(prev, input, propValue));
+    },
+    []
+  );
+
+  function getNewValue(prev: any, input: ServerStateInput, propValue: any) {
+    let newValue: Record<string, any>;
+
+    if (typeof input === 'function') {
+      newValue = input(prev);
+    } else if (typeof input === 'string') {
+      newValue = {[input]: propValue};
+    } else {
+      newValue = input;
+    }
+
+    if (__DEV__) {
+      const privateProp = PRIVATE_PROPS.find((prop) => prop in newValue);
+      if (privateProp) {
+        console.warn(
+          `Custom "${privateProp}" property in server state is ignored. Use a different name.`
+        );
+      }
+    }
+
+    return {
+      ...prev,
+      ...newValue,
+    };
+  }
+
+  const resolvedServerStateForRsc = useMemo(() => {
+    return {
+      ...userServerState,
+      ...locationServerState,
+      ...persistedServerState,
+    };
+  }, [userServerState, locationServerState, persistedServerState]);
+
+  const resolvedUserServerState = useMemo(() => {
+    return {
+      ...userServerState,
+      ...persistedServerState,
+    };
+  }, [userServerState, persistedServerState]);
+
+  useEffect(() => {
+    startTransition(() => {
+      setServerStateForRsc(resolvedServerStateForRsc);
+    });
+    return () => {};
+  }, [resolvedServerStateForRsc]);
 
   const value = useMemo(
     () => ({
       pending,
-      serverState,
-      setServerState: setServerStateCallback,
+      locationServerState: locationServerState,
+      userServerState: resolvedUserServerState,
+      setUserServerState: setUserServerStateCallback,
+      setPersistedServerState: setPersistedServerStateCallback,
+      setLocationServerState: setLocationServerStateCallback,
     }),
-    [serverState, setServerStateCallback, pending]
+    [
+      pending,
+      locationServerState,
+      resolvedUserServerState,
+      setUserServerStateCallback,
+      setPersistedServerStateCallback,
+      setLocationServerStateCallback,
+    ]
   );
 
   return (

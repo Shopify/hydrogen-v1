@@ -3,6 +3,7 @@ import {
   ServerStateContext,
   ServerStateContextValue,
 } from '../ServerStateProvider';
+import {InternalServerStateContextValue} from '../ServerStateProvider/ServerStateProvider';
 
 /**
  * The `useServerState` hook allows you to [manage server state](/custom-storefronts/hydrogen/framework/server-state) when using Hydrogen as a React Server Component framework.
@@ -19,8 +20,28 @@ import {
  *
  */
 export function useServerState(): ServerStateContextValue {
+  const internalServerStateContext =
+    useContext<InternalServerStateContextValue>(ServerStateContext);
+
+  if (!internalServerStateContext) {
+    return {} as ServerStateContextValue;
+  }
+
+  return {
+    serverState: internalServerStateContext.serverState,
+    setServerState: internalServerStateContext.setUserServerState,
+    setPersistedServerState: internalServerStateContext.setPersistedServerState,
+    pending: internalServerStateContext.pending,
+  };
+}
+
+/**
+ * Internal-only hook to manage server state, including to set location server state
+ * @internal
+ */
+export function useInternalServerState(): InternalServerStateContextValue {
   return (
-    useContext<ServerStateContextValue>(ServerStateContext) ??
-    ({} as ServerStateContextValue)
+    useContext<InternalServerStateContextValue>(ServerStateContext) ??
+    ({} as InternalServerStateContextValue)
   );
 }

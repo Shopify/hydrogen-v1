@@ -8,7 +8,7 @@ import React, {
   useEffect,
 } from 'react';
 import {META_ENV_SSR} from '../ssr-interop';
-import {useServerState} from '../useServerState';
+import {useInternalServerState} from '../useServerState/use-server-state';
 
 type RouterContextValue = {
   history: BrowserHistory;
@@ -29,22 +29,23 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [location, setLocation] = useState(history.location);
 
-  const {pending, serverState, setServerState} = useServerState();
+  const {pending, locationServerState, setLocationServerState} =
+    useInternalServerState();
 
   useEffect(() => {
     // The app has just loaded
     if (isFirstLoad) isFirstLoad = false;
     // A navigation event has just happened
-    else if (!pending && currentPath !== serverState.pathname) {
+    else if (!pending && currentPath !== locationServerState.pathname) {
       window.scrollTo(0, 0);
     }
 
-    currentPath = serverState.pathname;
+    currentPath = locationServerState.pathname;
   }, [pending]);
 
   useEffect(() => {
     const unlisten = history.listen(({location: newLocation}) => {
-      setServerState({
+      setLocationServerState({
         pathname: newLocation.pathname,
         search: location.search || undefined,
       });
