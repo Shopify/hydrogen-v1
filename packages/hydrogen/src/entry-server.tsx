@@ -45,6 +45,7 @@ import {
 import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
+import {Shopify} from './foundation/AnalyticEventBus/connectors/Shopify';
 
 declare global {
   // This is provided by a Vite plugin
@@ -661,6 +662,14 @@ function PreloadQueries({
 }) {
   const preloadQueries = request.getPreloadQueries();
   preloadRequestCacheData(request, preloadQueries);
+
+  const url = new URL(request.url);
+  Shopify({
+    page_url: url.toString(),
+    normalized_page_url: request.preloadURL,
+    referrer: request.headers.get('referrer'),
+  });
+
   return children;
 }
 
