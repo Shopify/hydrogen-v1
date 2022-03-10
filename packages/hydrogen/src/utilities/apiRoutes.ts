@@ -133,20 +133,18 @@ function queryShopBuilder(shopifyConfig: ShopifyConfig) {
     const {storeDomain, storefrontApiVersion, storefrontToken, defaultLocale} =
       shopifyConfig;
 
-    const request = new Request(
+    const fetcher = fetchBuilder<T>(
       `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
       {
         method: 'POST',
+        body: graphqlRequestBody(query, variables),
         headers: {
           'X-Shopify-Storefront-Access-Token': storefrontToken,
           'Accept-Language': (locale as string) ?? defaultLocale,
           'Content-Type': 'application/json',
         },
-        body: graphqlRequestBody(query, variables),
       }
     );
-
-    const fetcher = fetchBuilder<T>(request);
 
     return await fetcher();
   };

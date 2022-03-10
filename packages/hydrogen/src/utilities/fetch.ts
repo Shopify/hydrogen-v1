@@ -2,20 +2,25 @@ import {print} from 'graphql';
 import {LIB_VERSION} from '../version';
 import {ASTNode} from 'graphql';
 
-export function fetchBuilder<T>(request: Request) {
-  const defaultHeaders: Record<string, string> = {
-    'content-type': 'application/json',
-    'user-agent': `Hydrogen ${LIB_VERSION}`,
+const defaultHeaders = {
+  'content-type': 'application/json',
+  'user-agent': `Hydrogen ${LIB_VERSION}`,
+};
+
+type FetchInit = {
+  body?: string;
+  method?: string;
+  headers?: Record<string, string>;
+};
+
+export function fetchBuilder<T>(url: string, options: FetchInit = {}) {
+  const requestInit = {
+    ...options,
+    headers: {...defaultHeaders, ...options.headers},
   };
 
-  for (const [property, value] of Object.entries(defaultHeaders)) {
-    if (!request.headers.has(property)) {
-      request.headers.append(property, value);
-    }
-  }
-
   return async () => {
-    const response = await fetch(request.url, request);
+    const response = await fetch(url, requestInit);
 
     if (!response.ok) {
       throw response;

@@ -51,12 +51,12 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {request, key} = createShopRequest(body, locale);
+  const {key, url, requestInit} = createShopRequest(body, locale);
 
   const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
     key,
     query
-      ? fetchBuilder<UseShopQueryResponse<T>>(request)
+      ? fetchBuilder<UseShopQueryResponse<T>>(url, requestInit)
       : // If no query, avoid calling SFAPI & return nothing
         async () => ({data: undefined as unknown as T, errors: undefined}),
     {cache, preload}
@@ -108,19 +108,18 @@ function createShopRequest(body: string, locale?: string) {
     locale: defaultLocale,
   } = useShop();
 
-  const url = `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`;
-
   return {
-    request: new Request(url, {
+    key: [storeDomain, storefrontApiVersion, body, locale],
+    url: `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
+    requestInit: {
+      body,
       method: 'POST',
       headers: {
         'X-Shopify-Storefront-Access-Token': storefrontToken,
         'content-type': 'application/json',
         'Accept-Language': (locale as string) ?? defaultLocale,
       },
-      body,
-    }),
-    key: [storeDomain, storefrontApiVersion, body, locale],
+    },
   };
 }
 
