@@ -59,7 +59,7 @@ export function useShopQuery<T>({
       ? fetchBuilder<UseShopQueryResponse<T>>(url, requestInit)
       : // If no query, avoid calling SFAPI & return nothing
         async () => ({data: undefined as unknown as T, errors: undefined}),
-    {cache, preload}
+    {cache, preload, asyncPreload: {url, fetchInit: requestInit}}
   );
 
   /**
