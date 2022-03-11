@@ -81,27 +81,27 @@ You can modify `basePath` if you want to prefix all file routes. For example, yo
 </Router>
 ```
 
-## New `useParams()` hook
+## New `useRouteParams()` hook
 
-You can use the `useParams()` hook to retrieve the parameters of an active route. The hook is available in both server and client components:
+You can use the `useRouteParams()` hook to retrieve the parameters of an active route. The hook is available in both server and client components:
 
 ```jsx
 // products/[handle].server.jsx
 
-import {useParams} from '@shopify/hydrogen';
+import {useRouteParams} from '@shopify/hydrogen';
 
 export default function Product() {
-  const {handle} = useParams();
+  const {handle} = useRouteParams();
   // ...
 }
 ```
 
 ```jsx
 // ProductDetails.client.jsx
-import {useParams} from '@shopify/hydrogen/client';
+import {useRouteParams} from '@shopify/hydrogen/client';
 
 export default function ProductDetails() {
-  const {handle} = useParams();
+  const {handle} = useRouteParams();
   // ...
 }
 ```

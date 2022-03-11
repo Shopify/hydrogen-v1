@@ -392,14 +392,14 @@ export default async function testCases({
       expect(await page.textContent('#root')).toContain('Lazy Route');
     });
 
-    it('loads params via `useParams()` in server components', async () => {
+    it('loads params via `useRouteParams()` in server components', async () => {
       await page.goto(getServerUrl() + '/params/somevalue');
       expect(await page.textContent('#serverParams')).toContain(
         'Server Component: somevalue'
       );
     });
 
-    it('loads params via `useParams()` in client components', async () => {
+    it('loads params via `useRouteParams()` in client components', async () => {
       await page.goto(getServerUrl() + '/params/somevalue');
       expect(await page.textContent('#clientParams')).toContain(
         'Client Component: somevalue'

@@ -76,17 +76,17 @@ export default function({request}) {
 
 ## Retrieving parameters of active routes
 
-You can use the `useParams` hook to retrieve the parameters of an active route. The hook is available in both server and client components.
+You can use the `useRouteParams` hook to retrieve the parameters of an active route. The hook is available in both server and client components.
 
 ### Example code
 
 {% codeblock file, filename: '[handle].server.jsx' %}
 
 ```jsx
-import {useParams} from '@shopify/hydrogen';
+import {useRouteParams} from '@shopify/hydrogen';
 // Server component
 export default function Page() {
-  const {handle} = useParams();
+  const {handle} = useRouteParams();
   return <h1>The handle route param is: {handle}</h1>;
 }
 ```
@@ -96,10 +96,10 @@ export default function Page() {
 {% codeblock file, filename: 'component.client.jsx' %}
 
 ```jsx
-import {useParams} from '@shopify/hydrogen/client';
+import {useRouteParams} from '@shopify/hydrogen/client';
 // Client component
 export default function Component() {
-  const {handle} = useParams();
+  const {handle} = useRouteParams();
   return <h1>The handle route param is: {handle}</h1>;
 }
 ```
@@ -108,7 +108,7 @@ export default function Component() {
 
 ### Return value
 
-The `useParams` hook returns an object with key values for each matching route parameter.
+The `useRouteParams` hook returns an object with key values for each matching route parameter.
 
 ## Custom routes
 

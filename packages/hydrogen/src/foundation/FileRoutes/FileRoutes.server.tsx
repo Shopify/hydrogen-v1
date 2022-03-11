@@ -4,7 +4,7 @@ import {log} from '../../utilities/log';
 import {useServerRequest} from '../ServerRequestProvider';
 
 import type {ImportGlobEagerOutput} from '../../types';
-import {RouteParamsProvider} from '../useParams/RouteParamsProvider.client';
+import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client';
 
 interface FileRoutesProps {
   /** The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. */

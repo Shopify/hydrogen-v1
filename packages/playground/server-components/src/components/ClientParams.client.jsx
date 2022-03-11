@@ -1,7 +1,7 @@
 import React from 'react';
-import {useParams} from '@shopify/hydrogen/client';
+import {useRouteParams} from '@shopify/hydrogen/client';
 
 export default function ClientParams() {
-  const {handle} = useParams();
+  const {handle} = useRouteParams();
   return <h1 id="clientParams">Client Component: {handle}</h1>;
 }

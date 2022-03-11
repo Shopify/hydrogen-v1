@@ -15,7 +15,7 @@ export {FileRoutes} from './foundation/FileRoutes/FileRoutes.server';
 export {Route} from './foundation/Route/Route.server';
 export {Router} from './foundation/Router/Router.server';
 export {log, setLogger, setLoggerOptions, Logger} from './utilities/log';
-export {useParams} from './foundation/useParams/useParams';
+export {useRouteParams} from './foundation/useRouteParams/useRouteParams';
 
 // This is exported here because it contains a Server Component
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
