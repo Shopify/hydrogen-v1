@@ -4,7 +4,34 @@ fragment SellingPlanGroupsFragment on SellingPlanGroup {
   sellingPlans(first: $numProductSellingPlans) {
     edges {
       node {
-        ...SellingPlanFragment
+        id
+        description
+        name
+        options {
+          name
+          value
+        }
+        priceAdjustments {
+          orderCount
+          adjustmentValue {
+            ... on SellingPlanFixedAmountPriceAdjustment {
+              adjustmentAmount {
+                currencyCode
+                amount
+              }
+            }
+            ... on SellingPlanFixedPriceAdjustment {
+              price {
+                currencyCode
+                amount
+              }
+            }
+            ... on SellingPlanPercentagePriceAdjustment {
+              adjustmentPercentage
+            }
+          }
+        }
+        recurringDeliveries
       }
     }
   }

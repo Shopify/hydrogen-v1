@@ -165,10 +165,12 @@ fragment VariantFragment on ProductVariant {
   }
   ...UnitPriceFragment
   priceV2 {
-    ...MoneyFragment
+    currencyCode
+    amount
   }
   compareAtPriceV2 {
-    ...MoneyFragment
+    currencyCode
+    amount
   }
   selectedOptions {
     name
@@ -186,20 +188,51 @@ fragment VariantFragment on ProductVariant {
       node {
         priceAdjustments {
           compareAtPrice {
-            ...MoneyFragment
+            currencyCode
+            amount
           }
           perDeliveryPrice {
-            ...MoneyFragment
+            currencyCode
+            amount
           }
           price {
-            ...MoneyFragment
+            currencyCode
+            amount
           }
           unitPrice {
-            ...MoneyFragment
+            currencyCode
+            amount
           }
         }
         sellingPlan {
-          ...SellingPlanFragment
+          id
+          description
+          name
+          options {
+            name
+            value
+          }
+          priceAdjustments {
+            orderCount
+            adjustmentValue {
+              ... on SellingPlanFixedAmountPriceAdjustment {
+                adjustmentAmount {
+                  currencyCode
+                  amount
+                }
+              }
+              ... on SellingPlanFixedPriceAdjustment {
+                price {
+                  currencyCode
+                  amount
+                }
+              }
+              ... on SellingPlanPercentagePriceAdjustment {
+                adjustmentPercentage
+              }
+            }
+          }
+          recurringDeliveries
         }
       }
     }

@@ -12,7 +12,8 @@ fragment UnitPriceFragment on ProductVariant {
     referenceValue
   }
   unitPrice {
-    ...MoneyFragment
+    currencyCode
+    amount
   }
 }
 ```
