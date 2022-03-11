@@ -16,7 +16,6 @@ const QUERY = gql`
                   mediaContentType
                   id
                   alt
-                  mediaContentType
                   previewImage {
                     url
                   }
