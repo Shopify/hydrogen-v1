@@ -1,1 +1,1 @@
-export {Image, ImageProps, ImageFragment, MediaImageProps} from './Image';
+export {Image} from './Image';

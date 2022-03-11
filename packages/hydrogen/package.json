@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "0.11.1",
+  "version": "0.12.0",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -19,6 +19,8 @@
     "plugin.d.ts",
     "entry-server.js",
     "entry-server.d.ts",
+    "fragments.js",
+    "fragments.d.ts",
     "client.js",
     "client.d.ts",
     "entry-client.js",
@@ -50,7 +52,7 @@
     "directory": "packages/hydrogen"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.16",
+    "@babel/core": "^7.17.5",
     "@graphql-codegen/add": "^3.1.1",
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/graphql-modules-preset": "^2.3.5",
@@ -101,15 +103,14 @@
   "dependencies": {
     "@vitejs/plugin-react": "^1.1.1",
     "abort-controller": "^3.0.0",
-    "body-parser": "^1.19.1",
+    "body-parser": "^1.19.2",
     "connect": "^3.7.0",
-    "es-module-lexer": "^0.9.0",
-    "fast-glob": "^3.2.5",
+    "es-module-lexer": "^0.10.0",
+    "fast-glob": "^3.2.11",
     "graphql": "^16.3.0",
-    "history": "^5.2.0",
-    "isomorphic-dompurify": "^0.13.0",
+    "history": "^5.3.0",
     "kolorist": "^1.5.1",
-    "magic-string": "^0.25.7",
+    "magic-string": "^0.26.1",
     "node-fetch": "^2.6.7",
     "path-to-regexp": "^6.2.0",
     "react-error-boundary": "^3.1.3",

@@ -9,9 +9,9 @@ import {PageSeo} from './PageSeo.client';
 
 import type {DefaultPage, HomePage} from './types';
 import type {
-  ProductSeoFragment,
-  CollectionSeoFragment,
-  PageSeoFragment,
+  ProductSeoFragmentFragment,
+  CollectionSeoFragmentFragment,
+  PageSeoFragmentFragment,
 } from './SeoFragment';
 
 type Props =
@@ -25,15 +25,15 @@ type Props =
     }
   | {
       type: 'product';
-      data: ProductSeoFragment;
+      data: ProductSeoFragmentFragment;
     }
   | {
       type: 'collection';
-      data: CollectionSeoFragment;
+      data: CollectionSeoFragmentFragment;
     }
   | {
       type: 'page';
-      data: PageSeoFragment;
+      data: PageSeoFragmentFragment;
     };
 
 /**

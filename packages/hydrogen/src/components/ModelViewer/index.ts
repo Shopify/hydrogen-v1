@@ -1,1 +1,1 @@
-export {ModelViewer, ModelViewerProps} from './ModelViewer.client';
+export {ModelViewer} from './ModelViewer.client';

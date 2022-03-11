@@ -1,9 +1,13 @@
 import React from 'react';
 import {Head} from '../../client';
 
-import type {Description} from './types';
+import type {SeoFragmentFragment} from './SeoFragment';
 
-export function DescriptionSeo({description}: {description?: Description}) {
+export function DescriptionSeo({
+  description,
+}: {
+  description?: SeoFragmentFragment['description'];
+}) {
   if (!description) {
     return null;
   }

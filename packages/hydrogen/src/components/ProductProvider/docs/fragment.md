@@ -1,6 +1,6 @@
 ## GraphQL fragment
 
-The following GraphQL fragment is available for your GraphQL queries using `ProductProviderFragment` or `ProductProvider.Fragment`. Using this fragment in your queries ensures that you have all the data necessary for using the `ProductProvider`.
+The following GraphQL fragment is available for your GraphQL queries using `ProductProviderFragment` from `@shopify/hydrogen/fragments`. Using this fragment in your queries ensures that you have all the data necessary for using the `ProductProvider`.
 
 ```graphql
 fragment ProductProviderFragment on Product {
@@ -108,13 +108,13 @@ const QUERY = gql`
     $numProductVariantSellingPlanAllocations: Int!
     $numProductSellingPlanGroups: Int!
     $numProductSellingPlans: Int!
+    $includeReferenceMetafieldDetails: Boolean!
   ) {
     product: product(handle: $handle) {
       id
       vendor
       seo {
-        title
-        description
+        ...SeoFragment
       }
       featuredImage {
         url

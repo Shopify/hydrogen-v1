@@ -1,7 +1,7 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Money and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `Money` component renders a string of the Storefront API's
-[`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) according to the
+[MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) according to the
 `defaultLocale` in the `shopify.config.js` file. If `children` is a function, then it will
 provide render props for the `children` corresponding to the object returned by the `useMoney` hook.
 
@@ -52,10 +52,10 @@ export default function ProductWithCustomMoney() {
 
 ## Props
 
-| Name | Type                 | Description                                                                   |
-| ---- | -------------------- | ----------------------------------------------------------------------------- |
-| as?  | <code>TTag</code>    | An HTML tag to be rendered as the base element wrapper. The default is `div`. |
-| data | <code>MoneyV2</code> | A [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2).       |
+| Name | Type                               | Description                                                                                                                     |
+| ---- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| as?  | <code>TTag</code>                  | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                   |
+| data | <code>MoneyFragmentFragment</code> | An object with keys that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
 
 ## Component type
 
@@ -63,7 +63,7 @@ The `Money` component is a client component, which means that it renders on the 
 
 ## GraphQL fragment
 
-The following fragment is available as a string for your GraphQL query using `MoneyFragment` or `Money.Fragment`. Using this fragment ensures that you have all the data necessary for rendering the `Money` component.
+The following fragment is available as a string for your GraphQL query using `MoneyFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `Money` component.
 
 ```graphql
 fragment MoneyFragment on MoneyV2 {

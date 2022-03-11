@@ -71,7 +71,10 @@ export function Boomerang({pageTemplate}: {pageTemplate: string | null}) {
         });
       }
     })();
-    loadScript(URL);
+    loadScript(URL).catch(() => {
+      // ignore if boomerang doesn't load
+      // most likely because of a ad blocker
+    });
   }, [storeDomain, pageTemplate]);
 
   return null;

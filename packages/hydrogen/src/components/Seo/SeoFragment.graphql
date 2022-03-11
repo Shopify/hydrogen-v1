@@ -1,27 +1,36 @@
-fragment ImageSeo on Image {
+fragment DefaultPageSeoFragment on Shop {
+  title: name
+  description
+}
+
+fragment HomeSeoFragment on Shop {
+  title: name
+  description
+}
+
+fragment ImageSeoFragment on Image {
   url
   width
   height
   altText
 }
 
-fragment Seo on SEO {
+fragment SeoFragment on SEO {
   description
   title
 }
 
-fragment ProductSeo on Product {
+fragment ProductSeoFragment on Product {
   title
   description
   seo {
-    title
-    description
+    ...SeoFragment
   }
   vendor
   featuredImage {
-    ...ImageSeo
+    ...ImageSeoFragment
   }
-  variants {
+  variants(first: $numProductVariants) {
     edges {
       node {
         image {
@@ -38,22 +47,20 @@ fragment ProductSeo on Product {
   }
 }
 
-fragment CollectionSeo on Collection {
+fragment CollectionSeoFragment on Collection {
   title
   description
   seo {
-    title
-    description
+    ...SeoFragment
   }
   image {
-    ...ImageSeo
+    ...ImageSeoFragment
   }
 }
 
-fragment PageSeo on Page {
+fragment PageSeoFragment on Page {
   title
   seo {
-    title
-    description
+    ...SeoFragment
   }
 }

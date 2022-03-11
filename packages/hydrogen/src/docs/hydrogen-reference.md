@@ -48,11 +48,6 @@ Primitive components and hooks are the building blocks for different component t
     <td>Not applicable</td>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/components/primitive/rawhtml">RawHtml</a></td>
-    <td>Renders an HTML string as HTML DOM elements.</td>
-    <td>Not applicable</td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
     <td>Renders SEO information on a webpage.</td>
     <td>Not applicable</td>
@@ -117,7 +112,7 @@ Product and variant components and hooks relate to the goods, digital downloads,
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/product-variant/productdescription">ProductDescription</a></td>
-    <td>Renders a <code>RawHtml</code> component with the product's <a href="/api/storefront/reference/products/product">descriptionHtml</a>.</td>
+    <td>Renders a <code>div</code> component with the product's <a href="/api/storefront/reference/products/product">descriptionHtml</a>.</td>
     <td>Not applicable</td>
   </tr>
   <tr>
@@ -286,5 +281,9 @@ Hydrogen includes the following utilities to help speed up your development proc
   <tr>
     <td><a href="/api/hydrogen/utilities/parsemetafieldvalue">parseMetafieldValue</a></td>
     <td>Parses a metafield's value from a string to a sensible type corresponding to the metafield's type.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/utilities/queryshop">queryShop</a></td>
+    <td>Helps you query the Storefront API.</td>
   </tr>
 </table>

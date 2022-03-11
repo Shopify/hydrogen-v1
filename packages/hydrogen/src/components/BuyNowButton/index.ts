@@ -1,5 +1,1 @@
-export {
-  BuyNowButton,
-  BuyNowButtonProps,
-  BuyNowButtonPropsWeControl,
-} from './BuyNowButton.client';
+export {BuyNowButton} from './BuyNowButton.client';

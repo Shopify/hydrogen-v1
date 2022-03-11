@@ -1,6 +1,5 @@
 import React from 'react';
 import {Props} from '../types';
-import {ImageFragment as Fragment} from '../../graphql/graphql-constants';
 import {
   ImageSizeOptions,
   ImageLoaderOptions,
@@ -15,21 +14,21 @@ export interface BaseImageProps {
    */
   loader?(props: ImageLoaderOptions): string;
   /** An object of `loader` function options. For example, if the `loader` function requires a `scale` option,
-   * then the value can be a property of the `loaderOptions` object (eg. `{scale: 2}`).
+   * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
    */
   loaderOptions?: ImageLoaderOptions['options'];
 }
 
-export interface MediaImageProps extends BaseImageProps {
-  /** An object with the keys `url`, `altText`, `id`, `width` and `height`. Refer to the
-   * Storefront API's [`Image` object](/api/storefront/reference/common-objects/image).
+interface MediaImageProps extends BaseImageProps {
+  /** An object with keys that correspond to the Storefront API's
+   * [Image object](/api/storefront/reference/common-objects/image).
    */
   data: ImageFragmentFragment;
   /** An object of image size options for Shopify CDN images. */
   options?: ImageSizeOptions;
 }
 
-export interface ExternalImageProps extends BaseImageProps {
+interface ExternalImageProps extends BaseImageProps {
   /** A URL string. This string can be an absolute path or a relative path depending on the `loader`. */
   src: string;
   /** The integer value for the width of the image. This is a required prop when `src` is present. */
@@ -38,7 +37,7 @@ export interface ExternalImageProps extends BaseImageProps {
   height: number;
 }
 
-export type ImageProps = MediaImageProps | ExternalImageProps;
+type ImageProps = MediaImageProps | ExternalImageProps;
 
 type PropsWeControl = 'src' | 'width' | 'height';
 
@@ -65,7 +64,7 @@ function convertShopifyImageData({
 
 /**
  * The `Image` component renders an image for the Storefront API's
- * [`Image` object](/api/storefront/reference/common-objects/image).
+ * [Image object](/api/storefront/reference/common-objects/image).
  */
 export function Image<TTag extends React.ElementType = 'img'>(
   props: Props<TTag, PropsWeControl> & ImageProps
@@ -130,7 +129,3 @@ export function Image<TTag extends React.ElementType = 'img'>(
     />
   );
 }
-
-Image.Fragment = Fragment;
-
-export const ImageFragment = Fragment;

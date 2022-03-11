@@ -1,15 +1,19 @@
 import React, {ElementType} from 'react';
-import {RawHtml} from '../RawHtml';
-import {useProduct} from '../ProductProvider';
 import {Props} from '../types';
+import {useProduct} from '../ProductProvider';
 
 /**
- * The `ProductDescription` component renders a `RawHtml` component with
+ * The `ProductDescription` component renders a `div` with
  * the product's [`descriptionHtml`](/api/storefront/reference/products/product).
  * It must be a descendent of the `ProductProvider` component.
  */
 export function ProductDescription<TTag extends ElementType = 'div'>(
-  props: Props<TTag>
+  props: Props<TTag> & {
+    /** An HTML tag to wrap the description. If not specified, then the
+     * description is wrapped in a `div` element.
+     */
+    as?: TTag;
+  }
 ) {
   const product = useProduct();
 
@@ -17,7 +21,12 @@ export function ProductDescription<TTag extends ElementType = 'div'>(
     throw new Error('Expected a ProductProvider context, but none was found');
   }
 
+  const Wrapper = props.as ?? 'div';
+
   return product.descriptionHtml ? (
-    <RawHtml string={product.descriptionHtml} {...props} />
+    <Wrapper
+      dangerouslySetInnerHTML={{__html: product.descriptionHtml}}
+      {...props}
+    />
   ) : null;
 }

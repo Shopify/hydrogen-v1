@@ -1,6 +1,6 @@
 ## GraphQL fragment
 
-The following fragment is available as a string for your GraphQL query using `MediaFileFragment` or `MediaFile.Fragment`. Using this fragment ensures that you have all the data necessary for rendering the `MediaFile` component.
+The following fragment is available as a string for your GraphQL query using `MediaFileFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `MediaFile` component.
 
 ```graphql
 fragment MediaFileFragment on Media {

@@ -1,12 +1,15 @@
 import {
   useShopQuery,
   flattenConnection,
-  ProductProviderFragment,
-  Image,
   Link,
   Seo,
   CacheDays,
 } from '@shopify/hydrogen';
+import {
+  ProductProviderFragment,
+  ImageFragment,
+  HomeSeoFragment,
+} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Layout from '../components/Layout.server';
@@ -37,10 +40,7 @@ export default function Index({country = {isoCode: 'US'}}) {
 function SeoForHomepage() {
   const {
     data: {
-      shop: {
-        name: shopName,
-        primaryDomain: {url: shopUrl},
-      },
+      shop: {title, description},
     },
   } = useShopQuery({
     query: SEO_QUERY,
@@ -52,8 +52,8 @@ function SeoForHomepage() {
     <Seo
       type="homepage"
       data={{
-        title: shopName,
-        url: shopUrl,
+        title,
+        description,
       }}
     />
   );
@@ -190,13 +190,11 @@ function GradientBackground() {
 const SEO_QUERY = gql`
   query homeShopInfo {
     shop {
-      name
-      description
-      primaryDomain {
-        url
-      }
+      ...HomeSeoFragment
     }
   }
+
+  ${HomeSeoFragment}
 `;
 
 const QUERY = gql`
@@ -237,5 +235,5 @@ const QUERY = gql`
   }
 
   ${ProductProviderFragment}
-  ${Image.Fragment}
+  ${ImageFragment}
 `;
