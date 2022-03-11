@@ -36,6 +36,21 @@ export function publish(eventname: string, guardDup = false, payload?: any) {
       subs[key](combinedPayload);
     });
   }
+
+  // Publish to server
+  fetch('/__event', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      eventname,
+      payload: {
+        ...combinedPayload,
+        referrer: window.document.referrer,
+      },
+    }),
+  });
 }
 
 export function subscribe(
