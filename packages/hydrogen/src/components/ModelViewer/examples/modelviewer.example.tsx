@@ -1,10 +1,7 @@
 import {ModelViewer} from '@shopify/hydrogen';
-import {Model3DFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${Model3DFragment}
-
   query Products {
     products(first: 5) {
       edges {
@@ -15,9 +12,17 @@ const QUERY = gql`
           media(first: 1) {
             edges {
               node {
-                ... on Model3D {
+                ... on Model3d {
                   mediaContentType
-                  ...Model3DFragment
+                  id
+                  alt
+                  mediaContentType
+                  previewImage {
+                    url
+                  }
+                  sources {
+                    url
+                  }
                 }
               }
             }

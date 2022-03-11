@@ -25,7 +25,15 @@ const QUERY = gql`
               node {
                 ... on Model3D {
                   mediaContentType
-                  ...Model3DFragment
+                  id
+                  alt
+                  mediaContentType
+                  previewImage {
+                    url
+                  }
+                  sources {
+                    url
+                  }
                 }
               }
             }

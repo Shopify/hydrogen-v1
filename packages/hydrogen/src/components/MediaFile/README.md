@@ -75,15 +75,32 @@ fragment MediaFileFragment on Media {
   }
   ... on Video {
     mediaContentType
-    ...VideoFragment
+    id
+    previewImage {
+      url
+    }
+    sources {
+      mimeType
+      url
+    }
   }
   ... on ExternalVideo {
     mediaContentType
-    ...ExternalVideoFragment
+    id
+    embedUrl
+    host
   }
   ... on Model3d {
     mediaContentType
-    ...Model3DFragment
+    id
+    alt
+    mediaContentType
+    previewImage {
+      url
+    }
+    sources {
+      url
+    }
   }
 }
 ```

@@ -17,7 +17,9 @@ const QUERY = gql`
               node {
                 ... on ExternalVideo {
                   mediaContentType
-                  ...ExternalVideoFragment
+                  id
+                  embedUrl
+                  host
                 }
               }
             }
