@@ -5,7 +5,7 @@ import {DEFAULT_LOCALE} from '../../foundation/constants';
 
 import {ShopifyConfig} from '../../types';
 import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server';
-import {Router} from '../../foundation/Router/Router';
+import {BrowserRouter} from '../../foundation/Router/BrowserRouter.client';
 import {ServerState, ServerStateProvider} from '../../foundation';
 
 type SetServerState = React.Dispatch<React.SetStateAction<ServerState>>;
@@ -39,7 +39,7 @@ export const mountWithProviders = createMount<
       serverState={serverState}
     >
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <Router history={history}>{element}</Router>
+        <BrowserRouter history={history}>{element}</BrowserRouter>
       </ShopifyProvider>
     </ServerStateProvider>
   ),

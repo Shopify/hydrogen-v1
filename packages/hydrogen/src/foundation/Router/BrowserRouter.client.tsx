@@ -15,14 +15,15 @@ type RouterContextValue = {
   location: Location;
 };
 
-const RouterContext = createContext<RouterContextValue | {}>({});
+export const RouterContext = createContext<RouterContextValue | {}>({});
 
 let currentPath = '';
 
-export const Router: FC<{history?: BrowserHistory}> = ({
-  history: pHistory,
-  children,
-}) => {
+export const BrowserRouter: FC<{
+  history?: BrowserHistory;
+}> = ({history: pHistory, children}) => {
+  if (META_ENV_SSR) return <>{children}</>;
+
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [firstLoad, setFirstLoad] = useState(true);
   const [location, setLocation] = useState(history.location);

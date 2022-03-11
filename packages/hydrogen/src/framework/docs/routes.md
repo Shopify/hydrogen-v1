@@ -74,6 +74,138 @@ export default function({request}) {
 
 {% endcodeblock %}
 
+## Retrieving parameters of active routes
+
+You can use the `useRouteParams` hook to retrieve the parameters of an active route. The hook is available in both server and client components.
+
+### Example code
+
+{% codeblock file, filename: '[handle].server.jsx' %}
+
+```jsx
+import {useRouteParams} from '@shopify/hydrogen';
+// Server component
+export default function Page() {
+  const {handle} = useRouteParams();
+  return <h1>The handle route param is: {handle}</h1>;
+}
+```
+
+{% endcodeblock %}
+
+{% codeblock file, filename: 'component.client.jsx' %}
+
+```jsx
+import {useRouteParams} from '@shopify/hydrogen/client';
+// Client component
+export default function Component() {
+  const {handle} = useRouteParams();
+  return <h1>The handle route param is: {handle}</h1>;
+}
+```
+
+{% endcodeblock %}
+
+### Return value
+
+The `useRouteParams` hook returns an object with key values for each matching route parameter.
+
+## Custom routes
+
+By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx`.
+
+### Router component
+
+The `Router` component provides the context for routing in your Hydrogen app. You should only have one `Router` component in your app. All [`FileRoutes`](#fileroutes-component) and [`Route`](#route-component) components must be children of `Router`.
+
+### FileRoutes component
+
+The `FileRoutes` component builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. You can have multiple instances of this component to source file routes from multiple locations.
+
+#### Example code
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```jsx
+import {Router, FileRoutes, Route} from '@shopify/hydrogen';
+function App() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <CartProvider>
+          <Router>
+            <FileRoutes basePath="/es/" routes={esRoutes} />
+            <FileRoutes basePath="/en/" routes={enRoutes} />
+            <Route path="*" page={<NotFound />} />
+          </Router>
+        </CartProvider>
+      </ShopProvider>
+    </Suspense>
+  );
+}
+function NotFound() {
+  return <h1>Not found</h1>;
+}
+```
+
+{% endcodeblock %}
+
+#### Props
+
+| Name       | Type     | Description                                                                                                                                                                            |
+| ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| routes     | `array`  | The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method.                                                                       |
+| basePath?  | `string` | A path that's prepended to all file routes. You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale.                |
+| dirPrefix? | `string` | The portion of the file route path that shouldn't be a part of the URL. You need to modify this if you want to import your routes from a location other than the default `src/routes`. |
+
+### Route component
+
+The `Route` component is used to set up a route in Hydrogen that's independent of the file system. Routes are matched in the order that they're defined. Only one route renders at a time. Use `path="*"` with the last defined `<Route>` to implement a fallback mechanism on a "Not Found" page.
+
+> Note:
+> Routes defined with the `Route` component can't be API routes.
+
+#### Example code
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```tsx
+import {Router, Route} from '@shopify/hydrogen';
+function App({routes}) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <CartProvider>
+          <Router>
+            <Route path="/" page={<Home />} />
+            <Route path="/products/:handle" page={<Product />} />
+            <Route path="*" page={<NotFound />} />
+          </Router>
+        </CartProvider>
+      </ShopProvider>
+    </Suspense>
+  );
+}
+function Products({params}) {
+  return <h1>Product name: {params.handle}</h1>;
+}
+function Home() {
+  return <h1>Home</h1>;
+}
+function NotFound() {
+  return <h1>Not found</h1>;
+}
+```
+
+{% endcodeblock %}
+
+#### Props
+
+| Name | Type           | Description                                                                                            |
+| ---- | -------------- | ------------------------------------------------------------------------------------------------------ |
+| path | `string`       | The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. |
+| page | `ReactElement` | A reference to a React Server Component that's rendered when the route is active.                      |
+
 ## Navigating between routes
 
 You can navigate between routes using the `Link` component or the `useNavigate` hook.
@@ -114,7 +246,9 @@ The `useNavigate` hook imperatively navigates between routes. Consider using the
 
 ```jsx
 import {useNavigate} from '@shopify/hydrogen/client';
+
 function addToCart() { ... }
+
 export default function ClientComponent() {
   const navigate = useNavigate();
   async function clickAddToCart() {

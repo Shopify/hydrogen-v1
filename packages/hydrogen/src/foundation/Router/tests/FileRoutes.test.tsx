@@ -1,5 +1,5 @@
 import {ImportGlobEagerOutput} from '../../../types';
-import {createPageRoutes} from '../FileRoutes';
+import {createPageRoutes} from '../../FileRoutes/FileRoutes.server';
 
 const STUB_MODULE = {default: {}, api: null};
 
@@ -8,7 +8,7 @@ it('converts normal pages to routes', () => {
     './routes/contact.server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
 
   expect(routes).toEqual([
     {
@@ -25,7 +25,7 @@ it('handles index pages', () => {
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
 
   expect(routes).toEqual([
     {
@@ -51,7 +51,7 @@ it('handles nested index pages', () => {
     './routes/articles/[...handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
 
   expect(routes).toEqual([
     {
@@ -94,7 +94,7 @@ it('handles dynamic paths', () => {
     './routes/products/[handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
   expect(routes).toEqual([
     {
       path: '/contact',
@@ -121,7 +121,7 @@ it('handles catch all routes', () => {
     './routes/products/[...handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
   expect(routes).toEqual([
     {
       path: '/contact',
@@ -150,7 +150,7 @@ it('handles nested dynamic paths', () => {
     './routes/blogs/[handle]/[...articleHandle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
 
   expect(routes).toEqual([
     {
@@ -191,7 +191,7 @@ it('prioritizes overrides next to dynamic paths', () => {
     './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
 
   expect(routes).toEqual([
     {
@@ -229,7 +229,7 @@ it('handles typescript paths', () => {
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
 
   expect(routes).toEqual([
     {
@@ -251,7 +251,7 @@ it('lowercases routes', () => {
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages);
+  const routes = createPageRoutes(pages, '*', './routes');
 
   expect(routes).toEqual([
     {
@@ -273,7 +273,7 @@ it('factors in the top-level path prefix', () => {
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = createPageRoutes(pages, '/foo/*');
+  const routes = createPageRoutes(pages, '/foo/*', './routes');
 
   expect(routes).toEqual([
     {
@@ -283,6 +283,28 @@ it('factors in the top-level path prefix', () => {
     },
     {
       path: '/foo/',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+  ]);
+});
+
+it('uses a custom file directory path', () => {
+  const pages: ImportGlobEagerOutput = {
+    './custom/contact.server.jsx': STUB_MODULE,
+    './custom/index.server.jsx': STUB_MODULE,
+  };
+
+  const routes = createPageRoutes(pages, '*', './custom');
+
+  expect(routes).toEqual([
+    {
+      path: '/contact',
+      component: STUB_MODULE.default,
+      exact: true,
+    },
+    {
+      path: '/',
       component: STUB_MODULE.default,
       exact: true,
     },

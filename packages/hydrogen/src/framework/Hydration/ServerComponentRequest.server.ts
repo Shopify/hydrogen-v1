@@ -14,6 +14,11 @@ export type PreloadQueryEntry = {
 };
 export type PreloadQueriesByURL = Map<string, PreloadQueryEntry>;
 export type AllPreloadQueries = Map<string, PreloadQueriesByURL>;
+export type RouterContextData = {
+  routeRendered: boolean;
+  serverProps: Record<string, any>;
+  routeParams: Record<string, string>;
+};
 
 let reqCounter = 0; // For debugging
 const generateId =
@@ -48,6 +53,7 @@ export class ServerComponentRequest extends Request {
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
     preloadQueries: PreloadQueriesByURL;
+    router: RouterContextData;
     [key: string]: any;
   };
 
@@ -73,6 +79,11 @@ export class ServerComponentRequest extends Request {
     this.ctx = {
       cache: new Map(),
       head: new HeadData({}),
+      router: {
+        routeRendered: false,
+        serverProps: {},
+        routeParams: {},
+      },
       queryCacheControl: [],
       queryTimings: [],
       preloadQueries: new Map(),

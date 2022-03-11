@@ -1,4 +1,4 @@
-import {useShopQuery, Seo} from '@shopify/hydrogen';
+import {useShopQuery, Seo, useRouteParams} from '@shopify/hydrogen';
 import {
   ProductProviderFragment,
   ProductSeoFragment,
@@ -9,8 +9,8 @@ import ProductDetails from '../../components/ProductDetails.client';
 import NotFound from '../../components/NotFound.server';
 import Layout from '../../components/Layout.server';
 
-export default function Product({country = {isoCode: 'US'}, params}) {
-  const {handle} = params;
+export default function Product({country = {isoCode: 'US'}}) {
+  const {handle} = useRouteParams();
 
   const {
     data: {product},

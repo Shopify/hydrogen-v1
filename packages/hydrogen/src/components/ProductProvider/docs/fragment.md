@@ -74,7 +74,7 @@ The `ProductProviderFragment` includes variables that you will need to provide v
 
 ```jsx
 export default function Product() {
-  const {handle} = useParams();
+  const {handle} = useRouteParams();
 
   const {data} = useShopQuery({
     query: QUERY,
