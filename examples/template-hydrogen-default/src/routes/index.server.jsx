@@ -5,11 +5,7 @@ import {
   Seo,
   CacheDays,
 } from '@shopify/hydrogen';
-import {
-  ProductProviderFragment,
-  ImageFragment,
-  HomeSeoFragment,
-} from '@shopify/hydrogen/fragments';
+import {ProductProviderFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Layout from '../components/Layout.server';
@@ -190,11 +186,10 @@ function GradientBackground() {
 const SEO_QUERY = gql`
   query homeShopInfo {
     shop {
-      ...HomeSeoFragment
+      title: name
+      description
     }
   }
-
-  ${HomeSeoFragment}
 `;
 
 const QUERY = gql`
@@ -220,7 +215,11 @@ const QUERY = gql`
           id
           title
           image {
-            ...ImageFragment
+            id
+            url
+            altText
+            width
+            height
           }
           products(first: $numProducts) {
             edges {
@@ -235,5 +234,4 @@ const QUERY = gql`
   }
 
   ${ProductProviderFragment}
-  ${ImageFragment}
 `;

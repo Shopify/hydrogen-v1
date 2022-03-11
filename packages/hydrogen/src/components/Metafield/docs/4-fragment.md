@@ -18,7 +18,11 @@ fragment MetafieldFragment on Metafield {
       id
       mediaContentType
       image {
-        ...ImageFragment
+        id
+        url
+        altText
+        width
+        height
       }
     }
   }

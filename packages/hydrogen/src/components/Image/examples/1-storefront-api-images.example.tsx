@@ -9,7 +9,11 @@ const QUERY = gql`
 
   productByHandle(handle: "my-product") {
     featuredImage {
-      ...ImageFragment
+      id
+      url
+      altText
+      width
+      height
     }
   }
 `;

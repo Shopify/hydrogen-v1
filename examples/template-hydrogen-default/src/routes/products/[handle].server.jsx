@@ -1,8 +1,5 @@
 import {useShopQuery, Seo, useRouteParams} from '@shopify/hydrogen';
-import {
-  ProductProviderFragment,
-  ProductSeoFragment,
-} from '@shopify/hydrogen/fragments';
+import {ProductProviderFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
@@ -52,10 +49,36 @@ const QUERY = gql`
       id
       vendor
       ...ProductProviderFragment
-      ...ProductSeoFragment
+      title
+      description
+      seo {
+        description
+        title
+      }
+      vendor
+      featuredImage {
+        url
+        width
+        height
+        altText
+      }
+      variants(first: $numProductVariants) {
+        edges {
+          node {
+            image {
+              url
+            }
+            availableForSale
+            priceV2 {
+              amount
+              currencyCode
+            }
+            sku
+          }
+        }
+      }
     }
   }
 
   ${ProductProviderFragment}
-  ${ProductSeoFragment}
 `;
