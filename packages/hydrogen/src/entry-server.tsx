@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React from 'react';
 import {
   Logger,
   logServerResponse,
@@ -45,7 +45,10 @@ import {
 import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
-import {Shopify} from './foundation/AnalyticEventBus/connectors/Shopify';
+
+// Initialize analytic connector
+import './foundation/AnalyticEventBus/connectors/Shopify.server';
+import {Analytics} from './foundation/AnalyticEventBus/Analytics.server';
 
 declare global {
   // This is provided by a Vite plugin
@@ -77,6 +80,8 @@ export const renderHydrogen = (
   App: any,
   {shopifyConfig, routes}: ServerHandlerConfig
 ) => {
+  console.log(routes);
+
   const handleRequest: RequestHandler = async function (
     rawRequest,
     {indexTemplate, streamableResponse, dev, cache, context, nonce}
@@ -607,6 +612,7 @@ function buildAppRSC({
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
         <App {...state} {...hydrogenServerProps} routes={routes} />
+        <Analytics />
       </PreloadQueries>
     </ServerRequestProvider>
   );
@@ -644,6 +650,7 @@ function buildAppSSR(
             <React.Suspense fallback={null}>
               <RscConsumer />
             </React.Suspense>
+            <Analytics />
           </PreloadQueries>
         </ServerStateProvider>
       </ServerRequestProvider>
@@ -658,19 +665,12 @@ function PreloadQueries({
   children,
 }: {
   request: ServerComponentRequest;
-  children: ReactElement;
+  children: React.ReactNode;
 }) {
   const preloadQueries = request.getPreloadQueries();
   preloadRequestCacheData(request, preloadQueries);
 
-  const url = new URL(request.url);
-  Shopify({
-    page_url: url.toString(),
-    normalized_page_url: request.preloadURL,
-    referrer: request.headers.get('referrer'),
-  });
-
-  return children;
+  return <>{children}</>;
 }
 
 async function renderToBufferedString(

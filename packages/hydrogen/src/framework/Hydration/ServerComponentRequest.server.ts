@@ -48,6 +48,7 @@ export class ServerComponentRequest extends Request {
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
     preloadQueries: PreloadQueriesByURL;
+    analyticData: any;
     [key: string]: any;
   };
 
@@ -67,21 +68,25 @@ export class ServerComponentRequest extends Request {
       });
     }
 
+    const referer = this.headers.get('referer');
+
     this.time = getTime();
     this.id = generateId();
+    this.preloadURL =
+      this.isRscRequest() && referer && referer !== '' ? referer : this.url;
 
     this.ctx = {
       cache: new Map(),
       head: new HeadData({}),
       queryCacheControl: [],
       queryTimings: [],
+      analyticData: {
+        url: this.url,
+        normailizedRscUrl: this.preloadURL,
+      },
       preloadQueries: new Map(),
     };
     this.cookies = this.parseCookies();
-
-    const referer = this.headers.get('referer');
-    this.preloadURL =
-      this.isRscRequest() && referer && referer !== '' ? referer : this.url;
   }
 
   private parseCookies() {

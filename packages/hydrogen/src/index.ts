@@ -38,3 +38,5 @@ export {
   CacheMonths,
   CacheCustom,
 } from './framework/CachingStrategy';
+
+export {ServerAnalytics} from './foundation/AnalyticEventBus';

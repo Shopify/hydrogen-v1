@@ -3,7 +3,7 @@ import {useServerRequest} from '../ServerRequestProvider';
 import {FileRoutes} from './FileRoutes';
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import {Boomerang} from '../Boomerang/Boomerang.client';
-import AnalyticEventBus from '../AnalyticEventBus/AnalyticEventBus';
+import {ServerAnalytics} from '../AnalyticEventBus/';
 
 type RouterProps = {
   children: Array<ReactElement> | ReactElement;
@@ -32,7 +32,7 @@ function recurseChildren(
     if (child.type === FileRoutes) {
       const fileRoutingResult = child.type({...child.props, serverProps});
       if (fileRoutingResult)
-        AnalyticEventBus.publish('page-view', {
+        ServerAnalytics.pushToDatalayer({
           templateName: fileRoutingResult?.type.name,
         });
       return (
@@ -44,7 +44,7 @@ function recurseChildren(
     }
   }
 
-  AnalyticEventBus.publish('page-view', {templateName: 'fallback'});
+  ServerAnalytics.pushToDatalayer({templateName: 'fallback'});
 
   return (
     <>

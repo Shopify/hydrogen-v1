@@ -6,22 +6,26 @@ import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
+import AnalyticsListener from './components/AnalyticListener.client';
 
 function App({routes, ...serverProps}) {
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <CartProvider>
-          <DefaultSeo />
-          <Router
-            fallback={<NotFound response={serverProps.response} />}
-            serverProps={serverProps}
-          >
-            <FileRoutes routes={routes} />
-          </Router>
-        </CartProvider>
-      </ShopifyProvider>
-    </Suspense>
+    <>
+      <AnalyticsListener />
+      <Suspense fallback={<LoadingFallback />}>
+        <ShopifyProvider shopifyConfig={shopifyConfig}>
+          <CartProvider>
+            <DefaultSeo />
+            <Router
+              fallback={<NotFound response={serverProps.response} />}
+              serverProps={serverProps}
+            >
+              <FileRoutes routes={routes} />
+            </Router>
+          </CartProvider>
+        </ShopifyProvider>
+      </Suspense>
+    </>
   );
 }
 
