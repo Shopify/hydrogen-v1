@@ -28,6 +28,7 @@
     "marker.js",
     "middleware.js",
     "middleware.d.ts",
+    "src/storefront-api-types.ts",
     "web-polyfills.js"
   ],
   "scripts": {

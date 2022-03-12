@@ -7,7 +7,7 @@ import {TwitterSeo} from './TwitterSeo.client';
 import {ImageSeo} from './ImageSeo.client';
 
 import type {ProductSeoFragmentFragment} from './SeoFragment';
-import type {Scalars} from '../../graphql/types/types';
+import type {Scalars} from '../../storefront-api-types';
 
 export function ProductSeo({
   url,

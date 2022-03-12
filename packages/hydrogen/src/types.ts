@@ -2,7 +2,7 @@ import type {ServerResponse} from 'http';
 import type {Logger} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import type {Metafield, Image, MediaContentType} from './graphql/types/types';
+import type {Metafield, Image, MediaContentType} from './storefront-api-types';
 
 type CommonOptions = {
   App: any;

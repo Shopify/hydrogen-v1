@@ -1,6 +1,6 @@
 import React from 'react';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {CurrencyCode} from '../../../graphql/types/types';
+import {CurrencyCode} from '../../../storefront-api-types';
 import {getPrice} from '../../../utilities/tests/price';
 import {Money} from '../Money.client';
 import {Link} from '../../Link/index';

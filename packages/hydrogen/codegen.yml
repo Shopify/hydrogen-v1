@@ -12,13 +12,15 @@ documents:
   ]
 generates:
   # the base types that are generated
-  src/graphql/types/types.ts:
+  src/storefront-api-types.ts:
     plugins:
       - add:
           content:
             - '/** '
             - ' * THIS FILE IS AUTO-GENERATED, DO NOT EDIT'
+            - ' * Based on Storefront API 2022-04'
             - ' * If changes need to happen to the types defined in this file, then generally the Storefront API needs to update, and then you can run `yarn graphql-types`'
+            - ' * Except custom Scalars, which are defined in the `codegen.yml` file'
             - ' */'
       - typescript:
           useTypeImports: true
@@ -39,7 +41,7 @@ generates:
       documentMode: string
     presetConfig:
       # is the same as the base type file path above
-      baseTypesPath: graphql/types/types.ts
+      baseTypesPath: storefront-api-types.ts
       # perhaps think about changing the extension in the future?
       extension: .ts
     plugins:

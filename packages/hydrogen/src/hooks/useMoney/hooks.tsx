@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import {useShop} from '../../foundation/useShop';
-import {CurrencyCode, MoneyV2} from '../../graphql/types/types';
+import {CurrencyCode, MoneyV2} from '../../storefront-api-types';
 
 export type UseMoneyValue = {
   /**
