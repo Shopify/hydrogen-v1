@@ -15,7 +15,7 @@ describe('index', () => {
 
   it('should have the correct title', async () => {
     await hydrogen.visit('/');
-    const heading = await hydrogen.page.$('h1');
+    const heading = await hydrogen.page.waitForSelector('h1');
     expect(heading).not.toBeNull();
 
     const text = await hydrogen.page.evaluate((h1) => h1.textContent, heading);
