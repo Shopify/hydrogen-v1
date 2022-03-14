@@ -1,6 +1,6 @@
 ## Return value
 
-The `useQuery` returns an object with the following keys:
+The `useQuery` returns an object with the following key:
 
 | Key    | Description                     |
 | ------ | ------------------------------- |
