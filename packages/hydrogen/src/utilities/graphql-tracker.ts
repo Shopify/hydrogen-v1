@@ -1,18 +1,17 @@
 import type {ASTNode} from 'graphql';
-import type {Logger} from './log';
 
 export const TIMEOUT_MS = 2000;
 
 type TrackerParams = {
   query: ASTNode;
-  log: Logger;
   data: {data: unknown};
+  onUnusedData: (params: {queryName: string; properties: string[]}) => void;
 };
 
 function checkReadValues(
   map: Record<string, string>,
   query: TrackerParams['query'],
-  log: TrackerParams['log']
+  onUnusedData: TrackerParams['onUnusedData']
 ) {
   // Track all the selections that were fetched
   const selections: string[] = [];
@@ -49,17 +48,15 @@ function checkReadValues(
     const defs = (query as any)?.definitions;
     const queryName = defs && defs[0].name?.value;
 
-    log.warn(
-      `
-Potentially overfetching fields in GraphQL query: \`${queryName}\`.
-• ${unusedGraphQLFields.join(`\n• `)}
-Examine the list of fields above to confirm that they are being used.
-`
-    );
+    onUnusedData({queryName, properties: unusedGraphQLFields});
   }
 }
 
-export function wrapInGraphQLTracker<T>({query, data, log}: TrackerParams) {
+export function wrapInGraphQLTracker<T>({
+  query,
+  data,
+  onUnusedData,
+}: TrackerParams) {
   let readTimeout: ReturnType<typeof setTimeout>;
   // Create a map of read fields
   const readFieldsMap: Record<string | symbol, any> = {};
@@ -72,7 +69,7 @@ export function wrapInGraphQLTracker<T>({query, data, log}: TrackerParams) {
           if (!readFieldsMap[prop]) {
             clearTimeout(readTimeout);
             readTimeout = setTimeout(
-              () => checkReadValues(readFieldsMap, query, log),
+              () => checkReadValues(readFieldsMap, query, onUnusedData),
               TIMEOUT_MS
             );
           }

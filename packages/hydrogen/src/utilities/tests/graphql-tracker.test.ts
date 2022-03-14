@@ -1,7 +1,6 @@
 // eslint-disable-next-line node/no-extraneous-import
 import gql from 'graphql-tag';
 import {wrapInGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
-import type {Logger} from '../log';
 
 const query = gql`
   query shopName {
@@ -37,12 +36,13 @@ describe('GraphQL Tracker', () => {
   jest.useFakeTimers();
 
   it('warns about unused properties', () => {
-    const warnings = [] as string[];
-    const log = {
-      warn: (string: string) => warnings.push(string),
-    } as unknown as Logger;
+    let unusedData: null | {queryName: string; properties: string[]} = null;
 
-    const tracker = wrapInGraphQLTracker<typeof data>({query, data, log});
+    const tracker = wrapInGraphQLTracker<typeof data>({
+      query,
+      data,
+      onUnusedData: (params) => (unusedData = params),
+    });
 
     // Read stuff via destructuring or direct access
     tracker.data.shop.id + tracker.data.shop.name;
@@ -60,20 +60,21 @@ describe('GraphQL Tracker', () => {
 
     jest.advanceTimersByTime(TIMEOUT_MS / 2 + 100);
     // Not enough time since last read
-    expect(warnings.length).toEqual(0);
+    expect(unusedData).toBeFalsy();
     jest.advanceTimersByTime(TIMEOUT_MS / 2);
     // Enough time since last read
-    expect(warnings.length).toBeGreaterThan(0);
+    expect(unusedData).toBeTruthy();
 
-    const warning = warnings.join('\n');
-    expect(warning).toContain('shopName');
+    const {queryName, properties} = unusedData!;
 
-    expect(warning).toContain('description');
-    expect(warning).toContain('moneyFormat');
-    expect(warning).toContain('currencyCode');
+    expect(queryName).toEqual('shopName');
 
-    expect(warning).not.toContain('id');
-    expect(warning).not.toContain('name');
-    expect(warning).not.toContain('countryCode');
+    expect(properties).toContain('description');
+    expect(properties).toContain('moneyFormat');
+    expect(properties).toContain('currencyCode');
+
+    expect(properties).not.toContain('id');
+    expect(properties).not.toContain('name');
+    expect(properties).not.toContain('countryCode');
   });
 });

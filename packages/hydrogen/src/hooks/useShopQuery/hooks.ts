@@ -108,10 +108,22 @@ export function useShopQuery<T>({
     typeof query !== 'string' &&
     data?.data
   ) {
-    return wrapInGraphQLTracker({query, data, log}) as UseShopQueryResponse<T>;
+    return wrapInGraphQLTracker({
+      query,
+      data,
+      onUnusedData: ({queryName, properties}) => {
+        log.warn(
+          `
+Potentially overfetching fields in GraphQL query: \`${queryName}\`.
+• ${properties.join(`\n• `)}
+Examine the list of fields above to confirm that they are being used.
+`
+        );
+      },
+    });
   }
 
-  return data as UseShopQueryResponse<T>;
+  return data!;
 }
 
 function createShopRequest(body: string, locale?: string) {
