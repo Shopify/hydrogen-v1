@@ -24,6 +24,7 @@ export function publish(eventname: string, guardDup = false, payload?: any) {
   if (guardDup) {
     const eventGuard = guardDupEvents[namedspacedEventname];
     if (eventGuard && Date.now() - eventGuard < 10) {
+      console.log('Client analytic de-dup');
       guardDupEvents[namedspacedEventname] = Date.now();
       return;
     } else {
@@ -38,19 +39,21 @@ export function publish(eventname: string, guardDup = false, payload?: any) {
   }
 
   // Publish to server
-  fetch('/__event', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      eventname,
-      payload: {
-        ...combinedPayload,
-        referrer: window.document.referrer,
+  try {
+    fetch('/__event', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    }),
-  });
+      body: JSON.stringify({
+        eventname,
+        payload: {
+          ...combinedPayload,
+          referrer: window.document.referrer,
+        },
+      }),
+    });
+  } catch (error) {}
 }
 
 export function subscribe(

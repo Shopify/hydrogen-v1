@@ -45,11 +45,11 @@ import {
 import {RSC_PATHNAME, EVENT_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
+import {Analytics} from './foundation/AnalyticEventBus/Analytics.server';
+import {ServerAnalyticRoute} from './foundation/AnalyticEventBus/ServerAnalyticRoute.server';
 
 // Initialize analytic connector
 import './foundation/AnalyticEventBus/connectors/Shopify.server';
-import {Analytics} from './foundation/AnalyticEventBus/Analytics.server';
-import {ServerAnalyticRoute} from './foundation/AnalyticEventBus/ServerAnalyticRoute.server';
 
 declare global {
   // This is provided by a Vite plugin

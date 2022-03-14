@@ -14,17 +14,16 @@ export function Analytics({
 }: {
   analyticDataFromServer: any;
 }) {
-  ClientAnalytics.pushToDatalayer(analyticDataFromServer);
-
   // Make AnalyticEventBus available in the client browser
-  useEffect(() => {
-    (function () {
-      window.Shopify = window.Shopify || {};
-      window.Shopify.Analytics = window.Shopify.Analytics || ClientAnalytics;
-    })();
-  }, [ClientAnalytics]);
+  // useEffect(() => {
+  //   (function () {
+  //     window.Shopify = window.Shopify || {};
+  //     window.Shopify.Analytics = window.Shopify.Analytics || ClientAnalytics;
+  //   })();
+  // }, [ClientAnalytics]);
 
   useEffect(() => {
+    ClientAnalytics.pushToDatalayer(analyticDataFromServer);
     ClientAnalytics.publish('page-view', true);
   }, [analyticDataFromServer]);
 
