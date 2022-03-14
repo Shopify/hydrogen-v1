@@ -99,7 +99,123 @@ fragment ProductProviderFragment on Product {
   variants(first: $numProductVariants) {
     edges {
       node {
-        ...VariantFragment
+        id
+        title
+        availableForSale
+        image {
+          id
+          url
+          altText
+          width
+          height
+        }
+        unitPriceMeasurement {
+          measuredType
+          quantityUnit
+          quantityValue
+          referenceUnit
+          referenceValue
+        }
+        unitPrice {
+          currencyCode
+          amount
+        }
+        priceV2 {
+          currencyCode
+          amount
+        }
+        compareAtPriceV2 {
+          currencyCode
+          amount
+        }
+        selectedOptions {
+          name
+          value
+        }
+        metafields(first: $numProductVariantMetafields) {
+          edges {
+            node {
+              id
+              type
+              namespace
+              key
+              value
+              createdAt
+              updatedAt
+              description
+              reference @include(if: $includeReferenceMetafieldDetails) {
+                __typename
+                ... on MediaImage {
+                  id
+                  mediaContentType
+                  image {
+                    id
+                    url
+                    altText
+                    width
+                    height
+                  }
+                }
+              }
+            }
+          }
+        }
+        sellingPlanAllocations(
+          first: $numProductVariantSellingPlanAllocations
+        ) {
+          edges {
+            node {
+              priceAdjustments {
+                compareAtPrice {
+                  currencyCode
+                  amount
+                }
+                perDeliveryPrice {
+                  currencyCode
+                  amount
+                }
+                price {
+                  currencyCode
+                  amount
+                }
+                unitPrice {
+                  currencyCode
+                  amount
+                }
+              }
+              sellingPlan {
+                id
+                description
+                name
+                options {
+                  name
+                  value
+                }
+                priceAdjustments {
+                  orderCount
+                  adjustmentValue {
+                    ... on SellingPlanFixedAmountPriceAdjustment {
+                      adjustmentAmount {
+                        currencyCode
+                        amount
+                      }
+                    }
+                    ... on SellingPlanFixedPriceAdjustment {
+                      price {
+                        currencyCode
+                        amount
+                      }
+                    }
+                    ... on SellingPlanPercentagePriceAdjustment {
+                      adjustmentPercentage
+                    }
+                  }
+                }
+                recurringDeliveries
+              }
+            }
+          }
+        }
       }
     }
   }

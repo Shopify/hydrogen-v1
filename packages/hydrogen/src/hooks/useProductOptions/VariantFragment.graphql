@@ -1,7 +1,3 @@
-#import './SellingPlanFragment.graphql'
-#import '../../components/Money/MoneyFragment.graphql'
-#import '../../components/Image/ImageFragment.graphql'
-
 fragment VariantFragment on ProductVariant {
   id
   title
