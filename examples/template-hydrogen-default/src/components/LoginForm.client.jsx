@@ -11,6 +11,7 @@ export function LoginForm() {
     fields: {email, password},
     submit,
     dirty,
+    submitErrors,
   } = useForm({
     fields: {
       email: useField({
@@ -23,17 +24,15 @@ export function LoginForm() {
       }),
     },
     onSubmit: async (fieldValues) => {
-      const {loginSuccess, error} = await callLoginApi({
+      const response = await callLoginApi({
         email: fieldValues.email,
         password: fieldValues.password,
       });
 
-      if (loginSuccess) {
-        console.log('Login success!');
-        return submitSuccess();
+      if (response.error) {
+        return submitFail([{message: 'Incorrect email or password.'}]);
       } else {
-        console.log('Login fail', error);
-        return submitFail();
+        return submitSuccess();
       }
     },
   });
@@ -45,6 +44,15 @@ export function LoginForm() {
       className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4"
       onSubmit={submit}
     >
+      {submitErrors.length > 0 && (
+        <div className="flex items-center justify-between mb-6">
+          {submitErrors.map((error) => (
+            <p key={error} className="text-red-500 text-xs italic">
+              {error}
+            </p>
+          ))}
+        </div>
+      )}
       <div className="mb-6">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
@@ -124,7 +132,13 @@ export function callLoginApi({email, password}) {
     },
     body: JSON.stringify({email, password}),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 200) {
+        return {};
+      } else {
+        return res.json();
+      }
+    })
     .catch((error) => {
       return {
         error: error.toString(),
