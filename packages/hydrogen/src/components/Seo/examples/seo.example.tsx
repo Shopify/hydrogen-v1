@@ -14,8 +14,8 @@ const QUERY = gql`
   }
 `;
 
-export default function Page({useRouteParams}) {
-  const {handle} = useRouteParams;
+export default function Page() {
+  const {handle} = useRouteParams();
   const {data} = useShopQuery({query: QUERY, variables: {handle}});
 
   if (!data.pageByHandle) {
