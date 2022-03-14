@@ -3,7 +3,7 @@ import type {
   DefaultPageSeoFragmentFragment,
   HomeSeoFragmentFragment,
 } from './SeoFragment';
-import type {Scalars} from '../../graphql/types/types';
+import type {Scalars} from '../../storefront-api-types';
 
 export interface Twitter {
   site: string;

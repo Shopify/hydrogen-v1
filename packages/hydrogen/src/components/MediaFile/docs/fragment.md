@@ -7,7 +7,11 @@ fragment MediaFileFragment on Media {
   ... on MediaImage {
     mediaContentType
     image {
-      ...ImageFragment
+      id
+      url
+      altText
+      width
+      height
     }
   }
   ... on Video {

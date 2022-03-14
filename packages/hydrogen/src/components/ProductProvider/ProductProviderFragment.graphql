@@ -1,16 +1,12 @@
-#import '../MediaFile/MediaFileFragment.graphql'
-#import '../Metafield/MetafieldFragment.graphql'
-#import '../../hooks/useProductOptions/VariantFragment.graphql'
-#import '../../hooks/useProductOptions/SellingPlanGroupsFragment.graphql'
-#import '../Money/MoneyFragment.graphql'
-
 fragment ProductProviderFragment on Product {
   compareAtPriceRange {
     maxVariantPrice {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
     minVariantPrice {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
   }
   descriptionHtml
@@ -32,10 +28,12 @@ fragment ProductProviderFragment on Product {
   }
   priceRange {
     maxVariantPrice {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
     minVariantPrice {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
   }
   title

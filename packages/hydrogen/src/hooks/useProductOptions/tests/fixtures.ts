@@ -1,7 +1,7 @@
 import {
   CurrencyCode,
   SellingPlanAllocationConnection,
-} from '../../../graphql/types/types';
+} from '../../../storefront-api-types';
 import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement';
 
 const priceV2 = {

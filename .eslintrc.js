@@ -1,7 +1,7 @@
 // @ts-check
 
 module.exports = {
-  ignorePatterns: ['**/graphql/types/types.ts'],
+  ignorePatterns: ['**/storefront-api-types.ts'],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
   extends: ['plugin:node/recommended', 'plugin:hydrogen/typescript'],

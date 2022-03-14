@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useShop} from '../../foundation';
 import {flattenConnection} from '../../utilities';
-import {CartInput} from '../../graphql/types/types';
+import {CartInput} from '../../storefront-api-types';
 import {CartCreate} from '../../graphql/graphql-constants';
 import {
   CartCreateMutation,

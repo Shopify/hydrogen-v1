@@ -4,7 +4,7 @@ import {mount} from '@shopify/react-testing';
 import {flattenConnection} from '../../../utilities';
 import {CartContext} from '../context';
 import {CART_WITH_LINES} from './fixtures';
-import type {CartLineInput} from '../../../graphql/types/types';
+import type {CartLineInput} from '../../../storefront-api-types';
 
 import {CartProvider} from '../CartProvider.client';
 

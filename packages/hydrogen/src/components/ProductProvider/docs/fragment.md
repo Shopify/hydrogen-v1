@@ -6,10 +6,12 @@ The following GraphQL fragment is available for your GraphQL queries using `Prod
 fragment ProductProviderFragment on Product {
   compareAtPriceRange {
     maxVariantPrice {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
     minVariantPrice {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
   }
   descriptionHtml
@@ -31,10 +33,12 @@ fragment ProductProviderFragment on Product {
   }
   priceRange {
     maxVariantPrice {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
     minVariantPrice {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
   }
   title

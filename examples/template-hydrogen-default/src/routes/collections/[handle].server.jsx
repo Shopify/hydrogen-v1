@@ -1,7 +1,6 @@
 import {useShopQuery, flattenConnection, Seo} from '@shopify/hydrogen';
 import {
   ProductProviderFragment,
-  CollectionSeoFragment,
 } from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
@@ -80,7 +79,18 @@ const QUERY = gql`
       id
       title
       descriptionHtml
-      ...CollectionSeoFragment
+      description
+      seo {
+        description
+        title
+      }
+      image {
+        id
+        url
+        width
+        height
+        altText
+      }
       products(first: $numProducts) {
         edges {
           node {
@@ -95,6 +105,5 @@ const QUERY = gql`
     }
   }
 
-  ${CollectionSeoFragment}
   ${ProductProviderFragment}
 `;

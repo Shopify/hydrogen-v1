@@ -3,7 +3,7 @@ import {CartLineProvider} from '../../CartLineProvider';
 import {CartLinePrice} from '../CartLinePrice.client';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {Money} from '../../Money';
-import {CurrencyCode} from '../../../graphql/types/types';
+import {CurrencyCode} from '../../../storefront-api-types';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('<CartLinePrice />', () => {

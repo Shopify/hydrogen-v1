@@ -1,15 +1,16 @@
 /** Storefront API images */
 
 import {Image} from '@shopify/hydrogen';
-import {ImageFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${ImageFragment}
-
   productByHandle(handle: "my-product") {
     featuredImage {
-      ...ImageFragment
+      id
+      url
+      altText
+      width
+      height
     }
   }
 `;
