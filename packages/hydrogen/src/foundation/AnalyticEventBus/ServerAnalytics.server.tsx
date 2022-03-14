@@ -7,13 +7,7 @@ let subscribers: Subscribers = {};
 
 export function pushToDatalayer(data: any): void {
   const request = useServerRequest();
-  request.ctx.analyticData = Object.assign(
-    {
-      pageId: request.id,
-    },
-    request.ctx.analyticData,
-    data
-  );
+  request.ctx.analyticData = Object.assign({}, request.ctx.analyticData, data);
 }
 
 export function getDatalayer(): any {

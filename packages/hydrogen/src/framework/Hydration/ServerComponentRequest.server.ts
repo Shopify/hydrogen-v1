@@ -81,6 +81,7 @@ export class ServerComponentRequest extends Request {
       queryCacheControl: [],
       queryTimings: [],
       analyticData: {
+        pageId: this.id,
         url: this.url,
         normailizedRscUrl: this.preloadURL,
       },
