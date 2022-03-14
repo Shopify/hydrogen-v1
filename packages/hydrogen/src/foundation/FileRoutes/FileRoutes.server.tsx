@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {Suspense, useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
 import {log} from '../../utilities/log';
 import {useServerRequest} from '../ServerRequestProvider';
@@ -52,10 +52,12 @@ export function FileRoutes({
     request.ctx.router.routeParams = foundRouteDetails.params;
     return (
       <RouteParamsProvider routeParams={foundRouteDetails.params}>
-        <foundRoute.component
-          params={foundRouteDetails.params}
-          {...serverProps}
-        />
+        <Suspense fallback={null}>
+          <foundRoute.component
+            params={foundRouteDetails.params}
+            {...serverProps}
+          />
+        </Suspense>
       </RouteParamsProvider>
     );
   }
