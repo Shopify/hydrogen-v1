@@ -183,7 +183,28 @@ fragment VariantFragment on ProductVariant {
   metafields(first: $numProductVariantMetafields) {
     edges {
       node {
-        ...MetafieldFragment
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference @include(if: $includeReferenceMetafieldDetails) {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
       }
     }
   }
