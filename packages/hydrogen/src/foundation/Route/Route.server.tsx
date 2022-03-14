@@ -1,4 +1,4 @@
-import React, {cloneElement, ReactElement} from 'react';
+import React, {cloneElement, ReactElement, Suspense} from 'react';
 import {useServerRequest} from '../ServerRequestProvider';
 import {matchPath} from '../../utilities/matchPath';
 import {Boomerang} from '../Boomerang/Boomerang.client';
@@ -39,8 +39,10 @@ export function Route({path, page}: RouteProps): ReactElement | null {
 
     return (
       <RouteParamsProvider routeParams={match.params}>
-        {cloneElement(page, {params: match.params || {}, ...serverProps})}
-        {name ? <Boomerang pageTemplate={name} /> : null}
+        <Suspense fallback={null}>
+          {cloneElement(page, {params: match.params || {}, ...serverProps})}
+          {name ? <Boomerang pageTemplate={name} /> : null}
+        </Suspense>
       </RouteParamsProvider>
     );
   }
