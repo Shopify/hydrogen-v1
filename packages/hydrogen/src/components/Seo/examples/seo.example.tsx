@@ -1,4 +1,4 @@
-import {Seo, useShopQuery} from '@shopify/hydrogen';
+import {Seo, useShopQuery, useRouteParams} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
@@ -7,14 +7,15 @@ const QUERY = gql`
       title
       body
       seo {
-        ...SeoFragment
+        title
+        description
       }
     }
   }
 `;
 
-export default function Page({params}) {
-  const {handle} = params;
+export default function Page({useRouteParams}) {
+  const {handle} = useRouteParams;
   const {data} = useShopQuery({query: QUERY, variables: {handle}});
 
   if (!data.pageByHandle) {

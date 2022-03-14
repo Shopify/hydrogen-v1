@@ -35,8 +35,8 @@ The `handle` property is passed directly to the root server component `/routes/p
 {% codeblock file, filename: '[handle].server.jsx' %}
 
 ```jsx
-export default function Product({params}) {
-  const {handle} = params;
+export default function Product() {
+  const {handle} = useRouteParams;
   return <div>{handle}</div>;
 }
 ```

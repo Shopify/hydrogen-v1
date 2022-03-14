@@ -65,7 +65,7 @@ export default function ExternalImageWithLoader() {
 
 | Name           | Type                                             | Description                                                                                                                                                                                          |
 | -------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data           | <code>ImageFragmentFragment</code>               | An object with keys that correspond to the Storefront API's [Image object](/api/storefront/reference/common-objects/image).                                                                          |
+| data           | [GraphQL query](#storefront-api-data)            | An object with fields that correspond to the Storefront API's [Image object](/api/storefront/reference/common-objects/image).                                                                        |
 | options?       | <code>ImageSizeOptions</code>                    | An object of image size options for Shopify CDN images.                                                                                                                                              |
 | src            | <code>string</code>                              | A URL string. This string can be an absolute path or a relative path depending on the `loader`.                                                                                                      |
 | width          | <code>number</code>                              | The integer value for the width of the image. This is a required prop when `src` is present.                                                                                                         |
@@ -77,12 +77,12 @@ export default function ExternalImageWithLoader() {
 
 The `Image` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL queries using `ImageFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `Image` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [Image object](/api/storefront/reference/common-objects/image):
 
 ```graphql
-fragment ImageFragment on Image {
+{
   id
   url
   altText

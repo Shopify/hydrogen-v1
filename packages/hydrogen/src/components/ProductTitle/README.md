@@ -22,7 +22,7 @@ export function Product({product}) {
 
 | Name | Type              | Description                                                                                     |
 | ---- | ----------------- | ----------------------------------------------------------------------------------------------- |
-| `as` | <code>TTag</code> | An HTML tag to wrap the title. If not specified, then the title is wrapped in a `span` element. |
+| as   | <code>TTag</code> | An HTML tag to wrap the title. If not specified, then the title is wrapped in a `span` element. |
 
 ## Component type
 

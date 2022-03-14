@@ -13,7 +13,7 @@ import type {
 import type {PartialDeep} from 'type-fest';
 
 export interface MediaFileProps {
-  /** An object with keys that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). */
+  /** An object with fields that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). */
   data: PartialDeep<MediaEdgeType['node']>;
   /** The options for the `Image`, `Video`, or `ExternalVideo` components. */
   options?:

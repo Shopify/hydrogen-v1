@@ -46,22 +46,22 @@ export default function Product() {
 
 ## Props
 
-| Name        | Type                                                      | Description                                                                                                                     |
-| ----------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| data        | <code>UnitPriceFragmentFragment['unitPrice']</code>       | An object with keys that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
-| measurement | <code>UnitPriceMeasurement['unitPriceMeasurement']</code> | A [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement).                                       |
-| as?         | <code>TTag</code>                                         | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                   |
+| Name        | Type                                                      | Description                                                                                                                       |
+| ----------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| data        | [GraphQL query](#storefront-api-data)                     | An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
+| measurement | <code>UnitPriceMeasurement['unitPriceMeasurement']</code> | A [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement).                                         |
+| as?         | <code>TTag</code>                                         | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                     |
 
 ## Component type
 
 The `UnitPrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL query using `UnitPriceFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `UnitPrice` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2):
 
 ```graphql
-fragment UnitPriceFragment on ProductVariant {
+{
   unitPriceMeasurement {
     measuredType
     quantityUnit

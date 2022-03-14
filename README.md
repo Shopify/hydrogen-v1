@@ -30,13 +30,13 @@ Spin up a Hydrogen app in your browser with our [playground](https://hydrogen.ne
 
 ```bash
 # Using `yarn`
-yarn create hydrogen-app
+yarn add @shopify/hydrogen@rc1
 
 # Using `npm`
-npm init hydrogen-app@latest
+npm init hydrogen-app@rc1
 
 # Using `npx`
-npx create-hydrogen-app
+npx create-hydrogen-app@rc1
 ```
 
 **Running locally:**

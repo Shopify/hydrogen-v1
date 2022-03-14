@@ -55,7 +55,7 @@ export default function MyProductModel() {
 | Name                        | Type                                                           | Description                                                                                                                                                                                                                                                                                                                                                                         |
 | --------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | children?                   | <code>ReactNode</code>                                         | Any ReactNode elements.                                                                                                                                                                                                                                                                                                                                                             |
-| data                        | <code>Model3DFragmentFragment</code>                           | An object with keys that correspond to the Storefront API's [Model3D object](/api/storefront/latest/objects/model3d).                                                                                                                                                                                                                                                               |
+| data                        | [GraphQL query](#storefront-api-data)                          | An object with fields that correspond to the Storefront API's [Model3D object](/api/storefront/latest/objects/model3d).                                                                                                                                                                                                                                                             |
 | loading?                    | <code>"auto" &#124; "lazy" &#124; "eager"</code>               | A string of either `auto`, `lazy`, or `eager` to indicate the conditions for preloading. Refer to [loading in the &lt;model-viewer&gt; documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-loading).                                                                                                                                                |
 | poster?                     | <code>string</code>                                            | A URL to display an image instead of the model. This is useful for showing the user something before a model is loaded and ready to render. If no URL is provided, then [Model3d.previewImage](/api/storefront/latest/objects/model3d) is used. Refer to [poster in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-poster). |
 | reveal?                     | <code>"auto" &#124; "interaction" &#124; "manual"</code>       | A string of either `auto`, `interaction`, or `manual` to indicate when the model should be revealed. Refer to [reveal in the &lt;model-viewer&gt; documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-reveal).                                                                                                                                      |
@@ -113,12 +113,12 @@ export default function MyProductModel() {
 
 The `ModelViewer` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL query using `Model3DFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `Model3D` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [Model3D object](/api/storefront/latest/objects/model3d):
 
 ```graphql
-fragment Model3DFragment on Model3d {
+{
   id
   alt
   mediaContentType

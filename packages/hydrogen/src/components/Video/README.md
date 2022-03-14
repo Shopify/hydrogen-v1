@@ -51,21 +51,21 @@ export default function MyProductVideo() {
 
 ## Props
 
-| Name     | Type                               | Description                                                                                                       |
-| -------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| data     | <code>VideoFragmentFragment</code> | An object with keys that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). |
-| options? | <code>ImageSizeOptions</code>      | An object of image size options for the video's `previewImage`.                                                   |
+| Name     | Type                                  | Description                                                                                                         |
+| -------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| data     | [GraphQL query](#storefront-api-data) | An object with fields that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). |
+| options? | <code>ImageSizeOptions</code>         | An object of image size options for the video's `previewImage`.                                                     |
 
 ## Component type
 
 The `Video` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL queries using `VideoFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `Video` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video):
 
 ```graphql
-fragment VideoFragment on Video {
+{
   id
   previewImage {
     url

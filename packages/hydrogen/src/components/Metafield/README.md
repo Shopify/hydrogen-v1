@@ -20,10 +20,10 @@ export function Product({product}) {
 
 ## Props
 
-| Name | Type                                   | Description                                                                                                                               |
-| ---- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| data | <code>MetafieldFragmentFragment</code> | An object with keys that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield).       |
-| as?  | <code>TTag</code>                      | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/types). |
+| Name | Type                                  | Description                                                                                                                               |
+| ---- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| data | [GraphQL query](#storefront-api-data) | An object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield).     |
+| as?  | <code>TTag</code>                     | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/types). |
 
 ## Default output
 
@@ -58,12 +58,12 @@ The `Metafield` components provides the Metafield object with a `value` that was
 
 The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL query using `MetafieldFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `Metafield` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield):
 
 ```graphql
-fragment MetafieldFragment on Metafield {
+{
   id
   type
   namespace
@@ -91,7 +91,7 @@ fragment MetafieldFragment on Metafield {
 
 ### Variables
 
-The `MetafieldFragment` includes variables that you will need to provide values for when performing your query.
+The [Metafield object](/api/storefront/reference/common-objects/metafield) includes variables that you will need to provide values for when performing your query.
 
 | Variable                            | Description                                                                                                                                                                        |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

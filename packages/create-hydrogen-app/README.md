@@ -3,11 +3,11 @@
 Create a new [Hydrogen](https://www.npmjs.com/package/@shopify/hydrogen) project:
 
 ```bash
-npm init hydrogen-app@latest
+npm init hydrogen-app@rc1
 ```
 
 Or with yarn:
 
 ```bash
-yarn create hydrogen-app
+yarn add @shopify/hydrogen@rc1
 ```

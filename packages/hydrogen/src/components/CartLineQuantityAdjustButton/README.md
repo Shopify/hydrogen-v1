@@ -33,6 +33,13 @@ export function App() {
 }
 ```
 
+## Props
+
+| Name     | Type                                                      | Description                                                                                             |
+| -------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| adjust   | <code>"increase" &#124; "decrease" &#124; "remove"</code> | The adjustment for a cart line's quantity. Valid values: `increase` (default), `decrease`, or `remove`. |
+| children | <code>ReactNode</code>                                    | Any `ReactNode` elements.                                                                               |
+
 ## Component type
 
 The `CartLineQuantityAdjustButton` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).

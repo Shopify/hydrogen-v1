@@ -1,9 +1,9 @@
-## GraphQL fragment
+## Storefront API data
 
-The following GraphQL fragment is available for your GraphQL queries using `ProductProviderFragment` from `@shopify/hydrogen/fragments`. Using this fragment in your queries ensures that you have all the data necessary for using the `ProductProvider`.
+The `data` prop is an object with fields that correspond to the Storefront API's [Product object](/api/storefront/reference/products/product):
 
 ```graphql
-fragment ProductProviderFragment on Product {
+{
   compareAtPriceRange {
     maxVariantPrice {
       currencyCode
@@ -275,7 +275,7 @@ fragment ProductProviderFragment on Product {
 
 ### Variables
 
-The `ProductProviderFragment` includes variables that you will need to provide values for when performing your query.
+The [Product object](/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
 
 | Variable                                   | Description                                                                                           |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
@@ -332,7 +332,8 @@ const QUERY = gql`
       id
       vendor
       seo {
-        ...SeoFragment
+        title
+        description
       }
       featuredImage {
         url

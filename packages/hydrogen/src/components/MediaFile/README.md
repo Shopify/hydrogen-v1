@@ -87,21 +87,21 @@ export function MyComponent() {
 
 ## Props
 
-| Name     | Type                                                | Description                                                                                                           |
-| -------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------- |
-| data     | <code>MediaFileFragmentFragment</code>              | An object with keys that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). |
-| options? | <code>React.ComponentProps<typeof Video>['options'] | React.ComponentProps<typeof ExternalVideo>['options']                                                                 | React.ComponentProps<typeof Image>['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components. |
+| Name     | Type                                                                                                                                                                                                                           | Description                                                                                                             |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| data     | [GraphQL query](#storefront-api-data)                                                                                                                                                                                          | An object with fields that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). |
+| options? | <code>React.ComponentProps&#60;typeof Video&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof ExternalVideo&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof Image&#62;['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components.                                                    |
 
 ## Component type
 
 The `MediaFile` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL query using `MediaFileFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `MediaFile` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media):
 
 ```graphql
-fragment MediaFileFragment on Media {
+{
   ... on MediaImage {
     mediaContentType
     image {
