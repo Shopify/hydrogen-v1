@@ -1,7 +1,5 @@
 import {useShopQuery, flattenConnection, Seo} from '@shopify/hydrogen';
-import {
-  ProductProviderFragment,
-} from '@shopify/hydrogen/fragments';
+import {ProductProviderFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';

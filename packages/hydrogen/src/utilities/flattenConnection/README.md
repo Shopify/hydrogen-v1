@@ -11,7 +11,6 @@ import {
   useShopQuery,
   MediaFile,
 } from '@shopify/hydrogen/client';
-import {MediaFileFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
@@ -20,13 +19,50 @@ const QUERY = gql`
       media(first: 10) {
         edges {
           node {
-            ...MediaFileFragment
+            ... on MediaImage {
+              mediaContentType
+              image {
+                id
+                url
+                altText
+                width
+                height
+              }
+            }
+            ... on Video {
+              mediaContentType
+              id
+              previewImage {
+                url
+              }
+              sources {
+                mimeType
+                url
+              }
+            }
+            ... on ExternalVideo {
+              mediaContentType
+              id
+              embedUrl
+              host
+            }
+            ... on Model3d {
+              mediaContentType
+              id
+              alt
+              mediaContentType
+              previewImage {
+                url
+              }
+              sources {
+                url
+              }
+            }
           }
         }
       }
     }
   }
-  ${MediaFileFragment}
 `;
 export function Product({handle}) {
   const {data} = useShopQuery({query: QUERY, variables: {handle}});
