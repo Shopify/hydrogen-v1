@@ -36,6 +36,8 @@ export function graphiqlMiddleware({
   };
 }
 
+let entrypointError: Error | null = null;
+
 /**
  * Provides middleware to Node.js Express-like servers. Used by the Hydrogen
  * Vite dev server plugin as well as production Node.js implementation.
@@ -64,8 +66,31 @@ export function hydrogenMiddleware({
     try {
       await webPolyfills;
 
-      const entrypoint = await getServerEntrypoint();
-      const handleRequest: RequestHandler = entrypoint.default ?? entrypoint;
+      const entrypoint = await Promise.resolve(getServerEntrypoint()).catch(
+        (error: Error) => {
+          // Errors are only thrown the first time we try to load the entry point.
+          // After refreshing the browser, this just loads an empty module
+          // and doesn't throw anymore. Store this error in the outer scope
+          // to keep throwing it on refresh until things are fixed.
+          entrypointError = error;
+        }
+      );
+
+      const handleRequest: RequestHandler = entrypoint?.default ?? entrypoint;
+
+      if (typeof handleRequest !== 'function') {
+        if (entrypointError) {
+          throw entrypointError;
+        } else {
+          // This means there is no error when loading the entry point but
+          // we are still not getting a function as the default export.
+          throw new Error(
+            'Something is wrong in your project. Make sure to add "export default renderHydrogen(...)" in your server entry file.'
+          );
+        }
+      }
+
+      entrypointError = null;
 
       const eventResponse = await handleRequest(request, {
         dev,
@@ -93,7 +118,6 @@ export function hydrogenMiddleware({
       }
     } catch (e: any) {
       if (dev && devServer) devServer.ssrFixStacktrace(e);
-      console.log(e.stack);
       response.statusCode = 500;
 
       /**
