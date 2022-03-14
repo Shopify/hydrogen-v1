@@ -42,13 +42,14 @@ import {
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME} from './constants';
+import {RSC_PATHNAME, EVENT_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 
 // Initialize analytic connector
 import './foundation/AnalyticEventBus/connectors/Shopify.server';
 import {Analytics} from './foundation/AnalyticEventBus/Analytics.server';
+import {ServerAnalyticRoute} from './foundation/AnalyticEventBus/ServerAnalyticRoute.server';
 
 declare global {
   // This is provided by a Vite plugin
@@ -80,8 +81,6 @@ export const renderHydrogen = (
   App: any,
   {shopifyConfig, routes}: ServerHandlerConfig
 ) => {
-  console.log(routes);
-
   const handleRequest: RequestHandler = async function (
     rawRequest,
     {indexTemplate, streamableResponse, dev, cache, context, nonce}
@@ -97,6 +96,10 @@ export const renderHydrogen = (
     setCache(cache);
     setContext(context);
     setConfig({dev});
+
+    if (url.pathname === EVENT_PATHNAME) {
+      return ServerAnalyticRoute(request);
+    }
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 

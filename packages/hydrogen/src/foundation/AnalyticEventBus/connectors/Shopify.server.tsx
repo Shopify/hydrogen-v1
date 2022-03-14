@@ -1,5 +1,5 @@
 import {ServerAnalytics} from '../index';
 
 ServerAnalytics.subscribe('page-view', (payload: any) => {
-  console.log(Object.assign({}, payload));
+  console.log('page-view', Object.assign({}, payload));
 });

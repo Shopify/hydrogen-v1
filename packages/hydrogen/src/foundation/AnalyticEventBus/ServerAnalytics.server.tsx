@@ -21,7 +21,7 @@ export function publish(eventname: string, payload?: any) {
 
   if (subs) {
     Object.keys(subs).forEach((key) => {
-      subs[key](Object.assign({}, getDatalayer(), payload));
+      subs[key](Object.assign({}, payload));
     });
   }
 }
