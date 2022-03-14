@@ -1,6 +1,5 @@
 import {useShopQuery, flattenConnection, Seo} from '@shopify/hydrogen';
 import {
-  MediaFileFragment,
   ProductProviderFragment,
 } from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
@@ -106,6 +105,5 @@ const QUERY = gql`
     }
   }
 
-  ${MediaFileFragment}
   ${ProductProviderFragment}
 `;

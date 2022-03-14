@@ -6,11 +6,9 @@ The `Video` component renders a `video` for the Storefront API's [Video object](
 
 ```tsx
 import {Video} from '@shopify/hydrogen';
-import {VideoFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${VideoFragment}
   query Products {
     products(first: 5) {
       edges {
@@ -23,7 +21,14 @@ const QUERY = gql`
               node {
                 ... on Video {
                   mediaContentType
-                  ...VideoFragment
+                  id
+                  previewImage {
+                    url
+                  }
+                  sources {
+                    mimeType
+                    url
+                  }
                 }
               }
             }
