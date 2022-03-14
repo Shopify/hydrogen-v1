@@ -170,14 +170,14 @@ const QUERY = gql`
     shop {
       name
     }
-    products(first: 250) {
+    products(first: 3) {
       edges {
         node {
           handle
         }
       }
     }
-    collections(first: 250) {
+    collections(first: 3) {
       edges {
         node {
           handle
