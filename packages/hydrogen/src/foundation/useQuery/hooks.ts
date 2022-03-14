@@ -41,7 +41,10 @@ export function useQuery<T>(
   queryOptions?: HydrogenUseQueryOptions
 ) {
   const request = useServerRequest();
-  const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
+  const withCacheIdKey = [
+    '__QUERY_CACHE_ID__',
+    ...(typeof key === 'string' ? [key] : key),
+  ];
   const fetcher = cachedQueryFnBuilder<T>(
     withCacheIdKey,
     queryFn,
