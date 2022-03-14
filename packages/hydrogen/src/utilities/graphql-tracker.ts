@@ -8,8 +8,6 @@ type TrackerParams = {
 };
 
 export function wrapInGraphQLTracker<T>({query, data, log}: TrackerParams) {
-  if (!import.meta.env.DEV) return;
-
   // Create a map of read fields
   const readFieldsMap: Record<string | symbol, any> = {};
 
@@ -75,5 +73,5 @@ Examine the list of fields above to confirm that they are being used.
     }
   }, 2000);
 
-  return dataProxy;
+  return dataProxy as T;
 }
