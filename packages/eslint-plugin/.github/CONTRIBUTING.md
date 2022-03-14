@@ -13,18 +13,18 @@ All changes should have tests and documentation.
 
 ## Test changes in the starter template
 
-Before submitting a PR you can test your changes in the starter template by replacing the contents of `packages/dev/.eslintrc.js` with:
+Before submitting a PR please test your changes in one of the hydrogen templates in the top-level `/examples` folder in this repo. 
+
+To do this you must first run `yarn link` from within the `packages/eslint-plugin` folder. 
+
+Then make sure the ESLint configuration  (`.eslintrc.js`) inside the template is extending from this plugin. For example, to test in the `template-hydrogen-default`, the `/examples/template-hydrogen-default/.eslintrc.js` should look something like this:
 
 ```js
+// example: /examples/template-hydrogen-default/.eslintrc.js`
+
 module.exports = {
   extends: ['plugin:hydrogen/recommended'],
 };
 ```
 
-And then modifying the `lint:js` task in `packages/dev/package.json` to be:
-
-```json
-    "lint:js": "eslint --rulesdir '../eslint-plugin/dist/' --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src",
-```
-
-Finally, run `yarn lint:js` from the root of that package.
+Then run `yarn link eslint-plugin-hydrogen` and `yarn lint:js` from within the example template (example: `/examples/template-hydrogen-default`).
