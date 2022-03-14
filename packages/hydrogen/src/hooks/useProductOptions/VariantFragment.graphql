@@ -1,7 +1,6 @@
 #import './SellingPlanFragment.graphql'
 #import '../../components/Money/MoneyFragment.graphql'
 #import '../../components/Image/ImageFragment.graphql'
-#import '../../components/UnitPrice/UnitPriceFragment.graphql'
 
 fragment VariantFragment on ProductVariant {
   id
@@ -14,7 +13,17 @@ fragment VariantFragment on ProductVariant {
     width
     height
   }
-  ...UnitPriceFragment
+  unitPriceMeasurement {
+    measuredType
+    quantityUnit
+    quantityValue
+    referenceUnit
+    referenceValue
+  }
+  unitPrice {
+    currencyCode
+    amount
+  }
   priceV2 {
     currencyCode
     amount

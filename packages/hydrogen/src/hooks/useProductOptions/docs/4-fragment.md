@@ -14,7 +14,17 @@ fragment VariantFragment on ProductVariant {
     width
     height
   }
-  ...UnitPriceFragment
+  unitPriceMeasurement {
+    measuredType
+    quantityUnit
+    quantityValue
+    referenceUnit
+    referenceValue
+  }
+  unitPrice {
+    currencyCode
+    amount
+  }
   priceV2 {
     currencyCode
     amount
