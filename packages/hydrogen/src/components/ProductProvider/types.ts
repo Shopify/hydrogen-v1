@@ -2,7 +2,7 @@ import {SellingPlanGroup, Variant} from '../../hooks/useProductOptions';
 import {GraphQLConnection, RawMetafield} from '../../types';
 import {ProductProviderFragmentFragment} from './ProductProviderFragment';
 import {ImageFragmentFragment} from '../Image/ImageFragment';
-import {Collection} from '../../graphql/types/types';
+import {Collection} from '../../storefront-api-types';
 
 export interface Product {
   compareAtPriceRange: Partial<

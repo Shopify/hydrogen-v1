@@ -7,7 +7,7 @@ import {TitleSeo} from '../TitleSeo.client';
 import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 import {ImageSeo} from '../ImageSeo.client';
-import {CurrencyCode} from '../../../graphql/types/types';
+import {CurrencyCode} from '../../../storefront-api-types';
 
 jest.mock('../../../client', () => ({
   Head({children}: {children: React.ReactNode}) {

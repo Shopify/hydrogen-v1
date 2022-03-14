@@ -102,7 +102,7 @@ The Typescript types are then automatically generated from the `.graphql` query 
 
 ### Creating Typescript types for Storefront API objects without a `.graphql` file
 
-If you would like to use a type for a Storefront API object without using a GraphQL query / fragment to generate it, you can directly import the Typescript type from `/packages/src/graphql/types/types.ts` which will match the full shape of the object from the Storefront API. From there, you can use things like Typescript's `Pick` or `Omit` helpers to create the shape you need.
+If you would like to use a type for a Storefront API object without using a GraphQL query / fragment to generate it, you can directly import the Typescript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. From there, you can use things like Typescript's `Pick` or `Omit` helpers to create the shape you need.
 
 ### Updating GraphQL and Typescript types to a new Storefront API version
 
@@ -110,7 +110,7 @@ We use `graphql-codegen` to automatically generate types for all of the Storefro
 
 In order to update the supported Storefront API version:
 
-1. Update the URL in `codegen.yml`
+1. Update the Schema URL and the header comment in `codegen.yml`
 1. Run `yarn graphql-types`
 1. Fix any Typescript errors that now appear
    1. One fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up
@@ -120,7 +120,7 @@ For context, updating the `codegen.yml` file and running the script does the fol
 
 1. Automatically hits the Storefront API, and use an introspection query to get the latest info
 1. Uses the results of that query to generate a new `graphql.schema.json` (which is a local representation of the Storefront API)
-1. Generates / updates the new types in `/packages/src/graphql/types/types.ts` based on the `graphql.schema.json`
+1. Generates / updates the new types in `/packages/hydrogen/src/storefront-api-types.ts` based on the `graphql.schema.json`
 1. Generates / updates the types in each `[Name]Fragment.ts` file
 
 ## Running a local version of Hydrogen in a Hydrogen app

@@ -3,7 +3,7 @@ import {ProductOptionsHookValue} from '../../hooks';
 import {ParsedMetafield} from '../../types';
 import {ProductProviderFragmentFragment} from './ProductProviderFragment';
 import {Product} from './types';
-import {Collection, Image} from '../../graphql/types/types';
+import {Collection, Image} from '../../storefront-api-types';
 import type {Variant} from '../../hooks/useProductOptions';
 
 export const ProductContext = createContext<ProductContextType | null>(null);

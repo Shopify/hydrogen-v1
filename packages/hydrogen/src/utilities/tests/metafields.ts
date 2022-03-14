@@ -1,6 +1,6 @@
 // eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
-import {Metafield} from '../../graphql/types/types';
+import {Metafield} from '../../storefront-api-types';
 import {ParsedMetafield, Rating, RawMetafield} from '../../types';
 
 export type MetafieldType =

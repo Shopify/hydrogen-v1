@@ -3,7 +3,7 @@ import faker from 'faker';
 import {getPrice} from './price';
 import {getUnitPriceMeasurement} from './unitPriceMeasurement';
 import {getAnyMedia, getPreviewImage} from './media';
-import {ProductVariant} from '../../graphql/types/types';
+import {ProductVariant} from '../../storefront-api-types';
 import {ProductProviderFragmentFragment} from '../../components/ProductProvider/ProductProviderFragment';
 import {getRawMetafield} from './metafields';
 

@@ -6,7 +6,7 @@ import {
   ExternalVideo,
   MediaHost,
   Model3d,
-} from '../../graphql/types/types';
+} from '../../storefront-api-types';
 // eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
 
