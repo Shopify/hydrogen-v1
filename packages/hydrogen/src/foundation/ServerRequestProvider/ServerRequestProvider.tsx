@@ -164,13 +164,6 @@ export function preloadRequestCacheData(
             },
             (error) => {
               result = {error};
-
-              collectQueryTimings(
-                request,
-                preloadQuery.key,
-                'expired',
-                getTime() - startApiTime
-              );
             }
           );
         }
