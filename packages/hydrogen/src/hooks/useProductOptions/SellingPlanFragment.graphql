@@ -1,5 +1,3 @@
-#import '../../components/Money/MoneyFragment.graphql'
-
 fragment SellingPlanFragment on SellingPlan {
   id
   description
@@ -13,12 +11,14 @@ fragment SellingPlanFragment on SellingPlan {
     adjustmentValue {
       ... on SellingPlanFixedAmountPriceAdjustment {
         adjustmentAmount {
-          ...MoneyFragment
+          currencyCode
+          amount
         }
       }
       ... on SellingPlanFixedPriceAdjustment {
         price {
-          ...MoneyFragment
+          currencyCode
+          amount
         }
       }
       ... on SellingPlanPercentagePriceAdjustment {
