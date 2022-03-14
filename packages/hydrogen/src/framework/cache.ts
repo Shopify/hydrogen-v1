@@ -41,9 +41,9 @@ function getKeyUrl(key: string) {
  * containing the `JSON.parse` version of the response as well
  * as the response itself so it can be checked for staleness.
  */
-export async function getItemFromCache(
+export async function getItemFromCache<T = any>(
   key: QueryKey
-): Promise<undefined | [any, Response]> {
+): Promise<undefined | [T, Response]> {
   const cache = getCache();
   if (!cache) {
     return;

@@ -7,7 +7,7 @@ const defaultHeaders = {
   'user-agent': `Hydrogen ${LIB_VERSION}`,
 };
 
-type FetchInit = {
+export type FetchInit = {
   body?: string;
   method?: string;
   headers?: Record<string, string>;

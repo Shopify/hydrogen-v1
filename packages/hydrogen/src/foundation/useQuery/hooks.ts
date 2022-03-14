@@ -13,6 +13,7 @@ import {
 } from '../../framework/cache';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
+import type {FetchInit} from '../../utilities/fetch';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -24,6 +25,10 @@ export interface HydrogenUseQueryOptions {
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
+  asyncPreload?: {
+    url: string;
+    fetchInit: FetchInit;
+  };
 }
 
 /**
@@ -55,6 +60,8 @@ export function useQuery<T>(
       preload: queryOptions?.preload,
       key: withCacheIdKey,
       fetcher,
+      url: queryOptions?.asyncPreload?.url,
+      fetchInit: queryOptions?.asyncPreload?.fetchInit,
     });
   }
 

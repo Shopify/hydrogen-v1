@@ -3,14 +3,19 @@ import {getTime} from '../../utilities/timing';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
 import type {PreloadOptions, QueryKey} from '../../types';
-import {hashKey} from '../cache';
+import {getItemFromCache, hashKey, setItemInCache} from '../cache';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
+import {FetchInit, fetchBuilder} from '../../utilities/fetch';
+import {getContext} from '../runtime';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
   fetcher: () => Promise<unknown>;
   preload?: PreloadOptions;
+  // These properties can be used to create a fetcher
+  url?: string;
+  fetchInit?: FetchInit;
 };
 export type PreloadQueriesByURL = Map<string, PreloadQueryEntry>;
 export type AllPreloadQueries = Map<string, PreloadQueriesByURL>;
@@ -27,6 +32,66 @@ const generateId =
 // Stores queries by url or '*'
 const preloadCache: AllPreloadQueries = new Map();
 const PRELOAD_ALL = '*';
+
+const PRELOADING_INFO_KEY = 'HYDROGEN_PRELOADING_INFO';
+let isPreloadingInfoFetched = false;
+let needsToSavePreloadingInfo = false;
+
+type PreloadingInfo = Array<{
+  url: string;
+  preloadQueries: Array<Omit<PreloadQueryEntry, 'fetcher | url'>>;
+}>;
+
+// Save a serialized version of `preloadCache` in a remote cache.
+// This leaves out the `fetcher` property, which can be built later.
+export async function savePreloadingInfo() {
+  if (!needsToSavePreloadingInfo) return;
+
+  const preloadingInfo = {} as Record<
+    string,
+    Array<Partial<PreloadQueryEntry>>
+  >;
+
+  for (const [url, queries] of preloadCache.entries()) {
+    preloadingInfo[url] = [];
+
+    for (const value of queries.values()) {
+      const {key, fetchInit, preload} = value;
+      preloadingInfo[url].push({key, fetchInit, preload});
+    }
+  }
+
+  getContext()?.waitUntil(setItemInCache(PRELOADING_INFO_KEY, preloadingInfo));
+
+  needsToSavePreloadingInfo = false;
+}
+
+// Get serialized information from a remote cache
+// to create fetchers and populate `preloadCache`.
+export async function ensurePreloadingInfo() {
+  if (isPreloadingInfoFetched) return;
+
+  try {
+    const [info] =
+      (await getItemFromCache<PreloadingInfo>(PRELOADING_INFO_KEY)) || [];
+
+    info?.forEach(({url, preloadQueries}) => {
+      const subMap = new Map() as PreloadQueriesByURL;
+
+      preloadQueries.forEach((value) => {
+        const fetcher = fetchBuilder(url, value.fetchInit);
+        subMap.set(hashKey(value.key), {...value, fetcher});
+      });
+
+      preloadCache.set(url, subMap);
+    });
+  } catch (error) {
+    // Preloading info not found in cache, mark it to save it later
+    needsToSavePreloadingInfo = true;
+  } finally {
+    isPreloadingInfoFetched = true;
+  }
+}
 
 /**
  * This augments the `Request` object from the Fetch API:

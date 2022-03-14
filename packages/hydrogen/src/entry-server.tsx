@@ -17,7 +17,11 @@ import type {
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import {
+  ServerComponentRequest,
+  ensurePreloadingInfo,
+  savePreloadingInfo,
+} from './framework/Hydration/ServerComponentRequest.server';
 import {getCacheControlHeader} from './framework/cache';
 import {
   preloadRequestCacheData,
@@ -115,6 +119,8 @@ export const renderHydrogen = (
         return renderApiRoute(request, apiRoute, shopifyConfig);
       }
     }
+
+    await ensurePreloadingInfo();
 
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
@@ -333,6 +339,8 @@ async function stream(
       },
       async onCompleteAll() {
         log.trace('worker complete stream');
+        savePreloadingInfo();
+
         if (componentResponse.canStream()) return;
 
         Object.assign(
@@ -470,6 +478,7 @@ async function stream(
       },
       async onCompleteAll() {
         log.trace('node complete stream');
+        savePreloadingInfo();
 
         if (componentResponse.canStream() || response.writableEnded) {
           postRequestTasks(
@@ -674,6 +683,8 @@ async function renderToBufferedString(
       const readable = ssrRenderToReadableStream(ReactApp, {
         nonce,
         onCompleteAll() {
+          savePreloadingInfo();
+
           /**
            * We want to wait until `onCompleteAll` has been called before fetching the
            * stream body. Otherwise, React 18's streaming JS script/template tags
@@ -701,6 +712,8 @@ async function renderToBufferedString(
          * `template` and `script` tags inserted and rendered as part of the hydration response.
          */
         onCompleteAll() {
+          savePreloadingInfo();
+
           let data = '';
           writer.on('data', (chunk) => (data += chunk.toString()));
           writer.once('error', reject);
