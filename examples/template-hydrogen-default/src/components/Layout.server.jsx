@@ -28,30 +28,32 @@ export default function Layout({children, hero}) {
   const storeName = data ? data.shop.name : '';
 
   return (
-    <LocalizationProvider preload="*">
-      <div className="absolute top-0 left-0">
-        <a
-          href="#mainContent"
-          className="p-4 focus:block sr-only focus:not-sr-only"
-        >
-          Skip to content
-        </a>
-      </div>
-      <div className="min-h-screen max-w-screen text-gray-700 font-sans">
-        {/* TODO: Find out why Suspense needs to be here to prevent hydration errors. */}
-        <Suspense fallback={null}>
-          <Header collections={collections} storeName={storeName} />
-          <Cart />
-        </Suspense>
-        <main role="main" id="mainContent" className="relative bg-gray-50">
-          {hero}
-          <div className="mx-auto max-w-7xl p-4 md:py-5 md:px-8">
-            {children}
-          </div>
-        </main>
-        <Footer collection={collections[0]} product={products[0]} />
-      </div>
-    </LocalizationProvider>
+    <Suspense fallback={null}>
+      <LocalizationProvider preload="*">
+        <div className="absolute top-0 left-0">
+          <a
+            href="#mainContent"
+            className="p-4 focus:block sr-only focus:not-sr-only"
+          >
+            Skip to content
+          </a>
+        </div>
+        <div className="min-h-screen max-w-screen text-gray-700 font-sans">
+          {/* TODO: Find out why Suspense needs to be here to prevent hydration errors. */}
+          <Suspense fallback={null}>
+            <Header collections={collections} storeName={storeName} />
+            <Cart />
+          </Suspense>
+          <main role="main" id="mainContent" className="relative bg-gray-50">
+            {hero}
+            <div className="mx-auto max-w-7xl p-4 md:py-5 md:px-8">
+              {children}
+            </div>
+          </main>
+          <Footer collection={collections[0]} product={products[0]} />
+        </div>
+      </LocalizationProvider>
+    </Suspense>
   );
 }
 
