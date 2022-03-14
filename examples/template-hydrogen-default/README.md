@@ -38,3 +38,19 @@ Then, you can run a local `server.js` using the production build with:
 ```bash
 yarn serve
 ```
+
+## Running tests
+
+This project contains basic end-to-end (E2E) tests in the `/tests/e2e` folder powered by [Vitest](https://vitest.dev).
+
+You can run tests in development, and they will automatically reload when you make changes to the component you provide to `hydrogen.watchForUpdates()`:
+
+```bash
+yarn test
+```
+
+To run tests in a continuous-integration (CI) environment like GitHub Actions:
+
+```bash
+yarn test:ci
+```

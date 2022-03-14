@@ -8,7 +8,10 @@ const config: Config.InitialOptions = {
     '!**/*/dist/**/*',
     '!**/*/fixtures/**/*',
   ],
-  testPathIgnorePatterns: ['<rootDir>/packages/playground/*'],
+  testPathIgnorePatterns: [
+    '<rootDir>/packages/playground/*',
+    '<rootDir>/examples/*',
+  ],
   testTimeout: process.env.CI ? 30000 : 10000,
   watchPathIgnorePatterns: ['<rootDir>/temp', 'fixtures'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
