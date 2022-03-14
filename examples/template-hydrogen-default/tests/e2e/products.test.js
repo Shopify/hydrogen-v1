@@ -15,7 +15,7 @@ describe('products', () => {
 
   it('shows the correct product title', async () => {
     await hydrogen.visit('/products/snowboard');
-    const heading = await hydrogen.page.$('h1');
+    const heading = await hydrogen.page.waitForSelector('h1');
     expect(heading).not.toBeNull();
 
     const text = await hydrogen.page.evaluate((h1) => h1.textContent, heading);
