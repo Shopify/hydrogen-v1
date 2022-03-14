@@ -8,7 +8,11 @@ fragment VariantFragment on ProductVariant {
   title
   availableForSale
   image {
-    ...ImageFragment
+    id
+    url
+    altText
+    width
+    height
   }
   ...UnitPriceFragment
   priceV2 {

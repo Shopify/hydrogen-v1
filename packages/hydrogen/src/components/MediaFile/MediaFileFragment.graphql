@@ -1,4 +1,3 @@
-#import '../Image/ImageFragment.graphql'
 #import '../Video/VideoFragment.graphql'
 #import '../ExternalVideo/ExternalVideoFragment.graphql'
 #import '../Model3D/Model3DFragment.graphql'
@@ -7,7 +6,11 @@ fragment MediaFileFragment on Media {
   ... on MediaImage {
     mediaContentType
     image {
-      ...ImageFragment
+      id
+      url
+      altText
+      width
+      height
     }
   }
   ... on Video {
