@@ -36,7 +36,7 @@ The `handle` property is passed directly to the root server component `/routes/p
 
 ```jsx
 export default function Product() {
-  const {handle} = useRouteParams;
+  const {handle} = useRouteParams();
   return <div>{handle}</div>;
 }
 ```
