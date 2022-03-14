@@ -86,6 +86,7 @@ const QUERY = gql`
         title
       }
       image {
+        id
         url
         width
         height
