@@ -9,12 +9,9 @@ The `MediaFile` component renders the media for the Storefront API's
 
 ```tsx
 import {MediaFile, useShopQuery} from '@shopify/hydrogen';
-import {MediaFileFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${MediaFileFragment}
-
   query Products {
     products(first: 5) {
       edges {
@@ -25,7 +22,45 @@ const QUERY = gql`
           media(first: 1) {
             edges {
               node {
-                ...MediaFileFragment
+                ... on MediaImage {
+                  mediaContentType
+                  image {
+                    id
+                    url
+                    altText
+                    width
+                    height
+                  }
+                }
+                ... on Video {
+                  mediaContentType
+                  id
+                  previewImage {
+                    url
+                  }
+                  sources {
+                    mimeType
+                    url
+                  }
+                }
+                ... on ExternalVideo {
+                  mediaContentType
+                  id
+                  embedUrl
+                  host
+                }
+                ... on Model3d {
+                  mediaContentType
+                  id
+                  alt
+                  mediaContentType
+                  previewImage {
+                    url
+                  }
+                  sources {
+                    url
+                  }
+                }
               }
             }
           }

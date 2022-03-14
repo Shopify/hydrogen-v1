@@ -167,7 +167,17 @@ fragment VariantFragment on ProductVariant {
     width
     height
   }
-  ...UnitPriceFragment
+  unitPriceMeasurement {
+    measuredType
+    quantityUnit
+    quantityValue
+    referenceUnit
+    referenceValue
+  }
+  unitPrice {
+    currencyCode
+    amount
+  }
   priceV2 {
     currencyCode
     amount
@@ -183,7 +193,28 @@ fragment VariantFragment on ProductVariant {
   metafields(first: $numProductVariantMetafields) {
     edges {
       node {
-        ...MetafieldFragment
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference @include(if: $includeReferenceMetafieldDetails) {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
       }
     }
   }

@@ -8,7 +8,6 @@ The `parseMetafieldValue` function parses a [Metafield](/api/storefront/referenc
 import {
   parseMetafieldValue,
   Metafield,
-  MetafieldFragment,
   flattenConnection,
   useShopQuery,
   Metafield,
@@ -21,14 +20,33 @@ const QUERY = gql`
       metafields(first: 10) {
         edges {
           node {
-            ...MetafieldFragment
+            id
+            type
+            namespace
+            key
+            value
+            createdAt
+            updatedAt
+            description
+            reference @include(if: $includeReferenceMetafieldDetails) {
+              __typename
+              ... on MediaImage {
+                id
+                mediaContentType
+                image {
+                  id
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
+            }
           }
         }
       }
     }
   }
-
-  ${MetafieldFragment}
 `;
 
 export function Product({handle}) {

@@ -20,14 +20,73 @@ fragment ProductProviderFragment on Product {
   media(first: $numProductMedia) {
     edges {
       node {
-        ...MediaFileFragment
+        ... on MediaImage {
+          mediaContentType
+          image {
+            id
+            url
+            altText
+            width
+            height
+          }
+        }
+        ... on Video {
+          mediaContentType
+          id
+          previewImage {
+            url
+          }
+          sources {
+            mimeType
+            url
+          }
+        }
+        ... on ExternalVideo {
+          mediaContentType
+          id
+          embedUrl
+          host
+        }
+        ... on Model3d {
+          mediaContentType
+          id
+          alt
+          mediaContentType
+          previewImage {
+            url
+          }
+          sources {
+            url
+          }
+        }
       }
     }
   }
   metafields(first: $numProductMetafields) {
     edges {
       node {
-        ...MetafieldFragment
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference @include(if: $includeReferenceMetafieldDetails) {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
       }
     }
   }
@@ -52,7 +111,46 @@ fragment ProductProviderFragment on Product {
   sellingPlanGroups(first: $numProductSellingPlanGroups) {
     edges {
       node {
-        ...SellingPlanGroupsFragment
+        sellingPlans(first: $numProductSellingPlans) {
+          edges {
+            node {
+              id
+              description
+              name
+              options {
+                name
+                value
+              }
+              priceAdjustments {
+                orderCount
+                adjustmentValue {
+                  ... on SellingPlanFixedAmountPriceAdjustment {
+                    adjustmentAmount {
+                      currencyCode
+                      amount
+                    }
+                  }
+                  ... on SellingPlanFixedPriceAdjustment {
+                    price {
+                      currencyCode
+                      amount
+                    }
+                  }
+                  ... on SellingPlanPercentagePriceAdjustment {
+                    adjustmentPercentage
+                  }
+                }
+              }
+              recurringDeliveries
+            }
+          }
+        }
+        appName
+        name
+        options {
+          name
+          values
+        }
       }
     }
   }
