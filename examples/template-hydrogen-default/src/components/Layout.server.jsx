@@ -39,11 +39,8 @@ export default function Layout({children, hero}) {
           </a>
         </div>
         <div className="min-h-screen max-w-screen text-gray-700 font-sans">
-          {/* TODO: Find out why Suspense needs to be here to prevent hydration errors. */}
-          <Suspense fallback={null}>
-            <Header collections={collections} storeName={storeName} />
-            <Cart />
-          </Suspense>
+          <Header collections={collections} storeName={storeName} />
+          <Cart />
           <main role="main" id="mainContent" className="relative bg-gray-50">
             {hero}
             <div className="mx-auto max-w-7xl p-4 md:py-5 md:px-8">
