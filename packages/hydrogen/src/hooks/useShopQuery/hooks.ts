@@ -6,6 +6,7 @@ import type {CachingStrategy, PreloadOptions} from '../../types';
 import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
+import {wrapInGraphQLTracker} from '../../utilities/graphql-tracker';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -22,6 +23,7 @@ export function useShopQuery<T>({
   cache,
   locale = '',
   preload = false,
+  trackOverfetch = true,
 }: {
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
@@ -40,6 +42,8 @@ export function useShopQuery<T>({
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
+  /** Detect and warn about unused data from the GraphQL request in development. */
+  trackOverfetch?: boolean;
 }): UseShopQueryResponse<T> {
   if (!import.meta.env.SSR) {
     throw new Error(
@@ -97,77 +101,14 @@ export function useShopQuery<T>({
     log.error(`GraphQL errors: ${errors.length}`);
   }
 
-  if (import.meta.env.DEV) {
-    // Create a map of read fields
-    const readFieldsMap: Record<string | symbol, any> = {};
-
-    // Create a proxy object that allows us to inspect the fields that were fetched
-    const dataProxy = JSON.parse(JSON.stringify(data), (_, value) => {
-      if (typeof value === 'object' && value && !Array.isArray(value)) {
-        return new Proxy(value, {
-          get(target, prop) {
-            readFieldsMap[prop as any] = true;
-            return target[prop];
-          },
-        });
-      }
-
-      return value;
-    });
-
-    setTimeout(() => {
-      // Track all the selections that were fetched
-      const selections: string[] = [];
-
-      // TODO: Fields that match this regex should be ignored.
-      // Improve to look for Fragment at the end of the name.
-      const regex = /(Fragment|__typename|edges|node)/;
-
-      // Loop through the read fields map and add the
-      // selections to the selections array
-      JSON.parse(JSON.stringify(query), (key, value) => {
-        if (
-          value &&
-          typeof value === 'object' &&
-          value.kind === 'SelectionSet'
-        ) {
-          const selection = value.selections.map((sel: any) => {
-            if (!sel.name || regex.test(sel.name?.value)) {
-              return;
-            }
-
-            return sel.name?.value;
-          });
-
-          selections.push(selection.filter(Boolean));
-        }
-
-        return value;
-      });
-
-      const flattenedSelections = [...new Set(selections.flat())];
-
-      // Check if any of the selections were not read
-      const unusedGraphQLFields = flattenedSelections.filter(
-        (prop) => !readFieldsMap[prop]
-      );
-
-      if (unusedGraphQLFields) {
-        // TODO support aliased fields
-        const defs = (query as any)?.definitions;
-        const queryName = defs && defs[0].name?.value;
-
-        log.warn(
-          `
-Potentially overfetching fields in GraphQL query: \`${queryName}\`.
-• ${unusedGraphQLFields.join(`\n• `)}
-Examine the list of fields above to confirm that they are being used.
-`
-        );
-      }
-    }, 2000);
-
-    return dataProxy as UseShopQueryResponse<T>;
+  if (
+    import.meta.env.DEV &&
+    trackOverfetch &&
+    query &&
+    typeof query !== 'string' &&
+    data?.data
+  ) {
+    return wrapInGraphQLTracker({query, data, log}) as UseShopQueryResponse<T>;
   }
 
   return data as UseShopQueryResponse<T>;
