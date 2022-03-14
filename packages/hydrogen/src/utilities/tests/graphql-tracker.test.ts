@@ -1,6 +1,6 @@
 // eslint-disable-next-line node/no-extraneous-import
 import gql from 'graphql-tag';
-import {wrapInGraphQLTracker} from '../graphql-tracker';
+import {wrapInGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
 import type {Logger} from '../log';
 
 const query = gql`
@@ -47,6 +47,8 @@ describe('GraphQL Tracker', () => {
     // Read stuff via destructuring or direct access
     tracker.data.shop.id + tracker.data.shop.name;
 
+    jest.advanceTimersByTime(TIMEOUT_MS / 2);
+
     const {
       data: {
         shop: {
@@ -56,7 +58,12 @@ describe('GraphQL Tracker', () => {
       },
     } = tracker;
 
-    jest.advanceTimersByTime(2100);
+    jest.advanceTimersByTime(TIMEOUT_MS / 2 + 100);
+    // Not enough time since last read
+    expect(warnings.length).toEqual(0);
+    jest.advanceTimersByTime(TIMEOUT_MS / 2);
+    // Enough time since last read
+    expect(warnings.length).toBeGreaterThan(0);
 
     const warning = warnings.join('\n');
     expect(warning).toContain('shopName');
