@@ -79,7 +79,7 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes}: ServerHandlerConfig
+  {shopifyConfig, routes, serverAnalyticConnectors}: ServerHandlerConfig
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
@@ -98,7 +98,7 @@ export const renderHydrogen = (
     setConfig({dev});
 
     if (url.pathname === EVENT_PATHNAME) {
-      return ServerAnalyticRoute(request);
+      return ServerAnalyticRoute(request, serverAnalyticConnectors);
     }
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;

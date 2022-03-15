@@ -48,6 +48,7 @@ export type ImportGlobEagerOutput = Record<
 export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
+  serverAnalyticConnectors?: Array<(request: Request) => void>;
 };
 
 export type ClientHandlerConfig = {
