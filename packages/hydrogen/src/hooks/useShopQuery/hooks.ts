@@ -23,7 +23,7 @@ export function useShopQuery<T>({
   cache,
   locale = '',
   preload = false,
-  trackOverfetch = true,
+  trackOverfetch = false,
 }: {
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
@@ -52,6 +52,8 @@ export function useShopQuery<T>({
   }
 
   const serverRequest = useServerRequest();
+  trackOverfetch = trackOverfetch || serverRequest.ctx.trackOverfetch;
+
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';

@@ -54,6 +54,7 @@ export class ServerComponentRequest extends Request {
     queryTimings: Array<QueryTiming>;
     preloadQueries: PreloadQueriesByURL;
     router: RouterContextData;
+    trackOverfetch: boolean;
     [key: string]: any;
   };
 
@@ -79,6 +80,7 @@ export class ServerComponentRequest extends Request {
     this.ctx = {
       cache: new Map(),
       head: new HeadData({}),
+      trackOverfetch: false,
       router: {
         routeRendered: false,
         serverProps: {},

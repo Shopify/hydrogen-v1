@@ -48,6 +48,7 @@ export type ImportGlobEagerOutput = Record<
 export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
+  trackOverfetch?: boolean;
 };
 
 export type ClientHandlerConfig = {

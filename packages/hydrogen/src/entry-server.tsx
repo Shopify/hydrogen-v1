@@ -74,13 +74,14 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes}: ServerHandlerConfig
+  {shopifyConfig, routes, trackOverfetch = false}: ServerHandlerConfig
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
     {indexTemplate, streamableResponse, dev, cache, context, nonce}
   ) {
     const request = new ServerComponentRequest(rawRequest);
+    request.ctx.trackOverfetch = trackOverfetch;
     const url = new URL(request.url);
     const log = getLoggerWithContext(request);
     const componentResponse = new ServerComponentResponse();
