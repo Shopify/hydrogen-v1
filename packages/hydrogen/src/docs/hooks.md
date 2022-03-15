@@ -105,10 +105,6 @@ Localization hooks relate to creating shopping experiences for a global audience
     <th>Description</th>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/hooks/localization/useavailablecountries">useAvailableCountries</a></td>
-    <td>Returns an array of the available countries used for localization purposes.</td>
-  </tr>
-  <tr>
     <td><a href="/api/hydrogen/hooks/localization/usecountry">useCountry</a></td>
     <td>Returns a tuple of the current localization country and a function for updating it.</td>
   </tr>

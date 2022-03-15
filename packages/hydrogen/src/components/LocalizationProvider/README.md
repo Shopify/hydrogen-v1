@@ -27,4 +27,3 @@ The `LocalizationProvider` component is a server component, which means that it 
 ## Related hooks
 
 - [`useCountry`](/api/hydrogen/hooks/localization/usecountry)
-- [`useAvailableCountries`](/api/hydrogen/hooks/localization/useavailablecountries)
