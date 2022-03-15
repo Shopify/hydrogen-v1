@@ -2029,13 +2029,6 @@ export const ImageFragment = `fragment ImageFragment on Image {
 *         isoCode
 *       }
 *     }
-*     availableCountries {
-*       isoCode
-*       name
-*       currency {
-*         isoCode
-*       }
-*     }
 *   }
 * }
 * 
@@ -2045,13 +2038,6 @@ export const ImageFragment = `fragment ImageFragment on Image {
 export const Localization = `query Localization {
   localization {
     country {
-      isoCode
-      name
-      currency {
-        isoCode
-      }
-    }
-    availableCountries {
       isoCode
       name
       currency {

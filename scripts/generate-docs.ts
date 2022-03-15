@@ -286,7 +286,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the Hydrogen localization hooks included in Hydrogen.',
       url: '/api/hydrogen/hooks/localization/index.md',
-      entry: ['hooks/useAvailableCountries', 'hooks/useCountry'],
+      entry: ['hooks/useCountry'],
       intro:
         'Localization can help merchants expand their business to a global audience by creating shopping experiences in local languages and currencies.',
       tables: [
