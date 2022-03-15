@@ -39,13 +39,7 @@ export default function NotFound({country = {isoCode: 'US'}, response}) {
     query: QUERY,
     variables: {
       country: country.isoCode,
-      numProductMetafields: 0,
-      numProductVariants: 250,
-      numProductMedia: 0,
-      numProductVariantMetafields: 0,
-      numProductVariantSellingPlanAllocations: 0,
-      numProductSellingPlanGroups: 0,
-      numProductSellingPlans: 0,
+      numProductVariants: 1,
     },
   });
   const products = data ? flattenConnection(data.products) : [];
@@ -70,116 +64,13 @@ export default function NotFound({country = {isoCode: 'US'}, response}) {
 }
 
 const QUERY = gql`
-  query NotFoundProductDetails(
-    $country: CountryCode
-    $includeReferenceMetafieldDetails: Boolean = false
-    $numProductMetafields: Int!
-    $numProductVariants: Int!
-    $numProductMedia: Int!
-    $numProductVariantMetafields: Int!
-    $numProductVariantSellingPlanAllocations: Int!
-    $numProductSellingPlanGroups: Int!
-    $numProductSellingPlans: Int!
-  ) @inContext(country: $country) {
+  query NotFoundProductDetails($country: CountryCode, $numProductVariants: Int!)
+  @inContext(country: $country) {
     products(first: 3) {
       edges {
         node {
-          compareAtPriceRange {
-            maxVariantPrice {
-              currencyCode
-              amount
-            }
-            minVariantPrice {
-              currencyCode
-              amount
-            }
-          }
-          descriptionHtml
           handle
           id
-          media(first: $numProductMedia) {
-            edges {
-              node {
-                ... on MediaImage {
-                  mediaContentType
-                  image {
-                    id
-                    url
-                    altText
-                    width
-                    height
-                  }
-                }
-                ... on Video {
-                  mediaContentType
-                  id
-                  previewImage {
-                    url
-                  }
-                  sources {
-                    mimeType
-                    url
-                  }
-                }
-                ... on ExternalVideo {
-                  mediaContentType
-                  id
-                  embedUrl
-                  host
-                }
-                ... on Model3d {
-                  mediaContentType
-                  id
-                  alt
-                  mediaContentType
-                  previewImage {
-                    url
-                  }
-                  sources {
-                    url
-                  }
-                }
-              }
-            }
-          }
-          metafields(first: $numProductMetafields) {
-            edges {
-              node {
-                id
-                type
-                namespace
-                key
-                value
-                createdAt
-                updatedAt
-                description
-                reference @include(if: $includeReferenceMetafieldDetails) {
-                  __typename
-                  ... on MediaImage {
-                    id
-                    mediaContentType
-                    image {
-                      id
-                      url
-                      altText
-                      width
-                      height
-                    }
-                  }
-                }
-              }
-            }
-          }
-          priceRange {
-            maxVariantPrice {
-              currencyCode
-              amount
-            }
-            minVariantPrice {
-              currencyCode
-              amount
-            }
-          }
           title
           variants(first: $numProductVariants) {
             edges {
@@ -194,17 +85,6 @@ const QUERY = gql`
                   width
                   height
                 }
-                unitPriceMeasurement {
-                  measuredType
-                  quantityUnit
-                  quantityValue
-                  referenceUnit
-                  referenceValue
-                }
-                unitPrice {
-                  currencyCode
-                  amount
-                }
                 priceV2 {
                   currencyCode
                   amount
@@ -212,141 +92,6 @@ const QUERY = gql`
                 compareAtPriceV2 {
                   currencyCode
                   amount
-                }
-                selectedOptions {
-                  name
-                  value
-                }
-                metafields(first: $numProductVariantMetafields) {
-                  edges {
-                    node {
-                      id
-                      type
-                      namespace
-                      key
-                      value
-                      createdAt
-                      updatedAt
-                      description
-                      reference
-                        @include(if: $includeReferenceMetafieldDetails) {
-                        __typename
-                        ... on MediaImage {
-                          id
-                          mediaContentType
-                          image {
-                            id
-                            url
-                            altText
-                            width
-                            height
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-                sellingPlanAllocations(
-                  first: $numProductVariantSellingPlanAllocations
-                ) {
-                  edges {
-                    node {
-                      priceAdjustments {
-                        compareAtPrice {
-                          currencyCode
-                          amount
-                        }
-                        perDeliveryPrice {
-                          currencyCode
-                          amount
-                        }
-                        price {
-                          currencyCode
-                          amount
-                        }
-                        unitPrice {
-                          currencyCode
-                          amount
-                        }
-                      }
-                      sellingPlan {
-                        id
-                        description
-                        name
-                        options {
-                          name
-                          value
-                        }
-                        priceAdjustments {
-                          orderCount
-                          adjustmentValue {
-                            ... on SellingPlanFixedAmountPriceAdjustment {
-                              adjustmentAmount {
-                                currencyCode
-                                amount
-                              }
-                            }
-                            ... on SellingPlanFixedPriceAdjustment {
-                              price {
-                                currencyCode
-                                amount
-                              }
-                            }
-                            ... on SellingPlanPercentagePriceAdjustment {
-                              adjustmentPercentage
-                            }
-                          }
-                        }
-                        recurringDeliveries
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-          sellingPlanGroups(first: $numProductSellingPlanGroups) {
-            edges {
-              node {
-                sellingPlans(first: $numProductSellingPlans) {
-                  edges {
-                    node {
-                      id
-                      description
-                      name
-                      options {
-                        name
-                        value
-                      }
-                      priceAdjustments {
-                        orderCount
-                        adjustmentValue {
-                          ... on SellingPlanFixedAmountPriceAdjustment {
-                            adjustmentAmount {
-                              currencyCode
-                              amount
-                            }
-                          }
-                          ... on SellingPlanFixedPriceAdjustment {
-                            price {
-                              currencyCode
-                              amount
-                            }
-                          }
-                          ... on SellingPlanPercentagePriceAdjustment {
-                            adjustmentPercentage
-                          }
-                        }
-                      }
-                      recurringDeliveries
-                    }
-                  }
-                }
-                appName
-                name
-                options {
-                  name
-                  values
                 }
               }
             }
