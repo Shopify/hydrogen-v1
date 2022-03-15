@@ -30,7 +30,7 @@ export interface HydrogenUseQueryOptions {
  * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
  * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based
  * on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this
- * hook to call any third-party APIs.
+ * hook to call any third-party APIs from a server component.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
@@ -41,7 +41,10 @@ export function useQuery<T>(
   queryOptions?: HydrogenUseQueryOptions
 ) {
   const request = useServerRequest();
-  const withCacheIdKey = ['__QUERY_CACHE_ID__', ...key];
+  const withCacheIdKey = [
+    '__QUERY_CACHE_ID__',
+    ...(typeof key === 'string' ? [key] : key),
+  ];
   const fetcher = cachedQueryFnBuilder<T>(
     withCacheIdKey,
     queryFn,

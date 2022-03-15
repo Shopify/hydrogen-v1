@@ -14,23 +14,27 @@
     "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
     "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker-event",
     "serve": "node --enable-source-maps dist/server",
-    "preview": "npx @shopify/hydrogen-cli@latest preview"
+    "preview": "npx @shopify/hydrogen-cli@latest preview",
+    "test": "WATCH=true vitest",
+    "test:ci": "yarn build && vitest run"
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
     "@shopify/prettier-config": "^1.1.2",
     "@shopify/stylelint-plugin": "^10.0.1",
-    "@tailwindcss/typography": "^0.5.0",
-    "autoprefixer": "^10.4.1",
+    "@tailwindcss/typography": "^0.5.2",
+    "autoprefixer": "^10.4.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.31.0",
     "eslint-plugin-hydrogen": "^0.6.2",
     "npm-run-all": "^4.1.5",
+    "playwright": "^1.19.2",
     "postcss": "^8.4.5",
     "prettier": "^2.3.2",
     "stylelint": "^13.13.0",
     "tailwindcss": "^3.0.0",
-    "vite": "^2.8.0"
+    "vite": "^2.8.0",
+    "vitest": "^0.5.9"
   },
   "dependencies": {
     "@headlessui/react": "^1.5.0",

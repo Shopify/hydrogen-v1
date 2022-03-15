@@ -62,160 +62,6 @@ export default async function testCases({
     expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
-  it('should support API route on a server component for POST methods', async () => {
-    const response = await page.request.post(getServerUrl() + '/', {
-      headers: {
-        Accept: 'text/plain',
-      },
-    });
-    const text = await response.text();
-
-    expect(response.status()).toBe(200);
-    expect(text).toEqual('some api response');
-  });
-
-  it('should support API route on a server component for PUT methods', async () => {
-    const response = await page.request.put(getServerUrl() + '/', {
-      headers: {
-        Accept: 'text/plain',
-      },
-    });
-    const text = await response.text();
-
-    expect(response.status()).toBe(200);
-    expect(text).toEqual('some api response');
-  });
-
-  it('should support API route on a server component for PATCH methods', async () => {
-    const response = await page.request.patch(getServerUrl() + '/', {
-      headers: {
-        Accept: 'text/plain',
-      },
-    });
-    const text = await response.text();
-
-    expect(response.status()).toBe(200);
-    expect(text).toEqual('some api response');
-  });
-
-  it('should support API route on a server component for DELETE methods', async () => {
-    const response = await page.request.delete(getServerUrl() + '/', {
-      headers: {
-        Accept: 'text/plain',
-      },
-    });
-    const text = await response.text();
-
-    expect(response.status()).toBe(200);
-    expect(text).toEqual('some api response');
-  });
-
-  it('should support API route on a server component for HEAD methods', async () => {
-    const response = await page.request.head(getServerUrl() + '/', {
-      headers: {
-        Accept: 'text/plain',
-      },
-    });
-    const text = await response.text();
-
-    expect(response.status()).toBe(200);
-  });
-
-  it('should GET data from an API route', async () => {
-    const response = await page.request.get(getServerUrl() + '/comments', {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-    const json = await response.json();
-
-    expect(response.status()).toBe(200);
-    expect(json).toEqual([{id: 0, value: 'some comment'}]);
-  });
-
-  it('should GET by a route parameter', async () => {
-    const response = await page.request.get(getServerUrl() + '/comments/0', {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-    const json = await response.json();
-
-    expect(response.status()).toBe(200);
-    expect(json).toEqual({id: 0, value: 'some comment'});
-  });
-
-  it('should POST data to an API route', async () => {
-    const response = await page.request.post(getServerUrl() + '/comments', {
-      data: JSON.stringify({
-        value: 'new comment',
-      }),
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-    const json = await response.json();
-
-    expect(response.status()).toBe(200);
-    expect(json).toEqual({id: 1, value: 'new comment'});
-  });
-
-  it('should DELETE an API route', async () => {
-    const response = await page.request.delete(getServerUrl() + '/comments', {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-    expect(response.status()).toBe(204);
-    expect(response.statusText()).toBe('No Content');
-  });
-
-  it('should return 404 on unknown method', async () => {
-    const response = await page.request.patch(getServerUrl() + '/comments', {
-      data: JSON.stringify({}),
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-
-    const text = await response.text();
-
-    expect(response.status()).toBe(405);
-    expect(response.statusText()).toBe('Method Not Allowed');
-    expect(text).toBe('Comment method not found');
-  });
-
-  it('should support simple strings returned from API routes', async () => {
-    const response = await page.request.get(getServerUrl() + '/string');
-    const text = await response.text();
-
-    expect(response.status()).toBe(200);
-    expect(text).toBe('some string');
-  });
-
-  it('should support objects as json returned from API routes', async () => {
-    const response = await page.request.get(getServerUrl() + '/json');
-    const json = await response.json();
-
-    expect(response.status()).toBe(200);
-    expect(json).toEqual({some: 'json'});
-  });
-
-  it('should support queryShop in API functions', async () => {
-    const response = await page.request.get(getServerUrl() + '/api-queryshop');
-    const data = await response.json();
-
-    expect(response.status()).toBe(200);
-    expect(data).toEqual({data: {shop: {name: 'Snowdevil'}}});
-  });
-
-  it.skip('supports form request on API routes', async () => {
-    await page.goto(getServerUrl() + '/form');
-    await page.type('#fname', 'sometext');
-    await page.click('#fsubmit');
-    expect(await page.textContent('*')).toContain('fname=sometext');
-  });
-
   it('should render server state in client component', async () => {
     await page.goto(getServerUrl() + '/test-server-state');
     expect(await page.textContent('h1')).toContain('Test Server State');
@@ -358,6 +204,205 @@ export default async function testCases({
         (code) => code.replace('<h1>Home', `<h1>${newheading}`),
         () => untilUpdated(() => page.textContent('h1'), 'Home'),
         () => untilUpdated(() => page.textContent('h1'), newheading)
+      );
+    });
+  });
+
+  describe('API Routing', () => {
+    it('should support API route on a server component for POST methods', async () => {
+      const response = await page.request.post(getServerUrl() + '/', {
+        headers: {
+          Accept: 'text/plain',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(text).toEqual('some api response');
+    });
+
+    it('should support API route on a server component for PUT methods', async () => {
+      const response = await page.request.put(getServerUrl() + '/', {
+        headers: {
+          Accept: 'text/plain',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(text).toEqual('some api response');
+    });
+
+    it('should support API route on a server component for PATCH methods', async () => {
+      const response = await page.request.patch(getServerUrl() + '/', {
+        headers: {
+          Accept: 'text/plain',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(text).toEqual('some api response');
+    });
+
+    it('should support API route on a server component for DELETE methods', async () => {
+      const response = await page.request.delete(getServerUrl() + '/', {
+        headers: {
+          Accept: 'text/plain',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(text).toEqual('some api response');
+    });
+
+    it('should support API route on a server component for HEAD methods', async () => {
+      const response = await page.request.head(getServerUrl() + '/', {
+        headers: {
+          Accept: 'text/plain',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+    });
+
+    it('should GET data from an API route', async () => {
+      const response = await page.request.get(getServerUrl() + '/comments', {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      const json = await response.json();
+
+      expect(response.status()).toBe(200);
+      expect(json).toEqual([{id: 0, value: 'some comment'}]);
+    });
+
+    it('should GET by a route parameter', async () => {
+      const response = await page.request.get(getServerUrl() + '/comments/0', {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      const json = await response.json();
+
+      expect(response.status()).toBe(200);
+      expect(json).toEqual({id: 0, value: 'some comment'});
+    });
+
+    it('should POST data to an API route', async () => {
+      const response = await page.request.post(getServerUrl() + '/comments', {
+        data: JSON.stringify({
+          value: 'new comment',
+        }),
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      const json = await response.json();
+
+      expect(response.status()).toBe(200);
+      expect(json).toEqual({id: 1, value: 'new comment'});
+    });
+
+    it('should DELETE an API route', async () => {
+      const response = await page.request.delete(getServerUrl() + '/comments', {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      expect(response.status()).toBe(204);
+      expect(response.statusText()).toBe('No Content');
+    });
+
+    it('should return 404 on unknown method', async () => {
+      const response = await page.request.patch(getServerUrl() + '/comments', {
+        data: JSON.stringify({}),
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const text = await response.text();
+
+      expect(response.status()).toBe(405);
+      expect(response.statusText()).toBe('Method Not Allowed');
+      expect(text).toBe('Comment method not found');
+    });
+
+    it('should support simple strings returned from API routes', async () => {
+      const response = await page.request.get(getServerUrl() + '/string');
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(text).toBe('some string');
+    });
+
+    it('should support objects as json returned from API routes', async () => {
+      const response = await page.request.get(getServerUrl() + '/json');
+      const json = await response.json();
+
+      expect(response.status()).toBe(200);
+      expect(json).toEqual({some: 'json'});
+    });
+
+    it('should support queryShop in API functions', async () => {
+      const response = await page.request.get(
+        getServerUrl() + '/api-queryshop'
+      );
+      const data = await response.json();
+
+      expect(response.status()).toBe(200);
+      expect(data).toEqual({data: {shop: {name: 'Snowdevil'}}});
+    });
+
+    it.skip('supports form request on API routes', async () => {
+      await page.goto(getServerUrl() + '/form');
+      await page.type('#fname', 'sometext');
+      await page.click('#fsubmit');
+      expect(await page.textContent('*')).toContain('fname=sometext');
+    });
+  });
+
+  describe('Custom Routing', () => {
+    it('loads a custom route', async () => {
+      await page.goto(getServerUrl() + '/custom1');
+      expect(await page.textContent('h1')).toContain('Custom 1');
+    });
+
+    it('loads a custom route with params', async () => {
+      await page.goto(getServerUrl() + '/custom2/someParam');
+      expect(await page.textContent('h1')).toContain('Custom 2: someParam');
+    });
+
+    it('loads a child within children', async () => {
+      await page.goto(getServerUrl() + '/custom3');
+      expect(await page.textContent('h1')).toContain('Custom 1');
+    });
+
+    it('loads a route rendered by a component', async () => {
+      await page.goto(getServerUrl() + '/custom4');
+      expect(await page.textContent('h1')).toContain('Custom 1');
+    });
+
+    it('loads a route lazily defined', async () => {
+      await page.goto(getServerUrl() + '/lazyRoute');
+      expect(await page.textContent('#root')).toContain('Lazy Route');
+    });
+
+    it('loads params via `useRouteParams()` in server components', async () => {
+      await page.goto(getServerUrl() + '/params/somevalue');
+      expect(await page.textContent('#serverParams')).toContain(
+        'Server Component: somevalue'
+      );
+    });
+
+    it('loads params via `useRouteParams()` in client components', async () => {
+      await page.goto(getServerUrl() + '/params/somevalue');
+      expect(await page.textContent('#clientParams')).toContain(
+        'Client Component: somevalue'
       );
     });
   });

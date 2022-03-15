@@ -1,5 +1,3 @@
-#import '../Image/ImageFragment.graphql'
-
 fragment MetafieldFragment on Metafield {
   id
   type
@@ -15,7 +13,11 @@ fragment MetafieldFragment on Metafield {
       id
       mediaContentType
       image {
-        ...ImageFragment
+        id
+        url
+        altText
+        width
+        height
       }
     }
   }

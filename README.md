@@ -63,16 +63,11 @@ Learn more about [getting started with Hydrogen](https://shopify.dev/custom-stor
 
 ## Other handy links
 
-🎁 Give us the gift of [feedback](https://www.surveymonkey.com/r/HydrogenFeedback).
-
-📍 Check out [Hydrogen examples on Github](https://github.com/Shopify/hydrogen-examples).
-
 🤩 [Learn more about Hydrogen](https://shopify.dev/hydrogen).
 
 👷‍♀️ Add `npm` packages to your project:
 
 - [`@shopify/hydrogen`](https://www.npmjs.com/package/@shopify/hydrogen)
-- [`@shopify/hydrogen-cli`](https://www.npmjs.com/package/@shopify/hydrogen-cli)
 - [`create-hydrogen-app`](https://www.npmjs.com/package/create-hydrogen-app)
 - [`eslint-plugin-hydrogen`](https://www.npmjs.com/package/eslint-plugin-hydrogen)
 - [`hydrogen-plugin-sanity`](https://www.npmjs.com/package/hydrogen-plugin-sanity)

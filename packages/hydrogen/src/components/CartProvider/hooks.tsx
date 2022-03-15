@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useShop} from '../../foundation';
 import {flattenConnection} from '../../utilities';
-import {CartInput} from '../../graphql/types/types';
+import {CartInput} from '../../storefront-api-types';
 import {CartCreate} from '../../graphql/graphql-constants';
 import {
   CartCreateMutation,
@@ -26,6 +26,8 @@ export function useCartFetch() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'X-SDK-Variant': 'hydrogen',
+            'X-SDK-Version': storefrontApiVersion,
             'X-Shopify-Storefront-Access-Token': storefrontToken,
           },
           body: JSON.stringify({

@@ -1,4 +1,4 @@
-import {CurrencyCode} from '../../../graphql/types/types';
+import {CurrencyCode} from '../../../storefront-api-types';
 
 export const CART_LINE = {
   attributes: [{key: 'color', value: 'red'}],

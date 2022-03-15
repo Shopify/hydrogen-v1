@@ -1,5 +1,5 @@
 import React from 'react';
-import {MoneyV2, UnitPriceMeasurement} from '../../graphql/types/types';
+import {MoneyV2, UnitPriceMeasurement} from '../../storefront-api-types';
 import {Money} from '../Money';
 import {useProduct} from '../ProductProvider';
 import {UnitPrice} from '../UnitPrice';

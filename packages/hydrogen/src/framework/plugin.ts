@@ -43,7 +43,10 @@ export default (
         return (
           source.includes(entryServer) ||
           // TODO update this after handleEvent is replaced with handleRequest
-          /(handle-worker-event|index|entry-server)\.js/.test(importer)
+          /(handle-worker-event|index|entry-server)\.js/.test(importer) ||
+          // Support importing server components for testing
+          // TODO: revisit this when RSC splits into two bundles
+          /\.test\.[tj]sx?$/.test(importer)
         );
       },
     }),

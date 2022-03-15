@@ -1,55 +1,15 @@
-import React, {ReactElement, Children} from 'react';
-import {useServerRequest} from '../ServerRequestProvider';
-import {FileRoutes} from './FileRoutes';
-import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
-import {Boomerang} from '../Boomerang/Boomerang.client';
-import {ServerAnalytics} from '../AnalyticEventBus/';
+import React, {ReactElement} from 'react';
+import {BrowserRouter} from './BrowserRouter.client';
 
 type RouterProps = {
   children: Array<ReactElement> | ReactElement;
-  serverProps: Record<string, any>;
-  fallback: ReactElement;
 };
 
-export function Router({
-  children,
-  fallback,
-  serverProps,
-}: RouterProps): ReactElement | null {
-  const request = useServerRequest();
-  const currentPath = new URL(request.url).pathname;
-  return recurseChildren(request, serverProps, fallback, currentPath, children);
-}
-
-function recurseChildren(
-  request: ServerComponentRequest,
-  serverProps: Record<string, any>,
-  fallback: ReactElement,
-  currentPath: string,
-  children: Array<ReactElement> | ReactElement
-): ReactElement | null {
-  for (const child of Children.toArray(children) as Array<ReactElement>) {
-    if (child.type === FileRoutes) {
-      const fileRoutingResult = child.type({...child.props, serverProps});
-      if (fileRoutingResult)
-        ServerAnalytics.pushToDatalayer({
-          templateName: fileRoutingResult?.type.name,
-        });
-      return (
-        <>
-          {fileRoutingResult}
-          <Boomerang pageTemplate={fileRoutingResult?.type.name} />
-        </>
-      );
-    }
-  }
-
-  ServerAnalytics.pushToDatalayer({templateName: 'fallback'});
-
-  return (
-    <>
-      {fallback}
-      <Boomerang pageTemplate={'fallback'} />
-    </>
-  );
+/**
+ * The `Router` component provides the context for routing in your Hydrogen app.
+ * You should only have one `Router` component in your app.
+ * All [`FileRoutes`](#fileroutes-component) and [`Route`](#route-component) components must be children of `Router`.
+ */
+export function Router({children}: RouterProps): ReactElement {
+  return <BrowserRouter>{children}</BrowserRouter>;
 }

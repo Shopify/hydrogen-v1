@@ -438,8 +438,6 @@ async function stream(
 
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
-    response.socket!.on('error', log.fatal);
-
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -575,8 +573,6 @@ async function hydrate(
 
     return new Response(bufferedBody);
   } else if (response) {
-    response.socket!.on('error', log.fatal);
-
     const rscWriter = await import(
       // @ts-ignore
       '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
@@ -610,11 +606,14 @@ function buildAppRSC({
   routes,
 }: BuildAppOptions) {
   const hydrogenServerProps = {request, response, log};
+  const serverProps = {...state, ...hydrogenServerProps, routes};
+
+  request.ctx.router.serverProps = serverProps;
 
   const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
-        <App {...state} {...hydrogenServerProps} routes={routes} />
+        <App {...serverProps} />
         <Analytics />
       </PreloadQueries>
     </ServerRequestProvider>

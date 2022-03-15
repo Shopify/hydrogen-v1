@@ -11,9 +11,9 @@ import {ServerComponentResponse} from '../../../framework/Hydration/ServerCompon
 
 let mockLogger: jest.Mocked<Logger>;
 
-const QUERY_1 = 'query test1 {}';
-const QUERY_2 = 'query testing2 {}';
-const QUERY_3 = 'query testable3 {}';
+const QUERY_1 = 'test1';
+const QUERY_2 = 'testing2';
+const QUERY_3 = 'testable3';
 
 describe('cache header log', () => {
   beforeEach(() => {
@@ -39,7 +39,7 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as ServerComponentRequest;
+    } as unknown as ServerComponentRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
@@ -63,7 +63,7 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as ServerComponentRequest;
+    } as unknown as ServerComponentRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
@@ -87,7 +87,7 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as ServerComponentRequest;
+    } as unknown as ServerComponentRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
@@ -120,7 +120,7 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as ServerComponentRequest;
+    } as unknown as ServerComponentRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;

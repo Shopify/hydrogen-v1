@@ -5,7 +5,6 @@ import {
   CacheHours,
   ServerAnalytics,
 } from '@shopify/hydrogen';
-import {ImageFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Header from './Header.client';
@@ -76,7 +75,11 @@ const QUERY = gql`
           id
           title
           image {
-            ...ImageFragment
+            id
+            url
+            altText
+            width
+            height
           }
         }
       }
@@ -89,5 +92,4 @@ const QUERY = gql`
       }
     }
   }
-  ${ImageFragment}
 `;

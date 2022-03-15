@@ -1,5 +1,4 @@
 import {useShopQuery, Seo, CacheDays} from '@shopify/hydrogen';
-import {DefaultPageSeoFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 /**
@@ -8,7 +7,7 @@ import gql from 'graphql-tag';
 export default function DefaultSeo() {
   const {
     data: {
-      shop: {title, description},
+      shop: {name, description},
     },
   } = useShopQuery({
     query: QUERY,
@@ -20,7 +19,7 @@ export default function DefaultSeo() {
     <Seo
       type="defaultSeo"
       data={{
-        title,
+        title: name,
         description,
       }}
     />
@@ -30,9 +29,8 @@ export default function DefaultSeo() {
 const QUERY = gql`
   query shopInfo {
     shop {
-      ...DefaultPageSeoFragment
+      name
+      description
     }
   }
-
-  ${DefaultPageSeoFragment}
 `;

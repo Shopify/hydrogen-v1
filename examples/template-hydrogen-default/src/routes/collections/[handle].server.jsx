@@ -1,9 +1,4 @@
 import {useShopQuery, flattenConnection, Seo} from '@shopify/hydrogen';
-import {
-  MediaFileFragment,
-  ProductProviderFragment,
-  CollectionSeoFragment,
-} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
@@ -68,25 +63,63 @@ const QUERY = gql`
     $handle: String!
     $country: CountryCode
     $numProducts: Int!
-    $includeReferenceMetafieldDetails: Boolean = false
-    $numProductMetafields: Int = 0
-    $numProductVariants: Int = 250
-    $numProductMedia: Int = 6
-    $numProductVariantMetafields: Int = 0
-    $numProductVariantSellingPlanAllocations: Int = 0
-    $numProductSellingPlanGroups: Int = 0
-    $numProductSellingPlans: Int = 0
   ) @inContext(country: $country) {
     collection(handle: $handle) {
-      id
       title
       descriptionHtml
-      ...CollectionSeoFragment
+      description
+      seo {
+        description
+        title
+      }
+      image {
+        id
+        url
+        width
+        height
+        altText
+      }
       products(first: $numProducts) {
         edges {
           node {
+            title
             vendor
-            ...ProductProviderFragment
+            handle
+            descriptionHtml
+            compareAtPriceRange {
+              maxVariantPrice {
+                currencyCode
+                amount
+              }
+              minVariantPrice {
+                currencyCode
+                amount
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  title
+                  availableForSale
+                  image {
+                    id
+                    url
+                    altText
+                    width
+                    height
+                  }
+                  priceV2 {
+                    currencyCode
+                    amount
+                  }
+                  compareAtPriceV2 {
+                    currencyCode
+                    amount
+                  }
+                }
+              }
+            }
           }
         }
         pageInfo {
@@ -95,8 +128,4 @@ const QUERY = gql`
       }
     }
   }
-
-  ${CollectionSeoFragment}
-  ${MediaFileFragment}
-  ${ProductProviderFragment}
 `;

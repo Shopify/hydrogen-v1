@@ -5,11 +5,6 @@ import {
   Seo,
   CacheDays,
 } from '@shopify/hydrogen';
-import {
-  ProductProviderFragment,
-  ImageFragment,
-  HomeSeoFragment,
-} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 import Layout from '../components/Layout.server';
@@ -190,11 +185,9 @@ function GradientBackground() {
 const SEO_QUERY = gql`
   query homeShopInfo {
     shop {
-      ...HomeSeoFragment
+      description
     }
   }
-
-  ${HomeSeoFragment}
 `;
 
 const QUERY = gql`
@@ -202,30 +195,51 @@ const QUERY = gql`
     $country: CountryCode
     $numCollections: Int = 2
     $numProducts: Int = 3
-    $includeReferenceMetafieldDetails: Boolean = false
-    $numProductMetafields: Int = 0
-    $numProductVariants: Int = 250
-    $numProductMedia: Int = 1
-    $numProductVariantMetafields: Int = 10
-    $numProductVariantSellingPlanAllocations: Int = 0
-    $numProductSellingPlanGroups: Int = 0
-    $numProductSellingPlans: Int = 0
+    $numProductVariants: Int = 1
   ) @inContext(country: $country) {
     collections(first: $numCollections) {
       edges {
         node {
-          descriptionHtml
-          description
           handle
           id
           title
           image {
-            ...ImageFragment
+            id
+            url
+            altText
+            width
+            height
           }
           products(first: $numProducts) {
             edges {
               node {
-                ...ProductProviderFragment
+                handle
+                id
+                title
+                variants(first: $numProductVariants) {
+                  edges {
+                    node {
+                      id
+                      title
+                      availableForSale
+                      image {
+                        id
+                        url
+                        altText
+                        width
+                        height
+                      }
+                      priceV2 {
+                        currencyCode
+                        amount
+                      }
+                      compareAtPriceV2 {
+                        currencyCode
+                        amount
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -233,7 +247,4 @@ const QUERY = gql`
       }
     }
   }
-
-  ${ProductProviderFragment}
-  ${ImageFragment}
 `;

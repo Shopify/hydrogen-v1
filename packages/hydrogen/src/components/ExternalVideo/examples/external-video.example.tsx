@@ -1,10 +1,7 @@
 import {ExternalVideo} from '@shopify/hydrogen';
-import {ExternalVideoFragment} from '@shopify/hydrogen/fragments';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${ExternalVideoFragment}
-
   query Products {
     products(first: 5) {
       edges {
@@ -17,7 +14,9 @@ const QUERY = gql`
               node {
                 ... on ExternalVideo {
                   mediaContentType
-                  ...ExternalVideoFragment
+                  id
+                  embedUrl
+                  host
                 }
               }
             }

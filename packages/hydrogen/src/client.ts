@@ -6,3 +6,5 @@ export * from './foundation/ServerStateProvider';
 export {Head} from './foundation/Head';
 export * from './utilities';
 export {ClientAnalytics} from './foundation/AnalyticEventBus';
+export {useRouteParams} from './foundation/useRouteParams/useRouteParams';
+export {useNavigate} from './foundation/useNavigate/useNavigate';
