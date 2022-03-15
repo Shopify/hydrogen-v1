@@ -12,11 +12,13 @@ export function useLoadScript(
 ): ScriptState {
   const [status, setStatus] = useState<ScriptState>('loading');
 
+  const optionsString = JSON.stringify(options);
+
   useEffect(() => {
     async function loadScriptWrapper() {
       try {
         setStatus('loading');
-        await loadScript(url, options);
+        await loadScript(url, JSON.parse(optionsString));
         setStatus('done');
       } catch (error) {
         setStatus('error');
@@ -24,7 +26,7 @@ export function useLoadScript(
     }
 
     loadScriptWrapper();
-  }, [options, url]);
+  }, [optionsString, url]);
 
   return status;
 }
