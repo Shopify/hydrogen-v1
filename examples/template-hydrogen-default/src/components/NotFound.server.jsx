@@ -39,7 +39,6 @@ export default function NotFound({country = {isoCode: 'US'}, response}) {
     query: QUERY,
     variables: {
       country: country.isoCode,
-      numProductVariants: 1,
     },
   });
   const products = data ? flattenConnection(data.products) : [];
@@ -64,7 +63,7 @@ export default function NotFound({country = {isoCode: 'US'}, response}) {
 }
 
 const QUERY = gql`
-  query NotFoundProductDetails($country: CountryCode, $numProductVariants: Int!)
+  query NotFoundProductDetails($country: CountryCode)
   @inContext(country: $country) {
     products(first: 3) {
       edges {
@@ -72,7 +71,7 @@ const QUERY = gql`
           handle
           id
           title
-          variants(first: $numProductVariants) {
+          variants(first: 1) {
             edges {
               node {
                 id
