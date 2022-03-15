@@ -33,6 +33,11 @@ const generateId =
 const preloadCache: AllPreloadQueries = new Map();
 const PRELOAD_ALL = '*';
 
+type RequestEvent = 'done';
+type RequestEventCallback = (params: {
+  responseAppend: (string: string) => void;
+}) => void;
+
 /**
  * This augments the `Request` object from the Fetch API:
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Request
@@ -56,6 +61,10 @@ export class ServerComponentRequest extends Request {
     router: RouterContextData;
     [key: string]: any;
   };
+
+  private eventCallbacks: Partial<
+    Record<RequestEvent, Record<string, RequestEventCallback>>
+  >;
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -93,6 +102,8 @@ export class ServerComponentRequest extends Request {
     const referer = this.headers.get('referer');
     this.preloadURL =
       this.isRscRequest() && referer && referer !== '' ? referer : this.url;
+
+    this.eventCallbacks = {};
   }
 
   private parseCookies() {
@@ -134,6 +145,24 @@ export class ServerComponentRequest extends Request {
 
   public savePreloadQueries() {
     preloadCache.set(this.preloadURL, this.ctx.preloadQueries);
+  }
+
+  public on(
+    event: RequestEvent,
+    key: string | string[],
+    cb: RequestEventCallback
+  ) {
+    this.eventCallbacks[event] ??= {};
+    this.eventCallbacks[event]![hashKey(key)] ??= cb;
+  }
+
+  public emit(
+    event: RequestEvent,
+    params: Parameters<RequestEventCallback>[0]
+  ) {
+    for (const cb of Object.values(this.eventCallbacks[event] || {})) {
+      cb(params);
+    }
   }
 }
 

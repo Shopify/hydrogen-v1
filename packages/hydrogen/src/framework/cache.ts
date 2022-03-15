@@ -21,7 +21,7 @@ export function getCacheControlHeader({dev}: {dev?: boolean}) {
 }
 
 export function hashKey(key: QueryKey): string {
-  const rawKey = key instanceof Array ? key : [key];
+  const rawKey = Array.isArray(key) ? key : [key];
 
   /**
    * TODO: Smarter hash

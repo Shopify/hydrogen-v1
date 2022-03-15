@@ -194,6 +194,11 @@ async function render(
     bufferReadableStream(rscReadable.getReader()),
   ]);
 
+  const emitDoneEvent = () =>
+    request.emit('done', {
+      responseAppend: (string) => (html += string),
+    });
+
   const {headers, status, statusText} = getResponseOptions(componentResponse);
 
   /**
@@ -204,10 +209,12 @@ async function render(
 
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
+    const customBody = await componentResponse.customBody;
 
+    emitDoneEvent();
     postRequestTasks('ssr', status, request, componentResponse);
 
-    return new Response(await componentResponse.customBody, {
+    return new Response(customBody, {
       status,
       statusText,
       headers,
@@ -225,6 +232,7 @@ async function render(
     );
   }
 
+  emitDoneEvent();
   postRequestTasks('ssr', status, request, componentResponse);
 
   return new Response(html, {
@@ -294,6 +302,12 @@ async function stream(
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
+
+    const emitDoneEvent = () => {
+      request.emit('done', {
+        responseAppend: (string) => writable.write(encoder.encode(string)),
+      });
+    };
 
     const ssrReadable = ssrRenderToReadableStream(AppSSR, {
       nonce,
@@ -401,7 +415,11 @@ async function stream(
 
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
-        setTimeout(() => writable.close(), 0);
+        setTimeout(() => {
+          emitDoneEvent();
+          writable.close();
+        }, 0);
+
         postRequestTasks(
           'str',
           responseOptions.status,
@@ -410,7 +428,9 @@ async function stream(
         );
       });
     } else {
+      emitDoneEvent();
       writable.close();
+
       postRequestTasks(
         'str',
         responseOptions.status,
@@ -430,6 +450,12 @@ async function stream(
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
     response.socket!.on('error', log.fatal);
+
+    const emitDoneEvent = () => {
+      request.emit('done', {
+        responseAppend: (string) => response.write(string),
+      });
+    };
 
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
@@ -472,12 +498,15 @@ async function stream(
         log.trace('node complete stream');
 
         if (componentResponse.canStream() || response.writableEnded) {
+          emitDoneEvent();
+
           postRequestTasks(
             'str',
             response.statusCode,
             request,
             componentResponse
           );
+
           return;
         }
 
@@ -496,7 +525,9 @@ async function stream(
         }
 
         if (componentResponse.customBody) {
-          return response.end(await componentResponse.customBody);
+          const customBody = await componentResponse.customBody;
+          emitDoneEvent();
+          return response.end(customBody);
         }
 
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
@@ -506,6 +537,7 @@ async function stream(
             // Piping ends the response so script tags
             // must be written before that.
             response.write(scriptTags);
+            emitDoneEvent();
             pipe(response);
           }
         );
