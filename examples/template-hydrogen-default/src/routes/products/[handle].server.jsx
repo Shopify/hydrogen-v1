@@ -213,24 +213,6 @@ const QUERY = gql`
             ) {
               edges {
                 node {
-                  priceAdjustments {
-                    compareAtPrice {
-                      currencyCode
-                      amount
-                    }
-                    perDeliveryPrice {
-                      currencyCode
-                      amount
-                    }
-                    price {
-                      currencyCode
-                      amount
-                    }
-                    unitPrice {
-                      currencyCode
-                      amount
-                    }
-                  }
                   sellingPlan {
                     id
                     description
@@ -239,27 +221,6 @@ const QUERY = gql`
                       name
                       value
                     }
-                    priceAdjustments {
-                      orderCount
-                      adjustmentValue {
-                        ... on SellingPlanFixedAmountPriceAdjustment {
-                          adjustmentAmount {
-                            currencyCode
-                            amount
-                          }
-                        }
-                        ... on SellingPlanFixedPriceAdjustment {
-                          price {
-                            currencyCode
-                            amount
-                          }
-                        }
-                        ... on SellingPlanPercentagePriceAdjustment {
-                          adjustmentPercentage
-                        }
-                      }
-                    }
-                    recurringDeliveries
                   }
                 }
               }
@@ -280,31 +241,9 @@ const QUERY = gql`
                     name
                     value
                   }
-                  priceAdjustments {
-                    orderCount
-                    adjustmentValue {
-                      ... on SellingPlanFixedAmountPriceAdjustment {
-                        adjustmentAmount {
-                          currencyCode
-                          amount
-                        }
-                      }
-                      ... on SellingPlanFixedPriceAdjustment {
-                        price {
-                          currencyCode
-                          amount
-                        }
-                      }
-                      ... on SellingPlanPercentagePriceAdjustment {
-                        adjustmentPercentage
-                      }
-                    }
-                  }
-                  recurringDeliveries
                 }
               }
             }
-            appName
             name
             options {
               name
