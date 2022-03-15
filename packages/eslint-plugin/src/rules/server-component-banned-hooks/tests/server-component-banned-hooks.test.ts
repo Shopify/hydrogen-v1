@@ -1,6 +1,6 @@
 import {TSESLint} from '@typescript-eslint/experimental-utils';
 import {AST_NODE_TYPES} from '@typescript-eslint/types';
-import {noStateInServerComponents} from '../no-state-in-server-components';
+import {serverComponentBannedHooks} from '../server-component-banned-hooks';
 import dedent from 'dedent';
 
 const ruleTester = new TSESLint.RuleTester({
@@ -11,13 +11,13 @@ function error(hookName: string) {
   return {
     type: AST_NODE_TYPES.CallExpression,
     data: {hook: hookName},
-    messageId: 'noStateInServerComponents' as const,
+    messageId: 'serverComponentBannedHooks' as const,
   };
 }
 
 ruleTester.run(
-  'hydrogen/no-state-in-server-components',
-  noStateInServerComponents,
+  'hydrogen/server-component-banned-hooks',
+  serverComponentBannedHooks,
   {
     valid: [
       {
@@ -53,6 +53,41 @@ ruleTester.run(
           return null;
         }
       `,
+        filename: 'ServerComponent.server.tsx',
+      },
+      {
+        code: dedent`
+        function ClientComponent() {
+          useEffect(() => {});
+          return null;
+        }
+      `,
+        filename: 'ClientComponent.client.tsx',
+      },
+      {
+        code: dedent`
+          function ClientComponent() {
+            useLayoutEffect(() => {});
+            return null;
+          }
+        `,
+        filename: 'ClientComponent.client.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            return null;
+          }
+        `,
+        filename: 'ServerComponent.server.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            const {foo} = useBar();
+            return null;
+          }
+        `,
         filename: 'ServerComponent.server.tsx',
       },
     ],
@@ -117,6 +152,80 @@ ruleTester.run(
         }
       `,
         errors: [error('useReducer'), error('useState')],
+        filename: 'ServerComponent.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            useEffect(() => {});
+            return null;
+          }
+        `,
+        errors: [error('useEffect')],
+        filename: 'ServerComponent.server.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            useLayoutEffect(() => {});
+            return null;
+          }
+        `,
+        errors: [error('useLayoutEffect')],
+        filename: 'ServerComponent.server.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            useEffect(() => {});
+            useLayoutEffect(() => {});
+            return null;
+          }
+        `,
+        errors: [error('useEffect'), error('useLayoutEffect')],
+        filename: 'ServerComponent.server.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            useEffect(() => {});
+            return null;
+          }
+        `,
+        errors: [error('useEffect')],
+        filename: 'ServerComponent.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            useEffect(() => {});
+            return null;
+          }
+        `,
+        errors: [error('useEffect')],
+        filename: 'ServerComponent.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            useLayoutEffect(() => {});
+            useEffect(() => {});
+            return null;
+          }
+        `,
+        errors: [error('useLayoutEffect'), error('useEffect')],
+        filename: 'ServerComponent.tsx',
+      },
+
+      {
+        code: dedent`
+          function ServerComponent() {
+            React.useLayoutEffect(() => {});
+            React.useEffect(() => {});
+            return null;
+          }
+        `,
+        errors: [error('useLayoutEffect'), error('useEffect')],
         filename: 'ServerComponent.tsx',
       },
     ],
