@@ -52,7 +52,14 @@ const QUERY = gql`
           amount
         }
       }
+      description
       descriptionHtml
+      featuredImage {
+        url
+        width
+        height
+        altText
+      }
       handle
       id
       media(first: $numProductMedia) {
@@ -138,42 +145,26 @@ const QUERY = gql`
           amount
         }
       }
+      seo {
+        description
+        title
+      }
       title
       variants(first: $numProductVariants) {
         edges {
           node {
-            id
-            title
             availableForSale
+            compareAtPriceV2 {
+              amount
+              currencyCode
+            }
+            id
             image {
               id
               url
               altText
               width
               height
-            }
-            unitPriceMeasurement {
-              measuredType
-              quantityUnit
-              quantityValue
-              referenceUnit
-              referenceValue
-            }
-            unitPrice {
-              currencyCode
-              amount
-            }
-            priceV2 {
-              currencyCode
-              amount
-            }
-            compareAtPriceV2 {
-              currencyCode
-              amount
-            }
-            selectedOptions {
-              name
-              value
             }
             metafields(first: $numProductVariantMetafields) {
               edges {
@@ -203,37 +194,31 @@ const QUERY = gql`
                 }
               }
             }
-          }
-        }
-      }
-      title
-      description
-      seo {
-        description
-        title
-      }
-      vendor
-      featuredImage {
-        url
-        width
-        height
-        altText
-      }
-      variants(first: $numProductVariants) {
-        edges {
-          node {
-            image {
-              url
-            }
-            availableForSale
             priceV2 {
               amount
               currencyCode
             }
+            selectedOptions {
+              name
+              value
+            }
             sku
+            title
+            unitPrice {
+              amount
+              currencyCode
+            }
+            unitPriceMeasurement {
+              measuredType
+              quantityUnit
+              quantityValue
+              referenceUnit
+              referenceValue
+            }
           }
         }
       }
+      vendor
     }
   }
 `;
