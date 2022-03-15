@@ -1,4 +1,11 @@
-const RESERVED_EVENT_NAMES = ['page-view', 'viewed-product', 'add-to-cart'];
+const RESERVED_EVENT_NAMES = [
+  'page-view',
+  'viewed-product',
+  'add-to-cart',
+  'remove-from-cart',
+  'update-cart',
+  'discount-code-updated',
+];
 
 export function getNamedspacedEventname(eventname: string): string {
   // Any event name that is not in the reserved space will be prefix with `c-`

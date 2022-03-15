@@ -68,6 +68,7 @@ import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 import {useServerState} from '../../foundation/useServerState';
 import {ServerStateContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
+import {ClientAnalytics} from '../../foundation/AnalyticEventBus';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
@@ -365,6 +366,10 @@ export function CartProvider({
         }
 
         if (data?.cartLinesAdd?.cart) {
+          ClientAnalytics.publish('add-to-cart', true, {
+            addedCartLines: lines,
+            cart: data.cartLinesAdd.cart,
+          });
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesAdd.cart),
@@ -403,6 +408,10 @@ export function CartProvider({
         }
 
         if (data?.cartLinesRemove?.cart) {
+          ClientAnalytics.publish('remove-from-cart', true, {
+            removedCartLines: lines,
+            cart: data.cartLinesRemove.cart,
+          });
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesRemove.cart),
@@ -440,6 +449,10 @@ export function CartProvider({
         }
 
         if (data?.cartLinesUpdate?.cart) {
+          ClientAnalytics.publish('update-cart', true, {
+            updatedCartLines: lines,
+            cart: data.cartLinesUpdate.cart,
+          });
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesUpdate.cart),
@@ -595,6 +608,10 @@ export function CartProvider({
         }
 
         if (data?.cartDiscountCodesUpdate?.cart) {
+          ClientAnalytics.publish('discount-code-updated', true, {
+            updatedDiscountCodes: discountCodes,
+            cart: data.cartDiscountCodesUpdate.cart,
+          });
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartDiscountCodesUpdate.cart),

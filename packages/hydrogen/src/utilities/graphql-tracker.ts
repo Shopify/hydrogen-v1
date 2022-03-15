@@ -43,7 +43,7 @@ function checkReadValues(
   // Check if any of the selections were not read
   const unusedGraphQLFields = flattenedSelections.filter((prop) => !map[prop]);
 
-  if (unusedGraphQLFields) {
+  if (unusedGraphQLFields && unusedGraphQLFields.length > 0) {
     // TODO support aliased fields
     const defs = (query as any)?.definitions;
     const queryName = defs && defs[0].name?.value;
