@@ -172,6 +172,14 @@ export default async function testCases({
     expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
   });
 
+  it("emits lifecycle event 'done' and allows appending HTML to the response", async () => {
+    await page.goto(getServerUrl() + '/request-lifecycle');
+
+    // Event runs exactly once, even if `request.on` is called
+    // multiple times due to React rendering cycles.
+    expect(await page.$$('[data-test=lifecycle-done]')).toHaveLength(1);
+  });
+
   describe('HMR', () => {
     if (isBuild) return;
 
