@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "cross-env LOCAL_DEV=true yarn turbo run dev --parallel",
     "build": "yarn turbo run build",
-    "lint": "yarn turbo run lint --parallel && yarn lint:language",
+    "lint": "yarn turbo run lint --parallel",
     "lint:language": "alex -q {.,.changeset}",
     "format": "prettier --write --ignore-unknown .",
     "format:check": "prettier --check --ignore-unknown .",

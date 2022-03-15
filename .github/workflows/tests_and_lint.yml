@@ -45,12 +45,11 @@ jobs:
       - name: Check formatting
         run: yarn format:check
 
-      - name: Lint the framework code
-        run: yarn lint
+      - name: Lint code
+        run: yarn lint --force
 
-      - name: Lint the template code
-        run: yarn lint
-        working-directory: ./examples/template-hydrogen-default
+      - name: Lint language
+        run: yarn lint:language
 
       - name: Run the unit tests
         run: yarn test

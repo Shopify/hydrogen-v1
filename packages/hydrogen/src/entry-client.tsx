@@ -82,7 +82,7 @@ function Error({error}: {error: Error}) {
       }}
     >
       <h1 style={{fontSize: '2em', marginBottom: '1em', fontWeight: 'bold'}}>
-        Something's wrong here...
+        Something&apos;s wrong here...
       </h1>
 
       <div style={{fontSize: '1.1em'}}>

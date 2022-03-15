@@ -1,12 +1,18 @@
 // @ts-check
 
 module.exports = {
-  ignorePatterns: ['**/storefront-api-types.ts', 'dist', 'vendor'],
+  ignorePatterns: [
+    '**/storefront-api-types.ts',
+    'dist',
+    'vendor',
+    '*.example.tsx',
+  ],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
   extends: [
     'plugin:node/recommended',
     'plugin:hydrogen/typescript',
+    'plugin:react/recommended',
     'plugin:react-hooks/recommended',
   ],
   parserOptions: {
@@ -15,6 +21,7 @@ module.exports = {
   },
   rules: {
     'tsdoc/syntax': 'error',
+    'react/prop-types': 'off',
     'node/no-missing-import': [
       'error',
       {
