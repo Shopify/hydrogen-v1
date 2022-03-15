@@ -31,6 +31,7 @@ export default function MobileNavigation({collections, isOpen, setIsOpen}) {
           className="flex justify-center items-center w-7 h-full"
           onClick={() => setIsOpen((previousIsOpen) => !previousIsOpen)}
         >
+          <span className="sr-only">{isOpen ? 'Close' : 'Open'} Menu</span>
           {isOpen ? <CloseIcon /> : <OpenIcon />}
         </button>
         {isOpen ? (
