@@ -23,7 +23,6 @@ export function useShopQuery<T>({
   cache,
   locale = '',
   preload = false,
-  trackOverfetch = true,
 }: {
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
@@ -42,8 +41,6 @@ export function useShopQuery<T>({
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
-  /** Detect and warn about unused data from the GraphQL request in development. */
-  trackOverfetch?: boolean;
 }): UseShopQueryResponse<T> {
   if (!import.meta.env.SSR) {
     throw new Error(
@@ -103,7 +100,7 @@ export function useShopQuery<T>({
 
   if (
     import.meta.env.DEV &&
-    trackOverfetch &&
+    log.options().showUnusedQueryProperties &&
     query &&
     typeof query !== 'string' &&
     data?.data
