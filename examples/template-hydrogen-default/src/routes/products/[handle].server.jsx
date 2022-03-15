@@ -32,15 +32,8 @@ export default function Product({country = {isoCode: 'US'}}) {
 }
 
 const QUERY = gql`
-  query product(
-    $country: CountryCode
-    $handle: String!
-    $includeReferenceMetafieldDetails: Boolean = true
-    $numProductMetafields: Int = 20
-    $numProductVariants: Int = 250
-    $numProductMedia: Int = 6
-    $numProductVariantMetafields: Int = 10
-  ) @inContext(country: $country) {
+  query product($country: CountryCode, $handle: String!)
+  @inContext(country: $country) {
     product: product(handle: $handle) {
       compareAtPriceRange {
         maxVariantPrice {
@@ -62,7 +55,7 @@ const QUERY = gql`
       }
       handle
       id
-      media(first: $numProductMedia) {
+      media(first: 6) {
         edges {
           node {
             ... on MediaImage {
@@ -107,7 +100,7 @@ const QUERY = gql`
           }
         }
       }
-      metafields(first: $numProductMetafields) {
+      metafields(first: 20) {
         edges {
           node {
             id
@@ -118,7 +111,7 @@ const QUERY = gql`
             createdAt
             updatedAt
             description
-            reference @include(if: $includeReferenceMetafieldDetails) {
+            reference {
               __typename
               ... on MediaImage {
                 id
@@ -150,7 +143,7 @@ const QUERY = gql`
         title
       }
       title
-      variants(first: $numProductVariants) {
+      variants(first: 250) {
         edges {
           node {
             availableForSale
@@ -166,7 +159,7 @@ const QUERY = gql`
               width
               height
             }
-            metafields(first: $numProductVariantMetafields) {
+            metafields(first: 10) {
               edges {
                 node {
                   id
@@ -177,7 +170,7 @@ const QUERY = gql`
                   createdAt
                   updatedAt
                   description
-                  reference @include(if: $includeReferenceMetafieldDetails) {
+                  reference {
                     __typename
                     ... on MediaImage {
                       id
