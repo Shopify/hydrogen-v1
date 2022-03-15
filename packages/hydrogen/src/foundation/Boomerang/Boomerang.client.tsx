@@ -75,7 +75,7 @@ export function Boomerang({pageTemplate}: {pageTemplate: string | null}) {
       // ignore if boomerang doesn't load
       // most likely because of a ad blocker
     });
-  }, [storeDomain, pageTemplate]);
+  }, [storeDomain, pageTemplate, templateName]);
 
   return null;
 }

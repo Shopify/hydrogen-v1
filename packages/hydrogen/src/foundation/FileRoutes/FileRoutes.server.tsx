@@ -29,12 +29,12 @@ export function FileRoutes({
   const request = useServerRequest();
   const {routeRendered, serverProps} = request.ctx.router;
 
-  if (routeRendered) return null;
-
   const pageRoutes = useMemo(
-    () => createPageRoutes(routes, basePath, dirPrefix),
-    [routes, basePath]
+    () => createPageRoutes(routes, basePath, dirPrefix, routeRendered),
+    [routes, basePath, dirPrefix, routeRendered]
   );
+
+  if (!pageRoutes) return null;
 
   let foundRoute, foundRouteDetails;
 
@@ -72,8 +72,11 @@ interface HydrogenRoute {
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
-  dirPrefix: string
-): HydrogenRoute[] {
+  dirPrefix: string,
+  routeRendered: boolean
+): HydrogenRoute[] | undefined {
+  if (routeRendered) return;
+
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const routes = Object.keys(pages)

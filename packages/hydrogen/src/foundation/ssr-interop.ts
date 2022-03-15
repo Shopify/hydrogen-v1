@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /**
  * This file is used for compatibility between browser and server environments.
  * The browser loads this file as is, without leaking server logic.

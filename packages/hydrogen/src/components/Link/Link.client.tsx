@@ -54,7 +54,17 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           });
         }
       },
-      [reloadDocument, target, _replace, to, clientState, onClick, location]
+      [
+        onClick,
+        reloadDocument,
+        target,
+        _replace,
+        location,
+        to,
+        navigate,
+        props.to,
+        clientState,
+      ]
     );
 
     return (

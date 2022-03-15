@@ -55,6 +55,7 @@ export function useServerRequest() {
   let request: ServerComponentRequest | null;
   try {
     // Context only works in SSR rendering
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     request = useContext(RequestContextSSR);
   } catch (error) {
     // If normal context failed it means this is not an SSR request.

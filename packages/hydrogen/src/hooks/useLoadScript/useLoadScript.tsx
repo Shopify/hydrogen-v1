@@ -24,7 +24,7 @@ export function useLoadScript(
     }
 
     loadScriptWrapper();
-  }, [url, JSON.stringify(options)]);
+  }, [options, url]);
 
   return status;
 }

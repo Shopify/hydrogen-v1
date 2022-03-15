@@ -41,7 +41,7 @@
     "build-esnext": "tsc --p tsconfig.build.json",
     "build-node": "tsc --p tsconfig.cjs.json",
     "build-copy": "cpy --parents *.[jt]s *.json dist vendor ../../node_modules/@shopify/hydrogen",
-    "lint": "eslint --ext .ts src/** --no-error-on-unmatched-pattern",
+    "lint": "eslint --ext .ts,.tsx src --no-error-on-unmatched-pattern",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
     "prepack": "yarn build"

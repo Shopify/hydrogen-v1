@@ -623,7 +623,7 @@ export function CartProvider({
       return;
     }
     buyerIdentityUpdate({countryCode}, state);
-  }, [countryCode]);
+  }, [buyerIdentityUpdate, countryCode, state]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {

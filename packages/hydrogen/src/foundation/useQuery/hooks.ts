@@ -79,6 +79,9 @@ function cachedQueryFnBuilder<T>(
   async function cachedQueryFn() {
     // Call this hook before running any async stuff
     // to prevent losing the current React cycle.
+
+    // TODO: pass `request` to `cachedQueryFn` instead of pulling it here.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const request = useServerRequest();
     const log = getLoggerWithContext(request);
 

@@ -79,7 +79,7 @@ export function useProductOptions({
         }, {} as SelectedOptions)
       : {};
     setSelectedOptions(selectedOptions);
-  }, [initialVariantId, variants]);
+  }, [initialVariantId, selectedVariant?.selectedOptions, variants]);
 
   /**
    * Allow the developer to select an option.

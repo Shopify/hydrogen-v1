@@ -19,6 +19,7 @@
     "test": "jest",
     "dev": "yarn build --preserveWatchOutput -w",
     "build": "tsc -p . ",
+    "lint": "eslint --ext .ts src/",
     "prepack": "yarn build && node scripts/copy-templates.js",
     "hydrogen": "./bin/hydrogen",
     "h2": "./bin/hydrogen"

@@ -1,10 +1,14 @@
 // @ts-check
 
 module.exports = {
-  ignorePatterns: ['**/storefront-api-types.ts'],
+  ignorePatterns: ['**/storefront-api-types.ts', 'dist', 'vendor'],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
-  extends: ['plugin:node/recommended', 'plugin:hydrogen/typescript'],
+  extends: [
+    'plugin:node/recommended',
+    'plugin:hydrogen/typescript',
+    'plugin:react-hooks/recommended',
+  ],
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,

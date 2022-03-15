@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {RSC_PATHNAME} from '../../constants';
 import {useEnvContext, META_ENV_SSR} from '../ssr-interop';
 

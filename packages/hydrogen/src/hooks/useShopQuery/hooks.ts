@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';

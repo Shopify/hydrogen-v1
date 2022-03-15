@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {createBrowserHistory, BrowserHistory, Location} from 'history';
 import React, {
   createContext,
@@ -39,7 +40,7 @@ export const BrowserRouter: FC<{
     }
 
     currentPath = serverState.pathname;
-  }, [pending]);
+  }, [firstLoad, pending, serverState.pathname]);
 
   useEffect(() => {
     const unlisten = history.listen(({location: newLocation}) => {
@@ -52,7 +53,7 @@ export const BrowserRouter: FC<{
     });
 
     return () => unlisten();
-  }, [history]);
+  }, [history, location.search, setServerState]);
 
   return (
     <RouterContext.Provider

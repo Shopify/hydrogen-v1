@@ -13,9 +13,8 @@
   "scripts": {
     "dev": "cross-env LOCAL_DEV=true yarn turbo run dev --parallel",
     "build": "yarn turbo run build",
-    "lint": "run-p lint:js lint:language",
-    "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src",
-    "lint:language": "alex {.,.changeset}",
+    "lint": "yarn turbo run lint --parallel && yarn lint:language",
+    "lint:language": "alex -q {.,.changeset}",
     "format": "prettier --write --ignore-unknown .",
     "format:check": "prettier --check --ignore-unknown .",
     "test": "jest",
