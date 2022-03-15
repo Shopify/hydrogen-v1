@@ -42,8 +42,6 @@ const QUERY = gql`
     $numProductVariantMetafields: Int = 10
   ) @inContext(country: $country) {
     product: product(handle: $handle) {
-      id
-      vendor
       compareAtPriceRange {
         maxVariantPrice {
           currencyCode
