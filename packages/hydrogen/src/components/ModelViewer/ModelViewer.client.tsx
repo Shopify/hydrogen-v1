@@ -280,10 +280,14 @@ export function ModelViewer<TTag extends ElementType>(
     return null;
   }
 
-  if (!data?.sources?.[0]?.url) {
+  if (!data.sources?.[0]?.url) {
     throw new Error(
       `<ModelViewer/> requires 'data.sources' prop to be an array, with an object that has a property 'url' on it`
     );
+  }
+
+  if (!data.alt) {
+    throw new Error(`<ModelViewer/> requires the 'data.alt' prop`);
   }
 
   return (
