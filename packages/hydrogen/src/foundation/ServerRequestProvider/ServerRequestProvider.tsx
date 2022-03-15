@@ -95,19 +95,21 @@ export function useRequestCacheData<T>(
   const cacheKey = hashKey(key);
 
   if (!cache.has(cacheKey)) {
-    let data: RequestCacheResult<T>;
+    let result: RequestCacheResult<T>;
     let promise: Promise<RequestCacheResult<T> | void>;
 
     cache.set(cacheKey, () => {
-      if (data !== undefined) {
+      if (result !== undefined) {
         collectQueryTimings(request, key, 'rendered');
-        return data;
+        return result;
       }
+
       if (!promise) {
         const startApiTime = getTime();
         promise = fetcher().then(
-          (r) => {
-            data = {data: r};
+          (data) => {
+            result = {data};
+
             collectQueryTimings(
               request,
               key,
@@ -115,9 +117,10 @@ export function useRequestCacheData<T>(
               getTime() - startApiTime
             );
           },
-          (e) => (data = {error: e})
+          (error) => (result = {error})
         );
       }
+
       throw promise;
     });
   }
@@ -139,19 +142,19 @@ export function preloadRequestCacheData(
     collectQueryTimings(request, preloadQuery.key, 'preload');
 
     if (!cache.has(cacheKey)) {
-      let data: unknown;
+      let result: unknown;
       let promise: Promise<unknown>;
 
       cache.set(cacheKey, () => {
-        if (data !== undefined) {
+        if (result !== undefined) {
           collectQueryTimings(request, preloadQuery.key, 'rendered');
-          return data;
+          return result;
         }
         if (!promise) {
           const startApiTime = getTime();
           promise = preloadQuery.fetcher().then(
-            (r) => {
-              data = {data: r};
+            (data) => {
+              result = {data};
               collectQueryTimings(
                 request,
                 preloadQuery.key,
@@ -159,18 +162,8 @@ export function preloadRequestCacheData(
                 getTime() - startApiTime
               );
             },
-            (e) => {
-              // The preload query failed for some reason:
-              // On Cloudfare, this happens when a Cache item has expired at max-age
-              //
-              // We need to remove this entry from cache so that render cycle will retry on its own
-              cache.delete(cacheKey);
-              collectQueryTimings(
-                request,
-                preloadQuery.key,
-                'expired',
-                getTime() - startApiTime
-              );
+            (error) => {
+              result = {error};
             }
           );
         }

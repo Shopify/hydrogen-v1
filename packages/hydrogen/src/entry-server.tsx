@@ -429,8 +429,6 @@ async function stream(
 
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
-    response.socket!.on('error', log.fatal);
-
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -566,8 +564,6 @@ async function hydrate(
 
     return new Response(bufferedBody);
   } else if (response) {
-    response.socket!.on('error', log.fatal);
-
     const rscWriter = await import(
       // @ts-ignore
       '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
