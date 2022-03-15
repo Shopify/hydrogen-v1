@@ -1,3 +1,4 @@
+import {useNavigate} from '@shopify/hydrogen/client';
 import {
   useForm,
   useField,
@@ -7,6 +8,7 @@ import {
 } from '@shopify/react-form';
 
 export function LoginForm() {
+  const navigate = useNavigate();
   const {
     fields: {email, password},
     submit,
@@ -32,12 +34,11 @@ export function LoginForm() {
       if (response.error) {
         return submitFail([{message: 'Incorrect email or password.'}]);
       } else {
+        navigate('/account');
         return submitSuccess();
       }
     },
   });
-
-  function handleForgotPassword() {}
 
   return (
     <form
@@ -106,24 +107,14 @@ export function LoginForm() {
           disabled={!dirty}
           onClick={submit}
         >
-          Create
-        </button>
-        <button
-          className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-          onClick={handleForgotPassword}
-        >
-          Forgot Password?
+          Sign in
         </button>
       </div>
     </form>
   );
 }
 
-export function callLoginApi({email, password}) {
-  const formData = new FormData();
-  formData.append('email', email);
-  formData.append('password', password);
-
+function callLoginApi({email, password}) {
   return fetch(`/account/api-login`, {
     method: 'POST',
     headers: {
