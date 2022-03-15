@@ -191,13 +191,8 @@ const SEO_QUERY = gql`
 `;
 
 const QUERY = gql`
-  query indexContent(
-    $country: CountryCode
-    $numCollections: Int = 2
-    $numProducts: Int = 3
-    $numProductVariants: Int = 1
-  ) @inContext(country: $country) {
-    collections(first: $numCollections) {
+  query indexContent($country: CountryCode) @inContext(country: $country) {
+    collections(first: 2) {
       edges {
         node {
           handle
@@ -210,13 +205,13 @@ const QUERY = gql`
             width
             height
           }
-          products(first: $numProducts) {
+          products(first: 3) {
             edges {
               node {
                 handle
                 id
                 title
-                variants(first: $numProductVariants) {
+                variants(first: 1) {
                   edges {
                     node {
                       id
