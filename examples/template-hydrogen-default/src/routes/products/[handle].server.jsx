@@ -40,9 +40,6 @@ const QUERY = gql`
     $numProductVariants: Int = 250
     $numProductMedia: Int = 6
     $numProductVariantMetafields: Int = 10
-    $numProductVariantSellingPlanAllocations: Int = 0
-    $numProductSellingPlanGroups: Int = 0
-    $numProductSellingPlans: Int = 0
   ) @inContext(country: $country) {
     product: product(handle: $handle) {
       id
@@ -207,47 +204,6 @@ const QUERY = gql`
                   }
                 }
               }
-            }
-            sellingPlanAllocations(
-              first: $numProductVariantSellingPlanAllocations
-            ) {
-              edges {
-                node {
-                  sellingPlan {
-                    id
-                    description
-                    name
-                    options {
-                      name
-                      value
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      sellingPlanGroups(first: $numProductSellingPlanGroups) {
-        edges {
-          node {
-            sellingPlans(first: $numProductSellingPlans) {
-              edges {
-                node {
-                  id
-                  description
-                  name
-                  options {
-                    name
-                    value
-                  }
-                }
-              }
-            }
-            name
-            options {
-              name
-              values
             }
           }
         }
