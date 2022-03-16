@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "yarn@1.22.17",
   "workspaces": [
-    "examples/*",
+    "examples/template-hydrogen-default",
     "packages/*",
     "packages/playground/*"
   ],
