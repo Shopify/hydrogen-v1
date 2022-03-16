@@ -101,7 +101,7 @@ export default () => {
         const packageJson = {
           type: isESM ? 'module' : 'commonjs',
           main: mainFile,
-          exports: {'.': mainFile, mainFile},
+          exports: {'.': mainFile, [mainFile]: mainFile},
         };
 
         fs.writeFileSync(
