@@ -27,6 +27,3 @@ export type {
   CollectionSeoFragmentFragment,
   PageSeoFragmentFragment,
 } from './components/Seo/SeoFragment';
-
-export {VideoFragment} from './graphql/graphql-constants';
-export type {VideoFragmentFragment} from './components/Video/VideoFragment';
