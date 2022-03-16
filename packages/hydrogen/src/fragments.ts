@@ -1,6 +1,3 @@
-export {ImageFragment} from './graphql/graphql-constants';
-export type {ImageFragmentFragment} from './components/Image/ImageFragment';
-
 export {MediaFileFragment} from './graphql/graphql-constants';
 export type {
   MediaFileFragmentFragment,

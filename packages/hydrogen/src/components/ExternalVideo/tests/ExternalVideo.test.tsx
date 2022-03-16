@@ -68,7 +68,13 @@ describe('<ExternalVideo />', () => {
 
   describe(`throws when necessary props aren't passed`, () => {
     it(`data.embedUrl`, () => {
+      // to silence the test runner's console.error from being called
+      const consoleSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       expect(() => mount(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
+      expect(console.error).toHaveBeenCalled();
+      consoleSpy.mockRestore();
     });
   });
 });

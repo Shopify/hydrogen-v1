@@ -6,7 +6,8 @@ import {
   shopifyImageLoader,
   getShopifyImageDimensions,
 } from '../../utilities';
-import type {ImageFragmentFragment} from './ImageFragment';
+import type {Image as ImageType} from '../../storefront-api-types';
+import type {PartialDeep, MergeExclusive} from 'type-fest';
 
 export interface BaseImageProps {
   /** A custom function that generates the image URL. Parameters passed into this function includes
@@ -17,13 +18,15 @@ export interface BaseImageProps {
    * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
    */
   loaderOptions?: ImageLoaderOptions['options'];
+  id?: string;
+  alt?: string;
 }
 
 interface MediaImageProps extends BaseImageProps {
   /** An object with keys that correspond to the Storefront API's
    * [Image object](/api/storefront/reference/common-objects/image).
    */
-  data: ImageFragmentFragment;
+  data: PartialDeep<ImageType>;
   /** An object of image size options for Shopify CDN images. */
   options?: ImageSizeOptions;
 }
@@ -37,30 +40,9 @@ interface ExternalImageProps extends BaseImageProps {
   height: number;
 }
 
-type ImageProps = MediaImageProps | ExternalImageProps;
+type ImageProps = MergeExclusive<MediaImageProps, ExternalImageProps>;
 
 type PropsWeControl = 'src' | 'width' | 'height';
-
-function convertShopifyImageData({
-  data,
-  options,
-  loader,
-  loaderOptions,
-  id: propId,
-  alt,
-}: MediaImageProps & {id?: string; alt?: string}) {
-  const {url: src, altText, id} = data;
-  const {width, height} = getShopifyImageDimensions(data, options);
-  return {
-    src,
-    id: propId ? propId : id,
-    alt: alt ? alt : altText,
-    width,
-    height,
-    loader: loader ? loader : shopifyImageLoader,
-    loaderOptions: {...options, ...loaderOptions},
-  };
-}
 
 /**
  * The `Image` component renders an image for the Storefront API's
@@ -128,4 +110,28 @@ export function Image<TTag extends React.ElementType = 'img'>(
       height={imgProps.height ?? undefined}
     />
   );
+}
+
+function convertShopifyImageData({
+  data,
+  options,
+  loader,
+  loaderOptions,
+  id: propId,
+  alt,
+}: MediaImageProps) {
+  const {url: src, altText, id} = data;
+  if (!src) {
+    throw new Error(`<Image/> requires 'data.url' when using the 'data' prop`);
+  }
+  const {width, height} = getShopifyImageDimensions(data, options);
+  return {
+    src,
+    id: propId ? propId : id,
+    alt: alt ? alt : altText,
+    width,
+    height,
+    loader: loader ? loader : shopifyImageLoader,
+    loaderOptions: {...options, ...loaderOptions},
+  };
 }
