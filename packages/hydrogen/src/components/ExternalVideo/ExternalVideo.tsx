@@ -1,12 +1,13 @@
 import React from 'react';
 import {YouTube, Vimeo, useEmbeddedVideoUrl} from '../../utilities';
-import type {ExternalVideoFragmentFragment} from './ExternalVideoFragment';
+import type {ExternalVideo} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 interface ExternalVideoProps {
-  /** An object with the keys `host`, `embedUrl`, and `id`. Refer to the Storefront API's
-   * [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).
+  /**
+   * An object with fields that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
    */
-  data: ExternalVideoFragmentFragment;
+  data: PartialDeep<ExternalVideo>;
   /** An object containing the options available for either
    * [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or
    * [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters).
@@ -34,12 +35,16 @@ export function ExternalVideo(
     ...passthroughProps
   } = props;
 
+  if (!data.embedUrl) {
+    throw new Error(`<ExternalVideo/> requires the 'embedUrl' property`);
+  }
+
   const url = useEmbeddedVideoUrl(data.embedUrl, options);
 
   return (
     <iframe
       {...passthroughProps}
-      id={id}
+      id={id ?? data.embedUrl}
       frameBorder={frameBorder}
       allow={allow}
       allowFullScreen={allowFullScreen}

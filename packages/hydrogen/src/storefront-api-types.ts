@@ -250,9 +250,8 @@ export enum ArticleSortKeys {
   /** Sort by the `published_at` value. */
   PublishedAt = 'PUBLISHED_AT',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -408,9 +407,8 @@ export enum BlogSortKeys {
   /** Sort by the `id` value. */
   Id = 'ID',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -1612,9 +1610,8 @@ export enum CollectionSortKeys {
   /** Sort by the `id` value. */
   Id = 'ID',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -3640,6 +3637,8 @@ export enum LanguageCode {
   Pl = 'PL',
   /** Pashto. */
   Ps = 'PS',
+  /** Portuguese. */
+  Pt = 'PT',
   /** Portuguese (Brazil). */
   PtBr = 'PT_BR',
   /** Portuguese (Portugal). */
@@ -3720,6 +3719,8 @@ export enum LanguageCode {
   Yi = 'YI',
   /** Yoruba. */
   Yo = 'YO',
+  /** Chinese. */
+  Zh = 'ZH',
   /** Chinese (Simplified). */
   ZhCn = 'ZH_CN',
   /** Chinese (Traditional). */
@@ -4062,6 +4063,72 @@ export type MediaImage = Media &
     /** The preview image for the media. */
     previewImage?: Maybe<Image>;
   };
+
+/**
+ * A menu used for navigation within a storefront.
+ *
+ */
+export type Menu = Node & {
+  __typename?: 'Menu';
+  /** The menu's handle. */
+  handle: Scalars['String'];
+  /** A globally-unique identifier. */
+  id: Scalars['ID'];
+  /** The menu's child items. */
+  items: Array<MenuItem>;
+  /** The count of items on the menu. */
+  itemsCount: Scalars['Int'];
+  /** The menu's title. */
+  title: Scalars['String'];
+};
+
+/**
+ * A menu item within a parent menu.
+ *
+ */
+export type MenuItem = Node & {
+  __typename?: 'MenuItem';
+  /** A globally-unique identifier. */
+  id: Scalars['ID'];
+  /** The menu item's child items. */
+  items: Array<MenuItem>;
+  /** The ID of the linked resource. */
+  resourceId?: Maybe<Scalars['ID']>;
+  /** The menu item's tags to filter a collection. */
+  tags: Array<Scalars['String']>;
+  /** The menu item's title. */
+  title: Scalars['String'];
+  /** The menu item's type. */
+  type: MenuItemType;
+  /** The menu item's URL. */
+  url?: Maybe<Scalars['URL']>;
+};
+
+/** A menu item type. */
+export enum MenuItemType {
+  /** An article link. */
+  Article = 'ARTICLE',
+  /** A blog link. */
+  Blog = 'BLOG',
+  /** A catalog link. */
+  Catalog = 'CATALOG',
+  /** A collection link. */
+  Collection = 'COLLECTION',
+  /** A collection link. */
+  Collections = 'COLLECTIONS',
+  /** A frontpage link. */
+  Frontpage = 'FRONTPAGE',
+  /** An http link. */
+  Http = 'HTTP',
+  /** A page link. */
+  Page = 'PAGE',
+  /** A product link. */
+  Product = 'PRODUCT',
+  /** A search link. */
+  Search = 'SEARCH',
+  /** A shop policy link. */
+  ShopPolicy = 'SHOP_POLICY',
+}
 
 /** The merchandise to be purchased at checkout. */
 export type Merchandise = ProductVariant;
@@ -4974,9 +5041,8 @@ export enum OrderSortKeys {
   /** Sort by the `processed_at` value. */
   ProcessedAt = 'PROCESSED_AT',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -5075,9 +5141,8 @@ export enum PageSortKeys {
   /** Sort by the `id` value. */
   Id = 'ID',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -5393,9 +5458,8 @@ export enum ProductCollectionSortKeys {
   /** Sort by the `price` value. */
   Price = 'PRICE',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -5456,9 +5520,8 @@ export enum ProductImageSortKeys {
   /** Sort by the `position` value. */
   Position = 'POSITION',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -5471,9 +5534,8 @@ export enum ProductMediaSortKeys {
   /** Sort by the `position` value. */
   Position = 'POSITION',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -5517,9 +5579,8 @@ export enum ProductSortKeys {
   /** Sort by the `product_type` value. */
   ProductType = 'PRODUCT_TYPE',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -5661,9 +5722,8 @@ export enum ProductVariantSortKeys {
   /** Sort by the `position` value. */
   Position = 'POSITION',
   /**
-   * During a search (i.e. when the `query` parameter has been specified on the connection) this sorts the
-   * results by relevance to the search term(s). When no search query is specified, this sort key is not
-   * deterministic and should not be used.
+   * Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+   * Don't use this sort key when no search query is specified.
    *
    */
   Relevance = 'RELEVANCE',
@@ -5709,6 +5769,8 @@ export type QueryRoot = {
    *
    */
   locations: LocationConnection;
+  /** A storefront menu. */
+  menu?: Maybe<Menu>;
   /** Returns a specific node by ID. */
   node?: Maybe<
     | AppliedGiftCard
@@ -5724,6 +5786,8 @@ export type QueryRoot = {
     | Location
     | MailingAddress
     | MediaImage
+    | Menu
+    | MenuItem
     | Metafield
     | Model3d
     | Order
@@ -5752,6 +5816,8 @@ export type QueryRoot = {
       | Location
       | MailingAddress
       | MediaImage
+      | Menu
+      | MenuItem
       | Metafield
       | Model3d
       | Order
@@ -5878,6 +5944,11 @@ export type QueryRootLocationsArgs = {
   near?: InputMaybe<GeoCoordinateInput>;
   reverse?: InputMaybe<Scalars['Boolean']>;
   sortKey?: InputMaybe<LocationSortKeys>;
+};
+
+/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+export type QueryRootMenuArgs = {
+  handle: Scalars['String'];
 };
 
 /** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */

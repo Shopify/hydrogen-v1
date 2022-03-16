@@ -65,4 +65,10 @@ describe('<ExternalVideo />', () => {
       className: 'fancy',
     });
   });
+
+  describe(`throws when necessary props aren't passed`, () => {
+    it(`data.embedUrl`, () => {
+      expect(() => mount(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
+    });
+  });
 });
