@@ -7,13 +7,14 @@ import React, {
 } from 'react';
 import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
 import {Props} from '../types';
-import type {Model3DFragmentFragment} from './Model3DFragment';
+import type {Model3d} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 interface ModelViewerProps {
   /** Any ReactNode elements. */
   children?: ReactNode;
   /** An object with keys that correspond to the Storefront API's [Model3D object](/api/storefront/latest/objects/model3d). */
-  data: Model3DFragmentFragment;
+  data: PartialDeep<Model3d>;
   /** A string of either `auto`, `lazy`, or `eager` to indicate the conditions for preloading. Refer to [loading in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-loading). */
   loading?: 'auto' | 'lazy' | 'eager';
   /** A URL to display an image instead of the model. This is useful for showing the user something before a model is loaded and ready to render. If no URL is provided, then [Model3d.previewImage](/api/storefront/latest/objects/model3d) is used. Refer to [poster in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-poster). */
@@ -144,13 +145,7 @@ export function ModelViewer<TTag extends ElementType>(
   const callbackRef = useCallback((node) => {
     setModelViewer(node);
   }, []);
-  const {
-    data: model,
-    id = model.id,
-    children,
-    className,
-    ...passthroughProps
-  } = props;
+  const {data, id = data.id, children, className, ...passthroughProps} = props;
 
   const modelViewerLoadedStatus = useLoadScript(
     'https://unpkg.com/@google/model-viewer@v1.8.0/dist/model-viewer.min.js',
@@ -285,16 +280,26 @@ export function ModelViewer<TTag extends ElementType>(
     return null;
   }
 
+  if (!data.sources?.[0]?.url) {
+    throw new Error(
+      `<ModelViewer/> requires 'data.sources' prop to be an array, with an object that has a property 'url' on it`
+    );
+  }
+
+  if (!data.alt) {
+    throw new Error(`<ModelViewer/> requires the 'data.alt' prop`);
+  }
+
   return (
     <model-viewer
       ref={callbackRef}
       {...passthroughProps}
       class={className}
       id={id}
-      src={model.sources[0].url}
-      alt={model.alt}
+      src={data.sources[0].url}
+      alt={data.alt}
       camera-controls={passthroughProps.cameraControls ?? true}
-      poster={passthroughProps.poster || model.previewImage?.url}
+      poster={passthroughProps.poster || data.previewImage?.url}
       autoplay={passthroughProps.autoplay ?? true}
       loading={passthroughProps.loading}
       reveal={passthroughProps.reveal}

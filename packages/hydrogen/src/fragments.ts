@@ -1,9 +1,3 @@
-export {ExternalVideoFragment} from './graphql/graphql-constants';
-export type {ExternalVideoFragmentFragment} from './components/ExternalVideo/ExternalVideoFragment';
-
-export {ImageFragment} from './graphql/graphql-constants';
-export type {ImageFragmentFragment} from './components/Image/ImageFragment';
-
 export {MediaFileFragment} from './graphql/graphql-constants';
 export type {
   MediaFileFragmentFragment,
@@ -15,9 +9,6 @@ export type {
 
 export {MetafieldFragment} from './graphql/graphql-constants';
 export type {MetafieldFragmentFragment} from './components/Metafield/MetafieldFragment';
-
-export {Model3DFragment} from './graphql/graphql-constants';
-export type {Model3DFragmentFragment} from './components/ModelViewer/Model3DFragment';
 
 export {MoneyFragment} from './graphql/graphql-constants';
 export type {MoneyFragmentFragment} from './components/Money/MoneyFragment';

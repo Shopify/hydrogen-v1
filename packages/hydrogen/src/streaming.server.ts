@@ -39,27 +39,8 @@ export const ssrRenderToReadableStream = _ssrRenderToReadableStream as (
   options: StreamOptions
 ) => ReadableStream<Uint8Array>;
 
-let cachedStreamingSupport: boolean;
 export async function isStreamingSupported() {
-  if (cachedStreamingSupport === undefined) {
-    try {
-      const rs = new ReadableStream({
-        start(controller) {
-          controller.close();
-        },
-      });
-
-      // This will throw in CFW until streaming
-      // is supported. It works in Miniflare.
-      await new Response(rs).text();
-
-      cachedStreamingSupport = true;
-    } catch (_) {
-      cachedStreamingSupport = false;
-    }
-  }
-
-  return cachedStreamingSupport;
+  return Boolean(globalThis.Oxygen?.env?.HYDROGEN_ENABLE_WORKER_STREAMING);
 }
 
 export async function bufferReadableStream(
