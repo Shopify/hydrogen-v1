@@ -5,7 +5,7 @@ import type {PartialDeep} from 'type-fest';
 
 interface ExternalVideoProps {
   /**
-   * An object with the key `embedUrl`. Refer to the Storefront API's [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).
+   * An object with fields that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
    */
   data: PartialDeep<ExternalVideo>;
   /** An object containing the options available for either
