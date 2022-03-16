@@ -216,7 +216,7 @@ addEventListener('fetch', (event) => event.respondWith(handleEvent(event)));
 Update `package.json` to specify the new Worker entry point. If the entry point is in `<root>/worker.js`, then the changes look like the following:
 
 ```diff
-- "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker-event",
+- "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker",
 + "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker",
 ```
 
