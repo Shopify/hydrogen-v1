@@ -10,9 +10,6 @@ export type {
 export {MetafieldFragment} from './graphql/graphql-constants';
 export type {MetafieldFragmentFragment} from './components/Metafield/MetafieldFragment';
 
-export {MoneyFragment} from './graphql/graphql-constants';
-export type {MoneyFragmentFragment} from './components/Money/MoneyFragment';
-
 export {ProductProviderFragment} from './graphql/graphql-constants';
 export type {ProductProviderFragmentFragment} from './components/ProductProvider/ProductProviderFragment';
 
