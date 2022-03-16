@@ -105,14 +105,39 @@ export function useShopQuery<T>({
     typeof query !== 'string' &&
     data?.data
   ) {
+    const fileLine = new Error('').stack
+      ?.split('\n')
+      .find((line) => line.includes('.server.'));
+    const [, functionName, fileName] =
+      fileLine?.match(/^\s*at (\w+) \(([^)]+)\)/) || [];
+
     injectGraphQLTracker({
       query,
       data,
       onUnusedData: ({queryName, properties}) => {
         const footer = `Examine the list of fields above to confirm that they are being used.\n`;
-        const header = `Potentially overfetching fields in GraphQL query \`${queryName}\`:\n`;
+        const header = `Potentially overfetching fields in GraphQL query.\n`;
+        let info = `Query \`${queryName}\``;
+        if (fileName) {
+          info += ` in file \`${fileName}\` (function \`${functionName}\`)`;
+        }
 
-        log.warn(header + `• ${properties.join(`\n• `)}\n` + footer);
+        const n = 6;
+        const shouldTrim = properties.length > n + 1;
+        const shownProperties = shouldTrim
+          ? properties.slice(0, n)
+          : properties;
+        const hiddenInfo = shouldTrim
+          ? `  ...and ${properties.length - shownProperties.length} more\n`
+          : '';
+
+        log.warn(
+          header +
+            info +
+            `:\n• ${shownProperties.join(`\n• `)}\n` +
+            hiddenInfo +
+            footer
+        );
       },
     });
   }
