@@ -326,10 +326,12 @@ export function CartProvider({
       }
 
       if (data?.cartCreate?.cart) {
-        ClientAnalytics.publish('add-to-cart', true, {
-          addedCartLines: cart.lines,
-          cart: data.cartCreate.cart,
-        });
+        if (cart.lines) {
+          ClientAnalytics.publish('add-to-cart', true, {
+            addedCartLines: cart.lines,
+            cart: data.cartCreate.cart,
+          });
+        }
         dispatch({
           type: 'resolve',
           cart: cartFromGraphQL(data.cartCreate.cart),
