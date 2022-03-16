@@ -28,8 +28,5 @@ export type {
   PageSeoFragmentFragment,
 } from './components/Seo/SeoFragment';
 
-export {UnitPriceFragment} from './graphql/graphql-constants';
-export type {UnitPriceFragmentFragment} from './components/UnitPrice/UnitPriceFragment';
-
 export {VideoFragment} from './graphql/graphql-constants';
 export type {VideoFragmentFragment} from './components/Video/VideoFragment';

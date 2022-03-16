@@ -8,5 +8,6 @@ Fragments and their related types have been removed:
 - Model3DFragment and Model3DFragmentFragment
 - ImageFragment and ImageFragmentFragment
 - MoneyFragment and MoneyFragmentFragment
+- UnitPriceFragment and UnitPriceFragmentFragment
 
 As part of the effort to reduce over-fetching in the GraphQL queries.
