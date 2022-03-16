@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import {
   Logger,
   logServerResponse,
@@ -81,6 +81,8 @@ export const renderHydrogen = (
   App: any,
   {shopifyConfig, routes, serverAnalyticConnectors}: ServerHandlerConfig
 ) => {
+  // for each serverAnalyticsConnector - run init if available
+
   const handleRequest: RequestHandler = async function (
     rawRequest,
     {indexTemplate, streamableResponse, dev, cache, context, nonce}
@@ -614,7 +616,9 @@ function buildAppRSC({
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
         <App {...serverProps} />
-        <Analytics />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
       </PreloadQueries>
     </ServerRequestProvider>
   );
@@ -649,10 +653,12 @@ function buildAppSSR(
           setServerState={() => {}}
         >
           <PreloadQueries request={request}>
-            <React.Suspense fallback={null}>
+            <Suspense fallback={null}>
               <RscConsumer />
-            </React.Suspense>
-            <Analytics />
+            </Suspense>
+            <Suspense fallback={null}>
+              <Analytics />
+            </Suspense>
           </PreloadQueries>
         </ServerStateProvider>
       </ServerRequestProvider>
