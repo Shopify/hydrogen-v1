@@ -3,7 +3,6 @@ import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
 import MoneyPrice from '../../components/MoneyPrice.client';
-import Logout from '../../components/Logout.client';
 
 import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants/cookies';
 
@@ -31,7 +30,14 @@ export default function Account({response}) {
   return (
     <Layout>
       <h1>Account</h1>
-      <Logout />
+      <div className="flex items-center justify-between">
+        <a
+          className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+          href="/api/logout"
+        >
+          Logout
+        </a>
+      </div>
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4">
         <h2>Order History</h2>
         <table className="min-w-full table-fixed text-sm text-left mt-6">

@@ -2,9 +2,10 @@ import cookie from 'cookie';
 
 import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants/cookies';
 
-export async function api() {
+export function api() {
   return new Response(null, {
     headers: {
+      Location: '/',
       'Set-Cookie': cookie.serialize(CUSTOMER_ACCESS_TOKEN_COOKIE_NAME, '', {
         httpOnly: true,
         secure: true,
@@ -14,6 +15,6 @@ export async function api() {
         maxAge: 0,
       }),
     },
-    status: 200,
+    status: 301,
   });
 }
