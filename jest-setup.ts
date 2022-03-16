@@ -10,13 +10,13 @@ globalThis.scrollTo = () => null;
 
 jest.mock('react-dom', () => {
   const reactDom = jest.requireActual('react-dom');
-  // const reactDomClient = jest.requireActual('react-dom/client');
+  const reactDomClient = jest.requireActual('react-dom/client');
 
   return {
     ...reactDom,
     render: (app, container) => {
       // @ts-ignore
-      const root = reactDom.createRoot(container);
+      const root = reactDomClient.createRoot(container);
       container.__unmount = root.unmount.bind(root);
       root.render(app);
     },

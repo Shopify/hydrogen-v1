@@ -303,17 +303,13 @@ async function stream(
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
 
-    let ssrReadable: ReadableStream<Uint8Array>;
+    let ssrReadable: Awaited<ReturnType<typeof ssrRenderToReadableStream>>;
 
     try {
       ssrReadable = await ssrRenderToReadableStream(AppSSR, {
         nonce,
         bootstrapScripts,
         bootstrapModules,
-        onCompleteAll() {
-          log.trace('worker complete stream');
-          onCompleteAll.resolve(true);
-        },
         onError(error) {
           didError = error;
 
@@ -337,6 +333,11 @@ async function stream(
     }
 
     log.trace('worker ready to stream');
+
+    ssrReadable.allReady.then(() => {
+      log.trace('worker complete stream');
+      onCompleteAll.resolve(true);
+    });
 
     async function prepareForStreaming(flush: boolean) {
       Object.assign(
@@ -441,7 +442,7 @@ async function stream(
       nonce,
       bootstrapScripts,
       bootstrapModules,
-      onCompleteShell() {
+      onShellReady() {
         log.trace('node ready to stream');
         /**
          * TODO: This assumes `response.cache()` has been called _before_ any
@@ -474,7 +475,7 @@ async function stream(
           return response.write(chunk);
         });
       },
-      async onCompleteAll() {
+      async onAllReady() {
         log.trace('node complete stream');
 
         if (componentResponse.canStream() || response.writableEnded) {
@@ -516,7 +517,7 @@ async function stream(
           }
         );
       },
-      onErrorShell(error: any) {
+      onShellError(error: any) {
         log.error(error);
 
         if (!response.writableEnded) {
@@ -688,22 +689,19 @@ async function renderToBufferedString(
 ): Promise<string> {
   return new Promise<string>(async (resolve, reject) => {
     if (__WORKER__) {
-      const onCompleteAll = defer();
-
       try {
         const ssrReadable = await ssrRenderToReadableStream(ReactApp, {
           nonce,
-          onCompleteAll: () => onCompleteAll.resolve(null),
           onError: (error) => log.error(error),
         });
 
         /**
-         * We want to wait until `onCompleteAll` has been called before fetching the
+         * We want to wait until `allReady` resolves before fetching the
          * stream body. Otherwise, React 18's streaming JS script/template tags
          * will be included in the output and cause issues when loading
          * the Client Components in the browser.
          */
-        await onCompleteAll.promise;
+        await ssrReadable.allReady;
 
         resolve(bufferReadableStream(ssrReadable.getReader()));
       } catch (error: unknown) {
@@ -718,7 +716,7 @@ async function renderToBufferedString(
          * When hydrating, we have to wait until `onCompleteAll` to avoid having
          * `template` and `script` tags inserted and rendered as part of the hydration response.
          */
-        onCompleteAll() {
+        onAllReady() {
           let data = '';
           writer.on('data', (chunk) => (data += chunk.toString()));
           writer.once('error', reject);
@@ -726,7 +724,7 @@ async function renderToBufferedString(
           // Tell React to start writing to the writer
           pipe(writer);
         },
-        onErrorShell: reject,
+        onShellError: reject,
         onError: (error) => log.error(error),
       });
     }

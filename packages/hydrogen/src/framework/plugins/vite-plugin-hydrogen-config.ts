@@ -54,13 +54,14 @@ export default () => {
            * server versions and optimize them for ESM.
            */
           'react-helmet-async',
+          'react-error-boundary',
           /**
            * Vite cannot find the following dependencies since they might be
            * required in RSC asynchronously. This tells Vite to optimize them
            * at server start to avoid posterior page reloads and issues (#429 #430).
            */
           'react',
-          'react-dom',
+          'react-dom/client',
           'react-server-dom-vite/client-proxy',
         ],
       },

@@ -24,22 +24,22 @@ type StreamOptions = {
   nonce?: string;
   bootstrapScripts?: string[];
   bootstrapModules?: string[];
-  onCompleteAll?: () => void;
   onError?: (error: Error) => void;
 };
 
 export const ssrRenderToPipeableStream = _ssrRenderToPipeableStream as (
   App: JSX.Element,
   options: StreamOptions & {
-    onCompleteShell?: () => void;
-    onErrorShell?: (error: Error) => void;
+    onAllReady?: () => void;
+    onShellReady?: () => void;
+    onShellError?: (error: Error) => void;
   }
 ) => {pipe: Writable['pipe']};
 
 export const ssrRenderToReadableStream = _ssrRenderToReadableStream as (
   App: JSX.Element,
   options: StreamOptions
-) => Promise<ReadableStream<Uint8Array>>;
+) => Promise<ReadableStream<Uint8Array> & {allReady: Promise<void>}>;
 
 let cachedStreamingSupport: boolean;
 export async function isStreamingSupported() {
