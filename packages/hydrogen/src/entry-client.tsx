@@ -22,6 +22,12 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
     return;
   }
 
+  if (import.meta.hot) {
+    import.meta.hot.on('hydrogen:warn', (data) => {
+      console.warn(data);
+    });
+  }
+
   // default to StrictMode on, unless explicitly turned off
   const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
 

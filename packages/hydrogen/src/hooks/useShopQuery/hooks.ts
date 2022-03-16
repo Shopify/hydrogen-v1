@@ -7,6 +7,7 @@ import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
+import {sendMessageToClient} from '../../utilities/devtools';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -131,13 +132,15 @@ export function useShopQuery<T>({
           ? `  ...and ${properties.length - shownProperties.length} more\n`
           : '';
 
-        log.warn(
+        const warning =
           header +
-            info +
-            `:\n• ${shownProperties.join(`\n• `)}\n` +
-            hiddenInfo +
-            footer
-        );
+          info +
+          `:\n• ${shownProperties.join(`\n• `)}\n` +
+          hiddenInfo +
+          footer;
+
+        log.warn(warning);
+        sendMessageToClient('warn', warning);
       },
     });
   }
