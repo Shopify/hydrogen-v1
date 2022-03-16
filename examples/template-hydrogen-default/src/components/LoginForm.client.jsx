@@ -7,7 +7,7 @@ import {
   submitFail,
 } from '@shopify/react-form';
 
-export function LoginForm() {
+export default function LoginForm() {
   const navigate = useNavigate();
   const {
     fields: {email, password},
@@ -115,7 +115,7 @@ export function LoginForm() {
 }
 
 function callLoginApi({email, password}) {
-  return fetch(`/account/login`, {
+  return fetch(`/api/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
