@@ -1,13 +1,13 @@
 import React from 'react';
 import {YouTube, Vimeo, useEmbeddedVideoUrl} from '../../utilities';
-import type {ExternalVideo} from '../../storefront-api-types';
+import type {ExternalVideo as ExternalVideoType} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
 interface ExternalVideoProps {
   /**
    * An object with fields that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
    */
-  data: PartialDeep<ExternalVideo>;
+  data: PartialDeep<ExternalVideoType>;
   /** An object containing the options available for either
    * [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or
    * [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters).
