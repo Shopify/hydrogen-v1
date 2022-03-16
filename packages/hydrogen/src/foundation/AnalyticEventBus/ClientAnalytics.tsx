@@ -57,7 +57,9 @@ export function publish(eventname: string, guardDup = false, payload?: any) {
         },
       }),
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export function subscribe(
