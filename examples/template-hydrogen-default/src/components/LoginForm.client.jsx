@@ -115,7 +115,7 @@ export function LoginForm() {
 }
 
 function callLoginApi({email, password}) {
-  return fetch(`/account/api-login`, {
+  return fetch(`/account/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
