@@ -1,8 +1,7 @@
 import {Video} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
-const QUERY = `#graphql
-  ${Video.Fragment}
+const QUERY = gql`
   query Products {
     products(first: 5) {
       edges {
@@ -15,7 +14,14 @@ const QUERY = `#graphql
               node {
                 ... on Video {
                   mediaContentType
-                  ...VideoFragment
+                  id
+                  previewImage {
+                    url
+                  }
+                  sources {
+                    mimeType
+                    url
+                  }
                 }
               }
             }

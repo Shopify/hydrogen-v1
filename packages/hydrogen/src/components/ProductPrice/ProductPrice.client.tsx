@@ -1,12 +1,10 @@
-import React, {ElementType} from 'react';
-import {MoneyV2, UnitPriceMeasurement} from '../../graphql/types/types';
-import {Money, MoneyProps} from '../Money';
+import React from 'react';
+import {MoneyV2, UnitPriceMeasurement} from '../../storefront-api-types';
+import {Money} from '../Money';
 import {useProduct} from '../ProductProvider';
-import {Props} from '../types';
 import {UnitPrice} from '../UnitPrice';
 
-export interface ProductPriceProps<TTag>
-  extends Omit<MoneyProps<TTag>, 'data'> {
+export interface ProductPriceProps {
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
   /** The type of value. Valid values: `min` (default), `max` or `unit`. */
@@ -19,8 +17,12 @@ export interface ProductPriceProps<TTag>
  * The `ProductPrice` component renders a `Money` component with the product
  * [`priceRange`](/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
  */
-export function ProductPrice<TTag extends ElementType>(
-  props: Props<TTag> & ProductPriceProps<TTag>
+export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
+  props: (
+    | Omit<React.ComponentProps<typeof UnitPrice>, 'data' | 'measurement'>
+    | Omit<React.ComponentProps<typeof Money>, 'data'>
+  ) &
+    ProductPriceProps
 ) {
   const product = useProduct();
   const {
@@ -72,9 +74,13 @@ export function ProductPrice<TTag extends ElementType>(
 
   if (measurement) {
     return (
-      <UnitPrice {...passthroughProps} data={price} measurement={measurement} />
+      <UnitPrice<TTag>
+        {...passthroughProps}
+        data={price}
+        measurement={measurement}
+      />
     );
   }
 
-  return <Money {...passthroughProps} data={price} />;
+  return <Money<TTag> {...passthroughProps} data={price} />;
 }

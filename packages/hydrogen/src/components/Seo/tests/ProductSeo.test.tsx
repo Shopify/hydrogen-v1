@@ -7,9 +7,10 @@ import {TitleSeo} from '../TitleSeo.client';
 import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 import {ImageSeo} from '../ImageSeo.client';
+import {CurrencyCode} from '../../../storefront-api-types';
 
 jest.mock('../../../client', () => ({
-  Head({children}) {
+  Head({children}: {children: React.ReactNode}) {
     return children;
   },
 }));
@@ -71,7 +72,10 @@ describe('<ProductSeo />', () => {
               url: 'https://test-123/image.png',
             },
             availableForSale: false,
-            priceV2: {amount, currencyCode: 'CAD'},
+            priceV2: {
+              amount: amount.toString(),
+              currencyCode: 'CAD' as CurrencyCode,
+            },
           },
         },
       ],
@@ -85,7 +89,7 @@ describe('<ProductSeo />', () => {
   });
 
   it('renders <meta /> with property="og:price:currency" with the first variant price', () => {
-    const currencyCode = 'CAD';
+    const currencyCode = 'CAD' as CurrencyCode;
     const variants = {
       edges: [
         {
@@ -94,7 +98,7 @@ describe('<ProductSeo />', () => {
               url: 'https://test-123/image.png',
             },
             availableForSale: false,
-            priceV2: {amount: 123.45, currencyCode},
+            priceV2: {amount: (123.45).toString(), currencyCode},
           },
         },
       ],
@@ -176,7 +180,10 @@ describe('<ProductSeo />', () => {
           url: 'https://test-123/image.png',
         },
         availableForSale: false,
-        priceV2: {amount: 123.45, currencyCode: 'CAD'},
+        priceV2: {
+          amount: (123.45).toString(),
+          currencyCode: 'CAD' as CurrencyCode,
+        },
         sku: 'CK02112101',
       };
 

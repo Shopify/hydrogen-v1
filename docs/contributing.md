@@ -102,7 +102,7 @@ The Typescript types are then automatically generated from the `.graphql` query 
 
 ### Creating Typescript types for Storefront API objects without a `.graphql` file
 
-If you would like to use a type for a Storefront API object without using a GraphQL query / fragment to generate it, you can directly import the Typescript type from `/packages/src/graphql/types/types.ts` which will match the full shape of the object from the Storefront API. From there, you can use things like Typescript's `Pick` or `Omit` helpers to create the shape you need.
+If you would like to use a type for a Storefront API object without using a GraphQL query / fragment to generate it, you can directly import the Typescript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. From there, you can use things like Typescript's `Pick` or `Omit` helpers to create the shape you need.
 
 ### Updating GraphQL and Typescript types to a new Storefront API version
 
@@ -110,15 +110,17 @@ We use `graphql-codegen` to automatically generate types for all of the Storefro
 
 In order to update the supported Storefront API version:
 
-1. Update the URL in `codegen.yml`
+1. Update the Schema URL and the header comment in `codegen.yml`
 1. Run `yarn graphql-types`
-1. Fix any Typescript errors that now appear (one fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up, another way is to run the tests with `yarn test`)
+1. Fix any Typescript errors that now appear
+   1. One fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up
+   1. Another way is to clear the test cache with `yarn test --clearCache` and then run the tests with `yarn test`
 
 For context, updating the `codegen.yml` file and running the script does the following:
 
 1. Automatically hits the Storefront API, and use an introspection query to get the latest info
 1. Uses the results of that query to generate a new `graphql.schema.json` (which is a local representation of the Storefront API)
-1. Generates / updates the new types in `/packages/src/graphql/types/types.ts` based on the `graphql.schema.json`
+1. Generates / updates the new types in `/packages/hydrogen/src/storefront-api-types.ts` based on the `graphql.schema.json`
 1. Generates / updates the types in each `[Name]Fragment.ts` file
 
 ## Running a local version of Hydrogen in a Hydrogen app
@@ -217,28 +219,31 @@ You can run a single E2E test by passing a keyword, which is matched using regex
 
 ## Releasing new versions
 
-Hydrogen versions are determined exclusively by [changesets](https://github.com/changesets/changesets). When new changesets are merged into `main`, a new PR will be automatically created containing the proposed version.
+Hydrogen versions are determined exclusively by [changesets](https://github.com/changesets/changesets). When new changesets are merged into a release branch like `v1.x-2022-07`, a new PR will be automatically created containing the proposed version.
 
 This PR can stay open and will be continously updated by the changesets bot until you are ready to merge.
 
 When you are ready to release a new version of Hydrogen, merge the PR created by the changesets bot. This will convert all changesets into appropriate `CHANGELOG` files, add Git tags, and create GitHub releases for each package contained in the release.
 
-Next, visit the Shipit page for Hydrogen and click **Deploy** on the merge commit from
+Next, visit the Shipit page for Hydrogen containing the version you intend to release, e.g. `Hydrogen v1.x-2022-07`. Click **Deploy** on the merge commit that was recently created.
 
-## Releasing experimental versions
+## Releasing unstable versions
 
-Releasing an experimental version of Hydrogen to GitHub can be useful if you want to test the new version in existing apps.
+Hydrogen maintains an `unstable` branch as a home for features and breaking changes related to the `unstable` version of the Storefront API.
 
-To release an experimental version:
+To release an unstable version:
 
-- Merge your changes into the `experimental` branch.
-- Run `yarn changeset pre enter experimental` locally while in the branch. This will modify changesets' files to begin tracking changesets as an experimental release.
-- Change `.changeset/config.json` to `"changelog": "@changesets/cli/changelog"`in order to run the next command locally.
-- Run`yarn changeset version` when you are ready to release an experimental version to NPM.
-- Commit these changes, and push them to your remote `experimental` branch.
-- Go to Shipit and find "Hydrogen Experimental." Run a deploy against the commit containing your new version.
+1. Merge your changes into the `unstable` branch.
+1. Visit the Shipit page for `Hydrogen Unstable` and click **Deploy** on the commit you want to release
 
-This should release your experimental version on NPM with the `experimental` tag.
+A new snapshot release will be created with your changes and tagged on NPM with `unstable`. You can install the unstable version of Hydrogen using this tag:
+
+```bash
+yarn add @shopify/hydrogen@unstable
+
+# or start a new project:
+npx create-hydrogen-app@unstable
+```
 
 ## Testing changes in another project
 

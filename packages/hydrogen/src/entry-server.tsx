@@ -39,7 +39,6 @@ import {
   ssrRenderToReadableStream,
   rscRenderToReadableStream,
   createFromReadableStream,
-  supportsReadableStream,
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
@@ -121,7 +120,7 @@ export const renderHydrogen = (
 
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
-      (!!streamableResponse || supportsReadableStream());
+      (!!streamableResponse || (await isStreamingSupported()));
 
     const params = {
       App,
@@ -438,8 +437,6 @@ async function stream(
 
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
-    response.socket!.on('error', log.fatal);
-
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -457,8 +454,6 @@ async function stream(
         );
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
-
-        logServerResponse('str', request, response.statusCode);
 
         if (isRedirect(response)) {
           // Return redirects early without further rendering/streaming
@@ -588,8 +583,6 @@ async function hydrate(
 
     return new Response(bufferedBody);
   } else if (response) {
-    response.socket!.on('error', log.fatal);
-
     const rscWriter = await import(
       // @ts-ignore
       '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
@@ -623,11 +616,14 @@ function buildAppRSC({
   routes,
 }: BuildAppOptions) {
   const hydrogenServerProps = {request, response, log};
+  const serverProps = {...state, ...hydrogenServerProps, routes};
+
+  request.ctx.router.serverProps = serverProps;
 
   const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
-        <App {...state} {...hydrogenServerProps} routes={routes} />
+        <App {...serverProps} />
       </PreloadQueries>
     </ServerRequestProvider>
   );

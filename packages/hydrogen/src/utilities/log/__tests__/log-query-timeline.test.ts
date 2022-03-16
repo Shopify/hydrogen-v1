@@ -4,10 +4,15 @@ import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
 
 let mockLogger: jest.Mocked<Logger>;
 
-const QUERY_1 = 'query test1 {}';
-const QUERY_2 = 'query testing2 {}';
+const QUERY_1 = 'test1';
+const QUERY_2 = 'testing2';
 
-function expectTiming(mockCall, method, queryName, duration?) {
+function expectTiming(
+  mockCall: string,
+  method: string,
+  queryName: string,
+  duration?: number
+) {
   let regex;
   if (duration) {
     regex = new RegExp(
@@ -45,7 +50,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as ServerComponentRequest;
+    } as unknown as ServerComponentRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'rendered');
@@ -69,7 +74,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as ServerComponentRequest;
+    } as unknown as ServerComponentRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'requested');
@@ -111,7 +116,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as ServerComponentRequest;
+    } as unknown as ServerComponentRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
 
@@ -136,7 +141,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as ServerComponentRequest;
+    } as unknown as ServerComponentRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'resolved', 120);

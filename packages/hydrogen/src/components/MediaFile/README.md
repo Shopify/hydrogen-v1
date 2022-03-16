@@ -12,8 +12,6 @@ import {MediaFile, useShopQuery} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${MediaFile.Fragment}
-
   query Products {
     products(first: 5) {
       edges {
@@ -24,7 +22,45 @@ const QUERY = gql`
           media(first: 1) {
             edges {
               node {
-                ...MediaFileFragment
+                ... on MediaImage {
+                  mediaContentType
+                  image {
+                    id
+                    url
+                    altText
+                    width
+                    height
+                  }
+                }
+                ... on Video {
+                  mediaContentType
+                  id
+                  previewImage {
+                    url
+                  }
+                  sources {
+                    mimeType
+                    url
+                  }
+                }
+                ... on ExternalVideo {
+                  mediaContentType
+                  id
+                  embedUrl
+                  host
+                }
+                ... on Model3d {
+                  mediaContentType
+                  id
+                  alt
+                  mediaContentType
+                  previewImage {
+                    url
+                  }
+                  sources {
+                    url
+                  }
+                }
               }
             }
           }
@@ -51,10 +87,10 @@ export function MyComponent() {
 
 ## Props
 
-| Name     | Type                                                                                             | Description                                                                         |
-| -------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| data     | <code>MediaImageMedia &#124; ModelViewerMedia &#124; ExternalVideoMedia &#124; VideoMedia</code> | A [Media object](/api/storefront/reference/products/media).                         |
-| options? | <code>UndocumentedType &#124; UndocumentedType</code>                                            | The options for the `Image`, `Video`, `ExternalVideo`, or `ModelViewer` components. |
+| Name     | Type                                                | Description                                                                                                           |
+| -------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------- |
+| data     | <code>MediaFileFragmentFragment</code>              | An object with keys that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). |
+| options? | <code>React.ComponentProps<typeof Video>['options'] | React.ComponentProps<typeof ExternalVideo>['options']                                                                 | React.ComponentProps<typeof Image>['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components. |
 
 ## Component type
 
@@ -62,27 +98,48 @@ The `MediaFile` component is a shared component, which means that it renders on 
 
 ## GraphQL fragment
 
-The following fragment is available as a string for your GraphQL query using `MediaFileFragment` or `MediaFile.Fragment`. Using this fragment ensures that you have all the data necessary for rendering the `MediaFile` component.
+The following fragment is available as a string for your GraphQL query using `MediaFileFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `MediaFile` component.
 
 ```graphql
 fragment MediaFileFragment on Media {
   ... on MediaImage {
     mediaContentType
     image {
-      ...ImageFragment
+      id
+      url
+      altText
+      width
+      height
     }
   }
   ... on Video {
     mediaContentType
-    ...VideoFragment
+    id
+    previewImage {
+      url
+    }
+    sources {
+      mimeType
+      url
+    }
   }
   ... on ExternalVideo {
     mediaContentType
-    ...ExternalVideoFragment
+    id
+    embedUrl
+    host
   }
   ... on Model3d {
     mediaContentType
-    ...Model3DFragment
+    id
+    alt
+    mediaContentType
+    previewImage {
+      url
+    }
+    sources {
+      url
+    }
   }
 }
 ```

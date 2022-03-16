@@ -7,4 +7,9 @@ import shopifyConfig from './shopify.config';
 export default defineConfig({
   plugins: [hydrogen(shopifyConfig)],
   optimizeDeps: {include: ['@headlessui/react']},
+  test: {
+    globals: true,
+    testTimeout: 10000,
+    hookTimeout: 10000,
+  },
 });

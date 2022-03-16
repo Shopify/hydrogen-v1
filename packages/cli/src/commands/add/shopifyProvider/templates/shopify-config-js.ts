@@ -5,7 +5,7 @@ export default function ({storeDomain, storefrontToken}: TemplateOptions) {
 module.exports = {
   storeDomain: '${storeDomain}',
   storefrontToken: '${storefrontToken}',
-  storefrontApiVersion: '2022-01',
+  storefrontApiVersion: '2022-04',
 };
 `;
 }

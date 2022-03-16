@@ -28,6 +28,12 @@ export function ShopifyProvider({
   shopifyConfig,
   children,
 }: ShopifyProviderProps): JSX.Element {
+  if (!shopifyConfig) {
+    throw new Error(
+      'The `shopifyConfig` prop should be passed to `ShopifyProvider`'
+    );
+  }
+
   const shopifyProviderValue = useMemo(
     () => makeShopifyContext(shopifyConfig),
     [shopifyConfig]

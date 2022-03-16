@@ -10,8 +10,7 @@ import {hydrateRoot} from 'react-dom';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
-import {ServerStateProvider} from './client';
-import {Router} from './foundation/Router/Router.client';
+import {ServerStateProvider} from './foundation/ServerStateProvider';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
@@ -57,20 +56,45 @@ function Content({
       serverState={serverState}
       setServerState={setServerState}
     >
-      <Router>
-        <ClientWrapper>{response.readRoot()}</ClientWrapper>
-      </Router>
+      <ClientWrapper>{response.readRoot()}</ClientWrapper>
     </ServerStateProvider>
   );
 }
 
 function Error({error}: {error: Error}) {
+  if (import.meta.env.DEV) {
+    return (
+      <div style={{padding: '1em'}}>
+        <h1 style={{fontSize: '2em', marginBottom: '1em', fontWeight: 'bold'}}>
+          Error
+        </h1>
+
+        <pre style={{whiteSpace: 'pre-wrap'}}>{error.stack}</pre>
+      </div>
+    );
+  }
+
   return (
-    <div style={{padding: '1em'}}>
+    <div
+      style={{
+        padding: '2em',
+        textAlign: 'center',
+      }}
+    >
       <h1 style={{fontSize: '2em', marginBottom: '1em', fontWeight: 'bold'}}>
-        Error
+        Something's wrong here...
       </h1>
-      <pre style={{whiteSpace: 'pre-wrap'}}>{error.stack}</pre>
+
+      <div style={{fontSize: '1.1em'}}>
+        <p>We found an error while loading this page.</p>
+        <p>
+          Please, refresh or go back to the{' '}
+          <a href="/" style={{textDecoration: 'underline'}}>
+            home page
+          </a>
+          .
+        </p>
+      </div>
     </div>
   );
 }

@@ -4,11 +4,13 @@ import {Image} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${Image.Fragment}
-
   productByHandle(handle: "my-product") {
     featuredImage {
-      ...ImageFragment
+      id
+      url
+      altText
+      width
+      height
     }
   }
 `;

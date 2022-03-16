@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ProductDescription and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
-The `ProductDescription` component renders a `RawHtml` component with
+The `ProductDescription` component renders a `div` component with
 the product's [`descriptionHtml`](/api/storefront/reference/products/product).
 It must be a descendent of the `ProductProvider` component.
 
@@ -25,4 +25,3 @@ The `ProductDescription` component is a client component, which means that it re
 ## Related components
 
 - [`ProductProvider`](/api/hydrogen/components/product-variant/productprovider)
-- [`RawHtml`](/api/hydrogen/components/primitive/rawhtml)

@@ -1,12 +1,12 @@
-import {useShopQuery, ProductProviderFragment, Seo} from '@shopify/hydrogen';
+import {useShopQuery, Seo, useRouteParams} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
 import NotFound from '../../components/NotFound.server';
 import Layout from '../../components/Layout.server';
 
-export default function Product({country = {isoCode: 'US'}, params}) {
-  const {handle} = params;
+export default function Product({country = {isoCode: 'US'}}) {
+  const {handle} = useRouteParams();
 
   const {
     data: {product},
@@ -32,35 +32,186 @@ export default function Product({country = {isoCode: 'US'}, params}) {
 }
 
 const QUERY = gql`
-  query product(
-    $country: CountryCode
-    $handle: String!
-    $includeReferenceMetafieldDetails: Boolean = true
-    $numProductMetafields: Int = 20
-    $numProductVariants: Int = 250
-    $numProductMedia: Int = 6
-    $numProductVariantMetafields: Int = 10
-    $numProductVariantSellingPlanAllocations: Int = 0
-    $numProductSellingPlanGroups: Int = 0
-    $numProductSellingPlans: Int = 0
-  ) @inContext(country: $country) {
+  query product($country: CountryCode, $handle: String!)
+  @inContext(country: $country) {
     product: product(handle: $handle) {
-      id
-      description
-      vendor
-      seo {
-        title
-        description
+      compareAtPriceRange {
+        maxVariantPrice {
+          currencyCode
+          amount
+        }
+        minVariantPrice {
+          currencyCode
+          amount
+        }
       }
+      description
+      descriptionHtml
       featuredImage {
         url
-        height
         width
+        height
         altText
       }
-      ...ProductProviderFragment
+      handle
+      id
+      media(first: 6) {
+        edges {
+          node {
+            ... on MediaImage {
+              mediaContentType
+              image {
+                id
+                url
+                altText
+                width
+                height
+              }
+            }
+            ... on Video {
+              mediaContentType
+              id
+              previewImage {
+                url
+              }
+              sources {
+                mimeType
+                url
+              }
+            }
+            ... on ExternalVideo {
+              mediaContentType
+              id
+              embedUrl
+              host
+            }
+            ... on Model3d {
+              mediaContentType
+              id
+              alt
+              mediaContentType
+              previewImage {
+                url
+              }
+              sources {
+                url
+              }
+            }
+          }
+        }
+      }
+      metafields(first: 20) {
+        edges {
+          node {
+            id
+            type
+            namespace
+            key
+            value
+            createdAt
+            updatedAt
+            description
+            reference {
+              __typename
+              ... on MediaImage {
+                id
+                mediaContentType
+                image {
+                  id
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
+            }
+          }
+        }
+      }
+      priceRange {
+        maxVariantPrice {
+          currencyCode
+          amount
+        }
+        minVariantPrice {
+          currencyCode
+          amount
+        }
+      }
+      seo {
+        description
+        title
+      }
+      title
+      variants(first: 250) {
+        edges {
+          node {
+            availableForSale
+            compareAtPriceV2 {
+              amount
+              currencyCode
+            }
+            id
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+            metafields(first: 10) {
+              edges {
+                node {
+                  id
+                  type
+                  namespace
+                  key
+                  value
+                  createdAt
+                  updatedAt
+                  description
+                  reference {
+                    __typename
+                    ... on MediaImage {
+                      id
+                      mediaContentType
+                      image {
+                        id
+                        url
+                        altText
+                        width
+                        height
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            priceV2 {
+              amount
+              currencyCode
+            }
+            selectedOptions {
+              name
+              value
+            }
+            sku
+            title
+            unitPrice {
+              amount
+              currencyCode
+            }
+            unitPriceMeasurement {
+              measuredType
+              quantityUnit
+              quantityValue
+              referenceUnit
+              referenceValue
+            }
+          }
+        }
+      }
+      vendor
     }
   }
-
-  ${ProductProviderFragment}
 `;

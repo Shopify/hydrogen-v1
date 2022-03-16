@@ -3,14 +3,11 @@
  * Instead, you can edit the associated .graphql file to query for additional fields and this file will be updated when you run `yarn graphql-types`
  */
 // @ts-nocheck
-import * as Types from '../../graphql/types/types';
+import * as Types from '../../storefront-api-types';
 
 export type MediaFileFragment_ExternalVideo_Fragment = {
   __typename?: 'ExternalVideo';
-} & Pick<
-  Types.ExternalVideo,
-  'mediaContentType' | 'id' | 'embeddedUrl' | 'host'
->;
+} & Pick<Types.ExternalVideo, 'mediaContentType' | 'id' | 'embedUrl' | 'host'>;
 
 export type MediaFileFragment_MediaImage_Fragment = {
   __typename?: 'MediaImage';

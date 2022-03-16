@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import {useShop} from '../../foundation/useShop';
-import {CurrencyCode, MoneyV2} from '../../graphql/types/types';
+import {CurrencyCode, MoneyV2} from '../../storefront-api-types';
 
 export type UseMoneyValue = {
   /**
@@ -39,9 +39,9 @@ export type UseMoneyValue = {
 };
 
 /**
- * The `useMoney` hook takes a [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) and returns a
+ * The `useMoney` hook takes a [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) and returns a
  * default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by
- * [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
+ * [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
  */
 export function useMoney(money: MoneyV2): UseMoneyValue {
   const {locale} = useShop();

@@ -109,9 +109,13 @@ export function getApiRouteFromURL(
   };
 }
 
+/** The `queryShop` utility is a function that helps you query the Storefront API.
+ * It's similar to the `useShopQuery` hook, which is available in server components.
+ * To use `queryShop`, pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`.
+ */
 interface QueryShopArgs {
   /** A string of the GraphQL query.
-   * If no query is provided, useShopQuery will make no calls to the Storefront API.
+   * If no query is provided, then the `useShopQuery` makes no calls to the Storefront API.
    */
   query: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
@@ -129,20 +133,18 @@ function queryShopBuilder(shopifyConfig: ShopifyConfig) {
     const {storeDomain, storefrontApiVersion, storefrontToken, defaultLocale} =
       shopifyConfig;
 
-    const request = new Request(
+    const fetcher = fetchBuilder<T>(
       `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
       {
         method: 'POST',
+        body: graphqlRequestBody(query, variables),
         headers: {
           'X-Shopify-Storefront-Access-Token': storefrontToken,
           'Accept-Language': (locale as string) ?? defaultLocale,
           'Content-Type': 'application/json',
         },
-        body: graphqlRequestBody(query, variables),
       }
     );
-
-    const fetcher = fetchBuilder<T>(request);
 
     return await fetcher();
   };

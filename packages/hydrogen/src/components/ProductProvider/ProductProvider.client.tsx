@@ -3,7 +3,6 @@ import {useProductOptions, useParsedMetafields} from '../../hooks';
 import {flattenConnection} from '../../utilities';
 import {ProductContext, ProductContextType} from './context';
 import {Product} from './types';
-import {ProductProviderFragment as Fragment} from '../../graphql/graphql-constants';
 import {ProductOptionsProvider} from './ProductOptionsProvider.client';
 
 export interface ProductProviderProps {
@@ -59,6 +58,3 @@ export function ProductProvider({
     </ProductContext.Provider>
   );
 }
-
-ProductProvider.Fragment = Fragment;
-export const ProductProviderFragment = Fragment;

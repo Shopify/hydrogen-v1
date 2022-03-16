@@ -1,1 +1,1 @@
-export {MediaFile, MediaFileProps, MediaFileFragment} from './MediaFile';
+export {MediaFile, MediaFileProps} from './MediaFile';

@@ -5,7 +5,7 @@ import {Head} from '../../../client';
 import {ImageSeo} from '../ImageSeo.client';
 
 jest.mock('../../../client', () => ({
-  Head({children}) {
+  Head({children}: {children: React.ReactNode}) {
     return children;
   },
 }));
@@ -14,7 +14,7 @@ describe('<ImageSeo />', () => {
   it('renders nothing in Head when no props were provided', () => {
     const wrapper = mount(<ImageSeo />);
 
-    expect(wrapper.find(Head).children.length).toBe(0);
+    expect(wrapper.find(Head)?.children.length).toBe(0);
   });
 
   it("renders <meta/> with property='og:image' and content from url prop", () => {

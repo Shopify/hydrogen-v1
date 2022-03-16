@@ -2,14 +2,12 @@ import React, {ElementType} from 'react';
 import {Props} from '../types';
 import {useShop} from '../../foundation';
 import {getMeasurementAsString} from '../../utilities';
-import {RawHtml} from '../RawHtml';
 import {ParsedMetafield, Measurement, Rating} from '../../types';
-import {MetafieldFragment as Fragment} from '../../graphql/graphql-constants';
 import {Image} from '../Image';
 import {MediaImage} from '../../types';
 
 export interface MetafieldProps<TTag> {
-  /** A [Metafield object](/api/storefront/reference/common-objects/metafield) from the Storefront API. */
+  /** An object with keys that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield). */
   data: ParsedMetafield;
   /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](/apps/metafields/types). */
   as?: TTag;
@@ -20,7 +18,7 @@ export interface MetafieldProps<TTag> {
  * API's [Metafield object](/api/storefront/reference/common-objects/metafield).
  *
  * Renders a smart default of the
- * Metafield's `value`. For more information, refer to the [Default Output](#default-output) section.
+ * Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
  */
 export function Metafield<TTag extends ElementType>(
   props: Props<TTag> & MetafieldProps<TTag>
@@ -67,20 +65,22 @@ export function Metafield<TTag extends ElementType>(
       );
     }
     case 'single_line_text_field': {
+      const Wrapper = as ?? 'span';
       return (
-        <RawHtml
+        <Wrapper
           {...(passthroughProps as any)}
-          as={as ?? 'span'}
-          string={data.value as string}
+          dangerouslySetInnerHTML={{__html: data.value as string}}
         />
       );
     }
     case 'multi_line_text_field': {
+      const Wrapper = as ?? 'div';
       return (
-        <RawHtml
+        <Wrapper
           {...(passthroughProps as any)}
-          as={as ?? 'span'}
-          string={(data.value as string).split('\n').join('<br/>')}
+          dangerouslySetInnerHTML={{
+            __html: (data.value as string).split('\n').join('<br/>'),
+          }}
         />
       );
     }
@@ -109,7 +109,3 @@ export function Metafield<TTag extends ElementType>(
     }
   }
 }
-
-Metafield.Fragment = Fragment;
-
-export const MetafieldFragment = Fragment;

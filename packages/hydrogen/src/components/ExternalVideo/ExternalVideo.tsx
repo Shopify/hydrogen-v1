@@ -1,11 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import {YouTube, Vimeo, useEmbeddedVideoUrl} from '../../utilities';
-import {Props} from '../types';
-import {ExternalVideoFragment as Fragment} from '../../graphql/graphql-constants';
 import type {ExternalVideoFragmentFragment} from './ExternalVideoFragment';
 
-export interface ExternalVideoProps {
-  /** An object with the keys `host`, `embeddedUrl`, and `id`. Refer to the Storefront API's
+interface ExternalVideoProps {
+  /** An object with the keys `host`, `embedUrl`, and `id`. Refer to the Storefront API's
    * [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).
    */
   data: ExternalVideoFragmentFragment;
@@ -20,10 +18,11 @@ type PropsWeControl = 'src';
 
 /**
  * The `ExternalVideo` component renders an embedded video for the Storefront
- * API's [`ExternalVideo` object](/api/storefront/reference/products/externalvideo).
+ * API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
  */
-export function ExternalVideo<TTag extends React.ElementType = 'iframe'>(
-  props: Props<TTag, PropsWeControl> & ExternalVideoProps
+export function ExternalVideo(
+  props: Omit<JSX.IntrinsicElements['iframe'], PropsWeControl> &
+    ExternalVideoProps
 ) {
   const {
     data,
@@ -35,7 +34,7 @@ export function ExternalVideo<TTag extends React.ElementType = 'iframe'>(
     ...passthroughProps
   } = props;
 
-  const url = useEmbeddedVideoUrl(data.embeddedUrl, options);
+  const url = useEmbeddedVideoUrl(data.embedUrl, options);
 
   return (
     <iframe
@@ -48,7 +47,3 @@ export function ExternalVideo<TTag extends React.ElementType = 'iframe'>(
     ></iframe>
   );
 }
-
-ExternalVideo.Fragment = Fragment;
-
-export const ExternalVideoFragment = Fragment;

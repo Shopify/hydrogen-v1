@@ -2,7 +2,6 @@ import React from 'react';
 import {Metafield} from '../Metafield.client';
 import {getParsedMetafield} from '../../../utilities/tests/metafields';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {RawHtml} from '../../RawHtml';
 import {Image} from '../../Image';
 import {getMediaImage} from '../../../utilities/tests/media';
 import type {Rating} from '../../../types';
@@ -276,7 +275,7 @@ describe('<Metafield />', () => {
   });
 
   describe('with `single_line_text_field` type metafield', () => {
-    it('renders the text in a `RawHtml` by default', () => {
+    it('renders the text in a `span` by default', () => {
       const metafield = getParsedMetafield({
         type: 'single_line_text_field',
         value: 'hello world',
@@ -287,40 +286,63 @@ describe('<Metafield />', () => {
         },
       });
 
-      expect(component).toContainReactComponent(RawHtml, {
-        string: metafield.value,
+      expect(component).toContainReactComponent('span', {
+        dangerouslySetInnerHTML: {
+          __html: metafield.value as string,
+        },
       });
     });
 
     it('allows passthrough props', () => {
+      const metafield = getParsedMetafield({
+        type: 'single_line_text_field',
+      });
       const component = mountWithProviders(
-        <Metafield
-          data={getParsedMetafield({type: 'single_line_text_field'})}
-          className="emphasized"
-          as="p"
-        />
+        <Metafield data={metafield} className="emphasized" as="p" />
       );
-      expect(component).toContainReactComponent(RawHtml, {
+      expect(component).toContainReactComponent('p', {
         className: 'emphasized',
-        as: 'p',
+        dangerouslySetInnerHTML: {
+          __html: metafield.value as string,
+        },
       });
     });
   });
 
   describe('with `multi_line_text_field` type metafield', () => {
-    it.todo('renders the text in a `RawHtml` by default');
+    it('renders the text in a `div` by default', () => {
+      const metafield = getParsedMetafield({
+        type: 'multi_line_text_field',
+        value: `
+         <p>hello world</p>
+         <p>second line</p>
+        `,
+      });
+      const component = mountWithProviders(<Metafield data={metafield} />, {
+        shopifyConfig: {
+          defaultLocale: 'en-us',
+        },
+      });
+
+      expect(component).toContainReactComponent('div', {
+        dangerouslySetInnerHTML: {
+          __html: (metafield.value as string).split('\n').join('<br/>'),
+        },
+      });
+    });
 
     it('allows passthrough props', () => {
+      const metafield = getParsedMetafield({
+        type: 'multi_line_text_field',
+      });
       const component = mountWithProviders(
-        <Metafield
-          data={getParsedMetafield({type: 'multi_line_text_field'})}
-          className="emphasized"
-          as="p"
-        />
+        <Metafield data={metafield} className="emphasized" as="section" />
       );
-      expect(component).toContainReactComponent(RawHtml, {
+      expect(component).toContainReactComponent('section', {
         className: 'emphasized',
-        as: 'p',
+        dangerouslySetInnerHTML: {
+          __html: (metafield.value as string).split('\n').join('<br/>'),
+        },
       });
     });
   });

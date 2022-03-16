@@ -8,12 +8,7 @@ import {getTime} from '../timing';
 
 import type {RenderType} from './log';
 
-export type TimingType =
-  | 'requested'
-  | 'resolved'
-  | 'rendered'
-  | 'preload'
-  | 'expired';
+export type TimingType = 'requested' | 'resolved' | 'rendered' | 'preload';
 
 export type QueryTiming = {
   name: string;
@@ -28,7 +23,6 @@ const TIMING_MAPPING = {
   rendered: 'Rendered',
   resolved: 'Resolved',
   preload: 'Preload',
-  expired: 'Expired',
 };
 
 export function collectQueryTimings(
@@ -84,7 +78,7 @@ export function logQueryTimings(
           )} ${loadColor(TIMING_MAPPING[query.timingType].padEnd(10))} ${
             query.name
           }${
-            query.timingType === 'resolved' || query.timingType === 'expired'
+            query.timingType === 'resolved'
               ? ` (Took ${duration?.toFixed(2)}ms)`
               : ''
           }`

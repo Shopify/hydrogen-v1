@@ -11,17 +11,19 @@ export {
   getTime,
 } from './utilities';
 
-export {FileRoutes} from './foundation/Router/FileRoutes';
-export {Route} from './foundation/Router/Route.server';
+export {FileRoutes} from './foundation/FileRoutes/FileRoutes.server';
+export {Route} from './foundation/Route/Route.server';
 export {Router} from './foundation/Router/Router.server';
 export {log, setLogger, setLoggerOptions, Logger} from './utilities/log';
-export {useParams} from './foundation/Router/useParams';
+export {useRouteParams} from './foundation/useRouteParams/useRouteParams';
 
 // This is exported here because it contains a Server Component
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
+export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server';
 
 // Exported here because users shouldn't be making `useShopQuery` calls from the client
-export * from './hooks/useShopQuery';
+export * from './hooks/useShopQuery/hooks';
+export * from './foundation/useQuery/hooks';
 
 // Export server-only CartQuery here instead of `CartProvider.client` to prevent
 // it from being bundled with other client components

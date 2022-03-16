@@ -3,7 +3,7 @@
  * Instead, you can edit the associated .graphql file to query for additional fields and this file will be updated when you run `yarn graphql-types`
  */
 // @ts-nocheck
-import * as Types from '../../../graphql/types/types';
+import * as Types from '../../../storefront-api-types';
 
 export type CartAttributesUpdateMutationVariables = Types.Exact<{
   attributes: Array<Types.AttributeInput> | Types.AttributeInput;
@@ -110,7 +110,7 @@ export type CartAttributesUpdateMutation = {__typename?: 'Mutation'} & {
             discountCodes: Array<
               {__typename?: 'CartDiscountCode'} & Pick<
                 Types.CartDiscountCode,
-                'code'
+                'code' | 'applicable'
               >
             >;
           }

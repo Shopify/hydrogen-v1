@@ -6,6 +6,7 @@ import type {CachingStrategy, PreloadOptions} from '../../types';
 import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
+import {wrapInGraphQLTracker} from '../../utilities/graphql-tracker';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -22,6 +23,7 @@ export function useShopQuery<T>({
   cache,
   locale = '',
   preload = false,
+  trackOverfetch = true,
 }: {
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
@@ -40,6 +42,8 @@ export function useShopQuery<T>({
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
+  /** Detect and warn about unused data from the GraphQL request in development. */
+  trackOverfetch?: boolean;
 }): UseShopQueryResponse<T> {
   if (!import.meta.env.SSR) {
     throw new Error(
@@ -51,12 +55,12 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {request, key} = createShopRequest(body, locale);
+  const {key, url, requestInit} = createShopRequest(body, locale);
 
-  const {data, error: fetchError} = useQuery<UseShopQueryResponse<T>>(
+  const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
     key,
     query
-      ? fetchBuilder<UseShopQueryResponse<T>>(request)
+      ? fetchBuilder<UseShopQueryResponse<T>>(url, requestInit)
       : // If no query, avoid calling SFAPI & return nothing
         async () => ({data: undefined as unknown as T, errors: undefined}),
     {cache, preload}
@@ -65,15 +69,11 @@ export function useShopQuery<T>({
   /**
    * The fetch request itself failed, so we handle that differently than a GraphQL error
    */
-  if (fetchError) {
-    const errorMessage = `Failed to fetch the Storefront API. ${
-      // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
-      fetchError.status === 403
-        ? `You may have a bad value in 'shopify.config.js'`
-        : `${fetchError.statusText}`
-    }`;
+  if (useQueryError) {
+    const errorMessage = createErrorMessage(useQueryError);
 
     log.error(errorMessage);
+    log.error(useQueryError);
 
     if (getConfig().dev) {
       throw new Error(errorMessage);
@@ -101,7 +101,29 @@ export function useShopQuery<T>({
     log.error(`GraphQL errors: ${errors.length}`);
   }
 
-  return data as UseShopQueryResponse<T>;
+  if (
+    import.meta.env.DEV &&
+    trackOverfetch &&
+    query &&
+    typeof query !== 'string' &&
+    data?.data
+  ) {
+    return wrapInGraphQLTracker({
+      query,
+      data,
+      onUnusedData: ({queryName, properties}) => {
+        log.warn(
+          `
+Potentially overfetching fields in GraphQL query: \`${queryName}\`.
+• ${properties.join(`\n• `)}
+Examine the list of fields above to confirm that they are being used.
+`
+        );
+      },
+    });
+  }
+
+  return data!;
 }
 
 function createShopRequest(body: string, locale?: string) {
@@ -112,18 +134,32 @@ function createShopRequest(body: string, locale?: string) {
     locale: defaultLocale,
   } = useShop();
 
-  const url = `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`;
-
   return {
-    request: new Request(url, {
+    key: [storeDomain, storefrontApiVersion, body, locale],
+    url: `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
+    requestInit: {
+      body,
       method: 'POST',
       headers: {
         'X-Shopify-Storefront-Access-Token': storefrontToken,
+        'X-SDK-Variant': 'hydrogen',
+        'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
         'Accept-Language': (locale as string) ?? defaultLocale,
       },
-      body,
-    }),
-    key: [storeDomain, storefrontApiVersion, body, locale],
+    },
   };
+}
+
+function createErrorMessage(fetchError: Response | Error) {
+  if (fetchError instanceof Response) {
+    `An error occurred while fetching from the Storefront API. ${
+      // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
+      fetchError.status === 403
+        ? `You may have a bad value in 'shopify.config.js'`
+        : `${fetchError.statusText}`
+    }`;
+  } else {
+    return `Failed to connect to the Storefront API: ${fetchError.message}`;
+  }
 }

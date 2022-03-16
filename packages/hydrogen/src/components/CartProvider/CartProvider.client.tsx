@@ -33,7 +33,7 @@ import {
   CartLineUpdateInput,
   CartBuyerIdentityInput,
   AttributeInput,
-} from '../../graphql/types/types';
+} from '../../storefront-api-types';
 import {useCartFetch} from './hooks';
 import {CartContext} from './context';
 import {
@@ -644,7 +644,11 @@ export function CartProvider({
           : 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        addLineItem(lines, state);
+        if ('cart' in state && state.cart.id) {
+          addLineItem(lines, state);
+        } else {
+          cartCreate({lines});
+        }
       },
       linesRemove(lines: string[]) {
         removeLineItem(lines, state);

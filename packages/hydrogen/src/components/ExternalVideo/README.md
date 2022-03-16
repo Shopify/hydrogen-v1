@@ -1,7 +1,7 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ExternalVideo and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
 
 The `ExternalVideo` component renders an embedded video for the Storefront
-API's [`ExternalVideo` object](/api/storefront/reference/products/externalvideo).
+API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
 
 ## Example code
 
@@ -10,8 +10,6 @@ import {ExternalVideo} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
-  ${ExternalVideo.Fragment}
-
   query Products {
     products(first: 5) {
       edges {
@@ -24,7 +22,9 @@ const QUERY = gql`
               node {
                 ... on ExternalVideo {
                   mediaContentType
-                  ...ExternalVideoFragment
+                  id
+                  embedUrl
+                  host
                 }
               }
             }
@@ -47,10 +47,10 @@ export default function MyProductVideo() {
 
 ## Props
 
-| Name     | Type                                                                                    | Description                                                                                                                                                                                                                       |
-| -------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data     | <code>Pick<<wbr>ExternalVideoType, "host" &#124; "embeddedUrl" &#124; "id"<wbr>></code> | An object with the keys `host`, `embeddedUrl`, and `id`. Refer to the Storefront API's [`ExternalVideo` type](/api/storefront/reference/products/externalvideo).                                                                  |
-| options? | <code>YouTube &#124; Vimeo</code>                                                       | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
+| Name     | Type                                       | Description                                                                                                                                                                                                                       |
+| -------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data     | <code>ExternalVideoFragmentFragment</code> | An object with keys that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).                                                                                             |
+| options? | <code>YouTube &#124; Vimeo</code>          | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
 
 ## Component type
 
@@ -58,12 +58,12 @@ The `ExternalVideo` component is a shared component, which means that it renders
 
 ## GraphQL fragment
 
-The following fragment is available as a string for your GraphQL query using `ExternalVideoFragment` or `ExternalVideo.Fragment`. Using this fragment ensures that you have all the data you need for rendering the `ExternalVideo` component.
+The following fragment is available as a string for your GraphQL query using `ExternalVideoFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data you need for rendering the `ExternalVideo` component.
 
 ```graphql
 fragment ExternalVideoFragment on ExternalVideo {
   id
-  embeddedUrl
+  embedUrl
   host
 }
 ```

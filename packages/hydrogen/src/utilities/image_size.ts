@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image as ImageType} from '../graphql/types/types';
+import {Image as ImageType} from '../storefront-api-types';
 
 export type Width = string | 'original';
 export type Height = string | 'original';

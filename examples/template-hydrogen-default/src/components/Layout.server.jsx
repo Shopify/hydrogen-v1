@@ -1,5 +1,4 @@
 import {
-  Image,
   useShopQuery,
   flattenConnection,
   LocalizationProvider,
@@ -69,7 +68,11 @@ const QUERY = gql`
           id
           title
           image {
-            ...ImageFragment
+            id
+            url
+            altText
+            width
+            height
           }
         }
       }
@@ -82,5 +85,4 @@ const QUERY = gql`
       }
     }
   }
-  ${Image.Fragment}
 `;
