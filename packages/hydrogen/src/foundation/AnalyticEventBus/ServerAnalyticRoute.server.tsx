@@ -5,7 +5,7 @@ export function ServerAnalyticRoute(
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>
 ) {
   serverAnalyticsConnectors?.forEach((connector) => {
-    connector.request && connector.request(request);
+    connector.request(request);
   });
 
   return new Response(null, {

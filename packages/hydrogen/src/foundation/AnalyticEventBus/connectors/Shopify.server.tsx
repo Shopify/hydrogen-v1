@@ -1,4 +1,6 @@
-export function request(request: Request) {
+import {log} from '../../../utilities/log';
+
+export function request(request: Request): void {
   Promise.resolve(request.json())
     .then((data) => {
       if (data.eventname) {
@@ -6,6 +8,6 @@ export function request(request: Request) {
       }
     })
     .catch((error) => {
-      console.log('Fail to resolve server analytics: ', error);
+      log.warn('Fail to resolve server analytics: ', error);
     });
 }
