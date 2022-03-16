@@ -2,11 +2,7 @@ import cookie from 'cookie';
 
 import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants/cookies';
 
-export async function api(request) {
-  // set cookie on server
-  request.cookies.delete(CUSTOMER_ACCESS_TOKEN_COOKIE_NAME);
-
-  // set cookie in response
+export async function api() {
   return new Response(null, {
     headers: {
       'Set-Cookie': cookie.serialize(CUSTOMER_ACCESS_TOKEN_COOKIE_NAME, '', {

@@ -33,12 +33,11 @@ export async function api(request, {queryShop}) {
     data.customerAccessTokenCreate &&
     data.customerAccessTokenCreate.customerAccessToken !== null
   ) {
-    // set cookie on server
-    const {accessToken, expiresAt} =
-      data.customerAccessTokenCreate.customerAccessToken;
-    request.cookies.set(CUSTOMER_ACCESS_TOKEN_COOKIE_NAME, accessToken);
+    const {
+      accessToken,
+      expiresAt,
+    } = data.customerAccessTokenCreate.customerAccessToken;
 
-    // set cookie in response
     return new Response(null, {
       headers: {
         'Set-Cookie': cookie.serialize(

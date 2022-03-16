@@ -1,1 +1,1 @@
-export {useCookies} from './use-cookies';
+export {useCookies} from './use-cookies.server';

@@ -1,7 +1,7 @@
-import {useEnvContext} from '../ssr-interop';
+import {useServerRequest} from '../ServerRequestProvider';
 
 export function useCookies() {
-  const cookies = useEnvContext((req) => req.cookies);
+  const {cookies} = useServerRequest();
 
   if (!cookies) {
     throw new Error('No Cookies found');
