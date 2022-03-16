@@ -1,5 +1,4 @@
 import React from 'react';
-import {Props} from '../types';
 import {
   ImageSizeOptions,
   ImageLoaderOptions,
@@ -18,8 +17,6 @@ export interface BaseImageProps {
    * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
    */
   loaderOptions?: ImageLoaderOptions['options'];
-  id?: string;
-  alt?: string;
 }
 
 interface MediaImageProps extends BaseImageProps {
@@ -41,15 +38,15 @@ interface ExternalImageProps extends BaseImageProps {
 }
 
 type ImageProps = MergeExclusive<MediaImageProps, ExternalImageProps>;
-
 type PropsWeControl = 'src' | 'width' | 'height';
 
 /**
  * The `Image` component renders an image for the Storefront API's
  * [Image object](/api/storefront/reference/common-objects/image).
  */
-export function Image<TTag extends React.ElementType = 'img'>(
-  props: Props<TTag, PropsWeControl> & ImageProps
+export function Image(
+  props: Omit<React.ImgHTMLAttributes<HTMLImageElement>, PropsWeControl> &
+    ImageProps
 ) {
   const {
     data,
@@ -119,7 +116,7 @@ function convertShopifyImageData({
   loaderOptions,
   id: propId,
   alt,
-}: MediaImageProps) {
+}: MediaImageProps & {id?: string; alt?: string}) {
   const {url: src, altText, id} = data;
   if (!src) {
     throw new Error(`<Image/> requires 'data.url' when using the 'data' prop`);
