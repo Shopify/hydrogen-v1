@@ -15,6 +15,10 @@ export function getDatalayer(): any {
   return dataLayer;
 }
 
+export function resetDatalayer(): void {
+  dataLayer = {};
+}
+
 export function publish(eventname: string, guardDup = false, payload?: any) {
   const namedspacedEventname = getNamedspacedEventname(eventname);
   const subs = subscribers[namedspacedEventname];

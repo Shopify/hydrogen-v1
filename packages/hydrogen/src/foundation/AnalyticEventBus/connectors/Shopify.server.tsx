@@ -1,6 +1,11 @@
-import {ServerAnalytics} from '../index';
-
-ServerAnalytics.subscribe('page-view', (payload: any) => {
-  // TO-DO: Implement Shopify monorail
-  console.log('page-view', Object.assign({}, payload));
-});
+export function request(request: Request) {
+  Promise.resolve(request.json())
+    .then((data) => {
+      if (data.eventname) {
+        console.log(data.eventname, data.payload);
+      }
+    })
+    .catch((error) => {
+      console.log('Fail to resolve server analytics: ', error);
+    });
+}

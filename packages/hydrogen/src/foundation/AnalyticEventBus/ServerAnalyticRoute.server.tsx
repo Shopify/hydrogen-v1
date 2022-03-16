@@ -1,21 +1,11 @@
-import {publish} from './ServerAnalytics.server';
+import type {ServerAnalyticsConnector} from '../../types';
 
 export function ServerAnalyticRoute(
   request: Request,
-  serverAnalyticsConnector?: Array<(request: Request) => void>
+  serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>
 ) {
-  Promise.resolve(request.json())
-    .then((data) => {
-      if (data.eventname) {
-        publish(data.eventname, data.payload);
-      }
-    })
-    .catch((error) => {
-      console.log('Fail to resolve server analytics: ', error);
-    });
-
-  serverAnalyticsConnector?.forEach((callback) => {
-    callback(request);
+  serverAnalyticsConnectors?.forEach((connector) => {
+    connector.request && connector.request(request);
   });
 
   return new Response(null, {

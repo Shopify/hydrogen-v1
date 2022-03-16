@@ -1,12 +1,3 @@
-import {
-  pushToDatalayer,
-  getDatalayer,
-  subscribe,
-} from './ServerAnalytics.server';
-export const ServerAnalytics = {
-  pushToDatalayer,
-  getDatalayer,
-  subscribe,
-};
+export {useServerDatalayer} from './hook';
 
-export * as ClientAnalytics from './ClientAnalytics.client';
+export * as ClientAnalytics from './ClientAnalytics';

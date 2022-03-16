@@ -45,10 +45,15 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
+export type ServerAnalyticsConnector = {
+  init?: () => void;
+  request?: (request: Request) => void;
+};
+
 export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
-  serverAnalyticConnectors?: Array<(request: Request) => void>;
+  serverAnalyticConnectors?: Array<ServerAnalyticsConnector>;
 };
 
 export type ClientHandlerConfig = {
