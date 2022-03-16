@@ -54,14 +54,14 @@ export function ServerRequestProvider({
 export function useServerRequest() {
   let request: ServerComponentRequest | null;
   try {
-    // Context only works in SSR rendering
-    request = useContext(RequestContextSSR);
-  } catch (error) {
-    // If normal context failed it means this is not an SSR request.
-    // Try getting RSC cache instead:
+    // This cache only works during RSC rendering:
     // @ts-ignore
     const cache = React.unstable_getCacheForType(requestCacheRSC);
     request = cache ? cache.get(requestCacheRSC.key) : null;
+  } catch (error) {
+    // If RSC cache failed it means this is not an RSC request.
+    // Try getting SSR context instead:
+    request = useContext(RequestContextSSR);
   }
 
   if (!request) {
