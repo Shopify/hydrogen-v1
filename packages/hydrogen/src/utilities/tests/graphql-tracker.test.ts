@@ -1,6 +1,6 @@
 // eslint-disable-next-line node/no-extraneous-import
 import gql from 'graphql-tag';
-import {wrapInGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
+import {injectGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
 
 const query = gql`
   query shopName {
@@ -88,9 +88,10 @@ describe('GraphQL Tracker', () => {
       properties: [] as string[],
     };
 
-    const dataMock = wrapInGraphQLTracker({
+    const dataMock = getData();
+    const manualCheck = injectGraphQLTracker({
       query,
-      data: getData(),
+      data: dataMock,
       onUnusedData: (params: typeof unusedData) => (unusedData = params),
     });
 
@@ -155,6 +156,14 @@ describe('GraphQL Tracker', () => {
       'shop.paymentSettings.__typename'
     ); // Ignored
     expect(unusedData.properties).not.toContain('products.handle');
+
+    // Reading properties after the timeout is finished won't trigger a refresh
+    firstProductEdge.node.variants.edges[0].node.title;
+    jest.advanceTimersByTime(TIMEOUT_MS + 100);
+    expect(unusedData.properties).toContain('products.variants.title');
+
+    manualCheck();
+    expect(unusedData.properties).not.toContain('products.variants.title');
 
     // Make sure the data has not been altered during the proxy injection
     expect(JSON.stringify(dataMock)).toEqual(JSON.stringify(getData()));

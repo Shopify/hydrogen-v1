@@ -6,7 +6,7 @@ import type {CachingStrategy, PreloadOptions} from '../../types';
 import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
-import {wrapInGraphQLTracker} from '../../utilities/graphql-tracker';
+import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -105,17 +105,14 @@ export function useShopQuery<T>({
     typeof query !== 'string' &&
     data?.data
   ) {
-    return wrapInGraphQLTracker({
+    injectGraphQLTracker({
       query,
       data,
       onUnusedData: ({queryName, properties}) => {
-        log.warn(
-          `
-Potentially overfetching fields in GraphQL query: \`${queryName}\`.
-• ${properties.join(`\n• `)}
-Examine the list of fields above to confirm that they are being used.
-`
-        );
+        const footer = `Examine the list of fields above to confirm that they are being used.\n`;
+        const header = `Potentially overfetching fields in GraphQL query \`${queryName}\`:\n`;
+
+        log.warn(header + `• ${properties.join(`\n• `)}\n` + footer);
       },
     });
   }
