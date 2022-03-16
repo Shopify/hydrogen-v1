@@ -6,7 +6,7 @@ import {
   getShopifyImageDimensions,
 } from '../../utilities';
 import type {Image as ImageType} from '../../storefront-api-types';
-import type {PartialDeep, MergeExclusive} from 'type-fest';
+import type {PartialDeep, Merge, MergeExclusive} from 'type-fest';
 
 export interface BaseImageProps {
   /** A custom function that generates the image URL. Parameters passed into this function includes
@@ -19,7 +19,7 @@ export interface BaseImageProps {
   loaderOptions?: ImageLoaderOptions['options'];
 }
 
-interface MediaImageProps extends BaseImageProps {
+interface MediaImagePropsBase extends BaseImageProps {
   /** An object with keys that correspond to the Storefront API's
    * [Image object](/api/storefront/reference/common-objects/image).
    */
@@ -28,7 +28,7 @@ interface MediaImageProps extends BaseImageProps {
   options?: ImageSizeOptions;
 }
 
-interface ExternalImageProps extends BaseImageProps {
+interface ExternalImagePropsBase extends BaseImageProps {
   /** A URL string. This string can be an absolute path or a relative path depending on the `loader`. */
   src: string;
   /** The integer value for the width of the image. This is a required prop when `src` is present. */
@@ -37,17 +37,16 @@ interface ExternalImageProps extends BaseImageProps {
   height: number;
 }
 
+type BaseElementProps = React.ImgHTMLAttributes<HTMLImageElement>;
+type MediaImageProps = Merge<BaseElementProps, MediaImagePropsBase>;
+type ExternalImageProps = Merge<BaseElementProps, ExternalImagePropsBase>;
 type ImageProps = MergeExclusive<MediaImageProps, ExternalImageProps>;
-type PropsWeControl = 'src' | 'width' | 'height';
 
 /**
  * The `Image` component renders an image for the Storefront API's
  * [Image object](/api/storefront/reference/common-objects/image).
  */
-export function Image(
-  props: Omit<React.ImgHTMLAttributes<HTMLImageElement>, PropsWeControl> &
-    ImageProps
-) {
+export function Image(props: ImageProps) {
   const {
     data,
     options,
