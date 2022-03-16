@@ -8,7 +8,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED} from 'react';
+import {
+  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
+  createServerContext,
+} from 'react';
 
 var ReactSharedInternals = __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
@@ -89,6 +92,9 @@ function close(destination) {
 function stringToChunk(content) {
   return content;
 }
+function stringToPrecomputedChunk(content) {
+  return Buffer.from(content, 'utf8');
+}
 function closeWithError(destination, error) {
   // $FlowFixMe: This is an Error object or the destination accepts other types.
   destination.destroy(error);
@@ -119,6 +125,10 @@ function processModuleChunk(request, id, moduleMetaData) {
   var row = serializeRowHeader('M', id) + json + '\n';
   return stringToChunk(row);
 }
+function processProviderChunk(request, id, contextName) {
+  var row = serializeRowHeader('P', id) + contextName + '\n';
+  return stringToChunk(row);
+}
 function processSymbolChunk(request, id, name) {
   var json = stringify(name);
   var row = serializeRowHeader('S', id) + json + '\n';
@@ -146,14 +156,1008 @@ function resolveModuleMetaData(config, moduleReference) {
 // The Symbol used to tag the ReactElement-like types.
 var REACT_ELEMENT_TYPE = Symbol.for('react.element');
 var REACT_FRAGMENT_TYPE = Symbol.for('react.fragment');
+var REACT_PROVIDER_TYPE = Symbol.for('react.provider');
+var REACT_SERVER_CONTEXT_TYPE = Symbol.for('react.server_context');
 var REACT_FORWARD_REF_TYPE = Symbol.for('react.forward_ref');
 var REACT_MEMO_TYPE = Symbol.for('react.memo');
 var REACT_LAZY_TYPE = Symbol.for('react.lazy');
+var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for(
+  'react.default_value'
+);
+
+// A reserved attribute.
+// It is handled by React separately and shouldn't be written to the DOM.
+var RESERVED = 0; // A simple string attribute.
+// Attributes that aren't in the filter are presumed to have this type.
+
+var STRING = 1; // A string attribute that accepts booleans in React. In HTML, these are called
+// "enumerated" attributes with "true" and "false" as possible values.
+// When true, it should be set to a "true" string.
+// When false, it should be set to a "false" string.
+
+var BOOLEANISH_STRING = 2; // A real boolean attribute.
+// When true, it should be present (set either to an empty string or its name).
+// When false, it should be omitted.
+
+var BOOLEAN = 3; // An attribute that can be used as a flag as well as with a value.
+// When true, it should be present (set either to an empty string or its name).
+// When false, it should be omitted.
+// For any other value, should be present with that value.
+
+var OVERLOADED_BOOLEAN = 4; // An attribute that must be numeric or parse as a numeric.
+// When falsy, it should be removed.
+
+var NUMERIC = 5; // An attribute that must be positive numeric or parse as a positive numeric.
+// When falsy, it should be removed.
+
+var POSITIVE_NUMERIC = 6;
+
+function PropertyInfoRecord(
+  name,
+  type,
+  mustUseProperty,
+  attributeName,
+  attributeNamespace,
+  sanitizeURL,
+  removeEmptyString
+) {
+  this.acceptsBooleans =
+    type === BOOLEANISH_STRING ||
+    type === BOOLEAN ||
+    type === OVERLOADED_BOOLEAN;
+  this.attributeName = attributeName;
+  this.attributeNamespace = attributeNamespace;
+  this.mustUseProperty = mustUseProperty;
+  this.propertyName = name;
+  this.type = type;
+  this.sanitizeURL = sanitizeURL;
+  this.removeEmptyString = removeEmptyString;
+} // When adding attributes to this list, be sure to also add them to
+// the `possibleStandardNames` module to ensure casing and incorrect
+// name warnings.
+
+var properties = {}; // These props are reserved by React. They shouldn't be written to the DOM.
+
+var reservedProps = [
+  'children',
+  'dangerouslySetInnerHTML', // TODO: This prevents the assignment of defaultValue to regular
+  // elements (not just inputs). Now that ReactDOMInput assigns to the
+  // defaultValue property -- do we need this?
+  'defaultValue',
+  'defaultChecked',
+  'innerHTML',
+  'suppressContentEditableWarning',
+  'suppressHydrationWarning',
+  'style',
+];
+
+{
+  reservedProps.push('innerText', 'textContent');
+}
+
+reservedProps.forEach(function (name) {
+  properties[name] = new PropertyInfoRecord(
+    name,
+    RESERVED,
+    false, // mustUseProperty
+    name, // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // A few React string attributes have a different name.
+// This is a mapping from React prop names to the attribute names.
+
+[
+  ['acceptCharset', 'accept-charset'],
+  ['className', 'class'],
+  ['htmlFor', 'for'],
+  ['httpEquiv', 'http-equiv'],
+].forEach(function (_ref) {
+  var name = _ref[0],
+    attributeName = _ref[1];
+  properties[name] = new PropertyInfoRecord(
+    name,
+    STRING,
+    false, // mustUseProperty
+    attributeName, // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // These are "enumerated" HTML attributes that accept "true" and "false".
+// In React, we let users pass `true` and `false` even though technically
+// these aren't boolean attributes (they are coerced to strings).
+
+['contentEditable', 'draggable', 'spellCheck', 'value'].forEach(function (
+  name
+) {
+  properties[name] = new PropertyInfoRecord(
+    name,
+    BOOLEANISH_STRING,
+    false, // mustUseProperty
+    name.toLowerCase(), // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // These are "enumerated" SVG attributes that accept "true" and "false".
+// In React, we let users pass `true` and `false` even though technically
+// these aren't boolean attributes (they are coerced to strings).
+// Since these are SVG attributes, their attribute names are case-sensitive.
+
+[
+  'autoReverse',
+  'externalResourcesRequired',
+  'focusable',
+  'preserveAlpha',
+].forEach(function (name) {
+  properties[name] = new PropertyInfoRecord(
+    name,
+    BOOLEANISH_STRING,
+    false, // mustUseProperty
+    name, // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // These are HTML boolean attributes.
+
+[
+  'allowFullScreen',
+  'async', // Note: there is a special case that prevents it from being written to the DOM
+  // on the client side because the browsers are inconsistent. Instead we call focus().
+  'autoFocus',
+  'autoPlay',
+  'controls',
+  'default',
+  'defer',
+  'disabled',
+  'disablePictureInPicture',
+  'disableRemotePlayback',
+  'formNoValidate',
+  'hidden',
+  'loop',
+  'noModule',
+  'noValidate',
+  'open',
+  'playsInline',
+  'readOnly',
+  'required',
+  'reversed',
+  'scoped',
+  'seamless', // Microdata
+  'itemScope',
+].forEach(function (name) {
+  properties[name] = new PropertyInfoRecord(
+    name,
+    BOOLEAN,
+    false, // mustUseProperty
+    name.toLowerCase(), // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // These are the few React props that we set as DOM properties
+// rather than attributes. These are all booleans.
+
+[
+  'checked', // Note: `option.selected` is not updated if `select.multiple` is
+  // disabled with `removeAttribute`. We have special logic for handling this.
+  'multiple',
+  'muted',
+  'selected', // NOTE: if you add a camelCased prop to this list,
+  // you'll need to set attributeName to name.toLowerCase()
+  // instead in the assignment below.
+].forEach(function (name) {
+  properties[name] = new PropertyInfoRecord(
+    name,
+    BOOLEAN,
+    true, // mustUseProperty
+    name, // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // These are HTML attributes that are "overloaded booleans": they behave like
+// booleans, but can also accept a string value.
+
+[
+  'capture',
+  'download', // NOTE: if you add a camelCased prop to this list,
+  // you'll need to set attributeName to name.toLowerCase()
+  // instead in the assignment below.
+].forEach(function (name) {
+  properties[name] = new PropertyInfoRecord(
+    name,
+    OVERLOADED_BOOLEAN,
+    false, // mustUseProperty
+    name, // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // These are HTML attributes that must be positive numbers.
+
+[
+  'cols',
+  'rows',
+  'size',
+  'span', // NOTE: if you add a camelCased prop to this list,
+  // you'll need to set attributeName to name.toLowerCase()
+  // instead in the assignment below.
+].forEach(function (name) {
+  properties[name] = new PropertyInfoRecord(
+    name,
+    POSITIVE_NUMERIC,
+    false, // mustUseProperty
+    name, // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // These are HTML attributes that must be numbers.
+
+['rowSpan', 'start'].forEach(function (name) {
+  properties[name] = new PropertyInfoRecord(
+    name,
+    NUMERIC,
+    false, // mustUseProperty
+    name.toLowerCase(), // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+});
+var CAMELIZE = /[\-\:]([a-z])/g;
+
+var capitalize = function (token) {
+  return token[1].toUpperCase();
+}; // This is a list of all SVG attributes that need special casing, namespacing,
+// or boolean value assignment. Regular attributes that just accept strings
+// and have the same names are omitted, just like in the HTML attribute filter.
+// Some of these attributes can be hard to find. This list was created by
+// scraping the MDN documentation.
+
+[
+  'accent-height',
+  'alignment-baseline',
+  'arabic-form',
+  'baseline-shift',
+  'cap-height',
+  'clip-path',
+  'clip-rule',
+  'color-interpolation',
+  'color-interpolation-filters',
+  'color-profile',
+  'color-rendering',
+  'dominant-baseline',
+  'enable-background',
+  'fill-opacity',
+  'fill-rule',
+  'flood-color',
+  'flood-opacity',
+  'font-family',
+  'font-size',
+  'font-size-adjust',
+  'font-stretch',
+  'font-style',
+  'font-variant',
+  'font-weight',
+  'glyph-name',
+  'glyph-orientation-horizontal',
+  'glyph-orientation-vertical',
+  'horiz-adv-x',
+  'horiz-origin-x',
+  'image-rendering',
+  'letter-spacing',
+  'lighting-color',
+  'marker-end',
+  'marker-mid',
+  'marker-start',
+  'overline-position',
+  'overline-thickness',
+  'paint-order',
+  'panose-1',
+  'pointer-events',
+  'rendering-intent',
+  'shape-rendering',
+  'stop-color',
+  'stop-opacity',
+  'strikethrough-position',
+  'strikethrough-thickness',
+  'stroke-dasharray',
+  'stroke-dashoffset',
+  'stroke-linecap',
+  'stroke-linejoin',
+  'stroke-miterlimit',
+  'stroke-opacity',
+  'stroke-width',
+  'text-anchor',
+  'text-decoration',
+  'text-rendering',
+  'underline-position',
+  'underline-thickness',
+  'unicode-bidi',
+  'unicode-range',
+  'units-per-em',
+  'v-alphabetic',
+  'v-hanging',
+  'v-ideographic',
+  'v-mathematical',
+  'vector-effect',
+  'vert-adv-y',
+  'vert-origin-x',
+  'vert-origin-y',
+  'word-spacing',
+  'writing-mode',
+  'xmlns:xlink',
+  'x-height', // NOTE: if you add a camelCased prop to this list,
+  // you'll need to set attributeName to name.toLowerCase()
+  // instead in the assignment below.
+].forEach(function (attributeName) {
+  var name = attributeName.replace(CAMELIZE, capitalize);
+  properties[name] = new PropertyInfoRecord(
+    name,
+    STRING,
+    false, // mustUseProperty
+    attributeName,
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // String SVG attributes with the xlink namespace.
+
+[
+  'xlink:actuate',
+  'xlink:arcrole',
+  'xlink:role',
+  'xlink:show',
+  'xlink:title',
+  'xlink:type', // NOTE: if you add a camelCased prop to this list,
+  // you'll need to set attributeName to name.toLowerCase()
+  // instead in the assignment below.
+].forEach(function (attributeName) {
+  var name = attributeName.replace(CAMELIZE, capitalize);
+  properties[name] = new PropertyInfoRecord(
+    name,
+    STRING,
+    false, // mustUseProperty
+    attributeName,
+    'http://www.w3.org/1999/xlink',
+    false, // sanitizeURL
+    false
+  );
+}); // String SVG attributes with the xml namespace.
+
+[
+  'xml:base',
+  'xml:lang',
+  'xml:space', // NOTE: if you add a camelCased prop to this list,
+  // you'll need to set attributeName to name.toLowerCase()
+  // instead in the assignment below.
+].forEach(function (attributeName) {
+  var name = attributeName.replace(CAMELIZE, capitalize);
+  properties[name] = new PropertyInfoRecord(
+    name,
+    STRING,
+    false, // mustUseProperty
+    attributeName,
+    'http://www.w3.org/XML/1998/namespace',
+    false, // sanitizeURL
+    false
+  );
+}); // These attribute exists both in HTML and SVG.
+// The attribute name is case-sensitive in SVG so we can't just use
+// the React name like we do for attributes that exist only in HTML.
+
+['tabIndex', 'crossOrigin'].forEach(function (attributeName) {
+  properties[attributeName] = new PropertyInfoRecord(
+    attributeName,
+    STRING,
+    false, // mustUseProperty
+    attributeName.toLowerCase(), // attributeName
+    null, // attributeNamespace
+    false, // sanitizeURL
+    false
+  );
+}); // These attributes accept URLs. These must not allow javascript: URLS.
+// These will also need to accept Trusted Types object in the future.
+
+var xlinkHref = 'xlinkHref';
+properties[xlinkHref] = new PropertyInfoRecord(
+  'xlinkHref',
+  STRING,
+  false, // mustUseProperty
+  'xlink:href',
+  'http://www.w3.org/1999/xlink',
+  true, // sanitizeURL
+  false
+);
+['src', 'href', 'action', 'formAction'].forEach(function (attributeName) {
+  properties[attributeName] = new PropertyInfoRecord(
+    attributeName,
+    STRING,
+    false, // mustUseProperty
+    attributeName.toLowerCase(), // attributeName
+    null, // attributeNamespace
+    true, // sanitizeURL
+    true
+  );
+});
+
+/**
+ * CSS properties which accept numbers but are not in units of "px".
+ */
+var isUnitlessNumber = {
+  animationIterationCount: true,
+  aspectRatio: true,
+  borderImageOutset: true,
+  borderImageSlice: true,
+  borderImageWidth: true,
+  boxFlex: true,
+  boxFlexGroup: true,
+  boxOrdinalGroup: true,
+  columnCount: true,
+  columns: true,
+  flex: true,
+  flexGrow: true,
+  flexPositive: true,
+  flexShrink: true,
+  flexNegative: true,
+  flexOrder: true,
+  gridArea: true,
+  gridRow: true,
+  gridRowEnd: true,
+  gridRowSpan: true,
+  gridRowStart: true,
+  gridColumn: true,
+  gridColumnEnd: true,
+  gridColumnSpan: true,
+  gridColumnStart: true,
+  fontWeight: true,
+  lineClamp: true,
+  lineHeight: true,
+  opacity: true,
+  order: true,
+  orphans: true,
+  tabSize: true,
+  widows: true,
+  zIndex: true,
+  zoom: true,
+  // SVG-related properties
+  fillOpacity: true,
+  floodOpacity: true,
+  stopOpacity: true,
+  strokeDasharray: true,
+  strokeDashoffset: true,
+  strokeMiterlimit: true,
+  strokeOpacity: true,
+  strokeWidth: true,
+};
+/**
+ * @param {string} prefix vendor-specific prefix, eg: Webkit
+ * @param {string} key style name, eg: transitionDuration
+ * @return {string} style name prefixed with `prefix`, properly camelCased, eg:
+ * WebkitTransitionDuration
+ */
+
+function prefixKey(prefix, key) {
+  return prefix + key.charAt(0).toUpperCase() + key.substring(1);
+}
+/**
+ * Support style names that may come passed in prefixed by adding permutations
+ * of vendor prefixes.
+ */
+
+var prefixes = ['Webkit', 'ms', 'Moz', 'O']; // Using Object.keys here, or else the vanilla for-in loop makes IE8 go into an
+// infinite loop, because it iterates over the newly added props too.
+
+Object.keys(isUnitlessNumber).forEach(function (prop) {
+  prefixes.forEach(function (prefix) {
+    isUnitlessNumber[prefixKey(prefix, prop)] = isUnitlessNumber[prop];
+  });
+});
 
 var isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
 
 function isArray(a) {
   return isArrayImpl(a);
+}
+
+var startInlineScript = stringToPrecomputedChunk('<script>');
+var endInlineScript = stringToPrecomputedChunk('</script>');
+var startScriptSrc = stringToPrecomputedChunk('<script src="');
+var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
+var endAsyncScript = stringToPrecomputedChunk('" async=""></script>'); // Allows us to keep track of what we've already written so we can refer back to it.
+
+var textSeparator = stringToPrecomputedChunk('<!-- -->');
+
+var styleAttributeStart = stringToPrecomputedChunk(' style="');
+var styleAssign = stringToPrecomputedChunk(':');
+var styleSeparator = stringToPrecomputedChunk(';');
+
+var attributeSeparator = stringToPrecomputedChunk(' ');
+var attributeAssign = stringToPrecomputedChunk('="');
+var attributeEnd = stringToPrecomputedChunk('"');
+var attributeEmptyString = stringToPrecomputedChunk('=""');
+
+var endOfStartTag = stringToPrecomputedChunk('>');
+var endOfStartTagSelfClosing = stringToPrecomputedChunk('/>');
+
+var selectedMarkerAttribute = stringToPrecomputedChunk(' selected=""');
+
+var leadingNewline = stringToPrecomputedChunk('\n');
+
+var DOCTYPE = stringToPrecomputedChunk('<!DOCTYPE html>');
+var endTag1 = stringToPrecomputedChunk('</');
+var endTag2 = stringToPrecomputedChunk('>');
+// A placeholder is a node inside a hidden partial tree that can be filled in later, but before
+// display. It's never visible to users. We use the template tag because it can be used in every
+// type of parent. <script> tags also work in every other tag except <colgroup>.
+
+var placeholder1 = stringToPrecomputedChunk('<template id="');
+var placeholder2 = stringToPrecomputedChunk('"></template>');
+
+var startCompletedSuspenseBoundary = stringToPrecomputedChunk('<!--$-->');
+var startPendingSuspenseBoundary1 = stringToPrecomputedChunk(
+  '<!--$?--><template id="'
+);
+var startPendingSuspenseBoundary2 = stringToPrecomputedChunk('"></template>');
+var startClientRenderedSuspenseBoundary = stringToPrecomputedChunk('<!--$!-->');
+var endSuspenseBoundary = stringToPrecomputedChunk('<!--/$-->');
+var startSegmentHTML = stringToPrecomputedChunk('<div hidden id="');
+var startSegmentHTML2 = stringToPrecomputedChunk('">');
+var endSegmentHTML = stringToPrecomputedChunk('</div>');
+var startSegmentSVG = stringToPrecomputedChunk(
+  '<svg aria-hidden="true" style="display:none" id="'
+);
+var startSegmentSVG2 = stringToPrecomputedChunk('">');
+var endSegmentSVG = stringToPrecomputedChunk('</svg>');
+var startSegmentMathML = stringToPrecomputedChunk(
+  '<math aria-hidden="true" style="display:none" id="'
+);
+var startSegmentMathML2 = stringToPrecomputedChunk('">');
+var endSegmentMathML = stringToPrecomputedChunk('</math>');
+var startSegmentTable = stringToPrecomputedChunk('<table hidden id="');
+var startSegmentTable2 = stringToPrecomputedChunk('">');
+var endSegmentTable = stringToPrecomputedChunk('</table>');
+var startSegmentTableBody = stringToPrecomputedChunk(
+  '<table hidden><tbody id="'
+);
+var startSegmentTableBody2 = stringToPrecomputedChunk('">');
+var endSegmentTableBody = stringToPrecomputedChunk('</tbody></table>');
+var startSegmentTableRow = stringToPrecomputedChunk('<table hidden><tr id="');
+var startSegmentTableRow2 = stringToPrecomputedChunk('">');
+var endSegmentTableRow = stringToPrecomputedChunk('</tr></table>');
+var startSegmentColGroup = stringToPrecomputedChunk(
+  '<table hidden><colgroup id="'
+);
+var startSegmentColGroup2 = stringToPrecomputedChunk('">');
+var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
+// The following code is the source scripts that we then minify and inline below,
+// with renamed function names that we hope don't collide:
+// const COMMENT_NODE = 8;
+// const SUSPENSE_START_DATA = '$';
+// const SUSPENSE_END_DATA = '/$';
+// const SUSPENSE_PENDING_START_DATA = '$?';
+// const SUSPENSE_FALLBACK_START_DATA = '$!';
+//
+// function clientRenderBoundary(suspenseBoundaryID) {
+//   // Find the fallback's first element.
+//   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
+//   if (!suspenseIdNode) {
+//     // The user must have already navigated away from this tree.
+//     // E.g. because the parent was hydrated.
+//     return;
+//   }
+//   // Find the boundary around the fallback. This is always the previous node.
+//   const suspenseNode = suspenseIdNode.previousSibling;
+//   // Tag it to be client rendered.
+//   suspenseNode.data = SUSPENSE_FALLBACK_START_DATA;
+//   // Tell React to retry it if the parent already hydrated.
+//   if (suspenseNode._reactRetry) {
+//     suspenseNode._reactRetry();
+//   }
+// }
+//
+// function completeBoundary(suspenseBoundaryID, contentID) {
+//   // Find the fallback's first element.
+//   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
+//   const contentNode = document.getElementById(contentID);
+//   // We'll detach the content node so that regardless of what happens next we don't leave in the tree.
+//   // This might also help by not causing recalcing each time we move a child from here to the target.
+//   contentNode.parentNode.removeChild(contentNode);
+//   if (!suspenseIdNode) {
+//     // The user must have already navigated away from this tree.
+//     // E.g. because the parent was hydrated. That's fine there's nothing to do
+//     // but we have to make sure that we already deleted the container node.
+//     return;
+//   }
+//   // Find the boundary around the fallback. This is always the previous node.
+//   const suspenseNode = suspenseIdNode.previousSibling;
+//
+//   // Clear all the existing children. This is complicated because
+//   // there can be embedded Suspense boundaries in the fallback.
+//   // This is similar to clearSuspenseBoundary in ReactDOMHostConfig.
+//   // TODO: We could avoid this if we never emitted suspense boundaries in fallback trees.
+//   // They never hydrate anyway. However, currently we support incrementally loading the fallback.
+//   const parentInstance = suspenseNode.parentNode;
+//   let node = suspenseNode.nextSibling;
+//   let depth = 0;
+//   do {
+//     if (node && node.nodeType === COMMENT_NODE) {
+//       const data = node.data;
+//       if (data === SUSPENSE_END_DATA) {
+//         if (depth === 0) {
+//           break;
+//         } else {
+//           depth--;
+//         }
+//       } else if (
+//         data === SUSPENSE_START_DATA ||
+//         data === SUSPENSE_PENDING_START_DATA ||
+//         data === SUSPENSE_FALLBACK_START_DATA
+//       ) {
+//         depth++;
+//       }
+//     }
+//
+//     const nextNode = node.nextSibling;
+//     parentInstance.removeChild(node);
+//     node = nextNode;
+//   } while (node);
+//
+//   const endOfBoundary = node;
+//
+//   // Insert all the children from the contentNode between the start and end of suspense boundary.
+//   while (contentNode.firstChild) {
+//     parentInstance.insertBefore(contentNode.firstChild, endOfBoundary);
+//   }
+//   suspenseNode.data = SUSPENSE_START_DATA;
+//   if (suspenseNode._reactRetry) {
+//     suspenseNode._reactRetry();
+//   }
+// }
+//
+// function completeSegment(containerID, placeholderID) {
+//   const segmentContainer = document.getElementById(containerID);
+//   const placeholderNode = document.getElementById(placeholderID);
+//   // We always expect both nodes to exist here because, while we might
+//   // have navigated away from the main tree, we still expect the detached
+//   // tree to exist.
+//   segmentContainer.parentNode.removeChild(segmentContainer);
+//   while (segmentContainer.firstChild) {
+//     placeholderNode.parentNode.insertBefore(
+//       segmentContainer.firstChild,
+//       placeholderNode,
+//     );
+//   }
+//   placeholderNode.parentNode.removeChild(placeholderNode);
+// }
+
+var completeSegmentFunction =
+  'function $RS(a,b){a=document.getElementById(a);b=document.getElementById(b);for(a.parentNode.removeChild(a);a.firstChild;)b.parentNode.insertBefore(a.firstChild,b);b.parentNode.removeChild(b)}';
+var completeBoundaryFunction =
+  'function $RC(a,b){a=document.getElementById(a);b=document.getElementById(b);b.parentNode.removeChild(b);if(a){a=a.previousSibling;var f=a.parentNode,c=a.nextSibling,e=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d)if(0===e)break;else e--;else"$"!==d&&"$?"!==d&&"$!"!==d||e++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;b.firstChild;)f.insertBefore(b.firstChild,c);a.data="$";a._reactRetry&&a._reactRetry()}}';
+var clientRenderFunction =
+  'function $RX(a){if(a=document.getElementById(a))a=a.previousSibling,a.data="$!",a._reactRetry&&a._reactRetry()}';
+var completeSegmentScript1Full = stringToPrecomputedChunk(
+  completeSegmentFunction + ';$RS("'
+);
+var completeSegmentScript1Partial = stringToPrecomputedChunk('$RS("');
+var completeSegmentScript2 = stringToPrecomputedChunk('","');
+var completeSegmentScript3 = stringToPrecomputedChunk('")</script>');
+var completeBoundaryScript1Full = stringToPrecomputedChunk(
+  completeBoundaryFunction + ';$RC("'
+);
+var completeBoundaryScript1Partial = stringToPrecomputedChunk('$RC("');
+var completeBoundaryScript2 = stringToPrecomputedChunk('","');
+var completeBoundaryScript3 = stringToPrecomputedChunk('")</script>');
+var clientRenderScript1Full = stringToPrecomputedChunk(
+  clientRenderFunction + ';$RX("'
+);
+var clientRenderScript1Partial = stringToPrecomputedChunk('$RX("');
+var clientRenderScript2 = stringToPrecomputedChunk('")</script>');
+
+var rendererSigil;
+
+{
+  // Use this to detect multiple renderers using the same context
+  rendererSigil = {};
+} // Used to store the parent path of all context overrides in a shared linked list.
+// Forming a reverse tree.
+
+var rootContextSnapshot = null; // We assume that this runtime owns the "current" field on all ReactContext instances.
+// This global (actually thread local) state represents what state all those "current",
+// fields are currently in.
+
+var currentActiveSnapshot = null;
+
+function popNode(prev) {
+  {
+    prev.context._currentValue = prev.parentValue;
+  }
+}
+
+function pushNode(next) {
+  {
+    next.context._currentValue = next.value;
+  }
+}
+
+function popToNearestCommonAncestor(prev, next) {
+  if (prev === next);
+  else {
+    popNode(prev);
+    var parentPrev = prev.parent;
+    var parentNext = next.parent;
+
+    if (parentPrev === null) {
+      if (parentNext !== null) {
+        throw new Error(
+          'The stacks must reach the root at the same time. This is a bug in React.'
+        );
+      }
+    } else {
+      if (parentNext === null) {
+        throw new Error(
+          'The stacks must reach the root at the same time. This is a bug in React.'
+        );
+      }
+
+      popToNearestCommonAncestor(parentPrev, parentNext); // On the way back, we push the new ones that weren't common.
+
+      pushNode(next);
+    }
+  }
+}
+
+function popAllPrevious(prev) {
+  popNode(prev);
+  var parentPrev = prev.parent;
+
+  if (parentPrev !== null) {
+    popAllPrevious(parentPrev);
+  }
+}
+
+function pushAllNext(next) {
+  var parentNext = next.parent;
+
+  if (parentNext !== null) {
+    pushAllNext(parentNext);
+  }
+
+  pushNode(next);
+}
+
+function popPreviousToCommonLevel(prev, next) {
+  popNode(prev);
+  var parentPrev = prev.parent;
+
+  if (parentPrev === null) {
+    throw new Error(
+      'The depth must equal at least at zero before reaching the root. This is a bug in React.'
+    );
+  }
+
+  if (parentPrev.depth === next.depth) {
+    // We found the same level. Now we just need to find a shared ancestor.
+    popToNearestCommonAncestor(parentPrev, next);
+  } else {
+    // We must still be deeper.
+    popPreviousToCommonLevel(parentPrev, next);
+  }
+}
+
+function popNextToCommonLevel(prev, next) {
+  var parentNext = next.parent;
+
+  if (parentNext === null) {
+    throw new Error(
+      'The depth must equal at least at zero before reaching the root. This is a bug in React.'
+    );
+  }
+
+  if (prev.depth === parentNext.depth) {
+    // We found the same level. Now we just need to find a shared ancestor.
+    popToNearestCommonAncestor(prev, parentNext);
+  } else {
+    // We must still be deeper.
+    popNextToCommonLevel(prev, parentNext);
+  }
+
+  pushNode(next);
+} // Perform context switching to the new snapshot.
+// To make it cheap to read many contexts, while not suspending, we make the switch eagerly by
+// updating all the context's current values. That way reads, always just read the current value.
+// At the cost of updating contexts even if they're never read by this subtree.
+
+function switchContext(newSnapshot) {
+  // The basic algorithm we need to do is to pop back any contexts that are no longer on the stack.
+  // We also need to update any new contexts that are now on the stack with the deepest value.
+  // The easiest way to update new contexts is to just reapply them in reverse order from the
+  // perspective of the backpointers. To avoid allocating a lot when switching, we use the stack
+  // for that. Therefore this algorithm is recursive.
+  // 1) First we pop which ever snapshot tree was deepest. Popping old contexts as we go.
+  // 2) Then we find the nearest common ancestor from there. Popping old contexts as we go.
+  // 3) Then we reapply new contexts on the way back up the stack.
+  var prev = currentActiveSnapshot;
+  var next = newSnapshot;
+
+  if (prev !== next) {
+    if (prev === null) {
+      // $FlowFixMe: This has to be non-null since it's not equal to prev.
+      pushAllNext(next);
+    } else if (next === null) {
+      popAllPrevious(prev);
+    } else if (prev.depth === next.depth) {
+      popToNearestCommonAncestor(prev, next);
+    } else if (prev.depth > next.depth) {
+      popPreviousToCommonLevel(prev, next);
+    } else {
+      popNextToCommonLevel(prev, next);
+    }
+
+    currentActiveSnapshot = next;
+  }
+}
+function pushProvider(context, nextValue) {
+  var prevValue;
+
+  {
+    prevValue = context._currentValue;
+    context._currentValue = nextValue;
+
+    {
+      if (
+        context._currentRenderer !== undefined &&
+        context._currentRenderer !== null &&
+        context._currentRenderer !== rendererSigil
+      ) {
+        error(
+          'Detected multiple renderers concurrently rendering the ' +
+            'same context provider. This is currently unsupported.'
+        );
+      }
+
+      context._currentRenderer = rendererSigil;
+    }
+  }
+
+  var prevNode = currentActiveSnapshot;
+  var newNode = {
+    parent: prevNode,
+    depth: prevNode === null ? 0 : prevNode.depth + 1,
+    context: context,
+    parentValue: prevValue,
+    value: nextValue,
+  };
+  currentActiveSnapshot = newNode;
+  return newNode;
+}
+function popProvider() {
+  var prevSnapshot = currentActiveSnapshot;
+
+  if (prevSnapshot === null) {
+    throw new Error(
+      'Tried to pop a Context at the root of the app. This is a bug in React.'
+    );
+  }
+
+  {
+    var value = prevSnapshot.parentValue;
+
+    if (value === REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED) {
+      prevSnapshot.context._currentValue = prevSnapshot.context._defaultValue;
+    } else {
+      prevSnapshot.context._currentValue = value;
+    }
+  }
+
+  return (currentActiveSnapshot = prevSnapshot.parent);
+}
+function getActiveContext() {
+  return currentActiveSnapshot;
+}
+function readContext(context) {
+  var value = context._currentValue;
+  return value;
+}
+
+function readContext$1(context) {
+  {
+    if (context.$$typeof !== REACT_SERVER_CONTEXT_TYPE) {
+      error('Only ServerContext is supported in Flight');
+    }
+
+    if (currentCache === null) {
+      error(
+        'Context can only be read while React is rendering. ' +
+          'In classes, you can read it in the render method or getDerivedStateFromProps. ' +
+          'In function components, you can read it directly in the function body, but not ' +
+          'inside Hooks like useReducer() or useMemo().'
+      );
+    }
+  }
+
+  return readContext(context);
+}
+
+var Dispatcher = {
+  useMemo: function (nextCreate) {
+    return nextCreate();
+  },
+  useCallback: function (callback) {
+    return callback;
+  },
+  useDebugValue: function () {},
+  useDeferredValue: unsupportedHook,
+  useTransition: unsupportedHook,
+  getCacheForType: function (resourceType) {
+    if (!currentCache) {
+      throw new Error('Reading the cache is only supported while rendering.');
+    }
+
+    var entry = currentCache.get(resourceType);
+
+    if (entry === undefined) {
+      entry = resourceType(); // TODO: Warn if undefined?
+
+      currentCache.set(resourceType, entry);
+    }
+
+    return entry;
+  },
+  readContext: readContext$1,
+  useContext: readContext$1,
+  useReducer: unsupportedHook,
+  useRef: unsupportedHook,
+  useState: unsupportedHook,
+  useInsertionEffect: unsupportedHook,
+  useLayoutEffect: unsupportedHook,
+  useImperativeHandle: unsupportedHook,
+  useEffect: unsupportedHook,
+  useId: unsupportedHook,
+  useMutableSource: unsupportedHook,
+  useSyncExternalStore: unsupportedHook,
+  useCacheRefresh: function () {
+    return unsupportedRefresh;
+  },
+};
+
+function unsupportedHook() {
+  throw new Error('This Hook is not supported in Server Components.');
+}
+
+function unsupportedRefresh() {
+  if (!currentCache) {
+    throw new Error(
+      'Refreshing the cache is not supported in Server Components.'
+    );
+  }
+}
+
+var currentCache = null;
+function setCurrentCache(cache) {
+  currentCache = cache;
+  return currentCache;
+}
+function getCurrentCache() {
+  return currentCache;
+}
+
+var ContextRegistry = ReactSharedInternals.ContextRegistry;
+function getOrCreateServerContext(globalName) {
+  if (!ContextRegistry[globalName]) {
+    ContextRegistry[globalName] = createServerContext(
+      globalName,
+      REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED
+    );
+  }
+
+  return ContextRegistry[globalName];
 }
 
 var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
@@ -165,7 +1169,7 @@ function defaultErrorHandler(error) {
 var OPEN = 0;
 var CLOSING = 1;
 var CLOSED = 2;
-function createRequest(model, bundlerConfig, onError) {
+function createRequest(model, bundlerConfig, onError, context) {
   var pingedSegments = [];
   var request = {
     status: OPEN,
@@ -181,16 +1185,24 @@ function createRequest(model, bundlerConfig, onError) {
     completedErrorChunks: [],
     writtenSymbols: new Map(),
     writtenModules: new Map(),
+    writtenProviders: new Map(),
     onError: onError === undefined ? defaultErrorHandler : onError,
     toJSON: function (key, value) {
       return resolveModelToJSON(request, this, key, value);
     },
   };
   request.pendingChunks++;
-  var rootSegment = createSegment(request, model);
+  var rootContext = createRootContext(context);
+  var rootSegment = createSegment(request, model, rootContext);
   pingedSegments.push(rootSegment);
   return request;
 }
+
+function createRootContext(reqContext) {
+  return importServerContexts(reqContext);
+}
+
+var POP = {};
 
 function attemptResolveElement(type, key, ref, props) {
   if (ref !== null && ref !== undefined) {
@@ -226,6 +1238,13 @@ function attemptResolveElement(type, key, ref, props) {
     }
 
     switch (type.$$typeof) {
+      case REACT_LAZY_TYPE: {
+        var payload = type._payload;
+        var init = type._init;
+        var wrappedType = init(payload);
+        return attemptResolveElement(wrappedType, key, ref, props);
+      }
+
       case REACT_FORWARD_REF_TYPE: {
         var render = type.render;
         return render(props, undefined);
@@ -233,6 +1252,38 @@ function attemptResolveElement(type, key, ref, props) {
 
       case REACT_MEMO_TYPE: {
         return attemptResolveElement(type.type, key, ref, props);
+      }
+
+      case REACT_PROVIDER_TYPE: {
+        pushProvider(type._context, props.value);
+
+        {
+          var extraKeys = Object.keys(props).filter(function (value) {
+            if (value === 'children' || value === 'value') {
+              return false;
+            }
+
+            return true;
+          });
+
+          if (extraKeys.length !== 0) {
+            error(
+              'ServerContext can only have a value prop and children. Found: %s',
+              JSON.stringify(extraKeys)
+            );
+          }
+        }
+
+        return [
+          REACT_ELEMENT_TYPE,
+          type,
+          key, // Rely on __popProvider being serialized last to pop the provider.
+          {
+            value: props.value,
+            children: props.children,
+            __pop: POP,
+          },
+        ];
       }
     }
   }
@@ -253,11 +1304,12 @@ function pingSegment(request, segment) {
   }
 }
 
-function createSegment(request, model) {
+function createSegment(request, model, context) {
   var id = request.nextChunkId++;
   var segment = {
     id: id,
     model: model,
+    context: context,
     ping: function () {
       return pingSegment(request, segment);
     },
@@ -286,7 +1338,7 @@ function escapeStringValue(value) {
 function isObjectPrototype(object) {
   if (!object) {
     return false;
-  } // $FlowFixMe
+  }
 
   var ObjectPrototype = Object.prototype;
 
@@ -387,8 +1439,7 @@ function describeValueForErrorMessage(value) {
 
 function describeObjectForErrorMessage(objectOrArray, expandedName) {
   if (isArray(objectOrArray)) {
-    var str = '['; // $FlowFixMe: Should be refined by now.
-
+    var str = '[';
     var array = objectOrArray;
 
     for (var i = 0; i < array.length; i++) {
@@ -417,8 +1468,7 @@ function describeObjectForErrorMessage(objectOrArray, expandedName) {
     str += ']';
     return str;
   } else {
-    var _str = '{'; // $FlowFixMe: Should be refined by now.
-
+    var _str = '{';
     var object = objectOrArray;
     var names = Object.keys(object);
 
@@ -452,6 +1502,8 @@ function describeObjectForErrorMessage(objectOrArray, expandedName) {
   }
 }
 
+var insideContextProps = null;
+var isInsideContextValue = false;
 function resolveModelToJSON(request, parent, key, value) {
   {
     // $FlowFixMe
@@ -472,34 +1524,62 @@ function resolveModelToJSON(request, parent, key, value) {
   switch (value) {
     case REACT_ELEMENT_TYPE:
       return '$';
+  }
 
-    case REACT_LAZY_TYPE:
-      throw new Error(
-        'React Lazy Components are not yet supported on the server.'
-      );
+  {
+    if (
+      parent[0] === REACT_ELEMENT_TYPE &&
+      parent[1] &&
+      parent[1].$$typeof === REACT_PROVIDER_TYPE &&
+      key === '3'
+    ) {
+      insideContextProps = value;
+    } else if (insideContextProps === parent && key === 'value') {
+      isInsideContextValue = true;
+    } else if (insideContextProps === parent && key === 'children') {
+      isInsideContextValue = false;
+    }
   } // Resolve server components.
 
   while (
     typeof value === 'object' &&
     value !== null &&
-    value.$$typeof === REACT_ELEMENT_TYPE
+    (value.$$typeof === REACT_ELEMENT_TYPE ||
+      value.$$typeof === REACT_LAZY_TYPE)
   ) {
-    // TODO: Concatenate keys of parents onto children.
-    var element = value;
+    {
+      if (isInsideContextValue) {
+        error('React elements are not allowed in ServerContext');
+      }
+    }
 
     try {
-      // Attempt to render the server component.
-      value = attemptResolveElement(
-        element.type,
-        element.key,
-        element.ref,
-        element.props
-      );
+      switch (value.$$typeof) {
+        case REACT_ELEMENT_TYPE: {
+          // TODO: Concatenate keys of parents onto children.
+          var element = value; // Attempt to render the server component.
+
+          value = attemptResolveElement(
+            element.type,
+            element.key,
+            element.ref,
+            element.props
+          );
+          break;
+        }
+
+        case REACT_LAZY_TYPE: {
+          var payload = value._payload;
+          var init = value._init;
+          value = init(payload);
+          break;
+        }
+      }
     } catch (x) {
       if (typeof x === 'object' && x !== null && typeof x.then === 'function') {
         // Something suspended, we'll need to create a new segment and resolve it later.
         request.pendingChunks++;
-        var newSegment = createSegment(request, value);
+        var newSegment = createSegment(request, value, getActiveContext());
         var ping = newSegment.ping;
         x.then(ping, ping);
         return serializeByRefID(newSegment.id);
@@ -568,6 +1648,28 @@ function resolveModelToJSON(request, parent, key, value) {
         emitErrorChunk(request, _errorId, x);
         return serializeByValueID(_errorId);
       }
+    } else if (value.$$typeof === REACT_PROVIDER_TYPE) {
+      var providerKey = value._context._globalName;
+      var writtenProviders = request.writtenProviders;
+      var providerId = writtenProviders.get(key);
+
+      if (providerId === undefined) {
+        request.pendingChunks++;
+        providerId = request.nextChunkId++;
+        writtenProviders.set(providerKey, providerId);
+        emitProviderChunk(request, providerId, providerKey);
+      }
+
+      return serializeByValueID(providerId);
+    } else if (value === POP) {
+      popProvider();
+
+      {
+        insideContextProps = null;
+        isInsideContextValue = false;
+      }
+
+      return undefined;
     }
 
     {
@@ -751,7 +1853,14 @@ function emitSymbolChunk(request, id, name) {
   request.completedModuleChunks.push(processedChunk);
 }
 
+function emitProviderChunk(request, id, contextName) {
+  var processedChunk = processProviderChunk(request, id, contextName);
+  request.completedJSONChunks.push(processedChunk);
+}
+
 function retrySegment(request, segment) {
+  switchContext(segment.context);
+
   try {
     var _value3 = segment.model;
 
@@ -792,9 +1901,9 @@ function retrySegment(request, segment) {
 
 function performWork(request) {
   var prevDispatcher = ReactCurrentDispatcher.current;
-  var prevCache = currentCache;
+  var prevCache = getCurrentCache();
   ReactCurrentDispatcher.current = Dispatcher;
-  currentCache = request.cache;
+  setCurrentCache(request.cache);
 
   try {
     var pingedSegments = request.pingedSegments;
@@ -813,7 +1922,7 @@ function performWork(request) {
     fatalError(request, error);
   } finally {
     ReactCurrentDispatcher.current = prevDispatcher;
-    currentCache = prevCache;
+    setCurrentCache(prevCache);
   }
 }
 
@@ -920,60 +2029,26 @@ function startFlowing(request, destination) {
   }
 }
 
-function unsupportedHook() {
-  throw new Error('This Hook is not supported in Server Components.');
-}
+function importServerContexts(contexts) {
+  if (contexts) {
+    var prevContext = getActiveContext();
+    switchContext(rootContextSnapshot);
 
-function unsupportedRefresh() {
-  if (!currentCache) {
-    throw new Error(
-      'Refreshing the cache is not supported in Server Components.'
-    );
+    for (var i = 0; i < contexts.length; i++) {
+      var _contexts$i = contexts[i],
+        name = _contexts$i[0],
+        _value4 = _contexts$i[1];
+      var context = getOrCreateServerContext(name);
+      pushProvider(context, _value4);
+    }
+
+    var importedContext = getActiveContext();
+    switchContext(prevContext);
+    return importedContext;
   }
+
+  return rootContextSnapshot;
 }
-
-var currentCache = null;
-var Dispatcher = {
-  useMemo: function (nextCreate) {
-    return nextCreate();
-  },
-  useCallback: function (callback) {
-    return callback;
-  },
-  useDebugValue: function () {},
-  useDeferredValue: unsupportedHook,
-  useTransition: unsupportedHook,
-  getCacheForType: function (resourceType) {
-    if (!currentCache) {
-      throw new Error('Reading the cache is only supported while rendering.');
-    }
-
-    var entry = currentCache.get(resourceType);
-
-    if (entry === undefined) {
-      entry = resourceType(); // TODO: Warn if undefined?
-
-      currentCache.set(resourceType, entry);
-    }
-
-    return entry;
-  },
-  readContext: unsupportedHook,
-  useContext: unsupportedHook,
-  useReducer: unsupportedHook,
-  useRef: unsupportedHook,
-  useState: unsupportedHook,
-  useInsertionEffect: unsupportedHook,
-  useLayoutEffect: unsupportedHook,
-  useImperativeHandle: unsupportedHook,
-  useEffect: unsupportedHook,
-  useId: unsupportedHook,
-  useMutableSource: unsupportedHook,
-  useSyncExternalStore: unsupportedHook,
-  useCacheRefresh: function () {
-    return unsupportedRefresh;
-  },
-};
 
 function createDrainHandler(destination, request) {
   return function () {
@@ -981,11 +2056,12 @@ function createDrainHandler(destination, request) {
   };
 }
 
-function renderToPipeableStream(model, options) {
+function renderToPipeableStream(model, options, context) {
   var request = createRequest(
     model,
     {}, // Manifest, not used
-    options ? options.onError : undefined
+    options ? options.onError : undefined,
+    context
   );
   var hasStartedFlowing = false;
   startWork(request);

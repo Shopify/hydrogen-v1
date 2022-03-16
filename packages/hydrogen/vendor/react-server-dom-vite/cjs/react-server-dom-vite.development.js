@@ -14,6 +14,8 @@ if (process.env.NODE_ENV !== 'production') {
   (function () {
     'use strict';
 
+    var React = require('react');
+
     function createStringDecoder() {
       return new TextDecoder();
     }
@@ -97,6 +99,24 @@ if (process.env.NODE_ENV !== 'production') {
     // The Symbol used to tag the ReactElement-like types.
     var REACT_ELEMENT_TYPE = Symbol.for('react.element');
     var REACT_LAZY_TYPE = Symbol.for('react.lazy');
+    var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for(
+      'react.default_value'
+    );
+
+    var ReactSharedInternals =
+      React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+
+    var ContextRegistry = ReactSharedInternals.ContextRegistry;
+    function getOrCreateServerContext(globalName) {
+      if (!ContextRegistry[globalName]) {
+        ContextRegistry[globalName] = React.createServerContext(
+          globalName,
+          REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED
+        );
+      }
+
+      return ContextRegistry[globalName];
+    }
 
     var PENDING = 0;
     var RESOLVED_MODEL = 1;
@@ -362,6 +382,16 @@ if (process.env.NODE_ENV !== 'production') {
         resolveModelChunk(chunk, model);
       }
     }
+    function resolveProvider(response, id, contextName) {
+      var chunks = response._chunks;
+      chunks.set(
+        id,
+        createInitializedChunk(
+          response,
+          getOrCreateServerContext(contextName).Provider
+        )
+      );
+    }
     function resolveModule(response, id, model) {
       var chunks = response._chunks;
       var chunk = chunks.get(id);
@@ -427,6 +457,11 @@ if (process.env.NODE_ENV !== 'production') {
 
         case 'M': {
           resolveModule(response, id, text);
+          return;
+        }
+
+        case 'P': {
+          resolveProvider(response, id, text);
           return;
         }
 
