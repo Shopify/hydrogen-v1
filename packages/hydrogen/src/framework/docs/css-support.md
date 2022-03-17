@@ -84,7 +84,7 @@ If you don't want to build with Tailwind's library and instead want to write you
 
 ## CSS Modules
 
-Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module and exports them as an export named `StyleTag`. In order to use CSS Modules in your Hydrogen app, you must render a this style tag in the component along with your styles:
+Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module and exports them to a `StyleTag` component. To use CSS Modules in your Hydrogen app, you must render the style tag in the component along with your styles:
 
 {% codeblock file, filename: 'src/components/Hello.client.jsx' %}
 
