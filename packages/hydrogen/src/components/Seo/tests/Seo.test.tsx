@@ -63,6 +63,7 @@ describe('<Seo />', () => {
       title: 'test title',
       description: 'test description',
     };
+    // @ts-ignore
     const wrapper = mount(<Seo type="defaultSeo" data={defaultPage} />);
 
     expect(wrapper).toContainReactComponent(DefaultPageSeo, {
@@ -73,6 +74,7 @@ describe('<Seo />', () => {
 
   it('renders <HomePageSeo /> type is homepage', () => {
     const homePage = {title: 'test title'};
+    // @ts-ignore
     const wrapper = mount(<Seo type="homepage" data={homePage} />);
 
     expect(wrapper).toContainReactComponent(HomePageSeo, {

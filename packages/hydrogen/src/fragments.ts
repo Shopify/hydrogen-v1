@@ -7,23 +7,5 @@ export type {
   MediaFileFragment_Video_Fragment,
 } from './components/MediaFile/MediaFileFragment';
 
-export {MetafieldFragment} from './graphql/graphql-constants';
-export type {MetafieldFragmentFragment} from './components/Metafield/MetafieldFragment';
-
 export {ProductProviderFragment} from './graphql/graphql-constants';
 export type {ProductProviderFragmentFragment} from './components/ProductProvider/ProductProviderFragment';
-
-export {
-  DefaultPageSeoFragment,
-  HomeSeoFragment,
-  ProductSeoFragment,
-  CollectionSeoFragment,
-  PageSeoFragment,
-} from './graphql/graphql-constants';
-export type {
-  DefaultPageSeoFragmentFragment,
-  HomeSeoFragmentFragment,
-  ProductSeoFragmentFragment,
-  CollectionSeoFragmentFragment,
-  PageSeoFragmentFragment,
-} from './components/Seo/SeoFragment';

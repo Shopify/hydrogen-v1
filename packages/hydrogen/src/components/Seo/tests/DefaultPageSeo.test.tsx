@@ -8,7 +8,7 @@ import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 
 jest.mock('../../../client', () => ({
-  Head({children}) {
+  Head({children}: {children: React.ReactNode}) {
     return children;
   },
 }));

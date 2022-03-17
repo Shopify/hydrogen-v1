@@ -1,7 +1,6 @@
 import React from 'react';
 import {Head} from '../../client';
-
-import type {Twitter} from './types';
+import type {Twitter} from './seo-types';
 
 export function TwitterSeo({site, title, description}: Partial<Twitter>) {
   return (
