@@ -51,10 +51,10 @@ export default function MyProductVideo() {
 
 ## Props
 
-| Name     | Type                                  | Description                                                                                                         |
-| -------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| data     | [GraphQL query](#storefront-api-data) | An object with fields that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). |
-| options? | <code>ImageSizeOptions</code>         | An object of image size options for the video's `previewImage`.                                                     |
+| Name     | Type                                        | Description                                                                                                         |
+| -------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| data     | <code>PartialDeep&#60;VideoType&#62;</code> | An object with fields that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). |
+| options? | <code>ImageSizeOptions</code>               | An object of image size options for the video's `previewImage`.                                                     |
 
 ## Component type
 

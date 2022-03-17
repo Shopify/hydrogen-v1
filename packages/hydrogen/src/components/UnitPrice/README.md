@@ -46,11 +46,11 @@ export default function Product() {
 
 ## Props
 
-| Name        | Type                                                      | Description                                                                                                                       |
-| ----------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| data        | [GraphQL query](#storefront-api-data)                     | An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
-| measurement | <code>UnitPriceMeasurement['unitPriceMeasurement']</code> | A [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement).                                         |
-| as?         | <code>TTag</code>                                         | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                     |
+| Name        | Type                                                   | Description                                                                                                                       |
+| ----------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| data        | <code>PartialDeep&#60;MoneyV2&#62;</code>              | An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
+| measurement | <code>PartialDeep&#60;UnitPriceMeasurement&#62;</code> | A [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement).                                         |
+| as?         | <code>TTag</code>                                      | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                     |
 
 ## Component type
 

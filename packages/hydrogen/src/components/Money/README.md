@@ -52,10 +52,10 @@ export default function ProductWithCustomMoney() {
 
 ## Props
 
-| Name | Type                                  | Description                                                                                                                       |
-| ---- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| as?  | <code>TTag</code>                     | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                     |
-| data | [GraphQL query](#storefront-api-data) | An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
+| Name | Type                                      | Description                                                                                                                       |
+| ---- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| as?  | <code>TTag</code>                         | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                     |
+| data | <code>PartialDeep&#60;MoneyV2&#62;</code> | An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
 
 ## Component type
 
