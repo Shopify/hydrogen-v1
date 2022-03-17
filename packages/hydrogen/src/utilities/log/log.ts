@@ -28,6 +28,7 @@ export type LoggerOptions = {
   showCacheControlHeader?: boolean;
   showCacheApiStatus?: boolean;
   showQueryTiming?: boolean;
+  showUnusedQueryProperties?: boolean;
 };
 
 export type RenderType = 'str' | 'rsc' | 'ssr' | 'api';

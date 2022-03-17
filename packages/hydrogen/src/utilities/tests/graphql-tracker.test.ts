@@ -1,51 +1,102 @@
 // eslint-disable-next-line node/no-extraneous-import
 import gql from 'graphql-tag';
-import {wrapInGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
+import {injectGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
 
 const query = gql`
   query shopName {
     shop {
+      __typename
       id
-      name
-      description
+      title: name
+      summary: description
       moneyFormat
       paymentSettings {
-        countryCode
-        currencyCode
+        __typename
+        ...CodesFragment
+        supportedDigitalWallets
+      }
+    }
+    products {
+      edges {
+        node {
+          handle
+          variants {
+            edges {
+              node {
+                title
+                compareAtPriceV2 {
+                  amount
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
+
+  fragment CodesFragment on PaymentSettings {
+    countryCode
+    currencyCode
+  }
 `;
 
-const data = {
+const getData = () => ({
   data: {
     shop: {
       id: 'id',
-      name: 'name',
-      description: 'description',
+      title: 'aliased name',
+      summary: 'description',
       moneyFormat: 'moneyFormat',
       paymentSettings: {
         countryCode: 'ES',
         currencyCode: 'EUR',
+        supportedDigitalWallets: ['ANDROID_PAY', 'SHOPIFY_PAY'],
       },
     },
+    products: {
+      edges: [
+        {
+          node: {
+            handle: 'handle-0',
+            variants: {
+              edges: [{node: {title: 'title-0', compareAtPriceV2: null}}],
+            },
+          },
+        },
+        {
+          node: {
+            handle: 'handle-1',
+            variants: {
+              edges: [
+                {node: {title: 'title-1', compareAtPriceV2: {amount: 12}}},
+              ],
+            },
+          },
+        },
+      ],
+    },
   },
-};
+});
 
 describe('GraphQL Tracker', () => {
   jest.useFakeTimers();
 
   it('warns about unused properties', () => {
-    let unusedData: null | {queryName: string; properties: string[]} = null;
+    let unusedData = {
+      queryName: '',
+      properties: [] as string[],
+    };
 
-    const tracker = wrapInGraphQLTracker<typeof data>({
+    const dataMock = getData();
+    const manualCheck = injectGraphQLTracker({
       query,
-      data,
-      onUnusedData: (params) => (unusedData = params),
+      data: dataMock,
+      onUnusedData: (params: typeof unusedData) => (unusedData = params),
     });
 
-    // Read stuff via destructuring or direct access
-    tracker.data.shop.id + tracker.data.shop.name;
+    // Read stuff via direct access or destructuring
+    dataMock.data.shop.id + dataMock.data.shop.title;
 
     jest.advanceTimersByTime(TIMEOUT_MS / 2);
 
@@ -55,26 +106,66 @@ describe('GraphQL Tracker', () => {
           // @ts-ignore
           paymentSettings: {countryCode},
         },
+        products: {
+          edges: [
+            // @ts-ignore
+            firstProductEdge,
+            {
+              // @ts-ignore
+              node: {handle},
+            },
+          ],
+        },
       },
-    } = tracker;
+    } = dataMock;
 
     jest.advanceTimersByTime(TIMEOUT_MS / 2 + 100);
     // Not enough time since last read
-    expect(unusedData).toBeFalsy();
+    expect(unusedData.properties.length).toEqual(0);
+
     jest.advanceTimersByTime(TIMEOUT_MS / 2);
     // Enough time since last read
-    expect(unusedData).toBeTruthy();
+    expect(unusedData.properties.length).toBeGreaterThan(0);
 
-    const {queryName, properties} = unusedData!;
+    expect(unusedData.queryName).toEqual('shopName');
 
-    expect(queryName).toEqual('shopName');
+    // Properties that are not used:
+    expect(unusedData.properties).toContain('shop.summary');
+    expect(unusedData.properties).toContain('shop.moneyFormat');
+    expect(unusedData.properties).toContain(
+      'shop.paymentSettings.currencyCode'
+    );
+    expect(unusedData.properties).toContain('products.variants.title');
+    expect(unusedData.properties).toContain(
+      'products.variants.compareAtPriceV2.amount'
+    );
+    expect(unusedData.properties).toContain(
+      'shop.paymentSettings.supportedDigitalWallets'
+    );
 
-    expect(properties).toContain('description');
-    expect(properties).toContain('moneyFormat');
-    expect(properties).toContain('currencyCode');
+    // Properties that have been read or are excluded for any reason:
+    expect(unusedData.properties).not.toContain('shop.id');
+    expect(unusedData.properties).not.toContain('shop.__typename'); // Ignored
+    expect(unusedData.properties).not.toContain('shop.name'); // Aliased to title
+    expect(unusedData.properties).not.toContain('shop.title');
+    expect(unusedData.properties).not.toContain('shop.description'); // Alaised to summary
+    expect(unusedData.properties).not.toContain(
+      'shop.paymentSettings.countryCode'
+    );
+    expect(unusedData.properties).not.toContain(
+      'shop.paymentSettings.__typename'
+    ); // Ignored
+    expect(unusedData.properties).not.toContain('products.handle');
 
-    expect(properties).not.toContain('id');
-    expect(properties).not.toContain('name');
-    expect(properties).not.toContain('countryCode');
+    // Reading properties after the timeout is finished won't trigger a refresh
+    firstProductEdge.node.variants.edges[0].node.title;
+    jest.advanceTimersByTime(TIMEOUT_MS + 100);
+    expect(unusedData.properties).toContain('products.variants.title');
+
+    manualCheck();
+    expect(unusedData.properties).not.toContain('products.variants.title');
+
+    // Make sure the data has not been altered during the proxy injection
+    expect(JSON.stringify(dataMock)).toEqual(JSON.stringify(getData()));
   });
 });
