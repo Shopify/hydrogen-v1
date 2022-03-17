@@ -29,7 +29,7 @@ createServer().then(({app}) => {
 });
 ```
 
-If you want to use a different Node.js framework like [Express](https://expressjs.com/) or [Fastify](https://www.fastify.io/), or if you want to supply a `cache` input to `hydrogenMiddleware` for [production caching](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-in-production), create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
+If you want to use a different Node.js framework like [Express](https://expressjs.com/) or [Fastify](https://www.fastify.io/), or if you want to supply a `cache` input to `hydrogenMiddleware` for [production caching](/custom-storefronts/hydrogen/framework/cache#caching-in-production), then create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
 
 ```js
 import {hydrogenMiddleware} from '@shopify/hydrogen/middleware';
@@ -53,7 +53,7 @@ app.use(
   hydrogenMiddleware({
     getServerEntrypoint: () => import('./src/App.server'),
     indexTemplate: () => import('./dist/client/index.html?raw'),
-    // optional: Provide a cache
+    // Optional: Provide a caching strategy
     cache: customCacheImplementation,
   })
 );
