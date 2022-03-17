@@ -2187,69 +2187,6 @@ fragment Model3DFragment on Model3d {
 `;
 
 /**
- *```
- *
- * fragment MetafieldFragment on Metafield {
- *   id
- *   type
- *   namespace
- *   key
- *   value
- *   createdAt
- *   updatedAt
- *   description
- *   reference @include(if: $includeReferenceMetafieldDetails) {
- *     __typename
- *     ... on MediaImage {
- *       id
- *       mediaContentType
- *       image {
- *         ...ImageFragment
- *       }
- *     }
- *   }
- * }
- * fragment ImageFragment on Image {
- *   id
- *   url
- *   altText
- *   width
- *   height
- * }
- *
- *```
- */
-export const MetafieldFragment = `
-fragment MetafieldFragment on Metafield {
-  id
-  type
-  namespace
-  key
-  value
-  createdAt
-  updatedAt
-  description
-  reference @include(if: $includeReferenceMetafieldDetails) {
-    __typename
-    ... on MediaImage {
-      id
-      mediaContentType
-      image {
-        ...ImageFragment
-      }
-    }
-  }
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
-`;
-
-/**
 *```
 * fragment Model3DFragment on Model3d {
 *   id
@@ -2320,7 +2257,25 @@ export const MoneyFragment = `fragment MoneyFragment on MoneyV2 {
  *   metafields(first: $numProductMetafields) {
  *     edges {
  *       node {
- *         ...MetafieldFragment
+ *         id
+ *         type
+ *         namespace
+ *         key
+ *         value
+ *         createdAt
+ *         updatedAt
+ *         description
+ *         reference @include(if: $includeReferenceMetafieldDetails) {
+ *           __typename
+ *           ... on MediaImage {
+ *             id
+ *             mediaContentType
+ *             image {
+ *               ...ImageFragment
+ *             }
+ *           }
+ *         }
+ *
  *       }
  *     }
  *   }
@@ -2372,27 +2327,6 @@ export const MoneyFragment = `fragment MoneyFragment on MoneyV2 {
  * }
  *
  *
- * fragment MetafieldFragment on Metafield {
- *   id
- *   type
- *   namespace
- *   key
- *   value
- *   createdAt
- *   updatedAt
- *   description
- *   reference @include(if: $includeReferenceMetafieldDetails) {
- *     __typename
- *     ... on MediaImage {
- *       id
- *       mediaContentType
- *       image {
- *         ...ImageFragment
- *       }
- *     }
- *   }
- * }
- *
  * fragment VariantFragment on ProductVariant {
  *   id
  *   title
@@ -2414,7 +2348,24 @@ export const MoneyFragment = `fragment MoneyFragment on MoneyV2 {
  *   metafields(first: $numProductVariantMetafields) {
  *     edges {
  *       node {
- *         ...MetafieldFragment
+ *         id
+ *         type
+ *         namespace
+ *         key
+ *         value
+ *         createdAt
+ *         updatedAt
+ *         description
+ *         reference @include(if: $includeReferenceMetafieldDetails) {
+ *           __typename
+ *           ... on MediaImage {
+ *             id
+ *             mediaContentType
+ *             image {
+ *               ...ImageFragment
+ *             }
+ *           }
+ *         }
  *       }
  *     }
  *   }
@@ -2628,7 +2579,25 @@ fragment ProductProviderFragment on Product  {
   metafields(first: $numProductMetafields) {
     edges {
       node {
-        ...MetafieldFragment
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference @include(if: $includeReferenceMetafieldDetails) {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              ...ImageFragment
+            }
+          }
+        }
+
       }
     }
   }
@@ -2679,28 +2648,6 @@ fragment MediaFileFragment on Media {
   }
 }
 
-
-fragment MetafieldFragment on Metafield {
-  id
-  type
-  namespace
-  key
-  value
-  createdAt
-  updatedAt
-  description
-  reference @include(if: $includeReferenceMetafieldDetails) {
-    __typename
-    ... on MediaImage {
-      id
-      mediaContentType
-      image {
-        ...ImageFragment
-      }
-    }
-  }
-}
-
 fragment VariantFragment on ProductVariant {
   id
   title
@@ -2722,7 +2669,24 @@ fragment VariantFragment on ProductVariant {
   metafields(first: $numProductVariantMetafields) {
     edges {
       node {
-        ...MetafieldFragment
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference @include(if: $includeReferenceMetafieldDetails) {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              ...ImageFragment
+            }
+          }
+        }
       }
     }
   }
@@ -3178,7 +3142,25 @@ fragment MoneyFragment on MoneyV2 {
  *   metafields(first: $numProductVariantMetafields) {
  *     edges {
  *       node {
- *         ...MetafieldFragment
+ *         id
+ *         type
+ *         namespace
+ *         key
+ *         value
+ *         createdAt
+ *         updatedAt
+ *         description
+ *         reference @include(if: $includeReferenceMetafieldDetails) {
+ *           __typename
+ *           ... on MediaImage {
+ *             id
+ *             mediaContentType
+ *             image {
+ *               ...ImageFragment
+ *             }
+ *           }
+ *         }
+ *
  *       }
  *     }
  *   }
@@ -3293,7 +3275,25 @@ fragment VariantFragment on ProductVariant {
   metafields(first: $numProductVariantMetafields) {
     edges {
       node {
-        ...MetafieldFragment
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference @include(if: $includeReferenceMetafieldDetails) {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              ...ImageFragment
+            }
+          }
+        }
+
       }
     }
   }
