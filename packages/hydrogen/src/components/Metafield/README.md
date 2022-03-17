@@ -20,10 +20,10 @@ export function Product({product}) {
 
 ## Props
 
-| Name | Type                                  | Description                                                                                                                               |
-| ---- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| data | [GraphQL query](#storefront-api-data) | An object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield).     |
-| as?  | <code>TTag</code>                     | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/types). |
+| Name | Type                         | Description                                                                                                                               |
+| ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| data | <code>ParsedMetafield</code> | An object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield).     |
+| as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/types). |
 
 ## Default output
 
