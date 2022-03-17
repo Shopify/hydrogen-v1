@@ -36,11 +36,14 @@ describe('cache header log', () => {
       options: jest.fn(() => ({})),
     };
 
-    resetLogger();
     setLogger(mockLogger);
     setLoggerOptions({
       showQueryTiming: true,
     });
+  });
+
+  afterEach(() => {
+    resetLogger();
   });
 
   it('should log query timing', () => {

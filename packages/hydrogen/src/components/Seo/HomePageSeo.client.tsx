@@ -1,10 +1,8 @@
 import React from 'react';
 import {Head} from '../../client';
-
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
-
-import type {HomePage} from './types';
+import type {HomePage} from './seo-types';
 
 export function HomePageSeo({title, description, url}: HomePage) {
   const organizationSchema = {
