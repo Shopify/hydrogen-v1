@@ -1,8 +1,8 @@
 import {CacheCustom, useCookies} from '@shopify/hydrogen';
 
-import AccountDetails from '../components/AccountDetails.server';
+import AccountDetails from '../../components/AccountDetails.server';
 
-import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../constants/cookies';
+import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants/cookies';
 
 export default function Account({response}) {
   // disabled full page cache
@@ -19,6 +19,6 @@ export default function Account({response}) {
   if (customerAccessToken) {
     return <AccountDetails customerAccessToken={customerAccessToken} />;
   } else {
-    response.redirect('/login');
+    response.redirect('/account/login');
   }
 }
