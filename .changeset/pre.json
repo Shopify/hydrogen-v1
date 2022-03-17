@@ -1,5 +1,5 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "rc1",
   "initialVersions": {
     "template-hydrogen-default": "0.11.0",
