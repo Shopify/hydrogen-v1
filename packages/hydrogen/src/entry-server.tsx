@@ -42,7 +42,7 @@ import {
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME, EVENT_PATHNAME} from './constants';
+import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/AnalyticEventBus/Analytics.server';
@@ -95,7 +95,10 @@ export const renderHydrogen = (
     setContext(context);
     setConfig({dev});
 
-    if (url.pathname === EVENT_PATHNAME) {
+    if (
+      url.pathname === EVENT_PATHNAME ||
+      EVENT_PATHNAME_REGEX.test(url.pathname)
+    ) {
       return ServerAnalyticRoute(request, [
         ShopifyAnalytics,
         ...(serverAnalyticConnectors ? serverAnalyticConnectors : []),
