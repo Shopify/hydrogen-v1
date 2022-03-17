@@ -17,11 +17,11 @@ export function GoogleAnalytics() {
       gtag('js', new Date());
 
       gtag('config', 'G-39VXD1NQYB', {
+        transport_url: `${document.location.origin}/__event`,
         send_page_view: false,
       });
 
       ClientAnalytics.subscribe('page-view', (payload) => {
-        console.log('Google analytic page-view', payload);
         gtag('event', 'page_view');
       });
     }

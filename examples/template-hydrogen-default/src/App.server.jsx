@@ -7,6 +7,7 @@ import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 import {GoogleAnalytics} from './components/GoogleAnalytics.client';
+import * as GoogleAnalyticsServer from './components/GoogleAnalytics.server';
 
 function App({routes}) {
   return (
@@ -29,4 +30,8 @@ function App({routes}) {
 
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {shopifyConfig, routes});
+export default renderHydrogen(App, {
+  shopifyConfig,
+  routes,
+  serverAnalyticConnectors: [GoogleAnalyticsServer],
+});
