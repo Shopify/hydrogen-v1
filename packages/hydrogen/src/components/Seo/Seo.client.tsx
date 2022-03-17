@@ -1,39 +1,35 @@
-import React from 'react';
+import React, {type ComponentProps} from 'react';
 import {useUrl} from '../../foundation';
-
 import {DefaultPageSeo} from './DefaultPageSeo.client';
 import {HomePageSeo} from './HomePageSeo.client';
 import {ProductSeo} from './ProductSeo.client';
 import {CollectionSeo} from './CollectionSeo.client';
 import {PageSeo} from './PageSeo.client';
-
-import type {DefaultPage, HomePage} from './types';
 import type {
-  ProductSeoFragmentFragment,
-  CollectionSeoFragmentFragment,
-  PageSeoFragmentFragment,
-} from './SeoFragment';
+  DefaultPage as DefaultPageType,
+  HomePage as HomePageType,
+} from './seo-types';
 
 type Props =
   | {
       type: 'defaultSeo';
-      data: Omit<DefaultPage, 'url'>;
+      data: Omit<DefaultPageType, 'url'>;
     }
   | {
       type: 'homepage';
-      data: Omit<HomePage, 'url'>;
+      data: Omit<HomePageType, 'url'>;
     }
   | {
       type: 'product';
-      data: ProductSeoFragmentFragment;
+      data: Omit<ComponentProps<typeof ProductSeo>, 'url'>;
     }
   | {
       type: 'collection';
-      data: CollectionSeoFragmentFragment;
+      data: ComponentProps<typeof CollectionSeo>;
     }
   | {
       type: 'page';
-      data: PageSeoFragmentFragment;
+      data: ComponentProps<typeof PageSeo>;
     };
 
 /**

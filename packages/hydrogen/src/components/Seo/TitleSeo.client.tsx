@@ -1,9 +1,9 @@
 import React from 'react';
 import {Head} from '../../client';
+import type {Seo as SeoType} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
-import type {SeoFragmentFragment} from './SeoFragment';
-
-export function TitleSeo({title}: {title?: SeoFragmentFragment['title']}) {
+export function TitleSeo({title}: PartialDeep<SeoType>) {
   if (!title) {
     return null;
   }

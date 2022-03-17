@@ -24,7 +24,11 @@ jest.mock('../DescriptionSeo.client', () => ({
   },
 }));
 
-const defaultProps = {title: 'default title', url: 'https://test.com'};
+const defaultProps = {
+  title: 'default title',
+  url: 'https://test.com',
+  description: 'cool product',
+};
 
 describe('<HomePageSeo />', () => {
   it("renders <meta/> with property='og:url' and url prop", () => {
@@ -75,7 +79,7 @@ describe('<HomePageSeo />', () => {
   });
 
   it('does not render <DescriptionSeo /> by default', () => {
-    const wrapper = mount(<HomePageSeo {...defaultProps} />);
+    const wrapper = mount(<HomePageSeo {...defaultProps} description={null} />);
 
     expect(wrapper).not.toContainReactComponent(DescriptionSeo);
   });

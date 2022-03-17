@@ -1,0 +1,28 @@
+{
+  "name": "example-css-modules",
+  "description": "An example using CSS Modules in Hydrogen",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "yarn build:client && yarn build:server && yarn build:worker",
+    "build:client": "vite build --outDir dist/client --manifest",
+    "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
+    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker",
+    "serve": "node --enable-source-maps dist/server"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.2",
+    "cross-env": "^7.0.3",
+    "postcss": "^8.4.5",
+    "vite": "^2.8.0"
+  },
+  "dependencies": {
+    "@shopify/hydrogen": "latest",
+    "body-parser": "^1.19.1",
+    "compression": "^1.7.4",
+    "react": "0.0.0-experimental-529dc3ce8-20220124",
+    "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
+    "serve-static": "^1.14.1"
+  }
+}

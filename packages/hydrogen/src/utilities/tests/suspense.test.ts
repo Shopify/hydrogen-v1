@@ -67,6 +67,12 @@ describe('Suspense', () => {
     wrongErrorBoundary = jest.fn();
   });
 
+  afterEach(() => {
+    errorBoundary.mockClear();
+    suspenseBoundary.mockClear();
+    wrongErrorBoundary.mockClear();
+  });
+
   it('Resolves to the expected value on a successful promise resolve', async () => {
     const expected = 'succeeded';
     const res = await suspenseLikeBehaviour(
