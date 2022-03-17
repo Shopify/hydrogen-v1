@@ -13,14 +13,18 @@ export default function AccountDetails({customerAccessToken}) {
     cache: NoStore(),
   });
 
+  const customer = data && data.customer;
+
   const orders =
-    data && data.customer && data.customer.orders
-      ? flattenConnection(data.customer.orders)
-      : [];
+    customer && customer.orders ? flattenConnection(customer.orders) : [];
+
+  const pageHeader = customer
+    ? `Welcome ${customer.firstName || customer.email} !`
+    : 'Account Details';
 
   return (
     <Layout>
-      <h1>Account</h1>
+      <h1>{pageHeader}</h1>
       <div className="flex items-center justify-between">
         <a
           className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
@@ -63,6 +67,8 @@ export default function AccountDetails({customerAccessToken}) {
 const QUERY = gql`
   query CustomerDetails($customerAccessToken: String!) {
     customer(customerAccessToken: $customerAccessToken) {
+      firstName
+      email
       orders(first: 250) {
         edges {
           node {

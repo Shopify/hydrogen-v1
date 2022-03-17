@@ -1,4 +1,4 @@
-import {useNavigate} from '@shopify/hydrogen/client';
+import {useNavigate, Link} from '@shopify/hydrogen/client';
 import {
   useForm,
   useField,
@@ -101,14 +101,22 @@ export default function LoginForm() {
         )}
       </div>
       <div className="flex items-center justify-between">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit"
-          disabled={!dirty}
-          onClick={submit}
+        <div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+            disabled={!dirty}
+            onClick={submit}
+          >
+            Sign in
+          </button>
+        </div>
+        <Link
+          className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+          to="/account/register"
         >
-          Sign in
-        </button>
+          Create account
+        </Link>
       </div>
     </form>
   );
