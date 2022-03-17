@@ -18,4 +18,4 @@ export default MyComponent() {
 }
 ```
 
-Explore an [example implementation of CSS Modules in GitHub](https://github.com/Shopify/hydrogen/tree/v1.x-2022-07/examples/css-modules).
+Explore an [example implementation of CSS Modules in GitHub](https://github.com/Shopify/hydrogen/tree/main/examples/css-modules).
