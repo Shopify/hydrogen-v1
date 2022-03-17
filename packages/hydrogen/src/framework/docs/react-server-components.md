@@ -13,6 +13,9 @@ For example, the following React element tree is [composed of React components](
 
 ![A diagram that illustrates a React element tree composed of server, client, and shared components](/assets/custom-storefronts/hydrogen/react-element-tree.png)
 
+> Note:
+> You can't import a server component into a client component. However, you can pass a server component into a client component using [passthrough or render props](/api/hydrogen/components#customizing-hydrogen-components).
+
 ### Component types
 
 React Server Components include the following component types:
