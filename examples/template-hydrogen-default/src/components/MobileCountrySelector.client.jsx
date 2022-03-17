@@ -49,7 +49,7 @@ export default function MobileCountrySelector() {
                 {selectedCountry.name}
                 <ArrowIcon isOpen={open} />
               </Listbox.Button>
-              <Listbox.Options className="w-full px-3 pb-2 text-lg">
+              <Listbox.Options className="w-full px-3 pb-2 text-lg overflow-y-auto h-64">
                 <Listbox.Option
                   disabled
                   className="font-medium px-4 pb-4 w-full text-left uppercase"
