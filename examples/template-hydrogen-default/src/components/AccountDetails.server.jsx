@@ -1,4 +1,4 @@
-import {useShopQuery, flattenConnection} from '@shopify/hydrogen';
+import {useShopQuery, NoStore, flattenConnection} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
@@ -10,6 +10,7 @@ export default function AccountDetails({customerAccessToken}) {
     variables: {
       customerAccessToken,
     },
+    cache: NoStore(),
   });
 
   const orders =

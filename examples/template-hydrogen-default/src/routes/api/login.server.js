@@ -1,3 +1,4 @@
+import {NoStore} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 import cookie from 'cookie';
 
@@ -26,6 +27,7 @@ export async function api(request, {queryShop}) {
         password: jsonBody.password,
       },
     },
+    cache: NoStore(),
   });
 
   if (
