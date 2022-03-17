@@ -4,7 +4,7 @@ import * as styles from './index.module.css';
 export default function Index() {
   return (
     <div className={styles.wrapper}>
-      <styles.default />
+      <styles.StyleTag />
       <h1>Hi</h1>
       <Hello />
     </div>

@@ -26,7 +26,7 @@ export default function cssModulesRsc() {
         if (id.includes('.module.') && cssMap.has(id)) {
           return code.replace(
             /export default .*$/gms,
-            `import React from 'react'; export default () => React.createElement('style', {}, \`${cssMap.get(
+            `import React from 'react'; export const StyleTag = () => React.createElement('style', {}, \`${cssMap.get(
               id
             )}\`);`
           );

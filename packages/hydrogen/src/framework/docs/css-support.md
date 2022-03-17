@@ -2,12 +2,12 @@ Hydrogen's [starter template](/custom-storefronts/hydrogen/getting-started) is s
 
 ## How it works
 
-You can build with Tailwind's library or use other methods of styling like vanilla CSS files or a third-party CSS-in-JS framework. Hydrogen is powered by Vite, which natively supports several different [methods of CSS injection](https://vitejs.dev/guide/features.html#css).
+You can build with Tailwind's library or use other methods of styling like vanilla CSS files or a third-party CSS-in-JS framework like [CSS Modules](#css-modules). Hydrogen is powered by Vite, which natively supports several different [methods of CSS injection](https://vitejs.dev/guide/features.html#css).
 
 > Note:
 > Make sure to import your stylesheets from a `*.client.jsx` component, or directly from `index.html`.
 
-## Benefits of Tailwind
+## Tailwind
 
 Tailwind is a CSS framework that is composed of classes. It offers developers a set of guardrails by providing a limited set of spacing, color, and responsive layout utilities.
 
@@ -47,7 +47,7 @@ Tailwind utility classes can be customized to meet your needs. For example, you 
 
 If you use Tailwind with [Visual Studio Code](https://code.visualstudio.com/), then you can see a preview of the color palette and what CSS properties the class name will apply.
 
-## Remove Tailwind
+### Remove Tailwind
 
 If you don't want to build with Tailwind's library and instead want to write your own CSS, then you can remove Tailwind:
 
@@ -56,7 +56,7 @@ If you don't want to build with Tailwind's library and instead want to write you
 3. Remove Tailwind from `postcss.config.js`.
 4. Run the following commands:
 
-   {% codeblock file, filename: 'Terminal' %}
+   {% codeblock terminal %}
 
    ```bash?filename: 'Terminal', title: 'yarn'
    // Switch to your app's directory
@@ -82,11 +82,30 @@ If you don't want to build with Tailwind's library and instead want to write you
 
    {% endcodeblock %}
 
-## Known issues with server-side rendering (SSR)
+## CSS Modules
 
-Some CSS-in-JS frameworks (for example, CSS Modules) might not work properly with SSR. Shopify is investigating how to support these frameworks in connection with React server components and streaming SSR.
+Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module and exports them as an export named `StyleTag`. In order to use CSS Modules in your Hydrogen app, you must render a this style tag in the component along with your styles:
 
-Check back to read the official guidance as Shopify approaches a stable release of Hydrogen.
+{% codeblock file, filename: 'src/components/Hello.client.jsx' %}
+
+```js
+import * as styles from './styles.module.css';
+
+export default MyComponent() {
+  return (
+    <div className={styles.wrapper}>
+      // A style is rendered inline
+      <styles.StyleTag />
+      <p>Hello</p>
+    </div>
+  );
+}
+```
+
+{% endcodeblock %}
+
+> Tip:
+> Explore an [example implementation of CSS Modules in GitHub](https://github.com/Shopify/hydrogen/tree/main/examples/css-modules).
 
 ## Next steps
 
