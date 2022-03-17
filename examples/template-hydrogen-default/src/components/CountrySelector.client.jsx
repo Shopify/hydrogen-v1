@@ -50,7 +50,7 @@ export default function CountrySelector() {
               </Listbox.Button>
 
               <Listbox.Options className="absolute z-10 mt-2">
-                <div className="bg-white p-4 rounded-lg drop-shadow-2xl">
+                <div className="bg-white p-4 rounded-lg drop-shadow-2xl overflow-y-auto h-64">
                   <Listbox.Option
                     disabled
                     className="p-2 text-md text-left font-medium uppercase"
