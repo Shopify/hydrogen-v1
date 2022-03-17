@@ -65,7 +65,10 @@ export class ServerComponentRequest extends Request {
       super(input, init);
     } else {
       super(getUrlFromNodeRequest(input), {
-        headers: new Headers(input.headers as {[key: string]: string}),
+        headers: new Headers({
+          ...(input.headers as {[key: string]: string}),
+          'x-forwarded-for': input.socket.remoteAddress,
+        }),
         method: input.method,
         body:
           input.method !== 'GET' && input.method !== 'HEAD'
