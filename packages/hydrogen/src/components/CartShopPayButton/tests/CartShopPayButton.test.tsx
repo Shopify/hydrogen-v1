@@ -6,6 +6,8 @@ import {ShopPayButton} from '../../ShopPayButton';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('CartShopPayButton', () => {
+  const fetch = global.fetch;
+
   beforeEach(() => {
     // @ts-ignore
     global.fetch = jest.fn(async (_url, _init) => {
@@ -16,6 +18,10 @@ describe('CartShopPayButton', () => {
           }),
       };
     });
+  });
+
+  afterEach(() => {
+    global.fetch = fetch;
   });
 
   it('renders a ShopPayButton', () => {

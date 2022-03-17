@@ -19,11 +19,14 @@ describe('cache header log', () => {
       options: jest.fn(() => ({})),
     };
 
-    resetLogger();
     setLogger(mockLogger);
     setLoggerOptions({
       showCacheApiStatus: true,
     });
+  });
+
+  afterEach(() => {
+    resetLogger();
   });
 
   it('should log cache api status', () => {
