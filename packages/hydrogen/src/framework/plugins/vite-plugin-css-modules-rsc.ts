@@ -14,7 +14,7 @@ export default function cssModulesRsc() {
         cssMap = new Map();
       },
       transform(code, id) {
-        if (id.includes('.module.')) {
+        if (/\.module\.(s?css|sass|less)/.test(id)) {
           cssMap.set(id, code);
         }
       },
