@@ -18,8 +18,11 @@ jest.mock('../hooks', () => {
 
 describe('<CartProvider />', () => {
   beforeEach(() => {
-    fetchCartMock.mockReset();
     fetchCartMock.mockReturnValue({data: {}});
+  });
+
+  afterEach(() => {
+    fetchCartMock.mockClear();
   });
 
   describe('prop `data` does not exist', () => {
