@@ -1,12 +1,11 @@
 import React from 'react';
 import {Head} from '../../client';
-
-import type {SeoFragmentFragment} from './SeoFragment';
+import type {Seo as SeoType} from '../../storefront-api-types';
 
 export function DescriptionSeo({
   description,
 }: {
-  description?: SeoFragmentFragment['description'];
+  description?: SeoType['description'];
 }) {
   if (!description) {
     return null;

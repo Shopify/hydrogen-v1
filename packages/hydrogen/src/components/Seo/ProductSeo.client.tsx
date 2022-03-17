@@ -1,13 +1,11 @@
 import React from 'react';
 import {Head} from '../../client';
-
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
 import {TwitterSeo} from './TwitterSeo.client';
 import {ImageSeo} from './ImageSeo.client';
-
-import type {ProductSeoFragmentFragment} from './SeoFragment';
-import type {Scalars} from '../../storefront-api-types';
+import type {Scalars, Product as ProductType} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 export function ProductSeo({
   url,
@@ -17,7 +15,7 @@ export function ProductSeo({
   vendor,
   featuredImage,
   variants,
-}: ProductSeoFragmentFragment & {url: Scalars['URL']}) {
+}: PartialDeep<ProductType> & {url: Scalars['URL']}) {
   const seoTitle = seo?.title ?? title;
   const seoDescription = seo?.description ?? description;
 
@@ -39,15 +37,21 @@ export function ProductSeo({
     productSchema.image = featuredImage.url;
   }
 
-  if (variants.edges.length > 0) {
-    const firstVariant = variants.edges[0].node;
-    firstVariantPrice = firstVariant.priceV2;
+  if (variants?.edges && variants.edges.length > 0) {
+    const firstVariant = variants.edges[0]?.node;
+    firstVariantPrice = firstVariant?.priceV2;
 
     if (firstVariant && firstVariant.sku) {
       productSchema.sku = firstVariant.sku;
     }
 
-    productSchema.offers = variants.edges.map(({node}) => {
+    productSchema.offers = variants.edges.map((edge) => {
+      const node = edge?.node;
+      if (!node || !node.priceV2?.amount || !node.priceV2.currencyCode) {
+        throw new Error(
+          `<ProductSeo/> requires variant.PriceV2 'amount' and 'currency`
+        );
+      }
       const offerSchema = {
         '@type': 'Offer',
         availability: `https://schema.org/${
