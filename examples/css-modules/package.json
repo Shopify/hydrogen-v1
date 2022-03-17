@@ -1,6 +1,6 @@
 {
   "name": "example-css-modules",
-  "description": "This the default template for Hydrogen",
+  "description": "An example using CSS Modules in Hydrogen",
   "version": "0.11.0",
   "license": "MIT",
   "private": true,
