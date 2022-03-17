@@ -127,7 +127,10 @@ describe('BuyNowButton', () => {
       });
     });
 
-    afterEach(() => (window.location = location));
+    afterEach(() => {
+      window.location = location;
+      mockUseInstantCheckout.mockRestore();
+    });
 
     it('redirects to checkout', () => {
       mountWithProviders(

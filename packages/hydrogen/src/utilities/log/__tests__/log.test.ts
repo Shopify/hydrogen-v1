@@ -25,8 +25,11 @@ describe('log', () => {
     global.Date.now = () => 2100;
     global.performance.now = () => 2100;
 
-    resetLogger();
     setLogger(mockLogger);
+  });
+
+  afterEach(() => {
+    resetLogger();
   });
 
   it('should return the wrapped mockLogger instance when log is called', () => {

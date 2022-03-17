@@ -29,31 +29,38 @@ createServer().then(({app}) => {
 });
 ```
 
-If you want to use a different Node.js framework like [Express](https://expressjs.com/) or [Fastify](https://www.fastify.io/), create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
+If you want to use a different Node.js framework like [Express](https://expressjs.com/) or [Fastify](https://www.fastify.io/), or if you want to supply a `cache` input to `hydrogenMiddleware` for [production caching](/custom-storefronts/hydrogen/framework/cache#caching-in-production), then create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
 
 ```js
 import {hydrogenMiddleware} from '@shopify/hydrogen/middleware';
 import serveStatic from 'serve-static';
 import compression from 'compression';
 import bodyParser from 'body-parser';
-// ...
+import connect from 'connect';
+import path from 'path';
 
-const app = new MyServerFramework();
+const port = process.env.PORT || 8080;
+
+// Initialize your own server framework like connect
+const app = connect();
 
 // Add desired middlewares and handle static assets
 app.use(compression());
-app.use(serveStatic(path.resolve(__dirname, 'dist', 'client'), {index: false}));
+app.use(serveStatic(path.resolve(__dirname, '../', 'client'), {index: false}));
 app.use(bodyParser.raw({type: '*/*'}));
 
 app.use(
-  '*',
   hydrogenMiddleware({
     getServerEntrypoint: () => import('./src/App.server'),
     indexTemplate: () => import('./dist/client/index.html?raw'),
+    // Optional: Provide a caching strategy
+    cache: customCacheImplementation,
   })
 );
 
-app.listen(/* ... */);
+app.listen(port, () => {
+  console.log(`Hydrogen server running at http://localhost:${port}`);
+});
 ```
 
 Update the scripts in `package.json` to specify your new entry point. If the scripts are located in `<root>/server.js`, then the changes would look like the following:
