@@ -6,7 +6,6 @@ import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
-import AnalyticsListener from './components/AnalyticListener.client';
 import {GoogleAnalytics} from './components/GoogleAnalytics.client';
 
 function App({routes}) {
@@ -23,7 +22,6 @@ function App({routes}) {
           </CartProvider>
         </ShopifyProvider>
       </Suspense>
-      <AnalyticsListener />
       <GoogleAnalytics />
     </>
   );
