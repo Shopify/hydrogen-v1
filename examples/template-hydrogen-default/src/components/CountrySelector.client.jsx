@@ -18,7 +18,7 @@ export default function CountrySelector() {
 
   useEffect(() => {
     if (listboxOpen && !isLoading && !countries.length) {
-      fetch('/api/countries')
+      fetch('/countries')
         .then((resp) => {
           if (!resp.ok) throw new Error(resp.statusText);
           else return resp.json();
