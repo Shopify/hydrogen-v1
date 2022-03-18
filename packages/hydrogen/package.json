@@ -19,8 +19,6 @@
     "plugin.d.ts",
     "entry-server.js",
     "entry-server.d.ts",
-    "fragments.js",
-    "fragments.d.ts",
     "client.js",
     "client.d.ts",
     "entry-client.js",

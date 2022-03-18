@@ -4,6 +4,7 @@ import {useProduct} from '../../hooks/useProduct/useProduct';
 import {Props} from '../types';
 import {MetafieldProps} from '../Metafield/Metafield.client';
 import {flattenConnection} from '../../utilities';
+import type {ParsedMetafield} from '../../types';
 
 export interface ProductMetafieldProps<TTag>
   extends Omit<MetafieldProps<TTag>, 'metafield'> {
@@ -40,11 +41,14 @@ export function ProductMetafield<TTag extends ElementType>(
 
   const {namespace, keyName, variantId, ...passthroughProps} = props;
 
-  const metafields = variantId
-    ? flattenConnection(
-        product.variants?.find(({id}) => id === variantId)?.metafields ?? {}
-      )
-    : product.metafields;
+  const metafields = (
+    variantId
+      ? flattenConnection(
+          product.variants?.find((variant) => variant?.id === variantId)
+            ?.metafields ?? {}
+        )
+      : product.metafields
+  ) as ParsedMetafield[]; // TODO: fix the typing here and ensure it's correct
 
   const field = metafields?.find(
     (metafield) =>

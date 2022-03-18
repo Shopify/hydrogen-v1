@@ -4,7 +4,7 @@ import {useShop} from '../../foundation';
 import {getMeasurementAsString} from '../../utilities';
 import {ParsedMetafield, Measurement, Rating} from '../../types';
 import {Image} from '../Image';
-import {MediaImage} from '../../types';
+import type {MediaImage} from '../../storefront-api-types';
 
 export interface MetafieldProps<TTag> {
   /** An object with keys that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield). */
@@ -98,8 +98,8 @@ export function Metafield<TTag extends ElementType>(
     case 'file_reference': {
       if (data.reference?.__typename === 'MediaImage') {
         const ref = data.reference as MediaImage;
-        return ref.data ? (
-          <Image data={ref.data} {...passthroughProps} />
+        return ref.image ? (
+          <Image data={ref.image} {...passthroughProps} />
         ) : null;
       }
     }

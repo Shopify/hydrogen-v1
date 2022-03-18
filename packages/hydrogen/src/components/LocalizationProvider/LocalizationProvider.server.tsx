@@ -2,7 +2,6 @@ import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
 import {useShopQuery} from '../../hooks/useShopQuery';
 import {LocalizationQuery} from './LocalizationQuery';
-import {Localization} from '../../graphql/graphql-constants';
 import {CacheDays} from '../../framework/CachingStrategy';
 import {PreloadOptions} from '../../types';
 
@@ -29,7 +28,7 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
   const {
     data: {localization},
   } = useShopQuery<LocalizationQuery>({
-    query: Localization,
+    query: query,
     cache: CacheDays(),
     preload: props.preload,
   });
@@ -40,3 +39,16 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
     </LocalizationClientProvider>
   );
 }
+
+const query = `query Localization {
+  localization {
+    country {
+      isoCode
+      name
+      currency {
+        isoCode
+      }
+    }
+  }
+}
+`;

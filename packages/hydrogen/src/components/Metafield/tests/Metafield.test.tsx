@@ -31,6 +31,7 @@ describe('<Metafield />', () => {
   it(`validates props when a component is passed to the 'as' prop`, () => {
     const component = mountWithProviders(
       <Metafield
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         data={getParsedMetafield({type: 'number_integer'})}
         as={Link}
         to="/test"
@@ -44,6 +45,7 @@ describe('<Metafield />', () => {
   describe('with `date` type metafield', () => {
     it('renders the localized date as a string in a `time` by default', () => {
       const metafield = getParsedMetafield({type: 'date'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
           defaultLocale: 'en-us',
@@ -58,6 +60,7 @@ describe('<Metafield />', () => {
     it('renders the date as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'date'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
@@ -74,6 +77,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'date'})}
           className="emphasized"
         />
@@ -87,6 +91,7 @@ describe('<Metafield />', () => {
   describe('with `date_time` type metafield', () => {
     it('renders the date as a string in a `time` by default', () => {
       const metafield = getParsedMetafield({type: 'date_time'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
           defaultLocale: 'en-us',
@@ -101,6 +106,7 @@ describe('<Metafield />', () => {
     it('renders the date as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'date_time'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
@@ -117,6 +123,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'date_time'})}
           className="emphasized"
         />
@@ -133,6 +140,7 @@ describe('<Metafield />', () => {
         type: 'weight',
         value: JSON.stringify({value: 10, unit: 'kg'}),
       });
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
           defaultLocale: 'en-us',
@@ -150,6 +158,7 @@ describe('<Metafield />', () => {
         value: JSON.stringify({value: 10, unit: 'kg'}),
       });
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
@@ -166,6 +175,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'weight'})}
           className="emphasized"
         />
@@ -182,6 +192,7 @@ describe('<Metafield />', () => {
         type: 'volume',
         value: JSON.stringify({value: 10, unit: 'l'}),
       });
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
           defaultLocale: 'en-us',
@@ -199,6 +210,7 @@ describe('<Metafield />', () => {
         value: JSON.stringify({value: 10, unit: 'l'}),
       });
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
@@ -215,6 +227,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'volume'})}
           className="emphasized"
         />
@@ -231,6 +244,7 @@ describe('<Metafield />', () => {
         type: 'dimension',
         value: JSON.stringify({value: 5, unit: 'cm'}),
       });
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
           defaultLocale: 'en-us',
@@ -248,6 +262,7 @@ describe('<Metafield />', () => {
         value: JSON.stringify({value: 5, unit: 'cm'}),
       });
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
@@ -264,6 +279,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'dimension'})}
           className="emphasized"
         />
@@ -280,6 +296,7 @@ describe('<Metafield />', () => {
         type: 'single_line_text_field',
         value: 'hello world',
       });
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
           defaultLocale: 'en-us',
@@ -298,6 +315,7 @@ describe('<Metafield />', () => {
         type: 'single_line_text_field',
       });
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} className="emphasized" as="p" />
       );
       expect(component).toContainReactComponent('p', {
@@ -318,6 +336,7 @@ describe('<Metafield />', () => {
          <p>second line</p>
         `,
       });
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
           defaultLocale: 'en-us',
@@ -336,6 +355,7 @@ describe('<Metafield />', () => {
         type: 'multi_line_text_field',
       });
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} className="emphasized" as="section" />
       );
       expect(component).toContainReactComponent('section', {
@@ -353,6 +373,7 @@ describe('<Metafield />', () => {
         type: 'url',
         value: 'https://www.example.com',
       });
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('a', {
@@ -364,6 +385,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'url'})}
           className="emphasized"
         />
@@ -377,6 +399,7 @@ describe('<Metafield />', () => {
   describe('with `json` type metafield', () => {
     it('renders the json as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'json'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -387,6 +410,7 @@ describe('<Metafield />', () => {
     it('renders the json as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'json'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />
       );
 
@@ -398,6 +422,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'json'})}
           className="emphasized"
         />
@@ -411,6 +436,7 @@ describe('<Metafield />', () => {
   describe('with `color` type metafield', () => {
     it('renders the color as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'color'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -421,6 +447,7 @@ describe('<Metafield />', () => {
     it('renders the color as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'color'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />
       );
 
@@ -432,6 +459,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'color'})}
           className="emphasized"
         />
@@ -445,6 +473,7 @@ describe('<Metafield />', () => {
   describe('with `product_reference` type metafield', () => {
     it('renders the product reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'product_reference'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -455,6 +484,7 @@ describe('<Metafield />', () => {
     it('renders the product reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'product_reference'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />
       );
 
@@ -466,6 +496,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'product_reference'})}
           className="emphasized"
         />
@@ -479,6 +510,7 @@ describe('<Metafield />', () => {
   describe('with `page_reference` type metafield', () => {
     it('renders the page reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'page_reference'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -489,6 +521,7 @@ describe('<Metafield />', () => {
     it('renders the page reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'page_reference'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />
       );
 
@@ -500,6 +533,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'page_reference'})}
           className="emphasized"
         />
@@ -513,6 +547,7 @@ describe('<Metafield />', () => {
   describe('with `variant_reference` type metafield', () => {
     it('renders the variant reference as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'variant_reference'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -523,6 +558,7 @@ describe('<Metafield />', () => {
     it('renders the variant reference as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'variant_reference'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />
       );
 
@@ -534,6 +570,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'variant_reference'})}
           className="emphasized"
         />
@@ -551,6 +588,7 @@ describe('<Metafield />', () => {
           type: 'file_reference',
           reference: {__typename: 'MediaImage', ...getMediaImage()},
         });
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         const component = mountWithProviders(<Metafield data={metafield} />);
 
         expect(component).toContainReactComponent(Image);
@@ -562,6 +600,7 @@ describe('<Metafield />', () => {
           reference: {__typename: 'MediaImage', ...getMediaImage()},
         });
         const component = mountWithProviders(
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           <Metafield data={metafield} className="rounded-md" />
         );
 
@@ -574,6 +613,7 @@ describe('<Metafield />', () => {
     describe('when the reference type is not a MediaImage', () => {
       it('renders the file reference as a string in a `span` by default', () => {
         const metafield = getParsedMetafield({type: 'file_reference'});
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         const component = mountWithProviders(<Metafield data={metafield} />);
 
         expect(component).toContainReactComponent('span', {
@@ -584,6 +624,7 @@ describe('<Metafield />', () => {
       it('renders the file reference as a string in the element specified by the `as` prop', () => {
         const metafield = getParsedMetafield({type: 'file_reference'});
         const component = mountWithProviders(
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           <Metafield data={metafield} as="p" />
         );
 
@@ -595,6 +636,7 @@ describe('<Metafield />', () => {
       it('allows passthrough props', () => {
         const component = mountWithProviders(
           <Metafield
+            // @ts-expect-error The mock doesn't match perfectly, fix at some point
             data={getParsedMetafield({type: 'file_reference'})}
             className="emphasized"
           />
@@ -609,6 +651,7 @@ describe('<Metafield />', () => {
   describe('with `boolean` type metafield', () => {
     it('renders the boolean value as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'boolean'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -619,6 +662,7 @@ describe('<Metafield />', () => {
     it('renders the boolean as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'boolean'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />
       );
 
@@ -630,6 +674,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'boolean'})}
           className="emphasized"
         />
@@ -643,6 +688,7 @@ describe('<Metafield />', () => {
   describe('with `number_integer` type metafield', () => {
     it('renders the integer value as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'number_integer'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -653,6 +699,7 @@ describe('<Metafield />', () => {
     it('renders the boolean as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'number_integer'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />
       );
 
@@ -664,6 +711,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'number_integer'})}
           className="emphasized"
         />
@@ -677,6 +725,7 @@ describe('<Metafield />', () => {
   describe('with `number_decimal` type metafield', () => {
     it('renders the number as a string in a `span` by default', () => {
       const metafield = getParsedMetafield({type: 'number_decimal'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -687,6 +736,7 @@ describe('<Metafield />', () => {
     it('renders the number as a string in the element specified by the `as` prop', () => {
       const metafield = getParsedMetafield({type: 'number_decimal'});
       const component = mountWithProviders(
+        // @ts-expect-error The mock doesn't match perfectly, fix at some point
         <Metafield data={metafield} as="p" />
       );
 
@@ -698,6 +748,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'number_decimal'})}
           className="emphasized"
         />
@@ -711,6 +762,7 @@ describe('<Metafield />', () => {
   describe('with `rating` type metafield', () => {
     it(`renders a 'span' with the rating inside`, () => {
       const metafield = getParsedMetafield({type: 'rating'});
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
@@ -721,6 +773,7 @@ describe('<Metafield />', () => {
     it('allows passthrough props', () => {
       const component = mountWithProviders(
         <Metafield
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           data={getParsedMetafield({type: 'rating'})}
           className="emphasized"
         />

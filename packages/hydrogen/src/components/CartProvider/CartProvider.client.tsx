@@ -26,7 +26,7 @@ import {
   CartAttributesUpdate,
   CartDiscountCodesUpdate,
   CartQuery,
-} from '../../graphql/graphql-constants';
+} from './cart-queries';
 import {
   CartLineInput,
   CartInput,
@@ -694,6 +694,7 @@ export function CartProvider({
 function cartFromGraphQL(cart: CartFragmentFragment): Cart {
   return {
     ...cart,
+    // @ts-expect-error While the cart still uses fragments, there will be a TS error here until we remove those fragments and get the type in-line
     lines: flattenConnection(cart.lines),
     note: cart.note ?? undefined,
   };

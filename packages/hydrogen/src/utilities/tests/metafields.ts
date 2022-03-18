@@ -1,7 +1,8 @@
 // eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
-import {Metafield} from '../../storefront-api-types';
-import {ParsedMetafield, Rating, RawMetafield} from '../../types';
+import type {Metafield} from '../../storefront-api-types';
+import {ParsedMetafield, Rating} from '../../types';
+import type {PartialDeep} from 'type-fest';
 
 export type MetafieldType =
   | 'single_line_text_field'
@@ -45,8 +46,8 @@ export const METAFIELDS: MetafieldType[] = [
 ];
 
 export function getRawMetafield(
-  metafield: Partial<Metafield> & {type?: MetafieldType} = {}
-): RawMetafield {
+  metafield: PartialDeep<Metafield> & {type?: MetafieldType} = {}
+): PartialDeep<Metafield> {
   const type: MetafieldType =
     metafield.type == null
       ? faker.random.arrayElement(METAFIELDS)
@@ -136,8 +137,9 @@ export function getMetafieldValue(type: MetafieldType) {
 export function getParsedMetafield(
   metafield: Partial<Metafield> & {type?: MetafieldType} = {}
 ) {
-  const rawField: RawMetafield = getRawMetafield(metafield);
-  const field: ParsedMetafield = {...rawField, value: undefined};
+  const rawField = getRawMetafield(metafield);
+  // @ts-expect-error some type error here needs to be fixed
+  const field: PartialDeep<ParsedMetafield> = {...rawField, value: undefined};
 
   if (rawField.value == null) {
     return field;
