@@ -12,7 +12,7 @@
     "build": "yarn build:client && yarn build:server && yarn build:worker",
     "build:client": "vite build --outDir dist/client --manifest",
     "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
-    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker-event",
+    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker",
     "serve": "node --enable-source-maps dist/server",
     "preview": "npx @shopify/hydrogen-cli@latest preview",
     "test": "WATCH=true vitest",
@@ -42,7 +42,6 @@
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
     "graphql-tag": "^2.12.4",
-    "path-to-regexp": "^6.2.0",
     "react": "0.0.0-experimental-529dc3ce8-20220124",
     "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
     "serve-static": "^1.14.1"

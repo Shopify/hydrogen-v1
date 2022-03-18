@@ -164,6 +164,8 @@ function createShopRequest(body: string, locale?: string) {
       method: 'POST',
       headers: {
         'X-Shopify-Storefront-Access-Token': storefrontToken,
+        'X-SDK-Variant': 'hydrogen',
+        'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
         'Accept-Language': (locale as string) ?? defaultLocale,
       },

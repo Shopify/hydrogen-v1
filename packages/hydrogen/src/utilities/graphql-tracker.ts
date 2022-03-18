@@ -20,14 +20,10 @@ export function injectGraphQLTracker({
   data,
   onUnusedData,
 }: TrackerParams) {
-  const {fieldNodes, fragments} = convertQueryToResolveInfo(
-    query as DocumentNode
-  );
+  const info = convertQueryToResolveInfo(query as DocumentNode);
 
   // E.g. ['shop.stuff.myString']
-  const requestedFields = Object.keys(
-    flattenObject(getSelectionFieldsFromAST(fieldNodes, fragments))
-  );
+  const requestedFields = getFieldList(info.nodes, info.fragments);
 
   // Remove the last key of each path to avoid proxying primitive
   // values. Reverse order to avoid accessing already defined
@@ -93,101 +89,52 @@ function findOperationDefinition(query: DocumentNode) {
 }
 
 function convertQueryToResolveInfo(query: DocumentNode) {
-  const operation = findOperationDefinition(query);
-
-  const fragments = query.definitions
-    .filter(({kind}) => kind === 'FragmentDefinition')
-    .reduce((result, current) => {
-      current = current as FragmentDefinitionNode;
-      return {
-        ...result,
-        [current.name.value]: current,
-      };
-    }, {} as Record<string, FragmentDefinitionNode>);
-
   return {
-    fieldNodes: operation?.selectionSet.selections as FieldNode[],
-    fragments,
+    // Root of the selection nodes
+    nodes: findOperationDefinition(query)?.selectionSet
+      .selections as FieldNode[],
+    // Collection of all the fragments in this query
+    fragments: query.definitions.reduce((acc, current) => {
+      if (current.kind === 'FragmentDefinition') {
+        acc[current.name.value] = current;
+      }
+      return acc;
+    }, {} as Record<string, FragmentDefinitionNode>),
   };
 }
 
 /**
- * Extracts the selection fields from a query AST as a plain JS object.
+ * Extracts the selection fields from a query AST as a list of dot-separated paths.
  * @param selectionNodes - Selection nodes from the AST
  * @param fragments - Fragments from the AST
- * @param root - Internal pointer for recursion
- * @returns A plain JS object representing the selection fields
+ * @param path - Accummulated path for recursion
+ * @returns A plain JS array representing the selection fields
  */
-function getSelectionFieldsFromAST(
-  selectionNodes: SelectionNode | SelectionNode[],
+function getFieldList(
+  nodes: ReadonlyArray<SelectionNode>,
   fragments: Record<string, FragmentDefinitionNode> = {},
-  root: Record<string, any> = {}
-) {
-  const nodes = Array.isArray(selectionNodes)
-    ? selectionNodes
-    : [selectionNodes];
+  path = ''
+): string[] {
+  return nodes.reduce((acc, node) => {
+    let nextPath = path;
+    let nextNodes: ReadonlyArray<SelectionNode> | undefined;
 
-  return nodes.reduce(function (tree, value) {
-    if (value.kind === 'Field') {
-      const name =
-        (value.alias && value.alias.value) || (value.name && value.name.value);
+    if (node.kind === 'FragmentSpread') {
+      nextNodes = fragments[node.name.value].selectionSet.selections;
+    } else if (node.kind === 'InlineFragment') {
+      nextNodes = node.selectionSet?.selections;
+    } else if (node.kind === 'Field') {
+      nextNodes = node.selectionSet?.selections;
+      const name = node.alias?.value ?? node.name?.value;
+      nextPath = path ? `${path}.${name}` : name;
 
-      if (value.selectionSet) {
-        tree[name] ??= {};
-
-        getSelectionFieldsFromAST(
-          value.selectionSet.selections as SelectionNode[], // readonly type?
-          fragments,
-          tree[name]
-        );
-      } else {
-        tree[name] = true;
-      }
-    } else if (value.kind === 'FragmentSpread') {
-      const name = value.name.value;
-      const fragment = fragments[name];
-      if (!fragment) {
-        throw new Error('Unknown fragment "' + name + '"');
-      }
-
-      getSelectionFieldsFromAST(
-        fragment.selectionSet.selections as SelectionNode[],
-        fragments,
-        tree
-      );
-    } else if (value.kind === 'InlineFragment') {
-      getSelectionFieldsFromAST(
-        value.selectionSet.selections as SelectionNode[],
-        fragments,
-        tree
-      );
+      if (!nextNodes) acc.push(nextPath); // This is a leaf
     }
 
-    return tree;
-  }, root);
-}
+    if (nextNodes) acc.push(...getFieldList(nextNodes, fragments, nextPath));
 
-/**
- * Generates a new object with only one level depth where all the
- * original nested properties are concatenated with dots.
- * @param input - Object to flatten
- * @param key - Internal pointer for recursion
- * @param output - Internal pointer for recursion
- * @returns
- */
-function flattenObject(input: any, key = '', output: Record<string, any> = {}) {
-  if (input === null || typeof input !== 'object') {
-    // This is a leaf, stop here
-    output[key] = input;
-  } else {
-    // Array or object, continue recursively for each child
-    const prefix = key ? key + '.' : key;
-    for (const nextKey of Object.keys(input)) {
-      flattenObject(input[nextKey], prefix + nextKey, output);
-    }
-  }
-
-  return output;
+    return acc;
+  }, [] as string[]);
 }
 
 /**

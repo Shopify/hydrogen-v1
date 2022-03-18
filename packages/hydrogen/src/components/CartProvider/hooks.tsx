@@ -26,6 +26,8 @@ export function useCartFetch() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'X-SDK-Variant': 'hydrogen',
+            'X-SDK-Version': storefrontApiVersion,
             'X-Shopify-Storefront-Access-Token': storefrontToken,
           },
           body: JSON.stringify({

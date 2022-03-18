@@ -1,12 +1,13 @@
 import React from 'react';
 import {useMoney} from '../../hooks';
-import type {MoneyFragmentFragment} from './MoneyFragment';
+import type {MoneyV2} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 interface MoneyProps<TTag> {
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: TTag;
   /** An object with keys that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). */
-  data: MoneyFragmentFragment;
+  data: PartialDeep<MoneyV2>;
 }
 
 /**

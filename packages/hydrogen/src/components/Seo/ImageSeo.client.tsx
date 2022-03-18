@@ -1,14 +1,9 @@
 import React from 'react';
 import {Head} from '../../client';
+import type {Image} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
-import type {ImageSeoFragmentFragment} from './SeoFragment';
-
-export function ImageSeo({
-  url,
-  width,
-  height,
-  altText,
-}: Partial<ImageSeoFragmentFragment>) {
+export function ImageSeo({url, width, height, altText}: PartialDeep<Image>) {
   return (
     <Head>
       {url && <meta property="og:image" content={url} />}

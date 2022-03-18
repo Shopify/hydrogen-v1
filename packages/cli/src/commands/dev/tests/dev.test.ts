@@ -1,6 +1,17 @@
 import {withCli} from '../../../testing';
 
 describe('dev', () => {
+  let consoleLogSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    consoleLogSpy = jest.spyOn(console, 'log');
+    consoleLogSpy.mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleLogSpy.mockRestore();
+  });
+
   it('provides a helpful message when vite is not found', async () => {
     await withCli(async ({run}) => {
       const {output} = await run('dev');

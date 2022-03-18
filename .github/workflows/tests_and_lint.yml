@@ -57,6 +57,8 @@ jobs:
 
       - name: Run the E2E tests
         run: yarn test-e2e
+        env:
+          CI: true
 
       - name: Run the template code tests
         run: yarn test:ci
