@@ -1,5 +1,9 @@
-export function request(request: Request, requestJSON?: any): void {
-  if (requestJSON?.eventname) {
-    console.log(requestJSON.eventname, requestJSON.payload);
+export function request(
+  request: Request,
+  data?: any,
+  contentType?: string
+): void {
+  if (contentType === 'json' && data?.eventname) {
+    console.log(data.eventname, data.payload);
   }
 }

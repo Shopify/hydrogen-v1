@@ -46,7 +46,11 @@ export type ImportGlobEagerOutput = Record<
 >;
 
 export type ServerAnalyticsConnector = {
-  request: (request: Request, requestJSON?: any) => void;
+  request: (
+    request: Request,
+    data?: any,
+    contentType?: 'json' | 'text'
+  ) => void;
 };
 
 export type ServerHandlerConfig = {
