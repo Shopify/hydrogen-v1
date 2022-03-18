@@ -74,31 +74,5 @@ export default () => {
       envPrefix: ['VITE_', 'PUBLIC_'],
       base: process.env.HYDROGEN_ASSET_BASE_URL,
     }),
-
-    // TODO: Remove when react-dom/fizz is fixed
-    renderChunk: process.env.WORKER
-      ? (code, chunk, opts) => {
-          if (!chunk.isEntry) return null;
-
-          // React fizz and flight try to access an undefined value.
-          // This puts a guard before accessing it.
-          code = code.replace(/\((\w+)\.locked\)/gm, '($1 && $1.locked)');
-
-          // `renderToReadableStream` is bugged in React.
-          // This adds a workaround until these issues are fixed:
-          // https://github.com/facebook/react/issues/22772
-          // https://github.com/facebook/react/issues/23113
-          // code = code.replace(
-          //   /var \w+\s*=\s*(\w+)\.completedRootSegment;/g,
-          //   'if($1.status===5)return;$1.status=5;\n$&'
-          // );
-          // code = code.replace(
-          //   /{([^{]*?(\w+)\.pingedTasks\.length)/g,
-          //   '{$2.status=0;\n$1'
-          // );
-
-          return code;
-        }
-      : undefined,
   } as Plugin;
 };
