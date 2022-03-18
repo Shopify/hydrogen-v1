@@ -15,6 +15,19 @@ export type VariantFragmentFragment = {__typename?: 'ProductVariant'} & Pick<
         'id' | 'url' | 'altText' | 'width' | 'height'
       >
     >;
+    unitPriceMeasurement?: Types.Maybe<
+      {__typename?: 'UnitPriceMeasurement'} & Pick<
+        Types.UnitPriceMeasurement,
+        | 'measuredType'
+        | 'quantityUnit'
+        | 'quantityValue'
+        | 'referenceUnit'
+        | 'referenceValue'
+      >
+    >;
+    unitPrice?: Types.Maybe<
+      {__typename?: 'MoneyV2'} & Pick<Types.MoneyV2, 'currencyCode' | 'amount'>
+    >;
     priceV2: {__typename?: 'MoneyV2'} & Pick<
       Types.MoneyV2,
       'currencyCode' | 'amount'
@@ -131,17 +144,4 @@ export type VariantFragmentFragment = {__typename?: 'ProductVariant'} & Pick<
         }
       >;
     };
-    unitPriceMeasurement?: Types.Maybe<
-      {__typename?: 'UnitPriceMeasurement'} & Pick<
-        Types.UnitPriceMeasurement,
-        | 'measuredType'
-        | 'quantityUnit'
-        | 'quantityValue'
-        | 'referenceUnit'
-        | 'referenceValue'
-      >
-    >;
-    unitPrice?: Types.Maybe<
-      {__typename?: 'MoneyV2'} & Pick<Types.MoneyV2, 'currencyCode' | 'amount'>
-    >;
   };
