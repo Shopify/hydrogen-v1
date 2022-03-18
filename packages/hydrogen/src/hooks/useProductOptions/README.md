@@ -127,11 +127,11 @@ export function MyComponent() {
 
 This hook takes a single object with the following keys:
 
-| Key                 | Required | Description                        |
-| ------------------- | -------- | ---------------------------------- |
-| `variants`          | No       | The product's `VariantConnection`. |
-| `sellingPlanGroups` | No       | The product's `SellingPlanGroups`. |
-| `initialVariantId`  | No       | The initially selected variant.    |
+| Key                | Type                                                         | Description                        |
+| ------------------ | ------------------------------------------------------------ | ---------------------------------- |
+| variants?          | <code>PartialDeep&#60;ProductVariantConnection&#62;</code>   | The product's `VariantConnection`. |
+| sellingPlanGroups? | <code>PartialDeep&#60;SellingPlanGroupConnection&#62;</code> | The product's `SellingPlanGroups`. |
+| initialVariantId?  | <code>ProductVariantType['id']</code>                        | The initially selected variant.    |
 
 ## Return value
 

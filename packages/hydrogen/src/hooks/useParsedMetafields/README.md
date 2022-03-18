@@ -25,6 +25,14 @@ export function Product(product) {
 }
 ```
 
+## Arguments
+
+This hook takes a single object with the following key:
+
+| Key         | Type                                                  | Description                                                                            |
+| ----------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| metafields? | <code>PartialDeep&#60;MetafieldConnection&#62;</code> | A [MetafieldConnection](/api/storefront/reference/common-objects/metafieldconnection). |
+
 ## Return type
 
 This hook returns an array of metafields whose `values` have been parsed according to the metafield `type`. For details on the parsed value, refer to the [`parseMetafieldValue`](/api/hydrogen/utilities/parsemetafieldvalue) utility.
