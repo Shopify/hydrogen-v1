@@ -355,6 +355,9 @@ export async function api(request, {params}) {
 
 {% endcodeblock %}
 
+> Tip:
+> Explore an [example implementation in GitHub](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/countries.server.jsx) that lazy loads [available countries](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx) by an API route (`/api/countries`).
+
 ## Next steps
 
 - Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
