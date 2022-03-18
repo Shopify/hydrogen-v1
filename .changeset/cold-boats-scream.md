@@ -16,5 +16,11 @@ Fragments and their related types have been removed:
   - ProductSeoFragment and ProductSeoFragmentFragment
   - CollectionSeoFragment and CollectionSeoFragmentFragment
   - PageSeoFragment and PageSeoFragmentFragment
+- MediaFile fragments and types:
+  - MediaFileFragment and MediaFileFragmentFragment
+  - MediaFileFragment_ExternalVideo_Fragment
+  - MediaFileFragment_MediaImage_Fragment
+  - MediaFileFragment_Model3d_Fragment
+  - MediaFileFragment_Video_Fragment
 
 As part of the effort to reduce over-fetching in the GraphQL queries.
