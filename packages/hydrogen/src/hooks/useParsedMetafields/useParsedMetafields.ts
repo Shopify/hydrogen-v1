@@ -8,6 +8,7 @@ import type {PartialDeep} from 'type-fest';
  * in an array of metafields whose `values` have been parsed according to the metafield `type`.
  */
 export function useParsedMetafields(
+  /** A [MetafieldConnection](/api/storefront/reference/common-objects/metafieldconnection). */
   metafields?: PartialDeep<MetafieldConnection>
 ) {
   metafields?.edges?.[0]?.node;
