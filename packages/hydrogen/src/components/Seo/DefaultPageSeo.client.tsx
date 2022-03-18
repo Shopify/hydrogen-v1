@@ -5,8 +5,8 @@ import {Head} from '../../client';
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
 import {TwitterSeo} from './TwitterSeo.client';
-
-import type {DefaultPage} from './types';
+import type {DefaultPage} from './seo-types';
+import type {PartialDeep} from 'type-fest';
 
 export function DefaultPageSeo({
   title,
@@ -14,7 +14,7 @@ export function DefaultPageSeo({
   url,
   titleTemplate,
   lang,
-}: DefaultPage) {
+}: PartialDeep<DefaultPage>) {
   const {locale} = useShop();
   const fallBacklang = locale.split(/[-_]/)[0];
 

@@ -6,6 +6,8 @@ import {Money} from '../../Money';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('<CartEstimatedCost />', () => {
+  const fetch = global.fetch;
+
   beforeEach(() => {
     // @ts-ignore
     global.fetch = jest.fn(async (_url, _init) => {
@@ -16,6 +18,10 @@ describe('<CartEstimatedCost />', () => {
           }),
       };
     });
+  });
+
+  afterEach(() => {
+    global.fetch = fetch;
   });
 
   it('renders a <Money />', () => {

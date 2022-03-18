@@ -14,6 +14,7 @@ import hydrationAutoImport from './plugins/vite-plugin-hydration-auto-import';
 import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
 
 export default (
   shopifyConfig: ShopifyConfig,
@@ -28,6 +29,7 @@ export default (
     react(),
     hydrationAutoImport(),
     ssrInterop(),
+    cssModulesRsc(),
     rsc({
       clientComponentPaths: [
         path.join(

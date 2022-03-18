@@ -7,6 +7,8 @@ import {CartProvider} from '../../CartProvider';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('CartLines', () => {
+  const fetch = global.fetch;
+
   beforeEach(() => {
     // @ts-ignore
     global.fetch = jest.fn(async (_url, _init) => {
@@ -17,6 +19,10 @@ describe('CartLines', () => {
           }),
       };
     });
+  });
+
+  afterEach(() => {
+    global.fetch = fetch;
   });
 
   it('renders items', () => {

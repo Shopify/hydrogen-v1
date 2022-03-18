@@ -11,6 +11,7 @@ import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
+import type {DevServerMessage} from './utilities/devtools';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
@@ -20,6 +21,14 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
       `Could not find a root element <div id="root"></div> to render.`
     );
     return;
+  }
+
+  if (import.meta.hot) {
+    import.meta.hot.on('hydrogen', ({type, data}: DevServerMessage) => {
+      if (type === 'warn') {
+        console.warn(data);
+      }
+    });
   }
 
   // default to StrictMode on, unless explicitly turned off
