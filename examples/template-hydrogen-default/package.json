@@ -1,7 +1,7 @@
 {
   "name": "template-hydrogen-default",
   "description": "This the default template for Hydrogen",
-  "version": "0.11.0",
+  "version": "0.0.0",
   "license": "MIT",
   "private": true,
   "scripts": {
