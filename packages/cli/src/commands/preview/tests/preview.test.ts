@@ -1,6 +1,6 @@
 import {withCli} from '../../../testing';
 
-describe('preview', () => {
+describe.skip('preview', () => {
   it('provides a helpful message when no worker build exists', async () => {
     await withCli(async ({run, fs}) => {
       const result = await run('preview');
