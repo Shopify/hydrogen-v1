@@ -140,7 +140,7 @@ export function useShopQuery<T>({
           footer;
 
         log.warn(warning);
-        sendMessageToClient('warn', warning);
+        sendMessageToClient({type: 'warn', data: warning});
       },
     });
   }
