@@ -21,7 +21,10 @@ export default function MobileCountrySelector() {
   useEffect(() => {
     if (listboxOpen && !isLoading && !countries.length) {
       fetch('/api/countries')
-        .then((resp) => resp.json())
+        .then((resp) => {
+          if (!resp.ok) throw new Error(resp.statusText);
+          else return resp.json();
+        })
         .then((c) => setCountries(c))
         .catch((e) => setError(e))
         .finally(() => setLoading(false));

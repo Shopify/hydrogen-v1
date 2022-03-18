@@ -1,5 +1,3 @@
-import {CacheDays} from '@shopify/hydrogen';
-
 export async function api(request, {queryShop}) {
   const {
     data: {
@@ -7,7 +5,6 @@ export async function api(request, {queryShop}) {
     },
   } = await queryShop({
     query: QUERY,
-    cache: CacheDays(),
   });
 
   return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
