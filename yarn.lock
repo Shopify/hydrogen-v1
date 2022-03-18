@@ -9782,14 +9782,13 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@0.0.0-experimental-529dc3ce8-20220124:
-  version "0.0.0-experimental-529dc3ce8-20220124"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-529dc3ce8-20220124.tgz#62408979d684b43a5bea27934fda15fa31a80f2a"
-  integrity sha512-FNqeU2sPoynTu7Sh1IY880Bxg/xX22tlsTHoh67J+PTY7aFBAYMgE5PkxZon54DpQkv2p8gWVIIzSObi4U7ZjQ==
+react-dom@0.0.0-experimental-2bf7c02f0-20220314:
+  version "0.0.0-experimental-2bf7c02f0-20220314"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-2bf7c02f0-20220314.tgz#8da38113cbd3e64f0f11c6bb0870369d0466870c"
+  integrity sha512-QEgt5HMcqstPyhSEcUdDHsfslVXO7xsnI1EuvmHyTy6WqvlR+vLuNFdtTw9ivDoIBAFGI/C7s020xEa7dyxf8g==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    scheduler "0.0.0-experimental-529dc3ce8-20220124"
+    scheduler "0.0.0-experimental-2bf7c02f0-20220314"
 
 react-error-boundary@^3.1.3:
   version "3.1.4"
@@ -9838,13 +9837,12 @@ react-refresh@^0.11.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
-react@0.0.0-experimental-529dc3ce8-20220124:
-  version "0.0.0-experimental-529dc3ce8-20220124"
-  resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-529dc3ce8-20220124.tgz#843efb350b3034c5cb5d3d657ece78a8057b7a2b"
-  integrity sha512-EGC2hJU4tjaVgcLHE090M592h+AfO6Y88cnS1XtPMHWBgsNpO4t3rZfLFU4bMor3wRSKPEIzmEcpaPWCrJWctA==
+react@0.0.0-experimental-2bf7c02f0-20220314:
+  version "0.0.0-experimental-2bf7c02f0-20220314"
+  resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-2bf7c02f0-20220314.tgz#7cc98f6e472d8f92cbb2907bcd17c0330b4dda21"
+  integrity sha512-o0giPxuDQ2ouybfOVWWIjumYD6DE8chPgwvQ8okFkTQtp/Vq4XC+I+2oUlZBYFVycuf33OahTg9rO/67gErZJw==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 read-pkg-up@^7.0.1:
   version "7.0.1"
@@ -10437,13 +10435,12 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@0.0.0-experimental-529dc3ce8-20220124:
-  version "0.0.0-experimental-529dc3ce8-20220124"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.0.0-experimental-529dc3ce8-20220124.tgz#4c3da241ae995e2790688e2a775e7db2e26f9d0f"
-  integrity sha512-mp0MaDWUfFuByyQS3syKFF3pqk7m6NcIsTNFsu/7jdy0GCqk7jy3T2YgHF3S1Y0qNhV9TYCgGwLTZSNaae2uUQ==
+scheduler@0.0.0-experimental-2bf7c02f0-20220314:
+  version "0.0.0-experimental-2bf7c02f0-20220314"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.0.0-experimental-2bf7c02f0-20220314.tgz#0c47b7356b64040f285806f72b27f9fb4790232b"
+  integrity sha512-RVBx9wfkLek9qsdlWRb5QRdtz4E5wouRbSWrSoNyQXUL96so75ZXhe6E5iNLhDnjOoP9m/s1Ga00KunDUYjcFg==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@^0.20.2:
   version "0.20.2"

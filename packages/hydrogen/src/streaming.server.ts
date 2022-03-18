@@ -22,22 +22,24 @@ export const createFromReadableStream = _createFromReadableStream as (
 
 type StreamOptions = {
   nonce?: string;
-  onCompleteShell?: () => void;
-  onCompleteAll?: () => void;
-  onError?: (error: Error) => void;
   bootstrapScripts?: string[];
   bootstrapModules?: string[];
+  onError?: (error: Error) => void;
 };
 
 export const ssrRenderToPipeableStream = _ssrRenderToPipeableStream as (
   App: JSX.Element,
-  options: StreamOptions
+  options: StreamOptions & {
+    onAllReady?: () => void;
+    onShellReady?: () => void;
+    onShellError?: (error: Error) => void;
+  }
 ) => {pipe: Writable['pipe']};
 
 export const ssrRenderToReadableStream = _ssrRenderToReadableStream as (
   App: JSX.Element,
   options: StreamOptions
-) => ReadableStream<Uint8Array>;
+) => Promise<ReadableStream<Uint8Array> & {allReady: Promise<void>}>;
 
 export async function isStreamingSupported() {
   return Boolean(globalThis.Oxygen?.env?.HYDROGEN_ENABLE_WORKER_STREAMING);

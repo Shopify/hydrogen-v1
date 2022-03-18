@@ -6,7 +6,7 @@ import React, {
   type ElementType,
 } from 'react';
 // @ts-expect-error hydrateRoot isn't on the TS types yet, but we're using React 18 so it exists
-import {hydrateRoot} from 'react-dom';
+import {hydrateRoot} from 'react-dom/client';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';

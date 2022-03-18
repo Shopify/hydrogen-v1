@@ -42,8 +42,8 @@
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
     "graphql-tag": "^2.12.4",
-    "react": "0.0.0-experimental-529dc3ce8-20220124",
-    "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
+    "react": "0.0.0-experimental-2bf7c02f0-20220314",
+    "react-dom": "0.0.0-experimental-2bf7c02f0-20220314",
     "serve-static": "^1.14.1"
   }
 }
