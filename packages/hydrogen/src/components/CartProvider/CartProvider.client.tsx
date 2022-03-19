@@ -252,7 +252,7 @@ export function CartProvider({
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
   /**
-   * A cart object from the Storefront API to populate the initial state of the provider.
+   * An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).
    */
   data?: CartFragmentFragment;
 }) {

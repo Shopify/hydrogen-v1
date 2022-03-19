@@ -7,7 +7,7 @@ import {Image} from '../Image';
 import {MediaImage} from '../../types';
 
 export interface MetafieldProps<TTag> {
-  /** An object with keys that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield). */
+  /** An object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield). */
   data: ParsedMetafield;
   /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](/apps/metafields/types). */
   as?: TTag;

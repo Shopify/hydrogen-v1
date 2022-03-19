@@ -1,9 +1,9 @@
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL query using `MetafieldFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `Metafield` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield):
 
 ```graphql
-fragment MetafieldFragment on Metafield {
+{
   id
   type
   namespace
@@ -31,7 +31,7 @@ fragment MetafieldFragment on Metafield {
 
 ### Variables
 
-The `MetafieldFragment` includes variables that you will need to provide values for when performing your query.
+The [Metafield object](/api/storefront/reference/common-objects/metafield) includes variables that you will need to provide values for when performing your query.
 
 | Variable                            | Description                                                                                                                                                                        |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

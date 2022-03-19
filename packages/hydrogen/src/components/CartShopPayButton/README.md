@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartShopPayButton and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartShopPayButton and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `CartShopPayButton` component renders a `ShopPayButton` for the items in the cart.
 It must be a descendent of a `CartProvider` component.
@@ -16,6 +16,12 @@ export default function MyComponent() {
   );
 }
 ```
+
+## Props
+
+| Name       | Type                                                                                         | Description                                                                               |
+| ---------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| className? | <code>Omit&#60;React.ComponentProps&#60;typeof ShopPayButton&#62;, 'variantIds'&#62;)</code> | A string of classes to apply to the `div` that wraps the `shop-pay-button` web component. |
 
 ## Component type
 

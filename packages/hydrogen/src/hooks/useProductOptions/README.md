@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/hooks/useProductOptions and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/hooks/useProductOptions and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `useProductOptions` hook returns an object that enables you to keep track of the
 selected variant and/or selling plan state, as well as callbacks for modifying the state.
@@ -127,11 +127,11 @@ export function MyComponent() {
 
 This hook takes a single object with the following keys:
 
-| Key                 | Required | Description                        |
-| ------------------- | -------- | ---------------------------------- |
-| `variants`          | No       | The product's `VariantConnection`. |
-| `sellingPlanGroups` | No       | The product's `SellingPlanGroups`. |
-| `initialVariantId`  | No       | The initially selected variant.    |
+| Key                | Type                                                         | Description                        |
+| ------------------ | ------------------------------------------------------------ | ---------------------------------- |
+| variants?          | <code>PartialDeep&#60;ProductVariantConnection&#62;</code>   | The product's `VariantConnection`. |
+| sellingPlanGroups? | <code>PartialDeep&#60;SellingPlanGroupConnection&#62;</code> | The product's `SellingPlanGroups`. |
+| initialVariantId?  | <code>ProductVariantType['id']</code>                        | The initially selected variant.    |
 
 ## Return value
 
@@ -151,12 +151,12 @@ This hook returns a single object with the following keys:
 | `selectedSellingPlanAllocation` | The selected selling plan allocation.                                         |
 | `sellingPlanGroups`             | The selling plan groups.                                                      |
 
-## GraphQL fragment
+## Storefront API data
 
-The following GraphQL fragment is available for your queries as `VariantFragment`. Using this query ensures that you have all the data necessary for the `useProductOptions` hook.
+The following GraphQL query corresponds to the Storefront API's [ProductVariant object](/api/storefront/2022-01/objects/ProductVariant). Using the query ensures that you have all the data necessary for the `useProductOptions` hook:
 
 ```graphql
-fragment VariantFragment on ProductVariant {
+{
   id
   title
   availableForSale
@@ -277,7 +277,7 @@ fragment VariantFragment on ProductVariant {
 
 ### Variables
 
-The `ProductProviderFragment` includes variables that you will need to provide values for when performing your query.
+The [Product object](/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
 
 | Variable                                   | Description                                                                                           |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |

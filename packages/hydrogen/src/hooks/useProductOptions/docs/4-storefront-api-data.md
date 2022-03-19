@@ -1,9 +1,9 @@
-## GraphQL fragment
+## Storefront API data
 
-The following GraphQL fragment is available for your queries as `VariantFragment`. Using this query ensures that you have all the data necessary for the `useProductOptions` hook.
+The following GraphQL query corresponds to the Storefront API's [ProductVariant object](/api/storefront/2022-01/objects/ProductVariant). Using the query ensures that you have all the data necessary for the `useProductOptions` hook:
 
 ```graphql
-fragment VariantFragment on ProductVariant {
+{
   id
   title
   availableForSale
@@ -124,7 +124,7 @@ fragment VariantFragment on ProductVariant {
 
 ### Variables
 
-The `ProductProviderFragment` includes variables that you will need to provide values for when performing your query.
+The [Product object](/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
 
 | Variable                                   | Description                                                                                           |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |

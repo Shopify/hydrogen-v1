@@ -35,8 +35,8 @@ The `handle` property is passed directly to the root server component `/routes/p
 {% codeblock file, filename: '[handle].server.jsx' %}
 
 ```jsx
-export default function Product({params}) {
-  const {handle} = params;
+export default function Product() {
+  const {handle} = useRouteParams();
   return <div>{handle}</div>;
 }
 ```
@@ -354,6 +354,9 @@ export async function api(request, {params}) {
 ```
 
 {% endcodeblock %}
+
+> Tip:
+> Explore an [example implementation in GitHub](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/countries.server.jsx) that lazy loads [available countries](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx) by an API route (`/api/countries`).
 
 ## Next steps
 

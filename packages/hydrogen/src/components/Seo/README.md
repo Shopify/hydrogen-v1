@@ -1,11 +1,11 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Seo and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Seo and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `Seo` component renders SEO information on a webpage.
 
 ## Example code
 
 ```tsx
-import {Seo, useShopQuery} from '@shopify/hydrogen';
+import {Seo, useShopQuery, useRouteParams} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 const QUERY = gql`
@@ -14,14 +14,15 @@ const QUERY = gql`
       title
       body
       seo {
-        ...SeoFragment
+        title
+        description
       }
     }
   }
 `;
 
-export default function Page({params}) {
-  const {handle} = params;
+export default function Page() {
+  const {handle} = useRouteParams();
   const {data} = useShopQuery({query: QUERY, variables: {handle}});
 
   if (!data.pageByHandle) {
@@ -38,39 +39,41 @@ export default function Page({params}) {
 
 The `Seo` component has two props: `type` and `data`. The `type` prop accepts `defaultSeo`, `homepage`, `product`, `collection`, or `page`. Each `type` expects a different `data` shape.
 
-| Type       | Data                                                                                                                                                                                    | Description                                                                                                                                                                           |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| defaultSeo | <pre>{ <br> title: DefaultPageSeoFragmentFragment['title']; <br> description?: DefaultPageSeoFragmentFragment['description'];<br> titleTemplate?: string;<br> lang?: string;<br>}</pre> | The SEO information to render as default on every page of the website. You can specify `homepage`, `product`, `collection`, or `page` in children components to override the default. |
-| homepage   | <code>HomeSeoFragmentFragment</code>                                                                                                                                                    | The SEO information to render on the home page of the website.                                                                                                                        |
-| product    | <code>ProductSeoFragmentFragment</code>                                                                                                                                                 | The SEO information to render on the product page. Corresponds to the Storefront API's [Product object](/api/storefront/latest/objects/product).                                      |
-| collection | <code>CollectionSeoFragmentFragment</code>                                                                                                                                              | The SEO information to render on the collection page. Corresponds to the Storefront API's [Collection object](/api/storefront/latest/objects/collection)                              |
-| page       | <code>PageSeoFragmentFragment</code>                                                                                                                                                    | The SEO information to render on pages (for example, "About" or "Shipping"). Corresponds to the Storefront API's [Page object](/api/storefront/latest/objects/page).                  |
+| Type       | Data                                                                           | Description                                                                                                                                                                                                                                                                 |
+| ---------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| defaultSeo | <code>Omit&#60;DefaultPageType, 'url'&#62;</code>                              | The SEO information to render as default on every page of the website. Corresponds to the Storefront API's [Seo object](/api/storefront/latest/objects/seo). You can specify `homepage`, `product`, `collection`, or `page` in children components to override the default. |
+| homepage   | <code>Omit&#60;HomePageType, 'url'&#62;</code>                                 | The SEO information to render on the home page of the website. Corresponds to the Storefront API's [Seo object](/api/storefront/latest/objects/seo).                                                                                                                        |
+| product    | <code>Omit&#60;ComponentProps&#60;typeof ProductSeo&#62;, 'url'&#62;</code>    | The SEO information to render on the product page. Corresponds to the Storefront API's [Product object](/api/storefront/latest/objects/product).                                                                                                                            |
+| collection | <code>Omit&#60;ComponentProps&#60;typeof CollectionSeo&#62;, 'url'&#62;</code> | The SEO information to render on the collection page. Corresponds to the Storefront API's [Collection object](/api/storefront/latest/objects/collection).                                                                                                                   |
+| page       | <code>Omit&#60;ComponentProps&#60;typeof PageSeo&#62;, 'url'&#62;</code>       | The SEO information to render on pages (for example, "About" or "Shipping"). Corresponds to the Storefront API's [Page object](/api/storefront/latest/objects/page).                                                                                                        |
 
 ## Component type
 
 The `Seo` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragments
+## Storefront API data
 
-The `Seo` component supports the following fragments which correspond to each type:
+The `Seo` component includes the following types that expect a specific data shape:
 
 ### `defaultSeo`
 
-The following fragment is available as a string for your GraphQL query using `DefaultPageSeoFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `<Seo type="defaultSeo" />` component.
+The `defaultSeo` type is an object with the following data structure. The `title` and `description` fields correspond to the Storefront API's [Seo object](/api/storefront/latest/objects/seo):
 
 ```graphql
-fragment DefaultPageSeoFragment on Shop {
+{
   title: name
   description
+  titleTemplate?: string
+  lang?: string
 }
 ```
 
 ### `homepage`
 
-The following fragment is available as a string for your GraphQL query using `HomeSeoFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `<Seo type="homepage" />` component.
+The `homepage` type is an object with fields that correspond to the Storefront API's [Seo object](/api/storefront/latest/objects/seo):
 
 ```graphql
-fragment HomeSeoFragment on Shop {
+{
   title: name
   description
 }
@@ -78,18 +81,23 @@ fragment HomeSeoFragment on Shop {
 
 ### `product`
 
-The following fragment is available as a string for your GraphQL query using `ProductSeoFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `<Seo type="product" />` component.
+The `product` type is an object with fields that correspond to the Storefront API's [Product object](/api/storefront/latest/objects/product):
 
 ```graphql
-fragment ProductSeoFragment on Product {
+{
   title
   description
   seo {
-    ...SeoFragment
+    title
+    description
   }
   vendor
   featuredImage {
-    ...ImageSeoFragment
+    id
+    url
+    altText
+    width
+    height
   }
   variants(first: $numProductVariants) {
     edges {
@@ -111,30 +119,36 @@ fragment ProductSeoFragment on Product {
 
 ### `collection`
 
-The following fragment is available as a string for your GraphQL query using `CollectionSeoFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `<Seo type="collection" />` component.
+The `collection` type is an object with fields that correspond to the Storefront API's [Collection object](/api/storefront/latest/objects/collection):
 
 ```graphql
-fragment CollectionSeoFragment on Collection {
+{
   title
   description
   seo {
-    ...SeoFragment
+    title
+    description
   }
   image {
-    ...ImageSeoFragment
+    id
+    url
+    altText
+    width
+    height
   }
 }
 ```
 
 ### `page`
 
-The following fragment is available as a string for your GraphQL query using `PageSeoFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `<Seo type="page" />` component.
+The `page` type is an object with fields that correspond to the Storefront API's [Page object](/api/storefront/latest/objects/page):
 
 ```graphql
-fragment PageSeoFragment on Page {
+{
   title
   seo {
-    ...SeoFragment
+    title
+    description
   }
 }
 ```

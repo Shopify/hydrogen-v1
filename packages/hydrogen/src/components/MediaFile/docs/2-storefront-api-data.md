@@ -1,9 +1,9 @@
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL query using `MediaFileFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `MediaFile` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media):
 
 ```graphql
-fragment MediaFileFragment on Media {
+{
   ... on MediaImage {
     mediaContentType
     image {

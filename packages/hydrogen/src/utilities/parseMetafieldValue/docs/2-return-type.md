@@ -4,9 +4,9 @@ Depending on the `type` specified in the passed [Metafield](/api/storefront/refe
 
 | Metafield `type`         | `value` type                                                                                  |
 | ------------------------ | --------------------------------------------------------------------------------------------- |
-| `date`                   | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
-| `date_time`              | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
-| `boolean`                | boolean                                                                                       |
+| `date`                   | [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
+| `date_time`              | [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
+| `boolean`                | Boolean                                                                                       |
 | `number_integer`         | int                                                                                           |
 | `number_decimal`         | float                                                                                         |
 | `json`                   | An object                                                                                     |

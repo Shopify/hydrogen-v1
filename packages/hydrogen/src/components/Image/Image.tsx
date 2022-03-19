@@ -20,7 +20,7 @@ export interface BaseImageProps {
 }
 
 interface MediaImagePropsBase extends BaseImageProps {
-  /** An object with keys that correspond to the Storefront API's
+  /** An object with fields that correspond to the Storefront API's
    * [Image object](/api/storefront/reference/common-objects/image).
    */
   data: PartialDeep<ImageType>;
