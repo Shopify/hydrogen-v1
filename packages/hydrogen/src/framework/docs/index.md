@@ -44,6 +44,7 @@ Most of the files that you'll work with in the Hydrogen project are located in t
             └── [handle].server.jsx
         └── index.server.jsx
         └── redirect.server.jsx
+        └── robots.txt.server.js
         └── sitemap.xml.server.jsx
     ├── App.server.jsx
     ├── index.css
