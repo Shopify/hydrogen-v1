@@ -395,6 +395,12 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/static-assets.md',
     }),
     generator.section({
+      title: 'ESLint',
+      description: 'Learn about the ESLint plugin in Hydrogen.',
+      url: '/custom-storefronts/hydrogen/framework/eslint.md',
+      entry: 'framework/docs/eslint.md',
+    }),
+    generator.section({
       title: 'Third-party dependencies',
       description:
         'Tips and tricks for using third-party dependencies in Hydrogen apps.',
