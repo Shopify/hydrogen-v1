@@ -16,10 +16,9 @@ interface FileRoutesProps {
 }
 
 /**
- * Build a set of default Hydrogen routes based on the output provided by Vite's
- * import.meta.globEager method.
- *
- * @see https://vitejs.dev/guide/features.html#glob-import
+ * The `FileRoutes` component builds a set of default Hydrogen routes based on the output provided by Vite's
+ * [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. You can have multiple
+ * instances of this component to source file routes from multiple locations.
  */
 export function FileRoutes({
   routes,
