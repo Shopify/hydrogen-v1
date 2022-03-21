@@ -35,6 +35,10 @@ export default (
         path.join(
           path.dirname(require.resolve('@shopify/hydrogen/package.json'))
         ),
+        path.join(
+          // eslint-disable-next-line node/no-missing-require
+          path.dirname(require.resolve('@shopify/hydrogen-ui/client'))
+        ),
       ],
       isServerComponentImporterAllowed(importer: string, source: string) {
         // Always allow the entry server (e.g. App.server.jsx) to be imported
