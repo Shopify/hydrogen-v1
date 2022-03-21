@@ -126,7 +126,7 @@ export default function CustomPage({response}) {
 
 #### `response.redirect()`
 
-If you want to return users to a different URL, use `response.redirect()` in your server components. Make sure to return
+If you want to return users to a different URL, use `response.redirect()` in your server components.
 
 {% codeblock file %}
 
