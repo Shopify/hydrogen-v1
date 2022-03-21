@@ -1,5 +1,5 @@
 ---
-'@shopify/hydrogen': patch
+'@shopify/hydrogen': minor
 ---
 
 Fragments and their related types have been removed:
