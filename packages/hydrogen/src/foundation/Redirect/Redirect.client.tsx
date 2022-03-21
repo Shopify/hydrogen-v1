@@ -9,7 +9,7 @@ export default function Redirect({to}: RedirectProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (to.startsWith('http') || to.startsWith('https')) {
+    if (to.startsWith('http')) {
       window.location.href = to;
     } else {
       navigate(to);

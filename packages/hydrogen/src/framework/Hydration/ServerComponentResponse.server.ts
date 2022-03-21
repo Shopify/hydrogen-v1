@@ -56,7 +56,10 @@ export class ServerComponentResponse extends Response {
   }
 
   redirect(location: string, status = 307) {
+    // writeHead is used for SSR, so that the server responds with a redirect
     this.writeHead({status, headers: {location}});
+
+    // in the case of an RSC request, instead render a client component that will redirect
     return React.createElement(Redirect, {to: location});
   }
 
