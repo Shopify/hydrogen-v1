@@ -23,5 +23,6 @@ Fragments and their related types have been removed:
   - MediaFileFragment_MediaImage_Fragment
   - MediaFileFragment_Model3d_Fragment
   - MediaFileFragment_Video_Fragment
+- ProductFragment and ProductFragmentFragment
 
-As part of the effort to reduce over-fetching in the GraphQL queries.
+These fragments have been removed to reduce the chances of over-fetching (in other words, querying for fields you don't use) in your GraphQL queries. Please refer to the [Storefront API documentation](https://shopify.dev/api/storefront) for information and guides.

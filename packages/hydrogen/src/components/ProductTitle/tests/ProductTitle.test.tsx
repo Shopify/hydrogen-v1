@@ -9,6 +9,7 @@ describe('<ProductTitle />', () => {
   it('renders the product title in a <span> by default', () => {
     const product = getProduct();
     const price = mountWithProviders(
+      // @ts-ignore mock data doesn't match exactly
       <ProductProvider data={product} initialVariantId="">
         <ProductTitle />
       </ProductProvider>
@@ -22,6 +23,7 @@ describe('<ProductTitle />', () => {
   it('renders the product title in the HTML element specified by the `as` prop', () => {
     const product = getProduct();
     const price = mountWithProviders(
+      // @ts-ignore mock data doesn't match exactly
       <ProductProvider data={product} initialVariantId="">
         <ProductTitle as="p" />
       </ProductProvider>
@@ -35,6 +37,7 @@ describe('<ProductTitle />', () => {
   it(`does prop validation when using a component for the 'as' prop`, () => {
     const product = getProduct();
     const price = mountWithProviders(
+      // @ts-ignore mock data doesn't match exactly
       <ProductProvider data={product} initialVariantId="">
         <ProductTitle as={Link} to="/test" />
       </ProductProvider>
