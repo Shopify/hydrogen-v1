@@ -8,7 +8,7 @@ This hook returns a single object with the following keys:
 | `options`                       | An array of the product's options and values.                                 |
 | `selectedVariant`               | The selected variant.                                                         |
 | `setSelectedVariant`            | A callback to set the selected variant to the variant passed as an argument.  |
-| `selectedOptions`               | The current selected options                                                  |
+| `selectedOptions`               | The current selected options.                                                  |
 | `setSelectedOption`             | A callback to set the selected option.                                        |
 | `setSelectedOptions`            | A callback to set multiple selected options at once.                          |
 | `isOptionInStock`               | A callback that returns a boolean indicating if the option is in stock.       |
