@@ -1,4 +1,4 @@
-import {useShopQuery, Seo, useRouteParams} from '@shopify/hydrogen';
+import {Link, useShopQuery, Seo, useRouteParams} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';

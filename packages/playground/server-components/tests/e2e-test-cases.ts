@@ -45,8 +45,12 @@ export default async function testCases({
   });
 
   it('follows synchronous redirects', async () => {
-    await page.goto(getServerUrl() + '/redirected');
-    expect(await page.url()).toContain('/about');
+    await page.goto(getServerUrl() + '/');
+
+    await page.click('.redirect-btn');
+
+    await page.waitForURL('**/about');
+
     expect(await page.textContent('h1')).toContain('About');
   });
 

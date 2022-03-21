@@ -126,15 +126,13 @@ export default function CustomPage({response}) {
 
 #### `response.redirect()`
 
-If you want to return users to a different URL, use `response.redirect()` in your server components.
+If you want to return users to a different URL, use `response.redirect()` in your server components. Make sure to return
 
 {% codeblock file %}
 
 ```jsx
 export default function PageThatShouldRedirect({response}) {
-  response.redirect('https://yoursite.com/new-page');
-
-  return <p>Redirecting...</p>;
+  return response.redirect('/new-page');
 }
 ```
 
@@ -145,7 +143,7 @@ The `redirect` function accepts a `location` URL and an optional `statusCode`, w
 {% codeblock file %}
 
 ```jsx
-response.redirect('https://yoursite.com/new-page', 301);
+return response.redirect('https://yoursite.com/new-page', 301);
 ```
 
 {% endcodeblock %}
@@ -154,7 +152,7 @@ response.redirect('https://yoursite.com/new-page', 301);
 > This redirect method only supports initial server-rendered page responses. It does not yet support client-navigated responses.
 
 > Caution:
-> You must call `response.redirect()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response.
+> You must call `return response.redirect()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response. The value must also be returned.
 
 #### `response.send()`
 
