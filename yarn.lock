@@ -4933,25 +4933,6 @@ eslint-plugin-eslint-comments@^3.2.0:
     escape-string-regexp "^1.0.5"
     ignore "^5.0.5"
 
-eslint-plugin-hydrogen@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-hydrogen/-/eslint-plugin-hydrogen-0.6.2.tgz#f105ae5b6e54581179b6d640595d5c35099cf855"
-  integrity sha512-uZSImz8F53iNzhk3fnGH1s+WNzU9LdUlpOAAi/MlB1X2S5XWPI7grkAXdRcTV4OVhUbFv+RIFhCmX9ZrkLiIHw==
-  dependencies:
-    "@typescript-eslint/eslint-plugin" "^4.26.0"
-    "@typescript-eslint/experimental-utils" "^4.0.1"
-    "@typescript-eslint/parser" "^4.26.0"
-    "@typescript-eslint/types" "^4.20.0"
-    eslint "^7.27.0"
-    eslint-config-prettier "^8.3.0"
-    eslint-plugin-eslint-comments "^3.2.0"
-    eslint-plugin-jest "^24.3.0"
-    eslint-plugin-jsx-a11y "^6.4.0"
-    eslint-plugin-prettier "^3.4.0"
-    eslint-plugin-react "^7.24.0"
-    eslint-plugin-react-hooks "^4.2.0"
-    prettier "^2.0.0"
-
 eslint-plugin-jest@^24.3.0:
   version "24.7.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.7.0.tgz#206ac0833841e59e375170b15f8d0955219c4889"
