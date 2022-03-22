@@ -68,6 +68,7 @@ export default function LoginForm() {
           id="email"
           name="email"
           type="email"
+          autoComplete="username"
           placeholder="Email"
           value={email.value}
           onChange={email.onChange}
@@ -91,6 +92,7 @@ export default function LoginForm() {
           id="password"
           name="password"
           type="password"
+          autoComplete="current-password"
           placeholder="Password"
           value={password.value}
           onChange={password.onChange}
@@ -116,6 +118,14 @@ export default function LoginForm() {
           to="/account/register"
         >
           Create account
+        </Link>
+      </div>
+      <div className="flex items-center justify-between mt-4">
+        <Link
+          className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+          to="/account/recover"
+        >
+          Forgot your password?
         </Link>
       </div>
     </form>

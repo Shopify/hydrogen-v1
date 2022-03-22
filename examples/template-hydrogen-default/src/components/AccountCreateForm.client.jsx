@@ -129,6 +129,7 @@ export default function AccountCreateForm() {
           id="email"
           name="email"
           type="email"
+          autoComplete="username"
           placeholder="Email"
           value={email.value}
           onChange={email.onChange}
@@ -152,6 +153,7 @@ export default function AccountCreateForm() {
           id="password"
           name="password"
           type="password"
+          autoComplete="current-password"
           placeholder="Password"
           value={password.value}
           onChange={password.onChange}
