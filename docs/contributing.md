@@ -271,6 +271,6 @@ To make updates to the plugin:
 1. Build _just_ the plugin with `yarn build vite`.
 1. Copy the output of the plugin to Hydrogen. This command might vary depending on your directory structure: `cp -rf build/node_modules/react-server-dom-vite ../../Shopify/hydrogen/packages/hydrogen/vendor/`
 1. Delete the `packages/hydrogen/vendor/react-server-dom-vite/umd` folder. We don't need it in Hydrogen.
-1. Tell @frandiox what changes you made, as we need to use his personal branch to make changes upstream into the React PR.
+1. Tell @frandiox what changes you made, as we need to use that personal branch to make changes upstream into the React PR.
 
 Eventually this will not be vendored and we can delete these instructions!
