@@ -1,6 +1,6 @@
 import {NoStore} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
-import cookie from 'cookie';
+import {stringify as stringifyCookie} from 'worktop/cookie';
 
 import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants/cookies';
 
@@ -52,7 +52,7 @@ export async function api(request, {queryShop}) {
 
     return new Response(null, {
       headers: {
-        'Set-Cookie': cookie.serialize(
+        'Set-Cookie': stringifyCookie(
           CUSTOMER_ACCESS_TOKEN_COOKIE_NAME,
           accessToken,
           {

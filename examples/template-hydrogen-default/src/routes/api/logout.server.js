@@ -1,4 +1,4 @@
-import cookie from 'cookie';
+import {stringify as stringifyCookie} from 'worktop/cookie';
 
 import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants/cookies';
 
@@ -6,7 +6,7 @@ export function api() {
   return new Response(null, {
     headers: {
       Location: '/',
-      'Set-Cookie': cookie.serialize(CUSTOMER_ACCESS_TOKEN_COOKIE_NAME, '', {
+      'Set-Cookie': stringifyCookie(CUSTOMER_ACCESS_TOKEN_COOKIE_NAME, '', {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
