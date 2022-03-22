@@ -9,25 +9,25 @@
  */
 'use strict';
 var e = require('react'),
-  k = null,
+  h = null,
   m = 0;
 function n(a, b) {
   if (0 !== b.length)
     if (512 < b.length)
       0 < m &&
-        (a.enqueue(new Uint8Array(k.buffer, 0, m)),
-        (k = new Uint8Array(512)),
+        (a.enqueue(new Uint8Array(h.buffer, 0, m)),
+        (h = new Uint8Array(512)),
         (m = 0)),
         a.enqueue(b);
     else {
-      var d = k.length - m;
+      var d = h.length - m;
       d < b.length &&
         (0 === d
-          ? a.enqueue(k)
-          : (k.set(b.subarray(0, d), m), a.enqueue(k), (b = b.subarray(d))),
-        (k = new Uint8Array(512)),
+          ? a.enqueue(h)
+          : (h.set(b.subarray(0, d), m), a.enqueue(h), (b = b.subarray(d))),
+        (h = new Uint8Array(512)),
         (m = 0));
-      k.set(b, m);
+      h.set(b, m);
       m += b.length;
     }
   return !0;
@@ -48,7 +48,7 @@ var w = JSON.stringify,
   ca = Symbol.for('react.memo'),
   A = Symbol.for('react.lazy'),
   B = Symbol.for('react.default_value');
-function C(a, b, d, c, f, g, h) {
+function C(a, b, d, c, f, g, k) {
   this.acceptsBooleans = 2 === b || 3 === b || 4 === b;
   this.attributeName = c;
   this.attributeNamespace = f;
@@ -56,7 +56,7 @@ function C(a, b, d, c, f, g, h) {
   this.propertyName = a;
   this.type = b;
   this.sanitizeURL = g;
-  this.removeEmptyString = h;
+  this.removeEmptyString = k;
 }
 var D =
   'children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style'.split(
@@ -493,8 +493,8 @@ function X(a, b) {
     }
     var g = c[f];
     d += W(g) + ': ';
-    var h = a[g];
-    d = g === b && 'object' === typeof h && null !== h ? d + X(h) : d + V(h);
+    var k = a[g];
+    d = g === b && 'object' === typeof k && null !== k ? d + X(k) : d + V(k);
   }
   return d + '}';
 }
@@ -540,11 +540,11 @@ function pa(a, b, d, c) {
     if ((c.$$typeof_rsc || c.$$typeof) === x) {
       f = c.filepath + '#' + c.name;
       g = a.writtenModules;
-      var h = g.get(f);
-      if (void 0 !== h)
+      var k = g.get(f);
+      if (void 0 !== k)
         return b[0] === y && '1' === d
-          ? '@' + h.toString(16)
-          : '$' + h.toString(16);
+          ? '@' + k.toString(16)
+          : '$' + k.toString(16);
       try {
         var q = {id: c.filepath, name: c.name};
         a.pendingChunks++;
@@ -688,7 +688,7 @@ function ta(a) {
     a.pingedSegments = [];
     for (var f = 0; f < c.length; f++) {
       var g = c[f];
-      var h = a;
+      var k = a;
       M(g.context);
       try {
         for (
@@ -701,10 +701,10 @@ function ta(a) {
           q = U(l.type, l.key, l.ref, l.props);
         }
         var O = g.id,
-          P = w(q, h.toJSON),
+          P = w(q, k.toJSON),
           Q = 'J' + O.toString(16) + ':' + P + '\n';
         var t = p.encode(Q);
-        h.completedJSONChunks.push(t);
+        k.completedJSONChunks.push(t);
       } catch (v) {
         if (
           'object' === typeof v &&
@@ -713,7 +713,7 @@ function ta(a) {
         ) {
           var ka = g.ping;
           v.then(ka, ka);
-        } else Y(h, v), Z(h, g.id, v);
+        } else Y(k, v), Z(k, g.id, v);
       }
     }
     null !== a.destination && wa(a, a.destination);
@@ -724,7 +724,7 @@ function ta(a) {
   }
 }
 function wa(a, b) {
-  k = new Uint8Array(512);
+  h = new Uint8Array(512);
   m = 0;
   try {
     for (var d = a.completedModuleChunks, c = 0; c < d.length; c++)
@@ -751,9 +751,9 @@ function wa(a, b) {
       }
     g.splice(0, c);
   } finally {
-    k &&
+    h &&
       0 < m &&
-      (b.enqueue(new Uint8Array(k.buffer, 0, m)), (k = null), (m = 0));
+      (b.enqueue(new Uint8Array(h.buffer, 0, m)), (h = null), (m = 0));
   }
   0 === a.pendingChunks && b.close();
 }
@@ -775,24 +775,22 @@ function qa(a) {
   return null;
 }
 exports.renderToReadableStream = function (a, b, d) {
-  var c = oa(a, {}, b ? b.onError : void 0, d),
-    f = new ReadableStream({
-      start: function () {
-        ta(c);
-      },
-      pull: function (a) {
-        if (f.locked)
-          if (1 === c.status) (c.status = 2), u(a, c.fatalError);
-          else if (2 !== c.status && null === c.destination) {
-            c.destination = a;
-            try {
-              wa(c, a);
-            } catch (h) {
-              Y(c, h), va(c, h);
-            }
-          }
-      },
-      cancel: function () {},
-    });
-  return f;
+  var c = oa(a, {}, b ? b.onError : void 0, d);
+  return new ReadableStream({
+    start: function () {
+      ta(c);
+    },
+    pull: function (a) {
+      if (1 === c.status) (c.status = 2), u(a, c.fatalError);
+      else if (2 !== c.status && null === c.destination) {
+        c.destination = a;
+        try {
+          wa(c, a);
+        } catch (g) {
+          Y(c, g), va(c, g);
+        }
+      }
+    },
+    cancel: function () {},
+  });
 };

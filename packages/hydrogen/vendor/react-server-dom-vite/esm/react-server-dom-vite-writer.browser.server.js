@@ -2108,13 +2108,7 @@ function renderToReadableStream(model, options, context) {
       startWork(request);
     },
     pull: function (controller) {
-      // Pull is called immediately even if the stream is not passed to anything.
-      // That's buffering too early. We want to start buffering once the stream
-      // is actually used by something so we can give it the best result possible
-      // at that point.
-      if (stream.locked) {
-        startFlowing(request, controller);
-      }
+      startFlowing(request, controller);
     },
     cancel: function (reason) {},
   });
