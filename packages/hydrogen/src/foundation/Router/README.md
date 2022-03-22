@@ -32,9 +32,9 @@ function NotFound() {
 
 ## Props
 
-| Name     | Type                              | Description         |
-| -------- | --------------------------------- | ------------------- | ------------------- |
-| children | <code>Array&#60;ReactElement&#62; | ReactElement</code> | Any React elements. |
+| Name     | Type                                                         | Description         |
+| -------- | ------------------------------------------------------------ | ------------------- |
+| children | <code>Array&#60;ReactElement&#62; &#124; ReactElement</code> | Any React elements. |
 
 ## Component type
 
