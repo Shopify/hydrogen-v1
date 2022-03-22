@@ -59,6 +59,10 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
   });
 
   // Tables
+  const frameworkComponentsTable = await generator.table({
+    ...COMPONENTS_TABLE,
+    description: 'Hydrogen includes the following framework components:',
+  });
   const primitiveComponentsTable = await generator.table({
     ...COMPONENTS_TABLE,
     description: 'Hydrogen includes the following primitive components:',
@@ -92,6 +96,22 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'Get familiar with the Shopify-specific commerce components included in Hydrogen.',
       url: '/api/hydrogen/components/index.md',
       entry: 'docs/components',
+    }),
+    // Framework
+    generator.section({
+      title: 'Framework components',
+      intro:
+        'Framework components are components that are available in the [Hydrogen framework](/custom-storefronts/hydrogen/framework).',
+      description:
+        'Get familiar with the framework components included in Hydrogen.',
+      url: '/api/hydrogen/components/framework/index.md',
+      entry: [
+        'foundation/FileRoutes',
+        'foundation/Route',
+        'foundation/Router',
+        'components/Link',
+      ],
+      tables: [frameworkComponentsTable],
     }),
     // Primitive
     generator.section({
@@ -188,6 +208,24 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       url: '/api/hydrogen/hooks/index.md',
       entry: 'docs/hooks',
     }),
+    // Framework
+    generator.section({
+      title: 'Framework',
+      description:
+        'Get familiar with the framework hooks included in Hydrogen.',
+      url: '/api/hydrogen/hooks/framework/index.md',
+      entry: ['foundation/useNavigate', 'foundation/useRouteParams'],
+      intro:
+        'Framework hooks are hooks that are available in the [Hydrogen framework](/custom-storefronts/hydrogen/framework).',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description: 'Hydrogen includes the following framework hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
+      ],
+    }),
+
     // Global
     generator.section({
       title: 'Global',
