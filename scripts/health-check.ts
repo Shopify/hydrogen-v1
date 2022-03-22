@@ -17,7 +17,6 @@ function checkHealth(url: string) {
     req.on('error', (e) => {
       reject(e);
     });
-    req.end();
   });
 }
 
