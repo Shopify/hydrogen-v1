@@ -1,5 +1,5 @@
 /**
- * @license React
+* @license React
  * react-server-dom-vite.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -8,16 +8,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {
-  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
-  createServerContext,
-} from 'react';
+import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, createServerContext } from 'react';
 
 function createStringDecoder() {
   return new TextDecoder();
 }
 var decoderOptions = {
-  stream: true,
+  stream: true
 };
 function readPartialStringChunk(decoder, buffer) {
   return decoder.decode(buffer, decoderOptions);
@@ -36,7 +33,7 @@ function resolveModuleReference(moduleData) {
 } // Vite import globs will be injected here.
 
 var allClientComponents = {
-  __INJECTED_CLIENT_IMPORTERS__: null,
+  __INJECTED_CLIENT_IMPORTERS__: null
 }; // Mock client component imports during testing
 
 if (typeof jest !== 'undefined') {
@@ -47,16 +44,13 @@ function importClientComponent(moduleId) {
   var modImport = allClientComponents[moduleId];
 
   if (!modImport) {
-    return Promise.reject(
-      new Error('Could not find client component ' + moduleId)
-    );
+    return Promise.reject(new Error("Could not find client component " + moduleId));
   }
 
-  return typeof modImport === 'function'
-    ? modImport()
-    : Promise.resolve(modImport);
+  return typeof modImport === 'function' ? modImport() : Promise.resolve(modImport);
 } // The module cache contains all the modules we've preloaded so far.
 // If they're still pending they're a thenable.
+
 
 var moduleCache = new Map(); // Start preloading the modules since we might need them soon.
 // This function doesn't suspend.
@@ -70,6 +64,7 @@ function preloadModule(_ref) {
     return mod;
   } // Store the original promise first, then override cache with its result.
 
+
   var promise = importClientComponent(id);
   cacheResult(promise);
   promise.then(cacheResult, cacheResult);
@@ -78,7 +73,7 @@ function preloadModule(_ref) {
 
 function requireModule(_ref2) {
   var id = _ref2.id,
-    name = _ref2.name;
+      name = _ref2.name;
   var mod = moduleCache.get(id);
 
   if (!mod || mod instanceof Promise || mod instanceof Error) {
@@ -96,19 +91,14 @@ function requireModule(_ref2) {
 // The Symbol used to tag the ReactElement-like types.
 var REACT_ELEMENT_TYPE = Symbol.for('react.element');
 var REACT_LAZY_TYPE = Symbol.for('react.lazy');
-var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for(
-  'react.default_value'
-);
+var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for('react.default_value');
 
 var ReactSharedInternals = __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
 var ContextRegistry = ReactSharedInternals.ContextRegistry;
 function getOrCreateServerContext(globalName) {
   if (!ContextRegistry[globalName]) {
-    ContextRegistry[globalName] = createServerContext(
-      globalName,
-      REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED
-    );
+    ContextRegistry[globalName] = createServerContext(globalName, REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED);
   }
 
   return ContextRegistry[globalName];
@@ -251,6 +241,7 @@ function initializeModuleChunk(chunk) {
 } // Report that any missing chunks in the model is now going to throw this
 // error upon read. Also notify any pending promises.
 
+
 function reportGlobalError(response, error) {
   response._chunks.forEach(function (chunk) {
     // If this chunk was already resolved or errored, it won't
@@ -270,7 +261,7 @@ function createElement(type, key, props) {
     ref: null,
     props: props,
     // Record the component responsible for creating this element.
-    _owner: null,
+    _owner: null
   };
 
   {
@@ -282,19 +273,20 @@ function createElement(type, key, props) {
       configurable: false,
       enumerable: false,
       writable: true,
-      value: true, // This element has already been validated on the server.
+      value: true // This element has already been validated on the server.
+
     });
     Object.defineProperty(element, '_self', {
       configurable: false,
       enumerable: false,
       writable: false,
-      value: null,
+      value: null
     });
     Object.defineProperty(element, '_source', {
       configurable: false,
       enumerable: false,
       writable: false,
-      value: null,
+      value: null
     });
   }
 
@@ -305,7 +297,7 @@ function createLazyChunkWrapper(chunk) {
   var lazyType = {
     $$typeof: REACT_LAZY_TYPE,
     _payload: chunk,
-    _init: readChunk,
+    _init: readChunk
   };
   return lazyType;
 }
@@ -324,27 +316,30 @@ function getChunk(response, id) {
 
 function parseModelString(response, parentObject, value) {
   switch (value[0]) {
-    case '$': {
-      if (value === '$') {
-        return REACT_ELEMENT_TYPE;
-      } else if (value[1] === '$' || value[1] === '@') {
-        // This was an escaped string value.
-        return value.substring(1);
-      } else {
-        var id = parseInt(value.substring(1), 16);
-        var chunk = getChunk(response, id);
-        return readChunk(chunk);
+    case '$':
+      {
+        if (value === '$') {
+          return REACT_ELEMENT_TYPE;
+        } else if (value[1] === '$' || value[1] === '@') {
+          // This was an escaped string value.
+          return value.substring(1);
+        } else {
+          var id = parseInt(value.substring(1), 16);
+          var chunk = getChunk(response, id);
+          return readChunk(chunk);
+        }
       }
-    }
 
-    case '@': {
-      var _id = parseInt(value.substring(1), 16);
+    case '@':
+      {
+        var _id = parseInt(value.substring(1), 16);
 
-      var _chunk = getChunk(response, _id); // We create a React.lazy wrapper around any lazy values.
-      // When passed into React, we'll know how to suspend on this.
+        var _chunk = getChunk(response, _id); // We create a React.lazy wrapper around any lazy values.
+        // When passed into React, we'll know how to suspend on this.
 
-      return createLazyChunkWrapper(_chunk);
-    }
+
+        return createLazyChunkWrapper(_chunk);
+      }
   }
 
   return value;
@@ -364,7 +359,7 @@ function createResponse() {
   var chunks = new Map();
   var response = {
     _chunks: chunks,
-    readRoot: readRoot,
+    readRoot: readRoot
   };
   return response;
 }
@@ -380,13 +375,7 @@ function resolveModel(response, id, model) {
 }
 function resolveProvider(response, id, contextName) {
   var chunks = response._chunks;
-  chunks.set(
-    id,
-    createInitializedChunk(
-      response,
-      getOrCreateServerContext(contextName).Provider
-    )
-  );
+  chunks.set(id, createInitializedChunk(response, getOrCreateServerContext(contextName).Provider));
 }
 function resolveModule(response, id, model) {
   var chunks = response._chunks;
@@ -446,37 +435,41 @@ function processFullRow(response, row) {
   var text = row.substring(colon + 1);
 
   switch (tag) {
-    case 'J': {
-      resolveModel(response, id, text);
-      return;
-    }
+    case 'J':
+      {
+        resolveModel(response, id, text);
+        return;
+      }
 
-    case 'M': {
-      resolveModule(response, id, text);
-      return;
-    }
+    case 'M':
+      {
+        resolveModule(response, id, text);
+        return;
+      }
 
-    case 'P': {
-      resolveProvider(response, id, text);
-      return;
-    }
+    case 'P':
+      {
+        resolveProvider(response, id, text);
+        return;
+      }
 
-    case 'S': {
-      resolveSymbol(response, id, JSON.parse(text));
-      return;
-    }
+    case 'S':
+      {
+        resolveSymbol(response, id, JSON.parse(text));
+        return;
+      }
 
-    case 'E': {
-      var errorInfo = JSON.parse(text);
-      resolveError(response, id, errorInfo.message, errorInfo.stack);
-      return;
-    }
+    case 'E':
+      {
+        var errorInfo = JSON.parse(text);
+        resolveError(response, id, errorInfo.message, errorInfo.stack);
+        return;
+      }
 
-    default: {
-      throw new Error(
-        "Error parsing the data. It's probably an error code or network corruption."
-      );
-    }
+    default:
+      {
+        throw new Error("Error parsing the data. It's probably an error code or network corruption.");
+      }
   }
 }
 
@@ -494,13 +487,12 @@ function processStringChunk(response, chunk, offset) {
   response._partialRow += chunk.substring(offset);
 }
 function processBinaryChunk(response, chunk) {
+
   var stringDecoder = response._stringDecoder;
   var linebreak = chunk.indexOf(10); // newline
 
   while (linebreak > -1) {
-    var fullrow =
-      response._partialRow +
-      readFinalStringChunk(stringDecoder, chunk.subarray(0, linebreak));
+    var fullrow = response._partialRow + readFinalStringChunk(stringDecoder, chunk.subarray(0, linebreak));
     processFullRow(response, fullrow);
     response._partialRow = '';
     chunk = chunk.subarray(linebreak + 1);
@@ -528,13 +520,14 @@ function createFromJSONCallback(response) {
 function createResponse$1() {
   // NOTE: CHECK THE COMPILER OUTPUT EACH TIME YOU CHANGE THIS.
   // It should be inlined to one object literal but minor changes can break it.
-  var stringDecoder = createStringDecoder();
+  var stringDecoder =  createStringDecoder() ;
   var response = createResponse();
   response._partialRow = '';
 
   {
     response._stringDecoder = stringDecoder;
   } // Don't inline this call because it causes closure to outline the call above.
+
 
   response._fromJSON = createFromJSONCallback(response);
   return response;
@@ -545,7 +538,7 @@ function startReadingFromStream(response, stream) {
 
   function progress(_ref) {
     var done = _ref.done,
-      value = _ref.value;
+        value = _ref.value;
 
     if (done) {
       close(response);
@@ -572,14 +565,11 @@ function createFromReadableStream(stream) {
 
 function createFromFetch(promiseForResponse) {
   var response = createResponse$1();
-  promiseForResponse.then(
-    function (r) {
-      startReadingFromStream(response, r.body);
-    },
-    function (e) {
-      reportGlobalError(response, e);
-    }
-  );
+  promiseForResponse.then(function (r) {
+    startReadingFromStream(response, r.body);
+  }, function (e) {
+    reportGlobalError(response, e);
+  });
   return response;
 }
 
@@ -610,4 +600,4 @@ function createFromXHR(request) {
   return response;
 }
 
-export {createFromFetch, createFromReadableStream, createFromXHR};
+export { createFromFetch, createFromReadableStream, createFromXHR };
