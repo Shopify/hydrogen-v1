@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.0
+
+### Minor Changes
+
+- [#877](https://github.com/Shopify/hydrogen/pull/877) [`a362a5dd`](https://github.com/Shopify/hydrogen/commit/a362a5dd02e94c7cdf62bb8d0d7e52e8676b415c) Thanks [@cartogram](https://github.com/cartogram)! - Breaking Change: New rules `client-component-banned-hooks` and `server-component-banned-hooks` added as generic rules to ban any non-supported hooks in each context. `server-component-banned-hooks` combines and replaces the `no-state-in-server-components` and `no-effects-in-server-components` rules. `client-component-banned-hooks` will flag usage of `useQuery` and `useShopQuery` in client components.
+
 ## 0.11.0 - 2022-02-24
 
 - No updates. Transitive dependency bump.
