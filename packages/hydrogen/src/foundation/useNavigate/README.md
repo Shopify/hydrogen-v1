@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/foundation/useQuery and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
-The `useNavigate` hook imperatively navigates between routes. Consider using the `useNavigate` hook only where appropriate.
+The `useNavigate` hook imperatively navigates between routes.
 
 ## Example code
 
