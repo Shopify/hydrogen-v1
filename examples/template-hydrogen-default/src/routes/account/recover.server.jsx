@@ -26,30 +26,27 @@ export async function api(request, {queryShop}) {
   const {data, error} = await queryShop({
     query: LOGIN,
     variables: {
-      input: {
-        email: jsonBody.email,
-      },
+      email: jsonBody.email,
     },
     cache: NoStore(),
   });
 
   if (
-    error ||
-    (data &&
-      data.customerRecover &&
-      data.customerRecover.customerUserErrors &&
-      data.customerRecover.customerUserErrors.lenghth > 0)
+    data &&
+    data.customerRecover &&
+    data.customerRecover.customerUserErrors &&
+    data.customerRecover.customerUserErrors.lenghth === 0
   ) {
+    return new Response(null, {
+      status: 200,
+    });
+  } else {
     return new Response(
       JSON.stringify({
         error: data ? data.customerCreate.customerUserErrors : error,
       }),
       {status: 401},
     );
-  } else {
-    return new Response(null, {
-      status: 200,
-    });
   }
 }
 

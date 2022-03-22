@@ -16,7 +16,7 @@ export default function AccountDetails({customerAccessToken}) {
   const customer = data && data.customer;
 
   const orders =
-    customer && customer.orders && customer.orders.edges.length > 0
+    customer?.orders?.edges.length > 0
       ? flattenConnection(customer.orders)
       : [];
 

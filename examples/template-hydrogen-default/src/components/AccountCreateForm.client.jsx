@@ -45,6 +45,7 @@ export default function AccountCreateForm() {
         return submitFail([{message: accountCreateResponse.error}]);
       }
 
+      // this can be avoided if customerCreate mutation returns customerAccessToken
       await callLoginApi({
         email: fieldValues.email,
         password: fieldValues.password,
