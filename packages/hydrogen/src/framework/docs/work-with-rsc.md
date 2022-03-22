@@ -56,13 +56,27 @@ export default function WishListButton({product}) {
 
 {% endcodeblock %}
 
-## Accessing Hydrogen components from client components
+## Importing functionality in Hydrogen components
 
-Because of the way tree-shaking works in Vite, avoid importing server components when referencing Hydrogen client components in one of your client components.
+Hydrogen includes the following import locations:
 
-Hydrogen provides a special `@shopify/hydrogen/client` module to reference components that are safe to use within client components. You should use this import path when writing your client components.
+- `@shopify/hydrogen`: An import path for functionality that's only used in server components. This doesn't include hooks that should only be used in client components.
+- `@shopify/hydrogen/client`: An import path for functionality that's only used in client components. You should use this import path when writing your client components.
 
-### Example
+> Note:
+> The path for importing functionality doesn't define the type of the component. The separate import paths for used for organizational purposes. The `@shopify/hydrogen/client` import path prevents server functionality from being used in the browser. However, the inverse isn't true for server components as they can import and use client components.
+
+### Examples
+
+The following example shows how to use the `@shopify/hydrogen` import path in a server component:
+
+{% codeblock file, filename: 'NotFound.server.jsx' %}
+
+```jsx
+import {useShopQuery} from '@shopify/hydrogen';
+```
+
+{% endcodeblock %}
 
 The following example shows how to use the `@shopify/hydrogen/client` import path in a client component:
 
@@ -70,6 +84,24 @@ The following example shows how to use the `@shopify/hydrogen/client` import pat
 
 ```jsx
 import {useServerState} from '@shopify/hydrogen/client';
+```
+
+{% endcodeblock %}
+
+The following example shows how to import the `Link` component into a client and server component:
+
+{% codeblock file, filename: 'Button.client.jsx' %}
+
+```jsx
+import {Link} from '@shopify/hydrogen/client';
+```
+
+{% endcodeblock %}
+
+{% codeblock file, filename: 'index.server.jsx' %}
+
+```jsx
+import {Link} from '@shopify/hydrogen';
 ```
 
 {% endcodeblock %}
