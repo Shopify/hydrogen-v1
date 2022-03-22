@@ -7,6 +7,38 @@
 
 Hydrogen contains a set of Shopify-specific commerce components, hooks, and utilities that help accelerate your development process. This guide provides a complete reference of the components, hooks, and utilities that Hydrogen offers, and their relationships to each other.
 
+## Framework components and hooks
+
+Framework components and hooks are available as part of the [Hydrogen framework](/custom-storefronts/hydrogen/framework).
+
+<table>
+  <tr>
+    <th>Component name</th>
+    <th>Description</th>
+    <th>Related hooks</th>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/framework/fileroutes">FileRoutes</a></td>
+    <td>Builds a set of default Hydrogen routes based on the output provided by Vite's <code>import.meta.globEager</code> method.</td>
+    <td>Not applicable</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/framework/link">Link</a></td>
+    <td>Used to navigate between routes.</td>
+    <td><a href="/api/hydrogen/hooks/framework/usenavigate">useNavigate</a></td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/framework/route">Route</a></td>
+    <td>Used to set up a route in Hydrogen that's independent of the file system.</td>
+    <td>Not applicable</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/framework/router">Router</a></td>
+    <td>Provides the context for routing in your Hydrogen app.</td>
+    <td>Not applicable</td>
+  </tr>
+</table>
+
 ## Primitive components and hooks
 
 Primitive components and hooks are the building blocks for different component types, including products, variants, and cart.
