@@ -64,7 +64,7 @@ Hydrogen includes the following import locations:
 - `@shopify/hydrogen/client`: An import path for functionality that's only used in client components. You should use this import path when writing your client components.
 
 > Note:
-> The path for importing functionality doesn't define the type of the component. The separate import paths for used for organizational purposes. The `@shopify/hydrogen/client` import path prevents server functionality from being used in the browser. However, the inverse isn't true for server components as they can import and use client components.
+> The path for importing functionality doesn't define the type of the component. The separate import paths are used for organizational purposes. The `@shopify/hydrogen/client` import path prevents server functionality from being used in the browser. However, the inverse isn't true for server components as they can import and use client components.
 
 ### Examples
 
