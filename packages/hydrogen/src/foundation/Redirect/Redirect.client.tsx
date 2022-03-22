@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {useNavigate} from '../../client';
+import {useNavigate} from '../../foundation/useNavigate/useNavigate';
 
 type RedirectProps = {
   to: string;
