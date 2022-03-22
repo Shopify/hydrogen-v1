@@ -13,8 +13,7 @@ export type RouteProps = {
 
 /**
  * The `Route` component is used to set up a route in Hydrogen that's independent of the file system. Routes are
- * matched in the order that they're defined. Only one route renders at a time. Use `path="*"`
- * with the last defined `<Route>` to implement a fallback mechanism on a "Not Found" page.
+ * matched in the order that they're defined.
  */
 export function Route({path, page}: RouteProps): ReactElement | null {
   const request = useServerRequest();

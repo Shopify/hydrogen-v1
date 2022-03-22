@@ -4,7 +4,6 @@ import {createPath} from 'history';
 import {useNavigate} from '../../foundation/useNavigate/useNavigate';
 
 export interface LinkProps
-  /** All properties available to an `<a>` element are available. See [anchor element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).*/
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   /** The destination URL that the link points to. This is the `href` attribute of the underlying `<a>` element. */
   to: string;
@@ -17,8 +16,9 @@ export interface LinkProps
 }
 
 /**
- * The `Link` component lets users navigate from one page to another.
- * It renders an accessible `<a>` element.
+ * The `Link` component is used to navigate between routes. Because it renders an underlying `<a>` element, all
+ * properties available to the `<a>` element are also available to the `Link` component.
+ * For more information, refer to the [`<a>` element documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes).
  */
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   function Link(props, ref) {
