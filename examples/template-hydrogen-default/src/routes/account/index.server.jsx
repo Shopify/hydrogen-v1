@@ -19,6 +19,6 @@ export default function Account({response}) {
   if (customerAccessToken) {
     return <AccountDetails customerAccessToken={customerAccessToken} />;
   } else {
-    response.redirect('/account/login');
+    return response.redirect('/account/login');
   }
 }
