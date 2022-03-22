@@ -3,6 +3,5 @@ deploy:
     - yarn install
     - >-
       yarn workspace @shopify/hydrogen build --force &&
-      node_modules/.bin/changeset pre exit &&
       node_modules/.bin/changeset version --snapshot unstable &&
       node_modules/.bin/changeset publish --no-git-tag --tag unstable
