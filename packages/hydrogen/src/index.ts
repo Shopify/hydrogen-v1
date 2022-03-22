@@ -40,3 +40,5 @@ export {
   CacheMonths,
   CacheCustom,
 } from './framework/CachingStrategy';
+
+export {fetch} from './foundation/fetch';

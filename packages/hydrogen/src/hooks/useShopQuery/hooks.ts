@@ -1,13 +1,13 @@
 import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';
-import {useQuery} from '../../foundation/useQuery';
 import type {CachingStrategy, PreloadOptions} from '../../types';
-import {fetchBuilder, graphqlRequestBody} from '../../utilities';
+import {graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
+import {fetch} from '../../foundation/fetch';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -43,6 +43,10 @@ export function useShopQuery<T>({
    */
   preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
+  if (!query) {
+    return {data: undefined as unknown as T, errors: undefined};
+  }
+
   if (!import.meta.env.SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
@@ -53,16 +57,21 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {key, url, requestInit} = createShopRequest(body, locale);
+  const {url, requestInit} = createShopRequest(body, locale);
 
-  const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
-    key,
-    query
-      ? fetchBuilder<UseShopQueryResponse<T>>(url, requestInit)
-      : // If no query, avoid calling SFAPI & return nothing
-        async () => ({data: undefined as unknown as T, errors: undefined}),
-    {cache, preload}
-  );
+  let data: any;
+  let useQueryError: any;
+
+  try {
+    data = fetch(url, {...requestInit, cache, preload}).json();
+  } catch (error: any) {
+    // Pass-through thrown promise for Suspense functionality
+    if (error?.then) {
+      throw error;
+    }
+
+    useQueryError = error;
+  }
 
   /**
    * The fetch request itself failed, so we handle that differently than a GraphQL error

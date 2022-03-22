@@ -62,6 +62,7 @@ export default () => {
            */
           'react',
           'react-dom/client',
+          'react-fetch',
           'react-server-dom-vite/client-proxy',
         ],
       },
