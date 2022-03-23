@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const argv = require('minimist')(process.argv.slice(2));
 const {prompt} = require('enquirer');
-const {yellow} = require('kolorist');
+const {cyan, green, yellow, red} = require('kolorist');
 const {copy} = require('./scripts/utils.js');
 
 const cwd = process.cwd();
@@ -35,7 +35,7 @@ async function init() {
 
   const packageName = await getValidPackageName(targetDir);
   const root = path.join(cwd, targetDir);
-  console.log(`\nScaffolding Hydrogen app in ${root}...`);
+  console.log(`\nWriting files...`);
 
   if (!fs.existsSync(root)) {
     fs.mkdirSync(root, {recursive: true});
@@ -48,14 +48,16 @@ async function init() {
       const {yes} = await prompt({
         type: 'confirm',
         name: 'yes',
-        initial: 'Y',
+        initial: false,
         message:
-          `Target directory ${targetDir} is not empty.\n` +
+          `Target directory ${yellow(targetDir + "/")} is not empty.\n` +
           `Remove existing files and continue?`,
       });
       if (yes) {
+        console.log(`Deleting files in ${yellow(targetDir + "/")}...`)
         emptyDir(root);
       } else {
+        console.log("Exiting. No files deleted.")
         return;
       }
     }
@@ -72,7 +74,7 @@ async function init() {
   // --template expects a value
   if (typeof template === 'string') {
     isValidTemplate = TEMPLATES.includes(template);
-    message = `${template} isn't a valid template. Please choose from below:`;
+    message = `${red(template)} isn't a valid template. Please choose from the available options:`;
   }
 
   if (!template || !isValidTemplate) {
@@ -138,15 +140,11 @@ async function init() {
 
   const pkgManager = /yarn/.test(process.env.npm_execpath) ? 'yarn' : 'npm';
 
-  console.log(`\nDone. Now:\n`);
-  console.log(
-    `  Update ${yellow(
-      packageName + '/shopify.config.js'
-    )} with the values for your storefront. If you want to test your Hydrogen app using the demo store, you can skip this step.`
-  );
-  console.log(`\nand then run:\n`);
+  console.log(`Created ${green(packageName)} in directory ${cwd}`);
+  console.log(`\nTo install your project dependencies and start your local `
+    + `development server, run these commands:\n`);
   if (root !== cwd) {
-    console.log(`  cd ${path.relative(cwd, root)}`);
+    console.log(cyan(`  cd ${path.relative(cwd, root)}`));
   }
 
   /**
@@ -155,9 +153,14 @@ async function init() {
    */
   const usesYarn = pkgManager === 'yarn' || process.env.LOCAL;
 
-  console.log(`  ${usesYarn ? `yarn` : `npm install --legacy-peer-deps`}`);
-  console.log(`  ${usesYarn ? `yarn dev` : `npm run dev`}`);
-  console.log();
+  console.log(cyan(`  ${usesYarn ? `yarn` : `npm install --legacy-peer-deps`}`));
+  console.log(cyan(`  ${usesYarn ? `yarn dev` : `npm run dev`}`));
+  console.log(
+    `\nYour project will display inventory from the Hydrogen Demo Store. `
+    + `To connect this project to your Shopify store's inventory instead, `
+    + `update ${yellow(packageName + '/shopify.config.js')} with your `
+    + `store ID and Storefront API key.\n`
+  );
 }
 
 async function getValidPackageName(projectName) {
