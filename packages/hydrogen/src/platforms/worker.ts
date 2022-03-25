@@ -6,11 +6,6 @@ import entrypoint from '__SERVER_ENTRY__';
 // eslint-disable-next-line node/no-missing-import
 import indexTemplate from '__INDEX_TEMPLATE__?raw';
 
-interface CacheStorage {
-  open(cacheName: string): Promise<Cache>;
-  readonly default: Cache;
-}
-
 const handleRequest = entrypoint as RequestHandler;
 
 declare global {
@@ -34,7 +29,7 @@ export default {
     try {
       return (await handleRequest(request, {
         indexTemplate,
-        cache: (caches as unknown as CacheStorage).default,
+        cache: await caches.open(Oxygen.env.OXYGEN_DEPLOY_ID ?? 'default'),
         context,
       })) as Response;
     } catch (error: any) {
