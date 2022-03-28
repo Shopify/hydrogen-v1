@@ -156,7 +156,10 @@ function useCreateShopRequest(body: string, locale?: string) {
     locale: defaultLocale,
   } = useShop();
 
+  const request = useServerRequest();
+
   const secretToken = Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN;
+  const buyerIp = request.getBuyerIp();
 
   return {
     key: [storeDomain, storefrontApiVersion, body, locale],
@@ -166,6 +169,7 @@ function useCreateShopRequest(body: string, locale?: string) {
       method: 'POST',
       headers: {
         'X-Shopify-Storefront-Access-Token': secretToken ?? storefrontToken,
+        'Shopify-Storefront-Buyer-IP': buyerIp ?? '',
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
