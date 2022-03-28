@@ -181,7 +181,7 @@ function useCreateShopRequest(body: string, locale?: string) {
 
 function createErrorMessage(fetchError: Response | Error) {
   if (fetchError instanceof Response) {
-    `An error occurred while fetching from the Storefront API. ${
+    return `An error occurred while fetching from the Storefront API. ${
       // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
       fetchError.status === 403
         ? `You may have a bad value in 'shopify.config.js'`
