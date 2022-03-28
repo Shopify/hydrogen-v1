@@ -24,7 +24,7 @@ export interface HydrogenUseQueryOptions {
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
-  /** Inspect the response body to decide whether it should be cached.
+  /** Function to optionally inspect the response body to determine if it should be cached.
    */
   shouldCacheResponse?: (body: any) => boolean;
 }
