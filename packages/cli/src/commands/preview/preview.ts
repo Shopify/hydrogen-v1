@@ -22,6 +22,6 @@ export async function preview(env: Env) {
     // SourceTextModule is only available when running node with the --experimental-vm-modules flag
     miniOxygenPreview(config);
   } else {
-    throw new Error('Hydrogen CLI should be run with module support. Please ensure you are not running this command directly.');
+    throw new Error("Preview command requires module support via node's --experimental-vm-modules flag");
   }
 }
