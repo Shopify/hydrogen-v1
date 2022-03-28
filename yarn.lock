@@ -1980,6 +1980,16 @@
     http-cache-semantics "^4.1.0"
     undici "4.12.1"
 
+"@miniflare/cache@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@miniflare/cache/-/cache-2.3.0.tgz#664af6ca212241653bef5e2b93b4608dbac103c7"
+  integrity sha512-lOf3WVtrs0ac7KOtsQ+JOGHWR90zsqqJbolE+Wt4hIZuvM2U3t1RD2Ms7U20J301msVIsBAd02IL57H95LXQtQ==
+  dependencies:
+    "@miniflare/core" "2.3.0"
+    "@miniflare/shared" "2.3.0"
+    http-cache-semantics "^4.1.0"
+    undici "4.13.0"
+
 "@miniflare/core@2.2.0", "@miniflare/core@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/core/-/core-2.2.0.tgz#ec45606ca2864612a455b91df74d57c2a279f866"
@@ -1994,6 +2004,20 @@
     set-cookie-parser "^2.4.8"
     undici "4.12.1"
 
+"@miniflare/core@2.3.0", "@miniflare/core@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@miniflare/core/-/core-2.3.0.tgz#29e5756d2772d09c6cdf77d2c84fc85888e30bf8"
+  integrity sha512-Dltb3p+Uq5Lx53DuInckHYaDoMrBq49HE/p/oUDXmzHmQy7EAM6v+nJGKmiM9Uen4OqyqsmlmPWqntSMjaX7Jg==
+  dependencies:
+    "@iarna/toml" "^2.2.5"
+    "@miniflare/shared" "2.3.0"
+    "@miniflare/watcher" "2.3.0"
+    busboy "^0.3.1"
+    dotenv "^10.0.0"
+    kleur "^4.1.4"
+    set-cookie-parser "^2.4.8"
+    undici "4.13.0"
+
 "@miniflare/runner-vm@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/runner-vm/-/runner-vm-2.2.0.tgz#897042f6e08f2112ae054d9a9f1b07e34c87d721"
@@ -2001,10 +2025,25 @@
   dependencies:
     "@miniflare/shared" "2.2.0"
 
+"@miniflare/runner-vm@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@miniflare/runner-vm/-/runner-vm-2.3.0.tgz#c2881a7f7cb78244c3456be044bf604520743543"
+  integrity sha512-/aB997YodNcRFxtlnvEn4BJSIqKXRw29FexOqCWwWv+b7XQkTTxd4IfSocIFi6du3265gp85icqP/hxsLAQBVg==
+  dependencies:
+    "@miniflare/shared" "2.3.0"
+
 "@miniflare/shared@2.2.0", "@miniflare/shared@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/shared/-/shared-2.2.0.tgz#a4c79b0919a54c9c3da64c65f05ae813e56988ce"
   integrity sha512-ikz3nkBexVQ16Ioi6naAzK6Spj5O7lUcqIihMLCQKTAAdC252EL0QrBRxHV9MlvkypVNj6MqkoL4E6HcyuCo6g==
+  dependencies:
+    ignore "^5.1.8"
+    kleur "^4.1.4"
+
+"@miniflare/shared@2.3.0", "@miniflare/shared@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@miniflare/shared/-/shared-2.3.0.tgz#7ad2f09bc85125872301578848b46b7d8b4a77ce"
+  integrity sha512-TvCSUe1op5AKINx3zHSSdfAbdoV3eSF3MzeVQA4+1NmtuefY8cjujQCdILeAxg3oPbHXaZkc7j1zZ13rYdvwGQ==
   dependencies:
     ignore "^5.1.8"
     kleur "^4.1.4"
@@ -2016,12 +2055,26 @@
   dependencies:
     "@miniflare/shared" "2.2.0"
 
+"@miniflare/storage-memory@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@miniflare/storage-memory/-/storage-memory-2.3.0.tgz#1a6ac118243aefe6b91232c739316a995eb0296f"
+  integrity sha512-cMqQK9neRySchoNUVhQYOmLFrYkAjT5V113Wfxmsz93dladQ1/mXOsndqPrlb+5hhnwbw4Ns67nyzkHUe9sX/g==
+  dependencies:
+    "@miniflare/shared" "2.3.0"
+
 "@miniflare/watcher@2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@miniflare/watcher/-/watcher-2.2.0.tgz#adfa5d93aa0df86ed8b83e44f71ebb1cbce4bb13"
   integrity sha512-Myaztj1QaL1IaB04uBLKY8hE1kFtvB65cnKdJPOgjFxIgFzNyqybjlBjxx01Q6vymboFTPrl1Q5+g7fsW3lmfQ==
   dependencies:
     "@miniflare/shared" "2.2.0"
+
+"@miniflare/watcher@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@miniflare/watcher/-/watcher-2.3.0.tgz#82c8cba1c37d619f4790bc9b230cdaa45f677fdf"
+  integrity sha512-G0ZE9WHIcdR2TlPXwwQabULDIMZ9LujfC0tn+yXmPXKxgWoJWcWFmUbkhVDcOJzkIz2TAhRlLbW11n8nChUHFQ==
+  dependencies:
+    "@miniflare/shared" "2.3.0"
 
 "@miniflare/web-sockets@^2.2.0":
   version "2.2.0"
@@ -2162,6 +2215,22 @@
     "@babel/parser" "^7.16.4"
     "@microsoft/tsdoc" "^0.13.2"
     resolve "^1.20.0"
+
+"@shopify/mini-oxygen@../mini-oxygen/":
+  version "0.0.2"
+  dependencies:
+    "@miniflare/cache" "^2.3.0"
+    "@miniflare/core" "^2.3.0"
+    "@miniflare/runner-vm" "^2.3.0"
+    "@miniflare/shared" "^2.3.0"
+    "@miniflare/storage-memory" "^2.3.0"
+    "@types/connect" "^3.4.35"
+    "@types/mime" "^2.0.3"
+    connect "^3.7.0"
+    inquirer "^8.2.1"
+    mime "^3.0.0"
+    semiver "^1.1.0"
+    typescript "^4.6.2"
 
 "@shopify/prettier-config@^1.1.2":
   version "1.1.2"
@@ -2338,7 +2407,7 @@
   dependencies:
     change-case "*"
 
-"@types/connect@*", "@types/connect@^3.4.34":
+"@types/connect@*", "@types/connect@^3.4.34", "@types/connect@^3.4.35":
   version "3.4.35"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
   integrity sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==
@@ -6471,6 +6540,26 @@ inquirer@^8.0.0, inquirer@^8.1.2:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
+inquirer@^8.2.1:
+  version "8.2.2"
+  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-8.2.2.tgz#1310517a87a0814d25336c78a20b44c3d9b7629d"
+  integrity sha512-pG7I/si6K/0X7p1qU+rfWnpTE1UIkTONN1wxtzh0d+dHXtT/JG6qBgLxoyHVsQa8cFABxAPh0pD6uUUHiAoaow==
+  dependencies:
+    ansi-escapes "^4.2.1"
+    chalk "^4.1.1"
+    cli-cursor "^3.1.0"
+    cli-width "^3.0.0"
+    external-editor "^3.0.3"
+    figures "^3.0.0"
+    lodash "^4.17.21"
+    mute-stream "0.0.8"
+    ora "^5.4.1"
+    run-async "^2.4.0"
+    rxjs "^7.5.5"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+    through "^2.3.6"
+
 internal-slot@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/internal-slot/-/internal-slot-1.0.3.tgz#7347e307deeea2faac2ac6205d4bc7d34967f59c"
@@ -10384,6 +10473,13 @@ rxjs@^7.2.0, rxjs@^7.4.0:
   dependencies:
     tslib "~2.1.0"
 
+rxjs@^7.5.5:
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.5.tgz#2ebad89af0f560f460ad5cc4213219e1f7dd4e9f"
+  integrity sha512-sy+H0pQofO95VDmFLzyaw9xNJU4KTRSwQIGM6+iG3SypAtCiLDzpeG8sJrNCWn2Up9km+KhkvTdbkrdy+yzZdw==
+  dependencies:
+    tslib "^2.1.0"
+
 safe-buffer@5.1.2, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
@@ -11884,6 +11980,11 @@ undici@4.12.1:
   version "4.12.1"
   resolved "https://registry.yarnpkg.com/undici/-/undici-4.12.1.tgz#3a7b5fb12f835a96a65397dd94578464b08d1c27"
   integrity sha512-MSfap7YiQJqTPP12C11PFRs9raZuVicDbwsZHTjB0a8+SsCqt7KdUis54f373yf7ZFhJzAkGJLaKm0202OIxHg==
+
+undici@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-4.13.0.tgz#7d10fe150c3241a6b3b0eba80eff59c9fb40f359"
+  integrity sha512-8lk8S/f2V0VUNGf2scU2b+KI2JSzEQLdCyRNRF3XmHu+5jectlSDaPSBCXAHFaUlt1rzngzOBVDgJS9/Gue/KA==
 
 undici@^4.9.3:
   version "4.14.1"

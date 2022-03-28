@@ -1,38 +1,27 @@
 import type {Env} from 'types';
-import {MiniOxygen} from './mini-oxygen/core';
+import miniOxygenPreview from '@shopify/mini-oxygen';
 import path from 'path';
-import {tree, HelpfulError} from '../../utilities';
+import vm from 'vm';
 
 export async function preview(env: Env) {
-  const {fs, ui, workspace} = env;
+  const {ui, workspace} = env;
   const root = workspace.root();
-  const port = 3000;
-
-  if (!(await fs.exists('dist/worker/index.js'))) {
-    throw new HelpfulError({
-      title: 'worker not found',
-      content: 'A worker build is required for this command.',
-      suggestion: ({workspace}) =>
-        `Run \`${workspace.packageManager} run build\` to generate a worker build and try again.`,
-    });
-  }
-
-  const {files} = await tree(fs.join(root, 'dist/client'), {
-    recursive: true,
-  });
-
-  const mf = new MiniOxygen({
+  const config = {
+    ui,
+    port: 3000,
+    workerFile: path.resolve(root, 'dist/worker/index.js'),
+    assetsDir: path.resolve(root, 'dist/client'),
+    watch: false,
     buildCommand: 'yarn build',
-    globals: {Oxygen: {}},
-    scriptPath: path.resolve(root, 'dist/worker/index.js'),
-    sitePath: path.resolve(root, 'dist/client'),
-  });
+    autoReload: false,
+    modules: true,
+    env: {},
+  };
 
-  const app = await mf.createServer({assets: files});
-
-  app.listen(port, () => {
-    ui.say(
-      `\nStarted miniOxygen server. Listening at http://localhost:${port}\n`
-    );
-  });
+  if ('SourceTextModule' in vm) {
+    // SourceTextModule is only available when running node with the --experimental-vm-modules flag
+    miniOxygenPreview(config);
+  } else {
+    throw new Error('Hydrogen CLI should be run with module support. Please ensure you are not running this command directly.');
+  }
 }
