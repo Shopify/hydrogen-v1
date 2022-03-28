@@ -90,6 +90,25 @@ ruleTester.run(
         `,
         filename: 'ServerComponent.server.tsx',
       },
+      {
+        code: dedent`
+          function ServerComponent() {
+            useLayoutEffect(() => {});
+            useEffect(() => {});
+            return null;
+          }
+        `,
+        filename: 'ServerComponent.tsx',
+      },
+      {
+        code: dedent`
+          function ServerComponent() {
+            useEffect(() => {});
+            return null;
+          }
+        `,
+        filename: 'ServerComponent.tsx',
+      },
     ],
     invalid: [
       {
@@ -125,37 +144,6 @@ ruleTester.run(
       },
       {
         code: dedent`
-        function ServerComponent() {
-          const [state, setState] = useState();
-          return null;
-        }
-      `,
-        errors: [error('useState')],
-        filename: 'ServerComponent.tsx',
-      },
-      {
-        code: dedent`
-        function ServerComponent() {
-          const [state, dispatch] = useReducer(() => {}, {});
-          return null;
-        }
-      `,
-        errors: [error('useReducer')],
-        filename: 'ServerComponent.tsx',
-      },
-      {
-        code: dedent`
-        function ServerComponent() {
-          const [state, dispatch] = useReducer(() => {}, {});
-          const [state, setState] = useState();
-          return null;
-        }
-      `,
-        errors: [error('useReducer'), error('useState')],
-        filename: 'ServerComponent.tsx',
-      },
-      {
-        code: dedent`
           function ServerComponent() {
             useEffect(() => {});
             return null;
@@ -184,49 +172,6 @@ ruleTester.run(
         `,
         errors: [error('useEffect'), error('useLayoutEffect')],
         filename: 'ServerComponent.server.tsx',
-      },
-      {
-        code: dedent`
-          function ServerComponent() {
-            useEffect(() => {});
-            return null;
-          }
-        `,
-        errors: [error('useEffect')],
-        filename: 'ServerComponent.tsx',
-      },
-      {
-        code: dedent`
-          function ServerComponent() {
-            useEffect(() => {});
-            return null;
-          }
-        `,
-        errors: [error('useEffect')],
-        filename: 'ServerComponent.tsx',
-      },
-      {
-        code: dedent`
-          function ServerComponent() {
-            useLayoutEffect(() => {});
-            useEffect(() => {});
-            return null;
-          }
-        `,
-        errors: [error('useLayoutEffect'), error('useEffect')],
-        filename: 'ServerComponent.tsx',
-      },
-
-      {
-        code: dedent`
-          function ServerComponent() {
-            React.useLayoutEffect(() => {});
-            React.useEffect(() => {});
-            return null;
-          }
-        `,
-        errors: [error('useLayoutEffect'), error('useEffect')],
-        filename: 'ServerComponent.tsx',
       },
     ],
   }
