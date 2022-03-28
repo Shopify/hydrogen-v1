@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- [#912](https://github.com/Shopify/hydrogen/pull/912) [`de0e0d6a`](https://github.com/Shopify/hydrogen/commit/de0e0d6a6652463243ee09013cd30830ce2a246a) Thanks [@blittle](https://github.com/blittle)! - Change the country selector to lazy load available countries. The motivation to do so is that a _lot_ of countries come with the starter template. The problem is 1) the graphql query to fetch them all is relatively slow and 2) all of them get serialized to the browser in each RSC response.
+- [#912](https://github.com/Shopify/hydrogen/pull/912) [`de0e0d6a`](https://github.com/Shopify/hydrogen/commit/de0e0d6a6652463243ee09013cd30830ce2a246a) Thanks [@blittle](https://github.com/blittle)! - Change the country selector to lazy load available countries. The motivation to do so is that a _lot_ of countries come with the Demo Store template. The problem is 1) the graphql query to fetch them all is relatively slow and 2) all of them get serialized to the browser in each RSC response.
 
   This change removes `availableCountries` from the `LocalizationProvider`. As a result, the `useAvailableCountries` hook is also gone. Instead, the available countries are loaded on demand from an API route.
 
@@ -54,7 +54,7 @@
   }, []);
   ```
 
-  See an example on how this could be done inside the Hydrogen Example Template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx)
+  See an example on how this could be done inside the Demo Store template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx)
 
 * [#698](https://github.com/Shopify/hydrogen/pull/698) [`6f30b9a1`](https://github.com/Shopify/hydrogen/commit/6f30b9a1327f06d648a01dd94d539c7dcb3061e0) Thanks [@jplhomer](https://github.com/jplhomer)! - Basic end-to-end tests have been added to the default Hydrogen template. You can run tests in development:
 
@@ -192,7 +192,7 @@
 
 - [#906](https://github.com/Shopify/hydrogen/pull/906) [`4db9534c`](https://github.com/Shopify/hydrogen/commit/4db9534ccf2a7a1579eb5e61b039f3c9a2ab49a8) Thanks [@blittle](https://github.com/blittle)! - Optimize the GraphQL query for the home page
 
-* [#965](https://github.com/Shopify/hydrogen/pull/965) [`cdad13ed`](https://github.com/Shopify/hydrogen/commit/cdad13ed85ff17b84981367f39c7d2fe45e72dcf) Thanks [@blittle](https://github.com/blittle)! - Fix server redirects to work properly with RSC responses. For example, the redirect component within the starter template needs to change:
+* [#965](https://github.com/Shopify/hydrogen/pull/965) [`cdad13ed`](https://github.com/Shopify/hydrogen/commit/cdad13ed85ff17b84981367f39c7d2fe45e72dcf) Thanks [@blittle](https://github.com/blittle)! - Fix server redirects to work properly with RSC responses. For example, the redirect component within the Demo Store template needs to change:
 
   ```diff
   export default function Redirect({response}) {
@@ -304,7 +304,7 @@
 
 ### Patch Changes
 
-- [#845](https://github.com/Shopify/hydrogen/pull/858) [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the starter template.
+- [#845](https://github.com/Shopify/hydrogen/pull/858) [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the Demo Store template.
 
 * [#852](https://github.com/Shopify/hydrogen/pull/852) [`6015edf`](https://github.com/Shopify/hydrogen/commit/6015edfa01f7c8e3e7a0120db0847bdc1c068263) Thanks [@frandiox](https://github.com/frandiox)! - Update @headlessui/react version to fix Cart dialog not opening.
 
@@ -315,7 +315,7 @@
 - feat: `/src/entry-server.jsx` file has been merged into `App.server.jsx`. The latter is the new default entry point for the server
 - feat: `/src/entry-client.jsx` file has been removed. The new entry point in for the client in `index.html` is `/@shopify/hydrogen/entry-client`. Custom entry points are still supported
 - fix: Footer date update
-- fix: product link errors in Cart.client.jsx of the example template
+- fix: product link errors in Cart.client.jsx of the Demo Store template
 - feat: Helmet component has been renamed to Head
 
 ## 0.10.1 - 2022-01-26
@@ -362,7 +362,7 @@
 - Devcontainer support added [#164](https://github.com/Shopify/hydrogen/pull/164)
 - fix: add check for products.length in `Welcome.server.jsx`
 - BREAKING CHANGE: the previously default export from `@shopify/hydrogen/middleware` is now a named export `hydrogenMiddleware`.
-- fix: starter template media gallery error when handling videos
+- fix: Demo Store template media gallery error when handling videos
 - fix: add 404 link to footer
 - fix: align font styles for h1 and paragraph
 
@@ -461,7 +461,7 @@
 
 ## 0.1.0 - 2021-09-23
 
-- fix: support starter template homepage without at least three products
+- fix: support Demo Store template homepage without at least three products
 
 ## 1.0.0-alpha.23 - 2021-09-22
 

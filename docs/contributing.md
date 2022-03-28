@@ -13,7 +13,7 @@ yarn dev
 
 Visit the dev environment at http://localhost:3000.
 
-To make changes to the starter template, edit the files in `examples/template-hydrogen-default`.
+To make changes to the Demo Store template, edit the files in `examples/template-hydrogen-default`.
 
 To modify Hydrogen framework, components, and hooks, edit the files in `packages/hydrogen`.
 
@@ -23,7 +23,7 @@ You can [inspect Vite plugin](https://github.com/antfu/vite-plugin-inspect) tran
 
 Hydrogen is a Yarn v1 monorepo. It consists of several key packages:
 
-- `examples/template-hydrogen-default`: The starter template
+- `examples/template-hydrogen-default`: The Demo Store template
 - `packages/hydrogen`: The Hydrogen React framework & SDK
 - `packages/create-hydrogen-app`: The CLI used to scaffold new projects
 - `packages/cli`: The CLI used to perform tasks in a Hydrogen app
