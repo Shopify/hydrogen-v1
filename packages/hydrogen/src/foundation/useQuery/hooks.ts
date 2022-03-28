@@ -24,6 +24,9 @@ export interface HydrogenUseQueryOptions {
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
+  /** Inspect the response body to decide whether it should be cached.
+   */
+  shouldCacheResponse?: (body: any) => boolean;
 }
 
 /**
@@ -73,6 +76,8 @@ function cachedQueryFnBuilder<T>(
     ...(queryOptions ?? {}),
   };
 
+  const shouldCacheResponse = queryOptions?.shouldCacheResponse ?? (() => true);
+
   /**
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
@@ -114,7 +119,10 @@ function cachedQueryFnBuilder<T>(
           await setItemInCache(lockKey, true);
           try {
             const output = await generateNewOutput();
-            await setItemInCache(key, output, resolvedQueryOptions?.cache);
+
+            if (shouldCacheResponse(output)) {
+              await setItemInCache(key, output, resolvedQueryOptions?.cache);
+            }
           } catch (e: any) {
             log.error(`Error generating async response: ${e.message}`);
           } finally {
@@ -131,10 +139,11 @@ function cachedQueryFnBuilder<T>(
     /**
      * Important: Do this async
      */
-    runDelayedFunction(
-      async () =>
-        await setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
-    );
+    if (shouldCacheResponse(newOutput)) {
+      runDelayedFunction(() =>
+        setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+      );
+    }
 
     collectQueryCacheControlHeaders(
       request,
