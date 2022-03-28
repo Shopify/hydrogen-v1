@@ -50,14 +50,14 @@ async function init() {
         name: 'yes',
         initial: false,
         message:
-          `Target directory ${yellow(targetDir + "/")} is not empty.\n` +
+          `Target directory ${yellow(targetDir + '/')} is not empty.\n` +
           `Remove existing files and continue?`,
       });
       if (yes) {
-        console.log(`Deleting files in ${yellow(targetDir + "/")}...`)
+        console.log(`Deleting files in ${yellow(targetDir + '/')}...`);
         emptyDir(root);
       } else {
-        console.log("Exiting. No files deleted.")
+        console.log('Exiting. No files deleted.');
         return;
       }
     }
@@ -74,7 +74,9 @@ async function init() {
   // --template expects a value
   if (typeof template === 'string') {
     isValidTemplate = TEMPLATES.includes(template);
-    message = `${red(template)} isn't a valid template. Please choose from the available options:`;
+    message = `${red(
+      template
+    )} isn't a valid template. Please choose from the available options:`;
   }
 
   if (!template || !isValidTemplate) {
@@ -141,8 +143,10 @@ async function init() {
   const pkgManager = /yarn/.test(process.env.npm_execpath) ? 'yarn' : 'npm';
 
   console.log(`Created ${green(packageName)} in directory ${cwd}`);
-  console.log(`\nTo install your project dependencies and start your local `
-    + `development server, run these commands:\n`);
+  console.log(
+    `\nTo install your project dependencies and start your local ` +
+      `development server, run these commands:\n`
+  );
   if (root !== cwd) {
     console.log(cyan(`  cd ${path.relative(cwd, root)}`));
   }
@@ -153,13 +157,15 @@ async function init() {
    */
   const usesYarn = pkgManager === 'yarn' || process.env.LOCAL;
 
-  console.log(cyan(`  ${usesYarn ? `yarn` : `npm install --legacy-peer-deps`}`));
+  console.log(
+    cyan(`  ${usesYarn ? `yarn` : `npm install --legacy-peer-deps`}`)
+  );
   console.log(cyan(`  ${usesYarn ? `yarn dev` : `npm run dev`}`));
   console.log(
-    `\nYour project will display inventory from the Hydrogen Demo Store. `
-    + `To connect this project to your Shopify store's inventory instead, `
-    + `update ${yellow(packageName + '/shopify.config.js')} with your `
-    + `store ID and Storefront API key.\n`
+    `\nYour project will display inventory from the Hydrogen Demo Store. ` +
+      `To connect this project to your Shopify store's inventory instead, ` +
+      `update ${yellow(packageName + '/shopify.config.js')} with your ` +
+      `store ID and Storefront API key.\n`
   );
 }
 
