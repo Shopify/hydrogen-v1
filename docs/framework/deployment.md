@@ -211,6 +211,7 @@ async function handleEvent(event) {
       indexTemplate,
       cache: caches.default,
       context: event,
+      buyerIpHeader: 'cf-connecting-ip',
     });
   } catch (error) {
     return new Response(error.message || error.toString(), {status: 500});
