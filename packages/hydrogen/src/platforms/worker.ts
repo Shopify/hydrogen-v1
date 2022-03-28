@@ -29,7 +29,7 @@ export default {
     try {
       return (await handleRequest(request, {
         indexTemplate,
-        cache: await caches.open(Oxygen.env.OXYGEN_DEPLOY_ID ?? 'default'),
+        cache: await caches.open('oxygen'),
         context,
       })) as Response;
     } catch (error: any) {
