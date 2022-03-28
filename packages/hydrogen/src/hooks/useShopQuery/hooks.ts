@@ -53,7 +53,7 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {key, url, requestInit} = createShopRequest(body, locale);
+  const {key, url, requestInit} = useCreateShopRequest(body, locale);
 
   const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
     key,
@@ -148,13 +148,15 @@ export function useShopQuery<T>({
   return data!;
 }
 
-function createShopRequest(body: string, locale?: string) {
+function useCreateShopRequest(body: string, locale?: string) {
   const {
     storeDomain,
     storefrontToken,
     storefrontApiVersion,
     locale: defaultLocale,
   } = useShop();
+
+  const secretToken = Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN;
 
   return {
     key: [storeDomain, storefrontApiVersion, body, locale],
@@ -163,7 +165,7 @@ function createShopRequest(body: string, locale?: string) {
       body,
       method: 'POST',
       headers: {
-        'X-Shopify-Storefront-Access-Token': storefrontToken,
+        'X-Shopify-Storefront-Access-Token': secretToken ?? storefrontToken,
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
