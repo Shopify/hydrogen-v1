@@ -12,6 +12,7 @@ import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import type {DevServerMessage} from './utilities/devtools';
+import {DevTools} from './components/DevTools';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
@@ -33,18 +34,22 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
 
   // default to StrictMode on, unless explicitly turned off
   const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
+  const devToolsMarkup = config?.showDevTools ? <DevTools /> : null;
 
   let hasCaughtError = false;
 
   hydrateRoot(
     root,
-    <RootComponent>
-      <ErrorBoundary FallbackComponent={Error}>
-        <Suspense fallback={null}>
-          <Content clientWrapper={ClientWrapper} />
-        </Suspense>
-      </ErrorBoundary>
-    </RootComponent>,
+    <>
+      <RootComponent>
+        <ErrorBoundary FallbackComponent={Error}>
+          <Suspense fallback={null}>
+            <Content clientWrapper={ClientWrapper} />
+          </Suspense>
+        </ErrorBoundary>
+      </RootComponent>
+      {devToolsMarkup}
+    </>,
     {
       onRecoverableError(e: any) {
         if (__DEV__ && !hasCaughtError) {
