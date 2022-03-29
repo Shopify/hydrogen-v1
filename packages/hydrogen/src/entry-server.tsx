@@ -66,6 +66,7 @@ interface RequestHandlerOptions {
   dev?: boolean;
   context?: RuntimeContext;
   nonce?: string;
+  buyerIpHeader?: string;
 }
 
 export interface RequestHandler {
@@ -80,9 +81,19 @@ export const renderHydrogen = (
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
-    {indexTemplate, streamableResponse, dev, cache, context, nonce}
+    {
+      indexTemplate,
+      streamableResponse,
+      dev,
+      cache,
+      context,
+      nonce,
+      buyerIpHeader,
+    }
   ) {
     const request = new ServerComponentRequest(rawRequest);
+    request.ctx.buyerIpHeader = buyerIpHeader;
+
     const url = new URL(request.url);
     const log = getLoggerWithContext(request);
     const componentResponse = new ServerComponentResponse();

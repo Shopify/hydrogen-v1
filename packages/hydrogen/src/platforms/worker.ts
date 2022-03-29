@@ -31,6 +31,7 @@ export default {
         indexTemplate,
         cache: await caches.open('oxygen'),
         context,
+        buyerIpHeader: 'oxygen-buyer-ip',
       })) as Response;
     } catch (error: any) {
       return new Response(error.message || error.toString(), {status: 500});
