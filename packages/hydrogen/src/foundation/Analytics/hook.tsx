@@ -1,6 +1,6 @@
 import {useServerRequest} from '../ServerRequestProvider';
 
-export function useServerDatalayer(data?: any): any {
+export function useServerAnalytics(data?: any): any {
   const request = useServerRequest();
   if (data)
     request.ctx.analyticData = Object.assign(

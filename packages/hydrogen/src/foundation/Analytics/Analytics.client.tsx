@@ -1,6 +1,4 @@
-import React from 'react';
 import {useEffect} from 'react';
-import {ShopifyAnalytics} from './connectors/Shopify/ShopifyAnalytics.client';
 import {ClientAnalytics} from './index';
 
 export function Analytics({
@@ -45,5 +43,5 @@ export function Analytics({
     }
   }, [analyticDataFromServer]);
 
-  return <ShopifyAnalytics />;
+  return null;
 }

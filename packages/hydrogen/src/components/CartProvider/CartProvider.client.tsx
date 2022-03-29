@@ -68,7 +68,7 @@ import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 import {useServerState} from '../../foundation/useServerState';
 import {ServerStateContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
-import {ClientAnalytics} from '../../foundation/AnalyticEventBus';
+import {ClientAnalytics} from '../../foundation/Analytics';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
