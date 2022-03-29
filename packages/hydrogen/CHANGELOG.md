@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.13.1
+
+### Patch Changes
+
+- [#1008](https://github.com/Shopify/hydrogen/pull/1008) [`ca1de82b`](https://github.com/Shopify/hydrogen/commit/ca1de82bc38c1c02caa451fb52065da499555e6f) Thanks [@frandiox](https://github.com/frandiox)! - Allow passing `cache` parameter to `createServer` in Node entry.
+
+* [#997](https://github.com/Shopify/hydrogen/pull/997) [`fffdc08f`](https://github.com/Shopify/hydrogen/commit/fffdc08f87f71592352a2eb67a63e80704054db2) Thanks [@frandiox](https://github.com/frandiox)! - Allow empty array values in flattenConnection utility.
+
+- [#1007](https://github.com/Shopify/hydrogen/pull/1007) [`7cfca7b0`](https://github.com/Shopify/hydrogen/commit/7cfca7b09289e028a463ababb51e69b4e3943d94) Thanks [@scottdixon](https://github.com/scottdixon)! - Fix API index routes https://github.com/Shopify/hydrogen/issues/562
+
+* [#1000](https://github.com/Shopify/hydrogen/pull/1000) [`6d0d5068`](https://github.com/Shopify/hydrogen/commit/6d0d50686029c3d66d9dc0ceb0b5f71456c7b19e) Thanks [@frandiox](https://github.com/frandiox)! - Do not cache Storefront API responses that contain GraphQL errors.
+
+- [#1003](https://github.com/Shopify/hydrogen/pull/1003) [`d8a9c929`](https://github.com/Shopify/hydrogen/commit/d8a9c9290aaf7c9d058b2c08567294822bea5396) Thanks [@jplhomer](https://github.com/jplhomer)! - Update useShopQuery to accept a custom Storefront API secret token, and forward the Buyer IP.
+
 ## 0.13.0
 
 ### Minor Changes
