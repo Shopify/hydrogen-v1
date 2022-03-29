@@ -35,7 +35,11 @@ export default function Product({country = {isoCode: 'US'}}) {
     <Layout>
       <Seo type="product" data={product} />
       <ProductDetails product={product} />
-      <SocialVideo />
+      {/* NOTE: Realistically, you might not wrap each one of these in a suspense boundary,
+      as it could cause UI thrash. But this is just a demo. */}
+      <Suspense fallback={<GenericFallback />}>
+        <SocialVideo />
+      </Suspense>
       <Suspense fallback={<GenericFallback />}>
         <RelatedProducts title="New Arrivals" endpoint="/new_arrivals" />
       </Suspense>
@@ -45,7 +49,9 @@ export default function Product({country = {isoCode: 'US'}}) {
           endpoint="/recommendations/user"
         />
       </Suspense>
-      <Reviews />
+      <Suspense fallback={<GenericFallback />}>
+        <Reviews />
+      </Suspense>
       <Suspense fallback={<GenericFallback />}>
         <RelatedProducts
           title="Products related to this item"
