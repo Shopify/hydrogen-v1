@@ -1,9 +1,11 @@
-import {useShopQuery, Seo, useRouteParams} from '@shopify/hydrogen';
+import {useShopQuery, Seo, useRouteParams, useQuery} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
 import NotFound from '../../components/NotFound.server';
 import Layout from '../../components/Layout.server';
+import {Suspense} from 'react';
+import ProductCard from '../../components/ProductCard';
 
 export default function Product({country = {isoCode: 'US'}}) {
   const {handle} = useRouteParams();
@@ -27,7 +29,56 @@ export default function Product({country = {isoCode: 'US'}}) {
     <Layout>
       <Seo type="product" data={product} />
       <ProductDetails product={product} />
+      <Suspense fallback={<GenericFallback />}>
+        <RelatedProducts title="New Arrivals" endpoint="/new_arrivals" />
+      </Suspense>
+      <Suspense fallback={<GenericFallback />}>
+        <RelatedProducts
+          title="Recommend for you"
+          endpoint="/recommendations/user"
+        />
+      </Suspense>
+      <Suspense fallback={<GenericFallback />}>
+        <RelatedProducts
+          title="Products related to this item"
+          endpoint="/recommendations/product"
+        />
+      </Suspense>
+      <Suspense fallback={<GenericFallback />}>
+        <RelatedProducts
+          title="Customers who viewed this item also viewed"
+          endpoint="/recommendations/others"
+        />
+      </Suspense>
     </Layout>
+  );
+}
+
+function GenericFallback() {
+  return <div className="h-48 w-full bg-gray-300" />;
+}
+
+function RelatedProducts({title = 'New Arrivals', endpoint}) {
+  const {data: products} = useQuery(endpoint, async () =>
+    fetch(`https://fake-commerce-api.jplhomer.workers.dev${endpoint}`).then(
+      (r) => r.json(),
+    ),
+  );
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-8 text-md font-medium">
+        <span className="text-black uppercase">{title}</span>
+      </div>
+
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {products.map((product) => (
+          <li key={product.id}>
+            <ProductCard product={product} />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
