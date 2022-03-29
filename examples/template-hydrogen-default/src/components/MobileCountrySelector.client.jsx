@@ -15,7 +15,7 @@ export default function MobileCountrySelector() {
   const [countries, setCountries] = useState([]);
 
   if (error) {
-    console.error(error);
+    throw error;
   }
 
   useEffect(() => {
