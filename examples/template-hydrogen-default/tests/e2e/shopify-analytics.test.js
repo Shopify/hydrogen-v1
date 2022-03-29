@@ -15,7 +15,7 @@ describe('analytics', () => {
     await hydrogen.cleanUp();
   });
 
-  it('should emit page-view', async () => {
+  it('should emit page_view', async () => {
     const [request] = await Promise.all([
       hydrogen.page.waitForRequest(analyticEndpoint),
       hydrogen.visit('/'),
@@ -27,7 +27,7 @@ describe('analytics', () => {
     expect(analyticEvent.normalized_page_url).toEqual(hydrogen.url('/'));
   }, 60000);
 
-  it('should emit page-view on sub load', async () => {
+  it('should emit page_view on sub load', async () => {
     const collectionPath = '/collections/freestyle-collection';
     // Full load
     await Promise.all([
@@ -49,7 +49,46 @@ describe('analytics', () => {
     );
   }, 60000);
 
-  it('should emit add-to-cart event', async () => {
+  it('should emit viewed_product event', async () => {
+    const productPath = '/products/snowboard';
+    // page load
+    const [request] = await Promise.all([
+      hydrogen.page.waitForRequest(analyticEndpoint),
+      hydrogen.visit(productPath),
+    ]);
+
+    const analyticEvent = request.postDataJSON();
+    const analyticPageEvent = analyticEvent.events[0].payload;
+    const analyticProductEvent = analyticEvent.events[1].payload;
+
+    expect(request.url()).toEqual(analyticEndpoint);
+    expect(analyticPageEvent.event_type).toEqual('page_view');
+    expect(analyticPageEvent.normalized_page_url).toEqual(
+      hydrogen.url(productPath),
+    );
+
+    expect(request.url()).toEqual(analyticEndpoint);
+    expect(analyticProductEvent.event_type).toEqual('viewed_product');
+    expect(analyticProductEvent.normalized_page_url).toEqual(
+      hydrogen.url(productPath),
+    );
+
+    const viewedProduct = analyticProductEvent.products[0];
+    expect(viewedProduct).toEqual({
+      product_gid: 'gid://shopify/Product/6730850828344',
+      name: 'The Hydrogen',
+      brand: 'Snowdevil',
+      variant_gid: 'gid://shopify/ProductVariant/41007289630776',
+      variant: 'Morning / 154',
+      quantity: 1,
+      price: '600.0',
+      currency: 'USD',
+      id: '6730850828344',
+      variant_id: '41007289630776',
+    });
+  }, 60000);
+
+  it('should emit added_product event', async () => {
     const productPath = '/products/snowboard';
     // page load
     await Promise.all([
