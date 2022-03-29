@@ -46,8 +46,10 @@ fragment CartFragment on Cart {
               height
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name

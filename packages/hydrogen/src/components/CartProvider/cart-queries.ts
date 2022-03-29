@@ -47,8 +47,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name
@@ -145,8 +147,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name
@@ -243,8 +247,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name
@@ -341,8 +347,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name
@@ -439,8 +447,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name
@@ -542,8 +552,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name
@@ -640,8 +652,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name
@@ -738,8 +752,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name
@@ -834,8 +850,10 @@ fragment CartFragment on Cart {
               ...ImageFragment
             }
             product {
+              id
               handle
               title
+              vendor
             }
             selectedOptions {
               name

@@ -51,8 +51,7 @@ export function ShopifyAnalytics() {
             ...buildBasePayload(payload),
             products: formatCartProductsData(
               payload.addedCartLines,
-              payload.cart,
-              payload.products[0]
+              payload.cart
             ),
           })
         );
@@ -63,19 +62,15 @@ export function ShopifyAnalytics() {
   return null;
 }
 
-function formatCartProductsData(
-  addedProducts: any[],
-  cart: any,
-  pageProduct: any
-): any[] {
+function formatCartProductsData(cartLines: any[], cart: any): any[] {
   let products: any[] = [];
   const cartItems = flattenCartLines(cart.lines.edges);
-  addedProducts.forEach((product) => {
+  cartLines.forEach((product) => {
     const variant = cartItems[product.merchandiseId];
     products.push({
-      product_gid: pageProduct.product_gid,
+      product_gid: variant.product.product_gid,
       name: variant.product.title,
-      brand: pageProduct.brand,
+      brand: variant.product.vendor,
       variant_gid: variant.id,
       variant: variant.title,
       quantity: product.quantity,
