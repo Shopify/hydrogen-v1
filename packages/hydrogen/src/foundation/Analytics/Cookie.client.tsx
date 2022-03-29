@@ -1,18 +1,15 @@
-import cookie from 'cookie';
+import {parse, stringify} from 'worktop/cookie';
+import type {Attributes} from 'worktop/cookie';
 
-export type CookieSerializeOptions = cookie.CookieSerializeOptions;
+export type CookieOptions = Attributes;
 
 export function getCookie(key: string): string | undefined {
-  const cookies = cookie.parse(document.cookie);
+  const cookies = parse(document.cookie);
   return cookies[key];
 }
 
-export function setCookie(
-  key: string,
-  value: string,
-  options?: cookie.CookieSerializeOptions
-) {
-  document.cookie = cookie.serialize(key, value, options);
+export function setCookie(key: string, value: string, options?: CookieOptions) {
+  document.cookie = stringify(key, value, options);
 }
 
 // ----------------------------------------------------------------------------

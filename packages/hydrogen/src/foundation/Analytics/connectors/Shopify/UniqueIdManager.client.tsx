@@ -1,7 +1,7 @@
 import {getCookie, setCookie, validateCookie} from '../../Cookie.client';
 import {buildUUID} from './utils';
 
-import type {CookieSerializeOptions} from '../../Cookie.client';
+import type {CookieOptions} from '../../Cookie.client';
 
 const defaultDisallowedCookieVal = '00000000-0000-0000-5000-000000000000';
 const longTermKey = '_shopify_y';
@@ -14,15 +14,15 @@ let cookieDomain: string;
 export function getClientId() {
   determineCookieDomain();
   return getOrSet(longTermKey, {
-    maxAge: longTermLength,
+    maxage: longTermLength,
     domain: cookieDomain,
-    sameSite: 'lax',
+    samesite: 'Lax',
   });
 }
 
 // Functions extracted from Shopify Trekkie
 
-function getOrSet(key: string, options?: CookieSerializeOptions): string {
+function getOrSet(key: string, options?: CookieOptions): string {
   let token = getCookie(key);
   let writeCookie = false;
 
@@ -81,14 +81,14 @@ function determineCookieDomain(): void {
 function writeForDomain(
   key: string,
   val: string,
-  maxAge: number,
+  maxage: number,
   domain: string
 ): void {
   setCookie(key, val, {
     domain,
     path: '/',
-    maxAge,
-    sameSite: 'lax',
+    maxage,
+    samesite: 'Lax',
   });
 }
 

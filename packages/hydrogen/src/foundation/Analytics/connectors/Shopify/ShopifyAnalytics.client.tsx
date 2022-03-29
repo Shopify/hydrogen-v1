@@ -114,7 +114,7 @@ function buildBasePayload(payload: any): any {
 
     // 'api_client_id': '?',
     channel: APP,
-    sub_channel: payload.shopName,
+    // sub_channel: payload.shopName, // storefront id
 
     currency: payload.currency,
     page_id: payload.shopify.pageId,
@@ -131,8 +131,6 @@ function buildBasePayload(payload: any): any {
     event_id: buildUUID(),
     event_time: Date.now(),
     event_source: APP,
-
-    // 'regulations_enforced': 'tbd - do we have ip => geo with regualtion mapping available on oxygen/cloudflare?',
   };
 
   formattedData = addDataIf(
