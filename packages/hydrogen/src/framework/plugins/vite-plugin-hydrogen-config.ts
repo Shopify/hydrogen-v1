@@ -62,6 +62,7 @@ export default () => {
           'react',
           'react-dom',
           'react-server-dom-vite/client-proxy',
+          'cookie',
         ],
       },
 

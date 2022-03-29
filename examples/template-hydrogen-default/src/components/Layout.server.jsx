@@ -31,6 +31,7 @@ export default function Layout({children, hero}) {
   const shopId = data?.shop.id.replace('gid://shopify/Shop/', '');
   useServerDatalayer({
     shopId,
+    shopName: storeName,
   });
 
   return (

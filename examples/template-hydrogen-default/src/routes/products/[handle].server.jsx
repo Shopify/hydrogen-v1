@@ -1,4 +1,9 @@
-import {useShopQuery, Seo, useRouteParams} from '@shopify/hydrogen';
+import {
+  useShopQuery,
+  Seo,
+  useRouteParams,
+  useServerDatalayer,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
@@ -17,6 +22,24 @@ export default function Product({country = {isoCode: 'US'}}) {
       handle,
     },
     preload: true,
+  });
+
+  const displayedVariant = product.variants.edges[0].node;
+
+  useServerDatalayer({
+    publishEventsOnNavigate: ['viewed-product'],
+    products: [
+      {
+        product_gid: product.id,
+        name: product.title,
+        brand: product.vendor,
+        variant_gid: displayedVariant.id,
+        variant: displayedVariant.title,
+        quantity: 1,
+        price: displayedVariant.priceV2.amount,
+        currency: displayedVariant.priceV2.currencyCode,
+      },
+    ],
   });
 
   if (!product) {

@@ -47,7 +47,7 @@ import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/AnalyticEventBus/Analytics.server';
 import {ServerAnalyticRoute} from './foundation/AnalyticEventBus/ServerAnalyticRoute.server';
-import * as ShopifyAnalytics from './foundation/AnalyticEventBus/connectors/Shopify.server';
+import * as ShopifyAnalytics from './foundation/AnalyticEventBus/connectors/Shopify/ShopifyAnalytics.server';
 
 declare global {
   // This is provided by a Vite plugin
