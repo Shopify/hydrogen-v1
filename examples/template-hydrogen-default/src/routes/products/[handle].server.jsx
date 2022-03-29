@@ -72,9 +72,15 @@ function GenericFallback() {
   return <div className="h-48 w-full bg-gray-300" />;
 }
 
+/**
+ * FYI, we intend to ship a synchronous-looking `fetch` which supports Suspense
+ * with Hydrogen soon, similar to this hook: https://github.com/Shopify/hydrogen/pull/983
+ */
 function useFetch(endpoint) {
-  const {data} = useQuery(endpoint, async () =>
-    fetch(endpoint).then((r) => r.json()),
+  const {data} = useQuery(
+    endpoint,
+    async () => fetch(endpoint).then((r) => r.json()),
+    {preload: true},
   );
 
   return data;
@@ -121,7 +127,7 @@ function SocialVideo() {
               (index > 1 ? 'hidden md:flex' : index > 0 ? 'hidden lg:flex' : '')
             }
           >
-            <Image
+            <img
               className="w-full"
               alt={'social video ' + index}
               src={video.image}
