@@ -3,7 +3,7 @@ import {useServerRequest} from '../ServerRequestProvider';
 import {matchPath} from '../../utilities/matchPath';
 import {Boomerang} from '../Boomerang/Boomerang.client';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client';
-import {useServerAnalytics} from '../AnalyticEventBus/';
+import {useServerAnalytics} from '../Analytics';
 
 export type RouteProps = {
   /** The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. */

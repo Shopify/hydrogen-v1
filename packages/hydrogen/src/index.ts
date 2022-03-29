@@ -41,4 +41,4 @@ export {
   CacheCustom,
 } from './framework/CachingStrategy';
 
-export {useServerAnalytics} from './foundation/AnalyticEventBus';
+export {useServerAnalytics} from './foundation/Analytics';

@@ -4,7 +4,7 @@ import {isServer} from '../../utilities';
 
 type EventGuard = Record<string, number>;
 
-let subscribers: Subscribers = {};
+const subscribers: Subscribers = {};
 let pageAnalyticData: any = {};
 const guardDupEvents: EventGuard = {};
 
