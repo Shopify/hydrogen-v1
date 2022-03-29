@@ -18,7 +18,7 @@ Hydrogen is the approach you use to build a custom storefront. The Hydrogen fram
 
 ## Hydrogen project structure
 
-When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Hydrogen starter template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store.
+When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Demo Store template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store.
 
 Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
 
@@ -26,7 +26,7 @@ Most of the files that you'll work with in the Hydrogen project are located in t
 - The main app component in `App.server.jsx`, which includes boilerplate code for the app and routing. This file is also the main entry point for the server.
 - Basic styles provided by Tailwind CSS (`index.css`)
 
-{% codeblock file, filename: "File structure of the Hydrogen starter template" %}
+{% codeblock file, filename: "File structure of the Demo Store template" %}
 
 ```
 └── src
@@ -44,6 +44,7 @@ Most of the files that you'll work with in the Hydrogen project are located in t
             └── [handle].server.jsx
         └── index.server.jsx
         └── redirect.server.jsx
+        └── robots.txt.server.js
         └── sitemap.xml.server.jsx
     ├── App.server.jsx
     ├── index.css

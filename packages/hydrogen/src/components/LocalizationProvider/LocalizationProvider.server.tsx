@@ -2,7 +2,6 @@ import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
 import {useShopQuery} from '../../hooks/useShopQuery';
 import {LocalizationQuery} from './LocalizationQuery';
-import {Localization} from '../../graphql/graphql-constants';
 import {CacheDays} from '../../framework/CachingStrategy';
 import {PreloadOptions} from '../../types';
 
@@ -19,9 +18,9 @@ export interface LocalizationProviderProps {
 /**
  * The `LocalizationProvider` component automatically queries the Storefront API's
  * [`localization`](/api/storefront/reference/common-objects/queryroot) field
- * for the `isoCode` and `name` of the `country` and `availableCountries` and keeps this information in a context.
+ * for the `isoCode` and `name` of the `country` and keeps this information in a context.
  *
- * Any descendents of this provider can use the `useCountry` and `useAvailableCountries` hooks.
+ * Any descendents of this provider can use the `useCountry` hook.
  * The `isoCode` of the `country` can be used in the Storefront API's
  * `@inContext` directive as the `country` value.
  */
@@ -29,7 +28,7 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
   const {
     data: {localization},
   } = useShopQuery<LocalizationQuery>({
-    query: Localization,
+    query: query,
     cache: CacheDays(),
     preload: props.preload,
   });
@@ -40,3 +39,16 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
     </LocalizationClientProvider>
   );
 }
+
+const query = `query Localization {
+  localization {
+    country {
+      isoCode
+      name
+      currency {
+        isoCode
+      }
+    }
+  }
+}
+`;

@@ -1,6 +1,6 @@
 ## Return value
 
-The `useShopQuery` returns an object with the following keys:
+The `useShopQuery` returns an object with the following key:
 
 | Key    | Description                     |
 | ------ | ------------------------------- |

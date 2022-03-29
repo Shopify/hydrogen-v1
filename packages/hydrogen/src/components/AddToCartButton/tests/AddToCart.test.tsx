@@ -84,9 +84,10 @@ describe('AddToCartButton', () => {
       it('calls linesAdd with the initialVariantId', () => {
         const mockLinesAdd = jest.fn();
         const product = getProduct();
-        const selectedVariant = product.variants.edges[0].node;
+        const selectedVariant = product?.variants?.edges?.[0]?.node;
 
         const component = mountWithCartProvider(
+          // @ts-expect-error SellingPlanAllocations isn't mocked out correctly
           <ProductProvider data={product} initialVariantId={selectedVariant.id}>
             <AddToCartButton>Add to cart</AddToCartButton>
           </ProductProvider>,
@@ -98,7 +99,7 @@ describe('AddToCartButton', () => {
         expect(mockLinesAdd).toHaveBeenCalledTimes(1);
         expect(mockLinesAdd).toHaveBeenCalledWith([
           expect.objectContaining({
-            merchandiseId: selectedVariant.id,
+            merchandiseId: selectedVariant?.id,
           }),
         ]);
       });
@@ -121,6 +122,7 @@ describe('AddToCartButton', () => {
         });
 
         const component = mountWithCartProvider(
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           <ProductProvider data={product}>
             <AddToCartButton>Add to cart</AddToCartButton>
           </ProductProvider>,
@@ -144,6 +146,7 @@ describe('AddToCartButton', () => {
         const product = getProduct();
 
         const component = mountWithCartProvider(
+          // @ts-expect-error The mock doesn't match perfectly, fix at some point
           <ProductProvider data={product} initialVariantId={null}>
             <AddToCartButton>Add to cart</AddToCartButton>
           </ProductProvider>,

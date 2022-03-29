@@ -7,6 +7,25 @@
 
 Hydrogen hooks are functions that allow you to use state and other methods inside Hydrogen components.
 
+## Framework hooks
+
+Framework hooks are hooks that are available in the [Hydrogen framework](/custom-storefronts/hydrogen/framework).
+
+<table>
+  <tr>
+    <th>Hook name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/framework/usenavigate">useNavigate</a></td>
+    <td>Imperatively navigates between routes.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/framework/userouteparams">useRouteParams</a></td>
+    <td>Retrieves the parameters of an active route.</td>
+  </tr>
+</table>
+
 ## Primitive hooks
 
 Primitive hooks are the building blocks for different component types, including products, variants, and cart.
@@ -103,10 +122,6 @@ Localization hooks relate to creating shopping experiences for a global audience
   <tr>
     <th>Hook name</th>
     <th>Description</th>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/localization/useavailablecountries">useAvailableCountries</a></td>
-    <td>Returns an array of the available countries used for localization purposes.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/localization/usecountry">useCountry</a></td>

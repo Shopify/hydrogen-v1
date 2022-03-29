@@ -27,7 +27,7 @@ Taking this approach to build Hydrogen might run counter to the way the JavaScri
 ## Assumptions
 
 - **Merchants with existing headless (React) web solutions can use Hydrogen components when they are released**. The unstyled components built for Shopify storefronts can replace custom-built components.
-- **Merchants with existing headless (React) web solutions will NOT use the Hydrogen starter kit**, unless they feel like rebuilding their app.
+- **Merchants with existing headless (React) web solutions will NOT use the Demo Store template**, unless they feel like rebuilding their app.
 - **Hydrogen components are built with React**, but we may support other frameworks like Vue in the future.
-- **Hydrogen's starter kit is built using React**, and we have NO plans to build a similar starter kit for other frameworks like Vue.
+- **Hydrogen's Demo Store template is built using React**, and we have NO plans to build a similar template for other frameworks like Vue.
 - **Hydrogen will not offer a vanilla JavaScript SDK solution**. Hydrogen is built for React and will eventually offer components for other frameworks. Users building their web app without a supported framework will make GraphQL calls directly using modern web libraries like `fetch`.

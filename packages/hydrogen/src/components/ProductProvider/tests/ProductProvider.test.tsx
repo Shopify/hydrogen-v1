@@ -9,6 +9,7 @@ describe('<ProductProvider />', () => {
   it('sets up a product context for the provided product', () => {
     const product = getProduct();
     const productProvider = mountWithProviders(
+      // @ts-expect-error mock data doesn't fully match
       <ProductProvider data={product} initialVariantId="">
         Hello world
       </ProductProvider>
@@ -34,6 +35,7 @@ describe('<ProductProvider />', () => {
   it('renders its children', () => {
     const Children = () => null;
     const productProvider = mountWithProviders(
+      // @ts-expect-error mock data doesn't fully match
       <ProductProvider data={getProduct()} initialVariantId="">
         <Children />
       </ProductProvider>

@@ -4,25 +4,33 @@ import type {Subscriber, Subscribers, SubscriberFunction} from './types';
 type EventGuard = Record<string, number>;
 
 let subscribers: Subscribers = {};
-let dataLayer: any = {};
+let pageAnalyticData: any = {};
 const guardDupEvents: EventGuard = {};
 
-export function pushToDatalayer(data: any): void {
-  dataLayer = Object.assign({}, dataLayer, data);
+function pushToPageAnalyticData(data: any, namespace?: string): void {
+  if (namespace) {
+    pageAnalyticData[namespace] = Object.assign(
+      {},
+      pageAnalyticData[namespace] || {},
+      data
+    );
+  } else {
+    pageAnalyticData = Object.assign({}, pageAnalyticData, data);
+  }
 }
 
-export function getDatalayer(): any {
-  return dataLayer;
+function getPageAnalyticData(): any {
+  return pageAnalyticData;
 }
 
-export function resetDatalayer(): void {
-  dataLayer = {};
+function resetPageAnalyticData(): void {
+  pageAnalyticData = {};
 }
 
-export function publish(eventname: string, guardDup = false, payload?: any) {
+function publish(eventname: string, guardDup = false, payload?: any) {
   const namedspacedEventname = getNamedspacedEventname(eventname);
   const subs = subscribers[namedspacedEventname];
-  const combinedPayload = Object.assign({}, getDatalayer(), payload);
+  const combinedPayload = Object.assign({}, pageAnalyticData, payload);
 
   // De-dup events due to re-renders
   if (guardDup) {
@@ -41,28 +49,9 @@ export function publish(eventname: string, guardDup = false, payload?: any) {
       subs[key](combinedPayload);
     });
   }
-
-  // Publish to server
-  try {
-    fetch('/__event', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        eventname,
-        payload: {
-          ...combinedPayload,
-          referrer: window.document.referrer,
-        },
-      }),
-    });
-  } catch (error) {
-    console.log(error);
-  }
 }
 
-export function subscribe(
+function subscribe(
   eventname: string,
   callbackFunction: SubscriberFunction
 ): Subscriber {
@@ -83,3 +72,11 @@ export function subscribe(
     },
   };
 }
+
+export const ClientAnalytics = {
+  pushToPageAnalyticData,
+  getPageAnalyticData,
+  resetPageAnalyticData,
+  publish,
+  subscribe,
+};

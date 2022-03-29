@@ -50,6 +50,7 @@ describe('CartLineQuantityAdjustButton', () => {
       </Cart>,
       {
         linesUpdate: linesUpdateMock,
+        // @ts-ignore
         lines: [customLine],
       }
     );

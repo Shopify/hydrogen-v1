@@ -1,10 +1,309 @@
 # Changelog
 
+## 0.13.1
+
+### Patch Changes
+
+- [#1008](https://github.com/Shopify/hydrogen/pull/1008) [`ca1de82b`](https://github.com/Shopify/hydrogen/commit/ca1de82bc38c1c02caa451fb52065da499555e6f) Thanks [@frandiox](https://github.com/frandiox)! - Allow passing `cache` parameter to `createServer` in Node entry.
+
+* [#997](https://github.com/Shopify/hydrogen/pull/997) [`fffdc08f`](https://github.com/Shopify/hydrogen/commit/fffdc08f87f71592352a2eb67a63e80704054db2) Thanks [@frandiox](https://github.com/frandiox)! - Allow empty array values in flattenConnection utility.
+
+- [#1007](https://github.com/Shopify/hydrogen/pull/1007) [`7cfca7b0`](https://github.com/Shopify/hydrogen/commit/7cfca7b09289e028a463ababb51e69b4e3943d94) Thanks [@scottdixon](https://github.com/scottdixon)! - Fix API index routes https://github.com/Shopify/hydrogen/issues/562
+
+* [#1000](https://github.com/Shopify/hydrogen/pull/1000) [`6d0d5068`](https://github.com/Shopify/hydrogen/commit/6d0d50686029c3d66d9dc0ceb0b5f71456c7b19e) Thanks [@frandiox](https://github.com/frandiox)! - Do not cache Storefront API responses that contain GraphQL errors.
+
+- [#1003](https://github.com/Shopify/hydrogen/pull/1003) [`d8a9c929`](https://github.com/Shopify/hydrogen/commit/d8a9c9290aaf7c9d058b2c08567294822bea5396) Thanks [@jplhomer](https://github.com/jplhomer)! - Update useShopQuery to accept a custom Storefront API secret token, and forward the Buyer IP.
+
+## 0.13.0
+
+### Minor Changes
+
+- [#922](https://github.com/Shopify/hydrogen/pull/922) [`b5eaddc1`](https://github.com/Shopify/hydrogen/commit/b5eaddc113106ae946fd4b5273ff1485c74a2741) Thanks [@frehner](https://github.com/frehner)! - Fragments and their related types have been removed:
+
+  - ExternalVideoFragment and ExternalVideoFragmentFragment
+  - Model3DFragment and Model3DFragmentFragment
+  - ImageFragment and ImageFragmentFragment
+  - MoneyFragment and MoneyFragmentFragment
+  - UnitPriceFragment and UnitPriceFragmentFragment
+  - VideoFragment and VideoFragmentFragment
+  - MetafieldFragment and MetafieldFragmentFragment
+  - Seo fragments and types:
+    - DefaultPageSeoFragment and DefaultPageSeoFragmentFragment
+    - HomeSeoFragment and HomeSeoFragmentFragment
+    - ProductSeoFragment and ProductSeoFragmentFragment
+    - CollectionSeoFragment and CollectionSeoFragmentFragment
+    - PageSeoFragment and PageSeoFragmentFragment
+  - MediaFile fragments and types:
+    - MediaFileFragment and MediaFileFragmentFragment
+    - MediaFileFragment_ExternalVideo_Fragment
+    - MediaFileFragment_MediaImage_Fragment
+    - MediaFileFragment_Model3d_Fragment
+    - MediaFileFragment_Video_Fragment
+  - ProductFragment and ProductFragmentFragment
+
+  These fragments have been removed to reduce the chances of over-fetching (in other words, querying for fields you don't use) in your GraphQL queries. Please refer to the [Storefront API documentation](https://shopify.dev/api/storefront) for information and guides.
+
+* [#912](https://github.com/Shopify/hydrogen/pull/912) [`de0e0d6a`](https://github.com/Shopify/hydrogen/commit/de0e0d6a6652463243ee09013cd30830ce2a246a) Thanks [@blittle](https://github.com/blittle)! - Change the country selector to lazy load available countries. The motivation to do so is that a _lot_ of countries come with the Demo Store template. The problem is 1) the graphql query to fetch them all is relatively slow and 2) all of them get serialized to the browser in each RSC response.
+
+  This change removes `availableCountries` from the `LocalizationProvider`. As a result, the `useAvailableCountries` hook is also gone. Instead, the available countries are loaded on demand from an API route.
+
+  Migratation steps:
+
+  Create an API route to retrieve available countries:
+
+  ```jsx
+  export async function api(request, {queryShop}) {
+    const {
+      data: {
+        localization: {availableCountries},
+      },
+    } = await queryShop({
+      query: QUERY,
+    });
+
+    return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  const QUERY = `
+    query Localization {
+      localization {
+        availableCountries {
+          isoCode
+          name
+          currency {
+            isoCode
+          }
+        }
+      }
+    }
+  `;
+  ```
+
+  Then within your client code, query the API route with a `useEffect` hook:
+
+  ```jsx
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/countries')
+      .then((resp) => resp.json())
+      .then((c) => setCountries(c))
+      .catch((e) => setError(e))
+      .finally(() => setLoading(false));
+  }, []);
+  ```
+
+  See an example on how this could be done inside the Demo Store template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx)
+
+- [#698](https://github.com/Shopify/hydrogen/pull/698) [`6f30b9a1`](https://github.com/Shopify/hydrogen/commit/6f30b9a1327f06d648a01dd94d539c7dcb3061e0) Thanks [@jplhomer](https://github.com/jplhomer)! - Basic end-to-end tests have been added to the default Hydrogen template. You can run tests in development:
+
+  ```bash
+  yarn test
+  ```
+
+  Or in continuous-integration (CI) environments:
+
+  ```bash
+  yarn test:ci
+  ```
+
+* [#932](https://github.com/Shopify/hydrogen/pull/932) [`507c5cbf`](https://github.com/Shopify/hydrogen/commit/507c5cbf233a7f3ca05094e839656de227243299) Thanks [@jplhomer](https://github.com/jplhomer)! - Adds [CSS Modules](https://github.com/css-modules/css-modules) support. Hydrogen now includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module and exports them to a `StyleTag` component. To use CSS Modules in your Hydrogen app, you must render the style tag in the component along with your styles:
+
+  ```js
+  import * as styles from './styles.module.css';
+
+  export default MyComponent() {
+    return (
+      <div className={styles.wrapper}>
+        // A style is rendered inline
+        <styles.StyleTag />
+        <p>Hello</p>
+      </div>
+    );
+  }
+  ```
+
+  Explore an [example implementation of CSS Modules in GitHub](https://github.com/Shopify/hydrogen/tree/main/examples/css-modules).
+
+- [#846](https://github.com/Shopify/hydrogen/pull/846) [`58c823b5`](https://github.com/Shopify/hydrogen/commit/58c823b5eb5c5c33caa25cae629409ce651b3991) Thanks [@blittle](https://github.com/blittle)! - ## New `<Route>` Component
+
+  The `<Route>` component is available for routes not defined by the file system. The `<Route>` component must be used within the `<Router>` component.
+
+  ```jsx
+  // app.server.jsx
+
+  function App({routes, ...serverProps}) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <ShopifyProvider shopifyConfig={shopifyConfig}>
+          <CartProvider>
+            <DefaultSeo />
+            <Router serverProps={serverProps}>
+              <Route path="/custom" page={<CustomRoute />} />
+            </Router>
+          </CartProvider>
+        </ShopifyProvider>
+      </Suspense>
+    );
+  }
+
+  function CustomRoute() {
+    return <h1>Custom route</h1>;
+  }
+  ```
+
+  `<Route>` accepts two props:
+
+  | Property | Type                                    | Required | Description                                                                                            |
+  | -------- | --------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+  | `path`   | `string`                                | Yes      | The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. |
+  | `page`   | `A rendered Server Component reference` | Yes      | A reference to a React Server Component that's rendered when the route is active.                      |
+
+  ## Changes to `<Router>`
+
+  You can have multiple `<Route>` and `<FileRoutes>` components in your app. Hydrogen will only render one route for each request — whichever it finds first. This means the `<Router>` component no longer takes `fallback` as a prop. It also doesn't need `serverProps`. Instead, to render a 404 "Not Found" page, add `<Route path="*" page={<NotFound />} />` to your app. Make sure it's the last `<Route>` defined inside your app:
+
+  ```diff
+  function App({routes, ...serverProps}) {
+    return (
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <CartProvider>
+          <DefaultSeo />
+  -       <Router
+  -         fallback={<NotFound response={serverProps.response} />}
+  -         serverProps={serverProps}
+  -       >
+  +       <Router>
+            <FileRoutes routes={routes} />
+  +         <Route path="*" page={<NotFound />} />
+          </Router>
+        </CartProvider>
+      </ShopifyProvider>
+    );
+  }
+  ```
+
+  ## Changes to `<FileRoutes>`
+
+  The `<FileRoutes>` component now accepts two additional optional props:
+
+  | Property    | Type     | Required | Default Value | Description                                                             |
+  | ----------- | -------- | -------- | ------------- | ----------------------------------------------------------------------- |
+  | `basePath`  | `string` | No       | `"/"`         | A path that's prepended to all file routes.                             |
+  | `dirPrefix` | `string` | No       | `"./routes"`  | The portion of the file route path that shouldn't be a part of the URL. |
+
+  You need to modify `dirPrefix` if you want to import routes from a location other than `src/routes`.
+
+  You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale:
+
+  ```jsx
+  <Router>
+    <FileRoutes basePath={`/${locale}`} routes={routes} />
+    <Route path="*" page={<NotFound />} />
+  </Router>
+  ```
+
+  ## New `useRouteParams()` hook
+
+  You can use the `useRouteParams()` hook to retrieve the parameters of an active route. The hook is available in both server and client components:
+
+  ```jsx
+  // products/[handle].server.jsx
+
+  import {useRouteParams} from '@shopify/hydrogen';
+
+  export default function Product() {
+    const {handle} = useRouteParams();
+    // ...
+  }
+  ```
+
+  ```jsx
+  // ProductDetails.client.jsx
+  import {useRouteParams} from '@shopify/hydrogen/client';
+
+  export default function ProductDetails() {
+    const {handle} = useRouteParams();
+    // ...
+  }
+  ```
+
+* [#842](https://github.com/Shopify/hydrogen/pull/842) [`626e58ee`](https://github.com/Shopify/hydrogen/commit/626e58eebe3cf994423895bbdf7754c009d701fe) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Removed the `Rawhtml` component.
+
+  Upgrade your project by replacing references to the `RawHtml` component to follow
+  [React's `dangerouslySetInnerHTML`](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml):
+
+  Change all `RawHtml` component
+
+  ```jsx
+  <RawHtml string="<p>Hello world</p>" />
+  ```
+
+  to jsx equivalent
+
+  ```jsx
+  <div dangerouslySetInnerHTML={{__html: '<p>Hello world</p>'}} />
+  ```
+
+### Patch Changes
+
+- [#870](https://github.com/Shopify/hydrogen/pull/870) [`4c0fcd8f`](https://github.com/Shopify/hydrogen/commit/4c0fcd8f55a7956ab4641f12a5d9ebcb2587264c) Thanks [@frandiox](https://github.com/frandiox)! - Remove useQuery hook from client exports to avoid leaking server logic to the browser.
+
+* [#950](https://github.com/Shopify/hydrogen/pull/950) [`d19fc36b`](https://github.com/Shopify/hydrogen/commit/d19fc36ba548d64a3548df435358ae5bea7cdf8e) Thanks [@frandiox](https://github.com/frandiox)! - Allow disabling minification in vite.config.js
+
+- [#981](https://github.com/Shopify/hydrogen/pull/981) [`8dda8a86`](https://github.com/Shopify/hydrogen/commit/8dda8a860bc1cf58511756b6fff999fb7caa6081) Thanks [@michenly](https://github.com/michenly)! - Fix useUrl() when it is in RSC mode
+
+* [#965](https://github.com/Shopify/hydrogen/pull/965) [`cdad13ed`](https://github.com/Shopify/hydrogen/commit/cdad13ed85ff17b84981367f39c7d2fe45e72dcf) Thanks [@blittle](https://github.com/blittle)! - Fix server redirects to work properly with RSC responses. For example, the redirect component within the Demo Store template needs to change:
+
+  ```diff
+  export default function Redirect({response}) {
+  -  response.redirect('/products/snowboard');
+  -  return <div>This page is redirected</div>;
+  +  return response.redirect('/products/snowboard');
+  }
+  ```
+
+  This server component is rendered two ways:
+
+  1. When an app directly loads the redirect route, the server will render a 300 redirect with the proper location header.
+  2. The app is already loaded, but the user navigates to the redirected route. We cannot 300 respond in this scenario, instead `response.redirect(...)` returns a component which will redirect on the client.
+
+- [#904](https://github.com/Shopify/hydrogen/pull/904) [`1b46f8d0`](https://github.com/Shopify/hydrogen/commit/1b46f8d00ed5db9abaf0868574e252fa319a8ca9) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Log query key when provided in string
+
+* [#758](https://github.com/Shopify/hydrogen/pull/758) [`0bee3af0`](https://github.com/Shopify/hydrogen/commit/0bee3af0373acad85dba38a630d3a81e52d6c134) Thanks [@frandiox](https://github.com/frandiox)! - Upgrade to React experimental version `0.0.0-experimental-2bf7c02f0-20220314`.
+
+  To upgrade your Hydrogen app, change the pinned version of `react` and `react-dom` in your `package.json` file to this version, or run:
+
+  ```bash
+  yarn add @shopify/hydrogen react@0.0.0-experimental-2bf7c02f0-20220314 react-dom@0.0.0-experimental-2bf7c02f0-20220314
+  ```
+
+- [#895](https://github.com/Shopify/hydrogen/pull/895) [`1017b541`](https://github.com/Shopify/hydrogen/commit/1017b541c275c030f97ee6dee1e310df1fe89fb5) Thanks [@frandiox](https://github.com/frandiox)! - Improve error thrown in development when entry point fails on load.
+
+* [#897](https://github.com/Shopify/hydrogen/pull/897) [`c01044e6`](https://github.com/Shopify/hydrogen/commit/c01044e6b4ebe74f8e2e310e78dbaa8178536016) Thanks [@blittle](https://github.com/blittle)! - Add new custom headers for storefront API calls. See Issue [#660](https://github.com/Shopify/hydrogen/issues/660)
+
+- [#908](https://github.com/Shopify/hydrogen/pull/908) [`8f4cd100`](https://github.com/Shopify/hydrogen/commit/8f4cd1005ce9d78a1426223b6d4ad44c3cae2ebc) Thanks [@mcvinci](https://github.com/mcvinci)! - Hydrogen docs: Updates to align with latest release
+
+* [#871](https://github.com/Shopify/hydrogen/pull/871) [`4cb07c73`](https://github.com/Shopify/hydrogen/commit/4cb07c7357cf05cc63f9d3c2834ac3c43e8859b5) Thanks [@scottdixon](https://github.com/scottdixon)! - Hydrogen docs: Update ProductProvider example query
+
+- [#878](https://github.com/Shopify/hydrogen/pull/878) [`587aa3e6`](https://github.com/Shopify/hydrogen/commit/587aa3e6b7bee39f8f8a88685ef95ec9bb7c057b) Thanks [@frandiox](https://github.com/frandiox)! - Fix preloading queries in workers to prevent waterfall requests.
+
+  **Breaking change**: `fetchBuilder` no longer accepts a `Request` argument. Instead, it now accepts a `url: string` and `options: FetchInit`:
+
+  ```diff
+  -fetchBuilder(new Request('https://my.endpoint.com', {headers: {foo: 'bar'}}));
+  +fetchBuilder('https://my.endpoint.com', {headers: {foo: 'bar}});
+  ```
+
+* [#923](https://github.com/Shopify/hydrogen/pull/923) [`993be985`](https://github.com/Shopify/hydrogen/commit/993be9856f32f282f14e5c893abfa0a69c5636a4) Thanks [@frandiox](https://github.com/frandiox)! - Provide a Logger option to use GraphQL and disable by default. Improve logging of unused query properties.
+
+- [#960](https://github.com/Shopify/hydrogen/pull/960) [`2e8a5ea2`](https://github.com/Shopify/hydrogen/commit/2e8a5ea24c4d506b14ad3b5b9ed81147a879fc2e) Thanks [@mcvinci](https://github.com/mcvinci)! - Hydrogen docs: Add reference to robots.txt.server.js file
+
 ## 0.12.0
 
 ### Minor Changes
 
-- [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the starter template.
+- [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the Demo Store template.
 
 * [#827](https://github.com/Shopify/hydrogen/pull/827) [`745e8c0`](https://github.com/Shopify/hydrogen/commit/745e8c0a87a7c41803934565e5a756295ff629c2) Thanks [@michenly](https://github.com/michenly)! - Move any static `Fragment` properties on components to the entry point `@shopify/hydrogen/fragments`.
   The migration diff are as follows:
@@ -640,7 +939,7 @@ function SomeComponent() {
 
 ### Fixed
 
-- Starter template GalleryPreview unique key warning
+- Demo Store template GalleryPreview unique key warning
 - Mitigation for upcoming breaking minor Vite update
 
 ## 0.2.0 - 2021-10-08

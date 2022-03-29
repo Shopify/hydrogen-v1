@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/utilities/flattenConnection and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/utilities/flattenConnection and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `flattenConnection` utility transforms a connection object from the Storefront API (for example, [Product-related connections](/api/storefront/reference/products/product)) into a flat array of nodes.
 
@@ -79,9 +79,9 @@ export function Product({handle}) {
 
 ## Arguments
 
-| Description                                                                                                                                                                                               | Required |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| A connection object with the field `edges` whose value is an array of objects corresponding to `{node: Value}`. For example, any of the [Product connections](/api/storefront/reference/products/product) | Yes      |
+| Argument                                                                                                                                                                                                   | Required |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| A connection object with the field `edges` whose value is an array of objects corresponding to `{node: Value}`. For example, any of the [Product connections](/api/storefront/reference/products/product). | Yes      |
 
 ## Return type
 

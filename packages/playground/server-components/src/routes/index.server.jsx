@@ -14,6 +14,10 @@ export default function Index() {
       <Link className="btn" to="/about">
         About
       </Link>
+      <br />
+      <Link className="redirect-btn" to="/redirected">
+        Redirect
+      </Link>
     </>
   );
 }
