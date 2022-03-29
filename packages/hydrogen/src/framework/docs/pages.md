@@ -132,9 +132,7 @@ If you want to return users to a different URL, use `response.redirect()` in you
 
 ```jsx
 export default function PageThatShouldRedirect({response}) {
-  response.redirect('https://yoursite.com/new-page');
-
-  return <p>Redirecting...</p>;
+  return response.redirect('/new-page');
 }
 ```
 
@@ -145,7 +143,7 @@ The `redirect` function accepts a `location` URL and an optional `statusCode`, w
 {% codeblock file %}
 
 ```jsx
-response.redirect('https://yoursite.com/new-page', 301);
+return response.redirect('https://yoursite.com/new-page', 301);
 ```
 
 {% endcodeblock %}
@@ -154,7 +152,7 @@ response.redirect('https://yoursite.com/new-page', 301);
 > This redirect method only supports initial server-rendered page responses. It does not yet support client-navigated responses.
 
 > Caution:
-> You must call `response.redirect()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response.
+> You must call `return response.redirect()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response. The value must also be returned.
 
 #### `response.send()`
 
@@ -291,7 +289,7 @@ const QUERY = gql`
 
 #### Limitations and considerations
 
-The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) includes a `routes/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
+The [Demo Store template](/custom-storefronts/hydrogen/getting-started) includes a `routes/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Demo Store template:
 
 - The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources. If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.
 
@@ -299,7 +297,7 @@ The [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started) in
 
 - The sitemap is cached for 24 hours.
 
-- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Hydrogen starter template URL structure, which is based on resource's handle.
+- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Demo Store template URL structure, which is based on resource's handle.
 
 ### Build a JSON API
 

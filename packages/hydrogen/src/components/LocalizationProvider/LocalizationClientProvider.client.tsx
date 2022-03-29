@@ -15,10 +15,6 @@ export default function LocalizationClientProvider({
     localization.country
   );
 
-  const [availableCountries] = useState<Localization['availableCountries']>(
-    localization.availableCountries
-  );
-
   const setter = useCallback(
     (country: Localization['country']) => {
       setCountry(country);
@@ -31,9 +27,8 @@ export default function LocalizationClientProvider({
     return {
       country,
       setCountry: setter,
-      availableCountries,
     };
-  }, [country, setter, availableCountries]);
+  }, [country, setter]);
 
   return (
     <LocalizationContext.Provider value={contextValue}>

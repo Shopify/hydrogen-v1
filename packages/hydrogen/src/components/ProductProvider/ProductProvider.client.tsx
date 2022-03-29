@@ -2,14 +2,15 @@ import React, {ReactNode, useMemo} from 'react';
 import {useProductOptions, useParsedMetafields} from '../../hooks';
 import {flattenConnection} from '../../utilities';
 import {ProductContext, ProductContextType} from './context';
-import {Product} from './types';
 import {ProductOptionsProvider} from './ProductOptionsProvider.client';
+import type {Product as ProductType} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 export interface ProductProviderProps {
   /** A `ReactNode` element. */
   children: ReactNode;
   /** A [Product object](/api/storefront/reference/products/product). */
-  data: Product;
+  data: PartialDeep<ProductType>;
   /** The initially selected variant. If this is missing, then `selectedVariantId`
    * in the returned `object` from the `useProduct` hook uses the first available variant
    * or the first variant (if none are available).
@@ -30,6 +31,7 @@ export function ProductProvider({
 }: ProductProviderProps) {
   const metafields = useParsedMetafields(product.metafields);
 
+  // @ts-expect-error The types here are broken on main, need to come back and fix them sometime
   const providerValue = useMemo<ProductContextType>(() => {
     return {
       ...product,

@@ -37,6 +37,11 @@ async function handleEvent(event) {
       return await handleAsset(url, event);
     }
 
+    // TODO: Switch to module syntax and transfer args to Oxygen.env
+    if (!globalThis.Oxygen) {
+      globalThis.Oxygen = {};
+    }
+
     return await handleRequest(event.request, {
       indexTemplate,
       cache: caches.default,

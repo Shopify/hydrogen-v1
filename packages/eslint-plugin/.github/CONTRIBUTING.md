@@ -11,7 +11,7 @@ All changes should have tests and documentation.
 2. `$ yarn install` to install dependencies
 3. `$ yarn test` to run all tests
 
-## Test changes in the starter template
+## Test changes in the Demo Store template
 
 Before submitting a PR please test your changes in one of the hydrogen templates in the top-level `/examples` folder in this repo.
 
@@ -27,4 +27,4 @@ module.exports = {
 };
 ```
 
-Then run `yarn link eslint-plugin-hydrogen` and `yarn lint:js` from within the example template (example: `/examples/template-hydrogen-default`).
+Then run `yarn link eslint-plugin-hydrogen` and `yarn lint:js` from within the Demo Store template (example: `/examples/template-hydrogen-default`).

@@ -49,6 +49,12 @@ export function hydrogenMiddleware({
   getServerEntrypoint,
   devServer,
 }: HydrogenMiddlewareArgs) {
+  if (dev && devServer) {
+    // Store this globally for devtools
+    // @ts-ignore
+    globalThis.__viteDevServer = devServer;
+  }
+
   /**
    * We're running in the Node.js runtime without access to `fetch`,
    * which is needed for proxy requests and server-side API requests.

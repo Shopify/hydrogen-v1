@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Money and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Money and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `Money` component renders a string of the Storefront API's
 [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) according to the
@@ -52,21 +52,21 @@ export default function ProductWithCustomMoney() {
 
 ## Props
 
-| Name | Type                               | Description                                                                                                                     |
-| ---- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| as?  | <code>TTag</code>                  | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                   |
-| data | <code>MoneyFragmentFragment</code> | An object with keys that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
+| Name | Type                                      | Description                                                                                                                       |
+| ---- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| as?  | <code>TTag</code>                         | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                     |
+| data | <code>PartialDeep&#60;MoneyV2&#62;</code> | An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). |
 
 ## Component type
 
 The `Money` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragment
+## Storefront API data
 
-The following fragment is available as a string for your GraphQL query using `MoneyFragment` from `@shopify/hydrogen/fragments`. Using this fragment ensures that you have all the data necessary for rendering the `Money` component.
+The `data` prop is an object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2):
 
 ```graphql
-fragment MoneyFragment on MoneyV2 {
+{
   currencyCode
   amount
 }

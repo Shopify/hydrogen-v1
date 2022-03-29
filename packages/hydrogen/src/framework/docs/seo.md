@@ -2,7 +2,7 @@ Hydrogen detects when a search engine crawls your shop and defaults to server-si
 
 ## How SEO works in Hydrogen
 
-Hydrogen includes a [`Seo`](/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Hydrogen starter template](/custom-storefronts/hydrogen/getting-started):
+Hydrogen includes an [`Seo`](/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](/custom-storefronts/hydrogen/getting-started):
 
 - [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
 
@@ -105,7 +105,7 @@ To imitate the behaviour of a SEO robot and show the page content fully from ser
 
 ## Limitations and considerations
 
-The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Hydrogen starter template:
+The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Demo Store template:
 
 - The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources.
 
@@ -116,7 +116,7 @@ The following limitations and considerations apply to the [XML sitemap](https://
 
 - The sitemap is cached for 24 hours.
 
-- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Hydrogen starter template URL structure, which is based on resource's handle.
+- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Demo Store template URL structure, which is based on resource's handle.
 
 ## Next steps
 

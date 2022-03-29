@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/hooks/useParsedMetafields and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/hooks/useParsedMetafields and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `useParsedMetafields` hook transforms a [MetafieldConnection](/api/storefront/reference/common-objects/metafieldconnection)
 in an array of metafields whose `values` have been parsed according to the metafield `type`.
@@ -24,6 +24,14 @@ export function Product(product) {
   );
 }
 ```
+
+## Arguments
+
+This hook takes a single object with the following key:
+
+| Key         | Type                                                  | Description                                                                            |
+| ----------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| metafields? | <code>PartialDeep&#60;MetafieldConnection&#62;</code> | A [MetafieldConnection](/api/storefront/reference/common-objects/metafieldconnection). |
 
 ## Return type
 

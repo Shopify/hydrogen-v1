@@ -1,15 +1,15 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {flattenConnection} from '../../utilities';
-import {
-  SelectedOptions,
-  SellingPlanGroup,
+import {SelectedOptions, ProductOptionsHookValue} from './types';
+import {getOptions, getSelectedVariant} from './helpers';
+import type {
   SellingPlan,
   SellingPlanAllocation,
-  Variant,
-  ProductOptionsHookValue,
-} from './types';
-import {getOptions, getSelectedVariant} from './helpers';
-import {GraphQLConnection} from '../../types';
+  ProductVariantConnection,
+  SellingPlanGroupConnection,
+  ProductVariant as ProductVariantType,
+} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 /**
  * The `useProductOptions` hook returns an object that enables you to keep track of the
@@ -21,11 +21,11 @@ export function useProductOptions({
   initialVariantId: explicitVariantId,
 }: {
   /** The product's `VariantConnection`. */
-  variants?: GraphQLConnection<Variant>;
+  variants?: PartialDeep<ProductVariantConnection>;
   /** The product's `SellingPlanGroups`. */
-  sellingPlanGroups?: GraphQLConnection<SellingPlanGroup>; // This comes from the Product
+  sellingPlanGroups?: PartialDeep<SellingPlanGroupConnection>; // This comes from the Product
   /** The initially selected variant. */
-  initialVariantId?: Variant['id'] | null;
+  initialVariantId?: ProductVariantType['id'] | null;
 }): ProductOptionsHookValue {
   // The flattened variants
   const variants = useMemo(
@@ -36,6 +36,7 @@ export function useProductOptions({
   // All the options available for a product, based on all the variants
   const options = useMemo(() => getOptions(variants), [variants]);
 
+  // TODO: we have some weird variable shadowing going on here that probably needs to be looked at. This variable is the same name as a prop
   const initialVariantId =
     explicitVariantId === null
       ? (explicitVariantId as null)
@@ -47,7 +48,7 @@ export function useProductOptions({
    * is passed, use that as an initial value.
    */
   const [selectedVariant, setSelectedVariant] = useState<
-    Variant | undefined | null
+    PartialDeep<ProductVariantType> | undefined | null
   >(initialVariantId);
 
   /**
@@ -57,7 +58,7 @@ export function useProductOptions({
   const [selectedOptions, setSelectedOptions] = useState(
     selectedVariant?.selectedOptions
       ? selectedVariant.selectedOptions.reduce((memo, optionSet) => {
-          memo[optionSet.name] = optionSet.value;
+          memo[optionSet?.name ?? ''] = optionSet?.value ?? '';
           return memo;
         }, {} as SelectedOptions)
       : {}
@@ -74,7 +75,7 @@ export function useProductOptions({
 
     const selectedOptions = selectedVariant?.selectedOptions
       ? selectedVariant.selectedOptions.reduce((memo, optionSet) => {
-          memo[optionSet.name] = optionSet.value;
+          memo[optionSet?.name ?? ''] = optionSet?.value ?? '';
           return memo;
         }, {} as SelectedOptions)
       : {};
@@ -145,6 +146,7 @@ export function useProductOptions({
 
   const selectedSellingPlanAllocation = useMemo<
     SellingPlanAllocation | undefined
+    // @ts-ignore The types here are broken on main, need to come back and fix them sometime
   >(() => {
     if (!selectedVariant || !selectedSellingPlan) {
       return;
@@ -157,14 +159,18 @@ export function useProductOptions({
     }
 
     return flattenConnection(selectedVariant.sellingPlanAllocations).find(
+      // @ts-ignore The types here are broken on main, need to come back and fix them sometime
       (allocation) => allocation.sellingPlan.id === selectedSellingPlan.id
     );
   }, [selectedVariant, selectedSellingPlan]);
 
   return {
+    // @ts-ignore The types here are broken on main, need to come back and fix them sometime
     variants,
+    // @ts-ignore The types here are broken on main, need to come back and fix them sometime
     variantsConnection,
     options,
+    // @ts-ignore The types here are broken on main, need to come back and fix them sometime
     selectedVariant,
     setSelectedVariant,
     selectedOptions,
@@ -174,7 +180,9 @@ export function useProductOptions({
     selectedSellingPlan,
     setSelectedSellingPlan,
     selectedSellingPlanAllocation,
+    // @ts-ignore The types here are broken on main, need to come back and fix them sometime
     sellingPlanGroups,
+    // @ts-ignore The types here are broken on main, need to come back and fix them sometime
     sellingPlanGroupsConnection,
   };
 }

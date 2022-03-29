@@ -5,7 +5,6 @@ export type Localization = LocalizationQuery['localization'];
 
 export interface LocalizationContextValue {
   country?: Localization['country'];
-  availableCountries: Localization['availableCountries'];
   setCountry(country: Localization['country']): void;
 }
 

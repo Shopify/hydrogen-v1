@@ -13,10 +13,5 @@ export type LocalizationQuery = {__typename?: 'QueryRoot'} & {
       Types.Country,
       'isoCode' | 'name'
     > & {currency: {__typename?: 'Currency'} & Pick<Types.Currency, 'isoCode'>};
-    availableCountries: Array<
-      {__typename?: 'Country'} & Pick<Types.Country, 'isoCode' | 'name'> & {
-          currency: {__typename?: 'Currency'} & Pick<Types.Currency, 'isoCode'>;
-        }
-    >;
   };
 };

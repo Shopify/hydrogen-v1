@@ -55,6 +55,7 @@ export class ServerComponentRequest extends Request {
     preloadQueries: PreloadQueriesByURL;
     analyticData: any;
     router: RouterContextData;
+    buyerIpHeader?: string;
     [key: string]: any;
   };
 
@@ -64,17 +65,7 @@ export class ServerComponentRequest extends Request {
     if (input instanceof Request) {
       super(input, init);
     } else {
-      super(getUrlFromNodeRequest(input), {
-        headers: new Headers({
-          ...(input.headers as {[key: string]: string}),
-          'x-forwarded-for': input.socket.remoteAddress,
-        }),
-        method: input.method,
-        body:
-          input.method !== 'GET' && input.method !== 'HEAD'
-            ? input.body
-            : undefined,
-      });
+      super(getUrlFromNodeRequest(input), getInitFromNodeRequest(input));
     }
 
     const referer = this.headers.get('referer');
@@ -143,6 +134,15 @@ export class ServerComponentRequest extends Request {
   public savePreloadQueries() {
     preloadCache.set(this.preloadURL, this.ctx.preloadQueries);
   }
+
+  /**
+   * Buyer IP varies by hosting provider and runtime. The developer should provide this
+   * as an argument to the `handleRequest` function for their runtime.
+   * Defaults to `x-forwarded-for` header value.
+   */
+  public getBuyerIp() {
+    return this.headers.get(this.ctx.buyerIpHeader ?? 'x-forwarded-for');
+  }
 }
 
 function mergeMapEntries(
@@ -177,4 +177,21 @@ function getUrlFromNodeRequest(request: any) {
   return new URL(
     `${secure ? 'https' : 'http'}://${request.headers.host! + url}`
   ).toString();
+}
+
+function getInitFromNodeRequest(request: any) {
+  const init = {
+    headers: new Headers(request.headers as {[key: string]: string}),
+    method: request.method,
+    body:
+      request.method !== 'GET' && request.method !== 'HEAD'
+        ? request.body
+        : undefined,
+  };
+
+  if (!init.headers.has('x-forwarded-for')) {
+    init.headers.set('x-forwarded-for', request.socket.remoteAddress);
+  }
+
+  return init;
 }

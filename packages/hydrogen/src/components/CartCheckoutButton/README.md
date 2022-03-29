@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartCheckoutButton and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/CartCheckoutButton and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `CartCheckoutButton` component renders a button that redirects to the checkout URL for the cart.
 
@@ -29,9 +29,9 @@ export class MyComponent() {
 
 ## Props
 
-| Name       | Required | Description            |
-| ---------- | -------- | ---------------------- |
-| `children` | Yes      | A `ReactNode` element. |
+| Name     | Type                   | Description            |
+| -------- | ---------------------- | ---------------------- |
+| children | <code>ReactNode</code> | A `ReactNode` element. |
 
 ## Related components
 

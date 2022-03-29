@@ -19,12 +19,10 @@ import connect, {NextHandleFunction} from 'connect';
 const handleRequest = entrypoint as RequestHandler;
 
 type CreateServerOptions = {
-  port?: number | string;
+  cache?: Cache;
 };
 
-export async function createServer({
-  port = process.env.PORT || 8080,
-}: CreateServerOptions = {}) {
+export async function createServer({cache}: CreateServerOptions = {}) {
   // @ts-ignore
   globalThis.Oxygen = {env: process.env};
 
@@ -44,14 +42,16 @@ export async function createServer({
     hydrogenMiddleware({
       getServerEntrypoint: () => handleRequest,
       indexTemplate,
+      cache,
     })
   );
 
-  return {app, port};
+  return {app};
 }
 
 if (require.main === module) {
-  createServer().then(({app, port}) => {
+  createServer().then(({app}) => {
+    const port = process.env.PORT || 8080;
     app.listen(port, () => {
       console.log(`Hydrogen server running at http://localhost:${port}`);
     });

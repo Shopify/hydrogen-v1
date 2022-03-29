@@ -1,11 +1,12 @@
 import React from 'react';
-import {GraphQLConnection, RawMetafield} from '../../../types';
 import * as hooks from '../useParsedMetafields';
 import {mount} from '@shopify/react-testing';
 import {
   getParsedMetafield,
   getRawMetafield,
 } from '../../../utilities/tests/metafields';
+import type {MetafieldConnection} from '../../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 describe('useParsedMetafields', () => {
   it('returns an array of parsed metafields', () => {
@@ -51,7 +52,7 @@ describe('useParsedMetafields', () => {
 function MyComponent({
   metafields,
 }: {
-  metafields: GraphQLConnection<RawMetafield>;
+  metafields: PartialDeep<MetafieldConnection>;
 }) {
   hooks.useParsedMetafields(metafields);
   return null;

@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/hooks/useCountry and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/hooks/useCountry and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `useCountry` hook returns a tuple of the current localization country and a function for updating it.
 It must be a descendent of a `LocalizationProvider` component.
@@ -50,7 +50,3 @@ This hook returns an array with the following elements:
 ## Related components
 
 - [`LocalizationProvider`](/api/hydrogen/components/localization/localizationprovider)
-
-## Related hooks
-
-- [`useAvailableCountries`](/api/hydrogen/hooks/localization/useavailablecountries)

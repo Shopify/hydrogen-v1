@@ -13,7 +13,7 @@ import type {PartialDeep} from 'type-fest';
 interface ModelViewerProps {
   /** Any ReactNode elements. */
   children?: ReactNode;
-  /** An object with keys that correspond to the Storefront API's [Model3D object](/api/storefront/latest/objects/model3d). */
+  /** An object with fields that correspond to the Storefront API's [Model3D object](/api/storefront/latest/objects/model3d). */
   data: PartialDeep<Model3d>;
   /** A string of either `auto`, `lazy`, or `eager` to indicate the conditions for preloading. Refer to [loading in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-loading). */
   loading?: 'auto' | 'lazy' | 'eager';

@@ -7,12 +7,5 @@ query Localization {
         isoCode
       }
     }
-    availableCountries {
-      isoCode
-      name
-      currency {
-        isoCode
-      }
-    }
   }
 }
