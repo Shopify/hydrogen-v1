@@ -163,7 +163,10 @@ function useCreateShopRequest(body: string, locale?: string) {
 
   const request = useServerRequest();
 
-  const secretToken = Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN;
+  const secretToken =
+    typeof Oxygen !== 'undefined'
+      ? Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN
+      : null;
   const buyerIp = request.getBuyerIp();
 
   return {
