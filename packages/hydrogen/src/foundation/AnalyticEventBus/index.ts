@@ -1,3 +1,3 @@
 export {useServerDatalayer} from './hook';
 
-export * as ClientAnalytics from './ClientAnalytics';
+export {ClientAnalytics} from './ClientAnalytics';
