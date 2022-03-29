@@ -8,12 +8,16 @@ import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
+import {META_ENV_SSR} from '../../foundation/ssr-interop';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
   data: T;
   errors: any;
 }
+
+// Check if the response body has GraphQL errors
+const shouldCacheResponse = (body: any) => !(body?.error || body?.data?.errors);
 
 /**
  * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
@@ -43,7 +47,7 @@ export function useShopQuery<T>({
    */
   preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
-  if (!import.meta.env.SSR) {
+  if (!META_ENV_SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
     );
@@ -61,7 +65,7 @@ export function useShopQuery<T>({
       ? fetchBuilder<UseShopQueryResponse<T>>(url, requestInit)
       : // If no query, avoid calling SFAPI & return nothing
         async () => ({data: undefined as unknown as T, errors: undefined}),
-    {cache, preload}
+    {cache, shouldCacheResponse, preload}
   );
 
   /**
@@ -88,7 +92,8 @@ export function useShopQuery<T>({
    * get returned to the consumer.
    */
   if (data?.errors) {
-    const errors = data.errors instanceof Array ? data.errors : [data.errors];
+    const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
+
     for (const error of errors) {
       if (getConfig().dev) {
         throw new Error(error.message);
@@ -100,7 +105,7 @@ export function useShopQuery<T>({
   }
 
   if (
-    import.meta.env.DEV &&
+    __DEV__ &&
     log.options().showUnusedQueryProperties &&
     query &&
     typeof query !== 'string' &&

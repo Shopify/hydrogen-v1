@@ -58,7 +58,7 @@ export function useServerRequest() {
     // @ts-ignore
     const cache = React.unstable_getCacheForType(requestCacheRSC);
     request = cache ? cache.get(requestCacheRSC.key) : null;
-  } catch (error) {
+  } catch {
     // If RSC cache failed it means this is not an RSC request.
     // Try getting SSR context instead:
     request = useContext(RequestContextSSR);
