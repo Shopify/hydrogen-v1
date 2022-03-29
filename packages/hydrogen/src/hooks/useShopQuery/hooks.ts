@@ -162,12 +162,17 @@ function useCreateShopRequest(body: string, locale?: string) {
   } = useShop();
 
   const request = useServerRequest();
-
   const secretToken =
     typeof Oxygen !== 'undefined'
       ? Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN
       : null;
   const buyerIp = request.getBuyerIp();
+
+  const extraHeaders = {} as Record<string, any>;
+
+  if (buyerIp) {
+    extraHeaders['Shopify-Storefront-Buyer-IP'] = buyerIp;
+  }
 
   return {
     key: [storeDomain, storefrontApiVersion, body, locale],
@@ -177,11 +182,11 @@ function useCreateShopRequest(body: string, locale?: string) {
       method: 'POST',
       headers: {
         'X-Shopify-Storefront-Access-Token': secretToken ?? storefrontToken,
-        'Shopify-Storefront-Buyer-IP': buyerIp ?? '',
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
         'Accept-Language': (locale as string) ?? defaultLocale,
+        ...extraHeaders,
       },
     },
   };
