@@ -8,6 +8,7 @@ import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
+import {META_ENV_SSR} from '../../foundation/ssr-interop';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -46,7 +47,7 @@ export function useShopQuery<T>({
    */
   preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
-  if (!import.meta.env.SSR) {
+  if (!META_ENV_SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
     );
@@ -104,7 +105,7 @@ export function useShopQuery<T>({
   }
 
   if (
-    import.meta.env.DEV &&
+    __DEV__ &&
     log.options().showUnusedQueryProperties &&
     query &&
     typeof query !== 'string' &&
