@@ -22,8 +22,8 @@ export function ShopifyAnalytics() {
       isInit = true;
 
       ClientAnalytics.subscribe('page-view', (payload) => {
-        sendToMonorail(
-          wrapWithMonorailSchema({
+        sendToServer(
+          wrapWithSchema({
             ...buildBasePayload(payload),
             event_name: 'page_rendered',
             event_type: 'page_view',
@@ -32,8 +32,8 @@ export function ShopifyAnalytics() {
       });
 
       ClientAnalytics.subscribe('viewed-product', (payload) => {
-        sendToMonorail(
-          wrapWithMonorailSchema({
+        sendToServer(
+          wrapWithSchema({
             event_name: 'page_rendered',
             event_type: 'viewed_product',
             ...buildBasePayload(payload),
@@ -44,8 +44,8 @@ export function ShopifyAnalytics() {
 
       ClientAnalytics.subscribe('add-to-cart', (payload) => {
         console.log('add to cart', payload);
-        sendToMonorail(
-          wrapWithMonorailSchema({
+        sendToServer(
+          wrapWithSchema({
             event_name: 'cart',
             event_type: 'added_product',
             ...buildBasePayload(payload),
@@ -98,7 +98,7 @@ function formatProductsData(products: any): any {
   return products;
 }
 
-function wrapWithMonorailSchema(payload: any): any {
+function wrapWithSchema(payload: any): any {
   return {
     schema_id: 'customer_event/2.0',
     payload,
@@ -173,7 +173,7 @@ const BATCH_SENT_TIMEOUT = 500;
 let batchedData: any[] = [];
 let batchedTimeout: NodeJS.Timeout | null;
 
-function sendToMonorail(data: any) {
+function sendToServer(data: any) {
   batchedData.push(data);
 
   if (batchedTimeout) {

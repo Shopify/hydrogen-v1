@@ -8,9 +8,7 @@ export function request(
     data.events.forEach((event: any) => {
       event.payload.client_ip_address = request.headers.get('x-forwarded-for');
       event.payload.client_user_agent = request.headers.get('user-agent');
-      console.log(event.payload);
     });
-    console.log(data);
 
     fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
       method: 'post',
