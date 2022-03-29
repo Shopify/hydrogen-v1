@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.2
+
+### Patch Changes
+
+- [#1013](https://github.com/Shopify/hydrogen/pull/1013) [`94dc94ae`](https://github.com/Shopify/hydrogen/commit/94dc94aeb9dfd5e0120cab610203fdb4f0c61d3c) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix CORS issue in StackBlitz
+
 ## 0.13.1
 
 ### Patch Changes
