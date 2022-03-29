@@ -2,7 +2,7 @@ import {
   useShopQuery,
   Seo,
   useRouteParams,
-  useServerDatalayer,
+  useServerAnalytics,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -26,7 +26,7 @@ export default function Product({country = {isoCode: 'US'}}) {
 
   const displayedVariant = product.variants.edges[0].node;
 
-  useServerDatalayer({
+  useServerAnalytics({
     publishEventsOnNavigate: ['viewed-product'],
     products: [
       {
