@@ -21,7 +21,6 @@ If you're using the default server entry point in the `build:server` script (`@s
 const {createServer} = require('./dist/server');
 
 createServer({
-  port: 8080,
   cache: customCacheImplementation,
 }).then(({app}) => {
   app.use(/* ... */);
@@ -32,7 +31,7 @@ createServer({
 });
 ```
 
-This function accepts a `port` and a [`cache` instance](https://developer.mozilla.org/en-US/docs/Web/API/Cache) as optional parameters.
+This function accepts an optional [`cache` instance](https://developer.mozilla.org/en-US/docs/Web/API/Cache) parameter.
 
 If you want to use a different Node.js framework like [Express](https://expressjs.com/) or [Fastify](https://www.fastify.io/), then create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
 
