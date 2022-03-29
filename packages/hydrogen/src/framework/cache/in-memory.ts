@@ -1,11 +1,16 @@
 import {logCacheApiStatus} from '../../utilities/log';
 
+type CacheMatch = {
+  value: Response;
+  date: Date;
+};
+
 /**
  * This is an in-memory implementation of `Cache` that *barely*
  * works and is only meant to be used during development.
  */
 export class InMemoryCache {
-  private store: Map<string, any>;
+  private store: Map<string, CacheMatch>;
 
   constructor() {
     this.store = new Map();
@@ -29,13 +34,16 @@ export class InMemoryCache {
 
     const {value, date} = match;
 
-    const cacheControl = value.headers.get('cache-control');
-    const maxAge = parseInt(cacheControl.match(/max-age=(\d+)/)[1], 10);
-    const swr = parseInt(
-      cacheControl.match(/stale-while-revalidate=(\d+)/)[1],
+    const cacheControl = value.headers.get('cache-control') || '';
+    const maxAge = parseInt(
+      cacheControl.match(/max-age=(\d+)/)?.[1] || '0',
       10
     );
-    const age = (new Date().valueOf() - date) / 1000;
+    const swr = parseInt(
+      cacheControl.match(/stale-while-revalidate=(\d+)/)?.[1] || '0',
+      10
+    );
+    const age = (new Date().valueOf() - date.valueOf()) / 1000;
 
     const isMiss = age > maxAge + swr;
     if (isMiss) {
@@ -48,7 +56,7 @@ export class InMemoryCache {
 
     const headers = new Headers(value.headers);
     headers.set('cache', isStale ? 'STALE' : 'HIT');
-    headers.set('date', date.toGMTString());
+    headers.set('date', date.toUTCString());
     logCacheApiStatus(headers.get('cache'), request.url);
 
     const response = new Response(value.body, {
@@ -61,5 +69,17 @@ export class InMemoryCache {
   delete(request: Request) {
     this.store.delete(request.url);
     logCacheApiStatus('DELETE', request.url);
+  }
+
+  keys(request?: Request) {
+    const cacheKeys = [] as Request[];
+
+    for (const url of this.store.keys()) {
+      if (!request || request.url === url) {
+        cacheKeys.push(new Request(url));
+      }
+    }
+
+    return Promise.resolve(cacheKeys);
   }
 }
