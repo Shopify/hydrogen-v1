@@ -20,7 +20,10 @@ If you're using the default server entry point in the `build:server` script (`@s
 ```js
 const {createServer} = require('./dist/server');
 
-createServer().then(({app}) => {
+createServer({
+  port: 8080,
+  cache: customCacheImplementation,
+}).then(({app}) => {
   app.use(/* ... */);
 
   app.listen(3000, () => {
@@ -29,7 +32,9 @@ createServer().then(({app}) => {
 });
 ```
 
-If you want to use a different Node.js framework like [Express](https://expressjs.com/) or [Fastify](https://www.fastify.io/), or if you want to supply a `cache` input to `hydrogenMiddleware` for [production caching](/custom-storefronts/hydrogen/framework/cache#caching-in-production), then create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
+This function accepts a `port` and a [`cache` instance](https://developer.mozilla.org/en-US/docs/Web/API/Cache) as optional parameters.
+
+If you want to use a different Node.js framework like [Express](https://expressjs.com/) or [Fastify](https://www.fastify.io/), then create a new server entry point (for example, `server.js`) and import `hydrogenMiddleware`:
 
 ```js
 import {hydrogenMiddleware} from '@shopify/hydrogen/middleware';

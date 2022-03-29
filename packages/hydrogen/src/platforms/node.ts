@@ -19,10 +19,12 @@ import connect, {NextHandleFunction} from 'connect';
 const handleRequest = entrypoint as RequestHandler;
 
 type CreateServerOptions = {
+  cache?: Cache;
   port?: number | string;
 };
 
 export async function createServer({
+  cache,
   port = process.env.PORT || 8080,
 }: CreateServerOptions = {}) {
   // @ts-ignore
@@ -44,6 +46,7 @@ export async function createServer({
     hydrogenMiddleware({
       getServerEntrypoint: () => handleRequest,
       indexTemplate,
+      cache,
     })
   );
 
