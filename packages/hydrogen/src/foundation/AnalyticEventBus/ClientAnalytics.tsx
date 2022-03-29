@@ -1,5 +1,6 @@
 import {getNamedspacedEventname} from './utils';
 import type {Subscriber, Subscribers, SubscriberFunction} from './types';
+import {isServer} from '../../utilities';
 
 type EventGuard = Record<string, number>;
 
@@ -7,7 +8,20 @@ let subscribers: Subscribers = {};
 let pageAnalyticData: any = {};
 const guardDupEvents: EventGuard = {};
 
+const USAGE_ERROR =
+  'ClientAnalytic should only be used within the useEffect callback or event handlers';
+
+function isInvokedFromServer(): boolean {
+  if (isServer()) {
+    console.warn(USAGE_ERROR);
+    return true;
+  }
+  return false;
+}
+
 function pushToPageAnalyticData(data: any, namespace?: string): void {
+  if (isInvokedFromServer()) return;
+
   if (namespace) {
     pageAnalyticData[namespace] = Object.assign(
       {},
@@ -20,14 +34,20 @@ function pushToPageAnalyticData(data: any, namespace?: string): void {
 }
 
 function getPageAnalyticData(): any {
+  if (isInvokedFromServer()) return;
+
   return pageAnalyticData;
 }
 
 function resetPageAnalyticData(): void {
+  if (isInvokedFromServer()) return;
+
   pageAnalyticData = {};
 }
 
 function publish(eventname: string, guardDup = false, payload?: any) {
+  if (isInvokedFromServer()) return;
+
   const namedspacedEventname = getNamedspacedEventname(eventname);
   const subs = subscribers[namedspacedEventname];
   const combinedPayload = Object.assign({}, pageAnalyticData, payload);
@@ -36,7 +56,6 @@ function publish(eventname: string, guardDup = false, payload?: any) {
   if (guardDup) {
     const eventGuard = guardDupEvents[namedspacedEventname];
     if (eventGuard && Date.now() - eventGuard < 10) {
-      console.log('Client analytic de-dup');
       guardDupEvents[namedspacedEventname] = Date.now();
       return;
     } else {
@@ -55,7 +74,8 @@ function subscribe(
   eventname: string,
   callbackFunction: SubscriberFunction
 ): Subscriber {
-  console.log('Client Subscribe');
+  if (isInvokedFromServer()) return {unsubscribe: () => {}};
+
   const namedspacedEventname = getNamedspacedEventname(eventname);
   const subs = subscribers[namedspacedEventname];
 
