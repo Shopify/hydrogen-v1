@@ -3,7 +3,7 @@ import {
   flattenConnection,
   LocalizationProvider,
   CacheHours,
-  useServerDatalayer,
+  useServerAnalytics,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -29,7 +29,7 @@ export default function Layout({children, hero}) {
   const storeName = data ? data.shop.name : '';
 
   const shopId = data?.shop.id.replace('gid://shopify/Shop/', '');
-  useServerDatalayer({
+  useServerAnalytics({
     shopId,
   });
 

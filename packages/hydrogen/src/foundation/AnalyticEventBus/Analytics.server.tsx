@@ -1,5 +1,5 @@
 import React from 'react';
-import {useServerDatalayer} from './hook';
+import {useServerAnalytics} from './hook';
 import {Analytics as AnalyticsClient} from './Analytics.client';
 import {useServerRequest} from '../ServerRequestProvider';
 
@@ -12,6 +12,6 @@ export function Analytics() {
     if (result instanceof Promise) throw result;
   });
 
-  const analyticData = useServerDatalayer();
+  const analyticData = useServerAnalytics();
   return <AnalyticsClient analyticDataFromServer={analyticData} />;
 }
