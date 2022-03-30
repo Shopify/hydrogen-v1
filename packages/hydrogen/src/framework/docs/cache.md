@@ -136,7 +136,7 @@ public, max-age=1, stale-while-revalidate=9
 
 ## Caching in development
 
-Caching is disabled by default during development.
+Sub-request caching is disabled by default during development.
 
 To enable sub-request caching using an in-memory store, pass `devCache: true` to the second parameter of the Hydrogen Vite plugin:
 
@@ -208,10 +208,6 @@ that built the request and the cache control headers:
 │ query Localization      public, max-age=3600, stale-while-revalidate=82800
 └──
 ```
-
-You can also preview the full-page caching headers in the network tab of your browser’s developer tools. The response header used is `cache-control-preview`.
-
-![A screenshot of the response headers](/assets/custom-storefronts/hydrogen/response-headers.png)
 
 ## Busting query cache on build
 
