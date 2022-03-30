@@ -13,7 +13,7 @@ export default function CountrySelector() {
   const [countries, setCountries] = useState([]);
 
   if (error) {
-    console.error(error);
+    throw error;
   }
 
   useEffect(() => {

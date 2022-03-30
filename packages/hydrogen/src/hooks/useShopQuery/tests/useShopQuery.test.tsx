@@ -74,7 +74,7 @@ describe('useShopQuery', () => {
   });
 
   it('handles GraphQL errors with OK status', async () => {
-    const errorResult = '{"data":{"errors":[{}]}}';
+    const errorResult = '{"errors":[{}]}';
     mockedFetch.mockResolvedValue(new Response(errorResult, {status: 200}));
     const component = await mountComponent();
 
