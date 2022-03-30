@@ -85,6 +85,7 @@ function FeaturedProductsBox({country}) {
               <Link
                 to={`/collections/${featuredProductsCollection.handle}`}
                 className="text-blue-600 hover:underline"
+                prefetch={true}
               >
                 Shop all
               </Link>
@@ -101,6 +102,7 @@ function FeaturedProductsBox({country}) {
             <Link
               to={`/collections/${featuredProductsCollection.handle}`}
               className="text-blue-600"
+              prefetch={true}
             >
               Shop all
             </Link>

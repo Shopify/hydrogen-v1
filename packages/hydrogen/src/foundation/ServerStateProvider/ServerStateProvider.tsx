@@ -20,20 +20,30 @@ export interface ServerState {
   [key: string]: any;
 }
 
+type ServerStateSetterInput =
+  | ((prev: ServerState) => Partial<ServerState>)
+  | Partial<ServerState>
+  | string;
+
 export interface ServerStateSetter {
   (
-    input:
-      | ((prev: ServerState) => Partial<ServerState>)
-      | Partial<ServerState>
-      | string,
+    input: ServerStateSetterInput,
     propValue?: any // Value when using string input
   ): void;
+}
+
+interface ProposedServerStateSetter {
+  (
+    input: ServerStateSetterInput,
+    propValue?: any // Value when using string input
+  ): ServerState;
 }
 
 export interface ServerStateContextValue {
   pending: boolean;
   serverState: ServerState;
   setServerState: ServerStateSetter;
+  getProposedServerState: ProposedServerStateSetter;
 }
 
 export const ServerStateContext = createContext<ServerStateContextValue>(
@@ -63,41 +73,57 @@ export function ServerStateProvider({
        * the `pending` flag also provided by the hook to display in the UI.
        */
       startTransition(() => {
-        return setServerState((prev) => {
-          let newValue: Record<string, any>;
-
-          if (typeof input === 'function') {
-            newValue = input(prev);
-          } else if (typeof input === 'string') {
-            newValue = {[input]: propValue};
-          } else {
-            newValue = input;
-          }
-
-          if (__DEV__) {
-            const privateProp = PRIVATE_PROPS.find((prop) => prop in newValue);
-            if (privateProp) {
-              console.warn(
-                `Custom "${privateProp}" property in server state is ignored. Use a different name.`
-              );
-            }
-          }
-
-          return {
-            ...prev,
-            ...newValue,
-          };
-        });
+        return setServerState((prev) =>
+          getNewServerState(prev, input, propValue)
+        );
       });
     },
     [setServerState, startTransition]
   );
+
+  const getProposedServerStateCallback = useCallback<ProposedServerStateSetter>(
+    (input, propValue) => {
+      return getNewServerState(serverState, input, propValue);
+    },
+    [serverState]
+  );
+
+  function getNewServerState(
+    prev: ServerState,
+    input: ServerStateSetterInput,
+    propValue?: any
+  ) {
+    let newValue: Record<string, any>;
+
+    if (typeof input === 'function') {
+      newValue = input(prev);
+    } else if (typeof input === 'string') {
+      newValue = {[input]: propValue};
+    } else {
+      newValue = input;
+    }
+
+    if (__DEV__) {
+      const privateProp = PRIVATE_PROPS.find((prop) => prop in newValue);
+      if (privateProp) {
+        console.warn(
+          `Custom "${privateProp}" property in server state is ignored. Use a different name.`
+        );
+      }
+    }
+
+    return {
+      ...prev,
+      ...newValue,
+    };
+  }
 
   const value = useMemo(
     () => ({
       pending,
       serverState,
       setServerState: setServerStateCallback,
+      getProposedServerState: getProposedServerStateCallback,
     }),
     [serverState, setServerStateCallback, pending]
   );

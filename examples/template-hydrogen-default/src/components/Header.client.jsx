@@ -45,6 +45,7 @@ export default function Header({collections, storeName}) {
             <Link
               className="font-black uppercase text-3xl tracking-widest"
               to="/"
+              prefetch={true}
             >
               {storeName}
             </Link>

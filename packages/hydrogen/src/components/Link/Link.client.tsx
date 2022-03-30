@@ -1,7 +1,9 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useRouter} from '../../foundation/Router/BrowserRouter.client';
 import {createPath} from 'history';
 import {useNavigate} from '../../foundation/useNavigate/useNavigate';
+import {useServerState} from '../../foundation/useServerState';
+import {RSC_PATHNAME} from '../../constants';
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -13,6 +15,8 @@ export interface LinkProps
   clientState?: any;
   /** Whether to reload the whole document on navigation. */
   reloadDocument?: boolean;
+  /** Whether to prefetch the link source when the user signals intent. */
+  prefetch?: boolean;
 }
 
 /**
@@ -24,6 +28,13 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   function Link(props, ref) {
     const navigate = useNavigate();
     const {location} = useRouter();
+
+    /**
+     * Inspired by Remix's Link component
+     */
+    const [shouldPrefetch, setShouldPrefetch] = useState(false);
+    const [maybePrefetch, setMaybePrefetch] = useState(false);
+
     const {
       reloadDocument,
       target,
@@ -31,6 +42,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       to,
       onClick,
       clientState,
+      prefetch,
     } = props;
 
     const internalClick = useCallback(
@@ -57,18 +69,113 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       [reloadDocument, target, _replace, to, clientState, onClick, location]
     );
 
+    const signalPrefetchIntent = () => {
+      if (prefetch) {
+        setMaybePrefetch(true);
+      }
+    };
+
+    const cancelPrefetchIntent = () => {
+      if (prefetch) {
+        setMaybePrefetch(false);
+      }
+    };
+
+    /**
+     * Wrapping `maybePrefetch` inside useEffect allows the user to quickly graze over
+     * a link without triggering a prefetch.
+     */
+    useEffect(() => {
+      if (maybePrefetch) {
+        const id = setTimeout(() => {
+          setShouldPrefetch(true);
+        }, 100);
+
+        return () => {
+          clearTimeout(id);
+        };
+      }
+    });
+
+    const onMouseEnter = composeEventHandlers(
+      props.onMouseEnter,
+      signalPrefetchIntent
+    );
+    const onMouseLeave = composeEventHandlers(
+      props.onMouseLeave,
+      cancelPrefetchIntent
+    );
+    const onFocus = composeEventHandlers(props.onFocus, signalPrefetchIntent);
+    const onBlur = composeEventHandlers(props.onBlur, cancelPrefetchIntent);
+
     return (
-      <a
-        {...without(props, ['to', 'replace', 'clientState', 'reloadDocument'])}
-        ref={ref}
-        onClick={internalClick}
-        href={props.to}
-      >
-        {props.children}
-      </a>
+      <>
+        <a
+          {...without(props, [
+            'to',
+            'replace',
+            'clientState',
+            'reloadDocument',
+            'prefetch',
+            'onMouseEnter',
+            'onMouseLeave',
+            'onFocus',
+            'onBlur',
+          ])}
+          ref={ref}
+          onClick={internalClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          href={props.to}
+        >
+          {props.children}
+        </a>
+        {shouldPrefetch && <Prefetch pathname={to} />}
+      </>
     );
   }
 );
+
+function Prefetch({pathname}: {pathname: string}) {
+  const {getProposedServerState} = useServerState();
+  const {location} = useRouter();
+
+  const newPath = createPath({pathname});
+
+  if (pathname.startsWith('http://') || newPath === createPath(location)) {
+    return null;
+  }
+
+  const newLocation = new URL(newPath, window.location.href);
+  const proposedServerState = getProposedServerState({
+    pathname: newLocation.pathname,
+    search: newLocation.search || undefined,
+  });
+  const href =
+    `${RSC_PATHNAME}?state=` +
+    encodeURIComponent(JSON.stringify(proposedServerState));
+
+  return <link rel="prefetch" as="fetch" href={href} />;
+}
+
+/**
+ * Credit: Remix's <Link> component.
+ */
+export function composeEventHandlers<
+  EventType extends React.SyntheticEvent | Event
+>(
+  theirHandler: ((event: EventType) => any) | undefined,
+  ourHandler: (event: EventType) => any
+): (event: EventType) => any {
+  return (event) => {
+    theirHandler && theirHandler(event);
+    if (!event.defaultPrevented) {
+      ourHandler(event);
+    }
+  };
+}
 
 function isModifiedEvent(event: React.MouseEvent) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
