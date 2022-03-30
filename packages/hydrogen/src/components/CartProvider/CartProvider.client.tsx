@@ -327,10 +327,14 @@ export function CartProvider({
 
       if (data?.cartCreate?.cart) {
         if (cart.lines) {
-          ClientAnalytics.publish('add-to-cart', true, {
-            addedCartLines: cart.lines,
-            cart: data.cartCreate.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.ADD_TO_CART,
+            true,
+            {
+              addedCartLines: cart.lines,
+              cart: data.cartCreate.cart,
+            }
+          );
         }
         dispatch({
           type: 'resolve',
@@ -372,10 +376,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesAdd?.cart) {
-          ClientAnalytics.publish('add-to-cart', true, {
-            addedCartLines: lines,
-            cart: data.cartLinesAdd.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.ADD_TO_CART,
+            true,
+            {
+              addedCartLines: lines,
+              cart: data.cartLinesAdd.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesAdd.cart),
@@ -414,10 +422,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesRemove?.cart) {
-          ClientAnalytics.publish('remove-from-cart', true, {
-            removedCartLines: lines,
-            cart: data.cartLinesRemove.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.REMOVE_FROM_CART,
+            true,
+            {
+              removedCartLines: lines,
+              cart: data.cartLinesRemove.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesRemove.cart),
@@ -455,10 +467,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesUpdate?.cart) {
-          ClientAnalytics.publish('update-cart', true, {
-            updatedCartLines: lines,
-            oldCart: state.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.UPDATE_CART,
+            true,
+            {
+              updatedCartLines: lines,
+              cart: data.cartLinesUpdate.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesUpdate.cart),
@@ -614,10 +630,14 @@ export function CartProvider({
         }
 
         if (data?.cartDiscountCodesUpdate?.cart) {
-          ClientAnalytics.publish('discount-code-updated', true, {
-            updatedDiscountCodes: discountCodes,
-            cart: data.cartDiscountCodesUpdate.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+            true,
+            {
+              updatedDiscountCodes: discountCodes,
+              cart: data.cartDiscountCodesUpdate.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartDiscountCodesUpdate.cart),

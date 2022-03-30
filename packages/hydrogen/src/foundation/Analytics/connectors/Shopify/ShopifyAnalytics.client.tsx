@@ -24,8 +24,9 @@ export function ShopifyAnalytics() {
 
     if (!isInit) {
       isInit = true;
+      const eventNames = ClientAnalytics.eventNames;
 
-      ClientAnalytics.subscribe('page-view', (payload) => {
+      ClientAnalytics.subscribe(eventNames.PAGE_VIEW, (payload) => {
         sendToServer(
           wrapWithSchema({
             ...buildBasePayload(payload),
@@ -35,7 +36,7 @@ export function ShopifyAnalytics() {
         );
       });
 
-      ClientAnalytics.subscribe('viewed-product', (payload) => {
+      ClientAnalytics.subscribe(eventNames.VIEWED_PRODUCT, (payload) => {
         sendToServer(
           wrapWithSchema({
             event_name: 'page_rendered',
@@ -46,7 +47,7 @@ export function ShopifyAnalytics() {
         );
       });
 
-      ClientAnalytics.subscribe('add-to-cart', (payload) => {
+      ClientAnalytics.subscribe(eventNames.ADD_TO_CART, (payload) => {
         sendToServer(
           wrapWithSchema({
             event_name: 'cart',
@@ -60,20 +61,27 @@ export function ShopifyAnalytics() {
         );
       });
 
-      ClientAnalytics.subscribe('update-cart', (payload) => {
-        const oldCartLines = flattenCartLines(payload.oldCart.lines);
-        payload.updatedCartLines.forEach((line: any) => {
-          if (line.quantity > oldCartLines[line.id].quantity) {
-            sendToServer(
-              wrapWithSchema({
-                event_name: 'cart',
-                event_type: 'added_product',
-                ...buildBasePayload(payload),
-                products: formatProductData([line], oldCartLines),
-              })
-            );
-          }
-        });
+      ClientAnalytics.subscribe(eventNames.UPDATE_CART, (payload) => {
+        try {
+          const oldCartLines = flattenCartLines(payload.oldCart.lines);
+          payload.updatedCartLines.forEach((line: any) => {
+            if (line.quantity > oldCartLines[line.id].quantity) {
+              sendToServer(
+                wrapWithSchema({
+                  event_name: 'cart',
+                  event_type: 'added_product',
+                  ...buildBasePayload(payload),
+                  products: formatProductData([line], oldCartLines),
+                })
+              );
+            }
+          });
+        } catch (error) {
+          console.warn(
+            `Error Shopify analytics: ${eventNames.UPDATE_CART}`,
+            error
+          );
+        }
       });
     }
   });
