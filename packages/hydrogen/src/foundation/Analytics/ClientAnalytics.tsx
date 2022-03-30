@@ -1,6 +1,7 @@
 import {getNamedspacedEventname} from './utils';
 import type {Subscriber, Subscribers, SubscriberFunction} from './types';
 import {isServer} from '../../utilities';
+import {eventNames} from './const';
 
 type EventGuard = Record<string, NodeJS.Timeout>;
 
@@ -106,4 +107,5 @@ export const ClientAnalytics = {
   resetPageAnalyticData,
   publish,
   subscribe,
+  eventNames,
 };

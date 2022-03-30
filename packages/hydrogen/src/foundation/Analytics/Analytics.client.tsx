@@ -33,7 +33,7 @@ export function Analytics({
     }
 
     ClientAnalytics.pushToPageAnalyticData(analyticDataFromServer);
-    ClientAnalytics.publish('page-view', true);
+    ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true);
     if (analyticDataFromServer.publishEventsOnNavigate) {
       analyticDataFromServer.publishEventsOnNavigate.forEach(
         (eventName: string) => {
