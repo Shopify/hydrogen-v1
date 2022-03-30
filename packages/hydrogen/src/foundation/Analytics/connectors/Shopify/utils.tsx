@@ -53,3 +53,15 @@ export function hexTime(): string {
 
   return zeros.substr(0, 8 - output.length) + output;
 }
+
+export function addDataIf(
+  keyValuePairs: Record<string, string>,
+  formattedData: any
+): any {
+  Object.entries(keyValuePairs).forEach(([key, value]) => {
+    if (value) {
+      formattedData[key] = value;
+    }
+  });
+  return formattedData;
+}

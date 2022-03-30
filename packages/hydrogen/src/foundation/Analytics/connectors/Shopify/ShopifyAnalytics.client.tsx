@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
 import {ClientAnalytics} from '../../index';
-import {stripGId} from '../../utils';
+import {formatProductsData, formatCartProductsData} from './cart-utils';
 import {getClientId} from './UniqueIdManager.client';
-import {buildUUID} from './utils';
+import {buildUUID, addDataIf} from './utils';
 
 const APP = 'hydrogen';
 let isInit = false;
@@ -43,7 +43,6 @@ export function ShopifyAnalytics() {
       });
 
       ClientAnalytics.subscribe('add-to-cart', (payload) => {
-        console.log('add to cart', payload);
         sendToServer(
           wrapWithSchema({
             event_name: 'cart',
@@ -62,42 +61,6 @@ export function ShopifyAnalytics() {
   return null;
 }
 
-function formatCartProductsData(cartLines: any[], cart: any): any[] {
-  let products: any[] = [];
-  const cartItems = flattenCartLines(cart.lines.edges);
-  cartLines.forEach((product) => {
-    const variant = cartItems[product.merchandiseId];
-    products.push({
-      product_gid: variant.product.product_gid,
-      name: variant.product.title,
-      brand: variant.product.vendor,
-      variant_gid: variant.id,
-      variant: variant.title,
-      quantity: product.quantity,
-      price: variant.priceV2.amount,
-      currency: variant.priceV2.currencyCode,
-    });
-  });
-  return products;
-}
-
-function flattenCartLines(lines: any): Record<string, any> {
-  const products: Record<string, any> = {};
-  lines.forEach((line: any) => {
-    const product: any = line.node.merchandise;
-    products[product.id] = product;
-  });
-  return products;
-}
-
-function formatProductsData(products: any): any {
-  products.forEach((product: any) => {
-    product.id = stripGId(product.product_gid);
-    product.variant_id = stripGId(product.variant_gid);
-  });
-  return products;
-}
-
 function wrapWithSchema(payload: any): any {
   return {
     schema_id: 'customer_event/2.0',
@@ -114,14 +77,15 @@ function buildBasePayload(payload: any): any {
 
     // 'api_client_id': '?',
     channel: APP,
-    // sub_channel: payload.shopName, // storefront id
+    // sub_channel: // storefront id - from env
 
     currency: payload.currency,
     page_id: payload.shopify.pageId,
     page_url: document.location.href,
     normalized_page_url: `${document.location.origin}${document.location.pathname}`,
     query_params: document.location.search,
-    // 'canonical_page_url': '',
+    canonical_page_url: payload.canonicalPageUrl,
+    // search_string
     referrer: document.referrer,
 
     client_id: payload.shopify.clientId,
@@ -157,18 +121,6 @@ function buildBasePayload(payload: any): any {
   return formattedData;
 }
 
-function addDataIf(
-  keyValuePair: Record<string, string>,
-  formattedData: any
-): any {
-  Object.entries(keyValuePair).forEach(([key, value]) => {
-    if (value) {
-      formattedData[key] = value;
-    }
-  });
-  return formattedData;
-}
-
 const BATCH_SENT_TIMEOUT = 500;
 let batchedData: any[] = [];
 let batchedTimeout: NodeJS.Timeout | null;
@@ -192,9 +144,7 @@ function sendToServer(data: any) {
     batchedData = [];
     batchedTimeout = null;
 
-    console.log('monorail timeout', batchedDataToBeSent);
-
-    // Publish to server
+    // Send to server
     try {
       fetch('/__event?Shopify', {
         method: 'post',
@@ -205,7 +155,14 @@ function sendToServer(data: any) {
         body: JSON.stringify(batchedDataToBeSent),
       });
     } catch (error) {
-      console.log(error);
+      // Fallback to client-side
+      fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
+        method: 'post',
+        headers: {
+          'content-type': 'text/plain',
+        },
+        body: JSON.stringify(batchedDataToBeSent),
+      });
     }
   }, BATCH_SENT_TIMEOUT);
 }

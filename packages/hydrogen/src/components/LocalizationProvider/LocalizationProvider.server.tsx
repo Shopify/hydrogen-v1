@@ -4,6 +4,7 @@ import {useShopQuery} from '../../hooks/useShopQuery';
 import {LocalizationQuery} from './LocalizationQuery';
 import {CacheDays} from '../../framework/CachingStrategy';
 import {PreloadOptions} from '../../types';
+import {useServerAnalytics} from '../../foundation/Analytics';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
@@ -31,6 +32,10 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
     query: query,
     cache: CacheDays(),
     preload: props.preload,
+  });
+
+  useServerAnalytics({
+    currency: localization.country.currency.isoCode,
   });
 
   return (

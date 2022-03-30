@@ -13,7 +13,3 @@ export function getNamedspacedEventname(eventname: string): string {
     ? `c-${eventname}`
     : eventname;
 }
-
-export function stripGId(text: string): string {
-  return text.substring(text.lastIndexOf('/') + 1);
-}

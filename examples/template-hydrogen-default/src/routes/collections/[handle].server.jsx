@@ -1,4 +1,9 @@
-import {useShopQuery, flattenConnection, Seo} from '@shopify/hydrogen';
+import {
+  useShopQuery,
+  flattenConnection,
+  Seo,
+  useServerAnalytics,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
@@ -27,6 +32,13 @@ export default function Collection({
   }
 
   const collection = data.collection;
+
+  useServerAnalytics({
+    canonicalPageUrl: `/collections/${handle}`,
+    collectionName: collection.title,
+    collectionId: collection.id,
+  });
+
   const products = flattenConnection(collection.products);
   const hasNextPage = data.collection.products.pageInfo.hasNextPage;
 
@@ -65,6 +77,7 @@ const QUERY = gql`
     $numProducts: Int!
   ) @inContext(country: $country) {
     collection(handle: $handle) {
+      id
       title
       descriptionHtml
       description

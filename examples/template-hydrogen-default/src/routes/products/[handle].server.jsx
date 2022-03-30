@@ -28,6 +28,7 @@ export default function Product({country = {isoCode: 'US'}}) {
 
   useServerAnalytics({
     publishEventsOnNavigate: ['viewed-product'],
+    canonicalPageUrl: `/products/${handle}`,
     products: [
       {
         product_gid: product.id,
