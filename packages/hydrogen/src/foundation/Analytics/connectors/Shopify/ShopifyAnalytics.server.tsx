@@ -10,14 +10,14 @@ export function request(
       event.payload.client_user_agent = request.headers.get('user-agent');
     });
 
-    fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
-      method: 'post',
-      headers: {
-        'content-type': 'text/plain',
-      },
-      body: JSON.stringify(data),
-    }).catch((error) => {
-      // send to bugsnag? oxygen?
-    });
+    // fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
+    //   method: 'post',
+    //   headers: {
+    //     'content-type': 'text/plain',
+    //   },
+    //   body: JSON.stringify(data),
+    // }).catch((error) => {
+    //   // send to bugsnag? oxygen?
+    // });
   }
 }
