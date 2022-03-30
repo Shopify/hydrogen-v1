@@ -107,6 +107,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     );
     const onFocus = composeEventHandlers(props.onFocus, signalPrefetchIntent);
     const onBlur = composeEventHandlers(props.onBlur, cancelPrefetchIntent);
+    const onTouchStart = composeEventHandlers(
+      props.onTouchStart,
+      cancelPrefetchIntent
+    );
 
     return (
       <>
@@ -121,6 +125,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             'onMouseLeave',
             'onFocus',
             'onBlur',
+            'onTouchStart',
           ])}
           ref={ref}
           onClick={internalClick}
@@ -128,6 +133,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           onMouseLeave={onMouseLeave}
           onFocus={onFocus}
           onBlur={onBlur}
+          onTouchStart={onTouchStart}
           href={props.to}
         >
           {props.children}
