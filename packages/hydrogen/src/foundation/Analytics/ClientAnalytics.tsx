@@ -56,21 +56,24 @@ function publish(eventname: string, guardDup = false, payload?: any) {
   if (guardDup) {
     const eventGuardTimeout = guardDupEvents[namedspacedEventname];
 
-    clearTimeout(eventGuardTimeout);
+    if (eventGuardTimeout) {
+      clearTimeout(eventGuardTimeout);
+    }
+
     const namespacedTimeout = setTimeout(() => {
-      if (subs) {
-        Object.keys(subs).forEach((key) => {
-          subs[key](combinedPayload);
-        });
-      }
+      publishEvent(subs, combinedPayload);
     }, 100);
     guardDupEvents[namedspacedEventname] = namespacedTimeout;
   } else {
-    if (subs) {
-      Object.keys(subs).forEach((key) => {
-        subs[key](combinedPayload);
-      });
-    }
+    publishEvent(subs, combinedPayload);
+  }
+}
+
+function publishEvent(subs: Record<string, SubscriberFunction>, payload: any) {
+  if (subs) {
+    Object.keys(subs).forEach((key) => {
+      subs[key](payload);
+    });
   }
 }
 
