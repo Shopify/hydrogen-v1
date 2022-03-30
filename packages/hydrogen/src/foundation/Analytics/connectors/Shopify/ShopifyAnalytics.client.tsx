@@ -1,6 +1,11 @@
 import {useEffect} from 'react';
 import {ClientAnalytics} from '../../index';
-import {formatProductsData, formatCartProductsData} from './cart-utils';
+import {
+  formatProductsData,
+  formatCartProductsData,
+  flattenCartLines,
+  formatProductData,
+} from './cart-utils';
 import {getClientId} from './UniqueIdManager.client';
 import {buildUUID, addDataIf} from './utils';
 
@@ -9,7 +14,6 @@ let isInit = false;
 
 export function ShopifyAnalytics() {
   useEffect(() => {
-    ClientAnalytics.resetPageAnalyticData();
     ClientAnalytics.pushToPageAnalyticData(
       {
         pageId: buildUUID(),
@@ -55,8 +59,24 @@ export function ShopifyAnalytics() {
           })
         );
       });
+
+      ClientAnalytics.subscribe('update-cart', (payload) => {
+        const oldCartLines = flattenCartLines(payload.oldCart.cart.lines);
+        payload.updatedCartLines.forEach((line: any) => {
+          if (line.quantity > oldCartLines[line.id].quantity) {
+            sendToServer(
+              wrapWithSchema({
+                event_name: 'cart',
+                event_type: 'added_product',
+                ...buildBasePayload(payload),
+                products: formatProductData([line], oldCartLines),
+              })
+            );
+          }
+        });
+      });
     }
-  }, [isInit]);
+  });
 
   return null;
 }

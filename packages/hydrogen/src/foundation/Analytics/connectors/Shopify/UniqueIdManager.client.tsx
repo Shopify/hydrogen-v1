@@ -93,7 +93,7 @@ function writeForDomain(
 }
 
 function isMyshopifyDotComHost(): boolean {
-  return location.hostname.indexOf(myShopifyDomain) !== -1;
+  return window.location.hostname.indexOf(myShopifyDomain) !== -1;
 }
 
 function generateShopifyDValue(): string {

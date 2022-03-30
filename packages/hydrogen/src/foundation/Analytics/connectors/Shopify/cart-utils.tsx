@@ -3,10 +3,14 @@ export function stripGId(text: string): string {
 }
 
 export function formatCartProductsData(cartLines: any[], cart: any): any[] {
+  const cartItems = flattenProductLines(cart.lines.edges);
+  return formatProductData(cartLines, cartItems);
+}
+
+export function formatProductData(cartLines: any[], cartItems: any): any[] {
   let products: any[] = [];
-  const cartItems = flattenCartLines(cart.lines.edges);
   cartLines.forEach((product) => {
-    const variant = cartItems[product.merchandiseId];
+    const variant = cartItems[product.merchandiseId || product.id];
     products.push({
       product_gid: variant.product.product_gid,
       name: variant.product.title,
@@ -21,11 +25,23 @@ export function formatCartProductsData(cartLines: any[], cart: any): any[] {
   return products;
 }
 
-export function flattenCartLines(lines: any): Record<string, any> {
+export function flattenProductLines(lines: any): Record<string, any> {
   const products: Record<string, any> = {};
   lines.forEach((line: any) => {
     const product: any = line.node.merchandise;
     products[product.id] = product;
+  });
+  return products;
+}
+
+export function flattenCartLines(lines: any): Record<string, any> {
+  const products: Record<string, any> = {};
+  lines.forEach((line: any) => {
+    const product: any = line.merchandise;
+    products[line.id] = {
+      ...product,
+      quantity: line.quantity,
+    };
   });
   return products;
 }
