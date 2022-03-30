@@ -90,16 +90,17 @@ describe('analytics', () => {
 
   it('should emit added_product event', async () => {
     const productPath = '/products/snowboard';
+    const newPage = await hydrogen.newPage();
     // page load
     await Promise.all([
-      hydrogen.page.waitForRequest(analyticEndpoint),
-      hydrogen.visit(productPath),
+      newPage.waitForRequest(analyticEndpoint),
+      newPage.goto(hydrogen.url(productPath)),
     ]);
 
     // On add to cart
     const [request] = await Promise.all([
-      hydrogen.page.waitForRequest(analyticEndpoint),
-      hydrogen.page.locator('button:has-text("Add to bag")').click(),
+      newPage.waitForRequest(analyticEndpoint),
+      newPage.locator('button:has-text("Add to bag")').click(),
     ]);
 
     const analyticEvent = request.postDataJSON().events[0].payload;
@@ -116,6 +117,47 @@ describe('analytics', () => {
       variant_gid: 'gid://shopify/ProductVariant/41007289630776',
       variant: 'Morning / 154',
       quantity: 1,
+      price: '600.0',
+      currency: 'USD',
+    });
+  }, 60000);
+
+  it('should emit added_product event on updating cart', async () => {
+    const productPath = '/products/snowboard';
+    const newPage = await hydrogen.newPage();
+    // page load
+    await Promise.all([
+      newPage.waitForRequest(analyticEndpoint),
+      newPage.goto(hydrogen.url(productPath)),
+    ]);
+
+    // Add an item to cart
+    await Promise.all([
+      newPage.waitForRequest(analyticEndpoint),
+      newPage.locator('button:has-text("Add to bag")').click(),
+    ]);
+
+    // Open cart menu and click on increase quantity button
+    const [request] = await Promise.all([
+      newPage.waitForRequest(analyticEndpoint),
+      newPage.locator('button[aria-controls="cart"]').click(),
+      newPage.locator('button[aria-label="Increase quantity"]').click(),
+    ]);
+
+    const analyticEvent = request.postDataJSON().events[0].payload;
+    expect(request.url()).toEqual(analyticEndpoint);
+    expect(analyticEvent.event_type).toEqual('added_product');
+    expect(analyticEvent.normalized_page_url).toEqual(
+      hydrogen.url(productPath),
+    );
+
+    const addedProduct = analyticEvent.products[0];
+    expect(addedProduct).toEqual({
+      name: 'The Hydrogen',
+      brand: 'Snowdevil',
+      variant_gid: 'gid://shopify/ProductVariant/41007289630776',
+      variant: 'Morning / 154',
+      quantity: 2,
       price: '600.0',
       currency: 'USD',
     });

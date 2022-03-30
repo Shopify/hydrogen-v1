@@ -11,6 +11,10 @@ export async function startHydrogenServer() {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
+  const newPage = async () => {
+    return await browser.newPage();
+  };
+
   const cleanUp = async () => {
     await browser.close();
     await app.server.close();
@@ -20,7 +24,7 @@ export async function startHydrogenServer() {
 
   const visit = async (pathname: string) => page.goto(url(pathname));
 
-  return {url, page, cleanUp, visit, watchForUpdates: () => {}};
+  return {url, page, newPage, cleanUp, visit, watchForUpdates: () => {}};
 }
 
 async function createNodeServer() {
