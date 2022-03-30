@@ -8,7 +8,7 @@ export function Analytics() {
 
   // Make sure all queries have returned before rendering the Analytics server component
   cache.forEach((cacheFn) => {
-    if (cacheFn && cacheFn.call) {
+    if (cacheFn && typeof cacheFn === 'function') {
       const result = cacheFn.call();
       if (result instanceof Promise) throw result;
     }
