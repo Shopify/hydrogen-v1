@@ -457,7 +457,7 @@ export function CartProvider({
         if (data?.cartLinesUpdate?.cart) {
           ClientAnalytics.publish('update-cart', true, {
             updatedCartLines: lines,
-            oldCart: state,
+            oldCart: state.cart,
           });
           dispatch({
             type: 'resolve',

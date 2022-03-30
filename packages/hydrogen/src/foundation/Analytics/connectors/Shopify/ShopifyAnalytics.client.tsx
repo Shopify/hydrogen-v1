@@ -61,7 +61,7 @@ export function ShopifyAnalytics() {
       });
 
       ClientAnalytics.subscribe('update-cart', (payload) => {
-        const oldCartLines = flattenCartLines(payload.oldCart.cart.lines);
+        const oldCartLines = flattenCartLines(payload.oldCart.lines);
         payload.updatedCartLines.forEach((line: any) => {
           if (line.quantity > oldCartLines[line.id].quantity) {
             sendToServer(
