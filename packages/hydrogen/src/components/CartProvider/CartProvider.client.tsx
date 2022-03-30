@@ -472,7 +472,7 @@ export function CartProvider({
             true,
             {
               updatedCartLines: lines,
-              cart: data.cartLinesUpdate.cart,
+              oldCart: state.cart,
             }
           );
           dispatch({
