@@ -94,8 +94,10 @@ function wrapWithSchema(payload: any): any {
 function buildBasePayload(payload: any): any {
   let formattedData = {
     shop_id: payload.shopId,
-
-    // 'api_client_id': '?',
+    event_id: buildUUID(),
+    event_time: Date.now(),
+    event_source: APP,
+    api_client_id: '?', // TBD
     channel: APP,
     // sub_channel: // storefront id - from env
 
@@ -111,10 +113,6 @@ function buildBasePayload(payload: any): any {
     client_id: payload.shopify.clientId,
     client_id_type: 'shopify_y',
     // 'is_persistent_cookie': 'figure out how to determine this', // tbd
-
-    event_id: buildUUID(),
-    event_time: Date.now(),
-    event_source: APP,
   };
 
   formattedData = addDataIf(
