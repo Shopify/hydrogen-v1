@@ -41,6 +41,10 @@ export function Analytics({
         }
       );
     }
+
+    return function cleanup() {
+      ClientAnalytics.resetPageAnalyticData();
+    };
   }, [analyticDataFromServer]);
 
   return null;
