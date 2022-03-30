@@ -17,7 +17,8 @@ export interface UseShopQueryResponse<T> {
 }
 
 // Check if the response body has GraphQL errors
-const shouldCacheResponse = (body: any) => !(body?.error || body?.data?.errors);
+// https://spec.graphql.org/June2018/#sec-Response-Format
+const shouldCacheResponse = (body: any) => !body?.errors;
 
 /**
  * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
@@ -162,12 +163,17 @@ function useCreateShopRequest(body: string, locale?: string) {
   } = useShop();
 
   const request = useServerRequest();
-
   const secretToken =
     typeof Oxygen !== 'undefined'
       ? Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN
       : null;
   const buyerIp = request.getBuyerIp();
+
+  const extraHeaders = {} as Record<string, any>;
+
+  if (buyerIp) {
+    extraHeaders['Shopify-Storefront-Buyer-IP'] = buyerIp;
+  }
 
   return {
     key: [storeDomain, storefrontApiVersion, body, locale],
@@ -177,11 +183,11 @@ function useCreateShopRequest(body: string, locale?: string) {
       method: 'POST',
       headers: {
         'X-Shopify-Storefront-Access-Token': secretToken ?? storefrontToken,
-        'Shopify-Storefront-Buyer-IP': buyerIp ?? '',
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
         'Accept-Language': (locale as string) ?? defaultLocale,
+        ...extraHeaders,
       },
     },
   };
