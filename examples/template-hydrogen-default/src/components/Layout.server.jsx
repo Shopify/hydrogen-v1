@@ -31,7 +31,6 @@ export default function Layout({children, hero}) {
   const shopId = data?.shop.id.replace('gid://shopify/Shop/', '');
   useServerAnalytics({
     shopId,
-    shopName: storeName,
   });
 
   return (
