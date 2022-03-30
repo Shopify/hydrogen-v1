@@ -2,7 +2,7 @@ import {getNamedspacedEventname} from './utils';
 import type {Subscriber, Subscribers, SubscriberFunction} from './types';
 import {isServer} from '../../utilities';
 
-type EventGuard = Record<string, number>;
+type EventGuard = Record<string, NodeJS.Timeout>;
 
 const subscribers: Subscribers = {};
 let pageAnalyticData: any = {};
@@ -54,19 +54,23 @@ function publish(eventname: string, guardDup = false, payload?: any) {
 
   // De-dup events due to re-renders
   if (guardDup) {
-    const eventGuard = guardDupEvents[namedspacedEventname];
-    if (eventGuard && Date.now() - eventGuard < 10) {
-      guardDupEvents[namedspacedEventname] = Date.now();
-      return;
-    } else {
-      guardDupEvents[namedspacedEventname] = Date.now();
-    }
-  }
+    const eventGuardTimeout = guardDupEvents[namedspacedEventname];
 
-  if (subs) {
-    Object.keys(subs).forEach((key) => {
-      subs[key](combinedPayload);
-    });
+    clearTimeout(eventGuardTimeout);
+    const namespacedTimeout = setTimeout(() => {
+      if (subs) {
+        Object.keys(subs).forEach((key) => {
+          subs[key](combinedPayload);
+        });
+      }
+    }, 100);
+    guardDupEvents[namedspacedEventname] = namespacedTimeout;
+  } else {
+    if (subs) {
+      Object.keys(subs).forEach((key) => {
+        subs[key](combinedPayload);
+      });
+    }
   }
 }
 
