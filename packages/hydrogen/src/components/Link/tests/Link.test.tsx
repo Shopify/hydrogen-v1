@@ -64,6 +64,7 @@ describe('<Link />', () => {
 
   it('updates server state on navigate', (done) => {
     global.window.scrollTo = jest.fn();
+    global.window.__hydrogenConfig = {experimental: {serverComponents: true}};
 
     const setServerState = jest.fn((args) => {
       try {
