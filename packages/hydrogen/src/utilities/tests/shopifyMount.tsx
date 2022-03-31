@@ -6,20 +6,24 @@ import {DEFAULT_LOCALE} from '../../foundation/constants';
 import {ShopifyConfig} from '../../types';
 import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server';
 import {BrowserRouter} from '../../foundation/Router/BrowserRouter.client';
-import {ServerState, ServerStateProvider} from '../../foundation';
+import {
+  LocationServerProps,
+  ServerProps,
+  ServerPropsProvider,
+} from '../../foundation/ServerPropsProvider/ServerPropsProvider';
 
-type SetServerState = React.Dispatch<React.SetStateAction<ServerState>>;
+type SetServerProps = React.Dispatch<React.SetStateAction<ServerProps>>;
 export interface ShopifyProviderOptions {
   shopifyConfig?: Partial<ShopifyConfig>;
-  setServerState?: SetServerState;
-  serverState?: ServerState;
+  setServerProps?: SetServerProps;
+  serverProps?: LocationServerProps;
   history?: BrowserHistory;
 }
 
 export interface ShopifyProviderContext {
   shopifyConfig: ShopifyConfig;
-  setServerState: SetServerState;
-  serverState: ServerState;
+  setServerProps: SetServerProps;
+  serverProps: LocationServerProps;
   history?: BrowserHistory;
 }
 
@@ -29,19 +33,19 @@ export const mountWithProviders = createMount<
 >({
   context: (options) => ({
     shopifyConfig: getShopifyConfig(options.shopifyConfig),
-    setServerState: options.setServerState || ((() => {}) as SetServerState),
-    serverState: options.serverState || {pathname: '', search: ''},
+    setServerProps: options.setServerProps || ((() => {}) as SetServerProps),
+    serverProps: options.serverProps || {pathname: '', search: ''},
     history: options.history,
   }),
-  render: (element, {shopifyConfig, setServerState, serverState, history}) => (
-    <ServerStateProvider
-      setServerState={setServerState}
-      serverState={serverState}
+  render: (element, {shopifyConfig, setServerProps, serverProps, history}) => (
+    <ServerPropsProvider
+      setServerPropsForRsc={setServerProps}
+      initialServerProps={serverProps}
     >
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         <BrowserRouter history={history}>{element}</BrowserRouter>
       </ShopifyProvider>
-    </ServerStateProvider>
+    </ServerPropsProvider>
   ),
 });
 

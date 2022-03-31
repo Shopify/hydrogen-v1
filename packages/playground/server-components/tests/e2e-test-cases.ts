@@ -70,11 +70,21 @@ export default async function testCases({
     expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
-  it('should render server state in client component', async () => {
-    await page.goto(getServerUrl() + '/test-server-state');
-    expect(await page.textContent('h1')).toContain('Test Server State');
-    expect(await page.textContent('#server-state')).toContain(
-      'Pathname: /test-server-state'
+  it('should render server props in client component', async () => {
+    await page.goto(getServerUrl() + '/test-server-props');
+    expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
+      `"props: {}"`
+    );
+
+    await page.click('#update-server-props');
+    expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
+      `"props: {\\"hello\\":\\"world\\"}"`
+    );
+
+    // Navigate events should clear the server props
+    await page.click('#navigate');
+    expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
+      `"props: {}"`
     );
   });
 

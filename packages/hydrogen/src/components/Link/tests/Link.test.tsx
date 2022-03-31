@@ -65,26 +65,28 @@ describe('<Link />', () => {
   it('updates server state on navigate', (done) => {
     global.window.scrollTo = jest.fn();
 
-    const setServerState = jest.fn((args) => {
+    const setServerProps = jest.fn();
+
+    const component = mountWithProviders(
+      <Link to="/products/hydrogen">Link</Link>,
+      {
+        setServerProps,
+      }
+    );
+
+    component.act(() => {
+      component?.domNode?.click();
+    });
+
+    setTimeout(() => {
       try {
-        expect(args()).toEqual({
+        expect(setServerProps).toHaveBeenCalledWith({
           pathname: '/products/hydrogen',
         });
         done();
       } catch (e) {
         done(e);
       }
-    });
-
-    const component = mountWithProviders(
-      <Link to="/products/hydrogen">Link</Link>,
-      {
-        setServerState,
-      }
-    );
-
-    component.act(() => {
-      component?.domNode?.click();
     });
   });
 

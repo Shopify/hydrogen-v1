@@ -1,6 +1,6 @@
 import React, {ReactNode, useMemo, useState, useCallback} from 'react';
 import {LocalizationContext, Localization} from './LocalizationContext.client';
-import {useServerState} from '../../foundation/useServerState';
+import {useServerProps} from '../../foundation/useServerProps';
 
 export default function LocalizationClientProvider({
   localization,
@@ -9,7 +9,7 @@ export default function LocalizationClientProvider({
   children: ReactNode;
   localization: Localization;
 }) {
-  const {setPersistedServerState} = useServerState();
+  const {setServerProps} = useServerProps();
   const [country, setCountry] = useState<Localization['country']>(
     localization.country
   );
@@ -17,9 +17,9 @@ export default function LocalizationClientProvider({
   const setter = useCallback(
     (country: Localization['country']) => {
       setCountry(country);
-      setPersistedServerState('country', country);
+      setServerProps('country', country);
     },
-    [setPersistedServerState]
+    [setServerProps]
   );
 
   const contextValue = useMemo(() => {

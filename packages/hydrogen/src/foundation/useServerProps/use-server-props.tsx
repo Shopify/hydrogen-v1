@@ -1,9 +1,9 @@
 import {useContext} from 'react';
 import {
-  ServerStateContext,
-  ServerStateContextValue,
-} from '../ServerStateProvider';
-import {InternalServerStateContextValue} from '../ServerStateProvider/ServerStateProvider';
+  ServerPropsContext,
+  ServerPropsContextValue,
+  InternalServerPropsContextValue,
+} from '../ServerPropsProvider/ServerPropsProvider';
 
 /**
  * The `useServerState` hook allows you to [manage server state](/custom-storefronts/hydrogen/framework/server-state) when using Hydrogen as a React Server Component framework.
@@ -20,19 +20,18 @@ import {InternalServerStateContextValue} from '../ServerStateProvider/ServerStat
  * | `pending`        | Whether a [transition is pending](https://github.com/reactwg/react-18/discussions/41). |
  *
  */
-export function useServerState(): ServerStateContextValue {
-  const internalServerStateContext =
-    useContext<InternalServerStateContextValue>(ServerStateContext);
+export function useServerProps(): ServerPropsContextValue {
+  const internalServerPropsContext =
+    useContext<InternalServerPropsContextValue>(ServerPropsContext);
 
-  if (!internalServerStateContext) {
-    return {} as ServerStateContextValue;
+  if (!internalServerPropsContext) {
+    return {} as ServerPropsContextValue;
   }
 
   return {
-    serverState: internalServerStateContext.userServerState,
-    setServerState: internalServerStateContext.setUserServerState,
-    setPersistedServerState: internalServerStateContext.setPersistedServerState,
-    pending: internalServerStateContext.pending,
+    serverProps: internalServerPropsContext.serverProps,
+    setServerProps: internalServerPropsContext.setServerProps,
+    pending: internalServerPropsContext.pending,
   };
 }
 
@@ -40,9 +39,9 @@ export function useServerState(): ServerStateContextValue {
  * Internal-only hook to manage server state, including to set location server state
  * @internal
  */
-export function useInternalServerState(): InternalServerStateContextValue {
+export function useInternalServerProps(): InternalServerPropsContextValue {
   return (
-    useContext<InternalServerStateContextValue>(ServerStateContext) ??
-    ({} as InternalServerStateContextValue)
+    useContext<InternalServerPropsContextValue>(ServerPropsContext) ??
+    ({} as InternalServerPropsContextValue)
   );
 }

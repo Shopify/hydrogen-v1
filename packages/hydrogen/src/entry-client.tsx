@@ -10,9 +10,9 @@ import {hydrateRoot} from 'react-dom/client';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
-import {ServerStateProvider} from './foundation/ServerStateProvider';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
-import type {LocationServerState} from './foundation/ServerStateProvider/ServerStateProvider';
+import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
@@ -55,19 +55,19 @@ function Content({
 }: {
   clientWrapper: ElementType;
 }) {
-  const [serverState, setServerState] = useState<LocationServerState>({
+  const [serverState, setServerState] = useState<LocationServerProps>({
     pathname: window.location.pathname,
     search: window.location.search,
   });
   const response = useServerResponse(serverState);
 
   return (
-    <ServerStateProvider
-      initialServerState={serverState}
-      setServerStateForRsc={setServerState}
+    <ServerPropsProvider
+      initialServerProps={serverState}
+      setServerPropsForRsc={setServerState}
     >
       <ClientWrapper>{response.readRoot()}</ClientWrapper>
-    </ServerStateProvider>
+    </ServerPropsProvider>
   );
 }
 

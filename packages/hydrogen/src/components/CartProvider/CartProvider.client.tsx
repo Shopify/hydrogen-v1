@@ -65,8 +65,8 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
-import {useServerState} from '../../foundation/useServerState';
-import {ServerStateContextValue} from '../../foundation';
+import {useServerProps} from '../../foundation/useServerProps';
+import {ServerPropsContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
 
 function cartReducer(state: State, action: CartAction): State {
@@ -256,8 +256,8 @@ export function CartProvider({
    */
   data?: CartFragmentFragment;
 }) {
-  const {serverState} = useServerState() as ServerStateContextValue;
-  const countryCode = serverState?.country?.isoCode;
+  const {serverProps} = useServerProps() as ServerPropsContextValue;
+  const countryCode = serverProps?.country?.isoCode;
 
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
