@@ -1,24 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, createContext} from 'react';
 import {DATA_LOADER_PATHNAME} from '../../constants';
 import {ImportGlobOutput} from '../../types';
 import {matchPath} from '../../utilities/matchPath';
-import {useRouteDataInternal} from '../RouteData/RouteDataProvider';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client';
 import {useRouter} from './BrowserRouter.client';
+
+// @ts-ignore
+globalThis.__routeDataContext ||= createContext<any>(null);
+// @ts-ignore
+const RouteDataContext = globalThis.__routeDataContext;
 
 export function LegacyRouter({
   initialComponent,
   initialParams,
+  initialData,
 }: {
   initialComponent: any;
   initialParams: any;
+  initialData: any;
 }) {
   const {location} = useRouter();
   const [initialLoad, setInitialLoad] = useState(true);
-  const [activeRoute, setActiveRoute] = useState({component: initialComponent});
+  const [activeRoute, setActiveRoute] = useState({
+    component: initialComponent,
+    data: initialData,
+  });
   const [routeParams, setRouteParams] = useState(initialParams ?? {});
-  // @ts-ignore
-  const {setRouteData} = useRouteDataInternal();
 
   useEffect(() => {
     async function loadRoute() {
@@ -38,13 +45,17 @@ export function LegacyRouter({
         const dataResponse = await fetch(
           DATA_LOADER_PATHNAME + '?pathname=' + location.pathname
         );
+        let data;
         if (dataResponse.headers.get('content-type') === 'application/json') {
-          setRouteData(await dataResponse.json());
+          data = await dataResponse.json();
         } else {
-          setRouteData(await dataResponse.text());
+          data = await dataResponse.text();
         }
 
-        setActiveRoute({component: (await foundRoute.component()).default});
+        setActiveRoute({
+          component: (await foundRoute.component()).default,
+          data,
+        });
       }
     }
 
@@ -59,7 +70,16 @@ export function LegacyRouter({
 
   return (
     <RouteParamsProvider routeParams={routeParams}>
-      <ActiveRoute />
+      <RouteDataContext.Provider value={activeRoute.data}>
+        <ActiveRoute />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__hydrogenRouteData = ${JSON.stringify(
+              initialData
+            )}`,
+          }}
+        ></script>
+      </RouteDataContext.Provider>
     </RouteParamsProvider>
   );
 }
@@ -139,4 +159,8 @@ export function createLazyPageRoutes(
     ...routes.filter((route) => !route.path.includes(':')),
     ...routes.filter((route) => route.path.includes(':')),
   ];
+}
+
+export function useRouteData() {
+  return useContext(RouteDataContext);
 }

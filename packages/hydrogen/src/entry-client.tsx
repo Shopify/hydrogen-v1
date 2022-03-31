@@ -18,7 +18,6 @@ import {
   createLazyPageRoutes,
 } from './foundation/Router/LegacyRouter';
 import {BrowserRouter} from './foundation/Router/BrowserRouter.client';
-import {RouteDataProvider} from './foundation/RouteData/RouteDataProvider';
 
 declare global {
   interface Window {
@@ -80,14 +79,13 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
       <RootComponent>
         <ErrorBoundary FallbackComponent={Error}>
           <ClientWrapper>
-            <RouteDataProvider value={initialData}>
-              <BrowserRouter>
-                <LegacyRouter
-                  initialComponent={initialComponent}
-                  initialParams={foundRouteDetails.params}
-                />
-              </BrowserRouter>
-            </RouteDataProvider>
+            <BrowserRouter>
+              <LegacyRouter
+                initialComponent={initialComponent}
+                initialParams={foundRouteDetails.params}
+                initialData={initialData}
+              />
+            </BrowserRouter>
           </ClientWrapper>
         </ErrorBoundary>
       </RootComponent>

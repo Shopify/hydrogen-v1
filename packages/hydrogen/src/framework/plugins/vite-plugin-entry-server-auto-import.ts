@@ -20,7 +20,6 @@ export default (hydrogenConfig: any) => {
       hydrogenConfigExists = fs.existsSync(
         path.join(config.root, 'hydrogen.config.js')
       );
-      console.log({hydrogenConfigExists});
     },
     resolveId(id) {
       if (

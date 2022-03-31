@@ -1,5 +1,5 @@
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
-import handleRequest from './src/App.server';
+import handleRequest from '@shopify/hydrogen/server';
 // eslint-disable-next-line node/no-missing-import
 import indexTemplate from './dist/client/index.html?raw';
 

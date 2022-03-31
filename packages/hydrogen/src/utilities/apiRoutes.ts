@@ -127,7 +127,7 @@ interface QueryShopArgs {
   locale?: string;
 }
 
-function queryShopBuilder(shopifyConfig: ShopifyConfig) {
+export function queryShopBuilder(shopifyConfig: ShopifyConfig) {
   return async function queryShop<T>({
     query,
     variables,

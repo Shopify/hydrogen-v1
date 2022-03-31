@@ -17,6 +17,7 @@ type CommonOptions = {
   log: Logger;
   dev?: boolean;
   hydrogenConfig: any;
+  shopifyConfig: ShopifyConfig;
 };
 
 export type RendererOptions = CommonOptions & {

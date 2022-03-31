@@ -15,6 +15,7 @@ import type {
   ImportGlobEagerOutput,
   ServerHandlerConfig,
   ImportGlobOutput,
+  ShopifyConfig,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -30,6 +31,7 @@ import {
   getApiRouteFromURL,
   renderApiRoute,
   getApiRoutes,
+  queryShopBuilder,
 } from './utilities/apiRoutes';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import {isBotUA} from './utilities/bot-ua';
@@ -52,7 +54,6 @@ import {
   createLazyPageRoutes,
 } from './foundation/Router/LegacyRouter';
 import {BrowserRouter} from './foundation/Router/BrowserRouter.client';
-import {RouteDataProvider} from './foundation/RouteData/RouteDataProvider';
 
 declare global {
   // This is provided by a Vite plugin
@@ -154,6 +155,7 @@ export const renderHydrogen = (
       componentResponse,
       response: streamableResponse,
       hydrogenConfig,
+      shopifyConfig,
     };
 
     if (!hydrogenConfig?.experimental?.serverComponents) {
@@ -252,6 +254,7 @@ async function streamLegacy(
     template,
     nonce,
     dev,
+    shopifyConfig,
   }: StreamerOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
@@ -269,6 +272,7 @@ async function streamLegacy(
       log,
       // @ts-expect-error TODO: Update all other render methods to use glob instead of eager
       routes,
+      shopifyConfig,
     },
     {template: noScriptTemplate}
   );
@@ -339,7 +343,10 @@ async function streamLegacy(
 
 async function renderLegacyDataLoader(
   url: URL,
-  {routes}: {routes: ImportGlobEagerOutput}
+  {
+    routes,
+    shopifyConfig,
+  }: {routes: ImportGlobEagerOutput; shopifyConfig: ShopifyConfig}
 ) {
   const pathname = url.searchParams.get('pathname');
 
@@ -351,7 +358,11 @@ async function renderLegacyDataLoader(
   const component = await foundRoute.component();
   const initialParams = foundRouteDetails.params;
   const initialDataResponse =
-    component.data && (await component.data({params: initialParams}));
+    component.data &&
+    (await component.data({
+      params: initialParams,
+      queryShop: queryShopBuilder(shopifyConfig),
+    }));
 
   if (!initialDataResponse) {
     return new Response('', {status: 204});
@@ -833,6 +844,7 @@ type BuildLegacyAppOptions = {
   response: ServerComponentResponse;
   log: Logger;
   routes: ImportGlobOutput;
+  shopifyConfig: ShopifyConfig;
 };
 
 function buildAppRSC({
@@ -902,7 +914,7 @@ function buildAppSSR(
 }
 
 async function buildAppLegacySSR(
-  {App, state, request, log, routes}: BuildLegacyAppOptions,
+  {App, state, request, log, routes, shopifyConfig}: BuildLegacyAppOptions,
   htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
   const serverProps = {
@@ -923,7 +935,11 @@ async function buildAppLegacySSR(
   const initialComponent = component.default;
   const initialParams = foundRouteDetails.params;
   const initialDataResponse =
-    component.data && (await component.data({params: initialParams}));
+    component.data &&
+    (await component.data({
+      params: initialParams,
+      queryShop: queryShopBuilder(shopifyConfig),
+    }));
   let initialData;
 
   if (initialDataResponse) {
@@ -935,8 +951,9 @@ async function buildAppLegacySSR(
       } else {
         initialData = await initialDataResponse.text();
       }
+    } else {
+      initialData = initialDataResponse;
     }
-    initialData = initialDataResponse;
   }
 
   const AppSSR = (
@@ -948,12 +965,11 @@ async function buildAppLegacySSR(
       <ServerRequestProvider request={request} isRSC={false}>
         <App>
           <BrowserRouter>
-            <RouteDataProvider value={initialData}>
-              <LegacyRouter
-                initialComponent={initialComponent}
-                initialParams={initialParams}
-              />
-            </RouteDataProvider>
+            <LegacyRouter
+              initialComponent={initialComponent}
+              initialParams={initialParams}
+              initialData={initialData}
+            />
           </BrowserRouter>
         </App>
       </ServerRequestProvider>
