@@ -1,4 +1,3 @@
-import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
   Route,
   Router,
@@ -28,7 +27,7 @@ setLogger({
   options: () => ({}),
 });
 
-function App({routes}) {
+export default function App({routes}) {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
@@ -48,9 +47,7 @@ function App({routes}) {
   );
 }
 
-const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
-
-export default renderHydrogen(App, {shopifyConfig, routes});
+export const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
 function HasRouteChildren({children}) {
   return children;

@@ -1,10 +1,14 @@
 import {Plugin, ResolvedConfig} from 'vite';
 import path from 'path';
 import MagicString from 'magic-string';
+import {
+  HYDROGEN_DEFAULT_LEGACY_ENTRY,
+  HYDROGEN_DEFAULT_SERVER_ENTRY,
+} from './vite-plugin-hydrogen-middleware';
 
 const HYDROGEN_ENTRY_FILE = 'hydrogen-entry-server.jsx';
 
-export default () => {
+export default (hydrogenConfig: any) => {
   let config: ResolvedConfig;
   return {
     name: 'vite-plugin-entry-server-auto-import',
@@ -25,12 +29,18 @@ export default () => {
       return null;
     },
     load(id) {
+      const serverEntrypoint =
+        process.env.HYDROGEN_SERVER_ENTRY ||
+        hydrogenConfig?.experimental?.serverComponents
+          ? HYDROGEN_DEFAULT_SERVER_ENTRY
+          : HYDROGEN_DEFAULT_LEGACY_ENTRY;
       if (id.includes(HYDROGEN_ENTRY_FILE + '?virtual')) {
         const code = new MagicString(
           `import renderHydrogen from '@shopify/hydrogen/entry-server';\n` +
-            `import * as entrypoint from './src/App';\n` +
+            `import * as entrypoint from '.${serverEntrypoint}';\n` +
             `import shopifyConfig from './shopify.config.js';\n` +
-            `export default renderHydrogen(entrypoint.default, {routes: entrypoint.routes, shopifyConfig});`
+            `import hydrogenConfig from './hydrogen.config.js';\n` +
+            `export default renderHydrogen(entrypoint.default, {routes: entrypoint.routes, hydrogenConfig, shopifyConfig});`
         );
 
         return {

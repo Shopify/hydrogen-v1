@@ -16,6 +16,7 @@ type CommonOptions = {
   componentResponse: ServerComponentResponse;
   log: Logger;
   dev?: boolean;
+  hydrogenConfig: any;
 };
 
 export type RendererOptions = CommonOptions & {
@@ -57,6 +58,7 @@ export type ImportGlobOutput = Record<
 
 export type ServerHandlerConfig = {
   routes: ImportGlobEagerOutput;
+  hydrogenConfig: any;
   shopifyConfig: ShopifyConfig;
 };
 

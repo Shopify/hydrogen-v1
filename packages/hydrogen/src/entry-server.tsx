@@ -84,7 +84,7 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes}: ServerHandlerConfig
+  {hydrogenConfig, shopifyConfig, routes}: ServerHandlerConfig
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
@@ -151,11 +151,10 @@ export const renderHydrogen = (
       isStreamable,
       componentResponse,
       response: streamableResponse,
+      hydrogenConfig,
     };
 
-    // TODO: Read hydrogen.config.js file to get this setting
-    const isExperimentalServerComponentsEnabled = false;
-    if (!isExperimentalServerComponentsEnabled) {
+    if (!hydrogenConfig?.experimental?.serverComponents) {
       if (isStreamable) {
         return streamLegacy(url, params);
       }
@@ -348,6 +347,7 @@ async function render(
     template,
     nonce,
     dev,
+    hydrogenConfig,
   }: RendererOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
@@ -360,6 +360,7 @@ async function render(
       response: componentResponse,
       routes,
       log,
+      hydrogenConfig,
     },
     {template}
   );
@@ -431,6 +432,7 @@ async function stream(
     template,
     nonce,
     dev,
+    hydrogenConfig,
   }: StreamerOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
@@ -447,6 +449,7 @@ async function stream(
       response: componentResponse,
       log,
       routes,
+      hydrogenConfig,
     },
     {template: noScriptTemplate}
   );
@@ -779,6 +782,7 @@ type BuildAppOptions = {
   response: ServerComponentResponse;
   log: Logger;
   routes: ImportGlobEagerOutput;
+  hydrogenConfig: any;
 };
 
 type BuildLegacyAppOptions = {
@@ -797,7 +801,7 @@ function buildAppRSC({
   response,
   log,
   routes,
-}: BuildAppOptions) {
+}: Omit<BuildAppOptions, 'hydrogenConfig'>) {
   const hydrogenServerProps = {request, response, log};
   const serverProps = {...state, ...hydrogenServerProps, routes};
 
@@ -815,7 +819,7 @@ function buildAppRSC({
 }
 
 function buildAppSSR(
-  {App, state, request, response, log, routes}: BuildAppOptions,
+  {App, state, request, response, log, routes, hydrogenConfig}: BuildAppOptions,
   htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
   const {AppRSC} = buildAppRSC({
@@ -834,7 +838,10 @@ function buildAppSSR(
   const RscConsumer = () => rscResponse.readRoot();
 
   const AppSSR = (
-    <Html {...htmlOptions}>
+    <Html
+      {...htmlOptions}
+      clientConfig={buildHydrogenConfigForClient(hydrogenConfig)}
+    >
       <ServerRequestProvider request={request} isRSC={false}>
         <ServerStateProvider
           serverState={state as any}
@@ -1076,4 +1083,14 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
+}
+
+/**
+ * Build a serializable client version of hydrogen config.
+ * Use an allowlist to exclude plugins, functions, etc.
+ */
+function buildHydrogenConfigForClient(hydrogenConfig: any) {
+  return {
+    experimental: hydrogenConfig?.experimental,
+  };
 }
