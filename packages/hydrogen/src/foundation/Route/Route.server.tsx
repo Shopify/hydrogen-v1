@@ -3,7 +3,7 @@ import {useServerRequest} from '../ServerRequestProvider';
 import {matchPath} from '../../utilities/matchPath';
 import {Boomerang} from '../Boomerang/Boomerang.client';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client';
-import {useServerDatalayer} from '../AnalyticEventBus/';
+import {useServerAnalytics} from '../Analytics';
 
 export type RouteProps = {
   /** The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. */
@@ -14,8 +14,7 @@ export type RouteProps = {
 
 /**
  * The `Route` component is used to set up a route in Hydrogen that's independent of the file system. Routes are
- * matched in the order that they're defined. Only one route renders at a time. Use `path="*"`
- * with the last defined `<Route>` to implement a fallback mechanism on a "Not Found" page.
+ * matched in the order that they're defined.
  */
 export function Route({path, page}: RouteProps): ReactElement | null {
   const request = useServerRequest();
@@ -38,7 +37,7 @@ export function Route({path, page}: RouteProps): ReactElement | null {
     request.ctx.router.routeParams = match.params;
     const name = (page?.type as any)?.name;
 
-    useServerDatalayer({
+    useServerAnalytics({
       templateName: name,
     });
 

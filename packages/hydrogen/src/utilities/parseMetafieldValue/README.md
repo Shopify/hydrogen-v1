@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/utilities/parseMetafieldValue and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/utilities/parseMetafieldValue and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `parseMetafieldValue` function parses a [Metafield](/api/storefront/reference/common-objects/metafield)'s `value` from a string into a sensible type corresponding to the [Metafield](/api/storefront/reference/common-objects/metafield)'s `type`.
 
@@ -69,7 +69,7 @@ export function Product({handle}) {
 
 ## Arguments
 
-| Description                                                               | Required |
+| Argument                                                                  | Required |
 | ------------------------------------------------------------------------- | -------- |
 | A [Metafield object](/api/storefront/reference/common-objects/metafield). | Yes      |
 
@@ -79,9 +79,9 @@ Depending on the `type` specified in the passed [Metafield](/api/storefront/refe
 
 | Metafield `type`         | `value` type                                                                                  |
 | ------------------------ | --------------------------------------------------------------------------------------------- |
-| `date`                   | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
-| `date_time`              | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
-| `boolean`                | boolean                                                                                       |
+| `date`                   | [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
+| `date_time`              | [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) |
+| `boolean`                | Boolean                                                                                       |
 | `number_integer`         | int                                                                                           |
 | `number_decimal`         | float                                                                                         |
 | `json`                   | An object                                                                                     |

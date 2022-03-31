@@ -44,9 +44,17 @@ export default async function testCases({
     );
   });
 
-  it('follows synchronous redirects', async () => {
+  it('follows redirects from SSR responses', async () => {
     await page.goto(getServerUrl() + '/redirected');
     expect(await page.url()).toContain('/about');
+    expect(await page.textContent('h1')).toContain('About');
+  });
+
+  it('follows redirects in RSC responses', async () => {
+    await page.goto(getServerUrl() + '/');
+    await page.click('.redirect-btn');
+    await page.waitForURL('**/about');
+
     expect(await page.textContent('h1')).toContain('About');
   });
 

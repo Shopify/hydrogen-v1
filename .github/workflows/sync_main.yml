@@ -1,0 +1,21 @@
+name: Sync to main
+
+on:
+  push:
+    branches:
+      - 'v1.x-2022-07'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Sync the release branch to main
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Push to main branch
+        run: |
+          git show-ref
+          git config user.email "hydrogen@shopify.com"
+          git config user.name "Hydrogen Bot"
+          git push origin HEAD:main --force

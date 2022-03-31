@@ -20,10 +20,11 @@ describe('<ProductMetafield/>', () => {
       },
     });
     const wrapper = mountWithProviders(
+      // @ts-expect-error mock data doesn't fully match
       <ProductProvider data={product} initialVariantId="">
         <ProductMetafield
-          namespace={metafield.namespace}
-          keyName={metafield.key}
+          namespace={metafield?.namespace ?? ''}
+          keyName={metafield?.key ?? ''}
         />
       </ProductProvider>
     );
@@ -49,10 +50,11 @@ describe('<ProductMetafield/>', () => {
     });
     const product = getProduct({variants: {edges: [{node: variant as any}]}});
     const wrapper = mountWithProviders(
+      // @ts-expect-error mock data doesn't fully match
       <ProductProvider data={product} initialVariantId="">
         <ProductMetafield
-          namespace={metafield.namespace}
-          keyName={metafield.key}
+          namespace={metafield?.namespace ?? ''}
+          keyName={metafield?.key ?? ''}
           variantId={variantId}
         />
       </ProductProvider>

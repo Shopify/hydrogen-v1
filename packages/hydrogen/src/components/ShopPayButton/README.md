@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ShopPayButton and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ShopPayButton and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `ShopPayButton` component renders a button that redirects to the Shop Pay checkout.
 
@@ -20,7 +20,7 @@ The `variantIds` and `variantIdsAndQuantities` props are mutually exclusive. You
 | ----------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | variantIds              | <pre>{ <br> variantIds: string[]; <br> variantIdsAndQuantities?: never;<br>}</pre>               | An array of IDs of the variants to purchase with Shop Pay. This will only ever have a quantity of 1 for each variant. If you want to use other quantities, then use `variantIdsAndQuantities`. |
 | variantIdsAndQuantities | <pre>{ <br> variantIds: never; <br> variantIdsAndQuantities?: VariantIdAndQuantity[];<br>}</pre> | An array of variant IDs and quantities to purchase with Shop Pay.                                                                                                                              |
-| className?              | string                                                                                           | A string of classes to apply to the `div` that wraps the Shop Pay button.                                                                                                                      |
+| className?              | <code>string</code>                                                                              | A string of classes to apply to the `div` that wraps the Shop Pay button.                                                                                                                      |
 
 ## Component type
 

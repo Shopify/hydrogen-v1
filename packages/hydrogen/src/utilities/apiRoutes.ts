@@ -41,7 +41,7 @@ export function getApiRoutes(
   const routes = Object.keys(pages)
     .filter((key) => pages[key].api)
     .map((key) => {
-      const path = key
+      let path = key
         .replace('./routes', '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
@@ -60,6 +60,9 @@ export function getApiRoutes(
           /\[(?:[.]{3})?(\w+?)\]/g,
           (_match, param: string) => `:${param}`
         );
+
+      if (path.endsWith('/') && path !== '/')
+        path = path.substring(0, path.length - 1);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match

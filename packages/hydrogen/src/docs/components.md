@@ -7,6 +7,38 @@
 
 Hydrogen components are objects that contain all of business logic for the commerce concept that they represent. They're used to parse and process data.
 
+## Framework components
+
+Framework components are components that are available in the [Hydrogen framework](/custom-storefronts/hydrogen/framework).
+
+<table>
+  <tr>
+    <th>Component name</th>
+    <th>Component type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/framework/fileroutes">FileRoutes</a></td>
+    <td>Server</td>
+    <td>Builds a set of default Hydrogen routes based on the output provided by Vite's <code>import.meta.globEager</code> method.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/framework/link">Link</a></td>
+    <td>Client</td>
+    <td>Used to navigate between routes.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/framework/route">Route</a></td>
+    <td>Server</td>
+    <td>Used to set up a route in Hydrogen that's independent of the file system.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/components/framework/router">Router</a></td>
+    <td>Server</td>
+    <td>Provides the context for routing in your Hydrogen app.</td>
+  </tr>
+</table>
+
 ## Primitive components
 
 Primitive components are the building blocks for different component types, including products, variants, and cart.

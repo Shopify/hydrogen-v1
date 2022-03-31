@@ -33,6 +33,5 @@ export {ProductPrice} from './ProductPrice';
 export {ProductMetafield} from './ProductMetafield';
 export {BuyNowButton} from './BuyNowButton';
 export {ShopPayButton} from './ShopPayButton';
-export {useAvailableCountries} from '../hooks/useAvailableCountries';
 export {useCountry} from '../hooks/useCountry';
 export {Seo} from './Seo';

@@ -3,7 +3,7 @@ import {
   flattenConnection,
   LocalizationProvider,
   CacheHours,
-  useServerDatalayer,
+  useServerAnalytics,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -29,7 +29,7 @@ export default function Layout({children, hero}) {
   const storeName = data ? data.shop.name : '';
 
   const shopId = data?.shop.id.replace('gid://shopify/Shop/', '');
-  useServerDatalayer({
+  useServerAnalytics({
     shopId,
   });
 
@@ -52,7 +52,7 @@ export default function Layout({children, hero}) {
         <main role="main" id="mainContent" className="relative bg-gray-50">
           {hero}
           <div className="mx-auto max-w-7xl p-4 md:py-5 md:px-8">
-            {children}
+            <Suspense fallback={null}>{children}</Suspense>
           </div>
         </main>
         <Footer collection={collections[0]} product={products[0]} />

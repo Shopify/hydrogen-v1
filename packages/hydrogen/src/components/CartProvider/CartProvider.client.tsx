@@ -26,7 +26,7 @@ import {
   CartAttributesUpdate,
   CartDiscountCodesUpdate,
   CartQuery,
-} from '../../graphql/graphql-constants';
+} from './cart-queries';
 import {
   CartLineInput,
   CartInput,
@@ -68,7 +68,7 @@ import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 import {useServerState} from '../../foundation/useServerState';
 import {ServerStateContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
-import {ClientAnalytics} from '../../foundation/AnalyticEventBus';
+import {ClientAnalytics} from '../../foundation/Analytics';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
@@ -253,7 +253,7 @@ export function CartProvider({
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
   /**
-   * A cart object from the Storefront API to populate the initial state of the provider.
+   * An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).
    */
   data?: CartFragmentFragment;
 }) {
@@ -327,10 +327,14 @@ export function CartProvider({
 
       if (data?.cartCreate?.cart) {
         if (cart.lines) {
-          ClientAnalytics.publish('add-to-cart', true, {
-            addedCartLines: cart.lines,
-            cart: data.cartCreate.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.ADD_TO_CART,
+            true,
+            {
+              addedCartLines: cart.lines,
+              cart: data.cartCreate.cart,
+            }
+          );
         }
         dispatch({
           type: 'resolve',
@@ -372,10 +376,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesAdd?.cart) {
-          ClientAnalytics.publish('add-to-cart', true, {
-            addedCartLines: lines,
-            cart: data.cartLinesAdd.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.ADD_TO_CART,
+            true,
+            {
+              addedCartLines: lines,
+              cart: data.cartLinesAdd.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesAdd.cart),
@@ -414,10 +422,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesRemove?.cart) {
-          ClientAnalytics.publish('remove-from-cart', true, {
-            removedCartLines: lines,
-            cart: data.cartLinesRemove.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.REMOVE_FROM_CART,
+            true,
+            {
+              removedCartLines: lines,
+              cart: data.cartLinesRemove.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesRemove.cart),
@@ -455,10 +467,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesUpdate?.cart) {
-          ClientAnalytics.publish('update-cart', true, {
-            updatedCartLines: lines,
-            cart: data.cartLinesUpdate.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.UPDATE_CART,
+            true,
+            {
+              updatedCartLines: lines,
+              oldCart: state.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesUpdate.cart),
@@ -614,10 +630,14 @@ export function CartProvider({
         }
 
         if (data?.cartDiscountCodesUpdate?.cart) {
-          ClientAnalytics.publish('discount-code-updated', true, {
-            updatedDiscountCodes: discountCodes,
-            cart: data.cartDiscountCodesUpdate.cart,
-          });
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+            true,
+            {
+              updatedDiscountCodes: discountCodes,
+              cart: data.cartDiscountCodesUpdate.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartDiscountCodesUpdate.cart),
@@ -717,6 +737,7 @@ export function CartProvider({
 function cartFromGraphQL(cart: CartFragmentFragment): Cart {
   return {
     ...cart,
+    // @ts-expect-error While the cart still uses fragments, there will be a TS error here until we remove those fragments and get the type in-line
     lines: flattenConnection(cart.lines),
     note: cart.note ?? undefined,
   };

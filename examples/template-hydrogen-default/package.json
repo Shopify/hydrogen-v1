@@ -1,7 +1,7 @@
 {
   "name": "template-hydrogen-default",
   "description": "This the default template for Hydrogen",
-  "version": "0.11.0",
+  "version": "0.0.0",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -26,7 +26,7 @@
     "autoprefixer": "^10.4.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.31.0",
-    "eslint-plugin-hydrogen": "^0.6.2",
+    "eslint-plugin-hydrogen": "^0.12.1",
     "npm-run-all": "^4.1.5",
     "playwright": "^1.19.2",
     "postcss": "^8.4.5",
@@ -38,12 +38,12 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.5.0",
-    "@shopify/hydrogen": "^0.12.0",
+    "@shopify/hydrogen": "^0.13.2",
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
     "graphql-tag": "^2.12.4",
-    "react": "0.0.0-experimental-529dc3ce8-20220124",
-    "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
+    "react": "0.0.0-experimental-2bf7c02f0-20220314",
+    "react-dom": "0.0.0-experimental-2bf7c02f0-20220314",
     "serve-static": "^1.14.1"
   }
 }

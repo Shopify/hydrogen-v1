@@ -4,7 +4,7 @@ import type {Video as VideoType} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
 interface VideoProps {
-  /** An object with keys that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). */
+  /** An object with fields that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). */
   data: PartialDeep<VideoType>;
   /** An object of image size options for the video's `previewImage`. */
   options?: ImageSizeOptions;

@@ -11,7 +11,7 @@ export function useUrl(): URL {
     if (serverUrl.pathname === RSC_PATHNAME) {
       const state = JSON.parse(serverUrl.searchParams.get('state') || '{}');
 
-      const parsedUrl = `${serverUrl.origin}/${state.pathname ?? ''}${
+      const parsedUrl = `${serverUrl.origin}${state.pathname ?? ''}${
         state.search ?? ''
       }`;
 

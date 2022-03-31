@@ -1,4 +1,4 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ProductProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/hydrogen-reference-docs.md. -->
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/ProductProvider and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
 The `ProductProvider` component sets up a context with product details. Descendents of
 this component can use the `useProduct` hook.
@@ -293,22 +293,22 @@ export function Product() {
 
 ## Props
 
-| Name               | Required | Description                                                                                                                                                                                                     |
-| ------------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `children`         | Yes      | A `ReactNode` element.                                                                                                                                                                                          |
-| `data`             | Yes      | A [Product object](/api/storefront/reference/products/product).                                                                                                                                                 |
-| `initialVariantId` | No       | The initially selected variant. If this is missing, then `selectedVariantId` in the returned `object` from the `useProduct` hook uses the first available variant or the first variant (if none are available). |
+| Name              | Type                                                                              | Description                                                                                                                                                                                                     |
+| ----------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| children          | <code>ReactNode</code>                                                            | A `ReactNode` element.                                                                                                                                                                                          |
+| data              | <code>PartialDeep&#60;ProductType&#62;</code>                                     | An object with fields that correspond to the Storefront API's [Product object](/api/storefront/reference/products/product).                                                                                     |
+| initialVariantId? | <code>Parameters&#60;typeof useProductOption&#62;['0']['initialvariantid']</code> | The initially selected variant. If this is missing, then `selectedVariantId` in the returned `object` from the `useProduct` hook uses the first available variant or the first variant (if none are available). |
 
 ## Component type
 
 The `ProductProvider` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
 
-## GraphQL fragment
+## Storefront API data
 
-The following GraphQL fragment is available for your GraphQL queries using `ProductProviderFragment` from `@shopify/hydrogen/fragments`. Using this fragment in your queries ensures that you have all the data necessary for using the `ProductProvider`.
+The `data` prop is an object with fields that correspond to the Storefront API's [Product object](/api/storefront/reference/products/product):
 
 ```graphql
-fragment ProductProviderFragment on Product {
+{
   compareAtPriceRange {
     maxVariantPrice {
       currencyCode
@@ -580,7 +580,7 @@ fragment ProductProviderFragment on Product {
 
 ### Variables
 
-The `ProductProviderFragment` includes variables that you will need to provide values for when performing your query.
+The [Product object](/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
 
 | Variable                                   | Description                                                                                           |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
@@ -637,7 +637,8 @@ const QUERY = gql`
       id
       vendor
       seo {
-        ...SeoFragment
+        title
+        description
       }
       featuredImage {
         url

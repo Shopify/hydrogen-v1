@@ -1,17 +1,33 @@
-import {useCallback, useMemo} from 'react';
-import {useAvailableCountries, useCountry} from '@shopify/hydrogen/client';
+import {useCallback, useState, useEffect} from 'react';
+import {useCountry} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
+import SpinnerIcon from './SpinnerIcon.client';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
  */
 export default function CountrySelector() {
-  const availableCountries = useAvailableCountries();
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [listboxOpen, setListboxOpen] = useState(false);
+  const [countries, setCountries] = useState([]);
 
-  const countries = useMemo(
-    () => [...availableCountries].sort((a, b) => a.name.localeCompare(b.name)),
-    [availableCountries],
-  );
+  if (error) {
+    throw error;
+  }
+
+  useEffect(() => {
+    if (listboxOpen && !isLoading && !countries.length) {
+      fetch('/countries')
+        .then((resp) => {
+          if (!resp.ok) throw new Error(resp.statusText);
+          else return resp.json();
+        })
+        .then((c) => setCountries(c))
+        .catch((e) => setError(e))
+        .finally(() => setLoading(false));
+    }
+  }, [listboxOpen, isLoading, countries.length]);
 
   const [selectedCountry, setSelectedCountry] = useCountry();
 
@@ -27,45 +43,53 @@ export default function CountrySelector() {
   return (
     <div className="hidden lg:block">
       <Listbox onChange={setCountry}>
-        {({open}) => (
-          <>
-            <Listbox.Button className="font-medium text-sm h-8 p-2 flex items-center">
-              <span className="mr-4">{selectedCountry.name}</span>
-              <ArrowIcon isOpen={open} />
-            </Listbox.Button>
+        {({open}) => {
+          setTimeout(() => setListboxOpen(open));
+          return (
+            <>
+              <Listbox.Button className="font-medium text-sm h-8 p-2 flex items-center">
+                <span className="mr-4">{selectedCountry.name}</span>
+                <ArrowIcon isOpen={open} />
+              </Listbox.Button>
 
-            <Listbox.Options className="absolute z-10 mt-2">
-              <div className="bg-white p-4 rounded-lg drop-shadow-2xl">
-                <Listbox.Option
-                  disabled
-                  className="p-2 text-md text-left font-medium uppercase"
-                >
-                  Country
-                </Listbox.Option>
-                {countries.map((country) => {
-                  const isSelected =
-                    country.isoCode === selectedCountry.isoCode;
-                  return (
-                    <Listbox.Option
-                      key={country.isoCode}
-                      value={country.isoCode}
-                    >
-                      {({active}) => (
-                        <div
-                          className={`w-36 py-2 px-3 flex justify-between items-center text-left cursor-pointer rounded
+              <Listbox.Options className="absolute z-10 mt-2">
+                <div className="bg-white p-4 rounded-lg drop-shadow-2xl overflow-y-auto h-64">
+                  <Listbox.Option
+                    disabled
+                    className="p-2 text-md text-left font-medium uppercase"
+                  >
+                    Country
+                  </Listbox.Option>
+                  {!countries.length ? (
+                    <div className="flex justify-center">
+                      <SpinnerIcon />
+                    </div>
+                  ) : null}
+                  {countries.map((country) => {
+                    const isSelected =
+                      country.isoCode === selectedCountry.isoCode;
+                    return (
+                      <Listbox.Option
+                        key={country.isoCode}
+                        value={country.isoCode}
+                      >
+                        {({active}) => (
+                          <div
+                            className={`w-36 py-2 px-3 flex justify-between items-center text-left cursor-pointer rounded
                           ${active ? 'bg-gray-200' : null}`}
-                        >
-                          {country.name}
-                          {isSelected ? <CheckIcon /> : null}
-                        </div>
-                      )}
-                    </Listbox.Option>
-                  );
-                })}
-              </div>
-            </Listbox.Options>
-          </>
-        )}
+                          >
+                            {country.name}
+                            {isSelected ? <CheckIcon /> : null}
+                          </div>
+                        )}
+                      </Listbox.Option>
+                    );
+                  })}
+                </div>
+              </Listbox.Options>
+            </>
+          );
+        }}
       </Listbox>
     </div>
   );

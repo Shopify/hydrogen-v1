@@ -13,7 +13,7 @@ yarn dev
 
 Visit the dev environment at http://localhost:3000.
 
-To make changes to the starter template, edit the files in `examples/template-hydrogen-default`.
+To make changes to the Demo Store template, edit the files in `examples/template-hydrogen-default`.
 
 To modify Hydrogen framework, components, and hooks, edit the files in `packages/hydrogen`.
 
@@ -23,7 +23,7 @@ You can [inspect Vite plugin](https://github.com/antfu/vite-plugin-inspect) tran
 
 Hydrogen is a Yarn v1 monorepo. It consists of several key packages:
 
-- `examples/template-hydrogen-default`: The starter template
+- `examples/template-hydrogen-default`: The Demo Store template
 - `packages/hydrogen`: The Hydrogen React framework & SDK
 - `packages/create-hydrogen-app`: The CLI used to scaffold new projects
 - `packages/cli`: The CLI used to perform tasks in a Hydrogen app
@@ -227,6 +227,8 @@ When you are ready to release a new version of Hydrogen, merge the PR created by
 
 Next, visit the Shipit page for Hydrogen containing the version you intend to release, e.g. `Hydrogen v1.x-2022-07`. Click **Deploy** on the merge commit that was recently created.
 
+_Most recent stable version only_: After Shipit is finished publishing to NPM, manually [run the Stackblitz publish workflow](https://github.com/Shopify/hydrogen/actions/workflows/publish_stackblitz.yml) in GitHub against the latest stable branch. This is required, because GitHub will not allow a bot to kick off another GitHub Action, and the Changesets bot is the user who created the release.
+
 ## Releasing unstable versions
 
 Hydrogen maintains an `unstable` branch as a home for features and breaking changes related to the `unstable` version of the Storefront API.
@@ -257,3 +259,20 @@ yarn tophat ../PATH/TO/PROJECT --packages [...PACKAGES_LIST]
 yarn tophat ../cartogram/hydrogen-shop --packages cli hydrogen eslint-plugin
 
 ```
+
+## Updating the `react-server-dom-vite` vendored plugin
+
+We have an [open PR](https://github.com/facebook/react/pull/22952) for `react-server-dom-vite`, which powers server components in Hydrogen. We're still aligning with the React team on this implementation.
+
+In the meantime, we vendor the contents of the compiled plugin in `packages/hydrogen/vendor/react-server-dom-vite`.
+
+To make updates to the plugin:
+
+1. Clone the `facebook/react` repo and install dependencies.
+1. Check out Fran's PR above. We recommend using the GitHub CLI and running `gh pr checkout 22952`.
+1. Build _just_ the plugin with `yarn build vite`.
+1. Copy the output of the plugin to Hydrogen. This command might vary depending on your directory structure: `cp -rf build/node_modules/react-server-dom-vite ../../Shopify/hydrogen/packages/hydrogen/vendor/`
+1. Delete the `packages/hydrogen/vendor/react-server-dom-vite/umd` folder. We don't need it in Hydrogen.
+1. Tell @frandiox what changes you made, as we need to use that personal branch to make changes upstream into the React PR.
+
+Eventually this will not be vendored and we can delete these instructions!

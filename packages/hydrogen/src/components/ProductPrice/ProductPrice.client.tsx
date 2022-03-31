@@ -36,11 +36,11 @@ export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
     throw new Error('Expected a ProductProvider context, but none was found');
   }
 
-  let price: MoneyV2 | undefined | null;
-  let measurement: UnitPriceMeasurement | undefined | null;
+  let price: Partial<MoneyV2> | undefined | null;
+  let measurement: Partial<UnitPriceMeasurement> | undefined | null;
 
   const variant = variantId
-    ? product?.variants?.find((variant) => variant.id === variantId)
+    ? product?.variants?.find((variant) => variant?.id === variantId)
     : null;
 
   if (priceType === 'compareAt') {
@@ -68,7 +68,7 @@ export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
     }
   }
 
-  if (price == null) {
+  if (!price) {
     return null;
   }
 

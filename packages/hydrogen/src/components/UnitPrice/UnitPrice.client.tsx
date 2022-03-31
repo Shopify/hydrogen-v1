@@ -4,7 +4,7 @@ import type {UnitPriceMeasurement, MoneyV2} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
 export interface UnitPriceProps<TTag> {
-  /** An object with keys that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). */
+  /** An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). */
   data: PartialDeep<MoneyV2>;
   /** A [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement). */
   measurement: PartialDeep<UnitPriceMeasurement>;

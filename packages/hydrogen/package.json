@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "0.12.0",
+  "version": "0.13.2",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -19,8 +19,6 @@
     "plugin.d.ts",
     "entry-server.js",
     "entry-server.d.ts",
-    "fragments.js",
-    "fragments.d.ts",
     "client.js",
     "client.d.ts",
     "entry-client.js",
@@ -84,8 +82,8 @@
   "peerDependencies": {
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
-    "react": "0.0.0-experimental-529dc3ce8-20220124",
-    "react-dom": "0.0.0-experimental-529dc3ce8-20220124",
+    "react": "0.0.0-experimental-2bf7c02f0-20220314",
+    "react-dom": "0.0.0-experimental-2bf7c02f0-20220314",
     "serve-static": "^1.14.1",
     "vite": "^2.8.0"
   },

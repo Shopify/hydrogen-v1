@@ -7,12 +7,18 @@ import {fetchBuilder, graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
+import {sendMessageToClient} from '../../utilities/devtools';
+import {META_ENV_SSR} from '../../foundation/ssr-interop';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
   data: T;
   errors: any;
 }
+
+// Check if the response body has GraphQL errors
+// https://spec.graphql.org/June2018/#sec-Response-Format
+const shouldCacheResponse = (body: any) => !body?.errors;
 
 /**
  * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
@@ -42,7 +48,7 @@ export function useShopQuery<T>({
    */
   preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
-  if (!import.meta.env.SSR) {
+  if (!META_ENV_SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
     );
@@ -52,7 +58,7 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {key, url, requestInit} = createShopRequest(body, locale);
+  const {key, url, requestInit} = useCreateShopRequest(body, locale);
 
   const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
     key,
@@ -60,7 +66,7 @@ export function useShopQuery<T>({
       ? fetchBuilder<UseShopQueryResponse<T>>(url, requestInit)
       : // If no query, avoid calling SFAPI & return nothing
         async () => ({data: undefined as unknown as T, errors: undefined}),
-    {cache, preload}
+    {cache, shouldCacheResponse, preload}
   );
 
   /**
@@ -87,7 +93,8 @@ export function useShopQuery<T>({
    * get returned to the consumer.
    */
   if (data?.errors) {
-    const errors = data.errors instanceof Array ? data.errors : [data.errors];
+    const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
+
     for (const error of errors) {
       if (getConfig().dev) {
         throw new Error(error.message);
@@ -99,7 +106,7 @@ export function useShopQuery<T>({
   }
 
   if (
-    import.meta.env.DEV &&
+    __DEV__ &&
     log.options().showUnusedQueryProperties &&
     query &&
     typeof query !== 'string' &&
@@ -131,13 +138,15 @@ export function useShopQuery<T>({
           ? `  ...and ${properties.length - shownProperties.length} more\n`
           : '';
 
-        log.warn(
+        const warning =
           header +
-            info +
-            `:\n• ${shownProperties.join(`\n• `)}\n` +
-            hiddenInfo +
-            footer
-        );
+          info +
+          `:\n• ${shownProperties.join(`\n• `)}\n` +
+          hiddenInfo +
+          footer;
+
+        log.warn(warning);
+        sendMessageToClient({type: 'warn', data: warning});
       },
     });
   }
@@ -145,13 +154,26 @@ export function useShopQuery<T>({
   return data!;
 }
 
-function createShopRequest(body: string, locale?: string) {
+function useCreateShopRequest(body: string, locale?: string) {
   const {
     storeDomain,
     storefrontToken,
     storefrontApiVersion,
     locale: defaultLocale,
   } = useShop();
+
+  const request = useServerRequest();
+  const secretToken =
+    typeof Oxygen !== 'undefined'
+      ? Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN
+      : null;
+  const buyerIp = request.getBuyerIp();
+
+  const extraHeaders = {} as Record<string, any>;
+
+  if (buyerIp) {
+    extraHeaders['Shopify-Storefront-Buyer-IP'] = buyerIp;
+  }
 
   return {
     key: [storeDomain, storefrontApiVersion, body, locale],
@@ -160,11 +182,12 @@ function createShopRequest(body: string, locale?: string) {
       body,
       method: 'POST',
       headers: {
-        'X-Shopify-Storefront-Access-Token': storefrontToken,
+        'X-Shopify-Storefront-Access-Token': secretToken ?? storefrontToken,
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
         'Accept-Language': (locale as string) ?? defaultLocale,
+        ...extraHeaders,
       },
     },
   };
@@ -172,7 +195,7 @@ function createShopRequest(body: string, locale?: string) {
 
 function createErrorMessage(fetchError: Response | Error) {
   if (fetchError instanceof Response) {
-    `An error occurred while fetching from the Storefront API. ${
+    return `An error occurred while fetching from the Storefront API. ${
       // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
       fetchError.status === 403
         ? `You may have a bad value in 'shopify.config.js'`
