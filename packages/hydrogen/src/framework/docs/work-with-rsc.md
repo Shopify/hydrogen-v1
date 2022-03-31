@@ -83,7 +83,7 @@ The following example shows how to use the `@shopify/hydrogen/client` import pat
 {% codeblock file, filename: 'ProductSelector.client.jsx' %}
 
 ```jsx
-import {useServerState} from '@shopify/hydrogen/client';
+import {useServerProps} from '@shopify/hydrogen/client';
 ```
 
 {% endcodeblock %}
@@ -106,16 +106,16 @@ import {Link} from '@shopify/hydrogen';
 
 {% endcodeblock %}
 
-## Sharing `state` between client and server
+## Sharing data between client and server
 
 > Note:
 > The functionality described in this section is unique to Hydrogen's React Server Components implementation.
 
-Hydrogen provides a [`useServerState()` hook with a `setServerState()` helper function](/custom-storefronts/hydrogen/framework/server-state), which allows components to paginate within collections, programmatically switch routes, or do anything that requires new data from the server.
+Hydrogen provides a [`useServerProps()` hook with a `setServerProps()` helper function](/custom-storefronts/hydrogen/framework/server-props), which allows components to paginate within collections, change a product variant, or do anything that requires new data from the server.
 
-Sharing state information between the client and server is important for common tasks, like `page` routing. The following diagram shows how the `page` state is shared between the client and server:
+Sharing data between the client and server is important for common tasks, like `page` routing. The following diagram shows how the `page` prop is shared between the client and server:
 
-![A diagram that illustrates the workflow for sharing state information between client and server](/assets/custom-storefronts/hydrogen/hydrogen-sharing-state-information.png)
+![A diagram that illustrates the workflow for sharing data between client and server](/assets/custom-storefronts/hydrogen/hydrogen-sharing-state-information.png)
 
 1. `App.server.jsx` relies on the `pathname` and `search` state to choose the correct route to render. To change routes, the client updates the `page` state:
 

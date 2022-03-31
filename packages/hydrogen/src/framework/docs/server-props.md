@@ -1,38 +1,28 @@
 As you build your Hydrogen app with [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `state` on the server. Sharing state information between the client and server is important for common tasks, like [page routing](/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc#sharing-state-between-client-and-server).
 
-This guide describes how to manage your server state during your development process.
+This guide describes how to manage server props during your development process.
 
-## How `state` works
+## How server props work
 
-The `state` object is core to React Server Components. Hydrogen provides a `useServerState()` hook with a `setServerState()` helper function, which allows components to paginate within collections, programmatically switch routes, or do anything that requires new data from the server.
+Server `props` are simply the props passed to your root server component route. Hydrogen provides a `useServerProps()` hook with a `setServerProps()` helper function, which allows you to re-render the server component with new `props`. This is useful to paginate within collections, switch product variants, or do anything that requires new data from the server.
 
-For example, you can take geo-location co-ordinates and set them as `serverState` to provide a new hydrated experience for the current location:
+For example, you can take geo-location co-ordinates and set them as server `props` to provide a new hydrated experience for the current location:
 
 {% codeblock file, filename: 'GeoLocate.client.jsx' %}
 
 ```js
 navigator.geolocation.getCurrentPosition((data) => {
-  setServerState('geoCoordinates', data);
+  setServerProps('geoCoordinates', data);
 });
 ```
 
 {% endcodeblock %}
 
-## Managing server state
-
-The most basic example of `state` is the `pathname` and `search` prop, which Hydrogen manages for you whenever your URL location changes. The server state is passed as a prop to page components. However, you can set any state that you want within client components using the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook:
-
-```js
-import {useServerState} from '@shopify/hydrogen/client';
-
-const {setServerState} = useServerState();
-```
-
-Whenever you modify the state with `setServerState()`, Hydrogen automatically makes a hydration request to the server component. Your app tree is updated based on the result of that hydration request.
+Whenever you modify the props with `setServerProps()`, Hydrogen automatically makes a hydration request to the server component. Your app tree is updated based on the result of that hydration request.
 
 ## Example
 
-The following example shows a page that queries a specific product ID based on server state:
+The following example shows a page that queries a specific product ID based on server props:
 
 {% codeblock file, filename: 'MyPage.server.jsx' %}
 
@@ -58,23 +48,24 @@ export default function MyPage({selectedProductId}) {
 {% codeblock file, filename: 'ProductSelector.client.jsx' %}
 
 ```jsx
-import {useServerState} from '@shopify/hydrogen/client';
+import {useServerProps} from '@shopify/hydrogen/client';
 
 export default function ProductSelector({selectedProductId}) {
-  const {setServerState} = useServerState();
+  const {setServerProps, pending} = useServerProps();
 
   return (
     <div>
+      {pending ? <p>Loading...</p> : null}
       <button
         onClick={() => {
-          setServerState('selectedProductId', 123);
+          setServerProps('selectedProductId', 123);
         }}
       >
         Select Shoes
       </button>
       <button
         onClick={() => {
-          setServerState('selectedProductId', 456);
+          setServerProps('selectedProductId', 456);
         }}
       >
         Select Dresses
@@ -85,6 +76,8 @@ export default function ProductSelector({selectedProductId}) {
 ```
 
 {% endcodeblock %}
+
+When the user navigates to a new page in your app, the server props will reset. This is important because if they navigate to another product, the selected variant of the previous product should not apply to the new product page.
 
 ## Next steps
 

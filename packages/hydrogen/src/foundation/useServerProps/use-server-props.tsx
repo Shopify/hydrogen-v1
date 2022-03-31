@@ -6,17 +6,16 @@ import {
 } from '../ServerPropsProvider/ServerPropsProvider';
 
 /**
- * The `useServerState` hook allows you to [manage server state](/custom-storefronts/hydrogen/framework/server-state) when using Hydrogen as a React Server Component framework.
+ * The `useServerProps` hook allows you to manage the [server props](/custom-storefronts/hydrogen/framework/server-state) passed to your server components when using Hydrogen as a React Server Component framework. The server props get cleared when you navigate from one route to another.
  *
  * ## Return value
  *
- * The `useServerState` hook returns an object with the following keys:
+ * The `useServerProps` hook returns an object with the following keys:
  *
- * | Key            | Description                                                                                                   |
- * | -------------- | ------------------------------------------------------------------------------------------------------------- |
- * | `serverState`    | The current server state.                                                                                      |
- * | `setServerState` | A function used to modify server state.                                                                       |
- * | `setPersistedServerState` | A function used to modify server state that should persist between navigations.                                                                       |
+ * | Key              | Description                                                                            |
+ * | ---------------- | -------------------------------------------------------------------------------------- |
+ * | `serverProps`    | The current server props.                                                              |
+ * | `setServerProps` | A function used to modify server props.                                                |
  * | `pending`        | Whether a [transition is pending](https://github.com/reactwg/react-18/discussions/41). |
  *
  */

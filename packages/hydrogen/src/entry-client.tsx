@@ -55,16 +55,16 @@ function Content({
 }: {
   clientWrapper: ElementType;
 }) {
-  const [serverState, setServerState] = useState<LocationServerProps>({
+  const [serverProps, setServerProps] = useState<LocationServerProps>({
     pathname: window.location.pathname,
     search: window.location.search,
   });
-  const response = useServerResponse(serverState);
+  const response = useServerResponse(serverProps);
 
   return (
     <ServerPropsProvider
-      initialServerProps={serverState}
-      setServerPropsForRsc={setServerState}
+      initialServerProps={serverProps}
+      setServerPropsForRsc={setServerProps}
     >
       <ClientWrapper>{response.readRoot()}</ClientWrapper>
     </ServerPropsProvider>

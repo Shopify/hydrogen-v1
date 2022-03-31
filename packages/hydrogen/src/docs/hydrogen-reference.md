@@ -111,8 +111,8 @@ Global components wrap around your entire app. Hydrogen includes the [ShopifyPro
     <th>Description</th>
   </tr>
   <tr>
-    <td><a href="/api/hydrogen/hooks/global/useserverstate">useServerState</a></td>
-    <td><a href="/custom-storefronts/hydrogen/framework/server-state">Manages the server state</a> when using Hydrogen as a React Server Component framework.</td>
+    <td><a href="/api/hydrogen/hooks/global/useserverprops">useServerProps</a></td>
+    <td><a href="/custom-storefronts/hydrogen/framework/server-state">Manages the props passed to your server components</a> when using Hydrogen as a React Server Component framework.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshop">useShop</a></td>
