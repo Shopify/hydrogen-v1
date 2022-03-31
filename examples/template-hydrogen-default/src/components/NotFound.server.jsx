@@ -1,4 +1,4 @@
-import {useShopQuery, flattenConnection} from '@shopify/hydrogen';
+import {useShop, useShopQuery, flattenConnection} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
@@ -35,10 +35,14 @@ export default function NotFound({country = {isoCode: 'US'}, response}) {
     response.writeHead({status: 404, statusText: 'Not found'});
   }
 
+  const {languageCode} = useShop();
+  const language = languageCode.toUpperCase();
+
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       country: country.isoCode,
+      language,
     },
   });
   const products = data ? flattenConnection(data.products) : [];
@@ -63,8 +67,8 @@ export default function NotFound({country = {isoCode: 'US'}, response}) {
 }
 
 const QUERY = gql`
-  query NotFoundProductDetails($country: CountryCode)
-  @inContext(country: $country) {
+  query NotFoundProductDetails($country: CountryCode, $language: LanguageCode)
+  @inContext(country: $country, language: $language) {
     products(first: 3) {
       edges {
         node {

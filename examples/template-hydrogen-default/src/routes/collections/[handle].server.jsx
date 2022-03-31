@@ -1,4 +1,4 @@
-import {useShopQuery, flattenConnection, Seo} from '@shopify/hydrogen';
+import {useShop, useShopQuery, flattenConnection, Seo} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
@@ -11,12 +11,16 @@ export default function Collection({
   collectionProductCount = 24,
   params,
 }) {
+  const {languageCode} = useShop();
+  const language = languageCode.toUpperCase();
+
   const {handle} = params;
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       handle,
       country: country.isoCode,
+      language,
       numProducts: collectionProductCount,
     },
     preload: true,
@@ -62,8 +66,9 @@ const QUERY = gql`
   query CollectionDetails(
     $handle: String!
     $country: CountryCode
+    $language: LanguageCode
     $numProducts: Int!
-  ) @inContext(country: $country) {
+  ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       title
       descriptionHtml

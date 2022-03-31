@@ -1,4 +1,5 @@
 import {
+  useShop,
   useShopQuery,
   flattenConnection,
   LocalizationProvider,
@@ -15,9 +16,13 @@ import {Suspense} from 'react';
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
 export default function Layout({children, hero}) {
+  const {languageCode} = useShop();
+  const language = languageCode.toUpperCase();
+
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
+      language,
       numCollections: 3,
     },
     cache: CacheHours(),
@@ -56,7 +61,8 @@ export default function Layout({children, hero}) {
 }
 
 const QUERY = gql`
-  query layoutContent($numCollections: Int!) {
+  query layoutContent($language: LanguageCode, $numCollections: Int!)
+  @inContext(language: $language) {
     shop {
       name
     }

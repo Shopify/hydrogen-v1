@@ -1,4 +1,5 @@
 import {
+  useShop,
   useShopQuery,
   flattenConnection,
   Link,
@@ -59,10 +60,14 @@ function BoxFallback() {
 }
 
 function FeaturedProductsBox({country}) {
+  const {languageCode} = useShop();
+  const language = languageCode.toUpperCase();
+
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       country: country.isoCode,
+      language,
     },
     preload: true,
   });
@@ -112,10 +117,14 @@ function FeaturedProductsBox({country}) {
 }
 
 function FeaturedCollectionBox({country}) {
+  const {languageCode} = useShop();
+  const language = languageCode.toUpperCase();
+
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       country: country.isoCode,
+      language,
     },
     preload: true,
   });
@@ -191,7 +200,8 @@ const SEO_QUERY = gql`
 `;
 
 const QUERY = gql`
-  query indexContent($country: CountryCode) @inContext(country: $country) {
+  query indexContent($country: CountryCode, $language: LanguageCode)
+  @inContext(country: $country, language: $language) {
     collections(first: 2) {
       edges {
         node {
