@@ -58,7 +58,7 @@ export type ImportGlobOutput = Record<
 
 export type ServerHandlerConfig = {
   routes: ImportGlobEagerOutput;
-  hydrogenConfig: any;
+  hydrogenConfig?: any;
   shopifyConfig: ShopifyConfig;
 };
 
