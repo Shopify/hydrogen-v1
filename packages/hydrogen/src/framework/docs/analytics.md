@@ -6,15 +6,18 @@ This guide describes the analytic events that Hydrogen emits by default. It also
 
 By default, Hydrogen emits the following analytic events:
 
-- `page-view`: When a customer visits a storefront page
-- `add-to-cart`: When a customer adds an item to their cart
-- `update-cart`: When a customer updates an item in their cart
-- `remove-from-cart`: When a customer removes an item from their cart
-- `discount-code-updated`: When a discount code that a customer applies to a cart is updated
+- `PAGE_VIEW`: When a customer visits a storefront page
+- `ADD_TOCART`: When a customer adds an item to their cart
+- `UPDATE_CART`: When a customer updates an item in their cart
+- `REMOVE_FROM_CART`: When a customer removes an item from their cart
+- `DISCOUNT_CODE_UPDATED`: When a discount code that a customer applies to a cart is updated
+
+The event name constants are available in `ClientAnalytics.eventNames`.
 
 ## Subscribe to an analytic event
 
-You can subscribe to an analytic event to allow your Hydrogen app to listen for the event. The following steps describe how to subscribe to the `page-view` analytic event.
+You can subscribe to an analytic event to allow your Hydrogen app to listen for the event.
+The following steps describe how to subscribe to the `PAGE_VIEW` analytic event.
 
 1. Create a new client component in the `/components` directory of your Hydrogen app. For example, `components/AnalyticListener.client.jsx`.
 
@@ -27,12 +30,23 @@ You can subscribe to an analytic event to allow your Hydrogen app to listen for 
 
    let init = false;
    export default function AnalyticsListener() {
-     if (!init) {
-       ClientAnalytics.subscribe('page-view', (payload) => {
-         console.log(payload);
+     useEffect(() => {
+       // Setup common page specific data
+       ClientAnalytics.pushToPageAnalyticData({
+         userLocale: navigator.language,
        });
-       init = true;
-     }
+
+       if (!init) {
+         // One time initialization
+         ClientAnalytics.subscribe(
+           ClientAnalytics.eventNames.PAGE_VIEW,
+           (payload) => {
+             console.log(payload);
+           }
+         );
+         init = true;
+       }
+     });
 
      return null;
    }
@@ -63,7 +77,7 @@ Aside from the [default analytic events](#default-analytic-events) that Hydrogen
 
 The following example shows how to configure a custom event to track the pages where a promotional banner is being clicked the most:
 
-{% codeblock file, filename: 'components/CustomAnalyticListener.client.jsx' %}
+{% codeblock file, filename: 'components/Banner.client.jsx' %}
 
 ```js
 <Banner onClick={(event) => {
@@ -79,62 +93,131 @@ The following example shows how to configure a custom event to track the pages w
 
 ### Retrieving data from other parts of your Hydrogen app
 
-You might need data that's available elsewhere in your Hydrogen app. For example, the data you need might be available in other server and client components:
+Collect analaytic data where you are making queries.
 
-{% codeblock file, filename: '*.server.js' %}
+For example, making collection name and id available when receive `PAGE_VIEW`
+analytic event:
+
+{% codeblock file, filename: 'collections/[handle].server.js' %}
 
 ```js
-useServerDatalayer({locale});
+const {data} = useShopQuery({
+  query: QUERY,
+  variables: {
+    handle,
+    country: country.isoCode,
+    numProducts: collectionProductCount,
+  },
+  preload: true,
+});
+
+const collection = data.collection;
+
+useServerAnalytics({
+  canonicalPageUrl: `/collections/${handle}`,
+  collectionName: collection.title,
+  collectionId: collection.id,
+});
 ```
 
 {% endcodeblock %}
+
+You can add to page analytic data from client components as well.
 
 {% codeblock file, filename: '*.client.js' %}
 
 ```js
 // some.client.jsx
-ClientAnalytics.pushToDataLayer({
-  heroBanner: 'hero-1',
+useEffect(() => {
+  ClientAnalytics.pushToPageAnalyticData({
+    heroBanner: 'hero-1',
+  });
 });
 ```
 
 {% endcodeblock %}
+
+> Note: All `ClientAnalytics.*` function calls must be wrapped in a `useEffect`
 
 To retrieve the data that's available elsewhere in your Hydrogen app, you can add the following code to your server and client components:
 
 {% codeblock file, filename: '*.server.js' %}
 
 ```js
-const serverDataLayer = useServerDatalayer();
+const serverDataLayer = useServerAnalytics();
 ```
 
+> Note: Do not use the data from `useServerAnalytics()` for rendering. This will cause occasional hydration mismatch.
+
 {% endcodeblock %}
+
+You can get analytic data from client components too.
 
 {% codeblock file, filename: '*.client.js' %}
 
 ```js
-ClientAnalytics.getDataLayer();
+ClientAnalytics.getPageAnalyticData();
 ```
 
 {% endcodeblock %}
 
+> Note: Do not use the data from `ClientAnalytics.getPageAnalyticData()` for rendering. This will cause occasional hydration mismatch.
+
 ## Send analytic data from the server side
 
-All events that are configured in client components are sent to the server using the `/__event` endpoint. You can listen to the `/__event` endpoint on the server side by supplying a server analytic connector:
+In order to send analytics from the server-side, do the following:
+
+1. Create a client-side analytic listener that makes a fetch call to `__event` endpoint
+
+{% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
+
+```js
+import {ClientAnalytics} from '@shopify/hydrogen/client';
+
+let init = false;
+export default function AnalyticsListener() {
+  useEffect(() => {
+    // Setup common page specific data
+    ClientAnalytics.pushToPageAnalyticData({
+      userLocale: navigator.language,
+    });
+
+    if (!init) {
+      // One time initialization
+      ClientAnalytics.subscribe(
+        ClientAnalytics.eventNames.PAGE_VIEW,
+        (payload) => {
+          try {
+            fetch('/__event', {
+              method: 'post',
+              headers: {
+                'cache-control': 'no-cache',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(payload),
+            });
+          } catch (e) {
+            // deal with error
+          }
+        }
+      );
+      init = true;
+    }
+  });
+
+  return null;
+}
+```
+
+{% endcodeblock %}
+
+2. Create a server-side analytic connector and pass it into the `serverAnalyticConnectors` config
 
 {% codeblock file, filename: 'MyServerAnalyticConnector.jsx' %}
 
 ```js
-export function request(request: Request): void {
-  Promise.resolve(request.json())
-    .then((data) => {
-      if (data.eventname) {
-        console.log(data.eventname, data.payload);
-      }
-    })
-    .catch((error) => {
-      log.warn('Failed to resolve server analytics: ', error);
-    });
+export function request(request, data, contentType) {
+  // Deal with your analytic request
 }
 ```
 
@@ -156,19 +239,33 @@ export default renderHydrogen(App, {
 
 {% endcodeblock %}
 
+### ServerAnalyticConnector request function paramters
+
+| Parameter   | Type           | Description                            |
+| ----------- | -------------- | -------------------------------------- |
+| request     | Request        | The analytic request object            |
+| data        | Object or Text | The result from `.json()` or `.text()` |
+| contentType | string         | 'json' or 'text'                       |
+
 ## Unsubscribe from an analytic event
 
-You can unsubscribe from analytic events that you no longer want your Hydrogen app to track. For example, you can unsubscribe from the `page-view` event:
+You can unsubscribe from analytic events that you no longer want your Hydrogen app to track. For example:
 
-{% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
+{% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
 
-```js
-const pageViewSubscriber = ClientAnalytics.subscribe('page-view', (payload) => {
-  console.log(payload);
+```jsx
+useEffect(() => {
+  const pageViewSubscriber = ClientAnalytics.subscribe(
+    'accepts-marketing',
+    (payload) => {
+      console.log(payload);
+    }
+  );
+
+  return function cleanup() {
+    pageViewSubscriber.unsubscribe();
+  };
 });
-...
-// Some condition is met
-pageViewSubscriber.unsubscribe();
 ```
 
 {% endcodeblock %}
