@@ -2,6 +2,7 @@ import {
   CurrencyCode,
   SellingPlanAllocationConnection,
 } from '../../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement';
 
 const priceV2 = {
@@ -155,88 +156,89 @@ export const SELLING_PLAN_GROUPS_CONNECTION = {
 
 export const VARIANTS_WITH_SELLING_PLANS = {
   edges: (VARIANTS.edges ?? []).map((edge) => {
-    const sellingPlanAllocations: SellingPlanAllocationConnection = {
-      pageInfo: {
-        hasNextPage: false,
-        hasPreviousPage: false,
-      },
-      edges: [
-        {
-          cursor: '1234',
-          node: {
-            sellingPlan: {
-              id: 'abc',
-              name: 'Deliver every week',
-              options: [
+    const sellingPlanAllocations: PartialDeep<SellingPlanAllocationConnection> =
+      {
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+        edges: [
+          {
+            cursor: '1234',
+            node: {
+              sellingPlan: {
+                id: 'abc',
+                name: 'Deliver every week',
+                options: [
+                  {
+                    name: 'Deliver every',
+                    value: 'week',
+                  },
+                ],
+                priceAdjustments: [],
+                recurringDeliveries: false,
+              },
+              priceAdjustments: [
                 {
-                  name: 'Deliver every',
-                  value: 'week',
+                  price: {
+                    amount: '10',
+                    currencyCode: CurrencyCode.Usd,
+                  },
+                  compareAtPrice: {
+                    amount: '10',
+                    currencyCode: CurrencyCode.Usd,
+                  },
+                  perDeliveryPrice: {
+                    amount: '10',
+                    currencyCode: CurrencyCode.Usd,
+                  },
+                  unitPrice: {
+                    amount: '10',
+                    currencyCode: CurrencyCode.Usd,
+                  },
                 },
               ],
-              priceAdjustments: [],
-              recurringDeliveries: false,
             },
-            priceAdjustments: [
-              {
-                price: {
-                  amount: '10',
-                  currencyCode: CurrencyCode.Usd,
-                },
-                compareAtPrice: {
-                  amount: '10',
-                  currencyCode: CurrencyCode.Usd,
-                },
-                perDeliveryPrice: {
-                  amount: '10',
-                  currencyCode: CurrencyCode.Usd,
-                },
-                unitPrice: {
-                  amount: '10',
-                  currencyCode: CurrencyCode.Usd,
-                },
-              },
-            ],
           },
-        },
-        {
-          cursor: '4567',
-          node: {
-            sellingPlan: {
-              id: 'def',
-              name: 'Deliver every 2 weeks',
-              options: [
+          {
+            cursor: '4567',
+            node: {
+              sellingPlan: {
+                id: 'def',
+                name: 'Deliver every 2 weeks',
+                options: [
+                  {
+                    name: 'Deliver every',
+                    value: '2 weeks',
+                  },
+                ],
+                priceAdjustments: [],
+                recurringDeliveries: false,
+              },
+              priceAdjustments: [
                 {
-                  name: 'Deliver every',
-                  value: '2 weeks',
+                  price: {
+                    amount: '9',
+                    currencyCode: CurrencyCode.Usd,
+                  },
+                  compareAtPrice: {
+                    amount: '9',
+                    currencyCode: CurrencyCode.Usd,
+                  },
+                  perDeliveryPrice: {
+                    amount: '9',
+                    currencyCode: CurrencyCode.Usd,
+                  },
+                  unitPrice: {
+                    amount: '9',
+                    currencyCode: CurrencyCode.Usd,
+                  },
                 },
               ],
-              priceAdjustments: [],
-              recurringDeliveries: false,
             },
-            priceAdjustments: [
-              {
-                price: {
-                  amount: '9',
-                  currencyCode: CurrencyCode.Usd,
-                },
-                compareAtPrice: {
-                  amount: '9',
-                  currencyCode: CurrencyCode.Usd,
-                },
-                perDeliveryPrice: {
-                  amount: '9',
-                  currencyCode: CurrencyCode.Usd,
-                },
-                unitPrice: {
-                  amount: '9',
-                  currencyCode: CurrencyCode.Usd,
-                },
-              },
-            ],
           },
-        },
-      ],
-    };
+        ],
+      };
 
     return {
       node: {
