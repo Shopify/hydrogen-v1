@@ -19,14 +19,6 @@ import {
 } from './foundation/Router/LegacyRouter';
 import {BrowserRouter} from './foundation/Router/BrowserRouter.client';
 
-declare global {
-  interface Window {
-    __hydrogenConfig: Record<string, any>;
-    __hydrogenRoutes: Record<string, any>;
-    __hydrogenRouteData: any;
-  }
-}
-
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
 

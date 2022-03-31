@@ -126,3 +126,11 @@ export interface HydrogenVitePluginOptions {
 }
 
 export type PreloadOptions = boolean | string;
+
+declare global {
+  interface Window {
+    __hydrogenConfig: Record<string, any>;
+    __hydrogenRoutes: Record<string, any>;
+    __hydrogenRouteData: any;
+  }
+}
