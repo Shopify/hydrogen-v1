@@ -3,6 +3,7 @@ import type {ShopifyConfig} from '../../types';
 
 export type ShopifyContextValue = {
   locale: string;
+  languageCode: string;
   storeDomain: ShopifyConfig['storeDomain'];
   storefrontToken: ShopifyConfig['storefrontToken'];
   storefrontApiVersion: string;

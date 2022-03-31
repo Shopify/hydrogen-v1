@@ -1,5 +1,6 @@
 import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
+import {useShop} from '../../foundation/useShop';
 import {useShopQuery} from '../../hooks/useShopQuery';
 import {LocalizationQuery} from './LocalizationQuery';
 import {CacheDays} from '../../framework/CachingStrategy';
@@ -25,10 +26,14 @@ export interface LocalizationProviderProps {
  * `@inContext` directive as the `country` value.
  */
 export function LocalizationProvider(props: LocalizationProviderProps) {
+  const {languageCode} = useShop();
+  const language = languageCode.toUpperCase();
+
   const {
     data: {localization},
   } = useShopQuery<LocalizationQuery>({
     query: query,
+    variables: {language},
     cache: CacheDays(),
     preload: props.preload,
   });
@@ -40,8 +45,10 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
   );
 }
 
-const query = `query Localization {
-  localization {
+const query = `
+query Localization($language: LanguageCode) 
+@inContext(language: $language) {
+   localization {
     country {
       isoCode
       name

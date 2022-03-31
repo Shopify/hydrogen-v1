@@ -8,8 +8,12 @@ import type {ShopifyConfig} from '../../types';
 import {useServerRequest} from '../ServerRequestProvider';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
+  const locale = shopifyConfig.defaultLocale ?? DEFAULT_LOCALE;
+  const languageCode = locale.split(/[-_]/)[0];
+
   return {
-    locale: shopifyConfig.defaultLocale ?? DEFAULT_LOCALE,
+    locale,
+    languageCode,
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
     storefrontApiVersion: shopifyConfig.storefrontApiVersion,
