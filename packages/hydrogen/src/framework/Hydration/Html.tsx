@@ -7,6 +7,7 @@ type HtmlOptions = {
   template: string;
   htmlAttrs?: Record<string, string>;
   bodyAttrs?: Record<string, string>;
+  clientConfig?: Record<string, any>;
 };
 
 const HTML_ATTR_SEP_RE = /(?<!\=)"\s+/gim;
@@ -42,7 +43,13 @@ function propsToAttrs(props: Record<string, string>) {
     .join(' ');
 }
 
-export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
+export function Html({
+  children,
+  template,
+  htmlAttrs,
+  bodyAttrs,
+  clientConfig,
+}: HtmlOptions) {
   let head = template.match(/<head>(.+?)<\/head>/s)![1] || '';
 
   // @ts-ignore
@@ -60,6 +67,11 @@ export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
       <head dangerouslySetInnerHTML={{__html: head}} />
       <body {...attrsToProps(getBodyAttrs(template))} {...bodyAttrs}>
         <div id="root">{children}</div>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__hydrogenConfig = ${JSON.stringify(clientConfig)}`,
+          }}
+        ></script>
       </body>
     </html>
   );

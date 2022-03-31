@@ -7,9 +7,11 @@ import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY = '/src/App.server';
+export const HYDROGEN_DEFAULT_LEGACY_SERVER_ENTRY = '@shopify/hydrogen/server';
 
 export default (
   shopifyConfig: ShopifyConfig,
+  hydrogenConfig: any,
   pluginOptions: HydrogenVitePluginOptions
 ) => {
   return {
@@ -41,17 +43,19 @@ export default (
 
       server.middlewares.use(bodyParser.raw({type: '*/*'}));
 
+      const serverEntrypoint =
+        process.env.HYDROGEN_SERVER_ENTRY ||
+        hydrogenConfig?.experimental?.serverComponents
+          ? HYDROGEN_DEFAULT_SERVER_ENTRY
+          : HYDROGEN_DEFAULT_LEGACY_SERVER_ENTRY;
+
       return () =>
         server.middlewares.use(
           hydrogenMiddleware({
             dev: true,
             shopifyConfig,
             indexTemplate: getIndexTemplate,
-            getServerEntrypoint: () =>
-              server.ssrLoadModule(
-                process.env.HYDROGEN_SERVER_ENTRY ||
-                  HYDROGEN_DEFAULT_SERVER_ENTRY
-              ),
+            getServerEntrypoint: () => server.ssrLoadModule(serverEntrypoint),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)

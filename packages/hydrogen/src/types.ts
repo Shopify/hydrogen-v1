@@ -11,7 +11,7 @@ import type {
 
 type CommonOptions = {
   App: any;
-  routes?: ImportGlobEagerOutput;
+  routes: ImportGlobEagerOutput;
   request: ServerComponentRequest;
   componentResponse: ServerComponentResponse;
   log: Logger;
@@ -50,8 +50,13 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
+export type ImportGlobOutput = Record<
+  string,
+  () => Promise<Record<'default' | 'api', any>>
+>;
+
 export type ServerHandlerConfig = {
-  routes?: ImportGlobEagerOutput;
+  routes: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
 };
 

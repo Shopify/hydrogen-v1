@@ -4,7 +4,7 @@ import MagicString from 'magic-string';
 
 const HYDROGEN_ENTRY_FILE = 'hydrogen-entry-client.jsx';
 
-export default () => {
+export default (hydrogenConfig: any) => {
   let config: ResolvedConfig;
   return {
     name: 'vite-plugin-hydration-auto-import',
@@ -27,10 +27,21 @@ export default () => {
     },
     load(id) {
       if (id.includes(HYDROGEN_ENTRY_FILE + '?virtual')) {
-        const code = new MagicString(
-          `import renderHydrogen from '@shopify/hydrogen/entry-client';\n` +
-            `export default renderHydrogen((props) => props.children);`
-        );
+        let code;
+
+        if (hydrogenConfig?.experimental?.serverComponents) {
+          code = new MagicString(
+            `import renderHydrogen from '@shopify/hydrogen/entry-client';\n` +
+              `export default renderHydrogen((props) => props.children);`
+          );
+        } else {
+          code = new MagicString(
+            `import renderHydrogen from '@shopify/hydrogen/entry-client';\n` +
+              `import App, {routes} from './src/App';\n` +
+              `window.__hydrogenRoutes = routes;\n` +
+              `export default renderHydrogen(App);`
+          );
+        }
 
         return {
           code: code.toString(),

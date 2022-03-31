@@ -1,17 +1,10 @@
-import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {FileRoutes, Router, ShopifyProvider} from '@shopify/hydrogen';
+import {ShopifyProviderClient as ShopifyProvider} from '@shopify/hydrogen';
 import shopifyConfig from '../shopify.config';
 
-function App() {
+export default function App({children}) {
   return (
-    <ShopifyProvider shopifyConfig={shopifyConfig}>
-      <Router>
-        <FileRoutes route={routes} />
-      </Router>
-    </ShopifyProvider>
+    <ShopifyProvider shopifyConfig={shopifyConfig}>{children}</ShopifyProvider>
   );
 }
 
-const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
-
-export default renderHydrogen(App, {routes, shopifyConfig});
+export const routes = import.meta.glob('./routes/**/*.[jt](s|sx)');

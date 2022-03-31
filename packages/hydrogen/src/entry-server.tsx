@@ -14,6 +14,7 @@ import type {
   HydratorOptions,
   ImportGlobEagerOutput,
   ServerHandlerConfig,
+  ImportGlobOutput,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -45,6 +46,12 @@ import {
 import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
+import {
+  findRoute,
+  LegacyRouter,
+  createLazyPageRoutes,
+} from './foundation/Router/LegacyRouter';
+import {BrowserRouter} from './foundation/Router/BrowserRouter.client';
 
 declare global {
   // This is provided by a Vite plugin
@@ -146,6 +153,16 @@ export const renderHydrogen = (
       response: streamableResponse,
     };
 
+    // TODO: Read hydrogen.config.js file to get this setting
+    const isExperimentalServerComponentsEnabled = false;
+    if (!isExperimentalServerComponentsEnabled) {
+      if (isStreamable) {
+        return streamLegacy(url, params);
+      }
+
+      return renderLegacy(url, params);
+    }
+
     if (isReactHydrationRequest) {
       return hydrate(url, params);
     }
@@ -168,6 +185,151 @@ export const renderHydrogen = (
 function getApiRoute(url: URL, {routes}: {routes: ImportGlobEagerOutput}) {
   const apiRoutes = getApiRoutes(routes);
   return getApiRouteFromURL(url, apiRoutes);
+}
+
+async function renderLegacy(
+  url: URL,
+  {
+    App,
+    routes,
+    request,
+    componentResponse,
+    log,
+    template,
+    nonce,
+    dev,
+  }: RendererOptions
+) {
+  const serverProps = {
+    pathname: url.pathname,
+    search: url.search,
+    request,
+    log,
+    routes,
+  };
+
+  request.ctx.router.serverProps = serverProps;
+
+  const AppSSR = (
+    <Html template={template}>
+      <ServerRequestProvider request={request} isRSC={false}>
+        <App routes={routes} />
+      </ServerRequestProvider>
+    </Html>
+  );
+
+  function onErrorShell(error: Error) {
+    log.error(error);
+    componentResponse.writeHead({status: 500});
+    return template;
+  }
+
+  let html = await renderToBufferedString(AppSSR, {log, nonce}).catch(
+    onErrorShell
+  );
+  html = applyHtmlHead(html, request.ctx.head, template);
+
+  const headers = {} as Record<string, any>;
+  headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+
+  return new Response(html, {status: 200, headers});
+}
+
+async function streamLegacy(
+  url: URL,
+  {
+    App,
+    routes,
+    request,
+    response,
+    componentResponse,
+    log,
+    template,
+    nonce,
+    dev,
+  }: StreamerOptions
+) {
+  const state = {pathname: url.pathname, search: url.search};
+  log.trace('stream start');
+
+  const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
+    stripScriptsFromTemplate(template);
+
+  const {AppSSR} = await buildAppLegacySSR(
+    {
+      App,
+      state,
+      request,
+      response: componentResponse,
+      log,
+      // @ts-expect-error TODO: Update all other render methods to use glob instead of eager
+      routes,
+    },
+    {template: noScriptTemplate}
+  );
+
+  let didError: Error | undefined;
+
+  if (__WORKER__) {
+    // todo: implement
+    return new Response('TODO: Implement Worker response');
+  } else if (response) {
+    const {pipe} = ssrRenderToPipeableStream(AppSSR, {
+      nonce,
+      bootstrapScripts,
+      bootstrapModules,
+      onShellReady() {
+        log.trace('node ready to stream');
+
+        writeHeadToServerResponse(response, componentResponse, log, didError);
+
+        if (isRedirect(response)) {
+          // Return redirects early without further rendering/streaming
+          return response.end();
+        }
+
+        startWritingHtmlToServerResponse(response, dev ? didError : undefined);
+
+        setTimeout(() => {
+          log.trace('node pipe response');
+          pipe(response);
+        }, 0);
+      },
+      async onAllReady() {
+        log.trace('node complete stream');
+
+        postRequestTasks(
+          'str',
+          response.statusCode,
+          request,
+          componentResponse
+        );
+        return;
+      },
+      onShellError(error: any) {
+        log.error(error);
+
+        if (!response.writableEnded) {
+          writeHeadToServerResponse(response, componentResponse, log, error);
+          startWritingHtmlToServerResponse(response, dev ? error : undefined);
+
+          response.write(template);
+          response.end();
+        }
+      },
+      onError(error: any) {
+        didError = error;
+
+        if (dev && response.headersSent) {
+          // Calling write would flush headers automatically.
+          // Delay this error until headers are properly sent.
+          response.write(getErrorMarkup(error));
+        }
+
+        log.error(error);
+      },
+    });
+  }
 }
 
 /**
@@ -616,7 +778,16 @@ type BuildAppOptions = {
   request: ServerComponentRequest;
   response: ServerComponentResponse;
   log: Logger;
-  routes?: ImportGlobEagerOutput;
+  routes: ImportGlobEagerOutput;
+};
+
+type BuildLegacyAppOptions = {
+  App: React.JSXElementConstructor<any>;
+  state?: object | null;
+  request: ServerComponentRequest;
+  response: ServerComponentResponse;
+  log: Logger;
+  routes: ImportGlobOutput;
 };
 
 function buildAppRSC({
@@ -680,6 +851,49 @@ function buildAppSSR(
   );
 
   return {AppSSR, rscReadable: rscReadableForFlight};
+}
+
+async function buildAppLegacySSR(
+  {App, state, request, log, routes}: BuildLegacyAppOptions,
+  htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
+) {
+  const serverProps = {
+    ...state,
+    request,
+    log,
+    routes,
+  };
+
+  request.ctx.router.serverProps = serverProps;
+
+  const {foundRoute, foundRouteDetails} = findRoute(
+    // @ts-ignore
+    state!.pathname,
+    createLazyPageRoutes(routes, '*', './routes')
+  );
+  const initialComponent = (await foundRoute.component()).default;
+  const initialParams = foundRouteDetails.params;
+
+  const AppSSR = (
+    <Html
+      {...htmlOptions}
+      // TODO: Pass from hydrogen.config.js
+      clientConfig={{experimental: {serverComponents: false}}}
+    >
+      <ServerRequestProvider request={request} isRSC={false}>
+        <App>
+          <BrowserRouter>
+            <LegacyRouter
+              initialComponent={initialComponent}
+              initialParams={initialParams}
+            />
+          </BrowserRouter>
+        </App>
+      </ServerRequestProvider>
+    </Html>
+  );
+
+  return {AppSSR};
 }
 
 function PreloadQueries({

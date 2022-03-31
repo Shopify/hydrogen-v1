@@ -15,8 +15,10 @@ import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
+import entryServerAutoImport from './plugins/vite-plugin-entry-server-auto-import';
 
 export default (
+  hydrogenConfig: any,
   shopifyConfig: ShopifyConfig,
   pluginOptions: HydrogenVitePluginOptions = {}
 ) => {
@@ -25,9 +27,10 @@ export default (
 
     hydrogenConfig(),
     hydrogenClientMiddleware(),
-    hydrogenMiddleware(shopifyConfig, pluginOptions),
+    hydrogenMiddleware(shopifyConfig, hydrogenConfig, pluginOptions),
     react(),
-    hydrationAutoImport(),
+    entryServerAutoImport(),
+    hydrationAutoImport(hydrogenConfig),
     ssrInterop(),
     cssModulesRsc(),
     rsc({

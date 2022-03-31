@@ -12,6 +12,19 @@ import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import type {DevServerMessage} from './utilities/devtools';
+import {
+  findRoute,
+  LegacyRouter,
+  createLazyPageRoutes,
+} from './foundation/Router/LegacyRouter';
+import {BrowserRouter} from './foundation/Router/BrowserRouter.client';
+
+declare global {
+  interface Window {
+    __hydrogenConfig: Record<string, any>;
+    __hydrogenRoutes: Record<string, any>;
+  }
+}
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
@@ -31,19 +44,50 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
     });
   }
 
+  const hydrogenConfig = window.__hydrogenConfig;
+
   // default to StrictMode on, unless explicitly turned off
   const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
 
-  hydrateRoot(
-    root,
-    <RootComponent>
-      <ErrorBoundary FallbackComponent={Error}>
-        <Suspense fallback={null}>
-          <Content clientWrapper={ClientWrapper} />
-        </Suspense>
-      </ErrorBoundary>
-    </RootComponent>
-  );
+  if (hydrogenConfig?.experimental?.serverComponents) {
+    hydrateRoot(
+      root,
+      <RootComponent>
+        <ErrorBoundary FallbackComponent={Error}>
+          <Suspense fallback={null}>
+            <Content clientWrapper={ClientWrapper} />
+          </Suspense>
+        </ErrorBoundary>
+      </RootComponent>
+    );
+  } else {
+    const routes = createLazyPageRoutes(
+      window.__hydrogenRoutes,
+      '*',
+      './routes'
+    );
+    const {foundRoute, foundRouteDetails} = findRoute(
+      window.location.pathname,
+      routes
+    );
+    const initialComponent = (await foundRoute.component()).default;
+
+    hydrateRoot(
+      root,
+      <RootComponent>
+        <ErrorBoundary FallbackComponent={Error}>
+          <ClientWrapper>
+            <BrowserRouter>
+              <LegacyRouter
+                initialComponent={initialComponent}
+                initialParams={foundRouteDetails.params}
+              />
+            </BrowserRouter>
+          </ClientWrapper>
+        </ErrorBoundary>
+      </RootComponent>
+    );
+  }
 };
 
 export default renderHydrogen;

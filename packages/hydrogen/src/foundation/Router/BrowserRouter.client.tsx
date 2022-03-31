@@ -7,6 +7,7 @@ import React, {
   FC,
   useEffect,
 } from 'react';
+import {getClientConfig} from '../config';
 import {META_ENV_SSR} from '../ssr-interop';
 import {useServerState} from '../useServerState';
 
@@ -15,7 +16,13 @@ type RouterContextValue = {
   location: Location;
 };
 
-export const RouterContext = createContext<RouterContextValue | {}>({});
+/**
+ * SCREAMING INTENSIFIES!!!!!
+ */
+// @ts-ignore
+globalThis.__routerContext ||= createContext<RouterContextValue | {}>({});
+// @ts-ignore
+export const RouterContext = globalThis.__routerContext;
 
 let currentPath = '';
 let isFirstLoad = true;
@@ -35,19 +42,21 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
     // The app has just loaded
     if (isFirstLoad) isFirstLoad = false;
     // A navigation event has just happened
-    else if (!pending && currentPath !== serverState.pathname) {
+    else if (!pending && currentPath !== serverState?.pathname) {
       window.scrollTo(0, 0);
     }
 
-    currentPath = serverState.pathname;
+    currentPath = serverState?.pathname;
   }, [pending]);
 
   useEffect(() => {
     const unlisten = history.listen(({location: newLocation}) => {
-      setServerState({
-        pathname: newLocation.pathname,
-        search: location.search || undefined,
-      });
+      if (getClientConfig()?.experimental?.serverComponents) {
+        setServerState({
+          pathname: newLocation.pathname,
+          search: location.search || undefined,
+        });
+      }
 
       setLocation(newLocation);
     });
