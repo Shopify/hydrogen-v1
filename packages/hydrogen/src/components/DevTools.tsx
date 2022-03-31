@@ -3,7 +3,7 @@ import type {DevServerMessage} from '../utilities/devtools';
 
 type Panel = 'warnings' | 'network';
 
-export function DevTools() {
+export default function DevTools() {
   const [warnings, setWarnings] = useState<string[] | null>(null);
   const [open, setOpen] = useState(false);
   const [activePanel, setActivePanel] = useState<Panel>('warnings');

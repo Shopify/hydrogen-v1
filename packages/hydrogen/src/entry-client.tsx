@@ -12,7 +12,9 @@ import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import type {DevServerMessage} from './utilities/devtools';
-import {DevTools} from './components/DevTools';
+
+const DevTools =
+  import.meta.env.hot && React.lazy(() => import('./components/DevTools'));
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
@@ -34,7 +36,6 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
 
   // default to StrictMode on, unless explicitly turned off
   const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
-  const devToolsMarkup = config?.showDevTools ? <DevTools /> : null;
 
   let hasCaughtError = false;
 
@@ -48,7 +49,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
           </Suspense>
         </ErrorBoundary>
       </RootComponent>
-      {devToolsMarkup}
+      {DevTools ? <DevTools /> : null}
     </>,
     {
       onRecoverableError(e: any) {
