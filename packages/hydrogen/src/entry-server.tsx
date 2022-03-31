@@ -43,7 +43,7 @@ import {
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME} from './constants';
+import {DATA_LOADER_PATHNAME, RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {
@@ -52,6 +52,7 @@ import {
   createLazyPageRoutes,
 } from './foundation/Router/LegacyRouter';
 import {BrowserRouter} from './foundation/Router/BrowserRouter.client';
+import {RouteDataProvider} from './foundation/RouteData/RouteDataProvider';
 
 declare global {
   // This is provided by a Vite plugin
@@ -113,6 +114,7 @@ export const renderHydrogen = (
     setConfig({dev});
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
+    const isLegacyDataLoaderRequest = url.pathname === DATA_LOADER_PATHNAME;
 
     let template =
       typeof indexTemplate === 'function'
@@ -155,6 +157,10 @@ export const renderHydrogen = (
     };
 
     if (!hydrogenConfig?.experimental?.serverComponents) {
+      if (isLegacyDataLoaderRequest) {
+        return renderLegacyDataLoader(url, params);
+      }
+
       if (isStreamable) {
         return streamLegacy(url, params);
       }
@@ -329,6 +335,41 @@ async function streamLegacy(
       },
     });
   }
+}
+
+async function renderLegacyDataLoader(
+  url: URL,
+  {routes}: {routes: ImportGlobEagerOutput}
+) {
+  const pathname = url.searchParams.get('pathname');
+
+  const {foundRoute, foundRouteDetails} = findRoute(
+    pathname!,
+    // @ts-ignore
+    createLazyPageRoutes(routes, '*', './routes')
+  );
+  const component = await foundRoute.component();
+  const initialParams = foundRouteDetails.params;
+  const initialDataResponse =
+    component.data && (await component.data({params: initialParams}));
+
+  if (!initialDataResponse) {
+    return new Response('', {status: 204});
+  }
+
+  if (initialDataResponse instanceof Response) {
+    return initialDataResponse;
+  }
+
+  if (typeof initialDataResponse === 'object') {
+    return new Response(JSON.stringify(initialDataResponse), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  return new Response(initialDataResponse);
 }
 
 /**
@@ -878,8 +919,25 @@ async function buildAppLegacySSR(
     state!.pathname,
     createLazyPageRoutes(routes, '*', './routes')
   );
-  const initialComponent = (await foundRoute.component()).default;
+  const component = await foundRoute.component();
+  const initialComponent = component.default;
   const initialParams = foundRouteDetails.params;
+  const initialDataResponse =
+    component.data && (await component.data({params: initialParams}));
+  let initialData;
+
+  if (initialDataResponse) {
+    if (initialDataResponse instanceof Response) {
+      if (
+        initialDataResponse.headers.get('content-type') === 'application/json'
+      ) {
+        initialData = await initialDataResponse.json();
+      } else {
+        initialData = await initialDataResponse.text();
+      }
+    }
+    initialData = initialDataResponse;
+  }
 
   const AppSSR = (
     <Html
@@ -890,10 +948,12 @@ async function buildAppLegacySSR(
       <ServerRequestProvider request={request} isRSC={false}>
         <App>
           <BrowserRouter>
-            <LegacyRouter
-              initialComponent={initialComponent}
-              initialParams={initialParams}
-            />
+            <RouteDataProvider value={initialData}>
+              <LegacyRouter
+                initialComponent={initialComponent}
+                initialParams={initialParams}
+              />
+            </RouteDataProvider>
           </BrowserRouter>
         </App>
       </ServerRequestProvider>

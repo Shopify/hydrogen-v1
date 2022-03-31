@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
+import {DATA_LOADER_PATHNAME} from '../../constants';
 import {ImportGlobOutput} from '../../types';
 import {matchPath} from '../../utilities/matchPath';
+import {useRouteDataInternal} from '../RouteData/RouteDataProvider';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client';
 import {useRouter} from './BrowserRouter.client';
 
@@ -15,6 +17,8 @@ export function LegacyRouter({
   const [initialLoad, setInitialLoad] = useState(true);
   const [activeRoute, setActiveRoute] = useState({component: initialComponent});
   const [routeParams, setRouteParams] = useState(initialParams ?? {});
+  // @ts-ignore
+  const {setRouteData} = useRouteDataInternal();
 
   useEffect(() => {
     async function loadRoute() {
@@ -29,6 +33,17 @@ export function LegacyRouter({
 
       if (foundRoute) {
         setRouteParams(foundRouteDetails.params);
+
+        // TODO: Check manifest to see whether route has a data loader
+        const dataResponse = await fetch(
+          DATA_LOADER_PATHNAME + '?pathname=' + location.pathname
+        );
+        if (dataResponse.headers.get('content-type') === 'application/json') {
+          setRouteData(await dataResponse.json());
+        } else {
+          setRouteData(await dataResponse.text());
+        }
+
         setActiveRoute({component: (await foundRoute.component()).default});
       }
     }
@@ -38,7 +53,7 @@ export function LegacyRouter({
     } else {
       loadRoute();
     }
-  }, [location, initialLoad]);
+  }, [location]);
 
   const ActiveRoute = activeRoute.component;
 

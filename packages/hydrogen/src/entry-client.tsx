@@ -18,11 +18,13 @@ import {
   createLazyPageRoutes,
 } from './foundation/Router/LegacyRouter';
 import {BrowserRouter} from './foundation/Router/BrowserRouter.client';
+import {RouteDataProvider} from './foundation/RouteData/RouteDataProvider';
 
 declare global {
   interface Window {
     __hydrogenConfig: Record<string, any>;
     __hydrogenRoutes: Record<string, any>;
+    __hydrogenRouteData: any;
   }
 }
 
@@ -71,18 +73,21 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
       routes
     );
     const initialComponent = (await foundRoute.component()).default;
+    const initialData = window.__hydrogenRouteData;
 
     hydrateRoot(
       root,
       <RootComponent>
         <ErrorBoundary FallbackComponent={Error}>
           <ClientWrapper>
-            <BrowserRouter>
-              <LegacyRouter
-                initialComponent={initialComponent}
-                initialParams={foundRouteDetails.params}
-              />
-            </BrowserRouter>
+            <RouteDataProvider value={initialData}>
+              <BrowserRouter>
+                <LegacyRouter
+                  initialComponent={initialComponent}
+                  initialParams={foundRouteDetails.params}
+                />
+              </BrowserRouter>
+            </RouteDataProvider>
           </ClientWrapper>
         </ErrorBoundary>
       </RootComponent>
