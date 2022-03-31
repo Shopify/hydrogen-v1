@@ -8,8 +8,11 @@ export default function DevTools() {
   const [open, setOpen] = useState(false);
   const [activePanel, setActivePanel] = useState<Panel>('warnings');
   const toggleOpen = useCallback(() => setOpen((state) => !state), []);
+  const [hasMounted, setHasMounted] = React.useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
+
     if (import.meta.hot) {
       import.meta.hot.on('hydrogen', ({type, data}: DevServerMessage) => {
         if (type === 'warn') {
@@ -69,7 +72,7 @@ export default function DevTools() {
     </svg>
   );
 
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV && hasMounted) {
     return (
       <div
         style={{
