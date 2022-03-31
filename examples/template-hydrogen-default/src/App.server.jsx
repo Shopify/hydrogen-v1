@@ -6,20 +6,24 @@ import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
+import GTM from './components/GTM.client';
 
 function App({routes}) {
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <CartProvider>
-          <DefaultSeo />
-          <Router>
-            <FileRoutes routes={routes} />
-            <Route path="*" page={<NotFound />} />
-          </Router>
-        </CartProvider>
-      </ShopifyProvider>
-    </Suspense>
+    <>
+      <Suspense fallback={<LoadingFallback />}>
+        <ShopifyProvider shopifyConfig={shopifyConfig}>
+          <CartProvider>
+            <DefaultSeo />
+            <Router>
+              <FileRoutes routes={routes} />
+              <Route path="*" page={<NotFound />} />
+            </Router>
+          </CartProvider>
+        </ShopifyProvider>
+      </Suspense>
+      <GTM />
+    </>
   );
 }
 

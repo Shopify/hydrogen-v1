@@ -37,8 +37,10 @@
     "vitest": "^0.5.9"
   },
   "dependencies": {
+    "@analytics/google-tag-manager": "^0.5.2",
     "@headlessui/react": "^1.5.0",
     "@shopify/hydrogen": "^0.13.2",
+    "analytics": "^0.8.1",
     "body-parser": "^1.19.1",
     "compression": "^1.7.4",
     "graphql-tag": "^2.12.4",
