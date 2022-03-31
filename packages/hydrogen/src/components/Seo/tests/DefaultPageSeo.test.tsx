@@ -15,7 +15,7 @@ jest.mock('../../../client', () => ({
 
 jest.mock('../../../foundation', () => ({
   useShop() {
-    return {locale: 'fr-CA'};
+    return {languageCode: 'fr'};
   },
 }));
 
