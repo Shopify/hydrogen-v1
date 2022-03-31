@@ -22,8 +22,9 @@ export default function DevTools() {
     }
   }, []);
 
-  const perfData = window.performance.timing;
-  const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+  const perfData = performance.getEntriesByType('navigation');
+  const entry = perfData[0];
+
   const warningsMarkup = warnings
     ? warnings.map((war, i) => <div key={war + i}>{war}</div>)
     : null;
@@ -40,8 +41,31 @@ export default function DevTools() {
       break;
     case 'network':
       activePanelContent = (
-        <div style={{fontFamily: 'monospace', fontSize: '0.9em'}}>
-          {pageLoadTime > 0 && <strong>Page loaded in {pageLoadTime}ms</strong>}
+        <div>
+          <h1
+            style={{
+              paddingTop: '1em',
+              fontWeight: 'bold',
+            }}
+          >
+            Metrics
+          </h1>
+          <ul
+            style={{
+              fontFamily: 'monospace',
+              paddingTop: '1em',
+              fontSize: '0.9em',
+            }}
+          >
+            {Object.entries(entry.toJSON())
+              .filter(([key]) => ['duration', 'domInteractive'].includes(key))
+              .map(([key, value]) => (
+                <li key={key}>
+                  <strong>{key}</strong> {((value as number) / 1000).toFixed(2)}
+                  s
+                </li>
+              ))}
+          </ul>
         </div>
       );
       break;
