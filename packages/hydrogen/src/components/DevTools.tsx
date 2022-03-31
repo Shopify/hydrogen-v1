@@ -25,31 +25,33 @@ export default function DevTools() {
   const perfData = performance.getEntriesByType('navigation');
   const entry = perfData[0];
 
-  const warningsMarkup = warnings
-    ? warnings.map((war, i) => <div key={war + i}>{war}</div>)
-    : null;
-
   let activePanelContent = null;
 
   switch (activePanel) {
     case 'warnings':
+      const warningsMarkup = warnings
+        ? warnings.map((war, i) => <li key={war + i}>{war}</li>)
+        : null;
       activePanelContent = (
-        <div style={{fontFamily: 'monospace', fontSize: '0.9em'}}>
-          {warningsMarkup}
-        </div>
+        <>
+          <PanelHeading>Overfetched graphQL fields</PanelHeading>
+
+          <ul
+            style={{
+              fontFamily: 'monospace',
+              paddingTop: '1em',
+              fontSize: '0.9em',
+            }}
+          >
+            {warningsMarkup}
+          </ul>
+        </>
       );
       break;
     case 'network':
       activePanelContent = (
-        <div>
-          <h1
-            style={{
-              paddingTop: '1em',
-              fontWeight: 'bold',
-            }}
-          >
-            Metrics
-          </h1>
+        <>
+          <PanelHeading>Metrics</PanelHeading>
           <ul
             style={{
               fontFamily: 'monospace',
@@ -66,7 +68,7 @@ export default function DevTools() {
                 </li>
               ))}
           </ul>
-        </div>
+        </>
       );
       break;
   }
@@ -117,7 +119,7 @@ export default function DevTools() {
         <button
           style={{
             position: 'absolute',
-            top: '0.25em',
+            top: '0.35em',
             right: '1em',
             overflow: 'hidden',
             zIndex: 10,
@@ -149,33 +151,35 @@ export default function DevTools() {
               alignItems: 'center',
             }}
           >
-            <button
-              onClick={() => {
-                setOpen(true);
-                setActivePanel('warnings');
-              }}
-              style={{
-                margin: '0 0.5em',
-                textDecoration:
-                  open && activePanel === 'warnings' ? 'underline' : 'none',
-              }}
-            >
-              Warnings{' '}
-              {warnings && (
-                <strong
-                  style={{
-                    borderRadius: '2em',
-                    padding: '.25em 0.5em',
-                    background: 'white',
-                    margin: '0 0.25em',
-                    color: 'black',
-                    textAlign: 'center',
-                  }}
-                >
-                  {warnings.length}
-                </strong>
-              )}
-            </button>
+            {warnings && warnings.length > 0 && (
+              <button
+                onClick={() => {
+                  setOpen(true);
+                  setActivePanel('warnings');
+                }}
+                style={{
+                  margin: '0 0.5em',
+                  textDecoration:
+                    open && activePanel === 'warnings' ? 'underline' : 'none',
+                }}
+              >
+                Warnings{' '}
+                {warnings && (
+                  <strong
+                    style={{
+                      borderRadius: '2em',
+                      padding: '.25em 0.5em',
+                      background: 'white',
+                      margin: '0 0.25em',
+                      color: 'black',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {warnings.length}
+                  </strong>
+                )}
+              </button>
+            )}
             <button
               onClick={() => {
                 setOpen(true);
@@ -191,7 +195,7 @@ export default function DevTools() {
               Network
             </button>
           </div>
-          <div style={{paddingTop: '4em'}}>{activePanelContent}</div>
+          <div style={{paddingTop: '2em'}}>{activePanelContent}</div>
         </div>
       </div>
     );
@@ -199,3 +203,14 @@ export default function DevTools() {
 
   return null;
 }
+
+const PanelHeading = ({children}: {children: string}) => (
+  <h1
+    style={{
+      paddingTop: '1em',
+      fontWeight: 'bold',
+    }}
+  >
+    {children}
+  </h1>
+);
