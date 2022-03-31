@@ -1,3 +1,3 @@
-## Rule Details
+## Rule details
 
-This rule prevents using these hooks in files that end with the `.client` suffix.
+This rule prevents using the `useQuery` hook in files that end with the `.client` extension.

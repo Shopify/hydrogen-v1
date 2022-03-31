@@ -1,12 +1,12 @@
-# Prevents `useState` and `useReducer` in React Server Components (`hydrogen/no-banned-hooks-in-server-components`)
+# Prevent `useQuery` in client components
 
-The `useState` and `useReducer` state handling hooks do not function as expected in React Server Components because Server Components execute only once per request on the server.
+The `useQuery` hook doesn't function in client components because it requires access to server-only features that don't exist in the client.
 
-## Rule Details
+## Rule details
 
-This rule prevents using these hooks in files that do not end with the `.client` suffix.
+This rule prevents using the `useQuery` hook in files that end with the `.client` extension.
 
-Examples of **incorrect** code for this rule:
+### Incorrect code
 
 ```tsx
 // MyServerComponent.server.jsx
@@ -26,7 +26,7 @@ function MyServerComponent() {
 }
 ```
 
-Examples of **correct** code for this rule:
+### Correct code
 
 ```tsx
 // MyClientComponent.client.jsx

@@ -1,4 +1,6 @@
-// Examples of **incorrect** code for this rule:
+// Incorrect code
+
+// Component.client.jsx
 
 function MyComponent() {
   return (

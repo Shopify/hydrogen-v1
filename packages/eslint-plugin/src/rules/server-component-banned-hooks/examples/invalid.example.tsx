@@ -1,6 +1,7 @@
-// Examples of **incorrect** code for this rule:
+// Incorrect code
 
-// MyComponent.jsx or MyComponent.server.jsx
+// MyServerComponent.server.jsx or MyServerComponent.jsx
+
 import {useState} from 'react';
 
 export function MyNonClientComponent() {
