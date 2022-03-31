@@ -7,7 +7,7 @@ This guide describes the analytic events that Hydrogen emits by default. It also
 By default, Hydrogen emits the following analytic events:
 
 - `PAGE_VIEW`: When a customer visits a storefront page
-- `ADD_TOCART`: When a customer adds an item to their cart
+- `ADD_TO_CART`: When a customer adds an item to their cart
 - `UPDATE_CART`: When a customer updates an item in their cart
 - `REMOVE_FROM_CART`: When a customer removes an item from their cart
 - `DISCOUNT_CODE_UPDATED`: When a discount code that a customer applies to a cart is updated
@@ -16,8 +16,7 @@ The event name constants are available in `ClientAnalytics.eventNames`.
 
 ## Subscribe to an analytic event
 
-You can subscribe to an analytic event to allow your Hydrogen app to listen for the event.
-The following steps describe how to subscribe to the `PAGE_VIEW` analytic event.
+You can subscribe to an analytic event to allow your Hydrogen app to listen for the event. The following steps describe how to subscribe to the `PAGE_VIEW` analytic event.
 
 1. Create a new client component in the `/components` directory of your Hydrogen app. For example, `components/AnalyticListener.client.jsx`.
 
@@ -31,7 +30,7 @@ The following steps describe how to subscribe to the `PAGE_VIEW` analytic event.
    let init = false;
    export default function AnalyticsListener() {
      useEffect(() => {
-       // Setup common page specific data
+       // Set up common page-specific data
        ClientAnalytics.pushToPageAnalyticData({
          userLocale: navigator.language,
        });
@@ -93,10 +92,7 @@ The following example shows how to configure a custom event to track the pages w
 
 ### Retrieving data from other parts of your Hydrogen app
 
-Collect analaytic data where you are making queries.
-
-For example, making collection name and id available when receive `PAGE_VIEW`
-analytic event:
+You can collect analytic data wherever you make queries. For example, you can make `collectionName` and `collectionId` available when you receive the `PAGE_VIEW` analytic event:
 
 {% codeblock file, filename: 'collections/[handle].server.js' %}
 
@@ -122,7 +118,7 @@ useServerAnalytics({
 
 {% endcodeblock %}
 
-You can add to page analytic data from client components as well.
+You can also add to page analytic data from client components:
 
 {% codeblock file, filename: '*.client.js' %}
 
@@ -137,7 +133,8 @@ useEffect(() => {
 
 {% endcodeblock %}
 
-> Note: All `ClientAnalytics.*` function calls must be wrapped in a `useEffect`
+> Note: 
+> All `ClientAnalytics.*` function calls must be wrapped in a [`useEffect`](https://reactjs.org/docs/hooks-reference.html#useeffect) hook.
 
 To retrieve the data that's available elsewhere in your Hydrogen app, you can add the following code to your server and client components:
 
@@ -147,11 +144,12 @@ To retrieve the data that's available elsewhere in your Hydrogen app, you can ad
 const serverDataLayer = useServerAnalytics();
 ```
 
-> Note: Do not use the data from `useServerAnalytics()` for rendering. This will cause occasional hydration mismatch.
+> Caution: 
+> Don't use the data from `useServerAnalytics()` for rendering. This will cause occasional mismatches during hydration.
 
 {% endcodeblock %}
 
-You can get analytic data from client components too.
+The following example shows how to retrieve analytic data from a client component:
 
 {% codeblock file, filename: '*.client.js' %}
 
@@ -161,13 +159,14 @@ ClientAnalytics.getPageAnalyticData();
 
 {% endcodeblock %}
 
-> Note: Do not use the data from `ClientAnalytics.getPageAnalyticData()` for rendering. This will cause occasional hydration mismatch.
+> Caution: 
+> Don't use the data from `ClientAnalytics.getPageAnalyticData()` for rendering. This will cause occasional mismatches during hydration.
 
 ## Send analytic data from the server side
 
-In order to send analytics from the server-side, do the following:
+To send analytic data from the server-side, complete the following steps:
 
-1. Create a client-side analytic listener that makes a fetch call to `__event` endpoint
+1. Create a client-side analytic listener that makes a fetch call to the `__event` endpoint.
 
 {% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
 
@@ -177,7 +176,7 @@ import {ClientAnalytics} from '@shopify/hydrogen/client';
 let init = false;
 export default function AnalyticsListener() {
   useEffect(() => {
-    // Setup common page specific data
+    // Set up common page-specific data
     ClientAnalytics.pushToPageAnalyticData({
       userLocale: navigator.language,
     });
@@ -211,13 +210,13 @@ export default function AnalyticsListener() {
 
 {% endcodeblock %}
 
-2. Create a server-side analytic connector and pass it into the `serverAnalyticConnectors` config
+2. Create a server-side analytic connector and pass it into the `serverAnalyticConnectors` configuration:
 
 {% codeblock file, filename: 'MyServerAnalyticConnector.jsx' %}
 
 ```js
 export function request(request, data, contentType) {
-  // Deal with your analytic request
+  // Send your analytic request to third-party analytics
 }
 ```
 
@@ -239,13 +238,13 @@ export default renderHydrogen(App, {
 
 {% endcodeblock %}
 
-### ServerAnalyticConnector request function paramters
+### ServerAnalyticConnector request function parameters
 
 | Parameter   | Type           | Description                            |
 | ----------- | -------------- | -------------------------------------- |
-| request     | Request        | The analytic request object            |
-| data        | Object or Text | The result from `.json()` or `.text()` |
-| contentType | string         | 'json' or 'text'                       |
+| `request`    | request        | The analytic request object.            |
+| `data`        | object or text | The result from `.json()` or `.text()`. |
+| `contentType` | string         | The content type. Valid values: `json` or `text`.                       |
 
 ## Unsubscribe from an analytic event
 
