@@ -133,7 +133,7 @@ useEffect(() => {
 
 {% endcodeblock %}
 
-> Note: 
+> Note:
 > All `ClientAnalytics.*` function calls must be wrapped in a [`useEffect`](https://reactjs.org/docs/hooks-reference.html#useeffect) hook.
 
 To retrieve the data that's available elsewhere in your Hydrogen app, you can add the following code to your server and client components:
@@ -144,7 +144,7 @@ To retrieve the data that's available elsewhere in your Hydrogen app, you can ad
 const serverDataLayer = useServerAnalytics();
 ```
 
-> Caution: 
+> Caution:
 > Don't use the data from `useServerAnalytics()` for rendering. This will cause occasional mismatches during hydration.
 
 {% endcodeblock %}
@@ -159,7 +159,7 @@ ClientAnalytics.getPageAnalyticData();
 
 {% endcodeblock %}
 
-> Caution: 
+> Caution:
 > Don't use the data from `ClientAnalytics.getPageAnalyticData()` for rendering. This will cause occasional mismatches during hydration.
 
 ## Send analytic data from the server side
@@ -168,87 +168,89 @@ To send analytic data from the server-side, complete the following steps:
 
 1. Create a client-side analytic listener that makes a fetch call to the `__event` endpoint.
 
-{% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
+   {% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
 
-```js
-import {ClientAnalytics} from '@shopify/hydrogen/client';
+   ```js
+   import {ClientAnalytics} from '@shopify/hydrogen/client';
 
-let init = false;
-export default function AnalyticsListener() {
-  useEffect(() => {
-    // Set up common page-specific data
-    ClientAnalytics.pushToPageAnalyticData({
-      userLocale: navigator.language,
-    });
+   let init = false;
+   export default function AnalyticsListener() {
+     useEffect(() => {
+       // Set up common page-specific data
+       ClientAnalytics.pushToPageAnalyticData({
+         userLocale: navigator.language,
+       });
 
-    if (!init) {
-      // One time initialization
-      ClientAnalytics.subscribe(
-        ClientAnalytics.eventNames.PAGE_VIEW,
-        (payload) => {
-          try {
-            fetch('/__event', {
-              method: 'post',
-              headers: {
-                'cache-control': 'no-cache',
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(payload),
-            });
-          } catch (e) {
-            // deal with error
-          }
-        }
-      );
-      init = true;
-    }
-  });
+       if (!init) {
+         // One time initialization
+         ClientAnalytics.subscribe(
+           ClientAnalytics.eventNames.PAGE_VIEW,
+           (payload) => {
+             try {
+               fetch('/__event', {
+                 method: 'post',
+                 headers: {
+                   'cache-control': 'no-cache',
+                   'Content-Type': 'application/json',
+                 },
+                 body: JSON.stringify(payload),
+               });
+             } catch (e) {
+               // Error handling
+             }
+           }
+         );
+         init = true;
+       }
+     });
 
-  return null;
-}
-```
+     return null;
+   }
+   ```
 
-{% endcodeblock %}
+   {% endcodeblock %}
 
 2. Create a server-side analytic connector and pass it into the `serverAnalyticConnectors` configuration:
 
-{% codeblock file, filename: 'MyServerAnalyticConnector.jsx' %}
+   {% codeblock file, filename: 'MyServerAnalyticConnector.jsx' %}
 
-```js
-export function request(request, data, contentType) {
-  // Send your analytic request to third-party analytics
-}
-```
+   ```js
+   export function request(request, data, contentType) {
+     // Send your analytic request to third-party analytics
+   }
+   ```
 
-{% endcodeblock %}
+   {% endcodeblock %}
 
-{% codeblock file, filename: 'App.server.js' %}
+   {% codeblock file, filename: 'App.server.js' %}
 
-```js
-import * as MyServerAnalyticConnector from '/components/MyServerAnalyticConnector.jsx'
+   ```js
+   import * as MyServerAnalyticConnector from '/components/MyServerAnalyticConnector.jsx'
 
-...
+   ...
 
-export default renderHydrogen(App, {
-  shopifyConfig,
-  routes,
-  serverAnalyticConnectors: [MyServerAnalyticConnector]
-});
-```
+   export default renderHydrogen(App, {
+     shopifyConfig,
+     routes,
+     serverAnalyticConnectors: [MyServerAnalyticConnector]
+   });
+   ```
 
-{% endcodeblock %}
+   {% endcodeblock %}
 
-### ServerAnalyticConnector request function parameters
+#### Parameters
 
-| Parameter   | Type           | Description                            |
-| ----------- | -------------- | -------------------------------------- |
-| `request`    | request        | The analytic request object.            |
-| `data`        | object or text | The result from `.json()` or `.text()`. |
-| `contentType` | string         | The content type. Valid values: `json` or `text`.                       |
+The following table describes the request function parameters for `ServerAnalyticConnector`:
+
+| Parameter     | Type           | Description                                       |
+| ------------- | -------------- | ------------------------------------------------- |
+| `request`     | request        | The analytic request object.                      |
+| `data`        | object or text | The result from `.json()` or `.text()`.           |
+| `contentType` | string         | The content type. Valid values: `json` or `text`. |
 
 ## Unsubscribe from an analytic event
 
-You can unsubscribe from analytic events that you no longer want your Hydrogen app to track. For example:
+You can unsubscribe from analytic events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `PAGE_VIEW` analytic event:
 
 {% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
 
