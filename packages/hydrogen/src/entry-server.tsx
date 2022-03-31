@@ -205,24 +205,25 @@ async function renderLegacy(
     template,
     nonce,
     dev,
+    shopifyConfig,
   }: RendererOptions
 ) {
-  const serverProps = {
-    pathname: url.pathname,
-    search: url.search,
-    request,
-    log,
-    routes,
-  };
+  const state = {pathname: url.pathname, search: url.search};
 
-  request.ctx.router.serverProps = serverProps;
+  const {noScriptTemplate} = stripScriptsFromTemplate(template);
 
-  const AppSSR = (
-    <Html template={template}>
-      <ServerRequestProvider request={request} isRSC={false}>
-        <App routes={routes} />
-      </ServerRequestProvider>
-    </Html>
+  const {AppSSR} = await buildAppLegacySSR(
+    {
+      App,
+      state,
+      request,
+      response: componentResponse,
+      log,
+      // @ts-expect-error TODO: Update all other render methods to use glob instead of eager
+      routes,
+      shopifyConfig,
+    },
+    {template: noScriptTemplate}
   );
 
   function onErrorShell(error: Error) {
