@@ -20,8 +20,8 @@ The `useShop` hook returns an object with the following keys:
 
 | Key                    | Description                                                                              |
 | ---------------------- | ---------------------------------------------------------------------------------------- |
-| `locale`               | The application locale. Defaults to `defaultLocale` in `shopify.config.js` then `en-us`. |
-| `languageCode`         | The first two chracter of locale above. ie. `en`                                         |
+| `locale`               | The application locale. Defaults to `defaultLocale` in `shopify.config.js` then `EN-US`. |
+| `languageCode`         | The first two chracter of locale above. ie. `EN`                                         |
 | `storeDomain`          | The store domain set in `shopify.config.js`.                                             |
 | `storefrontToken`      | The Storefront API token set in `shopify.config.js`.                                     |
 | `storefrontApiVersion` | The Storefront API version set in `shopify.config.js`.                                   |
