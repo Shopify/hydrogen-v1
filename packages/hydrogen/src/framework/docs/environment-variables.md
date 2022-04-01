@@ -2,7 +2,7 @@ Environment variables, also known as secrets, allow you to load different values
 
 ## How environment variables work
 
-You can store secrets in `.env` files in your project, as per [Vite's guide](https://vitejs.dev/guide/env-and-mode.html#env-files):
+You can [store secrets](https://vitejs.dev/guide/env-and-mode.html#env-files) in `.env` files in your Hydrogen project:
 
 {% codeblock file, filename: '.env' %}
 
