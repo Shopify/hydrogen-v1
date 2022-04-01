@@ -361,7 +361,8 @@ export default function GTM() {
 
 ## Testing analytics
 
-The following example shows how to write an end-to-end (E2E) test for Google Analytics 4:
+The following example shows how to write an end-to-end (E2E) test for Google Analytics 4.
+This will work for Google Tag Manager if configured with Google Analytic 4:
 
 {% codeblock file, filename: 'tests/e2e/analytics.ga4.test.js' %}
 
