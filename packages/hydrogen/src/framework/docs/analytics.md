@@ -1,30 +1,32 @@
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.
 
-This guide describes the analytic events that Hydrogen emits by default. It also explains how to subscribe to events, configure custom events, send analytic data from the server side, and unsubscribe from events.
+This guide describes the events that Hydrogen publishes by default. It also explains how to subscribe to events, configure custom events, send analytic data from the server side, and unsubscribe from events.
 
-## Default analytic events
+## Default events
 
-By default, Hydrogen emits the following analytic events:
+By default, Hydrogen publishes the following events to subscribers (`ClientAnalytics.subscribe`):
 
-- `PAGE_VIEW`: When a customer visits a storefront page
-- `ADD_TO_CART`: When a customer adds an item to their cart
-- `UPDATE_CART`: When a customer updates an item in their cart
-- `REMOVE_FROM_CART`: When a customer removes an item from their cart
-- `DISCOUNT_CODE_UPDATED`: When a discount code that a customer applies to a cart is updated
+| Event name              | When the event is published                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| `PAGE_VIEW`             | A customer visits a storefront page                          |
+| `ADD_TO_CART`           | A customer adds an item to their cart                        |
+| `UPDATE_CART`           | A customer updates an item in their cart                     |
+| `REMOVE_FROM_CART`      | A customer removes an item from their cart                   |
+| `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated |
 
 The event name constants are available in `ClientAnalytics.eventNames`.
 
-## Subscribe to an analytic event
+## Subscribe to an event
 
-You can subscribe to an analytic event to allow your Hydrogen app to listen for the event. The following steps describe how to subscribe to the `PAGE_VIEW` analytic event.
+Subscribe to an event to enable your Hydrogen app to listen for the event. The following steps describe how to subscribe to the `PAGE_VIEW` event.
 
 1. Create a new client component in the `/components` directory of your Hydrogen app. For example, `components/AnalyticListener.client.jsx`.
 
-2. In your client component, add the following code to subscribe to the analytic event:
+2. In your client component, add the following code to subscribe to the event:
 
    {% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
 
-   ```js
+   ```jsx
    import {ClientAnalytics} from '@shopify/hydrogen/client';
 
    let init = false;
@@ -36,7 +38,7 @@ You can subscribe to an analytic event to allow your Hydrogen app to listen for 
        });
 
        if (!init) {
-         // One time initialization
+         // One-time initialization
          ClientAnalytics.subscribe(
            ClientAnalytics.eventNames.PAGE_VIEW,
            (payload) => {
@@ -53,11 +55,11 @@ You can subscribe to an analytic event to allow your Hydrogen app to listen for 
 
    {% endcodeblock %}
 
-3. Add your client component to `App.server.jsx`, the main app component:
+3. Add your client component to `App.server.jsx`, which is the main app component:
 
    {% codeblock file, filename: 'App.server.jsx' %}
 
-   ```js
+   ```jsx
    function App({routes}) {
      return (
        <>
@@ -70,15 +72,13 @@ You can subscribe to an analytic event to allow your Hydrogen app to listen for 
 
    {% endcodeblock %}
 
-## Configure a custom analytic event
+## Configure a custom event
 
-Aside from the [default analytic events](#default-analytic-events) that Hydrogen supports, you can also configure custom analytic events. For example, you might have a promotional banner that displays on multiple pages.
-
-The following example shows how to configure a custom event to track the pages where a promotional banner is being clicked the most:
+Aside from the [default events](#default-events) that Hydrogen supports, you can also configure custom events. For example, you might want to configure a custom event that tracks the pages where a promotional banner is being clicked the most:
 
 {% codeblock file, filename: 'components/Banner.client.jsx' %}
 
-```js
+```jsx
 <Banner onClick={(event) => {
   ClientAnalytics.publish('select_promotion', {
     creative_name: "Summer Banner",
@@ -92,7 +92,7 @@ The following example shows how to configure a custom event to track the pages w
 
 ### Retrieving data from other parts of your Hydrogen app
 
-You can collect analytic data wherever you make queries. For example, you can make `collectionName` and `collectionId` available when you receive the `PAGE_VIEW` analytic event:
+You can collect analytic data wherever you make queries. For example, to gather information about the collection that a customer has interacted with, you can make `collectionName` and `collectionId` available when you receive the `PAGE_VIEW` event:
 
 {% codeblock file, filename: 'collections/[handle].server.js' %}
 
@@ -109,6 +109,8 @@ const {data} = useShopQuery({
 
 const collection = data.collection;
 
+// Use the `useServerAnalytics` hook to supply data
+// when events are published
 useServerAnalytics({
   canonicalPageUrl: `/collections/${handle}`,
   collectionName: collection.title,
@@ -118,7 +120,7 @@ useServerAnalytics({
 
 {% endcodeblock %}
 
-You can also add to page analytic data from client components:
+You can also capture events in client components. For example, when a customer makes a query, such as adding an item to their cart, or clicking on a promotional banner, you can capture the event in your client component:
 
 {% codeblock file, filename: '*.client.js' %}
 
@@ -162,7 +164,9 @@ ClientAnalytics.getPageAnalyticData();
 > Caution:
 > Don't use the data from `ClientAnalytics.getPageAnalyticData()` for rendering. This will cause occasional mismatches during hydration.
 
-## Send analytic data from the server side
+## Send analytic data from the server-side
+
+Some events are only available on the server, which makes sending analytic data from the server-side a good option. Server-side analytics monitor activities on the server itself and only process server-side information. Every request on your server is recorded in the server logs. You can send Shopify analytic data from the server-side because you know exactly what data you need to send.
 
 To send analytic data from the server-side, complete the following steps:
 
@@ -170,7 +174,7 @@ To send analytic data from the server-side, complete the following steps:
 
    {% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
 
-   ```js
+   ```jsx
    import {ClientAnalytics} from '@shopify/hydrogen/client';
 
    let init = false;
@@ -182,7 +186,7 @@ To send analytic data from the server-side, complete the following steps:
        });
 
        if (!init) {
-         // One time initialization
+         // One-time initialization
          ClientAnalytics.subscribe(
            ClientAnalytics.eventNames.PAGE_VIEW,
            (payload) => {
@@ -214,7 +218,7 @@ To send analytic data from the server-side, complete the following steps:
 
    {% codeblock file, filename: 'MyServerAnalyticConnector.jsx' %}
 
-   ```js
+   ```jsx
    export function request(request, data, contentType) {
      // Send your analytic request to third-party analytics
    }
@@ -248,9 +252,9 @@ The following table describes the request function parameters for `ServerAnalyti
 | `data`        | object or text | The result from `.json()` or `.text()`.           |
 | `contentType` | string         | The content type. Valid values: `json` or `text`. |
 
-## Unsubscribe from an analytic event
+## Unsubscribe from an event
 
-You can unsubscribe from analytic events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `PAGE_VIEW` analytic event:
+You can unsubscribe from events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `PAGE_VIEW` event:
 
 {% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
 
