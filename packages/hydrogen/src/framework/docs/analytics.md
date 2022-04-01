@@ -278,7 +278,57 @@ useEffect(() => {
 
 ## Example analytics connectors
 
-The following example shows an implementation of a client analytics connector with Google Tag Manager:
+The following example shows an implementation of a client analytics connector with
+[Google Analytics 4](https://developers.google.com/analytics/devguides/collection/ga4):
+
+{% codeblock file, filename: 'components/GoogleAnalytics.client.jsx' %}
+
+```jsx
+import {useEffect} from 'react';
+import {ClientAnalytics, loadScript} from '@shopify/hydrogen/client';
+
+const GTAG_ID = '<YOUR_GTAG_ID>';
+const URL = `https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`;
+let isInit = false;
+
+export function GoogleAnalytics() {
+  useEffect(() => {
+    if (!isInit) {
+      isInit = true;
+
+      // Load the gtag script
+      loadScript(URL).catch(() => {});
+
+      // gtag initialization code
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      // Configure your gtag
+      gtag('config', GTAG_ID, {
+        send_page_view: false,
+      });
+
+      // Listen for events from Hydrogen
+      ClientAnalytics.subscribe(
+        ClientAnalytics.eventNames.PAGE_VIEW,
+        (payload) => {
+          gtag('event', 'page_view');
+        }
+      );
+    }
+  });
+
+  return null;
+}
+```
+
+{% endcodeblock %}
+
+The following example shows an implementation of a client analytics connector using
+[getanalytics.io Google Tag Manager package](https://getanalytics.io/plugins/google-tag-manager/)
 
 {% codeblock file, filename: 'components/GoogleTagManager.client.jsx' %}
 
@@ -296,7 +346,7 @@ export default function GTM() {
         app: 'hydrogen-app',
         plugins: [
           googleTagManager({
-            containerId: 'GTM-WLTS4QF',
+            containerId: '<YOUR_GTM_ID>',
           }),
         ],
       });
@@ -309,54 +359,46 @@ export default function GTM() {
 
 {% endcodeblock %}
 
-The following example shows an implementation of a client analytics connector with Google Analytics:
-
-{% codeblock file, filename: 'components/GoogleAnalytics.client.jsx' %}
-
-```jsx
-import {useEffect} from 'react';
-import {ClientAnalytics, loadScript} from '@shopify/hydrogen/client';
-
-const URL = 'https://www.googletagmanager.com/gtag/js?id=G-39VXD1NQYB';
-let isInit = false;
-
-export function GoogleAnalytics() {
-  useEffect(() => {
-    if (!isInit) {
-      isInit = true;
-
-      loadScript(URL).catch(() => {});
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-
-      gtag('config', 'G-39VXD1NQYB', {
-        send_page_view: false,
-      });
-
-      ClientAnalytics.subscribe('page-view', (payload) => {
-        console.log('Google analytic page-view', payload);
-        gtag('event', 'page_view');
-      });
-    }
-  }, [isInit]);
-
-  return null;
-}
-```
-
-{% endcodeblock %}
-
 ## Testing analytics
 
-The following example shows how to write an end-to-end (E2E) test for analytics:
+The following example shows how to write an end-to-end (E2E) test for Google Analytics 4:
 
-{% codeblock file, filename: 'PLACEHOLDER NAME OF FILE' %}
+{% codeblock file, filename: 'tests/e2e/analytics.ga4.test.js' %}
 
 ```jsx
-PLACEHOLDER FOR CODE
+import {startHydrogenServer} from '../utils';
+
+const ANALYTICS_ENDPOINT = 'https://www.google-analytics.com/g/collect';
+const endpointRegex = new RegExp(`^${ANALYTICS_ENDPOINT}`);
+
+describe('Google Analytics 4', () => {
+  let hydrogen;
+  let session;
+
+  beforeAll(async () => {
+    hydrogen = await startHydrogenServer();
+  });
+
+  beforeEach(async () => {
+    session = await hydrogen.newPage();
+  });
+
+  afterAll(async () => {
+    await hydrogen.cleanUp();
+  });
+
+  it('should emit page_view', async () => {
+    const [request] = await Promise.all([
+      session.page.waitForRequest((request) =>
+        endpointRegex.test(request.url())
+      ),
+      session.visit('/'),
+    ]);
+
+    const ga4Event = new URL(request.url());
+    expect(ga4Event.searchParams.en).toEqual('page_view');
+  }, 60000);
+});
 ```
 
 {% endcodeblock %}
