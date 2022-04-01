@@ -12,32 +12,40 @@ PUBLIC_MY_API_URL="example.com"
 MY_SECRET_API_TOKEN="topsecret"
 ```
 
-Files for specific environments are also supported, such as `.env.development`, `.env.staging` or `.env.production`. The file used will be determined by the running [Vite mode](https://vitejs.dev/guide/env-and-mode.html#modes). For example, when running the development server, `.env.development` variables will override `.env`.
-
 {% endcodeblock %}
+
+### Files for specific environments
+
+Hydrogen supports files for specific environments. For example, you might have the following files that map to different environments:
+
+- **Development environment**: `.env.development`
+- **Staging environment**: `.env.staging`
+- **Production environment**: `.env.production`
+
+The file that Hydrogen uses is determined by the running [Vite mode](https://vitejs.dev/guide/env-and-mode.html#modes). For example, if you're running a development server, then `.env.development` overrides `.env`.
 
 ### Public variables
 
-In Hydrogen, environment variables prefixed with `PUBLIC_` in the `.env` files are treated as public and are available in the browser. These variables can be accessed using Vite's `import.meta.env` in any component.
+In Hydrogen, environment variables that are prefixed with `PUBLIC_` in `.env` files are treated as public and are available in the browser. These variables can be accessed using Vite's [`import.meta.env`](https://vitejs.dev/guide/env-and-mode.html) object in any component:
 
 {% codeblock file, filename: 'Component.client.jsx' %}
 
-```
+```js
 export default Component() {
   const url = import.meta.env.PUBLIC_MY_API_URL;
   // import.meta.env.MY_SECRET_API_TOKEN is undefined
-
   // ...
 }
 ```
 
 {% endcodeblock %}
 
-Note that public variables are inlined in the bundle code at build time as strings. Therefore, use these variables only for non-sensitive data. Its usage is common in client components, although they can be used anywhere.
+> Caution:
+> Public variables are inlined in the bundle code at build time as strings. As a result, you should only store non-sensitive data in these variables. Public variables are commonly used in client components, but they can be used anywhere.
 
 ### Private variables
 
-Any variable from `.env` files that isn't prefixed with `PUBLIC_` is treated as a server runtime variable in non-production environments. These variables are not exposed to the browser and can only be accessed from server components using the global `Oxygen.env` object.
+In Hydrogen, any variable from `.env` files that isn't prefixed with `PUBLIC_` is treated as a server runtime variable in non-production environments. These variables aren't exposed to the browser and can only be accessed from server components using the global `Oxygen.env` object:
 
 {% codeblock file, filename: 'Page.server.jsx' %}
 
@@ -51,24 +59,36 @@ export default Page() {
 
 {% endcodeblock %}
 
-In production, however, none of the `.env` files will be used to load runtime variables by default. Instead, loading variables will vary based on the hosting runtime you're using. For example, when deploying to a Node.js server, you can pass your variables to the Node.js process using [`cross-env`](https://github.com/kentcdodds/cross-env#readme): `cross-env MY_SECRET=... node dist/server`.
+### Private variables in production
 
-When using `@shopify/hydrogen/platforms/*` as the server build entry point, the global `Oxygen` object will be populated automatically. However, if you are using a custom entry point, you must create this object manually. For example, in a custom Node.js server entry file:
+In production, none of the `.env` files are used to load runtime variables by default. Instead, the variables that load are based on the hosting runtime you're using.
+
+For example, if you're deploying to a Node.js server, then you can pass variables to the Node.js process using [`cross-env`](https://github.com/kentcdodds/cross-env#readme):
 
 {% codeblock file, filename: 'server.js' %}
 
-```
-const app = /* custom server such as Express, Fastify, etc. */;
-
-globalThis.Oxygen = {env: process.env};
-
-app.use(hydrogenMiddleware({/* ... */}))
-
+```js
+cross-env MY_SECRET=... node dist/server
 ```
 
 {% endcodeblock %}
 
-Private variables are only available in components that run exclusively in the server. In other words, they are common in server components or utilities imported by them. Beware that, when used in client components, it will only work during server side rendering and then fail to hydrate later in the browser.
+If you're using `@shopify/hydrogen/platforms/*` as the server build entry point, then the global `Oxygen` object is populated automatically. However, if you're using a custom entry point, then you must create this object manually.
+
+The following example shows how to manually create the global `Oxygen` object in a custom Node.js server entry file:
+
+{% codeblock file, filename: 'server.js' %}
+
+```js
+const app = /* Custom server such as Express or Fastify */;
+globalThis.Oxygen = {env: process.env};
+app.use(hydrogenMiddleware({/* ... */}))
+```
+
+{% endcodeblock %}
+
+> Caution:
+> Private variables are only available in components that run exclusively in the server. Private variables are common in server components or utilities that are imported by them. If you use private variables in client components, then they'll only work during server-side rendering and will fail to hydrate later in the browser.
 
 ## Next steps
 
