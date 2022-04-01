@@ -17,12 +17,11 @@ import {Suspense} from 'react';
  */
 export default function Layout({children, hero}) {
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
-      language,
+      language: languageCode,
       numCollections: 3,
     },
     cache: CacheHours(),

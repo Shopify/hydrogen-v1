@@ -21,7 +21,7 @@ describe('<ShopifyProvider />', () => {
       const provider = mount(
         <ShopifyProvider
           shopifyConfig={{
-            defaultLocale: 'zh-TW',
+            defaultLocale: 'zh-tw',
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
             storefrontApiVersion: 'unstable',
@@ -32,7 +32,7 @@ describe('<ShopifyProvider />', () => {
       );
 
       expect(provider).toContainReactComponent(ShopifyContext.Provider, {
-        value: expect.objectContaining({locale: 'zh-TW'}),
+        value: expect.objectContaining({locale: 'ZH-TW'}),
       });
     });
 

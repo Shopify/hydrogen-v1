@@ -5,7 +5,9 @@
 // @ts-nocheck
 import * as Types from '../../storefront-api-types';
 
-export type LocalizationQueryVariables = Types.Exact<{[key: string]: never}>;
+export type LocalizationQueryVariables = Types.Exact<{
+  language?: Types.InputMaybe<Types.LanguageCode>;
+}>;
 
 export type LocalizationQuery = {__typename?: 'QueryRoot'} & {
   localization: {__typename?: 'Localization'} & {

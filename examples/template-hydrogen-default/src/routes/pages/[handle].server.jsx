@@ -6,10 +6,12 @@ import NotFound from '../../components/NotFound.server';
 
 export default function Page({params}) {
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {handle} = params;
-  const {data} = useShopQuery({query: QUERY, variables: {language, handle}});
+  const {data} = useShopQuery({
+    query: QUERY,
+    variables: {language: languageCode, handle},
+  });
 
   if (!data.pageByHandle) {
     return <NotFound />;

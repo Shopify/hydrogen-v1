@@ -7,12 +7,11 @@ export default function Sitemap({request, response}) {
   response.doNotStream();
 
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
-      language,
+      language: languageCode,
       urlLimits: MAX_URLS,
     },
     // Cache the page for 24 hours

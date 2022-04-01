@@ -45,11 +45,10 @@ function BoxFallback() {
 
 function StorefrontInfo() {
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {data} = useShopQuery({
     query: QUERY,
-    variables: {language},
+    variables: {language: languageCode},
     preload: true,
   });
   const shopName = data ? data.shop.name : '';
@@ -99,11 +98,10 @@ function StorefrontInfo() {
 
 function TemplateLinks() {
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {data} = useShopQuery({
     query: QUERY,
-    variables: {language},
+    variables: {language: languageCode},
     preload: true,
   });
   const products = data && flattenConnection(data.products);

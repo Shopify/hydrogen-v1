@@ -36,13 +36,12 @@ export default function NotFound({country = {isoCode: 'US'}, response}) {
   }
 
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       country: country.isoCode,
-      language,
+      language: languageCode,
     },
   });
   const products = data ? flattenConnection(data.products) : [];

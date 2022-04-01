@@ -61,13 +61,12 @@ function BoxFallback() {
 
 function FeaturedProductsBox({country}) {
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       country: country.isoCode,
-      language,
+      language: languageCode,
     },
     preload: true,
   });
@@ -118,13 +117,12 @@ function FeaturedProductsBox({country}) {
 
 function FeaturedCollectionBox({country}) {
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       country: country.isoCode,
-      language,
+      language: languageCode,
     },
     preload: true,
   });

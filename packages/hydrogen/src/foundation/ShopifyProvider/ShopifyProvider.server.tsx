@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {ShopifyProviderClient} from './ShopifyProvider.client';
 import type {ShopifyProviderProps} from './types';
+import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 
 import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
@@ -12,8 +13,8 @@ function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   const languageCode = locale.split(/[-_]/)[0];
 
   return {
-    locale,
-    languageCode,
+    locale: locale.toUpperCase() as `${LanguageCode}-${CountryCode}`,
+    languageCode: languageCode.toUpperCase() as `${LanguageCode}`,
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
     storefrontApiVersion: shopifyConfig.storefrontApiVersion,

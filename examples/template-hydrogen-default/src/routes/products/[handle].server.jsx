@@ -9,7 +9,6 @@ export default function Product({country = {isoCode: 'US'}}) {
   const {handle} = useRouteParams();
 
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {
     data: {product},
@@ -17,7 +16,7 @@ export default function Product({country = {isoCode: 'US'}}) {
     query: QUERY,
     variables: {
       country: country.isoCode,
-      language,
+      language: languageCode,
       handle,
     },
     preload: true,

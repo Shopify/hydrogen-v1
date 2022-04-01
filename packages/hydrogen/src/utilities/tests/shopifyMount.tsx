@@ -50,8 +50,8 @@ export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {
   const languageCode = locale.split(/[-_]/)[0];
 
   return {
-    locale,
-    languageCode,
+    locale: locale.toUpperCase(),
+    languageCode: languageCode.toUpperCase(),
     storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
     storefrontToken: config.storefrontToken ?? 'abc123',
     storefrontApiVersion: config.storefrontApiVersion ?? '2022-04',

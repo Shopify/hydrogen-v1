@@ -27,13 +27,12 @@ export interface LocalizationProviderProps {
  */
 export function LocalizationProvider(props: LocalizationProviderProps) {
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {
     data: {localization},
   } = useShopQuery<LocalizationQuery>({
     query: query,
-    variables: {language},
+    variables: {language: languageCode},
     cache: CacheDays(),
     preload: props.preload,
   });

@@ -1,4 +1,4 @@
-query Localization {
+query Localization($language: LanguageCode) @inContext(language: $language) {
   localization {
     country {
       isoCode

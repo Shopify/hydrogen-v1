@@ -12,7 +12,6 @@ export default function Collection({
   params,
 }) {
   const {languageCode} = useShop();
-  const language = languageCode.toUpperCase();
 
   const {handle} = params;
   const {data} = useShopQuery({
@@ -20,7 +19,7 @@ export default function Collection({
     variables: {
       handle,
       country: country.isoCode,
-      language,
+      language: languageCode,
       numProducts: collectionProductCount,
     },
     preload: true,
