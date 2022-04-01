@@ -3,10 +3,15 @@ import Product from '../../src/routes/products/[handle].server';
 
 describe('products', () => {
   let hydrogen;
+  let session;
 
   beforeAll(async () => {
     hydrogen = await startHydrogenServer();
     hydrogen.watchForUpdates(Product);
+  });
+
+  beforeEach(async () => {
+    session = await hydrogen.newPage();
   });
 
   afterAll(async () => {
@@ -14,11 +19,11 @@ describe('products', () => {
   });
 
   it('shows the correct product title', async () => {
-    await hydrogen.visit('/products/snowboard');
-    const heading = await hydrogen.page.$('h1');
+    await session.visit('/products/snowboard');
+    const heading = await session.page.locator('h1').first();
     expect(heading).not.toBeNull();
 
-    const text = await hydrogen.page.evaluate((h1) => h1.textContent, heading);
+    const text = await heading.textContent();
     expect(text).toBe('The Hydrogen');
   }, 60000);
 });
