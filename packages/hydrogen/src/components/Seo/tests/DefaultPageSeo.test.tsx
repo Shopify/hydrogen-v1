@@ -15,7 +15,7 @@ jest.mock('../../../client', () => ({
 
 jest.mock('../../../foundation', () => ({
   useShop() {
-    return {languageCode: 'fr'};
+    return {languageCode: 'FR'};
   },
 }));
 
@@ -88,7 +88,7 @@ describe('<DefaultPageSeo />', () => {
       const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent('html', {
-        lang: 'fr',
+        lang: 'FR',
       });
     });
 
