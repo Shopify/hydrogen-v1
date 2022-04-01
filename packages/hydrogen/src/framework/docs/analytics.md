@@ -1,6 +1,6 @@
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.
 
-This guide describes the events that Hydrogen publishes by default. It also explains how to subscribe to events, configure custom events, send analytic data from the server side, and unsubscribe from events.
+This guide describes how to subscribe to the default events that Hydrogen offers, configure custom events, send analytic data from the server-side, and unsubscribe from events. It also provides example implementations of client analytics connectors, and shows how to write an end-to-end (E2E) for testing analytics connectors.
 
 ## Default events
 
@@ -139,7 +139,7 @@ useEffect(() => {
 > Note:
 > All `ClientAnalytics.*` function calls must be wrapped in a [`useEffect`](https://reactjs.org/docs/hooks-reference.html#useeffect) hook.
 
-To retrieve the data that's available elsewhere in your Hydrogen app, you can add the following code to your server and client components:
+To retrieve the data that's available elsewhere in your Hydrogen app, you can add the following code to your server components:
 
 {% codeblock file, filename: '*.server.js' %}
 
@@ -235,9 +235,9 @@ To send analytic data from the server-side, complete the following steps:
    ...
 
    export default renderHydrogen(App, {
-     shopifyConfig,
-     routes,
-     serverAnalyticConnectors: [MyServerAnalyticConnector]
+    shopifyConfig,
+    routes,
+    serverAnalyticConnectors: [MyServerAnalyticConnector]
    });
    ```
 
@@ -278,8 +278,7 @@ useEffect(() => {
 
 ## Example analytics connectors
 
-The following example shows an implementation of a client analytics connector with
-[Google Analytics 4](https://developers.google.com/analytics/devguides/collection/ga4):
+The following example shows an implementation of a client analytics connector with [Google Analytics 4](https://developers.google.com/analytics/devguides/collection/ga4):
 
 {% codeblock file, filename: 'components/GoogleAnalytics.client.jsx' %}
 
@@ -327,8 +326,7 @@ export function GoogleAnalytics() {
 
 {% endcodeblock %}
 
-The following example shows an implementation of a client analytics connector using
-[getanalytics.io Google Tag Manager package](https://getanalytics.io/plugins/google-tag-manager/)
+The following example shows an implementation of a client analytics connector using the [getanalytics.io Google Tag Manager package](https://getanalytics.io/plugins/google-tag-manager/):
 
 {% codeblock file, filename: 'components/GoogleTagManager.client.jsx' %}
 
@@ -359,10 +357,9 @@ export default function GTM() {
 
 {% endcodeblock %}
 
-## Testing analytics
+### Testing analytics connectors
 
-The following example shows how to write an end-to-end (E2E) test for Google Analytics 4.
-This will work for Google Tag Manager if configured with Google Analytic 4:
+The following example shows how to write an end-to-end (E2E) test for Google Analytics 4. This test will also work for Google Tag Manager if you've configured it with Google Analytics 4:
 
 {% codeblock file, filename: 'tests/e2e/analytics.ga4.test.js' %}
 
@@ -389,17 +386,17 @@ describe('Google Analytics 4', () => {
   });
 
   it('should emit page_view', async () => {
-    // Wait for the ga4 analytic network call
+    // Wait for the Google Analytics 4 analytic network call
     const [request] = await Promise.all([
-      // Test if request matches a ga4 analytic pixel
+      // Test if the request matches a Google Analytics 4 analytic pixel
       session.page.waitForRequest((request) =>
         endpointRegex.test(request.url())
       ),
-      // Navigate to home page
+      // Navigate to the home page
       session.visit('/'),
     ]);
 
-    // Validate data on the ga4 analytic pixel
+    // Validate data on the Google Analytics 4 analytic pixel
     const ga4Event = new URL(request.url());
     expect(ga4Event.searchParams.en).toEqual('page_view');
   }, 60000);
