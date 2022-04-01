@@ -88,21 +88,11 @@ When merging PRs, please select the **Squash and Merge** option, which consolida
 
 If you are building or making changes to a component, be sure to read [What are headless components?](./contributing/headlesscomponents.md) and [How to build headless components](./contributing/howtobuildheadless.md).
 
-## GraphQL Types
+## Storefront API Typescript types
 
-### Updating the auto-generated Typescript types, or updating the `.graphql` files
+You can directly import the Typescript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. If you're working on a component, you're not guarnateed to get an object in the exact shape as that type, so wrap it in `PartialDeep` which is imported from `type-fest`. This will also force the component to be more defensive in handling optional properties.
 
-If you make changes to or add any new `.graphql` files within Hydrogen, you will need to run the following commands in order to generate the type definitions and Graphql documents for the newly added/updated files:
-
-```bash
-yarn graphql-types
-```
-
-The Typescript types are then automatically generated from the `.graphql` query in those files.
-
-### Creating Typescript types for Storefront API objects without a `.graphql` file
-
-If you would like to use a type for a Storefront API object without using a GraphQL query / fragment to generate it, you can directly import the Typescript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. From there, you can use things like Typescript's `Pick` or `Omit` helpers to create the shape you need.
+To update the types, follow the steps below, excluding the parts where you update the version.
 
 ### Updating GraphQL and Typescript types to a new Storefront API version
 
@@ -114,14 +104,13 @@ In order to update the supported Storefront API version:
 1. Run `yarn graphql-types`
 1. Fix any Typescript errors that now appear
    1. One fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up
-   1. Another way is to clear the test cache with `yarn test --clearCache` and then run the tests with `yarn test`
+   1. Another way is to clear the test cache with `yarn test --clearCache && yarn test`
 
 For context, updating the `codegen.yml` file and running the script does the following:
 
 1. Automatically hits the Storefront API, and use an introspection query to get the latest info
 1. Uses the results of that query to generate a new `graphql.schema.json` (which is a local representation of the Storefront API)
 1. Generates / updates the new types in `/packages/hydrogen/src/storefront-api-types.ts` based on the `graphql.schema.json`
-1. Generates / updates the types in each `[Name]Fragment.ts` file
 
 ## Running a local version of Hydrogen in a Hydrogen app
 

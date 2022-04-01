@@ -223,6 +223,8 @@ export type ArticleConnection = {
   __typename?: 'ArticleConnection';
   /** A list of edges. */
   edges: Array<ArticleEdge>;
+  /** A list of the nodes contained in ArticleEdge. */
+  nodes: Array<Article>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -384,6 +386,8 @@ export type BlogConnection = {
   __typename?: 'BlogConnection';
   /** A list of edges. */
   edges: Array<BlogEdge>;
+  /** A list of the nodes contained in BlogEdge. */
+  nodes: Array<Blog>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -443,6 +447,8 @@ export type Cart = Node & {
   checkoutUrl: Scalars['URL'];
   /** The date and time when the cart was created. */
   createdAt: Scalars['DateTime'];
+  /** The delivery groups available for the cart, based on the default address of the logged-in customer. */
+  deliveryGroups: CartDeliveryGroupConnection;
   /** The discount codes that have been applied to the cart. */
   discountCodes: Array<CartDiscountCode>;
   /** The estimated costs that the buyer will pay at checkout. The estimated costs are subject to change and changes will be reflected at checkout. The `estimatedCost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart). */
@@ -455,6 +461,15 @@ export type Cart = Node & {
   note?: Maybe<Scalars['String']>;
   /** The date and time when the cart was updated. */
   updatedAt: Scalars['DateTime'];
+};
+
+/** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
+export type CartDeliveryGroupsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  reverse?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
@@ -540,6 +555,69 @@ export type CartCreatePayload = {
   cart?: Maybe<Cart>;
   /** The list of errors that occurred from executing the mutation. */
   userErrors: Array<CartUserError>;
+};
+
+/** Information about the options available for one or more line items to be delivered to a specific address. */
+export type CartDeliveryGroup = {
+  __typename?: 'CartDeliveryGroup';
+  /** A list of cart lines for the delivery group. */
+  cartLines: CartLineConnection;
+  /** The destination address for the delivery group. */
+  deliveryAddress: MailingAddress;
+  /** The delivery options available for the delivery group. */
+  deliveryOptions: Array<CartDeliveryOption>;
+  /** The ID for the delivery group. */
+  id: Scalars['ID'];
+};
+
+/** Information about the options available for one or more line items to be delivered to a specific address. */
+export type CartDeliveryGroupCartLinesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  reverse?: InputMaybe<Scalars['Boolean']>;
+};
+
+/**
+ * An auto-generated type for paginating through multiple CartDeliveryGroups.
+ *
+ */
+export type CartDeliveryGroupConnection = {
+  __typename?: 'CartDeliveryGroupConnection';
+  /** A list of edges. */
+  edges: Array<CartDeliveryGroupEdge>;
+  /** A list of the nodes contained in CartDeliveryGroupEdge. */
+  nodes: Array<CartDeliveryGroup>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/**
+ * An auto-generated type which holds one CartDeliveryGroup and a cursor during pagination.
+ *
+ */
+export type CartDeliveryGroupEdge = {
+  __typename?: 'CartDeliveryGroupEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of CartDeliveryGroupEdge. */
+  node: CartDeliveryGroup;
+};
+
+/** Information about a delivery option. */
+export type CartDeliveryOption = {
+  __typename?: 'CartDeliveryOption';
+  /** The code of the delivery option. */
+  code?: Maybe<Scalars['String']>;
+  /** The method for the delivery option. */
+  deliveryMethodType: DeliveryMethodType;
+  /** The description of the delivery option. */
+  description?: Maybe<Scalars['String']>;
+  /** The estimated cost for the delivery option. */
+  estimatedCost: MoneyV2;
+  /** The title of the delivery option. */
+  title?: Maybe<Scalars['String']>;
 };
 
 /** The discounts that have been applied to the cart line. */
@@ -641,6 +719,8 @@ export type CartLineConnection = {
   __typename?: 'CartLineConnection';
   /** A list of edges. */
   edges: Array<CartLineEdge>;
+  /** A list of the nodes contained in CartLineEdge. */
+  nodes: Array<CartLine>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -1368,6 +1448,8 @@ export type CheckoutLineItemConnection = {
   __typename?: 'CheckoutLineItemConnection';
   /** A list of edges. */
   edges: Array<CheckoutLineItemEdge>;
+  /** A list of the nodes contained in CheckoutLineItemEdge. */
+  nodes: Array<CheckoutLineItem>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -1589,6 +1671,8 @@ export type CollectionConnection = {
   __typename?: 'CollectionConnection';
   /** A list of edges. */
   edges: Array<CollectionEdge>;
+  /** A list of the nodes contained in CollectionEdge. */
+  nodes: Array<Collection>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -1656,6 +1740,8 @@ export type CommentConnection = {
   __typename?: 'CommentConnection';
   /** A list of edges. */
   edges: Array<CommentEdge>;
+  /** A list of the nodes contained in CommentEdge. */
+  nodes: Array<Comment>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -2994,6 +3080,22 @@ export type CustomerUserError = DisplayableError & {
   message: Scalars['String'];
 };
 
+/** List of different delivery method types. */
+export enum DeliveryMethodType {
+  /** Local Delivery. */
+  Local = 'LOCAL',
+  /** None. */
+  None = 'NONE',
+  /** Shipping to a Pickup Point. */
+  PickupPoint = 'PICKUP_POINT',
+  /** Local Pickup. */
+  PickUp = 'PICK_UP',
+  /** Retail. */
+  Retail = 'RETAIL',
+  /** Shipping. */
+  Shipping = 'SHIPPING',
+}
+
 /** Digital wallet, such as Apple Pay, which can be used for accelerated checkouts. */
 export enum DigitalWallet {
   /** Android Pay. */
@@ -3056,6 +3158,13 @@ export type DiscountApplicationConnection = {
   __typename?: 'DiscountApplicationConnection';
   /** A list of edges. */
   edges: Array<DiscountApplicationEdge>;
+  /** A list of the nodes contained in DiscountApplicationEdge. */
+  nodes: Array<
+    | AutomaticDiscountApplication
+    | DiscountCodeApplication
+    | ManualDiscountApplication
+    | ScriptDiscountApplication
+  >;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -3253,6 +3362,8 @@ export type FulfillmentLineItemConnection = {
   __typename?: 'FulfillmentLineItemConnection';
   /** A list of edges. */
   edges: Array<FulfillmentLineItemEdge>;
+  /** A list of the nodes contained in FulfillmentLineItemEdge. */
+  nodes: Array<FulfillmentLineItem>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -3275,6 +3386,23 @@ export type FulfillmentTrackingInfo = {
   /** The tracking number of the fulfillment. */
   number?: Maybe<Scalars['String']>;
   /** The URL to track the fulfillment. */
+  url?: Maybe<Scalars['URL']>;
+};
+
+/** The generic file resource lets you manage files in a merchant’s store. Generic files include any file that doesn’t fit into a designated type such as image or video. Example: PDF, JSON. */
+export type GenericFile = Node & {
+  __typename?: 'GenericFile';
+  /** A word or phrase to indicate the contents of a file. */
+  alt?: Maybe<Scalars['String']>;
+  /** A globally-unique identifier. */
+  id: Scalars['ID'];
+  /** The mime type of the file. */
+  mimeType?: Maybe<Scalars['String']>;
+  /** The size of the original file in bytes. */
+  originalFileSize?: Maybe<Scalars['Int']>;
+  /** The preview image for the file. */
+  previewImage?: Maybe<Image>;
+  /** The URL of the file. */
   url?: Maybe<Scalars['URL']>;
 };
 
@@ -3382,6 +3510,8 @@ export type ImageConnection = {
   __typename?: 'ImageConnection';
   /** A list of edges. */
   edges: Array<ImageEdge>;
+  /** A list of the nodes contained in ImageEdge. */
+  nodes: Array<Image>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -3796,6 +3926,8 @@ export type LocationConnection = {
   __typename?: 'LocationConnection';
   /** A list of edges. */
   edges: Array<LocationEdge>;
+  /** A list of the nodes contained in LocationEdge. */
+  nodes: Array<Location>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -3917,6 +4049,8 @@ export type MailingAddressConnection = {
   __typename?: 'MailingAddressConnection';
   /** A list of edges. */
   edges: Array<MailingAddressEdge>;
+  /** A list of the nodes contained in MailingAddressEdge. */
+  nodes: Array<MailingAddress>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -4012,6 +4146,8 @@ export type MediaConnection = {
   __typename?: 'MediaConnection';
   /** A list of edges. */
   edges: Array<MediaEdge>;
+  /** A list of the nodes contained in MediaEdge. */
+  nodes: Array<ExternalVideo | MediaImage | Model3d | Video>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -4174,6 +4310,8 @@ export type MetafieldConnection = {
   __typename?: 'MetafieldConnection';
   /** A list of edges. */
   edges: Array<MetafieldEdge>;
+  /** A list of the nodes contained in MetafieldEdge. */
+  nodes: Array<Metafield>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -4225,7 +4363,13 @@ export type MetafieldParentResource =
  * Returns the resource which is being referred to by a metafield.
  *
  */
-export type MetafieldReference = MediaImage | Page | Product | ProductVariant;
+export type MetafieldReference =
+  | GenericFile
+  | MediaImage
+  | Page
+  | Product
+  | ProductVariant
+  | Video;
 
 /** Represents a Shopify hosted 3D model. */
 export type Model3d = Media &
@@ -4933,6 +5077,8 @@ export type OrderConnection = {
   __typename?: 'OrderConnection';
   /** A list of edges. */
   edges: Array<OrderEdge>;
+  /** A list of the nodes contained in OrderEdge. */
+  nodes: Array<Order>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -5018,6 +5164,8 @@ export type OrderLineItemConnection = {
   __typename?: 'OrderLineItemConnection';
   /** A list of edges. */
   edges: Array<OrderLineItemEdge>;
+  /** A list of the nodes contained in OrderLineItemEdge. */
+  nodes: Array<OrderLineItem>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -5107,6 +5255,8 @@ export type PageConnection = {
   __typename?: 'PageConnection';
   /** A list of edges. */
   edges: Array<PageEdge>;
+  /** A list of the nodes contained in PageEdge. */
+  nodes: Array<Page>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -5130,10 +5280,14 @@ export type PageEdge = {
  */
 export type PageInfo = {
   __typename?: 'PageInfo';
+  /** The cursor corresponding to the last node in edges. */
+  endCursor?: Maybe<Scalars['String']>;
   /** Whether there are more pages to fetch following the current page. */
   hasNextPage: Scalars['Boolean'];
   /** Whether there are any pages prior to the current page. */
   hasPreviousPage: Scalars['Boolean'];
+  /** The cursor corresponding to the first node in edges. */
+  startCursor?: Maybe<Scalars['String']>;
 };
 
 /** The set of valid sort keys for the Page query. */
@@ -5477,6 +5631,8 @@ export type ProductConnection = {
   edges: Array<ProductEdge>;
   /** A list of available filters. */
   filters: Array<Filter>;
+  /** A list of the nodes contained in ProductEdge. */
+  nodes: Array<Product>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -5699,6 +5855,8 @@ export type ProductVariantConnection = {
   __typename?: 'ProductVariantConnection';
   /** A list of edges. */
   edges: Array<ProductVariantEdge>;
+  /** A list of the nodes contained in ProductVariantEdge. */
+  nodes: Array<ProductVariant>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -5783,6 +5941,7 @@ export type QueryRoot = {
     | Collection
     | Comment
     | ExternalVideo
+    | GenericFile
     | Location
     | MailingAddress
     | MediaImage
@@ -5813,6 +5972,7 @@ export type QueryRoot = {
       | Collection
       | Comment
       | ExternalVideo
+      | GenericFile
       | Location
       | MailingAddress
       | MediaImage
@@ -6103,6 +6263,8 @@ export type SellingPlanAllocationConnection = {
   __typename?: 'SellingPlanAllocationConnection';
   /** A list of edges. */
   edges: Array<SellingPlanAllocationEdge>;
+  /** A list of the nodes contained in SellingPlanAllocationEdge. */
+  nodes: Array<SellingPlanAllocation>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -6140,6 +6302,8 @@ export type SellingPlanConnection = {
   __typename?: 'SellingPlanConnection';
   /** A list of edges. */
   edges: Array<SellingPlanEdge>;
+  /** A list of the nodes contained in SellingPlanEdge. */
+  nodes: Array<SellingPlan>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -6200,6 +6364,8 @@ export type SellingPlanGroupConnection = {
   __typename?: 'SellingPlanGroupConnection';
   /** A list of edges. */
   edges: Array<SellingPlanGroupEdge>;
+  /** A list of the nodes contained in SellingPlanGroupEdge. */
+  nodes: Array<SellingPlanGroup>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
@@ -6384,6 +6550,8 @@ export type StoreAvailabilityConnection = {
   __typename?: 'StoreAvailabilityConnection';
   /** A list of edges. */
   edges: Array<StoreAvailabilityEdge>;
+  /** A list of the nodes contained in StoreAvailabilityEdge. */
+  nodes: Array<StoreAvailability>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
 };
