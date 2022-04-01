@@ -260,7 +260,7 @@ You can unsubscribe from events that you no longer want your Hydrogen app to tra
 
 ```jsx
 useEffect(() => {
-  const pageViewSubscriber = ClientAnalytics.subscribe(
+  const acceptMarketingSubscriber = ClientAnalytics.subscribe(
     'accepts-marketing',
     (payload) => {
       console.log(payload);
@@ -268,7 +268,7 @@ useEffect(() => {
   );
 
   return function cleanup() {
-    pageViewSubscriber.unsubscribe();
+    acceptMarketingSubscriber.unsubscribe();
   };
 });
 ```
