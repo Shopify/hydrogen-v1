@@ -389,13 +389,17 @@ describe('Google Analytics 4', () => {
   });
 
   it('should emit page_view', async () => {
+    // Wait for the ga4 analytic network call
     const [request] = await Promise.all([
+      // Test if request matches a ga4 analytic pixel
       session.page.waitForRequest((request) =>
         endpointRegex.test(request.url())
       ),
+      // Navigate to home page
       session.visit('/'),
     ]);
 
+    // Validate data on the ga4 analytic pixel
     const ga4Event = new URL(request.url());
     expect(ga4Event.searchParams.en).toEqual('page_view');
   }, 60000);
