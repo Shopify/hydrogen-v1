@@ -3,10 +3,15 @@ import Index from '../../src/routes/index.server';
 
 describe('index', () => {
   let hydrogen;
+  let session;
 
   beforeAll(async () => {
     hydrogen = await startHydrogenServer();
     hydrogen.watchForUpdates(Index);
+  });
+
+  beforeEach(async () => {
+    session = await hydrogen.newPage();
   });
 
   afterAll(async () => {
@@ -14,11 +19,11 @@ describe('index', () => {
   });
 
   it('should have the correct title', async () => {
-    await hydrogen.visit('/');
-    const heading = await hydrogen.page.waitForSelector('h1');
+    await session.visit('/');
+    const heading = await session.page.waitForSelector('h1');
     expect(heading).not.toBeNull();
 
-    const text = await hydrogen.page.evaluate((h1) => h1.textContent, heading);
+    const text = await session.page.evaluate((h1) => h1.textContent, heading);
     expect(text).toBe('Hello, Hydrogen');
   }, 60000);
 });
