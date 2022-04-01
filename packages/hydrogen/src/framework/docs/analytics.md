@@ -14,7 +14,8 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 | `REMOVE_FROM_CART`      | A customer removes an item from their cart                   |
 | `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated |
 
-The event name constants are available in `ClientAnalytics.eventNames`.
+> Note:
+> The event name constants are available in `ClientAnalytics.eventNames`.
 
 ## Subscribe to an event
 
@@ -271,6 +272,91 @@ useEffect(() => {
     acceptMarketingSubscriber.unsubscribe();
   };
 });
+```
+
+{% endcodeblock %}
+
+## Example analytics connectors
+
+The following example shows an implementation of a client analytics connector with Google Tag Manager:
+
+{% codeblock file, filename: 'components/GoogleTagManager.client.jsx' %}
+
+```jsx
+import Analytics from 'analytics';
+import googleTagManager from '@analytics/google-tag-manager';
+import {useEffect} from 'react';
+
+let init = false;
+export default function GTM() {
+  useEffect(() => {
+    if (!init) {
+      // One-time initialization
+      Analytics({
+        app: 'hydrogen-app',
+        plugins: [
+          googleTagManager({
+            containerId: 'GTM-WLTS4QF',
+          }),
+        ],
+      });
+      init = true;
+    }
+  });
+  return null;
+}
+```
+
+{% endcodeblock %}
+
+The following example shows an implementation of a client analytics connector with Google Analytics:
+
+{% codeblock file, filename: 'components/GoogleAnalytics.client.jsx' %}
+
+```jsx
+import {useEffect} from 'react';
+import {ClientAnalytics, loadScript} from '@shopify/hydrogen/client';
+
+const URL = 'https://www.googletagmanager.com/gtag/js?id=G-39VXD1NQYB';
+let isInit = false;
+
+export function GoogleAnalytics() {
+  useEffect(() => {
+    if (!isInit) {
+      isInit = true;
+
+      loadScript(URL).catch(() => {});
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-39VXD1NQYB', {
+        send_page_view: false,
+      });
+
+      ClientAnalytics.subscribe('page-view', (payload) => {
+        console.log('Google analytic page-view', payload);
+        gtag('event', 'page_view');
+      });
+    }
+  }, [isInit]);
+
+  return null;
+}
+```
+
+{% endcodeblock %}
+
+## Testing analytics
+
+The following example shows how to write an end-to-end (E2E) test for analytics:
+
+{% codeblock file, filename: 'PLACEHOLDER NAME OF FILE' %}
+
+```jsx
+PLACEHOLDER FOR CODE
 ```
 
 {% endcodeblock %}
