@@ -209,6 +209,8 @@ that built the request and the cache control headers:
 └──
 ```
 
+During development, be sure to disable cache in your browser's dev tools to ensure the latest changes are visible in your browser. For example, you can disable cache in Google Chrome dev tools by visiting the network tab.
+
 ## Busting query cache on build
 
 To enable query cache busting on build, pass `{purgeQueryCacheOnBuild: true}` to the second parameter of the Hydrogen Vite plugin:
