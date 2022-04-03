@@ -15,7 +15,7 @@ export interface LinkProps
   clientState?: any;
   /** Whether to reload the whole document on navigation. */
   reloadDocument?: boolean;
-  /** Whether to prefetch the link source when the user signals intent. For more information, refer to [Prefetching a link source](/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). */
+  /** Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). */
   prefetch?: boolean;
 }
 
@@ -43,7 +43,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       to,
       onClick,
       clientState,
-      prefetch,
+      prefetch = true,
     } = props;
 
     const internalClick = useCallback(

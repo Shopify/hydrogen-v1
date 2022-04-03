@@ -12,7 +12,6 @@ export default function Navigation({collections}) {
             <Link
               to={`/collections/${collection.handle}`}
               className="block p-4 hover:opacity-80"
-              prefetch={true}
             >
               {collection.title}
             </Link>

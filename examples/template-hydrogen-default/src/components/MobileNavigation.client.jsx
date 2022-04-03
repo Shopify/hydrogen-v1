@@ -43,7 +43,6 @@ export default function MobileNavigation({collections, isOpen, setIsOpen}) {
                     className="group py-5 text-gray-700 flex items-center justify-between"
                     to={`/collections/${collection.handle}`}
                     onClick={() => setIsOpen(false)}
-                    prefetch={true}
                   >
                     {collection.title}
                     <ArrowRightIcon className="hidden group-hover:block" />

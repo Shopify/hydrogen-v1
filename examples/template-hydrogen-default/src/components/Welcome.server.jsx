@@ -103,7 +103,6 @@ function TemplateLinks() {
           <Link
             to={`/collections/${firstCollection}`}
             className="text-md font-medium text-blue-700 hover:underline"
-            prefetch={true}
           >
             Collection template
           </Link>
@@ -112,7 +111,6 @@ function TemplateLinks() {
           <Link
             to={`/products/${firstProduct}`}
             className="text-md font-medium text-blue-700 hover:underline"
-            prefetch={true}
           >
             Product template
           </Link>
@@ -121,7 +119,6 @@ function TemplateLinks() {
           <Link
             to="/error-page"
             className="text-md font-medium text-blue-700 hover:underline"
-            prefetch={true}
           >
             404 template
           </Link>
