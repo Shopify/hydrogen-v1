@@ -3,4 +3,4 @@
 'create-hydrogen-app': minor
 ---
 
-Add new `<Link preload={true} />` API for prefetching routes.
+Preload `Link` URLs by default when a user signals intent to visit the URL. This includes hovering or focusing on the URL. To disable preloading, pass `<Link preload={false} />` to the component.
