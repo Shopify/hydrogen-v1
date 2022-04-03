@@ -42,7 +42,21 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
           <Content clientWrapper={ClientWrapper} />
         </Suspense>
       </ErrorBoundary>
-    </RootComponent>
+    </RootComponent>,
+    {
+      onRecoverableError(e: any) {
+        if (__DEV__) {
+          console.log(
+            `React encountered an error while attempting to hydrate the application. ` +
+              `This is likely due to a bug in React's Suspense behavior related to experimental server components, ` +
+              `and it is safe to ignore this error.\n` +
+              `Visit this issue to learn more: https://github.com/Shopify/hydrogen/issues/920.\n\n` +
+              `The original error is printed below:`
+          );
+          console.log(e);
+        }
+      },
+    }
   );
 };
 
