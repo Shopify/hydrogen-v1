@@ -28,6 +28,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   function Link(props, ref) {
     const navigate = useNavigate();
     const {location} = useRouter();
+    const [_, startTransition] = (React as any).useTransition();
 
     /**
      * Inspired by Remix's Link component
@@ -70,15 +71,25 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     );
 
     const signalPrefetchIntent = () => {
-      if (prefetch) {
-        setMaybePrefetch(true);
-      }
+      /**
+       * startTransition to yield to more important updates
+       */
+      startTransition(() => {
+        if (prefetch) {
+          setMaybePrefetch(true);
+        }
+      });
     };
 
     const cancelPrefetchIntent = () => {
-      if (prefetch) {
-        setMaybePrefetch(false);
-      }
+      /**
+       * startTransition to yield to more important updates
+       */
+      startTransition(() => {
+        if (prefetch) {
+          setMaybePrefetch(false);
+        }
+      });
     };
 
     /**
@@ -95,7 +106,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           clearTimeout(id);
         };
       }
-    });
+    }, [maybePrefetch]);
 
     const onMouseEnter = composeEventHandlers(
       props.onMouseEnter,
@@ -109,7 +120,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     const onBlur = composeEventHandlers(props.onBlur, cancelPrefetchIntent);
     const onTouchStart = composeEventHandlers(
       props.onTouchStart,
-      cancelPrefetchIntent
+      signalPrefetchIntent
     );
 
     return (
@@ -121,11 +132,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             'clientState',
             'reloadDocument',
             'prefetch',
-            'onMouseEnter',
-            'onMouseLeave',
-            'onFocus',
-            'onBlur',
-            'onTouchStart',
           ])}
           ref={ref}
           onClick={internalClick}
@@ -150,7 +156,7 @@ function Prefetch({pathname}: {pathname: string}) {
 
   const newPath = createPath({pathname});
 
-  if (pathname.startsWith('http://') || newPath === createPath(location)) {
+  if (pathname.startsWith('http') || newPath === createPath(location)) {
     return null;
   }
 
@@ -176,7 +182,7 @@ export function composeEventHandlers<
   ourHandler: (event: EventType) => any
 ): (event: EventType) => any {
   return (event) => {
-    theirHandler && theirHandler(event);
+    theirHandler?.(event);
     if (!event.defaultPrevented) {
       ourHandler(event);
     }
