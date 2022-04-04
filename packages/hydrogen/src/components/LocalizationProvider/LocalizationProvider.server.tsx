@@ -2,9 +2,9 @@ import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
 import {useShop} from '../../foundation/useShop';
 import {useShopQuery} from '../../hooks/useShopQuery';
-import {LocalizationQuery} from './LocalizationQuery';
 import {CacheDays} from '../../framework/CachingStrategy';
 import {PreloadOptions} from '../../types';
+import {Country, Currency} from '../../storefront-api-types';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
@@ -43,6 +43,14 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
     </LocalizationClientProvider>
   );
 }
+
+export type LocalizationQuery = {__typename?: 'QueryRoot'} & {
+  localization: {__typename?: 'Localization'} & {
+    country: {__typename?: 'Country'} & Pick<Country, 'isoCode' | 'name'> & {
+        currency: {__typename?: 'Currency'} & Pick<Currency, 'isoCode'>;
+      };
+  };
+};
 
 const query = `
 query Localization($language: LanguageCode) 
