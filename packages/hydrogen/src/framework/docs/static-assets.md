@@ -22,6 +22,14 @@ export default function Hero() {
 > Tip:
 > You can also import static assets as an explicit URL or as a string. For more information, refer to [Vite's guide](https://vitejs.dev/guide/assets.html#explicit-url-imports).
 
+### Static assets in Oxygen
+
+If you're [using Oxygen to deploy your Hydrogen custom storefront](/custom-storefronts/hydrogen/deployment#deploy-to-oxygen), then static assets are automatically deployed to Shopify's content delivery network (CDN).
+
+Shopify provides merchants with a world-class CDN backed by [Fastly](https://www.fastly.com) and [Cloudflare](https://cloudflare.com/). Using a CDN means that your custom storefront will load quickly around the globe.
+
+Files delivered over the Shopify CDN are minified and compressed automatically using [Brotli](https://github.com/google/brotli), [Zopfli](https://github.com/google/zopfli), and [gzip](https://en.wikipedia.org/wiki/Gzip), reducing the size of the files the browser must download. Requests use [HTTP/3](https://developers.cloudflare.com/http3/) and [TLS 1.3](https://www.cloudflare.com/learning-resources/tls-1-3/) to further enhance request performance and security.
+
 ## Change the base URL
 
 If you want to serve your static assets from a different domain or path, then you can specify the `HYDROGEN_ASSET_BASE_URL` environment variable when building your project.
