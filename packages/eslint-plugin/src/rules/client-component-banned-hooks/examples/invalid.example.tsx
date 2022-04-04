@@ -1,4 +1,4 @@
-// Examples of **incorrect** code for this rule:
+// Incorrect code
 
 // MyComponent.client.jsx
 import {useQuery} from '@shopify/hydrogen';
