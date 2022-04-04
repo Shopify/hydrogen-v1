@@ -1,6 +1,6 @@
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.
 
-This guide describes how to subscribe to the default events that Hydrogen offers, configure custom events, send analytic data from the server-side, and unsubscribe from events. It also provides example implementations of client analytics connectors, and shows how to write an end-to-end (E2E) for testing analytics connectors.
+This guide describes how to subscribe to the default events that Hydrogen offers, configure custom events, send analytics data from the server-side, and unsubscribe from events. It also provides example implementations of client analytics connectors, and shows how to write an end-to-end (E2E) for testing analytics connectors.
 
 ## Default events
 
@@ -21,11 +21,11 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 
 Subscribe to an event to enable your Hydrogen app to listen for the event. The following steps describe how to subscribe to the `PAGE_VIEW` event.
 
-1. Create a new client component in the `/components` directory of your Hydrogen app. For example, `components/AnalyticListener.client.jsx`.
+1. Create a new client component in the `/components` directory of your Hydrogen app. For example, `components/AnalyticsListener.client.jsx`.
 
 2. In your client component, add the following code to subscribe to the event:
 
-   {% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
+   {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
    ```jsx
    import {ClientAnalytics} from '@shopify/hydrogen/client';
@@ -34,7 +34,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
    export default function AnalyticsListener() {
      useEffect(() => {
        // Set up common page-specific data
-       ClientAnalytics.pushToPageAnalyticData({
+       ClientAnalytics.pushToPageAnalyticsData({
          userLocale: navigator.language,
        });
 
@@ -93,7 +93,7 @@ Aside from the [default events](#default-events) that Hydrogen supports, you can
 
 ### Retrieving data from other parts of your Hydrogen app
 
-You can collect analytic data wherever you make queries. For example, to gather information about the collection that a customer has interacted with, you can make `collectionName` and `collectionId` available when you receive the `PAGE_VIEW` event:
+You can collect analytics data wherever you make queries. For example, to gather information about the collection that a customer has interacted with, you can make `collectionName` and `collectionId` available when you receive the `PAGE_VIEW` event:
 
 {% codeblock file, filename: 'collections/[handle].server.js' %}
 
@@ -128,7 +128,7 @@ You can also capture events in client components. For example, when a customer m
 ```js
 // some.client.jsx
 useEffect(() => {
-  ClientAnalytics.pushToPageAnalyticData({
+  ClientAnalytics.pushToPageAnalyticsData({
     heroBanner: 'hero-1',
   });
 });
@@ -152,28 +152,28 @@ const serverDataLayer = useServerAnalytics();
 
 {% endcodeblock %}
 
-The following example shows how to retrieve analytic data from a client component:
+The following example shows how to retrieve analytics data from a client component:
 
 {% codeblock file, filename: '*.client.js' %}
 
 ```js
-ClientAnalytics.getPageAnalyticData();
+ClientAnalytics.getPageAnalyticsData();
 ```
 
 {% endcodeblock %}
 
 > Caution:
-> Don't use the data from `ClientAnalytics.getPageAnalyticData()` for rendering. This will cause occasional mismatches during hydration.
+> Don't use the data from `ClientAnalytics.getPageAnalyticsData()` for rendering. This will cause occasional mismatches during hydration.
 
-## Send analytic data from the server-side
+## Send analytics data from the server-side
 
-Some events are only available on the server, which makes sending analytic data from the server-side a good option. Server-side analytics monitor activities on the server itself and only process server-side information. Every request on your server is recorded in the server logs. You can send Shopify analytic data from the server-side because you know exactly what data you need to send.
+Some events are only available on the server, which makes sending analytics data from the server-side a good option. Server-side analytics monitor activities on the server itself and only process server-side information. Every request on your server is recorded in the server logs. You can send Shopify analytics data from the server-side because you know exactly what data you need to send.
 
-To send analytic data from the server-side, complete the following steps:
+To send analytics data from the server-side, complete the following steps:
 
-1. Create a client-side analytic listener that makes a fetch call to the `__event` endpoint.
+1. Create a client-side analytics listener that makes a fetch call to the `__event` endpoint.
 
-   {% codeblock file, filename: 'components/AnalyticListener.client.jsx' %}
+   {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
    ```jsx
    import {ClientAnalytics} from '@shopify/hydrogen/client';
@@ -182,7 +182,7 @@ To send analytic data from the server-side, complete the following steps:
    export default function AnalyticsListener() {
      useEffect(() => {
        // Set up common page-specific data
-       ClientAnalytics.pushToPageAnalyticData({
+       ClientAnalytics.pushToPageAnalyticsData({
          userLocale: navigator.language,
        });
 
@@ -215,13 +215,13 @@ To send analytic data from the server-side, complete the following steps:
 
    {% endcodeblock %}
 
-2. Create a server-side analytic connector and pass it into the `serverAnalyticConnectors` configuration:
+2. Create a server-side analytics connector and pass it into the `serverAnalyticsConnectors` configuration:
 
-   {% codeblock file, filename: 'MyServerAnalyticConnector.jsx' %}
+   {% codeblock file, filename: 'MyServerAnalyticsConnector.jsx' %}
 
    ```jsx
    export function request(request, data, contentType) {
-     // Send your analytic request to third-party analytics
+     // Send your analytics request to third-party analytics
    }
    ```
 
@@ -230,14 +230,14 @@ To send analytic data from the server-side, complete the following steps:
    {% codeblock file, filename: 'App.server.js' %}
 
    ```js
-   import * as MyServerAnalyticConnector from '/components/MyServerAnalyticConnector.jsx'
+   import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.jsx'
 
    ...
 
    export default renderHydrogen(App, {
     shopifyConfig,
     routes,
-    serverAnalyticConnectors: [MyServerAnalyticConnector]
+    serverAnalyticsConnectors: [MyServerAnalyticsConnector]
    });
    ```
 
@@ -245,11 +245,11 @@ To send analytic data from the server-side, complete the following steps:
 
 #### Parameters
 
-The following table describes the request function parameters for `ServerAnalyticConnector`:
+The following table describes the request function parameters for `ServerAnalyticsConnector`:
 
 | Parameter     | Type           | Description                                       |
 | ------------- | -------------- | ------------------------------------------------- |
-| `request`     | request        | The analytic request object.                      |
+| `request`     | request        | The analytics request object.                     |
 | `data`        | object or text | The result from `.json()` or `.text()`.           |
 | `contentType` | string         | The content type. Valid values: `json` or `text`. |
 
@@ -386,7 +386,7 @@ describe('Google Analytics 4', () => {
   });
 
   it('should emit page_view', async () => {
-    // Wait for the Google Analytics 4 analytic network call
+    // Wait for the Google Analytics 4 network call
     const [request] = await Promise.all([
       // Test if the request matches a Google Analytics 4 analytic pixel
       session.page.waitForRequest((request) =>
