@@ -5,6 +5,7 @@ import {
   FileRoutes,
   ShopifyProvider,
   CookieSessionStorage,
+  useCustomer,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
@@ -14,10 +15,12 @@ import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 
 function App({routes}) {
+  const customerAccessToken = useCustomer();
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <CartProvider>
+        <CartProvider customerAccessToken={customerAccessToken}>
           <DefaultSeo />
           <Router>
             <FileRoutes routes={routes} />

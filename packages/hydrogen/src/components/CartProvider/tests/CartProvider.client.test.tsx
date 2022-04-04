@@ -380,5 +380,105 @@ describe('<CartProvider />', () => {
         },
       });
     });
+
+    it('use customerAccessToken if it exist in props', () => {
+      const mockCustomerAccessToken = 'access token test';
+
+      const cartMock: CartInput = {
+        lines: [
+          {
+            merchandiseId: '123',
+          },
+        ],
+      };
+
+      const wrapper = mount(
+        <CartProvider customerAccessToken={mockCustomerAccessToken}>
+          <CartContext.Consumer>
+            {(cartContext) => {
+              return (
+                <button
+                  onClick={() => {
+                    cartContext?.cartCreate(cartMock);
+                  }}
+                >
+                  Add
+                </button>
+              );
+            }}
+          </CartContext.Consumer>
+        </CartProvider>
+      );
+
+      expect(
+        wrapper.find(CartContext.Provider)?.prop('value')
+      ).not.toHaveProperty('id');
+
+      wrapper.find('button')?.trigger('onClick');
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith({
+        query: expect.stringContaining('mutation CartCreate'),
+        variables: {
+          input: {
+            ...cartMock,
+            buyerIdentity: {customerAccessToken: mockCustomerAccessToken},
+          },
+          numCartLines: undefined,
+          country: undefined,
+        },
+      });
+    });
+
+    it('use customerAccessToken from cartCreate input instead of customerAccessToken from props', () => {
+      const propsCustomerAccessToken = 'access token props';
+      const cartInputCustomerAccessToken = 'access token cart input';
+
+      const cartMock: CartInput = {
+        lines: [
+          {
+            merchandiseId: '123',
+          },
+        ],
+        buyerIdentity: {
+          customerAccessToken: cartInputCustomerAccessToken,
+        },
+      };
+
+      const wrapper = mount(
+        <CartProvider customerAccessToken={propsCustomerAccessToken}>
+          <CartContext.Consumer>
+            {(cartContext) => {
+              return (
+                <button
+                  onClick={() => {
+                    cartContext?.cartCreate(cartMock);
+                  }}
+                >
+                  Add
+                </button>
+              );
+            }}
+          </CartContext.Consumer>
+        </CartProvider>
+      );
+
+      expect(
+        wrapper.find(CartContext.Provider)?.prop('value')
+      ).not.toHaveProperty('id');
+
+      wrapper.find('button')?.trigger('onClick');
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith({
+        query: expect.stringContaining('mutation CartCreate'),
+        variables: {
+          input: {
+            ...cartMock,
+            buyerIdentity: {customerAccessToken: cartInputCustomerAccessToken},
+          },
+          numCartLines: undefined,
+          country: undefined,
+        },
+      });
+    });
   });
 });
