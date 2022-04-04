@@ -1,8 +1,5 @@
-import {NoStore} from '@shopify/hydrogen';
+import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
-import {stringify as stringifyCookie} from 'worktop/cookie';
-
-import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants/cookies';
 
 export async function api(request, {queryShop}) {
   const jsonBody = await request.json();
@@ -40,22 +37,12 @@ export async function api(request, {queryShop}) {
     data.customerReset &&
     data.customerReset.customerAccessToken !== null
   ) {
-    const {accessToken, expiresAt} = data.customerReset.customerAccessToken;
+    const customerHeaders = setCustomerAccessToken(
+      data.customerReset.customerAccessToken,
+    );
 
     return new Response(null, {
-      headers: {
-        'Set-Cookie': stringifyCookie(
-          CUSTOMER_ACCESS_TOKEN_COOKIE_NAME,
-          accessToken,
-          {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            path: '/',
-            expires: new Date(expiresAt),
-          },
-        ),
-      },
+      headers: customerHeaders,
       status: 200,
     });
   } else {

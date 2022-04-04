@@ -45,7 +45,6 @@
     "graphql-tag": "^2.12.4",
     "react": "0.0.0-experimental-2bf7c02f0-20220314",
     "react-dom": "0.0.0-experimental-2bf7c02f0-20220314",
-    "serve-static": "^1.14.1",
-    "worktop": "^0.7.3"
+    "serve-static": "^1.14.1"
   }
 }
