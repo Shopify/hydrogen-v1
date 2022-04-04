@@ -11,15 +11,6 @@ export function generateSubRequestCacheControlHeader(
   return generateCacheControlHeader(userCacheOptions || CacheSeconds());
 }
 
-/**
- * Use a preview header during development.
- * TODO: Support an override of this to force the cache
- * header to be present during dev. ENV var maybe?
- */
-export function getCacheControlHeader({dev}: {dev?: boolean}) {
-  return dev ? 'cache-control-preview' : 'cache-control';
-}
-
 export function hashKey(key: QueryKey): string {
   const rawKey = key instanceof Array ? key : [key];
 
