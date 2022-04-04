@@ -209,7 +209,8 @@ that built the request and the cache control headers:
 └──
 ```
 
-During development, be sure to disable cache in your browser's dev tools to ensure the latest changes are visible in your browser. For example, you can disable cache in Google Chrome dev tools by visiting the network tab.
+> Note:
+> During development, disable cache in your browser's developer tools to make sure the latest changes are visible in your browser. For example, you can [disable cache in Chrome DevTools](https://developer.chrome.com/docs/devtools/network/reference/#disable-cache) by visiting the **Network** tab.
 
 ## Busting query cache on build
 
