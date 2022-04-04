@@ -4,25 +4,36 @@ import {mount} from '@shopify/react-testing';
 import {flattenConnection} from '../../../utilities';
 import {CartContext} from '../context';
 import {CART_WITH_LINES} from './fixtures';
-import type {CartLineInput} from '../../../storefront-api-types';
+import type {CartInput, CartLineInput} from '../../../storefront-api-types';
+import {CountryCode} from '../../../storefront-api-types';
 
 import {CartProvider} from '../CartProvider.client';
 
 const fetchCartMock = jest.fn(() => ({data: {}}));
 
-jest.mock('../hooks', () => {
-  return {
-    useCartFetch: () => fetchCartMock,
-  };
-});
+jest.mock('../hooks', () => ({
+  useCartFetch: () => fetchCartMock,
+}));
+
+jest.mock('../../../foundation/useServerState', () => ({
+  useServerState: jest.fn(),
+}));
+
+const useServerStateMock: jest.Mock = jest.requireMock(
+  '../../../foundation/useServerState'
+).useServerState;
 
 describe('<CartProvider />', () => {
   beforeEach(() => {
     fetchCartMock.mockReturnValue({data: {}});
+    useServerStateMock.mockReturnValue({
+      serverState: {},
+    });
   });
 
   afterEach(() => {
-    fetchCartMock.mockClear();
+    fetchCartMock.mockReset();
+    useServerStateMock.mockReset();
   });
 
   describe('prop `data` does not exist', () => {
@@ -256,6 +267,116 @@ describe('<CartProvider />', () => {
           input: {lines: linesMock},
           numCartLines: undefined,
           country: undefined,
+        },
+      });
+    });
+  });
+
+  describe('cartCreate', () => {
+    it('use countryCode if it exist in serverState', () => {
+      const mockCountryCode = 'CA';
+
+      useServerStateMock.mockReturnValue({
+        serverState: {country: {isoCode: mockCountryCode}},
+      });
+
+      const cartMock: CartInput = {
+        lines: [
+          {
+            merchandiseId: '123',
+          },
+        ],
+      };
+
+      const wrapper = mount(
+        <CartProvider>
+          <CartContext.Consumer>
+            {(cartContext) => {
+              return (
+                <button
+                  onClick={() => {
+                    cartContext?.cartCreate(cartMock);
+                  }}
+                >
+                  Add
+                </button>
+              );
+            }}
+          </CartContext.Consumer>
+        </CartProvider>
+      );
+
+      expect(
+        wrapper.find(CartContext.Provider)?.prop('value')
+      ).not.toHaveProperty('id');
+
+      wrapper.find('button')?.trigger('onClick');
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith({
+        query: expect.stringContaining('mutation CartCreate'),
+        variables: {
+          input: {
+            ...cartMock,
+            buyerIdentity: {countryCode: mockCountryCode},
+          },
+          numCartLines: undefined,
+          country: mockCountryCode,
+        },
+      });
+    });
+
+    it('use countryCode from cartCreate input instead of countryCode in serverState', () => {
+      const serverStateCountryCode = CountryCode.Ca;
+      const cartInputCountryCode = CountryCode.Tw;
+
+      useServerStateMock.mockReturnValue({
+        serverState: {country: {isoCode: serverStateCountryCode}},
+      });
+
+      const cartMock: CartInput = {
+        lines: [
+          {
+            merchandiseId: '123',
+          },
+        ],
+        buyerIdentity: {
+          countryCode: cartInputCountryCode,
+        },
+      };
+
+      const wrapper = mount(
+        <CartProvider>
+          <CartContext.Consumer>
+            {(cartContext) => {
+              return (
+                <button
+                  onClick={() => {
+                    cartContext?.cartCreate(cartMock);
+                  }}
+                >
+                  Add
+                </button>
+              );
+            }}
+          </CartContext.Consumer>
+        </CartProvider>
+      );
+
+      expect(
+        wrapper.find(CartContext.Provider)?.prop('value')
+      ).not.toHaveProperty('id');
+
+      wrapper.find('button')?.trigger('onClick');
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith({
+        query: expect.stringContaining('mutation CartCreate'),
+        variables: {
+          input: {
+            ...cartMock,
+            buyerIdentity: {countryCode: cartInputCountryCode},
+          },
+          numCartLines: undefined,
+          country: serverStateCountryCode,
         },
       });
     });
