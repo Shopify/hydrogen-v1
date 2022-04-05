@@ -27,7 +27,6 @@ export function useShopQuery<T>({
   query,
   variables = {},
   cache,
-  locale = '',
   preload = false,
 }: {
   /** A string of the GraphQL query.
@@ -58,7 +57,7 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {key, url, requestInit} = useCreateShopRequest(body, locale);
+  const {key, url, requestInit} = useCreateShopRequest(body);
 
   const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
     key,
@@ -154,13 +153,8 @@ export function useShopQuery<T>({
   return data!;
 }
 
-function useCreateShopRequest(body: string, locale?: string) {
-  const {
-    storeDomain,
-    storefrontToken,
-    storefrontApiVersion,
-    locale: defaultLocale,
-  } = useShop();
+function useCreateShopRequest(body: string) {
+  const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
 
   const request = useServerRequest();
   const secretToken =
@@ -185,7 +179,7 @@ function useCreateShopRequest(body: string, locale?: string) {
   }
 
   return {
-    key: [storeDomain, storefrontApiVersion, body, locale],
+    key: [storeDomain, storefrontApiVersion, body],
     url: `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
     requestInit: {
       body,
@@ -194,7 +188,6 @@ function useCreateShopRequest(body: string, locale?: string) {
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
-        'Accept-Language': (locale as string) ?? defaultLocale,
         ...extraHeaders,
       },
     },
