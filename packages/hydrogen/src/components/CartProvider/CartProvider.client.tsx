@@ -427,7 +427,7 @@ export function CartProvider({
         const {data, error} = await fetch(endpoint, {
           method: 'POST',
           body: JSON.stringify({
-            _action: 'noteUpdate',
+            _action: 'updateNote',
             cartId: state.cart.id!,
             note: note,
             country: countryCode,
