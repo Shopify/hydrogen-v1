@@ -184,8 +184,9 @@ function getInitFromNodeRequest(request: any) {
         : undefined,
   };
 
-  if (!init.headers.has('x-forwarded-for')) {
-    init.headers.set('x-forwarded-for', request.socket.remoteAddress);
+  const remoteAddress = request.socket.remoteAddress;
+  if (!init.headers.has('x-forwarded-for') && remoteAddress) {
+    init.headers.set('x-forwarded-for', remoteAddress);
   }
 
   return init;
