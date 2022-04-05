@@ -9,7 +9,6 @@ import type {Reducer} from 'react';
 import {flattenConnection} from '../../utilities';
 import {Cart, CartAction, State} from './types';
 import {
-  CartLineRemove,
   CartLineUpdate,
   CartNoteUpdate,
   CartBuyerIdentityUpdate,
@@ -25,10 +24,6 @@ import {
 } from '../../storefront-api-types';
 import {useCartFetch} from './hooks';
 import {CartContext} from './context';
-import {
-  CartLineRemoveMutationVariables,
-  CartLineRemoveMutation,
-} from './graphql/CartLineRemoveMutation';
 import {
   CartLineUpdateMutationVariables,
   CartLineUpdateMutation,
@@ -369,18 +364,16 @@ export function CartProvider({
 
         onLineRemove?.();
 
-        const {data, error} = await fetchCart<
-          CartLineRemoveMutationVariables,
-          CartLineRemoveMutation
-        >({
-          query: CartLineRemove,
-          variables: {
+        const {data, error} = await fetch(endpoint, {
+          method: 'POST',
+          body: JSON.stringify({
+            _action: 'removeLineItem',
             cartId: state.cart.id!,
             lines: lines,
             numCartLines,
             country: countryCode,
-          },
-        });
+          }),
+        }).then((r) => r.json());
 
         if (error) {
           dispatch({

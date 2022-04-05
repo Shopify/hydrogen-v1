@@ -12,6 +12,8 @@ export async function api(request, {queryShop}) {
       return createCart(data, queryShop);
     case 'addLineItem':
       return addLineItem(data, queryShop);
+    case 'removeLineItem':
+      return removeLineItem(data, queryShop);
   }
 }
 
@@ -37,6 +39,13 @@ async function createCart(data, queryShop) {
 async function addLineItem(data, queryShop) {
   return await queryShop({
     query: ADD_LINE_ITEM_QUERY,
+    variables: {cartId: data.cartId, lines: data.lines, country: data.cart},
+  });
+}
+
+async function removeLineItem(data, queryShop) {
+  return await queryShop({
+    query: REMOVE_LINE_ITEM_QUERY,
     variables: {cartId: data.cartId, lines: data.lines, country: data.cart},
   });
 }
@@ -154,6 +163,18 @@ const CREATE_CART_QUERY = `#graphql
 const ADD_LINE_ITEM_QUERY = `#graphql
   mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $country: CountryCode = ZZ) @inContext(country: $country) {
     cartLinesAdd(cartId: $cartId, lines: $lines) {
+      cart {
+        ...CartFragment
+      }
+    }
+  }
+
+  ${CART_FRAGMENT}
+`;
+
+const REMOVE_LINE_ITEM_QUERY = `#graphql
+  mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $country: CountryCode = ZZ) @inContext(country: $country) {
+    cartLinesRemove(cartId: $cartId, lineIds: $lines) {
       cart {
         ...CartFragment
       }
