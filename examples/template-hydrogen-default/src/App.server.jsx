@@ -32,11 +32,9 @@ function App({routes}) {
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
 export default renderHydrogen(App, {
-  shopifyConfig: {
-    ...shopifyConfig,
-    session: CookieSessionStorage('__session', {
-      path: '/',
-    }),
-  },
   routes,
+  shopifyConfig,
+  session: CookieSessionStorage('__session', {
+    path: '/',
+  }),
 });

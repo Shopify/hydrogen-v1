@@ -18,7 +18,10 @@ export default function Product({country = {isoCode: 'US'}}) {
 
   const {get, set} = useSession();
 
-  set('does this set?', 'ha');
+  set('1', 'ha');
+  set('2', 'ha');
+  set('3', 'ha');
+  set('4', 'ha');
 
   const data = get();
   console.log('data', data);
