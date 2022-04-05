@@ -1,6 +1,7 @@
 import {type HydrogenUseQueryOptions, useQuery} from './useQuery/hooks';
 
 interface FetchResponse {
+  response: Response;
   json: () => any;
   text: () => any;
 }
@@ -11,12 +12,13 @@ export function fetch(
 ): FetchResponse {
   const {cache, preload, shouldCacheResponse, ...requestInit} = options ?? {};
 
-  const {data, error} = useQuery<string>(
+  const {data: useQueryResponse, error} = useQuery<[string, Response]>(
     [url, options],
     async () => {
       const response = await globalThis.fetch(url, requestInit);
 
-      return await response.text();
+      const text = await response.text();
+      return [text, response];
     },
     {
       cache,
@@ -29,7 +31,10 @@ export function fetch(
     throw error;
   }
 
+  const [data, response] = useQueryResponse;
+
   return {
+    response,
     json: () => JSON.parse(data),
     text: () => data,
   };
