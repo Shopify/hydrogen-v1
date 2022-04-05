@@ -15,7 +15,7 @@
     "autoprefixer": "^10.4.2",
     "cross-env": "^7.0.3",
     "postcss": "^8.4.5",
-    "vite": "^2.8.0"
+    "vite": "^2.9.0"
   },
   "dependencies": {
     "@shopify/hydrogen": "latest",
