@@ -1,10 +1,6 @@
-import fetch, {Request, Response, Headers} from 'node-fetch';
+import {fetch, Request, Response, Headers} from 'undici';
 import AbortController from 'abort-controller';
-import {
-  ReadableStream,
-  WritableStream,
-  TransformStream,
-} from 'web-streams-polyfill/ponyfill';
+import {ReadableStream, WritableStream, TransformStream} from 'node:stream/web';
 
 if (!globalThis.fetch) {
   Object.assign(globalThis, {

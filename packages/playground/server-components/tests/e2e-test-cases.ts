@@ -1,5 +1,5 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
-import fetch from 'node-fetch';
+import {fetch} from 'undici';
 import {resolve} from 'path';
 
 import {edit, untilUpdated} from '../../utilities';
