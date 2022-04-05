@@ -9,8 +9,6 @@ import type {Reducer} from 'react';
 import {flattenConnection} from '../../utilities';
 import {Cart, CartAction, State} from './types';
 import {
-  CartLineUpdate,
-  CartNoteUpdate,
   CartBuyerIdentityUpdate,
   CartAttributesUpdate,
   CartDiscountCodesUpdate,
@@ -24,14 +22,7 @@ import {
 } from '../../storefront-api-types';
 import {useCartFetch} from './hooks';
 import {CartContext} from './context';
-import {
-  CartLineUpdateMutationVariables,
-  CartLineUpdateMutation,
-} from './graphql/CartLineUpdateMutation';
-import {
-  CartNoteUpdateMutationVariables,
-  CartNoteUpdateMutation,
-} from './graphql/CartNoteUpdateMutation';
+import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation';
 import {
   CartBuyerIdentityUpdateMutationVariables,
   CartBuyerIdentityUpdateMutation,
@@ -433,18 +424,15 @@ export function CartProvider({
 
         onNoteUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartNoteUpdateMutationVariables,
-          CartNoteUpdateMutation
-        >({
-          query: CartNoteUpdate,
-          variables: {
+        const {data, error} = await fetch(endpoint, {
+          method: 'POST',
+          body: JSON.stringify({
+            _action: 'noteUpdate',
             cartId: state.cart.id!,
             note: note,
-            numCartLines,
             country: countryCode,
-          },
-        });
+          }),
+        }).then((r) => r.json());
 
         if (error) {
           dispatch({

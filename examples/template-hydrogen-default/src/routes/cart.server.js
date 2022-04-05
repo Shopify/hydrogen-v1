@@ -16,6 +16,8 @@ export async function api(request, {queryShop}) {
       return removeLineItem(data, queryShop);
     case 'updateLineItem':
       return updateLineItem(data, queryShop);
+    case 'updateNote':
+      return updateNote(data, queryShop);
     default:
       return new Response('Invalid action', {status: 400});
   }
@@ -57,6 +59,13 @@ async function removeLineItem(data, queryShop) {
 async function updateLineItem(data, queryShop) {
   return await queryShop({
     query: UPDATE_LINE_ITEM_QUERY,
+    variables: {cartId: data.cartId, lines: data.lines, country: data.country},
+  });
+}
+
+async function updateNote(data, queryShop) {
+  return await queryShop({
+    query: UPDATE_NOTE_QUERY,
     variables: {cartId: data.cartId, lines: data.lines, country: data.country},
   });
 }
@@ -205,4 +214,14 @@ const UPDATE_LINE_ITEM_QUERY = `#graphql
   }
 
   ${CART_FRAGMENT}
+`;
+
+const UPDATE_NOTE_QUERY = `#graphql
+  mutation CartNoteUpdate($cartId: ID!, $note: String, $country: CountryCode = ZZ) @inContext(country: $country) {
+    cartNoteUpdate(cartId: $cartId, note: $note) {
+      cart {
+        ...CartFragment
+      }
+    }
+  }
 `;
