@@ -40,7 +40,6 @@ export type ShopifyConfig = {
   storeDomain: string;
   storefrontToken: string;
   storefrontApiVersion: string;
-  session?: () => SessionStorageAdapter;
 };
 
 export type Hook = (
@@ -64,6 +63,7 @@ export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  session?: () => SessionStorageAdapter;
 };
 
 export type ClientHandlerConfig = {
