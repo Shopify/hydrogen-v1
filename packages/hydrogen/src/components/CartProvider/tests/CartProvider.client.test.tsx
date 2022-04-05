@@ -192,13 +192,10 @@ describe('<CartProvider />', () => {
 
       wrapper.find('button')?.trigger('onClick');
 
-      expect(fetchCartMock).toHaveBeenLastCalledWith({
-        query: expect.stringContaining('mutation CartCreate'),
-        variables: {
-          input: {lines: linesMock},
-          numCartLines: undefined,
-          country: undefined,
-        },
+      expect(fetchCartMock).toHaveBeenLastCalledWith('cartCreate', {
+        input: {lines: linesMock},
+        numCartLines: undefined,
+        country: undefined,
       });
     });
 
