@@ -171,6 +171,15 @@ function useCreateShopRequest(body: string, locale?: string) {
 
   const extraHeaders = {} as Record<string, any>;
 
+  /**
+   * Only pass one type of storefront token at a time.
+   */
+  if (secretToken) {
+    extraHeaders['Shopify-Storefront-Private-Token'] = secretToken;
+  } else {
+    extraHeaders['X-Shopify-Storefront-Access-Token'] = storefrontToken;
+  }
+
   if (buyerIp) {
     extraHeaders['Shopify-Storefront-Buyer-IP'] = buyerIp;
   }
@@ -182,7 +191,6 @@ function useCreateShopRequest(body: string, locale?: string) {
       body,
       method: 'POST',
       headers: {
-        'X-Shopify-Storefront-Access-Token': secretToken ?? storefrontToken,
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
