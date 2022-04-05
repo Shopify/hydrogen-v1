@@ -17,12 +17,13 @@ export default function Index() {
 
 ## Props
 
-| Name            | Type                 | Description                                                                                                                                                                                       |
-| --------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| to              | <code>string</code>  | The destination URL that the link points to. This is the `href` attribute of the underlying `<a>` element.                                                                                        |
-| replace?        | <code>boolean</code> | Whether to update the state object or URL of the current history entry. Refer to the [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState). |
-| clientState?    | <code>any</code>     | The custom client state with the navigation.                                                                                                                                                      |
-| reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                               |
+| Name            | Type                 | Description                                                                                                                                                                                                                |
+| --------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| to              | <code>string</code>  | The destination URL that the link points to. This is the `href` attribute of the underlying `<a>` element.                                                                                                                 |
+| replace?        | <code>boolean</code> | Whether to update the state object or URL of the current history entry. Refer to the [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState).                          |
+| clientState?    | <code>any</code>     | The custom client state with the navigation.                                                                                                                                                                               |
+| reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                                                        |
+| preload?        | <code>boolean</code> | Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). |
 
 ## Component type
 

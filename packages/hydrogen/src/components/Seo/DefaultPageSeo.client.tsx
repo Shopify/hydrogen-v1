@@ -15,8 +15,7 @@ export function DefaultPageSeo({
   titleTemplate,
   lang,
 }: PartialDeep<DefaultPage>) {
-  const {locale} = useShop();
-  const fallBacklang = locale.split(/[-_]/)[0];
+  const {languageCode: fallBacklang} = useShop();
 
   return (
     <>

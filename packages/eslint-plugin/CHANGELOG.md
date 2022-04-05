@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.1
+
+### Patch Changes
+
+- [#999](https://github.com/Shopify/hydrogen/pull/999) [`66cc632a`](https://github.com/Shopify/hydrogen/commit/66cc632a00123b1a5fffcd234c25a91e1a86bdf7) Thanks [@cartogram](https://github.com/cartogram)! - Fixes the rule: `server-component-banned-hooks` to allow the banned hooks in shared components.
+
 ## 0.12.0
 
 ### Minor Changes

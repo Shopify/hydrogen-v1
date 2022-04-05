@@ -88,7 +88,7 @@ export default function Footer({collection, product}) {
               </li>
               <li className="flex items-center text-sm font-medium text-gray-600 hover:text-gray-900">
                 <a href="https://shopify.dev/custom-storefronts/hydrogen/getting-started">
-                  Hydrogen starter template
+                  Demo Store template
                 </a>
               </li>
             </ul>

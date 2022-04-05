@@ -18,7 +18,6 @@ import type {
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import {getCacheControlHeader} from './framework/cache';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
@@ -66,6 +65,7 @@ interface RequestHandlerOptions {
   dev?: boolean;
   context?: RuntimeContext;
   nonce?: string;
+  buyerIpHeader?: string;
 }
 
 export interface RequestHandler {
@@ -80,9 +80,19 @@ export const renderHydrogen = (
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
-    {indexTemplate, streamableResponse, dev, cache, context, nonce}
+    {
+      indexTemplate,
+      streamableResponse,
+      dev,
+      cache,
+      context,
+      nonce,
+      buyerIpHeader,
+    }
   ) {
     const request = new ServerComponentRequest(rawRequest);
+    request.ctx.buyerIpHeader = buyerIpHeader;
+
     const url = new URL(request.url);
     const log = getLoggerWithContext(request);
     const componentResponse = new ServerComponentResponse();
@@ -208,7 +218,7 @@ async function render(
    * TODO: Also add `Vary` headers for `accept-language` and any other keys
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
-  headers[getCacheControlHeader({dev})] = componentResponse.cacheControlHeader;
+  headers['cache-control'] = componentResponse.cacheControlHeader;
 
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
@@ -350,7 +360,7 @@ async function stream(
        * queries which might be caught behind Suspense. Clarify this or add
        * additional checks downstream?
        */
-      responseOptions.headers[getCacheControlHeader({dev})] =
+      responseOptions.headers['cache-control'] =
         componentResponse.cacheControlHeader;
 
       if (isRedirect(responseOptions)) {
@@ -450,7 +460,7 @@ async function stream(
          * additional checks downstream?
          */
         response.setHeader(
-          getCacheControlHeader({dev}),
+          'cache-control',
           componentResponse.cacheControlHeader
         );
 
@@ -582,16 +592,22 @@ async function hydrate(
 
     postRequestTasks('rsc', 200, request, componentResponse);
 
-    return new Response(bufferedBody);
+    return new Response(bufferedBody, {
+      headers: {
+        'cache-control': componentResponse.cacheControlHeader,
+      },
+    });
   } else if (response) {
     const rscWriter = await import(
       // @ts-ignore
       '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
     );
 
-    const stream = rscWriter
-      .renderToPipeableStream(AppRSC)
-      .pipe(response) as Writable;
+    const streamer = rscWriter.renderToPipeableStream(AppRSC);
+    response.writeHead(200, 'ok', {
+      'cache-control': componentResponse.cacheControlHeader,
+    });
+    const stream = streamer.pipe(response) as Writable;
 
     stream.on('finish', function () {
       postRequestTasks('rsc', response.statusCode, request, componentResponse);

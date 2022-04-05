@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.14.0
+
+### Minor Changes
+
+- [#1028](https://github.com/Shopify/hydrogen/pull/1028) [`ba174588`](https://github.com/Shopify/hydrogen/commit/ba174588d8f4a9f1054779a9bf32a92e8d2c921c) Thanks [@michenly](https://github.com/michenly)! - Starting from SF API version `2022-04`, the preferred way to request translatable resources is using the `@inContext` directive. See the [API docs](https://shopify.dev/api/examples/multiple-languages#retrieve-translations-with-the-storefront-api) on how to do this and which resources have translatable properties.
+
+  This causes a breaking change to the `useShopQuery` hook. The `locale` property has been removed from the argument object; `Accept-Language` is no longer being send with every request, and we are no longer using locale as part of the cache key.
+
+  The `useShop` hook will now return the `languageCode` key, which is the first two characters of the existing `locale` key.
+
+  Both `locale` & `languageCode` values are also now capitalized to make it easier to pass into a GraphQL `@inContext` directive.
+
+* [#1020](https://github.com/Shopify/hydrogen/pull/1020) [`e9529bc8`](https://github.com/Shopify/hydrogen/commit/e9529bc81410e0d99f9d3dbdb138ae61d00f876b) Thanks [@jplhomer](https://github.com/jplhomer)! - Preload `Link` URLs by default when a user signals intent to visit the URL. This includes hovering or focusing on the URL. To disable preloading, pass `<Link preload={false} />` to the component.
+
+### Patch Changes
+
+- [#1017](https://github.com/Shopify/hydrogen/pull/1017) [`4c87fb63`](https://github.com/Shopify/hydrogen/commit/4c87fb639a79da883f99c58acde0d17c713c7620) Thanks [@frandiox](https://github.com/frandiox)! - Do not cache Storefront API responses that contain GraphQL errors (amend previous fix).
+
+* [#1039](https://github.com/Shopify/hydrogen/pull/1039) [`3a297862`](https://github.com/Shopify/hydrogen/commit/3a29786202947fab0bfe876042b37a91923ed637) Thanks [@frandiox](https://github.com/frandiox)! - Update to Vite 2.9
+
+- [#1026](https://github.com/Shopify/hydrogen/pull/1026) [`836b064d`](https://github.com/Shopify/hydrogen/commit/836b064d1648fb1a9f209a08a82ee5c20f7dfba9) Thanks [@frehner](https://github.com/frehner)! - Updated the Typescript types and GraphQL schema to the newest updates from Storefront API 2022-04. Of note in this update is the ability to skip `edges` and go directly to `node`, for example: `product.nodes[0]` instead of `product.edges[0].node`
+
+* [#1032](https://github.com/Shopify/hydrogen/pull/1032) [`03488083`](https://github.com/Shopify/hydrogen/commit/034880833dc500f66f9b67417c00099c283dfa67) Thanks [@jplhomer](https://github.com/jplhomer)! - Catch hydration errors related to experimental server components bugs and prevent them from being logged in production.
+
+- [#1037](https://github.com/Shopify/hydrogen/pull/1037) [`13376efb`](https://github.com/Shopify/hydrogen/commit/13376efbe4db93efd705b6900a6198708bc37e69) Thanks [@jplhomer](https://github.com/jplhomer)! - Use new header for private Storefront token
+
+## 0.13.2
+
+### Patch Changes
+
+- [#1013](https://github.com/Shopify/hydrogen/pull/1013) [`94dc94ae`](https://github.com/Shopify/hydrogen/commit/94dc94aeb9dfd5e0120cab610203fdb4f0c61d3c) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix CORS issue in StackBlitz
+
+## 0.13.1
+
+### Patch Changes
+
+- [#1008](https://github.com/Shopify/hydrogen/pull/1008) [`ca1de82b`](https://github.com/Shopify/hydrogen/commit/ca1de82bc38c1c02caa451fb52065da499555e6f) Thanks [@frandiox](https://github.com/frandiox)! - Allow passing `cache` parameter to `createServer` in Node entry.
+
+* [#997](https://github.com/Shopify/hydrogen/pull/997) [`fffdc08f`](https://github.com/Shopify/hydrogen/commit/fffdc08f87f71592352a2eb67a63e80704054db2) Thanks [@frandiox](https://github.com/frandiox)! - Allow empty array values in flattenConnection utility.
+
+- [#1007](https://github.com/Shopify/hydrogen/pull/1007) [`7cfca7b0`](https://github.com/Shopify/hydrogen/commit/7cfca7b09289e028a463ababb51e69b4e3943d94) Thanks [@scottdixon](https://github.com/scottdixon)! - Fix API index routes https://github.com/Shopify/hydrogen/issues/562
+
+* [#1000](https://github.com/Shopify/hydrogen/pull/1000) [`6d0d5068`](https://github.com/Shopify/hydrogen/commit/6d0d50686029c3d66d9dc0ceb0b5f71456c7b19e) Thanks [@frandiox](https://github.com/frandiox)! - Do not cache Storefront API responses that contain GraphQL errors.
+
+- [#1003](https://github.com/Shopify/hydrogen/pull/1003) [`d8a9c929`](https://github.com/Shopify/hydrogen/commit/d8a9c9290aaf7c9d058b2c08567294822bea5396) Thanks [@jplhomer](https://github.com/jplhomer)! - Update useShopQuery to accept a custom Storefront API secret token, and forward the Buyer IP.
+
 ## 0.13.0
 
 ### Minor Changes
@@ -29,7 +75,7 @@
 
   These fragments have been removed to reduce the chances of over-fetching (in other words, querying for fields you don't use) in your GraphQL queries. Please refer to the [Storefront API documentation](https://shopify.dev/api/storefront) for information and guides.
 
-* [#912](https://github.com/Shopify/hydrogen/pull/912) [`de0e0d6a`](https://github.com/Shopify/hydrogen/commit/de0e0d6a6652463243ee09013cd30830ce2a246a) Thanks [@blittle](https://github.com/blittle)! - Change the country selector to lazy load available countries. The motivation to do so is that a _lot_ of countries come with the starter template. The problem is 1) the graphql query to fetch them all is relatively slow and 2) all of them get serialized to the browser in each RSC response.
+* [#912](https://github.com/Shopify/hydrogen/pull/912) [`de0e0d6a`](https://github.com/Shopify/hydrogen/commit/de0e0d6a6652463243ee09013cd30830ce2a246a) Thanks [@blittle](https://github.com/blittle)! - Change the country selector to lazy load available countries. The motivation to do so is that a _lot_ of countries come with the Demo Store template. The problem is 1) the graphql query to fetch them all is relatively slow and 2) all of them get serialized to the browser in each RSC response.
 
   This change removes `availableCountries` from the `LocalizationProvider`. As a result, the `useAvailableCountries` hook is also gone. Instead, the available countries are loaded on demand from an API route.
 
@@ -79,7 +125,7 @@
   }, []);
   ```
 
-  See an example on how this could be done inside the Hydrogen Example Template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx)
+  See an example on how this could be done inside the Demo Store template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx)
 
 - [#698](https://github.com/Shopify/hydrogen/pull/698) [`6f30b9a1`](https://github.com/Shopify/hydrogen/commit/6f30b9a1327f06d648a01dd94d539c7dcb3061e0) Thanks [@jplhomer](https://github.com/jplhomer)! - Basic end-to-end tests have been added to the default Hydrogen template. You can run tests in development:
 
@@ -239,7 +285,7 @@
 
 - [#981](https://github.com/Shopify/hydrogen/pull/981) [`8dda8a86`](https://github.com/Shopify/hydrogen/commit/8dda8a860bc1cf58511756b6fff999fb7caa6081) Thanks [@michenly](https://github.com/michenly)! - Fix useUrl() when it is in RSC mode
 
-* [#965](https://github.com/Shopify/hydrogen/pull/965) [`cdad13ed`](https://github.com/Shopify/hydrogen/commit/cdad13ed85ff17b84981367f39c7d2fe45e72dcf) Thanks [@blittle](https://github.com/blittle)! - Fix server redirects to work properly with RSC responses. For example, the redirect component within the starter template needs to change:
+* [#965](https://github.com/Shopify/hydrogen/pull/965) [`cdad13ed`](https://github.com/Shopify/hydrogen/commit/cdad13ed85ff17b84981367f39c7d2fe45e72dcf) Thanks [@blittle](https://github.com/blittle)! - Fix server redirects to work properly with RSC responses. For example, the redirect component within the Demo Store template needs to change:
 
   ```diff
   export default function Redirect({response}) {
@@ -289,7 +335,7 @@
 
 ### Minor Changes
 
-- [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the starter template.
+- [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the Demo Store template.
 
 * [#827](https://github.com/Shopify/hydrogen/pull/827) [`745e8c0`](https://github.com/Shopify/hydrogen/commit/745e8c0a87a7c41803934565e5a756295ff629c2) Thanks [@michenly](https://github.com/michenly)! - Move any static `Fragment` properties on components to the entry point `@shopify/hydrogen/fragments`.
   The migration diff are as follows:
@@ -925,7 +971,7 @@ function SomeComponent() {
 
 ### Fixed
 
-- Starter template GalleryPreview unique key warning
+- Demo Store template GalleryPreview unique key warning
 - Mitigation for upcoming breaking minor Vite update
 
 ## 0.2.0 - 2021-10-08

@@ -1,8 +1,10 @@
+import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 import type {ReactNode} from 'react';
 import type {ShopifyConfig} from '../../types';
 
 export type ShopifyContextValue = {
-  locale: string;
+  locale: `${LanguageCode}-${CountryCode}`;
+  languageCode: `${LanguageCode}`;
   storeDomain: ShopifyConfig['storeDomain'];
   storefrontToken: ShopifyConfig['storefrontToken'];
   storefrontApiVersion: string;
