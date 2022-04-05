@@ -9,7 +9,7 @@ export function fetch(
   url: string,
   options?: Omit<RequestInit, 'cache'> & HydrogenUseQueryOptions
 ): FetchResponse {
-  const {cache, preload, ...requestInit} = options ?? {};
+  const {cache, preload, shouldCacheResponse, ...requestInit} = options ?? {};
 
   const {data, error} = useQuery<string>(
     [url, options],
@@ -21,6 +21,7 @@ export function fetch(
     {
       cache,
       preload,
+      shouldCacheResponse,
     }
   );
 
