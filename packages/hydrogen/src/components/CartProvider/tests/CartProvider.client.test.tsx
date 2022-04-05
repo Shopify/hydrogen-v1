@@ -4,25 +4,37 @@ import {mount} from '@shopify/react-testing';
 import {flattenConnection} from '../../../utilities';
 import {CartContext} from '../context';
 import {CART_WITH_LINES} from './fixtures';
-import type {CartLineInput} from '../../../storefront-api-types';
+import type {CartWithActions} from '../types';
+import type {CartInput, CartLineInput} from '../../../storefront-api-types';
+import {CountryCode} from '../../../storefront-api-types';
 
 import {CartProvider} from '../CartProvider.client';
 
-const fetchCartMock = jest.fn(() => ({data: {}}));
+const fetchCartMock = jest.fn();
 
-jest.mock('../hooks', () => {
-  return {
-    useCartFetch: () => fetchCartMock,
-  };
-});
+jest.mock('../hooks', () => ({
+  useCartFetch: () => fetchCartMock,
+}));
+
+jest.mock('../../../foundation/useServerState', () => ({
+  useServerState: jest.fn(),
+}));
+
+const useServerStateMock: jest.Mock = jest.requireMock(
+  '../../../foundation/useServerState'
+).useServerState;
 
 describe('<CartProvider />', () => {
   beforeEach(() => {
     fetchCartMock.mockReturnValue({data: {}});
+    useServerStateMock.mockReturnValue({
+      serverState: {},
+    });
   });
 
   afterEach(() => {
-    fetchCartMock.mockClear();
+    fetchCartMock.mockReset();
+    useServerStateMock.mockReset();
   });
 
   describe('prop `data` does not exist', () => {
@@ -132,25 +144,10 @@ describe('<CartProvider />', () => {
         },
       });
 
-      const wrapper = mount(
-        <CartProvider data={CART_WITH_LINES}>
-          <CartContext.Consumer>
-            {(cartContext) => {
-              return (
-                <button
-                  onClick={() => {
-                    cartContext?.linesAdd([newLine]);
-                  }}
-                >
-                  Add
-                </button>
-              );
-            }}
-          </CartContext.Consumer>
-        </CartProvider>
-      );
-
-      wrapper.find('button')?.trigger('onClick');
+      const wrapper = triggerCartContextCallback({
+        callbackName: 'linesAdd',
+        callbackArgs: [newLine],
+      });
 
       expect(wrapper).toContainReactComponent(CartContext.Provider, {
         value: expect.objectContaining({
@@ -168,35 +165,17 @@ describe('<CartProvider />', () => {
         },
       ];
 
-      const wrapper = mount(
-        <CartProvider>
-          <CartContext.Consumer>
-            {(cartContext) => {
-              return (
-                <button
-                  onClick={() => {
-                    cartContext?.linesAdd(linesMock);
-                  }}
-                >
-                  Add
-                </button>
-              );
-            }}
-          </CartContext.Consumer>
-        </CartProvider>
-      );
-
-      expect(
-        wrapper.find(CartContext.Provider)?.prop('value')
-      ).not.toHaveProperty('id');
-
-      wrapper.find('button')?.trigger('onClick');
-
-      expect(fetchCartMock).toHaveBeenLastCalledWith('cartCreate', {
-        input: {lines: linesMock},
-        numCartLines: undefined,
-        country: undefined,
+      triggerCartContextCallback({
+        callbackName: 'linesAdd',
+        callbackArgs: linesMock,
       });
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith(
+        'cartCreate',
+        expect.objectContaining({
+          input: {lines: linesMock},
+        })
+      );
     });
 
     it.skip('calls CartLineAddMutation with lines if cart id exist', () => {
@@ -223,38 +202,137 @@ describe('<CartProvider />', () => {
         },
       ];
 
-      const wrapper = mount(
-        <CartProvider>
-          <CartContext.Consumer>
-            {(cartContext) => {
-              return (
-                <button
-                  onClick={() => {
-                    cartContext?.linesAdd(linesMock);
-                  }}
-                >
-                  Add
-                </button>
-              );
-            }}
-          </CartContext.Consumer>
-        </CartProvider>
-      );
-
-      expect(wrapper.find(CartContext.Provider)?.prop('value')).toHaveProperty(
-        'id'
-      );
-
-      wrapper.find('button')?.trigger('onClick');
+      triggerCartContextCallback({
+        callbackName: 'linesAdd',
+        callbackArgs: linesMock,
+      });
 
       expect(fetchCartMock).toHaveBeenLastCalledWith({
         query: expect.stringContaining('mutation CartLineAdd'),
-        variables: {
+        variables: expect.objectContaining({
           input: {lines: linesMock},
-          numCartLines: undefined,
-          country: undefined,
-        },
+        }),
       });
     });
   });
+
+  describe('cartCreate()', () => {
+    it('uses callback arguments as input variable in cartCreate mutation', () => {
+      const cartMock: CartInput = {
+        attributes: [{key: 'key1', value: 'value1'}],
+        buyerIdentity: {
+          countryCode: CountryCode.Ca,
+          customerAccessToken: 'access token',
+          email: 'myemail@org.com',
+          phone: '555-123-4567',
+        },
+      };
+
+      triggerCartContextCallback({
+        callbackName: 'cartCreate',
+        callbackArgs: cartMock,
+      });
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith(
+        'cartCreate',
+        expect.objectContaining({
+          input: cartMock,
+        })
+      );
+    });
+
+    it('uses countryCode in cartCreate mutation if it exist in serverState', () => {
+      const mockCountryCode = 'CA';
+
+      useServerStateMock.mockReturnValue({
+        serverState: {country: {isoCode: mockCountryCode}},
+      });
+
+      triggerCartContextCallback({
+        callbackName: 'cartCreate',
+        callbackArgs: {},
+      });
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith(
+        'cartCreate',
+        expect.objectContaining({
+          input: {
+            buyerIdentity: {countryCode: mockCountryCode},
+          },
+          country: mockCountryCode,
+        })
+      );
+    });
+
+    it('uses countryCode from cartCreate input in cartCreate mutation instead of countryCode in serverState', () => {
+      const serverStateCountryCode = CountryCode.Ca;
+      const cartInputCountryCode = CountryCode.Tw;
+
+      useServerStateMock.mockReturnValue({
+        serverState: {country: {isoCode: serverStateCountryCode}},
+      });
+
+      const cartMock: CartInput = {
+        buyerIdentity: {
+          countryCode: cartInputCountryCode,
+        },
+      };
+
+      triggerCartContextCallback({
+        callbackName: 'cartCreate',
+        callbackArgs: cartMock,
+      });
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith(
+        'cartCreate',
+        expect.objectContaining({
+          input: {
+            buyerIdentity: {countryCode: cartInputCountryCode},
+          },
+          country: serverStateCountryCode,
+        })
+      );
+    });
+  });
 });
+
+function triggerCartContextCallback({
+  cartProviderProps,
+  callbackName,
+  callbackArgs,
+}: {
+  cartProviderProps?: Omit<
+    React.ComponentProps<typeof CartProvider>,
+    'children'
+  >;
+  callbackName: keyof CartWithActions;
+  callbackArgs?: any;
+}) {
+  const wrapper = mount(
+    <CartProvider {...cartProviderProps}>
+      <CartContext.Consumer>
+        {(cartContext) => {
+          return (
+            <button
+              onClick={() => {
+                if (cartContext?.[callbackName] instanceof Function) {
+                  (cartContext?.[callbackName] as Function)(callbackArgs);
+                }
+              }}
+            >
+              Add
+            </button>
+          );
+        }}
+      </CartContext.Consumer>
+    </CartProvider>
+  );
+
+  expect(wrapper.find(CartContext.Provider)?.prop('value')).not.toHaveProperty(
+    'id'
+  );
+
+  wrapper.find('button')?.trigger('onClick');
+
+  return wrapper;
+}
