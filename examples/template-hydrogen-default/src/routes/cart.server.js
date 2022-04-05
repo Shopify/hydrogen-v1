@@ -10,6 +10,8 @@ export async function api(request, {queryShop}) {
   switch (data._action) {
     case 'cartCreate':
       return createCart(data, queryShop);
+    case 'addLineItem':
+      return addLineItem(data, queryShop);
   }
 }
 
@@ -31,6 +33,14 @@ async function createCart(data, queryShop) {
     variables: {input: data.input, country: data.cart},
   });
 }
+
+async function addLineItem(data, queryShop) {
+  return await queryShop({
+    query: ADD_LINE_ITEM_QUERY,
+    variables: {cartId: data.cartId, lines: data.lines, country: data.cart},
+  });
+}
+
 const CART_FRAGMENT = `#graphql
   fragment CartFragment on Cart {
     id
@@ -132,6 +142,18 @@ const CART_QUERY = `
 const CREATE_CART_QUERY = `#graphql
   mutation CartCreate($input: CartInput!, $country: CountryCode = ZZ) @inContext(country: $country) {
     cartCreate(input: $input) {
+      cart {
+        ...CartFragment
+      }
+    }
+  }
+
+  ${CART_FRAGMENT}
+`;
+
+const ADD_LINE_ITEM_QUERY = `#graphql
+  mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $country: CountryCode = ZZ) @inContext(country: $country) {
+    cartLinesAdd(cartId: $cartId, lines: $lines) {
       cart {
         ...CartFragment
       }

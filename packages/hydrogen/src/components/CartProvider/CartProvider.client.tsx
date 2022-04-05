@@ -9,11 +9,6 @@ import type {Reducer} from 'react';
 import {flattenConnection} from '../../utilities';
 import {Cart, CartAction, State} from './types';
 import {
-  CartLineAddMutation,
-  CartLineAddMutationVariables,
-} from './graphql/CartLineAddMutation';
-import {
-  CartLineAdd,
   CartLineRemove,
   CartLineUpdate,
   CartNoteUpdate,
@@ -338,18 +333,16 @@ export function CartProvider({
       if (state.status === 'idle') {
         dispatch({type: 'addLineItem'});
         onLineAdd?.();
-        const {data, error} = await fetchCart<
-          CartLineAddMutationVariables,
-          CartLineAddMutation
-        >({
-          query: CartLineAdd,
-          variables: {
+        const {data, error} = await fetch(endpoint, {
+          method: 'POST',
+          body: JSON.stringify({
+            _action: 'addLineItem',
             cartId: state.cart.id!,
             lines: lines,
             numCartLines,
             country: countryCode,
-          },
-        });
+          }),
+        }).then((r) => r.json());
 
         if (error) {
           dispatch({
