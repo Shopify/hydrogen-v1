@@ -10060,11 +10060,6 @@ react-fast-compare@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
-react-fetch@0.0.0-experimental-2bf7c02f0-20220314:
-  version "0.0.0-experimental-2bf7c02f0-20220314"
-  resolved "https://registry.yarnpkg.com/react-fetch/-/react-fetch-0.0.0-experimental-2bf7c02f0-20220314.tgz#ce9bd2a5f55e39c1a733b5398b8903505972acbe"
-  integrity sha512-heobUjN4+kWQz25j6iEOMYnAqtWY0uvpxaQYLjlOGviz9U8X4Iiqf+dTYpoKY+0csNhtHgGyu6Eu7u2FkRthHQ==
-
 react-helmet-async@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/react-helmet-async/-/react-helmet-async-1.2.3.tgz#57326a69304ea3293036eafb49475e9ba454cb37"

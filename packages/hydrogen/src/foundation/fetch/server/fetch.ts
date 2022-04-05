@@ -1,10 +1,5 @@
-import {type HydrogenUseQueryOptions, useQuery} from './useQuery/hooks';
-
-interface FetchResponse {
-  response: Response;
-  json: () => any;
-  text: () => any;
-}
+import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/hooks';
+import type {FetchResponse} from '../types';
 
 export function fetch(
   url: string,

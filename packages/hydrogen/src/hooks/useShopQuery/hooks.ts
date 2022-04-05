@@ -7,7 +7,7 @@ import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
-import {fetch} from '../../foundation/fetch';
+import {fetch} from '../../foundation/fetch/server/fetch';
 import {META_ENV_SSR} from '../../foundation/ssr-interop';
 
 export interface UseShopQueryResponse<T> {
