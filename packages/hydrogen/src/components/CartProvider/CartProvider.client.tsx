@@ -25,7 +25,6 @@ import {
   CartBuyerIdentityUpdate,
   CartAttributesUpdate,
   CartDiscountCodesUpdate,
-  CartQuery,
 } from './cart-queries';
 import {
   CartLineInput,
@@ -63,7 +62,6 @@ import {
 } from './graphql/CartAttributesUpdateMutation';
 import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
-import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
 import {useServerState} from '../../foundation/useServerState';
 import {ServerStateContextValue} from '../../foundation';
@@ -231,6 +229,7 @@ export function CartProvider({
   onAttributesUpdate,
   onDiscountCodesUpdate,
   data: cart,
+  endpoint = '/cart',
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -255,6 +254,10 @@ export function CartProvider({
    * An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).
    */
   data?: CartFragmentFragment;
+  /**
+   * Provide an endpoint to fetch cart data. Defaults to `/cart`.
+   */
+  endpoint?: string;
 }) {
   const {serverState} = useServerState() as ServerStateContextValue;
   const countryCode = serverState?.country?.isoCode;
@@ -272,14 +275,13 @@ export function CartProvider({
     async (cartId: string) => {
       dispatch({type: 'cartFetch'});
 
-      const {data} = await fetchCart<CartQueryQueryVariables, CartQueryQuery>({
-        query: CartQuery,
-        variables: {
-          id: cartId,
-          numCartLines,
-          country: countryCode,
-        },
-      });
+      const url = new URL(endpoint, window.location.href);
+      url.searchParams.set('id', cartId);
+      if (countryCode) {
+        url.searchParams.set('country', countryCode);
+      }
+
+      const {data} = await fetch(url.toString()).then((r) => r.json());
 
       if (!data?.cart) {
         window.localStorage.removeItem(CART_ID_STORAGE_KEY);
