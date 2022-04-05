@@ -11,7 +11,7 @@ function App({routes}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <CartProvider>
+        <CartProvider endpoint="/cart">
           <DefaultSeo />
           <Router>
             <FileRoutes routes={routes} />
