@@ -34,6 +34,8 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   // default to StrictMode on, unless explicitly turned off
   const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
 
+  let hasCaughtError = false;
+
   hydrateRoot(
     root,
     <RootComponent>
@@ -45,7 +47,8 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
     </RootComponent>,
     {
       onRecoverableError(e: any) {
-        if (__DEV__) {
+        if (__DEV__ && !hasCaughtError) {
+          hasCaughtError = true;
           console.log(
             `React encountered an error while attempting to hydrate the application. ` +
               `This is likely due to a bug in React's Suspense behavior related to experimental server components, ` +
