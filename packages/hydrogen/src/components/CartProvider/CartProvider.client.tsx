@@ -7,10 +7,6 @@ import React, {
 } from 'react';
 import type {Reducer} from 'react';
 import {flattenConnection} from '../../utilities';
-import {
-  CartCreateMutation,
-  CartCreateMutationVariables,
-} from './graphql/CartCreateMutation';
 import {Cart, CartAction, State} from './types';
 import {
   CartLineAddMutation,
@@ -18,7 +14,6 @@ import {
 } from './graphql/CartLineAddMutation';
 import {
   CartLineAdd,
-  CartCreate,
   CartLineRemove,
   CartLineUpdate,
   CartNoteUpdate,
@@ -307,17 +302,14 @@ export function CartProvider({
         cart.buyerIdentity.countryCode = countryCode;
       }
 
-      const {data, error} = await fetchCart<
-        CartCreateMutationVariables,
-        CartCreateMutation
-      >({
-        query: CartCreate,
-        variables: {
+      const {data, error} = await fetch(endpoint, {
+        method: 'POST',
+        body: JSON.stringify({
+          _action: 'cartCreate',
           input: cart,
-          numCartLines,
           country: countryCode,
-        },
-      });
+        }),
+      }).then((r) => r.json());
 
       if (error) {
         dispatch({
