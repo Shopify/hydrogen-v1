@@ -1,4 +1,4 @@
-export async function api(request, {queryShop}) {
+export async function api(request, {queryShop, session}) {
   const {
     data: {
       localization: {availableCountries},
@@ -6,6 +6,8 @@ export async function api(request, {queryShop}) {
   } = await queryShop({
     query: QUERY,
   });
+
+  await session.set('Does it work?', 'haa');
 
   return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
 }

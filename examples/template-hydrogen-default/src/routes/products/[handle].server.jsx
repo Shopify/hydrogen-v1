@@ -1,4 +1,10 @@
-import {useShop, useShopQuery, Seo, useRouteParams} from '@shopify/hydrogen';
+import {
+  useSession,
+  useShop,
+  useShopQuery,
+  Seo,
+  useRouteParams,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
@@ -9,6 +15,13 @@ export default function Product({country = {isoCode: 'US'}}) {
   const {handle} = useRouteParams();
 
   const {languageCode} = useShop();
+
+  const {get, set} = useSession();
+
+  set('does this set?', 'ha');
+
+  const data = get();
+  console.log('data', data);
 
   const {
     data: {product},
