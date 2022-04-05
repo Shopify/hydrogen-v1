@@ -8,7 +8,7 @@ import React, {
 import type {Reducer} from 'react';
 import {flattenConnection} from '../../utilities';
 import {Cart, CartAction, State} from './types';
-import {CartAttributesUpdate, CartDiscountCodesUpdate} from './cart-queries';
+import {CartDiscountCodesUpdate} from './cart-queries';
 import {
   CartLineInput,
   CartInput,
@@ -24,10 +24,6 @@ import {
   CartDiscountCodesUpdateMutation,
 } from './graphql/CartDiscountCodesUpdateMutation';
 
-import {
-  CartAttributesUpdateMutationVariables,
-  CartAttributesUpdateMutation,
-} from './graphql/CartAttributesUpdateMutation';
 import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 
@@ -457,7 +453,6 @@ export function CartProvider({
             _action: 'updateBuyerIdentity',
             cartId: state.cart.id!,
             buyerIdentity,
-            numCartLines,
             country: countryCode,
           }),
         }).then((r) => r.json());
@@ -487,18 +482,15 @@ export function CartProvider({
 
         onAttributesUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartAttributesUpdateMutationVariables,
-          CartAttributesUpdateMutation
-        >({
-          query: CartAttributesUpdate,
-          variables: {
+        const {data, error} = await fetch(endpoint, {
+          method: 'POST',
+          body: JSON.stringify({
+            _action: 'updateCartAttributes',
             cartId: state.cart.id!,
             attributes: attributes,
-            numCartLines,
             country: countryCode,
-          },
-        });
+          }),
+        }).then((r) => r.json());
 
         if (error) {
           dispatch({

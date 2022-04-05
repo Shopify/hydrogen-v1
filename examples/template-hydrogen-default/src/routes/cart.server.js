@@ -20,6 +20,8 @@ export async function api(request, {queryShop}) {
       return updateNote(data, queryShop);
     case 'updateBuyerIdentity':
       return updateBuyerIdentity(data, queryShop);
+    case 'updateCartAttributes':
+      return updateCartAttributes(data, queryShop);
     default:
       return new Response('Invalid action', {status: 400});
   }
@@ -78,6 +80,17 @@ async function updateBuyerIdentity(data, queryShop) {
     variables: {
       cartId: data.cartId,
       buyerIdentity: data.buyerIdentity,
+      country: data.country,
+    },
+  });
+}
+
+async function updateCartAttributes(data, queryShop) {
+  return await queryShop({
+    query: UPDATE_CART_ATTRIBUTES_QUERY,
+    variables: {
+      cartId: data.cartId,
+      attributes: data.attributes,
       country: data.country,
     },
   });
@@ -248,6 +261,18 @@ const UPDATE_BUYER_IDENTITY_QUERY = `#graphql
     $country: CountryCode = ZZ
   ) @inContext(country: $country) {
     cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+      cart {
+        ...CartFragment
+      }
+    }
+  }
+
+  ${CART_FRAGMENT}
+`;
+
+const UPDATE_CART_ATTRIBUTES_QUERY = `#graphql
+  mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $country: CountryCode = ZZ) @inContext(country: $country) {
+    cartAttributesUpdate(attributes: $attributes, cartId: $cartId) {
       cart {
         ...CartFragment
       }
