@@ -8,7 +8,7 @@
     "packages/playground/*"
   ],
   "engines": {
-    "node": ">=14"
+    "node": ">=16.13"
   },
   "scripts": {
     "dev": "yarn turbo run dev --parallel --filter=@shopify/hydrogen-ui --filter=@shopify/hydrogen",
@@ -40,7 +40,6 @@
     "@types/faker": "^5.5.7",
     "@types/fs-extra": "^9.0.12",
     "@types/jest": "^26.0.22",
-    "@types/node-fetch": "^2.5.9",
     "@typescript-eslint/parser": "^4.20.0",
     "abort-controller": "^3.0.0",
     "alex": "^9.1.0",
@@ -57,7 +56,6 @@
     "glob": "^7.2.0",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
-    "node-fetch": "^2.6.7",
     "npm-run-all": "^4.1.5",
     "playwright-chromium": "^1.13.0",
     "prettier": "^2.2.1",
@@ -68,6 +66,7 @@
     "turbo": "^1.2.8",
     "type-fest": "^2.12.0",
     "typescript": "^4.6.2",
+    "undici": "^5.0.0",
     "vite": "^2.9.0",
     "yorkie": "^2.0.0"
   },

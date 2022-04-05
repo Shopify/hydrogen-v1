@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import {fetch} from 'undici';
 import AbortController from 'abort-controller';
 
 // Note: globalThis.fetch is already polyfilled by Jest with DOM utilities
