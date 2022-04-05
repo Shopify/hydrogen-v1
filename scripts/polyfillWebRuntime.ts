@@ -1,4 +1,4 @@
-import {fetch, Request, Response, Headers} from 'undici';
+import {Request, Response, Headers} from 'undici';
 import AbortController from 'abort-controller';
 import {TextEncoder, TextDecoder} from 'util';
 
