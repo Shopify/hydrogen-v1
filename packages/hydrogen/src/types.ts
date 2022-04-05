@@ -8,6 +8,7 @@ import type {
   Product,
   MediaImage,
 } from './storefront-api-types';
+import type {SessionStorageAdapter} from './foundation/session/session';
 
 type CommonOptions = {
   App: any;
@@ -39,6 +40,7 @@ export type ShopifyConfig = {
   storeDomain: string;
   storefrontToken: string;
   storefrontApiVersion: string;
+  session?: () => SessionStorageAdapter;
 };
 
 export type Hook = (

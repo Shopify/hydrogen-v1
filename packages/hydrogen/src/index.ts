@@ -43,3 +43,6 @@ export {
 
 export {fetchSync} from './foundation/fetchSync/server/fetchSync';
 export {useServerAnalytics} from './foundation/Analytics';
+
+export {useSession} from './foundation/session/session';
+export {CookieSessionStorage} from './foundation/session/CookieSessionStorage';
