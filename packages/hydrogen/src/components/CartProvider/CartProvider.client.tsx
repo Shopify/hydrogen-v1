@@ -8,7 +8,6 @@ import React, {
 import type {Reducer} from 'react';
 import {flattenConnection} from '../../utilities';
 import {Cart, CartAction, State} from './types';
-import {CartDiscountCodesUpdate} from './cart-queries';
 import {
   CartLineInput,
   CartInput,
@@ -19,10 +18,7 @@ import {
 import {useCartFetch} from './hooks';
 import {CartContext} from './context';
 import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation';
-import {
-  CartDiscountCodesUpdateMutationVariables,
-  CartDiscountCodesUpdateMutation,
-} from './graphql/CartDiscountCodesUpdateMutation';
+import {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation';
 
 import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
@@ -183,7 +179,6 @@ function cartReducer(state: State, action: CartAction): State {
  */
 export function CartProvider({
   children,
-  numCartLines,
   onCreate,
   onLineAdd,
   onLineRemove,
@@ -197,7 +192,6 @@ export function CartProvider({
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
-  numCartLines?: number;
   /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
   onCreate?: () => void;
   /** A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API. */
@@ -233,7 +227,7 @@ export function CartProvider({
     (state, dispatch) => cartReducer(state, dispatch),
     initialStatus
   );
-  const fetchCart = useCartFetch();
+  const fetchCart = useCartFetch(endpoint);
 
   const cartFetch = useCallback(
     async (cartId: string) => {
@@ -255,7 +249,7 @@ export function CartProvider({
 
       dispatch({type: 'resolve', cart: cartFromGraphQL(data.cart)});
     },
-    [fetchCart, numCartLines, countryCode]
+    [countryCode]
   );
 
   const cartCreate = useCallback(
@@ -271,14 +265,10 @@ export function CartProvider({
         cart.buyerIdentity.countryCode = countryCode;
       }
 
-      const {data, error} = await fetch(endpoint, {
-        method: 'POST',
-        body: JSON.stringify({
-          _action: 'cartCreate',
-          input: cart,
-          country: countryCode,
-        }),
-      }).then((r) => r.json());
+      const {data, error} = await fetchCart('cartCreate', {
+        input: cart,
+        country: countryCode,
+      });
 
       if (error) {
         dispatch({
@@ -299,7 +289,7 @@ export function CartProvider({
         );
       }
     },
-    [onCreate, fetchCart, numCartLines, countryCode]
+    [fetchCart, onCreate, countryCode]
   );
 
   const addLineItem = useCallback(
@@ -307,15 +297,11 @@ export function CartProvider({
       if (state.status === 'idle') {
         dispatch({type: 'addLineItem'});
         onLineAdd?.();
-        const {data, error} = await fetch(endpoint, {
-          method: 'POST',
-          body: JSON.stringify({
-            _action: 'addLineItem',
-            cartId: state.cart.id!,
-            lines: lines,
-            country: countryCode,
-          }),
-        }).then((r) => r.json());
+        const {data, error} = await fetchCart('addLineItem', {
+          cartId: state.cart.id!,
+          lines: lines,
+          country: countryCode,
+        });
 
         if (error) {
           dispatch({
@@ -332,7 +318,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, numCartLines, onLineAdd, countryCode]
+    [fetchCart, countryCode]
   );
 
   const removeLineItem = useCallback(
@@ -342,15 +328,11 @@ export function CartProvider({
 
         onLineRemove?.();
 
-        const {data, error} = await fetch(endpoint, {
-          method: 'POST',
-          body: JSON.stringify({
-            _action: 'removeLineItem',
-            cartId: state.cart.id!,
-            lines: lines,
-            country: countryCode,
-          }),
-        }).then((r) => r.json());
+        const {data, error} = await fetchCart('removeLineItem', {
+          cartId: state.cart.id!,
+          lines: lines,
+          country: countryCode,
+        });
 
         if (error) {
           dispatch({
@@ -367,7 +349,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onLineRemove, numCartLines, countryCode]
+    [fetchCart, onLineRemove, countryCode]
   );
 
   const updateLineItem = useCallback(
@@ -377,15 +359,11 @@ export function CartProvider({
 
         onLineUpdate?.();
 
-        const {data, error} = await fetch(endpoint, {
-          method: 'POST',
-          body: JSON.stringify({
-            _action: 'updateLineItem',
-            cartId: state.cart.id!,
-            lines: lines,
-            country: countryCode,
-          }),
-        }).then((r) => r.json());
+        const {data, error} = await fetchCart('updateLineItem', {
+          cartId: state.cart.id!,
+          lines: lines,
+          country: countryCode,
+        });
 
         if (error) {
           dispatch({
@@ -402,7 +380,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onLineUpdate, numCartLines, countryCode]
+    [fetchCart, onLineUpdate, countryCode]
   );
 
   const noteUpdate = useCallback(
@@ -412,15 +390,11 @@ export function CartProvider({
 
         onNoteUpdate?.();
 
-        const {data, error} = await fetch(endpoint, {
-          method: 'POST',
-          body: JSON.stringify({
-            _action: 'updateNote',
-            cartId: state.cart.id!,
-            note: note,
-            country: countryCode,
-          }),
-        }).then((r) => r.json());
+        const {data, error} = await fetchCart('updateNote', {
+          cartId: state.cart.id!,
+          note: note,
+          country: countryCode,
+        });
 
         if (error) {
           dispatch({
@@ -437,7 +411,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onNoteUpdate, numCartLines, countryCode]
+    [fetchCart, onNoteUpdate, countryCode]
   );
 
   const buyerIdentityUpdate = useCallback(
@@ -447,15 +421,11 @@ export function CartProvider({
 
         onBuyerIdentityUpdate?.();
 
-        const {data, error} = await fetch(endpoint, {
-          method: 'POST',
-          body: JSON.stringify({
-            _action: 'updateBuyerIdentity',
-            cartId: state.cart.id!,
-            buyerIdentity,
-            country: countryCode,
-          }),
-        }).then((r) => r.json());
+        const {data, error} = await fetchCart('updateBuyerIdentity', {
+          cartId: state.cart.id!,
+          buyerIdentity,
+          country: countryCode,
+        });
 
         if (error) {
           dispatch({
@@ -472,7 +442,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onBuyerIdentityUpdate, numCartLines, countryCode]
+    [fetchCart, onBuyerIdentityUpdate, countryCode]
   );
 
   const cartAttributesUpdate = useCallback(
@@ -482,15 +452,11 @@ export function CartProvider({
 
         onAttributesUpdate?.();
 
-        const {data, error} = await fetch(endpoint, {
-          method: 'POST',
-          body: JSON.stringify({
-            _action: 'updateCartAttributes',
-            cartId: state.cart.id!,
-            attributes: attributes,
-            country: countryCode,
-          }),
-        }).then((r) => r.json());
+        const {data, error} = await fetchCart('updateCartAttributes', {
+          cartId: state.cart.id!,
+          attributes: attributes,
+          country: countryCode,
+        });
 
         if (error) {
           dispatch({
@@ -507,7 +473,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onAttributesUpdate, numCartLines, countryCode]
+    [fetchCart, onAttributesUpdate, countryCode]
   );
 
   const discountCodesUpdate = useCallback(
@@ -520,17 +486,10 @@ export function CartProvider({
 
         onDiscountCodesUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartDiscountCodesUpdateMutationVariables,
-          CartDiscountCodesUpdateMutation
-        >({
-          query: CartDiscountCodesUpdate,
-          variables: {
-            cartId: state.cart.id!,
-            discountCodes: discountCodes,
-            numCartLines,
-            country: countryCode,
-          },
+        const {data, error} = await fetchCart('updateDiscountCodes', {
+          cartId: state.cart.id!,
+          discountCodes: discountCodes,
+          country: countryCode,
         });
 
         if (error) {
@@ -548,7 +507,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onDiscountCodesUpdate, numCartLines, countryCode]
+    [fetchCart, onDiscountCodesUpdate, countryCode]
   );
 
   const didFetchCart = useRef(false);

@@ -22,6 +22,8 @@ export async function api(request, {queryShop}) {
       return updateBuyerIdentity(data, queryShop);
     case 'updateCartAttributes':
       return updateCartAttributes(data, queryShop);
+    case 'updateDiscountCodes':
+      return updateDiscountCodes(data, queryShop);
     default:
       return new Response('Invalid action', {status: 400});
   }
@@ -91,6 +93,17 @@ async function updateCartAttributes(data, queryShop) {
     variables: {
       cartId: data.cartId,
       attributes: data.attributes,
+      country: data.country,
+    },
+  });
+}
+
+async function updateDiscountCodes(data, queryShop) {
+  return await queryShop({
+    query: UPDATE_DISCOUNT_CODES_QUERY,
+    variables: {
+      cartId: data.cartId,
+      discountCodes: data.discountCodes,
       country: data.country,
     },
   });
@@ -280,4 +293,14 @@ const UPDATE_CART_ATTRIBUTES_QUERY = `#graphql
   }
 
   ${CART_FRAGMENT}
+`;
+
+const UPDATE_DISCOUNT_CODES_QUERY = `#graphql
+  mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $country: CountryCode = ZZ) @inContext(country: $country) {
+    cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+      cart {
+        ...CartFragment
+      }
+    }
+  }
 `;

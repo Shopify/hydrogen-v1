@@ -1,70 +1,39 @@
 import React, {useState} from 'react';
-import {useShop} from '../../foundation';
 import {flattenConnection} from '../../utilities';
 import {CartInput} from '../../storefront-api-types';
-import {CartCreate} from './cart-queries';
-import {
-  CartCreateMutation,
-  CartCreateMutationVariables,
-} from './graphql/CartCreateMutation';
 import {Cart} from './types';
 
-export function useCartFetch() {
-  const {storeDomain, storefrontApiVersion, storefrontToken} = useShop();
-
-  return React.useCallback(
-    <T, K>({
-      query,
-      variables,
-    }: {
-      query: string;
-      variables: T;
-    }): Promise<{data: K | undefined; error: any}> => {
-      return fetch(
-        `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-SDK-Variant': 'hydrogen',
-            'X-SDK-Version': storefrontApiVersion,
-            'X-Shopify-Storefront-Access-Token': storefrontToken,
-          },
-          body: JSON.stringify({
-            query: query.toString(),
-            variables,
-          }),
-        }
-      )
-        .then((res) => res.json())
-        .catch((error) => {
-          return {
-            data: undefined,
-            error: error.toString(),
-          };
-        });
-    },
-    [storeDomain, storefrontApiVersion, storefrontToken]
-  );
+export function useCartFetch(endpoint: string) {
+  return async function (action: string, variables: any) {
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        body: JSON.stringify({
+          _action: action,
+          ...variables,
+        }),
+      });
+      return await res.json();
+    } catch (error: any) {
+      return {
+        data: undefined,
+        error: error.toString(),
+      };
+    }
+  };
 }
 
-export function useInstantCheckout() {
+export function useInstantCheckout(endpoint = '/cart') {
   const [cart, updateCart] = useState<Cart | undefined>();
   const [checkoutUrl, updateCheckoutUrl] = useState<Cart['checkoutUrl']>();
   const [error, updateError] = useState<string | undefined>();
 
-  const fetch = useCartFetch();
+  const fetch = useCartFetch(endpoint);
 
   const createInstantCheckout = React.useCallback(
     async (cartInput: CartInput) => {
-      const {data, error} = await fetch<
-        CartCreateMutationVariables,
-        CartCreateMutation
-      >({
-        query: CartCreate,
-        variables: {
-          input: cartInput,
-        },
+      const {data, error} = await fetch('cartCreate', {
+        input: cartInput,
       });
 
       if (error) {
@@ -77,7 +46,6 @@ export function useInstantCheckout() {
         const dataCart = data.cartCreate.cart;
         updateCart({
           ...dataCart,
-          // @ts-expect-error While the cart still uses fragments, there will be a TS error here until we remove those fragments and get the type in-line
           lines: flattenConnection(dataCart.lines),
           note: dataCart.note ?? undefined,
         });
