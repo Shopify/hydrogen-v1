@@ -2,7 +2,7 @@ Environment variables, also known as secrets, allow you to load different values
 
 ## How environment variables work
 
-You can [store secrets](https://vitejs.dev/guide/env-and-mode.html#env-files) in `.env` files in your Hydrogen project:
+You can [store secrets in `.env` files](https://vitejs.dev/guide/env-and-mode.html#env-files) in your Hydrogen project:
 
 {% codeblock file, filename: '.env' %}
 
@@ -41,7 +41,7 @@ export default Component() {
 {% endcodeblock %}
 
 > Caution:
-> Public variables are inlined in the bundle code at build time as strings. As a result, you should only store non-sensitive data in these variables. Public variables are commonly used in client components, but they can be used anywhere.
+> Public variables are added to the bundle code at build time as strings. As a result, you should only store non-sensitive data in these variables. Public variables are commonly used in client components, but they can be used anywhere.
 
 ### Private variables
 
@@ -61,7 +61,7 @@ export default Page() {
 
 ### Private variables in production
 
-In production, none of the `.env` files are used to load runtime variables by default. Instead, the variables that load are based on the hosting runtime you're using.
+In production, none of the `.env` files are used to load runtime variables by default. Instead, the variables that load are based on the hosting runtime that you're using.
 
 For example, if you're deploying to a Node.js server, then you can pass variables to the Node.js process using [`cross-env`](https://github.com/kentcdodds/cross-env#readme):
 
@@ -88,7 +88,7 @@ app.use(hydrogenMiddleware({/* ... */}))
 {% endcodeblock %}
 
 > Caution:
-> Private variables are only available in components that run exclusively in the server. Private variables are common in server components or utilities that are imported by them. If you use private variables in client components, then they'll only work during server-side rendering and will fail to hydrate later in the browser.
+> If you use private variables in client components, then they'll only work during server-side rendering and will fail to hydrate later in the browser. Private variables are only available in components that run exclusively in the server or in utilities that are imported by those components.
 
 ## Next steps
 
