@@ -334,7 +334,6 @@ export function CartProvider({
             _action: 'addLineItem',
             cartId: state.cart.id!,
             lines: lines,
-            numCartLines,
             country: countryCode,
           }),
         }).then((r) => r.json());
@@ -370,7 +369,6 @@ export function CartProvider({
             _action: 'removeLineItem',
             cartId: state.cart.id!,
             lines: lines,
-            numCartLines,
             country: countryCode,
           }),
         }).then((r) => r.json());
@@ -400,18 +398,16 @@ export function CartProvider({
 
         onLineUpdate?.();
 
-        const {data, error} = await fetchCart<
-          CartLineUpdateMutationVariables,
-          CartLineUpdateMutation
-        >({
-          query: CartLineUpdate,
-          variables: {
+        const {data, error} = await fetch(endpoint, {
+          method: 'POST',
+          body: JSON.stringify({
+            _action: 'updateLineItem',
             cartId: state.cart.id!,
             lines: lines,
-            numCartLines,
             country: countryCode,
-          },
-        });
+          }),
+        }).then((r) => r.json());
+
         if (error) {
           dispatch({
             type: 'reject',

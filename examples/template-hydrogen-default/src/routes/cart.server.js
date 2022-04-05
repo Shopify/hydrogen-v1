@@ -14,6 +14,10 @@ export async function api(request, {queryShop}) {
       return addLineItem(data, queryShop);
     case 'removeLineItem':
       return removeLineItem(data, queryShop);
+    case 'updateLineItem':
+      return updateLineItem(data, queryShop);
+    default:
+      return new Response('Invalid action', {status: 400});
   }
 }
 
@@ -32,21 +36,28 @@ async function getCart(request, queryShop) {
 async function createCart(data, queryShop) {
   return await queryShop({
     query: CREATE_CART_QUERY,
-    variables: {input: data.input, country: data.cart},
+    variables: {input: data.input, country: data.country},
   });
 }
 
 async function addLineItem(data, queryShop) {
   return await queryShop({
     query: ADD_LINE_ITEM_QUERY,
-    variables: {cartId: data.cartId, lines: data.lines, country: data.cart},
+    variables: {cartId: data.cartId, lines: data.lines, country: data.country},
   });
 }
 
 async function removeLineItem(data, queryShop) {
   return await queryShop({
     query: REMOVE_LINE_ITEM_QUERY,
-    variables: {cartId: data.cartId, lines: data.lines, country: data.cart},
+    variables: {cartId: data.cartId, lines: data.lines, country: data.country},
+  });
+}
+
+async function updateLineItem(data, queryShop) {
+  return await queryShop({
+    query: UPDATE_LINE_ITEM_QUERY,
+    variables: {cartId: data.cartId, lines: data.lines, country: data.country},
   });
 }
 
@@ -175,6 +186,18 @@ const ADD_LINE_ITEM_QUERY = `#graphql
 const REMOVE_LINE_ITEM_QUERY = `#graphql
   mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $country: CountryCode = ZZ) @inContext(country: $country) {
     cartLinesRemove(cartId: $cartId, lineIds: $lines) {
+      cart {
+        ...CartFragment
+      }
+    }
+  }
+
+  ${CART_FRAGMENT}
+`;
+
+const UPDATE_LINE_ITEM_QUERY = `#graphql
+  mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $country: CountryCode = ZZ) @inContext(country: $country) {
+    cartLinesUpdate(cartId: $cartId, lines: $lines) {
       cart {
         ...CartFragment
       }
