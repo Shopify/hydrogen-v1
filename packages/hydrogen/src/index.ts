@@ -25,10 +25,6 @@ export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.serv
 export * from './hooks/useShopQuery/hooks';
 export * from './foundation/useQuery/hooks';
 
-// Export server-only CartQuery here instead of `CartProvider.client` to prevent
-// it from being bundled with other client components
-export {CartQuery} from './components/CartProvider/cart-queries';
-
 export {
   generateCacheControlHeader,
   NoStore,

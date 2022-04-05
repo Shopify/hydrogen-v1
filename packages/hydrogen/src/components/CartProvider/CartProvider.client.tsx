@@ -17,11 +17,11 @@ import {
 } from '../../storefront-api-types';
 import {useCartFetch} from './hooks';
 import {CartContext} from './context';
-import {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation';
-import {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation';
+import type {CartNoteUpdateMutationVariables} from './graphql/CartNoteUpdateMutation';
+import type {CartDiscountCodesUpdateMutationVariables} from './graphql/CartDiscountCodesUpdateMutation';
 
 import {CART_ID_STORAGE_KEY} from './constants';
-import {CartFragmentFragment} from './graphql/CartFragment';
+import type {CartFragmentFragment} from './graphql/CartFragment';
 
 import {useServerState} from '../../foundation/useServerState';
 import {ServerStateContextValue} from '../../foundation';
