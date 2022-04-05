@@ -4,6 +4,11 @@ import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
+import {
+  emptySessionImplementation,
+  SessionApi,
+  SessionStorageAdapter,
+} from '../foundation/session/session';
 
 let memoizedRoutes: Array<HydrogenApiRoute> = [];
 let memoizedPages: ImportGlobEagerOutput = {};
@@ -12,6 +17,7 @@ type RouteParams = Record<string, string>;
 type RequestOptions = {
   params: RouteParams;
   queryShop: (args: QueryShopArgs) => Promise<any>;
+  session: SessionApi | null;
 };
 type ResourceGetter = (
   request: Request,
@@ -156,15 +162,32 @@ function queryShopBuilder(shopifyConfig: ShopifyConfig) {
 export async function renderApiRoute(
   request: Request,
   route: ApiRouteMatch,
-  shopifyConfig: ShopifyConfig
+  shopifyConfig: ShopifyConfig,
+  session?: SessionStorageAdapter
 ): Promise<Response> {
   let response;
   const log = getLoggerWithContext(request);
+  let cookieToSet = '';
 
   try {
     response = await route.resource(request, {
       params: route.params,
       queryShop: queryShopBuilder(shopifyConfig),
+      session: session
+        ? {
+            async get() {
+              return session.get(request, '');
+            },
+            async set(key: string, value: string) {
+              const data = await session.get(request, '');
+              data[key] = value;
+              cookieToSet = await session.set('', data);
+            },
+            async destroy() {
+              cookieToSet = await session.destroy('');
+            },
+          }
+        : emptySessionImplementation(log),
     });
 
     if (!(response instanceof Response)) {
@@ -177,6 +200,10 @@ export async function renderApiRoute(
           },
         });
       }
+    }
+
+    if (cookieToSet) {
+      response.headers.set('Set-Cookie', cookieToSet);
     }
   } catch (e) {
     log.error(e);

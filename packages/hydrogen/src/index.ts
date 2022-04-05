@@ -40,3 +40,6 @@ export {
   CacheMonths,
   CacheCustom,
 } from './framework/CachingStrategy';
+
+export {useSession} from './foundation/session/session';
+export {CookieSessionStorage} from './foundation/session/CookieSessionStorage';
