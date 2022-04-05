@@ -77,7 +77,7 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes}: ServerHandlerConfig
+  {shopifyConfig, routes, session}: ServerHandlerConfig
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
@@ -94,7 +94,7 @@ export const renderHydrogen = (
     const request = new ServerComponentRequest(rawRequest);
     request.ctx.buyerIpHeader = buyerIpHeader;
 
-    const session = shopifyConfig.session ? shopifyConfig.session() : undefined;
+    const sessionApi = session ? session() : undefined;
 
     const url = new URL(request.url);
     const log = getLoggerWithContext(request);
@@ -104,7 +104,7 @@ export const renderHydrogen = (
       request,
       componentResponse,
       log,
-      session
+      sessionApi
     );
 
     /**
@@ -134,7 +134,7 @@ export const renderHydrogen = (
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        return renderApiRoute(request, apiRoute, shopifyConfig, session);
+        return renderApiRoute(request, apiRoute, shopifyConfig, sessionApi);
       }
     }
 
