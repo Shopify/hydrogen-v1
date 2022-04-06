@@ -31,14 +31,14 @@ let writingLock = false;
  *
  * A better solution would be to have a lock only for the same session.
  */
-async function startWritingLock(promise: () => Promise<any>) {
+async function startFileLock(promise: () => Promise<any>) {
   if (!writingLock) {
     writingLock = true;
     await promise();
     writingLock = false;
   } else {
     await wait();
-    await startWritingLock(promise);
+    await startFileLock(promise);
   }
 }
 
@@ -109,7 +109,7 @@ async function getFile(
     expires: expires.getTime(),
   };
 
-  await startWritingLock(async () => {
+  await startFileLock(async () => {
     try {
       const textContent = await fsp.readFile(file, {encoding: 'utf-8'});
 
@@ -121,7 +121,7 @@ async function getFile(
       }
 
       if (
-        content.expires > new Date().getTime() ||
+        content.expires < new Date().getTime() ||
         content === defaultFileContent
       ) {
         await fsp.unlink(file);
@@ -155,7 +155,7 @@ async function writeFile(
     expires: expires.getTime(),
   };
 
-  await startWritingLock(async () => {
+  await startFileLock(async () => {
     try {
       await fsp.mkdir(path.dirname(file), {recursive: true});
     } catch (error: any) {
@@ -178,7 +178,7 @@ async function writeFile(
 
 async function deleteFile(file: string) {
   try {
-    await startWritingLock(async () => {
+    await startFileLock(async () => {
       await fsp.unlink(file);
     });
   } catch (error: any) {
