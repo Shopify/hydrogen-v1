@@ -20,7 +20,7 @@ export const CookieSessionStorage = function (
     let parsed = false;
 
     return {
-      async get(request: Request, id: string): Promise<Record<string, string>> {
+      async get(request: Request): Promise<Record<string, string>> {
         if (!parsed) {
           const cookieValue = request.headers.get('cookie');
           cookie.parse(cookieValue || '');
@@ -28,11 +28,11 @@ export const CookieSessionStorage = function (
         }
         return cookie.data;
       },
-      async set(id: string, value: Record<string, string>) {
+      async set(request: Request, value: Record<string, string>) {
         cookie.setAll(value);
         return cookie.serialize();
       },
-      async destroy(id: string) {
+      async destroy(request: Request) {
         // @todo - set expires for Date in past
         return cookie.destroy();
       },

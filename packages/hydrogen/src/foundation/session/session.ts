@@ -17,9 +17,9 @@ export type SessionApi = {
 };
 
 export type SessionStorageAdapter = {
-  get: (request: Request, id: string) => Promise<Record<string, string>>;
-  set: (id: string, value: Record<string, string>) => Promise<string>;
-  destroy: (id: string) => Promise<string>;
+  get: (request: Request) => Promise<Record<string, string>>;
+  set: (request: Request, value: Record<string, string>) => Promise<string>;
+  destroy: (request: Request) => Promise<string>;
 };
 
 export function getSyncSessionApi(
@@ -38,7 +38,7 @@ export function getSyncSessionApi(
     ? {
         get() {
           if (!sessionPromises.getPromise) {
-            sessionPromises.getPromise = wrapPromise(session.get(request, ''));
+            sessionPromises.getPromise = wrapPromise(session.get(request));
           }
           return sessionPromises.getPromise.read();
         },
@@ -47,9 +47,9 @@ export function getSyncSessionApi(
           if (!sessionPromises['set' + key + value]) {
             sessionPromises['set' + key + value] = wrapPromise(
               new Promise<string>(async (resolve, reject) => {
-                const data = await session.get(request, '');
+                const data = await session.get(request);
                 data[key] = value;
-                const cookieToSet = await session.set('', data);
+                const cookieToSet = await session.set(request, data);
                 resolve(cookieToSet);
               })
             );
@@ -62,7 +62,7 @@ export function getSyncSessionApi(
           if (!sessionPromises.destroyPromise) {
             sessionPromises.destroyPromise = wrapPromise(
               new Promise<string>(async (resolve, reject) => {
-                const cookieToSet = await session.destroy('');
+                const cookieToSet = await session.destroy(request);
                 resolve(cookieToSet);
               })
             );
