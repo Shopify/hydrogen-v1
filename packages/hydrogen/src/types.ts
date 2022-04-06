@@ -63,7 +63,7 @@ export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
-  session?: () => SessionStorageAdapter;
+  session?: (log: Logger) => SessionStorageAdapter;
 };
 
 export type ClientHandlerConfig = {

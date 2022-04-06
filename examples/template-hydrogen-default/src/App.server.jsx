@@ -4,7 +4,7 @@ import {
   Route,
   FileRoutes,
   ShopifyProvider,
-  CookieSessionStorage,
+  FileSessionStorage,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
@@ -34,7 +34,9 @@ const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 export default renderHydrogen(App, {
   routes,
   shopifyConfig,
-  session: CookieSessionStorage('__session', {
+  session: FileSessionStorage('__session', '/Users/blittle/dev/session', {
     path: '/',
+    expires: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30), // 30 days
+    maxAge: 60 * 60 * 24 * 30,
   }),
 });

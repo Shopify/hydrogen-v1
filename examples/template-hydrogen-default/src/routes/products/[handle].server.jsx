@@ -22,6 +22,8 @@ export default function Product({country = {isoCode: 'US'}}) {
   set('2', 'ha');
   set('3', 'ha');
   set('4', 'ha');
+  set('5', 'ha');
+  set('6', 'ha');
 
   const data = get();
   console.log('data', data);
