@@ -1,6 +1,6 @@
 import {Logger} from '../../utilities/log';
 import {useServerRequest} from '../ServerRequestProvider';
-import {wrapPromise} from '../../utilities/wrapPromise/wrapPromise';
+import {wrapPromise} from '../../utilities/suspense';
 import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 
