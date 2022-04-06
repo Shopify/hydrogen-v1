@@ -2,7 +2,7 @@ The `fetchSync` function makes third-party API requests. It is designed similar 
 
 ## Using `fetchSync`
 
-To request data from a third-party API, pass the URL to `fetch` along with any arguments. Leverage `Suspense` boundaries to define where you want your app to display a loading indicator while your data is being accessed.
+To request data from a third-party API, pass the URL to `fetchSync` along with any arguments. Leverage `Suspense` boundaries to define where you want your app to display a loading indicator while your data is being accessed.
 
 {% codeblock file, filename: "MyComponent.server.js" %}
 
