@@ -77,7 +77,7 @@ export function getSyncSessionApi(
 export const useSession = function () {
   const request = useServerRequest();
   const session = request.ctx.session?.get();
-  return [session, request.ctx.session?.set, request.ctx.session?.destroy];
+  return session;
 };
 
 export const emptySessionImplementation = function (log: Logger) {
