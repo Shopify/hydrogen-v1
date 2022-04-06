@@ -8,7 +8,7 @@ export function fetch(
   const {cache, preload, shouldCacheResponse, ...requestInit} = options ?? {};
 
   const {data: useQueryResponse, error} = useQuery<[string, Response]>(
-    [url, options],
+    [url, requestInit],
     async () => {
       const response = await globalThis.fetch(url, requestInit);
 

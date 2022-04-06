@@ -18,7 +18,8 @@ export interface UseShopQueryResponse<T> {
 
 // Check if the response body has GraphQL errors
 // https://spec.graphql.org/June2018/#sec-Response-Format
-const shouldCacheResponse = (body: any) => !body?.errors;
+const shouldCacheResponse = ([body, response]: [any, Response]) =>
+  !JSON.parse(body)?.errors;
 
 /**
  * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
