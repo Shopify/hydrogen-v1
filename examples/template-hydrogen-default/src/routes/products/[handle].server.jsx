@@ -16,17 +16,16 @@ export default function Product({country = {isoCode: 'US'}}) {
 
   const {languageCode} = useShop();
 
-  const {get, set} = useSession();
+  const [session, setSession] = useSession();
 
-  set('1', 'ha');
-  set('2', 'ha');
-  set('3', 'ha');
-  set('4', 'ha');
-  set('5', 'ha');
-  set('6', 'ha');
+  console.log('data', session);
 
-  const data = get();
-  console.log('data', data);
+  setSession('1', 'ha');
+  setSession('2', 'ha');
+  setSession('3', 'ha');
+  setSession('4', 'ha');
+  setSession('5', 'ha');
+  setSession('6', 'ha');
 
   const {
     data: {product},
