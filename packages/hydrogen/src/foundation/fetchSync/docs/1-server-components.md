@@ -1,6 +1,6 @@
 ## `fetchSync` in server components
 
-If you're using `fetchSync` in a server component, then you provide options for caching and preloading. This is similar to the [`useQuery`](/api/hydrogen/hooks/global/useQuery) hook:
+If you're using `fetchSync` in a server component, then you provide options for caching and preloading. This is similar to the [`useQuery`](/api/hydrogen/hooks/global/usequery) hook:
 
 {% codeblock file, filename: "MyComponent.server.js" %}
 
