@@ -4,7 +4,6 @@ import {
   CacheSeconds,
   generateCacheControlHeader,
 } from '../framework/CachingStrategy';
-import type {ServerComponentRequest} from './Hydration/ServerComponentRequest.server';
 import {logCacheApiStatus} from '../utilities/log';
 
 function getCacheControlSetting(
@@ -131,8 +130,7 @@ export async function setItemInCache(
     'cache-control': generateSubRequestCacheControlHeader(
       getCacheControlSetting(cacheControl, {
         maxAge:
-          (cacheControl?.maxAge || 0) +
-          (cacheControl.staleWhileRevalidate || 0),
+          (cacheControl.maxAge || 0) + (cacheControl.staleWhileRevalidate || 0),
       })
     ),
     'cache-put-date': new Date().toUTCString(),
@@ -162,7 +160,7 @@ export function isStale(
   response: Response,
   userCacheOptions?: CachingStrategy
 ) {
-  const responseMaxAge = getCacheControlSetting(userCacheOptions)?.maxAge || 0;
+  const responseMaxAge = getCacheControlSetting(userCacheOptions).maxAge || 0;
   const responseDate = response.headers.get('cache-put-date');
 
   if (!responseDate) return false;
