@@ -1,5 +1,5 @@
 import type {SessionStorageAdapter} from './session';
-import {Cookie} from './session';
+import {Cookie} from './Cookie';
 
 export type CookieSessionOptions = {
   httpOnly?: boolean;
@@ -33,6 +33,7 @@ export const CookieSessionStorage = function (
         return cookie.serialize();
       },
       async destroy(id: string) {
+        // @todo - set expires for Date in past
         return cookie.destroy();
       },
     };
