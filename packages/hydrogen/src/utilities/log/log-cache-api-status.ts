@@ -7,5 +7,5 @@ export function logCacheApiStatus(status: string | null, url: string) {
     return;
   }
 
-  log.debug(gray(`[Cache] ${status?.padEnd(6)} query ${findQueryName(url)}`));
+  log.debug(gray(`[Cache] ${status?.padEnd(8)} query ${findQueryName(url)}`));
 }

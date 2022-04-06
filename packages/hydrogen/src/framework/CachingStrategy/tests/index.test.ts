@@ -10,7 +10,7 @@ import {
   CacheCustom,
 } from '..';
 
-const expectedResultMapping = {
+const expectedResultMapping: any = {
   CacheSeconds: {
     method: CacheSeconds,
     header: 'public, max-age=1, stale-while-revalidate=9',
@@ -70,7 +70,7 @@ describe('CachingStrategy', () => {
         testFunction.method({
           mode: 'no-store',
         });
-      } catch (error) {
+      } catch (error: any) {
         expect(error.message).toEqual(
           "'mode' must be either 'public' or 'private'"
         );

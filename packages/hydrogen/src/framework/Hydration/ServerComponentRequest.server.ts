@@ -57,6 +57,7 @@ export class ServerComponentRequest extends Request {
     buyerIpHeader?: string;
     [key: string]: any;
   };
+  public isCF: () => Boolean;
 
   constructor(input: any);
   constructor(input: RequestInfo, init?: RequestInit);
@@ -66,6 +67,10 @@ export class ServerComponentRequest extends Request {
     } else {
       super(getUrlFromNodeRequest(input), getInitFromNodeRequest(input));
     }
+
+    this.isCF = () => {
+      return !!input.cf;
+    };
 
     this.time = getTime();
     this.id = generateId();
