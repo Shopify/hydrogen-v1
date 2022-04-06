@@ -30,9 +30,11 @@ export interface HydrogenUseQueryOptions {
 }
 
 /**
+ * \> Note:
+ * \> If you are making a simple fetch call on the server, we recommend [using `fetch` instead](/api/hydrogen/hooks/global/fetch).
+ *
  * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
- * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based
- * on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this
+ * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this
  * hook to call any third-party APIs from a server component.
  */
 export function useQuery<T>(
