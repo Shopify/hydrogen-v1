@@ -75,9 +75,9 @@ function query<Fn extends () => Promise<unknown>>(
   return undefined as unknown as Await<ReturnType<Fn>>;
 }
 
-export const suspend = <Fn extends () => Promise<unknown>>(
+export const suspendFunction = <Fn extends () => Promise<unknown>>(
   key: QueryKey,
   fn: Fn
 ) => query(key, fn);
-export const preload = (key: QueryKey, fn: () => Promise<unknown>) =>
+export const preloadFunction = (key: QueryKey, fn: () => Promise<unknown>) =>
   query(key, fn, true);

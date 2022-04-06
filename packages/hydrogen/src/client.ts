@@ -8,4 +8,4 @@ export * from './utilities';
 export {useRouteParams} from './foundation/useRouteParams/useRouteParams';
 export {useNavigate} from './foundation/useNavigate/useNavigate';
 export {fetch} from './foundation/fetch/client/fetch';
-export {suspend, preload} from './utilities/suspense';
+export {suspendFunction, preloadFunction} from './utilities/suspense';
