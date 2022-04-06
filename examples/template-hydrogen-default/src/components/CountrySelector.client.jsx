@@ -1,5 +1,5 @@
 import {useState, Suspense} from 'react';
-import {useCountry, fetch} from '@shopify/hydrogen/client';
+import {useCountry, fetchSync} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
 import SpinnerIcon from './SpinnerIcon.client';
 
@@ -61,7 +61,7 @@ export default function CountrySelector() {
 }
 
 export function Countries({selectedCountry, getClassName}) {
-  const countries = fetch('/countries').json();
+  const countries = fetchSync('/countries').json();
 
   return countries.map((country) => {
     const isSelected = country.isoCode === selectedCountry.isoCode;

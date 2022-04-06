@@ -1,7 +1,7 @@
 import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/hooks';
 import type {FetchResponse} from '../types';
 
-export function fetch(
+export function fetchSync(
   url: string,
   options?: Omit<RequestInit, 'cache'> & HydrogenUseQueryOptions
 ): FetchResponse {

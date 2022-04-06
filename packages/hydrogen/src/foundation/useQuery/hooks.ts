@@ -31,7 +31,7 @@ export interface HydrogenUseQueryOptions {
 
 /**
  * \> Note:
- * \> If you are making a simple fetch call on the server, we recommend [using `fetch` instead](/api/hydrogen/hooks/global/fetch).
+ * \> If you are making a simple fetch call on the server, we recommend [using `fetchSync` instead](/api/hydrogen/hooks/global/fetchsync).
  *
  * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
  * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this

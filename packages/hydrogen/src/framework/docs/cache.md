@@ -89,19 +89,15 @@ const {data} = useShopQuery({
 
 {% endcodeblock %}
 
-The following example shows how to implement [`useQuery` for third-party requests](/api/hydrogen/hooks/global/usequery):
+The following example shows how to implement [`fetchSync` for third-party requests](/api/hydrogen/hooks/global/fetchsync):
 
 {% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
 ```jsx
 // Use a caching strategy provided by Hydrogen
-const {data} = useQuery(
-  'cache-key',
-  async () => await fetch('https://my.3p.com/data.json').then(res => res.json()),
-  {
-    cache: CacheHours(),
-  }
-});
+const data = fetchSync('https://my.3p.com/data.json', {
+  cache: CacheHours(),
+}).json();
 ```
 
 {% endcodeblock %}

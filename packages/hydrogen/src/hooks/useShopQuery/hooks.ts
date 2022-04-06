@@ -7,7 +7,7 @@ import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
-import {fetch} from '../../foundation/fetch/server/fetch';
+import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
 import {META_ENV_SSR} from '../../foundation/ssr-interop';
 
 export interface UseShopQueryResponse<T> {
@@ -18,7 +18,7 @@ export interface UseShopQueryResponse<T> {
 
 // Check if the response body has GraphQL errors
 // https://spec.graphql.org/June2018/#sec-Response-Format
-const shouldCacheResponse = ([body, response]: [any, Response]) =>
+const shouldCacheResponse = ([body]: [any, Response]) =>
   !JSON.parse(body)?.errors;
 
 /**
@@ -48,6 +48,9 @@ export function useShopQuery<T>({
    */
   preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
+  /**
+   * If no query is passed, we no-op here to allow developers to obey the Rules of Hooks.
+   */
   if (!query) {
     return {data: undefined as unknown as T, errors: undefined};
   }
@@ -68,7 +71,7 @@ export function useShopQuery<T>({
   let useQueryError: any;
 
   try {
-    data = fetch(url, {
+    data = fetchSync(url, {
       ...requestInit,
       cache,
       preload,

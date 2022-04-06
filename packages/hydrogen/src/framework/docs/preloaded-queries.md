@@ -82,22 +82,13 @@ const {data} = useShopQuery({
   preload: true,
 });
 
-const {data} = useQuery(
-  ['unique', 'key'],
-  async () => {
-    const response = await fetch('https://my.api.com/data.json', {
-      headers: {
-        accept: 'application/json',
-      },
-    });
-
-    return await response.json();
-  },
-  {
+const data = fetchSync('https://my.api.com/data.json', {
+  headers: {
+    accept: 'application/json',
     // Preloads queries for every request
     preload: '*',
-  }
-);
+  },
+}).json();
 ```
 
 {% endcodeblock %}

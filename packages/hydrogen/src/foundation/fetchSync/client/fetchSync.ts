@@ -4,7 +4,7 @@ import type {FetchResponse} from '../types';
 /**
  * Fetch a URL for use in a client component Suspense boundary.
  */
-export function fetch(url: string, options?: RequestInit): FetchResponse {
+export function fetchSync(url: string, options?: RequestInit): FetchResponse {
   const [text, response] = suspendFunction([url, options], async () => {
     const response = await globalThis.fetch(url, options);
     const text = await response.text();

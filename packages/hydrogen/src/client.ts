@@ -7,5 +7,5 @@ export {Head} from './foundation/Head';
 export * from './utilities';
 export {useRouteParams} from './foundation/useRouteParams/useRouteParams';
 export {useNavigate} from './foundation/useNavigate/useNavigate';
-export {fetch} from './foundation/fetch/client/fetch';
+export {fetchSync} from './foundation/fetchSync/client/fetchSync';
 export {suspendFunction, preloadFunction} from './utilities/suspense';

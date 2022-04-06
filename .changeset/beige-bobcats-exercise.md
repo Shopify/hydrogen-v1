@@ -2,12 +2,12 @@
 '@shopify/hydrogen': minor
 ---
 
-Introduce Suspense-friendly `fetch` API for server and client components.
+Introduce Suspense-friendly `fetchSync` API for server and client components.
 
-When using `fetch` in server components, you provide options for caching and preloading. This is similar to the [`useQuery` hook](<[/api/hydrogen/hooks/global/useQuery](https://shopify.dev/api/hydrogen/hooks/global/usequery)>):
+When using `fetchSync` in server components, you provide options for caching and preloading. This is similar to the [`useQuery` hook](<[/api/hydrogen/hooks/global/useQuery](https://shopify.dev/api/hydrogen/hooks/global/usequery)>):
 
 ```jsx
-import {fetch, CacheMinutes} from '@shopify/hydrogen';
+import {fetchSync, CacheMinutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 export function MyServerComponent() {
@@ -19,7 +19,7 @@ export function MyServerComponent() {
 }
 
 function MyThings() {
-  const things = fetch('https://3p.api.com/things.json', {
+  const things = fetchSync('https://3p.api.com/things.json', {
     preload: true,
     cache: CacheMinutes(),
   }).json();
@@ -28,10 +28,10 @@ function MyThings() {
 }
 ```
 
-When using `fetch` in client components, you cannot provide options for caching and preloading. You must import `fetch` from `@shopify/hydrogen/client`:
+When using `fetchSync` in client components, you cannot provide options for caching and preloading. You must import `fetchSync` from `@shopify/hydrogen/client`:
 
 ```jsx
-import {fetch} from '@shopify/hydrogen/client';
+import {fetchSync} from '@shopify/hydrogen/client';
 import {Suspense} from 'react';
 
 export function MyClientComponent() {
@@ -43,7 +43,7 @@ export function MyClientComponent() {
 }
 
 function MyThings() {
-  const things = fetch('https://3p.api.com/things.json').json();
+  const things = fetchSync('https://3p.api.com/things.json').json();
 
   return <h2>{things.title}</h2>;
 }
