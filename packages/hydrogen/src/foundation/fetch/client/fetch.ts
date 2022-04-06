@@ -1,15 +1,13 @@
-import {wrapPromise} from '../../../utilities';
-import {FetchResponse} from '../types';
+import {suspend} from '../../../utilities/suspense';
+import type {FetchResponse} from '../types';
 
 export function fetch(url: string, options?: RequestInit): FetchResponse {
-  async function runFetch(): Promise<[string, Response]> {
+  const [text, response] = suspend([url, options], async () => {
     const response = await globalThis.fetch(url, options);
     const text = await response.text();
 
-    return [text, response];
-  }
-
-  const [text, response] = wrapPromise(runFetch()).read();
+    return [text, response] as [string, Response];
+  });
 
   return {
     response,

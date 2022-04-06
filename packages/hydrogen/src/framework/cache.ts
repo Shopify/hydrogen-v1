@@ -4,20 +4,12 @@ import {
   CacheSeconds,
   generateCacheControlHeader,
 } from '../framework/CachingStrategy';
+import {hashKey} from '../utilities/hash';
 
 export function generateSubRequestCacheControlHeader(
   userCacheOptions?: CachingStrategy
 ): string {
   return generateCacheControlHeader(userCacheOptions || CacheSeconds());
-}
-
-export function hashKey(key: QueryKey): string {
-  const rawKey = key instanceof Array ? key : [key];
-
-  /**
-   * TODO: Smarter hash
-   */
-  return rawKey.map((k) => JSON.stringify(k)).join('');
 }
 
 /**
