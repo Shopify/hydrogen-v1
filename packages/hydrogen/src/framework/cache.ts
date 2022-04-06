@@ -91,10 +91,8 @@ export async function setItemInCache(
    *
    * For example:
    *
-   * Cloudflare's Cache API does not support `stale-while-revalidate`
-   * This is a workaround until Cloudflare support
-   *
-   * Cloudflare cache control header has a very odd behaviour
+   * Cloudflare's Cache API does not support `stale-while-revalidate`.
+   * Cloudflare cache control header has a very odd behaviour.
    * Say we have the following cache control header on a request:
    *
    *   public, max-age=15, stale-while-revalidate=30
