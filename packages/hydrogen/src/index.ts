@@ -46,3 +46,4 @@ export {useServerAnalytics} from './foundation/Analytics';
 
 export {useSession} from './foundation/session/session';
 export {CookieSessionStorage} from './foundation/session/CookieSessionStorage';
+export {Cookie} from './foundation/session/Cookie';
