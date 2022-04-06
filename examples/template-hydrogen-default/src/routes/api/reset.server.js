@@ -1,7 +1,9 @@
-import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
+import {NoStore} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
-export async function api(request, {queryShop}) {
+import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants';
+
+export async function api(request, {queryShop, session}) {
   const jsonBody = await request.json();
 
   if (
@@ -37,12 +39,12 @@ export async function api(request, {queryShop}) {
     data.customerReset &&
     data.customerReset.customerAccessToken !== null
   ) {
-    const customerHeaders = setCustomerAccessToken(
-      data.customerReset.customerAccessToken,
+    await session.set(
+      CUSTOMER_ACCESS_TOKEN_COOKIE_NAME,
+      data.customerAccessTokenCreate.customerAccessToken.accessToken,
     );
 
     return new Response(null, {
-      headers: customerHeaders,
       status: 200,
     });
   } else {

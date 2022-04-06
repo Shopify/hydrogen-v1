@@ -1,6 +1,7 @@
-import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
+import {NoStore} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
+import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants';
 import Layout from '../../components/Layout.server';
 import LoginForm from '../../components/LoginForm.client';
 
@@ -13,7 +14,7 @@ export default function Login() {
   );
 }
 
-export async function api(request, {queryShop}) {
+export async function api(request, {queryShop, session}) {
   const jsonBody = await request.json();
 
   if (
@@ -44,12 +45,12 @@ export async function api(request, {queryShop}) {
     data.customerAccessTokenCreate &&
     data.customerAccessTokenCreate.customerAccessToken !== null
   ) {
-    const customerHeaders = setCustomerAccessToken(
-      data.customerAccessTokenCreate.customerAccessToken,
+    await session.set(
+      CUSTOMER_ACCESS_TOKEN_COOKIE_NAME,
+      data.customerAccessTokenCreate.customerAccessToken.accessToken,
     );
 
     return new Response(null, {
-      headers: customerHeaders,
       status: 200,
     });
   } else {

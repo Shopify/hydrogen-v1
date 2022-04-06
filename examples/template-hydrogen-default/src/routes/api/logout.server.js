@@ -1,11 +1,10 @@
-import {removeCustomerAccessToken} from '@shopify/hydrogen';
+import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants';
 
-export function api() {
-  const removeCustomerHeaders = removeCustomerAccessToken();
+export async function api(request, {session}) {
+  await session.set(CUSTOMER_ACCESS_TOKEN_COOKIE_NAME, '');
 
   return new Response(null, {
     headers: {
-      ...removeCustomerHeaders,
       Location: '/',
     },
     status: 301,

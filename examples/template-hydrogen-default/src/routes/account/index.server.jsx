@@ -1,8 +1,11 @@
-import {CacheCustom, useCustomer} from '@shopify/hydrogen';
+import {CacheCustom, useSession} from '@shopify/hydrogen';
 
+import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants';
 import AccountDetails from '../../components/AccountDetails.server';
 
 export default function Account({response}) {
+  const session = useSession();
+
   // disabled full page cache
   response.cache(
     CacheCustom({
@@ -10,7 +13,9 @@ export default function Account({response}) {
     }),
   );
 
-  const customerAccessToken = useCustomer();
+  const customerAccessToken = session
+    ? session.get()[CUSTOMER_ACCESS_TOKEN_COOKIE_NAME]
+    : undefined;
 
   if (customerAccessToken) {
     return <AccountDetails customerAccessToken={customerAccessToken} />;
