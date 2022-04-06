@@ -176,15 +176,15 @@ export async function renderApiRoute(
       session: session
         ? {
             async get() {
-              return session.get(request, '');
+              return session.get(request);
             },
             async set(key: string, value: string) {
-              const data = await session.get(request, '');
+              const data = await session.get(request);
               data[key] = value;
-              cookieToSet = await session.set('', data);
+              cookieToSet = await session.set(request, data);
             },
             async destroy() {
-              cookieToSet = await session.destroy('');
+              cookieToSet = await session.destroy(request);
             },
           }
         : emptySessionImplementation(log),

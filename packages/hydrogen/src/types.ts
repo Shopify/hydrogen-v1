@@ -54,7 +54,7 @@ export type ImportGlobEagerOutput = Record<
 export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
-  session?: () => SessionStorageAdapter;
+  session?: (log: Logger) => SessionStorageAdapter;
 };
 
 export type ClientHandlerConfig = {
