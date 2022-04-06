@@ -119,8 +119,7 @@ export async function setItemInCache(
      *
      * Store the following information in the response header:
      *
-     *   shopify-cf-max-age          - the actual max-age that is defined
-     *   shopify-cf-cache-put-date   - UTC time string of when this request is PUT into cache
+     *   cache-put-date   - UTC time string of when this request is PUT into cache
      *
      * Note on `shopify-cf-cache-put-date`: The `response.headers.get('date')` on Cloudflare
      * isn't static. I am not positive what date this is returning but it is never over 500 ms
@@ -135,8 +134,7 @@ export async function setItemInCache(
           maxAge: maxage + (cacheControl.staleWhileRevalidate || 0),
         })
       ),
-      'shopify-cf-max-age': maxage.toString(),
-      'shopify-cf-cache-put-date': new Date().toUTCString(),
+      'cache-put-date': new Date().toUTCString(),
     });
   } else {
     headers = new Headers({
@@ -166,27 +164,12 @@ export async function deleteItemFromCache(key: QueryKey) {
  */
 export function isStale(
   response: Response,
-  rootRequest: ServerComponentRequest
+  userCacheOptions?: CachingStrategy
 ) {
-  let responseDate = response.headers.get('date');
-  const responseCacheControl = response.headers.get('cache-control');
+  const responseMaxAge = getCacheControlSetting(userCacheOptions)?.maxAge || 0;
+  const responseDate = response.headers.get('cache-put-date');
 
-  if (!responseDate || !responseCacheControl) return false;
-
-  let responseMaxAge: number;
-  if (rootRequest.isCF()) {
-    // Get the header information we set in `setItemInCache`
-    responseDate = response.headers.get('shopify-cf-cache-put-date');
-    const cfMaxAge = response.headers.get('shopify-cf-max-age');
-    if (!cfMaxAge || !responseDate) return false;
-
-    responseMaxAge = parseInt(cfMaxAge);
-  } else {
-    const responseMaxAgeMatch = responseCacheControl.match(/max-age=(\d+)/);
-
-    if (!responseMaxAgeMatch) return false;
-    responseMaxAge = parseInt(responseMaxAgeMatch[1]);
-  }
+  if (!responseDate) return false;
 
   const ageInMs =
     new Date().valueOf() - new Date(responseDate as string).valueOf();

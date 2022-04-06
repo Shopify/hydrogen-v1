@@ -108,7 +108,7 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(response, request)) {
+      if (isStale(response, resolvedQueryOptions?.cache)) {
         logCacheApiStatus('STALE', hashedKey);
         const lockKey = `lock-${key}`;
 
