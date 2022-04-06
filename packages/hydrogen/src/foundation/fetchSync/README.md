@@ -1,15 +1,15 @@
-The `fetchSync` function makes third-party API requests. It is designed similar to the [Web API's `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch), only in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html).
+<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/components/Image and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
-## Using `fetchSync`
+The `fetchSync` hook makes third-party API requests and is the recommended way to make simple fetch calls on the server. It's designed similar to the [Web API's `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch), only in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html).
 
-To request data from a third-party API, pass the URL to `fetchSync` along with any arguments. Leverage `Suspense` boundaries to define where you want your app to display a loading indicator while your data is being accessed.
+## Example code
 
 {% codeblock file, filename: "MyComponent.server.js" %}
 
 ```jsx
 import {fetchSync} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-
+// Use `Suspense` boundaries to define where you want your app to display a loading indicator while your data is being accessed.
 export function MyComponent() {
   return (
     <Suspense fallback="Loading...">
@@ -17,33 +17,26 @@ export function MyComponent() {
     </Suspense>
   );
 }
-
 function MyThings() {
+  // To request data from a third-party API, pass the URL to `fetchSync` along with any arguments.
   const things = fetchSync('https://3p.api.com/things.json', {
     method: 'post',
   }).json();
-
   return <h2>{things.title}</h2>;
 }
 ```
 
 {% endcodeblock %}
 
-Two important things to notice about using `fetchSync`:
+## `fetchSync` in server components
 
-1. Do **not** use `async/await` with the `fetchSync` helper provided by Hydrogen. Hydrogen wraps the native fetch call in a way that supports Suspense boundaries.
-2. Process the response contents with `json()` or `text()` helpers.
-
-## Using `fetchSync` in server components
-
-When using `fetchSync` in server components, you provide options for caching and preloading. This is similar to the [`useQuery` hook](/api/hydrogen/hooks/global/useQuery):
+If you're using `fetchSync` in a server component, then you provide options for caching and preloading. This is similar to the [`useQuery`](/api/hydrogen/hooks/global/useQuery) hook:
 
 {% codeblock file, filename: "MyComponent.server.js" %}
 
 ```jsx
 import {fetchSync, CacheMinutes} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-
 export function MyComponent() {
   return (
     <Suspense fallback="Loading...">
@@ -51,13 +44,11 @@ export function MyComponent() {
     </Suspense>
   );
 }
-
 function MyThings() {
   const things = fetchSync('https://3p.api.com/things.json', {
     preload: true,
     cache: CacheMinutes(),
   }).json();
-
   return <h2>{things.title}</h2>;
 }
 ```
@@ -85,22 +76,21 @@ The `requestInit` object augments the [`init` properties available in the Web Fe
 
 The `fetchSync` function returns an object with the following keys:
 
-| Key        | Description                                                                             |
-| ---------- | --------------------------------------------------------------------------------------- |
-| `response` | The Response returned by the fetch call. Useful for checking status code, headers, etc. |
-| `json()`   | A function to return a JavaScript object based on the JSON response body.               |
-| `text()`   | A function to return a string version of the response body.                             |
+| Key        | Description                                                                               |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| `response` | The response returned by the fetch call. Useful for checking the status code and headers. |
+| `json()`   | A function to return a JavaScript object based on the JSON response body.                 |
+| `text()`   | A function to return a string version of the response body.                               |
 
-## Using `fetchSync` in client components
+## `fetchSync` in client components
 
-When using `fetchSync` in client components, be sure to import the function from `@shopify/hydrogen/client`. You cannot provide options for caching and preloading in client components:
+If you're using `fetchSync` in a client component, make sure to import the function from `@shopify/hydrogen/client`. You can't provide options for caching and preloading in client components:
 
 {% codeblock file, filename: "MyComponent.client.js" %}
 
 ```jsx
 import {fetchSync} from '@shopify/hydrogen/client';
 import {Suspense} from 'react';
-
 export function MyComponent() {
   return (
     <Suspense fallback="Loading...">
@@ -108,22 +98,13 @@ export function MyComponent() {
     </Suspense>
   );
 }
-
 function MyThings() {
   const things = fetchSync('https://3p.api.com/things.json').json();
-
   return <h2>{things.title}</h2>;
 }
 ```
 
 {% endcodeblock %}
-
-The following caveats apply to `fetchSync` in client components:
-
-- Suspense boundaries in client components are rendered during SSR. This means the fallback is streamed to the client while the fetch call runs.
-- Data fetched on the server during SSR is not serialized to the client. This means that your client `fetchSync` function will run twice during initial page load: once on the server, and once on the client.
-- Suspense boundaries inside client components rendered during a subsequent navigation are not rendered on the server, just on the client.
-- If you include browser-only logic inside your client component Suspense boundary which would otherwise fail on the server, you should conditionally include the suspending component with a piece of client state activated by `useEffect` or with a user action: `{isLoaded && <Suspense><MyComponent></Suspense>}`
 
 ### Arguments
 
@@ -145,3 +126,24 @@ The `fetchSync` function returns an object with the following keys:
 | `response` | The Response returned by the fetch call. Useful for checking status code, headers, etc. |
 | `json()`   | A function to return a JavaScript object based on the JSON response body.               |
 | `text()`   | A function to return a string version of the response body.                             |
+
+## Considerations
+
+The following considerations apply to `fetchSync` in server and client components.
+
+### `fetchSync` in server components
+
+- Don't use `async/await` with the `fetchSync` helper provided by Hydrogen. Hydrogen wraps the native fetch call in a way that supports Suspense boundaries.
+- Process the response contents with `json()` or `text()` helpers.
+
+### `fetchSync` in client components
+
+- Suspense boundaries in client components are rendered during server-side rendering (SSR). This means the fallback is streamed to the client while the fetch call runs.
+- Data fetched on the server during SSR isn't serialized to the client. This means that your client `fetchSync` function will run twice during initial page load: once on the server and once on the client.
+- Suspense boundaries inside client components rendered during a subsequent navigation are only rendered on the client - not on the server.
+- If you include browser-only logic inside your client component Suspense boundary, which would otherwise fail on the server, then you should conditionally include the suspending component with a piece of client state activated by `useEffect` or with a user action: `{isLoaded && <Suspense><MyComponent></Suspense>}`.
+
+## Related hooks
+
+- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)
+- [`useQuery`](/api/hydrogen/hooks/global/usequery)

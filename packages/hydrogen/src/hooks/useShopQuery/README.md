@@ -70,4 +70,5 @@ The `useShopQuery` returns an object with the following key:
 
 ## Related hooks
 
+- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync)
 - [`useQuery`](/api/hydrogen/hooks/global/usequery)
