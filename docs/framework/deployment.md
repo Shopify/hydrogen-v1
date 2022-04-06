@@ -237,3 +237,13 @@ Then you can deploy your project with [Wrangler](https://developers.cloudflare.c
 ```bash
 CF_ACCOUNT_ID=<YOUR_CLOUDFLARE_ACCT_ID> wrangler publish
 ```
+
+#### Worker sub request caching requirements
+
+In order for Cloudflare worker's Cache API to work, you must have:
+
+- A Cloudflare domain (Cannot be the `worker.dev` that Cloudflare gives you)
+- A DNS record for that domain `A example.dev 192.0.2.1 Proxied`
+- A worker route that points to the Cloudflare domain
+
+> Note: Above requirement may be different for enterprise accounts
