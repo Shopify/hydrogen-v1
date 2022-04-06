@@ -27,7 +27,6 @@ export function useShopQuery<T>({
   query,
   variables = {},
   cache,
-  locale = '',
   preload = false,
 }: {
   /** A string of the GraphQL query.
@@ -58,7 +57,7 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {key, url, requestInit} = useCreateShopRequest(body, locale);
+  const {key, url, requestInit} = useCreateShopRequest(body);
 
   const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
     key,
@@ -154,13 +153,8 @@ export function useShopQuery<T>({
   return data!;
 }
 
-function useCreateShopRequest(body: string, locale?: string) {
-  const {
-    storeDomain,
-    storefrontToken,
-    storefrontApiVersion,
-    locale: defaultLocale,
-  } = useShop();
+function useCreateShopRequest(body: string) {
+  const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
 
   const request = useServerRequest();
   const secretToken =
@@ -171,22 +165,29 @@ function useCreateShopRequest(body: string, locale?: string) {
 
   const extraHeaders = {} as Record<string, any>;
 
+  /**
+   * Only pass one type of storefront token at a time.
+   */
+  if (secretToken) {
+    extraHeaders['Shopify-Storefront-Private-Token'] = secretToken;
+  } else {
+    extraHeaders['X-Shopify-Storefront-Access-Token'] = storefrontToken;
+  }
+
   if (buyerIp) {
     extraHeaders['Shopify-Storefront-Buyer-IP'] = buyerIp;
   }
 
   return {
-    key: [storeDomain, storefrontApiVersion, body, locale],
+    key: [storeDomain, storefrontApiVersion, body],
     url: `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
     requestInit: {
       body,
       method: 'POST',
       headers: {
-        'X-Shopify-Storefront-Access-Token': secretToken ?? storefrontToken,
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
-        'Accept-Language': (locale as string) ?? defaultLocale,
         ...extraHeaders,
       },
     },

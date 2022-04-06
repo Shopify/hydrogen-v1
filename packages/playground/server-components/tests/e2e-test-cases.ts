@@ -40,7 +40,7 @@ export default async function testCases({
     await page.goto(getServerUrl() + '/config/someDynamicValue');
 
     expect(await page.textContent('#root > div')).toContain(
-      '{"locale":"en-us","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
+      '{"locale":"EN-US","languageCode":"EN","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
     );
   });
 
