@@ -117,17 +117,12 @@ function cachedQueryFnBuilder<T>(
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
-          await setItemInCache(lockKey, true, request);
+          await setItemInCache(lockKey, true);
           try {
             const output = await generateNewOutput();
 
             if (shouldCacheResponse(output)) {
-              await setItemInCache(
-                key,
-                output,
-                request,
-                resolvedQueryOptions?.cache
-              );
+              await setItemInCache(key, output, resolvedQueryOptions?.cache);
             }
           } catch (e: any) {
             log.error(`Error generating async response: ${e.message}`);
@@ -147,7 +142,7 @@ function cachedQueryFnBuilder<T>(
      */
     if (shouldCacheResponse(newOutput)) {
       runDelayedFunction(() =>
-        setItemInCache(key, newOutput, request, resolvedQueryOptions?.cache)
+        setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
       );
     }
 

@@ -76,7 +76,6 @@ export async function getItemFromCache(
 export async function setItemInCache(
   key: QueryKey,
   value: any,
-  rootRequest: ServerComponentRequest,
   userCacheOptions?: CachingStrategy
 ) {
   const cache = getCache();
@@ -87,60 +86,57 @@ export async function setItemInCache(
   const url = getKeyUrl(hashKey(key));
   const request = new Request(url);
 
-  let headers: Headers;
+  /**
+   * We are manually managing staled request by adding this workaround.
+   * Why? cache control header support is dependent on hosting platform
+   *
+   * For example:
+   *
+   * Cloudflare's Cache API does not support `stale-while-revalidate`
+   * This is a workaround until Cloudflare support
+   *
+   * Cloudflare cache control header has a very odd behaviour
+   * Say we have the following cache control header on a request:
+   *
+   *   public, max-age=15, stale-while-revalidate=30
+   *
+   * When there is a cache.match HIT, the cache control header would become
+   *
+   *   public, max-age=14400, stale-while-revalidate=30
+   *
+   * == `stale-while-revalidate` workaround ==
+   * Update response max-age so that:
+   *
+   *   max-age = max-age + stale-while-revalidate
+   *
+   * For example:
+   *
+   *   public, max-age=1, stale-while-revalidate=9
+   *                    |
+   *                    V
+   *   public, max-age=10, stale-while-revalidate=9
+   *
+   * Store the following information in the response header:
+   *
+   *   cache-put-date   - UTC time string of when this request is PUT into cache
+   *
+   * Note on `cache-put-date`: The `response.headers.get('date')` isn't static. I am
+   * not positive what date this is returning but it is never over 500 ms
+   * after subtracting from the current timestamp.
+   *
+   * `isStale` function will use the above information to test for stale-ness of a cached response
+   */
   const cacheControl = getCacheControlSetting(userCacheOptions);
-  if (rootRequest.isCF()) {
-    /**
-     * Cloudflare's Cache API does not support `stale-while-revalidate`
-     * This is a workaround until Cloudflare support
-     *
-     * Cloudflare cache control header has a very odd behaviour
-     * Say we have the following cache control header on a request:
-     *
-     *   public, max-age=15, stale-while-revalidate=30
-     *
-     * When there is a cache.match HIT, the cache control header would become
-     *
-     *   public, max-age=14400, stale-while-revalidate=30
-     *
-     * This makes testing stale-ness of a request impossible.
-     *
-     * == Workaround ==
-     * Update response max-age so that:
-     *
-     *   max-age = max-age + stale-while-revalidate
-     *
-     * For example:
-     *
-     *   public, max-age=1, stale-while-revalidate=9
-     *                    |
-     *                    V
-     *   public, max-age=10, stale-while-revalidate=9
-     *
-     * Store the following information in the response header:
-     *
-     *   cache-put-date   - UTC time string of when this request is PUT into cache
-     *
-     * Note on `shopify-cf-cache-put-date`: The `response.headers.get('date')` on Cloudflare
-     * isn't static. I am not positive what date this is returning but it is never over 500 ms
-     * after subtracting from the current timestamp.
-     *
-     * `isStale` function will use the above information to test for stale-ness of a cached response
-     */
-    const maxage = cacheControl?.maxAge || 0;
-    headers = new Headers({
-      'cache-control': generateSubRequestCacheControlHeader(
-        getCacheControlSetting(cacheControl, {
-          maxAge: maxage + (cacheControl.staleWhileRevalidate || 0),
-        })
-      ),
-      'cache-put-date': new Date().toUTCString(),
-    });
-  } else {
-    headers = new Headers({
-      'cache-control': generateSubRequestCacheControlHeader(cacheControl),
-    });
-  }
+  const headers = new Headers({
+    'cache-control': generateSubRequestCacheControlHeader(
+      getCacheControlSetting(cacheControl, {
+        maxAge:
+          (cacheControl?.maxAge || 0) +
+          (cacheControl.staleWhileRevalidate || 0),
+      })
+    ),
+    'cache-put-date': new Date().toUTCString(),
+  });
 
   const response = new Response(JSON.stringify(value), {headers});
 
