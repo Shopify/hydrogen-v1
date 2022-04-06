@@ -6,8 +6,6 @@ import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentR
 
 export type SessionSyncApi = {
   get: () => Record<string, string>;
-  set: (key: string, value: string) => void;
-  destroy: () => void;
 };
 
 export type SessionApi = {
@@ -42,34 +40,6 @@ export function getSyncSessionApi(
           }
           return sessionPromises.getPromise.read();
         },
-
-        set(key: string, value: string) {
-          if (!sessionPromises['set' + key + value]) {
-            sessionPromises['set' + key + value] = wrapPromise(
-              new Promise<string>(async (resolve, reject) => {
-                const data = await session.get(request);
-                data[key] = value;
-                const cookieToSet = await session.set(request, data);
-                resolve(cookieToSet);
-              })
-            );
-          }
-          const cookieToSet = sessionPromises['set' + key + value].read();
-          componentResponse.headers.set('Set-Cookie', cookieToSet);
-        },
-
-        destroy() {
-          if (!sessionPromises.destroyPromise) {
-            sessionPromises.destroyPromise = wrapPromise(
-              new Promise<string>(async (resolve, reject) => {
-                const cookieToSet = await session.destroy(request);
-                resolve(cookieToSet);
-              })
-            );
-          }
-          const cookieToSet = sessionPromises.destroyPromise.read();
-          componentResponse.headers.set('Set-Cookie', cookieToSet);
-        },
       }
     : emptySyncSessionImplementation(log);
 }
@@ -101,13 +71,6 @@ export const emptySyncSessionImplementation = function (log: Logger) {
     get() {
       log.warn('No session adapter has been configured!');
       return {};
-    },
-    set(key: string, value: string) {
-      log.warn('No session adapter has been configured!');
-    },
-    destroy() {
-      log.warn('No session adapter has been configured!');
-      return;
     },
   };
 };
