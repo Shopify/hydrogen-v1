@@ -2,4 +2,4 @@
 '@shopify/hydrogen': patch
 ---
 
-Workaround support stale-while-revalidate for Cloudflare Cache API
+Support sub request cache control header `stale-while-revalidate` everywhere
