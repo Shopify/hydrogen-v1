@@ -6,7 +6,6 @@ import {
 } from '../framework/CachingStrategy';
 import type {ServerComponentRequest} from './Hydration/ServerComponentRequest.server';
 import {logCacheApiStatus} from '../utilities/log';
-import {findQueryName} from '../utilities/log/utils';
 
 function getCacheControlSetting(
   userCacheOptions?: CachingStrategy,
@@ -58,7 +57,7 @@ export async function getItemFromCache(
   }
 
   const url = getKeyUrl(hashKey(key));
-  const request = url;
+  const request = new Request(url);
 
   const response = await cache.match(request);
   if (!response) {
@@ -86,7 +85,7 @@ export async function setItemInCache(
   }
 
   const url = getKeyUrl(hashKey(key));
-  const request = url;
+  const request = new Request(url);
 
   let headers: Headers;
   const cacheControl = getCacheControlSetting(userCacheOptions);
@@ -156,7 +155,7 @@ export async function deleteItemFromCache(key: QueryKey) {
   if (!cache) return;
 
   const url = getKeyUrl(hashKey(key));
-  const request = url;
+  const request = new Request(url);
 
   logCacheApiStatus('DELETE', url);
   await cache.delete(request);
