@@ -1,4 +1,6 @@
+import {Logger} from '../../../utilities/log';
 import {Cookie} from '../Cookie';
+import {log} from '../../../utilities/log';
 
 const options = {
   httponly: true,
@@ -10,6 +12,9 @@ const options = {
 };
 
 describe('Cookie', () => {
+  beforeEach(() => {
+    spyOn(log, 'warn');
+  });
   it('parses a cookie', () => {
     const cookie = new Cookie('__session', options);
     cookie.parse(
@@ -51,5 +56,17 @@ describe('Cookie', () => {
       `"__session=%7B%7D; Expires=Tue, 14 Feb 2017 12:51:58 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
     );
     Date.now = now;
+  });
+
+  it('warns if using oxygen reserved cookie names', () => {
+    new Cookie('mac', {...options, maxAge: 10});
+    expect(log.warn).toHaveBeenCalledWith(
+      'Warning "mac" is a reserved cookie name by oxygen!'
+    );
+
+    new Cookie('user_session_id', {...options, maxAge: 10});
+    expect(log.warn).toHaveBeenCalledWith(
+      'Warning "user_session_id" is a reserved cookie name by oxygen!'
+    );
   });
 });
