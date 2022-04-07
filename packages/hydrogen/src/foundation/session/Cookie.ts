@@ -6,8 +6,18 @@ export class Cookie {
   options?: CookieSessionOptions;
   data: Record<string, any>;
 
-  constructor(name: string, options?: CookieSessionOptions) {
+  constructor(name: string, options: CookieSessionOptions = {}) {
     this.options = options;
+    this.options = {
+      ...this.options,
+      expires:
+        // maxAge takes precedence
+        typeof options.maxAge !== 'undefined'
+          ? new Date(Date.now() + options.maxAge * 1000)
+          : options.expires
+          ? options.expires
+          : new Date(Date.now() + 604_800_000), // default one week
+    };
     this.name = name;
     this.data = {};
   }
@@ -36,6 +46,13 @@ export class Cookie {
 
   destroy(): string {
     this.data = {};
-    return stringifyCookie(this.name, '', this.options);
+    return stringifyCookie(this.name, '', {
+      ...this.options,
+      expires: new Date(0),
+    });
+  }
+
+  get expires(): number {
+    return this.options!.expires!.getTime();
   }
 }
