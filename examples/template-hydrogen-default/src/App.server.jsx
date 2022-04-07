@@ -36,7 +36,9 @@ export default renderHydrogen(App, {
   shopifyConfig,
   session: CookieSessionStorage('__session', {
     path: '/',
-    expires: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30), // 30 days
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
     maxAge: 60 * 60 * 24 * 30,
   }),
 });
