@@ -7,7 +7,6 @@ const options = {
   path: '/',
   expires: new Date(1649189942953),
   domain: 'shopify.dev',
-  maxage: 60 * 60 * 24 * 30,
 };
 
 let request: Request;
@@ -46,14 +45,14 @@ describe('CookieSessionStorage', () => {
   it('returns cookie string on setting data', async () => {
     const session = CookieSessionStorage('__session', options)();
     expect(await session.set(request, {some: 'data'})).toMatchInlineSnapshot(
-      `"__session=%7B%22some%22%3A%22data%22%7D; Expires=Tue, 05 Apr 2022 20:19:02 GMT; Max-Age=2592000; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
+      `"__session=%7B%22some%22%3A%22data%22%7D; Expires=Tue, 05 Apr 2022 20:19:02 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
     );
   });
 
   it('returns cookie string on destroying data', async () => {
     const session = CookieSessionStorage('__session', options)();
     expect(await session.destroy(request)).toMatchInlineSnapshot(
-      `"__session=; Expires=Tue, 05 Apr 2022 20:19:02 GMT; Max-Age=2592000; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
+      `"__session=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
     );
   });
 });

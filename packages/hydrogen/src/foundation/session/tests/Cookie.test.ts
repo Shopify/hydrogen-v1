@@ -5,9 +5,8 @@ const options = {
   secure: true,
   samesite: 'Strict',
   path: '/',
-  expires: new Date(1649189942953),
+  expires: new Date(1749343178614),
   domain: 'shopify.dev',
-  maxage: 60 * 60 * 24 * 30,
 };
 
 describe('Cookie', () => {
@@ -29,7 +28,7 @@ describe('Cookie', () => {
     cookie.set('c', 'd');
 
     expect(cookie.serialize()).toMatchInlineSnapshot(
-      `"__session=%7B%22a%22%3A%22b%22%2C%22c%22%3A%22d%22%7D; Expires=Tue, 05 Apr 2022 20:19:02 GMT; Max-Age=2592000; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
+      `"__session=%7B%22a%22%3A%22b%22%2C%22c%22%3A%22d%22%7D; Expires=Sun, 08 Jun 2025 00:39:38 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
     );
   });
 
@@ -40,7 +39,17 @@ describe('Cookie', () => {
     );
 
     expect(cookie.destroy()).toMatchInlineSnapshot(
-      `"__session=; Expires=Tue, 05 Apr 2022 20:19:02 GMT; Max-Age=2592000; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
+      `"__session=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
     );
+  });
+
+  it('defaults to maxAge', () => {
+    const now = Date.now;
+    Date.now = jest.fn(() => 1487076708000);
+    const cookie = new Cookie('__session', {...options, maxAge: 10});
+    expect(cookie.serialize()).toMatchInlineSnapshot(
+      `"__session=%7B%7D; Expires=Tue, 14 Feb 2017 12:51:58 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
+    );
+    Date.now = now;
   });
 });
