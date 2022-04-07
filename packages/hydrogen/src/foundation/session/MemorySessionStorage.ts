@@ -1,7 +1,7 @@
 import type {SessionStorageAdapter} from './session';
 import {Cookie} from './Cookie';
 import {v4 as uid} from 'uuid';
-import {CookieSessionOptions} from './CookieSessionStorage';
+import {CookieOptions} from './Cookie';
 
 function getSessionIdFromRequest(
   request: Request,
@@ -17,7 +17,7 @@ function getSessionIdFromRequest(
 
 export const MemorySessionStorage = function (
   name: string,
-  options: CookieSessionOptions
+  options: CookieOptions
 ): () => SessionStorageAdapter {
   const sessions: Map<string, {data: Record<string, string>; expires: number}> =
     new Map();

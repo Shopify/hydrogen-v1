@@ -3,7 +3,7 @@ import {Cookie} from './Cookie';
 import {v4 as uid} from 'uuid';
 import path from 'path';
 import {promises as fsp} from 'fs';
-import {CookieSessionOptions} from './CookieSessionStorage';
+import {CookieOptions} from './Cookie';
 import {Logger} from '../../utilities/log';
 
 function getSessionIdFromRequest(
@@ -45,7 +45,7 @@ async function startFileLock(promise: () => Promise<any>) {
 export const FileSessionStorage = function (
   name: string,
   dir: string,
-  cookieOptions: CookieSessionOptions
+  cookieOptions: CookieOptions
 ): (log: Logger) => SessionStorageAdapter {
   return function (log: Logger) {
     const cookie = new Cookie(name, cookieOptions);
