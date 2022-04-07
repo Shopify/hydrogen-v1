@@ -431,7 +431,7 @@ export default async function testCases({
 
       expect(response.status).toBe(200);
       expect(response.headers.get('Set-Cookie')).toBe(
-        '__session=%7B%22someData%22%3A%22some%20value%22%7D'
+        '__session=%7B%22someData%22%3A%22some%20value%22%7D; Expires=Sun, 08 Jun 2025 00:39:38 GMT'
       );
       expect(text).toEqual('Session Created');
     });
@@ -447,7 +447,9 @@ export default async function testCases({
       const text = await response.text();
 
       expect(response.status).toBe(200);
-      expect(response.headers.get('Set-Cookie')).toBe('__session=');
+      expect(response.headers.get('Set-Cookie')).toBe(
+        '__session=; Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      );
       expect(text).toEqual('Session Destroyed');
     });
 

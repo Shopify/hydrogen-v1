@@ -5,7 +5,7 @@ const options = {
   secure: true,
   samesite: 'Strict',
   path: '/',
-  expires: new Date(1649189942953),
+  expires: new Date(1749343178614),
   domain: 'shopify.dev',
 };
 
@@ -45,7 +45,7 @@ describe('CookieSessionStorage', () => {
   it('returns cookie string on setting data', async () => {
     const session = CookieSessionStorage('__session', options)();
     expect(await session.set(request, {some: 'data'})).toMatchInlineSnapshot(
-      `"__session=%7B%22some%22%3A%22data%22%7D; Expires=Tue, 05 Apr 2022 20:19:02 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
+      `"__session=%7B%22some%22%3A%22data%22%7D; Expires=Sun, 08 Jun 2025 00:39:38 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
     );
   });
 
