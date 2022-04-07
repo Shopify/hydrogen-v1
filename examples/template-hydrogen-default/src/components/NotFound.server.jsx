@@ -1,4 +1,9 @@
-import {useShop, useShopQuery, flattenConnection} from '@shopify/hydrogen';
+import {
+  useShop,
+  useShopQuery,
+  flattenConnection,
+  useSession,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
@@ -29,18 +34,19 @@ function NotFoundHero() {
   );
 }
 
-export default function NotFound({country = {isoCode: 'US'}, response}) {
+export default function NotFound({response}) {
   if (response) {
     response.doNotStream();
     response.writeHead({status: 404, statusText: 'Not found'});
   }
 
+  const {countryCode = 'US'} = useSession();
   const {languageCode} = useShop();
 
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
-      country: country.isoCode,
+      countryCode,
       language: languageCode,
     },
   });

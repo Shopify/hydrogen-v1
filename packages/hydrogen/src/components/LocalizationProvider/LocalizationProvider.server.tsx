@@ -4,7 +4,8 @@ import {useShop} from '../../foundation/useShop';
 import {useShopQuery} from '../../hooks/useShopQuery';
 import {CacheDays} from '../../framework/CachingStrategy';
 import {PreloadOptions} from '../../types';
-import {Country, Currency} from '../../storefront-api-types';
+import {Country, CountryCode} from '../../storefront-api-types';
+import {useSession} from '../../foundation/session/session';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
@@ -27,6 +28,7 @@ export interface LocalizationProviderProps {
  */
 export function LocalizationProvider(props: LocalizationProviderProps) {
   const {languageCode} = useShop();
+  const {countryCode, countryName} = useSession();
 
   const {
     data: {localization},
@@ -38,7 +40,18 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
   });
 
   return (
-    <LocalizationClientProvider localization={localization}>
+    <LocalizationClientProvider
+      localization={
+        countryCode
+          ? {
+              country: {
+                name: countryName,
+                isoCode: countryCode as CountryCode,
+              },
+            }
+          : localization
+      }
+    >
       {props.children}
     </LocalizationClientProvider>
   );
@@ -46,9 +59,7 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
 
 export type LocalizationQuery = {__typename?: 'QueryRoot'} & {
   localization: {__typename?: 'Localization'} & {
-    country: {__typename?: 'Country'} & Pick<Country, 'isoCode' | 'name'> & {
-        currency: {__typename?: 'Currency'} & Pick<Currency, 'isoCode'>;
-      };
+    country: {__typename?: 'Country'} & Pick<Country, 'isoCode' | 'name'>;
   };
 };
 
@@ -59,9 +70,6 @@ query Localization($language: LanguageCode)
     country {
       isoCode
       name
-      currency {
-        isoCode
-      }
     }
   }
 }

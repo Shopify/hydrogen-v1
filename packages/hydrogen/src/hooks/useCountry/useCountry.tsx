@@ -18,5 +18,5 @@ function useLocalization() {
 export function useCountry() {
   const context = useLocalization();
 
-  return [context.country, context.setCountry];
+  return [context.country];
 }

@@ -1,5 +1,5 @@
 import {useCallback, useState, useEffect} from 'react';
-import {useCountry} from '@shopify/hydrogen/client';
+import {useCountry, useServerState} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
 import SpinnerIcon from './SpinnerIcon.client';
 
@@ -9,6 +9,7 @@ import {ArrowIcon, CheckIcon} from './CountrySelector.client';
  * A client component that selects the appropriate country to display for products on a mobile storefront
  */
 export default function MobileCountrySelector() {
+  const {setServerState} = useServerState();
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [listboxOpen, setListboxOpen] = useState(false);
@@ -30,15 +31,23 @@ export default function MobileCountrySelector() {
         .finally(() => setLoading(false));
     }
   }, [listboxOpen, isLoading, countries.length]);
-  const [selectedCountry, setSelectedCountry] = useCountry();
+
+  const [selectedCountry] = useCountry();
 
   const setCountry = useCallback(
     (isoCode) => {
-      setSelectedCountry(
-        countries.find((country) => country.isoCode === isoCode),
+      const newCountry = countries.find(
+        (country) => country.isoCode === isoCode,
       );
+
+      fetch(`/countries`, {
+        body: JSON.stringify(newCountry),
+        method: 'POST',
+      }).then(() => {
+        setServerState('', '');
+      });
     },
-    [countries, setSelectedCountry],
+    [countries, setServerState],
   );
 
   return (
