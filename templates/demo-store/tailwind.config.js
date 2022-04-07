@@ -1,5 +1,6 @@
 /* We  */
 /* Tailwind Configuration Docs: https://tailwindcss.com/docs/configuration */
+const path = require('path');
 
 function withOpacityValue(variable) {
   return ({opacityValue}) => {
@@ -11,7 +12,10 @@ function withOpacityValue(variable) {
 }
 
 module.exports = {
-  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    path.join(__dirname, './index.html'),
+    path.join(__dirname, './src/**/*.{js,jsx,ts,tsx}'),
+  ],
   theme: {
     extend: {
       colors: {
