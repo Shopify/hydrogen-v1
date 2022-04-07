@@ -19,21 +19,31 @@ export const MemorySessionStorage = function (
   name: string,
   options: CookieSessionOptions
 ): () => SessionStorageAdapter {
-  const sessions: Record<string, Record<string, string>> = {};
+  const sessions: Map<string, {data: Record<string, string>; expires: number}> =
+    new Map();
 
   return function () {
     const cookie = new Cookie(name, options);
-    let data: Record<string, string> | undefined;
 
     return {
       async get(request: Request): Promise<Record<string, string>> {
-        if (data) return data;
-
         const sid = getSessionIdFromRequest(request, cookie);
+        let sessionData;
 
-        data = sid && sessions[sid] ? sessions[sid] : {};
+        if (sid && sessions.has(sid)) {
+          const {expires, data} = sessions.get(sid)!;
 
-        return data;
+          if (expires < new Date().getTime()) {
+            sessions.delete(sid);
+            sessionData = {};
+          } else {
+            sessionData = data;
+          }
+        } else {
+          sessionData = {};
+        }
+
+        return sessionData;
       },
       async set(request: Request, value: Record<string, string>) {
         let sid = getSessionIdFromRequest(request, cookie);
@@ -42,8 +52,10 @@ export const MemorySessionStorage = function (
           sid = uid();
         }
 
-        sessions[sid] = value;
-        data = value;
+        sessions.set(sid, {
+          data: value,
+          expires: cookie.expires,
+        });
 
         cookie.set('sid', sid);
 
@@ -53,12 +65,9 @@ export const MemorySessionStorage = function (
         const sid = getSessionIdFromRequest(request, cookie);
 
         if (sid) {
-          delete sessions[sid];
+          sessions.delete(sid);
         }
 
-        data = undefined;
-
-        // @todo - set expires for Date in past
         return cookie.destroy();
       },
     };

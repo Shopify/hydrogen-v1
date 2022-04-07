@@ -47,9 +47,6 @@ export const FileSessionStorage = function (
   dir: string,
   cookieOptions: CookieSessionOptions
 ): (log: Logger) => SessionStorageAdapter {
-  const expires: Date = (cookieOptions.expires =
-    cookieOptions.expires || new Date(new Date().getTime() + 604_800_000)); // one week
-
   return function (log: Logger) {
     const cookie = new Cookie(name, cookieOptions);
     let data: Record<string, string> | undefined;
@@ -61,7 +58,7 @@ export const FileSessionStorage = function (
         const sid = getSessionIdFromRequest(request, cookie) || uid();
         const file = getSessionFile(dir, sid);
 
-        const fileContents = await getFile(file, expires, log);
+        const fileContents = await getFile(file, cookie.expires, log);
         data = fileContents.data;
 
         return data;
@@ -70,7 +67,7 @@ export const FileSessionStorage = function (
         const sid = getSessionIdFromRequest(request, cookie) || uid();
         const file = getSessionFile(dir, sid);
 
-        await writeFile(file, value, expires);
+        await writeFile(file, value, cookie.expires);
         data = value;
         cookie.set('sid', sid);
 
@@ -100,13 +97,13 @@ type SessionFile = {
 
 async function getFile(
   file: string,
-  expires: Date,
+  expires: number,
   log: Logger
 ): Promise<SessionFile> {
   let content: SessionFile | null = null;
   const defaultFileContent = {
     data: {},
-    expires: expires.getTime(),
+    expires,
   };
 
   await startFileLock(async () => {
@@ -148,11 +145,11 @@ async function getFile(
 async function writeFile(
   file: string,
   data: Record<string, string>,
-  expires: Date
+  expires: number
 ) {
   const content: SessionFile = {
     data,
-    expires: expires.getTime(),
+    expires,
   };
 
   await startFileLock(async () => {
