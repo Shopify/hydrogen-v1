@@ -78,25 +78,14 @@ function ReactFlightVitePlugin() {
         var CLIENT_COMPONENT_GLOB = '**/*.client.[jt]s?(x)';
         var importerPath = path.dirname(id);
         var importerToRootPath = normalizePath(path.relative(importerPath, config.root));
-
-        var _ref2 = importerToRootPath.match(/(\.\.\/)+(\.\.)?/) || [],
-            importerToRootNested = _ref2[0];
-
-        var userPrefix = path.normalize(path.join(importerPath, importerToRootNested.replace(/\/?$/, path.sep)));
         var userGlob = path.join(importerToRootPath, CLIENT_COMPONENT_GLOB);
-        var importers = [[userGlob, userPrefix]];
+        var importers = [userGlob];
         clientComponentPaths.forEach(function (componentPath) {
-          var libPrefix = componentPath + path.sep;
-          var libGlob = path.join(path.relative(importerPath, componentPath), CLIENT_COMPONENT_GLOB);
-          importers.push([libGlob, libPrefix]);
+          importers.push(path.join(path.relative(importerPath, componentPath), CLIENT_COMPONENT_GLOB));
         });
-        var injectedGlobs = "Object.assign(Object.create(null), " + importers.map(function (_ref3) {
-          var glob = _ref3[0],
-              prefix = _ref3[1];
+        var injectedGlobs = "Object.assign(Object.create(null), " + importers.map(function (glob) {
           return (// Mark the globs to modify the result after Vite resolves them.
-            // The prefix is used later to turn relative imports
-            // into absolute imports, and then into hashes.
-            "/* HASH_BEGIN " + normalizePath(prefix) + " */ " + ("import.meta.glob('" + normalizePath(glob) + "') /* HASH_END */")
+            "/* HASH_BEGIN */ " + ("import.meta.glob('" + normalizePath(glob) + "') /* HASH_END */")
           );
         }).join(', ') + ");";
         return code.replace(INJECTING_RE, injectedGlobs);
@@ -153,8 +142,8 @@ async function proxyClientComponent(filepath, src) {
   exportStatements.forEach(function (key) {
     var isDefault = key === DEFAULT_EXPORT;
     var componentName = isDefault ? getComponentFilename(filepath) : key;
-    proxyCode += "export " + (isDefault ? DEFAULT_EXPORT : "const " + componentName + " =") + " wrapInClientProxy({ name: '" + componentName + "', id: '" + getComponentId(filepath) + "', component: allImports['" + key + "'], named: " + // eslint-disable-next-line react-internal/safe-string-coercion
-    String(!isDefault) + " });\n";
+    proxyCode += "export " + (isDefault ? DEFAULT_EXPORT : "const " + componentName + " =") + " wrapInClientProxy({ name: '" + componentName + "', id: '" + getComponentId(filepath) + "', value: allImports['" + key + "'], isDefault: " + // eslint-disable-next-line react-internal/safe-string-coercion
+    String(isDefault) + " });\n";
   });
   return proxyCode;
 }
@@ -164,10 +153,9 @@ var hashImportsPlugin = {
   transform: function (code, id) {
     // Turn relative import paths to lossy hashes
     if (rscViteFileRE.test(id)) {
-      var nestedRE = /\.\.\//gm;
-      return code.replace(/\/\*\s*HASH_BEGIN\s*(.+?)\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm, function (_, prefix, imports) {
+      return code.replace(/\/\*\s*HASH_BEGIN\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm, function (_, imports) {
         return imports.trim().replace(/"([^"]+?)":/gm, function (__, relativePath) {
-          var absolutePath = prefix + relativePath.replace(nestedRE, '');
+          var absolutePath = path.resolve(path.dirname(id.split('?')[0]), relativePath);
           return "\"" + getComponentId(absolutePath) + "\":";
         });
       });
