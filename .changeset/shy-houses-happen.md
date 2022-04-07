@@ -23,19 +23,16 @@ To listen for an analytics event, create a client component and subscribe to the
 // components/AnalyticsListener.client.jsx
 import {ClientAnalytics} from '@shopify/hydrogen/client';
 
-let init = false;
 export default function AnalyticsListener() {
   useEffect(() => {
-    if (!init) {
-      init = true;
-      // ClientAnalytics must be inside a `useEffect` to work properly
-      ClientAnalytics.subscribe(
-        ClientAnalytics.eventNames.PAGE_VIEW,
-        (payload) => {
-          console.log(payload);
-        }
-      );
-    }
+    // Make sure the `useEffect` dependency parameter is undefined so that
+    // `ClientAnalytics.subscribe` only execute once
+    ClientAnalytics.subscribe(
+      ClientAnalytics.eventNames.PAGE_VIEW,
+      (payload) => {
+        console.log(payload);
+      }
+    );
   });
 
   return null;
@@ -58,33 +55,21 @@ function App({routes}) {
 
 #### Server-side analytic
 
-In order to send analytics from server-sde, you need to make a fetch to
+In order to send analytics from server-side, you need to make a fetch request to
 the `__event` endpoint. For example:
 
 ```jsx
 // components/AnalyticsListener.client.jsx
 import {ClientAnalytics} from '@shopify/hydrogen/client';
 
-let init = false;
 export default function AnalyticsListener() {
   useEffect(() => {
-    if (!init) {
-      init = true;
-      // ClientAnalytics must be inside a `useEffect` to work properly
-      ClientAnalytics.subscribe(
-        ClientAnalytics.eventNames.PAGE_VIEW,
-        (payload) => {
-          fetch('/__event', {
-            method: 'post',
-            headers: {
-              'cache-control': 'no-cache',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-          });
-        }
-      );
-    }
+    // ClientAnalytics must be inside a `useEffect` to work properly
+    // Make sure the `useEffect` dependency parameter is undefined so that
+    // `ClientAnalytics.subscribe` only execute once
+    ClientAnalytics.subscribe(ClientAnalytics.eventNames.PAGE_VIEW, (payload) =>
+      ClientAnalytics.pushToServer(payload)
+    );
   });
 
   return null;
@@ -94,7 +79,7 @@ export default function AnalyticsListener() {
 Create a server analytics connector.
 
 ```jsx
-// components/ServerAnalyticsListener.server.jsx
+// components/MyServerAnalyticsListener.server.jsx
 export function request(
   request: Request,
   data?: any,

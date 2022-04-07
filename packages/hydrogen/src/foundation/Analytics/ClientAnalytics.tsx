@@ -101,11 +101,23 @@ function subscribe(
   };
 }
 
+function pushToServer(payload: any) {
+  return fetch('/__event', {
+    method: 'post',
+    headers: {
+      'cache-control': 'no-cache',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
 export const ClientAnalytics = {
   pushToPageAnalyticsData,
   getPageAnalyticsData,
   resetPageAnalyticsData,
   publish,
   subscribe,
+  pushToServer,
   eventNames,
 };

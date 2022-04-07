@@ -7,26 +7,17 @@ export function Analytics({
   analyticsDataFromServer: any;
 }) {
   useEffect(() => {
-    const urlParams = Object.assign(
-      {},
-      ...document.location.search
-        .substring(1)
-        .split('&')
-        .map((param) => {
-          const [key, value] = param.split('=');
-          return {[key]: value};
-        })
-    );
+    const urlParams = new URLSearchParams(document.location.search);
 
-    if (urlParams.utm_source) {
+    if (urlParams.has('utm_source')) {
       ClientAnalytics.pushToPageAnalyticsData(
         {
-          id: urlParams.utm_id,
-          source: urlParams.utm_source,
-          campaign: urlParams.utm_campaign,
-          medium: urlParams.utm_medium,
-          content: urlParams.utm_content,
-          term: urlParams.utm_term,
+          id: urlParams.get('utm_id'),
+          source: urlParams.get('utm_source'),
+          campaign: urlParams.get('utm_campaign'),
+          medium: urlParams.get('utm_medium'),
+          content: urlParams.get('utm_content'),
+          term: urlParams.get('utm_term'),
         },
         'utm'
       );

@@ -111,9 +111,7 @@ export const renderHydrogen = (
       url.pathname === EVENT_PATHNAME ||
       EVENT_PATHNAME_REGEX.test(url.pathname)
     ) {
-      return ServerAnalyticsRoute(request, [
-        ...(serverAnalyticsConnectors ? serverAnalyticsConnectors : []),
-      ]);
+      return ServerAnalyticsRoute(request, serverAnalyticsConnectors);
     }
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;

@@ -8,9 +8,9 @@ const DELAY_KEY = 'analytics-delay';
 export function Analytics() {
   const cache = useServerRequest().ctx.cache;
 
-  // 50 ms delay so that React doesn't resolve this component too early
-  // where server request cache is empty and cause a mismatch in hydration
-  if (!cache.has(DELAY_KEY)) {
+  // If render cache is empty, create a 50 ms delay so that React doesn't resolve this
+  // component too early and potentially cause a mismatch in hydration
+  if (cache.size === 0 && !cache.has(DELAY_KEY)) {
     let result: boolean;
     let promise: Promise<boolean>;
 
