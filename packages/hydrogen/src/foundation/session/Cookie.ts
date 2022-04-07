@@ -1,12 +1,27 @@
 import {parse, stringify as stringifyCookie} from 'worktop/cookie';
-import type {CookieSessionOptions} from './CookieSessionStorage';
+import {log} from '../../utilities/log';
 
+export type CookieOptions = {
+  httpOnly?: boolean;
+  secure?: boolean;
+  sameSite?: 'Lax' | 'Strict' | 'None';
+  path?: string;
+  expires?: Date;
+  domain?: string;
+  maxAge?: number;
+};
+
+const reservedCookieNames = ['mac', 'user_session_id'];
 export class Cookie {
   name: string;
-  options?: CookieSessionOptions;
+  options?: CookieOptions;
   data: Record<string, any>;
 
-  constructor(name: string, options: CookieSessionOptions = {}) {
+  constructor(name: string, options: CookieOptions = {}) {
+    if (reservedCookieNames.includes(name)) {
+      log.warn(`Warning "${name}" is a reserved cookie name by oxygen!`);
+    }
+
     this.options = options;
     this.options = {
       ...this.options,

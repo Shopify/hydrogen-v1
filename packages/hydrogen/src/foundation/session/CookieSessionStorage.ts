@@ -1,19 +1,9 @@
 import type {SessionStorageAdapter} from './session';
-import {Cookie} from './Cookie';
-
-export type CookieSessionOptions = {
-  httpOnly?: boolean;
-  secure?: boolean;
-  sameSite?: 'Lax' | 'Strict' | 'None';
-  path?: string;
-  expires?: Date;
-  domain?: string;
-  maxAge?: number;
-};
+import {Cookie, CookieOptions} from './Cookie';
 
 export const CookieSessionStorage = function (
   name: string,
-  options: CookieSessionOptions
+  options: CookieOptions
 ): () => SessionStorageAdapter {
   return function () {
     const cookie = new Cookie(name, options);
