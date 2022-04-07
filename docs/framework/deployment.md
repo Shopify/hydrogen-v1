@@ -240,10 +240,11 @@ CF_ACCOUNT_ID=<YOUR_CLOUDFLARE_ACCT_ID> wrangler publish
 
 #### Worker sub request caching requirements
 
-In order for Cloudflare worker's Cache API to work, you must have:
+For the Cloudflare Workers' Cache API to work, you need to have the following:
 
-- A Cloudflare domain (Cannot be the `worker.dev` that Cloudflare gives you)
-- A DNS record for that domain `A example.dev 192.0.2.1 Proxied`
+- A Cloudflare domain. This can't be `worker.dev`, which Cloudflare provides.
+- A DNS record for the Cloudflare domain. For example, `A example.dev 192.0.2.1 Proxied`.
 - A worker route that points to the Cloudflare domain
 
-> Note: Above requirement may be different for enterprise accounts
+> Note:
+> Requirements might be different for Cloudflare enterprise accounts.
