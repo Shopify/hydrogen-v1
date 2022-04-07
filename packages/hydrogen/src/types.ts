@@ -110,7 +110,7 @@ export interface AllCacheOptions {
   staleIfError?: number;
 }
 
-export type CachingStrategy = NoStoreStrategy | AllCacheOptions;
+export type CachingStrategy = AllCacheOptions;
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
