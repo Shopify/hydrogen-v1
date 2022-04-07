@@ -44,5 +44,4 @@ export {
 export {useSession} from './foundation/session/session';
 export {CookieSessionStorage} from './foundation/session/CookieSessionStorage';
 export {MemorySessionStorage} from './foundation/session/MemorySessionStorage';
-export {FileSessionStorage} from './foundation/session/FileSessionStorage';
 export {Cookie} from './foundation/session/Cookie';
