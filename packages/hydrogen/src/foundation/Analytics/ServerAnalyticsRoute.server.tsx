@@ -1,7 +1,7 @@
 import type {ServerAnalyticsConnector} from '../../types';
 import {log} from '../../utilities/log';
 
-export function ServerAnalyticRoute(
+export function ServerAnalyticsRoute(
   request: Request,
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>
 ) {

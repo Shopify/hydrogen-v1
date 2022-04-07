@@ -53,7 +53,7 @@ export class ServerComponentRequest extends Request {
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
     preloadQueries: PreloadQueriesByURL;
-    analyticData: any;
+    analyticsData: any;
     router: RouterContextData;
     buyerIpHeader?: string;
     [key: string]: any;
@@ -85,7 +85,7 @@ export class ServerComponentRequest extends Request {
       },
       queryCacheControl: [],
       queryTimings: [],
-      analyticData: {
+      analyticsData: {
         url: this.url,
         normailizedRscUrl: this.preloadURL,
       },

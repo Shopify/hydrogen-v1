@@ -61,7 +61,7 @@ export type ServerAnalyticsConnector = {
 export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
-  serverAnalyticConnectors?: Array<ServerAnalyticsConnector>;
+  serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
 };
 
 export type ClientHandlerConfig = {

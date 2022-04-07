@@ -46,7 +46,7 @@ import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
-import {ServerAnalyticRoute} from './foundation/Analytics/ServerAnalyticRoute.server';
+import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 
 declare global {
   // This is provided by a Vite plugin
@@ -79,7 +79,7 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes, serverAnalyticConnectors}: ServerHandlerConfig
+  {shopifyConfig, routes, serverAnalyticsConnectors}: ServerHandlerConfig
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
@@ -111,8 +111,8 @@ export const renderHydrogen = (
       url.pathname === EVENT_PATHNAME ||
       EVENT_PATHNAME_REGEX.test(url.pathname)
     ) {
-      return ServerAnalyticRoute(request, [
-        ...(serverAnalyticConnectors ? serverAnalyticConnectors : []),
+      return ServerAnalyticsRoute(request, [
+        ...(serverAnalyticsConnectors ? serverAnalyticsConnectors : []),
       ]);
     }
 

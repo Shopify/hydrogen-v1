@@ -6,11 +6,11 @@ import {eventNames} from './const';
 type EventGuard = Record<string, NodeJS.Timeout>;
 
 const subscribers: Subscribers = {};
-let pageAnalyticData: any = {};
+let pageAnalyticsData: any = {};
 const guardDupEvents: EventGuard = {};
 
 const USAGE_ERROR =
-  'ClientAnalytic should only be used within the useEffect callback or event handlers';
+  'ClientAnalytics should only be used within the useEffect callback or event handlers';
 
 function isInvokedFromServer(): boolean {
   if (isServer()) {
@@ -20,30 +20,30 @@ function isInvokedFromServer(): boolean {
   return false;
 }
 
-function pushToPageAnalyticData(data: any, namespace?: string): void {
+function pushToPageAnalyticsData(data: any, namespace?: string): void {
   if (isInvokedFromServer()) return;
 
   if (namespace) {
-    pageAnalyticData[namespace] = Object.assign(
+    pageAnalyticsData[namespace] = Object.assign(
       {},
-      pageAnalyticData[namespace] || {},
+      pageAnalyticsData[namespace] || {},
       data
     );
   } else {
-    pageAnalyticData = Object.assign({}, pageAnalyticData, data);
+    pageAnalyticsData = Object.assign({}, pageAnalyticsData, data);
   }
 }
 
-function getPageAnalyticData(): any {
+function getPageAnalyticsData(): any {
   if (isInvokedFromServer()) return;
 
-  return pageAnalyticData;
+  return pageAnalyticsData;
 }
 
-function resetPageAnalyticData(): void {
+function resetPageAnalyticsData(): void {
   if (isInvokedFromServer()) return;
 
-  pageAnalyticData = {};
+  pageAnalyticsData = {};
 }
 
 function publish(eventname: string, guardDup = false, payload?: any) {
@@ -51,7 +51,7 @@ function publish(eventname: string, guardDup = false, payload?: any) {
 
   const namedspacedEventname = getNamedspacedEventname(eventname);
   const subs = subscribers[namedspacedEventname];
-  const combinedPayload = Object.assign({}, pageAnalyticData, payload);
+  const combinedPayload = Object.assign({}, pageAnalyticsData, payload);
 
   // De-dup events due to re-renders
   if (guardDup) {
@@ -102,9 +102,9 @@ function subscribe(
 }
 
 export const ClientAnalytics = {
-  pushToPageAnalyticData,
-  getPageAnalyticData,
-  resetPageAnalyticData,
+  pushToPageAnalyticsData,
+  getPageAnalyticsData,
+  resetPageAnalyticsData,
   publish,
   subscribe,
   eventNames,

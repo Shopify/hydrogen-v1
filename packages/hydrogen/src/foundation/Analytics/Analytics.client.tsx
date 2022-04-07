@@ -2,9 +2,9 @@ import {useEffect} from 'react';
 import {ClientAnalytics} from './index';
 
 export function Analytics({
-  analyticDataFromServer,
+  analyticsDataFromServer,
 }: {
-  analyticDataFromServer: any;
+  analyticsDataFromServer: any;
 }) {
   useEffect(() => {
     const urlParams = Object.assign(
@@ -19,7 +19,7 @@ export function Analytics({
     );
 
     if (urlParams.utm_source) {
-      ClientAnalytics.pushToPageAnalyticData(
+      ClientAnalytics.pushToPageAnalyticsData(
         {
           id: urlParams.utm_id,
           source: urlParams.utm_source,
@@ -32,10 +32,10 @@ export function Analytics({
       );
     }
 
-    ClientAnalytics.pushToPageAnalyticData(analyticDataFromServer);
+    ClientAnalytics.pushToPageAnalyticsData(analyticsDataFromServer);
     ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true);
-    if (analyticDataFromServer.publishEventsOnNavigate) {
-      analyticDataFromServer.publishEventsOnNavigate.forEach(
+    if (analyticsDataFromServer.publishEventsOnNavigate) {
+      analyticsDataFromServer.publishEventsOnNavigate.forEach(
         (eventName: string) => {
           ClientAnalytics.publish(eventName, true);
         }
@@ -43,9 +43,9 @@ export function Analytics({
     }
 
     return function cleanup() {
-      ClientAnalytics.resetPageAnalyticData();
+      ClientAnalytics.resetPageAnalyticsData();
     };
-  }, [analyticDataFromServer]);
+  }, [analyticsDataFromServer]);
 
   return null;
 }

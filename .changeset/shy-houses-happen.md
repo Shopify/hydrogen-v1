@@ -3,8 +3,8 @@
 '@shopify/hydrogen': minor
 ---
 
-Analytic instrumentation - this provides intergration points for both server
-and client side analytic instrumentations
+Analytics instrumentation - this provides intergration points for both server
+and client side analytics instrumentations
 
 By default, Hydrogen will emit the following events:
 
@@ -20,7 +20,7 @@ By default, Hydrogen will emit the following events:
 To listen for an analytics event, create a client component and subscribe to the desired event.
 
 ```jsx
-// components/AnalyticListener.client.jsx
+// components/AnalyticsListener.client.jsx
 import {ClientAnalytics} from '@shopify/hydrogen/client';
 
 let init = false;
@@ -58,11 +58,11 @@ function App({routes}) {
 
 #### Server-side analytic
 
-In order to send analytic from server-sde, you need to make a fetch to
+In order to send analytics from server-sde, you need to make a fetch to
 the `__event` endpoint. For example:
 
 ```jsx
-// components/AnalyticListener.client.jsx
+// components/AnalyticsListener.client.jsx
 import {ClientAnalytics} from '@shopify/hydrogen/client';
 
 let init = false;
@@ -91,7 +91,7 @@ export default function AnalyticsListener() {
 }
 ```
 
-Create a server analytic connector.
+Create a server analytics connector.
 
 ```jsx
 // components/ServerAnalyticsListener.server.jsx
@@ -108,13 +108,13 @@ Include it in your `App.server.js`
 
 ```jsx
 // App.server.js
-import * as MyServerAnalyticConnector from '/components/MyServerAnalyticConnector.server.jsx'
+import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.server.jsx'
 
 ...
 
 export default renderHydrogen(App, {
   shopifyConfig,
   routes,
-  serverAnalyticConnectors: [MyServerAnalyticConnector]
+  serverAnalyticsConnectors: [MyServerAnalyticsConnector]
 });
 ```

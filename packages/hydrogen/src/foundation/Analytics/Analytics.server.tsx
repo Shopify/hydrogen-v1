@@ -3,7 +3,7 @@ import {useServerAnalytics} from './hook';
 import {Analytics as AnalyticsClient} from './Analytics.client';
 import {useServerRequest} from '../ServerRequestProvider';
 
-const DELAY_KEY = 'analytic-delay';
+const DELAY_KEY = 'analytics-delay';
 
 export function Analytics() {
   const cache = useServerRequest().ctx.cache;
@@ -40,6 +40,6 @@ export function Analytics() {
     }
   });
 
-  const analyticData = useServerAnalytics();
-  return <AnalyticsClient analyticDataFromServer={analyticData} />;
+  const analyticsData = useServerAnalytics();
+  return <AnalyticsClient analyticsDataFromServer={analyticsData} />;
 }

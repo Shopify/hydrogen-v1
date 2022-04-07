@@ -3,10 +3,10 @@ import {useServerRequest} from '../ServerRequestProvider';
 export function useServerAnalytics(data?: any): any {
   const request = useServerRequest();
   if (data)
-    request.ctx.analyticData = Object.assign(
+    request.ctx.analyticsData = Object.assign(
       {},
-      request.ctx.analyticData,
+      request.ctx.analyticsData,
       data
     );
-  return request.ctx.analyticData;
+  return request.ctx.analyticsData;
 }
