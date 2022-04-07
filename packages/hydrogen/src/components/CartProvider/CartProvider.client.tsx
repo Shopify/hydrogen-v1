@@ -213,7 +213,7 @@ export function CartProvider({
    */
   data?: CartFragmentFragment;
   /**
-   * Provide an endpoint to fetch cart data. Defaults to `/cart`.
+   * The endpoint that's used to fetch cart data. Defaults to `/cart`.
    */
   endpoint?: string;
 }) {
