@@ -87,7 +87,7 @@ export class ServerComponentRequest extends Request {
       queryTimings: [],
       analyticsData: {
         url: this.url,
-        normailizedRscUrl: this.preloadURL,
+        normalizedRscUrl: this.preloadURL,
       },
       preloadQueries: new Map(),
     };

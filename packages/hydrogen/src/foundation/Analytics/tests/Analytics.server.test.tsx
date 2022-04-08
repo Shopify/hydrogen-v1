@@ -83,7 +83,7 @@ describe('Analytics.server', () => {
     expect(cache.has('analytics-delay')).toEqual(true);
     expect(request.ctx.analyticsData).toEqual({
       url: 'https://examples.com/',
-      normailizedRscUrl: 'https://examples.com/',
+      normalizedRscUrl: 'https://examples.com/',
       ...analyticsData,
     });
   });
@@ -109,7 +109,7 @@ describe('Analytics.server', () => {
     expect(cache.has('analytics-delay')).toEqual(false);
     expect(request.ctx.analyticsData).toEqual({
       url: 'https://examples.com/',
-      normailizedRscUrl: 'https://examples.com/',
+      normalizedRscUrl: 'https://examples.com/',
       'api-50': 50,
       'api-75': 75,
     });

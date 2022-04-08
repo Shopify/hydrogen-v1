@@ -29,7 +29,7 @@ describe('Analytics - useServerAnalytics', () => {
     expect(component).toContainReactComponent('div', {
       children: JSON.stringify({
         url: 'https://examples.com/',
-        normailizedRscUrl: 'https://examples.com/',
+        normalizedRscUrl: 'https://examples.com/',
       }),
     });
   });
@@ -41,7 +41,7 @@ describe('Analytics - useServerAnalytics', () => {
     expect(component).toContainReactComponent('div', {
       children: JSON.stringify({
         url: 'https://examples.com/',
-        normailizedRscUrl: 'https://examples.com/',
+        normalizedRscUrl: 'https://examples.com/',
         test: '123',
       }),
     });

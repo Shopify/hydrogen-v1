@@ -55,7 +55,7 @@ describe('Analytics - ClientAnalytics', () => {
     expect(mockPageViewCallback).toHaveBeenCalledTimes(2);
   });
 
-  it('should de-duplicate analytics events when set', () => {
+  it('should de-duplicate analytics events when set', async (done) => {
     mockPageViewCallback.mockClear();
     let calledTimes = 0;
     pageViewSubscriber = ClientAnalytics.subscribe(
@@ -66,6 +66,7 @@ describe('Analytics - ClientAnalytics', () => {
         expect(payload).toEqual({
           test: '456',
         });
+        done();
       }
     );
     ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true, {
