@@ -2,7 +2,7 @@ import React from 'react';
 import {useCartLine} from '../CartLineProvider';
 import {Money} from '../Money';
 
-interface CartLinePriceProps {
+export interface CartLinePriceProps {
   /** The type of price. Valid values:`regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
 }

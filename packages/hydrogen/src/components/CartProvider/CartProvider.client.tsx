@@ -11,7 +11,7 @@ import {
   CartCreateMutation,
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation';
-import {Cart, CartAction, State} from './types';
+import {Cart, CartAction, CartProviderProps, State} from './types';
 import {
   CartLineAddMutation,
   CartLineAddMutationVariables,
@@ -231,31 +231,7 @@ export function CartProvider({
   onAttributesUpdate,
   onDiscountCodesUpdate,
   data: cart,
-}: {
-  /** Any `ReactNode` elements. */
-  children: React.ReactNode;
-  numCartLines?: number;
-  /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
-  onCreate?: () => void;
-  /** A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API. */
-  onLineAdd?: () => void;
-  /** A callback that is invoked when the process to remove a line item to the cart begins, but before the line item is removed from the Storefront API. */
-  onLineRemove?: () => void;
-  /** A callback that is invoked when the process to update a line item in the cart begins, but before the line item is updated in the Storefront API. */
-  onLineUpdate?: () => void;
-  /** A callback that is invoked when the process to add or update a note in the cart begins, but before the note is added or updated in the Storefront API. */
-  onNoteUpdate?: () => void;
-  /** A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API. */
-  onBuyerIdentityUpdate?: () => void;
-  /** A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API. */
-  onAttributesUpdate?: () => void;
-  /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
-  onDiscountCodesUpdate?: () => void;
-  /**
-   * An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).
-   */
-  data?: CartFragmentFragment;
-}) {
+}: CartProviderProps) {
   const {serverState} = useServerState() as ServerStateContextValue;
   const countryCode = serverState?.country?.isoCode;
 

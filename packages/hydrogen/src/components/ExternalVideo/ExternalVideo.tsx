@@ -3,7 +3,7 @@ import {YouTube, Vimeo, useEmbeddedVideoUrl} from '../../utilities';
 import type {ExternalVideo as ExternalVideoType} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
-interface ExternalVideoProps {
+export interface ExternalVideoProps {
   /**
    * An object with fields that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
    */

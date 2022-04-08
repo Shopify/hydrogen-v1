@@ -3,7 +3,7 @@ import {useMoney} from '../../hooks';
 import type {MoneyV2} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
-interface MoneyProps<TTag> {
+export interface MoneyProps<TTag> {
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: TTag;
   /** An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). */

@@ -1,28 +1,26 @@
 import React from 'react';
-import {ImageSizeOptions, useImageUrl} from '../../utilities';
-import type {Video as VideoType} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
+import type {Video as VideoType} from '../../storefront-api-types';
+import {ImageSizeOptions, useImageUrl} from '../../utilities';
 
-interface VideoProps {
+export type VideoProps = JSX.IntrinsicElements['video'] & {
   /** An object with fields that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). */
   data: PartialDeep<VideoType>;
   /** An object of image size options for the video's `previewImage`. */
   options?: ImageSizeOptions;
-}
+};
 
 /**
  * The `Video` component renders a `video` for the Storefront API's [Video object](/api/storefront/reference/products/video).
  */
-export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
-  const {
-    data,
-    options,
-    id = data.id,
-    playsInline = true,
-    controls = true,
-    ...passthroughProps
-  } = props;
-
+export function Video({
+  data,
+  options,
+  id = data.id,
+  playsInline = true,
+  controls = true,
+  ...passthroughProps
+}: VideoProps) {
   const posterUrl = useImageUrl(
     data.previewImage?.url as string | undefined,
     options
@@ -45,11 +43,7 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
           throw new Error(`<Video/> needs 'source.url' and 'source.mimeType'`);
         }
         return (
-          <source
-            key={source.url}
-            src={source.url}
-            type={source.mimeType}
-          ></source>
+          <source key={source.url} src={source.url} type={source.mimeType} />
         );
       })}
     </video>

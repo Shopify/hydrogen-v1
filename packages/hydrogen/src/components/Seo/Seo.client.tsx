@@ -10,7 +10,7 @@ import type {
   HomePage as HomePageType,
 } from './seo-types';
 
-type Props =
+export type SeoProps =
   | {
       type: 'defaultSeo';
       data: Omit<DefaultPageType, 'url'>;
@@ -35,7 +35,7 @@ type Props =
 /**
  * The `Seo` component renders SEO information on a webpage.
  */
-export function Seo(props: Props) {
+export function Seo(props: SeoProps) {
   const url = useUrl().href;
 
   switch (props.type) {

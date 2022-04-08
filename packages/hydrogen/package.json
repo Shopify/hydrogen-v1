@@ -12,6 +12,7 @@
   "license": "MIT",
   "main": "dist/esnext/index.js",
   "types": "dist/esnext/index.d.ts",
+  "typings": "dist/esnext/index.d.ts",
   "files": [
     "dist",
     "vendor",

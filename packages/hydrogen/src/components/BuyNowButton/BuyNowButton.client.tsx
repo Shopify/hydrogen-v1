@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import type {ReactNode} from 'react';
 import {useInstantCheckout} from '../CartProvider';
 
-interface BuyNowButtonProps {
+export interface BuyNowButtonProps {
   /** The item quantity. Defaults to 1. */
   quantity?: number;
   /** The ID of the variant. */

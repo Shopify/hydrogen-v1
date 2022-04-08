@@ -2,7 +2,7 @@ import React, {ReactNode, useEffect, useState} from 'react';
 import {useCart} from '../CartProvider';
 import {useProduct} from '../ProductProvider';
 
-interface AddToCartButtonProps {
+export interface AddToCartButtonProps {
   /** An array of cart line attributes that belong to the item being added to the cart. */
   attributes?: {
     key: string;

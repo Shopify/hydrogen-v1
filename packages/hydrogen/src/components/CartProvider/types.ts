@@ -1,4 +1,5 @@
-import {
+import type {ReactNode} from 'react';
+import type {
   CartInput,
   CartLineInput,
   CartLineUpdateInput,
@@ -9,6 +10,32 @@ import {
 import {CartFragmentFragment} from './graphql/CartFragment';
 
 export type Status = State['status'];
+
+export interface CartProviderProps {
+  /** Any `ReactNode` elements. */
+  children: ReactNode;
+  numCartLines?: number;
+  /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
+  onCreate?: () => void;
+  /** A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API. */
+  onLineAdd?: () => void;
+  /** A callback that is invoked when the process to remove a line item to the cart begins, but before the line item is removed from the Storefront API. */
+  onLineRemove?: () => void;
+  /** A callback that is invoked when the process to update a line item in the cart begins, but before the line item is updated in the Storefront API. */
+  onLineUpdate?: () => void;
+  /** A callback that is invoked when the process to add or update a note in the cart begins, but before the note is added or updated in the Storefront API. */
+  onNoteUpdate?: () => void;
+  /** A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API. */
+  onBuyerIdentityUpdate?: () => void;
+  /** A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API. */
+  onAttributesUpdate?: () => void;
+  /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
+  onDiscountCodesUpdate?: () => void;
+  /**
+   * An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).∏
+   */
+  data?: CartFragmentFragment;
+}
 
 export interface Cart {
   /** The cart's ID if it has been created through the Storefront API. */
@@ -45,7 +72,7 @@ export interface CartWithActions extends Cart {
   /** A callback that updates the note in the cart. Expects the same `note` input that you would provide to the Storefront API's `cartNoteUpdate` mutation. */
   noteUpdate: (note: MutationCartNoteUpdateArgs['note']) => void;
   /** A callback that updates the buyer identity in the cart. Expects the same `buyerIdentity` input that you would provide to the Storefront API's `cartBuyerIdentityUpdate` mutation. */
-  buyerIdentityUpdate: (buyerIdenity: CartBuyerIdentityInput) => void;
+  buyerIdentityUpdate: (buyerIdentity: CartBuyerIdentityInput) => void;
   /** A callback that updates the cart attributes. Expects the same `attributes` input that you would provide to the Storefront API's `cartAttributesUpdate` mutation. */
   cartAttributesUpdate: (
     attributes: MutationCartAttributesUpdateArgs['attributes']

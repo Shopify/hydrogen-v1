@@ -3,13 +3,15 @@ import {LocalizationContext, Localization} from './LocalizationContext.client';
 import {ServerStateContextValue} from '../../foundation/ServerStateProvider';
 import {useServerState} from '../../foundation/useServerState';
 
+export interface LocalizationClientProviderProps {
+  children: ReactNode;
+  localization: Localization;
+}
+
 export default function LocalizationClientProvider({
   localization,
   children,
-}: {
-  children: ReactNode;
-  localization: Localization;
-}) {
+}: LocalizationClientProviderProps) {
   const {setServerState} = useServerState() as ServerStateContextValue;
   const [country, setCountry] = useState<Localization['country']>(
     localization.country

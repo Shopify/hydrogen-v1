@@ -11,7 +11,8 @@ export interface ProductProviderProps {
   children: ReactNode;
   /** A [Product object](/api/storefront/reference/products/product). */
   data: PartialDeep<ProductType>;
-  /** The initially selected variant. If this is missing, then `selectedVariantId`
+  /**
+   * The initially selected variant. If this is missing, then `selectedVariantId`
    * in the returned `object` from the `useProduct` hook uses the first available variant
    * or the first variant (if none are available).
    */

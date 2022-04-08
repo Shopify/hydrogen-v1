@@ -1,4 +1,11 @@
 export {CartProvider} from './CartProvider.client';
 export {useCartFetch, useInstantCheckout} from './hooks';
 export {useCart} from '../../hooks/useCart';
-export type {State, Status, Cart, CartWithActions, CartAction} from './types';
+export type {
+  State,
+  Status,
+  Cart,
+  CartWithActions,
+  CartAction,
+  CartProviderProps,
+} from './types';

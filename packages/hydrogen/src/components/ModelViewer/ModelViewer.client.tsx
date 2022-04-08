@@ -10,7 +10,7 @@ import {Props} from '../types';
 import type {Model3d} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
-interface ModelViewerProps {
+export interface ModelViewerProps {
   /** Any ReactNode elements. */
   children?: ReactNode;
   /** An object with fields that correspond to the Storefront API's [Model3D object](/api/storefront/latest/objects/model3d). */

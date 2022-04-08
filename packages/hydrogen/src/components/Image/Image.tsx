@@ -40,7 +40,7 @@ interface ExternalImagePropsBase extends BaseImageProps {
 type BaseElementProps = React.ImgHTMLAttributes<HTMLImageElement>;
 type MediaImageProps = Merge<BaseElementProps, MediaImagePropsBase>;
 type ExternalImageProps = Merge<BaseElementProps, ExternalImagePropsBase>;
-type ImageProps = MergeExclusive<MediaImageProps, ExternalImageProps>;
+export type ImageProps = MergeExclusive<MediaImageProps, ExternalImageProps>;
 
 /**
  * The `Image` component renders an image for the Storefront API's

@@ -4,7 +4,7 @@ import {useProductOptions} from '../../hooks';
 import {useProduct} from '../../hooks/useProduct';
 import type {ProductProviderProps} from './ProductProvider.client';
 
-interface ProductOptionsProviderProps {
+export interface ProductOptionsProviderProps {
   children: React.ReactNode;
   initialVariantId: ProductProviderProps['initialVariantId'];
 }
