@@ -6,7 +6,7 @@ Sessions are an essential part of an e-commerce website. A session tracks global
 
 ## `useSession` component hook
 
-Within server components, you can read from session data with the `useSession` hook.
+Within server components, you can read session data with the `useSession` hook.
 
 ### Example code
 
@@ -18,7 +18,7 @@ import {useSession} from '@shopify/hydrogen';
 export default function ServerComponent() {
   const {countryCode} = useSession();
 
-  return <div>The country code for rendered page: {countryCode}</div>;
+  return <div>The country code: {countryCode}</div>;
 }
 ```
 
@@ -30,9 +30,9 @@ The `useSession` hook returns all data within the current session. The return ty
 
 ### Considerations
 
-- The `useSession` hook is unavailable within client components. If your client components need access to session data, get the data within server components and explicitly pass to the client the data the client needs. The session is likely to contain privileged data, so you should avoid passing _all_ session data to the client.
+- The `useSession` hook is unavailable within client components. If your client components need access to session data, get the data within server components and explicitly pass the data to client components. The session is likely to contain privileged data, so you should avoid passing _all_ session data to the client.
 - Updating session data should not happen within server components or client components. Instead, update session data within API routes.
-- The `useSession()` hook will suspend while
+- The `useSession()` hook will suspend when called. The length of the suspense depends on where the session data is stored.
 
 ## Sessions within API routes
 
@@ -73,7 +73,7 @@ export async function api(request, {session}) {
 
 # Configuring hydrogen sessions
 
-The Hydrogen starter template comes pre-configured with session support. You can adjust the session cookie configuration within `App.server.jsx`:
+The Hydrogen starter template comes pre-configured with session support. You can adjust the [session cookie configuration](/api/hydrogen/components/framework/route#Cookie%20options) within `App.server.jsx`:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
