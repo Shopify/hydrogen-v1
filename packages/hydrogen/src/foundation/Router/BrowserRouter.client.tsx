@@ -41,7 +41,7 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
 
       setServerState({
         pathname: newLocation.pathname,
-        search: location.search || '',
+        search: location.search,
       });
 
       setLocation(newLocation);
