@@ -78,9 +78,8 @@ export const renderHydrogen = (
   App: any,
   {shopifyConfig, routes}: ServerHandlerConfig
 ) => {
-  const handleRequest: RequestHandler = async function (
-    rawRequest,
-    {
+  const handleRequest: RequestHandler = async function (rawRequest, options) {
+    const {
       indexTemplate,
       streamableResponse,
       dev,
@@ -88,8 +87,8 @@ export const renderHydrogen = (
       context,
       nonce,
       buyerIpHeader,
-    }
-  ) {
+    } = options;
+
     const request = new ServerComponentRequest(rawRequest);
     request.ctx.buyerIpHeader = buyerIpHeader;
 
@@ -124,7 +123,15 @@ export const renderHydrogen = (
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        return renderApiRoute(request, apiRoute, shopifyConfig);
+        const apiResponse = await renderApiRoute(
+          request,
+          apiRoute,
+          shopifyConfig
+        );
+
+        return apiResponse instanceof Request
+          ? handleRequest(apiResponse, options)
+          : apiResponse;
       }
     }
 
