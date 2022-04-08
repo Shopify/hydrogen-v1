@@ -2,6 +2,7 @@ import {getNamedspacedEventname} from './utils';
 import type {Subscriber, Subscribers, SubscriberFunction} from './types';
 import {isServer} from '../../utilities';
 import {eventNames} from './const';
+import {EVENT_PATHNAME} from '../../constants';
 
 type EventGuard = Record<string, NodeJS.Timeout>;
 
@@ -101,15 +102,11 @@ function subscribe(
   };
 }
 
-function pushToServer(payload: any) {
-  return fetch('/__event', {
-    method: 'post',
-    headers: {
-      'cache-control': 'no-cache',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+function pushToServer(init?: RequestInit, searchParam?: string) {
+  return fetch(
+    `${EVENT_PATHNAME}${searchParam ? `?${searchParam}` : ''}`,
+    init
+  );
 }
 
 export const ClientAnalytics = {
