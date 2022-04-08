@@ -1,5 +1,5 @@
 export function Test() {
-  return <div>Client comp</div>;
+  return <div>mycoolcomponentclient</div>;
 }
 
 export const COOLNUMBER = 42;

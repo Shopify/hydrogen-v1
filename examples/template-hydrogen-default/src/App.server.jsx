@@ -7,7 +7,10 @@ import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 import {Test as TestServer} from '@shopify/hydrogen-ui/server';
-import {Test as TestClient, COOLNUMBER} from '@shopify/hydrogen-ui/client';
+import {
+  // Test as TestClient,
+  COOLNUMBER,
+} from '@shopify/hydrogen-ui/client';
 
 function App({routes}) {
   return (
@@ -16,7 +19,7 @@ function App({routes}) {
         <CartProvider>
           <DefaultSeo />
           <TestServer />
-          <TestClient />
+          {/* <TestClient /> */}
           {COOLNUMBER}
           <Router>
             <FileRoutes routes={routes} />
