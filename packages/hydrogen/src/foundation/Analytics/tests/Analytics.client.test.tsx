@@ -3,9 +3,15 @@ import {mount} from '@shopify/react-testing';
 import {Analytics} from '../Analytics.client';
 import {ClientAnalytics} from '../ClientAnalytics';
 
-function SomeClientComponent({callback}: {callback: (payload: any) => void}) {
+function SomeClientComponent({
+  eventName,
+  callback,
+}: {
+  eventName: string;
+  callback: (payload: any) => void;
+}) {
   useEffect(() => {
-    ClientAnalytics.subscribe(ClientAnalytics.eventNames.PAGE_VIEW, callback);
+    ClientAnalytics.subscribe(eventName, callback);
   });
   return null;
 }
@@ -20,7 +26,7 @@ function mountComponent(analyticsData: any, children: React.ReactChild) {
 }
 
 describe('Analytics.client', () => {
-  it('should receive page-view event', async () => {
+  it('should receive page-view event on mount', async () => {
     const analyticsData = {
       test: '123',
     };
@@ -29,6 +35,7 @@ describe('Analytics.client', () => {
       analyticsData,
       <>
         <SomeClientComponent
+          eventName={ClientAnalytics.eventNames.PAGE_VIEW}
           callback={(payload) => {
             expect(payload).toEqual(analyticsData);
           }}
@@ -53,6 +60,7 @@ describe('Analytics.client', () => {
       analyticsData,
       <>
         <SomeClientComponent
+          eventName={ClientAnalytics.eventNames.PAGE_VIEW}
           callback={(payload) => {
             expect(payload).toEqual({
               ...analyticsData,
@@ -65,6 +73,31 @@ describe('Analytics.client', () => {
                 term: '678',
               },
             });
+          }}
+        />
+      </>
+    );
+  });
+
+  it('should receive page-view and viewed-product event on mount', async () => {
+    const analyticsData = {
+      publishEventsOnNavigate: [ClientAnalytics.eventNames.VIEWED_PRODUCT],
+      test: '123',
+    };
+
+    await mountComponent(
+      analyticsData,
+      <>
+        <SomeClientComponent
+          eventName={ClientAnalytics.eventNames.PAGE_VIEW}
+          callback={(payload) => {
+            expect(payload).toEqual(analyticsData);
+          }}
+        />
+        <SomeClientComponent
+          eventName={ClientAnalytics.eventNames.VIEWED_PRODUCT}
+          callback={(payload) => {
+            expect(payload).toEqual(analyticsData);
           }}
         />
       </>
