@@ -70,7 +70,7 @@ export default defineConfig({
 {% endcodeblock %}
 
 > Tip:
-> Similarly, if you find that a dependency is being optimized when it shouldn't, you can try adding the dependency to `optimizeDeps.exclude` to see if it fixes the issue.
+> If you find that a dependency is being optimized when it shouldn't, then you can try adding the dependency to `optimizeDeps.exclude` to see if it fixes the issue.
 
 ## More help
 
