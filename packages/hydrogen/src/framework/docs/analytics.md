@@ -2,6 +2,20 @@ Hydrogen includes support for analytics that give you insight into how customers
 
 This guide describes how to subscribe to the default events that Hydrogen offers, configure custom events, send analytics data from the server-side, and unsubscribe from events. It also provides example implementations of client analytics connectors, and shows how to write an end-to-end (E2E) for testing analytics connectors.
 
+## How it works
+
+The following diagram describes how analytics data is processed on the server and client in Hydrogen:
+
+![Shows a diagram that describes how analytics data is processed on the server and client in Hydrogen](/assets/custom-storefronts/hydrogen/hydrogen-analytics.png)
+
+1. On the server, the `useServerAnalytics` hook collects data in a single render request.
+2. On the client, the data is streamed as part of the `Suspense` component. This single render request contains a `dataLayer` output, waits for all queries to complete, and triggers a `PAGE_VIEW` event.
+
+3. Events can be published to external endpoints from the client or server-side:
+
+- **Client**: The client can subscribe to events and publish them to external endpoints.
+- **Server**: Events are published to the `/__event` endpoint, a server analytics route. You can use `serverAnalyticsConnectors` to publish the event to an external endpoint.
+
 ## Default events
 
 By default, Hydrogen publishes the following events to subscribers (`ClientAnalytics.subscribe`):
@@ -13,6 +27,7 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 | `UPDATE_CART`           | A customer updates an item in their cart                     |
 | `REMOVE_FROM_CART`      | A customer removes an item from their cart                   |
 | `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated |
+| `VIEWED_PRODUCT`        | A customer views a product details page                      |
 
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
