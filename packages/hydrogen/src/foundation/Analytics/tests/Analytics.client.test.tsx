@@ -5,13 +5,26 @@ import {ClientAnalytics} from '../ClientAnalytics';
 
 function SomeClientComponent({
   eventName,
+  reset,
   callback,
 }: {
   eventName: string;
+  reset?: Boolean;
   callback: (payload: any) => void;
 }) {
   useEffect(() => {
-    ClientAnalytics.subscribe(eventName, callback);
+    const subscriber = ClientAnalytics.subscribe(eventName, (payload: any) => {
+      callback(payload);
+      subscriber.unsubscribe();
+
+      if (reset) {
+        ClientAnalytics.resetPageAnalyticsData();
+      }
+    });
+
+    // Fake publish analytics event because test is creating different
+    // ClientAnalytics instances between <Analytics> and <SomeClientComponet>
+    ClientAnalytics.publish(eventName);
   });
   return null;
 }
@@ -26,7 +39,21 @@ function mountComponent(analyticsData: any, children: React.ReactChild) {
 }
 
 describe('Analytics.client', () => {
-  it('should receive page-view event on mount', async () => {
+  afterEach(async () => {
+    // a reseting mount for ClientAnalytics instance
+    await mountComponent(
+      {},
+      <>
+        <SomeClientComponent
+          eventName={ClientAnalytics.eventNames.PAGE_VIEW}
+          reset={true}
+          callback={() => {}}
+        />
+      </>
+    );
+  });
+
+  it('should receive page-view event on mount', async (done) => {
     const analyticsData = {
       test: '123',
     };
@@ -36,55 +63,30 @@ describe('Analytics.client', () => {
       <>
         <SomeClientComponent
           eventName={ClientAnalytics.eventNames.PAGE_VIEW}
-          callback={(payload) => {
+          reset={true}
+          callback={(payload: any) => {
             expect(payload).toEqual(analyticsData);
+            done();
           }}
         />
       </>
     );
   });
 
-  it('should process utm search parameters', async () => {
-    global.window = Object.create(window);
-    Object.defineProperty(window, 'location', {
-      value: {
-        search:
-          '?utm_id=123&utm_source=456&utm_campaign=789&utm_medium=012&utm_content=345&utm_term=678',
-      },
-    });
-    const analyticsData = {
-      test: '123',
-    };
-
-    await mountComponent(
-      analyticsData,
-      <>
-        <SomeClientComponent
-          eventName={ClientAnalytics.eventNames.PAGE_VIEW}
-          callback={(payload) => {
-            expect(payload).toEqual({
-              ...analyticsData,
-              utm: {
-                id: '123',
-                source: '456',
-                campaign: '789',
-                medium: '012',
-                content: '345',
-                term: '678',
-              },
-            });
-          }}
-        />
-      </>
-    );
-  });
-
-  it('should receive page-view and viewed-product event on mount', async () => {
+  it('should receive page-view and viewed-product event on mount', async (done) => {
     const analyticsData = {
       publishEventsOnNavigate: [ClientAnalytics.eventNames.VIEWED_PRODUCT],
       test: '123',
     };
 
+    let doneCount = 0;
+    const allDone = () => {
+      doneCount++;
+      if (doneCount === 2) {
+        done();
+      }
+    };
+
     await mountComponent(
       analyticsData,
       <>
@@ -92,12 +94,14 @@ describe('Analytics.client', () => {
           eventName={ClientAnalytics.eventNames.PAGE_VIEW}
           callback={(payload) => {
             expect(payload).toEqual(analyticsData);
+            allDone();
           }}
         />
         <SomeClientComponent
           eventName={ClientAnalytics.eventNames.VIEWED_PRODUCT}
           callback={(payload) => {
             expect(payload).toEqual(analyticsData);
+            allDone();
           }}
         />
       </>
