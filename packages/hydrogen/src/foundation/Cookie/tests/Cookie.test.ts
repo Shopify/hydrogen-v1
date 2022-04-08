@@ -1,4 +1,3 @@
-import {Logger} from '../../../utilities/log';
 import {Cookie} from '../Cookie';
 import {log} from '../../../utilities/log';
 

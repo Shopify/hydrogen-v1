@@ -1,19 +1,7 @@
-import type {SessionStorageAdapter} from './session';
-import {Cookie} from './Cookie';
+import type {SessionStorageAdapter} from '../session/session';
+import {Cookie} from '../Cookie/Cookie';
 import {v4 as uid} from 'uuid';
-import {CookieOptions} from './Cookie';
-
-function getSessionIdFromRequest(
-  request: Request,
-  cookie: Cookie
-): string | null {
-  const cookieValue = request.headers.get('cookie');
-
-  if (cookieValue) {
-    return cookie.parse(cookieValue).sid;
-  }
-  return null;
-}
+import {CookieOptions} from '../Cookie/Cookie';
 
 export const MemorySessionStorage = function (
   name: string,
@@ -27,7 +15,7 @@ export const MemorySessionStorage = function (
 
     return {
       async get(request: Request): Promise<Record<string, string>> {
-        const sid = getSessionIdFromRequest(request, cookie);
+        const sid = cookie.getSessionId(request);
         let sessionData;
 
         if (sid && sessions.has(sid)) {
@@ -46,7 +34,7 @@ export const MemorySessionStorage = function (
         return sessionData;
       },
       async set(request: Request, value: Record<string, string>) {
-        let sid = getSessionIdFromRequest(request, cookie);
+        let sid = cookie.getSessionId(request);
 
         if (!sid) {
           sid = uid();
@@ -57,12 +45,12 @@ export const MemorySessionStorage = function (
           expires: cookie.expires,
         });
 
-        cookie.set('sid', sid);
+        cookie.setSessionid(sid);
 
         return cookie.serialize();
       },
       async destroy(request: Request) {
-        const sid = getSessionIdFromRequest(request, cookie);
+        const sid = cookie.getSessionId(request);
 
         if (sid) {
           sessions.delete(sid);

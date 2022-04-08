@@ -70,4 +70,18 @@ export class Cookie {
   get expires(): number {
     return this.options!.expires!.getTime();
   }
+
+  setSessionid(sid: string) {
+    return this.set('sid', sid);
+  }
+
+  getSessionId(request: Request): string | null {
+    const cookieValue = request.headers.get('cookie');
+
+    if (cookieValue) {
+      return this.parse(cookieValue).sid;
+    }
+
+    return null;
+  }
 }

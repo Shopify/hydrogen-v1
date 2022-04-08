@@ -1,5 +1,4 @@
 import {Logger} from '../../utilities/log';
-import {useServerRequest} from '../ServerRequestProvider';
 import {wrapPromise} from '../../utilities/suspense';
 import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
@@ -43,12 +42,6 @@ export function getSyncSessionApi(
       }
     : emptySyncSessionImplementation(log);
 }
-
-export const useSession = function () {
-  const request = useServerRequest();
-  const session = request.ctx.session?.get();
-  return session;
-};
 
 export const emptySessionImplementation = function (log: Logger) {
   return {
