@@ -93,7 +93,7 @@ export default renderHydrogen(App, {
 
 {% endcodeblock %}
 
-By default, session data is persisted within a cookie. This can be swapped for an in memory storage, file-based storage (for NodeJS only), or build your own storage adapter.
+By default, session data is persisted within a cookie. This can be swapped for an in memory storage, file-based storage (NodeJS only), or build your own storage adapter.
 
 # Cookie session storage
 
