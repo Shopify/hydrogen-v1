@@ -152,8 +152,8 @@ const serverDataLayer = useServerAnalytics();
 
 {% endcodeblock %}
 
-If you need to trigger a different analytics event on navigation, you can specify a list of analytics events
-to publish in the server analytics:
+If you need to trigger different analytics events on navigation, then you can specify a list of analytics events
+to publish in your server component:
 
 {% codeblock file, filename: '*.server.js' %}
 
@@ -163,10 +163,10 @@ const serverDataLayer = useServerAnalytics({
 });
 ```
 
+{% endcodeblock %}
+
 > Caution:
 > Don't use the data from `useServerAnalytics()` for rendering. This will cause occasional mismatches during hydration.
-
-{% endcodeblock %}
 
 The following example shows how to retrieve analytics data from a client component:
 
