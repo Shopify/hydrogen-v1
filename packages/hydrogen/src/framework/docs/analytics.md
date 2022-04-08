@@ -165,8 +165,6 @@ const serverDataLayer = useServerAnalytics({
 
 {% endcodeblock %}
 
-> Caution:
-> Don't use the data from `useServerAnalytics()` for rendering. This will cause occasional mismatches during hydration.
 
 The following example shows how to retrieve analytics data from a client component:
 
