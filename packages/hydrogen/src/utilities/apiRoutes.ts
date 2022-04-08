@@ -202,6 +202,10 @@ export async function renderApiRoute(
       }
     }
 
+    if (!response) {
+      response = new Response(null);
+    }
+
     if (cookieToSet) {
       response.headers.set('Set-Cookie', cookieToSet);
     }

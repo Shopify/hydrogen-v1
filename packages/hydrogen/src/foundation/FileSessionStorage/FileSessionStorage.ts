@@ -1,22 +1,10 @@
-import type {SessionStorageAdapter} from './session';
-import {Cookie} from './Cookie';
+import type {SessionStorageAdapter} from '../session/session';
+import {Cookie} from '../Cookie/Cookie';
 import {v4 as uid} from 'uuid';
 import path from 'path';
 import {promises as fsp} from 'fs';
-import {CookieOptions} from './Cookie';
+import {CookieOptions} from '../Cookie/Cookie';
 import {Logger} from '../../utilities/log';
-
-function getSessionIdFromRequest(
-  request: Request,
-  cookie: Cookie
-): string | null {
-  const cookieValue = request.headers.get('cookie');
-
-  if (cookieValue) {
-    return cookie.parse(cookieValue).sid;
-  }
-  return null;
-}
 
 async function wait() {
   return new Promise((resolve) => setTimeout(resolve));
@@ -55,7 +43,7 @@ export const FileSessionStorage = function (
       async get(request: Request): Promise<Record<string, string>> {
         if (data) return data;
 
-        const sid = getSessionIdFromRequest(request, cookie) || uid();
+        const sid = cookie.getSessionId(request) || uid();
         const file = getSessionFile(dir, sid);
 
         const fileContents = await getFile(file, cookie.expires, log);
@@ -64,17 +52,17 @@ export const FileSessionStorage = function (
         return data;
       },
       async set(request: Request, value: Record<string, string>) {
-        const sid = getSessionIdFromRequest(request, cookie) || uid();
+        const sid = cookie.getSessionId(request) || uid();
         const file = getSessionFile(dir, sid);
 
         await writeFile(file, value, cookie.expires);
         data = value;
-        cookie.set('sid', sid);
+        cookie.setSessionid(sid);
 
         return cookie.serialize();
       },
       async destroy(request: Request) {
-        const sid = getSessionIdFromRequest(request, cookie);
+        const sid = cookie.getSessionId(request);
 
         if (sid) {
           const file = getSessionFile(dir, sid);

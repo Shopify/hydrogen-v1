@@ -1,5 +1,5 @@
-import type {SessionStorageAdapter} from './session';
-import {Cookie, CookieOptions} from './Cookie';
+import type {SessionStorageAdapter} from '../session/session';
+import {Cookie, CookieOptions} from '../Cookie/Cookie';
 
 export const CookieSessionStorage = function (
   name: string,
