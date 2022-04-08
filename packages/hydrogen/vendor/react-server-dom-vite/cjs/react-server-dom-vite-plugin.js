@@ -160,7 +160,7 @@ var hashImportsPlugin = {
       return code.replace(/\/\*\s*HASH_BEGIN\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm, function (_, imports) {
         return imports.trim().replace(/"([^"]+?)":/gm, function (__, relativePath) {
           var absolutePath = path.resolve(path.dirname(id.split('?')[0]), relativePath);
-          return "\"" + getComponentId(absolutePath) + "\":";
+          return "\"" + getComponentId(vite.normalizePath(absolutePath)) + "\":";
         });
       });
     }
