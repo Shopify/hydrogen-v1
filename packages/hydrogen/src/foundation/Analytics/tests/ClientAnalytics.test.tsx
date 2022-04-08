@@ -42,7 +42,7 @@ describe('Analytics - ClientAnalytics', () => {
   });
 
   it('can unsubscribe from analytics event from last test', () => {
-    ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, false);
+    ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW);
 
     expect(mockPageViewCallback).toHaveBeenCalledTimes(2);
     expect(mockPageViewCallback.mock.calls[0][0]).toEqual({
@@ -77,6 +77,7 @@ describe('Analytics - ClientAnalytics', () => {
   });
 
   it('should push analytics to server analytics endpoint', () => {
+    mockedFetch.mockClear();
     mockedFetch.mockResolvedValue(new Response(null, {status: 200}));
 
     const requestInit = {

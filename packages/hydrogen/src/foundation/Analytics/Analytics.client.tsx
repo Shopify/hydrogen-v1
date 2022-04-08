@@ -7,7 +7,7 @@ export function Analytics({
   analyticsDataFromServer: any;
 }) {
   useEffect(() => {
-    const urlParams = new URLSearchParams(document.location.search);
+    const urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.has('utm_source')) {
       ClientAnalytics.pushToPageAnalyticsData(
