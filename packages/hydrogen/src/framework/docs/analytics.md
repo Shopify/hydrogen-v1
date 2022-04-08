@@ -152,6 +152,22 @@ const serverDataLayer = useServerAnalytics();
 
 {% endcodeblock %}
 
+If you need to trigger a different analytics event on navigation, you can specify a list of analytics events
+to publish in the server analytics:
+
+{% codeblock file, filename: '*.server.js' %}
+
+```js
+const serverDataLayer = useServerAnalytics({
+  publishEventsOnNavigate: [ClientAnalytics.eventNames.VIEWED_PRODUCT],
+});
+```
+
+> Caution:
+> Don't use the data from `useServerAnalytics()` for rendering. This will cause occasional mismatches during hydration.
+
+{% endcodeblock %}
+
 The following example shows how to retrieve analytics data from a client component:
 
 {% codeblock file, filename: '*.client.js' %}
@@ -388,7 +404,7 @@ describe('Google Analytics 4', () => {
   it('should emit page_view', async () => {
     // Wait for the Google Analytics 4 network call
     const [request] = await Promise.all([
-      // Test if the request matches a Google Analytics 4 analytic pixel
+      // Test if the request matches a Google Analytics 4 analytics pixel
       session.page.waitForRequest((request) =>
         endpointRegex.test(request.url())
       ),
@@ -396,7 +412,7 @@ describe('Google Analytics 4', () => {
       session.visit('/'),
     ]);
 
-    // Validate data on the Google Analytics 4 analytic pixel
+    // Validate data on the Google Analytics 4 analytics pixel
     const ga4Event = new URL(request.url());
     expect(ga4Event.searchParams.en).toEqual('page_view');
   }, 60000);
