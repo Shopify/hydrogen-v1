@@ -1,3 +1,3 @@
 export function Test() {
-  return <div>Server comp</div>;
+  return <div>mycoolcomponentserver</div>;
 }
