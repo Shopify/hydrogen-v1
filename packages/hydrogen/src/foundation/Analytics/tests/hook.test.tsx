@@ -23,7 +23,7 @@ function mountComponent(analyticsData?: any) {
   );
 }
 
-describe('useServerAnalytics', () => {
+describe('Analytics - useServerAnalytics', () => {
   it('should reads from request.ctx.analyticsData', async () => {
     const component = await mountComponent();
     expect(component).toContainReactComponent('div', {
