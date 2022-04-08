@@ -16,7 +16,7 @@
     "./client": "./dist/index.client.js"
   },
   "typesVersions": {
-    "*": {
+    "<=4.6": {
       "client": [
         "./dist/index.client.d.ts"
       ],
