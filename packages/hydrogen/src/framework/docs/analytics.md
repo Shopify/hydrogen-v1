@@ -165,7 +165,6 @@ const serverDataLayer = useServerAnalytics({
 
 {% endcodeblock %}
 
-
 The following example shows how to retrieve analytics data from a client component:
 
 {% codeblock file, filename: '*.client.js' %}
