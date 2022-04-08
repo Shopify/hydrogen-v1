@@ -8,6 +8,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useCallback,
+  type ReactNode,
 } from 'react';
 import type {ServerState} from '../ServerStateProvider';
 import {META_ENV_SSR} from '../ssr-interop';
@@ -23,7 +24,11 @@ export const RouterContext = createContext<RouterContextValue | {}>({});
 let isFirstLoad = true;
 const positions: Record<string, number> = {};
 
-export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
+type BrowserRouterProps = {
+  history?: BrowserHistory;
+  children?: ReactNode;
+};
+export const BrowserRouter: FC<BrowserRouterProps> = ({
   history: pHistory,
   children,
 }) => {

@@ -377,7 +377,7 @@ describe('<Metafield />', () => {
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('a', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
         href: metafield.value as string,
       });
     });
@@ -440,7 +440,7 @@ describe('<Metafield />', () => {
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
       });
     });
 
@@ -452,7 +452,7 @@ describe('<Metafield />', () => {
       );
 
       expect(component).toContainReactComponent('p', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
       });
     });
 
@@ -477,7 +477,7 @@ describe('<Metafield />', () => {
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
       });
     });
 
@@ -489,7 +489,7 @@ describe('<Metafield />', () => {
       );
 
       expect(component).toContainReactComponent('p', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
       });
     });
 
@@ -514,7 +514,7 @@ describe('<Metafield />', () => {
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
       });
     });
 
@@ -526,7 +526,7 @@ describe('<Metafield />', () => {
       );
 
       expect(component).toContainReactComponent('p', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
       });
     });
 
@@ -551,7 +551,7 @@ describe('<Metafield />', () => {
       const component = mountWithProviders(<Metafield data={metafield} />);
 
       expect(component).toContainReactComponent('span', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
       });
     });
 
@@ -563,7 +563,7 @@ describe('<Metafield />', () => {
       );
 
       expect(component).toContainReactComponent('p', {
-        children: metafield.value,
+        children: metafield?.value?.toString(),
       });
     });
 
@@ -617,7 +617,7 @@ describe('<Metafield />', () => {
         const component = mountWithProviders(<Metafield data={metafield} />);
 
         expect(component).toContainReactComponent('span', {
-          children: metafield.value,
+          children: metafield?.value?.toString(),
         });
       });
 
@@ -629,7 +629,7 @@ describe('<Metafield />', () => {
         );
 
         expect(component).toContainReactComponent('p', {
-          children: metafield.value,
+          children: metafield?.value?.toString(),
         });
       });
 

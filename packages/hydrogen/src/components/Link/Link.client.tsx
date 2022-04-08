@@ -47,7 +47,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     } = props;
 
     const internalClick = useCallback(
-      (e) => {
+      (e: React.MouseEvent<HTMLAnchorElement, globalThis.MouseEvent>) => {
         if (onClick) onClick(e);
         if (
           !reloadDocument && // do regular browser stuff

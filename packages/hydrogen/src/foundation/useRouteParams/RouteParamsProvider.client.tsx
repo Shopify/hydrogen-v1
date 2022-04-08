@@ -6,10 +6,10 @@ export const RouteParamsContext = createContext<RouteParamsContextValue>({
   routeParams: {},
 });
 
-export const RouteParamsProvider: FC<{routeParams: Record<string, string>}> = ({
-  children,
-  routeParams,
-}) => {
+export const RouteParamsProvider: FC<{
+  routeParams: Record<string, string>;
+  children?: React.ReactNode;
+}> = ({children, routeParams}) => {
   return (
     <RouteParamsContext.Provider value={{routeParams}}>
       {children}
