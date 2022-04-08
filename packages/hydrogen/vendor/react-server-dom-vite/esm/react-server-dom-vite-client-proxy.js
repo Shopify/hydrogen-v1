@@ -8,18 +8,38 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { createElement } from 'react';
+import { useState } from 'react';
 
-// eslint-disable-next-line no-unused-vars
+// Store of components discovered during RSC to load
+// them later when consuming the response in SSR.
+globalThis.__COMPONENT_INDEX = {}; // Store to get module references for long strings
+// when rendering in RSC (strings cannot be wrapped Proxy).
 
-/*global globalThis*/
-// This is a store of components discovered during RSC
-// to load them later when consuming the response in SSR.
-globalThis.__COMPONENT_INDEX = {};
+globalThis.__STRING_REFERENCE_INDEX = {};
+var MODULE_TAG = Symbol.for('react.module.reference');
+var STRING_SIZE_LIMIT = 64;
+var FN_RSC_ERROR = 'Functions exported from client components cannot be called or used as constructors from a server component.'; // TODO what's a better way to detect Flight runtime?
 
-function isReactComponent(component, name, isNamed) {
-  if (!component) return false;
-  return typeof component === 'function' && (!isNamed || /^[A-Z]/.test(name)) || typeof component.render === 'function' || component.$$typeof === Symbol.for('react.element');
+function isRsc() {
+  try {
+    useState();
+    return false;
+  } catch (error) {
+    return error.message.endsWith('Server Components.');
+  }
+}
+
+function createModuleReference(id, value, name, isDefault) {
+  var moduleRef = Object.create(null);
+  moduleRef.$$typeof = MODULE_TAG;
+  moduleRef.filepath = id;
+  moduleRef.name = isDefault ? 'default' : name; // Store component in a global index during RSC to use it later in SSR
+
+  globalThis.__COMPONENT_INDEX[id] = Object.defineProperty(globalThis.__COMPONENT_INDEX[id] || Object.create(null), moduleRef.name, {
+    value: value,
+    writable: true
+  });
+  return moduleRef;
 } // A ClientProxy behaves as a module reference for the Flight
 // runtime (RSC) and as a real component for the Fizz runtime (SSR).
 // Note that this is not used in browser environments.
@@ -28,49 +48,39 @@ function isReactComponent(component, name, isNamed) {
 function wrapInClientProxy(_ref) {
   var id = _ref.id,
       name = _ref.name,
-      named = _ref.named,
-      component = _ref.component;
+      isDefault = _ref.isDefault,
+      value = _ref.value;
+  var type = typeof value;
 
-  if (!isReactComponent(component, name, named)) {
-    // This is not a React component, do not wrap it.
-    return component;
+  if (value === null || type !== 'object' && type !== 'function') {
+    if (type === 'string' && value.length >= STRING_SIZE_LIMIT) {
+      var _moduleRef = createModuleReference(id, value, name, isDefault);
+
+      globalThis.__STRING_REFERENCE_INDEX[value] = _moduleRef;
+    }
+
+    return value;
   }
 
-  var render = function (props) {
-    return createElement(component, props);
+  var moduleRef = createModuleReference(id, value, name, isDefault);
+
+  var get = function (target, prop, receiver) {
+    return Reflect.get(isRsc() ? moduleRef : target, prop, receiver);
   };
 
-  Object.defineProperty(render, 'name', {
-    value: name
-  });
-
-  {
-    render.displayName = name;
-  } // Fizz runtime accesses the `render` method directly when encountering a forward_ref
-
-
-  var componentRef = Object.create(null);
-  componentRef.$$typeof = Symbol.for('react.forward_ref');
-  componentRef.render = render; // Flight runtime will check this custom typeof to decide wether this is a module ref
-
-  var moduleRef = Object.create(null);
-  moduleRef.$$typeof_rsc = Symbol.for('react.module.reference');
-  moduleRef.filepath = id;
-  moduleRef.name = named ? name : 'default'; // Store component in a global index during RSC to use them later in SSR
-
-  globalThis.__COMPONENT_INDEX[id] = Object.defineProperty(globalThis.__COMPONENT_INDEX[id] || Object.create(null), moduleRef.name, {
-    value: component,
-    writable: true
-  });
-  return new Proxy(componentRef, {
-    get: function (target, prop) {
-      return (// 1. Let React access the element/ref and type in SSR
-        target[prop] || // 2. Check module properties for RSC requests
-        moduleRef[prop] || // 3. Fallback to custom component properties such as `ImageComponent.Fragment`
-        component[prop]
-      );
+  return new Proxy(value, type === 'object' ? {
+    get: get
+  } : {
+    get: get,
+    apply: function () {
+      if (isRsc()) throw new Error(FN_RSC_ERROR + (" Calling \"" + name + "\"."));
+      return Reflect.apply.apply(Reflect, arguments);
+    },
+    construct: function () {
+      if (isRsc()) throw new Error(FN_RSC_ERROR + (" Instantiating \"" + name + "\"."));
+      return Reflect.construct.apply(Reflect, arguments);
     }
   });
 }
 
-export { wrapInClientProxy };
+export { FN_RSC_ERROR, MODULE_TAG, STRING_SIZE_LIMIT, isRsc, wrapInClientProxy };
