@@ -1,7 +1,7 @@
 import type {SessionStorageAdapter} from '../session/session';
 import {Cookie} from '../Cookie/Cookie';
 import {v4 as uid} from 'uuid';
-import {CookieOptions} from '../Cookie/Cookie';
+import type {CookieOptions} from '../Cookie/Cookie';
 
 export const MemorySessionStorage = function (
   name: string,
