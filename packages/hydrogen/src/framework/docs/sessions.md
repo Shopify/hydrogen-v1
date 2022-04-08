@@ -125,10 +125,10 @@ export default renderHydrogen(App, {
 
 `CookieSessionStorage` takes the following arguments:
 
-| Key             | Required | Description                                                             |
-| --------------- | -------- | ----------------------------------------------------------------------- |
-| `cookieName`    | Yes      | The name of the cookie stored in the browser.                           |
-| `cookieOptions` | No       | An optional object to configure how the cookie is persisted in browser. |
+| Key             | Required | Description                                                                                                                          |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `cookieName`    | Yes      | The name of the cookie stored in the browser.                                                                                        |
+| `cookieOptions` | No       | An optional object to [configure how the cookie is persisted](/api/hydrogen/components/framework/route#Cookie%20options) in browser. |
 
 ## Considerations
 
@@ -164,10 +164,10 @@ export default renderHydrogen(App, {
 
 `MemorySessionStorage` takes the following arguments:
 
-| Key             | Required | Description                                                             |
-| --------------- | -------- | ----------------------------------------------------------------------- |
-| `cookieName`    | Yes      | The name of the cookie stored in the browser.                           |
-| `cookieOptions` | No       | An optional object to configure how the cookie is persisted in browser. |
+| Key             | Required | Description                                                                                                                          |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `cookieName`    | Yes      | The name of the cookie stored in the browser.                                                                                        |
+| `cookieOptions` | No       | An optional object to [configure how the cookie is persisted](/api/hydrogen/components/framework/route#Cookie%20options) in browser. |
 
 ## Considerations
 
@@ -210,11 +210,11 @@ export default renderHydrogen(App, {
 
 `FileSessionStorage` takes the following arguments:
 
-| Key             | Required | Description                                                                                                  |
-| --------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
-| `cookieName`    | Yes      | The name of the cookie stored in the browser.                                                                |
-| `directory`     | Yes      | A directory to store the session files within. Each session is stored in a separate file on the file system. |
-| `cookieOptions` | No       | An optional object to configure how the cookie is persisted in browser.                                      |
+| Key             | Required | Description                                                                                                                          |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `cookieName`    | Yes      | The name of the cookie stored in the browser.                                                                                        |
+| `directory`     | Yes      | A directory to store the session files within. Each session is stored in a separate file on the file system.                         |
+| `cookieOptions` | No       | An optional object to [configure how the cookie is persisted](/api/hydrogen/components/framework/route#Cookie%20options) in browser. |
 
 ## Considerations
 
