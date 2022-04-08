@@ -3,7 +3,7 @@ import {Cookie} from '../Cookie/Cookie';
 import {v4 as uid} from 'uuid';
 import path from 'path';
 import {promises as fsp} from 'fs';
-import {CookieOptions} from '../Cookie/Cookie';
+import type {CookieOptions} from '../Cookie/Cookie';
 import {Logger} from '../../utilities/log';
 
 async function wait() {
