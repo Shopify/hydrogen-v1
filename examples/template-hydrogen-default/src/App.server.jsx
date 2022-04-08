@@ -16,17 +16,13 @@ import CartProvider from './components/CartProvider.client';
 import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from './constants';
 
 function App({routes}) {
-  const session = useSession();
+  const sessionData = useSession();
 
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         <CartProvider
-          customerAccessToken={
-            session
-              ? session.get()[CUSTOMER_ACCESS_TOKEN_COOKIE_NAME]
-              : undefined
-          }
+          customerAccessToken={sessionData?.[CUSTOMER_ACCESS_TOKEN_COOKIE_NAME]}
         >
           <DefaultSeo />
           <Router>

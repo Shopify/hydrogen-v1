@@ -4,7 +4,7 @@ import {CUSTOMER_ACCESS_TOKEN_COOKIE_NAME} from '../../constants';
 import AccountDetails from '../../components/AccountDetails.server';
 
 export default function Account({response}) {
-  const session = useSession();
+  const sessionData = useSession();
 
   // disabled full page cache
   response.cache(
@@ -13,9 +13,7 @@ export default function Account({response}) {
     }),
   );
 
-  const customerAccessToken = session
-    ? session.get()[CUSTOMER_ACCESS_TOKEN_COOKIE_NAME]
-    : undefined;
+  const customerAccessToken = sessionData?.[CUSTOMER_ACCESS_TOKEN_COOKIE_NAME];
 
   if (customerAccessToken) {
     return <AccountDetails customerAccessToken={customerAccessToken} />;
