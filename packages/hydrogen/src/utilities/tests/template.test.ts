@@ -46,4 +46,26 @@ describe('getScriptsFromTemplate', () => {
     expect(bootstrapScripts).toHaveLength(0);
     expect(bootstrapModules).toHaveLength(0);
   });
+
+  it('identifies scripts with line breaks in them', () => {
+    const template = `<html><head>
+      <script src="/foo.js"></script>
+    </head>
+    <body>
+      <script src="/bar.js"></script>
+      <script src="/module.js"
+              type="module"></script>
+    </body></html>`;
+
+    const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
+      stripScriptsFromTemplate(template);
+
+    expect(noScriptTemplate).not.toMatch('<script');
+
+    expect(bootstrapScripts).toHaveLength(2);
+    expect(bootstrapScripts[0]).toBe('/foo.js');
+
+    expect(bootstrapModules).toHaveLength(1);
+    expect(bootstrapModules[0]).toBe('/module.js');
+  });
 });

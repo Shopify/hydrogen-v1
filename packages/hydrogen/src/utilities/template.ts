@@ -7,7 +7,7 @@ export function stripScriptsFromTemplate(template: string) {
   const bootstrapModules = [] as string[];
 
   const scripts = template.matchAll(
-    /<script.+?src="(?<script>([^"]+?))".*?><\/script>/g
+    /<script.+?src="(?<script>([^"]+?))".*?><\/script>/gs
   );
 
   for (const match of scripts) {
