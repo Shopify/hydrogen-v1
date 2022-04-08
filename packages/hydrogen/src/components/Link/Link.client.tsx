@@ -163,7 +163,7 @@ function Prefetch({pathname}: {pathname: string}) {
   const newLocation = new URL(newPath, window.location.href);
   const proposedServerState = getProposedServerState({
     pathname: newLocation.pathname,
-    search: newLocation.search || undefined,
+    search: newLocation.search,
   });
   const href =
     `${RSC_PATHNAME}?state=` +
