@@ -48,7 +48,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
     expect(mockServerAnalyticsConnector2.mock.calls[0][0]).toEqual(request);
   });
 
-  it('should delegate json request', () => {
+  it('should delegate json request', async (done) => {
     const testRequest = new Request('__event', {
       method: 'POST',
       headers: {
@@ -68,6 +68,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
         test: '123',
       });
       expect(type).toEqual('json');
+      done();
     };
     const response = ServerAnalyticsRoute(testRequest, [
       {
@@ -78,7 +79,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
     expect(response.status).toEqual(200);
   });
 
-  it('should delegate text request', () => {
+  it('should delegate text request', async (done) => {
     const testRequest = new Request('__event', {
       method: 'POST',
       body: 'test123',
@@ -91,6 +92,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
       expect(request).toEqual(testRequest);
       expect(data).toEqual('test123');
       expect(type).toEqual('text');
+      done();
     };
     const response = ServerAnalyticsRoute(testRequest, [
       {
