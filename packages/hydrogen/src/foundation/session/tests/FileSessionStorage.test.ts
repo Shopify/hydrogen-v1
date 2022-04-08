@@ -25,7 +25,7 @@ let log: Logger;
 describe('FileSessionStorage', () => {
   beforeEach(async () => {
     log = {
-      warn: jasmine.createSpy(),
+      warn: jest.fn(),
       error: () => {},
       trace: () => {},
       debug: () => {},
@@ -115,7 +115,7 @@ describe('FileSessionStorage', () => {
       'eca0b9ec-c013-4ea1-8236-df6ed02f00c4',
       '{"data":{},"expires":1749343178614}'
     );
-    expect((log.warn as any).calls.first().args[0]).toContain(
+    expect((log.warn as any).mock.calls[0][0]).toContain(
       'Cannot parse existing session file'
     );
   });
