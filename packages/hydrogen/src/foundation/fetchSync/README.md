@@ -84,7 +84,7 @@ The `fetchSync` function returns an object with the following keys:
 
 ## `fetchSync` in client components
 
-If you're using `fetchSync` in a client component, make sure to import the function from `@shopify/hydrogen/client`. You can't provide options for caching and preloading in client components:
+If you're using `fetchSync` in a client component, then make sure to import the function from `@shopify/hydrogen/client`. You can't provide options for caching and preloading in client components:
 
 {% codeblock file, filename: "MyComponent.client.js" %}
 
