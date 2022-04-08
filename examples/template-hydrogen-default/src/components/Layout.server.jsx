@@ -3,7 +3,6 @@ import {
   flattenConnection,
   LocalizationProvider,
   CacheHours,
-  useServerAnalytics,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -27,11 +26,6 @@ export default function Layout({children, hero}) {
   const collections = data ? flattenConnection(data.collections) : null;
   const products = data ? flattenConnection(data.products) : null;
   const storeName = data ? data.shop.name : '';
-
-  const shopId = data?.shop.id.replace('gid://shopify/Shop/', '');
-  useServerAnalytics({
-    shopId,
-  });
 
   return (
     <LocalizationProvider preload="*">
@@ -65,7 +59,6 @@ const QUERY = gql`
   query layoutContent($numCollections: Int!) {
     shop {
       name
-      id
     }
     collections(first: $numCollections) {
       edges {
