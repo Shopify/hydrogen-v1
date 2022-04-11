@@ -63,9 +63,18 @@ export type ShopifyConfigGetter = (
   request: Request
 ) => ShopifyConfig | Promise<ShopifyConfig>;
 
+export type ServerAnalyticsConnector = {
+  request: (
+    request: Request,
+    data?: any,
+    contentType?: 'json' | 'text'
+  ) => void;
+};
+
 export type HydrogenConfig = {
   routes?: HydrogenConfigRoutes;
   shopify: ShopifyConfig | ShopifyConfigGetter;
+  serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
 };
 
 export type ClientHandlerConfig = {

@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {Suspense} from 'react';
 import {
   Logger,
   logServerResponse,
@@ -40,9 +40,11 @@ import {
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME} from './constants';
+import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
+import {Analytics} from './foundation/Analytics/Analytics.server';
+import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 
 declare global {
   // This is provided by a Vite plugin
@@ -100,6 +102,16 @@ export const renderHydrogen = (App: any, hydrogenConfig: HydrogenConfig) => {
     setCache(cache);
     setContext(context);
     setConfig({dev});
+
+    if (
+      url.pathname === EVENT_PATHNAME ||
+      EVENT_PATHNAME_REGEX.test(url.pathname)
+    ) {
+      return ServerAnalyticsRoute(
+        request,
+        hydrogenConfig.serverAnalyticsConnectors
+      );
+    }
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
@@ -615,6 +627,9 @@ function buildAppRSC({App, state, request, response, log}: BuildAppOptions) {
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
         <App {...serverProps} />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
       </PreloadQueries>
     </ServerRequestProvider>
   );
@@ -648,9 +663,12 @@ function buildAppSSR(
           setServerState={() => {}}
         >
           <PreloadQueries request={request}>
-            <React.Suspense fallback={null}>
+            <Suspense fallback={null}>
               <RscConsumer />
-            </React.Suspense>
+            </Suspense>
+            <Suspense fallback={null}>
+              <Analytics />
+            </Suspense>
           </PreloadQueries>
         </ServerStateProvider>
       </ServerRequestProvider>
@@ -665,11 +683,12 @@ function PreloadQueries({
   children,
 }: {
   request: ServerComponentRequest;
-  children: ReactElement;
+  children: React.ReactNode;
 }) {
   const preloadQueries = request.getPreloadQueries();
   preloadRequestCacheData(request, preloadQueries);
-  return children;
+
+  return <>{children}</>;
 }
 
 async function renderToBufferedString(
