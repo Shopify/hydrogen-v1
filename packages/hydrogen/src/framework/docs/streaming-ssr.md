@@ -80,13 +80,13 @@ export default function App({log, ...serverProps}) {
 
 If you don't define a `Suspense` component, then React waits for the streaming to finish before showing the final layout. The following clip shows a streamed document source that doesn't include a `Suspense` component:
 
-![SOMETHING](/assets/custom-storefronts/hydrogen/no-suspense.gif)
+![A streamed document source that doesn't include a Suspense component](/assets/custom-storefronts/hydrogen/no-suspense.gif)
 
 ### Example: Suspense component defined
 
 When a `Suspense` component is wrapped around a group of timed components, it waits for the last component in the group to resolve before rendering. The order of the streamed content doesn't change in the streamed document source:
 
-![SOMETHING](/assets/custom-storefronts/hydrogen/suspense-defined.gif)
+![A streamed document source that includes a Suspense component](/assets/custom-storefronts/hydrogen/suspense-defined.gif)
 
 ## Next steps
 
