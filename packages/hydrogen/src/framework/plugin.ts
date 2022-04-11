@@ -15,17 +15,21 @@ import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
+import {findUp} from 'find-up';
+import fs from 'fs-extra';
 
 export default (
-  shopifyConfig: ShopifyConfig,
+  explicitConfig: ShopifyConfig,
   pluginOptions: HydrogenVitePluginOptions = {}
 ) => {
+  const defaultConfig = {...loadConfig(), ...explicitConfig};
+
   return [
     process.env.VITE_INSPECT && inspect(),
 
     hydrogenConfig(),
     hydrogenClientMiddleware(),
-    hydrogenMiddleware(shopifyConfig, pluginOptions),
+    hydrogenMiddleware(defaultConfig, pluginOptions),
     react(),
     hydrationAutoImport(),
     ssrInterop(),
@@ -56,3 +60,25 @@ export default (
     pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ] as Plugin[];
 };
+
+async function loadConfig(): Promise<ShopifyConfig> {
+  const configurationPath = await findUp('hydrogen.config.js', {
+    type: 'file',
+  });
+
+  if (!configurationPath) {
+    throw new Error(`Couldn't find the configuration file.`);
+  }
+
+  const configuration = loadConfigurationFile(configurationPath);
+
+  return configuration;
+}
+
+async function loadConfigurationFile(path: string): Promise<ShopifyConfig> {
+  if (!fs.promises.access(path)) {
+    throw new Error(`Couldn't find the configuration file at ${path}`);
+  }
+  const configurationContent = await fs.readFile(path, {encoding: 'utf-8'});
+  return JSON.parse(configurationContent);
+}
