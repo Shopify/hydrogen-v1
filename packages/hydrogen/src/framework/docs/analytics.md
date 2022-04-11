@@ -221,7 +221,7 @@ To send analytics data from the server-side, complete the following steps:
            ClientAnalytics.eventNames.PAGE_VIEW,
            (payload) => {
              try {
-               fetch('/__event', {
+               ClientAnalytics.pushToServer({
                  method: 'post',
                  headers: {
                    'cache-control': 'no-cache',
