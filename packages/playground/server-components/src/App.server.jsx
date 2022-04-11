@@ -6,7 +6,7 @@ import {
   ShopifyProvider,
   setLogger,
 } from '@shopify/hydrogen';
-import shopifyConfig from '../shopify.config';
+import hydrogenConfig from '../hydrogen.config';
 import {Suspense} from 'react';
 import Custom1 from './customRoutes/custom1.server';
 import Custom2 from './customRoutes/custom2.server';
@@ -31,7 +31,7 @@ setLogger({
 function App({routes}) {
   return (
     <Suspense fallback={'Loading...'}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
+      <ShopifyProvider shopifyConfig={hydrogenConfig.shopify}>
         <Router>
           <Route path="/custom1" page={<Custom1 />} />
           <Route path="/custom2/:handle" page={<Custom2 />} />
@@ -48,9 +48,10 @@ function App({routes}) {
   );
 }
 
-const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
-
-export default renderHydrogen(App, {shopifyConfig, routes});
+export default renderHydrogen(App, {
+  shopifyConfig: hydrogenConfig.shopify,
+  routes: hydrogenConfig.routes,
+});
 
 function HasRouteChildren({children}) {
   return children;

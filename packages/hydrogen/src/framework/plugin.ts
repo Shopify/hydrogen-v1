@@ -1,4 +1,4 @@
-import type {HydrogenVitePluginOptions, ShopifyConfig} from '../types';
+import type {HydrogenVitePluginOptions} from '../types';
 import hydrogenConfig from './plugins/vite-plugin-hydrogen-config';
 import type {Plugin} from 'vite';
 import hydrogenMiddleware, {
@@ -16,16 +16,13 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
 
-export default (
-  shopifyConfig: ShopifyConfig,
-  pluginOptions: HydrogenVitePluginOptions = {}
-) => {
+export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
   return [
     process.env.VITE_INSPECT && inspect(),
 
     hydrogenConfig(),
     hydrogenClientMiddleware(),
-    hydrogenMiddleware(shopifyConfig, pluginOptions),
+    hydrogenMiddleware(pluginOptions),
     react(),
     hydrationAutoImport(),
     ssrInterop(),
@@ -45,7 +42,7 @@ export default (
         return (
           source.includes(entryServer) ||
           // TODO update this after handleEvent is replaced with handleRequest
-          /(handle-worker-event|index|entry-server)\.js/.test(importer) ||
+          /(index|entry-server|hydrogen\.config)\.[jt]s/.test(importer) ||
           // Support importing server components for testing
           // TODO: revisit this when RSC splits into two bundles
           /\.test\.[tj]sx?$/.test(importer)

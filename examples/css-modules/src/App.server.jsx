@@ -1,12 +1,12 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-import shopifyConfig from '../shopify.config';
+import hydrogenConfig from '../hydrogen.config';
 
 function App({routes}) {
   return (
     <Suspense fallback="Loading...">
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
+      <ShopifyProvider shopifyConfig={hydrogenConfig.shopify}>
         <Router>
           <FileRoutes routes={routes} />
         </Router>
@@ -17,4 +17,7 @@ function App({routes}) {
 
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {shopifyConfig, routes});
+export default renderHydrogen(App, {
+  routes,
+  shopifyConfig: hydrogenConfig.shopify,
+});

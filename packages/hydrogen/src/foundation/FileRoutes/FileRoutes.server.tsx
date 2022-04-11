@@ -12,7 +12,7 @@ interface FileRoutesProps {
   /** A path that's prepended to all file routes. You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale. */
   basePath?: string;
   /** The portion of the file route path that shouldn't be a part of the URL. You need to modify this if you want to import routes from a location other than the default `src/routes`. */
-  dirPrefix?: string;
+  dirPrefix?: string | RegExp;
 }
 
 /**
@@ -23,7 +23,7 @@ interface FileRoutesProps {
 export function FileRoutes({
   routes,
   basePath = '/',
-  dirPrefix = './routes',
+  dirPrefix = /^\.(\/src)?\/routes/,
 }: FileRoutesProps) {
   const request = useServerRequest();
   const {routeRendered, serverProps} = request.ctx.router;
@@ -71,7 +71,7 @@ interface HydrogenRoute {
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
-  dirPrefix: string
+  dirPrefix: string | RegExp
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 

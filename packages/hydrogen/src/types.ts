@@ -116,6 +116,7 @@ export type CachingStrategy = AllCacheOptions;
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
   purgeQueryCacheOnBuild?: boolean;
+  configPath?: string;
 }
 
 export type PreloadOptions = boolean | string;

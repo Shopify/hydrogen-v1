@@ -15,20 +15,19 @@ type HydrogenMiddlewareArgs = {
 };
 
 export function graphiqlMiddleware({
-  shopifyConfig,
+  getShopifyConfig,
   dev,
 }: {
-  shopifyConfig: ShopifyConfig;
-  dev: boolean;
+  getShopifyConfig: () => ShopifyConfig | Promise<ShopifyConfig>;
+  dev?: boolean;
 }) {
   return async function (
     request: IncomingMessage,
     response: ServerResponse,
     next: NextFunction
   ) {
-    const graphiqlRequest = dev && isGraphiqlRequest(request);
-
-    if (graphiqlRequest) {
+    if (dev && isGraphiqlRequest(request)) {
+      const shopifyConfig = await getShopifyConfig();
       return respondWithGraphiql(response, shopifyConfig);
     }
 

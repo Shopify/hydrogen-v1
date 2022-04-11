@@ -42,7 +42,7 @@ export function getApiRoutes(
     .filter((key) => pages[key].api)
     .map((key) => {
       let path = key
-        .replace('./routes', '')
+        .replace(/^\.(\/src)?\/routes/, '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
          * Replace /index with /

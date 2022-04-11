@@ -1,20 +1,21 @@
-import {Plugin, loadEnv, ResolvedConfig} from 'vite';
+import {Plugin, loadEnv, ResolvedConfig, normalizePath} from 'vite';
 import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
-import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
+import type {HydrogenVitePluginOptions} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY = '/src/App.server';
 
-export default (
-  shopifyConfig: ShopifyConfig,
-  pluginOptions: HydrogenVitePluginOptions
-) => {
+export default (pluginOptions: HydrogenVitePluginOptions) => {
+  let config: ResolvedConfig;
+
   return {
     name: 'vite-plugin-hydrogen-middleware',
-
+    configResolved(_config) {
+      config = _config;
+    },
     /**
      * By adding a middleware to the Vite dev server, we can handle SSR without needing
      * a custom node script. It works by handling any requests for `text/html` documents,
@@ -34,8 +35,13 @@ export default (
       // By running this middleware first, we avoid that.
       server.middlewares.use(
         graphiqlMiddleware({
-          shopifyConfig,
           dev: true,
+          getShopifyConfig: async () => {
+            const {default: hydrogenConfig} = await server.ssrLoadModule(
+              'virtual:hydrogen-config'
+            );
+            return hydrogenConfig.shopify;
+          },
         })
       );
 
@@ -45,7 +51,6 @@ export default (
         server.middlewares.use(
           hydrogenMiddleware({
             dev: true,
-            shopifyConfig,
             indexTemplate: getIndexTemplate,
             getServerEntrypoint: () =>
               server.ssrLoadModule(
@@ -58,6 +63,34 @@ export default (
               : undefined,
           })
         );
+    },
+    async load(id) {
+      if (id === 'virtual:hydrogen-config') {
+        let {configPath} = pluginOptions;
+
+        if (!configPath) {
+          // Find the config file in the project root
+          const files = await fs.readdir(config.root);
+          configPath = files.find((file) =>
+            /^hydrogen\.config\.[jt]s$/.test(file)
+          );
+        }
+
+        if (!configPath) return 'export default {}';
+
+        configPath = normalizePath(configPath);
+
+        if (!configPath.startsWith('/'))
+          configPath = path.resolve(config.root, configPath);
+
+        const hydrogenConfigCode = await fs.readFile(configPath, 'utf-8');
+
+        // Remove import globs to avoid loading React components here.
+        return hydrogenConfigCode.replace(
+          /import\.meta.glob(Eager)?\(['"`][^'"`]+['"`]\)/gm,
+          '{}'
+        );
+      }
     },
   } as Plugin;
 };
