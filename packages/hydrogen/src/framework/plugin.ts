@@ -20,6 +20,17 @@ export default (
   shopifyConfig: ShopifyConfig,
   pluginOptions: HydrogenVitePluginOptions = {}
 ) => {
+  let hydrogenUiPath;
+
+  try {
+    hydrogenUiPath = path.join(
+      // eslint-disable-next-line node/no-missing-require
+      path.dirname(require.resolve('@shopify/hydrogen-ui/client'))
+    );
+  } catch (error) {
+    // hydrogen-ui isn't installed, so don't worry about it
+  }
+
   return [
     process.env.VITE_INSPECT && inspect(),
 
@@ -35,10 +46,7 @@ export default (
         path.join(
           path.dirname(require.resolve('@shopify/hydrogen/package.json'))
         ),
-        path.join(
-          // eslint-disable-next-line node/no-missing-require
-          path.dirname(require.resolve('@shopify/hydrogen-ui/client'))
-        ),
+        ...[hydrogenUiPath].filter(Boolean),
       ],
       isServerComponentImporterAllowed(importer: string, source: string) {
         // Always allow the entry server (e.g. App.server.jsx) to be imported
