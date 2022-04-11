@@ -205,6 +205,7 @@ export default function App() {
 
 ## Next steps
 
+- Improve your app's loading performance with [streaming SSR and Suspense](/custom-storefronts/hydrogen/framework/streaming-ssr).
 - Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
 - Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
 - Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

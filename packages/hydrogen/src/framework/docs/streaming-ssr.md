@@ -1,0 +1,94 @@
+You can improve your app's loading performance by rendering components on the server and streaming them to the client.
+
+This guide describes how streaming server-side rendering (SSR) works in a Hydrogen app. It also explains how to use Suspense to manage asynchronous operations in your app.
+
+## How streaming SSR works
+
+Streaming SSR is a feature in React that allows you to load data over a network in multiple chunks. The chunks are loaded out of order in parallel to rendering, which makes your Hydrogen app fast and performant.
+
+> Note:
+> Streaming SSR is critical for building performant storefronts, which typically depend on API calls to generate content on a page.
+
+### Example
+
+The following clip shows an example of streaming content. The yellow boxes represent the content to display. As the streaming approaches 1.5 seconds, each yellow box gets replaced by a blue box at the specified time:
+
+![Example of streaming content](/assets/custom-storefronts/hydrogen/streaming.gif)
+
+The following example shows the source code for a streamed document. The HTML that's being streamed in chunks is displayed out of order:
+
+![Source code for a streamed document](/assets/custom-storefronts/hydrogen/streaming-source.png)
+
+## Benefits of streaming SSR
+
+Streaming SSR provides the following performance benefits:
+
+- **Fast TTFB (Time to First Byte)**: The browser streams the HTML page shell without blocking the server-side data fetch.
+- **Progressive hydration**: As server-side data fetches are resolved, the data is streamed within the HTML response. The React runtime progressively hydrates the state of each component, all without extra client round trips or blocking on rendering the full component tree.
+
+### Example
+
+You have a product page that contains a lot of buyer personalized content:
+
+- A localized description and price for a given product
+- A dynamic list of recommended products powered by purchase and navigation history
+- A custom call to action or promotion banner
+
+The following table describes different strategies for implementing the product page, and the benefits of using a streaming SSR strategy:
+
+<table>
+  <tr>
+    <th>Client-side strategy</th>
+    <th>Server-side strategy</th>
+    <th> ✅ Streaming SSR strategy</th>
+  </tr>
+  <tr>
+    <td><p>A client-side strategy might result in a fast render of an empty product page skeleton, with a series of post-render, browser-initiated fetches to retrieve and render the required content.</p><br><p>However, client-initiated roundtrips usually result in a subpar user experience.</p></td>
+    <td><p>A server-side strategy might fetch the data on the server and return it in the response.</p><br><p>However, server-side rendering offers a slow TTFB because the server is blocked on the data.</p></td>
+    <td><p>With a streaming SSR strategy in Hydrogen, you can stream, progressively hydrate, and render the product page to load content fast and efficiently.</p><br><p>Streaming SSR contrasts with standard SSR, where TTFB is blocked until all data queries are resolved. Individual components can also show custom loading states as the page is streamed and constructed by the browser.</p></td>
+  </tr>
+</table>
+
+## Using Suspense
+
+React 18 introduced [Suspense for data fetching to complement streaming SSR](https://nextjs.org/docs/advanced-features/react-18/streaming). Suspense is a feature in React that's used for managing asynchronous operations in an app. Suspense lets you render a fallback while a component is waiting for an asynchronous operation to finish:
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```jsx
+import {Suspense} from 'react';
+
+import DefaultSeo from './components/DefaultSeo.server';
+import LoadingFallback from './components/LoadingFallback';
+
+export default function App({log, ...serverProps}) {
+  // Until the component finishes loading, React looks for the closest Suspense boundary
+  // to display the specified loading fallback. You can wrap components in their own
+  // Suspense boundary so that they won't block other components on the page.
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <DefaultSeo />
+      {/** ... */}
+    </Suspense>
+  );
+}
+```
+
+{% endcodeblock %}
+
+### Example: No Suspense component defined
+
+If you don't define a `Suspense` component, then React waits for the streaming to finish before showing the final layout. The following clip shows a streamed document source that doesn't include a `Suspense` component:
+
+![SOMETHING](/assets/custom-storefronts/hydrogen/no-suspense.gif)
+
+### Example: Suspense component defined
+
+When a `Suspense` component is wrapped around a group of timed components, it waits for the last component in the group to resolve before rendering. The order of the streamed content doesn't change in the streamed document source:
+
+![SOMETHING](/assets/custom-storefronts/hydrogen/suspense-defined.gif)
+
+## Next steps
+
+- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [work with React Server Components](/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc) in your Hydrogen app.
