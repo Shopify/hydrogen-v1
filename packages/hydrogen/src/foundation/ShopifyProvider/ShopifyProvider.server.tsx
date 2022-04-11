@@ -6,7 +6,8 @@ import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig} from '../../types';
-import {useServerRequest} from '../ServerRequestProvider';
+import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
+import {useUrl} from '../useUrl';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   const locale = shopifyConfig.defaultLocale ?? DEFAULT_LOCALE;
@@ -39,12 +40,31 @@ export function ShopifyProvider({
     );
   }
 
+  const request = useServerRequest();
+  let actualShopifyConfig: ShopifyConfig;
+
+  if (typeof shopifyConfig === 'function') {
+    const url = useUrl();
+    const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
+      Promise.resolve(shopifyConfig(url, request))
+    );
+
+    if (result.error) {
+      throw new Error(
+        `Failed to load Shopify config: ${result.error.statusText}`
+      );
+    }
+
+    actualShopifyConfig = result.data;
+  } else {
+    actualShopifyConfig = shopifyConfig;
+  }
+
   const shopifyProviderValue = useMemo(
-    () => makeShopifyContext(shopifyConfig),
-    [shopifyConfig]
+    () => makeShopifyContext(actualShopifyConfig),
+    [actualShopifyConfig]
   );
 
-  const request = useServerRequest();
   request.ctx.shopifyConfig = shopifyProviderValue;
 
   return (

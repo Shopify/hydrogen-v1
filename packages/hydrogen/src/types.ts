@@ -50,13 +50,14 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
-export type ServerHandlerConfig = {
+export type HydrogenConfig = {
   routes?: ImportGlobEagerOutput;
-  shopifyConfig: ShopifyConfig;
+  shopify:
+    | ShopifyConfig
+    | ((url: URL, request: Request) => ShopifyConfig | Promise<ShopifyConfig>);
 };
 
 export type ClientHandlerConfig = {
-  shopifyConfig: ShopifyConfig;
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;
   showDevTools?: boolean;

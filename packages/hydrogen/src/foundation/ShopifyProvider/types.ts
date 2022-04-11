@@ -1,6 +1,6 @@
 import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 import type {ReactNode} from 'react';
-import type {ShopifyConfig} from '../../types';
+import type {HydrogenConfig, ShopifyConfig} from '../../types';
 
 export type ShopifyContextValue = {
   locale: `${LanguageCode}-${CountryCode}`;
@@ -12,7 +12,7 @@ export type ShopifyContextValue = {
 
 export type ShopifyProviderProps = {
   /** The contents of the `shopify.config.js` file. */
-  shopifyConfig: ShopifyConfig;
+  shopifyConfig: HydrogenConfig['shopify'];
   /** Any `ReactNode` elements. */
   children?: ReactNode;
   manager?: any;

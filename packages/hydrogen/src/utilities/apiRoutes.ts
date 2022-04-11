@@ -1,4 +1,4 @@
-import {ImportGlobEagerOutput, ShopifyConfig} from '../types';
+import {HydrogenConfig, ImportGlobEagerOutput} from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
@@ -127,12 +127,20 @@ interface QueryShopArgs {
   locale?: string;
 }
 
-function queryShopBuilder(shopifyConfig: ShopifyConfig) {
+function queryShopBuilder(
+  shopifyConfigGetter: HydrogenConfig['shopify'],
+  request: Request
+) {
   return async function queryShop<T>({
     query,
     variables,
     locale,
   }: QueryShopArgs): Promise<T> {
+    const shopifyConfig =
+      typeof shopifyConfigGetter === 'function'
+        ? await shopifyConfigGetter(new URL(request.url), request)
+        : shopifyConfigGetter;
+
     const {storeDomain, storefrontApiVersion, storefrontToken, defaultLocale} =
       shopifyConfig;
 
@@ -156,7 +164,7 @@ function queryShopBuilder(shopifyConfig: ShopifyConfig) {
 export async function renderApiRoute(
   request: Request,
   route: ApiRouteMatch,
-  shopifyConfig: ShopifyConfig
+  shopifyConfig: HydrogenConfig['shopify']
 ): Promise<Response> {
   let response;
   const log = getLoggerWithContext(request);
@@ -164,7 +172,7 @@ export async function renderApiRoute(
   try {
     response = await route.resource(request, {
       params: route.params,
-      queryShop: queryShopBuilder(shopifyConfig),
+      queryShop: queryShopBuilder(shopifyConfig, request),
     });
 
     if (!(response instanceof Response)) {

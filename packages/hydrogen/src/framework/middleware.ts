@@ -18,7 +18,9 @@ export function graphiqlMiddleware({
   getShopifyConfig,
   dev,
 }: {
-  getShopifyConfig: () => ShopifyConfig | Promise<ShopifyConfig>;
+  getShopifyConfig: (
+    request: IncomingMessage
+  ) => ShopifyConfig | Promise<ShopifyConfig>;
   dev?: boolean;
 }) {
   return async function (
@@ -27,7 +29,7 @@ export function graphiqlMiddleware({
     next: NextFunction
   ) {
     if (dev && isGraphiqlRequest(request)) {
-      const shopifyConfig = await getShopifyConfig();
+      const shopifyConfig = await getShopifyConfig(request);
       return respondWithGraphiql(response, shopifyConfig);
     }
 

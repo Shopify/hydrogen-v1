@@ -13,7 +13,7 @@ import type {
   StreamerOptions,
   HydratorOptions,
   ImportGlobEagerOutput,
-  ServerHandlerConfig,
+  HydrogenConfig,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -76,7 +76,7 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes}: ServerHandlerConfig
+  {shopify: shopifyConfig, routes}: HydrogenConfig
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,

@@ -48,10 +48,7 @@ function App({routes}) {
   );
 }
 
-export default renderHydrogen(App, {
-  shopifyConfig: hydrogenConfig.shopify,
-  routes: hydrogenConfig.routes,
-});
+export default renderHydrogen(App, hydrogenConfig);
 
 function HasRouteChildren({children}) {
   return children;
