@@ -88,6 +88,37 @@ When a `Suspense` component is wrapped around a group of timed components, it wa
 
 ![A streamed document source that includes a Suspense component](/assets/custom-storefronts/hydrogen/suspense-defined.gif)
 
+## Example
+
+Use `Suspense` to add layout fallback to improve cumulative layout shift (CLS)
+
+```jsx
+export default function Product({country = {isoCode: 'US'}}) {
+  const {handle} = useRouteParams();
+
+  return (
+    <Layout>
+      <Suspense
+        fallback={<ProductFallback handle={handle} isoCode={isoCode} />}
+      >
+        <Seo type="product" handle={handle} isoCode={isoCode} />
+        <ProductDetails handle={handle} isoCode={isoCode} />
+      </Suspense>
+    </Layout>
+  );
+}
+
+function ProductFallback() {
+  // This should shape the same as what <ProductDetails /> will output
+  return (
+    <div class="product-wrapper">
+      <div class="product-image-placeholder"></div>
+      <div class="product-info-placeholder"></div>
+    </div>
+  );
+}
+```
+
 ## Next steps
 
 - Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
