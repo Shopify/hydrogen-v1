@@ -50,9 +50,18 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
+export type ServerAnalyticsConnector = {
+  request: (
+    request: Request,
+    data?: any,
+    contentType?: 'json' | 'text'
+  ) => void;
+};
+
 export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
+  serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
 };
 
 export type ClientHandlerConfig = {
