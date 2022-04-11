@@ -9,7 +9,7 @@ The following diagram describes how analytics data is processed on the server an
 ![Shows a diagram that describes how analytics data is processed on the server and client in Hydrogen](/assets/custom-storefronts/hydrogen/hydrogen-analytics.png)
 
 1. On the server, the `useServerAnalytics` hook collects data in a single render request.
-2. On the client, the data is streamed as part of the `Suspense` component. This single render request contains a `dataLayer` output, waits for all queries to complete, and triggers a `PAGE_VIEW` event.
+2. On the client, the data is streamed as part of the `Suspense` component. This single render request waits for all queries to complete, outputs the collected data from the server-side, and triggers a `PAGE_VIEW` event.
 
 3. Events can be published to external endpoints from the client or server-side:
 
@@ -27,7 +27,7 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 | `UPDATE_CART`           | A customer updates an item in their cart                     |
 | `REMOVE_FROM_CART`      | A customer removes an item from their cart                   |
 | `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated |
-| `VIEWED_PRODUCT`        | A customer views a product details page                      |
+| `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages.                    |
 
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
@@ -167,7 +167,7 @@ const serverDataLayer = useServerAnalytics();
 
 {% endcodeblock %}
 
-If you need to trigger different analytics events on navigation, then you can specify a list of analytics events
+If you need to trigger additional analytics events on navigation, then you can specify a list of analytics events
 to publish in your server component:
 
 {% codeblock file, filename: '*.server.js' %}
@@ -195,7 +195,7 @@ ClientAnalytics.getPageAnalyticsData();
 
 ## Send analytics data from the server-side
 
-Some events are only available on the server, which makes sending analytics data from the server-side a good option. Server-side analytics monitor activities on the server itself and only process server-side information. Every request on your server is recorded in the server logs. You can send Shopify analytics data from the server-side because you know exactly what data you need to send.
+Some data is only available on the server. For example, detailed information about how many API calls a single page render makes and how long each API call took is only available on the server. This is information that users don't need to see and helps development teams gain insights about performance. If this is your use case, then sending analytics data from the server-side a good option.
 
 To send analytics data from the server-side, complete the following steps:
 
