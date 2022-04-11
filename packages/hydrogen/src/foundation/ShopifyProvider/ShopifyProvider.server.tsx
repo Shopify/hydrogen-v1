@@ -5,7 +5,7 @@ import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 
 import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
-import type {ShopifyConfig} from '../../types';
+import type {ShopifyConfig, ShopifyConfigGetter} from '../../types';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 import {useUrl} from '../useUrl';
 
@@ -34,19 +34,24 @@ export function ShopifyProvider({
   shopifyConfig,
   children,
 }: ShopifyProviderProps): JSX.Element {
+  const request = useServerRequest();
+
   if (!shopifyConfig) {
-    throw new Error(
-      'The `shopifyConfig` prop should be passed to `ShopifyProvider`'
-    );
+    shopifyConfig = request.ctx.hydrogenConfig?.shopify;
+
+    if (!shopifyConfig) {
+      throw new Error(
+        'The `shopifyConfig` prop should be passed to `ShopifyProvider`'
+      );
+    }
   }
 
-  const request = useServerRequest();
   let actualShopifyConfig: ShopifyConfig;
 
   if (typeof shopifyConfig === 'function') {
     const url = useUrl();
     const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
-      shopifyConfig(url, request)
+      (shopifyConfig as ShopifyConfigGetter)(url, request)
     );
 
     if (result.error) {

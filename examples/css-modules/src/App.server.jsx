@@ -6,7 +6,7 @@ import hydrogenConfig from '../hydrogen.config';
 function App() {
   return (
     <Suspense fallback="Loading...">
-      <ShopifyProvider shopifyConfig={hydrogenConfig.shopify}>
+      <ShopifyProvider>
         <Router>
           <FileRoutes />
         </Router>

@@ -31,7 +31,7 @@ setLogger({
 function App() {
   return (
     <Suspense fallback={'Loading...'}>
-      <ShopifyProvider shopifyConfig={hydrogenConfig.shopify}>
+      <ShopifyProvider>
         <Router>
           <Route path="/custom1" page={<Custom1 />} />
           <Route path="/custom2/:handle" page={<Custom2 />} />

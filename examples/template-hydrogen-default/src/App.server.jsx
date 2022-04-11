@@ -10,7 +10,7 @@ import CartProvider from './components/CartProvider.client';
 function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider shopifyConfig={hydrogenConfig.shopify}>
+      <ShopifyProvider>
         <CartProvider>
           <DefaultSeo />
           <Router>
