@@ -88,7 +88,7 @@ type RequestCacheResult<T> =
  */
 export function useRequestCacheData<T>(
   key: QueryKey,
-  fetcher: () => Promise<T>
+  fetcher: () => T | Promise<T>
 ): RequestCacheResult<T> {
   const request = useServerRequest();
   const cache = request.ctx.cache;
@@ -106,7 +106,14 @@ export function useRequestCacheData<T>(
 
       if (!promise) {
         const startApiTime = getTime();
-        promise = fetcher().then(
+        const maybePromise = fetcher();
+
+        if (!(maybePromise instanceof Promise)) {
+          result = {data: maybePromise};
+          return result;
+        }
+
+        promise = maybePromise.then(
           (data) => {
             result = {data};
 

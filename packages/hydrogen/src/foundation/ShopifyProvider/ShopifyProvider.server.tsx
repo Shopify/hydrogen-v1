@@ -46,7 +46,7 @@ export function ShopifyProvider({
   if (typeof shopifyConfig === 'function') {
     const url = useUrl();
     const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
-      Promise.resolve(shopifyConfig(url, request))
+      shopifyConfig(url, request)
     );
 
     if (result.error) {
