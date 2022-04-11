@@ -11,7 +11,7 @@ Streaming SSR is a feature in React that allows you to load data over a network 
 
 ### Example
 
-The following clip shows an example of streaming content. The yellow boxes represent the content to display. As the streaming approaches 1.5 seconds, each yellow box gets replaced by a blue box at the specified time:
+The following clip shows an example of streaming content. The yellow boxes represent the content to display. As the streaming approaches 1.5 seconds, each yellow box gets replaced by a blue box at the specified time. The blue boxes represent that the data is ready:
 
 ![Example of streaming content](/assets/custom-storefronts/hydrogen/streaming.gif)
 
@@ -53,23 +53,30 @@ The following table describes different strategies for implementing the product 
 
 React 18 introduced [Suspense for data fetching to complement streaming SSR](https://nextjs.org/docs/advanced-features/react-18/streaming). Suspense is a feature in React that's used for managing asynchronous operations in an app. Suspense lets you render a fallback while a component is waiting for an asynchronous operation to finish:
 
-{% codeblock file, filename: 'App.server.jsx' %}
+{% codeblock file, filename: 'Product.server.jsx' %}
 
 ```jsx
-import {Suspense} from 'react';
-
-import DefaultSeo from './components/DefaultSeo.server';
-import LoadingFallback from './components/LoadingFallback';
-
-export default function App({log, ...serverProps}) {
-  // Until the component finishes loading, React looks for the closest Suspense boundary
-  // to display the specified loading fallback. You can wrap components in their own
-  // Suspense boundary so that they won't block other components on the page.
+export default function Product({country = {isoCode: 'US'}}) {
+  const {handle} = useRouteParams();
+  // Use `Suspense` to add a layout fallback to improve cumulative layout shift (CLS)
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <DefaultSeo />
-      {/** ... */}
-    </Suspense>
+    <Layout>
+      <Suspense
+        fallback={<ProductFallback handle={handle} isoCode={isoCode} />}
+      >
+        <Seo type="product" handle={handle} isoCode={isoCode} />
+        <ProductDetails handle={handle} isoCode={isoCode} />
+      </Suspense>
+    </Layout>
+  );
+}
+function ProductFallback() {
+  // This should shape the same as what <ProductDetails /> will output
+  return (
+    <div class="product-wrapper">
+      <div class="product-image-placeholder"></div>
+      <div class="product-info-placeholder"></div>
+    </div>
   );
 }
 ```
@@ -87,37 +94,6 @@ If you don't define a `Suspense` component, then React waits for the streaming t
 When a `Suspense` component is wrapped around a group of timed components, it waits for the last component in the group to resolve before rendering. The order of the streamed content doesn't change in the streamed document source:
 
 ![A streamed document source that includes a Suspense component](/assets/custom-storefronts/hydrogen/suspense-defined.gif)
-
-## Example
-
-Use `Suspense` to add layout fallback to improve cumulative layout shift (CLS)
-
-```jsx
-export default function Product({country = {isoCode: 'US'}}) {
-  const {handle} = useRouteParams();
-
-  return (
-    <Layout>
-      <Suspense
-        fallback={<ProductFallback handle={handle} isoCode={isoCode} />}
-      >
-        <Seo type="product" handle={handle} isoCode={isoCode} />
-        <ProductDetails handle={handle} isoCode={isoCode} />
-      </Suspense>
-    </Layout>
-  );
-}
-
-function ProductFallback() {
-  // This should shape the same as what <ProductDetails /> will output
-  return (
-    <div class="product-wrapper">
-      <div class="product-image-placeholder"></div>
-      <div class="product-info-placeholder"></div>
-    </div>
-  );
-}
-```
 
 ## Next steps
 
