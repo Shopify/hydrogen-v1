@@ -20,14 +20,14 @@ The following diagram describes how analytics data is processed on the server an
 
 By default, Hydrogen publishes the following events to subscribers (`ClientAnalytics.subscribe`):
 
-| Event name              | When the event is published                                  |
-| ----------------------- | ------------------------------------------------------------ |
-| `PAGE_VIEW`             | A customer visits a storefront page                          |
-| `ADD_TO_CART`           | A customer adds an item to their cart                        |
-| `UPDATE_CART`           | A customer updates an item in their cart                     |
-| `REMOVE_FROM_CART`      | A customer removes an item from their cart                   |
-| `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated |
-| `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages.                    |
+| Event name              | When the event is published                                                                           |
+| ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| `PAGE_VIEW`             | A customer visits a storefront page                                                                   |
+| `ADD_TO_CART`           | A customer adds an item to their cart                                                                 |
+| `UPDATE_CART`           | A customer updates an item in their cart                                                              |
+| `REMOVE_FROM_CART`      | A customer removes an item from their cart                                                            |
+| `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated                                          |
+| `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages. |
 
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
@@ -54,8 +54,8 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
        });
 
        if (!init) {
-         init = true;
          // One-time initialization
+         init = true;
          ClientAnalytics.subscribe(
            ClientAnalytics.eventNames.PAGE_VIEW,
            (payload) => {
@@ -215,8 +215,8 @@ To send analytics data from the server-side, complete the following steps:
        });
 
        if (!init) {
-         init = true;
          // One-time initialization
+         init = true;
          ClientAnalytics.subscribe(
            ClientAnalytics.eventNames.PAGE_VIEW,
            (payload) => {
@@ -367,8 +367,8 @@ let init = false;
 export default function GTM() {
   useEffect(() => {
     if (!init) {
-      init = true;
       // One-time initialization
+      init = true;
       Analytics({
         app: 'hydrogen-app',
         plugins: [
