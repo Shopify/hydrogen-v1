@@ -3,12 +3,12 @@ import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import hydrogenConfig from '../hydrogen.config';
 
-function App({routes}) {
+function App() {
   return (
     <Suspense fallback="Loading...">
       <ShopifyProvider shopifyConfig={hydrogenConfig.shopify}>
         <Router>
-          <FileRoutes routes={routes} />
+          <FileRoutes />
         </Router>
       </ShopifyProvider>
     </Suspense>

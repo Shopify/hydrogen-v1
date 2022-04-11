@@ -12,7 +12,6 @@ import type {
   RendererOptions,
   StreamerOptions,
   HydratorOptions,
-  ImportGlobEagerOutput,
   HydrogenConfig,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
@@ -74,10 +73,7 @@ export interface RequestHandler {
   >;
 }
 
-export const renderHydrogen = (
-  App: any,
-  {shopify: shopifyConfig, routes}: HydrogenConfig
-) => {
+export const renderHydrogen = (App: any, hydrogenConfig: HydrogenConfig) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
     {
@@ -91,6 +87,7 @@ export const renderHydrogen = (
     }
   ) {
     const request = new ServerComponentRequest(rawRequest);
+    request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
     const url = new URL(request.url);
@@ -115,8 +112,8 @@ export const renderHydrogen = (
       template = template.default;
     }
 
-    if (!isReactHydrationRequest && routes) {
-      const apiRoute = getApiRoute(url, {routes});
+    if (!isReactHydrationRequest && hydrogenConfig.routes) {
+      const apiRoute = getApiRoute(url, hydrogenConfig.routes);
 
       // The API Route might have a default export, making it also a server component
       // If it does, only render the API route if the request method is GET
@@ -124,7 +121,7 @@ export const renderHydrogen = (
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        return renderApiRoute(request, apiRoute, shopifyConfig);
+        return renderApiRoute(request, apiRoute, hydrogenConfig.shopify);
       }
     }
 
@@ -136,7 +133,6 @@ export const renderHydrogen = (
       App,
       log,
       dev,
-      routes,
       nonce,
       request,
       template,
@@ -164,8 +160,8 @@ export const renderHydrogen = (
   return handleRequest;
 };
 
-function getApiRoute(url: URL, {routes}: {routes: ImportGlobEagerOutput}) {
-  const apiRoutes = getApiRoutes(routes);
+function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
+  const apiRoutes = getApiRoutes(routes!);
   return getApiRouteFromURL(url, apiRoutes);
 }
 
@@ -176,16 +172,7 @@ function getApiRoute(url: URL, {routes}: {routes: ImportGlobEagerOutput}) {
  */
 async function render(
   url: URL,
-  {
-    App,
-    routes,
-    request,
-    componentResponse,
-    log,
-    template,
-    nonce,
-    dev,
-  }: RendererOptions
+  {App, request, componentResponse, log, template, nonce}: RendererOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
@@ -195,7 +182,6 @@ async function render(
       state,
       request,
       response: componentResponse,
-      routes,
       log,
     },
     {template}
@@ -260,7 +246,6 @@ async function stream(
   url: URL,
   {
     App,
-    routes,
     request,
     response,
     componentResponse,
@@ -283,7 +268,6 @@ async function stream(
       request,
       response: componentResponse,
       log,
-      routes,
     },
     {template: noScriptTemplate}
   );
@@ -560,7 +544,6 @@ async function hydrate(
   url: URL,
   {
     App,
-    routes,
     request,
     response,
     componentResponse,
@@ -576,7 +559,6 @@ async function hydrate(
     request,
     response: componentResponse,
     log,
-    routes,
   });
 
   if (__WORKER__) {
@@ -621,19 +603,11 @@ type BuildAppOptions = {
   request: ServerComponentRequest;
   response: ServerComponentResponse;
   log: Logger;
-  routes?: ImportGlobEagerOutput;
 };
 
-function buildAppRSC({
-  App,
-  state,
-  request,
-  response,
-  log,
-  routes,
-}: BuildAppOptions) {
+function buildAppRSC({App, state, request, response, log}: BuildAppOptions) {
   const hydrogenServerProps = {request, response, log};
-  const serverProps = {...state, ...hydrogenServerProps, routes};
+  const serverProps = {...state, ...hydrogenServerProps};
 
   request.ctx.router.serverProps = serverProps;
 
@@ -649,7 +623,7 @@ function buildAppRSC({
 }
 
 function buildAppSSR(
-  {App, state, request, response, log, routes}: BuildAppOptions,
+  {App, state, request, response, log}: BuildAppOptions,
   htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
   const {AppRSC} = buildAppRSC({
@@ -658,7 +632,6 @@ function buildAppSSR(
     request,
     response,
     log,
-    routes,
   });
 
   const [rscReadableForFizz, rscReadableForFlight] =

@@ -7,14 +7,14 @@ import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 
-function App({routes}) {
+function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider shopifyConfig={hydrogenConfig.shopify}>
         <CartProvider>
           <DefaultSeo />
           <Router>
-            <FileRoutes routes={routes} />
+            <FileRoutes />
             <Route path="*" page={<NotFound />} />
           </Router>
         </CartProvider>

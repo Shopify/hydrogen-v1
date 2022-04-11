@@ -28,7 +28,7 @@ setLogger({
   options: () => ({}),
 });
 
-function App({routes}) {
+function App() {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider shopifyConfig={hydrogenConfig.shopify}>
@@ -40,7 +40,7 @@ function App({routes}) {
           </HasRouteChildren>
           <HasInternalRoute />
           <Route path="/params/:handle" page={<ServerParams />} />
-          <FileRoutes routes={routes} />
+          <FileRoutes />
           <LazyRoute />
         </Router>
       </ShopifyProvider>

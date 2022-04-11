@@ -50,11 +50,22 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
+export type HydrogenConfigRoutes =
+  | ImportGlobEagerOutput
+  | {
+      files: ImportGlobEagerOutput;
+      basePath?: string;
+      dirPrefix?: string;
+    };
+
+export type ShopifyConfigGetter = (
+  url: URL,
+  request: Request
+) => ShopifyConfig | Promise<ShopifyConfig>;
+
 export type HydrogenConfig = {
-  routes?: ImportGlobEagerOutput;
-  shopify:
-    | ShopifyConfig
-    | ((url: URL, request: Request) => ShopifyConfig | Promise<ShopifyConfig>);
+  routes?: HydrogenConfigRoutes;
+  shopify: ShopifyConfig | ShopifyConfigGetter;
 };
 
 export type ClientHandlerConfig = {

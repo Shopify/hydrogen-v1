@@ -2,7 +2,7 @@ import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
-import type {PreloadOptions, QueryKey} from '../../types';
+import type {HydrogenConfig, PreloadOptions, QueryKey} from '../../types';
 import {hashKey} from '../cache';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
@@ -49,6 +49,7 @@ export class ServerComponentRequest extends Request {
   public ctx: {
     cache: Map<string, any>;
     head: HeadData;
+    hydrogenConfig?: HydrogenConfig;
     shopifyConfig?: ShopifyContextValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;

@@ -1,12 +1,17 @@
-import {HydrogenConfig, ImportGlobEagerOutput} from '../types';
+import {
+  HydrogenConfig,
+  HydrogenConfigRoutes,
+  ImportGlobEagerOutput,
+} from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
+import {findRoutePrefix} from './findRoutePrefix';
 
-let memoizedRoutes: Array<HydrogenApiRoute> = [];
-let memoizedPages: ImportGlobEagerOutput = {};
+let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
+let memoizedRawRoutes: ImportGlobEagerOutput = {};
 
 type RouteParams = Record<string, string>;
 type RequestOptions = {
@@ -31,18 +36,24 @@ export type ApiRouteMatch = {
 };
 
 export function getApiRoutes(
-  pages: ImportGlobEagerOutput | undefined,
-  topLevelPath = '*'
+  rawRoutes: HydrogenConfigRoutes
 ): Array<HydrogenApiRoute> {
-  if (!pages || memoizedPages === pages) return memoizedRoutes;
+  const routes = (rawRoutes.files ?? rawRoutes) as ImportGlobEagerOutput;
+  const topLevelPath = (rawRoutes.basePath ?? '*') as string;
+  const dirPrefix = rawRoutes.dirPrefix as string | undefined;
+
+  if (!routes || memoizedRawRoutes === routes) return memoizedApiRoutes;
 
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
-  const routes = Object.keys(pages)
-    .filter((key) => pages[key].api)
+  const keys = Object.keys(routes);
+  const commonRoutePrefix = dirPrefix ?? findRoutePrefix(keys);
+
+  const apiRoutes = keys
+    .filter((key) => routes[key].api)
     .map((key) => {
       let path = key
-        .replace(/^\.(\/src)?\/routes/, '')
+        .replace(commonRoutePrefix, '')
         .replace(/\.server\.(t|j)sx?$/, '')
         /**
          * Replace /index with /
@@ -72,20 +83,20 @@ export function getApiRoutes(
 
       return {
         path: topLevelPrefix + path,
-        resource: pages[key].api,
-        hasServerComponent: !!pages[key].default,
+        resource: routes[key].api,
+        hasServerComponent: !!routes[key].default,
         exact,
       };
     });
 
-  memoizedRoutes = [
-    ...routes.filter((route) => !route.path.includes(':')),
-    ...routes.filter((route) => route.path.includes(':')),
+  memoizedApiRoutes = [
+    ...apiRoutes.filter((route) => !route.path.includes(':')),
+    ...apiRoutes.filter((route) => route.path.includes(':')),
   ];
 
-  memoizedPages = pages;
+  memoizedRawRoutes = routes;
 
-  return memoizedRoutes;
+  return memoizedApiRoutes;
 }
 
 export function getApiRouteFromURL(
