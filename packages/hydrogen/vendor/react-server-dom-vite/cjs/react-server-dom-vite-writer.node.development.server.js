@@ -138,8 +138,9 @@ var MODULE_TAG = Symbol.for('react.module.reference');
 function getModuleKey(reference) {
   return reference.filepath + '#' + reference.name;
 }
-function isModuleReference(reference) {
-  return (reference.$$typeof_rsc || reference.$$typeof) === MODULE_TAG;
+function getModuleReference(reference) {
+  if (typeof reference === 'string') return globalThis.__STRING_REFERENCE_INDEX[reference];
+  return reference && reference.$$typeof === MODULE_TAG ? reference : undefined;
 }
 function resolveModuleMetaData(config, moduleReference) {
   return {
@@ -955,6 +956,11 @@ function attemptResolveElement(type, key, ref, props) {
     throw new Error('Refs cannot be used in server components, nor passed to client components.');
   }
 
+  if (getModuleReference(type)) {
+    // This is a reference to a client component.
+    return [REACT_ELEMENT_TYPE, type, key, props];
+  }
+
   if (typeof type === 'function') {
     // This is a server-side component.
     return type(props);
@@ -974,11 +980,6 @@ function attemptResolveElement(type, key, ref, props) {
 
     return [REACT_ELEMENT_TYPE, type, key, props];
   } else if (type != null && typeof type === 'object') {
-    if (isModuleReference(type)) {
-      // This is a reference to a client component.
-      return [REACT_ELEMENT_TYPE, type, key, props];
-    }
-
     switch (type.$$typeof) {
       case REACT_LAZY_TYPE:
         {
@@ -1309,52 +1310,55 @@ function resolveModelToJSON(request, parent, key, value) {
     return null;
   }
 
+  var moduleReference = getModuleReference(value);
+
+  if (moduleReference) {
+    var moduleKey = getModuleKey(moduleReference);
+    var writtenModules = request.writtenModules;
+    var existingId = writtenModules.get(moduleKey);
+
+    if (existingId !== undefined) {
+      if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
+        // If we're encoding the "type" of an element, we can refer
+        // to that by a lazy reference instead of directly since React
+        // knows how to deal with lazy values. This lets us suspend
+        // on this component rather than its parent until the code has
+        // loaded.
+        return serializeByRefID(existingId);
+      }
+
+      return serializeByValueID(existingId);
+    }
+
+    try {
+      var moduleMetaData = resolveModuleMetaData(request.bundlerConfig, moduleReference);
+      request.pendingChunks++;
+      var moduleId = request.nextChunkId++;
+      emitModuleChunk(request, moduleId, moduleMetaData);
+      writtenModules.set(moduleKey, moduleId);
+
+      if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
+        // If we're encoding the "type" of an element, we can refer
+        // to that by a lazy reference instead of directly since React
+        // knows how to deal with lazy values. This lets us suspend
+        // on this component rather than its parent until the code has
+        // loaded.
+        return serializeByRefID(moduleId);
+      }
+
+      return serializeByValueID(moduleId);
+    } catch (x) {
+      request.pendingChunks++;
+
+      var _errorId = request.nextChunkId++;
+
+      emitErrorChunk(request, _errorId, x);
+      return serializeByValueID(_errorId);
+    }
+  }
+
   if (typeof value === 'object') {
-    if (isModuleReference(value)) {
-      var moduleReference = value;
-      var moduleKey = getModuleKey(moduleReference);
-      var writtenModules = request.writtenModules;
-      var existingId = writtenModules.get(moduleKey);
-
-      if (existingId !== undefined) {
-        if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
-          // If we're encoding the "type" of an element, we can refer
-          // to that by a lazy reference instead of directly since React
-          // knows how to deal with lazy values. This lets us suspend
-          // on this component rather than its parent until the code has
-          // loaded.
-          return serializeByRefID(existingId);
-        }
-
-        return serializeByValueID(existingId);
-      }
-
-      try {
-        var moduleMetaData = resolveModuleMetaData(request.bundlerConfig, moduleReference);
-        request.pendingChunks++;
-        var moduleId = request.nextChunkId++;
-        emitModuleChunk(request, moduleId, moduleMetaData);
-        writtenModules.set(moduleKey, moduleId);
-
-        if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
-          // If we're encoding the "type" of an element, we can refer
-          // to that by a lazy reference instead of directly since React
-          // knows how to deal with lazy values. This lets us suspend
-          // on this component rather than its parent until the code has
-          // loaded.
-          return serializeByRefID(moduleId);
-        }
-
-        return serializeByValueID(moduleId);
-      } catch (x) {
-        request.pendingChunks++;
-
-        var _errorId = request.nextChunkId++;
-
-        emitErrorChunk(request, _errorId, x);
-        return serializeByValueID(_errorId);
-      }
-    } else if (value.$$typeof === REACT_PROVIDER_TYPE) {
+    if (value.$$typeof === REACT_PROVIDER_TYPE) {
       var providerKey = value._context._globalName;
       var writtenProviders = request.writtenProviders;
       var providerId = writtenProviders.get(key);

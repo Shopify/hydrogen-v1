@@ -1,16 +1,16 @@
 Third-party dependencies will generally work out-of-the-box with Hydrogen. This guide describes how to install third-party dependencies, where to insert them, and offers tips for troubleshooting dependencies.
 
-## Install dependencies
+## Installation
 
 To install third party dependencies, run the following command:
 
-{% codeblock file, filename: 'Terminal' %}
+{% codeblock terminal %}
 
-```bash?filename: 'Terminal', title: 'yarn'
+```bash?title: 'yarn'
 yarn add <dependency>
 ```
 
-```bash?filename: 'Terminal', title: 'npm'
+```bash?title: 'npm'
 npm install <dependency>
 ```
 
@@ -25,6 +25,23 @@ Consider the following:
 - If the dependency includes a style import from a CSS file, then you can import that in the `<head>` element of `index.html`.
 
 ## Troubleshooting dependencies
+
+This section provides strategies for troubleshooting third-party dependencies in your Hydrogen project.
+
+### Updating Vite dependencies
+
+[Vite](https://vitejs.dev/) caches pre-bundled dependencies in `node_modules/.vite`. It re-runs the pre-bundling step if any of the following changes occur:
+
+- The dependencies list is updated in `package.json`
+- Package manager lockfiles (for example `yarn.lock`) are updated
+- Any fields in `vite.config.js` are updated
+
+You can force Vite to re-bundle dependencies by completing one of the following tasks:
+
+- Start the dev server with the `--force` command line option
+- Manually delete the `node_modules/.vite` cache directory
+
+### Bundling third-party dependencies
 
 When bundling third-party dependencies, you might see errors in development or production related to the incorrect bundle type being used from the package.
 
@@ -52,7 +69,8 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-Similarly, if you find that a dependency is being optimized when it shouldn't, you can try adding the dependency to `optimizeDeps.exclude` to see if it fixes the issue.
+> Tip:
+> If you find that a dependency is being optimized when it shouldn't, then you can try adding the dependency to `optimizeDeps.exclude` to see if it fixes the issue.
 
 ## More help
 
