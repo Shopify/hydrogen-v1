@@ -54,6 +54,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
        });
 
        if (!init) {
+         init = true;
          // One-time initialization
          ClientAnalytics.subscribe(
            ClientAnalytics.eventNames.PAGE_VIEW,
@@ -61,7 +62,6 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
              console.log(payload);
            }
          );
-         init = true;
        }
      });
 
@@ -215,6 +215,7 @@ To send analytics data from the server-side, complete the following steps:
        });
 
        if (!init) {
+         init = true;
          // One-time initialization
          ClientAnalytics.subscribe(
            ClientAnalytics.eventNames.PAGE_VIEW,
@@ -233,7 +234,6 @@ To send analytics data from the server-side, complete the following steps:
              }
            }
          );
-         init = true;
        }
      });
 
@@ -316,12 +316,12 @@ import {ClientAnalytics, loadScript} from '@shopify/hydrogen/client';
 
 const GTAG_ID = '<YOUR_GTAG_ID>';
 const URL = `https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`;
-let isInit = false;
+let init = false;
 
 export function GoogleAnalytics() {
   useEffect(() => {
-    if (!isInit) {
-      isInit = true;
+    if (!init) {
+      init = true;
 
       // Load the gtag script
       loadScript(URL).catch(() => {});
@@ -367,6 +367,7 @@ let init = false;
 export default function GTM() {
   useEffect(() => {
     if (!init) {
+      init = true;
       // One-time initialization
       Analytics({
         app: 'hydrogen-app',
@@ -376,7 +377,6 @@ export default function GTM() {
           }),
         ],
       });
-      init = true;
     }
   });
   return null;
