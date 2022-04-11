@@ -391,6 +391,13 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/streaming-ssr.md',
     }),
     generator.section({
+      title: 'Analytics',
+      description:
+        'Learn about the analytics support build into Hydrogen apps.',
+      url: '/custom-storefronts/hydrogen/framework/analytics.md',
+      entry: 'framework/docs/analytics.md',
+    }),
+    generator.section({
       title: 'Preloaded queries',
       description:
         'Learn how to configure queries to preload in your Hydrogen app.',

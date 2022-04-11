@@ -15,7 +15,9 @@ const URL =
 export function Boomerang({pageTemplate}: {pageTemplate: string | null}) {
   const {storeDomain} = useShop();
   const templateName =
-    pageTemplate !== null ? pageTemplate.toLowerCase() : 'not-set';
+    pageTemplate && pageTemplate !== null
+      ? pageTemplate.toLowerCase()
+      : 'not-set';
 
   useEffect(() => {
     (function () {

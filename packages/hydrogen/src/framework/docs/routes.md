@@ -58,6 +58,22 @@ You can also provide a custom static implementation of a dynamic page to overrid
 
 {% endcodeblock %}
 
+### Prefetching a link source
+
+The [`Link`](/api/hydrogen/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
+
+If you want to disable link prefetching, then pass `preload={false}` to the `Link` component:
+
+{% codeblock file, filename: 'Component.client.jsx' %}
+
+```html
+<Link prefetch={false} to="/path">Link</Link>
+```
+
+{% endcodeblock %}
+
+By default, when a user hovers or focuses on the link for more than 100ms, a prefetch link tag is rendered for the React Server Components response path. If the user prematurely leaves or blurs the link, then the prefetch link tag isn't added.
+
 ## Catch all routes
 
 You can extend dynamic routes to catch all paths by adding an ellipsis (...) inside the brackets. For example, `/routes/example/[...handle].server.jsx` will match `/example/a` and `/example/a/b`.

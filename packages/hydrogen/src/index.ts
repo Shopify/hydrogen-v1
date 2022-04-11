@@ -40,3 +40,5 @@ export {
   CacheMonths,
   CacheCustom,
 } from './framework/CachingStrategy';
+
+export {useServerAnalytics} from './foundation/Analytics';
