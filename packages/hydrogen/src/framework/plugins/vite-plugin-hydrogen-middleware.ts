@@ -38,7 +38,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           dev: true,
           getShopifyConfig: async (incomingMessage) => {
             const {default: hydrogenConfigExport} = await server.ssrLoadModule(
-              'virtual:hydrogen-config'
+              'virtual:hydrogen-config-no-globs'
             );
 
             // @ts-ignore
@@ -83,24 +83,24 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           })
         );
     },
+    async resolveId(source, importer) {
+      if (source === 'virtual:hydrogen-config') {
+        const configPath = await findHydrogenConfigPath(
+          config.root,
+          pluginOptions.configPath
+        );
+
+        return this.resolve(configPath, importer, {
+          skipSelf: true,
+        });
+      }
+    },
     async load(id) {
-      if (id === 'virtual:hydrogen-config') {
-        let {configPath} = pluginOptions;
-
-        if (!configPath) {
-          // Find the config file in the project root
-          const files = await fs.readdir(config.root);
-          configPath = files.find((file) =>
-            /^hydrogen\.config\.[jt]s$/.test(file)
-          );
-        }
-
-        if (!configPath) return 'export default {}';
-
-        configPath = normalizePath(configPath);
-
-        if (!configPath.startsWith('/'))
-          configPath = path.resolve(config.root, configPath);
+      if (id.startsWith('virtual:hydrogen-config-no-globs')) {
+        const configPath = await findHydrogenConfigPath(
+          config.root,
+          pluginOptions.configPath
+        );
 
         const hydrogenConfigCode = await fs.readFile(configPath, 'utf-8');
 
@@ -133,4 +133,28 @@ async function polyfillOxygenEnv(config: ResolvedConfig) {
   }
 
   globalThis.Oxygen = {env};
+}
+
+async function findHydrogenConfigPath(root: string, userProvidedPath?: string) {
+  let configPath = userProvidedPath;
+
+  if (!configPath) {
+    // Find the config file in the project root
+    const files = await fs.readdir(root);
+    configPath = files.find((file) => /^hydrogen\.config\.[jt]s$/.test(file));
+  }
+
+  if (configPath) {
+    configPath = normalizePath(configPath);
+
+    if (!configPath.startsWith('/'))
+      configPath = path.resolve(root, configPath);
+  }
+
+  return (
+    configPath ||
+    require.resolve(
+      '@shopify/hydrogen/dist/esnext/utilities/empty-hydrogen-config.js'
+    )
+  );
 }

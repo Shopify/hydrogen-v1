@@ -1,13 +1,12 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {Router, Route, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
-import hydrogenConfig from '../hydrogen.config';
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 
-function App() {
+export default renderHydrogen(() => {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
@@ -21,6 +20,4 @@ function App() {
       </ShopifyProvider>
     </Suspense>
   );
-}
-
-export default renderHydrogen(App, hydrogenConfig);
+});

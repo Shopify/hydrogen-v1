@@ -6,7 +6,6 @@ import {
   ShopifyProvider,
   setLogger,
 } from '@shopify/hydrogen';
-import hydrogenConfig from '../hydrogen.config';
 import {Suspense} from 'react';
 import Custom1 from './customRoutes/custom1.server';
 import Custom2 from './customRoutes/custom2.server';
@@ -28,7 +27,7 @@ setLogger({
   options: () => ({}),
 });
 
-function App() {
+export default renderHydrogen(() => {
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider>
@@ -46,9 +45,7 @@ function App() {
       </ShopifyProvider>
     </Suspense>
   );
-}
-
-export default renderHydrogen(App, hydrogenConfig);
+});
 
 function HasRouteChildren({children}) {
   return children;

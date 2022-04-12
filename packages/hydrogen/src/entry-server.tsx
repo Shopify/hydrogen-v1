@@ -79,7 +79,7 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  hydrogenConfigParam: HydrogenConfigExport
+  hydrogenConfigParam?: HydrogenConfigExport
 ) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
@@ -96,10 +96,17 @@ export const renderHydrogen = (
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
 
+    if (!hydrogenConfigParam) {
+      // @ts-ignore
+      // eslint-disable-next-line node/no-missing-import
+      const defaultConfig = await import('virtual:hydrogen-config');
+      hydrogenConfigParam = defaultConfig.default as HydrogenConfigExport;
+    }
+
     const hydrogenConfig =
       typeof hydrogenConfigParam === 'function'
         ? await hydrogenConfigParam(normalizeRscUrl(url), request)
-        : hydrogenConfigParam;
+        : hydrogenConfigParam || {};
 
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;

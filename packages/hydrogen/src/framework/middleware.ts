@@ -167,7 +167,7 @@ async function respondWithGraphiql(
 ) {
   if (!shopifyConfig) {
     throw new Error(
-      "You must provide shopifyConfig to Hydrogen's Vite middleware"
+      "You must provide 'shopify' property in your Hydrogen's config file"
     );
   }
 
