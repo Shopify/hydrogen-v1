@@ -20,7 +20,7 @@
     "format:check": "prettier --check --ignore-unknown .",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "test-e2e": "jest --config jest-e2e.config.ts",
+    "test-e2e": "jest --config jest-e2e.config.ts --runInBand",
     "test:vite-ci": "cross-env FORCE_COLOR=true jest && jest --config jest-e2e.config.ts",
     "version": "changeset version && node -p \"'export const LIB_VERSION = \\'' + require('./packages/hydrogen/package.json').version + '\\';'\" > packages/hydrogen/src/version.ts",
     "hydrogen": "./packages/cli/bin/hydrogen",
