@@ -5,7 +5,7 @@ import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 
 import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
-import type {ShopifyConfig, ShopifyConfigGetter} from '../../types';
+import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 import {useUrl} from '../useUrl';
 
@@ -49,9 +49,8 @@ export function ShopifyProvider({
   let actualShopifyConfig: ShopifyConfig;
 
   if (typeof shopifyConfig === 'function') {
-    const url = useUrl();
     const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
-      (shopifyConfig as ShopifyConfigGetter)(url, request)
+      (shopifyConfig as ShopifyConfigFetcher)(useUrl(), request)
     );
 
     if (result.error) {

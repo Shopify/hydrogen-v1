@@ -13,6 +13,7 @@ import type {
   StreamerOptions,
   HydratorOptions,
   HydrogenConfig,
+  HydrogenConfigExport,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -45,6 +46,7 @@ import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
+import {normalizeRscUrl} from './foundation/useUrl/useUrl';
 
 declare global {
   // This is provided by a Vite plugin
@@ -75,7 +77,10 @@ export interface RequestHandler {
   >;
 }
 
-export const renderHydrogen = (App: any, hydrogenConfig: HydrogenConfig) => {
+export const renderHydrogen = (
+  App: any,
+  hydrogenConfigParam: HydrogenConfigExport
+) => {
   const handleRequest: RequestHandler = async function (
     rawRequest,
     {
@@ -89,10 +94,16 @@ export const renderHydrogen = (App: any, hydrogenConfig: HydrogenConfig) => {
     }
   ) {
     const request = new ServerComponentRequest(rawRequest);
+    const url = new URL(request.url);
+
+    const hydrogenConfig =
+      typeof hydrogenConfigParam === 'function'
+        ? await hydrogenConfigParam(normalizeRscUrl(url), request)
+        : hydrogenConfigParam;
+
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
-    const url = new URL(request.url);
     const log = getLoggerWithContext(request);
     const componentResponse = new ServerComponentResponse();
 

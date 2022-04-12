@@ -36,23 +36,30 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       server.middlewares.use(
         graphiqlMiddleware({
           dev: true,
-          getShopifyConfig: async (request) => {
-            const {default: hydrogenConfig} = await server.ssrLoadModule(
+          getShopifyConfig: async (incomingMessage) => {
+            const {default: hydrogenConfigExport} = await server.ssrLoadModule(
               'virtual:hydrogen-config'
             );
-
-            if (typeof hydrogenConfig.shopify !== 'function')
-              return hydrogenConfig.shopify;
 
             // @ts-ignore
             const {address = 'localhost', port = '3000'} =
               server.httpServer?.address() || {};
-
-            const url = new URL(`http://${address}:${port}${request.url}`);
-            return hydrogenConfig.shopify(
-              url,
-              new Request(url.toString(), {headers: request.headers as any})
+            const url = new URL(
+              `http://${address}:${port}${incomingMessage.url}`
             );
+            const request = new Request(url.toString(), {
+              headers: incomingMessage.headers as any,
+            });
+
+            const hydrogenConfig =
+              typeof hydrogenConfigExport === 'function'
+                ? await hydrogenConfigExport(url, request)
+                : hydrogenConfigExport;
+
+            if (typeof hydrogenConfig.shopify !== 'function')
+              return hydrogenConfig.shopify;
+
+            return hydrogenConfig.shopify(url, request);
           },
         })
       );

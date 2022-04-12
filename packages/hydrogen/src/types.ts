@@ -58,10 +58,9 @@ export type HydrogenConfigRoutes =
       dirPrefix?: string;
     };
 
-export type ShopifyConfigGetter = (
-  url: URL,
-  request: Request
-) => ShopifyConfig | Promise<ShopifyConfig>;
+type ConfigFetcher<T> = (url: URL, request: Request) => T | Promise<T>;
+
+export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
 
 export type ServerAnalyticsConnector = {
   request: (
@@ -73,9 +72,12 @@ export type ServerAnalyticsConnector = {
 
 export type HydrogenConfig = {
   routes?: HydrogenConfigRoutes;
-  shopify: ShopifyConfig | ShopifyConfigGetter;
+  shopify: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
 };
+
+export type HydrogenConfigFetcher = ConfigFetcher<HydrogenConfig>;
+export type HydrogenConfigExport = HydrogenConfig | HydrogenConfigFetcher;
 
 export type ClientHandlerConfig = {
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
