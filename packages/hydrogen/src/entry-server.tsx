@@ -150,9 +150,43 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
           sessionApi
         );
 
-        return apiResponse instanceof Request
-          ? handleRequest(apiResponse, options)
-          : apiResponse;
+        if (apiResponse instanceof Request) {
+          if (!Array.from((apiResponse.headers as any).keys()).length) {
+            request.headers.forEach((value, key) => {
+              apiResponse.headers.set(key, value);
+            });
+          }
+
+          if (request.headers.get('Hydrogen-Client') === 'Form-Action') {
+            const url = new URL(request.url);
+            const newUrl = new URL(request.url);
+
+            return handleRequest(
+              new Request(
+                url.origin +
+                  RSC_PATHNAME +
+                  `?state=${encodeURIComponent(
+                    JSON.stringify({
+                      pathname: newUrl.pathname,
+                      search: '',
+                    })
+                  )}`,
+                {
+                  headers: apiResponse.headers,
+                }
+              ),
+              options
+            );
+          } else {
+            // JavaScript is disabled on the client, handle the response without streaming
+            return handleRequest(apiResponse, {
+              ...options,
+              streamableResponse: undefined,
+            });
+          }
+        }
+
+        return apiResponse;
       }
     }
 

@@ -11,7 +11,7 @@ export default function FormServer() {
   );
 }
 
-export async function api(request, {hydrate}) {
+export async function api(request) {
   count++;
-  return hydrate('/form');
+  return new Request(request.url);
 }

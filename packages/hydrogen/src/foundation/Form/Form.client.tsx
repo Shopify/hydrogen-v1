@@ -31,7 +31,7 @@ export function Form({
             method,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
-              Hydrogen: 'Form-Action',
+              'Hydrogen-Client': 'Form-Action',
             },
             body: formData,
           })
