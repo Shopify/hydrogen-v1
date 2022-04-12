@@ -160,6 +160,7 @@ export const renderHydrogen = (
       request,
       template,
       isStreamable,
+      hydrogenConfig,
       componentResponse,
       response: streamableResponse,
     };
@@ -195,17 +196,26 @@ function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
  */
 async function render(
   url: URL,
-  {App, request, componentResponse, log, template, nonce}: RendererOptions
+  {
+    App,
+    request,
+    template,
+    componentResponse,
+    hydrogenConfig,
+    nonce,
+    log,
+  }: RendererOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
   const {AppSSR, rscReadable} = buildAppSSR(
     {
       App,
+      log,
       state,
       request,
+      hydrogenConfig,
       response: componentResponse,
-      log,
     },
     {template}
   );
@@ -272,10 +282,11 @@ async function stream(
     request,
     response,
     componentResponse,
-    log,
+    hydrogenConfig,
     template,
     nonce,
     dev,
+    log,
   }: StreamerOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
@@ -287,10 +298,11 @@ async function stream(
   const {AppSSR, rscReadable} = buildAppSSR(
     {
       App,
+      log,
       state,
       request,
+      hydrogenConfig,
       response: componentResponse,
-      log,
     },
     {template: noScriptTemplate}
   );
@@ -567,21 +579,23 @@ async function hydrate(
   url: URL,
   {
     App,
+    log,
     request,
     response,
-    componentResponse,
     isStreamable,
-    log,
+    hydrogenConfig,
+    componentResponse,
   }: HydratorOptions
 ) {
   const state = JSON.parse(url.searchParams.get('state') || '{}');
 
   const {AppRSC} = buildAppRSC({
     App,
+    log,
     state,
     request,
+    hydrogenConfig,
     response: componentResponse,
-    log,
   });
 
   if (__WORKER__) {
@@ -625,12 +639,24 @@ type BuildAppOptions = {
   state?: object | null;
   request: ServerComponentRequest;
   response: ServerComponentResponse;
+  hydrogenConfig: HydrogenConfig;
   log: Logger;
 };
 
-function buildAppRSC({App, state, request, response, log}: BuildAppOptions) {
+function buildAppRSC({
+  App,
+  log,
+  state,
+  request,
+  response,
+  hydrogenConfig,
+}: BuildAppOptions) {
   const hydrogenServerProps = {request, response, log};
-  const serverProps = {...state, ...hydrogenServerProps};
+  const serverProps = {
+    ...state,
+    ...hydrogenServerProps,
+    customConfig: hydrogenConfig.custom || {},
+  };
 
   request.ctx.router.serverProps = serverProps;
 
@@ -649,15 +675,16 @@ function buildAppRSC({App, state, request, response, log}: BuildAppOptions) {
 }
 
 function buildAppSSR(
-  {App, state, request, response, log}: BuildAppOptions,
+  {App, state, request, response, hydrogenConfig, log}: BuildAppOptions,
   htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
   const {AppRSC} = buildAppRSC({
     App,
+    log,
     state,
     request,
     response,
-    log,
+    hydrogenConfig,
   });
 
   const [rscReadableForFizz, rscReadableForFlight] =

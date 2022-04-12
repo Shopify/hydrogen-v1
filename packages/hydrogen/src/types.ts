@@ -14,6 +14,7 @@ type CommonOptions = {
   routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
   componentResponse: ServerComponentResponse;
+  hydrogenConfig: HydrogenConfig;
   log: Logger;
   dev?: boolean;
 };
@@ -74,6 +75,7 @@ export type HydrogenConfig = {
   routes?: HydrogenConfigRoutes;
   shopify: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  custom?: Record<string, any>;
 };
 
 export type HydrogenConfigFetcher = ConfigFetcher<HydrogenConfig>;
