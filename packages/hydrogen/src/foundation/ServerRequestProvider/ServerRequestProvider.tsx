@@ -80,7 +80,7 @@ export function useServerRequest() {
 
 type RequestCacheResult<T> =
   | {data: T; error?: never} // success
-  | {data?: never; error: Response}; // failure
+  | {data?: never; error: Response | Error}; // failure
 
 /**
  * Returns data stored in the request cache.

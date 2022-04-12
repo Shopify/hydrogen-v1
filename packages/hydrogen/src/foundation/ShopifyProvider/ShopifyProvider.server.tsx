@@ -54,6 +54,10 @@ export function ShopifyProvider({
     );
 
     if (result.error) {
+      if (result.error instanceof Error) {
+        throw result.error;
+      }
+
       throw new Error(
         `Failed to load Shopify config: ${result.error.statusText}`
       );
