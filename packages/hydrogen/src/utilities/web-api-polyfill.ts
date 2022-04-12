@@ -1,6 +1,6 @@
 import {fetch, Request, Response, Headers} from 'undici';
 import AbortController from 'abort-controller';
-import {ReadableStream, WritableStream, TransformStream} from 'node:stream/web';
+import {ReadableStream, WritableStream, TransformStream} from 'stream/web';
 
 if (!globalThis.fetch) {
   Object.assign(globalThis, {
@@ -10,6 +10,11 @@ if (!globalThis.fetch) {
     Headers,
     AbortController,
   });
+}
+
+if (!globalThis.AbortController) {
+  // @ts-ignore
+  globalThis.AbortController = AbortController;
 }
 
 if (!globalThis.ReadableStream) {

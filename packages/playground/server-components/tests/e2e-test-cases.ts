@@ -1,8 +1,12 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import {fetch} from 'undici';
+import AbordController from 'abort-controller';
 import {resolve} from 'path';
 
 import {edit, untilUpdated} from '../../utilities';
+
+//@ts-ignore
+globalThis.AbortController = AbordController;
 
 type TestOptions = {
   getServerUrl: () => string;
