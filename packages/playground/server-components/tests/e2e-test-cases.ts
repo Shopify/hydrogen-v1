@@ -374,7 +374,7 @@ export default async function testCases({
     });
 
     it('can concatenate requests', async () => {
-      await page.goto(getServerUrl() + '/post-rsc');
+      await page.goto(getServerUrl() + '/html-form');
       expect(await page.textContent('#counter')).toEqual('0');
       await page.click('#increase');
       expect(await page.textContent('#counter')).toEqual('1');

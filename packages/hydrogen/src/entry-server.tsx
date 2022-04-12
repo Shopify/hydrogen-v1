@@ -114,15 +114,6 @@ export const renderHydrogen = (
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    let template =
-      typeof indexTemplate === 'function'
-        ? await indexTemplate(url.toString())
-        : indexTemplate;
-
-    if (template && typeof template !== 'string') {
-      template = template.default;
-    }
-
     if (!isReactHydrationRequest && routes) {
       const apiRoute = getApiRoute(url, {routes});
 
@@ -147,6 +138,15 @@ export const renderHydrogen = (
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
+
+    let template =
+      typeof indexTemplate === 'function'
+        ? await indexTemplate(url.toString())
+        : indexTemplate;
+
+    if (template && typeof template !== 'string') {
+      template = template.default;
+    }
 
     const params = {
       App,

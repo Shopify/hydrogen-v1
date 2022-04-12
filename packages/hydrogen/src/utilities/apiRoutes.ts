@@ -167,7 +167,7 @@ export async function renderApiRoute(
       queryShop: queryShopBuilder(shopifyConfig),
     });
 
-    if (!(response instanceof Response) && !(response instanceof Request)) {
+    if (!(response instanceof Response || response instanceof Request)) {
       if (typeof response === 'string' || response instanceof String) {
         response = new Response(response as string);
       } else if (typeof response === 'object') {
@@ -186,8 +186,7 @@ export async function renderApiRoute(
   logServerResponse(
     'api',
     request as ServerComponentRequest,
-    // @ts-ignore
-    response.status ?? 200
+    (response as Response).status ?? 200
   );
 
   return response;
