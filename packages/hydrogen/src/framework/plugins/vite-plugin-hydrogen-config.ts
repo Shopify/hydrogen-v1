@@ -54,7 +54,7 @@ export default () => {
          */
         noExternal: Boolean(process.env.WORKER) || [/react-server-dom-vite/],
         target: process.env.WORKER ? 'webworker' : 'node',
-        external: ['buffer'],
+        external: ['buffer', 'stream/web'],
       },
 
       // Reload when updating local Hydrogen lib

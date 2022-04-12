@@ -117,10 +117,16 @@ export function hydrogenMiddleware({
         response.statusCode = eventResponse.status;
 
         if (eventResponse.body) {
-          response.write(eventResponse.body);
-        }
+          const reader = eventResponse.body.getReader();
 
-        response.end();
+          while (true) {
+            const {done, value} = await reader.read();
+            if (done) return response.end();
+            response.write(value);
+          }
+        } else {
+          response.end();
+        }
       }
     } catch (e: any) {
       if (dev && devServer) devServer.ssrFixStacktrace(e);
