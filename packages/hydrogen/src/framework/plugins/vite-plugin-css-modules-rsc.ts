@@ -26,9 +26,9 @@ export default function cssModulesRsc() {
         if (id.includes('.module.') && cssMap.has(id)) {
           return code.replace(
             /export default .*$/gms,
-            `import React from 'react'; export const StyleTag = () => React.createElement('style', {}, \`${cssMap.get(
-              id
-            )}\`);`
+            `import React from 'react'; export const StyleTag = () => React.createElement('style', {dangerouslySetInnerHTML: {__html: ${JSON.stringify(
+              cssMap.get(id)
+            )}}});`
           );
         }
       },

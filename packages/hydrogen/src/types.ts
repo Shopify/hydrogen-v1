@@ -68,6 +68,7 @@ export type ClientHandlerConfig = {
   shopifyConfig: ShopifyConfig;
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;
+  showDevTools?: boolean;
 };
 
 export type ClientHandler = (
@@ -119,7 +120,7 @@ export interface AllCacheOptions {
   staleIfError?: number;
 }
 
-export type CachingStrategy = NoStoreStrategy | AllCacheOptions;
+export type CachingStrategy = AllCacheOptions;
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;

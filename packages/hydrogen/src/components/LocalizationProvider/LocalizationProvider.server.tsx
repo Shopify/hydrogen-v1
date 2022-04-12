@@ -1,9 +1,10 @@
 import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
+import {useShop} from '../../foundation/useShop';
 import {useShopQuery} from '../../hooks/useShopQuery';
-import {LocalizationQuery} from './LocalizationQuery';
 import {CacheDays} from '../../framework/CachingStrategy';
 import {PreloadOptions} from '../../types';
+import {Country, Currency} from '../../storefront-api-types';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
@@ -25,10 +26,13 @@ export interface LocalizationProviderProps {
  * `@inContext` directive as the `country` value.
  */
 export function LocalizationProvider(props: LocalizationProviderProps) {
+  const {languageCode} = useShop();
+
   const {
     data: {localization},
   } = useShopQuery<LocalizationQuery>({
     query: query,
+    variables: {language: languageCode},
     cache: CacheDays(),
     preload: props.preload,
   });
@@ -40,8 +44,18 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
   );
 }
 
-const query = `query Localization {
-  localization {
+export type LocalizationQuery = {__typename?: 'QueryRoot'} & {
+  localization: {__typename?: 'Localization'} & {
+    country: {__typename?: 'Country'} & Pick<Country, 'isoCode' | 'name'> & {
+        currency: {__typename?: 'Currency'} & Pick<Currency, 'isoCode'>;
+      };
+  };
+};
+
+const query = `
+query Localization($language: LanguageCode) 
+@inContext(language: $language) {
+   localization {
     country {
       isoCode
       name

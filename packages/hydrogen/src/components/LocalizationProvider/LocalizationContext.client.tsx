@@ -1,5 +1,5 @@
 import {createContext} from 'react';
-import {LocalizationQuery} from './LocalizationQuery';
+import type {LocalizationQuery} from './LocalizationProvider.server';
 
 export type Localization = LocalizationQuery['localization'];
 

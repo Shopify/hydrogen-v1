@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.14.0
+
+### Minor Changes
+
+- [#1028](https://github.com/Shopify/hydrogen/pull/1028) [`ba174588`](https://github.com/Shopify/hydrogen/commit/ba174588d8f4a9f1054779a9bf32a92e8d2c921c) Thanks [@michenly](https://github.com/michenly)! - Starting from SF API version `2022-04`, the preferred way to request translatable resources is using the `@inContext` directive. See the [API docs](https://shopify.dev/api/examples/multiple-languages#retrieve-translations-with-the-storefront-api) on how to do this and which resources have translatable properties.
+
+  This causes a breaking change to the `useShopQuery` hook. The `locale` property has been removed from the argument object; `Accept-Language` is no longer being send with every request, and we are no longer using locale as part of the cache key.
+
+  The `useShop` hook will now return the `languageCode` key, which is the first two characters of the existing `locale` key.
+
+  Both `locale` & `languageCode` values are also now capitalized to make it easier to pass into a GraphQL `@inContext` directive.
+
+* [#1020](https://github.com/Shopify/hydrogen/pull/1020) [`e9529bc8`](https://github.com/Shopify/hydrogen/commit/e9529bc81410e0d99f9d3dbdb138ae61d00f876b) Thanks [@jplhomer](https://github.com/jplhomer)! - Preload `Link` URLs by default when a user signals intent to visit the URL. This includes hovering or focusing on the URL. To disable preloading, pass `<Link preload={false} />` to the component.
+
 ## 0.13.0
 
 ### Minor Changes
