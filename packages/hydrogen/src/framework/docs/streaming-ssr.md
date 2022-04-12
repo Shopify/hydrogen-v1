@@ -51,14 +51,23 @@ The following table describes different strategies for implementing the product 
 
 ## Using Suspense
 
-React 18 introduced [Suspense for data fetching to complement streaming SSR](https://nextjs.org/docs/advanced-features/react-18/streaming). Suspense is a feature in React that's used for managing asynchronous operations in an app. Suspense lets you render a fallback while a component is waiting for an asynchronous operation to finish:
+React 18 introduced [Suspense for data fetching to complement streaming SSR](https://nextjs.org/docs/advanced-features/react-18/streaming). Suspense is a feature of React that governs the appearance and behavior of placeholder content inside components while asynchronous data-fetching is in progress.
+
+### How Suspense works
+
+Suspense is implemented as a React component that wraps other components, so that each pair of Suspense tags corresponds to a Suspense boundary.
+
+A Suspense boundary is any portion of React component code enclosed by a pair of Suspense component tags so that those components share common rendering behaviors while awaiting data controlled by Suspense. Multiple Suspense boundaries can co-exist within a single component, and Suspense boundaries can also be nested.
+
+### Example: Layout fallback
+
+Suspense lets you render a fallback while a component is waiting for an asynchronous operation to finish. The following example shows how you can use `Suspense` to add a layout fallback to improve cumulative layout shift (CLS):
 
 {% codeblock file, filename: 'Product.server.jsx' %}
 
 ```jsx
 export default function Product({country = {isoCode: 'US'}}) {
   const {handle} = useRouteParams();
-  // Use `Suspense` to add a layout fallback to improve cumulative layout shift (CLS)
   return (
     <Layout>
       <Suspense
