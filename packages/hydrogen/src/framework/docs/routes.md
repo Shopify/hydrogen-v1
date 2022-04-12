@@ -188,6 +188,30 @@ export async function api(request, {params}) {
 > Tip:
 > Explore an [example implementation in GitHub](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/countries.server.jsx) that lazy loads [available countries](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx) by an API route (`/api/countries`).
 
+### Concatenating requests
+
+Hydrogen allows concatenating requests in API routes in order to avoid extra network trips (waterfall requests). This is useful for HTML forms, where it is common to refresh the current page after the form submission is completed.
+
+```jsx
+// src/routes/my-page.server.jsx
+
+export async function api(request) {
+  if (request.method === 'POST') {
+    // do some work here...
+  }
+
+  return new Request(request.url, {method: 'GET'});
+}
+
+export default function Page() {
+  return (
+    <form action="/my-page" method="POST">
+      ...
+    </form>
+  );
+}
+```
+
 ## Next steps
 
 - Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
