@@ -5,6 +5,7 @@ import React, {
   StrictMode,
   Fragment,
   type ElementType,
+  useEffect,
 } from 'react';
 // @ts-expect-error hydrateRoot isn't on the TS types yet, but we're using React 18 so it exists
 import {hydrateRoot} from 'react-dom/client';

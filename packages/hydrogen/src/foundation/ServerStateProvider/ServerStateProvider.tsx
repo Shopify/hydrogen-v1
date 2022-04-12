@@ -42,6 +42,7 @@ interface ProposedServerStateSetter {
 export interface ServerStateContextValue {
   pending: boolean;
   serverState: ServerState;
+  setApiResponse: any;
   setServerState: ServerStateSetter;
   getProposedServerState: ProposedServerStateSetter;
 }
@@ -53,12 +54,14 @@ export const ServerStateContext = createContext<ServerStateContextValue>(
 interface ServerStateProviderProps {
   serverState: ServerState;
   setServerState: React.Dispatch<React.SetStateAction<ServerState>>;
+  setApiResponse: React.Dispatch<React.SetStateAction<any>>;
   children: ReactNode;
 }
 
 export function ServerStateProvider({
   serverState,
   setServerState,
+  setApiResponse,
   children,
 }: ServerStateProviderProps) {
   const [pending, startTransition] = useTransition();
@@ -126,6 +129,7 @@ export function ServerStateProvider({
       serverState,
       setServerState: setServerStateCallback,
       getProposedServerState: getProposedServerStateCallback,
+      setApiResponse,
     }),
     [
       serverState,
