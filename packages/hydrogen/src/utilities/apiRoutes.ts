@@ -152,6 +152,12 @@ function queryShopBuilder(
         ? await shopifyConfigGetter(new URL(request.url), request)
         : shopifyConfigGetter;
 
+    if (!shopifyConfig) {
+      throw new Error(
+        'Shopify connection info was not found in Hydrogen config'
+      );
+    }
+
     const {storeDomain, storefrontApiVersion, storefrontToken, defaultLocale} =
       shopifyConfig;
 
