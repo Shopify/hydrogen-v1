@@ -48,7 +48,9 @@ beforeAll(async () => {
     // start a server in that directory.
 
     const testCustomServe = resolve(
-      testPath.replace(/\.test\.([jt]s)$/, '.serve.$1')
+      testPath
+        .replace(/\.test\.([jt]s)$/, '.serve.$1')
+        .replace(/\/[\w-]+\/tests\//, '/test-utils/')
     );
 
     if (existsSync(testCustomServe)) {

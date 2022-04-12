@@ -1,4 +1,4 @@
-import {port} from './node-prod-e2e.serve';
+import {port} from '../../test-utils/node-prod-e2e.serve';
 import testCases from './e2e-test-cases';
 
 describe('Node.js production', () => {

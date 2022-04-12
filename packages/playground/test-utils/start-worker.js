@@ -1,13 +1,14 @@
 // @ts-check
 const path = require('path');
 const {Miniflare} = require('miniflare');
-const {loadProdEnv} = require('./utils');
+// eslint-disable-next-line node/no-unpublished-require
+const {loadProdEnv} = require('./load-prod-env');
 
 async function createServer({root = process.cwd()} = {}) {
   const mf = new Miniflare({
     scriptPath: path.resolve(root, 'dist/worker/index.js'),
     sitePath: path.resolve(root, 'dist/client'),
-    bindings: await loadProdEnv(),
+    bindings: await loadProdEnv(root),
   });
 
   const app = mf.createServer();
