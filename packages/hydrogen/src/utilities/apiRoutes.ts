@@ -157,7 +157,7 @@ export async function renderApiRoute(
   request: Request,
   route: ApiRouteMatch,
   shopifyConfig: ShopifyConfig
-): Promise<Response> {
+): Promise<Response | Request> {
   let response;
   const log = getLoggerWithContext(request);
 
@@ -167,7 +167,7 @@ export async function renderApiRoute(
       queryShop: queryShopBuilder(shopifyConfig),
     });
 
-    if (!(response instanceof Response)) {
+    if (!(response instanceof Response || response instanceof Request)) {
       if (typeof response === 'string' || response instanceof String) {
         response = new Response(response as string);
       } else if (typeof response === 'object') {
@@ -183,7 +183,11 @@ export async function renderApiRoute(
     response = new Response('Error processing: ' + request.url, {status: 500});
   }
 
-  logServerResponse('api', request as ServerComponentRequest, response.status);
+  logServerResponse(
+    'api',
+    request as ServerComponentRequest,
+    (response as Response).status ?? 200
+  );
 
   return response;
 }
