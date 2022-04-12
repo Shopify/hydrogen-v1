@@ -71,7 +71,7 @@ Primitive components and hooks are the building blocks for different component t
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/primitive/money">Money</a></td>
-    <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a>.</td>
+    <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a> according to the <code>defaultLocale</code> in the <code>hydrogen.config.js</code> file.</td>
     <td><a href="/api/hydrogen/hooks/primitive/usemoney">useMoney</a></td>
   </tr>
   <tr>
@@ -116,7 +116,7 @@ Global components wrap around your entire app. Hydrogen includes the [ShopifyPro
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshop">useShop</a></td>
-    <td>Accesses values within <code>shopify.config.js</code>.</td>
+    <td>Accesses values within <code>hydrogen.config.js</code>.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshopquery">useShopQuery</a></td>

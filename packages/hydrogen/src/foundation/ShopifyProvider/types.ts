@@ -11,9 +11,10 @@ export type ShopifyContextValue = {
 };
 
 export type ShopifyProviderProps = {
-  /** The contents of the `shopify.config.js` file. */
+  /** The contents of the `hydrogen.config.js` file. */
   shopifyConfig?: HydrogenConfig['shopify'];
   /** Any `ReactNode` elements. */
   children?: ReactNode;
+  /** PLACEHOLDER DESCRIPTION */
   manager?: any;
 };

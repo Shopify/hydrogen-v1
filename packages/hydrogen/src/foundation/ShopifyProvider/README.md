@@ -7,23 +7,19 @@ You should place it in your app's entry point component. For example, `&lt;App&g
 
 ```tsx
 import {ShopifyProvider} from '@shopify/hydrogen';
-import shopifyConfig from '../shopify.config';
 
 export default function App() {
-  return (
-    <ShopifyProvider shopifyConfig={shopifyConfig}>
-      {/* Routes, Pages, etc */}
-    </ShopifyProvider>
-  );
+  return <ShopifyProvider>{/* Routes, Pages, etc */}</ShopifyProvider>;
 }
 ```
 
 ## Props
 
-| Name          | Type                                                    | Description                                   |
-| ------------- | ------------------------------------------------------- | --------------------------------------------- |
-| shopifyConfig | <code><a href="#shopifyconfig">ShopifyConfig</a></code> | The contents of the `shopify.config.js` file. |
-| children?     | <code>React</code>                                      | Any `ReactNode` elements.                     |
+| Name           | Type                                   | Description                                    |
+| -------------- | -------------------------------------- | ---------------------------------------------- |
+| shopifyConfig? | <code>HydrogenConfig['shopify']</code> | The contents of the `hydrogen.config.js` file. |
+| children?      | <code>React</code>                     | Any `ReactNode` elements.                      |
+| any?           | <code>any</code>                       | PLACEHOLDER DESCRIPTION                        |
 
 ## Component type
 

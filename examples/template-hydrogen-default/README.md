@@ -16,7 +16,7 @@ yarn
 yarn dev
 ```
 
-Remember to update `shopify.config.js` with your shop's domain and Storefront API token!
+Remember to update `hydrogen.config.js` with your shop's domain and Storefront API token!
 
 ## Previewing a production build
 

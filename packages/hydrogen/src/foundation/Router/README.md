@@ -11,11 +11,11 @@ import {Router, FileRoutes, Route} from '@shopify/hydrogen';
 function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
+      <ShopifyProvider>
         <CartProvider>
           <Router>
-            <FileRoutes basePath="/es/" routes={esRoutes} />
-            <FileRoutes basePath="/en/" routes={enRoutes} />
+            <FileRoutes basePath="/es/" />
+            <FileRoutes basePath="/en/" />
             <Route path="*" page={<NotFound />} />
           </Router>
         </CartProvider>

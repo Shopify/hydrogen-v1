@@ -8,10 +8,10 @@ The `Route` component is used to set up a route in Hydrogen that's independent o
 
 ```tsx
 import {Router, Route} from '@shopify/hydrogen';
-function App({routes}) {
+export default renderHydrogen(() => {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
+      <ShopifyProvider>
         <CartProvider>
           <Router>
             <Route path="/" page={<Home />} />

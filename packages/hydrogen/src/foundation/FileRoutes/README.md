@@ -11,11 +11,11 @@ import {Router, FileRoutes, Route} from '@shopify/hydrogen';
 function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
+      <ShopifyProvider>
         <CartProvider>
           <Router>
-            <FileRoutes basePath="/es/" routes={esRoutes} />
-            <FileRoutes basePath="/en/" routes={enRoutes} />
+            <FileRoutes basePath="/es/" />
+            <FileRoutes basePath="/en/" />
             <Route path="*" page={<NotFound />} />
           </Router>
         </CartProvider>
@@ -32,11 +32,11 @@ function NotFound() {
 
 ## Props
 
-| Name       | Type     | Description                                                                                                                                                                            |
-| ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| routes     | `array`  | The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method.                                                                       |
-| basePath?  | `string` | A path that's prepended to all file routes. You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale.                |
-| dirPrefix? | `string` | The portion of the file route path that shouldn't be a part of the URL. You need to modify this if you want to import your routes from a location other than the default `src/routes`. |
+| Name       | Type                               | Description                                                                                                                                                                            |
+| ---------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| routes?    | <code>ImportGlobEagerOutput</code> | The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method.                                                                       |
+| basePath?  | <code>string</code>                | A path that's prepended to all file routes. You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale.                |
+| dirPrefix? | <code>string &#124; RegExp</code>  | The portion of the file route path that shouldn't be a part of the URL. You need to modify this if you want to import your routes from a location other than the default `src/routes`. |
 
 ## Component type
 

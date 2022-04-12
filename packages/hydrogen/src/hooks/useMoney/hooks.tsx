@@ -29,7 +29,7 @@ export type UseMoneyValue = {
   parts: Intl.NumberFormatPart[];
   /**
    * A string returned by `new Intl.NumberFormat` for the amount and currency code,
-   * using the `shopify.config.js` locale.
+   * using the `locale` value in `hydrogen.config.js`.
    */
   localizedString: string;
   /**

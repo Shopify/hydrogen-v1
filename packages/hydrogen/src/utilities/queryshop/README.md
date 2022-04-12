@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/utilities/parseMetafieldValue and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
-The `queryShop` utility is a function that helps you query the Storefront API. It's similar to the `useShopQuery` hook, which is available in server components. To use `queryShop`, pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`.
+The `queryShop` utility is a function that helps you query the Storefront API. It's similar to the `useShopQuery` hook, which is available in server components.
 
 ## Example code
 

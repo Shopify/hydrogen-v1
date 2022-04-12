@@ -164,7 +164,7 @@ async function init() {
   console.log(
     `\nYour project will display inventory from the Hydrogen Demo Store. ` +
       `To connect this project to your Shopify store's inventory instead, ` +
-      `update ${yellow(packageName + '/shopify.config.js')} with your ` +
+      `update ${yellow(packageName + '/hydrogen.config.js')} with your ` +
       `store ID and Storefront API key.\n`
   );
 }

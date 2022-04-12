@@ -144,7 +144,7 @@ To enable sub-request caching using an in-memory store, pass `devCache: true` to
 
 ```js
 export default defineConfig({
-  plugins: [hydrogen(shopifyConfig, {devCache: true})],
+  plugins: [hydrogen({devCache: true})],
 });
 ```
 
@@ -220,7 +220,7 @@ To enable query cache busting on build, pass `{purgeQueryCacheOnBuild: true}` to
 
 ```js
 export default defineConfig({
-  plugins: [hydrogen(shopifyConfig, {purgeQueryCacheOnBuild: true})],
+  plugins: [hydrogen({purgeQueryCacheOnBuild: true})],
 });
 ```
 

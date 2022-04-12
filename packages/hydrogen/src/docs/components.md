@@ -77,7 +77,7 @@ Primitive components are the building blocks for different component types, incl
   <tr>
     <td><a href="/api/hydrogen/components/primitive/money">Money</a></td>
     <td>Client</td>
-    <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a>.</td>
+    <td>Renders a string of the Storefront API's <a href="/api/storefront/reference/common-objects/moneyv2">MoneyV2 object</a> according to the <code>defaultLocale</code> in the <code>hydrogen.config.js</code> file.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/components/primitive/seo">Seo</a></td>
