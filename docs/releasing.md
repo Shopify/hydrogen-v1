@@ -32,6 +32,6 @@ npx create-hydrogen-app@unstable
 
 ## Common problems
 
-### After merging the auto-generated changeset PR, my github Actions failed with `No commits between X and changeset-release/Y`.
+**After merging the auto-generated changeset PR, my GitHub Action encountered an Error with the message `No commits between X and changeset-release/Y`**
 
-This happens when changesets does not properly clear out all the changesets in the `.changesets` directory of the hydrogen repo. The soluction is to create a new PR with all of the `.changesets` removed.
+This happens when changesets does not properly clear out all the changesets in the `.changesets` directory of the hydrogen repo. The soluction is to create a new PR with all of the `.changesets` removed. The GitHub Action will re-run when you merge the second PR.
