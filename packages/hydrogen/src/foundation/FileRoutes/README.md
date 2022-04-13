@@ -14,8 +14,8 @@ function App() {
       <ShopifyProvider>
         <CartProvider>
           <Router>
-            <FileRoutes basePath="/es/" />
-            <FileRoutes basePath="/en/" />
+            <FileRoutes basePath="/es/" routes={esRoutes} />
+            <FileRoutes basePath="/en/" routes={enRoutes} />
             <Route path="*" page={<NotFound />} />
           </Router>
         </CartProvider>
