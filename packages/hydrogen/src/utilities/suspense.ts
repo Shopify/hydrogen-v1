@@ -42,7 +42,7 @@ type SuspenseCacheEntry = {
   response?: unknown;
 };
 
-const globalCache: Record<string, SuspenseCacheEntry> = {};
+const browserCache: Record<string, SuspenseCacheEntry> = {};
 
 /**
  * Perform an async function in a synchronous way for Suspense support.
@@ -56,8 +56,8 @@ function query<Fn extends () => Promise<unknown>>(
 ) {
   const stringKey = hashKey(key);
 
-  if (globalCache[stringKey]) {
-    const entry = globalCache[stringKey];
+  if (browserCache[stringKey]) {
+    const entry = browserCache[stringKey];
     if (preload) return undefined as unknown as Await<ReturnType<Fn>>;
     if (entry.error) throw entry.error;
     if (entry.response) return entry.response as Await<ReturnType<Fn>>;
@@ -69,7 +69,7 @@ function query<Fn extends () => Promise<unknown>>(
       .then((response) => (entry.response = response))
       .catch((error) => (entry.error = error)),
   };
-  globalCache[stringKey] = entry;
+  browserCache[stringKey] = entry;
 
   if (!preload) throw entry.promise;
   return undefined as unknown as Await<ReturnType<Fn>>;
