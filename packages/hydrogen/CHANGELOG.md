@@ -1,5 +1,101 @@
 # Changelog
 
+## 0.15.0
+
+### Minor Changes
+
+- [#983](https://github.com/Shopify/hydrogen/pull/983) [`52af261b`](https://github.com/Shopify/hydrogen/commit/52af261ba2bf6ed08e232b9fb2d75e69905f4cc6) Thanks [@jplhomer](https://github.com/jplhomer)! - Introduce Suspense-friendly `fetchSync` API for server and client components.
+
+  When using `fetchSync` in server components, you provide options for caching and preloading. This is similar to the [`useQuery` hook](<[/api/hydrogen/hooks/global/useQuery](https://shopify.dev/api/hydrogen/hooks/global/usequery)>):
+
+  ```jsx
+  import {fetchSync, CacheMinutes} from '@shopify/hydrogen';
+  import {Suspense} from 'react';
+
+  export function MyServerComponent() {
+    return (
+      <Suspense fallback="Loading...">
+        <MyThings />
+      </Suspense>
+    );
+  }
+
+  function MyThings() {
+    const things = fetchSync('https://3p.api.com/things.json', {
+      preload: true,
+      cache: CacheMinutes(),
+    }).json();
+
+    return <h2>{things.title}</h2>;
+  }
+  ```
+
+  When using `fetchSync` in client components, you cannot provide options for caching and preloading. You must import `fetchSync` from `@shopify/hydrogen/client`:
+
+  ```jsx
+  import {fetchSync} from '@shopify/hydrogen/client';
+  import {Suspense} from 'react';
+
+  export function MyClientComponent() {
+    return (
+      <Suspense fallback="Loading...">
+        <MyThings />
+      </Suspense>
+    );
+  }
+
+  function MyThings() {
+    const things = fetchSync('https://3p.api.com/things.json').json();
+
+    return <h2>{things.title}</h2>;
+  }
+  ```
+
+* [#890](https://github.com/Shopify/hydrogen/pull/890) [`a4c6d6c4`](https://github.com/Shopify/hydrogen/commit/a4c6d6c4d31337cecbd4d5afb76887bcd31ceb65) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Analytics instrumentation - this provides integration points for both server
+  and client side analytics instrumentations
+
+  - [Usage documentation](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics)
+
+### Patch Changes
+
+- [#1061](https://github.com/Shopify/hydrogen/pull/1061) [`a4aa3887`](https://github.com/Shopify/hydrogen/commit/a4aa3887be9f448ec1f4322fadb9821e0d19a0b5) Thanks [@jplhomer](https://github.com/jplhomer)! - Support script tags in index.html that contain line breaks
+
+* [#1057](https://github.com/Shopify/hydrogen/pull/1057) [`06d92ddc`](https://github.com/Shopify/hydrogen/commit/06d92ddc44e03d37d2dd8a9bbeaa5fab4c4bbbd1) Thanks [@frandiox](https://github.com/frandiox)! - Ability to concatenate requests in API route handlers without leaving the server by returning a new Request instance.
+
+  ```jsx
+  // src/routes/my-page.server.jsx
+
+  export async function api(request) {
+    if (request.method === 'POST') {
+      // do some work here...
+    }
+
+    return new Request(request.url, {method: 'GET'});
+  }
+
+  export default function Page() {
+    return (
+      <form action="/my-page" method="POST">
+        ...
+      </form>
+    );
+  }
+  ```
+
+  In the previous example, a POST request to `/my-page` would run the API handler and automatically continue with the server component rendering (GET). This is useful for handling HTML forms without waterfall requests.
+
+- [#1049](https://github.com/Shopify/hydrogen/pull/1049) [`b88a885d`](https://github.com/Shopify/hydrogen/commit/b88a885d6b062209497a97d8ce7bcd438787d53c) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Support sub request cache control header `stale-while-revalidate` everywhere
+
+* [#1047](https://github.com/Shopify/hydrogen/pull/1047) [`5268bf85`](https://github.com/Shopify/hydrogen/commit/5268bf85f61f8abf0e97788b7ae925ad4f3183b2) Thanks [@jplhomer](https://github.com/jplhomer)! - Restore scroll position when navigating using the back and forward buttons.
+
+- [#1062](https://github.com/Shopify/hydrogen/pull/1062) [`cc172ae7`](https://github.com/Shopify/hydrogen/commit/cc172ae778bad0d654adcd2f41d4a548d1d94a0a) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix encoding of quotes in CSS Modules which caused hydration errors
+
+* [#1046](https://github.com/Shopify/hydrogen/pull/1046) [`3947d53a`](https://github.com/Shopify/hydrogen/commit/3947d53a99868a1e218bfab958b824ce0484615a) Thanks [@michenly](https://github.com/michenly)! - Fixed server Cookie bug where initializing with empty string will resulted in 1 item in the Cookies Map.
+
+- [#1059](https://github.com/Shopify/hydrogen/pull/1059) [`401f329d`](https://github.com/Shopify/hydrogen/commit/401f329d331bebc4842204d4df39c4dd6797b4e1) Thanks [@frandiox](https://github.com/frandiox)! - Fix link prefetch mismatch due to query-string
+
+* [#1072](https://github.com/Shopify/hydrogen/pull/1072) [`47c0c184`](https://github.com/Shopify/hydrogen/commit/47c0c18411eb20fa6652a981b09fd65cbed38304) Thanks [@michenly](https://github.com/michenly)! - Improve type for ShopifyContextValue to be based on ShopifyConfig.
+
 ## 0.14.0
 
 ### Minor Changes
