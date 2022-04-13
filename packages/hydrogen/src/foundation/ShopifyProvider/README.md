@@ -19,7 +19,6 @@ export default function App() {
 | -------------- | -------------------------------------- | ---------------------------------------------- |
 | shopifyConfig? | <code>HydrogenConfig['shopify']</code> | The contents of the `hydrogen.config.js` file. |
 | children?      | <code>React</code>                     | Any `ReactNode` elements.                      |
-| any?           | <code>any</code>                       | PLACEHOLDER DESCRIPTION                        |
 
 ## Component type
 

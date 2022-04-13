@@ -15,6 +15,4 @@ export type ShopifyProviderProps = {
   shopifyConfig?: HydrogenConfig['shopify'];
   /** Any `ReactNode` elements. */
   children?: ReactNode;
-  /** PLACEHOLDER DESCRIPTION */
-  manager?: any;
 };
