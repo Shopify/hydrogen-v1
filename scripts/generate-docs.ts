@@ -236,6 +236,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'foundation/useServerState',
         'foundation/useShop',
         'foundation/useQuery',
+        'foundation/fetchSync',
         'foundation/useUrl',
         'hooks/useShopQuery',
       ],

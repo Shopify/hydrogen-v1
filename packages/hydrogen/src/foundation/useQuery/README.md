@@ -2,6 +2,9 @@
 
 The `useQuery` hook executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this hook to call any third-party APIs from a server component.
 
+> Note:
+> If you're making a simple fetch call on the server, then we recommend using the [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) hook instead.
+
 ## Example code
 
 ```tsx
@@ -50,4 +53,5 @@ The `useQuery` returns an object with the following key:
 
 ## Related hooks
 
+- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync)
 - [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)

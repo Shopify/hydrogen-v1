@@ -4,4 +4,5 @@
 
 ## Related hooks
 
+- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync)
 - [`useQuery`](/api/hydrogen/hooks/global/usequery)

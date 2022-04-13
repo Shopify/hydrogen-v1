@@ -122,7 +122,7 @@ export default function CustomPage({response}) {
 {% endcodeblock %}
 
 > Caution:
-> You must call `response.doNotStream()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved.
+> You must call `response.doNotStream()` before any calls to `fetchSync`, `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved.
 
 #### `response.redirect()`
 
@@ -150,7 +150,7 @@ return response.redirect('https://yoursite.com/new-page', 301);
 {% endcodeblock %}
 
 > Caution:
-> You must call `return response.redirect()` before any calls to `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response. The value must also be returned.
+> You must call `return response.redirect()` before any calls to `fetchSync`, `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response. The value must also be returned.
 
 #### `response.send()`
 

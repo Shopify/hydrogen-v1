@@ -55,6 +55,14 @@ Global hooks are used to fetch data from server components.
     <th>Description</th>
   </tr>
   <tr>
+    <td><a href="/api/hydrogen/hooks/global/fetchsync">fetchSync</a></td>
+    <td>Makes third-party API requests and is the recommended way to make simple fetch calls on the server.</td>
+  </tr>
+  <tr>
+    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
+    <td>Executes an asynchronous operation like <code>fetch</code> in a way that supports <a href="https://reactjs.org/docs/concurrent-mode-suspense.html">Suspense</a>.</td>
+  </tr
+  <tr>
     <td><a href="/api/hydrogen/hooks/global/useserverstate">useServerState</a></td>
     <td><a href="/custom-storefronts/hydrogen/framework/server-state">Manages the server state</a> when using Hydrogen as a React Server Component framework.</td>
   </tr>
@@ -65,10 +73,6 @@ Global hooks are used to fetch data from server components.
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshopquery">useShopQuery</a></td>
     <td>Makes server-only GraphQL queries to the <a href="/api/storefront">Storefront API</a>.</td>
-  </tr>
-  <tr>
-    <td><a href="/api/hydrogen/hooks/global/usequery">useQuery</a></td>
-    <td>Executes an asynchronous operation like <code>fetch</code> in a way that supports <a href="https://reactjs.org/docs/concurrent-mode-suspense.html">Suspense</a>.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useurl">useUrl</a></td>

@@ -1,4 +1,4 @@
 ## Related hooks
 
-- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync)
 - [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery)
+- [`useQuery`](/api/hydrogen/hooks/global/usequery)
