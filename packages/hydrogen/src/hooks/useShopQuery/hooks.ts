@@ -9,6 +9,7 @@ import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
 import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
 import {META_ENV_SSR} from '../../foundation/ssr-interop';
+import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -175,26 +176,12 @@ function useCreateShopRequest(body: string) {
   const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
 
   const request = useServerRequest();
-  const secretToken =
-    typeof Oxygen !== 'undefined'
-      ? Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN
-      : null;
   const buyerIp = request.getBuyerIp();
 
-  const extraHeaders = {} as Record<string, any>;
-
-  /**
-   * Only pass one type of storefront token at a time.
-   */
-  if (secretToken) {
-    extraHeaders['Shopify-Storefront-Private-Token'] = secretToken;
-  } else {
-    extraHeaders['X-Shopify-Storefront-Access-Token'] = storefrontToken;
-  }
-
-  if (buyerIp) {
-    extraHeaders['Shopify-Storefront-Buyer-IP'] = buyerIp;
-  }
+  const extraHeaders = getStorefrontApiRequestHeaders({
+    buyerIp,
+    storefrontToken,
+  });
 
   return {
     key: [storeDomain, storefrontApiVersion, body],
