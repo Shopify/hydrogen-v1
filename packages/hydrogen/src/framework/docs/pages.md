@@ -143,13 +143,11 @@ The `redirect` function accepts a `location` URL and an optional `statusCode`, w
 {% codeblock file %}
 
 ```jsx
+// This redirect function only supports initial server-rendered page responses. It doesn't yet support client-navigated responses.
 return response.redirect('https://yoursite.com/new-page', 301);
 ```
 
 {% endcodeblock %}
-
-> Note:
-> This redirect method only supports initial server-rendered page responses. It does not yet support client-navigated responses.
 
 > Caution:
 > You must call `return response.redirect()` before any calls to `fetchSync`, `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response. The value must also be returned.

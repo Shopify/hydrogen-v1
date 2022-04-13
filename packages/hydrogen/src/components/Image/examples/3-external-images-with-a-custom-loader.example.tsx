@@ -11,6 +11,7 @@ export default function ExternalImageWithLoader() {
       src="fancyImage.png"
       width={500}
       height={500}
+      loader={imageLoader}
       loaderOptions={{scale: 2}}
     />
   );

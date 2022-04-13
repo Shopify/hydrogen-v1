@@ -3,11 +3,13 @@ import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
   collectQueryTimings,
+  logCacheApiStatus,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
   getItemFromCache,
+  hashKey,
   isStale,
   setItemInCache,
 } from '../../framework/cache';
@@ -88,6 +90,7 @@ function cachedQueryFnBuilder<T>(
     // to prevent losing the current React cycle.
     const request = useServerRequest();
     const log = getLoggerWithContext(request);
+    const hashedKey = hashKey(key);
 
     const cacheResponse = await getItemFromCache(key);
 
@@ -107,14 +110,12 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(response)) {
-        log.debug(
-          '[useQuery] cache stale; generating new response in background'
-        );
+      if (isStale(response, resolvedQueryOptions?.cache)) {
+        logCacheApiStatus('STALE', hashedKey);
         const lockKey = `lock-${key}`;
 
         runDelayedFunction(async () => {
-          log.debug(`[stale regen] fetching cache lock`);
+          logCacheApiStatus('UPDATING', hashedKey);
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
