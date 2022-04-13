@@ -9,10 +9,10 @@ import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
   getItemFromCache,
-  hashKey,
   isStale,
   setItemInCache,
 } from '../../framework/cache';
+import {hashKey} from '../../utilities/hash';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
