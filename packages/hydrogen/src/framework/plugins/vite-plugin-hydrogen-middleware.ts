@@ -38,7 +38,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           dev: true,
           getShopifyConfig: async (incomingMessage) => {
             const {default: hydrogenConfigExport} = await server.ssrLoadModule(
-              'virtual:hydrogen-config-no-globs'
+              'virtual:hydrogen-config:proxy'
             );
 
             // @ts-ignore
@@ -96,19 +96,10 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       }
     },
     async load(id) {
-      if (id.startsWith('virtual:hydrogen-config-no-globs')) {
-        const configPath = await findHydrogenConfigPath(
-          config.root,
-          pluginOptions.configPath
-        );
-
-        const hydrogenConfigCode = await fs.readFile(configPath, 'utf-8');
-
-        // Remove import globs to avoid loading React components here.
-        return hydrogenConfigCode.replace(
-          /import\.meta.glob(Eager)?\(['"`][^'"`]+['"`]\)/gm,
-          '{}'
-        );
+      if (id === 'virtual:hydrogen-config:proxy') {
+        // Likely due to a bug in Vite, but the config cannot be loaded
+        // directly using ssrLoadModule. It needs to be proxied as follows:
+        return `import hc from 'virtual:hydrogen-config'; export default hc;`;
       }
     },
   } as Plugin;
