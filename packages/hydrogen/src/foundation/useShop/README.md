@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/foundation/useShop and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
-The `useShop` hook provides access to values within `hydrogen.config.js`. It must be a descendent of a `ShopifyProvider` component.
+The `useShop` hook provides access to values within `hydrogenConfing.shopify`. It must be a descendent of a `ShopifyProvider` component.
 
 ## Example code
 
@@ -18,13 +18,13 @@ export default function MyPage() {
 
 The `useShop` hook returns an object with the following keys:
 
-| Key                    | Description                                                                               |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| `locale`               | The application locale. Defaults to `defaultLocale` in `hydrogen.config.js` then `EN-US`. |
-| `languageCode`         | The first two characters of the `locale` key. For example, `EN`.                          |
-| `storeDomain`          | The store domain set in `hydrogen.config.js`.                                             |
-| `storefrontToken`      | The Storefront API token set in `hydrogen.config.js`.                                     |
-| `storefrontApiVersion` | The Storefront API version set in `hydrogen.config.js`.                                   |
+| Key                    | Description                                                                                    |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| `locale`               | The application locale. Defaults to `defaultLocale` in `hydrogenConfing.shopify` then `EN-US`. |
+| `languageCode`         | The first two characters of the `locale` key. For example, `EN`.                               |
+| `storeDomain`          | The store domain set in `hydrogenConfing.shopify`.                                             |
+| `storefrontToken`      | The Storefront API token set in `hydrogenConfing.shopify`.                                     |
+| `storefrontApiVersion` | The Storefront API version set in `hydrogenConfing.shopify`.                                   |
 
 ## Related components
 
