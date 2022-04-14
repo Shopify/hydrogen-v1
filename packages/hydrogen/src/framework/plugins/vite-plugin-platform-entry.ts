@@ -50,10 +50,7 @@ export default () => {
         normalizePath(id).includes('@shopify/hydrogen/dist/esnext/platforms/')
       ) {
         code = code
-          .replace(
-            '__SERVER_ENTRY__',
-            process.env.HYDROGEN_SERVER_ENTRY || HYDROGEN_DEFAULT_SERVER_ENTRY
-          )
+          .replace('__SERVER_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY)
           .replace(
             '__INDEX_TEMPLATE__',
             normalizePath(
