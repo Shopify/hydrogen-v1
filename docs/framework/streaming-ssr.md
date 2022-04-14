@@ -55,6 +55,8 @@ React 18 introduced [Suspense for data fetching to complement streaming SSR](htt
 
 ### How Suspense works
 
+Suspense establishes where you need to await an initiated data fetch. This means that Suspense doesn't define where you initiate fetching data. Instead, it specifies where you access the results of fetching data.
+
 Suspense is implemented as a React component that wraps other components, so that each pair of Suspense tags corresponds to a Suspense boundary.
 
 A Suspense boundary is any portion of React component code enclosed by a pair of Suspense component tags so that those components share common rendering behaviors while awaiting data controlled by Suspense. Multiple Suspense boundaries can co-exist within a single component, and Suspense boundaries can also be nested.
@@ -100,7 +102,7 @@ If you don't define a `Suspense` component, then React waits for the streaming t
 
 ### Example: Suspense component defined
 
-When a `Suspense` component is wrapped around a group of timed components, it waits for the last component in the group to resolve before rendering. The order of the streamed content doesn't change in the streamed document source:
+When a `Suspense` component is wrapped around a group of components that fetch data, it waits for the last component in the group to resolve before rendering. The order of the streamed content doesn't change in the streamed document source:
 
 ![A streamed document source that includes a Suspense component](/assets/custom-storefronts/hydrogen/suspense-defined.gif)
 
