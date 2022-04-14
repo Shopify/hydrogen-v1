@@ -1,19 +1,19 @@
 ---
-'@shopify/hydrogen': minor
+'@shopify/hydrogen': patch
 ---
 
-Add `useLocation()` to allow a developer to subscribe to a reactive version of the current router location.
+Update `useUrl()` to allow a developer to subscribe to a reactive version of the current router location.
 
 Example:
 
 ```jsx
-import {useLocation} from '@shopify/hydrogen/client';
+import {useUrl} from '@shopify/hydrogen/client';
 
 function MyClientComponent() {
-  const location = useLocation();
+  const url = useUrl();
 
   useEffect(() => {
     // Record navigation, analytics, etc
-  }, [location]);
+  }, [url]);
 }
 ```

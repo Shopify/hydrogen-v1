@@ -8,6 +8,5 @@ export * from './utilities';
 export {ClientAnalytics} from './foundation/Analytics';
 export {useRouteParams} from './foundation/useRouteParams/useRouteParams';
 export {useNavigate} from './foundation/useNavigate/useNavigate';
-export {useLocation} from './foundation/Router/BrowserRouter.client';
 export {fetchSync} from './foundation/fetchSync/client/fetchSync';
 export {suspendFunction, preloadFunction} from './utilities/suspense';
