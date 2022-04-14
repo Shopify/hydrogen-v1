@@ -116,7 +116,7 @@ Global components wrap around your entire app. Hydrogen includes the [ShopifyPro
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshop">useShop</a></td>
-    <td>Accesses values within <code>hydrogenConfing.shopify</code>.</td>
+    <td>Accesses values within the <code>shopify</code> property in the <code>hydrogen.config.js</code> file.</td>
   </tr>
   <tr>
     <td><a href="/api/hydrogen/hooks/global/useshopquery">useShopQuery</a></td>

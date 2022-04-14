@@ -17,7 +17,7 @@ export default function App() {
 
 | Name           | Type                | Description                 |
 | -------------- | ------------------- | --------------------------- | ------------------------------------------------------------------------------------------------ |
-| shopifyConfig? | <code>ShopifyConfig | ShopifyConfigFetcher</code> | Shopify connection information. Defaults to the `shopify` property in `hydrogen.config.js` file. |
+| shopifyConfig? | <code>ShopifyConfig &#124; ShopifyConfigFetcher</code> | Shopify connection information. Defaults to the `shopify` property in the `hydrogen.config.js` file. |
 | children?      | <code>React</code>  | Any `ReactNode` elements.   |
 
 ## Component type

@@ -11,7 +11,7 @@ export type ShopifyContextValue = {
 };
 
 export type ShopifyProviderProps = {
-  /** Shopify connection information. Defaults to the `shopify` property in `hydrogen.config.js` file. */
+  /** Shopify connection information. Defaults to the `shopify` property in the `hydrogen.config.js` file. */
   shopifyConfig?: ShopifyConfig | ShopifyConfigFetcher;
   /** Any `ReactNode` elements. */
   children?: ReactNode;

@@ -28,7 +28,7 @@ This hook returns an object with the following keys:
 
 | Key                    | Description                                                                                                                                  |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `defaultLocale` value in `hydrogenConfing.shopify`. |
+| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `defaultLocale` value in `hydrogenConfig.shopify`. |
 | `currencyCode`         | The currency code from the `MoneyV2` object.                                                                                                 |
 | `currencyName`         | The name for the currency code, returned by `Intl.NumberFormat`.                                                                             |
 | `currencySymbol`       | The currency symbol returned by `Intl.NumberFormat`.                                                                                         |

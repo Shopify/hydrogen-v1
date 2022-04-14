@@ -1,6 +1,6 @@
 <!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/hydrogen/src/foundation/useShop and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
 
-The `useShop` hook provides access to values within `hydrogenConfing.shopify`. It must be a descendent of a `ShopifyProvider` component.
+The `useShop` hook provides access to values within the `shopify` property in the `hydrogen.config.js` file. The `useShop` hook must be a descendent of a `ShopifyProvider` component.
 
 ## Example code
 
