@@ -9,7 +9,7 @@ This guide provides information about how React Server Components work in the co
 
 React Server Components allow the server and the client to work together to render your Hydrogen app.
 
-For example, the following React element tree is [composed of React components](#composition) that render other React components. React Server Components allow some components to render on the server, some to render on the client, and others to render on both the server and the client:
+For example, the following React element tree is [composed of React components](#composition) that render other React components. React Server Components allow some components to render on the server, some to render in the browser or on the server using server-side rendering (SSR), and others to render on both the server and the client:
 
 ![A diagram that illustrates a React element tree composed of server, client, and shared components](/assets/custom-storefronts/hydrogen/react-element-tree.png)
 
@@ -140,5 +140,6 @@ Although shared components have the most constraints, many components already ob
 ## Next steps
 
 - Learn how to [work with React Server Components](/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc).
+- Improve your app's loading performance with [streaming SSR and Suspense](/custom-storefronts/hydrogen/framework/streaming-ssr).
 - Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
 - Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
