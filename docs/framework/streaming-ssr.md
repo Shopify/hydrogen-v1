@@ -59,7 +59,7 @@ Suspense establishes where you need to await an initiated data fetch. This means
 
 Suspense is implemented as a React component that wraps other components, so that each pair of Suspense tags corresponds to a Suspense boundary.
 
-A Suspense boundary is any portion of React component code enclosed by a pair of Suspense component tags so that those components share common rendering behaviors while awaiting data controlled by Suspense. Multiple Suspense boundaries can co-exist within a single component, and Suspense boundaries can also be nested.
+A Suspense boundary is any portion of React component code that's enclosed by a pair of Suspense component tags. The components in a Suspense boundary share common rendering behaviors while awaiting data controlled by Suspense. Multiple Suspense boundaries can co-exist within a single component, and Suspense boundaries can also be nested.
 
 ### Example: Layout fallback
 
