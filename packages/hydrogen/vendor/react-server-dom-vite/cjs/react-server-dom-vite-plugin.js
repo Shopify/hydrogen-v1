@@ -21,22 +21,48 @@ var path = require('path');
 var rscViteFileRE = /\/react-server-dom-vite.js/;
 function ReactFlightVitePlugin() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref$clientComponentP = _ref.clientComponentPaths,
-      clientComponentPaths = _ref$clientComponentP === void 0 ? [] : _ref$clientComponentP,
       _ref$isServerComponen = _ref.isServerComponentImporterAllowed,
       isServerComponentImporterAllowed = _ref$isServerComponen === void 0 ? function (importer) {
     return false;
-  } : _ref$isServerComponen;
+  } : _ref$isServerComponen,
+      _ref$isClientComponen = _ref.isClientComponent,
+      isClientComponent = _ref$isClientComponen === void 0 ? function (id) {
+    return /\.client\.[jt]sx?($|\?)/.test(id);
+  } : _ref$isClientComponen,
+      findClientComponentsForDev = _ref.findClientComponentsForDev,
+      findClientComponentsForClientBuild = _ref.findClientComponentsForClientBuild;
 
   var config;
+  var server;
+  var timeout;
+  var absoluteImporterPath;
+  var discoveredClientComponents = [];
+
+  if (!findClientComponentsForDev) {
+    findClientComponentsForDev = function () {
+      return Array.from(server.moduleGraph.fileToModulesMap.keys()).filter(isClientComponent);
+    };
+  }
+
   return {
     name: 'vite-plugin-react-server-components',
     enforce: 'pre',
-    configResolved: function (_config) {
+    configureServer: function (_server) {
+      server = _server;
+    },
+    configResolved: async function (_config) {
       config = _config; // By pushing this plugin at the end of the existing array,
       // we enforce running it *after* Vite resolves import.meta.glob.
 
       config.plugins.push(hashImportsPlugin);
+
+      if (config.command === 'build' && !config.build.ssr) {
+        if (findClientComponentsForClientBuild) {
+          discoveredClientComponents = await findClientComponentsForClientBuild(config);
+        } else {
+          throw new Error('[react-server-dom-vite] Parameter findClientComponentsForClientBuild is required for client build');
+        }
+      }
     },
     resolveId: async function (source, importer) {
       if (!importer) return null;
@@ -52,7 +78,22 @@ function ReactFlightVitePlugin() {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       if (!options.ssr) return null; // Wrapped components won't match this becase they end in ?no-proxy
 
-      if (/\.client\.[jt]sx?$/.test(id)) {
+      if (isClientComponent(id) && !/[&?]no-proxy($|&)/.test(id)) {
+        // Refresh the list of discovered client components
+        // every time a new one is processed.
+        if (config.command === 'serve') {
+          clearTimeout(timeout);
+          timeout = setTimeout(async function () {
+            discoveredClientComponents = findClientComponentsForDev ? await findClientComponentsForDev(config, server) : [];
+
+            if (absoluteImporterPath) {
+              // Signal Vite that this file needs to be
+              // refreshed both in server and browser.
+              server.watcher.emit('change', absoluteImporterPath);
+            }
+          }, 100);
+        }
+
         return proxyClientComponent(id);
       }
 
@@ -72,6 +113,7 @@ function ReactFlightVitePlugin() {
        */
       if (rscViteFileRE.test(id)) {
         var INJECTING_RE = /\{\s*__INJECTED_CLIENT_IMPORTERS__[:\s]*null[,\s]*\}\s*;/;
+        absoluteImporterPath = id.split('?')[0];
 
         if (options && options.ssr) {
           // In SSR, directly use components already discovered by RSC
@@ -79,13 +121,9 @@ function ReactFlightVitePlugin() {
           return code.replace(INJECTING_RE, 'globalThis.__COMPONENT_INDEX');
         }
 
-        var CLIENT_COMPONENT_GLOB = '**/*.client.[jt]s?(x)';
         var importerPath = path.dirname(id);
-        var importerToRootPath = vite.normalizePath(path.relative(importerPath, config.root));
-        var userGlob = path.join(importerToRootPath, CLIENT_COMPONENT_GLOB);
-        var importers = [userGlob];
-        clientComponentPaths.forEach(function (componentPath) {
-          importers.push(path.join(path.relative(importerPath, componentPath), CLIENT_COMPONENT_GLOB));
+        var importers = discoveredClientComponents.map(function (absolutePath) {
+          return vite.normalizePath(path.relative(importerPath, absolutePath));
         });
         var injectedGlobs = "Object.assign(Object.create(null), " + importers.map(function (glob) {
           return (// Mark the globs to modify the result after Vite resolves them.
