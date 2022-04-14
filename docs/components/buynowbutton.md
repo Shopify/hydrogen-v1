@@ -16,12 +16,12 @@ export function MyComponent() {
 
 ## Props
 
-| Name        | Type                                                                 | Description                                                                       |
-| ----------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| quantity?   | <code>number</code>                                                  | The item quantity. Defaults to 1.                                                 |
-| variantId   | <code>string</code>                                                  | The ID of the variant.                                                            |
-| attributes? | <code>Unknown<<wbr>UndocumentedType, UndocumentedType<wbr>>[]</code> | An array of cart line attributes that belong to the item being added to the cart. |
-| children    | <code>ReactNode<<wbr>Imported<wbr>></code>                           | Any `ReactNode` elements.                                                         |
+| Name        | Type                                            | Description                                                                       |
+| ----------- | ----------------------------------------------- | --------------------------------------------------------------------------------- |
+| quantity?   | <code>number</code>                             | The item quantity. Defaults to 1.                                                 |
+| variantId   | <code>string</code>                             | The ID of the variant.                                                            |
+| attributes? | <code>Object<<wbr>string, string<wbr>>[]</code> | An array of cart line attributes that belong to the item being added to the cart. |
+| children    | <code>ReactNode<<wbr>Imported<wbr>></code>      | Any `ReactNode` elements.                                                         |
 
 ## Component type
 

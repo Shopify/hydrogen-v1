@@ -190,7 +190,7 @@ export async function api(request, {params}) {
 
 ### Concatenating requests
 
-Hydrogen allows concatenating requests in API routes in order to avoid extra network trips (waterfall requests). This is useful for HTML forms, where it is common to refresh the current page after the form submission is completed.
+You can concatenate requests in API routes to avoid extra network problems, such as waterfall requests. Concatenating requests is useful for HTML forms, where it's common to refresh the current page after a form is submitted.
 
 ```jsx
 // src/routes/my-page.server.jsx

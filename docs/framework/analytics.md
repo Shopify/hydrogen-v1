@@ -9,12 +9,13 @@ The following diagram describes how analytics data is processed on the server an
 ![Shows a diagram that describes how analytics data is processed on the server and client in Hydrogen](/assets/custom-storefronts/hydrogen/hydrogen-analytics.png)
 
 1. On the server, the `useServerAnalytics` hook collects data in a single render request.
+
 2. On the client, the data is streamed as part of the `Suspense` component. This single render request waits for all queries to complete, outputs the collected data from the server-side, and triggers a `PAGE_VIEW` event.
 
 3. Events can be published to external endpoints from the client or server-side:
 
 - **Client**: The client can subscribe to events and publish them to external endpoints.
-- **Server**: Events are published to the `/__event` endpoint, a server analytics route. You can use `serverAnalyticsConnectors` to publish the event to an external endpoint.
+- **Server**: Events are published to the `/__event` endpoint, a server analytics route. You can use server analytics connectors to publish the event to an external endpoint.
 
 ## Default events
 
