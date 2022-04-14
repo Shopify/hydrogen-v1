@@ -46,13 +46,10 @@ export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
         ...[hydrogenUiPath].filter(Boolean),
       ],
       isServerComponentImporterAllowed(importer: string, source: string) {
-        // Always allow the entry server (e.g. App.server.jsx) to be imported
-        // in other files such as worker.js or server.js.
-        const entryServer =
-          process.env.HYDROGEN_SERVER_ENTRY || HYDROGEN_DEFAULT_SERVER_ENTRY;
-
         return (
-          source.includes(entryServer) ||
+          // Always allow the entry server (e.g. App.server.jsx) to be imported
+          // in other files such as worker.js or server.js.
+          source.includes(HYDROGEN_DEFAULT_SERVER_ENTRY) ||
           // TODO update this after handleEvent is replaced with handleRequest
           /(index|entry-server|hydrogen\.config)\.[jt]s/.test(importer) ||
           // Support importing server components for testing

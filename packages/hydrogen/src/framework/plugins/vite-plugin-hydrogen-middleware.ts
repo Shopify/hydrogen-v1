@@ -6,7 +6,8 @@ import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
 import type {HydrogenVitePluginOptions} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
 
-export const HYDROGEN_DEFAULT_SERVER_ENTRY = '/src/App.server';
+export const HYDROGEN_DEFAULT_SERVER_ENTRY =
+  process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
 const virtualModuleId = 'virtual:hydrogen-config';
 const virtualProxyModuleId = virtualModuleId + ':proxy';
@@ -73,10 +74,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
             dev: true,
             indexTemplate: getIndexTemplate,
             getServerEntrypoint: () =>
-              server.ssrLoadModule(
-                process.env.HYDROGEN_SERVER_ENTRY ||
-                  HYDROGEN_DEFAULT_SERVER_ENTRY
-              ),
+              server.ssrLoadModule(HYDROGEN_DEFAULT_SERVER_ENTRY),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)
