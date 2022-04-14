@@ -41,4 +41,5 @@ export {
   CacheCustom,
 } from './framework/CachingStrategy';
 
+export {fetchSync} from './foundation/fetchSync/server/fetchSync';
 export {useServerAnalytics} from './foundation/Analytics';

@@ -80,9 +80,8 @@ export const renderHydrogen = (
   App: any,
   {shopifyConfig, routes, serverAnalyticsConnectors}: ServerHandlerConfig
 ) => {
-  const handleRequest: RequestHandler = async function (
-    rawRequest,
-    {
+  const handleRequest: RequestHandler = async function (rawRequest, options) {
+    const {
       indexTemplate,
       streamableResponse,
       dev,
@@ -90,8 +89,8 @@ export const renderHydrogen = (
       context,
       nonce,
       buyerIpHeader,
-    }
-  ) {
+    } = options;
+
     const request = new ServerComponentRequest(rawRequest);
     request.ctx.buyerIpHeader = buyerIpHeader;
 
@@ -115,15 +114,6 @@ export const renderHydrogen = (
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    let template =
-      typeof indexTemplate === 'function'
-        ? await indexTemplate(url.toString())
-        : indexTemplate;
-
-    if (template && typeof template !== 'string') {
-      template = template.default;
-    }
-
     if (!isReactHydrationRequest && routes) {
       const apiRoute = getApiRoute(url, {routes});
 
@@ -133,13 +123,30 @@ export const renderHydrogen = (
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        return renderApiRoute(request, apiRoute, shopifyConfig);
+        const apiResponse = await renderApiRoute(
+          request,
+          apiRoute,
+          shopifyConfig
+        );
+
+        return apiResponse instanceof Request
+          ? handleRequest(apiResponse, options)
+          : apiResponse;
       }
     }
 
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
+
+    let template =
+      typeof indexTemplate === 'function'
+        ? await indexTemplate(url.toString())
+        : indexTemplate;
+
+    if (template && typeof template !== 'string') {
+      template = template.default;
+    }
 
     const params = {
       App,

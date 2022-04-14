@@ -9,8 +9,9 @@ All data fetching happens on the server and is never exposed to the client, unle
 
 Hydrogen provides the following ways to fetch data from server components:
 
-- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery): A hook that allows you to make server-only GraphQL queries to the Storefront API.
-- [`useQuery`](/api/hydrogen/hooks/global/usequery): A simple wrapper around `fetch` that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs.
+- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery): A hook that makes server-only GraphQL queries to the Storefront API.
+- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync): A hook that makes third-party API requests and is the recommended way to make simple fetch calls on the server.
+- [`useQuery`](/api/hydrogen/hooks/global/usequery): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
 
 To learn how to fetch data from third-party sources, refer to [Data sources](/custom-storefronts/hydrogen/data-sources).
 
@@ -51,6 +52,74 @@ export default function WishListButton({product}) {
       {added ? 'Added' : 'Add'} {product.title} to Wish List
     </button>
   );
+}
+```
+
+{% endcodeblock %}
+
+## Fetching data on the client
+
+To make a third-party HTTP request on the client, use the [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) hook within a Suspense boundary:
+
+{% codeblock file, filename: 'PostDetails.client.jsx' %}
+
+```js
+import {syncFetch} from '@shopify/hydrogen/client';
+import {Suspense, useState} from 'react';
+export default function PostDetails() {
+  const [show, setShow] = useState(false);
+  return (
+    <>
+      <button onClick={() => setShow(!show)} type="button">
+        Show Details
+      </button>
+      {show && (
+        <Suspense fallback="Loading">
+          <Details>
+        </Suspense>
+      }
+    </>
+  );
+}
+function Details() {
+  const post = fetchSync('https://3p.api.com/post.json').json();
+  return <h2>{post.title}</h2>;
+}
+```
+
+{% endcodeblock %}
+
+Some third-party integrations offer a JavaScript SDK in the form of an `npm` package. You can use Hydrogen's `suspendFunction` utility to create a version of the SDK which supports Suspense data-fetching:
+
+{% codeblock file, filename: 'PostDetails.client.jsx' %}
+
+```js
+import {suspendFunction} from '@shopify/hydrogen/client';
+import {Suspense, useState} from 'react';
+import thirdPartyClient from 'third-party';
+export default function PostDetails() {
+  const [show, setShow] = useState(false);
+  return (
+    <>
+      <button onClick={() => setShow(!show)} type="button">
+        Show Details
+      </button>
+      {show && (
+        <Suspense fallback="Loading">
+          <Details>
+        </Suspense>
+      }
+    </>
+  );
+}
+function fetchThirdParty(opts) {
+  return suspendFunction(['unique', 'key'], async () => {
+    return await thirdPartyClient.query(opts)
+  });
+}
+function Details() {
+  const post = fetchThirdParty('myPost');
+  return <h2>{post.title}</h2>;
 }
 ```
 

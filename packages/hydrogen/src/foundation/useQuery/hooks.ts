@@ -9,10 +9,10 @@ import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,
   getItemFromCache,
-  hashKey,
   isStale,
   setItemInCache,
 } from '../../framework/cache';
+import {hashKey} from '../../utilities/hash';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
@@ -33,9 +33,11 @@ export interface HydrogenUseQueryOptions {
 
 /**
  * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
- * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based
- * on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this
+ * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this
  * hook to call any third-party APIs from a server component.
+ *
+ * \> Note:
+ * \> If you're making a simple fetch call on the server, then we recommend using the [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) hook instead.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
