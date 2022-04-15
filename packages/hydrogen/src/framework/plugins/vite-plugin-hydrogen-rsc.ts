@@ -18,7 +18,10 @@ export default function () {
     },
     async findClientComponentsForClientBuild() {
       // In client build, we create a local server to discover client compoents.
-      const server = await createServer({server: {middlewareMode: 'ssr'}});
+      const server = await createServer({
+        clearScreen: false,
+        server: {middlewareMode: 'ssr'},
+      });
 
       await Promise.all([
         // Load server entry to discover client components early
