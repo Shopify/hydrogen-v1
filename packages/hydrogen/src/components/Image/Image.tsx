@@ -92,7 +92,8 @@ export function Image(props: ImageProps) {
       };
 
   const srcPath = imgProps.loader
-    ? imgProps.loader({src: imgProps.src, options: imgProps.loaderOptions})
+    ? // @ts-ignore
+      imgProps.loader({src: imgProps.src, options: imgProps.loaderOptions})
     : imgProps.src;
 
   return (

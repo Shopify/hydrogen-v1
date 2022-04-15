@@ -16,6 +16,7 @@ export default function DevTools() {
     if (import.meta.hot) {
       import.meta.hot.on('hydrogen', ({type, data}: DevServerMessage) => {
         if (type === 'warn') {
+          // @ts-ignore
           setWarnings((state) => [...(state || []), data]);
         }
       });
