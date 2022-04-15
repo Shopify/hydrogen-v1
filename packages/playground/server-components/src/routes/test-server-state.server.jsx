@@ -1,4 +1,4 @@
-import ReadServerState from '../components/ReadServerState.client';
+import ReadServerState from '../components/ReadServerState';
 
 export default function TestServerState() {
   return (

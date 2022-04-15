@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import Counter from '../components/Counter.client';
+import Counter from '../components/Counter';
 import {createData} from '../utils';
 
 // Page with many Suspense boundaries to test streaming

@@ -1,4 +1,4 @@
-import ClientEnv from '../components/ClientEnv.client';
+import ClientEnv from '../components/ClientEnv';
 
 export default function Env() {
   return (
