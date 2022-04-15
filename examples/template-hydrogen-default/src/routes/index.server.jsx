@@ -9,8 +9,8 @@ import {
 import gql from 'graphql-tag';
 
 import Layout from '../components/Layout.server';
-import FeaturedCollection from '../components/FeaturedCollection';
-import ProductCard from '../components/ProductCard';
+import FeaturedCollection from '../components/FeaturedCollection.shared';
+import ProductCard from '../components/ProductCard.shared';
 import Welcome from '../components/Welcome.server';
 import {Suspense} from 'react';
 

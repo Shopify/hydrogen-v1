@@ -1,6 +1,6 @@
 import {useCart} from '@shopify/hydrogen/client';
 
-import CartIcon from './CartIcon';
+import CartIcon from './CartIcon.shared';
 
 /**
  * A client component that specifies the icon to use if a cart contains merchandise
