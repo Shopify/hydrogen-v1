@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image} from '../Image';
+import {Image} from '../Image.shared';
 import {mount} from '@shopify/react-testing';
 import {getPreviewImage} from '../../../utilities/tests/media';
 import * as utilities from '../../../utilities';
