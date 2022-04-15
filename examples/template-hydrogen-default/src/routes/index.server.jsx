@@ -13,6 +13,7 @@ import FeaturedCollection from '../components/FeaturedCollection.shared';
 import ProductCard from '../components/ProductCard.shared';
 import Welcome from '../components/Welcome.server';
 import {Suspense} from 'react';
+import RBButton from 'react-bootstrap/Button';
 
 export default function Index({country = {isoCode: 'US'}}) {
   return (
@@ -21,6 +22,7 @@ export default function Index({country = {isoCode: 'US'}}) {
         <SeoForHomepage />
       </Suspense>
       <div className="relative mb-12">
+        <RBButton>Bootstrap Button</RBButton>
         <Welcome />
         <Suspense fallback={<BoxFallback />}>
           <FeaturedProductsBox country={country} />
