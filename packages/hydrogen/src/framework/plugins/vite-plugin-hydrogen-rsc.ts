@@ -2,6 +2,8 @@
 import reactServerDomVite from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
 import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
 import {createServer} from 'vite';
+import {promises as fs} from 'fs';
+import path from 'path';
 
 export default function () {
   return reactServerDomVite({
@@ -34,9 +36,68 @@ export default function () {
       await server.close();
 
       // At this point, the server has loaded all the components in the module graph
-      return Array.from(server.moduleGraph.fileToModulesMap.keys()).filter(
-        (item) => /\.client\.[jt]sx?$/.test(item)
-      );
+      return reactServerDomVite.findClientComponentsFromServer(server);
+    },
+    isClientComponent(rawId: string) {
+      let [id, query = ''] = rawId.split('?');
+
+      // Check default RSC rules plus new .shared.jsx suffix
+      if (/\.client\.[jt]sx?$/.test(id)) return true;
+      if (/\.(server|shared)\.[jt]sx?$/.test(id)) return false;
+
+      // Vite exceptions
+      if (/(^|&)commonjs-(proxy|module)($|&)/.test(query)) return false;
+      // Hydrogen exceptions
+      if (id.endsWith('/hydrogen-entry-client.jsx')) return false;
+      if (id.endsWith('/hydrogen/dist/esnext/entry-client.js')) return false;
+
+      // In Vite, JSX syntax can only be used in .jsx files -- Assume it is a client component
+      if (/\.[jt]sx$/.test(id)) return true;
+
+      // non-JS files
+      if (!/\.[jt]s$/.test(id)) return false;
+
+      // --- Check content of JS files:
+
+      // Known React exceptions
+      if (/\/react-server-dom-vite\//.test(id)) return false;
+      if (/\/node_modules\/(\.vite|react(-dom)?)\//.test(id)) return false;
+
+      // Find absolute path before reading content
+      if (id.startsWith('/node_modules/')) {
+        try {
+          id = require.resolve(id.replace('/node_modules/', ''));
+        } catch {
+          console.warn(
+            `Could not resolve "${id}". Assuming it is not a client component.`
+          );
+          return false;
+        }
+      } else if (id.startsWith('/dist/')) {
+        // Local in Hydrogen
+        id = path.join(
+          path.dirname(require.resolve('@shopify/hydrogen/package.json')),
+          id
+        );
+      }
+
+      return fs
+        .readFile(id, 'utf-8')
+        .then((code) => {
+          return (
+            // imports React in some way
+            /['"]react['"]/.test(code) &&
+            // Uses createElement or jsx-runtime.
+            /(createElement|jsx-runtime)/.test(code)
+          );
+        })
+        .catch(() => {
+          console.warn(
+            `Warning: could not read file "${id}". Assuming it is not a client component.`
+          );
+
+          return false;
+        });
     },
   });
 }
