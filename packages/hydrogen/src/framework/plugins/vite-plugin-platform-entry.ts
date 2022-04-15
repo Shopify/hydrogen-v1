@@ -46,9 +46,7 @@ export default () => {
       return null;
     },
     transform(code, id) {
-      if (
-        normalizePath(id).includes('@shopify/hydrogen/dist/esnext/platforms/')
-      ) {
+      if (normalizePath(id).includes('/hydrogen/dist/esnext/platforms/')) {
         code = code
           .replace('__SERVER_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY)
           .replace(
