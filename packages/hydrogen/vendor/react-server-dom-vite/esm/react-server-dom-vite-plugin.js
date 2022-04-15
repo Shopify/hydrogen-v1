@@ -13,7 +13,80 @@ import { normalizePath, transformWithEsbuild } from 'vite';
 import { promises } from 'fs';
 import path from 'path';
 
-// $FlowFixMe[module-missing]
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _createForOfIteratorHelper(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+
+      var F = function () {};
+
+      return {
+        s: F,
+        n: function () {
+          if (i >= o.length) return {
+            done: true
+          };
+          return {
+            done: false,
+            value: o[i++]
+          };
+        },
+        e: function (e) {
+          throw e;
+        },
+        f: F
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  var normalCompletion = true,
+      didErr = false,
+      err;
+  return {
+    s: function () {
+      it = o[Symbol.iterator]();
+    },
+    n: function () {
+      var step = it.next();
+      normalCompletion = step.done;
+      return step;
+    },
+    e: function (e) {
+      didErr = true;
+      err = e;
+    },
+    f: function () {
+      try {
+        if (!normalCompletion && it.return != null) it.return();
+      } finally {
+        if (didErr) throw err;
+      }
+    }
+  };
+}
+
 var rscViteFileRE = /\/react-server-dom-vite.js/;
 function ReactFlightVitePlugin() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -25,19 +98,38 @@ function ReactFlightVitePlugin() {
       isClientComponent = _ref$isClientComponen === void 0 ? function (id) {
     return /\.client\.[jt]sx?($|\?)/.test(id);
   } : _ref$isClientComponen,
-      findClientComponentsForDev = _ref.findClientComponentsForDev,
       findClientComponentsForClientBuild = _ref.findClientComponentsForClientBuild;
 
   var config;
   var server;
-  var timeout;
+  var invalidateTimeout;
   var absoluteImporterPath;
-  var discoveredClientComponents = [];
 
-  if (!findClientComponentsForDev) {
-    findClientComponentsForDev = function () {
-      return Array.from(server.moduleGraph.fileToModulesMap.keys()).filter(isClientComponent);
+  function invalidateImporter() {
+    clearTimeout(invalidateTimeout);
+    invalidateTimeout = setTimeout(function () {
+      return server.watcher.emit('change', absoluteImporterPath);
+    }, 100);
+  }
+
+  function wrapIfClientComponent(id) {
+    var handle = function (isClient) {
+      if (!isClient) return null;
+
+      if (server) {
+        var moduleNode = server.moduleGraph.getModuleById(id);
+
+        if (!moduleNode.__isClientComponent) {
+          moduleNode.__isClientComponent = true;
+          if (absoluteImporterPath) invalidateImporter();
+        }
+      }
+
+      return proxyClientComponent(id.split('?')[0]);
     };
+
+    var tmp = isClientComponent(id);
+    return typeof tmp === 'boolean' ? handle(tmp) : tmp.then(handle);
   }
 
   return {
@@ -46,54 +138,25 @@ function ReactFlightVitePlugin() {
     configureServer: function (_server) {
       server = _server;
     },
-    configResolved: async function (_config) {
+    configResolved: function (_config) {
       config = _config; // By pushing this plugin at the end of the existing array,
       // we enforce running it *after* Vite resolves import.meta.glob.
 
       config.plugins.push(hashImportsPlugin);
-
-      if (config.command === 'build' && !config.build.ssr) {
-        if (findClientComponentsForClientBuild) {
-          discoveredClientComponents = await findClientComponentsForClientBuild(config);
-        } else {
-          throw new Error('[react-server-dom-vite] Parameter findClientComponentsForClientBuild is required for client build');
-        }
-      }
     },
-    resolveId: async function (source, importer) {
+    resolveId: function (source, importer) {
       if (!importer) return null;
       /**
        * Throw errors when non-Server Components try to load Server Components.
        */
 
-      if (/\.server(\.[jt]sx?)?$/.test(source) && !(/(\.server\.[jt]sx?|entry-server\.[jt]sx?|index\.html)$/.test(importer) || isServerComponentImporterAllowed(importer, source))) {
+      if (/\.server(\.[jt]sx?)?$/.test(source) && !(/(\.server\.[jt]sx?|index\.html)$/.test(importer) || isServerComponentImporterAllowed(importer, source))) {
         throw new Error("Cannot import " + source + " from \"" + importer + "\". " + 'By react-server convention, .server.js files can only be imported from other .server.js files. ' + 'That way nobody accidentally sends these to the client by indirectly importing it.');
       }
     },
-    load: async function (id) {
+    load: function (id) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      if (!options.ssr) return null; // Wrapped components won't match this becase they end in ?no-proxy
-
-      if (isClientComponent(id) && !/[&?]no-proxy($|&)/.test(id)) {
-        // Refresh the list of discovered client components
-        // every time a new one is processed.
-        if (config.command === 'serve') {
-          clearTimeout(timeout);
-          timeout = setTimeout(async function () {
-            discoveredClientComponents = findClientComponentsForDev ? await findClientComponentsForDev(config, server) : [];
-
-            if (absoluteImporterPath) {
-              // Signal Vite that this file needs to be
-              // refreshed both in server and browser.
-              server.watcher.emit('change', absoluteImporterPath);
-            }
-          }, 100);
-        }
-
-        return proxyClientComponent(id);
-      }
-
-      return null;
+      return options.ssr && shouldCheckClientComponent(id) ? wrapIfClientComponent(id) : null;
     },
     transform: function (code, id) {
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -109,7 +172,6 @@ function ReactFlightVitePlugin() {
        */
       if (rscViteFileRE.test(id)) {
         var INJECTING_RE = /\{\s*__INJECTED_CLIENT_IMPORTERS__[:\s]*null[,\s]*\}\s*;/;
-        absoluteImporterPath = id.split('?')[0];
 
         if (options && options.ssr) {
           // In SSR, directly use components already discovered by RSC
@@ -117,16 +179,29 @@ function ReactFlightVitePlugin() {
           return code.replace(INJECTING_RE, 'globalThis.__COMPONENT_INDEX');
         }
 
-        var importerPath = path.dirname(id);
-        var importers = discoveredClientComponents.map(function (absolutePath) {
-          return normalizePath(path.relative(importerPath, absolutePath));
-        });
-        var injectedGlobs = "Object.assign(Object.create(null), " + importers.map(function (glob) {
-          return (// Mark the globs to modify the result after Vite resolves them.
-            "/* HASH_BEGIN */ " + ("import.meta.glob('" + normalizePath(glob) + "') /* HASH_END */")
-          );
-        }).join(', ') + ");";
-        return code.replace(INJECTING_RE, injectedGlobs);
+        var injectGlobs = function (clientComponents) {
+          var importerPath = path.dirname(id);
+          var importers = clientComponents.map(function (absolutePath) {
+            return normalizePath(path.relative(importerPath, absolutePath));
+          });
+          var injectedGlobs = "Object.assign(Object.create(null), " + importers.map(function (glob) {
+            return (// Mark the globs to modify the result after Vite resolves them.
+              "/* HASH_BEGIN */ " + ("import.meta.glob('" + normalizePath(glob) + "') /* HASH_END */")
+            );
+          }).join(', ') + ");";
+          return code.replace(INJECTING_RE, injectedGlobs);
+        };
+
+        if (config.command === 'serve') {
+          absoluteImporterPath = id.split('?')[0];
+          return injectGlobs(findClientComponentsForDev(server));
+        }
+
+        if (!findClientComponentsForClientBuild) {
+          throw new Error('[react-server-dom-vite] Parameter findClientComponentsForClientBuild is required for client build');
+        }
+
+        return findClientComponentsForClientBuild(config).then(injectGlobs);
       }
     }
   };
@@ -185,6 +260,36 @@ async function proxyClientComponent(filepath, src) {
   });
   return proxyCode;
 }
+
+function shouldCheckClientComponent(id) {
+  return /\.[jt]sx?($|\?)/.test(id) && !/[&?]no-proxy($|&)/.test(id);
+}
+
+function findClientComponentsForDev(server) {
+  var clientComponents = []; // eslint-disable-next-line no-for-of-loops/no-for-of-loops
+
+  var _iterator = _createForOfIteratorHelper(server.moduleGraph.fileToModulesMap.values()),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var set = _step.value;
+      var clientModule = Array.from(set).find(function (moduleNode) {
+        return moduleNode.__isClientComponent;
+      });
+      if (clientModule) clientComponents.push(clientModule.file);
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return clientComponents;
+} // This can be used in custom findClientComponentsForClientBuild implementations
+
+
+ReactFlightVitePlugin.findClientComponentsFromServer = findClientComponentsForDev;
 var hashImportsPlugin = {
   name: 'vite-plugin-react-server-components-hash-imports',
   enforce: 'post',
