@@ -167,7 +167,7 @@ async function respondWithGraphiql(
 ) {
   if (!shopifyConfig) {
     throw new Error(
-      "You must provide 'shopify' property in your Hydrogen's config file"
+      "You must provide a 'shopify' property in your Hydrogen config file"
     );
   }
 
