@@ -1,7 +1,7 @@
 import {ServerAnalyticsRoute} from '../ServerAnalyticsRoute.server';
 
 const createRequest = () => {
-  return new Request('__event', {
+  return new Request('http://localhost:3000/__event', {
     headers: {
       'Content-Length': '0',
     },

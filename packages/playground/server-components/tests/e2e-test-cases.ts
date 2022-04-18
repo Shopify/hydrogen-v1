@@ -105,11 +105,14 @@ export default async function testCases({
     const response = await fetch(getServerUrl() + '/stream');
     const streamedChunks = [];
 
-    // This fetch response is not standard but a node-fetch polyfill.
-    // Therefore, the body is not a ReadableStream but a Node Readable.
     // @ts-ignore
-    for await (const chunk of response.body) {
-      streamedChunks.push(chunk.toString());
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      streamedChunks.push(decoder.decode(value));
     }
 
     expect(streamedChunks.length).toBeGreaterThan(1); // Streamed more than 1 chunk
@@ -125,11 +128,14 @@ export default async function testCases({
     const response = await fetch(getServerUrl() + '/stream?_bot');
     const streamedChunks = [];
 
-    // This fetch response is not standard but a node-fetch polyfill.
-    // Therefore, the body is not a ReadableStream but a Node Readable.
     // @ts-ignore
-    for await (const chunk of response.body) {
-      streamedChunks.push(chunk.toString());
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      streamedChunks.push(decoder.decode(value));
     }
 
     expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
@@ -150,11 +156,14 @@ export default async function testCases({
 
     const streamedChunks = [];
 
-    // This fetch response is not standard but a node-fetch polyfill.
-    // Therefore, the body is not a ReadableStream but a Node Readable.
     // @ts-ignore
-    for await (const chunk of response.body) {
-      streamedChunks.push(chunk.toString());
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      streamedChunks.push(decoder.decode(value));
     }
 
     expect(streamedChunks.length).toBeGreaterThan(1);

@@ -3,8 +3,9 @@ import {CacheSeconds, generateCacheControlHeader} from '../CachingStrategy';
 import type {CachingStrategy} from '../../types';
 import Redirect from '../../foundation/Redirect/Redirect.client';
 import React from 'react';
+import type {BodyInit, ResponseInit} from 'undici';
 
-export class ServerComponentResponse extends Response {
+export class ServerComponentResponse implements Response {
   private wait = false;
   private cacheOptions?: CachingStrategy;
 
@@ -14,6 +15,14 @@ export class ServerComponentResponse extends Response {
    * Allow custom body to be a string or a Promise.
    */
   public customBody: string | Promise<string> = '';
+
+  private _response: Response;
+
+  constructor(body?: BodyInit, init?: ResponseInit) {
+    // @ts-ignore
+    this._response = new Response(body, init);
+    this.headers = new Headers(init?.headers as any);
+  }
 
   /**
    * Buffer the current response until all queries have resolved,
@@ -78,5 +87,54 @@ export class ServerComponentResponse extends Response {
     }
 
     return null;
+  }
+
+  public headers: Headers;
+
+  get ok() {
+    return this._response.ok;
+  }
+  get redirected() {
+    return this._response.redirected;
+  }
+  get status() {
+    return this._response.status;
+  }
+  get statusText() {
+    return this._response.statusText;
+  }
+  get type() {
+    return this._response.type;
+  }
+  get url() {
+    return this._response.url;
+  }
+  get body() {
+    return this._response.body;
+  }
+  get bodyUsed() {
+    return this._response.bodyUsed;
+  }
+  arrayBuffer() {
+    return this._response.arrayBuffer();
+  }
+  blob() {
+    return this._response.blob();
+  }
+  formData() {
+    return this._response.formData();
+  }
+  text() {
+    return this._response.text();
+  }
+  json() {
+    return this._response.json();
+  }
+  clone() {
+    return new ServerComponentResponse(this._response.body as any, {
+      headers: this.headers as any,
+      status: this.status,
+      statusText: this.statusText,
+    });
   }
 }
