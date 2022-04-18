@@ -196,7 +196,7 @@ export default async function testCases({
       await edit(
         fullPath,
         (code) => code.replace('increase count', newButtonText),
-        () => untilUpdated(() => page.textContent('button'), 'increase'),
+        () => untilUpdated(() => page.textContent('button'), 'increase count'),
         () => untilUpdated(() => page.textContent('button'), newButtonText)
       );
     });
