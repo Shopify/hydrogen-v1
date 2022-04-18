@@ -1,17 +1,117 @@
-import {Form} from '@shopify/hydrogen';
+import {Form, RSCRequest} from '@shopify/hydrogen';
 
-let count = 0;
+const users = [
+  {
+    username: 'alincoln@shopify.com',
+    password: 'somepass',
+  },
+];
 
-export default function FormServer() {
+export default function FormServer({error, success}) {
+  if (success)
+    return (
+      <div className="flex justify-center mt-24">
+        <div className="w-full max-w-xs">
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 text-green-800 text-center font-bold">
+            Success
+          </div>
+        </div>
+      </div>
+    );
+
   return (
     <Form action="/form" method="POST">
-      <b>Count: {count}</b>
-      <button type="submit">Increment</button>
+      <div className="flex justify-center mt-24">
+        <div className="w-full max-w-xs">
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="username"
+              >
+                Username
+              </label>
+              <input
+                className={`shadow appearance-none border ${
+                  error === 'INVALID_USERNAME' || error === 'INVALID_USER'
+                    ? 'border-red-500'
+                    : ''
+                } rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Username"
+              />
+            </div>
+            <div className="mb-6">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                className={`shadow appearance-none border ${
+                  error === 'INVALID_PASSWORD' || error === 'INVALID_USER'
+                    ? 'border-red-500'
+                    : ''
+                } rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline`}
+                id="password"
+                name="password"
+                type="password"
+                placeholder="******************"
+              />
+              <ErrorMessage error={error} />
+            </div>
+            <div className="flex items-center justify-between">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="submit"
+              >
+                Sign In
+              </button>
+            </div>
+          </div>
+          <p className="text-center text-gray-500 text-xs">
+            &copy;2020 Acme Corp. All rights reserved.
+          </p>
+        </div>
+      </div>
     </Form>
   );
 }
 
+function ErrorMessage({error}) {
+  if (!error) return;
+
+  return (
+    <p className="text-red-500 text-xs italic">
+      {error === 'INVALID_USERNAME'
+        ? 'Please choose a username'
+        : error === 'INVALID_PASSWORD'
+        ? 'Please choose a password'
+        : 'Invalid username or password'}
+    </p>
+  );
+}
+
 export async function api(request) {
-  count++;
-  return new Request(request.url);
+  const data = await request.formData();
+  const username = data.get('username');
+  const password = data.get('password');
+
+  if (!username) throw new RSCRequest(request.url, {error: 'INVALID_USERNAME'});
+  if (!password) throw new RSCRequest(request.url, {error: 'INVALID_PASSWORD'});
+
+  const user = users.find(
+    (user) => username === user.username && user.password === password,
+  );
+
+  if (!user) {
+    throw new RSCRequest(request.url, {error: 'INVALID_USER'});
+  }
+
+  return new RSCRequest(request.url, {
+    success: true,
+  });
 }

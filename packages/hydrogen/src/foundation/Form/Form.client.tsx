@@ -23,17 +23,24 @@ export function Form({
   const submit = useCallback(
     async (e) => {
       e.preventDefault();
-      const formData = new FormData(formRef.current!);
+      const multiFormData = new FormData(formRef.current!);
+      const formBody: Array<string> = [];
+
+      multiFormData.forEach((value, key) => {
+        formBody.push(
+          `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`
+        );
+      });
 
       startTransition(() => {
         const response = createFromFetch(
           fetch(action, {
             method,
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
               'Hydrogen-Client': 'Form-Action',
             },
-            body: formData,
+            body: formBody.join('&'),
           })
         );
 
