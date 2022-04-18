@@ -205,7 +205,8 @@ function ReactFlightVitePlugin() {
           throw new Error('[react-server-dom-vite] Parameter findClientComponentsForClientBuild is required for client build');
         }
 
-        return findClientComponentsForClientBuild(config).then(injectGlobs);
+        var tmp = findClientComponentsForClientBuild(config);
+        return Array.isArray(tmp) ? injectGlobs(tmp) : tmp.then(injectGlobs);
       }
     }
   };
@@ -290,10 +291,8 @@ function findClientComponentsForDev(server) {
   }
 
   return clientComponents;
-} // This can be used in custom findClientComponentsForClientBuild implementations
+}
 
-
-ReactFlightVitePlugin.findClientComponentsFromServer = findClientComponentsForDev;
 var hashImportsPlugin = {
   name: 'vite-plugin-react-server-components-hash-imports',
   enforce: 'post',
@@ -308,6 +307,8 @@ var hashImportsPlugin = {
       });
     }
   }
-};
+}; // This can be used in custom findClientComponentsForClientBuild implementations
+
+ReactFlightVitePlugin.findClientComponentsFromServer = findClientComponentsForDev;
 
 module.exports = ReactFlightVitePlugin;
