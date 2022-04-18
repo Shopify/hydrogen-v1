@@ -1,7 +1,7 @@
 import {ServerAnalyticsRoute} from '../ServerAnalyticsRoute.server';
 
 const createRequest = () => {
-  return new Request('__event', {
+  return new Request('http://localhost:3000/__event', {
     headers: {
       'Content-Length': '0',
     },
@@ -49,7 +49,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
   });
 
   it('should delegate json request', async (done) => {
-    const testRequest = new Request('__event', {
+    const testRequest = new Request('http://localhost:3000/__event', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
   });
 
   it('should delegate text request', async (done) => {
-    const testRequest = new Request('__event', {
+    const testRequest = new Request('http://localhost:3000/__event', {
       method: 'POST',
       body: 'test123',
     });
