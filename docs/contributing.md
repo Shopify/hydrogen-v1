@@ -1,6 +1,6 @@
 # Contributing to Hydrogen
 
-## Releaseing
+## Releasing
 
 See [Releasing](releasing.md).
 
