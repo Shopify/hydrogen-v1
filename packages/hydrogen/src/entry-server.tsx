@@ -144,7 +144,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        const apiResponse = await renderApiRoute(
+        let apiResponse = await renderApiRoute(
           request,
           apiRoute,
           hydrogenConfig.shopify,
@@ -152,6 +152,13 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
         );
 
         if (apiResponse instanceof Request) {
+          let state = {};
+
+          if (apiResponse instanceof RSCRequest) {
+            state = apiResponse.state;
+            apiResponse = new Request(request.url);
+          }
+
           if (!Array.from((apiResponse.headers as any).keys()).length) {
             request.headers.forEach((value, key) => {
               apiResponse.headers.set(key, value);
@@ -170,9 +177,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
                     JSON.stringify({
                       pathname: newUrl.pathname,
                       search: '',
-                      ...(apiResponse instanceof RSCRequest
-                        ? apiResponse.state
-                        : {}),
+                      ...state,
                     })
                   )}`,
                 {
@@ -182,10 +187,13 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
               options
             );
           } else {
-            // JavaScript is disabled on the client, handle the response without streaming
-            return handleRequest(apiResponse, {
-              ...options,
-              streamableResponse: undefined,
+            // JavaScript is disabled on the client, redirect instead of just rendering the response
+            // this will prevent odd refresh / bookmark behavior
+            return new Response(null, {
+              status: 303,
+              headers: {
+                Location: request.url,
+              },
             });
           }
         }

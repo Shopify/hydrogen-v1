@@ -2,18 +2,19 @@ import {Form, RSCRequest} from '@shopify/hydrogen';
 
 const users = [
   {
+    name: 'Abraham Lincoln',
     username: 'alincoln@shopify.com',
     password: 'somepass',
   },
 ];
 
-export default function FormServer({error, success}) {
-  if (success)
+export default function FormServer({error, user}) {
+  if (user)
     return (
       <div className="flex justify-center mt-24">
         <div className="w-full max-w-xs">
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 text-green-800 text-center font-bold">
-            Success
+            Welcome {user.name}!
           </div>
         </div>
       </div>
@@ -100,18 +101,22 @@ export async function api(request) {
   const username = data.get('username');
   const password = data.get('password');
 
-  if (!username) throw new RSCRequest(request.url, {error: 'INVALID_USERNAME'});
-  if (!password) throw new RSCRequest(request.url, {error: 'INVALID_PASSWORD'});
+  // Note, you can throw or return a vanilla `Request` or `Response` object.
+  // RSCRequest is just syntactic sugar, the user could manually create a
+  // Response object instead.
+  if (!username) throw new RSCRequest({error: 'INVALID_USERNAME'});
+  if (!password) throw new RSCRequest({error: 'INVALID_PASSWORD'});
 
   const user = users.find(
     (user) => username === user.username && user.password === password,
   );
 
   if (!user) {
-    throw new RSCRequest(request.url, {error: 'INVALID_USER'});
+    throw new RSCRequest({error: 'INVALID_USER'});
   }
 
-  return new RSCRequest(request.url, {
-    success: true,
+  // Really, we'd want to save the user in the session. A separate PR has the session impl
+  return new RSCRequest({
+    user,
   });
 }
