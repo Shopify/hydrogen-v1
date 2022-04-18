@@ -10,7 +10,7 @@ When you are ready to release a new version of Hydrogen, follow these steps:
 
 1. Merge the PR created by the changesets bot. This will convert all changesets into appropriate `CHANGELOG` files, add Git tags, and create GitHub releases for each package contained in the release.
 1. Next, visit the Shipit page for Hydrogen containing the version you intend to release, e.g. `Hydrogen v1.x-2022-07`. Click **Deploy** on the merge commit that was recently created.
-1. _Most recent stable version only_: After Shipit is finished publishing to NPM, manually [run the Stackblitz publish workflow](https://github.com/Shopify/hydrogen/actions/workflows/publish_stackblitz.yml) and the [Discord announcement workflow](https://github.com/Shopify/hydrogen/actions/workflows/discord_announcement.yml)in GitHub against the latest stable branch. This is required, because GitHub will not allow a bot to kick off another GitHub Action, and the Changesets bot is the user who created the release.
+1. _Most recent stable version only_: After Shipit is finished publishing to NPM, manually [run the Stackblitz publish workflow](https://github.com/Shopify/hydrogen/actions/workflows/publish_stackblitz.yml) and the [Discord announcement workflow](https://github.com/Shopify/hydrogen/actions/workflows/discord_announcement.yml) in GitHub against the latest stable branch. This is required, because GitHub will not allow a bot to kick off another GitHub Action, and the Changesets bot is the user who created the release.
 
 ## Releasing unstable versions
 
