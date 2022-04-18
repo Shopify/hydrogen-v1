@@ -40,14 +40,14 @@ export default function () {
         return reactServerDomVite.findClientComponentsFromServer(server);
       },
       isClientComponent(rawId: string) {
-        let [id, query = ''] = rawId.split('?');
+        let [id] = rawId.split('?');
 
         // Check default RSC rules plus new .shared.jsx suffix
         if (/\.client\.[jt]sx?$/.test(id)) return true;
         if (/\.(server|shared)\.[jt]sx?$/.test(id)) return false;
 
-        // Vite exceptions
-        if (/(^|&)commonjs-(proxy|module)($|&)/.test(query)) return false;
+        // Vite exceptions (virtual modules)
+        if (/^\0/.test(id)) return false;
         // Hydrogen exceptions
         if (id.endsWith('/hydrogen-entry-client.jsx')) return false;
         if (id.endsWith('/hydrogen/dist/esnext/entry-client.js')) return false;
@@ -92,9 +92,9 @@ export default function () {
               /(createElement|jsx-runtime)/.test(code)
             );
           })
-          .catch(() => {
+          .catch((error) => {
             console.warn(
-              `Warning: could not read file "${id}". Assuming it is not a client component.`
+              `Warning: could not read file "${id}". Assuming it is not a client component. ${error.message}`
             );
 
             return false;
