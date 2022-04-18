@@ -9,12 +9,9 @@ import {
   AddToCartButton,
   BuyNowButton,
 } from '@shopify/hydrogen/client';
-import ProductOptions from './ProductOptions.client';
-import Gallery from './Gallery.client';
-import {
-  BUTTON_PRIMARY_CLASSES,
-  BUTTON_SECONDARY_CLASSES,
-} from './Button.client';
+import ProductOptions from './ProductOptions';
+import Gallery from './Gallery';
+import {BUTTON_PRIMARY_CLASSES, BUTTON_SECONDARY_CLASSES} from './Button';
 
 function AddToCartMarkup() {
   const {selectedVariant} = useProduct();

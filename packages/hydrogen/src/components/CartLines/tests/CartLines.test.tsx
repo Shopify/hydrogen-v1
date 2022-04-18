@@ -1,5 +1,5 @@
 import React from 'react';
-import {CartLines} from '../CartLines';
+import {CartLines} from '../CartLines.shared';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {CartLineProductTitle} from '../../CartLineProductTitle';
 import {CART} from '../../CartProvider/tests/fixtures';

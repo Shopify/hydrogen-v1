@@ -1,8 +1,8 @@
 import {Suspense} from 'react';
 import {Image, Link} from '@shopify/hydrogen';
 
-import MoneyCompareAtPrice from './MoneyCompareAtPrice.client';
-import MoneyPrice from './MoneyPrice.client';
+import MoneyCompareAtPrice from './MoneyCompareAtPrice';
+import MoneyPrice from './MoneyPrice';
 
 /**
  * A shared component that displays a single product to allow buyers to quickly identify a particular item of interest

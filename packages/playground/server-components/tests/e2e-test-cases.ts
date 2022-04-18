@@ -184,11 +184,7 @@ export default async function testCases({
     if (isBuild) return;
 
     it('updates the contents when a client component file changes', async () => {
-      const fullPath = resolve(
-        __dirname,
-        '../',
-        'src/components/Counter.client.jsx'
-      );
+      const fullPath = resolve(__dirname, '../', 'src/components/Counter.jsx');
       const newButtonText = 'add';
 
       await page.goto(getServerUrl() + '/about');

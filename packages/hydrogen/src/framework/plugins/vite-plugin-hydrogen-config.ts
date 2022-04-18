@@ -48,6 +48,9 @@ export default () => {
       optimizeDeps: {
         exclude: ['@shopify/hydrogen/client', '@shopify/hydrogen/entry-client'],
         include: [
+          'history',
+          'graphql',
+          'kolorist',
           /**
            * Additionally, the following dependencies have trouble loading the
            * correct version of the dependency (server vs client). This tells Vite to take the
@@ -61,6 +64,7 @@ export default () => {
            * at server start to avoid posterior page reloads and issues (#429 #430).
            */
           'react',
+          'react/jsx-runtime',
           'react-dom/client',
           'react-server-dom-vite/client-proxy',
         ],

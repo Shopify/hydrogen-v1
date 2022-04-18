@@ -14,9 +14,9 @@ import {
 } from '@shopify/hydrogen/client';
 import {Dialog} from '@headlessui/react';
 
-import {useCartUI} from './CartUIProvider.client';
-import CartIconWithItems from './CartIconWithItems.client';
-import {BUTTON_PRIMARY_CLASSES} from './Button.client';
+import {useCartUI} from './CartUIProvider';
+import CartIconWithItems from './CartIconWithItems';
+import {BUTTON_PRIMARY_CLASSES} from './Button';
 
 /**
  * A client component that contains the merchandise that a customer intends to purchase, and the estimated cost associated with the cart

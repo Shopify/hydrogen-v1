@@ -2,8 +2,8 @@ import {useShop, useShopQuery, flattenConnection} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
-import Button from './Button.client';
-import ProductCard from './ProductCard';
+import Button from './Button';
+import ProductCard from './ProductCard.shared';
 
 /**
  * A server component that defines the content to display when a page isn't found (404 error)
