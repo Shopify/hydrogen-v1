@@ -3,7 +3,7 @@ import {CacheSeconds, generateCacheControlHeader} from '../CachingStrategy';
 import type {CachingStrategy} from '../../types';
 import Redirect from '../../foundation/Redirect/Redirect.client';
 import React from 'react';
-import type {Response, BodyInit, ResponseInit} from 'undici';
+import type {BodyInit, ResponseInit} from 'undici';
 
 export class ServerComponentResponse implements Response {
   private wait = false;
@@ -20,7 +20,7 @@ export class ServerComponentResponse implements Response {
 
   constructor(body?: BodyInit, init?: ResponseInit) {
     // @ts-ignore
-    this._response = new GlobalResponse(body, init);
+    this._response = new Response(body, init);
     this.headers = new Headers(init?.headers as any);
   }
 
@@ -89,7 +89,6 @@ export class ServerComponentResponse implements Response {
     return null;
   }
 
-  // @ts-ignore
   public headers: Headers;
 
   get ok() {
@@ -131,8 +130,6 @@ export class ServerComponentResponse implements Response {
   json() {
     return this._response.json();
   }
-
-  // @ts-ignore
   clone() {
     return new ServerComponentResponse(this._response.body as any, {
       headers: this.headers as any,
