@@ -339,3 +339,7 @@ You can deploy your Hydrogen app to Cloudflare Workers, a serverless application
    ```bash
    CF_ACCOUNT_ID=<YOUR_CLOUDFLARE_ACCT_ID> wrangler publish
    ```
+
+## Deploy to Netlify
+
+You can deploy your Hydrogen app to Netlify powered by following the instructions outlined in the [Hydrogen on Netlify guide](https://docs.netlify.com/integrations/frameworks/hydrogen/).
