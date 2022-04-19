@@ -386,6 +386,12 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/cache.md',
     }),
     generator.section({
+      title: 'Streaming server-side rendering (SSR)',
+      description: 'Learn how to improve the loading performance of your app.',
+      url: '/custom-storefronts/hydrogen/framework/streaming-ssr.md',
+      entry: 'framework/docs/streaming-ssr.md',
+    }),
+    generator.section({
       title: 'Analytics',
       description:
         'Learn about the analytics support build into Hydrogen apps.',

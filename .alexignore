@@ -1,8 +1,5 @@
 docs/code_of_conduct.md
-packages/hydrogen/src/docs/hooks.md
-packages/hydrogen/src/docs/components.md
-packages/hydrogen/src/docs/hydrogen-reference.md
-packages/hydrogen/src/framework/docs/css-support.md
-packages/hydrogen/src/framework/docs/work-with-rsc.md
-packages/hydrogen/src/foundation/useQuery/README.md
+docs/framework/css-support.md
+docs/framework/work-with-rsc.md
+docs/hooks/usequery.md
 packages/hydrogen/CHANGELOG.md
