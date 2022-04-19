@@ -5,7 +5,15 @@ export default function ReadServerProps() {
 
   return (
     <div>
-      <p id="server-props">props: {JSON.stringify(serverProps)}</p>
+      <p
+        id={
+          Object.keys(serverProps).length
+            ? 'server-props-with-data'
+            : 'server-props'
+        }
+      >
+        props: {JSON.stringify(serverProps)}
+      </p>
       <button
         id="update-server-props"
         onClick={() => {

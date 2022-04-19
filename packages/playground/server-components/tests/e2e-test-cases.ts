@@ -77,14 +77,16 @@ export default async function testCases({
     );
 
     await page.click('#update-server-props');
-    await page.waitForTimeout(1000);
 
-    expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
-      `"props: {\\"hello\\":\\"world\\"}"`
-    );
+    await page.waitForSelector('#server-props-with-data');
+
+    expect(
+      await page.textContent('#server-props-with-data')
+    ).toMatchInlineSnapshot(`"props: {\\"hello\\":\\"world\\"}"`);
 
     // Navigate events should clear the server props
     await page.click('#navigate');
+    await page.waitForSelector('#server-props');
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
     );
