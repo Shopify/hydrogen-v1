@@ -1,6 +1,32 @@
 import {Plugin} from 'vite';
 
 export default () => {
+  let rollupOptions: any = {
+    output: {},
+  };
+
+  if (process.env.WORKER) {
+    /**
+     * By default, SSR dedupe logic gets bundled which runs `require('module')`.
+     * We don't want this in our workers runtime, because `require` is not supported.
+     */
+    rollupOptions.output.format = 'es';
+  }
+
+  if (!process.env.LOCAL_DEV) {
+    /**
+     * Ofuscate production asset name - To prevent ad blocker logics that blocks
+     * certain files due to how it is named.
+     *
+     * Ofuscation is done by base64 encoding of the filename
+     */
+    rollupOptions.output.chunkFileNames = (chunkInfo: any) => {
+      return `assets/${Buffer.from(chunkInfo.name).toString(
+        'base64'
+      )}.[hash].js`;
+    };
+  }
+
   return {
     name: 'vite-plugin-hydrogen-config',
     config: async (config, env) => ({
@@ -16,17 +42,9 @@ export default () => {
       build: {
         minify: config.build?.minify ?? 'esbuild',
         sourcemap: true,
-        /**
-         * By default, SSR dedupe logic gets bundled which runs `require('module')`.
-         * We don't want this in our workers runtime, because `require` is not supported.
-         */
-        rollupOptions: process.env.WORKER
-          ? {
-              output: {
-                format: 'es',
-              },
-            }
-          : {},
+        rollupOptions: config.build?.rollupOptions
+          ? Object.assign(rollupOptions, config.build.rollupOptions)
+          : rollupOptions,
       },
 
       ssr: {
