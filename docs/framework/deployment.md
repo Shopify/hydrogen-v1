@@ -342,4 +342,4 @@ You can deploy your Hydrogen app to Cloudflare Workers, a serverless application
 
 ## Deploy to Netlify
 
-You can deploy your Hydrogen app to Netlify powered by following the instructions outlined in the [Hydrogen on Netlify guide](https://docs.netlify.com/integrations/frameworks/hydrogen/).
+You can deploy your Hydrogen app to Netlify by following the instructions outlined in the [Hydrogen on Netlify guide](https://docs.netlify.com/integrations/frameworks/hydrogen/).
