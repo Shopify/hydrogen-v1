@@ -70,6 +70,8 @@ export default () => {
           'react',
           'react-dom/client',
           'react-server-dom-vite/client-proxy',
+          // https://github.com/vitejs/vite/issues/6215
+          'react/jsx-runtime',
         ],
       },
 
