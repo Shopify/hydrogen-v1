@@ -77,7 +77,7 @@ export default async function testCases({
     );
 
     await page.click('#update-server-props');
-    await page.waitForResponse((response) => response.url().includes('__rsc'));
+    await page.waitForTimeout(1000);
 
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {\\"hello\\":\\"world\\"}"`
