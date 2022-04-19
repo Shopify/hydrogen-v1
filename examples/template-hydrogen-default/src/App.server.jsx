@@ -6,6 +6,7 @@ import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
+import {Boomerang} from '@shopify/hydrogen/client';
 
 function App({routes}) {
   return (
@@ -18,6 +19,7 @@ function App({routes}) {
             <Route path="*" page={<NotFound />} />
           </Router>
         </CartProvider>
+        <Boomerang />
       </ShopifyProvider>
     </Suspense>
   );
