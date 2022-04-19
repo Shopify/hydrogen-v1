@@ -4,7 +4,7 @@ This guide describes how to manage server props during your development process.
 
 ## How server props work
 
-Server `props` are simply the props passed to your root server component route. Hydrogen provides a `useServerProps()` hook with a `setServerProps()` helper function, which allows you to re-render the server component with new `props`. This is useful to paginate within collections, switch product variants, or do anything that requires new data from the server.
+Server `props` are props that are passed to your root server component route. Hydrogen provides a [`useServerProps`](/api/hydrogen/hooks/global/useserverprops) hook with a `setServerProps` helper function, which allows you to re-render the server component with new `props`. This is useful to paginate within collections, switch product variants, or do anything that requires new data from the server.
 
 For example, you can take geo-location co-ordinates and set them as server `props` to provide a new hydrated experience for the current location:
 
@@ -77,7 +77,7 @@ export default function ProductSelector({selectedProductId}) {
 
 {% endcodeblock %}
 
-When the user navigates to a new page in your app, the server props will reset. This is important because if they navigate to another product, the selected variant of the previous product should not apply to the new product page.
+When the user navigates to a new page in your app, the server props will reset. This is important because if the user navigates to another product, then the selected variant of the previous product shouldn't apply to the new product page.
 
 ## Next steps
 
