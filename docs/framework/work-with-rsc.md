@@ -180,7 +180,7 @@ import {Link} from '@shopify/hydrogen';
 > Note:
 > The functionality described in this section is unique to Hydrogen's React Server Components implementation.
 
-Hydrogen provides a [`useServerProps()` hook with a `setServerProps()` helper function](/custom-storefronts/hydrogen/framework/server-props), which allows you to re-render server components with new data. Generally this should only be used for UI state that shouldn't persist in the URL. Any data set with `setServerProps()` will be cleared out when the user navigates to a new page.
+Hydrogen provides a [`useServerProps()` hook with a `setServerProps()` helper function](/custom-storefronts/hydrogen/framework/server-props), which allows you to re-render server components with new data. Generally, this should only be used for a UI state that shouldn't persist in the URL. Any data set with `setServerProps()` will be cleared out when the user navigates to a new page.
 
 ## Using `Context` in React Server Components
 
