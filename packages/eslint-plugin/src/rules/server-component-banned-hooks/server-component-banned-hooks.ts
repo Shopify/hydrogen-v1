@@ -15,14 +15,14 @@ export const serverComponentBannedHooks = createRule({
     type: 'problem',
     docs: {
       //@ts-expect-error
-      description: `Prevents ${new Intl.ListFormat('en').format(
+      description: `Prevent using ${new Intl.ListFormat('en').format(
         BANNED_HOOKS
-      )} in React Server Components`,
+      )} in server and shared components`,
       category: 'Possible Errors',
       recommended: 'error',
     },
     messages: {
-      serverComponentBannedHooks: `Do not use {{hook}} in React Server Components.`,
+      serverComponentBannedHooks: `Do not use {{hook}} in files that don't end with .client.`,
     },
     schema: [],
   },

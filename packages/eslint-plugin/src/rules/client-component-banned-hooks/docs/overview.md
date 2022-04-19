@@ -1,3 +1,3 @@
-# Prevents `useQuery` in React Client Components (`hydrogen/client-components-banned-hooks`)
+# Prevent `useQuery` in client components
 
-The `useQuery` hook does not function in React Client Components because it requires access to server-only features that do not exist in the client.
+The `useQuery` hook doesn't function in client components because it requires access to server-only features that don't exist in the client.

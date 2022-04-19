@@ -40,7 +40,7 @@ export default async function testCases({
     await page.goto(getServerUrl() + '/config/someDynamicValue');
 
     expect(await page.textContent('#root > div')).toContain(
-      '{"locale":"en-us","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
+      '{"locale":"EN-US","languageCode":"EN","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
     );
   });
 
@@ -206,7 +206,7 @@ export default async function testCases({
       await edit(
         fullPath,
         (code) => code.replace('increase count', newButtonText),
-        () => untilUpdated(() => page.textContent('button'), 'increase'),
+        () => untilUpdated(() => page.textContent('button'), 'increase count'),
         () => untilUpdated(() => page.textContent('button'), newButtonText)
       );
     });
@@ -381,6 +381,15 @@ export default async function testCases({
       await page.type('#fname', 'sometext');
       await page.click('#fsubmit');
       expect(await page.textContent('*')).toContain('fname=sometext');
+    });
+
+    it('can concatenate requests', async () => {
+      await page.goto(getServerUrl() + '/html-form');
+      expect(await page.textContent('#counter')).toEqual('0');
+      await page.click('#increase');
+      expect(await page.textContent('#counter')).toEqual('1');
+      await page.click('#increase');
+      expect(await page.textContent('#counter')).toEqual('2');
     });
   });
 

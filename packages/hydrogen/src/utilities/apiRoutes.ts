@@ -1,9 +1,10 @@
 import {ImportGlobEagerOutput, ShopifyConfig} from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
-import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
+import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
+import {getStorefrontApiRequestHeaders} from './storefrontApi';
 
 let memoizedRoutes: Array<HydrogenApiRoute> = [];
 let memoizedPages: ImportGlobEagerOutput = {};
@@ -123,18 +124,23 @@ interface QueryShopArgs {
   query: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
-  /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
-  locale?: string;
 }
 
-function queryShopBuilder(shopifyConfig: ShopifyConfig) {
+function queryShopBuilder(
+  shopifyConfig: ShopifyConfig,
+  request: ServerComponentRequest
+) {
   return async function queryShop<T>({
     query,
     variables,
-    locale,
   }: QueryShopArgs): Promise<T> {
-    const {storeDomain, storefrontApiVersion, storefrontToken, defaultLocale} =
-      shopifyConfig;
+    const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
+    const buyerIp = request.getBuyerIp();
+
+    const extraHeaders = getStorefrontApiRequestHeaders({
+      buyerIp,
+      storefrontToken,
+    });
 
     const fetcher = fetchBuilder<T>(
       `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
@@ -142,9 +148,8 @@ function queryShopBuilder(shopifyConfig: ShopifyConfig) {
         method: 'POST',
         body: graphqlRequestBody(query, variables),
         headers: {
-          'X-Shopify-Storefront-Access-Token': storefrontToken,
-          'Accept-Language': (locale as string) ?? defaultLocale,
           'Content-Type': 'application/json',
+          ...extraHeaders,
         },
       }
     );
@@ -154,20 +159,20 @@ function queryShopBuilder(shopifyConfig: ShopifyConfig) {
 }
 
 export async function renderApiRoute(
-  request: Request,
+  request: ServerComponentRequest,
   route: ApiRouteMatch,
   shopifyConfig: ShopifyConfig
-): Promise<Response> {
+): Promise<Response | Request> {
   let response;
   const log = getLoggerWithContext(request);
 
   try {
     response = await route.resource(request, {
       params: route.params,
-      queryShop: queryShopBuilder(shopifyConfig),
+      queryShop: queryShopBuilder(shopifyConfig, request),
     });
 
-    if (!(response instanceof Response)) {
+    if (!(response instanceof Response || response instanceof Request)) {
       if (typeof response === 'string' || response instanceof String) {
         response = new Response(response as string);
       } else if (typeof response === 'object') {
@@ -183,7 +188,11 @@ export async function renderApiRoute(
     response = new Response('Error processing: ' + request.url, {status: 500});
   }
 
-  logServerResponse('api', request as ServerComponentRequest, response.status);
+  logServerResponse(
+    'api',
+    request as ServerComponentRequest,
+    (response as Response).status ?? 200
+  );
 
   return response;
 }

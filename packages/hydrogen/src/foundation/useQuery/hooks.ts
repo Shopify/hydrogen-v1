@@ -3,6 +3,7 @@ import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
   collectQueryTimings,
+  logCacheApiStatus,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -11,6 +12,7 @@ import {
   isStale,
   setItemInCache,
 } from '../../framework/cache';
+import {hashKey} from '../../utilities/hash';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
@@ -31,9 +33,11 @@ export interface HydrogenUseQueryOptions {
 
 /**
  * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
- * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based
- * on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this
+ * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this
  * hook to call any third-party APIs from a server component.
+ *
+ * \> Note:
+ * \> If you're making a simple fetch call on the server, then we recommend using the [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) hook instead.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
@@ -86,6 +90,7 @@ function cachedQueryFnBuilder<T>(
     // to prevent losing the current React cycle.
     const request = useServerRequest();
     const log = getLoggerWithContext(request);
+    const hashedKey = hashKey(key);
 
     const cacheResponse = await getItemFromCache(key);
 
@@ -105,14 +110,12 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(response)) {
-        log.debug(
-          '[useQuery] cache stale; generating new response in background'
-        );
+      if (isStale(response, resolvedQueryOptions?.cache)) {
+        logCacheApiStatus('STALE', hashedKey);
         const lockKey = `lock-${key}`;
 
         runDelayedFunction(async () => {
-          log.debug(`[stale regen] fetching cache lock`);
+          logCacheApiStatus('UPDATING', hashedKey);
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 

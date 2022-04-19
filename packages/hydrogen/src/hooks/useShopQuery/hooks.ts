@@ -1,14 +1,15 @@
 import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';
-import {useQuery} from '../../foundation/useQuery';
 import type {CachingStrategy, PreloadOptions} from '../../types';
-import {fetchBuilder, graphqlRequestBody} from '../../utilities';
+import {graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
+import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
 import {META_ENV_SSR} from '../../foundation/ssr-interop';
+import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -18,7 +19,8 @@ export interface UseShopQueryResponse<T> {
 
 // Check if the response body has GraphQL errors
 // https://spec.graphql.org/June2018/#sec-Response-Format
-const shouldCacheResponse = (body: any) => !body?.errors;
+const shouldCacheResponse = ([body]: [any, Response]) =>
+  !JSON.parse(body)?.errors;
 
 /**
  * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
@@ -27,7 +29,6 @@ export function useShopQuery<T>({
   query,
   variables = {},
   cache,
-  locale = '',
   preload = false,
 }: {
   /** A string of the GraphQL query.
@@ -48,6 +49,13 @@ export function useShopQuery<T>({
    */
   preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
+  /**
+   * If no query is passed, we no-op here to allow developers to obey the Rules of Hooks.
+   */
+  if (!query) {
+    return {data: undefined as unknown as T, errors: undefined};
+  }
+
   if (!META_ENV_SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
@@ -58,16 +66,26 @@ export function useShopQuery<T>({
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {key, url, requestInit} = useCreateShopRequest(body, locale);
+  const {url, requestInit} = useCreateShopRequest(body);
 
-  const {data, error: useQueryError} = useQuery<UseShopQueryResponse<T>>(
-    key,
-    query
-      ? fetchBuilder<UseShopQueryResponse<T>>(url, requestInit)
-      : // If no query, avoid calling SFAPI & return nothing
-        async () => ({data: undefined as unknown as T, errors: undefined}),
-    {cache, shouldCacheResponse, preload}
-  );
+  let data: any;
+  let useQueryError: any;
+
+  try {
+    data = fetchSync(url, {
+      ...requestInit,
+      cache,
+      preload,
+      shouldCacheResponse,
+    }).json();
+  } catch (error: any) {
+    // Pass-through thrown promise for Suspense functionality
+    if (error?.then) {
+      throw error;
+    }
+
+    useQueryError = error;
+  }
 
   /**
    * The fetch request itself failed, so we handle that differently than a GraphQL error
@@ -154,39 +172,27 @@ export function useShopQuery<T>({
   return data!;
 }
 
-function useCreateShopRequest(body: string, locale?: string) {
-  const {
-    storeDomain,
-    storefrontToken,
-    storefrontApiVersion,
-    locale: defaultLocale,
-  } = useShop();
+function useCreateShopRequest(body: string) {
+  const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
 
   const request = useServerRequest();
-  const secretToken =
-    typeof Oxygen !== 'undefined'
-      ? Oxygen?.env?.SHOPIFY_STOREFRONT_API_SECRET_TOKEN
-      : null;
   const buyerIp = request.getBuyerIp();
 
-  const extraHeaders = {} as Record<string, any>;
-
-  if (buyerIp) {
-    extraHeaders['Shopify-Storefront-Buyer-IP'] = buyerIp;
-  }
+  const extraHeaders = getStorefrontApiRequestHeaders({
+    buyerIp,
+    storefrontToken,
+  });
 
   return {
-    key: [storeDomain, storefrontApiVersion, body, locale],
+    key: [storeDomain, storefrontApiVersion, body],
     url: `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
     requestInit: {
       body,
       method: 'POST',
       headers: {
-        'X-Shopify-Storefront-Access-Token': secretToken ?? storefrontToken,
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
         'content-type': 'application/json',
-        'Accept-Language': (locale as string) ?? defaultLocale,
         ...extraHeaders,
       },
     },

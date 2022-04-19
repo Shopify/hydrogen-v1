@@ -1,12 +1,12 @@
-# Prevents `useState` and `useReducer` in React Server Components (`hydrogen/no-banned-hooks-in-server-components`)
+# Prevent `useState`, `useReducer`, `useEffect`, and `useLayoutEffect` in server and shared components
 
-The `useState` and `useReducer` state handling hooks do not function as expected in React Server Components because Server Components execute only once per request on the server.
+These state handling hooks don't function as expected in React Server Components because server components execute only once for each request on the server.
 
-## Rule Details
+## Rule details
 
-This rule prevents using these hooks in files that do not end with the `.client` suffix.
+This rule prevents using the `useState`, `useReducer`, `useEffect`, and `useLayoutEffect` hooks in files that don't end with the `.client` extension.
 
-Examples of **incorrect** code for this rule:
+### Incorrect code
 
 ```tsx
 // MyServerComponent.server.jsx
@@ -26,7 +26,7 @@ function MyServerComponent() {
 }
 ```
 
-Examples of **correct** code for this rule:
+### Correct code
 
 ```tsx
 // MyClientComponent.client.jsx

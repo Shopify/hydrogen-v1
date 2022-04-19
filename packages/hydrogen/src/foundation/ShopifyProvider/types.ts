@@ -1,12 +1,12 @@
+import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 import type {ReactNode} from 'react';
 import type {ShopifyConfig} from '../../types';
 
-export type ShopifyContextValue = {
-  locale: string;
-  storeDomain: ShopifyConfig['storeDomain'];
-  storefrontToken: ShopifyConfig['storefrontToken'];
-  storefrontApiVersion: string;
-};
+export interface ShopifyContextValue
+  extends Omit<ShopifyConfig, 'defaultLocale'> {
+  locale: `${LanguageCode}-${CountryCode}`;
+  languageCode: `${LanguageCode}`;
+}
 
 export type ShopifyProviderProps = {
   /** The contents of the `shopify.config.js` file. */

@@ -82,6 +82,7 @@ describe('<Link />', () => {
       try {
         expect(setServerProps).toHaveBeenCalledWith({
           pathname: '/products/hydrogen',
+          search: '',
         });
         done();
       } catch (e) {

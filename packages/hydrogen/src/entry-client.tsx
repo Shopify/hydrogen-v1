@@ -14,6 +14,8 @@ import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
 
+const DevTools = React.lazy(() => import('./components/DevTools'));
+
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
 
@@ -35,15 +37,37 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   // default to StrictMode on, unless explicitly turned off
   const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
 
+  let hasCaughtError = false;
+
   hydrateRoot(
     root,
-    <RootComponent>
-      <ErrorBoundary FallbackComponent={Error}>
-        <Suspense fallback={null}>
-          <Content clientWrapper={ClientWrapper} />
-        </Suspense>
-      </ErrorBoundary>
-    </RootComponent>
+    <>
+      <RootComponent>
+        <ErrorBoundary FallbackComponent={Error}>
+          <Suspense fallback={null}>
+            <Content clientWrapper={ClientWrapper} />
+          </Suspense>
+        </ErrorBoundary>
+      </RootComponent>
+      {typeof DevTools !== 'undefined' && config?.showDevTools ? (
+        <DevTools />
+      ) : null}
+    </>,
+    {
+      onRecoverableError(e: any) {
+        if (__DEV__ && !hasCaughtError) {
+          hasCaughtError = true;
+          console.log(
+            `React encountered an error while attempting to hydrate the application. ` +
+              `This is likely due to a bug in React's Suspense behavior related to experimental server components, ` +
+              `and it is safe to ignore this error.\n` +
+              `Visit this issue to learn more: https://github.com/Shopify/hydrogen/issues/920.\n\n` +
+              `The original error is printed below:`
+          );
+          console.log(e);
+        }
+      },
+    }
   );
 };
 

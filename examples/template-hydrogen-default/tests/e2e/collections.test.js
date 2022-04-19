@@ -3,10 +3,15 @@ import Collections from '../../src/routes/collections/[handle].server';
 
 describe('collections', () => {
   let hydrogen;
+  let session;
 
   beforeAll(async () => {
     hydrogen = await startHydrogenServer();
     hydrogen.watchForUpdates(Collections);
+  });
+
+  beforeEach(async () => {
+    session = await hydrogen.newPage();
   });
 
   afterAll(async () => {
@@ -14,11 +19,11 @@ describe('collections', () => {
   });
 
   it('should have the correct title', async () => {
-    await hydrogen.visit('/collections/freestyle-collection');
-    const heading = await hydrogen.page.waitForSelector('h1');
+    await session.visit('/collections/freestyle-collection');
+    const heading = await session.page.locator('h1').first();
     expect(heading).not.toBeNull();
 
-    const text = await hydrogen.page.evaluate((h1) => h1.textContent, heading);
+    const text = await heading.textContent();
     expect(text).toBe('Freestyle Collection');
   }, 60000);
 });

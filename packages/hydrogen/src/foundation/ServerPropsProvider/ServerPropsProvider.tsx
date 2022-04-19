@@ -25,16 +25,23 @@ export interface ServerProps {
   [key: string]: any;
 }
 
-type ServerPropsInput =
+type ServerPropsSetterInput =
   | ((prev: ServerProps) => Partial<ServerProps>)
   | Partial<ServerProps>
   | string;
 
 export interface ServerPropsSetter {
   (
-    input: ServerPropsInput,
+    input: ServerPropsSetterInput,
     propValue?: any // Value when using string input
   ): void;
+}
+
+interface ProposedServerPropsSetter {
+  (
+    input: ServerPropsSetterInput,
+    propValue?: any // Value when using string input
+  ): LocationServerProps;
 }
 
 interface BaseServerPropsContextValue {
@@ -47,6 +54,7 @@ export interface InternalServerPropsContextValue
   setServerProps: ServerPropsSetter;
   serverProps: ServerProps;
   locationServerProps: LocationServerProps;
+  getProposedLocationServerProps: ProposedServerPropsSetter;
 }
 
 export interface ServerPropsContextValue extends BaseServerPropsContextValue {
@@ -92,7 +100,19 @@ export function ServerPropsProvider({
     []
   );
 
-  function getNewValue(prev: any, input: ServerPropsInput, propValue: any) {
+  const getProposedLocationServerPropsCallback =
+    useCallback<ProposedServerPropsSetter>(
+      (input, propValue) => {
+        return getNewValue(locationServerProps, input, propValue);
+      },
+      [locationServerProps]
+    );
+
+  function getNewValue(
+    prev: any,
+    input: ServerPropsSetterInput,
+    propValue: any
+  ) {
     let newValue: Record<string, any>;
 
     if (typeof input === 'function') {
@@ -145,6 +165,7 @@ export function ServerPropsProvider({
       serverProps: resolvedServerProps,
       setServerProps: setServerPropsCallback,
       setLocationServerProps: setLocationServerPropsCallback,
+      getProposedLocationServerProps: getProposedLocationServerPropsCallback,
     }),
     [
       pending,
@@ -152,6 +173,7 @@ export function ServerPropsProvider({
       resolvedServerProps,
       setServerPropsCallback,
       setLocationServerPropsCallback,
+      getProposedLocationServerPropsCallback,
     ]
   );
 

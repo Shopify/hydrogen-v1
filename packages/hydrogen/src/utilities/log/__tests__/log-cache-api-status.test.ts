@@ -38,7 +38,7 @@ describe('cache header log', () => {
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual({});
     expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"[90m[Cache] HIT    query shopInfo[39m"`
+      `"[90m[Cache] HIT      query shopInfo[39m"`
     );
   });
 });
