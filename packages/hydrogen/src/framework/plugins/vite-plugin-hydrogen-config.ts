@@ -1,7 +1,7 @@
 import {Plugin} from 'vite';
 
 export default () => {
-  let rollupOptions: any = {
+  const rollupOptions: any = {
     output: {},
   };
 
