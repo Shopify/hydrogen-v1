@@ -2,7 +2,7 @@
 
 {% include hydrogen/developer-preview.md %}
 
-You can deploy a Hydrogen app to most [Node.js and Worker runtimes](/custom-storefronts/hydrogen/framework#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen app to [Oxygen](#deploy-to-oxygen), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), and [Cloudflare Workers](#deploy-to-cloudflare-workers).
+You can deploy a Hydrogen app to most [Node.js and Worker runtimes](/custom-storefronts/hydrogen/framework#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen app to [Oxygen](#deploy-to-oxygen), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), [Cloudflare Workers](#deploy-to-cloudflare-workers), and [Netlify](#deploy-to-netlify).
 
 ## Requirements
 
@@ -339,3 +339,7 @@ You can deploy your Hydrogen app to Cloudflare Workers, a serverless application
    ```bash
    CF_ACCOUNT_ID=<YOUR_CLOUDFLARE_ACCT_ID> wrangler publish
    ```
+
+## Deploy to Netlify
+
+You can deploy your Hydrogen app to Netlify by following the instructions outlined in the [Hydrogen on Netlify guide](https://docs.netlify.com/integrations/frameworks/hydrogen/).
