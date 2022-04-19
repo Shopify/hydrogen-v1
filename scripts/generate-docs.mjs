@@ -26,7 +26,7 @@ const CONFIG = {
   // The directory name of the destination repo.
   repo: 'shopify-dev',
   // The directory name of the output directory inside the repo.
-  output: 'hydrogen',
+  output: 'content/api/hydrogen',
   // The directory name of the documentation source.
   src: 'docs',
 };
