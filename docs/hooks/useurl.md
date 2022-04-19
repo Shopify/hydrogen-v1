@@ -19,11 +19,14 @@ In client components, you can subscribe to the current value of the URL:
 ```tsx
 import {useUrl} from '@shopify/hydrogen/client';
 import {useEffect} from 'react';
+
 export function MyClientComponent() {
   const url = useUrl();
+
   useEffect(() => {
     // do something with url
   }, [url]);
+
   // ...
 }
 ```
@@ -33,14 +36,17 @@ The value of the URL will change immediately, but the page transition might not 
 ```tsx
 import {useUrl, useServerState} from '@shopify/hydrogen/client';
 import {useEffect} from 'react';
+
 export function MyClientComponent() {
   const url = useUrl();
   const {pending} = useServerState();
+
   useEffect(() => {
     if (!pending) {
       // do something with url, now that the page transition has completed.
     }
   }, [url, pending]);
+
   // ...
 }
 ```
