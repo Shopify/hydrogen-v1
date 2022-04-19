@@ -3867,6 +3867,24 @@ bytes@3.1.2:
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.2.tgz#8b0beeb98605adf1b128fa4386403c009e0221a5"
   integrity sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==
 
+c8@^7.11.0:
+  version "7.11.0"
+  resolved "https://registry.yarnpkg.com/c8/-/c8-7.11.0.tgz#b3ab4e9e03295a102c47ce11d4ef6d735d9a9ac9"
+  integrity sha512-XqPyj1uvlHMr+Y1IeRndC2X5P7iJzJlEJwBpCdBbq2JocXOgJfr+JVfJkyNMGROke5LfKrhSFXGFXnwnRJAUJw==
+  dependencies:
+    "@bcoe/v8-coverage" "^0.2.3"
+    "@istanbuljs/schema" "^0.1.2"
+    find-up "^5.0.0"
+    foreground-child "^2.0.0"
+    istanbul-lib-coverage "^3.0.1"
+    istanbul-lib-report "^3.0.0"
+    istanbul-reports "^3.0.2"
+    rimraf "^3.0.0"
+    test-exclude "^6.0.0"
+    v8-to-istanbul "^8.0.0"
+    yargs "^16.2.0"
+    yargs-parser "^20.2.7"
+
 cache-base@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cache-base/-/cache-base-1.0.1.tgz#0a7f46416831c8b662ee36fe4e7c59d76f666ab2"
@@ -5531,25 +5549,6 @@ eslint-plugin-eslint-comments@^3.2.0:
     escape-string-regexp "^1.0.5"
     ignore "^5.0.5"
 
-eslint-plugin-hydrogen@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-hydrogen/-/eslint-plugin-hydrogen-0.11.0.tgz#c0e90c52c937c0daa5cbb3dec0dcdb7d7ffc7056"
-  integrity sha512-fM1KD0E9KwNOF8bGREuB7LTHoxUkb2qdmZmZErXNzbMx51HNt9CXojtGuyUdkTFt6gvYO11JDzPzVyBUyI4gxQ==
-  dependencies:
-    "@typescript-eslint/eslint-plugin" "^4.26.0"
-    "@typescript-eslint/experimental-utils" "^4.0.1"
-    "@typescript-eslint/parser" "^4.26.0"
-    "@typescript-eslint/types" "^4.20.0"
-    eslint "^7.27.0"
-    eslint-config-prettier "^8.3.0"
-    eslint-plugin-eslint-comments "^3.2.0"
-    eslint-plugin-jest "^24.3.0"
-    eslint-plugin-jsx-a11y "^6.4.0"
-    eslint-plugin-prettier "^3.4.0"
-    eslint-plugin-react "^7.24.0"
-    eslint-plugin-react-hooks "^4.2.0"
-    prettier "^2.0.0"
-
 eslint-plugin-jest@^24.3.0:
   version "24.7.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.7.0.tgz#206ac0833841e59e375170b15f8d0955219c4889"
@@ -6210,6 +6209,14 @@ for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
   integrity sha1-gQaNKVqBQuwKxybG4iAMMPttXoA=
+
+foreground-child@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/foreground-child/-/foreground-child-2.0.0.tgz#71b32800c9f15aa8f2f83f4a6bd9bff35d861a53"
+  integrity sha512-dCIq9FpEcyQyXKCkyzmlPTFNgrCzPudOe+mhvJU5zAtlBnGVy2yKxtfsxK2tQBThwq225jcvBjpw1Gr40uzZCA==
+  dependencies:
+    cross-spawn "^7.0.0"
+    signal-exit "^3.0.2"
 
 form-data-encoder@^1.7.1:
   version "1.7.1"
@@ -7699,7 +7706,7 @@ isomorphic-ws@^4.0.1:
   resolved "https://registry.yarnpkg.com/isomorphic-ws/-/isomorphic-ws-4.0.1.tgz#55fd4cd6c5e6491e76dc125938dd863f5cd4f2dc"
   integrity sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==
 
-istanbul-lib-coverage@^3.0.0, istanbul-lib-coverage@^3.2.0:
+istanbul-lib-coverage@^3.0.0, istanbul-lib-coverage@^3.0.1, istanbul-lib-coverage@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/istanbul-lib-coverage/-/istanbul-lib-coverage-3.2.0.tgz#189e7909d0a39fa5a3dfad5b03f71947770191d3"
   integrity sha512-eOeJ5BHCmHYvQK7xt9GkdHuzuCGS1Y6g9Gvnx3Ym33fz/HpLRYxiS0wHNr+m/MBC8B647Xt608vCDEvhl9c6Mw==
@@ -12365,6 +12372,11 @@ tinyspy@^0.3.0:
   resolved "https://registry.yarnpkg.com/tinyspy/-/tinyspy-0.3.0.tgz#51bcc198173385c50416df791cd10c192078cb36"
   integrity sha512-c5uFHqtUp74R2DJE3/Efg0mH5xicmgziaQXMm/LvuuZn3RdpADH32aEGDRyCzObXT1DNfwDMqRQ/Drh1MlO12g==
 
+tinyspy@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/tinyspy/-/tinyspy-0.3.2.tgz#2f95cb14c38089ca690385f339781cd35faae566"
+  integrity sha512-2+40EP4D3sFYy42UkgkFFB+kiX2Tg3URG/lVvAZFfLxgGpnWl5qQJuBw1gaLttq8UOS+2p3C0WrhJnQigLTT2Q==
+
 title-case@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/title-case/-/title-case-3.0.3.tgz#bc689b46f02e411f1d1e1d081f7c3deca0489982"
@@ -12864,7 +12876,7 @@ unified-message-control@^3.0.0:
     unist-util-visit "^2.0.0"
     vfile-location "^3.0.0"
 
-unified@9.2.2, unified@^9.0.0, unified@^9.1.0:
+unified@^9.0.0, unified@^9.1.0:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/unified/-/unified-9.2.2.tgz#67649a1abfc3ab85d2969502902775eb03146975"
   integrity sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==
@@ -13081,6 +13093,15 @@ v8-to-istanbul@^7.0.0:
     convert-source-map "^1.6.0"
     source-map "^0.7.3"
 
+v8-to-istanbul@^8.0.0:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/v8-to-istanbul/-/v8-to-istanbul-8.1.1.tgz#77b752fd3975e31bbcef938f85e9bd1c7a8d60ed"
+  integrity sha512-FGtKtv3xIpR6BYhvgH8MI/y78oT7d8Au3ww4QIxymrCtZEh5b8gCw2siywE+puhEmuWKDtmfrvF5UlB298ut3w==
+  dependencies:
+    "@types/istanbul-lib-coverage" "^2.0.1"
+    convert-source-map "^1.6.0"
+    source-map "^0.7.3"
+
 v8flags@^3.1.1:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/v8flags/-/v8flags-3.2.0.tgz#b243e3b4dfd731fa774e7492128109a0fe66d656"
@@ -13220,6 +13241,19 @@ vitest@^0.5.9:
     tinypool "^0.1.2"
     tinyspy "^0.3.0"
     vite "^2.7.10"
+
+vitest@^0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.9.3.tgz#18e7f80bc27d0f370a524647d73ecfa0236011ac"
+  integrity sha512-hKjqdBI732cV5giNLERyAsaJBebstrX5mvTbZr+jUDYUHnX1O4DpAJcHtqBOutuBi7lVIGQ5IF8eWvHHqbCHBA==
+  dependencies:
+    "@types/chai" "^4.3.0"
+    "@types/chai-subset" "^1.3.3"
+    chai "^4.3.6"
+    local-pkg "^0.4.1"
+    tinypool "^0.1.2"
+    tinyspy "^0.3.2"
+    vite "^2.9.1"
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"
@@ -13494,7 +13528,7 @@ yaml@^1.10.0, yaml@^1.10.2:
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
-yargs-parser@20.x, yargs-parser@^20.2.2, yargs-parser@^20.2.3:
+yargs-parser@20.x, yargs-parser@^20.2.2, yargs-parser@^20.2.3, yargs-parser@^20.2.7:
   version "20.2.9"
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-20.2.9.tgz#2eb7dc3b0289718fc295f362753845c41a0c94ee"
   integrity sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==
