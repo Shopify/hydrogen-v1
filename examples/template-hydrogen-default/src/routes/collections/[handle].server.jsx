@@ -6,11 +6,7 @@ import Layout from '../../components/Layout.server';
 import ProductCard from '../../components/ProductCard';
 import NotFound from '../../components/NotFound.server';
 
-export default function Collection({
-  country = {isoCode: 'US'},
-  collectionProductCount = 24,
-  params,
-}) {
+export default function Collection({country = {isoCode: 'US'}, params}) {
   const {languageCode} = useShop();
 
   const {handle} = params;
@@ -20,7 +16,6 @@ export default function Collection({
       handle,
       country: country.isoCode,
       language: languageCode,
-      numProducts: collectionProductCount,
     },
     preload: true,
   });
@@ -53,12 +48,31 @@ export default function Collection({
             <ProductCard product={product} />
           </li>
         ))}
+        {hasNextPage && (
+          <LoadMoreProducts
+            cursor={data.collection.products.pageInfo.endCursor}
+          />
+        )}
       </ul>
-      {hasNextPage && (
-        <LoadMoreProducts startingCount={collectionProductCount} />
-      )}
     </Layout>
   );
+}
+
+export async function api(request, {params, queryShop}) {
+  if (request.method !== 'POST') {
+    return new Response(405, {Allow: 'POST'});
+  }
+
+  const cursor = new URL(request.url).searchParams.get('cursor');
+  const {handle} = params;
+
+  return await queryShop({
+    query: QUERY,
+    variables: {
+      handle,
+      cursor,
+    },
+  });
 }
 
 const QUERY = gql`
@@ -66,7 +80,7 @@ const QUERY = gql`
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
-    $numProducts: Int!
+    $cursor: String
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       title
@@ -83,7 +97,8 @@ const QUERY = gql`
         height
         altText
       }
-      products(first: $numProducts) {
+      # TODO: Bump up count; just for demo purposes
+      products(first: 1, after: $cursor) {
         edges {
           node {
             title
@@ -128,6 +143,7 @@ const QUERY = gql`
         }
         pageInfo {
           hasNextPage
+          endCursor
         }
       }
     }
