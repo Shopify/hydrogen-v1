@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "yarn@1.22.17",
   "workspaces": [
-    "examples/*",
+    "examples/template-hydrogen-default",
     "packages/*",
     "packages/playground/*"
   ],
@@ -47,7 +47,7 @@
     "chalk": "^4.1.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.23.0",
-    "eslint-plugin-hydrogen": "^0.6.2",
+    "eslint-plugin-hydrogen": "^0.11.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.2.0",
@@ -68,7 +68,7 @@
     "turbo": "^1.1.2",
     "type-fest": "^2.12.0",
     "typescript": "^4.6.2",
-    "vite": "^2.8.0",
+    "vite": "^2.9.0",
     "yorkie": "^2.0.0"
   },
   "gitHooks": {

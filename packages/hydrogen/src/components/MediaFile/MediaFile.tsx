@@ -4,16 +4,17 @@ import {Video} from '../Video';
 import {ExternalVideo} from '../ExternalVideo';
 import {ModelViewer} from '../ModelViewer';
 import type {
-  MediaFileFragmentFragment,
-  MediaFileFragment_ExternalVideo_Fragment,
-  MediaFileFragment_MediaImage_Fragment,
-  MediaFileFragment_Model3d_Fragment,
-  MediaFileFragment_Video_Fragment,
-} from './MediaFileFragment';
+  MediaEdge as MediaEdgeType,
+  MediaImage as MediaImageType,
+  ExternalVideo as ExternalVideoType,
+  Model3d as Model3dType,
+  Video as VideoType,
+} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 export interface MediaFileProps {
-  /** An object with keys that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). */
-  data: MediaFileFragmentFragment;
+  /** An object with fields that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). */
+  data: PartialDeep<MediaEdgeType['node']>;
   /** The options for the `Image`, `Video`, or `ExternalVideo` components. */
   options?:
     | React.ComponentProps<typeof Image>['options']
@@ -34,7 +35,7 @@ export function MediaFile({
 }: MediaFileProps) {
   switch (data.mediaContentType) {
     case 'IMAGE': {
-      const dataImage = (data as MediaFileFragment_MediaImage_Fragment).image;
+      const dataImage = (data as PartialDeep<MediaImageType>).image;
       if (!dataImage) {
         console.warn(
           `No "image" property was found on the "data" prop for <MediaFile/>, for the "type='image'"`
@@ -53,7 +54,7 @@ export function MediaFile({
       return (
         <Video
           {...passthroughProps}
-          data={data as MediaFileFragment_Video_Fragment}
+          data={data as PartialDeep<VideoType>}
           options={options as React.ComponentProps<typeof Video>['options']}
         />
       );
@@ -61,7 +62,7 @@ export function MediaFile({
       return (
         <ExternalVideo
           {...passthroughProps}
-          data={data as MediaFileFragment_ExternalVideo_Fragment}
+          data={data as PartialDeep<ExternalVideoType>}
           options={
             options as React.ComponentProps<typeof ExternalVideo>['options']
           }
@@ -71,7 +72,7 @@ export function MediaFile({
       return (
         <ModelViewer
           {...passthroughProps}
-          data={data as MediaFileFragment_Model3d_Fragment}
+          data={data as PartialDeep<Model3dType>}
         />
       );
     default:

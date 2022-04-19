@@ -1,10 +1,11 @@
 import React from 'react';
 import {ImageSizeOptions, useImageUrl} from '../../utilities';
-import type {VideoFragmentFragment} from './VideoFragment';
+import type {Video as VideoType} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 interface VideoProps {
-  /** An object with keys that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). */
-  data: VideoFragmentFragment;
+  /** An object with fields that correspond to the Storefront API's [Video object](/api/storefront/latest/objects/video). */
+  data: PartialDeep<VideoType>;
   /** An object of image size options for the video's `previewImage`. */
   options?: ImageSizeOptions;
 }
@@ -27,6 +28,10 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
     options
   );
 
+  if (!data.sources) {
+    throw new Error(`<Video/> requires a 'data.sources' array`);
+  }
+
   return (
     <video
       {...passthroughProps}
@@ -35,13 +40,18 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
       controls={controls}
       poster={posterUrl}
     >
-      {data.sources.map((source) => (
-        <source
-          key={source.url}
-          src={source.url}
-          type={source.mimeType}
-        ></source>
-      ))}
+      {data.sources.map((source) => {
+        if (!(source?.url && source?.mimeType)) {
+          throw new Error(`<Video/> needs 'source.url' and 'source.mimeType'`);
+        }
+        return (
+          <source
+            key={source.url}
+            src={source.url}
+            type={source.mimeType}
+          ></source>
+        );
+      })}
     </video>
   );
 }

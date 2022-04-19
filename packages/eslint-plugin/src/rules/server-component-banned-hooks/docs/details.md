@@ -1,3 +1,3 @@
-## Rule Details
+## Rule details
 
-This rule prevents using these hooks in files that do not end with the `.client` suffix.
+This rule prevents using the `useState`, `useReducer`, `useEffect`, and `useLayoutEffect` hooks in files that don't end with the `.client` extension.

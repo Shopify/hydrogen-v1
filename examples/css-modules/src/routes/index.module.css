@@ -1,0 +1,6 @@
+.wrapper {
+  padding: 1em;
+  border: 2px solid black;
+  background: #efefef;
+  content: '';
+}

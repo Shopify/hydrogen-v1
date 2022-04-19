@@ -18,6 +18,10 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
   });
 
   // Tables
+  const frameworkComponentsTable = await generator.table({
+    ...COMPONENTS_TABLE,
+    description: 'Hydrogen includes the following framework components:',
+  });
   const primitiveComponentsTable = await generator.table({
     ...COMPONENTS_TABLE,
     description: 'Hydrogen includes the following primitive components:',
@@ -51,6 +55,22 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'Get familiar with the Shopify-specific commerce components included in Hydrogen.',
       url: '/api/hydrogen/components/index.md',
       entry: 'docs/components',
+    }),
+    // Framework
+    generator.section({
+      title: 'Framework components',
+      intro:
+        'Framework components are components that are available in the [Hydrogen framework](/custom-storefronts/hydrogen/framework).',
+      description:
+        'Get familiar with the framework components included in Hydrogen.',
+      url: '/api/hydrogen/components/framework/index.md',
+      entry: [
+        'foundation/FileRoutes',
+        'foundation/Route',
+        'foundation/Router',
+        'components/Link',
+      ],
+      tables: [frameworkComponentsTable],
     }),
     // Primitive
     generator.section({
@@ -147,6 +167,24 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       url: '/api/hydrogen/hooks/index.md',
       entry: 'docs/hooks',
     }),
+    // Framework
+    generator.section({
+      title: 'Framework',
+      description:
+        'Get familiar with the framework hooks included in Hydrogen.',
+      url: '/api/hydrogen/hooks/framework/index.md',
+      entry: ['foundation/useNavigate', 'foundation/useRouteParams'],
+      intro:
+        'Framework hooks are hooks that are available in the [Hydrogen framework](/custom-storefronts/hydrogen/framework).',
+      tables: [
+        await generator.table({
+          title: 'Reference',
+          description: 'Hydrogen includes the following framework hooks:',
+          columns: ['Hook name', Column.Description],
+        }),
+      ],
+    }),
+
     // Global
     generator.section({
       title: 'Global',
@@ -157,6 +195,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'foundation/useServerState',
         'foundation/useShop',
         'foundation/useQuery',
+        'foundation/fetchSync',
         'foundation/useUrl',
         'hooks/useShopQuery',
       ],
@@ -245,7 +284,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       description:
         'Get familiar with the Hydrogen localization hooks included in Hydrogen.',
       url: '/api/hydrogen/hooks/localization/index.md',
-      entry: ['hooks/useAvailableCountries', 'hooks/useCountry'],
+      entry: ['hooks/useCountry'],
       intro:
         'Localization can help merchants expand their business to a global audience by creating shopping experiences in local languages and currencies.',
       tables: [
@@ -306,6 +345,19 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/cache.md',
     }),
     generator.section({
+      title: 'Streaming server-side rendering (SSR)',
+      description: 'Learn how to improve the loading performance of your app.',
+      url: '/custom-storefronts/hydrogen/framework/streaming-ssr.md',
+      entry: 'framework/docs/streaming-ssr.md',
+    }),
+    generator.section({
+      title: 'Analytics',
+      description:
+        'Learn about the analytics support build into Hydrogen apps.',
+      url: '/custom-storefronts/hydrogen/framework/analytics.md',
+      entry: 'framework/docs/analytics.md',
+    }),
+    generator.section({
       title: 'Preloaded queries',
       description:
         'Learn how to configure queries to preload in your Hydrogen app.',
@@ -352,6 +404,12 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'Learn how to reference and serve static assets in Hydrogen.',
       url: '/custom-storefronts/hydrogen/framework/static-assets.md',
       entry: 'framework/docs/static-assets.md',
+    }),
+    generator.section({
+      title: 'ESLint',
+      description: 'Learn about the ESLint plugin in Hydrogen.',
+      url: '/custom-storefronts/hydrogen/framework/eslint.md',
+      entry: 'framework/docs/eslint.md',
     }),
     generator.section({
       title: 'Third-party dependencies',

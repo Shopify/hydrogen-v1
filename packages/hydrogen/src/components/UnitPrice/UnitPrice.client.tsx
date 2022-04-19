@@ -1,12 +1,13 @@
 import React from 'react';
 import {Money} from '../Money';
-import type {UnitPriceFragmentFragment} from './UnitPriceFragment';
+import type {UnitPriceMeasurement, MoneyV2} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 export interface UnitPriceProps<TTag> {
-  /** An object with keys that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). */
-  data: UnitPriceFragmentFragment['unitPrice'];
+  /** An object with fields that correspond to the Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2). */
+  data: PartialDeep<MoneyV2>;
   /** A [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement). */
-  measurement: UnitPriceFragmentFragment['unitPriceMeasurement'];
+  measurement: PartialDeep<UnitPriceMeasurement>;
   /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
   as?: TTag;
 }

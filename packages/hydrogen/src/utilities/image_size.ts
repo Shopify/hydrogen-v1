@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Image as ImageType} from '../storefront-api-types';
+import type {Image as ImageType} from '../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 export type Width = string | 'original';
 export type Height = string | 'original';
@@ -84,7 +85,10 @@ export function useImageUrl(src?: string, options?: ImageSizeOptions) {
 }
 
 export function getShopifyImageDimensions(
-  image: Pick<ImageType, 'altText' | 'url' | 'id' | 'width' | 'height'>,
+  image: Pick<
+    PartialDeep<ImageType>,
+    'altText' | 'url' | 'id' | 'width' | 'height'
+  >,
   options?: ImageSizeOptions
 ) {
   // Storefront API could return null dimension values for images that are not hosted on Shopify CDN

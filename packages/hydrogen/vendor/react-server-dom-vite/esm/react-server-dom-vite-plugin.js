@@ -1,5 +1,5 @@
 /**
- * @license React
+* @license React
  * react-server-dom-vite-plugin.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -8,26 +8,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {init, parse} from 'es-module-lexer';
-import {normalizePath, transformWithEsbuild} from 'vite';
-import {promises} from 'fs';
+import { init, parse } from 'es-module-lexer';
+import { normalizePath, transformWithEsbuild } from 'vite';
+import { promises } from 'fs';
 import path from 'path';
 
 // $FlowFixMe[module-missing]
 var rscViteFileRE = /\/react-server-dom-vite.js/;
 function ReactFlightVitePlugin() {
-  var _ref =
-      arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-    _ref$clientComponentP = _ref.clientComponentPaths,
-    clientComponentPaths =
-      _ref$clientComponentP === void 0 ? [] : _ref$clientComponentP,
-    _ref$isServerComponen = _ref.isServerComponentImporterAllowed,
-    isServerComponentImporterAllowed =
-      _ref$isServerComponen === void 0
-        ? function (importer) {
-            return false;
-          }
-        : _ref$isServerComponen;
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$clientComponentP = _ref.clientComponentPaths,
+      clientComponentPaths = _ref$clientComponentP === void 0 ? [] : _ref$clientComponentP,
+      _ref$isServerComponen = _ref.isServerComponentImporterAllowed,
+      isServerComponentImporterAllowed = _ref$isServerComponen === void 0 ? function (importer) {
+    return false;
+  } : _ref$isServerComponen;
 
   var config;
   return {
@@ -45,28 +40,12 @@ function ReactFlightVitePlugin() {
        * Throw errors when non-Server Components try to load Server Components.
        */
 
-      if (
-        /\.server(\.[jt]sx?)?$/.test(source) &&
-        !(
-          /(\.server\.[jt]sx?|entry-server\.[jt]sx?|index\.html)$/.test(
-            importer
-          ) || isServerComponentImporterAllowed(importer, source)
-        )
-      ) {
-        throw new Error(
-          'Cannot import ' +
-            source +
-            ' from "' +
-            importer +
-            '". ' +
-            'By react-server convention, .server.js files can only be imported from other .server.js files. ' +
-            'That way nobody accidentally sends these to the client by indirectly importing it.'
-        );
+      if (/\.server(\.[jt]sx?)?$/.test(source) && !(/(\.server\.[jt]sx?|entry-server\.[jt]sx?|index\.html)$/.test(importer) || isServerComponentImporterAllowed(importer, source))) {
+        throw new Error("Cannot import " + source + " from \"" + importer + "\". " + 'By react-server convention, .server.js files can only be imported from other .server.js files. ' + 'That way nobody accidentally sends these to the client by indirectly importing it.');
       }
     },
     load: async function (id) {
-      var options =
-        arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       if (!options.ssr) return null; // Wrapped components won't match this becase they end in ?no-proxy
 
       if (/\.client\.[jt]sx?$/.test(id)) {
@@ -76,8 +55,7 @@ function ReactFlightVitePlugin() {
       return null;
     },
     transform: function (code, id) {
-      var options =
-        arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
       /**
        * In order to allow dynamic component imports from RSC, we use Vite's import.meta.glob.
@@ -89,8 +67,7 @@ function ReactFlightVitePlugin() {
        * and we will have duplicated files in the browser (with duplicated contexts, etc).
        */
       if (rscViteFileRE.test(id)) {
-        var INJECTING_RE =
-          /\{\s*__INJECTED_CLIENT_IMPORTERS__[:\s]*null[,\s]*\}\s*;/;
+        var INJECTING_RE = /\{\s*__INJECTED_CLIENT_IMPORTERS__[:\s]*null[,\s]*\}\s*;/;
 
         if (options && options.ssr) {
           // In SSR, directly use components already discovered by RSC
@@ -100,62 +77,30 @@ function ReactFlightVitePlugin() {
 
         var CLIENT_COMPONENT_GLOB = '**/*.client.[jt]s?(x)';
         var importerPath = path.dirname(id);
-        var importerToRootPath = normalizePath(
-          path.relative(importerPath, config.root)
-        );
-
-        var _ref2 = importerToRootPath.match(/(\.\.\/)+(\.\.)?/) || [],
-          importerToRootNested = _ref2[0];
-
-        var userPrefix = path.normalize(
-          path.join(
-            importerPath,
-            importerToRootNested.replace(/\/?$/, path.sep)
-          )
-        );
+        var importerToRootPath = normalizePath(path.relative(importerPath, config.root));
         var userGlob = path.join(importerToRootPath, CLIENT_COMPONENT_GLOB);
-        var importers = [[userGlob, userPrefix]];
+        var importers = [userGlob];
         clientComponentPaths.forEach(function (componentPath) {
-          var libPrefix = componentPath + path.sep;
-          var libGlob = path.join(
-            path.relative(importerPath, componentPath),
-            CLIENT_COMPONENT_GLOB
-          );
-          importers.push([libGlob, libPrefix]);
+          importers.push(path.join(path.relative(importerPath, componentPath), CLIENT_COMPONENT_GLOB));
         });
-        var injectedGlobs =
-          'Object.assign(Object.create(null), ' +
-          importers
-            .map(function (_ref3) {
-              var glob = _ref3[0],
-                prefix = _ref3[1];
-              return (
-                // Mark the globs to modify the result after Vite resolves them.
-                // The prefix is used later to turn relative imports
-                // into absolute imports, and then into hashes.
-                '/* HASH_BEGIN ' +
-                normalizePath(prefix) +
-                ' */ ' +
-                ("import.meta.glob('" +
-                  normalizePath(glob) +
-                  "') /* HASH_END */")
-              );
-            })
-            .join(', ') +
-          ');';
+        var injectedGlobs = "Object.assign(Object.create(null), " + importers.map(function (glob) {
+          return (// Mark the globs to modify the result after Vite resolves them.
+            "/* HASH_BEGIN */ " + ("import.meta.glob('" + normalizePath(glob) + "') /* HASH_END */")
+          );
+        }).join(', ') + ");";
         return code.replace(INJECTING_RE, injectedGlobs);
       }
-    },
+    }
   };
 }
 
 var btoa = function (hash) {
-  return (
-    // eslint-disable-next-line react-internal/safe-string-coercion
+  return (// eslint-disable-next-line react-internal/safe-string-coercion
     Buffer.from(String(hash), 'binary').toString('base64')
   );
 }; // Quick, lossy hash function: https://stackoverflow.com/a/8831937/4468962
 // Prevents leaking path information in the browser, and minifies RSC responses.
+
 
 function hashCode(value) {
   var hash = 0;
@@ -174,12 +119,12 @@ var getComponentFilename = function (filepath) {
 };
 
 var getComponentId = function (filepath) {
-  return getComponentFilename(filepath) + '-' + hashCode(filepath);
+  return getComponentFilename(filepath) + "-" + hashCode(filepath);
 };
 async function proxyClientComponent(filepath, src) {
   var DEFAULT_EXPORT = 'default'; // Modify the import ID to avoid infinite wraps
 
-  var importFrom = filepath + '?no-proxy';
+  var importFrom = filepath + "?no-proxy";
   await init;
 
   if (!src) {
@@ -187,30 +132,18 @@ async function proxyClientComponent(filepath, src) {
   }
 
   var _await$transformWithE = await transformWithEsbuild(src, filepath),
-    code = _await$transformWithE.code;
+      code = _await$transformWithE.code;
 
   var _parse = parse(code),
-    exportStatements = _parse[1];
+      exportStatements = _parse[1];
 
-  var proxyCode =
-    "import {wrapInClientProxy} from 'react-server-dom-vite/client-proxy';\n" +
-    ("import * as allImports from '" + importFrom + "';\n\n"); // Wrap components in Client Proxy
+  var proxyCode = "import {wrapInClientProxy} from 'react-server-dom-vite/client-proxy';\n" + ("import * as allImports from '" + importFrom + "';\n\n"); // Wrap components in Client Proxy
 
   exportStatements.forEach(function (key) {
     var isDefault = key === DEFAULT_EXPORT;
     var componentName = isDefault ? getComponentFilename(filepath) : key;
-    proxyCode +=
-      'export ' +
-      (isDefault ? DEFAULT_EXPORT : 'const ' + componentName + ' =') +
-      " wrapInClientProxy({ name: '" +
-      componentName +
-      "', id: '" +
-      getComponentId(filepath) +
-      "', component: allImports['" +
-      key +
-      "'], named: " + // eslint-disable-next-line react-internal/safe-string-coercion
-      String(!isDefault) +
-      ' });\n';
+    proxyCode += "export " + (isDefault ? DEFAULT_EXPORT : "const " + componentName + " =") + " wrapInClientProxy({ name: '" + componentName + "', id: '" + getComponentId(filepath) + "', value: allImports['" + key + "'], isDefault: " + // eslint-disable-next-line react-internal/safe-string-coercion
+    String(isDefault) + " });\n";
   });
   return proxyCode;
 }
@@ -220,20 +153,14 @@ var hashImportsPlugin = {
   transform: function (code, id) {
     // Turn relative import paths to lossy hashes
     if (rscViteFileRE.test(id)) {
-      var nestedRE = /\.\.\//gm;
-      return code.replace(
-        /\/\*\s*HASH_BEGIN\s*(.+?)\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm,
-        function (_, prefix, imports) {
-          return imports
-            .trim()
-            .replace(/"([^"]+?)":/gm, function (__, relativePath) {
-              var absolutePath = prefix + relativePath.replace(nestedRE, '');
-              return '"' + getComponentId(absolutePath) + '":';
-            });
-        }
-      );
+      return code.replace(/\/\*\s*HASH_BEGIN\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm, function (_, imports) {
+        return imports.trim().replace(/"([^"]+?)":/gm, function (__, relativePath) {
+          var absolutePath = path.resolve(path.dirname(id.split('?')[0]), relativePath);
+          return "\"" + getComponentId(normalizePath(absolutePath)) + "\":";
+        });
+      });
     }
-  },
+  }
 };
 
 export default ReactFlightVitePlugin;

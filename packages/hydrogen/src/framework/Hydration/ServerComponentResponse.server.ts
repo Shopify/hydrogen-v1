@@ -1,6 +1,8 @@
 import {renderToString} from 'react-dom/server';
 import {CacheSeconds, generateCacheControlHeader} from '../CachingStrategy';
 import type {CachingStrategy} from '../../types';
+import Redirect from '../../foundation/Redirect/Redirect.client';
+import React from 'react';
 
 export class ServerComponentResponse extends Response {
   private wait = false;
@@ -54,7 +56,11 @@ export class ServerComponentResponse extends Response {
   }
 
   redirect(location: string, status = 307) {
+    // writeHead is used for SSR, so that the server responds with a redirect
     this.writeHead({status, headers: {location}});
+
+    // in the case of an RSC request, instead render a client component that will redirect
+    return React.createElement(Redirect, {to: location});
   }
 
   /**

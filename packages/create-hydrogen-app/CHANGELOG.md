@@ -1,5 +1,246 @@
 # Changelog
 
+## 0.14.0
+
+### Minor Changes
+
+- [#1028](https://github.com/Shopify/hydrogen/pull/1028) [`ba174588`](https://github.com/Shopify/hydrogen/commit/ba174588d8f4a9f1054779a9bf32a92e8d2c921c) Thanks [@michenly](https://github.com/michenly)! - Starting from SF API version `2022-04`, the preferred way to request translatable resources is using the `@inContext` directive. See the [API docs](https://shopify.dev/api/examples/multiple-languages#retrieve-translations-with-the-storefront-api) on how to do this and which resources have translatable properties.
+
+  This causes a breaking change to the `useShopQuery` hook. The `locale` property has been removed from the argument object; `Accept-Language` is no longer being send with every request, and we are no longer using locale as part of the cache key.
+
+  The `useShop` hook will now return the `languageCode` key, which is the first two characters of the existing `locale` key.
+
+  Both `locale` & `languageCode` values are also now capitalized to make it easier to pass into a GraphQL `@inContext` directive.
+
+* [#1020](https://github.com/Shopify/hydrogen/pull/1020) [`e9529bc8`](https://github.com/Shopify/hydrogen/commit/e9529bc81410e0d99f9d3dbdb138ae61d00f876b) Thanks [@jplhomer](https://github.com/jplhomer)! - Preload `Link` URLs by default when a user signals intent to visit the URL. This includes hovering or focusing on the URL. To disable preloading, pass `<Link preload={false} />` to the component.
+
+## 0.13.0
+
+### Minor Changes
+
+- [#912](https://github.com/Shopify/hydrogen/pull/912) [`de0e0d6a`](https://github.com/Shopify/hydrogen/commit/de0e0d6a6652463243ee09013cd30830ce2a246a) Thanks [@blittle](https://github.com/blittle)! - Change the country selector to lazy load available countries. The motivation to do so is that a _lot_ of countries come with the Demo Store template. The problem is 1) the graphql query to fetch them all is relatively slow and 2) all of them get serialized to the browser in each RSC response.
+
+  This change removes `availableCountries` from the `LocalizationProvider`. As a result, the `useAvailableCountries` hook is also gone. Instead, the available countries are loaded on demand from an API route.
+
+  Migratation steps:
+
+  Create an API route to retrieve available countries:
+
+  ```jsx
+  export async function api(request, {queryShop}) {
+    const {
+      data: {
+        localization: {availableCountries},
+      },
+    } = await queryShop({
+      query: QUERY,
+    });
+
+    return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  const QUERY = `
+    query Localization {
+      localization {
+        availableCountries {
+          isoCode
+          name
+          currency {
+            isoCode
+          }
+        }
+      }
+    }
+  `;
+  ```
+
+  Then within your client code, query the API route with a `useEffect` hook:
+
+  ```jsx
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/countries')
+      .then((resp) => resp.json())
+      .then((c) => setCountries(c))
+      .catch((e) => setError(e))
+      .finally(() => setLoading(false));
+  }, []);
+  ```
+
+  See an example on how this could be done inside the Demo Store template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx)
+
+* [#698](https://github.com/Shopify/hydrogen/pull/698) [`6f30b9a1`](https://github.com/Shopify/hydrogen/commit/6f30b9a1327f06d648a01dd94d539c7dcb3061e0) Thanks [@jplhomer](https://github.com/jplhomer)! - Basic end-to-end tests have been added to the default Hydrogen template. You can run tests in development:
+
+  ```bash
+  yarn test
+  ```
+
+  Or in continuous-integration (CI) environments:
+
+  ```bash
+  yarn test:ci
+  ```
+
+- [#846](https://github.com/Shopify/hydrogen/pull/846) [`58c823b5`](https://github.com/Shopify/hydrogen/commit/58c823b5eb5c5c33caa25cae629409ce651b3991) Thanks [@blittle](https://github.com/blittle)! - ## New `<Route>` Component
+
+  The `<Route>` component is available for routes not defined by the file system. The `<Route>` component must be used within the `<Router>` component.
+
+  ```jsx
+  // app.server.jsx
+
+  function App({routes, ...serverProps}) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <ShopifyProvider shopifyConfig={shopifyConfig}>
+          <CartProvider>
+            <DefaultSeo />
+            <Router serverProps={serverProps}>
+              <Route path="/custom" page={<CustomRoute />} />
+            </Router>
+          </CartProvider>
+        </ShopifyProvider>
+      </Suspense>
+    );
+  }
+
+  function CustomRoute() {
+    return <h1>Custom route</h1>;
+  }
+  ```
+
+  `<Route>` accepts two props:
+
+  | Property | Type                                    | Required | Description                                                                                            |
+  | -------- | --------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+  | `path`   | `string`                                | Yes      | The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. |
+  | `page`   | `A rendered Server Component reference` | Yes      | A reference to a React Server Component that's rendered when the route is active.                      |
+
+  ## Changes to `<Router>`
+
+  You can have multiple `<Route>` and `<FileRoutes>` components in your app. Hydrogen will only render one route for each request — whichever it finds first. This means the `<Router>` component no longer takes `fallback` as a prop. It also doesn't need `serverProps`. Instead, to render a 404 "Not Found" page, add `<Route path="*" page={<NotFound />} />` to your app. Make sure it's the last `<Route>` defined inside your app:
+
+  ```diff
+  function App({routes, ...serverProps}) {
+    return (
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        <CartProvider>
+          <DefaultSeo />
+  -       <Router
+  -         fallback={<NotFound response={serverProps.response} />}
+  -         serverProps={serverProps}
+  -       >
+  +       <Router>
+            <FileRoutes routes={routes} />
+  +         <Route path="*" page={<NotFound />} />
+          </Router>
+        </CartProvider>
+      </ShopifyProvider>
+    );
+  }
+  ```
+
+  ## Changes to `<FileRoutes>`
+
+  The `<FileRoutes>` component now accepts two additional optional props:
+
+  | Property    | Type     | Required | Default Value | Description                                                             |
+  | ----------- | -------- | -------- | ------------- | ----------------------------------------------------------------------- |
+  | `basePath`  | `string` | No       | `"/"`         | A path that's prepended to all file routes.                             |
+  | `dirPrefix` | `string` | No       | `"./routes"`  | The portion of the file route path that shouldn't be a part of the URL. |
+
+  You need to modify `dirPrefix` if you want to import routes from a location other than `src/routes`.
+
+  You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale:
+
+  ```jsx
+  <Router>
+    <FileRoutes basePath={`/${locale}`} routes={routes} />
+    <Route path="*" page={<NotFound />} />
+  </Router>
+  ```
+
+  ## New `useRouteParams()` hook
+
+  You can use the `useRouteParams()` hook to retrieve the parameters of an active route. The hook is available in both server and client components:
+
+  ```jsx
+  // products/[handle].server.jsx
+
+  import {useRouteParams} from '@shopify/hydrogen';
+
+  export default function Product() {
+    const {handle} = useRouteParams();
+    // ...
+  }
+  ```
+
+  ```jsx
+  // ProductDetails.client.jsx
+  import {useRouteParams} from '@shopify/hydrogen/client';
+
+  export default function ProductDetails() {
+    const {handle} = useRouteParams();
+    // ...
+  }
+  ```
+
+* [#842](https://github.com/Shopify/hydrogen/pull/842) [`626e58ee`](https://github.com/Shopify/hydrogen/commit/626e58eebe3cf994423895bbdf7754c009d701fe) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Removed the `Rawhtml` component.
+
+  Upgrade your project by replacing references to the `RawHtml` component to follow
+  [React's `dangerouslySetInnerHTML`](https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml):
+
+  Change all `RawHtml` component
+
+  ```jsx
+  <RawHtml string="<p>Hello world</p>" />
+  ```
+
+  to jsx equivalent
+
+  ```jsx
+  <div dangerouslySetInnerHTML={{__html: '<p>Hello world</p>'}} />
+  ```
+
+### Patch Changes
+
+- [#906](https://github.com/Shopify/hydrogen/pull/906) [`4db9534c`](https://github.com/Shopify/hydrogen/commit/4db9534ccf2a7a1579eb5e61b039f3c9a2ab49a8) Thanks [@blittle](https://github.com/blittle)! - Optimize the GraphQL query for the home page
+
+* [#965](https://github.com/Shopify/hydrogen/pull/965) [`cdad13ed`](https://github.com/Shopify/hydrogen/commit/cdad13ed85ff17b84981367f39c7d2fe45e72dcf) Thanks [@blittle](https://github.com/blittle)! - Fix server redirects to work properly with RSC responses. For example, the redirect component within the Demo Store template needs to change:
+
+  ```diff
+  export default function Redirect({response}) {
+  -  response.redirect('/products/snowboard');
+  -  return <div>This page is redirected</div>;
+  +  return response.redirect('/products/snowboard');
+  }
+  ```
+
+  This server component is rendered two ways:
+
+  1. When an app directly loads the redirect route, the server will render a 300 redirect with the proper location header.
+  2. The app is already loaded, but the user navigates to the redirected route. We cannot 300 respond in this scenario, instead `response.redirect(...)` returns a component which will redirect on the client.
+
+- [#758](https://github.com/Shopify/hydrogen/pull/758) [`0bee3af0`](https://github.com/Shopify/hydrogen/commit/0bee3af0373acad85dba38a630d3a81e52d6c134) Thanks [@frandiox](https://github.com/frandiox)! - Upgrade to React experimental version `0.0.0-experimental-2bf7c02f0-20220314`.
+
+  To upgrade your Hydrogen app, change the pinned version of `react` and `react-dom` in your `package.json` file to this version, or run:
+
+  ```bash
+  yarn add @shopify/hydrogen react@0.0.0-experimental-2bf7c02f0-20220314 react-dom@0.0.0-experimental-2bf7c02f0-20220314
+  ```
+
+* [#917](https://github.com/Shopify/hydrogen/pull/917) [`be888259`](https://github.com/Shopify/hydrogen/commit/be888259590b838c494bf10f4facdf7db85779b2) Thanks [@jplhomer](https://github.com/jplhomer)! - Add accessible button label for mobile navigation
+
+- [#918](https://github.com/Shopify/hydrogen/pull/918) [`5699e0e9`](https://github.com/Shopify/hydrogen/commit/5699e0e9b7f5003812e31c470b5def5ba129f005) Thanks [@michenly](https://github.com/michenly)! - Optimize the GraphQL query for products page
+
+* [#926](https://github.com/Shopify/hydrogen/pull/926) [`0ca1a039`](https://github.com/Shopify/hydrogen/commit/0ca1a039e18df8ff5de1f988ab0b1fd7ad9dfcfc) Thanks [@frandiox](https://github.com/frandiox)! - Added a new default worker entry point that uses module syntax in `@shopify/hydrogen/platforms/worker`.
+
+- [#903](https://github.com/Shopify/hydrogen/pull/903) [`dd33f7ef`](https://github.com/Shopify/hydrogen/commit/dd33f7ef0bb17b0309f57f0b2a469a7e25ff3447) Thanks [@blittle](https://github.com/blittle)! - Optimize the GraphQL query for the NotFound.server.jsx page
+
+* [#897](https://github.com/Shopify/hydrogen/pull/897) [`c01044e6`](https://github.com/Shopify/hydrogen/commit/c01044e6b4ebe74f8e2e310e78dbaa8178536016) Thanks [@blittle](https://github.com/blittle)! - Add new custom headers for storefront API calls. See Issue [#660](https://github.com/Shopify/hydrogen/issues/660)
+
+- [#872](https://github.com/Shopify/hydrogen/pull/872) [`d90bb3be`](https://github.com/Shopify/hydrogen/commit/d90bb3bedcba47e6eee3498145def4ec1644b19c) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix usage of NotFound when it is not possible to modify the `response` object
+
 ## 0.12.0
 
 ### Minor Changes
@@ -77,7 +318,7 @@
 
 ### Patch Changes
 
-- [#845](https://github.com/Shopify/hydrogen/pull/858) [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the starter template.
+- [#845](https://github.com/Shopify/hydrogen/pull/858) [`8271be8`](https://github.com/Shopify/hydrogen/commit/8271be83331c99f27a258e6532983da4fe4f0b5b) Thanks [@michenly](https://github.com/michenly)! - Export Seo components Fragement and use them in the Demo Store template.
 
 * [#852](https://github.com/Shopify/hydrogen/pull/852) [`6015edf`](https://github.com/Shopify/hydrogen/commit/6015edfa01f7c8e3e7a0120db0847bdc1c068263) Thanks [@frandiox](https://github.com/frandiox)! - Update @headlessui/react version to fix Cart dialog not opening.
 
@@ -88,7 +329,7 @@
 - feat: `/src/entry-server.jsx` file has been merged into `App.server.jsx`. The latter is the new default entry point for the server
 - feat: `/src/entry-client.jsx` file has been removed. The new entry point in for the client in `index.html` is `/@shopify/hydrogen/entry-client`. Custom entry points are still supported
 - fix: Footer date update
-- fix: product link errors in Cart.client.jsx of the example template
+- fix: product link errors in Cart.client.jsx of the Demo Store template
 - feat: Helmet component has been renamed to Head
 
 ## 0.10.1 - 2022-01-26
@@ -135,7 +376,7 @@
 - Devcontainer support added [#164](https://github.com/Shopify/hydrogen/pull/164)
 - fix: add check for products.length in `Welcome.server.jsx`
 - BREAKING CHANGE: the previously default export from `@shopify/hydrogen/middleware` is now a named export `hydrogenMiddleware`.
-- fix: starter template media gallery error when handling videos
+- fix: Demo Store template media gallery error when handling videos
 - fix: add 404 link to footer
 - fix: align font styles for h1 and paragraph
 
@@ -234,7 +475,7 @@
 
 ## 0.1.0 - 2021-09-23
 
-- fix: support starter template homepage without at least three products
+- fix: support Demo Store template homepage without at least three products
 
 ## 1.0.0-alpha.23 - 2021-09-22
 

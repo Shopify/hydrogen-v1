@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useShop} from '../../foundation';
 import {flattenConnection} from '../../utilities';
 import {CartInput} from '../../storefront-api-types';
-import {CartCreate} from '../../graphql/graphql-constants';
+import {CartCreate} from './cart-queries';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
@@ -77,6 +77,7 @@ export function useInstantCheckout() {
         const dataCart = data.cartCreate.cart;
         updateCart({
           ...dataCart,
+          // @ts-expect-error While the cart still uses fragments, there will be a TS error here until we remove those fragments and get the type in-line
           lines: flattenConnection(dataCart.lines),
           note: dataCart.note ?? undefined,
         });

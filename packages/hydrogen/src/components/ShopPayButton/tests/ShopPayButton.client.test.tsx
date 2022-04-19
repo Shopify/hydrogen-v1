@@ -14,6 +14,17 @@ jest.mock('../../../hooks/useLoadScript/useLoadScript', () => {
 });
 
 describe(`ShopPayButton`, () => {
+  let consoleErrorSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    consoleErrorSpy = jest.spyOn(console, 'error');
+    consoleErrorSpy.mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
+  });
+
   it(`throws an error if you don't pass either variantIds or variantIdsAndQuantities`, () => {
     // @ts-expect-error Purposely not passing the correct props
     expect(() => mountWithProviders(<ShopPayButton />)).toThrowError(

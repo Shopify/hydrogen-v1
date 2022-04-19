@@ -2,7 +2,12 @@ import type {ServerResponse} from 'http';
 import type {Logger} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import type {Metafield, Image, MediaContentType} from './storefront-api-types';
+import type {
+  Metafield,
+  ProductVariant,
+  Product,
+  MediaImage,
+} from './storefront-api-types';
 
 type CommonOptions = {
   App: any;
@@ -45,15 +50,25 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
+export type ServerAnalyticsConnector = {
+  request: (
+    request: Request,
+    data?: any,
+    contentType?: 'json' | 'text'
+  ) => void;
+};
+
 export type ServerHandlerConfig = {
   routes?: ImportGlobEagerOutput;
   shopifyConfig: ShopifyConfig;
+  serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
 };
 
 export type ClientHandlerConfig = {
   shopifyConfig: ShopifyConfig;
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;
+  showDevTools?: boolean;
 };
 
 export type ClientHandler = (
@@ -64,25 +79,6 @@ export type ClientHandler = (
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
 }
-
-export interface MediaImage {
-  __typename?: string;
-  id?: string;
-  mediaContentType?: MediaContentType;
-  data?: Pick<Image, 'altText' | 'url' | 'id' | 'width' | 'height'>;
-}
-
-interface ProductVariant {
-  __typename?: string;
-}
-
-interface Product {
-  __typename?: string;
-}
-
-export type RawMetafield = Omit<Partial<Metafield>, 'reference'> & {
-  reference?: MediaImage | ProductVariant | Product | null;
-};
 
 export type ParsedMetafield = Omit<
   Partial<Metafield>,
@@ -124,7 +120,7 @@ export interface AllCacheOptions {
   staleIfError?: number;
 }
 
-export type CachingStrategy = NoStoreStrategy | AllCacheOptions;
+export type CachingStrategy = AllCacheOptions;
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;

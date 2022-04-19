@@ -51,3 +51,7 @@ jobs:
         with:
           apiToken: ${{ secrets.DEPLOYMENT_CF_API_TOKEN }}
           workingDirectory: ./examples/template-hydrogen-default
+
+      - name: Run health check
+        run: |
+          yarn ts-node scripts/health-check.ts https://template-default.hydrogen-devs.workers.dev/

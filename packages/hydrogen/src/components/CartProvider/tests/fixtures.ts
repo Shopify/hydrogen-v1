@@ -29,6 +29,7 @@ export const CART_WITH_LINES_FLATTENED = {
 };
 
 export const CART_ACTIONS: CartWithActions = {
+  // @ts-ignore
   lines: [],
   attributes: [],
   status: 'idle',
@@ -41,10 +42,11 @@ export const CART_ACTIONS: CartWithActions = {
   cartAttributesUpdate: () => {},
   discountCodesUpdate: () => {},
   totalQuantity: CART_WITH_LINES_FLATTENED.lines.reduce((prev, curr) => {
-    return prev + curr.quantity;
+    return prev + (curr?.quantity ?? 0);
   }, 0),
 };
 
+// @ts-ignore
 export const CART_WITH_ACTIONS: CartWithActions = {
   ...CART_ACTIONS,
   ...CART_WITH_LINES_FLATTENED,

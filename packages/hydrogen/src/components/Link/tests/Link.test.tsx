@@ -69,6 +69,7 @@ describe('<Link />', () => {
       try {
         expect(args()).toEqual({
           pathname: '/products/hydrogen',
+          search: '',
         });
         done();
       } catch (e) {

@@ -13,14 +13,14 @@ export const clientComponentBannedHooks = createRule({
     type: 'problem',
     docs: {
       //@ts-expect-error
-      description: `Prevents ${new Intl.ListFormat('en').format(
+      description: `Prevent using ${new Intl.ListFormat('en').format(
         BANNED_HOOKS
-      )} in React Client Components`,
+      )} in client components`,
       category: 'Possible Errors',
       recommended: 'error',
     },
     messages: {
-      clientComponentBannedHooks: `Do not use {{hook}} in React Client Components.`,
+      clientComponentBannedHooks: `Do not use {{hook}} in client components.`,
     },
     schema: [],
   },

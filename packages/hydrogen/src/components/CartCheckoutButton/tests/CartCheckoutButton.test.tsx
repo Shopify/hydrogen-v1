@@ -13,6 +13,8 @@ jest.mock('../../CartProvider', () => ({
 }));
 
 describe('CartCheckoutButton', () => {
+  const fetch = global.fetch;
+
   beforeEach(() => {
     // @ts-ignore
     global.fetch = jest.fn(async (_url, _init) => {
@@ -23,6 +25,10 @@ describe('CartCheckoutButton', () => {
           }),
       };
     });
+  });
+
+  afterEach(() => {
+    global.fetch = fetch;
   });
 
   // TODO fix this when @shopify/react-testing supports React 18 experimental

@@ -27,7 +27,7 @@ export * from './foundation/useQuery/hooks';
 
 // Export server-only CartQuery here instead of `CartProvider.client` to prevent
 // it from being bundled with other client components
-export {CartQuery} from './graphql/graphql-constants';
+export {CartQuery} from './components/CartProvider/cart-queries';
 
 export {
   generateCacheControlHeader,
@@ -40,3 +40,6 @@ export {
   CacheMonths,
   CacheCustom,
 } from './framework/CachingStrategy';
+
+export {fetchSync} from './foundation/fetchSync/server/fetchSync';
+export {useServerAnalytics} from './foundation/Analytics';

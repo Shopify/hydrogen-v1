@@ -3,6 +3,7 @@ import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
   collectQueryTimings,
+  logCacheApiStatus,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -11,6 +12,7 @@ import {
   isStale,
   setItemInCache,
 } from '../../framework/cache';
+import {hashKey} from '../../utilities/hash';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
@@ -24,13 +26,18 @@ export interface HydrogenUseQueryOptions {
    * to preload the query for all requests.
    */
   preload?: PreloadOptions;
+  /** A function that inspects the response body to determine if it should be cached.
+   */
+  shouldCacheResponse?: (body: any) => boolean;
 }
 
 /**
  * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
- * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). It's based
- * on [react-query](https://react-query.tanstack.com/reference/useQuery). You can use this
+ * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this
  * hook to call any third-party APIs from a server component.
+ *
+ * \> Note:
+ * \> If you're making a simple fetch call on the server, then we recommend using the [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) hook instead.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
@@ -73,6 +80,8 @@ function cachedQueryFnBuilder<T>(
     ...(queryOptions ?? {}),
   };
 
+  const shouldCacheResponse = queryOptions?.shouldCacheResponse ?? (() => true);
+
   /**
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
@@ -81,6 +90,7 @@ function cachedQueryFnBuilder<T>(
     // to prevent losing the current React cycle.
     const request = useServerRequest();
     const log = getLoggerWithContext(request);
+    const hashedKey = hashKey(key);
 
     const cacheResponse = await getItemFromCache(key);
 
@@ -100,21 +110,22 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(response)) {
-        log.debug(
-          '[useQuery] cache stale; generating new response in background'
-        );
+      if (isStale(response, resolvedQueryOptions?.cache)) {
+        logCacheApiStatus('STALE', hashedKey);
         const lockKey = `lock-${key}`;
 
         runDelayedFunction(async () => {
-          log.debug(`[stale regen] fetching cache lock`);
+          logCacheApiStatus('UPDATING', hashedKey);
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
           await setItemInCache(lockKey, true);
           try {
             const output = await generateNewOutput();
-            await setItemInCache(key, output, resolvedQueryOptions?.cache);
+
+            if (shouldCacheResponse(output)) {
+              await setItemInCache(key, output, resolvedQueryOptions?.cache);
+            }
           } catch (e: any) {
             log.error(`Error generating async response: ${e.message}`);
           } finally {
@@ -131,10 +142,11 @@ function cachedQueryFnBuilder<T>(
     /**
      * Important: Do this async
      */
-    runDelayedFunction(
-      async () =>
-        await setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
-    );
+    if (shouldCacheResponse(newOutput)) {
+      runDelayedFunction(() =>
+        setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+      );
+    }
 
     collectQueryCacheControlHeaders(
       request,

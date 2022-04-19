@@ -8,6 +8,7 @@ describe('<ProductDescription/>', () => {
   it('renders <div /> with the product’s descriptionHtml', () => {
     const product = getProduct();
     const price = mountWithProviders(
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       <ProductProvider data={product} initialVariantId="">
         <ProductDescription />
       </ProductProvider>
@@ -23,6 +24,7 @@ describe('<ProductDescription/>', () => {
   it('allows passthrough props', () => {
     const product = getProduct();
     const price = mountWithProviders(
+      // @ts-expect-error The mock doesn't match perfectly, fix at some point
       <ProductProvider data={product} initialVariantId="">
         <ProductDescription as="section" className="emphasized" />
       </ProductProvider>

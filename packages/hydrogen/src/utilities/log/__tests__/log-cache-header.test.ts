@@ -26,11 +26,14 @@ describe('cache header log', () => {
       options: jest.fn(() => ({})),
     };
 
-    resetLogger();
     setLogger(mockLogger);
     setLoggerOptions({
       showCacheControlHeader: true,
     });
+  });
+
+  afterEach(() => {
+    resetLogger();
   });
 
   it('should log cache control header for main request', () => {
