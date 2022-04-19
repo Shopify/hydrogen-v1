@@ -69,13 +69,7 @@ function tophat({scope, files, packageDir, destProjectDir, skipBuild}) {
   log('Build copied to project. ');
 }
 
-const DEFAULT_PKGS = ['cli'];
 const PACKAGE_CONFIG_MAP = [
-  {
-    name: 'hydrogen-cli',
-    directory: 'cli',
-    scoped: true,
-  },
   {
     name: 'eslint-plugin-shopify',
     directory: 'eslint-plugin',

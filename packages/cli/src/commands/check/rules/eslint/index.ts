@@ -1,1 +1,0 @@
-export {checkEslintConfig} from './checkEslintConfig';

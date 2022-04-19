@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.16.0
+
+### Patch Changes
+
+- [#1082](https://github.com/Shopify/hydrogen/pull/1082) [`bd14340c`](https://github.com/Shopify/hydrogen/commit/bd14340c3099a0bf375a5879410cdf0697ed22f6) Thanks [@jplhomer](https://github.com/jplhomer)! - Update `useUrl()` to allow a developer to subscribe to a reactive version of the current router location.
+
+  Example:
+
+  ```jsx
+  import {useUrl} from '@shopify/hydrogen/client';
+
+  function MyClientComponent() {
+    const url = useUrl();
+
+    useEffect(() => {
+      // Record navigation, analytics, etc
+    }, [url]);
+  }
+  ```
+
+* [#1075](https://github.com/Shopify/hydrogen/pull/1075) [`05dea552`](https://github.com/Shopify/hydrogen/commit/05dea552c90862a125b5111993003355a019b556) Thanks [@jplhomer](https://github.com/jplhomer)! - Properly set buyer IP and secret token for API Route queryShop helper
+
 ## 0.15.0
 
 ### Minor Changes
