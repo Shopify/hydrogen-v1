@@ -12,9 +12,11 @@ export default function Page() {
 }
 ```
 
+### Subscribing to the current URL value
+
 In client components, you can subscribe to the current value of the URL:
 
-```jsx
+```tsx
 import {useUrl} from '@shopify/hydrogen/client';
 import {useEffect} from 'react';
 
@@ -29,9 +31,9 @@ export function MyClientComponent() {
 }
 ```
 
-It's important to note the value of the URL will change immediately, but the page transition may not yet be completed. If you want to wait until the page is completely transitioned, use the `pending` server state hook value:
+The value of the URL will change immediately, but the page transition might not yet be completed. If you want to wait until the page is completely transitioned, then use the `pending` server state hook value:
 
-```jsx
+```tsx
 import {useUrl, useServerState} from '@shopify/hydrogen/client';
 import {useEffect} from 'react';
 
