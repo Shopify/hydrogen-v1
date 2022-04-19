@@ -17,7 +17,12 @@ const CONFIG = {
   // as the source file.
   paths: {},
   // Array of file paths to skip.
-  skip: [],
+  skip: [
+    'docs/code_of_conduct.md',
+    'docs/contributing.md',
+    'docs/migration_guide.md',
+    'docs/welcome.md',
+  ],
   // The directory name of the destination repo.
   repo: 'shopify-dev',
   // The directory name of the output directory inside the repo.
@@ -55,9 +60,11 @@ const CONFIG = {
 
 function process(src, dest, skipFiles = []) {
   const key = relative(CONFIG.src, src);
+  const fullPath = relative(join(__dirname, '../../'), src);
   const destination = getDestinationFilePath(key) ?? dest;
 
   if (skipFiles.some((key) => src.includes(key))) {
+    console.log(`Skipping - ${fullPath}`);
     return;
   }
 
@@ -70,16 +77,15 @@ function process(src, dest, skipFiles = []) {
   }
 
   const contents = readFileSync(src, 'utf8');
-  const newContents = prependBannerText(
-    relative(join(__dirname, '../../'), src),
-    contents
-  );
+  const newContents = prependBannerText(fullPath, contents);
 
   console.log(
     [
-      relative(join(__dirname, '../../'), src),
+      'Copying -',
+      fullPath,
+      ' → ',
       relative(join(__dirname, '../../'), destination),
-    ].join(' → ')
+    ].join(' ')
   );
 
   writeFileSync(destination, newContents);
