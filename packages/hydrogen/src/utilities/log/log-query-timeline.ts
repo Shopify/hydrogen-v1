@@ -1,6 +1,6 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import {QueryKey} from '../../types';
-import {hashKey} from '../../framework/cache';
+import {hashKey} from '../hash';
 import {findQueryName, parseUrl} from './utils';
 import {gray, red, yellow, green} from 'kolorist';
 import {getLoggerWithContext} from './log';

@@ -5,10 +5,11 @@ import {
 } from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
-import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
+import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {findRoutePrefix} from './findRoutePrefix';
+import {getStorefrontApiRequestHeaders} from './storefrontApi';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -134,18 +135,15 @@ interface QueryShopArgs {
   query: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
-  /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
-  locale?: string;
 }
 
 function queryShopBuilder(
   shopifyConfigGetter: HydrogenConfig['shopify'],
-  request: Request
+  request: ServerComponentRequest
 ) {
   return async function queryShop<T>({
     query,
     variables,
-    locale,
   }: QueryShopArgs): Promise<T> {
     const shopifyConfig =
       typeof shopifyConfigGetter === 'function'
@@ -158,8 +156,13 @@ function queryShopBuilder(
       );
     }
 
-    const {storeDomain, storefrontApiVersion, storefrontToken, defaultLocale} =
-      shopifyConfig;
+    const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
+    const buyerIp = request.getBuyerIp();
+
+    const extraHeaders = getStorefrontApiRequestHeaders({
+      buyerIp,
+      storefrontToken,
+    });
 
     const fetcher = fetchBuilder<T>(
       `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
@@ -167,9 +170,8 @@ function queryShopBuilder(
         method: 'POST',
         body: graphqlRequestBody(query, variables),
         headers: {
-          'X-Shopify-Storefront-Access-Token': storefrontToken,
-          'Accept-Language': (locale as string) ?? defaultLocale,
           'Content-Type': 'application/json',
+          ...extraHeaders,
         },
       }
     );
@@ -179,7 +181,7 @@ function queryShopBuilder(
 }
 
 export async function renderApiRoute(
-  request: Request,
+  request: ServerComponentRequest,
   route: ApiRouteMatch,
   shopifyConfig: HydrogenConfig['shopify']
 ): Promise<Response | Request> {

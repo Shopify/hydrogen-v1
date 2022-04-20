@@ -41,12 +41,19 @@ export default () => {
       // Reload when updating local Hydrogen lib
       server: process.env.LOCAL_DEV && {
         watch: {
-          ignored: ['!**/node_modules/@shopify/hydrogen/**'],
+          ignored: [
+            '!**/node_modules/@shopify/hydrogen/**',
+            '!**/node_modules/@shopify/hydrogen-ui/**',
+          ],
         },
       },
 
       optimizeDeps: {
-        exclude: ['@shopify/hydrogen/client', '@shopify/hydrogen/entry-client'],
+        exclude: [
+          '@shopify/hydrogen/client',
+          '@shopify/hydrogen/entry-client',
+          '@shopify/hydrogen-ui',
+        ],
         include: [
           /**
            * Additionally, the following dependencies have trouble loading the
@@ -63,6 +70,8 @@ export default () => {
           'react',
           'react-dom/client',
           'react-server-dom-vite/client-proxy',
+          // https://github.com/vitejs/vite/issues/6215
+          'react/jsx-runtime',
         ],
       },
 

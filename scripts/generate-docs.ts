@@ -5,47 +5,6 @@ import {DocsGen, Options, Column} from '../packages/generate-docs';
 const ROOT = resolve('.');
 const logger = console;
 
-async function runCliGenerator(args: Partial<Options> = {}) {
-  const cliGenerator = new DocsGen({
-    inputRootPath: ROOT,
-    packageName: 'cli',
-    ...args,
-  });
-
-  const CommandsTable = await cliGenerator.table({
-    title: 'Commands',
-    description: 'The Hydrogen CLI has the following commands',
-    columns: [Column.ComponentName, Column.Description],
-  });
-
-  await Promise.all([
-    cliGenerator.section({
-      title: 'CLI',
-      description:
-        'Use the  `@shopify/hydrogen-cli` to quickly get up and running building hydrogen apps.',
-      url: '/api/hydrogen/cli/index.md',
-      entry: '../',
-      hidden: true,
-    }),
-    cliGenerator.section({
-      title: 'Commands',
-      description: 'Command reference for the `@shopify/hydrogen-cli`',
-      url: '/api/hydrogen/cli/commands/index.md',
-      entry: 'commands',
-      tables: [CommandsTable],
-      hidden: true,
-    }),
-    cliGenerator.section({
-      title: 'Create',
-      description: 'Create command reference from the `@shopify/hydrogen-cli`',
-      url: '/api/hydrogen/cli/commands/create/index.md',
-      entry: 'commands/create',
-      hidden: true,
-      tables: [CommandsTable],
-    }),
-  ]);
-}
-
 const COMPONENTS_TABLE = {
   title: 'Reference',
   columns: [Column.ComponentName, Column.ComponentType, Column.Description],
@@ -236,6 +195,7 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
         'foundation/useServerState',
         'foundation/useShop',
         'foundation/useQuery',
+        'foundation/fetchSync',
         'foundation/useUrl',
         'hooks/useShopQuery',
       ],
@@ -385,6 +345,12 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
       entry: 'framework/docs/cache.md',
     }),
     generator.section({
+      title: 'Streaming server-side rendering (SSR)',
+      description: 'Learn how to improve the loading performance of your app.',
+      url: '/custom-storefronts/hydrogen/framework/streaming-ssr.md',
+      entry: 'framework/docs/streaming-ssr.md',
+    }),
+    generator.section({
       title: 'Analytics',
       description:
         'Learn about the analytics support build into Hydrogen apps.',
@@ -456,11 +422,9 @@ async function runHydrogenGenerator(args: Partial<Options> = {}) {
 }
 
 export default async function runAll(args: Partial<Options> = {}) {
-  return Promise.all([runHydrogenGenerator(args), runCliGenerator(args)]).catch(
-    (error) => {
-      logger.error(error);
-    }
-  );
+  return Promise.all([runHydrogenGenerator(args)]).catch((error) => {
+    logger.error(error);
+  });
 }
 
 runAll({
