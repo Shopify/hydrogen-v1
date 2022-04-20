@@ -5,6 +5,7 @@ import {
   ShopifyProvider,
   setLogger,
   useUrl,
+  usePluginContext,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
@@ -23,10 +24,11 @@ setLogger({
   options: () => ({}),
 });
 
-export default renderHydrogen(({customConfig, response}) => {
+export default renderHydrogen(({response}) => {
   const url = useUrl();
+  const {redirects} = usePluginContext('my-redirects');
 
-  for (const [key, value] of Object.entries(customConfig.redirects)) {
+  for (const [key, value] of Object.entries(redirects)) {
     if (url.pathname === key) {
       return response.redirect(value);
     }

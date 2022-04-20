@@ -14,7 +14,6 @@ type CommonOptions = {
   routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
   componentResponse: ServerComponentResponse;
-  hydrogenConfig: HydrogenConfig;
   log: Logger;
   dev?: boolean;
 };
@@ -71,15 +70,21 @@ export type ServerAnalyticsConnector = {
   ) => void;
 };
 
+export type HydrogenPlugin = {
+  name: string;
+  willHandleRequest?: (
+    url: URL,
+    request: ServerComponentRequest,
+    ctx: any
+  ) => void | Promise<void>;
+};
+
 export type HydrogenConfig = {
   routes?: HydrogenConfigRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
-  custom?: Record<string, any>;
+  plugins?: Array<HydrogenPlugin | HydrogenPlugin[]>;
 };
-
-export type HydrogenConfigFetcher = ConfigFetcher<HydrogenConfig>;
-export type HydrogenConfigExport = HydrogenConfig | HydrogenConfigFetcher;
 
 export type ClientHandlerConfig = {
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
