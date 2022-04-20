@@ -5,7 +5,7 @@ description: The ProductPrice component renders a Money component with the produ
 ---
 
 The `ProductPrice` component renders a `Money` component with the product
-[`priceRange`](/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
+[`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
 
 ## Example code
 
@@ -31,9 +31,9 @@ export function Product({product}) {
 
 ## Component type
 
-The `ProductPrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `ProductPrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`ProductProvider`](/api/hydrogen/components/product-variant/productprovider)
-- [`Money`](/api/hydrogen/components/primitive/money)
+- [`ProductProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productprovider)
+- [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)

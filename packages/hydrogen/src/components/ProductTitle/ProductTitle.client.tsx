@@ -4,7 +4,7 @@ import {Props} from '../types';
 
 /**
  * The `ProductTitle` component renders a `span` element (or the type of
- * HTML element specified by the `as` prop) with the product's [`title`](/api/storefront/reference/products/product).
+ * HTML element specified by the `as` prop) with the product's [`title`](https://shopify.dev/api/storefront/reference/products/product).
  * It must be a descendent of the `ProductProvider` component.
  */
 export function ProductTitle<TTag extends ElementType = 'span'>(

@@ -5,7 +5,7 @@ description: The Metafield component renders the value of a Storefront API's Met
 ---
 
 The `Metafield` component renders the value of a Storefront
-API's [Metafield object](/api/storefront/reference/common-objects/metafield).
+API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
 
 When a render function is provided, it passes the Metafield object with a value
 that was parsed according to the Metafield's `type` field. For more information,
@@ -28,10 +28,10 @@ export function Product({product}) {
 
 ## Props
 
-| Name | Type                         | Description                                                                                                                               |
-| ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| data | <code>ParsedMetafield</code> | An object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield).     |
-| as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](/apps/metafields/types). |
+| Name | Type                         | Description                                                                                                                                                  |
+| ---- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| data | <code>ParsedMetafield</code> | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).     |
+| as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](https://shopify.dev/apps/metafields/types). |
 
 ## Default output
 
@@ -60,15 +60,15 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 
 ## Render props
 
-The `Metafield` components provides the Metafield object with a `value` that was parsed according to the `Metafield`'s `type` field. For details on the parsed value, refer to the [`parseMetafieldValue`](/api/hydrogen/utilities/parsemetafieldvalue) utility.
+The `Metafield` components provides the Metafield object with a `value` that was parsed according to the `Metafield`'s `type` field. For details on the parsed value, refer to the [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue) utility.
 
 ## Component type
 
-The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Storefront API data
 
-The `data` prop is an object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield):
+The `data` prop is an object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield):
 
 ```graphql
 {
@@ -99,7 +99,7 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 
 ### Variables
 
-The [Metafield object](/api/storefront/reference/common-objects/metafield) includes variables that you will need to provide values for when performing your query.
+The [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield) includes variables that you will need to provide values for when performing your query.
 
 | Variable                            | Description                                                                                                                                                                        |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -107,4 +107,4 @@ The [Metafield object](/api/storefront/reference/common-objects/metafield) inclu
 
 ## Related components
 
-- [`ProductMetafield`](/api/hydrogen/components/product-variant/productmetafield)
+- [`ProductMetafield`](https://shopify.dev/api/hydrogen/components/product-variant/productmetafield)

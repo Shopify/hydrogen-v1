@@ -300,16 +300,16 @@ export function Product() {
 | Name              | Type                                                                              | Description                                                                                                                                                                                                     |
 | ----------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | children          | <code>ReactNode</code>                                                            | A `ReactNode` element.                                                                                                                                                                                          |
-| data              | <code>PartialDeep&#60;ProductType&#62;</code>                                     | An object with fields that correspond to the Storefront API's [Product object](/api/storefront/reference/products/product).                                                                                     |
+| data              | <code>PartialDeep&#60;ProductType&#62;</code>                                     | An object with fields that correspond to the Storefront API's [Product object](https://shopify.dev/api/storefront/reference/products/product).                                                                  |
 | initialVariantId? | <code>Parameters&#60;typeof useProductOption&#62;['0']['initialvariantid']</code> | The initially selected variant. If this is missing, then `selectedVariantId` in the returned `object` from the `useProduct` hook uses the first available variant or the first variant (if none are available). |
 
 ## Component type
 
-The `ProductProvider` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `ProductProvider` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Storefront API data
 
-The `data` prop is an object with fields that correspond to the Storefront API's [Product object](/api/storefront/reference/products/product):
+The `data` prop is an object with fields that correspond to the Storefront API's [Product object](https://shopify.dev/api/storefront/reference/products/product):
 
 ```graphql
 {
@@ -584,7 +584,7 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 
 ### Variables
 
-The [Product object](/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
+The [Product object](https://shopify.dev/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
 
 | Variable                                   | Description                                                                                           |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
@@ -920,10 +920,10 @@ const QUERY = gql`
 
 ## Related components
 
-- [`ProductTitle`](/api/hydrogen/components/product-variant/producttitle)
-- [`ProductDescription`](/api/hydrogen/components/product-variant/productdescription)
-- [`ProductPrice`](/api/hydrogen/components/product-variant/productprice)
+- [`ProductTitle`](https://shopify.dev/api/hydrogen/components/product-variant/producttitle)
+- [`ProductDescription`](https://shopify.dev/api/hydrogen/components/product-variant/productdescription)
+- [`ProductPrice`](https://shopify.dev/api/hydrogen/components/product-variant/productprice)
 
 ## Related hooks
 
-- [`useProduct`](/api/hydrogen/hooks/product-variant/useproduct)
+- [`useProduct`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproduct)

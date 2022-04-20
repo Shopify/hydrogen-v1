@@ -42,14 +42,14 @@ function NotFound() {
 
 ## Component type
 
-The `Router` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `Router` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Considerations
 
 - You should only have one `Router` component in your app.
-- All [`FileRoutes`](/api/hydrogen/components/framework/fileroutes) and [`Route`](/api/hydrogen/components/framework/route) components must be children of `Router`.
+- All [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes) and [`Route`](https://shopify.dev/api/hydrogen/components/framework/route) components must be children of `Router`.
 
 ## Related components
 
-- [`FileRoutes`](/api/hydrogen/components/framework/fileroutes)
-- [`Route`](/api/hydrogen/components/framework/route)
+- [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes)
+- [`Route`](https://shopify.dev/api/hydrogen/components/framework/route)

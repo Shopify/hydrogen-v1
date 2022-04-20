@@ -21,18 +21,18 @@ export default function Index() {
 
 ## Props
 
-| Name            | Type                 | Description                                                                                                                                                                                                                |
-| --------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| to              | <code>string</code>  | The destination URL that the link points to. This is the `href` attribute of the underlying `<a>` element.                                                                                                                 |
-| replace?        | <code>boolean</code> | Whether to update the state object or URL of the current history entry. Refer to the [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState).                          |
-| clientState?    | <code>any</code>     | The custom client state with the navigation.                                                                                                                                                                               |
-| reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                                                        |
-| prefetch?       | <code>boolean</code> | Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). |
+| Name            | Type                 | Description                                                                                                                                                                                                                                   |
+| --------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| to              | <code>string</code>  | The destination URL that the link points to. This is the `href` attribute of the underlying `<a>` element.                                                                                                                                    |
+| replace?        | <code>boolean</code> | Whether to update the state object or URL of the current history entry. Refer to the [history.replaceState documentation](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState).                                             |
+| clientState?    | <code>any</code>     | The custom client state with the navigation.                                                                                                                                                                                                  |
+| reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                                                                           |
+| prefetch?       | <code>boolean</code> | Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). |
 
 ## Component type
 
-The `Link` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `Link` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related hooks
 
-- [`useNavigate`](/api/hydrogen/hooks/framework/usenavigate)
+- [`useNavigate`](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate)

@@ -33,8 +33,8 @@ export function App() {
 
 ## Component type
 
-The `CartLineQuantity` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `CartLineQuantity` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`CartLineProvider`](/api/hydrogen/components/cart/cartlineprovider)
+- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)

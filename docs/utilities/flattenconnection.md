@@ -4,7 +4,7 @@ title: flattenConnection
 description: The flattenConnection utility transforms a connection object from the Storefront API (for example, Product-related connections) into a flat array of nodes.
 ---
 
-The `flattenConnection` utility transforms a connection object from the Storefront API (for example, [Product-related connections](/api/storefront/reference/products/product)) into a flat array of nodes.
+The `flattenConnection` utility transforms a connection object from the Storefront API (for example, [Product-related connections](https://shopify.dev/api/storefront/reference/products/product)) into a flat array of nodes.
 
 ## Example code
 
@@ -93,8 +93,8 @@ A flat array whose elements correspond to the `node` value in each element of th
 
 ## Related components
 
-- [ProductProvider](api/hydrogen/components/product-variant/productprovider)
+- [ProductProvider](https://shopify.dev/api/hydrogen/components/product-variant/productprovider)
 
 ## Related hooks
 
-- [useProduct](api/hydrogen/hooks/product-variant/useproduct)
+- [useProduct](https://shopify.dev/api/hydrogen/hooks/product-variant/useproduct)

@@ -44,9 +44,9 @@ function NotFound() {
 
 ## Component type
 
-The `FileRoutes` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `FileRoutes` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`Router`](/api/hydrogen/components/framework/router)
-- [`Route`](/api/hydrogen/components/framework/route)
+- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router)
+- [`Route`](https://shopify.dev/api/hydrogen/components/framework/route)

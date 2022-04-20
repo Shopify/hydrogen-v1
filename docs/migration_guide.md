@@ -64,7 +64,7 @@ In version 0.10, we removed React Router on the server. With this release, we ha
 
 1. [`<Link>` component](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#link-component)
 2. [`useNavigate` hook](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#usenavigate-hook)
-3. [`useUrl` hook](/api/hydrogen/hooks/global/useurl)
+3. [`useUrl` hook](https://shopify.dev/api/hydrogen/hooks/global/useurl)
 
 In a later release, we'll continue to enhance the routing capabilities in Hydrogen. Read more in the [Custom Routes RFC](https://github.com/Shopify/hydrogen/discussions/569).
 

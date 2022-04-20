@@ -5,7 +5,7 @@ description: The ExternalVideo component renders an embedded video for the Store
 ---
 
 The `ExternalVideo` component renders an embedded video for the Storefront
-API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
+API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
 
 ## Example code
 
@@ -53,16 +53,16 @@ export default function MyProductVideo() {
 
 | Name     | Type                                                | Description                                                                                                                                                                                                                       |
 | -------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data     | <code>PartialDeep&#60;ExternalVideoType&#62;</code> | An object with fields that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).                                                                                           |
+| data     | <code>PartialDeep&#60;ExternalVideoType&#62;</code> | An object with fields that correspond to the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).                                                                        |
 | options? | <code>YouTube &#124; Vimeo</code>                   | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
 
 ## Component type
 
-The `ExternalVideo` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `ExternalVideo` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Storefront API data
 
-The `data` prop is an object with fields that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo):
+The `data` prop is an object with fields that correspond to the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo):
 
 ```graphql
 {
@@ -74,4 +74,4 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 
 ## Related components
 
-- [`MediaFile`](/api/hydrogen/components/primitive/mediafile)
+- [`MediaFile`](https://shopify.dev/api/hydrogen/components/primitive/mediafile)

@@ -5,7 +5,7 @@ description: The Image component renders an image for the Storefront API's Image
 ---
 
 The `Image` component renders an image for the Storefront API's
-[Image object](/api/storefront/reference/common-objects/image).
+[Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
 
 ## Example code
 
@@ -70,7 +70,7 @@ export default function ExternalImageWithLoader() {
 
 | Name           | Type                                             | Description                                                                                                                                                                                          |
 | -------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data           | <code>PartialDeep&#60;ImageType&#62;</code>      | An object with fields that correspond to the Storefront API's [Image object](/api/storefront/reference/common-objects/image).                                                                        |
+| data           | <code>PartialDeep&#60;ImageType&#62;</code>      | An object with fields that correspond to the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).                                                     |
 | options?       | <code>ImageSizeOptions</code>                    | An object of image size options for Shopify CDN images.                                                                                                                                              |
 | src            | <code>string</code>                              | A URL string. This string can be an absolute path or a relative path depending on the `loader`.                                                                                                      |
 | width          | <code>number</code>                              | The integer value for the width of the image. This is a required prop when `src` is present.                                                                                                         |
@@ -80,11 +80,11 @@ export default function ExternalImageWithLoader() {
 
 ## Component type
 
-The `Image` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `Image` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Storefront API data
 
-The `data` prop is an object with fields that correspond to the Storefront API's [Image object](/api/storefront/reference/common-objects/image):
+The `data` prop is an object with fields that correspond to the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image):
 
 ```graphql
 {
@@ -110,4 +110,4 @@ You can change the size and format of the image returned by the Shopify CDN.
 
 ## Related components
 
-- [`MediaFile`](/api/hydrogen/components/primitive/mediafile)
+- [`MediaFile`](https://shopify.dev/api/hydrogen/components/primitive/mediafile)

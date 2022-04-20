@@ -4,7 +4,7 @@ title: useParsedMetafields
 description: The useParsedMetafields hook transforms a MetafieldConnection in an array of metafields whose values have been parsed according to the metafield type.
 ---
 
-The `useParsedMetafields` hook transforms a [MetafieldConnection](/api/storefront/reference/common-objects/metafieldconnection)
+The `useParsedMetafields` hook transforms a [MetafieldConnection](https://shopify.dev/api/storefront/reference/common-objects/metafieldconnection)
 in an array of metafields whose `values` have been parsed according to the metafield `type`.
 
 ## Example code
@@ -33,14 +33,14 @@ export function Product(product) {
 
 This hook takes a single object with the following key:
 
-| Key         | Type                                                  | Description                                                                            |
-| ----------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| metafields? | <code>PartialDeep&#60;MetafieldConnection&#62;</code> | A [MetafieldConnection](/api/storefront/reference/common-objects/metafieldconnection). |
+| Key         | Type                                                  | Description                                                                                               |
+| ----------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| metafields? | <code>PartialDeep&#60;MetafieldConnection&#62;</code> | A [MetafieldConnection](https://shopify.dev/api/storefront/reference/common-objects/metafieldconnection). |
 
 ## Return type
 
-This hook returns an array of metafields whose `values` have been parsed according to the metafield `type`. For details on the parsed value, refer to the [`parseMetafieldValue`](/api/hydrogen/utilities/parsemetafieldvalue) utility.
+This hook returns an array of metafields whose `values` have been parsed according to the metafield `type`. For details on the parsed value, refer to the [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue) utility.
 
 ## Related utilities
 
-- [`parseMetafieldValue`](/api/hydrogen/utilities/parsemetafieldvalue)
+- [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue)

@@ -158,7 +158,7 @@ This hook returns a single object with the following keys:
 
 ## Storefront API data
 
-The following GraphQL query corresponds to the Storefront API's [ProductVariant object](/api/storefront/2022-01/objects/ProductVariant). Using the query ensures that you have all the data necessary for the `useProductOptions` hook:
+The following GraphQL query corresponds to the Storefront API's [ProductVariant object](https://shopify.dev/api/storefront/2022-01/objects/ProductVariant). Using the query ensures that you have all the data necessary for the `useProductOptions` hook:
 
 ```graphql
 {
@@ -282,7 +282,7 @@ The following GraphQL query corresponds to the Storefront API's [ProductVariant 
 
 ### Variables
 
-The [Product object](/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
+The [Product object](https://shopify.dev/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
 
 | Variable                                   | Description                                                                                           |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
@@ -293,4 +293,4 @@ The [Product object](/api/storefront/reference/products/product) includes variab
 
 ## Related hooks
 
-- [`useProduct`](/api/hydrogen/hooks/product-variant/useproduct)
+- [`useProduct`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproduct)

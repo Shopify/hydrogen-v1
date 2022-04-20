@@ -5,7 +5,7 @@ description: The MediaFile component renders the media for the Storefront API's 
 ---
 
 The `MediaFile` component renders the media for the Storefront API's
-[Media object](/api/storefront/reference/products/media). It renders an `Image`, a
+[Media object](https://shopify.dev/api/storefront/reference/products/media). It renders an `Image`, a
 `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the
 `media` provided as a prop.
 
@@ -91,18 +91,18 @@ export function MyComponent() {
 
 ## Props
 
-| Name     | Type                                                                                                                                                                                                                           | Description                                                                                                             |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| data     | <code>PartialDeep&#60;MediaEdgeType['node']&#62;</code>                                                                                                                                                                        | An object with fields that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). |
-| options? | <code>React.ComponentProps&#60;typeof Video&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof ExternalVideo&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof Image&#62;['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components.                                                    |
+| Name     | Type                                                                                                                                                                                                                           | Description                                                                                                                                |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| data     | <code>PartialDeep&#60;MediaEdgeType['node']&#62;</code>                                                                                                                                                                        | An object with fields that correspond to the Storefront API's [Media object](https://shopify.dev/api/storefront/reference/products/media). |
+| options? | <code>React.ComponentProps&#60;typeof Video&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof ExternalVideo&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof Image&#62;['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components.                                                                       |
 
 ## Component type
 
-The `MediaFile` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `MediaFile` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Storefront API data
 
-The `data` prop is an object with fields that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media):
+The `data` prop is an object with fields that correspond to the Storefront API's [Media object](https://shopify.dev/api/storefront/reference/products/media):
 
 ```graphql
 {
@@ -150,7 +150,7 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 
 ## Related components
 
-- [`Image`](/api/hydrogen/components/primitive/image)
-- [`Video`](/api/hydrogen/components/primitive/video)
-- [`ExternalVideo`](/api/hydrogen/components/primitive/externalvideo)
-- [`ModelViewer`](/api/hydrogen/components/primitive/modelviewer)
+- [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image)
+- [`Video`](https://shopify.dev/api/hydrogen/components/primitive/video)
+- [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo)
+- [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer)

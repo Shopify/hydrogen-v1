@@ -5,7 +5,7 @@ description: The ProductTitle component renders a span element (or the type of H
 ---
 
 The `ProductTitle` component renders a `span` element (or the type of
-HTML element specified by the `as` prop) with the product's [`title`](/api/storefront/reference/products/product).
+HTML element specified by the `as` prop) with the product's [`title`](https://shopify.dev/api/storefront/reference/products/product).
 It must be a descendent of the `ProductProvider` component.
 
 ## Example code
@@ -30,8 +30,8 @@ export function Product({product}) {
 
 ## Component type
 
-The `ProductTitle` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `ProductTitle` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`ProductProvider`](/api/hydrogen/components/product-variant/productprovider)
+- [`ProductProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productprovider)

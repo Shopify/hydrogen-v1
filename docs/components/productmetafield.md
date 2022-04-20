@@ -5,7 +5,7 @@ description: The ProductMetafield component renders a Metafield component with t
 ---
 
 The `ProductMetafield` component renders a
-[`Metafield`](/api/hydrogen/components/primitive/metafield) component with the product metafield.
+[`Metafield`](https://shopify.dev/api/hydrogen/components/primitive/metafield) component with the product metafield.
 It must be a descendent of a `ProductProvider` component.
 
 ## Example code
@@ -36,16 +36,16 @@ export function ProductWithRenderProp({product}) {
 
 ## Props
 
-| Name       | Type                | Description                                                                                                                    |
-| ---------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| keyName    | <code>string</code> | A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's metafield.            |
-| namespace  | <code>string</code> | A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the product's metafield.      |
-| variantId? | <code>string</code> | The ID of the variant. If provided, then use the metafield corresponding to the variant ID instead of the product's metafield. |
+| Name       | Type                | Description                                                                                                                                  |
+| ---------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| keyName    | <code>string</code> | A string corresponding to the [key](https://shopify.dev/api/storefront/reference/common-objects/metafield) of the product's metafield.       |
+| namespace  | <code>string</code> | A string corresponding to the [namespace](https://shopify.dev/api/storefront/reference/common-objects/metafield) of the product's metafield. |
+| variantId? | <code>string</code> | The ID of the variant. If provided, then use the metafield corresponding to the variant ID instead of the product's metafield.               |
 
 ## Component type
 
-The `ProductMetafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `ProductMetafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`Metafield`](/api/hydrogen/components/primitive/metafield)
+- [`Metafield`](https://shopify.dev/api/hydrogen/components/primitive/metafield)

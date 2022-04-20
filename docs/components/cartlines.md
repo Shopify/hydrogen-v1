@@ -50,17 +50,17 @@ export function MyComponentWithRenderProps() {
 
 ## Component type
 
-The `CartLines` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `CartLines` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`CartLineImage`](/api/hydrogen/components/cart/cartlineimage)
-- [`CartLinePrice`](/api/hydrogen/components/cart/cartlineprice)
-- [`CartLineProvider`](/api/hydrogen/components/cart/cartlineprovider)
-- [`CartLineProductTitle`](/api/hydrogen/components/cart/cartlineproducttitle)
-- [`CartLineQuantity`](/api/hydrogen/components/cart/cartlinequantity)
-- [`CartLineQuantityAdjustButton`](/api/hydrogen/components/cart/cartlinequantityadjustbutton)
+- [`CartLineImage`](https://shopify.dev/api/hydrogen/components/cart/cartlineimage)
+- [`CartLinePrice`](https://shopify.dev/api/hydrogen/components/cart/cartlineprice)
+- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
+- [`CartLineProductTitle`](https://shopify.dev/api/hydrogen/components/cart/cartlineproducttitle)
+- [`CartLineQuantity`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantity)
+- [`CartLineQuantityAdjustButton`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantityadjustbutton)
 
 ## Related hooks
 
-- [`useCartLine`](/api/hydrogen/hooks/cart/usecart)
+- [`useCartLine`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)

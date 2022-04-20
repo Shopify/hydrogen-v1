@@ -4,7 +4,7 @@ title: parseMetafieldValue
 description: The parseMetafieldValue function parses a Metafield's value from a string into a sensible type corresponding to the Metafield's type.
 ---
 
-The `parseMetafieldValue` function parses a [Metafield](/api/storefront/reference/common-objects/metafield)'s `value` from a string into a sensible type corresponding to the [Metafield](/api/storefront/reference/common-objects/metafield)'s `type`.
+The `parseMetafieldValue` function parses a [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield)'s `value` from a string into a sensible type corresponding to the [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield)'s `type`.
 
 ## Example code
 
@@ -73,13 +73,13 @@ export function Product({handle}) {
 
 ## Arguments
 
-| Argument                                                                  | Required |
-| ------------------------------------------------------------------------- | -------- |
-| A [Metafield object](/api/storefront/reference/common-objects/metafield). | Yes      |
+| Argument                                                                                     | Required |
+| -------------------------------------------------------------------------------------------- | -------- |
+| A [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). | Yes      |
 
 ## Return type
 
-Depending on the `type` specified in the passed [Metafield](/api/storefront/reference/common-objects/metafield), the following type is returned:
+Depending on the `type` specified in the passed [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield), the following type is returned:
 
 | Metafield `type`         | `value` type                                                                                  |
 | ------------------------ | --------------------------------------------------------------------------------------------- |
@@ -104,4 +104,4 @@ Depending on the `type` specified in the passed [Metafield](/api/storefront/refe
 
 ## Related hook
 
-- [`useParsedMetafields`](/api/hydrogen/hooks/metafield/useparsedmetafields)
+- [`useParsedMetafields`](https://shopify.dev/api/hydrogen/hooks/metafield/useparsedmetafields)

@@ -33,9 +33,9 @@ export function App() {
 
 ## Component type
 
-The `CartLinePrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `CartLinePrice` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`CartLineProvider`](/api/hydrogen/components/cart/cartlineprovider)
-- [`Money`](/api/hydrogen/components/primitive/money)
+- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
+- [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)

@@ -32,12 +32,12 @@ export default function MyCart() {
 ## Component type
 
 The `CartEstimatedCost` component is a client component, which means that it renders on the client.
-For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`Money`](/api/hydrogen/components/primitive/money)
+- [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)
 
 ## Related hooks
 
-- [`useCart`](/api/hydrogen/hooks/cart/usecart)
+- [`useCart`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)

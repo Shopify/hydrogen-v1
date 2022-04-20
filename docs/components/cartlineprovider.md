@@ -33,16 +33,16 @@ export function App() {
 
 ## Component type
 
-The `CartLineProvider` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `CartLineProvider` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 
-- [`CartLineImage`](/api/hydrogen/components/cart/cartlineimage)
-- [`CartLinePrice`](/api/hydrogen/components/cart/cartlineprice)
-- [`CartLineProductTitle`](/api/hydrogen/components/cart/cartlineproducttitle)
-- [`CartLineQuantity`](/api/hydrogen/components/cart/cartlinequantity)
-- [`CartLineQuantityAdjustButton`](/api/hydrogen/components/cart/cartlinequantityadjustbutton)
+- [`CartLineImage`](https://shopify.dev/api/hydrogen/components/cart/cartlineimage)
+- [`CartLinePrice`](https://shopify.dev/api/hydrogen/components/cart/cartlineprice)
+- [`CartLineProductTitle`](https://shopify.dev/api/hydrogen/components/cart/cartlineproducttitle)
+- [`CartLineQuantity`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantity)
+- [`CartLineQuantityAdjustButton`](https://shopify.dev/api/hydrogen/components/cart/cartlinequantityadjustbutton)
 
 ## Related hooks
 
-- [`useCartLine`](/api/hydrogen/hooks/cart/usecartline)
+- [`useCartLine`](https://shopify.dev/api/hydrogen/hooks/cart/usecartline)

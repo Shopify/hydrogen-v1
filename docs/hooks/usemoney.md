@@ -4,7 +4,7 @@ title: useMoney
 description: The useMoney hook takes a MoneyV2 object and returns a default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by Intl.NumberFormat.
 ---
 
-The `useMoney` hook takes a [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) and returns a
+The `useMoney` hook takes a [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) and returns a
 default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by
 [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
 
@@ -30,17 +30,17 @@ export function MyComponent() {
 
 This hook returns an object with the following keys:
 
-| Key                    | Description                                                                                                                                                      |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `locale` value in [ShopifyContext](/api/hydrogen/hooks/global/useshop). |
-| `currencyCode`         | The currency code from the `MoneyV2` object.                                                                                                                     |
-| `currencyName`         | The name for the currency code, returned by `Intl.NumberFormat`.                                                                                                 |
-| `currencySymbol`       | The currency symbol returned by `Intl.NumberFormat`.                                                                                                             |
-| `currencyNarrowSymbol` | The currency narrow symbol returned by `Intl.NumberFormat`.                                                                                                      |
-| `amount`               | The localized amount, without any currency symbols or non-number types from the `Intl.NumberFormat.formatToParts` parts.                                         |
-| `parts`                | All parts returned by `Intl.NumberFormat.formatToParts`.                                                                                                         |
-| `original`             | The original `MoneyV2` object passed as an argument.                                                                                                             |
+| Key                    | Description                                                                                                                                                                         |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `locale` value in [ShopifyContext](https://shopify.dev/api/hydrogen/hooks/global/useshop). |
+| `currencyCode`         | The currency code from the `MoneyV2` object.                                                                                                                                        |
+| `currencyName`         | The name for the currency code, returned by `Intl.NumberFormat`.                                                                                                                    |
+| `currencySymbol`       | The currency symbol returned by `Intl.NumberFormat`.                                                                                                                                |
+| `currencyNarrowSymbol` | The currency narrow symbol returned by `Intl.NumberFormat`.                                                                                                                         |
+| `amount`               | The localized amount, without any currency symbols or non-number types from the `Intl.NumberFormat.formatToParts` parts.                                                            |
+| `parts`                | All parts returned by `Intl.NumberFormat.formatToParts`.                                                                                                                            |
+| `original`             | The original `MoneyV2` object passed as an argument.                                                                                                                                |
 
 ## Related components
 
-- [`Money`](/api/hydrogen/components/primitive/money)
+- [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)

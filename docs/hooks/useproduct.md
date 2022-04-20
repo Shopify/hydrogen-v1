@@ -26,7 +26,7 @@ export function CustomAddToCartButton() {
 
 ## Return value
 
-The `useProduct` hook returns an object with the following keys, as well as all keys from the [`useProductOptions` hook return value](/api/hydrogen/hooks/product-variant/useproductoptions):
+The `useProduct` hook returns an object with the following keys, as well as all keys from the [`useProductOptions` hook return value](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions):
 
 | Name                 | Description                                                                  |
 | -------------------- | ---------------------------------------------------------------------------- |
@@ -43,4 +43,4 @@ The `useProduct` hook returns an object with the following keys, as well as all 
 
 ## Related components
 
-- [`ProductProvider`](/api/hydrogen/components/product-variant/productprovider)
+- [`ProductProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productprovider)

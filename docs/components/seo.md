@@ -43,17 +43,17 @@ export default function Page() {
 
 The `Seo` component has two props: `type` and `data`. The `type` prop accepts `defaultSeo`, `homepage`, `product`, `collection`, or `page`. Each `type` expects a different `data` shape.
 
-| Type       | Data                                                                           | Description                                                                                                                                                                                                                                                                 |
-| ---------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| defaultSeo | <code>Omit&#60;DefaultPageType, 'url'&#62;</code>                              | The SEO information to render as default on every page of the website. Corresponds to the Storefront API's [Seo object](/api/storefront/latest/objects/seo). You can specify `homepage`, `product`, `collection`, or `page` in children components to override the default. |
-| homepage   | <code>Omit&#60;HomePageType, 'url'&#62;</code>                                 | The SEO information to render on the home page of the website. Corresponds to the Storefront API's [Seo object](/api/storefront/latest/objects/seo).                                                                                                                        |
-| product    | <code>Omit&#60;ComponentProps&#60;typeof ProductSeo&#62;, 'url'&#62;</code>    | The SEO information to render on the product page. Corresponds to the Storefront API's [Product object](/api/storefront/latest/objects/product).                                                                                                                            |
-| collection | <code>Omit&#60;ComponentProps&#60;typeof CollectionSeo&#62;, 'url'&#62;</code> | The SEO information to render on the collection page. Corresponds to the Storefront API's [Collection object](/api/storefront/latest/objects/collection).                                                                                                                   |
-| page       | <code>Omit&#60;ComponentProps&#60;typeof PageSeo&#62;, 'url'&#62;</code>       | The SEO information to render on pages (for example, "About" or "Shipping"). Corresponds to the Storefront API's [Page object](/api/storefront/latest/objects/page).                                                                                                        |
+| Type       | Data                                                                           | Description                                                                                                                                                                                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| defaultSeo | <code>Omit&#60;DefaultPageType, 'url'&#62;</code>                              | The SEO information to render as default on every page of the website. Corresponds to the Storefront API's [Seo object](https://shopify.dev/api/storefront/latest/objects/seo). You can specify `homepage`, `product`, `collection`, or `page` in children components to override the default. |
+| homepage   | <code>Omit&#60;HomePageType, 'url'&#62;</code>                                 | The SEO information to render on the home page of the website. Corresponds to the Storefront API's [Seo object](https://shopify.dev/api/storefront/latest/objects/seo).                                                                                                                        |
+| product    | <code>Omit&#60;ComponentProps&#60;typeof ProductSeo&#62;, 'url'&#62;</code>    | The SEO information to render on the product page. Corresponds to the Storefront API's [Product object](https://shopify.dev/api/storefront/latest/objects/product).                                                                                                                            |
+| collection | <code>Omit&#60;ComponentProps&#60;typeof CollectionSeo&#62;, 'url'&#62;</code> | The SEO information to render on the collection page. Corresponds to the Storefront API's [Collection object](https://shopify.dev/api/storefront/latest/objects/collection).                                                                                                                   |
+| page       | <code>Omit&#60;ComponentProps&#60;typeof PageSeo&#62;, 'url'&#62;</code>       | The SEO information to render on pages (for example, "About" or "Shipping"). Corresponds to the Storefront API's [Page object](https://shopify.dev/api/storefront/latest/objects/page).                                                                                                        |
 
 ## Component type
 
-The `Seo` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components).
+The `Seo` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Storefront API data
 
@@ -61,7 +61,7 @@ The `Seo` component includes the following types that expect a specific data sha
 
 ### `defaultSeo`
 
-The `defaultSeo` type is an object with the following data structure. The `title` and `description` fields correspond to the Storefront API's [Seo object](/api/storefront/latest/objects/seo):
+The `defaultSeo` type is an object with the following data structure. The `title` and `description` fields correspond to the Storefront API's [Seo object](https://shopify.dev/api/storefront/latest/objects/seo):
 
 ```graphql
 {
@@ -74,7 +74,7 @@ The `defaultSeo` type is an object with the following data structure. The `title
 
 ### `homepage`
 
-The `homepage` type is an object with fields that correspond to the Storefront API's [Seo object](/api/storefront/latest/objects/seo):
+The `homepage` type is an object with fields that correspond to the Storefront API's [Seo object](https://shopify.dev/api/storefront/latest/objects/seo):
 
 ```graphql
 {
@@ -85,7 +85,7 @@ The `homepage` type is an object with fields that correspond to the Storefront A
 
 ### `product`
 
-The `product` type is an object with fields that correspond to the Storefront API's [Product object](/api/storefront/latest/objects/product):
+The `product` type is an object with fields that correspond to the Storefront API's [Product object](https://shopify.dev/api/storefront/latest/objects/product):
 
 ```graphql
 {
@@ -123,7 +123,7 @@ The `product` type is an object with fields that correspond to the Storefront AP
 
 ### `collection`
 
-The `collection` type is an object with fields that correspond to the Storefront API's [Collection object](/api/storefront/latest/objects/collection):
+The `collection` type is an object with fields that correspond to the Storefront API's [Collection object](https://shopify.dev/api/storefront/latest/objects/collection):
 
 ```graphql
 {
@@ -145,7 +145,7 @@ The `collection` type is an object with fields that correspond to the Storefront
 
 ### `page`
 
-The `page` type is an object with fields that correspond to the Storefront API's [Page object](/api/storefront/latest/objects/page):
+The `page` type is an object with fields that correspond to the Storefront API's [Page object](https://shopify.dev/api/storefront/latest/objects/page):
 
 ```graphql
 {

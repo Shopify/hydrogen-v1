@@ -53,4 +53,4 @@ This hook returns an array with the following elements:
 
 ## Related components
 
-- [`LocalizationProvider`](/api/hydrogen/components/localization/localizationprovider)
+- [`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider)
