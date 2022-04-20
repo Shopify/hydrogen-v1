@@ -79,7 +79,12 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes, serverAnalyticsConnectors, session}: ServerHandlerConfig
+  {
+    shopifyConfig,
+    routes,
+    serverAnalyticsConnectors,
+    session,
+  }: ServerHandlerConfig
 ) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {
