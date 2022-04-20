@@ -1,7 +1,8 @@
 import {Plugin} from 'vite';
+import type {BuildOptions} from 'vite';
 
 export default () => {
-  const rollupOptions: any = {
+  const rollupOptions: BuildOptions['rollupOptions'] = {
     output: {},
   };
 
@@ -10,20 +11,18 @@ export default () => {
      * By default, SSR dedupe logic gets bundled which runs `require('module')`.
      * We don't want this in our workers runtime, because `require` is not supported.
      */
-    rollupOptions.output.format = 'es';
+    rollupOptions.output = {
+      format: 'es',
+    };
   }
 
   if (!process.env.LOCAL_DEV) {
     /**
      * Ofuscate production asset name - To prevent ad blocker logics that blocks
      * certain files due to how it is named.
-     *
-     * Ofuscation is done by base64 encoding of the filename
      */
-    rollupOptions.output.chunkFileNames = (chunkInfo: any) => {
-      return `assets/${Buffer.from(chunkInfo.name).toString(
-        'base64'
-      )}.[hash].js`;
+    rollupOptions.output = {
+      chunkFileNames: '[hash].js',
     };
   }
 
