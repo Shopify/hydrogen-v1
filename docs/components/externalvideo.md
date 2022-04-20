@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/externalvideo
+title: ExternalVideo
+description: The ExternalVideo component renders an embedded video for the Storefront API's ExternalVideo object.
+---
+
 The `ExternalVideo` component renders an embedded video for the Storefront
 API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
 

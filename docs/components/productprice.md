@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/product-variant/productprice
+title: ProductPrice
+description: The ProductPrice component renders a Money component with the product priceRange's maxVariantPrice or minVariantPrice, for either the regular price or compare at price range.
+---
+
 The `ProductPrice` component renders a `Money` component with the product
 [`priceRange`](/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
 

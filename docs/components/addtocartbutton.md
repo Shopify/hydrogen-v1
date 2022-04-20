@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/addtocartbutton
+title: AddToCartButton
+description: The AddToCartButton component renders a button that adds an item to the cart when pressed.
+---
+
 The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
 It must be a descendent of the `CartProvider` component.
 

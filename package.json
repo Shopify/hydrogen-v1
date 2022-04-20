@@ -26,8 +26,7 @@
     "hydrogen": "./packages/cli/bin/hydrogen",
     "h2": "./packages/cli/bin/hydrogen",
     "update-docs-on-version": "ts-node --project ./tsconfig.json ./scripts/update-docs-on-version.ts",
-    "generate-docs": "ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
-    "generate-docs:debug": "node --inspect-brk ./node_modules/.bin/ts-node --project ./tsconfig.json ./scripts/generate-docs.ts",
+    "generate-docs": "node ./scripts/generate-docs.mjs",
     "tophat": "node ./scripts/tophat",
     "graphql-types": "yarn workspace @shopify/hydrogen graphql-types"
   },

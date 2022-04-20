@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/global/shopifyprovider
+title: ShopifyProvider
+description: The ShopifyProvider component wraps your entire app and provides support for hooks.
+---
+
 The `ShopifyProvider` component wraps your entire app and provides support for hooks.
 You should place it in your app's entry point component. For example, `&lt;App&gt;`.
 

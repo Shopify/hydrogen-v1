@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/cartshoppaybutton
+title: CartShopPayButton
+description: The CartShopPayButton component renders a ShopPayButton for the items in the cart.
+---
+
 The `CartShopPayButton` component renders a `ShopPayButton` for the items in the cart.
 It must be a descendent of a `CartProvider` component.
 

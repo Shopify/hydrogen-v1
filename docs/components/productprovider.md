@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/product-variant/productprovider
+title: ProductProvider
+description: The ProductProvider component sets up a context with product details.
+---
+
 The `ProductProvider` component sets up a context with product details. Descendents of
 this component can use the `useProduct` hook.
 

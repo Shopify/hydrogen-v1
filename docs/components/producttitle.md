@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/product-variant/producttitle
+title: ProductTitle
+description: The ProductTitle component renders a span element (or the type of HTML element specified by the as prop) with the product's title.
+---
+
 The `ProductTitle` component renders a `span` element (or the type of
 HTML element specified by the `as` prop) with the product's [`title`](/api/storefront/reference/products/product).
 It must be a descendent of the `ProductProvider` component.

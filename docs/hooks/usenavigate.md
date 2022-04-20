@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/framework/usenavigate
+title: useNavigate
+description: The useNavigate hook imperatively navigates between routes.
+---
+
 The `useNavigate` hook imperatively navigates between routes.
 
 ## Example code

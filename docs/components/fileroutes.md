@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/framework/fileroutes
+title: FileRoutes
+description: The FileRoutes component builds a set of default Hydrogen routes based on the output provided by Vite's import.meta.globEager method.
+---
+
 The `FileRoutes` component builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. You can have multiple instances of this component to source file routes from multiple locations.
 
 ## Example code

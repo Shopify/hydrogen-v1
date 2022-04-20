@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/modelviewer
+title: ModelViewer
+description: The ModelViewer component renders a 3D model (with the model-viewer tag) for the Storefront API's Model3d object.
+---
+
 The `ModelViewer` component renders a 3D model (with the `model-viewer` tag) for
 the Storefront API's [Model3d object](/api/storefront/reference/products/model3d).
 

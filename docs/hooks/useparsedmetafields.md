@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/metafield/useparsedmetafields
+title: useParsedMetafields
+description: The useParsedMetafields hook transforms a MetafieldConnection in an array of metafields whose values have been parsed according to the metafield type.
+---
+
 The `useParsedMetafields` hook transforms a [MetafieldConnection](/api/storefront/reference/common-objects/metafieldconnection)
 in an array of metafields whose `values` have been parsed according to the metafield `type`.
 

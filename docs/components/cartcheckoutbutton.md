@@ -1,3 +1,8 @@
+---
+title: CartCheckoutButton
+description: The CartCheckoutButton renders a button that redirects to checkoutUrl for the cart.
+---
+
 The `CartCheckoutButton` component renders a button that redirects to the checkout URL for the cart.
 
 > Note:
