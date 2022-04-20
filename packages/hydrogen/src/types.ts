@@ -78,9 +78,6 @@ export type HydrogenConfig = {
   custom?: Record<string, any>;
 };
 
-export type HydrogenConfigFetcher = ConfigFetcher<HydrogenConfig>;
-export type HydrogenConfigExport = HydrogenConfig | HydrogenConfigFetcher;
-
 export type ClientHandlerConfig = {
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;

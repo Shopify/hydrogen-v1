@@ -37,7 +37,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         graphiqlMiddleware({
           dev: true,
           getShopifyConfig: async (incomingMessage) => {
-            const {default: hydrogenConfigExport} = await server.ssrLoadModule(
+            const {default: hydrogenConfig} = await server.ssrLoadModule(
               'virtual:hydrogen-config:proxy'
             );
 
@@ -51,15 +51,9 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
               headers: incomingMessage.headers as any,
             });
 
-            const hydrogenConfig =
-              typeof hydrogenConfigExport === 'function'
-                ? await hydrogenConfigExport(url, request)
-                : hydrogenConfigExport;
-
-            if (typeof hydrogenConfig.shopify !== 'function')
-              return hydrogenConfig.shopify;
-
-            return hydrogenConfig.shopify(url, request);
+            return typeof hydrogenConfig.shopify === 'function'
+              ? hydrogenConfig.shopify(url, request)
+              : hydrogenConfig.shopify;
           },
         })
       );
