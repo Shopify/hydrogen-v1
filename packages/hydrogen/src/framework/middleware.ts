@@ -7,7 +7,6 @@ import {graphiqlHtml} from './graphiql';
 
 type HydrogenMiddlewareArgs = {
   dev?: boolean;
-  shopifyConfig?: ShopifyConfig;
   indexTemplate: string | ((url: string) => Promise<string>);
   getServerEntrypoint: () => any;
   devServer?: ViteDevServer;
