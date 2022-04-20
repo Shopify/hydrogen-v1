@@ -1,5 +1,59 @@
 # Changelog
 
+## 0.16.0
+
+### Minor Changes
+
+- [#1094](https://github.com/Shopify/hydrogen/pull/1094) [`10ab341d`](https://github.com/Shopify/hydrogen/commit/10ab341d94a3c4a4913f3cd62b72ab7f9e62409a) Thanks [@jplhomer](https://github.com/jplhomer)! - Update starter template to use new `fetchSync` API
+
+### Patch Changes
+
+- [#929](https://github.com/Shopify/hydrogen/pull/929) [`f9e76eb7`](https://github.com/Shopify/hydrogen/commit/f9e76eb786b69dbbb3e47cfec2528cab82bbe370) Thanks [@cartogram](https://github.com/cartogram)! - Deprecate `@shopify/hydrogen-cli`. Use Shopify CLI (`@shopify/cli-hydrogen` instead.
+
+  The template now adds the `@shopify/cli` dependencies for the `yarn preview` command. To update your existing app:
+
+  To update your existing apps, install the Shopify & Hydrogen CLIs:
+
+  ```bash
+  yarn add -D @shopify/cli @shopify/cli-hydrogen
+  ```
+
+  And update the `preview` script in your `package.json`:
+
+  ```diff
+  -    "preview": "npx @shopify/hydrogen-cli@latest preview",
+  +    "preview": "shopify hydrogen preview",
+  ```
+
+* [#1089](https://github.com/Shopify/hydrogen/pull/1089) [`3c189665`](https://github.com/Shopify/hydrogen/commit/3c18966501633e10dfdcc2eb18c7cc75a8b086d6) Thanks [@cartogram](https://github.com/cartogram)! - Use Shopify CLI to start a local development server instead of `vite`.
+
+  To update your existing apps, install the Shopify & Hydrogen CLIs:
+
+  ```bash
+  yarn add -D @shopify/cli @shopify/cli-hydrogen
+  ```
+
+  And update the `dev` script in your `package.json`:
+
+  ```diff
+  -    "dev": "vite",
+  +    "dev": "shopify hydrogen dev",
+  ```
+
+## 0.14.0
+
+### Minor Changes
+
+- [#1028](https://github.com/Shopify/hydrogen/pull/1028) [`ba174588`](https://github.com/Shopify/hydrogen/commit/ba174588d8f4a9f1054779a9bf32a92e8d2c921c) Thanks [@michenly](https://github.com/michenly)! - Starting from SF API version `2022-04`, the preferred way to request translatable resources is using the `@inContext` directive. See the [API docs](https://shopify.dev/api/examples/multiple-languages#retrieve-translations-with-the-storefront-api) on how to do this and which resources have translatable properties.
+
+  This causes a breaking change to the `useShopQuery` hook. The `locale` property has been removed from the argument object; `Accept-Language` is no longer being send with every request, and we are no longer using locale as part of the cache key.
+
+  The `useShop` hook will now return the `languageCode` key, which is the first two characters of the existing `locale` key.
+
+  Both `locale` & `languageCode` values are also now capitalized to make it easier to pass into a GraphQL `@inContext` directive.
+
+* [#1020](https://github.com/Shopify/hydrogen/pull/1020) [`e9529bc8`](https://github.com/Shopify/hydrogen/commit/e9529bc81410e0d99f9d3dbdb138ae61d00f876b) Thanks [@jplhomer](https://github.com/jplhomer)! - Preload `Link` URLs by default when a user signals intent to visit the URL. This includes hovering or focusing on the URL. To disable preloading, pass `<Link preload={false} />` to the component.
+
 ## 0.13.0
 
 ### Minor Changes

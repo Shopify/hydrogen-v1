@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {Suspense} from 'react';
 import {
   Logger,
   logServerResponse,
@@ -41,9 +41,11 @@ import {
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME} from './constants';
+import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
+import {Analytics} from './foundation/Analytics/Analytics.server';
+import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 
 declare global {
   // This is provided by a Vite plugin
@@ -76,11 +78,10 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes}: ServerHandlerConfig
+  {shopifyConfig, routes, serverAnalyticsConnectors}: ServerHandlerConfig
 ) => {
-  const handleRequest: RequestHandler = async function (
-    rawRequest,
-    {
+  const handleRequest: RequestHandler = async function (rawRequest, options) {
+    const {
       indexTemplate,
       streamableResponse,
       dev,
@@ -88,8 +89,8 @@ export const renderHydrogen = (
       context,
       nonce,
       buyerIpHeader,
-    }
-  ) {
+    } = options;
+
     const request = new ServerComponentRequest(rawRequest);
     request.ctx.buyerIpHeader = buyerIpHeader;
 
@@ -104,16 +105,14 @@ export const renderHydrogen = (
     setContext(context);
     setConfig({dev});
 
-    const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
-
-    let template =
-      typeof indexTemplate === 'function'
-        ? await indexTemplate(url.toString())
-        : indexTemplate;
-
-    if (template && typeof template !== 'string') {
-      template = template.default;
+    if (
+      url.pathname === EVENT_PATHNAME ||
+      EVENT_PATHNAME_REGEX.test(url.pathname)
+    ) {
+      return ServerAnalyticsRoute(request, serverAnalyticsConnectors);
     }
+
+    const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
     if (!isReactHydrationRequest && routes) {
       const apiRoute = getApiRoute(url, {routes});
@@ -124,13 +123,30 @@ export const renderHydrogen = (
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        return renderApiRoute(request, apiRoute, shopifyConfig);
+        const apiResponse = await renderApiRoute(
+          request,
+          apiRoute,
+          shopifyConfig
+        );
+
+        return apiResponse instanceof Request
+          ? handleRequest(apiResponse, options)
+          : apiResponse;
       }
     }
 
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
+
+    let template =
+      typeof indexTemplate === 'function'
+        ? await indexTemplate(url.toString())
+        : indexTemplate;
+
+    if (template && typeof template !== 'string') {
+      template = template.default;
+    }
 
     const params = {
       App,
@@ -641,6 +657,9 @@ function buildAppRSC({
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
         <App {...serverProps} />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
       </PreloadQueries>
     </ServerRequestProvider>
   );
@@ -675,9 +694,12 @@ function buildAppSSR(
           setServerState={() => {}}
         >
           <PreloadQueries request={request}>
-            <React.Suspense fallback={null}>
+            <Suspense fallback={null}>
               <RscConsumer />
-            </React.Suspense>
+            </Suspense>
+            <Suspense fallback={null}>
+              <Analytics />
+            </Suspense>
           </PreloadQueries>
         </ServerStateProvider>
       </ServerRequestProvider>
@@ -692,11 +714,12 @@ function PreloadQueries({
   children,
 }: {
   request: ServerComponentRequest;
-  children: ReactElement;
+  children: React.ReactNode;
 }) {
   const preloadQueries = request.getPreloadQueries();
   preloadRequestCacheData(request, preloadQueries);
-  return children;
+
+  return <>{children}</>;
 }
 
 async function renderToBufferedString(

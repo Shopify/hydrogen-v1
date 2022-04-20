@@ -1,5 +1,149 @@
 # Changelog
 
+## 0.16.0
+
+### Patch Changes
+
+- [#1082](https://github.com/Shopify/hydrogen/pull/1082) [`bd14340c`](https://github.com/Shopify/hydrogen/commit/bd14340c3099a0bf375a5879410cdf0697ed22f6) Thanks [@jplhomer](https://github.com/jplhomer)! - Update `useUrl()` to allow a developer to subscribe to a reactive version of the current router location.
+
+  Example:
+
+  ```jsx
+  import {useUrl} from '@shopify/hydrogen/client';
+
+  function MyClientComponent() {
+    const url = useUrl();
+
+    useEffect(() => {
+      // Record navigation, analytics, etc
+    }, [url]);
+  }
+  ```
+
+* [#1075](https://github.com/Shopify/hydrogen/pull/1075) [`05dea552`](https://github.com/Shopify/hydrogen/commit/05dea552c90862a125b5111993003355a019b556) Thanks [@jplhomer](https://github.com/jplhomer)! - Properly set buyer IP and secret token for API Route queryShop helper
+
+## 0.15.0
+
+### Minor Changes
+
+- [#983](https://github.com/Shopify/hydrogen/pull/983) [`52af261b`](https://github.com/Shopify/hydrogen/commit/52af261ba2bf6ed08e232b9fb2d75e69905f4cc6) Thanks [@jplhomer](https://github.com/jplhomer)! - Introduce Suspense-friendly `fetchSync` API for server and client components.
+
+  When using `fetchSync` in server components, you provide options for caching and preloading. This is similar to the [`useQuery` hook](<[/api/hydrogen/hooks/global/useQuery](https://shopify.dev/api/hydrogen/hooks/global/usequery)>):
+
+  ```jsx
+  import {fetchSync, CacheMinutes} from '@shopify/hydrogen';
+  import {Suspense} from 'react';
+
+  export function MyServerComponent() {
+    return (
+      <Suspense fallback="Loading...">
+        <MyThings />
+      </Suspense>
+    );
+  }
+
+  function MyThings() {
+    const things = fetchSync('https://3p.api.com/things.json', {
+      preload: true,
+      cache: CacheMinutes(),
+    }).json();
+
+    return <h2>{things.title}</h2>;
+  }
+  ```
+
+  When using `fetchSync` in client components, you cannot provide options for caching and preloading. You must import `fetchSync` from `@shopify/hydrogen/client`:
+
+  ```jsx
+  import {fetchSync} from '@shopify/hydrogen/client';
+  import {Suspense} from 'react';
+
+  export function MyClientComponent() {
+    return (
+      <Suspense fallback="Loading...">
+        <MyThings />
+      </Suspense>
+    );
+  }
+
+  function MyThings() {
+    const things = fetchSync('https://3p.api.com/things.json').json();
+
+    return <h2>{things.title}</h2>;
+  }
+  ```
+
+* [#890](https://github.com/Shopify/hydrogen/pull/890) [`a4c6d6c4`](https://github.com/Shopify/hydrogen/commit/a4c6d6c4d31337cecbd4d5afb76887bcd31ceb65) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Analytics instrumentation - this provides integration points for both server
+  and client side analytics instrumentations
+
+  - [Usage documentation](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics)
+
+### Patch Changes
+
+- [#1061](https://github.com/Shopify/hydrogen/pull/1061) [`a4aa3887`](https://github.com/Shopify/hydrogen/commit/a4aa3887be9f448ec1f4322fadb9821e0d19a0b5) Thanks [@jplhomer](https://github.com/jplhomer)! - Support script tags in index.html that contain line breaks
+
+* [#1057](https://github.com/Shopify/hydrogen/pull/1057) [`06d92ddc`](https://github.com/Shopify/hydrogen/commit/06d92ddc44e03d37d2dd8a9bbeaa5fab4c4bbbd1) Thanks [@frandiox](https://github.com/frandiox)! - Ability to concatenate requests in API route handlers without leaving the server by returning a new Request instance.
+
+  ```jsx
+  // src/routes/my-page.server.jsx
+
+  export async function api(request) {
+    if (request.method === 'POST') {
+      // do some work here...
+    }
+
+    return new Request(request.url, {method: 'GET'});
+  }
+
+  export default function Page() {
+    return (
+      <form action="/my-page" method="POST">
+        ...
+      </form>
+    );
+  }
+  ```
+
+  In the previous example, a POST request to `/my-page` would run the API handler and automatically continue with the server component rendering (GET). This is useful for handling HTML forms without waterfall requests.
+
+- [#1049](https://github.com/Shopify/hydrogen/pull/1049) [`b88a885d`](https://github.com/Shopify/hydrogen/commit/b88a885d6b062209497a97d8ce7bcd438787d53c) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Support sub request cache control header `stale-while-revalidate` everywhere
+
+* [#1047](https://github.com/Shopify/hydrogen/pull/1047) [`5268bf85`](https://github.com/Shopify/hydrogen/commit/5268bf85f61f8abf0e97788b7ae925ad4f3183b2) Thanks [@jplhomer](https://github.com/jplhomer)! - Restore scroll position when navigating using the back and forward buttons.
+
+- [#1062](https://github.com/Shopify/hydrogen/pull/1062) [`cc172ae7`](https://github.com/Shopify/hydrogen/commit/cc172ae778bad0d654adcd2f41d4a548d1d94a0a) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix encoding of quotes in CSS Modules which caused hydration errors
+
+* [#1046](https://github.com/Shopify/hydrogen/pull/1046) [`3947d53a`](https://github.com/Shopify/hydrogen/commit/3947d53a99868a1e218bfab958b824ce0484615a) Thanks [@michenly](https://github.com/michenly)! - Fixed server Cookie bug where initializing with empty string will resulted in 1 item in the Cookies Map.
+
+- [#1059](https://github.com/Shopify/hydrogen/pull/1059) [`401f329d`](https://github.com/Shopify/hydrogen/commit/401f329d331bebc4842204d4df39c4dd6797b4e1) Thanks [@frandiox](https://github.com/frandiox)! - Fix link prefetch mismatch due to query-string
+
+* [#1072](https://github.com/Shopify/hydrogen/pull/1072) [`47c0c184`](https://github.com/Shopify/hydrogen/commit/47c0c18411eb20fa6652a981b09fd65cbed38304) Thanks [@michenly](https://github.com/michenly)! - Improve type for ShopifyContextValue to be based on ShopifyConfig.
+
+## 0.14.0
+
+### Minor Changes
+
+- [#1028](https://github.com/Shopify/hydrogen/pull/1028) [`ba174588`](https://github.com/Shopify/hydrogen/commit/ba174588d8f4a9f1054779a9bf32a92e8d2c921c) Thanks [@michenly](https://github.com/michenly)! - Starting from SF API version `2022-04`, the preferred way to request translatable resources is using the `@inContext` directive. See the [API docs](https://shopify.dev/api/examples/multiple-languages#retrieve-translations-with-the-storefront-api) on how to do this and which resources have translatable properties.
+
+  This causes a breaking change to the `useShopQuery` hook. The `locale` property has been removed from the argument object; `Accept-Language` is no longer being send with every request, and we are no longer using locale as part of the cache key.
+
+  The `useShop` hook will now return the `languageCode` key, which is the first two characters of the existing `locale` key.
+
+  Both `locale` & `languageCode` values are also now capitalized to make it easier to pass into a GraphQL `@inContext` directive.
+
+* [#1020](https://github.com/Shopify/hydrogen/pull/1020) [`e9529bc8`](https://github.com/Shopify/hydrogen/commit/e9529bc81410e0d99f9d3dbdb138ae61d00f876b) Thanks [@jplhomer](https://github.com/jplhomer)! - Preload `Link` URLs by default when a user signals intent to visit the URL. This includes hovering or focusing on the URL. To disable preloading, pass `<Link preload={false} />` to the component.
+
+### Patch Changes
+
+- [#1017](https://github.com/Shopify/hydrogen/pull/1017) [`4c87fb63`](https://github.com/Shopify/hydrogen/commit/4c87fb639a79da883f99c58acde0d17c713c7620) Thanks [@frandiox](https://github.com/frandiox)! - Do not cache Storefront API responses that contain GraphQL errors (amend previous fix).
+
+* [#1039](https://github.com/Shopify/hydrogen/pull/1039) [`3a297862`](https://github.com/Shopify/hydrogen/commit/3a29786202947fab0bfe876042b37a91923ed637) Thanks [@frandiox](https://github.com/frandiox)! - Update to Vite 2.9
+
+- [#1026](https://github.com/Shopify/hydrogen/pull/1026) [`836b064d`](https://github.com/Shopify/hydrogen/commit/836b064d1648fb1a9f209a08a82ee5c20f7dfba9) Thanks [@frehner](https://github.com/frehner)! - Updated the Typescript types and GraphQL schema to the newest updates from Storefront API 2022-04. Of note in this update is the ability to skip `edges` and go directly to `node`, for example: `product.nodes[0]` instead of `product.edges[0].node`
+
+* [#1032](https://github.com/Shopify/hydrogen/pull/1032) [`03488083`](https://github.com/Shopify/hydrogen/commit/034880833dc500f66f9b67417c00099c283dfa67) Thanks [@jplhomer](https://github.com/jplhomer)! - Catch hydration errors related to experimental server components bugs and prevent them from being logged in production.
+
+- [#1037](https://github.com/Shopify/hydrogen/pull/1037) [`13376efb`](https://github.com/Shopify/hydrogen/commit/13376efbe4db93efd705b6900a6198708bc37e69) Thanks [@jplhomer](https://github.com/jplhomer)! - Use new header for private Storefront token
+
 ## 0.13.2
 
 ### Patch Changes

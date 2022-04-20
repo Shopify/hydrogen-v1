@@ -2,14 +2,15 @@
   "$schema": "https://unpkg.com/@changesets/config@1.7.0/schema.json",
   "changelog": ["@changesets/changelog-github", {"repo": "shopify/hydrogen"}],
   "commit": false,
-  "fixed": [],
-  "linked": [["@shopify/hydrogen", "create-hydrogen-app"]],
+  "fixed": [["@shopify/hydrogen", "create-hydrogen-app"]],
+  "linked": [],
   "access": "public",
   "baseBranch": "v1.x-2022-07",
   "updateInternalDependencies": "patch",
   "ignore": [
     "template-hydrogen-default",
     "test-server-components",
-    "hydrogen-playground"
+    "hydrogen-playground",
+    "@shopify/hydrogen-ui"
   ]
 }
