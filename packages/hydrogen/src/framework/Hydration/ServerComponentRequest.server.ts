@@ -57,6 +57,7 @@ export class ServerComponentRequest extends Request {
     analyticsData: any;
     router: RouterContextData;
     buyerIpHeader?: string;
+    plugins: Record<string, any>;
     [key: string]: any;
   };
 
@@ -91,6 +92,7 @@ export class ServerComponentRequest extends Request {
         normalizedRscUrl: this.preloadURL,
       },
       preloadQueries: new Map(),
+      plugins: {},
     };
     this.cookies = this.parseCookies();
   }

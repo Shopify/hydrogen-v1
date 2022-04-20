@@ -45,6 +45,7 @@ import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
+import {runHook} from './foundation/plugins';
 
 declare global {
   // This is provided by a Vite plugin
@@ -97,8 +98,15 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       hydrogenConfig = configFile.default as HydrogenConfig;
     }
 
-    request.ctx.hydrogenConfig = hydrogenConfig;
+    const plugins = (hydrogenConfig.plugins || []).flat(Infinity as 1);
+
+    request.ctx.hydrogenConfig = {...hydrogenConfig, plugins};
     request.ctx.buyerIpHeader = buyerIpHeader;
+
+    const runningHooks = runHook('willHandleRequest', {url, request, plugins});
+    if (runningHooks) {
+      await runningHooks;
+    }
 
     const log = getLoggerWithContext(request);
     const componentResponse = new ServerComponentResponse();

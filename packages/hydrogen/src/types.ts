@@ -14,7 +14,6 @@ type CommonOptions = {
   routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
   componentResponse: ServerComponentResponse;
-  hydrogenConfig: HydrogenConfig;
   log: Logger;
   dev?: boolean;
 };
@@ -71,11 +70,20 @@ export type ServerAnalyticsConnector = {
   ) => void;
 };
 
+export type HydrogenPlugin = {
+  name: string;
+  willHandleRequest?: (
+    url: URL,
+    request: ServerComponentRequest,
+    ctx: any
+  ) => void | Promise<void>;
+};
+
 export type HydrogenConfig = {
   routes?: HydrogenConfigRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
-  custom?: Record<string, any>;
+  plugins?: Array<HydrogenPlugin | HydrogenPlugin[]>;
 };
 
 export type ClientHandlerConfig = {
