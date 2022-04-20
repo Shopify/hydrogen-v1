@@ -1,3 +1,9 @@
+---
+gid: f89f8b4b-65b3-4942-b597-3de1093c8f1f
+title: SEO
+description: Learn how to customize the output of SEO-related tags in your Hydrogen client and server components.
+---
+
 Hydrogen detects when a search engine crawls your shop and defaults to server-side rendering (SSR). This guide describes how to customize the output of SEO-related tags in your client and server components.
 
 ## How SEO works in Hydrogen
@@ -120,6 +126,5 @@ The following limitations and considerations apply to the [XML sitemap](https://
 
 ## Next steps
 
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
 - Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
 - Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

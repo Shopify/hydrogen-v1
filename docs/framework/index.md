@@ -1,3 +1,10 @@
+---
+gid: 30ba6db5-9196-467b-b9c6-886ca42c82ad
+url: /custom-storefronts/hydrogen/framework
+title: Hydrogen framework overview
+description: Learn about the architecture and framework of Hydrogen.
+---
+
 <aside class="note beta">
 <h4>Developer preview</h4>
 

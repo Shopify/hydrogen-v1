@@ -1,3 +1,9 @@
+---
+gid: f0257fae-85fc-4199-a74e-aa9e0a32d99c
+title: Static assets
+description: Learn how to reference and serve static assets in Hydrogen.
+---
+
 When building your custom storefront, it can be useful to have access to static assets that aren't already hosted elsewhere, like images. This guide describes how to reference and serve static assets in Hydrogen.
 
 ## How static assets work

@@ -1,3 +1,9 @@
+---
+gid: 11c33bdd-ed60-4ed9-9f60-5481602021c0
+title: Preloaded queries
+description: Learn how to configure queries to preload in your Hydrogen app.
+---
+
 This guide provides information on how preloaded queries work and how to configure them in your Hydrogen app.
 
 ## How preloaded queries work
@@ -119,6 +125,5 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ## Next steps
 
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
 - Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
 - Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

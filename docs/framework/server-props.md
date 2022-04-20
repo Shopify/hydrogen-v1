@@ -1,3 +1,9 @@
+---
+gid: 4eae60cf-7fcb-45a4-9875-bb32245cee83
+title: Server props
+description: Learn how to update the state on the server when you are building your Hydrogen app.
+---
+
 As you build your Hydrogen app with [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `state` on the server. Sharing state information between the client and server is important for common tasks, like [page routing](/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc#sharing-state-between-client-and-server).
 
 This guide describes how to manage server props during your development process.
@@ -82,5 +88,5 @@ When the user navigates to a new page in your app, the server props will reset. 
 ## Next steps
 
 - Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to interact with the [`useServerState`](/api/hydrogen/hooks/global/useserverstate) hook.
+- Learn how to interact with the [`useServerProps`](/api/hydrogen/hooks/global/useserverprops) hook.
 - Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

@@ -1,3 +1,9 @@
+---
+gid: 74ef5485-cac3-49a5-b037-ae10d6c551d1
+title: Pages
+description: Learn about how page server components receive props.
+---
+
 The Hydrogen framework includes page server components. This guide describes how page server components receive props.
 
 ## How pages work
@@ -470,5 +476,4 @@ const QUERY = gql`
 ## Next steps
 
 - Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
 - Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.

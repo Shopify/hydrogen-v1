@@ -1,3 +1,9 @@
+---
+gid: 038c475e-f28f-471b-a981-26e7ebb8bec9
+title: Caching
+description: Learn how to manage cache options for Hydrogen apps.
+---
+
 Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](/custom-storefronts/hydrogen/framework/streaming-ssr), caching ensures that buyers get the quickest response possible while also displaying the latest data.
 
 Hydrogen provides two mechanisms for cache within applications:

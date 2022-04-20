@@ -1,4 +1,8 @@
-# Deploy a Hydrogen app
+---
+gid: 61164af3-9b44-4302-b45d-b820c0b64534
+title: Deploy a Hydrogen app
+description: Learn how to deploy your Hydrogen app to Oxygen and other runtimes.
+---
 
 {% include hydrogen/developer-preview.md %}
 

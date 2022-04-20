@@ -1,3 +1,9 @@
+---
+gid: cf5bb36c-a4f1-4498-91df-334e66d26750
+title: Streaming server-side rendering (SSR)
+description: Improve your app's loading performance by rendering components on the server and streaming them to the client.
+---
+
 You can improve your app's loading performance by rendering components on the server and streaming them to the client.
 
 This guide describes how streaming server-side rendering (SSR) works in a Hydrogen app. It also explains how to use Suspense to manage asynchronous operations in your app.

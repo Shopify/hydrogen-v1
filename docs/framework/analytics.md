@@ -1,3 +1,9 @@
+---
+gid: 044c475e-f28g-444b-a984-26e7ebb8bec4
+title: Analytics
+description: Learn about the analytics support build into Hydrogen apps.
+---
+
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.
 
 This guide describes how to subscribe to the default events that Hydrogen offers, configure custom events, send analytics data from the server-side, and unsubscribe from events. It also provides example implementations of client analytics connectors, and shows how to write an end-to-end (E2E) for testing analytics connectors.

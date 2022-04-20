@@ -1,3 +1,9 @@
+---
+gid: 4431e3bd-069b-4027-b3e9-b013a9a6489d
+title: Routes
+description: Get familiar with the file-based routing system that Hydrogen uses.
+---
+
 The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen app.
 
 ## How routes work

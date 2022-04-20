@@ -1,3 +1,9 @@
+---
+gid: f058276e-ef84-4b6e-aea6-96ca6e056fc3
+title: Third-party dependencies
+description: Tips and tricks for using third-party dependencies in Hydrogen apps.
+---
+
 Third-party dependencies will generally work out-of-the-box with Hydrogen. This guide describes how to install third-party dependencies, where to insert them, and offers tips for troubleshooting dependencies.
 
 ## Installation

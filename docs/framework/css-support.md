@@ -1,3 +1,9 @@
+---
+gid: ea75625d-0b47-4f83-a010-848f7eb8d273
+title: Built-in CSS support
+description: Learn about the CSS support built into Hydrogen.
+---
+
 Hydrogen's [Demo Store template](/custom-storefronts/hydrogen/getting-started) is styled using the [Tailwind CSS](https://tailwindcss.com/) utility library. This guide describes the benefits of using Tailwind and how to remove it if you prefer to use another CSS framework.
 
 ## How it works
