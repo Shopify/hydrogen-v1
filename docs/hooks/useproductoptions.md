@@ -158,7 +158,7 @@ This hook returns a single object with the following keys:
 
 ## Storefront API data
 
-The following GraphQL query corresponds to the Storefront API's [ProductVariant object](https://shopify.dev/api/storefront/2022-01/objects/ProductVariant). Using the query ensures that you have all the data necessary for the `useProductOptions` hook:
+The following GraphQL query corresponds to the Storefront API's [ProductVariant object](https://shopify.dev/api/storefront/latest/objects/ProductVariant). Using the query ensures that you have all the data necessary for the `useProductOptions` hook:
 
 ```graphql
 {

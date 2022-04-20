@@ -1,4 +1,10 @@
-This guide provides information about working with React Server Components in your Hydrogen app. To learn how React Server Components work in the context of Hydrogen, refer to [React Server Components overview](/custom-storefronts/hydrogen/framework/react-server-components).
+---
+gid: 30ba6db5-9196-467b-b9c6-994ca42c45ad
+title: Working with React Server Components
+description: Learn how to work with React Server Components in your Hydrogen app.
+---
+
+This guide provides information about working with React Server Components in your Hydrogen app. To learn how React Server Components work in the context of Hydrogen, refer to [React Server Components overview](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 > Note:
 > React Server Components are currently in Alpha. However, Hydrogen includes a built-in layer of abstraction that provides stability, regardless of the state of React Server Components.
@@ -9,11 +15,11 @@ All data fetching happens on the server and is never exposed to the client, unle
 
 Hydrogen provides the following ways to fetch data from server components:
 
-- [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery): A hook that makes server-only GraphQL queries to the Storefront API.
-- [`fetchSync`](/api/hydrogen/hooks/global/fetchsync): A hook that makes third-party API requests and is the recommended way to make simple fetch calls on the server.
-- [`useQuery`](/api/hydrogen/hooks/global/usequery): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
+- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery): A hook that makes server-only GraphQL queries to the Storefront API.
+- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync): A hook that makes third-party API requests and is the recommended way to make simple fetch calls on the server.
+- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
 
-To learn how to fetch data from third-party sources, refer to [Data sources](/custom-storefronts/hydrogen/data-sources).
+To learn how to fetch data from third-party sources, refer to [Data sources](https://shopify.dev/custom-storefronts/hydrogen/data-sources).
 
 ### Example
 
@@ -59,7 +65,7 @@ export default function WishListButton({product}) {
 
 ## Fetching data on the client
 
-To make a third-party HTTP request on the client, use the [`fetchSync`](/api/hydrogen/hooks/global/fetchsync) hook within a Suspense boundary:
+To make a third-party HTTP request on the client, use the [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync) hook within a Suspense boundary:
 
 {% codeblock file, filename: 'PostDetails.client.jsx' %}
 
@@ -180,7 +186,7 @@ import {Link} from '@shopify/hydrogen';
 > Note:
 > The functionality described in this section is unique to Hydrogen's React Server Components implementation.
 
-Hydrogen provides a [`useServerProps()` hook with a `setServerProps()` helper function](/custom-storefronts/hydrogen/framework/server-props), which allows you to re-render server components with new data. Generally, this should only be used for a UI state that shouldn't persist in the URL. Any data set with `setServerProps()` will be cleared out when the user navigates to a new page.
+Hydrogen provides a [`useServerProps()` hook with a `setServerProps()` helper function](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props), which allows you to re-render server components with new data. Generally, this should only be used for a UI state that shouldn't persist in the URL. Any data set with `setServerProps()` will be cleared out when the user navigates to a new page.
 
 ## Using `Context` in React Server Components
 
@@ -252,6 +258,6 @@ export default function App() {
 
 ## Next steps
 
-- Improve your app's loading performance with [streaming SSR and Suspense](/custom-storefronts/hydrogen/framework/streaming-ssr).
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
+- Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn how the [page server component](https://shopify.dev/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
