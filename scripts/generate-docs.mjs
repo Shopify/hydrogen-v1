@@ -167,7 +167,9 @@ function process(src, dest, skipFiles = []) {
   }
 
   const contents = readFileSync(src, 'utf8');
-  const newContents = prependBannerText(fullPath, contents);
+  const newContents = removeAbsoluteLinksToShopifyDev(
+    prependBannerText(fullPath, contents)
+  );
 
   console.log(
     [
@@ -207,6 +209,12 @@ function getDestinationFilePath(key) {
 function prependBannerText(path, content) {
   const banner = `<!-- This file is generated from source code in the Shopify/hydrogen repo at ${path}. Any changes you make here will be overwritten. For more information, refer to https://shopify.dev/internal/operations/reference-docs/hydrogen. -->`;
   const newContent = `${banner}\n\n${content}`;
+
+  return newContent;
+}
+
+function removeAbsoluteLinksToShopifyDev(content) {
+  const newContent = content.replace('](https://shopify.dev', '](');
 
   return newContent;
 }
