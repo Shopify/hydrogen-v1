@@ -6,13 +6,50 @@ then the callback will be called when a new line item is successfully added to t
 The `CartProvider` component must be a descendent of the `ShopifyProvider` component.
 You must use this component if you want to use the `useCart` hook or related hooks, or if you would like to use the `AddToCartButton` component.
 
+In order to use `CartProvider`, you should have a local API endpoint which responds to cart events:
+
+```tsx
+// src/routes/cart.server.js
+
+export async function api(request, {queryShop}) {
+  const data = await request.json();
+
+  switch (data._action) {
+    case 'getCart':
+      return getCart(data, queryShop);
+    case 'cartCreate':
+      return createCart(data, queryShop);
+    case 'addLineItem':
+      return addLineItem(data, queryShop);
+    case 'removeLineItem':
+      return removeLineItem(data, queryShop);
+    case 'updateLineItem':
+      return updateLineItem(data, queryShop);
+    case 'updateNote':
+      return updateNote(data, queryShop);
+    case 'updateBuyerIdentity':
+      return updateBuyerIdentity(data, queryShop);
+    case 'updateCartAttributes':
+      return updateCartAttributes(data, queryShop);
+    case 'updateDiscountCodes':
+      return updateDiscountCodes(data, queryShop);
+    default:
+      return new Response('Invalid action', {status: 400});
+  }
+
+  // ...
+}
+```
+
+[See the full reference](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/cart.server.js) to model your local API endpoint.
+
 ## Example code
 
 ```tsx
 import {CartProvider} from '@shopify/hydrogen';
 
 export function App() {
-  return <CartProvider>{/* Your JSX */}</CartProvider>;
+  return <CartProvider endpoint="/cart">{/* Your JSX */}</CartProvider>;
 }
 ```
 
@@ -21,6 +58,7 @@ export function App() {
 | Name                   | Type                         | Description                                                                                                                                            |
 | ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | children               | <code>React.ReactNode</code> | Any `ReactNode` elements.                                                                                                                              |
+| endpoint               | <code>string</code>          | A relative path to a cart API endpoint in your app. Defaults to `/cart`. elements.                                                                     |
 | data?                  | <code>Cart</code>            | An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).                                      |
 | numCartLines?          | <code>number</code>          | A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API.                             |
 | onCreate?              | <code>() => void</code>      | A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API.                             |
