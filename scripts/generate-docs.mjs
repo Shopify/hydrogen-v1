@@ -29,7 +29,7 @@ const CONFIG = {
     // Global
     'hooks/fetchsync.md': 'hooks/global/fetchsync.md',
     'hooks/usequery.md': 'hooks/global/usequery.md',
-    'hooks/useserverstate.md': 'hooks/global/useserverstate.md',
+    'hooks/useserverprops.md': 'hooks/global/useserverprops.md',
     'hooks/useshop.md': 'hooks/global/useshop.md',
     'hooks/useshopquery.md': 'hooks/global/useshopquery.md',
     'hooks/useurl.md': 'hooks/global/useurl.md',
