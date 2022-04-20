@@ -13,7 +13,6 @@ import type {
   StreamerOptions,
   HydratorOptions,
   HydrogenConfig,
-  HydrogenConfigExport,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -46,7 +45,6 @@ import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
-import {normalizeRscUrl} from './foundation/useUrl/useUrl';
 
 declare global {
   // This is provided by a Vite plugin
@@ -77,10 +75,7 @@ export interface RequestHandler {
   >;
 }
 
-export const renderHydrogen = (
-  App: any,
-  hydrogenConfigParam?: HydrogenConfigExport
-) => {
+export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {
       indexTemplate,
@@ -95,17 +90,12 @@ export const renderHydrogen = (
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
 
-    if (!hydrogenConfigParam) {
+    if (!hydrogenConfig) {
       // @ts-ignore
       // eslint-disable-next-line node/no-missing-import
-      const defaultConfig = await import('virtual:hydrogen-config');
-      hydrogenConfigParam = defaultConfig.default as HydrogenConfigExport;
+      const configFile = await import('virtual:hydrogen-config');
+      hydrogenConfig = configFile.default as HydrogenConfig;
     }
-
-    const hydrogenConfig =
-      typeof hydrogenConfigParam === 'function'
-        ? await hydrogenConfigParam(normalizeRscUrl(url), request)
-        : hydrogenConfigParam || {};
 
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
