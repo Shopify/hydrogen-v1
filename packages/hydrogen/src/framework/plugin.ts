@@ -15,6 +15,7 @@ import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
+import hydrogenManifest from './plugins/vite-plugin-hydrogen-manifest';
 
 export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
   let hydrogenUiPath;
@@ -34,6 +35,7 @@ export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
     hydrogenConfig(),
     hydrogenClientMiddleware(),
     hydrogenMiddleware(pluginOptions),
+    hydrogenManifest(),
     react(),
     hydrationAutoImport(),
     ssrInterop(),

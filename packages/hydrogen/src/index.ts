@@ -43,3 +43,5 @@ export {
 
 export {fetchSync} from './foundation/fetchSync/server/fetchSync';
 export {useServerAnalytics} from './foundation/Analytics';
+
+export {Outlet} from './foundation/Router/Outlet.client';

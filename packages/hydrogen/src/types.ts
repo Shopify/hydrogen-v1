@@ -72,7 +72,7 @@ export type ServerAnalyticsConnector = {
 };
 
 export type HydrogenConfig = {
-  routes?: HydrogenConfigRoutes;
+  routes: HydrogenConfigRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   custom?: Record<string, any>;

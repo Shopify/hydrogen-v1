@@ -339,6 +339,13 @@ async function stream(
 
   let didError: Error | undefined;
 
+  const resolvedBootstrapModules = [
+    ...bootstrapModules,
+    // @ts-ignore
+    // eslint-disable-next-line node/no-missing-import
+    '/virtual:hydrogen-manifest',
+  ];
+
   if (__WORKER__) {
     const onCompleteAll = defer<true>();
     const encoder = new TextEncoder();
@@ -352,7 +359,7 @@ async function stream(
       ssrReadable = await ssrRenderToReadableStream(AppSSR, {
         nonce,
         bootstrapScripts,
-        bootstrapModules,
+        bootstrapModules: resolvedBootstrapModules,
         onError(error) {
           didError = error;
 
@@ -484,7 +491,7 @@ async function stream(
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
-      bootstrapModules,
+      bootstrapModules: resolvedBootstrapModules,
       onShellReady() {
         log.trace('node ready to stream');
         /**
