@@ -234,15 +234,12 @@ export function CartProvider({
     async (cartId: string) => {
       dispatch({type: 'cartFetch'});
 
-      const url = new URL(endpoint, window.location.href);
-      url.searchParams.set('id', cartId);
-      if (countryCode) {
-        url.searchParams.set('country', countryCode);
-      }
+      const {data, error} = await fetchCart('getCart', {
+        cartId,
+        country: countryCode,
+      });
 
-      const {data} = await fetch(url.toString()).then((r) => r.json());
-
-      if (!data?.cart) {
+      if (error) {
         window.localStorage.removeItem(CART_ID_STORAGE_KEY);
         dispatch({type: 'resetCart'});
         return;

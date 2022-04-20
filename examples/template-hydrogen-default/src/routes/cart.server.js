@@ -1,13 +1,10 @@
 export async function api(request, {queryShop}) {
   // TODO: Look up cart ID from session instead of passing explicitly
-
-  if (request.method === 'GET') {
-    return getCart(request, queryShop);
-  }
-
   const data = await request.json();
 
   switch (data._action) {
+    case 'getCart':
+      return getCart(data, queryShop);
     case 'cartCreate':
       return createCart(data, queryShop);
     case 'addLineItem':
@@ -29,16 +26,14 @@ export async function api(request, {queryShop}) {
   }
 }
 
-async function getCart(request, queryShop) {
-  const params = new URL(request.url).searchParams;
-  const id = params.get('id');
-  const country = params.get('country');
+async function getCart(data, queryShop) {
+  const {cartId, country} = data;
 
-  if (!id) {
+  if (!cartId) {
     throw new Error('Missing cartId');
   }
 
-  return await queryShop({query: CART_QUERY, variables: {id, country}});
+  return await queryShop({query: CART_QUERY, variables: {cartId, country}});
 }
 
 async function createCart(data, queryShop) {
@@ -198,8 +193,8 @@ const CART_FRAGMENT = `#graphql
 `;
 
 const CART_QUERY = `
-  query CartQuery($id: ID!, $country: CountryCode = ZZ) @inContext(country: $country) {
-    cart(id: $id) {
+  query CartQuery($cartId: ID!, $country: CountryCode = ZZ) @inContext(country: $country) {
+    cart(id: $cartId) {
       ...CartFragment
     }
   }
