@@ -17,7 +17,11 @@ export interface MetafieldProps<TTag> {
  * The `Metafield` component renders the value of a Storefront
  * API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
  *
- * Renders a smart default of the
+ * When a render function is provided, it passes the Metafield object with a value
+ * that was parsed according to the Metafield's `type` field. For more information,
+ * refer to the [Render props](#render-props) section.
+ *
+ * When no render function is provided, it renders a smart default of the
  * Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
  */
 export function Metafield<TTag extends ElementType>(
