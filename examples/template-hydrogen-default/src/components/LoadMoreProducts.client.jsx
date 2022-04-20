@@ -1,11 +1,11 @@
-import {useServerState} from '@shopify/hydrogen/client';
+import {useServerProps} from '@shopify/hydrogen/client';
 import SpinnerIcon from './SpinnerIcon.client';
 
 /**
  * A client component that provides functionality to initially show a subset of products and a button to load more products
  */
 export default function LoadMoreProducts({startingCount}) {
-  const {pending, serverState, setServerState} = useServerState();
+  const {pending, serverProps, setServerProps} = useServerProps();
 
   return (
     <div className="flex justify-center h-14">
@@ -19,10 +19,10 @@ export default function LoadMoreProducts({startingCount}) {
             pending ? 'opacity-50' : undefined
           }`}
           onClick={() => {
-            setServerState(
+            setServerProps(
               'collectionProductCount',
-              serverState.collectionProductCount
-                ? serverState.collectionProductCount + 24
+              serverProps.collectionProductCount
+                ? serverProps.collectionProductCount + 24
                 : startingCount + 1,
             );
           }}

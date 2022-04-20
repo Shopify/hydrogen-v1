@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useRouter} from '../../foundation/Router/BrowserRouter.client';
 import {createPath} from 'history';
 import {useNavigate} from '../../foundation/useNavigate/useNavigate';
-import {useServerState} from '../../foundation/useServerState';
 import {RSC_PATHNAME} from '../../constants';
+import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props';
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -151,7 +151,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 );
 
 function Prefetch({pathname}: {pathname: string}) {
-  const {getProposedServerState} = useServerState();
+  const {getProposedLocationServerProps} = useInternalServerProps();
   const {location} = useRouter();
 
   const newPath = createPath({pathname});
@@ -161,7 +161,7 @@ function Prefetch({pathname}: {pathname: string}) {
   }
 
   const newLocation = new URL(newPath, window.location.href);
-  const proposedServerState = getProposedServerState({
+  const proposedServerState = getProposedLocationServerProps({
     pathname: newLocation.pathname,
     search: newLocation.search,
   });

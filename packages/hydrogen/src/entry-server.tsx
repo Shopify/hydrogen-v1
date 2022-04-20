@@ -29,7 +29,7 @@ import {
   renderApiRoute,
   getApiRoutes,
 } from './utilities/apiRoutes';
-import {ServerStateProvider} from './foundation/ServerStateProvider';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
@@ -689,9 +689,9 @@ function buildAppSSR(
   const AppSSR = (
     <Html {...htmlOptions}>
       <ServerRequestProvider request={request} isRSC={false}>
-        <ServerStateProvider
-          serverState={state as any}
-          setServerState={() => {}}
+        <ServerPropsProvider
+          initialServerProps={state as any}
+          setServerPropsForRsc={() => {}}
         >
           <PreloadQueries request={request}>
             <Suspense fallback={null}>
@@ -701,7 +701,7 @@ function buildAppSSR(
               <Analytics />
             </Suspense>
           </PreloadQueries>
-        </ServerStateProvider>
+        </ServerPropsProvider>
       </ServerRequestProvider>
     </Html>
   );
