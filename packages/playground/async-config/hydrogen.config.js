@@ -1,24 +1,15 @@
 const sleep = (ms = 10) => new Promise((r) => setTimeout(r, ms));
 
-export default async (url) => {
-  await sleep();
+export default {
+  routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+  shopify: async (url) => {
+    await sleep();
 
-  return {
-    routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
-    shopify: async (url) => {
-      await sleep();
-
-      return {
-        defaultLocale: url.pathname.startsWith('/es') ? 'es-es' : 'en-us',
-        storeDomain: 'hydrogen-preview.myshopify.com',
-        storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
-        storefrontApiVersion: '2022-04',
-      };
-    },
-    custom: {
-      redirects: url.pathname.startsWith('/es')
-        ? {'/es/products': '/es/productos'}
-        : {'/en/productos': '/en/products'},
-    },
-  };
+    return {
+      defaultLocale: url.pathname.startsWith('/es') ? 'es-es' : 'en-us',
+      storeDomain: 'hydrogen-preview.myshopify.com',
+      storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
+      storefrontApiVersion: '2022-04',
+    };
+  },
 };

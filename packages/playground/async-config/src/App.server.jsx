@@ -23,10 +23,14 @@ setLogger({
   options: () => ({}),
 });
 
-export default renderHydrogen(({customConfig, response}) => {
-  const url = useUrl();
+let localeRedirects;
 
-  for (const [key, value] of Object.entries(customConfig.redirects)) {
+const handleRequest = renderHydrogen(({response}) => {
+  const url = useUrl();
+  const locale = url.pathname.startsWith('/es') ? 'es' : 'en';
+  const redirects = localeRedirects[locale];
+
+  for (const [key, value] of Object.entries(redirects)) {
     if (url.pathname === key) {
       return response.redirect(value);
     }
@@ -42,3 +46,20 @@ export default renderHydrogen(({customConfig, response}) => {
     </Suspense>
   );
 });
+
+export default async function (request, options) {
+  if (!localeRedirects) {
+    localeRedirects = await new Promise((resolve) =>
+      setTimeout(
+        () =>
+          resolve({
+            es: {'/es/products': '/es/productos'},
+            en: {'/en/productos': '/en/products'},
+          }),
+        20
+      )
+    );
+  }
+
+  return handleRequest(request, options);
+}
