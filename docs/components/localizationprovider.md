@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/localization/localizationprovider
+title: LocalizationProvider
+description: The LocalizationProvider component automatically queries the Storefront API's localization field for the isoCode and name of the country and keeps this information in a context.
+---
+
 The `useCountry` hook returns a tuple of the current localization country and a function for updating it.
 It must be a descendent of a `LocalizationProvider` component.
 

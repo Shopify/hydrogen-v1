@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/cartlinequantityadjustbutton
+title: CartLineQuantityAdjustButton
+description: The CartLineQuantityAdjustButton component renders a button that adjusts the cart line's quantity when pressed.
+---
+
 The `CartLineQuantityAdjustButton` component renders a button that adjusts the cart line's quantity when pressed.
 It must be a descendent of a `CartLineProvider` component.
 

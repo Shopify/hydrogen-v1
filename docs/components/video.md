@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/video
+title: Video
+description: The Video component renders a video for the Storefront API's Video object.
+---
+
 The `Video` component renders a `video` for the Storefront API's [Video object](/api/storefront/reference/products/video).
 
 ## Example code

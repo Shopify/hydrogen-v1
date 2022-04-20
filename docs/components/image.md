@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/image
+title: Image
+description: The Image component renders an image for the Storefront API's Image object.
+---
+
 The `Image` component renders an image for the Storefront API's
 [Image object](/api/storefront/reference/common-objects/image).
 

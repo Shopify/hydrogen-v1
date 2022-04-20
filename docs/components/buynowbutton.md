@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/buynowbutton
+title: BuyNowButton
+description: The BuyNowButton component renders a button that adds an item to the cart and redirects the customer to checkout.
+---
+
 The `BuyNowButton` component renders a button that adds an item to the cart and redirects the customer to checkout.
 
 ## Example code

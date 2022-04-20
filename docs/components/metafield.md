@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/metafield
+title: Metafield
+description: The Metafield component renders the value of a Storefront API's Metafield object.
+---
+
 The `Metafield` component renders the value of a Storefront
 API's [Metafield object](/api/storefront/reference/common-objects/metafield).
 

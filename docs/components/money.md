@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/money
+title: Money
+description: The Money component renders a string of the Storefront API's MoneyV2 object according to the locale in the Shopify config file.
+---
+
 The `Money` component renders a string of the Storefront API's
 [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) according to the
 `defaultLocale` in the `shopify.config.js` file. If `children` is a function, then it will

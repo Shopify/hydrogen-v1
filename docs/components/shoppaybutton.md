@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/shoppaybutton
+title: ShopPayButton
+description: The ShopPayButton component renders a button that redirects to the Shop Pay checkout.
+---
+
 The `ShopPayButton` component renders a button that redirects to the Shop Pay checkout.
 
 ## Example code

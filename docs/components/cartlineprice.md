@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/cartlineprice
+title: CartLinePrice
+description: The CartLinePrice component renders a Money component for the cart line merchandise's price or compare at price.
+---
+
 The `CartLinePrice` component renders a `Money` component for the cart line merchandise's price or
 compare at price. It must be a descendent of a `CartLineProvider` component.
 

@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/global/fetchsync
+title: fetchSync
+description: The fetchSync hook makes third-party API requests and is the recommended way to make simple fetch calls on the server.
+---
+
 The `fetchSync` hook makes third-party API requests and is the recommended way to make simple fetch calls on the server. It's designed similar to the [Web API's `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch), only in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html).
 
 ## Example code

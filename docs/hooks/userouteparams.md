@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/framework/userouteparams
+title: useRouteParams
+description: The useRouteParams hook retrieves the parameters of an active route.
+---
+
 The `useRouteParams` hook retrieves the parameters of an active route. The hook is available in both server and client components.
 
 ## Example code

@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/cart/usecartline
+title: useCartLine
+description: The useCartLine hook provides access to the cart line object.
+---
+
 The `useCartLine` hook provides access to the cart line object. It must be a descendent of a `CartProvider` component.
 
 ## Example code
