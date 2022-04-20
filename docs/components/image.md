@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/primitive/image
+gid: 244ea786-fafe-11eb-9a03-0242ac130003
 title: Image
 description: The Image component renders an image for the Storefront API's Image object.
 ---

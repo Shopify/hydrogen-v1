@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/hooks/cart/usecart
+gid: 7f04886e-d3f9-490d-87aa-7e655a0fbcf2
 title: useCart
 description: The useCart hook provides access to the cart object.
 ---

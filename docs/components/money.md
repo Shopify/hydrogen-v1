@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/primitive/money
+gid: 5819262c-fafe-11eb-9a03-0242ac130003
 title: Money
 description: The Money component renders a string of the Storefront API's MoneyV2 object according to the locale in the Shopify config file.
 ---

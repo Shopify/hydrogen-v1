@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/framework/route
+gid: d5a8c1e3-1b18-42d2-900d-aa2a2d067e7e
 title: Route
 description: The Route component is used to set up a route in Hydrogen that's independent of the file system.
 ---

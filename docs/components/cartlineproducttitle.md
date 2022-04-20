@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/cart/cartlineproducttitle
+gid: b5a21e4e-fafd-11eb-9a03-0242ac130003
 title: CartLineProductTitle
 description: The CartLineProductTitle component renders a span element (or the type of HTML element specified by the as prop) with the cart line merchandise's title.
 ---

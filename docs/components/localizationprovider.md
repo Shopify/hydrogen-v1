@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/localization/localizationprovider
+gid: 2d9f4930-fafe-11eb-9a03-0242ac130003
 title: LocalizationProvider
 description: The LocalizationProvider component automatically queries the Storefront API's localization field for the isoCode and name of the country and keeps this information in a context.
 ---

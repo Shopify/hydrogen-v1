@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/product-variant/productmetafield
+gid: 22484df6-f5ff-42e9-becd-e3d7c68c1255
 title: ProductMetafield
 description: The ProductMetafield component renders a Metafield component with the product metafield.
 ---

@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/hooks/global/fetchsync
+gid: 61a65cab-2745-412a-91ab-ab15b15424z5
 title: fetchSync
 description: The fetchSync hook makes third-party API requests and is the recommended way to make simple fetch calls on the server.
 ---

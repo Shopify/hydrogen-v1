@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/global/shopifyprovider
+gid: b4dc58a2-fafe-11eb-9a03-0242ac130003
 title: ShopifyProvider
 description: The ShopifyProvider component wraps your entire app and provides support for hooks.
 ---

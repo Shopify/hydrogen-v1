@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/cart/cartlineprice
+gid: af2afb1c-fafd-11eb-9a03-0242ac130003
 title: CartLinePrice
 description: The CartLinePrice component renders a Money component for the cart line merchandise's price or compare at price.
 ---

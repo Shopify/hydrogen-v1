@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/cart/cartlines
+gid: d13f165c-fafd-11eb-9a03-0242ac130003
 title: CartLines
 description: The CartLines component iterates over each cart line and renders its children within a CartLineProvider for each cart line.
 ---

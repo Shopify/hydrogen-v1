@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/cart/cartprovider
+gid: f51e68fc-fafd-11eb-9a03-0242ac130003
 title: CartProvider
 description: The CartProvider component creates a context for using a cart.
 ---

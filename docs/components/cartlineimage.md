@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/cart/cartlineimage
+gid: a5606662-fafd-11eb-9a03-0242ac130003
 title: CartLineImage
 description: The CartLineImage component renders an Image component for the cart line merchandise's image.
 ---

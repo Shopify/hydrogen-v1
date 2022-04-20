@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/cart/buynowbutton
+gid: 7f04886e-d3f9-490d-87aa-7e655a0fbcf9
 title: BuyNowButton
 description: The BuyNowButton component renders a button that adds an item to the cart and redirects the customer to checkout.
 ---

@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/hooks/global/usequery
+gid: 51a65cab-8245-412a-91ab-ab15b15165d5
 title: useQuery
 description: The useQuery hook executes an asynchronous operation like fetch in a way that supports Suspense.
 ---

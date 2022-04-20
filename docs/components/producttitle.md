@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/product-variant/producttitle
+gid: 85ee1eae-fafe-11eb-9a03-0242ac130003
 title: ProductTitle
 description: The ProductTitle component renders a span element (or the type of HTML element specified by the as prop) with the product's title.
 ---

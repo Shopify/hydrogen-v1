@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/hooks/framework/userouteparams
+gid: a84d7f1f-c1f4-419c-badc-a79835b39c88
 title: useRouteParams
 description: The useRouteParams hook retrieves the parameters of an active route.
 ---

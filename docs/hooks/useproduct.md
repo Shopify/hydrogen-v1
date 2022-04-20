@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/hooks/product-variant/useproduct
+gid: c850ae3e-fafd-11eb-9a03-0242ac130004
 title: useProduct
 description: The useProduct hook returns the product object of the nearest ProductProvider.
 ---

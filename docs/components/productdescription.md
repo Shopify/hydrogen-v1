@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/product-variant/productdescription
+gid: 6d33cdaa-fafe-11eb-9a03-0242ac130003
 title: ProductDescription
 description: The ProductDescription component renders a div component with the product's descriptionHtml.
 ---

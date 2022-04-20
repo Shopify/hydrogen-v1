@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/cart/cartlinequantityadjustbutton
+gid: c850ae3e-fafd-11eb-9a03-0242ac130003
 title: CartLineQuantityAdjustButton
 description: The CartLineQuantityAdjustButton component renders a button that adjusts the cart line's quantity when pressed.
 ---

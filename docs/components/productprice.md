@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/product-variant/productprice
+gid: 7326d7ca-fafe-11eb-9a03-0242ac130003
 title: ProductPrice
 description: The ProductPrice component renders a Money component with the product priceRange's maxVariantPrice or minVariantPrice, for either the regular price or compare at price range.
 ---

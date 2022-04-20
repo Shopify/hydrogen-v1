@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/framework/link
+gid: 58ebcc3d-0001-4fb0-9f17-0cc87bb9d40a
 title: Link
 description: The Link component is used to navigate between routes.
 ---

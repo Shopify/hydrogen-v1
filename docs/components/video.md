@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/primitive/video
+gid: c0d06be4-fafe-11eb-9a03-0242ac130003
 title: Video
 description: The Video component renders a video for the Storefront API's Video object.
 ---

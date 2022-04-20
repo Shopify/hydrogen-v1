@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/framework/fileroutes
+gid: 182b039d-d09d-4513-8759-b51412cc8293
 title: FileRoutes
 description: The FileRoutes component builds a set of default Hydrogen routes based on the output provided by Vite's import.meta.globEager method.
 ---

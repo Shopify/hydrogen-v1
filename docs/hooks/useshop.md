@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/hooks/global/useshop
+gid: c850ae3e-fafd-11eb-9a03-0242ac130007
 title: useShop
 description: The useShop hook provides access to values within shopify.config.js.
 ---

@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/product-variant/productprovider
+gid: 80d51c7e-fafe-11eb-9a03-0242ac130003
 title: ProductProvider
 description: The ProductProvider component sets up a context with product details.
 ---

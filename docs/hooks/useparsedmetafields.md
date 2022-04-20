@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/hooks/metafield/useparsedmetafields
+gid: ec647578-6ab7-40ca-87e5-8a559eca548e
 title: useParsedMetafields
 description: The useParsedMetafields hook transforms a MetafieldConnection in an array of metafields whose values have been parsed according to the metafield type.
 ---

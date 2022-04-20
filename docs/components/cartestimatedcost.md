@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/components/cart/cartestimatedcost
+gid: 14b85ca8-3d11-45e4-b260-df0c67c4669c
 title: CartEstimatedCost
 description: The CartEstimatedCost component renders a Money component with the cost associated with the amountType prop.
 ---

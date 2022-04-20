@@ -1,5 +1,5 @@
 ---
-url: /api/hydrogen/hooks/localization/usecountry
+gid: 9f04886e-d3f9-490d-87aa-7e655a0fbcf9
 title: useCountry
 description: The useCountry hook returns a tuple of the current localization country and a function for updating it.
 ---
