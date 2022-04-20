@@ -77,6 +77,7 @@ export default async function testCases({
     );
 
     await page.click('#update-server-props');
+    await page.click('#update-server-props');
 
     await page.waitForSelector('#server-props-with-data');
 
