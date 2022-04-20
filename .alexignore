@@ -1,5 +1,5 @@
 docs/code_of_conduct.md
 docs/framework/css-support.md
 docs/framework/work-with-rsc.md
-docs/hooks/usequery.md
+docs/hooks/global/usequery.md
 packages/hydrogen/CHANGELOG.md
