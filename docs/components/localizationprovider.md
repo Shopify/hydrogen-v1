@@ -4,8 +4,9 @@ title: LocalizationProvider
 description: The LocalizationProvider component automatically queries the Storefront API's localization field for the isoCode and name of the country and keeps this information in a context.
 ---
 
-The `useCountry` hook returns a tuple of the current localization country and a function for updating it.
-It must be a descendent of a `LocalizationProvider` component.
+The `LocalizationProvider` component automatically queries the Storefront API's [localization](/api/storefront/latest/objects/queryroot) field for the `isoCode` and `name` of the `country` and keeps this information in a context.
+
+Any descendents of this provider can use the `useCountry` hook. The `isoCode` of the `country` can be used in the Storefront API's `@inContext` directive as the `country` value.
 
 ## Example code
 

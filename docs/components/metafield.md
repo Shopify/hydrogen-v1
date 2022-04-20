@@ -7,7 +7,11 @@ description: The Metafield component renders the value of a Storefront API's Met
 The `Metafield` component renders the value of a Storefront
 API's [Metafield object](/api/storefront/reference/common-objects/metafield).
 
-Renders a smart default of the
+When a render function is provided, it passes the Metafield object with a value
+that was parsed according to the Metafield's `type` field. For more information,
+refer to the [Render props](#render-props) section.
+
+When no render function is provided, it renders a smart default of the
 Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
 
 ## Example code
@@ -47,7 +51,7 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 | `rating`                 | A `span` containing a string of the rating value.                                                                                                                                          |
 | `color`                  | A `span` containing the color value as a string.                                                                                                                                           |
 | `single_line_text_field` | A `span` component with the text.                                                                                                                                                          |
-| `multi_line_text_field`  | A `div` component with the text.                                                                                                                                                           |
+| `multi_line_text_field`  | A `div` component with the text, and `as="span"`.                                                                                                                                          |
 | `product_reference`      | A `span` containing the product reference GID.                                                                                                                                             |
 | `file_reference`         | An `Image` component when the file reference is of type `MediaImage`, or a `span` containing the file reference GID for other file types.                                                  |
 | `page_reference`         | A `span` containing the page reference GID.                                                                                                                                                |

@@ -4,8 +4,7 @@ title: ShopifyProvider
 description: The ShopifyProvider component wraps your entire app and provides support for hooks.
 ---
 
-The `ShopifyProvider` component wraps your entire app and provides support for hooks.
-You should place it in your app's entry point component. For example, `&lt;App&gt;`.
+The `ShopifyProvider` component wraps your entire app and provides support for hooks. You should place it in your app's entry point component. For example, `&lt;App&gt;`. If you're using the Hydrogen framework, then you don't need to add this provider because it's automatically wrapped around your app in `renderHydrogen()`.
 
 ## Example code
 
@@ -24,10 +23,10 @@ export default function App() {
 
 ## Props
 
-| Name          | Type                                                    | Description                                   |
-| ------------- | ------------------------------------------------------- | --------------------------------------------- |
-| shopifyConfig | <code><a href="#shopifyconfig">ShopifyConfig</a></code> | The contents of the `shopify.config.js` file. |
-| children?     | <code>React</code>                                      | Any `ReactNode` elements.                     |
+| Name          | Type                           | Description                                   |
+| ------------- | ------------------------------ | --------------------------------------------- |
+| shopifyConfig | <code>ShopifyConfig</a></code> | The contents of the `shopify.config.js` file. |
+| children?     | <code>React</code>             | Any `ReactNode` elements.                     |
 
 ## Component type
 

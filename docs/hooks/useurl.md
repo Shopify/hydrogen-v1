@@ -30,7 +30,7 @@ export function MyClientComponent() {
   const url = useUrl();
 
   useEffect(() => {
-    // do something with url
+    // Do something with url
   }, [url]);
 
   // ...
@@ -49,7 +49,7 @@ export function MyClientComponent() {
 
   useEffect(() => {
     if (!pending) {
-      // do something with url, now that the page transition has completed.
+      // Do something with url, now that the page transition has completed.
     }
   }, [url, pending]);
 

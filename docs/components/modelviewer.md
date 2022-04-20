@@ -24,7 +24,7 @@ const QUERY = gql`
           media(first: 1) {
             edges {
               node {
-                ... on Model3D {
+                ... on Model3d {
                   mediaContentType
                   id
                   alt
