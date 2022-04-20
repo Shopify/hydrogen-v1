@@ -60,7 +60,7 @@ export default function ExternalImageWithLoader() {
       width={500}
       height={500}
       loader={imageLoader}
-      loaderOptions={{scale: 2}}
+      loaderOptions={% raw %}{{scale: 2}}{% endraw %}
     />
   );
 }

@@ -13,8 +13,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const CONFIG = {
   // A key-value map of file paths to the destination path in the docs repo.
   // File paths included here will use the value as the destination path.
-  // Otherwise, it will still be copied to the docs repo but at the same path
-  // as the source file.
   paths: {
     // Hooks
     // Product Variant
@@ -107,7 +105,8 @@ const CONFIG = {
     'docs/images',
     'docs/contributing',
   ],
-  // require a path entry to be copied
+  // require a path entry to be copied. If true files will still be copied by default
+  // and appear in the same directory structure as their source file.
   enableDefaultPaths: false,
   // The directory name of the destination repo.
   repo: 'shopify-dev',
@@ -162,7 +161,7 @@ function process(src, dest, skipFiles = []) {
     return;
   }
 
-  if (!CONFIG.enableDefaultPaths && destination === dest) {
+  if (!CONFIG.enableDefaultPaths && !CONFIG.paths[key]) {
     console.log(`Skipping (no destination in paths) - ${fullPath}`);
     return;
   }
