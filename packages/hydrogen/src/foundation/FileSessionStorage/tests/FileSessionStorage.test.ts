@@ -15,8 +15,8 @@ const options = {
 const sessionFilePath = path.resolve(
   __dirname,
   'sessions',
-  'eca0b9',
-  'ec-c013-4ea1-8236-df6ed02f00c4'
+  'eca',
+  '0b9ec-c013-4ea1-8236-df6ed02f00c4'
 );
 
 let request: Request;
@@ -174,7 +174,7 @@ async function createSessionFile(sessionFilePath: string, contents: string) {
 async function expectFileContentsToBe(sid: string, result: string) {
   expect(
     await fsp.readFile(
-      path.resolve(__dirname, 'sessions', sid.slice(0, 6), sid.slice(6)),
+      path.resolve(__dirname, 'sessions', sid.slice(0, 3), sid.slice(3)),
       {
         encoding: 'utf-8',
       }

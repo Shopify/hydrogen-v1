@@ -172,5 +172,5 @@ async function deleteFile(file: string) {
 }
 
 function getSessionFile(dir: string, sid: string) {
-  return path.join(dir, sid.slice(0, 6), sid.slice(6));
+  return path.join(dir, sid.slice(0, 3), sid.slice(3));
 }
