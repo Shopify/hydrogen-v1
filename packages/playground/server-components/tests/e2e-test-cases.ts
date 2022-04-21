@@ -91,7 +91,7 @@ export default async function testCases({
 
     // Navigate events should clear the server props
     await Promise.all([page.click('#navigate'), page.waitForNavigation()]);
-    await page.waitForSelector('#server-props');
+    await page.waitForSelector('#server-props', {timeout: 35000});
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
     );
