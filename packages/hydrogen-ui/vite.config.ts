@@ -26,7 +26,6 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  // @ts-expect-error For some reason the triple slash reference isn't working here, when it should.
   test: {
     globals: true,
     environment: 'happy-dom',
