@@ -15,6 +15,12 @@ export default async function testCases({
   isBuild,
   isWorker,
 }: TestOptions) {
+  beforeEach(async () => {
+    await page.close();
+    //@ts-ignore
+    global.page = await global.browser.newPage();
+  });
+
   it('shows the homepage, navigates to about, and increases the count', async () => {
     await page.goto(getServerUrl());
 
