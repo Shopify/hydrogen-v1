@@ -76,7 +76,7 @@ export default async function testCases({
     expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
-  it('should render server props in client component', async () => {
+  it.skip('should render server props in client component', async () => {
     await page.goto(getServerUrl() + '/test-server-props');
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
