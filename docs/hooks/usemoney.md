@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/primitive/usemoney
+title: useMoney
+description: The useMoney hook takes a MoneyV2 object and returns a default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by Intl.NumberFormat.
+---
+
 The `useMoney` hook takes a [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) and returns a
 default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by
 [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).

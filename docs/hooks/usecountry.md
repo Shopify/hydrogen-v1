@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/localization/usecountry
+title: useCountry
+description: The useCountry hook returns a tuple of the current localization country and a function for updating it.
+---
+
 The `useCountry` hook returns a tuple of the current localization country and a function for updating it.
 It must be a descendent of a `LocalizationProvider` component.
 

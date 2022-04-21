@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/product-variant/productdescription
+title: ProductDescription
+description: The ProductDescription component renders a div component with the product's descriptionHtml.
+---
+
 The `ProductDescription` component renders a `div` component with
 the product's [`descriptionHtml`](/api/storefront/reference/products/product).
 It must be a descendent of the `ProductProvider` component.

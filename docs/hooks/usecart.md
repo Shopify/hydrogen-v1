@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/cart/usecart
+title: useCart
+description: The useCart hook provides access to the cart object.
+---
+
 The `useCart` hook provides access to the cart object. It must be a descendent of a `CartProvider` component.
 
 ## Example code

@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/product-variant/useproductoptions
+title: useProductOptions
+description: The useProductOptions hook returns an object that enables you to keep track of the selected variant and/or selling plan state, as well as callbacks for modifying the state.
+---
+
 The `useProductOptions` hook returns an object that enables you to keep track of the
 selected variant and/or selling plan state, as well as callbacks for modifying the state.
 

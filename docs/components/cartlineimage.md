@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/cartlineimage
+title: CartLineImage
+description: The CartLineImage component renders an Image component for the cart line merchandise's image.
+---
+
 The `CartLineImage` component renders an `Image` component for the cart line merchandise's image.
 It must be a descendent of a `CartLineProvider` component.
 

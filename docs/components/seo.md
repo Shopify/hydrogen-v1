@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/seo
+title: Seo
+description: The Seo component renders SEO information on a webpage.
+---
+
 The `Seo` component renders SEO information on a webpage.
 
 ## Example code

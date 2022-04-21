@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/image
+title: Image
+description: The Image component renders an image for the Storefront API's Image object.
+---
+
 The `Image` component renders an image for the Storefront API's
 [Image object](/api/storefront/reference/common-objects/image).
 
@@ -54,7 +60,7 @@ export default function ExternalImageWithLoader() {
       width={500}
       height={500}
       loader={imageLoader}
-      loaderOptions={{scale: 2}}
+      loaderOptions={% raw %}{{scale: 2}}{% endraw %}
     />
   );
 }

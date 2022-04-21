@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/global/useshopquery
+title: useShopQuery
+description: The useShopQuery hook allows you to make server-only GraphQL queries to the Storefront API.
+---
+
 The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
 
 ## Example code

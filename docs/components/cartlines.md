@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/cartlines
+title: CartLines
+description: The CartLines component iterates over each cart line and renders its children within a CartLineProvider for each cart line.
+---
+
 The `CartLines` component iterates over each cart line and renders its `children` within
 a `CartLineProvider` for each cart line.
 

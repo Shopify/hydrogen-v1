@@ -172,15 +172,15 @@ export default function CustomPage({response}) {
 
 Since this code lives inside a server component, you can use [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) to populate your [custom responses](#creative-ways-to-use-custom-responses) with Shopify data.
 
-### Server state props
+### Server props
 
-In addition to `request` and `response` props, any state you manage with [`setServerState`](/custom-storefronts/hydrogen/framework/server-state) is passed to each of your page server components as props:
+In addition to `request` and `response` props, any props you manage with [`setServerProps`](/custom-storefronts/hydrogen/framework/server-props) is passed to each of your page server components as props:
 
 {% codeblock file %}
 
 ```jsx
-function MyPage({custom, state, here}) {
-  // Use custom server state
+function MyPage({custom, props, here}) {
+  // Use custom server props
 }
 ```
 

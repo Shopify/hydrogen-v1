@@ -1,4 +1,10 @@
-The `useShop` hook provides access to values within the `shopify` property in the `hydrogen.config.js` file. The `useShop` hook must be a descendent of a `ShopifyProvider` compone
+---
+url: /api/hydrogen/hooks/global/useshop
+title: useShop
+description: The useShop hook provides access to values within shopify.config.js.
+---
+
+The `useShop` hook provides access to values within the `shopify` property in the `hydrogen.config.js` file.. It must be a descendent of a `ShopifyProvider` component.
 
 ## Example code
 

@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/cartprovider
+title: CartProvider
+description: The CartProvider component creates a context for using a cart.
+---
+
 The `CartProvider` component creates a context for using a cart. It creates a cart object and callbacks
 that can be accessed by any descendent component using the `useCart` hook and related hooks. It also carries out
 any callback props when a relevant action is performed. For example, if a `onLineAdd` callback is provided,

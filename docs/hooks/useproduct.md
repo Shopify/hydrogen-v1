@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/product-variant/useproduct
+title: useProduct
+description: The useProduct hook returns the product object of the nearest ProductProvider.
+---
+
 The `useProduct` hook returns the product object of the nearest `ProductProvider`. It must be a descendent of
 a `ProductProvider` component.
 

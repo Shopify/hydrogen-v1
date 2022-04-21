@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/cartlineproducttitle
+title: CartLineProductTitle
+description: The CartLineProductTitle component renders a span element (or the type of HTML element specified by the as prop) with the cart line merchandise's title.
+---
+
 The `CartLineProductTitle` component renders a `span` element (or the type of HTML element specified by
 the `as` prop) with the cart line merchandise's title. It must be a descendent of a `CartLineProvider` component.
 

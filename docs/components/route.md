@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/framework/route
+title: Route
+description: The Route component is used to set up a route in Hydrogen that's independent of the file system.
+---
+
 The `Route` component is used to set up a route in Hydrogen that's independent of the file system. Routes are matched in the order that they're defined.
 
 ## Example code

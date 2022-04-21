@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/mediafile
+title: MediaFile
+description: The MediaFile component renders the media for the Storefront API's Media object.
+---
+
 The `MediaFile` component renders the media for the Storefront API's
 [Media object](/api/storefront/reference/products/media). It renders an `Image`, a
 `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the

@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/primitive/useloadscript
+title: useLoadScript
+description: The useLoadScript hook loads an external script tag on the client-side.
+---
+
 The `useLoadScript` hook loads an external script tag on the client-side.
 
 ## Example code

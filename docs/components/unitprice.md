@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/primitive/unitprice
+title: UnitPrice
+description: The UnitPrice component renders a string with a UnitPrice as the Storefront API's MoneyV2 object with a reference unit from the Storefront API's UnitPriceMeasurement object.
+---
+
 The `UnitPrice` component renders a string with a [UnitPrice](/themes/pricing-payments/unit-pricing) as the
 Storefront API's [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) with a reference unit from the Storefront API's [UnitPriceMeasurement object](/api/storefront/reference/products/unitpricemeasurement).
 

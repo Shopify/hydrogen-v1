@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/cart/cartlinequantity
+title: CartLineQuantity
+description: The CartLineQuantity component renders a span element (or the type of HTML element specified by the as prop) with the cart line's quantity.
+---
+
 The `CartLineQuantity` component renders a `span` element (or the type of HTML element
 specified by the `as` prop) with the cart line's quantity. It must be a descendent of a `CartLineProvider` component.
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.16.1
+
+### Patch Changes
+
+- [#1102](https://github.com/Shopify/hydrogen/pull/1102) [`59ee791a`](https://github.com/Shopify/hydrogen/commit/59ee791ac81f41764b4ab3e5dd667c0c72b672d3) Thanks [@frandiox](https://github.com/frandiox)! - Do not call client exported functions during RSC.
+
 ## 0.16.0
 
 ### Patch Changes

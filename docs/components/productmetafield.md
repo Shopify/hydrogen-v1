@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/product-variant/productmetafield
+title: ProductMetafield
+description: The ProductMetafield component renders a Metafield component with the product metafield.
+---
+
 The `ProductMetafield` component renders a
 [`Metafield`](/api/hydrogen/components/primitive/metafield) component with the product metafield.
 It must be a descendent of a `ProductProvider` component.

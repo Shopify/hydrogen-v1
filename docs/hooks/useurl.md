@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/hooks/global/useurl
+title: useUrl
+description: The useUrl hook retrieves the current URL in a server or client component.
+---
+
 The `useUrl` hook retrieves the current URL in a server or client component.
 
 ## Example code

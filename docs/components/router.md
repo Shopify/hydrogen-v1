@@ -1,3 +1,9 @@
+---
+url: /api/hydrogen/components/framework/router
+title: Router
+description: The Router component provides the context for routing in your Hydrogen app.
+---
+
 The `Router` component provides the context for routing in your Hydrogen app.
 
 ## Example code
