@@ -1,4 +1,3 @@
-import {describe, it, expect} from 'vitest';
 import {render, screen} from '@testing-library/react';
 import {PartialDeep} from 'type-fest';
 import {
@@ -10,9 +9,10 @@ import {
 import {ExternalVideo} from './ExternalVideo';
 import {faker} from '@faker-js/faker';
 import * as React from 'react';
+import {vi} from 'vitest';
 
 describe('<ExternalVideo />', () => {
-  it.only('renders an iframe element with sensible defaults', () => {
+  it('renders an iframe element with sensible defaults', () => {
     const video = getExternalVideoData();
     render(<ExternalVideo data={video} />);
 
@@ -41,12 +41,12 @@ describe('<ExternalVideo />', () => {
       />
     );
 
-    expect(component).toContainReactComponent('iframe', {
-      id: 'hello',
-      allow: 'autoplay',
-      allowFullScreen: false,
-      frameBorder: '1',
-    });
+    const videoEl = screen.getByTestId('video-iframe');
+
+    expect(videoEl).toHaveAttribute('id', 'hello');
+    expect(videoEl).toHaveAttribute('allow', 'autoplay');
+    expect(videoEl).not.toHaveAttribute('allowfullscreen');
+    expect(videoEl).toHaveAttribute('frameborder', '1');
   });
 
   it('includes options in the iframe src when the `options` prop is provided', () => {
@@ -63,29 +63,28 @@ describe('<ExternalVideo />', () => {
       />
     );
 
-    expect(component).toContainReactComponent('iframe', {
-      src: 'https://www.youtube.com/embed/a2YSgfwXc9c?&color=red&autoplay=true',
-    });
+    const videoEl = screen.getByTestId('video-iframe');
+
+    expect(videoEl).toHaveAttribute(
+      'src',
+      'https://www.youtube.com/embed/a2YSgfwXc9c?&color=red&autoplay=true'
+    );
   });
 
   it('allows passthrough props', () => {
     render(<ExternalVideo data={getExternalVideoData()} className="fancy" />);
 
-    expect(component).toContainReactComponent('iframe', {
-      className: 'fancy',
-    });
+    const videoEl = screen.getByTestId('video-iframe');
+
+    expect(videoEl).toHaveAttribute('class', 'fancy');
   });
 
-  describe(`throws when necessary props aren't passed`, () => {
-    it(`data.embedUrl`, () => {
-      // to silence the test runner's console.error from being called
-      const consoleSpy = jest
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-      expect(() => render(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
-      expect(console.error).toHaveBeenCalled();
-      consoleSpy.mockRestore();
-    });
+  it(`throws when 'data.embedUrl' isn't passed`, () => {
+    // to silence the test runner's console.error from being called
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => render(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
+    expect(console.error).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 });
 
@@ -104,11 +103,12 @@ export function getExternalVideoData(
   };
 }
 
+// will move this into Image.test.tsx when it's moved into h-ui
 export function getPreviewImage(image: Partial<Image> = {}) {
   return {
     id: image.id ?? faker.random.words(),
     altText: image.altText ?? faker.random.words(),
-    url: image.url ?? faker.random.image(),
+    url: image.url ?? faker.image.image(),
     width: image.width ?? faker.datatype.number(),
     height: image.height ?? faker.datatype.number(),
     originalSrc: '',

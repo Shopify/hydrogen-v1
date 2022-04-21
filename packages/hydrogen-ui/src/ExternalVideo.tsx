@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import type {ExternalVideo as ExternalVideoType} from '../../hydrogen/src/storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 

@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import path from 'path';
 import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
@@ -25,4 +26,10 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  // @ts-expect-error For some reason the triple slash reference isn't working here, when it should.
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    setupFiles: './vitest.setup.ts',
+  },
 });
