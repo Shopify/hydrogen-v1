@@ -29,10 +29,10 @@ export default renderHydrogen(App, {
 
 ## Props
 
-| Prop           | Type                       | Description                                                                                                                             |
-| -------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| cookieName     | <code>string</code>        | The name of the cookie stored in the browser.                                                                                           |
-| cookieOptions? | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/api/hydrogen/components/framework/cookie#cookie-options). |
+| Prop     | Type                       | Description                                                                                                                                                |
+| -------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name     | <code>string</code>        | The name of the cookie stored in the browser.                                                                                                              |
+| options? | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](https://shopify.dev/api/hydrogen/components/framework/cookie#cookie-options). |
 
 ## Component type
 

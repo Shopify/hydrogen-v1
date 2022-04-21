@@ -32,11 +32,11 @@ export default renderHydrogen(App, {
 
 ## Props
 
-| Prop           | Type                       | Description                                                                                                                             |
-| -------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| cookieName     | <code>string</code>        | The name of the cookie stored in the browser.                                                                                           |
-| directory      | <code>string</code>        | A directory to store the session files within. Each session is stored in a separate file on the file system.                            |
-| cookieOptions? | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/api/hydrogen/components/framework/cookie#cookie-options). |
+| Prop          | Type                       | Description                                                                                                                             |
+| ------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| name          | <code>string</code>        | The name of the cookie stored in the browser.                                                                                           |
+| dir           | <code>string</code>        | A directory to store the session files within. Each session is stored in a separate file on the file system.                            |
+| cookieOptions | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/api/hydrogen/components/framework/cookie#cookie-options). |
 
 ## Component type
 
