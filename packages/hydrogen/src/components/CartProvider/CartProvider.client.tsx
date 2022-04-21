@@ -65,8 +65,8 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
-import {useServerState} from '../../foundation/useServerState';
-import {ServerStateContextValue} from '../../foundation';
+import {useServerProps} from '../../foundation/useServerProps';
+import {ServerPropsContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
 import {ClientAnalytics} from '../../foundation/Analytics';
 
@@ -253,12 +253,12 @@ export function CartProvider({
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
   /**
-   * An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).
+   * An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).
    */
   data?: CartFragmentFragment;
 }) {
-  const {serverState} = useServerState() as ServerStateContextValue;
-  const countryCode = serverState?.country?.isoCode;
+  const {serverProps} = useServerProps() as ServerPropsContextValue;
+  const countryCode = serverProps?.country?.isoCode;
 
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}

@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useRouter} from '../../foundation/Router/BrowserRouter.client';
 import {createPath} from 'history';
 import {useNavigate} from '../../foundation/useNavigate/useNavigate';
-import {useServerState} from '../../foundation/useServerState';
 import {RSC_PATHNAME} from '../../constants';
+import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props';
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -15,7 +15,7 @@ export interface LinkProps
   clientState?: any;
   /** Whether to reload the whole document on navigation. */
   reloadDocument?: boolean;
-  /** Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). */
+  /** Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). */
   prefetch?: boolean;
 }
 
@@ -151,7 +151,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 );
 
 function Prefetch({pathname}: {pathname: string}) {
-  const {getProposedServerState} = useServerState();
+  const {getProposedLocationServerProps} = useInternalServerProps();
   const {location} = useRouter();
 
   const newPath = createPath({pathname});
@@ -161,7 +161,7 @@ function Prefetch({pathname}: {pathname: string}) {
   }
 
   const newLocation = new URL(newPath, window.location.href);
-  const proposedServerState = getProposedServerState({
+  const proposedServerState = getProposedLocationServerProps({
     pathname: newLocation.pathname,
     search: newLocation.search,
   });

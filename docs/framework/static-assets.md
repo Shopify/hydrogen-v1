@@ -1,3 +1,9 @@
+---
+gid: f0257fae-85fc-4199-a74e-aa9e0a32d99c
+title: Static assets
+description: Learn how to reference and serve static assets in Hydrogen.
+---
+
 When building your custom storefront, it can be useful to have access to static assets that aren't already hosted elsewhere, like images. This guide describes how to reference and serve static assets in Hydrogen.
 
 ## How static assets work
@@ -24,7 +30,7 @@ export default function Hero() {
 
 ### Static assets in Oxygen
 
-If you're [using Oxygen to deploy your Hydrogen custom storefront](/custom-storefronts/hydrogen/deployment#deploy-to-oxygen), then static assets are automatically deployed to Shopify's content delivery network (CDN).
+If you're [using Oxygen to deploy your Hydrogen custom storefront](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-oxygen), then static assets are automatically deployed to Shopify's content delivery network (CDN).
 
 Shopify provides merchants with a world-class CDN backed by [Fastly](https://www.fastly.com) and [Cloudflare](https://cloudflare.com/). Using a CDN means that your custom storefront will load quickly around the globe.
 
@@ -49,9 +55,8 @@ $ HYDROGEN_ASSET_BASE_URL=https://mycdn.example/path/to/folder yarn build
 
 ## Considerations and limitations
 
-You should only import assets, such as styles or images, from [client components](/custom-storefronts/hydrogen/framework/react-server-components#component-types). Any static assets that are referenced in server components, or shared components that are rendered from server components, won't display in the browser.
+You should only import assets, such as styles or images, from [client components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components#component-types). Any static assets that are referenced in server components, or shared components that are rendered from server components, won't display in the browser.
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.

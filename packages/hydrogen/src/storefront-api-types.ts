@@ -22,7 +22,7 @@ export type Scalars = {
   Float: number;
   /**
    * Represents an [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)-encoded date and time string.
-   * For example, 3:30 pm on September 7, 2019 in the time zone of UTC (Coordinated Universal Time) is
+   * For example, 3:50 pm on September 7, 2019 in the time zone of UTC (Coordinated Universal Time) is
    * represented as `"2019-09-07T15:50:00Z`".
    *
    */
@@ -449,7 +449,10 @@ export type Cart = Node & {
   createdAt: Scalars['DateTime'];
   /** The delivery groups available for the cart, based on the default address of the logged-in customer. */
   deliveryGroups: CartDeliveryGroupConnection;
-  /** The discount codes that have been applied to the cart. */
+  /**
+   * The case-insensitive discount codes that the customer added at checkout.
+   *
+   */
   discountCodes: Array<CartDiscountCode>;
   /** The estimated costs that the buyer will pay at checkout. The estimated costs are subject to change and changes will be reflected at checkout. The `estimatedCost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart). */
   estimatedCost: CartEstimatedCost;
@@ -666,9 +669,9 @@ export enum CartErrorCode {
  */
 export type CartEstimatedCost = {
   __typename?: 'CartEstimatedCost';
-  /** The estimated amount, before taxes and discounts, for the customer to pay at checkout. */
+  /** The estimated amount, before taxes and discounts, for the customer to pay. */
   subtotalAmount: MoneyV2;
-  /** The estimated total amount for the customer to pay at checkout. */
+  /** The estimated total amount for the customer to pay. */
   totalAmount: MoneyV2;
   /** The estimated duty amount for the customer to pay at checkout. */
   totalDutyAmount?: Maybe<MoneyV2>;
@@ -682,7 +685,10 @@ export type CartInput = {
   attributes?: InputMaybe<Array<AttributeInput>>;
   /** The customer associated with the cart. Used to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-checkout). Buyer identity should match the customer's shipping address. */
   buyerIdentity?: InputMaybe<CartBuyerIdentityInput>;
-  /** The discount codes to apply to the cart. */
+  /**
+   * The case-insensitive discount codes that the customer added at checkout.
+   *
+   */
   discountCodes?: InputMaybe<Array<Scalars['String']>>;
   /** A list of merchandise lines to add to the cart. */
   lines?: InputMaybe<Array<CartLineInput>>;
@@ -837,7 +843,7 @@ export type Checkout = Node & {
   completedAt?: Maybe<Scalars['DateTime']>;
   /** The date and time when the checkout was created. */
   createdAt: Scalars['DateTime'];
-  /** The currency code for the Checkout. */
+  /** The currency code for the checkout. */
   currencyCode: CurrencyCode;
   /** A list of extra information that is added to the checkout. */
   customAttributes: Array<Attribute>;
@@ -890,9 +896,9 @@ export type Checkout = Node & {
   subtotalPrice: Scalars['Money'];
   /** Price of the checkout before duties, shipping and taxes. */
   subtotalPriceV2: MoneyV2;
-  /** Specifies if the Checkout is tax exempt. */
+  /** Whether the checkout is tax exempt. */
   taxExempt: Scalars['Boolean'];
-  /** Specifies if taxes are included in the line item and shipping line prices. */
+  /** Whether taxes are included in the line item and shipping line prices. */
   taxesIncluded: Scalars['Boolean'];
   /** The sum of all the duties applied to the line items in the checkout. */
   totalDuties?: Maybe<MoneyV2>;
@@ -1773,7 +1779,13 @@ export type Country = {
   unitSystem: UnitSystem;
 };
 
-/** ISO 3166-1 alpha-2 country codes with some differences. */
+/**
+ * The code designating a country, which generally follows ISO 3166-1 alpha-2 guidelines.
+ * If a territory doesn't have a country code value in the `CountryCode` enum, it might be considered a subdivision
+ * of another country. For example, the territories associated with Spain are represented by the country code `ES`,
+ * and the territories associated with the United States of America are represented by the country code `US`.
+ *
+ */
 export enum CountryCode {
   /** Ascension Island. */
   Ac = 'AC',
@@ -3288,7 +3300,13 @@ export type Filter = {
   values: Array<FilterValue>;
 };
 
-/** Denotes the type of data this filter group represents. */
+/**
+ * The type of data that the filter group represents.
+ *
+ * For more information, refer to [Filter products in a collection with the Storefront API]
+ * (https://shopify.dev/api/examples/filter-products).
+ *
+ */
 export enum FilterType {
   /** A boolean value. */
   Boolean = 'BOOLEAN',
@@ -3396,7 +3414,7 @@ export type GenericFile = Node & {
   alt?: Maybe<Scalars['String']>;
   /** A globally-unique identifier. */
   id: Scalars['ID'];
-  /** The mime type of the file. */
+  /** The MIME type of the file. */
   mimeType?: Maybe<Scalars['String']>;
   /** The size of the original file in bytes. */
   originalFileSize?: Maybe<Scalars['Int']>;
@@ -6238,9 +6256,9 @@ export type SellingPlan = {
   id: Scalars['ID'];
   /** The name of the selling plan. For example, '6 weeks of prepaid granola, delivered weekly'. */
   name: Scalars['String'];
-  /** Represents the selling plan options available in the drop-down list in the storefront. For example, 'Delivery every week' or 'Delivery every 2 weeks' specifies the delivery frequency options for the product. */
+  /** The selling plan options available in the drop-down list in the storefront. For example, 'Delivery every week' or 'Delivery every 2 weeks' specifies the delivery frequency options for the product. */
   options: Array<SellingPlanOption>;
-  /** Represents how a selling plan affects pricing when a variant is purchased with a selling plan. */
+  /** The price adjustments that a selling plan makes when a variant is purchased with a selling plan. */
   priceAdjustments: Array<SellingPlanPriceAdjustment>;
   /** Whether purchasing the selling plan will result in multiple deliveries. */
   recurringDeliveries: Scalars['Boolean'];

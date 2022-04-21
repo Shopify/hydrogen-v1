@@ -1,3 +1,9 @@
+---
+gid: 30ba6db5-9196-467b-b9c6-886ca42c82ad
+title: Hydrogen framework overview
+description: Learn about the architecture and framework of Hydrogen.
+---
+
 <aside class="note beta">
 <h4>Developer preview</h4>
 
@@ -14,15 +20,15 @@ Hydrogen is the approach you use to build a custom storefront. The Hydrogen fram
 ![A diagram that illustrates Vite's offering of server-side rendering (SSR) and hydration middleware, and client component code transformations](/assets/custom-storefronts/hydrogen/hydrogen-framework-overview.png)
 
 > Note:
-> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), which affects SSR.
+> The SSR and hydration middleware is similar to existing [Vite SSR](https://vitejs.dev/guide/ssr.html) implementations. However, Hydrogen uses [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), which affects SSR.
 
 ## Hydrogen project structure
 
-When you [create a Hydrogen app](/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Demo Store template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store.
+When you [create a Hydrogen app](https://shopify.dev/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Demo Store template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store.
 
 Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
 
-- A set of boilerplate [`components`](/custom-storefronts/hydrogen/getting-started#components) and [`routes`](/custom-storefronts/hydrogen/getting-started#routes)
+- A set of boilerplate [`components`](https://shopify.dev/custom-storefronts/hydrogen/getting-started#components) and [`routes`](https://shopify.dev/custom-storefronts/hydrogen/getting-started#routes)
 - The main app component in `App.server.jsx`, which includes boilerplate code for the app and routing. This file is also the main entry point for the server.
 - Basic styles provided by Tailwind CSS (`index.css`)
 
@@ -60,13 +66,13 @@ The following diagram shows the request workflow for Hydrogen apps, based on the
 
 ### Node.js runtime
 
-The Hydrogen app is hosted on a Node.js platform like Heroku, Vercel, or Netlify. If you've [generated a Node.js server](/custom-storefronts/hydrogen/deployment#deploy-to-node-js), then you can run it inside a [Docker container](/custom-storefronts/hydrogen/deployment#deploy-to-docker) like GCP, AWS, Azure, or Fly.io.
+The Hydrogen app is hosted on a Node.js platform like Heroku, Vercel, or Netlify. If you've [generated a Node.js server](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-node-js), then you can run it inside a [Docker container](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-docker) like GCP, AWS, Azure, or Fly.io.
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/node`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) package, which is a [Connect-based](https://github.com/senchalabs/connect) Node.js server. Alternatively, you can use your own server.
 
 ### Worker (v8) runtime
 
-The Hydrogen app is hosted on a worker platform like [Oxygen](/custom-storefronts/hydrogen/deployment#deploy-to-cloudflare-workers) or [Cloudflare](/custom-storefronts/hydrogen/deployment#deploy-to-oxygen).
+The Hydrogen app is hosted on a worker platform like [Oxygen](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-cloudflare-workers) or [Cloudflare](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-oxygen).
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/worker`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/worker.ts) package for server-side rendering. The Cache API and KV API are powered by Oxygen, Cloudflare, or another runtime adapter.
 
@@ -140,4 +146,4 @@ If you need to change the server entry point, then make the following updates in
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.

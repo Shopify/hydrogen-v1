@@ -6,6 +6,7 @@ import type {PreloadOptions, QueryKey} from '../../types';
 import {hashKey} from '../../utilities/hash';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
+import {SessionSyncApi} from '../../foundation/session/session';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
@@ -56,6 +57,7 @@ export class ServerComponentRequest extends Request {
     analyticsData: any;
     router: RouterContextData;
     buyerIpHeader?: string;
+    session?: SessionSyncApi;
     [key: string]: any;
   };
 

@@ -1,4 +1,10 @@
-Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](/custom-storefronts/hydrogen/framework/streaming-ssr), caching ensures that buyers get the quickest response possible while also displaying the latest data.
+---
+gid: 038c475e-f28f-471b-a981-26e7ebb8bec9
+title: Caching
+description: Learn how to manage cache options for Hydrogen apps.
+---
+
+Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr), caching ensures that buyers get the quickest response possible while also displaying the latest data.
 
 Hydrogen provides two mechanisms for cache within applications:
 
@@ -75,7 +81,7 @@ export interface AllCacheOptions {
 
 While rendering a page in your Hydrogen app, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheSeconds` strategy.
 
-The following example shows how to implement [`useShopQuery` for Shopify Storefront API queries](/api/hydrogen/hooks/global/useshopquery):
+The following example shows how to implement [`useShopQuery` for Shopify Storefront API queries](https://shopify.dev/api/hydrogen/hooks/global/useshopquery):
 
 {% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
@@ -89,7 +95,7 @@ const {data} = useShopQuery({
 
 {% endcodeblock %}
 
-The following example shows how to implement [`fetchSync` for third-party requests](/api/hydrogen/hooks/global/fetchsync):
+The following example shows how to implement [`fetchSync` for third-party requests](https://shopify.dev/api/hydrogen/hooks/global/fetchsync):
 
 {% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
@@ -269,5 +275,4 @@ Full-page caching is powered completely by [`cache-control` headers on the Hydro
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.

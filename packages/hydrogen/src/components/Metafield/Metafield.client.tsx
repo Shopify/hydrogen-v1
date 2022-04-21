@@ -7,17 +7,21 @@ import {Image} from '../Image';
 import type {MediaImage} from '../../storefront-api-types';
 
 export interface MetafieldProps<TTag> {
-  /** An object with fields that correspond to the Storefront API's [Metafield object](/api/storefront/reference/common-objects/metafield). */
+  /** An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). */
   data: ParsedMetafield;
-  /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](/apps/metafields/types). */
+  /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](https://shopify.dev/apps/metafields/types). */
   as?: TTag;
 }
 
 /**
  * The `Metafield` component renders the value of a Storefront
- * API's [Metafield object](/api/storefront/reference/common-objects/metafield).
+ * API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
  *
- * Renders a smart default of the
+ * When a render function is provided, it passes the Metafield object with a value
+ * that was parsed according to the Metafield's `type` field. For more information,
+ * refer to the [Render props](#render-props) section.
+ *
+ * When no render function is provided, it renders a smart default of the
  * Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
  */
 export function Metafield<TTag extends ElementType>(

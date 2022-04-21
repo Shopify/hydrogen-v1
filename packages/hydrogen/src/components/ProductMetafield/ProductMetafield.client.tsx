@@ -8,11 +8,11 @@ import type {ParsedMetafield} from '../../types';
 
 export interface ProductMetafieldProps<TTag>
   extends Omit<MetafieldProps<TTag>, 'metafield'> {
-  /** A string corresponding to the [key](/api/storefront/reference/common-objects/metafield) of the product's
+  /** A string corresponding to the [key](https://shopify.dev/api/storefront/reference/common-objects/metafield) of the product's
    * metafield.
    */
   keyName: string;
-  /** A string corresponding to the [namespace](/api/storefront/reference/common-objects/metafield) of the
+  /** A string corresponding to the [namespace](https://shopify.dev/api/storefront/reference/common-objects/metafield) of the
    * product's metafield.
    */
   namespace: string;
@@ -22,7 +22,7 @@ export interface ProductMetafieldProps<TTag>
 
 /**
  * The `ProductMetafield` component renders a
- * [`Metafield`](/api/hydrogen/components/primitive/metafield) component with the product metafield.
+ * [`Metafield`](https://shopify.dev/api/hydrogen/components/primitive/metafield) component with the product metafield.
  * It must be a descendent of a `ProductProvider` component.
  */
 export function ProductMetafield<TTag extends ElementType>(

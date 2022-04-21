@@ -1,3 +1,9 @@
+---
+gid: 30ba6db5-9196-467b-b9c6-886ca42c45ad
+title: React Server Components overview
+description: Learn about React Server Components, an opinionated data-fetching and rendering workflow for React apps.
+---
+
 Hydrogen is modelled after [React Server Components](https://reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html), an approach that offers an opinionated data-fetching and rendering workflow for React apps.
 
 This guide provides information about how React Server Components work in the context of Hydrogen.
@@ -14,17 +20,17 @@ For example, the following React element tree is [composed of React components](
 ![A diagram that illustrates a React element tree composed of server, client, and shared components](/assets/custom-storefronts/hydrogen/react-element-tree.png)
 
 > Note:
-> You can't import a server component into a client component. However, you can pass a server component into a client component using [passthrough or render props](/api/hydrogen/components#customizing-hydrogen-components).
+> You can't import a server component into a client component. However, you can pass a server component into a client component using [passthrough or render props](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components).
 
 ### Component types
 
 React Server Components include the following component types:
 
-| Type   | Description                                                                                                                                                                                                                                                 | Filename convention                                                   |
-| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Server | Components that fetch data and render content on the server. Their dependencies aren't in the client bundle. Server components don't include any client-side interactivity. Only server components can make calls to the [Storefront API](/api/storefront). | Server components end in `.server.jsx`.                               |
-| Client | Components that render on the client. Client components include client-side stateful interactivity.                                                                                                                                                         | Client components end in `.client.jsx`.                               |
-| Shared | Components that render on both the server and the client.                                                                                                                                                                                                   | Shared components don't end in either `.client.jsx` or `.server.jsx`. |
+| Type   | Description                                                                                                                                                                                                                                                                    | Filename convention                                                   |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Server | Components that fetch data and render content on the server. Their dependencies aren't in the client bundle. Server components don't include any client-side interactivity. Only server components can make calls to the [Storefront API](https://shopify.dev/api/storefront). | Server components end in `.server.jsx`.                               |
+| Client | Components that render on the client. Client components include client-side stateful interactivity.                                                                                                                                                                            | Client components end in `.client.jsx`.                               |
+| Shared | Components that render on both the server and the client.                                                                                                                                                                                                                      | Shared components don't end in either `.client.jsx` or `.server.jsx`. |
 
 ## Benefits
 
@@ -139,7 +145,6 @@ Although shared components have the most constraints, many components already ob
 
 ## Next steps
 
-- Learn how to [work with React Server Components](/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc).
-- Improve your app's loading performance with [streaming SSR and Suspense](/custom-storefronts/hydrogen/framework/streaming-ssr).
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn how to [work with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc).
+- Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
+- Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
