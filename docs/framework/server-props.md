@@ -1,10 +1,10 @@
 ---
 gid: 4eae60cf-7fcb-45a4-9875-bb32245cee83
 title: Server props
-description: Learn how to update the state on the server when you are building your Hydrogen app.
+description: Learn how to manage your server props during your development process.
 ---
 
-As you build your Hydrogen app with [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `state` on the server. Sharing state information between the client and server is important for common tasks, like [page routing](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc#sharing-state-between-client-and-server).
+As you build your Hydrogen app with [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `props` on the server. Sharing data between the client and server is important for common tasks, like [page routing](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc#sharing-data-between-client-and-server).
 
 This guide describes how to manage server props during your development process.
 
