@@ -122,5 +122,5 @@ function prependBannerText(path, content) {
 }
 
 function removeAbsoluteLinksToShopifyDev(content) {
-  return content.replace('](https://shopify.dev', '](');
+  return content.replaceAll('](https://shopify.dev', '](');
 }
