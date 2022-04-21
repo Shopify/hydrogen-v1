@@ -95,7 +95,7 @@ export default async function testCases({
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
     );
-  });
+  }, 35000);
 
   it('streams the SSR response and includes RSC payload', async () => {
     const response = await fetch(getServerUrl() + '/stream');
