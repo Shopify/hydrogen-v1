@@ -145,3 +145,12 @@ export interface HydrogenVitePluginOptions {
 }
 
 export type PreloadOptions = boolean | string;
+
+export interface HydrogenManifest {
+  routes: {
+    [path: string]: {
+      path: string;
+      parentPath?: string;
+    };
+  };
+}

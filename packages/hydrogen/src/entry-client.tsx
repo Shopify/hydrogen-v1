@@ -1,17 +1,12 @@
-import React, {
-  Suspense,
-  useState,
-  StrictMode,
-  Fragment,
-  type ElementType,
-} from 'react';
+import React, {Suspense, useState, StrictMode, Fragment} from 'react';
 // @ts-expect-error hydrateRoot isn't on the TS types yet, but we're using React 18 so it exists
 import {hydrateRoot} from 'react-dom/client';
-import type {ClientHandler} from './types';
+import type {ClientHandler, HydrogenManifest} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerStateProvider} from './foundation/ServerStateProvider';
 import type {DevServerMessage} from './utilities/devtools';
+import {matchPath} from './utilities/matchPath';
 
 const DevTools = React.lazy(() => import('./components/DevTools'));
 
@@ -33,6 +28,9 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
     });
   }
 
+  // @ts-ignore
+  const manifest = window.__hydrogenManifest as HydrogenManifest;
+
   // default to StrictMode on, unless explicitly turned off
   const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
 
@@ -44,7 +42,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
       <RootComponent>
         <ErrorBoundary FallbackComponent={Error}>
           <Suspense fallback={null}>
-            <Content clientWrapper={ClientWrapper} />
+            <Content manifest={manifest} />
           </Suspense>
         </ErrorBoundary>
       </RootComponent>
@@ -72,12 +70,25 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
 
 export default renderHydrogen;
 
-function Content({
-  clientWrapper: ClientWrapper = ({children}: {children: JSX.Element}) =>
-    children,
-}: {
-  clientWrapper: ElementType;
-}) {
+function Content({manifest}: {manifest: HydrogenManifest}) {
+  // Find matching routes (and their parents)
+  const matches = [];
+
+  for (const path in manifest.routes) {
+    const route = manifest.routes[path];
+    let match;
+    if ((match = matchPath(window.location.pathname, route))) {
+      matches.push(match);
+    }
+  }
+
+  // This is the root which always renders, no matter what
+  matches.push(manifest.routes.App);
+
+  // <OutletContext.Provider value={<MatchContent />}>
+  //   <AppContent />
+  // </OutletContext.Provider>
+
   const [serverState, setServerState] = useState({
     pathname: window.location.pathname,
     search: window.location.search,
@@ -89,7 +100,7 @@ function Content({
       serverState={serverState}
       setServerState={setServerState}
     >
-      <ClientWrapper>{response.readRoot()}</ClientWrapper>
+      {response.readRoot()}
     </ServerStateProvider>
   );
 }

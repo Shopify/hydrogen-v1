@@ -1,7 +1,12 @@
 import MagicString from 'magic-string';
 import type {Plugin, ResolvedConfig, ViteDevServer} from 'vite';
-import type {HydrogenConfig} from '../../types';
+import type {
+  HydrogenConfig,
+  HydrogenManifest,
+  ImportGlobEagerOutput,
+} from '../../types';
 import path from 'path';
+import {findRoutePrefix} from '../../utilities/findRoutePrefix';
 
 const MANIFEST_VIRTUAL_ID = '/virtual:hydrogen-manifest';
 
@@ -52,45 +57,86 @@ export default () => {
   } as Plugin;
 };
 
-interface HydrogenManifest {
-  routes: {
-    [routeId: string]: {
-      id: string;
-      parentId?: string;
-    };
-  };
-}
-
 async function createManifest(
   config: HydrogenConfig
 ): Promise<HydrogenManifest> {
-  const routes: HydrogenManifest['routes'] = {
-    App: {id: 'App'},
-  };
-
-  for (const routeKey in config.routes) {
-    // TODO: Pass in a the configurable prefix
-    const id = getRouteIdFromPath({path: routeKey});
-    routes[id] = {
-      id,
-      // TODO: Properly find parentId based on nested routes or associated layout components
-      parentId: 'App',
-    };
-  }
+  const routes = createPageRoutes(config.routes);
 
   return {
     routes,
   };
 }
 
-function getRouteIdFromPath({
-  path,
-  prefix = './src/routes/',
-  suffix = /\.server\.[jt]sx?$/,
-}: {
-  path: string;
-  prefix?: string;
-  suffix?: any;
-}) {
-  return path.replace(prefix, '').replace(suffix, '');
+function createPageRoutes(
+  routeConfig: HydrogenConfig['routes']
+): HydrogenManifest['routes'] {
+  const basePath = routeConfig.basePath ?? '';
+  const dirPrefix =
+    typeof routeConfig.dirPrefix === 'object' ? '' : routeConfig.dirPrefix;
+
+  const files = (routeConfig.files ?? routeConfig) as ImportGlobEagerOutput;
+  const keys = Object.keys(files);
+
+  const commonRoutePrefix = dirPrefix ?? findRoutePrefix(keys);
+
+  const routes = keys
+    .map((key) => {
+      let path = key
+        .replace(commonRoutePrefix, '')
+        .replace(/\.server\.(t|j)sx?$/, '')
+        /**
+         * Replace /index with /
+         */
+        .replace(/\/index$/i, '/')
+        /**
+         * Only lowercase the first letter. This allows the developer to use camelCase
+         * dynamic paths while ensuring their standard routes are normalized to lowercase.
+         */
+        .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
+        /**
+         * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
+         */
+        .replace(
+          /\[(?:[.]{3})?(\w+?)\]/g,
+          (_match, param: string) => `:${param}`
+        );
+
+      if (path.endsWith('/') && path !== '/')
+        path = path.substring(0, path.length - 1);
+
+      /**
+       * Catch-all routes [...handle].jsx don't need an exact match
+       * https://reactrouter.com/core/api/Route/exact-bool
+       */
+      const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
+
+      if (!files[key].default && !files[key].api) {
+        console.warn(
+          `${key} doesn't export a default React component or an API function`
+        );
+      }
+
+      return {
+        path: basePath + path,
+        id: key,
+        // TODO: Infer this based on conventions rather than hardcode.
+        parentPath: 'App',
+        component: files[key].default,
+        exact,
+      };
+    })
+    .filter((route) => route.component);
+
+  /**
+   * Place static paths BEFORE dynamic paths to grant priority.
+   */
+  const allRoutes = [
+    ...routes.filter((route) => !route.path.includes(':')),
+    ...routes.filter((route) => route.path.includes(':')),
+  ];
+
+  return allRoutes.reduce((acc, route) => {
+    acc[route.path] = route;
+    return acc;
+  }, {} as HydrogenManifest['routes']);
 }
