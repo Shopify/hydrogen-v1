@@ -10,16 +10,10 @@ declare global {
   }
 }
 
-// const URL =
-//   'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
+const URL =
+  'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
 
-const URL = 'http://localhost:4002/build/boomerang-hydrogen.min.js';
-
-export function PerformanceMetrics({
-  preventPushToServer,
-}: {
-  preventPushToServer: Boolean | undefined;
-}) {
+export function PerformanceMetrics() {
   const {storeDomain} = useShop();
 
   useEffect(() => {
@@ -34,7 +28,11 @@ export function PerformanceMetrics({
       // Executes only on first mount
       window.BOOMR = window.BOOMR || {};
       window.BOOMR.hydrogenPerformanceEvent = (data: any) => {
-        ClientAnalytics.publish(ClientAnalytics.eventNames.PERFORMANCE, data);
+        ClientAnalytics.publish(
+          ClientAnalytics.eventNames.PERFORMANCE,
+          true,
+          data
+        );
         ClientAnalytics.pushToServer(
           {
             method: 'post',

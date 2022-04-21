@@ -12,7 +12,10 @@ import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
-import {PerformanceMetrics} from '@shopify/hydrogen/client';
+import {
+  PerformanceMetrics,
+  PerformanceMetricsDebug,
+} from '@shopify/hydrogen/client';
 
 function App({routes}) {
   return (
@@ -26,6 +29,7 @@ function App({routes}) {
           </Router>
         </CartProvider>
         <PerformanceMetrics />
+        <PerformanceMetricsDebug />
       </ShopifyProvider>
     </Suspense>
   );
