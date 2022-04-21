@@ -6,14 +6,15 @@ then the callback will be called when a new line item is successfully added to t
 The `CartProvider` component must be a descendent of the `ShopifyProvider` component.
 You must use this component if you want to use the `useCart` hook or related hooks, or if you would like to use the `AddToCartButton` component.
 
-In order to use `CartProvider`, you should have a local API endpoint which responds to cart events:
+## Local API endpoint
+
+To use `CartProvider`, you need to have a local API endpoint that responds to cart events. To model your local API endpoint, refer to the [`cart.server.js` file in the Demo Store template](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/cart.server.js).
+
+{% codeblock file, filename: 'src/routes/cart.server.js' %}
 
 ```tsx
-// src/routes/cart.server.js
-
 export async function api(request, {queryShop}) {
   const data = await request.json();
-
   switch (data._action) {
     case 'getCart':
       return getCart(data, queryShop);
@@ -36,12 +37,11 @@ export async function api(request, {queryShop}) {
     default:
       return new Response('Invalid action', {status: 400});
   }
-
   // ...
 }
 ```
 
-[See the full reference](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/cart.server.js) to model your local API endpoint.
+{% endcodeblock %}
 
 ## Example code
 
@@ -58,7 +58,7 @@ export function App() {
 | Name                   | Type                         | Description                                                                                                                                            |
 | ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | children               | <code>React.ReactNode</code> | Any `ReactNode` elements.                                                                                                                              |
-| endpoint               | <code>string</code>          | A relative path to a cart API endpoint in your app. Defaults to `/cart`. elements.                                                                     |
+| endpoint               | <code>string</code>          | The endpoint that's used to fetch cart data. Defaults to `/cart`.                                                                     |
 | data?                  | <code>Cart</code>            | An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).                                      |
 | numCartLines?          | <code>number</code>          | A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API.                             |
 | onCreate?              | <code>() => void</code>      | A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API.                             |
