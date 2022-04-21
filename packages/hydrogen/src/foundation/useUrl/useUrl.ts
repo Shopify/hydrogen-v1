@@ -1,4 +1,6 @@
+import {useMemo} from 'react';
 import {RSC_PATHNAME} from '../../constants';
+import {useLocation} from '../Router/BrowserRouter.client';
 import {useEnvContext, META_ENV_SSR} from '../ssr-interop';
 
 /**
@@ -21,5 +23,10 @@ export function useUrl(): URL {
     return new URL(serverUrl);
   }
 
-  return new URL(window.location.href);
+  /**
+   * We return a `URL` object instead of passing through `location` because
+   * the URL object contains important info like hostname, etc.
+   */
+  const location = useLocation();
+  return useMemo(() => new URL(window.location.href), [location]);
 }

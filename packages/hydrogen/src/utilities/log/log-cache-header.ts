@@ -1,7 +1,7 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
 import {QueryKey} from '../../types';
-import {hashKey} from '../../framework/cache';
+import {hashKey} from '../hash';
 import {findQueryName, parseUrl} from './utils';
 import {gray} from 'kolorist';
 import {getLoggerWithContext} from './log';

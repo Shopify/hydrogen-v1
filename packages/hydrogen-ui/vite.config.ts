@@ -19,7 +19,7 @@ export default defineConfig({
     target: ['node16', 'chrome96', 'firefox94', 'safari14', 'edge96'],
     rollupOptions: {
       // don't bundle these packages into our lib
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', 'react/jsx-runtime'],
       // the true entry points to the bundles
       input: ['./src/index.client.ts', './src/index.server.ts'],
     },

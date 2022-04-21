@@ -10,8 +10,9 @@ import {hydrateRoot} from 'react-dom/client';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
-import {ServerStateProvider} from './foundation/ServerStateProvider';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
+import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
 
 const DevTools = React.lazy(() => import('./components/DevTools'));
 
@@ -78,19 +79,19 @@ function Content({
 }: {
   clientWrapper: ElementType;
 }) {
-  const [serverState, setServerState] = useState({
+  const [serverProps, setServerProps] = useState<LocationServerProps>({
     pathname: window.location.pathname,
     search: window.location.search,
   });
-  const response = useServerResponse(serverState);
+  const response = useServerResponse(serverProps);
 
   return (
-    <ServerStateProvider
-      serverState={serverState}
-      setServerState={setServerState}
+    <ServerPropsProvider
+      initialServerProps={serverProps}
+      setServerPropsForRsc={setServerProps}
     >
       <ClientWrapper>{response.readRoot()}</ClientWrapper>
-    </ServerStateProvider>
+    </ServerPropsProvider>
   );
 }
 

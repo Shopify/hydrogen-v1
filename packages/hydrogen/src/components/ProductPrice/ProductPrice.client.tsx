@@ -15,7 +15,7 @@ export interface ProductPriceProps {
 
 /**
  * The `ProductPrice` component renders a `Money` component with the product
- * [`priceRange`](/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
+ * [`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
  */
 export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
   props: (

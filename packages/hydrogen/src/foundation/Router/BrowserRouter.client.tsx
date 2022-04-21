@@ -9,9 +9,9 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react';
-import type {ServerState} from '../ServerStateProvider';
+import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider';
 import {META_ENV_SSR} from '../ssr-interop';
-import {useServerState} from '../useServerState';
+import {useInternalServerProps} from '../useServerProps/use-server-props';
 
 type RouterContextValue = {
   history: BrowserHistory;
@@ -32,14 +32,15 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [location, setLocation] = useState(history.location);
 
-  const {pending, serverState, setServerState} = useServerState();
-  useScrollRestoration(location, pending, serverState);
+  const {pending, locationServerProps, setLocationServerProps} =
+    useInternalServerProps();
+  useScrollRestoration(location, pending, locationServerProps);
 
   useLayoutEffect(() => {
     const unlisten = history.listen(({location: newLocation}) => {
       positions[location.key] = window.scrollY;
 
-      setServerState({
+      setLocationServerProps({
         pathname: newLocation.pathname,
         search: location.search,
       });
@@ -91,7 +92,7 @@ function useBeforeUnload(callback: () => any): void {
 function useScrollRestoration(
   location: Location,
   pending: boolean,
-  serverState: ServerState
+  serverProps: LocationServerProps
 ) {
   /**
    * Browsers have an API for scroll restoration. We wait for the page to load first,
@@ -127,8 +128,8 @@ function useScrollRestoration(
      */
     const finishedNavigating =
       !pending &&
-      location.pathname === serverState.pathname &&
-      location.search === serverState.search;
+      location.pathname === serverProps.pathname &&
+      location.search === serverProps.search;
 
     if (!finishedNavigating) {
       return;
@@ -151,5 +152,5 @@ function useScrollRestoration(
 
     // Scroll to the top of new pages
     window.scrollTo(0, 0);
-  }, [location, pending, serverState]);
+  }, [location, pending, serverProps]);
 }

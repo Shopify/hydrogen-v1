@@ -4,6 +4,7 @@ import {
   CacheSeconds,
   generateCacheControlHeader,
 } from '../framework/CachingStrategy';
+import {hashKey} from '../utilities/hash';
 import {logCacheApiStatus} from '../utilities/log';
 
 function getCacheControlSetting(
@@ -24,15 +25,6 @@ export function generateSubRequestCacheControlHeader(
   userCacheOptions?: CachingStrategy
 ): string {
   return generateCacheControlHeader(getCacheControlSetting(userCacheOptions));
-}
-
-export function hashKey(key: QueryKey): string {
-  const rawKey = key instanceof Array ? key : [key];
-
-  /**
-   * TODO: Smarter hash
-   */
-  return rawKey.map((k) => JSON.stringify(k)).join('');
 }
 
 /**
