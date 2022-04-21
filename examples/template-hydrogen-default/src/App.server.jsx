@@ -30,7 +30,7 @@ function App({routes}) {
           </Router>
         </CartProvider>
         <PerformanceMetrics />
-        <PerformanceMetricsDebug />
+        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
       </ShopifyProvider>
     </Suspense>
   );
