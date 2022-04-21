@@ -8,7 +8,6 @@ import {
 } from '../../hydrogen/src/storefront-api-types';
 import {ExternalVideo} from './ExternalVideo';
 import {faker} from '@faker-js/faker';
-import * as React from 'react';
 import {vi} from 'vitest';
 
 describe('<ExternalVideo />', () => {
