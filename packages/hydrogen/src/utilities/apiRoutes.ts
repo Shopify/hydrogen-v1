@@ -5,6 +5,11 @@ import type {ServerComponentRequest} from '../framework/Hydration/ServerComponen
 import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
+import {
+  emptySessionImplementation,
+  SessionApi,
+  SessionStorageAdapter,
+} from '../foundation/session/session';
 
 let memoizedRoutes: Array<HydrogenApiRoute> = [];
 let memoizedPages: ImportGlobEagerOutput = {};
@@ -13,6 +18,7 @@ type RouteParams = Record<string, string>;
 type RequestOptions = {
   params: RouteParams;
   queryShop: (args: QueryShopArgs) => Promise<any>;
+  session: SessionApi | null;
 };
 type ResourceGetter = (
   request: Request,
@@ -161,15 +167,32 @@ function queryShopBuilder(
 export async function renderApiRoute(
   request: ServerComponentRequest,
   route: ApiRouteMatch,
-  shopifyConfig: ShopifyConfig
+  shopifyConfig: ShopifyConfig,
+  session?: SessionStorageAdapter
 ): Promise<Response | Request> {
   let response;
   const log = getLoggerWithContext(request);
+  let cookieToSet = '';
 
   try {
     response = await route.resource(request, {
       params: route.params,
       queryShop: queryShopBuilder(shopifyConfig, request),
+      session: session
+        ? {
+            async get() {
+              return session.get(request);
+            },
+            async set(key: string, value: string) {
+              const data = await session.get(request);
+              data[key] = value;
+              cookieToSet = await session.set(request, data);
+            },
+            async destroy() {
+              cookieToSet = await session.destroy(request);
+            },
+          }
+        : emptySessionImplementation(log),
     });
 
     if (!(response instanceof Response || response instanceof Request)) {
@@ -182,6 +205,14 @@ export async function renderApiRoute(
           },
         });
       }
+    }
+
+    if (!response) {
+      response = new Response(null);
+    }
+
+    if (cookieToSet) {
+      response.headers.set('Set-Cookie', cookieToSet);
     }
   } catch (e) {
     log.error(e);

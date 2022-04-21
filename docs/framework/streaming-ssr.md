@@ -115,4 +115,4 @@ When a `Suspense` component is wrapped around a group of components that fetch d
 ## Next steps
 
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [work with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc) in your Hydrogen app.
+- Learn how to [work with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc) in your Hydrogen app.

@@ -145,6 +145,6 @@ Although shared components have the most constraints, many components already ob
 
 ## Next steps
 
-- Learn how to [work with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc).
+- Learn how to [work with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc).
 - Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
 - Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.

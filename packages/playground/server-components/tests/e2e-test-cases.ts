@@ -442,4 +442,69 @@ export default async function testCases({
       );
     });
   });
+
+  describe('Sessions', () => {
+    it('creates a session', async () => {
+      const response = await fetch(getServerUrl() + '/sessions/writeSession', {
+        method: 'POST',
+        body: JSON.stringify({
+          someData: 'some value',
+        }),
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const text = await response.text();
+
+      expect(response.status).toBe(200);
+      expect(response.headers.get('Set-Cookie')).toBe(
+        '__session=%7B%22someData%22%3A%22some%20value%22%7D; Expires=Sun, 08 Jun 2025 00:39:38 GMT'
+      );
+      expect(text).toEqual('Session Created');
+    });
+
+    it('deletes a session', async () => {
+      const response = await fetch(getServerUrl() + '/sessions/writeSession', {
+        method: 'DELETE',
+        headers: {
+          cookie: '__session=%7B%22someData%22%3A%22some%20value%22%7D',
+        },
+      });
+
+      const text = await response.text();
+
+      expect(response.status).toBe(200);
+      expect(response.headers.get('Set-Cookie')).toBe(
+        '__session=; Expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      );
+      expect(text).toEqual('Session Destroyed');
+    });
+
+    it('gets data from a session', async () => {
+      const response = await fetch(getServerUrl() + '/sessions/writeSession', {
+        headers: {
+          cookie: '__session=%7B%22someData%22%3A%22some%20value%22%7D',
+        },
+      });
+
+      const text = await response.text();
+
+      expect(response.status).toBe(200);
+      expect(text).toMatchInlineSnapshot(`"{\\"someData\\":\\"some value\\"}"`);
+    });
+
+    it('gets data from a session with RSC', async () => {
+      const response = await fetch(getServerUrl() + '/sessions/readSession', {
+        headers: {
+          cookie: '__session=%7B%22someData%22%3A%22some%20value%22%7D',
+        },
+      });
+
+      const text = await response.text();
+
+      expect(response.status).toBe(200);
+      expect(text).toContain(`some value`);
+    });
+  });
 }

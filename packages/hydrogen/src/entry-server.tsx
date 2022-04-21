@@ -46,6 +46,7 @@ import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
+import {getSyncSessionApi} from './foundation/session/session';
 
 declare global {
   // This is provided by a Vite plugin
@@ -78,7 +79,12 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes, serverAnalyticsConnectors}: ServerHandlerConfig
+  {
+    shopifyConfig,
+    routes,
+    serverAnalyticsConnectors,
+    session,
+  }: ServerHandlerConfig
 ) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {
@@ -96,7 +102,15 @@ export const renderHydrogen = (
 
     const url = new URL(request.url);
     const log = getLoggerWithContext(request);
+    const sessionApi = session ? session(log) : undefined;
     const componentResponse = new ServerComponentResponse();
+
+    request.ctx.session = getSyncSessionApi(
+      request,
+      componentResponse,
+      log,
+      sessionApi
+    );
 
     /**
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
@@ -126,7 +140,8 @@ export const renderHydrogen = (
         const apiResponse = await renderApiRoute(
           request,
           apiRoute,
-          shopifyConfig
+          shopifyConfig,
+          sessionApi
         );
 
         return apiResponse instanceof Request

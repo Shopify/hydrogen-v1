@@ -5,6 +5,7 @@ import {
   FileRoutes,
   ShopifyProvider,
   setLogger,
+  CookieSessionStorage,
 } from '@shopify/hydrogen';
 import shopifyConfig from '../shopify.config';
 import {Suspense} from 'react';
@@ -50,7 +51,13 @@ function App({routes}) {
 
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {shopifyConfig, routes});
+export default renderHydrogen(App, {
+  shopifyConfig,
+  routes,
+  session: CookieSessionStorage('__session', {
+    expires: new Date(1749343178614),
+  }),
+});
 
 function HasRouteChildren({children}) {
   return children;
