@@ -3,7 +3,7 @@
 'create-hydrogen-app': minor
 ---
 
-Hydrogen now has a built in session and cookie implementation. Read more about [how sessions work in hydrogen](). The starter template also includes a cookie session storage implementation. To use the new session implementation within an existing Hydrogen app:
+Hydrogen now has a built in session and cookie implementation. Read more about [how sessions work in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions). The starter template also includes a cookie session storage implementation. To use the new session implementation within an existing Hydrogen app:
 
 ```diff
 import renderHydrogen from '@shopify/hydrogen/entry-server';
