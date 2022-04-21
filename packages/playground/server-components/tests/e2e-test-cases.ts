@@ -83,7 +83,7 @@ export default async function testCases({
     );
 
     await page.click('#update-server-props');
-    await page.waitForSelector('#server-props-with-data');
+    await page.waitForSelector('#server-props-with-data', {timeout: 35000});
 
     expect(
       await page.textContent('#server-props-with-data')
