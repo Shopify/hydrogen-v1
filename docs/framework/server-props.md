@@ -89,4 +89,3 @@ When the user navigates to a new page in your app, the server props will reset. 
 
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
 - Learn how to interact with the [`useServerProps`](https://shopify.dev/api/hydrogen/hooks/global/useserverprops) hook.
-- Learn how the [page server component](https://shopify.dev/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
