@@ -41,29 +41,21 @@ const CONFIG = {
   const repoPath = resolve(__dirname, '../../', CONFIG.repo, CONFIG.output);
   const globPath = [CONFIG.src, '**', '*.md'].join(sep);
 
-  const files = glob.sync(globPath);
+  const files = glob.sync(globPath, {nosort: true});
 
   Object.entries(CONFIG.overrides)
     .filter(([path]) => path.endsWith('/'))
-    .forEach(([exception, replacement]) =>
+    .forEach(([folder, replacement]) => {
       files.forEach((file) => {
-        if (file.includes(`docs/${exception}`)) {
-          const dest = resolve(
-            file
-              .replace(CONFIG.src, repoPath)
-              .replace(CONFIG.output, replacement)
-          );
-          files.splice(files.indexOf(file), 1);
+        const dest = resolve(file.replace(CONFIG.src, repoPath));
+
+        if (file.startsWith(`docs/${folder}`)) {
+          process(file, dest.replace(CONFIG.output, replacement), CONFIG.skip);
+        } else {
           process(file, dest, CONFIG.skip);
         }
-      })
-    );
-
-  files.forEach((file) => {
-    const dest = resolve(file.replace(CONFIG.src, repoPath));
-
-    process(file, dest, CONFIG.skip);
-  });
+      });
+    });
 })();
 
 function process(src, dest, skipFiles = []) {
