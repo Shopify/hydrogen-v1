@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
-import {loadScript} from '../../utilities';
-import {useShop} from '../useShop';
+import {loadScript} from '../../../../utilities';
+import {ClientAnalytics} from '../../index';
+import {useShop} from '../../../useShop';
 
 declare global {
   interface Window {
@@ -9,10 +10,16 @@ declare global {
   }
 }
 
-const URL =
-  'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
+// const URL =
+//   'https://cdn.shopify.com/shopifycloud/boomerang/shopify-boomerang-hydrogen.min.js';
 
-export function Boomerang() {
+const URL = 'http://localhost:4002/build/boomerang-hydrogen.min.js';
+
+export function PerformanceMetrics({
+  preventPushToServer,
+}: {
+  preventPushToServer: Boolean | undefined;
+}) {
   const {storeDomain} = useShop();
 
   useEffect(() => {
@@ -26,6 +33,20 @@ export function Boomerang() {
 
       // Executes only on first mount
       window.BOOMR = window.BOOMR || {};
+      window.BOOMR.hydrogenPerformanceEvent = (data: any) => {
+        ClientAnalytics.publish(ClientAnalytics.eventNames.PERFORMANCE, data);
+        ClientAnalytics.pushToServer(
+          {
+            method: 'post',
+            headers: {
+              'cache-control': 'no-cache',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          },
+          ClientAnalytics.eventNames.PERFORMANCE
+        );
+      };
       window.BOOMR.storeDomain = storeDomain;
 
       function boomerangSaveLoadTime(e: Event) {
@@ -34,9 +55,7 @@ export function Boomerang() {
 
       // @ts-ignore
       function boomerangInit(e) {
-        e.detail.BOOMR.init({
-          producer_url: 'https://monorail-edge.shopifysvc.com/v1/produce',
-        });
+        e.detail.BOOMR.init();
         e.detail.BOOMR.t_end = Date.now();
       }
 

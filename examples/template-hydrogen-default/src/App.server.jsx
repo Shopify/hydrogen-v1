@@ -1,12 +1,18 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, Route, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import {
+  Router,
+  Route,
+  FileRoutes,
+  ShopifyProvider,
+  PerformanceMetricsServerAnalyticsConnector,
+} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
-import {Boomerang} from '@shopify/hydrogen/client';
+import {PerformanceMetrics} from '@shopify/hydrogen/client';
 
 function App({routes}) {
   return (
@@ -19,7 +25,7 @@ function App({routes}) {
             <Route path="*" page={<NotFound />} />
           </Router>
         </CartProvider>
-        <Boomerang />
+        <PerformanceMetrics />
       </ShopifyProvider>
     </Suspense>
   );
@@ -27,4 +33,8 @@ function App({routes}) {
 
 const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
 
-export default renderHydrogen(App, {shopifyConfig, routes});
+export default renderHydrogen(App, {
+  shopifyConfig,
+  routes,
+  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+});
