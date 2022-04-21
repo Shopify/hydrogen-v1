@@ -1,4 +1,10 @@
-Hydrogen's [Demo Store template](/custom-storefronts/hydrogen/getting-started) is styled using the [Tailwind CSS](https://tailwindcss.com/) utility library. This guide describes the benefits of using Tailwind and how to remove it if you prefer to use another CSS framework.
+---
+gid: ea75625d-0b47-4f83-a010-848f7eb8d273
+title: Built-in CSS support
+description: Learn about the CSS support built into Hydrogen.
+---
+
+Hydrogen's [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/getting-started) is styled using the [Tailwind CSS](https://tailwindcss.com/) utility library. This guide describes the benefits of using Tailwind and how to remove it if you prefer to use another CSS framework.
 
 ## How it works
 
@@ -109,5 +115,5 @@ export default MyComponent() {
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how the [page server component](https://shopify.dev/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

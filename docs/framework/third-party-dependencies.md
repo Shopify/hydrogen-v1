@@ -1,3 +1,9 @@
+---
+gid: f058276e-ef84-4b6e-aea6-96ca6e056fc3
+title: Third-party dependencies
+description: Tips and tricks for using third-party dependencies in Hydrogen apps.
+---
+
 Third-party dependencies will generally work out-of-the-box with Hydrogen. This guide describes how to install third-party dependencies, where to insert them, and offers tips for troubleshooting dependencies.
 
 ## Installation
@@ -20,7 +26,7 @@ npm install <dependency>
 
 Consider the following:
 
-- If the dependency interacts with `useState` or browser APIs, then place it inside a `*.client.jsx` component. Follow the [rules of server and client components](/custom-storefronts/hydrogen/framework/react-server-components#constraints).
+- If the dependency interacts with `useState` or browser APIs, then place it inside a `*.client.jsx` component. Follow the [rules of server and client components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components#constraints).
 - If the dependency is purely client-based, and you don't need to interact with it in individual components, then you can insert it in the `<head>` element of `index.html`.
 - If the dependency includes a style import from a CSS file, then you can import that in the `<head>` element of `index.html`.
 

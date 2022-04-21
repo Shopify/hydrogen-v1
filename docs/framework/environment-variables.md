@@ -1,3 +1,9 @@
+---
+gid: ab388044-3f55-4914-b1a6-51c75580ed2f
+title: Environment variables
+description: Learn how to store sensitive information in your Hydrogen project.
+---
+
 Environment variables, also known as secrets, allow you to load different values in your app depending on the running environment. This guide describes how to store environment variables in your Hydrogen project.
 
 ## How environment variables work
@@ -92,6 +98,5 @@ app.use(hydrogenMiddleware({/* ... */}))
 
 ## Next steps
 
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn how the [page server component](https://shopify.dev/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.

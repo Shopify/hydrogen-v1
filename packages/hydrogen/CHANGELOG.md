@@ -34,7 +34,7 @@
 
 - [#983](https://github.com/Shopify/hydrogen/pull/983) [`52af261b`](https://github.com/Shopify/hydrogen/commit/52af261ba2bf6ed08e232b9fb2d75e69905f4cc6) Thanks [@jplhomer](https://github.com/jplhomer)! - Introduce Suspense-friendly `fetchSync` API for server and client components.
 
-  When using `fetchSync` in server components, you provide options for caching and preloading. This is similar to the [`useQuery` hook](<[/api/hydrogen/hooks/global/useQuery](https://shopify.dev/api/hydrogen/hooks/global/usequery)>):
+  When using `fetchSync` in server components, you provide options for caching and preloading. This is similar to the [`useQuery` hook](https://shopify.dev/api/hydrogen/hooks/global/usequery):
 
   ```jsx
   import {fetchSync, CacheMinutes} from '@shopify/hydrogen';

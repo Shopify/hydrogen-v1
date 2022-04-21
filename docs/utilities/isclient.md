@@ -1,3 +1,9 @@
+---
+gid: 232fa7f6-5c17-4659-b8c8-4466be88d602
+title: isClient
+description: The isClient utility is a function that returns a boolean indicating if the code was run on the client.
+---
+
 The `isClient` utility is a function that returns a boolean indicating
 if the code was run on the client.
 

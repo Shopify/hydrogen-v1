@@ -1,3 +1,9 @@
+---
+gid: 74ef5485-cac3-49a5-b037-ae10d6c551d1
+title: Pages
+description: Learn about how page server components receive props.
+---
+
 The Hydrogen framework includes page server components. This guide describes how page server components receive props.
 
 ## How pages work
@@ -72,7 +78,7 @@ All server components receive a `response` prop containing a Hydrogen-specific v
 
 #### `response.cache()`
 
-If you want to modify the [full-page cache options](/custom-storefronts/hydrogen/framework/cache), then you can call `cache()` on the response object:
+If you want to modify the [full-page cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache), then you can call `cache()` on the response object:
 
 {% codeblock file %}
 
@@ -170,11 +176,11 @@ export default function CustomPage({response}) {
 
 {% endcodeblock %}
 
-Since this code lives inside a server component, you can use [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) to populate your [custom responses](#creative-ways-to-use-custom-responses) with Shopify data.
+Since this code lives inside a server component, you can use [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery) to populate your [custom responses](#creative-ways-to-use-custom-responses) with Shopify data.
 
 ### Server props
 
-In addition to `request` and `response` props, any props you manage with [`setServerProps`](/custom-storefronts/hydrogen/framework/server-props) is passed to each of your page server components as props:
+In addition to `request` and `response` props, any props you manage with [`setServerProps`](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) is passed to each of your page server components as props:
 
 {% codeblock file %}
 
@@ -287,15 +293,15 @@ const QUERY = gql`
 
 #### Limitations and considerations
 
-The [Demo Store template](/custom-storefronts/hydrogen/getting-started) includes a `routes/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Demo Store template:
+The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/getting-started) includes a `routes/sitemap.xml.server.jsx` component which serves a sitemap at `/sitemap.xml`. The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Demo Store template:
 
-- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources. If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.
+- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](https://shopify.dev/api/usage/pagination-graphql) if your store has more than 250 resources. If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.
 
 - When you add or remove pages, the sitemap is automatically updated within one day. Similarly, if you unpublish a product, then the product is removed automatically from the sitemap.
 
 - The sitemap is cached for 24 hours.
 
-- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Demo Store template URL structure, which is based on resource's handle.
+- By default, the sitemap uses the [`onlineStoreUrl`](https://shopify.dev/api/storefront/latest/objects/Product) field from the Storefront API as the URL. It falls back to the Demo Store template URL structure, which is based on resource's handle.
 
 ### Build a JSON API
 
@@ -469,6 +475,5 @@ const QUERY = gql`
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.

@@ -1,10 +1,16 @@
+---
+gid: 4431e3bd-069b-4027-b3e9-b013a9a6489d
+title: Routes
+description: Get familiar with the file-based routing system that Hydrogen uses.
+---
+
 The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen app.
 
 ## How routes work
 
 All components added to the `src/routes` directory are registered as routes in `App.server.jsx`. Any filenames with brackets, like `[handle]`, are converted to a route parameter called `:handle`.
 
-You can navigate between routes using the [`Link`](/api/hydrogen/components/framework/link) component or the [`useNavigate`](/api/hydrogen/hooks/framework/usenavigate) hook. You can use the [`useRouteParams`](/api/hydrogen/hooks/framework/userouteparams) hook to retrieve the parameters of an active route.
+You can navigate between routes using the [`Link`](https://shopify.dev/api/hydrogen/components/framework/link) component or the [`useNavigate`](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate) hook. You can use the [`useRouteParams`](https://shopify.dev/api/hydrogen/hooks/framework/userouteparams) hook to retrieve the parameters of an active route.
 
 ### Example
 
@@ -60,7 +66,7 @@ You can also provide a custom static implementation of a dynamic page to overrid
 
 ### Prefetching a link source
 
-The [`Link`](/api/hydrogen/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
+The [`Link`](https://shopify.dev/api/hydrogen/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
 
 If you want to disable link prefetching, then pass `preload={false}` to the `Link` component:
 
@@ -96,14 +102,14 @@ export default function({request}) {
 
 By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx` using the following components:
 
-- [`Router`](/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen app
-- [`FileRoutes`](/api/hydrogen/components/framework/fileroutes): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
-- [`Route`](/api/hydrogen/components/framework/route): Used to set up a route in Hydrogen that's independent of the file system
+- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen app
+- [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
+- [`Route`](https://shopify.dev/api/hydrogen/components/framework/route): Used to set up a route in Hydrogen that's independent of the file system
 
 ## API routes
 
 > Note:
-> If you want to use a third-party data source to render Hydrogen components, then refer to [Using Hydrogen components with a third-party data source](/custom-storefronts/hydrogen/data-sources#using-hydrogen-components-with-a-third-party-data-source). If you want to fetch data that goes alongside your Shopify product data and shopping experience, then refer to [Fetching supplementary data](/custom-storefronts/hydrogen/data-sources#fetching-supplementary-data).
+> If you want to use a third-party data source to render Hydrogen components, then refer to [Using Hydrogen components with a third-party data source](https://shopify.dev/custom-storefronts/hydrogen/data-sources#using-hydrogen-components-with-a-third-party-data-source). If you want to fetch data that goes alongside your Shopify product data and shopping experience, then refer to [Fetching supplementary data](https://shopify.dev/custom-storefronts/hydrogen/data-sources#fetching-supplementary-data).
 
 API routes allow you to build your API in Hydrogen. Any server component within the `src/routes` directory that exports an API function will become an API route. The following examples show some common use cases for implementing API routes.
 
@@ -214,5 +220,5 @@ export default function Page() {
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how the [page server component](https://shopify.dev/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
