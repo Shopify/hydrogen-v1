@@ -21,6 +21,8 @@
     "entry-server.d.ts",
     "client.js",
     "client.d.ts",
+    "config.js",
+    "config.d.ts",
     "entry-client.js",
     "entry-client.d.ts",
     "marker.js",

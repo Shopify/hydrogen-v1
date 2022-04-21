@@ -7,17 +7,21 @@ A simple version of the Hydrogen config looks like this:
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
-export default {
+import {defineConfig} from '@shopify/hydrogen/config';
+
+export default defineConfig({
   routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
   shopify: {
     storeDomain: '<your domain>.myshopify.com',
     storefrontToken: '<your token>',
     storefrontApiVersion: '2022-04',
   },
-};
+});
 ```
 
 {% endcodeblock %}
+
+The `defineConfig` function is an optional utility that provides types for the configuration object.
 
 ## Properties of the configuration
 
@@ -28,9 +32,10 @@ The `routes` property is where you can provide server components and API handler
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
-export default {
+export default defineConfig({
   routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
-};
+  // ...
+});
 ```
 
 {% endcodeblock %}
@@ -42,7 +47,7 @@ For advanced use cases, it's also possible to provide more information about rou
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
-export default {
+export default defineConfig({
   routes: {
     /* Route components and API handlers */
     files: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
@@ -51,7 +56,8 @@ export default {
     /* Additional prefix to use in the URLs (optional) */
     basePath: '/',
   },
-};
+  // ...
+});
 ```
 
 {% endcodeblock %}
@@ -63,7 +69,7 @@ The `shopify` property contains all the information needed to connect to the Sto
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
-export default {
+export default defineConfig({
   shopify: {
     /* The application locale */
     defaultLocale: 'EN-US',
@@ -76,7 +82,8 @@ export default {
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-04',
   },
-};
+  // ...
+});
 ```
 
 {% endcodeblock %}
@@ -90,7 +97,7 @@ For advanced use cases, it is also possible to provide a function that returns t
 ```tsx
 let myShopifyConfigCache = {};
 
-export default {
+export default defineConfig({
   shopify: (url: URL, request: Request) => {
     // For example, change config based on the URL
     const [firstUrlPart] = url.pathname.split('/');
@@ -114,7 +121,8 @@ export default {
         return myShopifyConfigCache[firstUrlPart];
       });
   },
-};
+  // ...
+});
 ```
 
 {% endcodeblock %}
