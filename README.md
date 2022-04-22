@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://hydrogen.shopify.dev"><img src="./docs/images/HydrogenLogo.png" alt="Hydrogen Logo"/></a>
+    <a href="https://hydrogen.shopify.dev"><img src="./.github/images/hydrogen-logo.svg" alt="Hydrogen Logo"/></a>
 </p>
 <p align="center">
     <a href="https://www.npmjs.com/package/@shopify/hydrogen"><img src="https://img.shields.io/npm/v/@shopify/hydrogen.svg?sanitize=true" alt="Version"></a>
