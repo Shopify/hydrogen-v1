@@ -3,9 +3,7 @@ import {PartialDeep} from 'type-fest';
 import {
   ExternalVideo as ExternalVideoType,
   Image,
-  MediaHost,
-  MediaContentType,
-} from '../../hydrogen/src/storefront-api-types';
+} from './storefront-api-types';
 import {ExternalVideo} from './ExternalVideo';
 import {faker} from '@faker-js/faker';
 import {vi} from 'vitest';
@@ -92,12 +90,12 @@ export function getExternalVideoData(
 ): PartialDeep<ExternalVideoType> {
   return {
     id: externalVideo.id ?? faker.random.words(),
-    mediaContentType: MediaContentType.ExternalVideo,
+    mediaContentType: 'EXTERNAL_VIDEO',
     embedUrl: externalVideo.embedUrl ?? faker.internet.url(),
     host:
       externalVideo.host ?? faker.datatype.number({max: 2, min: 1}) === 1
-        ? MediaHost.Youtube
-        : MediaHost.Vimeo,
+        ? 'YOUTUBE'
+        : 'VIMEO',
     previewImage: getPreviewImage(externalVideo.previewImage ?? undefined),
   };
 }
