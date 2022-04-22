@@ -10,7 +10,7 @@
   },
   "files": [
     "dist",
-    "graphql.schema.json"
+    "storefront.schema.json"
   ],
   "type": "module",
   "exports": {
@@ -40,7 +40,7 @@
     "build:vite": "vite build",
     "build:ts": "run-p build:tsc copy-storefront-types",
     "build:tsc": "tsc",
-    "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/storefront-api-types.d.ts",
+    "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/ --flat",
     "format": "prettier --write \"src/**/*\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
     "preview": "vite preview",

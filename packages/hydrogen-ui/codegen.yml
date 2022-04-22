@@ -31,7 +31,7 @@ generates:
             Money: string
             URL: string
   # the schema file, which is the local representation of the graphql endpoint
-  ./graphql.schema.json:
+  ./storefront.schema.json:
     plugins:
       - 'introspection':
           minify: true
