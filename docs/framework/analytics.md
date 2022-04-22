@@ -35,6 +35,8 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 | `REMOVE_FROM_CART`      | A customer removes an item from their cart                                                            |
 | `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated                                          |
 | `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages. |
+| `PERFORMANCE`           | The performance metrics of a page visit. This is avalible when `<PerformanceMetrics />`               |
+| is opted in.            |
 
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
@@ -292,7 +294,7 @@ The following table describes the request function parameters for `ServerAnalyti
 
 You can unsubscribe from events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `PAGE_VIEW` event:
 
-{% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
+{% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
 useEffect(() => {
@@ -306,6 +308,48 @@ useEffect(() => {
   return function cleanup() {
     acceptMarketingSubscriber.unsubscribe();
   };
+});
+```
+
+{% endcodeblock %}
+
+## Performance metrics
+
+You can opt-in to receive Hydrogen performance metrics. Just include `<PerformanceMetrics />`
+and `PerformanceMetricsServerAnalyticsConnector` in your `App.server.js`.
+
+If you would like to see performance debug metrics displayed in the browser console log,
+just include `<PerformanceMetricsDebug />`
+
+{% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
+
+```jsx
+import {
+  PerformanceMetricsServerAnalyticsConnector,
+  ...
+} from '@shopify/hydrogen';
+import {
+  PerformanceMetrics,
+  PerformanceMetricsDebug,
+} from '@shopify/hydrogen/client';
+
+function App({routes}) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        ...
+        <PerformanceMetrics />
+        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+      </ShopifyProvider>
+    </Suspense>
+  );
+}
+
+...
+
+export default renderHydrogen(App, {
+  ...
+  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
 });
 ```
 
