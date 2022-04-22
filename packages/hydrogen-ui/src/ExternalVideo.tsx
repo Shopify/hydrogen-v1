@@ -4,7 +4,7 @@ import type {PartialDeep} from 'type-fest';
 
 interface ExternalVideoProps {
   /**
-   * An object with fields that correspond to the Storefront API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
+   * An object with fields that correspond to the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
    */
   data: PartialDeep<ExternalVideoType>;
   /** An object containing the options available for either
@@ -18,7 +18,7 @@ type PropsWeControl = 'src';
 
 /**
  * The `ExternalVideo` component renders an embedded video for the Storefront
- * API's [ExternalVideo object](/api/storefront/reference/products/externalvideo).
+ * API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
  */
 export function ExternalVideo(
   props: Omit<JSX.IntrinsicElements['iframe'], PropsWeControl> &

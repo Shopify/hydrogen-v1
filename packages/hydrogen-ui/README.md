@@ -1,10 +1,10 @@
 # Hydrogen-UI
 
-## Implementation Notes
+## Common Problems
 
 ### jsx-runtime
 
-If you're using Vite and not using our Hydrogen plugin, and there is an error that says something like `Uncaught ReferenceError: module is not defined`, it's likely because of an issue with [Vite and react/jsx-runtime](https://github.com/vitejs/vite/issues/6215).
+If you’re using Vite and not using our Hydrogen plugin, and there is an error that says something like `Uncaught ReferenceError: module is not defined`, it’s likely because of an issue with [Vite and react/jsx-runtime](https://github.com/vitejs/vite/issues/6215).
 
 The solution is to add `'react/jsx-runtime'` to your Vite config's `optimizeDeps.include` array.
 
