@@ -42,20 +42,29 @@ const CONFIG = {
   const globPath = [CONFIG.src, '**', '*.md'].join(sep);
 
   const files = glob.sync(globPath, {nosort: true});
+  const filesCopy = [...files];
 
   Object.entries(CONFIG.overrides)
     .filter(([path]) => path.endsWith('/'))
     .forEach(([folder, replacement]) => {
-      files.forEach((file) => {
+      filesCopy.forEach((file) => {
         const dest = resolve(file.replace(CONFIG.src, repoPath));
 
-        if (file.startsWith(`docs/${folder}`)) {
+        if (file.startsWith(`${CONFIG.src}/${folder}`)) {
           process(file, dest.replace(CONFIG.output, replacement), CONFIG.skip);
-        } else {
-          process(file, dest, CONFIG.skip);
+
+          const handledIndex = files.indexOf(file);
+          if (handledIndex > -1) {
+            files.splice(handledIndex, 1);
+          }
         }
       });
     });
+
+  files.forEach((file) => {
+    const dest = resolve(file.replace(CONFIG.src, repoPath));
+    process(file, dest, CONFIG.skip);
+  });
 })();
 
 function process(src, dest, skipFiles = []) {
