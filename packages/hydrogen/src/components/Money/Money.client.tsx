@@ -13,7 +13,7 @@ interface MoneyProps<TTag> {
 /**
  * The `Money` component renders a string of the Storefront API's
  * [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) according to the
- * `defaultLocale` in the `hydrogen.config.js` file.
+ * `defaultLocale` in [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
  */
 export function Money<TTag extends keyof JSX.IntrinsicElements = 'div'>(
   props: JSX.IntrinsicElements[TTag] & MoneyProps<TTag>

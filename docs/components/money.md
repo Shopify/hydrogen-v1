@@ -6,7 +6,7 @@ description: The Money component renders a string of the Storefront API's MoneyV
 
 The `Money` component renders a string of the Storefront API's
 [MoneyV2 object](/api/storefront/reference/common-objects/moneyv2) according to the
-`defaultLocale` in the `hydrogen.config.js` file. If `children` is a function, then it will
+`defaultLocale` in [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). If `children` is a function, then it will
 provide render props for the `children` corresponding to the object returned by the `useMoney` hook.
 
 ## Example code

@@ -19,10 +19,10 @@ export default function App() {
 
 ## Props
 
-| Name           | Type                                                   | Description                                                                                          |
-| -------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| shopifyConfig? | <code>ShopifyConfig &#124; ShopifyConfigFetcher</code> | Shopify connection information. Defaults to the `shopify` property in the `hydrogen.config.js` file. |
-| children?      | <code>React</code>                                     | Any `ReactNode` elements.                                                                            |
+| Name           | Type                                                   | Description                                                                                                                                                                       |
+| -------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| shopifyConfig? | <code>ShopifyConfig &#124; ShopifyConfigFetcher</code> | Shopify connection information. Defaults to [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). |
+| children?      | <code>React</code>                                     | Any `ReactNode` elements.                                                                                                                                                         |
 
 ## Component type
 

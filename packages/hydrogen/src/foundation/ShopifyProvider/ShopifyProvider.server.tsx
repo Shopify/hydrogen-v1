@@ -31,7 +31,12 @@ export const SHOPIFY_PROVIDER_CONTEXT_KEY = Symbol.for('SHOPIFY_PROVIDER_RSC');
  * because it's automatically wrapped around your app in `renderHydrogen()`.
  */
 export function ShopifyProvider({
+  /**
+   * Shopify connection information. Defaults to
+   * [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
+   */
   shopifyConfig,
+  /** Any `ReactNode` elements. */
   children,
 }: ShopifyProviderProps): JSX.Element {
   const request = useServerRequest();
