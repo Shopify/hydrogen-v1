@@ -5,6 +5,7 @@
 - Tests should be wrapped with an outer describe('<ComponentName />')
 - Use react-testing-library to test React components
 - Use factories (faker) instead of hardcoded fixtures
+- Tests should use `it` for the test block, and the text should read like a sentence
 
 ## Package exports notes:
 

@@ -1,6 +1,6 @@
 # Hydrogen-UI
 
-## Implementation Notes
+## Common Problems
 
 ### jsx-runtime
 
