@@ -103,6 +103,51 @@ export default function App({log, ...serverProps}) {
 
 {% endcodeblock %}
 
+## Overwriting title template
+
+The title template defaults to the pattern of `{page title} - {shop name}`. If this is not desireable, you can overwrite it for all pages or for a single page.
+
+### Overwrite for all pages
+
+The following example shows how to overwrite title template for all pages (ie. `Fullstack Snow Board | Snowdevil`):
+
+{% codeblock file, filename: 'DefaultSeo.server.jsx' %}
+
+```jsx
+...
+  return (
+    <Seo
+      type="defaultSeo"
+      data={{
+        title: name,
+        description,
++       titleTemplate: `%s | ${name}`
+      }}
+    />
+  );
+...
+```
+
+{% endcodeblock %}
+
+### Overwrite for a single page
+
+The following example shows how to overwrite title template for a single page:
+
+{% codeblock file, filename: '/mypage.server.jsx' %}
+
+```jsx
+import {Head} from '@shopify/hydrogen/client';
+
+return (
+  <Head titleTemplate="%s">
+    <title>My Page</title>
+  </Head>
+);
+```
+
+{% endcodeblock %}
+
 ## Imitating SEO robot behavior
 
 Hydrogen supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side.
