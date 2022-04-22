@@ -1,6 +1,6 @@
 import {render, screen} from '@testing-library/react';
 import {PartialDeep} from 'type-fest';
-import {
+import type {
   ExternalVideo as ExternalVideoType,
   Image,
 } from './storefront-api-types';
