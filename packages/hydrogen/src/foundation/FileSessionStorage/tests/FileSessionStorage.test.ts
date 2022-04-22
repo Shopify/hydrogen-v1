@@ -37,7 +37,7 @@ describe('FileSessionStorage', () => {
 
     await fsp.mkdir(path.resolve(__dirname, 'sessions'));
 
-    request = new Request('', {
+    request = new Request('http://localhost:3000', {
       headers: {
         cookie:
           '__session=%7B%22a%22%3A%22b%22%2C%22c%22%3A%22d%22%2C%22sid%22%3A%22eca0b9ec-c013-4ea1-8236-df6ed02f00c4%22%7D; Expires=Tue, 05 Apr 2022 20:19:02 GMT; Max-Age=2592000; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly',

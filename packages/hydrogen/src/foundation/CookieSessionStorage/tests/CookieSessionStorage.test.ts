@@ -13,7 +13,7 @@ let request: Request;
 
 describe('CookieSessionStorage', () => {
   beforeEach(() => {
-    request = new Request('', {
+    request = new Request('http://localhost:3000', {
       headers: {
         cookie:
           '__session=%7B%22a%22%3A%22b%22%2C%22c%22%3A%22d%22%7D; Expires=Thu, 05 May 2022 20:17:51 GMT; Max-Age=2592000; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly',
