@@ -32,7 +32,7 @@ To enable GraphQL autocompletion for the Storefront API in your IDE:
 schema: node_modules/@shopify/hydrogen-ui/storefront.schema.json
 ```
 
-GraphQL autocompletion and validation will now work in `.graphql` files or in `gql` function calls!
+GraphQL autocompletion and validation will now work in `.graphql` files or in [`gql`](https://github.com/apollographql/graphql-tag) template literals!
 
 ## Typescript Types
 
