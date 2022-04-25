@@ -263,7 +263,7 @@ export async function renderApiRoute(
   return response;
 }
 
-export class RSCRequest extends Request {
+export class RequestServerComponents extends Request {
   public state: Record<string, any>;
   public newUrl: string;
 
