@@ -78,7 +78,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
    {% endcodeblock %}
 
-3. Add your client component to `App.server.jsx`, which is the main app component:
+3. Add your client component to your app's top-level React component (`App.server.jsx`):
 
    {% codeblock file, filename: 'App.server.jsx' %}
 

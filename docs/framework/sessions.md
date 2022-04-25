@@ -14,7 +14,7 @@ For example, session data might contain the products within a cart, site prefere
 
 ## Configuring sessions
 
-The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/getting-started) comes pre-configured with session support.
+The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates) comes pre-configured with session support.
 
 By default, session data is persisted within a cookie. You can adjust the session cookie configuration within `App.server.jsx` for an in-memory storage or file-based storage (NodeJS only), or build your own storage adapter.
 
