@@ -11,14 +11,16 @@ const options = {
 
 let request: Request;
 
-describe('CookieSessionStorage', () => {
+describe.only('CookieSessionStorage', () => {
   beforeEach(() => {
-    request = new Request('http://localhost', {
+    request = new Request('http://localhost:3000', {
       headers: {
         cookie:
           '__session=%7B%22a%22%3A%22b%22%2C%22c%22%3A%22d%22%7D; Expires=Thu, 05 May 2022 20:17:51 GMT; Max-Age=2592000; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly',
       },
     });
+
+    console.log();
   });
 
   it('parses the cookie only once', async () => {
@@ -54,5 +56,12 @@ describe('CookieSessionStorage', () => {
     expect(await session.destroy(request)).toMatchInlineSnapshot(
       `"__session=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Domain=shopify.dev; Path=/; SameSite=Strict; Secure; HttpOnly"`
     );
+  });
+
+  it.only('updates the internal cookie after set for subsequent gets', async () => {
+    const session = CookieSessionStorage('__session', options)();
+    await session.set(request, {some: 'data for you'});
+    const data = await session.get(request);
+    expect(data.some).toBe('data for you');
   });
 });

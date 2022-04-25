@@ -52,10 +52,16 @@ function createResponseCache() {
  *
  * Note that we'd want to add some other constraints and controls around caching here.
  */
-export function useServerResponse(state: any) {
+export function useServerResponse(state: any, rscResponseFromApiRoute?: any) {
   const key = JSON.stringify(state);
   const cache: ReturnType<typeof createResponseCache> =
     unstable_getCacheForType(createResponseCache);
+
+  if (rscResponseFromApiRoute) {
+    cache.clear();
+    cache.set(key, rscResponseFromApiRoute);
+    return rscResponseFromApiRoute;
+  }
 
   let response = cache.get(key);
   if (response) {

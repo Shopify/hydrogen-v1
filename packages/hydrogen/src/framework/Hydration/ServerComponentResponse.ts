@@ -16,12 +16,25 @@ export class ServerComponentResponse implements Response {
    */
   public customBody: string | Promise<string> = '';
 
+  public session: {
+    set: (key: string, value: string) => void;
+    get: () => Record<string, string>;
+    destroy: () => void;
+  };
+
   private _response: Response;
 
   constructor(body?: BodyInit, init?: ResponseInit) {
     // @ts-ignore
     this._response = new Response(body, init);
     this.headers = new Headers(init?.headers as any);
+    this.session = {
+      set(key, value) {},
+      get() {
+        return {};
+      },
+      destroy() {},
+    };
   }
 
   /**

@@ -1,4 +1,4 @@
-import {Form, RSCRequest} from '@shopify/hydrogen';
+import {Form, RSCRequest, useSession} from '@shopify/hydrogen';
 
 const users = [
   {
@@ -8,20 +8,33 @@ const users = [
   },
 ];
 
-export default function FormServer({error, user}) {
+const INVALID_USER = 'INVALID_USER';
+const INVALID_USERNAME = 'INVALID_USERNAME';
+const INVALID_PASSWORD = 'INVALID_PASSWORD';
+
+export default function FormServer({error}) {
+  const {user} = useSession();
+
   if (user)
     return (
       <div className="flex justify-center mt-24">
         <div className="w-full max-w-xs">
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 text-green-800 text-center font-bold">
-            Welcome {user.name}!
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 text-center">
+            <div className="font-bold text-green-800 ">Welcome {user}!</div>
+            <div className="mt-4">
+              <Form action="/login" method="POST">
+                <input type="hidden" name="action" value="logout" />
+                <button type="submit">Log out</button>
+              </Form>
+            </div>
           </div>
         </div>
       </div>
     );
 
   return (
-    <Form action="/form" method="POST">
+    <Form action="/login" method="POST">
+      <input type="hidden" name="action" value="login" />
       <div className="flex justify-center mt-24">
         <div className="w-full max-w-xs">
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -34,7 +47,7 @@ export default function FormServer({error, user}) {
               </label>
               <input
                 className={`shadow appearance-none border ${
-                  error === 'INVALID_USERNAME' || error === 'INVALID_USER'
+                  error === INVALID_USERNAME || error === INVALID_USER
                     ? 'border-red-500'
                     : ''
                 } rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
@@ -53,7 +66,7 @@ export default function FormServer({error, user}) {
               </label>
               <input
                 className={`shadow appearance-none border ${
-                  error === 'INVALID_PASSWORD' || error === 'INVALID_USER'
+                  error === INVALID_PASSWORD || error === INVALID_USER
                     ? 'border-red-500'
                     : ''
                 } rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline`}
@@ -96,27 +109,33 @@ function ErrorMessage({error}) {
   );
 }
 
-export async function api(request) {
+export async function api(request, {session}) {
   const data = await request.formData();
+  const action = data.get('action');
+
+  if (action === 'logout') {
+    await session.destroy();
+    return new RSCRequest();
+  }
+
   const username = data.get('username');
   const password = data.get('password');
 
   // Note, you can throw or return a vanilla `Request` or `Response` object.
   // RSCRequest is just syntactic sugar, the user could manually create a
   // Response object instead.
-  if (!username) throw new RSCRequest({error: 'INVALID_USERNAME'});
-  if (!password) throw new RSCRequest({error: 'INVALID_PASSWORD'});
+  if (!username) throw new RSCRequest(null, {error: INVALID_USERNAME});
+  if (!password) throw new RSCRequest(null, {error: INVALID_PASSWORD});
 
   const user = users.find(
     (user) => username === user.username && user.password === password,
   );
 
   if (!user) {
-    throw new RSCRequest({error: 'INVALID_USER'});
+    throw new RSCRequest(null, {error: INVALID_USER});
   }
 
-  // Really, we'd want to save the user in the session. A separate PR has the session impl
-  return new RSCRequest({
-    user,
-  });
+  await session.set('user', user.username);
+
+  return new RSCRequest();
 }

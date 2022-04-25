@@ -1,7 +1,7 @@
 import React, {useCallback, useRef} from 'react';
 // @ts-ignore
 import {createFromFetch} from '@shopify/hydrogen/vendor/react-server-dom-vite';
-import {useServerState} from '../useServerState';
+import {useInternalServerProps} from '../useServerProps/use-server-props';
 
 interface FormProps {
   action: string;
@@ -17,7 +17,7 @@ export function Form({
   enctype = 'application/x-www-form-urlencoded',
 }: FormProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  const {setApiResponse} = useServerState();
+  const {setRscResponseFromApiRoute} = useInternalServerProps();
   const [_, startTransition] = (React as any).useTransition();
 
   const submit = useCallback(
@@ -44,7 +44,7 @@ export function Form({
           })
         );
 
-        setApiResponse(response);
+        setRscResponseFromApiRoute(response);
       });
     },
     [action, method, formRef]

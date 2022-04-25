@@ -85,12 +85,21 @@ function Content({
     pathname: window.location.pathname,
     search: window.location.search,
   });
-  const response = useServerResponse(serverProps);
+  const [rscResponseFromApiRoute, setRscResponseFromApiRoute] =
+    useState<any>(null);
+  const response = useServerResponse(serverProps, rscResponseFromApiRoute);
+
+  useEffect(() => {
+    setRscResponseFromApiRoute(null);
+  }, [response]);
 
   return (
     <ServerPropsProvider
       initialServerProps={serverProps}
       setServerPropsForRsc={setServerProps}
+      setRscResponseFromApiRoute={(response: any) =>
+        setRscResponseFromApiRoute(response)
+      }
     >
       <ClientWrapper>{response.readRoot()}</ClientWrapper>
     </ServerPropsProvider>

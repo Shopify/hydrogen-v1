@@ -103,6 +103,8 @@ export class Cookie {
   }
 
   getSessionId(request: Request): string | null {
+    if (this.data.sid) return this.data.sid;
+
     const cookieValue = request.headers.get('cookie');
 
     if (cookieValue) {

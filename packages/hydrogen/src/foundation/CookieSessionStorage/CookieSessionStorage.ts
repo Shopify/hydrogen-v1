@@ -28,7 +28,7 @@ export const CookieSessionStorage = function (
         return cookie.serialize();
       },
       async destroy(request: Request) {
-        // @todo - set expires for Date in past
+        parsed = true;
         return cookie.destroy();
       },
     };

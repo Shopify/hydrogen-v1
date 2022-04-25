@@ -265,9 +265,11 @@ export async function renderApiRoute(
 
 export class RSCRequest extends Request {
   public state: Record<string, any>;
+  public newUrl: string;
 
-  constructor(state: Record<string, any> = {}) {
+  constructor(url: string, state: Record<string, any> = {}) {
     super('http://localhost');
     this.state = state;
+    this.newUrl = url;
   }
 }
