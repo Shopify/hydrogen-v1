@@ -17,7 +17,8 @@
     "./server": "./dist/index.server.js",
     "./client": "./dist/index.client.js",
     "./shared": "./dist/index.shared.js",
-    "./storefront-api-types": "./dist/storefront-api-types.d.ts"
+    "./storefront-api-types": "./dist/storefront-api-types.d.ts",
+    "./storefront.schema.json": "./storefront.schema.json"
   },
   "typesVersions": {
     "<=4.6": {
