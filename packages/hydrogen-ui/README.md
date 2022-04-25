@@ -38,13 +38,15 @@ When using RSC-compatible frameworks, then `/client` and `/shared` will have the
 To enable GraphQL autocompletion for the Storefront API in your IDE:
 
 1. Add `graphql` and [GraphQL-config](https://www.graphql-config.com/docs/user/user-installation) by running `yarn add --dev graphql graphql-config`
-1. Create a [GraphQL config file](https://www.graphql-config.com/docs/user/user-usage) at the root of your code. For example, `.graphqlrc.yml`
-1. Add a [`schema`](https://www.graphql-config.com/docs/user/user-schema) and point it to Hydrogen-UI's bundled schema for the Storefront API. For example:
+2. Create a [GraphQL config file](https://www.graphql-config.com/docs/user/user-usage) at the root of your code. For example, `.graphqlrc.yml`
+3. Add a [`schema`](https://www.graphql-config.com/docs/user/user-schema) and point it to Hydrogen-UI's bundled schema for the Storefront API. For example:
 
 ```yml
 # .graphqlrc.yml
 schema: node_modules/@shopify/hydrogen-ui/storefront.schema.json
 ```
+
+4. Install a GraphQL extension in your IDE; for example, the [GraphQL extension for VSCode](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql)
 
 GraphQL autocompletion and validation will now work in `.graphql` files or in [`gql`](https://github.com/apollographql/graphql-tag) template literals!
 
