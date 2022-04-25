@@ -19,6 +19,20 @@ Improve the developer experience:
 - [Add autocompletion for the Storefront API](#storefront-api-graphql-autocompletion)
 - [Add Typescript types for Storefront API objects](#typescript-types)
 
+## Component Types
+
+Hydrogen-UI exposes three different types of components, that match the [React Server Components (RSC)](https://github.com/josephsavona/rfcs/blob/server-components/text/0000-server-components.md#capabilities--constraints-of-server-and-client-components) specification. However, you do not need to be using a RSC-compatible framework in order to use some of these components. Here's a breakdown:
+
+| Import from                   | Works in non-RSC code / frameworks |
+| ----------------------------- | ---------------------------------- |
+| `@shopify/hydrogen-ui/client` | Yes ✅                             |
+| `@shopify/hydrogen-ui/shared` | Yes ✅                             |
+| `@shopify/hydrogen-ui/server` | No ❌                              |
+
+When using non-RSC-compatible frameworks, you can view the `/client` and `/shared` import paths as traditional components with essentially no difference between them.
+
+When using RSC-compatible frameworks, then `/client` and `/shared` will have the restrictions as outlined in the RSC doc outlined above.
+
 ## Storefront API GraphQL autocompletion
 
 To enable GraphQL autocompletion for the Storefront API in your IDE:

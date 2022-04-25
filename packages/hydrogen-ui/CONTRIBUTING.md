@@ -1,3 +1,8 @@
+## Authoring Components
+
+- Exports should all be named; avoid using default exports
+- The main exported component's name should match the name of the file
+
 ## Writing tests
 
 - Tests should live next to the component

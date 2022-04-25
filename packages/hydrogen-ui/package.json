@@ -16,6 +16,7 @@
   "exports": {
     "./server": "./dist/index.server.js",
     "./client": "./dist/index.client.js",
+    "./shared": "./dist/index.shared.js",
     "./storefront-api-types": "./dist/storefront-api-types.d.ts"
   },
   "typesVersions": {
@@ -25,6 +26,9 @@
       ],
       "server": [
         "./dist/index.server.d.ts"
+      ],
+      "shared": [
+        "./dist/index.shared.d.ts"
       ],
       "storefront-api-types": [
         "./dist/storefront-api-types.d.ts"
@@ -39,13 +43,14 @@
     "build": "yarn build:vite && yarn build:ts",
     "build:vite": "vite build",
     "build:ts": "run-p build:tsc copy-storefront-types",
-    "build:tsc": "tsc",
+    "build:tsc": "tsc --emitDeclarationOnly",
     "copy-storefront-types": "cpy ./src/storefront-api-types.d.ts ./dist/ --flat",
     "format": "prettier --write \"src/**/*\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
     "preview": "vite preview",
     "test": "vitest",
-    "test:ci": "vitest run --coverage"
+    "test:ci": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.1.2",
