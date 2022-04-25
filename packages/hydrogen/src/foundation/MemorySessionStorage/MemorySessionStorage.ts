@@ -3,8 +3,12 @@ import {Cookie} from '../Cookie/Cookie';
 import {v4 as uid} from 'uuid';
 import type {CookieOptions} from '../Cookie/Cookie';
 
+/** The `MemorySessionStorage` component stores session data within Hydrogen runtime memory.
+ */
 export const MemorySessionStorage = function (
+  /** The name of the cookie stored in the browser. */
   name: string,
+  /** An optional object to configure [how the cookie is persisted in the browser](https://shopify.dev/api/hydrogen/components/framework/cookie#cookie-options). */
   options: CookieOptions
 ): () => SessionStorageAdapter {
   const sessions: Map<string, {data: Record<string, string>; expires: number}> =

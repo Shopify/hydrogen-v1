@@ -1,7 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import {useServerAnalytics} from './hook';
 import {Analytics as AnalyticsClient} from './Analytics.client';
 import {useServerRequest} from '../ServerRequestProvider';
+import AnalyticsErrorBoundary from '../AnalyticsErrorBoundary.client';
 
 const DELAY_KEY = 'analytics-delay';
 
@@ -41,5 +42,9 @@ export function Analytics() {
   });
 
   const analyticsData = useServerAnalytics();
-  return <AnalyticsClient analyticsDataFromServer={analyticsData} />;
+  return (
+    <AnalyticsErrorBoundary>
+      <AnalyticsClient analyticsDataFromServer={analyticsData} />
+    </AnalyticsErrorBoundary>
+  );
 }
