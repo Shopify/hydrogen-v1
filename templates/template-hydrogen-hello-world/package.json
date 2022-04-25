@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "shopify hydrogen dev",
     "build": "shopify hydrogen build",
-    "preview": "shopify hydrogen preview"
+    "preview": "node --experimental-vm-modules node_modules/.bin/shopify hydrogen preview"
   },
   "devDependencies": {
     "vite": "^2.9.0",

@@ -16,7 +16,7 @@
     "serve": "node --enable-source-maps dist/server",
     "test": "WATCH=true vitest",
     "test:ci": "yarn build && vitest run",
-    "preview": "shopify hydrogen preview"
+    "preview": "node --experimental-vm-modules node_modules/.bin/shopify hydrogen preview"
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
