@@ -121,7 +121,7 @@ export async function api(request, {session}) {
 
 ## Building custom session implementations
 
-Hydrogen provides a [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie) component for building your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions#types-of-session-storage) use the same configuration options as what's available in `Cookie`.
+Hydrogen provides a [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie) component for building your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions#types-of-session-storage) use the same configuration options as `Cookie`.
 
 ## Next steps
 

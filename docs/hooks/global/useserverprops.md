@@ -9,7 +9,7 @@ The `useServerProps` hook allows you to manage the [server props](https://shopif
 ## Example code
 
 ```tsx
-// For convenience, `setServerProps` accepts arguments in the following ways:
+// `setServerProps` accepts arguments in the following ways:
 
 // Update a top-level server component prop based on key
 setServerProps(key, value);

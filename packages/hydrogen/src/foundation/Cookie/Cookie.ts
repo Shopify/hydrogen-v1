@@ -17,7 +17,7 @@ export type CookieOptions = {
    * within the [defined path](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#path_attribute).
    */
   path?: string;
-  /** [A date in which the cookie will expire](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_the_lifetime_of_a_cookie).
+  /** [A date on which the cookie will expire](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_the_lifetime_of_a_cookie).
    * If the date is in the past, then the browser will remove the cookie.
    */
   expires?: Date;
