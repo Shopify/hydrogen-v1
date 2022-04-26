@@ -1,3 +1,6 @@
+# THIS IS A STUB FOR NEW HYDROGEN APPS
+# THIS WILL EVENTUALLY MOVE TO A /TEMPLATE-* FOLDER
+
 # Logs
 logs
 *.log
@@ -25,24 +28,12 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-# Bower dependency directory (https://bower.io/)
-bower_components
-
-# node-waf configuration
-.lock-wscript
-
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
 # Dependency directories
 node_modules/
 jspm_packages/
-
-# Snowpack dependency directory (https://snowpack.dev/)
-web_modules/
 
 # TypeScript cache
 *.tsbuildinfo
@@ -71,48 +62,12 @@ web_modules/
 # dotenv environment variables file
 .env
 .env.test
-!**/playground/**/.env
-
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-out
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Gatsby files
-.cache/
-# Comment in the public line in if your project uses Gatsby and not Next.js
-# https://nextjs.org/blog/next-9-1#public-directory-support
-# public
-
-# vuepress build output
-.vuepress/dist
 
 # Serverless directories
 .serverless/
 
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
-
-# VSCode launch configs
-.vscode/
-!examples/*/.vscode/
-!templates/*/.vscode/
 
 # yarn v2
 .yarn/cache
@@ -121,14 +76,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# User localdev package
-packages/localdev
-
-.DS_Store
-
-temp
-snow-devil
-artifacts
-
-yarn.lock
-!/yarn.lock
+# Vite output
+dist
