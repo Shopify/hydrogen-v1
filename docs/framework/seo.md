@@ -109,7 +109,7 @@ The title template defaults to the pattern of `{page title} - {shop name}`. If t
 
 ### Overwrite for all pages
 
-The following example shows how to overwrite title template for all pages (ie. `Fullstack Snow Board | Snowdevil`):
+The following example shows how to overwrite title template for all pages (for example, `Fullstack Snow Board | Snowdevil`):
 
 {% codeblock file, filename: 'DefaultSeo.server.jsx' %}
 
