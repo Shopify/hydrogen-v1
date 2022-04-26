@@ -105,7 +105,7 @@ export default function App({log, ...serverProps}) {
 
 ## Overwriting title template
 
-The title template defaults to the pattern of `{page title} - {shop name}`. If this is not desireable, you can overwrite it for all pages or for a single page.
+The title template defaults to the pattern of `{page title} - {shop name}`. If you want to use a different pattern, then you can overwrite title template for all pages or for a single page.
 
 ### Overwrite for all pages
 
