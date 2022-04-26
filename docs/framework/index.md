@@ -24,39 +24,12 @@ Hydrogen is the approach you use to build a custom storefront. The Hydrogen fram
 
 ## Hydrogen project structure
 
-When you [create a Hydrogen app](https://shopify.dev/custom-storefronts/hydrogen/getting-started/create#step-1-create-a-new-hydrogen-app), the Demo Store template initializes a basic file structure of a Hydrogen project that's integrated with a Shopify store.
+Hydrogen offers different templates that provide paths to building Shopify custom storefronts:
 
-Most of the files that you'll work with in the Hydrogen project are located in the `/src` directory. The `/src` directory contains the following:
+- **Hello World**: A minimal template for developers who want to build their Hydrogen storefront from the very beginning
+- **Demo Store**: A full-featured template that demonstrates an opinionated, production-ready Hydrogen storefront with the full purchase journey out-of-the-box
 
-- A set of boilerplate [`components`](https://shopify.dev/custom-storefronts/hydrogen/getting-started#components) and [`routes`](https://shopify.dev/custom-storefronts/hydrogen/getting-started#routes)
-- The main app component in `App.server.jsx`, which includes boilerplate code for the app and routing. This file is also the main entry point for the server.
-- Basic styles provided by Tailwind CSS (`index.css`)
-
-{% codeblock file, filename: "File structure of the Demo Store template" %}
-
-```
-└── src
-    ├── components
-        └── Button.client.jsx
-        └── Cart.client.jsx
-        └── CartIcon.jsx
-        └── ...
-    ├── routes
-        └── collections
-            └── [handle].server.jsx
-        └── pages
-            └── [handle].server.jsx
-        └── products
-            └── [handle].server.jsx
-        └── index.server.jsx
-        └── redirect.server.jsx
-        └── robots.txt.server.js
-        └── sitemap.xml.server.jsx
-    ├── App.server.jsx
-    ├── index.css
-```
-
-{% endcodeblock %}
+For more information, refer to [Hydrogen templates](https://shopify.dev/custom-storefronts/hydrogen/templates).
 
 ## Request workflow for Hydrogen apps
 

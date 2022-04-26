@@ -8,7 +8,7 @@ Hydrogen detects when a search engine crawls your shop and defaults to server-si
 
 ## How SEO works in Hydrogen
 
-Hydrogen includes an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/getting-started):
+Hydrogen includes an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates):
 
 - [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
 

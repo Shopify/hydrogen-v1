@@ -55,7 +55,7 @@ npm run dev
 
 2. Visit the development environment running at http://localhost:3000.
 
-Learn more about [getting started with Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/getting-started).
+Learn more about [getting started with Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/templates).
 
 ## Contributing to Hydrogen
 
