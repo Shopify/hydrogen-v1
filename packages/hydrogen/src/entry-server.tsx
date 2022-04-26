@@ -270,7 +270,12 @@ async function render(
   if (flight) {
     html = html.replace(
       '</body>',
-      `${flightContainer({init: true, nonce, chunk: flight})}</body>`
+      () =>
+        `${flightContainer({
+          init: true,
+          nonce,
+          chunk: flight as string,
+        })}</body>`
     );
   }
 
