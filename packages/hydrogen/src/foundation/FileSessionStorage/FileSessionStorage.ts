@@ -35,7 +35,7 @@ async function startFileLock(promise: () => Promise<any>) {
 export const FileSessionStorage = function (
   /** The name of the cookie stored in the browser. */
   name: string,
-  /** A directory to store the session files within. Each session is stored in a separate file on the file system. */
+  /** A directory to store the session files in. Each session is stored in a separate file on the file system. */
   dir: string,
   /** An optional object to configure [how the cookie is persisted in the browser](https://shopify.dev/api/hydrogen/components/framework/cookie#cookie-options). */
   cookieOptions: CookieOptions

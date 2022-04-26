@@ -35,7 +35,7 @@ export default renderHydrogen(App, {
 | Prop          | Type                       | Description                                                                                                                             |
 | ------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | name          | <code>string</code>        | The name of the cookie stored in the browser.                                                                                           |
-| dir           | <code>string</code>        | A directory to store the session files within. Each session is stored in a separate file on the file system.                            |
+| dir           | <code>string</code>        | A directory to store the session files in. Each session is stored in a separate file on the file system.                                |
 | cookieOptions | <code>CookieOptions</code> | An optional object to configure [how the cookie is persisted in the browser](/api/hydrogen/components/framework/cookie#cookie-options). |
 
 ## Component type
@@ -44,7 +44,7 @@ The `FileSessionStorage` component is a server component that renders inside `Ap
 
 ## Considerations
 
-Because `FileSessionStorage` relies on the file system, it should not be used in Edge workers, and instead only in NodeJS deployments.
+Because `FileSessionStorage` relies on the file system, it shouldn't be used in Edge workers, and instead only in NodeJS deployments.
 
 ## Related components
 
