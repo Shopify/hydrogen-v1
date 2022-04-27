@@ -118,11 +118,11 @@ The following example shows how to overwrite title template for all pages (for e
   return (
     <Seo
       type="defaultSeo"
-      data={{
+      data={% raw %}{{
         title: name,
         description,
 +       titleTemplate: `%s | ${name}`
-      }}
+      }}{% endraw %}
     />
   );
 ...
