@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.17.1
+
+### Patch Changes
+
+- [#1145](https://github.com/Shopify/hydrogen/pull/1145) [`865b66e9`](https://github.com/Shopify/hydrogen/commit/865b66e95d67965543bcb92f0f9f15b5742f3596) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix search params on navigation
+
+* [#1139](https://github.com/Shopify/hydrogen/pull/1139) [`93525637`](https://github.com/Shopify/hydrogen/commit/9352563761c0405f2e2b39cb6b8b8f577f2522b9) Thanks [@blittle](https://github.com/blittle)! - Fix the scroll restoration on page transitions
+
+- [#1144](https://github.com/Shopify/hydrogen/pull/1144) [`dec5eb8e`](https://github.com/Shopify/hydrogen/commit/dec5eb8e34e75c806aa1cfea935814d228ab29d6) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - fix 0.17 build
+
 ## 0.17.0
 
 ### Minor Changes
