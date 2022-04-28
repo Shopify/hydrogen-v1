@@ -22,6 +22,7 @@ export default () => {
      * certain files due to how it is named.
      */
     rollupOptions.output = {
+      ...rollupOptions.output,
       chunkFileNames: '[hash].js',
     };
   }
