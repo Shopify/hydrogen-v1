@@ -42,7 +42,7 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
 
       setLocationServerProps({
         pathname: newLocation.pathname,
-        search: location.search,
+        search: newLocation.search,
       });
 
       setLocation(newLocation);
