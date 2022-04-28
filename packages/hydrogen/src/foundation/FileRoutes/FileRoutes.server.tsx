@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath';
 import {log} from '../../utilities/log';
+import {extractPathFromRoutesKey} from '../../utilities/apiRoutes';
 import {useServerRequest} from '../ServerRequestProvider';
 
 import type {ImportGlobEagerOutput} from '../../types';
@@ -77,28 +78,7 @@ export function createPageRoutes(
 
   const routes = Object.keys(pages)
     .map((key) => {
-      let path = key
-        .replace(dirPrefix, '')
-        .replace(/\.server\.(t|j)sx?$/, '')
-        /**
-         * Replace /index with /
-         */
-        .replace(/\/index$/i, '/')
-        /**
-         * Only lowercase the first letter. This allows the developer to use camelCase
-         * dynamic paths while ensuring their standard routes are normalized to lowercase.
-         */
-        .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
-        /**
-         * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
-         */
-        .replace(
-          /\[(?:[.]{3})?(\w+?)\]/g,
-          (_match, param: string) => `:${param}`
-        );
-
-      if (path.endsWith('/') && path !== '/')
-        path = path.substring(0, path.length - 1);
+      const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
