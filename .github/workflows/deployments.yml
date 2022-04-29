@@ -115,6 +115,7 @@ jobs:
           preview_url: ${{ steps.deploy.outputs.url }}
           description: ${{ github.event.head_commit.message }}
 
-      - name: Run health check
-        run: |
-          yarn ts-node scripts/health-check.ts ${{ steps.deploy.outputs.url }}
+      # Skip this for now. It takes Oxygen a few seconds to make the deployment live, and this 404s.
+      # - name: Run health check
+      #   run: |
+      #     yarn ts-node scripts/health-check.ts ${{ steps.deploy.outputs.url }}
