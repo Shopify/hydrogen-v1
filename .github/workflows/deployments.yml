@@ -102,6 +102,7 @@ jobs:
           path: ./examples/template-hydrogen-default
           deployment_id: ${{ steps.deployment-id.outputs.ID }}
           oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
+          commit_message: ${{ github.event.head_commit.message || 'Manual deployment' }}
 
       # Create GitHub Deployment
       - name: Create GitHub Deployment
@@ -115,4 +116,4 @@ jobs:
 
       - name: Run health check
         run: |
-          yarn ts-node scripts/health-check.ts https://template-default.hydrogen-devs.workers.dev/
+          yarn ts-node scripts/health-check.ts ${{ steps.deploy.outputs.url }}
