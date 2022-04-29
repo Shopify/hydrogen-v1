@@ -1,1 +1,2 @@
-export {Test, COOLNUMBER} from './test.client';
+// placeholder until a real export gets added
+export {};
