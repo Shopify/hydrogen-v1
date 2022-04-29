@@ -98,4 +98,4 @@ app.use(hydrogenMiddleware({/* ... */}))
 
 ## Next steps
 
-- Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn how to [deploy your Hydrogen app](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.

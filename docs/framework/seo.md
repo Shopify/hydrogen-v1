@@ -169,6 +169,10 @@ The following limitations and considerations apply to the [XML sitemap](https://
 
 - By default, the sitemap uses the [`onlineStoreUrl`](https://shopify.dev/api/storefront/latest/objects/Product) field from the Storefront API as the URL. It falls back to the Demo Store template URL structure, which is based on resource's handle.
 
+## Related components
+
+- [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo)
+
 ## Next steps
 
-- Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) build into Hydrogen apps.

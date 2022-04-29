@@ -78,8 +78,7 @@ export default defineConfig({
 > Tip:
 > If you find that a dependency is being optimized when it shouldn't, then you can try adding the dependency to `optimizeDeps.exclude` to see if it fixes the issue.
 
-## More help
+## Next steps
 
 - Learn more about dependency pre-bundling and optimization in [Vite](https://vitejs.dev/guide/dep-pre-bundling.html#dependency-pre-bundling).
-
 - [Check this GitHub discussion](https://github.com/Shopify/hydrogen/discussions/93) to see if another developer has the same issue or report a new issue to Hydrogen maintainers.
