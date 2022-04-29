@@ -91,7 +91,9 @@ jobs:
       - name: Production build
         id: storefront-build
         working-directory: ./examples/template-hydrogen-default
-        run: HYDROGEN_ASSET_BASE_URL=${{ steps.base-url.outputs.URL }} yarn build
+        run: |
+          yarn build:client
+          HYDROGEN_ASSET_BASE_URL=${{ steps.base-url.outputs.URL }} yarn build:worker
 
       - name: Publish to Oxygen
         id: deploy
