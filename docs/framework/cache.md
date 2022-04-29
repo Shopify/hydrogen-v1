@@ -81,7 +81,7 @@ export interface AllCacheOptions {
 
 While rendering a page in your Hydrogen app, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheSeconds` strategy.
 
-The following example shows how to implement [`useShopQuery` for Shopify Storefront API queries](https://shopify.dev/api/hydrogen/hooks/global/useshopquery):
+The following example shows how to implement [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery) for Shopify Storefront API queries:
 
 {% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
@@ -95,7 +95,7 @@ const {data} = useShopQuery({
 
 {% endcodeblock %}
 
-The following example shows how to implement [`fetchSync` for third-party requests](https://shopify.dev/api/hydrogen/hooks/global/fetchsync):
+The following example shows how to implement [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync) for third-party requests:
 
 {% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
@@ -273,6 +273,12 @@ Full-page caching is powered completely by [`cache-control` headers on the Hydro
 > Note:
 > Oxygen caches HTML responses from Hydrogen at the network edge. However, your hosting provider or CDN might not cache HTML responses by default. Make sure to consult with your individual provider to enable HTML caching for your Hydrogen app.
 
+## Related hooks
+
+- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
+- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
+- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+
 ## Next steps
 
-- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).

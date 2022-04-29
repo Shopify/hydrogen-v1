@@ -57,3 +57,7 @@ To enable the Hydrogen configuration, add the `extends` property in your `.eslin
 ## Contributing to Hydrogen's ESLint plugin
 
 Hydrogen's ESLint plugin is open source. Learn how to [contribute to the project on GitHub](https://github.com/Shopify/hydrogen/blob/main/packages/eslint-plugin/.github/CONTRIBUTING.md).
+
+## Next steps
+
+- Explore the [ESLint plugin](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin).

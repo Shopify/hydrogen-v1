@@ -54,3 +54,7 @@ The `useNavigate` hook returns the following values:
 ## Related components
 
 - [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
+
+## Related framework topics
+
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)

@@ -256,7 +256,14 @@ export default function App() {
 
 {% endcodeblock %}
 
+## Related hooks
+
+- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
+- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
+- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+- [`useServerProps`](https://shopify.dev/api/hydrogen/hooks/global/useserverprops)
+
 ## Next steps
 
 - Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
-- Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn about how Hydrogen consumes data from different [sources](https://shopify.dev/custom-storefronts/hydrogen/data-sources).

@@ -123,6 +123,13 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ![Shows a screenshot of query being double loaded](/assets/custom-storefronts/hydrogen/double-loaded-query.png)
 
+## Related components and hooks
+
+- [`localizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider)
+- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
+- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
+- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+
 ## Next steps
 
-- Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) build into Hydrogen apps.

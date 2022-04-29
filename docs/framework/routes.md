@@ -300,7 +300,7 @@ export default function MyProducts({response}) {
 
 #### `response.doNotStream()`
 
-By default, Hydrogen [streams SSR responses](https://github.com/reactwg/react-18/discussions/37). To customize a response, you need to tell Hydrogen that your server component plans to modify it in some way by calling `response.doNotStream()`:
+By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). To customize a response, you need to tell Hydrogen that your server component plans to modify it in some way by calling `response.doNotStream()`:
 
 {% codeblock file %}
 
@@ -379,11 +379,11 @@ export default function CustomPage({response}) {
 
 {% endcodeblock %}
 
-Since this code lives inside a server component, you can use [`useShopQuery`](/api/hydrogen/hooks/global/useshopquery) to populate your [custom responses](#custom-responses) with Shopify data.
+Since this code lives inside a server component, you can use [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery) to populate your [custom responses](#custom-responses) with Shopify data.
 
 ### Server props
 
-In addition to `request` and `response` props, any props you manage with [`setServerProps`](/custom-storefronts/hydrogen/framework/server-props) is passed to each of your server components as props:
+In addition to `request` and `response` props, any props you manage with [`setServerProps`](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) is passed to each of your server components as props:
 
 {% codeblock file %}
 
@@ -664,6 +664,21 @@ await fetch('/api/views', {
 
 {% endcodeblock %}
 
+## Related components and hooks
+
+- [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
+- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router)
+- [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes)
+- [`Route`](https://shopify.dev/api/hydrogen/components/framework/route)
+- [`useNavigate`](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate)
+- [`useRouteParams`](https://shopify.dev/api/hydrogen/hooks/framework/userouteparams)
+- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
+- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
+
 ## Next steps
 
-- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn about how Hydrogen consumes data from different [sources](https://shopify.dev/custom-storefronts/hydrogen/data-sources).
+- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen apps.
+- Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
+- Learn how to [manage your server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) during your development process.

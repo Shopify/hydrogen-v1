@@ -40,3 +40,7 @@ The `useSession` hook returns all data within the current session. The return ty
 - [`FileSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/filesessionstorage)
 - [`CookieSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/cookiesessionstorage)
 - [`MemorySessionStorage`](https://shopify.dev/api/hydrogen/components/framework/memorysessionstorage)
+
+## Related framework topics
+
+- [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)

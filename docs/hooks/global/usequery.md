@@ -59,3 +59,10 @@ The `useQuery` returns an object with the following key:
 
 - [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
 - [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
+
+## Related framework topics
+
+- [Caching](https://shopify.dev/custom-storefronts/hydrogen/framework/cache)
+- [Preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries)
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
+- [Working with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc)

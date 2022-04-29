@@ -119,4 +119,6 @@ If you need to change the server entry point, then make the following updates in
 
 ## Next steps
 
+- Get familiar with the different [templates](https://shopify.dev/custom-storefronts/hydrogen/templates) that help you get started with Hydrogen.
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [deploy your Hydrogen app](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.
