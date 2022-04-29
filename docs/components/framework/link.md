@@ -36,3 +36,7 @@ The `Link` component is a client component, which means that it renders on the c
 ## Related hooks
 
 - [`useNavigate`](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate)
+
+## Related framework topics
+
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)

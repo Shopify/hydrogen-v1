@@ -55,3 +55,7 @@ Because `FileSessionStorage` relies on the file system, it shouldn't be used in 
 ## Related hooks
 
 - [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession)
+
+## Related framework topics
+
+- [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)

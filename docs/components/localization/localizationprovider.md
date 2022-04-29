@@ -32,3 +32,7 @@ The `LocalizationProvider` component is a server component, which means that it 
 ## Related hooks
 
 - [`useCountry`](https://shopify.dev/api/hydrogen/hooks/localization/usecountry)
+
+## Related framework topics
+
+- [Preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries)

@@ -156,3 +156,7 @@ The `page` type is an object with fields that correspond to the Storefront API's
   }
 }
 ```
+
+## Related framework topics
+
+- [SEO](https://shopify.dev/custom-storefronts/hydrogen/framework/seo)

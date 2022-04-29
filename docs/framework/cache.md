@@ -277,6 +277,7 @@ Full-page caching is powered completely by [`cache-control` headers on the Hydro
 
 - [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
 - [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
+- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
 
 ## Next steps
 

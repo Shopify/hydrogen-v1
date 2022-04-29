@@ -30,3 +30,8 @@ The `useServerProps` hook returns an object with the following keys:
 | `serverProps`    | The current server props.                                                              |
 | `setServerProps` | A function used to modify server props.                                                |
 | `pending`        | Whether a [transition is pending](https://github.com/reactwg/react-18/discussions/41). |
+
+## Related framework topics
+
+- [Server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props)
+- [Working with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc)

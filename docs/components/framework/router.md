@@ -53,3 +53,7 @@ The `Router` component is a server component that renders inside `App.server.jsx
 
 - [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes)
 - [`Route`](https://shopify.dev/api/hydrogen/components/framework/route)
+
+## Related framework topics
+
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
