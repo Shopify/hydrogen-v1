@@ -31,10 +31,17 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
 
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [location, setLocation] = useState(history.location);
+  const [locationChanged, setLocationChanged] = useState(false);
 
   const {pending, locationServerProps, setLocationServerProps} =
     useInternalServerProps();
-  useScrollRestoration(location, pending, locationServerProps);
+  useScrollRestoration({
+    location,
+    pending,
+    serverProps: locationServerProps,
+    locationChanged,
+    onFinishNavigating: () => setLocationChanged(false),
+  });
 
   useLayoutEffect(() => {
     const unlisten = history.listen(({location: newLocation}) => {
@@ -46,10 +53,11 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
       });
 
       setLocation(newLocation);
+      setLocationChanged(true);
     });
 
     return () => unlisten();
-  }, [history, location]);
+  }, [history, location, setLocationChanged]);
 
   return (
     <RouterContext.Provider
@@ -89,11 +97,19 @@ function useBeforeUnload(callback: () => any): void {
   }, [callback]);
 }
 
-function useScrollRestoration(
-  location: Location,
-  pending: boolean,
-  serverProps: LocationServerProps
-) {
+function useScrollRestoration({
+  location,
+  pending,
+  serverProps,
+  locationChanged,
+  onFinishNavigating,
+}: {
+  location: Location;
+  pending: boolean;
+  serverProps: LocationServerProps;
+  locationChanged: boolean;
+  onFinishNavigating: () => void;
+}) {
   /**
    * Browsers have an API for scroll restoration. We wait for the page to load first,
    * in case the browser is able to restore scroll position automatically, and then
@@ -114,7 +130,7 @@ function useScrollRestoration(
 
   useLayoutEffect(() => {
     // The app has just loaded
-    if (isFirstLoad) {
+    if (isFirstLoad || !locationChanged) {
       isFirstLoad = false;
       return;
     }
@@ -140,6 +156,7 @@ function useScrollRestoration(
       const element = document.querySelector(location.hash);
       if (element) {
         element.scrollIntoView();
+        onFinishNavigating();
         return;
       }
     }
@@ -147,10 +164,21 @@ function useScrollRestoration(
     // If we have a matching position, scroll to it
     if (position) {
       window.scrollTo(0, position);
+      onFinishNavigating();
       return;
     }
 
     // Scroll to the top of new pages
     window.scrollTo(0, 0);
-  }, [location, pending, serverProps]);
+    onFinishNavigating();
+  }, [
+    location.pathname,
+    location.search,
+    location.hash,
+    pending,
+    serverProps.pathname,
+    serverProps.search,
+    locationChanged,
+    onFinishNavigating,
+  ]);
 }
