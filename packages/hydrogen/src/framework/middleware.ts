@@ -1,4 +1,5 @@
 import type {RequestHandler} from '../entry-server';
+import {ServerComponentResponse} from './Hydration/ServerComponentResponse';
 import type {IncomingMessage, NextFunction} from 'connect';
 import type {ServerResponse} from 'http';
 import type {ViteDevServer} from 'vite';
@@ -37,6 +38,7 @@ export function graphiqlMiddleware({
 }
 
 let entrypointError: Error | null = null;
+let setupGlobals = false;
 
 /**
  * Provides middleware to Node.js Express-like servers. Used by the Hydrogen
@@ -71,6 +73,15 @@ export function hydrogenMiddleware({
   ) {
     try {
       await webPolyfills;
+
+      if (!setupGlobals) {
+        // @ts-ignore
+        globalThis.GlobalResponse = globalThis.Response;
+
+        // @ts-ignore
+        globalThis.Response = ServerComponentResponse;
+        setupGlobals = true;
+      }
 
       const entrypoint = await Promise.resolve(getServerEntrypoint()).catch(
         (error: Error) => {

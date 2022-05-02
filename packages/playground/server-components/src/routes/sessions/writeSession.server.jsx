@@ -1,4 +1,5 @@
 export async function api(request, {session}) {
+  debugger;
   switch (request.method) {
     case 'DELETE':
       await session.destroy();

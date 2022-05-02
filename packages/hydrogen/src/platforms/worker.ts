@@ -1,4 +1,5 @@
 import type {RequestHandler} from '../entry-server';
+import {ServerComponentResponse} from '../framework/Hydration/ServerComponentResponse';
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
 import entrypoint from '__SERVER_ENTRY__';
@@ -15,6 +16,13 @@ declare global {
     [key: string]: any;
   };
 }
+debugger;
+
+// @ts-ignore
+globalThis.GlobalResponse = globalThis.Response;
+
+// @ts-ignore
+globalThis.Response = ServerComponentResponse;
 
 export default {
   async fetch(

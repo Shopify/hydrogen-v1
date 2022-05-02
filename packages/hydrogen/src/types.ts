@@ -1,7 +1,7 @@
 import type {ServerResponse} from 'http';
 import type {Logger} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
+import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse';
 import type {
   Metafield,
   ProductVariant,

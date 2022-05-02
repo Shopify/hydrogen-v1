@@ -1,5 +1,5 @@
 import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
-import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
+import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse';
 import {QueryKey} from '../../types';
 import {hashKey} from '../hash';
 import {findQueryName, parseUrl} from './utils';

@@ -186,7 +186,7 @@ function getUrlFromNodeRequest(request: any) {
 
 function getInitFromNodeRequest(request: any) {
   const init = {
-    headers: new Headers(request.headers as {[key: string]: string}),
+    headers: request.headers ?? {},
     method: request.method,
     body:
       request.method !== 'GET' && request.method !== 'HEAD'
@@ -195,8 +195,8 @@ function getInitFromNodeRequest(request: any) {
   };
 
   const remoteAddress = request.socket.remoteAddress;
-  if (!init.headers.has('x-forwarded-for') && remoteAddress) {
-    init.headers.set('x-forwarded-for', remoteAddress);
+  if (!init.headers['x-forwarded-for'] && remoteAddress) {
+    init.headers['x-forwarded-for'] = remoteAddress;
   }
 
   return init;

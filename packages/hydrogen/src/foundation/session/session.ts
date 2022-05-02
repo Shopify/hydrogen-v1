@@ -1,6 +1,6 @@
 import {Logger} from '../../utilities/log';
 import {wrapPromise} from '../../utilities/suspense';
-import type {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
+import type {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse';
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 
 export type SessionSyncApi = {

@@ -458,6 +458,7 @@ export default async function testCases({
 
   describe('Sessions', () => {
     it('creates a session', async () => {
+      debugger;
       const response = await fetch(getServerUrl() + '/sessions/writeSession', {
         method: 'POST',
         body: JSON.stringify({
