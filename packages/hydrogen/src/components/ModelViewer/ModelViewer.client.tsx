@@ -121,7 +121,7 @@ interface ModelViewerProps {
   onSceneGraphReady?: (event: Event) => void;
 }
 
-type PropsWeControl = 'src' | 'alt' | 'poster';
+type PropsWeControl = 'src' | 'poster';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -287,7 +287,9 @@ export function ModelViewer<TTag extends ElementType>(
   }
 
   if (!data.alt) {
-    throw new Error(`<ModelViewer/> requires the 'data.alt' prop`);
+    console.warn(
+      `<ModelViewer/> requires the 'data.alt' prop for accessibility`
+    );
   }
 
   return (
