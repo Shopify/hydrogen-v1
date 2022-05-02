@@ -35,8 +35,7 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 | `REMOVE_FROM_CART`      | A customer removes an item from their cart                                                            |
 | `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated                                          |
 | `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages. |
-| `PERFORMANCE`           | The performance metrics of a page visit. This is avalible when `<PerformanceMetrics />`               |
-| is opted in.            |
+| `PERFORMANCE`           | The performance metrics for page loads in a Hydrogen app. This is available when you opt in to `<PerformanceMetrics />`.               |
 
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
