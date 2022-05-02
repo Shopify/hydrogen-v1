@@ -287,7 +287,7 @@ export function ModelViewer<TTag extends ElementType>(
   }
 
   if (!data.alt) {
-    throw new Error(`<ModelViewer/> requires the 'data.alt' prop`);
+    console.warn(`<ModelViewer/> requires the 'data.alt' prop for accessibility`);
   }
 
   return (
