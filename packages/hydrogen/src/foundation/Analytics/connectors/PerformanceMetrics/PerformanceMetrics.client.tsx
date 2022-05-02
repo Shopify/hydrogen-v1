@@ -35,11 +35,6 @@ export function PerformanceMetrics() {
         );
         ClientAnalytics.pushToServer(
           {
-            method: 'post',
-            headers: {
-              'cache-control': 'no-cache',
-              'Content-Type': 'application/json',
-            },
             body: JSON.stringify(data),
           },
           ClientAnalytics.eventNames.PERFORMANCE

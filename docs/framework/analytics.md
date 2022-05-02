@@ -293,7 +293,7 @@ The following table describes the request function parameters for `ServerAnalyti
 
 You can unsubscribe from events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `PAGE_VIEW` event:
 
-{% codeblock file, filename: 'App.server.jsx' %}
+{% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
 
 ```jsx
 useEffect(() => {
