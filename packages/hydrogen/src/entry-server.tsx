@@ -733,7 +733,11 @@ function buildAppSSR(
   {App, state, request, response, log, routes}: BuildAppOptions,
   htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
-  const AppSSR = <Html {...htmlOptions}></Html>;
+  const AppSSR = (
+    <Html {...htmlOptions}>
+      <App ssrMode={true} />
+    </Html>
+  );
 
   return {AppSSR};
 }

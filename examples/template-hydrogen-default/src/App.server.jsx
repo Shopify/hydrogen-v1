@@ -6,14 +6,18 @@ import LoadingFallback from './components/LoadingFallback';
 import Header from './rscComponent/Header.server';
 import Footer from './rscComponent/Footer.server';
 import ProductDetails from './rscComponent/ProductDetails.server';
-import {RSCWrapper} from '@shopify/hydrogen/client';
+import {SSRSCWrapper} from '@shopify/hydrogen';
 
-function App({routes}) {
+function App({routes, ssrMode}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <RSCWrapper componentId="Header" />
-      <RSCWrapper componentId="ProductDetails" component={<ProductDetails />} />
-      <RSCWrapper componentId="Footer" component={<Footer />} />
+      <SSRSCWrapper componentId="Header" ssrMode={ssrMode} Component={Header} />
+      <SSRSCWrapper
+        componentId="ProductDetails"
+        ssrMode={ssrMode}
+        Component={ProductDetails}
+      />
+      <SSRSCWrapper componentId="Footer" ssrMode={ssrMode} Component={Footer} />
     </Suspense>
   );
 }
