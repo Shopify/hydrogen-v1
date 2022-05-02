@@ -819,7 +819,10 @@ function getResponseOptions(
 ) {
   const responseInit = {} as ResponseOptions;
   // @ts-ignore
-  responseInit.headers = Object.fromEntries(headers.entries());
+  for (const key of headers.keys()) {
+    // @ts-ignore
+    responseInit.headers[key] = headers.raw()[key];
+  }
 
   if (error) {
     responseInit.status = 500;
