@@ -33,6 +33,9 @@ export type StreamerOptions = CommonOptions & {
 export type HydratorOptions = CommonOptions & {
   response?: ServerResponse;
   isStreamable: boolean;
+  componentManifest: {
+    [key: string]: JSX.Element;
+  };
 };
 
 export type ShopifyConfig = {
@@ -64,6 +67,9 @@ export type ServerHandlerConfig = {
   shopifyConfig: ShopifyConfig;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   session?: (log: Logger) => SessionStorageAdapter;
+  componentManifest: {
+    [key: string]: JSX.Element;
+  };
 };
 
 export type ClientHandlerConfig = {

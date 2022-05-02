@@ -1,30 +1,19 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {
-  Router,
-  Route,
-  FileRoutes,
-  ShopifyProvider,
-  CookieSessionStorage,
-} from '@shopify/hydrogen';
+import {CookieSessionStorage} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
-import DefaultSeo from './components/DefaultSeo.server';
-import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
-import CartProvider from './components/CartProvider.client';
+import Header from './rscComponent/Header.server';
+import Footer from './rscComponent/Footer.server';
+import ProductDetails from './rscComponent/ProductDetails.server';
+import {RSCWrapper} from '@shopify/hydrogen/client';
 
 function App({routes}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <CartProvider>
-          <DefaultSeo />
-          <Router>
-            <FileRoutes routes={routes} />
-            <Route path="*" page={<NotFound />} />
-          </Router>
-        </CartProvider>
-      </ShopifyProvider>
+      <RSCWrapper componentId="Header" />
+      <RSCWrapper componentId="ProductDetails" component={<ProductDetails />} />
+      <RSCWrapper componentId="Footer" component={<Footer />} />
     </Suspense>
   );
 }
@@ -41,4 +30,9 @@ export default renderHydrogen(App, {
     sameSite: 'strict',
     maxAge: 60 * 60 * 24 * 30,
   }),
+  componentManifest: {
+    Header: Header,
+    ProductDetails: ProductDetails,
+    Footer: Footer,
+  },
 });
