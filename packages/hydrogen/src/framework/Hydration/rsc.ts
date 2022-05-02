@@ -90,6 +90,26 @@ export function useServerResponse(state: any) {
   return response;
 }
 
+export function useServerResponse2(state: any) {
+  console.log('useServerResponse2', state);
+  const key = JSON.stringify(state);
+  const cache: ReturnType<typeof createResponseCache> =
+    unstable_getCacheForType(createResponseCache);
+
+  let response = cache.get(key);
+  if (response) {
+    return response;
+  }
+
+  console.log(`fetch ${RSC_PATHNAME}2?state=` + encodeURIComponent(key));
+  response = createFromFetch(
+    fetch(`${RSC_PATHNAME}2?state=` + encodeURIComponent(key))
+  );
+
+  cache.set(key, response);
+  return response;
+}
+
 export function useRefresh() {
   const refreshCache = unstable_useCacheRefresh();
   refreshCache();

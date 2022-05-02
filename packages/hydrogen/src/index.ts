@@ -48,3 +48,5 @@ export {useSession} from './foundation/useSession/useSession';
 export {CookieSessionStorage} from './foundation/CookieSessionStorage/CookieSessionStorage';
 export {MemorySessionStorage} from './foundation/MemorySessionStorage/MemorySessionStorage';
 export {Cookie} from './foundation/Cookie/Cookie';
+
+export {SSRSCWrapper} from './foundation/SSRSCWrapper.server';

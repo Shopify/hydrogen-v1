@@ -29,7 +29,6 @@ import {
   renderApiRoute,
   getApiRoutes,
 } from './utilities/apiRoutes';
-import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
@@ -37,7 +36,6 @@ import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
   rscRenderToReadableStream,
-  createFromReadableStream,
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
@@ -84,6 +82,7 @@ export const renderHydrogen = (
     routes,
     serverAnalyticsConnectors,
     session,
+    componentManifest,
   }: ServerHandlerConfig
 ) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
@@ -127,6 +126,7 @@ export const renderHydrogen = (
     }
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
+    const isReactHydrationRequest2 = url.pathname === `${RSC_PATHNAME}2`;
 
     if (!isReactHydrationRequest && routes) {
       const apiRoute = getApiRoute(url, {routes});
@@ -174,10 +174,15 @@ export const renderHydrogen = (
       isStreamable,
       componentResponse,
       response: streamableResponse,
+      componentManifest,
     };
 
     if (isReactHydrationRequest) {
       return hydrate(url, params);
+    }
+
+    if (isReactHydrationRequest2) {
+      return hydrate2(url, params);
     }
 
     /**
@@ -220,7 +225,7 @@ async function render(
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
-  const {AppSSR, rscReadable} = buildAppSSR(
+  const {AppSSR} = buildAppSSR(
     {
       App,
       state,
@@ -238,9 +243,8 @@ async function render(
     return template;
   }
 
-  let [html, flight] = await Promise.all([
+  let [html] = await Promise.all([
     renderToBufferedString(AppSSR, {log, nonce}).catch(onErrorShell),
-    bufferReadableStream(rscReadable.getReader()).catch(() => null),
   ]);
 
   const {headers, status, statusText} = getResponseOptions(componentResponse);
@@ -266,18 +270,6 @@ async function render(
   headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
 
   html = applyHtmlHead(html, request.ctx.head, template);
-
-  if (flight) {
-    html = html.replace(
-      '</body>',
-      () =>
-        `${flightContainer({
-          init: true,
-          nonce,
-          chunk: flight as string,
-        })}</body>`
-    );
-  }
 
   postRequestTasks('ssr', status, request, componentResponse);
 
@@ -312,7 +304,7 @@ async function stream(
   const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
     stripScriptsFromTemplate(template);
 
-  const {AppSSR, rscReadable} = buildAppSSR(
+  const {AppSSR} = buildAppSSR(
     {
       App,
       state,
@@ -327,16 +319,6 @@ async function stream(
   const rscToScriptTagReadable = new ReadableStream({
     start(controller) {
       log.trace('rsc start chunks');
-      let init = true;
-      const encoder = new TextEncoder();
-      bufferReadableStream(rscReadable.getReader(), (chunk) => {
-        const scriptTag = flightContainer({init, chunk, nonce});
-        controller.enqueue(encoder.encode(scriptTag));
-        init = false;
-      }).then(() => {
-        log.trace('rsc finish chunks');
-        return controller.close();
-      });
     },
   });
 
@@ -602,6 +584,7 @@ async function hydrate(
     componentResponse,
     isStreamable,
     log,
+    componentManifest,
   }: HydratorOptions
 ) {
   const state = JSON.parse(url.searchParams.get('state') || '{}');
@@ -640,6 +623,65 @@ async function hydrate(
     );
 
     const streamer = rscWriter.renderToPipeableStream(AppRSC);
+    response.writeHead(200, 'ok', {
+      'cache-control': componentResponse.cacheControlHeader,
+    });
+    const stream = streamer.pipe(response) as Writable;
+
+    stream.on('finish', function () {
+      postRequestTasks('rsc', response.statusCode, request, componentResponse);
+    });
+  }
+}
+
+/**
+ * Stream a hydration response to the client.
+ */
+async function hydrate2(
+  url: URL,
+  {
+    App,
+    routes,
+    request,
+    response,
+    componentResponse,
+    isStreamable,
+    log,
+    componentManifest,
+  }: HydratorOptions
+) {
+  const state = JSON.parse(url.searchParams.get('state') || '{}');
+
+  console.log(state);
+  const Component: any = componentManifest[state.componentId];
+
+  console.log(Component);
+
+  if (__WORKER__) {
+    const rscReadable = rscRenderToReadableStream(<Component />);
+
+    if (isStreamable && (await isStreamingSupported())) {
+      postRequestTasks('rsc', 200, request, componentResponse);
+      return new Response(rscReadable);
+    }
+
+    // Note: CFW does not support reader.piteTo nor iterable syntax
+    const bufferedBody = await bufferReadableStream(rscReadable.getReader());
+
+    postRequestTasks('rsc', 200, request, componentResponse);
+
+    return new Response(bufferedBody, {
+      headers: {
+        'cache-control': componentResponse.cacheControlHeader,
+      },
+    });
+  } else if (response) {
+    const rscWriter = await import(
+      // @ts-ignore
+      '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
+    );
+
+    const streamer = rscWriter.renderToPipeableStream(<Component />);
     response.writeHead(200, 'ok', {
       'cache-control': componentResponse.cacheControlHeader,
     });
@@ -691,42 +733,13 @@ function buildAppSSR(
   {App, state, request, response, log, routes}: BuildAppOptions,
   htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
-  const {AppRSC} = buildAppRSC({
-    App,
-    state,
-    request,
-    response,
-    log,
-    routes,
-  });
-
-  const [rscReadableForFizz, rscReadableForFlight] =
-    rscRenderToReadableStream(AppRSC).tee();
-
-  const rscResponse = createFromReadableStream(rscReadableForFizz);
-  const RscConsumer = () => rscResponse.readRoot();
-
   const AppSSR = (
     <Html {...htmlOptions}>
-      <ServerRequestProvider request={request} isRSC={false}>
-        <ServerPropsProvider
-          initialServerProps={state as any}
-          setServerPropsForRsc={() => {}}
-        >
-          <PreloadQueries request={request}>
-            <Suspense fallback={null}>
-              <RscConsumer />
-            </Suspense>
-            <Suspense fallback={null}>
-              <Analytics />
-            </Suspense>
-          </PreloadQueries>
-        </ServerPropsProvider>
-      </ServerRequestProvider>
+      <App ssrMode={true} />
     </Html>
   );
 
-  return {AppSSR, rscReadable: rscReadableForFlight};
+  return {AppSSR};
 }
 
 function PreloadQueries({
@@ -871,33 +884,6 @@ async function createNodeWriter() {
   const streamImport = __WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
-}
-
-function flightContainer({
-  init,
-  chunk,
-  nonce,
-}: {
-  chunk?: string;
-  init?: boolean;
-  nonce?: string;
-}) {
-  let script = `<script${nonce ? ` nonce="${nonce}"` : ''}>`;
-  if (init) {
-    script += 'var __flight=[];';
-  }
-
-  if (chunk) {
-    const normalizedChunk = chunk
-      // 1. Duplicate the escape char (\) for already escaped characters (e.g. \n or \").
-      .replace(/\\/g, String.raw`\\`)
-      // 2. Escape existing backticks to allow wrapping the whole thing in `...`.
-      .replace(/`/g, String.raw`\``);
-
-    script += `__flight.push(\`${normalizedChunk}\`)`;
-  }
-
-  return script + '</script>';
 }
 
 function postRequestTasks(
