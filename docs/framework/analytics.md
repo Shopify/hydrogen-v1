@@ -319,7 +319,7 @@ Performance metrics provide insight into how fast pages are loading in your Hydr
 - **Time to First Byte (TTFB)**: The time between a browser requesting a page and receiving the first byte of information from the server
 - **First Contentful Paint (FCP)**: The time it takes for a browser to render content on a page
 - **Largest Contentful Paint (LCP)**: The time it takes to render and interact with the largest content element on the page
-- **Duration**: The average amount of time it takes for a page to load
+- **Duration**: The total amount of time it takes for a page to finish streaming
 
 You can opt in to receive performance metrics for page loads in your Hydrogen app by including `<PerformanceMetrics />` and `PerformanceMetricsServerAnalyticsConnector` in `App.server.js`.
 
