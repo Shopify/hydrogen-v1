@@ -315,11 +315,16 @@ useEffect(() => {
 
 ## Performance metrics
 
-You can opt-in to receive Hydrogen performance metrics. Just include `<PerformanceMetrics />`
-and `PerformanceMetricsServerAnalyticsConnector` in your `App.server.js`.
+Performance metrics provide insight into how fast pages are loading in your Hydrogen app. For example, you might want to gather the following metrics for full and sub page loads:
 
-If you would like to see performance debug metrics displayed in the browser console log,
-just include `<PerformanceMetricsDebug />`
+- **Time to First Byte (TTFB)**: The time between a browser requesting a page and receiving the first byte of information from the server
+- **First Contentful Paint (FCP)**: The time it takes for a browser to render content on a page
+- **Largest Contentful Paint (LCP)**: The time it takes to render and interact with the largest content element on the page
+- **Duration**: The average amount of time it takes for a page to load
+
+You can opt in to receive performance metrics for page loads in your Hydrogen app by including `<PerformanceMetrics />` and `PerformanceMetricsServerAnalyticsConnector` in `App.server.js`.
+
+If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in your client component:
 
 {% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
 
