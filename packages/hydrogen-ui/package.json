@@ -38,7 +38,7 @@
   },
   "sideEffects": false,
   "scripts": {
-    "dev": "run-p dev:vite dev:ts",
+    "dev": "run-p dev:vite dev:ts copy-storefront-types",
     "dev:vite": "vite build --watch --emptyOutDir false --clearScreen false",
     "dev:ts": "tsc --watch",
     "build": "yarn build:vite && yarn build:ts",
