@@ -1,7 +1,7 @@
 # This Action is responsible for deploying the default Hydrogen template to Oxygen.
 # It is split out from deployments.yml because Oxygen checks for the presence of this specific workflow in the repo.
 # TODO: Merge the workflow if/when Oxygen is more lenient.
-name: Oxgyen Deployment
+name: Oxygen Deployment
 
 on:
   workflow_dispatch:
