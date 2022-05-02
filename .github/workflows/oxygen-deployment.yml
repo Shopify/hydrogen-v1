@@ -8,10 +8,6 @@ on:
   push:
     branches: ['v1.x-2022-07']
 
-concurrency:
-  group: deployments-${{ github.head_ref }}
-  cancel-in-progress: true
-
 jobs:
   deploy_oxygen:
     runs-on: ubuntu-latest
