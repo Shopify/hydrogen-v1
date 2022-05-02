@@ -40,12 +40,12 @@ export function MyClientComponent() {
 The value of the URL will change immediately, but the page transition might not yet be completed. If you want to wait until the page is completely transitioned, then use the `pending` server state hook value:
 
 ```tsx
-import {useUrl, useServerState} from '@shopify/hydrogen/client';
+import {useUrl, useServerProps} from '@shopify/hydrogen/client';
 import {useEffect} from 'react';
 
 export function MyClientComponent() {
   const url = useUrl();
-  const {pending} = useServerState();
+  const {pending} = useServerProps();
 
   useEffect(() => {
     if (!pending) {

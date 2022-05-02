@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://hydrogen.shopify.dev"><img src="./docs/images/HydrogenLogo.png" alt="Hydrogen Logo"/></a>
+    <a href="https://hydrogen.shopify.dev"><img src="./.github/images/hydrogen-logo.svg" alt="Hydrogen Logo"/></a>
 </p>
 <p align="center">
     <a href="https://www.npmjs.com/package/@shopify/hydrogen"><img src="https://img.shields.io/npm/v/@shopify/hydrogen.svg?sanitize=true" alt="Version"></a>
@@ -55,11 +55,11 @@ npm run dev
 
 2. Visit the development environment running at http://localhost:3000.
 
-Learn more about [getting started with Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/getting-started).
+Learn more about [getting started with Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/templates).
 
 ## Contributing to Hydrogen
 
-[Read our contributing guide](./docs/contributing.md)
+[Read our contributing guide](./.github/contributing.md)
 
 ## Other handy links
 

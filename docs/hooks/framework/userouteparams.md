@@ -48,3 +48,7 @@ The `useRouteParams` hook returns an object with key values for each matching ro
 ## Related hooks
 
 - [`useNavigate`](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate)
+
+## Related framework topics
+
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)

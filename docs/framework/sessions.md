@@ -14,7 +14,7 @@ For example, session data might contain the products within a cart, site prefere
 
 ## Configuring sessions
 
-The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/getting-started) comes pre-configured with session support.
+The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates) comes pre-configured with session support.
 
 By default, session data is persisted within a cookie. You can adjust the session cookie configuration within `App.server.jsx` for an in-memory storage or file-based storage (NodeJS only), or build your own storage adapter.
 
@@ -121,9 +121,16 @@ export async function api(request, {session}) {
 
 ## Building custom session implementations
 
-Hydrogen provides a [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie) component for building your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions#types-of-session-storage) use the same configuration options as what's available in `Cookie`.
+Hydrogen provides a [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie) component for building your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions#types-of-session-storage) use the same configuration options as `Cookie`.
+
+## Related components and hooks
+
+- [`Cookie`](https://shopify.dev/api/hydrogen/components/framework/cookie)
+- [`CookieSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/cookiesessionstorage)
+- [`MemorySessionStorage`](https://shopify.dev/api/hydrogen/components/framework/memorysessionstorage)
+- [`FileSessionStorage`](https://shopify.dev/api/hydrogen/components/framework/filesessionstorage)
+- [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession)
 
 ## Next steps
 
-- Learn how to manage your [server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) during your development process.
 - Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.

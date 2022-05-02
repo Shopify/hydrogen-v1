@@ -1,5 +1,99 @@
 # Changelog
 
+## 0.17.1
+
+### Patch Changes
+
+- [#1145](https://github.com/Shopify/hydrogen/pull/1145) [`865b66e9`](https://github.com/Shopify/hydrogen/commit/865b66e95d67965543bcb92f0f9f15b5742f3596) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix search params on navigation
+
+* [#1139](https://github.com/Shopify/hydrogen/pull/1139) [`93525637`](https://github.com/Shopify/hydrogen/commit/9352563761c0405f2e2b39cb6b8b8f577f2522b9) Thanks [@blittle](https://github.com/blittle)! - Fix the scroll restoration on page transitions
+
+- [#1144](https://github.com/Shopify/hydrogen/pull/1144) [`dec5eb8e`](https://github.com/Shopify/hydrogen/commit/dec5eb8e34e75c806aa1cfea935814d228ab29d6) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - fix 0.17 build
+
+## 0.17.0
+
+### Minor Changes
+
+- [#1044](https://github.com/Shopify/hydrogen/pull/1044) [`c8f5934d`](https://github.com/Shopify/hydrogen/commit/c8f5934d85db63162a13256cfcf21098b390887b) Thanks [@blittle](https://github.com/blittle)! - Hydrogen now has a built in session and cookie implementation. Read more about [how sessions work in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions). The starter template also includes a cookie session storage implementation. To use the new session implementation within an existing Hydrogen app:
+
+  ```diff
+  import renderHydrogen from '@shopify/hydrogen/entry-server';
+  import {
+    Router,
+    Route,
+    FileRoutes,
+    ShopifyProvider,
+  +  CookieSessionStorage,
+  } from '@shopify/hydrogen';
+  import {Suspense} from 'react';
+  import shopifyConfig from '../shopify.config';
+  import DefaultSeo from './components/DefaultSeo.server';
+  import NotFound from './components/NotFound.server';
+  import LoadingFallback from './components/LoadingFallback';
+  import CartProvider from './components/CartProvider.client';
+
+  function App({routes}) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <ShopifyProvider shopifyConfig={shopifyConfig}>
+          <CartProvider>
+            <DefaultSeo />
+            <Router>
+              <FileRoutes routes={routes} />
+              <Route path="*" page={<NotFound />} />
+            </Router>
+          </CartProvider>
+        </ShopifyProvider>
+      </Suspense>
+    );
+  }
+
+  const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+
+  export default renderHydrogen(App, {
+    routes,
+    shopifyConfig,
+  +  session: CookieSessionStorage('__session', {
+  +    path: '/',
+  +    httpOnly: true,
+  +    secure: process.env.NODE_ENV === 'production',
+  +    sameSite: 'strict',
+  +    maxAge: 60 * 60 * 24 * 30,
+  +  }),
+  });
+
+  ```
+
+* [#881](https://github.com/Shopify/hydrogen/pull/881) [`a31babfb`](https://github.com/Shopify/hydrogen/commit/a31babfb9bf73b732a18487582cec129acbb8b5e) Thanks [@jplhomer](https://github.com/jplhomer)! - ## Change from serverState to serverProps
+
+  **Breaking changes:**
+
+  1. `useServerState()` is gone. Use `useServerProps()` instead
+  2. `useServerProps()` is reset on each page navigation. Previously `useServerState()` was not.
+  3. `useServerProps()` does not contain `pathname` and `search`. Use the [useNavigate](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate) hook to programmatically navigate instead.
+
+  **Explanation:**
+
+  The current behavior of server state is to **persist indefinitely** (until a hard page reload). This works great for things like the CountrySelector, where the updated state is meant to persist across navigations. This breaks down for many other use cases. Consider a collection paginator: if you paginate through to the second page of a collection using server state, visit a product page, and then go to a different collection page, the new collection page will use that same pagination variable in server state. This will result in a wonky or errored experience.
+
+  Additionally, we have found that the term for `serverState` is confusing. The hook is used within client components, yet the state is passed as a prop to server components.
+
+  As a result, `serverState` is now gone. Instead communicating between client and server components is through `serverProps`. If a client component wants to re-render server content, it just calls `setServerProps('some', 'data')`. Those props will be serialized to the server, and the server component will re-render. Additionally, the server props are reset on page navigation. So that they will not bleed between pages (fixes #331).
+
+  If you previously relied on `serverState` for global state in your app, you shouldn't use `serverProps` anymore. Instead we'll introduce a new session based mechanism for global state (in the meantime you could manually manage a cookie).
+
+  Lastly, `serverProps` no longer include the `pathname` and `search` parameters. Programmatically navigate in hydrogen instead with the [useNavigate](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate) hook.
+
+- [#1098](https://github.com/Shopify/hydrogen/pull/1098) [`f3dafec4`](https://github.com/Shopify/hydrogen/commit/f3dafec4b3113c85e33a15ee70b3f91c741e74f9) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Obfuscate chunk filename on production build
+
+### Patch Changes
+
+- [#1131](https://github.com/Shopify/hydrogen/pull/1131) [`8199023b`](https://github.com/Shopify/hydrogen/commit/8199023b88924db156e2a687dd6dfce2665ab638) Thanks [@blittle](https://github.com/blittle)! - Fix hydration issue where strings with $ would get converted to a single $
+
+* [#1105](https://github.com/Shopify/hydrogen/pull/1105) [`57ececf8`](https://github.com/Shopify/hydrogen/commit/57ececf82ee0c264abc256df8b02555772cc2419) Thanks [@frehner](https://github.com/frehner)! - Regenerate the graphql.schema.json which should fix the sudden end-of-line termination, and makes the schema valid again.
+
+- [#1099](https://github.com/Shopify/hydrogen/pull/1099) [`6b50d371`](https://github.com/Shopify/hydrogen/commit/6b50d37158aab1a4a82626e09865d27e14adfbfb) Thanks [@blittle](https://github.com/blittle)! - Fix Hydrogen to not hard fail when client analytics doesn't load. Analytics might fail to load due to client-side adblockers.
+
 ## 0.16.1
 
 ### Patch Changes

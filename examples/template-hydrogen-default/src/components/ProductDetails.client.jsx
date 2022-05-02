@@ -90,6 +90,24 @@ function SizeChart() {
   );
 }
 
+function ProductPrices() {
+  const product = useProduct();
+
+  return (
+    <>
+      <ProductPrice
+        className="text-gray-500 line-through text-lg font-semibold"
+        priceType="compareAt"
+        variantId={product.selectedVariant.id}
+      />
+      <ProductPrice
+        className="text-gray-900 text-lg font-semibold"
+        variantId={product.selectedVariant.id}
+      />
+    </>
+  );
+}
+
 export default function ProductDetails({product}) {
   const initialVariant = flattenConnection(product.variants)[0];
 
@@ -124,15 +142,7 @@ export default function ProductDetails({product}) {
             )}
             <span />
             <div className="flex justify-between md:block">
-              <ProductPrice
-                className="text-gray-500 line-through text-lg font-semibold"
-                priceType="compareAt"
-                variantId={initialVariant.id}
-              />
-              <ProductPrice
-                className="text-gray-900 text-lg font-semibold"
-                variantId={initialVariant.id}
-              />
+              <ProductPrices />
             </div>
           </div>
 
@@ -149,15 +159,7 @@ export default function ProductDetails({product}) {
                   {product.vendor}
                 </div>
               )}
-              <ProductPrice
-                className="text-gray-500 line-through text-lg font-semibold"
-                priceType="compareAt"
-                variantId={initialVariant.id}
-              />
-              <ProductPrice
-                className="text-gray-900 text-lg font-semibold"
-                variantId={initialVariant.id}
-              />
+              <ProductPrices />
             </div>
             {/* Product Options */}
             <div className="mt-8">

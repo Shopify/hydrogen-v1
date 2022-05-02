@@ -4,7 +4,7 @@ title: Cookie
 description: The Cookie component helps you build your own custom cookie and session implementations.
 ---
 
-The `Cookie` component helps you build your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions#types-of-session-storage) use the same configuration options as what's available in `Cookie`.
+The `Cookie` component helps you build your own custom cookie and session implementations. All [Hydrogen session storage mechanisms](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions#types-of-session-storage) use the same configuration options as `Cookie`.
 
 ## Example code
 
@@ -32,7 +32,7 @@ The following table describes the options for how the cookie is persisted within
 
 | Option   | Type                                             | Description                                                                                                                                                                                               |
 | -------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| expires  | <code>date</code>                                | [A date in which the cookie will expire](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_the_lifetime_of_a_cookie). If the date is in the past, then the browser will remove the cookie. |
+| expires  | <code>date</code>                                | [A date on which the cookie will expire](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_the_lifetime_of_a_cookie). If the date is in the past, then the browser will remove the cookie. |
 | maxAge   | <code>number</code>                              | The [number of seconds until the cookie expires](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#max-agenumber). `maxAge` takes precedence over `expires` if both are defined.       |
 | secure   | <code>boolean</code>                             | Whether to secure the cookie so that [client JavaScript is unable to read it](https://owasp.org/www-community/HttpOnly).                                                                                  |
 | httpOnly | <code>boolean</code>                             | Whether to secure the cookie so that the browser only sends it over HTTPS. Some browsers [don't work with secure cookies on localhost](https://owasp.org/www-community/controls/SecureCookieAttribute).   |
@@ -53,3 +53,7 @@ The `Cookie` component is a server component. For more information about compone
 ## Related hooks
 
 - [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession)
+
+## Related framework topics
+
+- [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)

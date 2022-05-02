@@ -27,15 +27,15 @@ The following diagram describes how analytics data is processed on the server an
 
 By default, Hydrogen publishes the following events to subscribers (`ClientAnalytics.subscribe`):
 
-| Event name              | When the event is published                                                                           |
-| ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| `PAGE_VIEW`             | A customer visits a storefront page                                                                   |
-| `ADD_TO_CART`           | A customer adds an item to their cart                                                                 |
-| `UPDATE_CART`           | A customer updates an item in their cart                                                              |
-| `REMOVE_FROM_CART`      | A customer removes an item from their cart                                                            |
-| `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated                                          |
-| `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages. |
-| `PERFORMANCE`           | The performance metrics for page loads in a Hydrogen app. This is available when you opt in to `<PerformanceMetrics />`.               |
+| Event name              | When the event is published                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| `PAGE_VIEW`             | A customer visits a storefront page                          |
+| `ADD_TO_CART`           | A customer adds an item to their cart                        |
+| `UPDATE_CART`           | A customer updates an item in their cart                     |
+| `REMOVE_FROM_CART`      | A customer removes an item from their cart                   |
+| `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated |
+| `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages.                      |
+| `PERFORMANCE`           | The performance metrics for page loads in a Hydrogen app. This is available when you opt in to `<PerformanceMetrics />`.   |
 
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
@@ -48,13 +48,13 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
 2. In your client component, add the following code to subscribe to the event:
 
-   {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
+    {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
-   ```jsx
-   import {ClientAnalytics} from '@shopify/hydrogen/client';
+    ```jsx
+    import {ClientAnalytics} from '@shopify/hydrogen/client';
 
-   let init = false;
-   export default function AnalyticsListener() {
+    let init = false;
+    export default function AnalyticsListener() {
      useEffect(() => {
        // Set up common page-specific data
        ClientAnalytics.pushToPageAnalyticsData({
@@ -74,27 +74,27 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
      });
 
      return null;
-   }
-   ```
+    }
+    ```
 
-   {% endcodeblock %}
+    {% endcodeblock %}
 
-3. Add your client component to `App.server.jsx`, which is the main app component:
+3. Add your client component to your app's top-level React component (`App.server.jsx`):
 
-   {% codeblock file, filename: 'App.server.jsx' %}
+    {% codeblock file, filename: 'App.server.jsx' %}
 
-   ```jsx
-   function App({routes}) {
+    ```jsx
+    function App({routes}) {
      return (
        <>
          <Suspense fallback={<LoadingFallback />}>...</Suspense>
          <AnalyticsListener />
        </>
      );
-   }
-   ```
+    }
+    ```
 
-   {% endcodeblock %}
+    {% endcodeblock %}
 
 ## Configure a custom event
 
@@ -209,13 +209,13 @@ To send analytics data from the server-side, complete the following steps:
 
 1. Create a client-side analytics listener that makes a fetch call to the `__event` endpoint.
 
-   {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
+    {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
-   ```jsx
-   import {ClientAnalytics} from '@shopify/hydrogen/client';
+    ```jsx
+    import {ClientAnalytics} from '@shopify/hydrogen/client';
 
-   let init = false;
-   export default function AnalyticsListener() {
+    let init = false;
+    export default function AnalyticsListener() {
      useEffect(() => {
        // Set up common page-specific data
        ClientAnalytics.pushToPageAnalyticsData({
@@ -246,38 +246,38 @@ To send analytics data from the server-side, complete the following steps:
      });
 
      return null;
-   }
-   ```
+    }
+    ```
 
-   {% endcodeblock %}
+    {% endcodeblock %}
 
 2. Create a server-side analytics connector and pass it into the `serverAnalyticsConnectors` configuration:
 
-   {% codeblock file, filename: 'MyServerAnalyticsConnector.jsx' %}
+    {% codeblock file, filename: 'MyServerAnalyticsConnector.jsx' %}
 
-   ```jsx
-   export function request(request, data, contentType) {
+    ```jsx
+    export function request(request, data, contentType) {
      // Send your analytics request to third-party analytics
-   }
-   ```
+    }
+    ```
 
-   {% endcodeblock %}
+    {% endcodeblock %}
 
-   {% codeblock file, filename: 'App.server.js' %}
+    {% codeblock file, filename: 'App.server.js' %}
 
-   ```js
-   import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.jsx'
+    ```js
+    import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.jsx'
 
-   ...
+    ...
 
-   export default renderHydrogen(App, {
-    shopifyConfig,
-    routes,
-    serverAnalyticsConnectors: [MyServerAnalyticsConnector]
-   });
-   ```
+    export default renderHydrogen(App, {
+     shopifyConfig,
+     routes,
+     serverAnalyticsConnectors: [MyServerAnalyticsConnector]
+    });
+    ```
 
-   {% endcodeblock %}
+    {% endcodeblock %}
 
 #### Parameters
 
@@ -285,7 +285,7 @@ The following table describes the request function parameters for `ServerAnalyti
 
 | Parameter     | Type           | Description                                       |
 | ------------- | -------------- | ------------------------------------------------- |
-| `request`     | request        | The analytics request object.                     |
+| `request`     | request        | The analytics request object.                      |
 | `data`        | object or text | The result from `.json()` or `.text()`.           |
 | `contentType` | string         | The content type. Valid values: `json` or `text`. |
 
@@ -490,5 +490,5 @@ describe('Google Analytics 4', () => {
 
 ## Next steps
 
-- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [configure queries to preload](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries) in your Hydrogen app.
 - Learn how to customize the output of [SEO-related tags](https://shopify.dev/custom-storefronts/hydrogen/framework/seo) in your Hydrogen client and server components.

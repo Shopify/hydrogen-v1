@@ -4,7 +4,7 @@ title: Server props
 description: Learn how to manage your server props during your development process.
 ---
 
-As you build your Hydrogen app with [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `props` on the server. Sharing data between the client and server is important for common tasks, like [page routing](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc#sharing-data-between-client-and-server).
+As you build your Hydrogen app with [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), you'll likely need to update `props` on the server. Sharing data between the client and server is important for common tasks, like [page routing](https://shopify.dev/custom-storefronts/hydrogen/framework/routes).
 
 This guide describes how to manage server props during your development process.
 
@@ -12,7 +12,7 @@ This guide describes how to manage server props during your development process.
 
 Server `props` are props that are passed to your root server component route. Hydrogen provides a [`useServerProps`](https://shopify.dev/api/hydrogen/hooks/global/useserverprops) hook with a `setServerProps` helper function, which allows you to re-render the server component with new `props`. This is useful to paginate within collections, switch product variants, or do anything that requires new data from the server.
 
-For example, you can take geo-location co-ordinates and set them as server `props` to provide a new hydrated experience for the current location:
+For example, you can take geo-location co-ordinates and set them as server props to provide a new hydrated experience for the current location:
 
 {% codeblock file, filename: 'GeoLocate.client.jsx' %}
 
@@ -85,7 +85,11 @@ export default function ProductSelector({selectedProductId}) {
 
 When the user navigates to a new page in your app, the server props will reset. This is important because if the user navigates to another product, then the selected variant of the previous product shouldn't apply to the new product page.
 
+## Related hooks
+
+- [`useServerProps`](https://shopify.dev/api/hydrogen/hooks/global/useserverprops)
+
 ## Next steps
 
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to interact with the [`useServerProps`](https://shopify.dev/api/hydrogen/hooks/global/useserverprops) hook.
+- Learn how to [work with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc).

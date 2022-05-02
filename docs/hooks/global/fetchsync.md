@@ -151,3 +151,10 @@ The following considerations apply to `fetchSync` in server and client component
 
 - [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
 - [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+
+## Related framework topics
+
+- [Caching](https://shopify.dev/custom-storefronts/hydrogen/framework/cache)
+- [Preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries)
+- [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
+- [Working with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc)
