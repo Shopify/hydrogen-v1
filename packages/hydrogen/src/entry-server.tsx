@@ -818,11 +818,17 @@ function getResponseOptions(
   error?: Error
 ) {
   const responseInit = {} as ResponseOptions;
+
   // @ts-ignore
-  for (const key of headers.keys()) {
-    // @ts-ignore
-    responseInit.headers[key] = headers.raw()[key];
-  }
+  responseInit.headers = Object.fromEntries(headers.entries());
+
+  // @ts-ignore
+  const rawHeaders = headers.raw();
+  const setCookieKey = Object.keys(rawHeaders).find(
+    (key) => key.toLowerCase() === 'set-cookie'
+  );
+
+  responseInit.headers['set-cookie'] = rawHeaders[setCookieKey];
 
   if (error) {
     responseInit.status = 500;
