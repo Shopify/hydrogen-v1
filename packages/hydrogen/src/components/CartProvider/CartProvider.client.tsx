@@ -257,8 +257,8 @@ export function CartProvider({
    */
   data?: CartFragmentFragment;
 }) {
-  const {serverProps} = useServerProps() as ServerPropsContextValue;
-  const countryCode = serverProps?.country?.isoCode;
+  // const {serverProps} = useServerProps() as ServerPropsContextValue;
+  // const countryCode = serverProps?.country?.isoCode;
 
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
