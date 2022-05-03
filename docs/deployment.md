@@ -23,7 +23,7 @@ Oxygen is Shopify's recommended deployment platform for Hydrogen apps. This is b
 
 You can deploy your Hydrogen app to [Node.js](https://nodejs.org/en/), an open-source JavaScript runtime environment.
 
-1. Check the port (`$PORT`) that's specified in the [`server.js`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/server.js) file.
+1. Check the port (`$PORT`) that's specified in the [`server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/server.js) file.
 
 2. Run your Hydrogen app on the port specified by executing the following commands:
 
