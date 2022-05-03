@@ -934,10 +934,6 @@ function postRequestTasks(
 function getHeaders(rawHeaders: Record<string, String | Array<String>> = {}) {
   const headers = new Headers();
 
-  if (!headers) {
-    return new Headers();
-  }
-
   for (const [key, values] of Object.entries(rawHeaders)) {
     // values doesn't have an array prototype, so instanceof doesn't work.
     // Check for .splice instead
