@@ -830,6 +830,8 @@ function getResponseOptions(
 
   // @ts-ignore
   const rawHeaders = headers.raw();
+  // Warning! Headers.raw is non-standard and might disappear in undici or newer versions of node-fetch
+  // See: https://github.com/whatwg/fetch/issues/973
   const setCookieKey = Object.keys(rawHeaders).find(
     (key) => key.toLowerCase() === 'set-cookie'
   );
