@@ -5,7 +5,8 @@
   "workspaces": [
     "examples/template-hydrogen-default",
     "packages/*",
-    "packages/playground/*"
+    "packages/playground/*",
+    "templates/*",
   ],
   "engines": {
     "node": ">=14"
