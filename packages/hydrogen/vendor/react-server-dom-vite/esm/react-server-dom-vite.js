@@ -77,6 +77,7 @@ function requireModule(_ref2) {
   var mod = moduleCache.get(id);
 
   if (!mod || mod instanceof Promise || mod instanceof Error) {
+    console.log(`${id} is not yet ready.`);
     // This module is still being downloaded or
     // it has errored out. Pass it to Suspense.
     throw mod;

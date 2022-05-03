@@ -449,12 +449,12 @@ async function stream(
         }
       );
 
-      const writingRSC = bufferReadableStream(
-        rscToScriptTagReadable.getReader(),
-        (scriptTag) => writable.write(encoder.encode(scriptTag))
-      );
+      // const writingRSC = bufferReadableStream(
+      //   rscToScriptTagReadable.getReader(),
+      //   (scriptTag) => writable.write(encoder.encode(scriptTag))
+      // );
 
-      Promise.all([writingSSR, writingRSC]).then(() => {
+      Promise.all([writingSSR]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => writable.close(), 0);
         postRequestTasks(
@@ -516,10 +516,10 @@ async function stream(
           pipe(response);
         }, 0);
 
-        bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) => {
-          log.trace('rsc chunk');
-          return response.write(chunk);
-        });
+        // bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) => {
+        //   log.trace('rsc chunk');
+        //   return response.write(chunk);
+        // });
       },
       async onAllReady() {
         log.trace('node complete stream');
@@ -554,14 +554,14 @@ async function stream(
 
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
 
-        bufferReadableStream(rscToScriptTagReadable.getReader()).then(
-          (scriptTags) => {
-            // Piping ends the response so script tags
-            // must be written before that.
-            response.write(scriptTags);
-            pipe(response);
-          }
-        );
+        // bufferReadableStream(rscToScriptTagReadable.getReader()).then(
+        //   (scriptTags) => {
+        //     // Piping ends the response so script tags
+        //     // must be written before that.
+        //     response.write(scriptTags);
+        //     pipe(response);
+        //   }
+        // );
       },
       onShellError(error: any) {
         log.error(error);
