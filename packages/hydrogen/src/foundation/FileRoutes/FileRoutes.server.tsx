@@ -13,6 +13,7 @@ interface FileRoutesProps {
   basePath?: string;
   /** The portion of the file route path that shouldn't be a part of the URL. You need to modify this if you want to import routes from a location other than the default `src/routes`. */
   dirPrefix?: string;
+  ssrMode?: boolean;
 }
 
 /**
@@ -24,6 +25,7 @@ export function FileRoutes({
   routes,
   basePath = '/',
   dirPrefix = './routes',
+  ssrMode = false,
 }: FileRoutesProps) {
   const request = useServerRequest();
   const {routeRendered, serverProps} = request.ctx.router;
@@ -35,16 +37,20 @@ export function FileRoutes({
     [routes, basePath]
   );
 
+  const url = new URL(request.url);
+
   let foundRoute, foundRouteDetails;
 
   for (let i = 0; i < pageRoutes.length; i++) {
-    foundRouteDetails = matchPath(serverProps.pathname, pageRoutes[i]);
+    foundRouteDetails = matchPath(url.pathname, pageRoutes[i]);
 
     if (foundRouteDetails) {
       foundRoute = pageRoutes[i];
       break;
     }
   }
+
+  console.log(serverProps);
 
   if (foundRoute) {
     request.ctx.router.routeRendered = true;
@@ -53,6 +59,7 @@ export function FileRoutes({
       <RouteParamsProvider routeParams={foundRouteDetails.params}>
         <foundRoute.component
           params={foundRouteDetails.params}
+          ssrMode={ssrMode}
           {...serverProps}
         />
       </RouteParamsProvider>

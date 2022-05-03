@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React from 'react';
 import {
   Logger,
   logServerResponse,
@@ -18,10 +18,7 @@ import type {
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import {
-  preloadRequestCacheData,
-  ServerRequestProvider,
-} from './foundation/ServerRequestProvider';
+import {ServerRequestProvider} from './foundation/ServerRequestProvider';
 import type {ServerResponse, IncomingMessage} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {
@@ -29,6 +26,7 @@ import {
   renderApiRoute,
   getApiRoutes,
 } from './utilities/apiRoutes';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
@@ -42,7 +40,6 @@ import {
 import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
-import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 
@@ -717,12 +714,7 @@ function buildAppRSC({
 
   const AppRSC = (
     <ServerRequestProvider request={request} isRSC={true}>
-      <PreloadQueries request={request}>
-        <App {...serverProps} />
-        <Suspense fallback={null}>
-          <Analytics />
-        </Suspense>
-      </PreloadQueries>
+      <App {...serverProps} />
     </ServerRequestProvider>
   );
 
@@ -735,25 +727,32 @@ function buildAppSSR(
 ) {
   const AppSSR = (
     <Html {...htmlOptions}>
-      <App ssrMode={true} />
+      <ServerRequestProvider request={request} isRSC={false}>
+        <ServerPropsProvider
+          initialServerProps={state as any}
+          setServerPropsForRsc={() => {}}
+        >
+          <App routes={routes} ssrMode={true} />
+        </ServerPropsProvider>
+      </ServerRequestProvider>
     </Html>
   );
 
   return {AppSSR};
 }
 
-function PreloadQueries({
-  request,
-  children,
-}: {
-  request: ServerComponentRequest;
-  children: React.ReactNode;
-}) {
-  const preloadQueries = request.getPreloadQueries();
-  preloadRequestCacheData(request, preloadQueries);
+// function PreloadQueries({
+//   request,
+//   children,
+// }: {
+//   request: ServerComponentRequest;
+//   children: React.ReactNode;
+// }) {
+//   const preloadQueries = request.getPreloadQueries();
+//   preloadRequestCacheData(request, preloadQueries);
 
-  return <>{children}</>;
-}
+//   return <>{children}</>;
+// }
 
 async function renderToBufferedString(
   ReactApp: JSX.Element,

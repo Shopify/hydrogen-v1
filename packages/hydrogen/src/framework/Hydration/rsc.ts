@@ -107,6 +107,7 @@ export function useServerResponse2(state: any) {
   );
 
   cache.set(key, response);
+  console.log('cache size', cache.size);
   return response;
 }
 

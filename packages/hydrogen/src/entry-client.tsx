@@ -9,10 +9,11 @@ import React, {
 import {hydrateRoot} from 'react-dom/client';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
-import {useServerResponse} from './framework/Hydration/rsc';
+import {useServerResponse2} from './framework/Hydration/rsc';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
+import {BrowserRouter} from './foundation/Router/BrowserRouter.client';
 
 const DevTools = React.lazy(() => import('./components/DevTools'));
 
@@ -83,14 +84,20 @@ function Content({
     pathname: window.location.pathname,
     search: window.location.search,
   });
-  const response = useServerResponse(serverProps);
+  const response = useServerResponse2({
+    ...serverProps,
+    componentId:
+      window.location.pathname === '/collection' ? 'Collection' : 'Product',
+  });
 
   return (
     <ServerPropsProvider
       initialServerProps={serverProps}
       setServerPropsForRsc={setServerProps}
     >
-      <ClientWrapper>{response.readRoot()}</ClientWrapper>
+      <BrowserRouter>
+        <ClientWrapper>{response.readRoot()}</ClientWrapper>
+      </BrowserRouter>
     </ServerPropsProvider>
   );
 }

@@ -3,7 +3,6 @@ import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse2} from '../framework/Hydration/rsc';
 
 export function RSCWrapper({componentId}: {componentId: string}) {
-  console.log('RSCWrapper', componentId);
   const response = useServerResponse2({
     componentId,
   });
