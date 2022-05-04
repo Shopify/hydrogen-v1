@@ -198,17 +198,15 @@ function resolveModuleMetaData(config, moduleReference) {
 }
 
 // ATTENTION
-// When adding new symbols to this file,
-// Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
-// The Symbol used to tag the ReactElement-like types.
-var REACT_ELEMENT_TYPE = Symbol.for('react.element');
-var REACT_FRAGMENT_TYPE = Symbol.for('react.fragment');
-var REACT_PROVIDER_TYPE = Symbol.for('react.provider');
-var REACT_SERVER_CONTEXT_TYPE = Symbol.for('react.server_context');
-var REACT_FORWARD_REF_TYPE = Symbol.for('react.forward_ref');
-var REACT_MEMO_TYPE = Symbol.for('react.memo');
-var REACT_LAZY_TYPE = Symbol.for('react.lazy');
-var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for('react.default_value');
+
+var REACT_ELEMENT_TYPE =  Symbol.for('react.element');
+var REACT_FRAGMENT_TYPE =  Symbol.for('react.fragment');
+var REACT_PROVIDER_TYPE =  Symbol.for('react.provider');
+var REACT_SERVER_CONTEXT_TYPE =  Symbol.for('react.server_context');
+var REACT_FORWARD_REF_TYPE =  Symbol.for('react.forward_ref');
+var REACT_MEMO_TYPE =  Symbol.for('react.memo');
+var REACT_LAZY_TYPE =  Symbol.for('react.lazy');
+var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED =  Symbol.for('react.default_value');
 
 // A reserved attribute.
 // It is handled by React separately and shouldn't be written to the DOM.
@@ -506,7 +504,7 @@ var startInlineScript = stringToPrecomputedChunk('<script>');
 var endInlineScript = stringToPrecomputedChunk('</script>');
 var startScriptSrc = stringToPrecomputedChunk('<script src="');
 var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
-var endAsyncScript = stringToPrecomputedChunk('" async=""></script>'); // Allows us to keep track of what we've already written so we can refer back to it.
+var endAsyncScript = stringToPrecomputedChunk('" async=""></script>');
 
 var textSeparator = stringToPrecomputedChunk('<!-- -->');
 

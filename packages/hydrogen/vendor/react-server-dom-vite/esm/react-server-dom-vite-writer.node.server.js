@@ -9,6 +9,7 @@
  */
 
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, createServerContext } from 'react';
+import { TextEncoder } from 'util';
 
 var ReactSharedInternals = __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
@@ -61,31 +62,144 @@ function flushBuffered(destination) {
     destination.flush();
   }
 }
+var VIEW_SIZE = 2048;
+var currentView = null;
+var writtenBytes = 0;
+var destinationHasCapacity = true;
 function beginWriting(destination) {
-  // Older Node streams like http.createServer don't have this.
-  if (typeof destination.cork === 'function') {
-    destination.cork();
+  currentView = new Uint8Array(VIEW_SIZE);
+  writtenBytes = 0;
+  destinationHasCapacity = true;
+}
+
+function writeStringChunk(destination, stringChunk) {
+  if (stringChunk.length === 0) {
+    return;
+  } // maximum possible view needed to encode entire string
+
+
+  if (stringChunk.length * 3 > VIEW_SIZE) {
+    if (writtenBytes > 0) {
+      writeToDestination(destination, currentView.subarray(0, writtenBytes));
+      currentView = new Uint8Array(VIEW_SIZE);
+      writtenBytes = 0;
+    }
+
+    writeToDestination(destination, textEncoder.encode(stringChunk));
+    return;
+  }
+
+  var target = currentView;
+
+  if (writtenBytes > 0) {
+    target = currentView.subarray(writtenBytes);
+  }
+
+  var _textEncoder$encodeIn = textEncoder.encodeInto(stringChunk, target),
+      read = _textEncoder$encodeIn.read,
+      written = _textEncoder$encodeIn.written;
+
+  writtenBytes += written;
+
+  if (read < stringChunk.length) {
+    writeToDestination(destination, currentView);
+    currentView = new Uint8Array(VIEW_SIZE);
+    writtenBytes = textEncoder.encodeInto(stringChunk.slice(read), currentView).written;
+  }
+
+  if (writtenBytes === VIEW_SIZE) {
+    writeToDestination(destination, currentView);
+    currentView = new Uint8Array(VIEW_SIZE);
+    writtenBytes = 0;
   }
 }
-function writeChunkAndReturn(destination, chunk) {
-  var nodeBuffer = chunk; // close enough
 
-  return destination.write(nodeBuffer);
+function writeViewChunk(destination, chunk) {
+  if (chunk.byteLength === 0) {
+    return;
+  }
+
+  if (chunk.byteLength > VIEW_SIZE) {
+    // this chunk may overflow a single view which implies it was not
+    // one that is cached by the streaming renderer. We will enqueu
+    // it directly and expect it is not re-used
+    if (writtenBytes > 0) {
+      writeToDestination(destination, currentView.subarray(0, writtenBytes));
+      currentView = new Uint8Array(VIEW_SIZE);
+      writtenBytes = 0;
+    }
+
+    writeToDestination(destination, chunk);
+    return;
+  }
+
+  var bytesToWrite = chunk;
+  var allowableBytes = currentView.length - writtenBytes;
+
+  if (allowableBytes < bytesToWrite.byteLength) {
+    // this chunk would overflow the current view. We enqueue a full view
+    // and start a new view with the remaining chunk
+    if (allowableBytes === 0) {
+      // the current view is already full, send it
+      writeToDestination(destination, currentView);
+    } else {
+      // fill up the current view and apply the remaining chunk bytes
+      // to a new view.
+      currentView.set(bytesToWrite.subarray(0, allowableBytes), writtenBytes);
+      writtenBytes += allowableBytes;
+      writeToDestination(destination, currentView);
+      bytesToWrite = bytesToWrite.subarray(allowableBytes);
+    }
+
+    currentView = new Uint8Array(VIEW_SIZE);
+    writtenBytes = 0;
+  }
+
+  currentView.set(bytesToWrite, writtenBytes);
+  writtenBytes += bytesToWrite.byteLength;
+
+  if (writtenBytes === VIEW_SIZE) {
+    writeToDestination(destination, currentView);
+    currentView = new Uint8Array(VIEW_SIZE);
+    writtenBytes = 0;
+  }
+}
+
+function writeChunk(destination, chunk) {
+  if (typeof chunk === 'string') {
+    writeStringChunk(destination, chunk);
+  } else {
+    writeViewChunk(destination, chunk);
+  }
+}
+
+function writeToDestination(destination, view) {
+  var currentHasCapacity = destination.write(view);
+  destinationHasCapacity = destinationHasCapacity && currentHasCapacity;
+}
+
+function writeChunkAndReturn(destination, chunk) {
+  writeChunk(destination, chunk);
+  return destinationHasCapacity;
 }
 function completeWriting(destination) {
-  // Older Node streams like http.createServer don't have this.
-  if (typeof destination.uncork === 'function') {
-    destination.uncork();
+  if (currentView && writtenBytes > 0) {
+    destination.write(currentView.subarray(0, writtenBytes));
   }
+
+  currentView = null;
+  writtenBytes = 0;
+  destinationHasCapacity = true;
 }
 function close(destination) {
   destination.end();
 }
+var textEncoder = new TextEncoder();
 function stringToChunk(content) {
   return content;
 }
 function stringToPrecomputedChunk(content) {
-  return Buffer.from(content, 'utf8');
+  return textEncoder.encode(content);
 }
 function closeWithError(destination, error) {
   // $FlowFixMe: This is an Error object or the destination accepts other types.
@@ -144,17 +258,15 @@ function resolveModuleMetaData(config, moduleReference) {
 }
 
 // ATTENTION
-// When adding new symbols to this file,
-// Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
-// The Symbol used to tag the ReactElement-like types.
-var REACT_ELEMENT_TYPE = Symbol.for('react.element');
-var REACT_FRAGMENT_TYPE = Symbol.for('react.fragment');
-var REACT_PROVIDER_TYPE = Symbol.for('react.provider');
-var REACT_SERVER_CONTEXT_TYPE = Symbol.for('react.server_context');
-var REACT_FORWARD_REF_TYPE = Symbol.for('react.forward_ref');
-var REACT_MEMO_TYPE = Symbol.for('react.memo');
-var REACT_LAZY_TYPE = Symbol.for('react.lazy');
-var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for('react.default_value');
+
+var REACT_ELEMENT_TYPE =  Symbol.for('react.element');
+var REACT_FRAGMENT_TYPE =  Symbol.for('react.fragment');
+var REACT_PROVIDER_TYPE =  Symbol.for('react.provider');
+var REACT_SERVER_CONTEXT_TYPE =  Symbol.for('react.server_context');
+var REACT_FORWARD_REF_TYPE =  Symbol.for('react.forward_ref');
+var REACT_MEMO_TYPE =  Symbol.for('react.memo');
+var REACT_LAZY_TYPE =  Symbol.for('react.lazy');
+var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED =  Symbol.for('react.default_value');
 
 // A reserved attribute.
 // It is handled by React separately and shouldn't be written to the DOM.
@@ -452,7 +564,7 @@ var startInlineScript = stringToPrecomputedChunk('<script>');
 var endInlineScript = stringToPrecomputedChunk('</script>');
 var startScriptSrc = stringToPrecomputedChunk('<script src="');
 var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
-var endAsyncScript = stringToPrecomputedChunk('" async=""></script>'); // Allows us to keep track of what we've already written so we can refer back to it.
+var endAsyncScript = stringToPrecomputedChunk('" async=""></script>');
 
 var textSeparator = stringToPrecomputedChunk('<!-- -->');
 
@@ -1557,7 +1669,7 @@ function performWork(request) {
 }
 
 function flushCompletedChunks(request, destination) {
-  beginWriting(destination);
+  beginWriting();
 
   try {
     // We emit module chunks first in the stream so that

@@ -77,7 +77,6 @@ function requireModule(_ref2) {
   var mod = moduleCache.get(id);
 
   if (!mod || mod instanceof Promise || mod instanceof Error) {
-    console.log(`${id} is not yet ready.`);
     // This module is still being downloaded or
     // it has errored out. Pass it to Suspense.
     throw mod;
@@ -87,12 +86,10 @@ function requireModule(_ref2) {
 }
 
 // ATTENTION
-// When adding new symbols to this file,
-// Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
-// The Symbol used to tag the ReactElement-like types.
-var REACT_ELEMENT_TYPE = Symbol.for('react.element');
-var REACT_LAZY_TYPE = Symbol.for('react.lazy');
-var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED = Symbol.for('react.default_value');
+
+var REACT_ELEMENT_TYPE =  Symbol.for('react.element');
+var REACT_LAZY_TYPE =  Symbol.for('react.lazy');
+var REACT_SERVER_CONTEXT_DEFAULT_VALUE_NOT_LOADED =  Symbol.for('react.default_value');
 
 var ReactSharedInternals = __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 

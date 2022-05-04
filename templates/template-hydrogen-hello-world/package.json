@@ -10,13 +10,13 @@
     "preview": "shopify hydrogen preview"
   },
   "devDependencies": {
-    "vite": "^2.9.0",
     "@shopify/cli": "1.0.9",
-    "@shopify/cli-hydrogen": "2.0.0"
+    "@shopify/cli-hydrogen": "2.0.0",
+    "vite": "^2.9.0"
   },
   "dependencies": {
     "@shopify/hydrogen": "^0.17.1",
-    "react": "0.0.0-experimental-2bf7c02f0-20220314",
-    "react-dom": "0.0.0-experimental-2bf7c02f0-20220314"
+    "react": "https://react-builds.vercel.app/api/prs/24480/packages/react",
+    "react-dom": "https://react-builds.vercel.app/api/prs/24480/packages/react-dom"
   }
 }
