@@ -17,63 +17,67 @@ export function PerformanceMetrics() {
   const {storeDomain} = useShop();
 
   useEffect(() => {
-    (function () {
-      if (
-        window.BOOMR &&
-        (window.BOOMR.version || window.BOOMR.snippetExecuted)
-      ) {
-        return;
-      }
+    try {
+      (function () {
+        if (
+          window.BOOMR &&
+          (window.BOOMR.version || window.BOOMR.snippetExecuted)
+        ) {
+          return;
+        }
 
-      // Executes only on first mount
-      window.BOOMR = window.BOOMR || {};
-      window.BOOMR.hydrogenPerformanceEvent = (data: any) => {
-        ClientAnalytics.publish(
-          ClientAnalytics.eventNames.PERFORMANCE,
-          true,
-          data
-        );
-        ClientAnalytics.pushToServer(
-          {
-            body: JSON.stringify(data),
-          },
-          ClientAnalytics.eventNames.PERFORMANCE
-        );
-      };
-      window.BOOMR.storeDomain = storeDomain;
+        // Executes only on first mount
+        window.BOOMR = window.BOOMR || {};
+        window.BOOMR.hydrogenPerformanceEvent = (data: any) => {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.PERFORMANCE,
+            true,
+            data
+          );
+          ClientAnalytics.pushToServer(
+            {
+              body: JSON.stringify(data),
+            },
+            ClientAnalytics.eventNames.PERFORMANCE
+          );
+        };
+        window.BOOMR.storeDomain = storeDomain;
 
-      function boomerangSaveLoadTime(e: Event) {
-        window.BOOMR_onload = (e && e.timeStamp) || Date.now();
-      }
+        function boomerangSaveLoadTime(e: Event) {
+          window.BOOMR_onload = (e && e.timeStamp) || Date.now();
+        }
 
-      // @ts-ignore
-      function boomerangInit(e) {
-        e.detail.BOOMR.init();
-        e.detail.BOOMR.t_end = Date.now();
-      }
+        // @ts-ignore
+        function boomerangInit(e) {
+          e.detail.BOOMR.init();
+          e.detail.BOOMR.t_end = Date.now();
+        }
 
-      if (window.addEventListener) {
-        window.addEventListener('load', boomerangSaveLoadTime, false);
-        // @ts-ignore
-      } else if (window.attachEvent) {
-        // @ts-ignore
-        window.attachEvent('onload', boomerangSaveLoadTime);
-      }
-      if (document.addEventListener) {
-        document.addEventListener('onBoomerangLoaded', boomerangInit);
-        // @ts-ignore
-      } else if (document.attachEvent) {
-        // @ts-ignore
-        document.attachEvent('onpropertychange', function (e) {
-          if (!e) e = event;
-          if (e.propertyName === 'onBoomerangLoaded') boomerangInit(e);
-        });
-      }
-    })();
-    loadScript(URL).catch(() => {
-      // ignore if boomerang doesn't load
-      // most likely because of an ad blocker
-    });
+        if (window.addEventListener) {
+          window.addEventListener('load', boomerangSaveLoadTime, false);
+          // @ts-ignore
+        } else if (window.attachEvent) {
+          // @ts-ignore
+          window.attachEvent('onload', boomerangSaveLoadTime);
+        }
+        if (document.addEventListener) {
+          document.addEventListener('onBoomerangLoaded', boomerangInit);
+          // @ts-ignore
+        } else if (document.attachEvent) {
+          // @ts-ignore
+          document.attachEvent('onpropertychange', function (e) {
+            if (!e) e = event;
+            if (e.propertyName === 'onBoomerangLoaded') boomerangInit(e);
+          });
+        }
+      })();
+      loadScript(URL).catch(() => {
+        // ignore if boomerang doesn't load
+        // most likely because of an ad blocker
+      });
+    } catch (err) {
+      // Do nothing
+    }
   }, [storeDomain]);
 
   return null;
