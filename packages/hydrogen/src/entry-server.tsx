@@ -475,14 +475,20 @@ async function stream(
     }
 
     if (await isStreamingSupported()) {
-      return new Response(transform.readable, responseOptions);
+      return new Response(transform.readable, {
+        ...responseOptions,
+        headers: getHeaders(responseOptions.headers),
+      });
     }
 
     const bufferedBody = await bufferReadableStream(
       transform.readable.getReader()
     );
 
-    return new Response(bufferedBody, responseOptions);
+    return new Response(bufferedBody, {
+      ...responseOptions,
+      headers: getHeaders(responseOptions.headers),
+    });
   } else if (response) {
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
@@ -818,8 +824,21 @@ function getResponseOptions(
   error?: Error
 ) {
   const responseInit = {} as ResponseOptions;
+
   // @ts-ignore
   responseInit.headers = Object.fromEntries(headers.entries());
+
+  // @ts-ignore
+  const rawHeaders = headers.raw();
+  // Warning! Headers.raw is non-standard and might disappear in undici or newer versions of node-fetch
+  // See: https://github.com/whatwg/fetch/issues/973
+  const setCookieKey = Object.keys(rawHeaders).find(
+    (key) => key.toLowerCase() === 'set-cookie'
+  );
+
+  if (setCookieKey) {
+    responseInit.headers['set-cookie'] = rawHeaders[setCookieKey];
+  }
 
   if (error) {
     responseInit.status = 500;
@@ -910,4 +929,23 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
+}
+
+function getHeaders(rawHeaders: Record<string, String | Array<String>> = {}) {
+  const headers = new Headers();
+
+  for (const [key, values] of Object.entries(rawHeaders)) {
+    // values doesn't have an array prototype, so instanceof doesn't work.
+    // Check for .splice instead
+    // @ts-ignore
+    if (values?.splice) {
+      for (const value of values) {
+        headers.append(key, value as string);
+      }
+    } else {
+      headers.append(key, values as string);
+    }
+  }
+
+  return headers;
 }

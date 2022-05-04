@@ -26,7 +26,7 @@ export default function Cart() {
   const {totalQuantity} = useCart();
 
   return (
-    <div>
+    <>
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className={`z-20 fixed top-0 bottom-0 left-0 right-0 bg-black transition-opacity duration-400 ${
@@ -52,7 +52,7 @@ export default function Cart() {
           )}
         </div>
       </Dialog>
-    </div>
+    </>
   );
 }
 
