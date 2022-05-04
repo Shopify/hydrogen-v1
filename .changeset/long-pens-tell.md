@@ -1,7 +1,5 @@
 ---
-'@shopify/hydrogen': minor
-'example-css-modules': minor
-'template-hydrogen-default': minor
+'@shopify/hydrogen': patch
 ---
 
 Upgrade body-parser
