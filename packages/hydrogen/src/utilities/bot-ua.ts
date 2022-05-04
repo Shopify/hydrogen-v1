@@ -41,6 +41,10 @@ const botUserAgents = [
   'W3C_Validator',
   'WhatsApp',
   'yandex',
+
+  // SEO Tools
+  'Seoradar',
+  'W3C html2txt',
 ];
 
 /**
