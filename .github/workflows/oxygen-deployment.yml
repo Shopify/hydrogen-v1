@@ -31,7 +31,7 @@ jobs:
 
       - name: Generate deployment ID
         id: deployment-id
-        working-directory: ./examples/template-hydrogen-default
+        working-directory: ./templates/template-hydrogen-default
         run: |
           yarn add ulid
           echo "::set-output name=ID::$(LC_ALL=C </dev/urandom tr -dc "0123456789abcdefghjkmnpqrstvwxyz" | head -c 9)"
@@ -43,7 +43,7 @@ jobs:
 
       - name: Production build
         id: storefront-build
-        working-directory: ./examples/template-hydrogen-default
+        working-directory: ./templates/template-hydrogen-default
         run: |
           HYDROGEN_ASSET_BASE_URL=${{ steps.base-url.outputs.URL }} yarn build:client
           HYDROGEN_ASSET_BASE_URL=${{ steps.base-url.outputs.URL }} yarn build:worker
@@ -52,7 +52,7 @@ jobs:
         id: deploy
         uses: shopify/oxygenctl-action@v2
         with:
-          path: ./examples/template-hydrogen-default
+          path: ./templates/template-hydrogen-default
           deployment_id: ${{ steps.deployment-id.outputs.ID }}
           oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
           # Hardcode message and timestamp if manual dispatch
