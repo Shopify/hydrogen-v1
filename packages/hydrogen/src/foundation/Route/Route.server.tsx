@@ -1,9 +1,7 @@
 import React, {cloneElement, ReactElement} from 'react';
 import {useServerRequest} from '../ServerRequestProvider';
 import {matchPath} from '../../utilities/matchPath';
-import {Boomerang} from '../Boomerang/Boomerang.client';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client';
-import {useServerAnalytics} from '../Analytics';
 
 export type RouteProps = {
   /** The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. */
@@ -35,16 +33,10 @@ export function Route({path, page}: RouteProps): ReactElement | null {
   if (match) {
     request.ctx.router.routeRendered = true;
     request.ctx.router.routeParams = match.params;
-    const name = (page?.type as any)?.name;
-
-    useServerAnalytics({
-      templateName: name,
-    });
 
     return (
       <RouteParamsProvider routeParams={match.params}>
         {cloneElement(page, {params: match.params || {}, ...serverProps})}
-        {name ? <Boomerang pageTemplate={name} /> : null}
       </RouteParamsProvider>
     );
   }

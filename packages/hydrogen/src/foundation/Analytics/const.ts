@@ -5,4 +5,5 @@ export const eventNames = {
   REMOVE_FROM_CART: 'remove-from-cart',
   UPDATE_CART: 'update-cart',
   DISCOUNT_CODE_UPDATED: 'discount-code-updated',
+  PERFORMANCE: 'performance',
 };

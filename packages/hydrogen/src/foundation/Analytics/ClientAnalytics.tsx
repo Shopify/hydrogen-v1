@@ -105,7 +105,16 @@ function subscribe(
 function pushToServer(init?: RequestInit, searchParam?: string) {
   return fetch(
     `${EVENT_PATHNAME}${searchParam ? `?${searchParam}` : ''}`,
-    init
+    Object.assign(
+      {
+        method: 'post',
+        headers: {
+          'cache-control': 'no-cache',
+          'Content-Type': 'application/json',
+        },
+      },
+      init
+    )
   );
 }
 

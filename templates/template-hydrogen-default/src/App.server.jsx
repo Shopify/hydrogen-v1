@@ -4,6 +4,7 @@ import {
   Route,
   FileRoutes,
   ShopifyProvider,
+  PerformanceMetricsServerAnalyticsConnector,
   CookieSessionStorage,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
@@ -12,6 +13,10 @@ import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
+import {
+  PerformanceMetrics,
+  PerformanceMetricsDebug,
+} from '@shopify/hydrogen/client';
 
 function App({routes}) {
   return (
@@ -24,6 +29,8 @@ function App({routes}) {
             <Route path="*" page={<NotFound />} />
           </Router>
         </CartProvider>
+        <PerformanceMetrics />
+        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
       </ShopifyProvider>
     </Suspense>
   );
@@ -41,4 +48,5 @@ export default renderHydrogen(App, {
     sameSite: 'strict',
     maxAge: 60 * 60 * 24 * 30,
   }),
+  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
 });

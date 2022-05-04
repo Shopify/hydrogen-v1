@@ -132,5 +132,6 @@ describe('Analytics - ClientAnalytics', () => {
     expect(ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED).toEqual(
       'discount-code-updated'
     );
+    expect(ClientAnalytics.eventNames.PERFORMANCE).toEqual('performance');
   });
 });
