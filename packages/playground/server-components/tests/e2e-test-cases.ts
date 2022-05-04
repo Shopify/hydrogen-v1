@@ -184,11 +184,11 @@ export default async function testCases({
     expect(response.status).toEqual(201);
     // statusText cannot be modified in workers
     expect(response.statusText).toEqual(isWorker ? 'Created' : 'hey');
-
     expect(response.headers.get('Accept-Encoding')).toBe('deflate, gzip');
-    expect(response.headers.get('Set-Cookie')).toBe(
-      'hello=world, hello2=world2'
-    );
+    expect(response.headers.raw()['set-cookie']).toEqual([
+      'hello=world',
+      'hello2=world2',
+    ]);
   });
 
   it('uses the provided custom body', async () => {
