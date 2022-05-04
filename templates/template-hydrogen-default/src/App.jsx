@@ -8,10 +8,10 @@ import {
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import shopifyConfig from '../shopify.config';
-import DefaultSeo from './components/DefaultSeo.server';
-import NotFound from './components/NotFound.server';
+import DefaultSeo from './components/DefaultSeo';
+import NotFound from './components/NotFound';
 import LoadingFallback from './components/LoadingFallback';
-import CartProvider from './components/CartProvider.client';
+import CartProvider from './components/CartProvider';
 
 function App({routes}) {
   return (
@@ -29,7 +29,7 @@ function App({routes}) {
   );
 }
 
-const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+const routes = import.meta.globEager('./routes/**/*.[jt](s|sx)');
 
 export default renderHydrogen(App, {
   routes,

@@ -1,8 +1,8 @@
 import {useShop, useShopQuery, flattenConnection} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
-import Layout from './Layout.server';
-import Button from './Button.client';
+import Layout from './Layout';
+import Button from './Button';
 import ProductCard from './ProductCard';
 
 /**

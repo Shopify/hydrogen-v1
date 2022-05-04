@@ -1,5 +1,5 @@
 import {startHydrogenServer} from '../utils';
-import Collections from '../../src/routes/collections/[handle].server';
+import Collections from '../../src/routes/collections/[handle]';
 
 describe('collections', () => {
   let hydrogen;

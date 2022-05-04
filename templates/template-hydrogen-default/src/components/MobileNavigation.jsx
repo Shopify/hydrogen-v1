@@ -2,7 +2,7 @@ import {Fragment, useEffect} from 'react';
 import {Link} from '@shopify/hydrogen/client';
 import {FocusTrap} from '@headlessui/react';
 
-import MobileCountrySelector from './MobileCountrySelector.client';
+import MobileCountrySelector from './MobileCountrySelector';
 import OpenIcon from './OpenIcon';
 
 let scrollPosition = 0;

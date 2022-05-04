@@ -1,7 +1,7 @@
 import {useState, Suspense} from 'react';
 import {useCountry, fetchSync} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
-import SpinnerIcon from './SpinnerIcon.client';
+import SpinnerIcon from './SpinnerIcon';
 
 /**
  * A client component that selects the appropriate country to display for products on a website

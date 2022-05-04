@@ -1,5 +1,5 @@
 import {startHydrogenServer} from '../utils';
-import Product from '../../src/routes/products/[handle].server';
+import Product from '../../src/routes/products/[handle]';
 
 describe('products', () => {
   let hydrogen;

@@ -1,9 +1,9 @@
 import {useState, Suspense} from 'react';
 import {useCountry} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
-import SpinnerIcon from './SpinnerIcon.client';
+import SpinnerIcon from './SpinnerIcon';
 
-import {ArrowIcon, Countries} from './CountrySelector.client';
+import {ArrowIcon, Countries} from './CountrySelector';
 
 /**
  * A client component that selects the appropriate country to display for products on a mobile storefront

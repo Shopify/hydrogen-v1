@@ -1,8 +1,8 @@
 import {useShop, useShopQuery, Seo} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
-import Layout from '../../components/Layout.server';
-import NotFound from '../../components/NotFound.server';
+import Layout from '../../components/Layout';
+import NotFound from '../../components/NotFound';
 
 export default function Page({params}) {
   const {languageCode} = useShop();

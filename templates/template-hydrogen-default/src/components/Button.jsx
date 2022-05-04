@@ -1,3 +1,5 @@
+'client export';
+
 import {Link} from '@shopify/hydrogen/client';
 
 const DEFAULT_CLASSES =

@@ -1,5 +1,5 @@
 import {startHydrogenServer} from '../utils';
-import Index from '../../src/routes/index.server';
+import Index from '../../src/routes';
 
 describe('index', () => {
   let hydrogen;
