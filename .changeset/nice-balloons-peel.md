@@ -1,5 +1,5 @@
 ---
-'template-hydrogen-default': minor
+'create-hydrogen-app': minor
 '@shopify/hydrogen': minor
 ---
 
