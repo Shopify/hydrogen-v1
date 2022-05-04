@@ -477,20 +477,14 @@ async function stream(
     }
 
     if (await isStreamingSupported()) {
-      return new Response(transform.readable, {
-        ...responseOptions,
-        headers: responseOptions.headers,
-      });
+      return new Response(transform.readable, responseOptions);
     }
 
     const bufferedBody = await bufferReadableStream(
       transform.readable.getReader()
     );
 
-    return new Response(bufferedBody, {
-      ...responseOptions,
-      headers: responseOptions.headers,
-    });
+    return new Response(bufferedBody, responseOptions);
   } else if (response) {
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
