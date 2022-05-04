@@ -205,9 +205,9 @@ You can deploy your project to any platform that supports Docker-based hosting, 
     {% codeblock terminal %}
 
     ```bash
-    docker build .
+    docker build . --tag hydrogen-sample-app:latest
 
-    docker run -p 8080:8080
+    docker run -d -p 8080:8080 hydrogen-sample-app
     ```
 
     {% endcodeblock %}
