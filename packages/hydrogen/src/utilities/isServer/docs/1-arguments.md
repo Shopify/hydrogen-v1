@@ -1,3 +1,0 @@
-## Arguments
-
-None

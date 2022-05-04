@@ -33,13 +33,13 @@ jobs:
         run: yarn workspace @shopify/hydrogen build
 
       - name: Make updates for Cloudflare Workers runtime
-        working-directory: ./examples/template-hydrogen-default
+        working-directory: ./templates/template-hydrogen-default
         run: |
           cp ../../.github/deployments/cloudflare/* .
           yarn add @cloudflare/kv-asset-handler
 
       - name: Build for workers
-        working-directory: ./examples/template-hydrogen-default
+        working-directory: ./templates/template-hydrogen-default
         run: |
           yarn build:client
           yarn cross-env WORKER=true vite build --outDir dist/worker --ssr worker
@@ -50,7 +50,7 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.DEPLOYMENT_CF_ACCOUNT_ID }}
         with:
           apiToken: ${{ secrets.DEPLOYMENT_CF_API_TOKEN }}
-          workingDirectory: ./examples/template-hydrogen-default
+          workingDirectory: ./templates/template-hydrogen-default
 
       - name: Run health check
         run: |

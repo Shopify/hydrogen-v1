@@ -1,9 +1,10 @@
 import {ImportGlobEagerOutput, ShopifyConfig} from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
-import {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
+import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
+import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {
   emptySessionImplementation,
   SessionApi,
@@ -36,6 +37,31 @@ export type ApiRouteMatch = {
   params: RouteParams;
 };
 
+export function extractPathFromRoutesKey(routesKey: string, dirPrefix: string) {
+  let path = routesKey
+    .replace(dirPrefix, '')
+    .replace(/\.server\.(t|j)sx?$/, '')
+    /**
+     * Replace /index with /
+     */
+    .replace(/\/index$/i, '/')
+    /**
+     * Only lowercase the first letter. This allows the developer to use camelCase
+     * dynamic paths while ensuring their standard routes are normalized to lowercase.
+     */
+    .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
+    /**
+     * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
+     */
+    .replace(/\[(?:[.]{3})?(\w+?)\]/g, (_match, param: string) => `:${param}`);
+
+  if (path.endsWith('/') && path !== '/') {
+    path = path.substring(0, path.length - 1);
+  }
+
+  return path;
+}
+
 export function getApiRoutes(
   pages: ImportGlobEagerOutput | undefined,
   topLevelPath = '*'
@@ -47,28 +73,7 @@ export function getApiRoutes(
   const routes = Object.keys(pages)
     .filter((key) => pages[key].api)
     .map((key) => {
-      let path = key
-        .replace('./routes', '')
-        .replace(/\.server\.(t|j)sx?$/, '')
-        /**
-         * Replace /index with /
-         */
-        .replace(/\/index$/i, '/')
-        /**
-         * Only lowercase the first letter. This allows the developer to use camelCase
-         * dynamic paths while ensuring their standard routes are normalized to lowercase.
-         */
-        .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
-        /**
-         * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
-         */
-        .replace(
-          /\[(?:[.]{3})?(\w+?)\]/g,
-          (_match, param: string) => `:${param}`
-        );
-
-      if (path.endsWith('/') && path !== '/')
-        path = path.substring(0, path.length - 1);
+      const path = extractPathFromRoutesKey(key, './routes');
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
@@ -129,18 +134,23 @@ interface QueryShopArgs {
   query: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
-  /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
-  locale?: string;
 }
 
-function queryShopBuilder(shopifyConfig: ShopifyConfig) {
+function queryShopBuilder(
+  shopifyConfig: ShopifyConfig,
+  request: ServerComponentRequest
+) {
   return async function queryShop<T>({
     query,
     variables,
-    locale,
   }: QueryShopArgs): Promise<T> {
-    const {storeDomain, storefrontApiVersion, storefrontToken, defaultLocale} =
-      shopifyConfig;
+    const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
+    const buyerIp = request.getBuyerIp();
+
+    const extraHeaders = getStorefrontApiRequestHeaders({
+      buyerIp,
+      storefrontToken,
+    });
 
     const fetcher = fetchBuilder<T>(
       `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
@@ -148,9 +158,8 @@ function queryShopBuilder(shopifyConfig: ShopifyConfig) {
         method: 'POST',
         body: graphqlRequestBody(query, variables),
         headers: {
-          'X-Shopify-Storefront-Access-Token': storefrontToken,
-          'Accept-Language': (locale as string) ?? defaultLocale,
           'Content-Type': 'application/json',
+          ...extraHeaders,
         },
       }
     );
@@ -160,11 +169,11 @@ function queryShopBuilder(shopifyConfig: ShopifyConfig) {
 }
 
 export async function renderApiRoute(
-  request: Request,
+  request: ServerComponentRequest,
   route: ApiRouteMatch,
   shopifyConfig: ShopifyConfig,
   session?: SessionStorageAdapter
-): Promise<Response> {
+): Promise<Response | Request> {
   let response;
   const log = getLoggerWithContext(request);
   let cookieToSet = '';
@@ -172,7 +181,7 @@ export async function renderApiRoute(
   try {
     response = await route.resource(request, {
       params: route.params,
-      queryShop: queryShopBuilder(shopifyConfig),
+      queryShop: queryShopBuilder(shopifyConfig, request),
       session: session
         ? {
             async get() {
@@ -190,7 +199,7 @@ export async function renderApiRoute(
         : emptySessionImplementation(log),
     });
 
-    if (!(response instanceof Response)) {
+    if (!(response instanceof Response || response instanceof Request)) {
       if (typeof response === 'string' || response instanceof String) {
         response = new Response(response as string);
       } else if (typeof response === 'object') {
@@ -202,6 +211,10 @@ export async function renderApiRoute(
       }
     }
 
+    if (!response) {
+      response = new Response(null);
+    }
+
     if (cookieToSet) {
       response.headers.set('Set-Cookie', cookieToSet);
     }
@@ -210,7 +223,11 @@ export async function renderApiRoute(
     response = new Response('Error processing: ' + request.url, {status: 500});
   }
 
-  logServerResponse('api', request as ServerComponentRequest, response.status);
+  logServerResponse(
+    'api',
+    request as ServerComponentRequest,
+    (response as Response).status ?? 200
+  );
 
   return response;
 }

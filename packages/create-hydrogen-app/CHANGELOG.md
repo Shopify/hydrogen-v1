@@ -1,5 +1,133 @@
 # Changelog
 
+## 0.17.2
+
+## 0.17.1
+
+## 0.17.0
+
+### Minor Changes
+
+- [#1044](https://github.com/Shopify/hydrogen/pull/1044) [`c8f5934d`](https://github.com/Shopify/hydrogen/commit/c8f5934d85db63162a13256cfcf21098b390887b) Thanks [@blittle](https://github.com/blittle)! - Hydrogen now has a built in session and cookie implementation. Read more about [how sessions work in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions). The starter template also includes a cookie session storage implementation. To use the new session implementation within an existing Hydrogen app:
+
+  ```diff
+  import renderHydrogen from '@shopify/hydrogen/entry-server';
+  import {
+    Router,
+    Route,
+    FileRoutes,
+    ShopifyProvider,
+  +  CookieSessionStorage,
+  } from '@shopify/hydrogen';
+  import {Suspense} from 'react';
+  import shopifyConfig from '../shopify.config';
+  import DefaultSeo from './components/DefaultSeo.server';
+  import NotFound from './components/NotFound.server';
+  import LoadingFallback from './components/LoadingFallback';
+  import CartProvider from './components/CartProvider.client';
+
+  function App({routes}) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <ShopifyProvider shopifyConfig={shopifyConfig}>
+          <CartProvider>
+            <DefaultSeo />
+            <Router>
+              <FileRoutes routes={routes} />
+              <Route path="*" page={<NotFound />} />
+            </Router>
+          </CartProvider>
+        </ShopifyProvider>
+      </Suspense>
+    );
+  }
+
+  const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+
+  export default renderHydrogen(App, {
+    routes,
+    shopifyConfig,
+  +  session: CookieSessionStorage('__session', {
+  +    path: '/',
+  +    httpOnly: true,
+  +    secure: process.env.NODE_ENV === 'production',
+  +    sameSite: 'strict',
+  +    maxAge: 60 * 60 * 24 * 30,
+  +  }),
+  });
+
+  ```
+
+* [#1134](https://github.com/Shopify/hydrogen/pull/1134) [`7138bb1d`](https://github.com/Shopify/hydrogen/commit/7138bb1dae884c9e057d1da2ba1f51cd05fff45a) Thanks [@michenly](https://github.com/michenly)! - Upgrade @shopify/cli-hydrogen to v2.0.0
+
+- [#881](https://github.com/Shopify/hydrogen/pull/881) [`a31babfb`](https://github.com/Shopify/hydrogen/commit/a31babfb9bf73b732a18487582cec129acbb8b5e) Thanks [@jplhomer](https://github.com/jplhomer)! - ## Change from serverState to serverProps
+
+  **Breaking changes:**
+
+  1. `useServerState()` is gone. Use `useServerProps()` instead
+  2. `useServerProps()` is reset on each page navigation. Previously `useServerState()` was not.
+  3. `useServerProps()` does not contain `pathname` and `search`. Use the [useNavigate](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate) hook to programmatically navigate instead.
+
+  **Explanation:**
+
+  The current behavior of server state is to **persist indefinitely** (until a hard page reload). This works great for things like the CountrySelector, where the updated state is meant to persist across navigations. This breaks down for many other use cases. Consider a collection paginator: if you paginate through to the second page of a collection using server state, visit a product page, and then go to a different collection page, the new collection page will use that same pagination variable in server state. This will result in a wonky or errored experience.
+
+  Additionally, we have found that the term for `serverState` is confusing. The hook is used within client components, yet the state is passed as a prop to server components.
+
+  As a result, `serverState` is now gone. Instead communicating between client and server components is through `serverProps`. If a client component wants to re-render server content, it just calls `setServerProps('some', 'data')`. Those props will be serialized to the server, and the server component will re-render. Additionally, the server props are reset on page navigation. So that they will not bleed between pages (fixes #331).
+
+  If you previously relied on `serverState` for global state in your app, you shouldn't use `serverProps` anymore. Instead we'll introduce a new session based mechanism for global state (in the meantime you could manually manage a cookie).
+
+  Lastly, `serverProps` no longer include the `pathname` and `search` parameters. Programmatically navigate in hydrogen instead with the [useNavigate](https://shopify.dev/api/hydrogen/hooks/framework/usenavigate) hook.
+
+### Patch Changes
+
+- [#1124](https://github.com/Shopify/hydrogen/pull/1124) [`737237d2`](https://github.com/Shopify/hydrogen/commit/737237d2229a711b87092c65cbcec8305c1a7460) Thanks [@cartogram](https://github.com/cartogram)! - Changing the casing on the fetchpriority attribute to all lowercase on Gallery images to prevent a React warning.
+
+* [#1125](https://github.com/Shopify/hydrogen/pull/1125) [`552d627b`](https://github.com/Shopify/hydrogen/commit/552d627b5a621c65853d3b6d3825bfe47f7ccff0) Thanks [@cartogram](https://github.com/cartogram)! - Fixed a bug where the price on the product details was not updating when the variant changed.
+
+## 0.16.1
+
+## 0.16.0
+
+### Minor Changes
+
+- [#1094](https://github.com/Shopify/hydrogen/pull/1094) [`10ab341d`](https://github.com/Shopify/hydrogen/commit/10ab341d94a3c4a4913f3cd62b72ab7f9e62409a) Thanks [@jplhomer](https://github.com/jplhomer)! - Update starter template to use new `fetchSync` API
+
+### Patch Changes
+
+- [#929](https://github.com/Shopify/hydrogen/pull/929) [`f9e76eb7`](https://github.com/Shopify/hydrogen/commit/f9e76eb786b69dbbb3e47cfec2528cab82bbe370) Thanks [@cartogram](https://github.com/cartogram)! - Deprecate `@shopify/hydrogen-cli`. Use Shopify CLI (`@shopify/cli-hydrogen` instead.
+
+  The template now adds the `@shopify/cli` dependencies for the `yarn preview` command. To update your existing app:
+
+  To update your existing apps, install the Shopify & Hydrogen CLIs:
+
+  ```bash
+  yarn add -D @shopify/cli @shopify/cli-hydrogen
+  ```
+
+  And update the `preview` script in your `package.json`:
+
+  ```diff
+  -    "preview": "npx @shopify/hydrogen-cli@latest preview",
+  +    "preview": "shopify hydrogen preview",
+  ```
+
+* [#1089](https://github.com/Shopify/hydrogen/pull/1089) [`3c189665`](https://github.com/Shopify/hydrogen/commit/3c18966501633e10dfdcc2eb18c7cc75a8b086d6) Thanks [@cartogram](https://github.com/cartogram)! - Use Shopify CLI to start a local development server instead of `vite`.
+
+  To update your existing apps, install the Shopify & Hydrogen CLIs:
+
+  ```bash
+  yarn add -D @shopify/cli @shopify/cli-hydrogen
+  ```
+
+  And update the `dev` script in your `package.json`:
+
+  ```diff
+  -    "dev": "vite",
+  +    "dev": "shopify hydrogen dev",
+  ```
+
 ## 0.14.0
 
 ### Minor Changes
@@ -68,7 +196,7 @@
   }, []);
   ```
 
-  See an example on how this could be done inside the Demo Store template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/examples/template-hydrogen-default/src/components/CountrySelector.client.jsx)
+  See an example on how this could be done inside the Demo Store template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/templates/template-hydrogen-default/src/components/CountrySelector.client.jsx)
 
 * [#698](https://github.com/Shopify/hydrogen/pull/698) [`6f30b9a1`](https://github.com/Shopify/hydrogen/commit/6f30b9a1327f06d648a01dd94d539c7dcb3061e0) Thanks [@jplhomer](https://github.com/jplhomer)! - Basic end-to-end tests have been added to the default Hydrogen template. You can run tests in development:
 

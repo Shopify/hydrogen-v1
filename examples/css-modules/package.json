@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@shopify/hydrogen": "latest",
-    "body-parser": "^1.19.1",
+    "body-parser": "^1.20.0",
     "compression": "^1.7.4",
     "react": "0.0.0-experimental-2bf7c02f0-20220314",
     "react-dom": "0.0.0-experimental-2bf7c02f0-20220314",

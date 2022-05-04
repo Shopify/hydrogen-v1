@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {Suspense} from 'react';
 import {
   Logger,
   logServerResponse,
@@ -29,7 +29,7 @@ import {
   renderApiRoute,
   getApiRoutes,
 } from './utilities/apiRoutes';
-import {ServerStateProvider} from './foundation/ServerStateProvider';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
@@ -41,9 +41,11 @@ import {
   isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME} from './constants';
+import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
+import {Analytics} from './foundation/Analytics/Analytics.server';
+import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 
 declare global {
@@ -77,11 +79,15 @@ export interface RequestHandler {
 
 export const renderHydrogen = (
   App: any,
-  {shopifyConfig, routes, session}: ServerHandlerConfig
+  {
+    shopifyConfig,
+    routes,
+    serverAnalyticsConnectors,
+    session,
+  }: ServerHandlerConfig
 ) => {
-  const handleRequest: RequestHandler = async function (
-    rawRequest,
-    {
+  const handleRequest: RequestHandler = async function (rawRequest, options) {
+    const {
       indexTemplate,
       streamableResponse,
       dev,
@@ -89,8 +95,8 @@ export const renderHydrogen = (
       context,
       nonce,
       buyerIpHeader,
-    }
-  ) {
+    } = options;
+
     const request = new ServerComponentRequest(rawRequest);
     request.ctx.buyerIpHeader = buyerIpHeader;
 
@@ -113,16 +119,14 @@ export const renderHydrogen = (
     setContext(context);
     setConfig({dev});
 
-    const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
-
-    let template =
-      typeof indexTemplate === 'function'
-        ? await indexTemplate(url.toString())
-        : indexTemplate;
-
-    if (template && typeof template !== 'string') {
-      template = template.default;
+    if (
+      url.pathname === EVENT_PATHNAME ||
+      EVENT_PATHNAME_REGEX.test(url.pathname)
+    ) {
+      return ServerAnalyticsRoute(request, serverAnalyticsConnectors);
     }
+
+    const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
     if (!isReactHydrationRequest && routes) {
       const apiRoute = getApiRoute(url, {routes});
@@ -133,13 +137,31 @@ export const renderHydrogen = (
         apiRoute &&
         (!apiRoute.hasServerComponent || request.method !== 'GET')
       ) {
-        return renderApiRoute(request, apiRoute, shopifyConfig, sessionApi);
+        const apiResponse = await renderApiRoute(
+          request,
+          apiRoute,
+          shopifyConfig,
+          sessionApi
+        );
+
+        return apiResponse instanceof Request
+          ? handleRequest(apiResponse, options)
+          : apiResponse;
       }
     }
 
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
+
+    let template =
+      typeof indexTemplate === 'function'
+        ? await indexTemplate(url.toString())
+        : indexTemplate;
+
+    if (template && typeof template !== 'string') {
+      template = template.default;
+    }
 
     const params = {
       App,
@@ -227,7 +249,7 @@ async function render(
    * TODO: Also add `Vary` headers for `accept-language` and any other keys
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
-  headers['cache-control'] = componentResponse.cacheControlHeader;
+  headers.set('cache-control', componentResponse.cacheControlHeader);
 
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
@@ -241,14 +263,19 @@ async function render(
     });
   }
 
-  headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+  headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
 
   if (flight) {
     html = html.replace(
       '</body>',
-      `${flightContainer({init: true, nonce, chunk: flight})}</body>`
+      () =>
+        `${flightContainer({
+          init: true,
+          nonce,
+          chunk: flight as string,
+        })}</body>`
     );
   }
 
@@ -369,8 +396,10 @@ async function stream(
        * queries which might be caught behind Suspense. Clarify this or add
        * additional checks downstream?
        */
-      responseOptions.headers['cache-control'] =
-        componentResponse.cacheControlHeader;
+      responseOptions.headers.set(
+        'cache-control',
+        componentResponse.cacheControlHeader
+      );
 
       if (isRedirect(responseOptions)) {
         return false;
@@ -382,7 +411,7 @@ async function stream(
           return false;
         }
 
-        responseOptions.headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+        responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
         if (didError) {
@@ -650,6 +679,9 @@ function buildAppRSC({
     <ServerRequestProvider request={request} isRSC={true}>
       <PreloadQueries request={request}>
         <App {...serverProps} />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
       </PreloadQueries>
     </ServerRequestProvider>
   );
@@ -679,16 +711,19 @@ function buildAppSSR(
   const AppSSR = (
     <Html {...htmlOptions}>
       <ServerRequestProvider request={request} isRSC={false}>
-        <ServerStateProvider
-          serverState={state as any}
-          setServerState={() => {}}
+        <ServerPropsProvider
+          initialServerProps={state as any}
+          setServerPropsForRsc={() => {}}
         >
           <PreloadQueries request={request}>
-            <React.Suspense fallback={null}>
+            <Suspense fallback={null}>
               <RscConsumer />
-            </React.Suspense>
+            </Suspense>
+            <Suspense fallback={null}>
+              <Analytics />
+            </Suspense>
           </PreloadQueries>
-        </ServerStateProvider>
+        </ServerPropsProvider>
       </ServerRequestProvider>
     </Html>
   );
@@ -701,11 +736,12 @@ function PreloadQueries({
   children,
 }: {
   request: ServerComponentRequest;
-  children: ReactElement;
+  children: React.ReactNode;
 }) {
   const preloadQueries = request.getPreloadQueries();
   preloadRequestCacheData(request, preloadQueries);
-  return children;
+
+  return <>{children}</>;
 }
 
 async function renderToBufferedString(
@@ -774,7 +810,7 @@ function startWritingHtmlToServerResponse(
 }
 
 type ResponseOptions = {
-  headers: Record<string, string>;
+  headers: Headers;
   status: number;
   statusText?: string;
 };
@@ -784,8 +820,8 @@ function getResponseOptions(
   error?: Error
 ) {
   const responseInit = {} as ResponseOptions;
-  // @ts-ignore
-  responseInit.headers = Object.fromEntries(headers.entries());
+
+  responseInit.headers = headers;
 
   if (error) {
     responseInit.status = 500;
@@ -819,8 +855,8 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries(headers).forEach(([key, value]) =>
-    response.setHeader(key, value)
+  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+    response.setHeader(key, value as string)
   );
 }
 

@@ -5,13 +5,13 @@ import {useShopQuery} from '../../hooks/useShopQuery';
 import {CacheDays} from '../../framework/CachingStrategy';
 import {PreloadOptions} from '../../types';
 import {Country, CountryCode} from '../../storefront-api-types';
-import {useSession} from '../../foundation/session/session';
+import {useSession} from '../../foundation/useSession/useSession';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
   children: ReactNode;
   /** Whether to preload the query. Defaults to `false`. Specify `true` to
-   * [preload the query](/custom-storefronts/hydrogen/framework/preloaded-queries) for the URL
+   * [preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries) for the URL
    * or `'*'` to preload the query for all requests.
    */
   preload: PreloadOptions;
@@ -19,7 +19,7 @@ export interface LocalizationProviderProps {
 
 /**
  * The `LocalizationProvider` component automatically queries the Storefront API's
- * [`localization`](/api/storefront/reference/common-objects/queryroot) field
+ * [`localization`](https://shopify.dev/api/storefront/reference/common-objects/queryroot) field
  * for the `isoCode` and `name` of the `country` and keeps this information in a context.
  *
  * Any descendents of this provider can use the `useCountry` hook.
@@ -64,7 +64,7 @@ export type LocalizationQuery = {__typename?: 'QueryRoot'} & {
 };
 
 const query = `
-query Localization($language: LanguageCode) 
+query Localization($language: LanguageCode)
 @inContext(language: $language) {
    localization {
     country {

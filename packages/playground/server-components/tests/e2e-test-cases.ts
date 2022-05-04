@@ -15,6 +15,12 @@ export default async function testCases({
   isBuild,
   isWorker,
 }: TestOptions) {
+  beforeEach(async () => {
+    await page.close();
+    //@ts-ignore
+    global.page = await global.browser.newPage();
+  });
+
   it('shows the homepage, navigates to about, and increases the count', async () => {
     await page.goto(getServerUrl());
 
@@ -70,13 +76,26 @@ export default async function testCases({
     expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
-  it('should render server state in client component', async () => {
-    await page.goto(getServerUrl() + '/test-server-state');
-    expect(await page.textContent('h1')).toContain('Test Server State');
-    expect(await page.textContent('#server-state')).toContain(
-      'Pathname: /test-server-state'
+  it.skip('should render server props in client component', async () => {
+    await page.goto(getServerUrl() + '/test-server-props');
+    expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
+      `"props: {}"`
     );
-  });
+
+    await page.click('#update-server-props');
+    await page.waitForSelector('#server-props-with-data', {timeout: 35000});
+
+    expect(
+      await page.textContent('#server-props-with-data')
+    ).toMatchInlineSnapshot(`"props: {\\"hello\\":\\"world\\"}"`);
+
+    // Navigate events should clear the server props
+    await Promise.all([page.click('#navigate'), page.waitForNavigation()]);
+    await page.waitForSelector('#server-props', {timeout: 35000});
+    expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
+      `"props: {}"`
+    );
+  }, 35000);
 
   it('streams the SSR response and includes RSC payload', async () => {
     const response = await fetch(getServerUrl() + '/stream');
@@ -165,11 +184,11 @@ export default async function testCases({
     expect(response.status).toEqual(201);
     // statusText cannot be modified in workers
     expect(response.statusText).toEqual(isWorker ? 'Created' : 'hey');
-
     expect(response.headers.get('Accept-Encoding')).toBe('deflate, gzip');
-    expect(response.headers.get('Set-Cookie')).toBe(
-      'hello=world, hello2=world2'
-    );
+    expect(response.headers.raw()['set-cookie']).toEqual([
+      'hello=world',
+      'hello2=world2',
+    ]);
   });
 
   it('uses the provided custom body', async () => {
@@ -196,7 +215,7 @@ export default async function testCases({
       await edit(
         fullPath,
         (code) => code.replace('increase count', newButtonText),
-        () => untilUpdated(() => page.textContent('button'), 'increase'),
+        () => untilUpdated(() => page.textContent('button'), 'increase count'),
         () => untilUpdated(() => page.textContent('button'), newButtonText)
       );
     });
@@ -371,6 +390,15 @@ export default async function testCases({
       await page.type('#fname', 'sometext');
       await page.click('#fsubmit');
       expect(await page.textContent('*')).toContain('fname=sometext');
+    });
+
+    it('can concatenate requests', async () => {
+      await page.goto(getServerUrl() + '/html-form');
+      expect(await page.textContent('#counter')).toEqual('0');
+      await page.click('#increase');
+      expect(await page.textContent('#counter')).toEqual('1');
+      await page.click('#increase');
+      expect(await page.textContent('#counter')).toEqual('2');
     });
   });
 

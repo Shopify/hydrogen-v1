@@ -25,7 +25,7 @@ export default () => {
       }
     },
     resolveId(source, importer) {
-      if (normalizePath(source).includes('@shopify/hydrogen/platforms/')) {
+      if (normalizePath(source).includes('/hydrogen/platforms/')) {
         const hydrogenPath = path.dirname(
           require.resolve('@shopify/hydrogen/package.json')
         );
@@ -46,9 +46,7 @@ export default () => {
       return null;
     },
     transform(code, id) {
-      if (
-        normalizePath(id).includes('@shopify/hydrogen/dist/esnext/platforms/')
-      ) {
+      if (normalizePath(id).includes('/hydrogen/dist/esnext/platforms/')) {
         code = code
           .replace(
             '__SERVER_ENTRY__',

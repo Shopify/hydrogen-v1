@@ -1,11 +1,11 @@
-<!-- This file is generated from source code in the Shopify/hydrogen repo. Edit the files in /packages/cli and run 'yarn generate-docs' at the root of this repo. For more information, refer to https://github.com/Shopify/shopify-dev/blob/main/content/internal/operations/reference-docs/hydrogen.md. -->
+# This module has been deprecated. Use [`@shopify/cli-hydrogen` ](https://www.npmjs.com/package/@shopify/cli-hydrogen) instead.
 
 ## `@shopify/hydrogen-cli`
 
 The `hydrogen/cli` package provides interactive project scaffolding for Hydrogen apps and other useful commands to help you build on `@shopify/hydrogen`.
 
 > Note:
-> The CLI doesn't currently generate the [Demo Store template](/custom-storefronts/hydrogen/getting-started). Run `npx create-hydrogen-app` to scaffold a new project with the Demo Store template. To contribute to the Demo Store template, update the [template files](https://github.com/Shopify/hydrogen/tree/main/examples/template-hydrogen-default).
+> The CLI doesn't currently generate the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates). Run `npx create-hydrogen-app` to scaffold a new project with the Demo Store template. To contribute to the Demo Store template, update the [template files](https://github.com/Shopify/hydrogen/tree/main/templates/template-hydrogen-default).
 
 ## Installation
 

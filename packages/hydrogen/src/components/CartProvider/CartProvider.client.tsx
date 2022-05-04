@@ -65,9 +65,10 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
-import {useServerState} from '../../foundation/useServerState';
-import {ServerStateContextValue} from '../../foundation';
+import {useServerProps} from '../../foundation/useServerProps';
+import {ServerPropsContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
+import {ClientAnalytics} from '../../foundation/Analytics';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
@@ -252,12 +253,12 @@ export function CartProvider({
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
   /**
-   * An object with fields that correspond to the Storefront API's [Cart object](/api/storefront/latest/objects/cart).
+   * An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).
    */
   data?: CartFragmentFragment;
 }) {
-  const {serverState} = useServerState() as ServerStateContextValue;
-  const countryCode = serverState?.country?.isoCode;
+  const {serverProps} = useServerProps() as ServerPropsContextValue;
+  const countryCode = serverProps?.country?.isoCode;
 
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
@@ -325,6 +326,16 @@ export function CartProvider({
       }
 
       if (data?.cartCreate?.cart) {
+        if (cart.lines) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.ADD_TO_CART,
+            true,
+            {
+              addedCartLines: cart.lines,
+              cart: data.cartCreate.cart,
+            }
+          );
+        }
         dispatch({
           type: 'resolve',
           cart: cartFromGraphQL(data.cartCreate.cart),
@@ -365,6 +376,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesAdd?.cart) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.ADD_TO_CART,
+            true,
+            {
+              addedCartLines: lines,
+              cart: data.cartLinesAdd.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesAdd.cart),
@@ -403,6 +422,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesRemove?.cart) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.REMOVE_FROM_CART,
+            true,
+            {
+              removedCartLines: lines,
+              cart: data.cartLinesRemove.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesRemove.cart),
@@ -440,6 +467,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesUpdate?.cart) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.UPDATE_CART,
+            true,
+            {
+              updatedCartLines: lines,
+              oldCart: state.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesUpdate.cart),
@@ -595,6 +630,14 @@ export function CartProvider({
         }
 
         if (data?.cartDiscountCodesUpdate?.cart) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+            true,
+            {
+              updatedDiscountCodes: discountCodes,
+              cart: data.cartDiscountCodesUpdate.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartDiscountCodesUpdate.cart),

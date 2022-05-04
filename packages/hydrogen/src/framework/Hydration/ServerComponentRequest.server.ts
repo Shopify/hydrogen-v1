@@ -3,7 +3,7 @@ import {getTime} from '../../utilities/timing';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
 import type {PreloadOptions, QueryKey} from '../../types';
-import {hashKey} from '../cache';
+import {hashKey} from '../../utilities/hash';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
 import {SessionSyncApi} from '../../foundation/session/session';
@@ -54,6 +54,7 @@ export class ServerComponentRequest extends Request {
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
     preloadQueries: PreloadQueriesByURL;
+    analyticsData: any;
     router: RouterContextData;
     buyerIpHeader?: string;
     session?: SessionSyncApi;
@@ -69,8 +70,12 @@ export class ServerComponentRequest extends Request {
       super(getUrlFromNodeRequest(input), getInitFromNodeRequest(input));
     }
 
+    const referer = this.headers.get('referer');
+
     this.time = getTime();
     this.id = generateId();
+    this.preloadURL =
+      this.isRscRequest() && referer && referer !== '' ? referer : this.url;
 
     this.ctx = {
       cache: new Map(),
@@ -82,13 +87,13 @@ export class ServerComponentRequest extends Request {
       },
       queryCacheControl: [],
       queryTimings: [],
+      analyticsData: {
+        url: this.url,
+        normalizedRscUrl: this.preloadURL,
+      },
       preloadQueries: new Map(),
     };
     this.cookies = this.parseCookies();
-
-    const referer = this.headers.get('referer');
-    this.preloadURL =
-      this.isRscRequest() && referer && referer !== '' ? referer : this.url;
   }
 
   private parseCookies() {
