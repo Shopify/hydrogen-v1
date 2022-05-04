@@ -249,7 +249,7 @@ async function render(
    * TODO: Also add `Vary` headers for `accept-language` and any other keys
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
-  headers['cache-control'] = componentResponse.cacheControlHeader;
+  headers.set('cache-control', componentResponse.cacheControlHeader);
 
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
@@ -263,7 +263,7 @@ async function render(
     });
   }
 
-  headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+  headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
 
@@ -396,8 +396,10 @@ async function stream(
        * queries which might be caught behind Suspense. Clarify this or add
        * additional checks downstream?
        */
-      responseOptions.headers['cache-control'] =
-        componentResponse.cacheControlHeader;
+      responseOptions.headers.set(
+        'cache-control',
+        componentResponse.cacheControlHeader
+      );
 
       if (isRedirect(responseOptions)) {
         return false;
@@ -409,7 +411,7 @@ async function stream(
           return false;
         }
 
-        responseOptions.headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+        responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
         if (didError) {
@@ -477,7 +479,7 @@ async function stream(
     if (await isStreamingSupported()) {
       return new Response(transform.readable, {
         ...responseOptions,
-        headers: getHeaders(responseOptions.headers),
+        headers: responseOptions.headers,
       });
     }
 
@@ -487,7 +489,7 @@ async function stream(
 
     return new Response(bufferedBody, {
       ...responseOptions,
-      headers: getHeaders(responseOptions.headers),
+      headers: responseOptions.headers,
     });
   } else if (response) {
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
@@ -814,7 +816,7 @@ function startWritingHtmlToServerResponse(
 }
 
 type ResponseOptions = {
-  headers: Record<string, string>;
+  headers: Headers;
   status: number;
   statusText?: string;
 };
@@ -825,20 +827,7 @@ function getResponseOptions(
 ) {
   const responseInit = {} as ResponseOptions;
 
-  // @ts-ignore
-  responseInit.headers = Object.fromEntries(headers.entries());
-
-  // @ts-ignore
-  const rawHeaders = headers.raw();
-  // Warning! Headers.raw is non-standard and might disappear in undici or newer versions of node-fetch
-  // See: https://github.com/whatwg/fetch/issues/973
-  const setCookieKey = Object.keys(rawHeaders).find(
-    (key) => key.toLowerCase() === 'set-cookie'
-  );
-
-  if (setCookieKey) {
-    responseInit.headers['set-cookie'] = rawHeaders[setCookieKey];
-  }
+  responseInit.headers = headers;
 
   if (error) {
     responseInit.status = 500;
@@ -872,8 +861,8 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries(headers).forEach(([key, value]) =>
-    response.setHeader(key, value)
+  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+    response.setHeader(key, value as string)
   );
 }
 
@@ -929,23 +918,4 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
-}
-
-function getHeaders(rawHeaders: Record<string, String | Array<String>> = {}) {
-  const headers = new Headers();
-
-  for (const [key, values] of Object.entries(rawHeaders)) {
-    // values doesn't have an array prototype, so instanceof doesn't work.
-    // Check for .splice instead
-    // @ts-ignore
-    if (values?.splice) {
-      for (const value of values) {
-        headers.append(key, value as string);
-      }
-    } else {
-      headers.append(key, values as string);
-    }
-  }
-
-  return headers;
 }
