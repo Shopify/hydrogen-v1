@@ -1,7 +1,7 @@
 ---
 gid: 044c475e-f28g-444b-a984-26e7ebb8bec4
 title: Analytics
-description: Learn about the analytics support build into Hydrogen apps.
+description: Learn about the analytics support built into Hydrogen apps.
 ---
 
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.

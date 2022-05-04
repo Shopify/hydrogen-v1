@@ -81,4 +81,4 @@ export default defineConfig({
 ## Next steps
 
 - Learn more about dependency pre-bundling and optimization in [Vite](https://vitejs.dev/guide/dep-pre-bundling.html#dependency-pre-bundling).
-- [Check this GitHub discussion](https://github.com/Shopify/hydrogen/discussions/93) to see if another developer has the same issue or report a new issue to Hydrogen maintainers.
+- [Check the Hydrogen GitHub discussion](https://github.com/Shopify/hydrogen/discussions/93) for your issue, or report a new issue to Hydrogen maintainers.

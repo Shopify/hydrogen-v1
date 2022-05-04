@@ -175,4 +175,4 @@ The following limitations and considerations apply to the [XML sitemap](https://
 
 ## Next steps
 
-- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) build into Hydrogen apps.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen apps.

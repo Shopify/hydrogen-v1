@@ -132,4 +132,4 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ## Next steps
 
-- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) build into Hydrogen apps.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen apps.
