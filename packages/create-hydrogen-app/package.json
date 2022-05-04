@@ -4,7 +4,7 @@
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"
   },
-  "version": "0.17.1",
+  "version": "0.17.2",
   "main": "index.js",
   "license": "MIT",
   "bin": {

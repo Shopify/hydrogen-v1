@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.17.2
+
+### Patch Changes
+
+- [#1161](https://github.com/Shopify/hydrogen/pull/1161) [`6b963fb1`](https://github.com/Shopify/hydrogen/commit/6b963fb1fdd2824683870c8ff3258447bf7fedea) Thanks [@merwan7](https://github.com/merwan7)! - Adds ability to add multiple cookies in one response
+
+* [#1162](https://github.com/Shopify/hydrogen/pull/1162) [`5446d544`](https://github.com/Shopify/hydrogen/commit/5446d544f151e233e909e6a6f002e87863ae6151) Thanks [@arlyxiao](https://github.com/arlyxiao)! - Upgrade body-parser
+
+- [#1200](https://github.com/Shopify/hydrogen/pull/1200) [`7fb7ee49`](https://github.com/Shopify/hydrogen/commit/7fb7ee497091df3177d53e8745edcae6ba99a87d) Thanks [@blittle](https://github.com/blittle)! - Add bot user agents for Seoradar and Adresults, resolves #1199
+
+* [#1167](https://github.com/Shopify/hydrogen/pull/1167) [`0a5ac1cb`](https://github.com/Shopify/hydrogen/commit/0a5ac1cbec449eefe48041ed6aceaac375dfa601) Thanks [@benjaminsehl](https://github.com/benjaminsehl)! - Only warn in console on missing Model3D alt tag, do not throw error
+
+- [#1152](https://github.com/Shopify/hydrogen/pull/1152) [`d3e3e695`](https://github.com/Shopify/hydrogen/commit/d3e3e695457e6eb2a3ebf9767e0f10cc3570e880) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix scroll restoration when server props are changed
+
 ## 0.17.1
 
 ### Patch Changes
