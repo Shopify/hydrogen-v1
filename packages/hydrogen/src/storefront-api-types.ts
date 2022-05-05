@@ -1,6 +1,6 @@
 /**
  * THIS FILE IS AUTO-GENERATED, DO NOT EDIT
- * Based on Storefront API 2022-04
+ * Based on Storefront API 2022-07
  * If changes need to happen to the types defined in this file, then generally the Storefront API needs to update, and then you can run `yarn graphql-types`
  * Except custom Scalars, which are defined in the `codegen.yml` file
  */
@@ -462,6 +462,8 @@ export type Cart = Node & {
   lines: CartLineConnection;
   /** A note that is associated with the cart. For example, the note can be a personalized message to the buyer. */
   note?: Maybe<Scalars['String']>;
+  /** The total number of items in the cart. */
+  totalQuantity: Scalars['Int'];
   /** The date and time when the cart was updated. */
   updatedAt: Scalars['DateTime'];
 };
@@ -746,6 +748,10 @@ export type CartLineEdge = {
 /** The estimated cost of the merchandise line that the buyer will pay at checkout. */
 export type CartLineEstimatedCost = {
   __typename?: 'CartLineEstimatedCost';
+  /** The amount of the merchandise line. */
+  amount: MoneyV2;
+  /** The compare at amount of the merchandise line. */
+  compareAtAmount: MoneyV2;
   /** The estimated cost of the merchandise line before discounts. */
   subtotalAmount: MoneyV2;
   /** The estimated total cost of the merchandise line. */
@@ -1780,7 +1786,7 @@ export type Country = {
 };
 
 /**
- * The code designating a country, which generally follows ISO 3166-1 alpha-2 guidelines.
+ * The code designating a country/region, which generally follows ISO 3166-1 alpha-2 guidelines.
  * If a territory doesn't have a country code value in the `CountryCode` enum, it might be considered a subdivision
  * of another country. For example, the territories associated with Spain are represented by the country code `ES`,
  * and the territories associated with the United States of America are represented by the country code `US`.
@@ -2627,6 +2633,8 @@ export enum CurrencyCode {
   Ssp = 'SSP',
   /** Sao Tome And Principe Dobra (STD). */
   Std = 'STD',
+  /** Sao Tome And Principe Dobra (STN). */
+  Stn = 'STN',
   /** Syrian Pound (SYP). */
   Syp = 'SYP',
   /** Swazi Lilangeni (SZL). */
@@ -2659,6 +2667,8 @@ export enum CurrencyCode {
   Uyu = 'UYU',
   /** Uzbekistan som (UZS). */
   Uzs = 'UZS',
+  /** Venezuelan Bolivares (VED). */
+  Ved = 'VED',
   /** Venezuelan Bolivares (VEF). */
   Vef = 'VEF',
   /** Venezuelan Bolivares (VES). */
@@ -3599,7 +3609,7 @@ export type Language = {
   name: Scalars['String'];
 };
 
-/** ISO 369 language codes supported by Shopify. */
+/** ISO 639-1 language codes supported by Shopify. */
 export enum LanguageCode {
   /** Afrikaans. */
   Af = 'AF',
@@ -4514,7 +4524,7 @@ export type Mutation = {
   checkoutDiscountCodeApply?: Maybe<CheckoutDiscountCodeApplyPayload>;
   /** Applies a discount to an existing checkout using a discount code. */
   checkoutDiscountCodeApplyV2?: Maybe<CheckoutDiscountCodeApplyV2Payload>;
-  /** Removes the applied discount from an existing checkout. */
+  /** Removes the applied discounts from an existing checkout. */
   checkoutDiscountCodeRemove?: Maybe<CheckoutDiscountCodeRemovePayload>;
   /**
    * Updates the email on an existing checkout.
@@ -5975,6 +5985,7 @@ export type QueryRoot = {
     | ProductVariant
     | Shop
     | ShopPolicy
+    | UrlRedirect
     | Video
   >;
   /** Returns the list of nodes with the given IDs. */
@@ -6006,6 +6017,7 @@ export type QueryRoot = {
       | ProductVariant
       | Shop
       | ShopPolicy
+      | UrlRedirect
       | Video
     >
   >;
@@ -6046,6 +6058,8 @@ export type QueryRoot = {
   publicApiVersions: Array<ApiVersion>;
   /** The shop associated with the storefront access token. */
   shop: Shop;
+  /** A list of redirects for a shop. */
+  urlRedirects: UrlRedirectConnection;
 };
 
 /** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
@@ -6196,6 +6210,15 @@ export type QueryRootProductsArgs = {
   query?: InputMaybe<Scalars['String']>;
   reverse?: InputMaybe<Scalars['Boolean']>;
   sortKey?: InputMaybe<ProductSortKeys>;
+};
+
+/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
+export type QueryRootUrlRedirectsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  reverse?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** SEO information. */
@@ -6792,6 +6815,43 @@ export enum UnitSystem {
   /** Metric system of weights and measures. */
   MetricSystem = 'METRIC_SYSTEM',
 }
+
+/** A redirect on the online store. */
+export type UrlRedirect = Node & {
+  __typename?: 'UrlRedirect';
+  /** The ID of the URL redirect. */
+  id: Scalars['ID'];
+  /** The old path to be redirected from. When the user visits this path, they'll be redirected to the target location. */
+  path: Scalars['String'];
+  /** The target location where the user will be redirected to. */
+  target: Scalars['String'];
+};
+
+/**
+ * An auto-generated type for paginating through multiple UrlRedirects.
+ *
+ */
+export type UrlRedirectConnection = {
+  __typename?: 'UrlRedirectConnection';
+  /** A list of edges. */
+  edges: Array<UrlRedirectEdge>;
+  /** A list of the nodes contained in UrlRedirectEdge. */
+  nodes: Array<UrlRedirect>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/**
+ * An auto-generated type which holds one UrlRedirect and a cursor during pagination.
+ *
+ */
+export type UrlRedirectEdge = {
+  __typename?: 'UrlRedirectEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of UrlRedirectEdge. */
+  node: UrlRedirect;
+};
 
 /** Represents an error in the input of a mutation. */
 export type UserError = DisplayableError & {
