@@ -12,14 +12,20 @@ const {copy} = require('./scripts/utils.js');
 
 const cwd = process.cwd();
 
-const TEMPLATES = ['hydrogen'];
+const TEMPLATES = {
+  'jsx': 'hydrogen',
+  'tsx': 'hydrogen-typescript'
+}
 
 const renameFiles = {
   _gitignore: '.gitignore',
 };
 
 async function init() {
+
+  // This is if you create with name
   let targetDir = argv._[0];
+
   if (!targetDir) {
     /**
      * @type {{ projectName: string }}
@@ -32,6 +38,20 @@ async function init() {
     });
     targetDir = projectName;
   }
+
+  /**
+   * @type {{ syntax: string }}
+   */
+  const {syntax} = await prompt({
+    type: 'select',
+    name: 'syntax',
+    message: 'Template syntax (.jsx|.tsx)',
+    initial: 0,
+    choices: [
+      {name: 'jsx', message: 'jsx', value: 'jsx'},
+      {name: 'tsx', message: 'tsx', value: 'tsx'},
+    ]
+  })
 
   const packageName = await getValidPackageName(targetDir);
   const root = path.join(cwd, targetDir);
@@ -63,34 +83,8 @@ async function init() {
     }
   }
 
-  const firstAndOnlyTemplate =
-    TEMPLATES && TEMPLATES.length && TEMPLATES.length === 1 && TEMPLATES[0];
-
   // Determine template
-  let template = argv.t || argv.template || firstAndOnlyTemplate;
-  let message = 'Select a template:';
-  let isValidTemplate = false;
-
-  // --template expects a value
-  if (typeof template === 'string') {
-    isValidTemplate = TEMPLATES.includes(template);
-    message = `${red(
-      template
-    )} isn't a valid template. Please choose from the available options:`;
-  }
-
-  if (!template || !isValidTemplate) {
-    /**
-     * @type {{ t: string }}
-     */
-    const {t} = await prompt({
-      type: 'select',
-      name: 't',
-      message,
-      choices: TEMPLATES,
-    });
-    template = t;
-  }
+  const template = TEMPLATES[syntax]
 
   const templateDir = path.join(__dirname, `template-${template}`);
 
