@@ -111,7 +111,7 @@ function ProductPrices() {
 export default function ProductDetails({product}) {
   const initialVariant = flattenConnection(product.variants)[0];
 
-  const productMetafields = useParsedMetafields(product.metafields);
+  const productMetafields = useParsedMetafields(product.metafields || {});
   const sizeChartMetafield = productMetafields.find(
     (metafield) =>
       metafield.namespace === 'my_fields' && metafield.key === 'size_chart',

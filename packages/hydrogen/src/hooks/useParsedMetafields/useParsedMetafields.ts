@@ -11,7 +11,6 @@ export function useParsedMetafields(
   /** A [MetafieldConnection](https://shopify.dev/api/storefront/reference/common-objects/metafieldconnection). */
   metafields?: PartialDeep<MetafieldConnection>
 ) {
-  metafields?.edges?.[0]?.node;
   return useMemo(() => {
     if (!metafields) {
       throw new Error(`'useParsedMetafields' needs metafields`);
