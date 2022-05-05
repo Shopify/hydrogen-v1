@@ -22,7 +22,7 @@ import {
   preloadRequestCacheData,
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider';
-import type {ServerResponse, IncomingMessage} from 'http';
+import {ServerResponse, IncomingMessage} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {
   getApiRouteFromURL,
@@ -31,7 +31,13 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {setContext, setCache, RuntimeContext} from './framework/runtime';
+import {
+  setContext,
+  setCache,
+  RuntimeContext,
+  runDelayedFunction,
+  getCache,
+} from './framework/runtime';
 import {setConfig} from './framework/config';
 import {
   ssrRenderToPipeableStream,
@@ -124,6 +130,17 @@ export const renderHydrogen = (
       EVENT_PATHNAME_REGEX.test(url.pathname)
     ) {
       return ServerAnalyticsRoute(request, serverAnalyticsConnectors);
+    }
+
+    const cacheInstance = getCache();
+    // Check if we have cached response
+    if (cacheInstance) {
+      const cachedResponse = await cacheInstance.match(request.cacheKey());
+
+      if (cachedResponse) {
+        console.log('Cache matched');
+        return cachedResponse;
+      }
     }
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
@@ -251,16 +268,20 @@ async function render(
    */
   headers.set('cache-control', componentResponse.cacheControlHeader);
 
+  let response: Response;
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
 
-    postRequestTasks('ssr', status, request, componentResponse);
-
-    return new Response(await componentResponse.customBody, {
+    const customBody = await componentResponse.customBody;
+    response = new Response(customBody, {
       status,
       statusText,
       headers,
     });
+
+    postRequestTasks('ssr', status, request, componentResponse, [customBody]);
+
+    return response;
   }
 
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
@@ -279,13 +300,15 @@ async function render(
     );
   }
 
-  postRequestTasks('ssr', status, request, componentResponse);
-
-  return new Response(html, {
+  response = new Response(html, {
     status,
     statusText,
     headers,
   });
+
+  postRequestTasks('ssr', status, request, componentResponse, [html]);
+
+  return response;
 }
 
 /**
@@ -348,6 +371,15 @@ async function stream(
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
+
+    // Maintain a copy of streamed html so we can cache this at the end
+    const originalWrite = writable.write;
+    const chunks: string[] = [];
+    writable.write = (chunk?: any) => {
+      console.log(chunk);
+      chunks.push(chunk);
+      return originalWrite(chunk);
+    };
 
     let ssrReadable: Awaited<ReturnType<typeof ssrRenderToReadableStream>>;
 
@@ -458,13 +490,16 @@ async function stream(
 
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
-        setTimeout(() => writable.close(), 0);
-        postRequestTasks(
-          'str',
-          responseOptions.status,
-          request,
-          componentResponse
-        );
+        setTimeout(() => {
+          writable.close();
+          postRequestTasks(
+            'str',
+            responseOptions.status,
+            request,
+            componentResponse,
+            chunks
+          );
+        }, 0);
       });
     } else {
       writable.close();
@@ -472,7 +507,8 @@ async function stream(
         'str',
         responseOptions.status,
         request,
-        componentResponse
+        componentResponse,
+        chunks
       );
     }
 
@@ -486,6 +522,18 @@ async function stream(
 
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
+    // Maintain a copy of streamed html so we can cache this at the end
+    const originalWrite = response.write;
+    const savedChunks: string[] = [];
+    response.write = (...args) => {
+      savedChunks.push(args[0].toString());
+      // console.log(args[0].toString());
+      // @ts-ignore
+      return originalWrite.apply(response, args);
+    };
+
+    console.log('stream - node');
+
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -509,7 +557,12 @@ async function stream(
           return response.end();
         }
 
-        if (!componentResponse.canStream()) return;
+        if (!componentResponse.canStream()) {
+          console.log(componentResponse.body);
+          return;
+        }
+
+        console.log('HERE');
 
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
 
@@ -519,6 +572,7 @@ async function stream(
         }, 0);
 
         bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) => {
+          savedChunks.push(chunk.toString());
           log.trace('rsc chunk');
           return response.write(chunk);
         });
@@ -526,15 +580,20 @@ async function stream(
       async onAllReady() {
         log.trace('node complete stream');
 
+        console.log('HERE 1');
+
         if (componentResponse.canStream() || response.writableEnded) {
           postRequestTasks(
             'str',
             response.statusCode,
             request,
-            componentResponse
+            componentResponse,
+            savedChunks
           );
           return;
         }
+
+        console.log('HERE 2');
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
@@ -542,28 +601,36 @@ async function stream(
           'str',
           response.statusCode,
           request,
-          componentResponse
+          componentResponse,
+          savedChunks
         );
+
+        console.log('HERE 3');
 
         if (isRedirect(response)) {
           // Redirects found after any async code
           return response.end();
         }
 
+        console.log('HERE 4');
+
         if (componentResponse.customBody) {
           return response.end(await componentResponse.customBody);
         }
 
+        console.log('HERE 5');
+
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
 
-        bufferReadableStream(rscToScriptTagReadable.getReader()).then(
-          (scriptTags) => {
-            // Piping ends the response so script tags
-            // must be written before that.
-            response.write(scriptTags);
-            pipe(response);
-          }
-        );
+        bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) => {
+          savedChunks.push(chunk);
+        }).then((scriptTags) => {
+          // Piping ends the response so script tags
+          // must be written before that.
+          console.log('HERE 6');
+          response.write(scriptTags);
+          pipe(response);
+        });
       },
       onShellError(error: any) {
         log.error(error);
@@ -621,14 +688,18 @@ async function hydrate(
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      postRequestTasks('rsc', 200, request, componentResponse);
+      postRequestTasks('rsc', 200, request, componentResponse, [
+        'hydrate - worker',
+      ]);
       return new Response(rscReadable);
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    postRequestTasks('rsc', 200, request, componentResponse);
+    postRequestTasks('rsc', 200, request, componentResponse, [
+      'hydrate - worker',
+    ]);
 
     return new Response(bufferedBody, {
       headers: {
@@ -648,7 +719,9 @@ async function hydrate(
     const stream = streamer.pipe(response) as Writable;
 
     stream.on('finish', function () {
-      postRequestTasks('rsc', response.statusCode, request, componentResponse);
+      postRequestTasks('rsc', response.statusCode, request, componentResponse, [
+        'hydrate',
+      ]);
     });
   }
 }
@@ -906,10 +979,40 @@ function postRequestTasks(
   type: RenderType,
   status: number,
   request: ServerComponentRequest,
-  componentResponse: ServerComponentResponse
+  componentResponse: ServerComponentResponse,
+  chunks: string[]
 ) {
   logServerResponse(type, request, status);
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
+  cacheResponse(componentResponse, request, chunks);
+}
+
+function cacheResponse(
+  componentResponse: ServerComponentResponse,
+  request: ServerComponentRequest,
+  chunks: string[]
+) {
+  const cache = getCache();
+
+  if (cache && chunks.length > 0) {
+    runDelayedFunction(async () => {
+      // Do not cache a result when it past the max-age
+      const {headers, status, statusText} =
+        getResponseOptions(componentResponse);
+      headers.set('cache-control', componentResponse.cacheControlHeader);
+      headers.set('Content-Type', 'text/html; charset=UTF-8');
+
+      console.log('Chunks', chunks.length);
+      await cache.put(
+        request.cacheKey(),
+        new Response(chunks.join(''), {
+          status,
+          statusText,
+          headers,
+        })
+      );
+    });
+  }
 }

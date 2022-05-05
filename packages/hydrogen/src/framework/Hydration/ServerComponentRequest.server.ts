@@ -147,7 +147,39 @@ export class ServerComponentRequest extends Request {
   public getBuyerIp() {
     return this.headers.get(this.ctx.buyerIpHeader ?? 'x-forwarded-for');
   }
+
+  /**
+   * Build a `cacheKey` in the form of a `Request` to be used in full-page
+   * caching. Since `accept-language` is important to Shopify API responses,
+   * we hoist that as part of the URL since most Cache API implementations
+   * will strip headers from the cache key.
+   *
+   * Developers can override this key by exporting `requestCacheKey(request)` from their `entry-server.jsx`.
+   */
+  public cacheKey(): Request {
+    const url = new URL(this.url);
+
+    if (this.headers.has('accept-language')) {
+      url.searchParams.set(
+        'accept-language',
+        this.headers.get('accept-language')!
+      );
+    }
+
+    const req = new Request(url.href, this);
+
+    if (prevCacheKey && this.url === 'http://localhost:3000/') {
+      console.log('test key: ', prevCacheKey === req);
+    }
+
+    if (this.url === 'http://localhost:3000/') {
+      prevCacheKey = req;
+    }
+    return req;
+  }
 }
+
+let prevCacheKey: Request;
 
 function mergeMapEntries(
   map1: PreloadQueriesByURL,
