@@ -3,7 +3,7 @@ import {PartialDeep} from 'type-fest';
 import type {
   ExternalVideo as ExternalVideoType,
   Image,
-} from './storefront-api-types';
+} from '../storefront-api-types';
 import {ExternalVideo} from './ExternalVideo';
 import {faker} from '@faker-js/faker';
 import {vi} from 'vitest';

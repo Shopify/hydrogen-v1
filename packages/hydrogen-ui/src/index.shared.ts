@@ -1,1 +1,2 @@
-export {ExternalVideo} from './ExternalVideo';
+export {ExternalVideo} from './ExternalVideo/ExternalVideo';
+export {Video} from './Video/Video';
