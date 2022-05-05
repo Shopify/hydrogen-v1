@@ -12,6 +12,8 @@ export default function LoginForm({shopName}) {
   const [password, setPassword] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(null);
 
+  const [remembered, setRemembered] = React.useState(false);
+
   function emailValidation(email) {
     if (!email || email.trim() === '') {
       return 'Please enter an email';
@@ -43,6 +45,7 @@ export default function LoginForm({shopName}) {
     setEmailError(null);
     setPassword('');
     setPasswordError(null);
+    setRemembered(false);
   }
 
   async function onPasswordSubmit() {
@@ -59,6 +62,7 @@ export default function LoginForm({shopName}) {
     const response = await callLoginApi({
       email,
       password,
+      remembered,
     });
 
     if (response.error) {
@@ -106,6 +110,8 @@ export default function LoginForm({shopName}) {
             password={password}
             setPassword={setPassword}
             passwordError={passwordError}
+            remembered={remembered}
+            setRemembered={setRemembered}
             onSubmit={onPasswordSubmit}
           />
         )}
@@ -114,14 +120,14 @@ export default function LoginForm({shopName}) {
   );
 }
 
-function callLoginApi({email, password}) {
+function callLoginApi({email, password, remembered}) {
   return fetch(`/account/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({email, password}),
+    body: JSON.stringify({email, password, remembered}),
   })
     .then((res) => {
       if (res.status === 200) {
@@ -207,7 +213,14 @@ function ValidEmail({email, onChangeEmail}) {
   );
 }
 
-function PasswordField({password, setPassword, passwordError, onSubmit}) {
+function PasswordField({
+  password,
+  setPassword,
+  passwordError,
+  remembered,
+  setRemembered,
+  onSubmit,
+}) {
   return (
     <>
       <div className="mb-6">
@@ -238,6 +251,26 @@ function PasswordField({password, setPassword, passwordError, onSubmit}) {
         >
           Sign in
         </button>
+      </div>
+      <div className="flex items-center justify-between mt-6">
+        <div className="flex items-start">
+          <div className="flex items-center h-5">
+            <input
+              id="remember"
+              type="checkbox"
+              value=""
+              className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+              required
+              checked={remembered}
+              onChange={() => {
+                setRemembered(!remembered);
+              }}
+            />
+          </div>
+          <label htmlFor="remember" className="ml-2 text-sm font-medium">
+            Remember me
+          </label>
+        </div>
         <Link
           className="inline-block align-baseline text-sm text-slate-400"
           to="/account/recover"

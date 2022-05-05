@@ -69,6 +69,7 @@ export async function api(request, {session, queryShop}) {
     await setCustomerAccessToken(
       session,
       data.customerAccessTokenCreate.customerAccessToken,
+      jsonBody.remembered,
     );
 
     return new Response(null, {
