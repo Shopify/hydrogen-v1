@@ -29,7 +29,7 @@ export function ProductProvider({
   data: product,
   initialVariantId,
 }: ProductProviderProps) {
-  const metafields = useParsedMetafields(product.metafields);
+  const metafields = useParsedMetafields(product.metafields || {});
 
   // @ts-expect-error The types here are broken on main, need to come back and fix them sometime
   const providerValue = useMemo<ProductContextType>(() => {
