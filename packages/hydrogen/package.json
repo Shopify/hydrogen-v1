@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=14"
   },
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "Modern custom Shopify storefronts",
   "license": "MIT",
   "main": "dist/esnext/index.js",
@@ -81,7 +81,7 @@
     "rimraf": "^3.0.2"
   },
   "peerDependencies": {
-    "body-parser": "^1.19.1",
+    "body-parser": "^1.20.0",
     "compression": "^1.7.4",
     "react": "0.0.0-experimental-2bf7c02f0-20220314",
     "react-dom": "0.0.0-experimental-2bf7c02f0-20220314",

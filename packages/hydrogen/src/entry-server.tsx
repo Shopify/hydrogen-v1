@@ -249,7 +249,7 @@ async function render(
    * TODO: Also add `Vary` headers for `accept-language` and any other keys
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
-  headers['cache-control'] = componentResponse.cacheControlHeader;
+  headers.set('cache-control', componentResponse.cacheControlHeader);
 
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
@@ -263,7 +263,7 @@ async function render(
     });
   }
 
-  headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+  headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
 
@@ -396,8 +396,10 @@ async function stream(
        * queries which might be caught behind Suspense. Clarify this or add
        * additional checks downstream?
        */
-      responseOptions.headers['cache-control'] =
-        componentResponse.cacheControlHeader;
+      responseOptions.headers.set(
+        'cache-control',
+        componentResponse.cacheControlHeader
+      );
 
       if (isRedirect(responseOptions)) {
         return false;
@@ -409,7 +411,7 @@ async function stream(
           return false;
         }
 
-        responseOptions.headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+        responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
         if (didError) {
@@ -808,7 +810,7 @@ function startWritingHtmlToServerResponse(
 }
 
 type ResponseOptions = {
-  headers: Record<string, string>;
+  headers: Headers;
   status: number;
   statusText?: string;
 };
@@ -818,8 +820,8 @@ function getResponseOptions(
   error?: Error
 ) {
   const responseInit = {} as ResponseOptions;
-  // @ts-ignore
-  responseInit.headers = Object.fromEntries(headers.entries());
+
+  responseInit.headers = headers;
 
   if (error) {
     responseInit.status = 500;
@@ -853,8 +855,8 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries(headers).forEach(([key, value]) =>
-    response.setHeader(key, value)
+  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+    response.setHeader(key, value as string)
   );
 }
 
