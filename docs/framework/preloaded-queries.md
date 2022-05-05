@@ -1,3 +1,9 @@
+---
+gid: 11c33bdd-ed60-4ed9-9f60-5481602021c0
+title: Preloaded queries
+description: Learn how to configure queries to preload in your Hydrogen app.
+---
+
 This guide provides information on how preloaded queries work and how to configure them in your Hydrogen app.
 
 ## How preloaded queries work
@@ -95,7 +101,7 @@ const data = fetchSync('https://my.api.com/data.json', {
 
 ## Test a preloaded query
 
-To test a preloaded query, enable the `showQueryTiming` property in `App.server.js`. The [`showQueryTiming`](/api/hydrogen/utilities/log#logger-options) property logs the timeline of when queries are being requested, resolved, and rendered.
+To test a preloaded query, enable the `showQueryTiming` property in `App.server.js`. The [`showQueryTiming`](https://shopify.dev/api/hydrogen/utilities/log#logger-options) property logs the timeline of when queries are being requested, resolved, and rendered.
 
 {% codeblock file, filename: "App.server.js" %}
 
@@ -117,8 +123,13 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ![Shows a screenshot of query being double loaded](/assets/custom-storefronts/hydrogen/double-loaded-query.png)
 
+## Related components and hooks
+
+- [`localizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider)
+- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
+- [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
+- [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)
+
 ## Next steps
 
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen apps.

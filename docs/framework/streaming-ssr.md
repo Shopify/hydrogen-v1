@@ -1,3 +1,9 @@
+---
+gid: cf5bb36c-a4f1-4498-91df-334e66d26750
+title: Streaming server-side rendering (SSR)
+description: Improve your app's loading performance by rendering components on the server and streaming them to the client.
+---
+
 You can improve your app's loading performance by rendering components on the server and streaming them to the client.
 
 This guide describes how streaming server-side rendering (SSR) works in a Hydrogen app. It also explains how to use Suspense to manage asynchronous operations in your app.
@@ -108,5 +114,5 @@ When a `Suspense` component is wrapped around a group of components that fetch d
 
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [work with React Server Components](/custom-storefronts/hydrogen/framework/react-server-components/work-with-rsc) in your Hydrogen app.
+- Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
+- Learn how to [work with React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc) in your Hydrogen app.

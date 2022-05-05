@@ -1,1 +1,2 @@
-export {Test} from './test.server';
+// placeholder until a real export gets added
+export {};

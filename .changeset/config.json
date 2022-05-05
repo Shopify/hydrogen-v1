@@ -9,6 +9,7 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "template-hydrogen-default",
+    "template-hydrogen-hello-world",
     "test-server-components",
     "hydrogen-playground",
     "@shopify/hydrogen-ui"

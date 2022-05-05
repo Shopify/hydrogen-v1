@@ -21,7 +21,7 @@ export interface BaseImageProps {
 
 interface MediaImagePropsBase extends BaseImageProps {
   /** An object with fields that correspond to the Storefront API's
-   * [Image object](/api/storefront/reference/common-objects/image).
+   * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
    */
   data: PartialDeep<ImageType>;
   /** An object of image size options for Shopify CDN images. */
@@ -44,7 +44,7 @@ type ImageProps = MergeExclusive<MediaImageProps, ExternalImageProps>;
 
 /**
  * The `Image` component renders an image for the Storefront API's
- * [Image object](/api/storefront/reference/common-objects/image).
+ * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
  */
 export function Image(props: ImageProps) {
   const {

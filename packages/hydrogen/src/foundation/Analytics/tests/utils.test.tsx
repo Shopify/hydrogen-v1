@@ -12,6 +12,7 @@ describe('Analytics - utils', () => {
     expect(getNamedspacedEventname('discount-code-updated')).toEqual(
       'discount-code-updated'
     );
+    expect(getNamedspacedEventname('performance')).toEqual('performance');
   });
 
   it('should return namespaced event name when it is not part of reserve name list', () => {

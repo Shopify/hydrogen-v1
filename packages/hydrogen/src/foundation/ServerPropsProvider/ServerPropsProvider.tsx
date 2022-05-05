@@ -6,7 +6,6 @@ import React, {
   // @ts-ignore
   useTransition,
   useState,
-  useEffect,
 } from 'react';
 
 declare global {
@@ -86,7 +85,10 @@ export function ServerPropsProvider({
 
   const setServerPropsCallback = useCallback<ServerPropsSetter>(
     (input, propValue) => {
-      setServerProps((prev) => getNewValue(prev, input, propValue));
+      startTransition(() => {
+        setServerProps((prev) => getNewValue(prev, input, propValue));
+        setServerPropsForRsc((prev) => getNewValue(prev, input, propValue));
+      });
     },
     []
   );
@@ -94,8 +96,11 @@ export function ServerPropsProvider({
   const setLocationServerPropsCallback = useCallback<ServerPropsSetter>(
     (input, propValue) => {
       // Flush the existing user server state when location changes, leaving only the persisted state
-      setServerProps({});
-      setLocationServerProps((prev) => getNewValue(prev, input, propValue));
+      startTransition(() => {
+        setServerPropsForRsc((prev) => getNewValue(prev, input, propValue));
+        setServerProps({});
+        setLocationServerProps((prev) => getNewValue(prev, input, propValue));
+      });
     },
     []
   );
@@ -138,31 +143,11 @@ export function ServerPropsProvider({
     };
   }
 
-  const resolvedServerPropsForRsc = useMemo(() => {
-    return {
-      ...serverProps,
-      ...locationServerProps,
-    };
-  }, [serverProps, locationServerProps]);
-
-  const resolvedServerProps = useMemo(() => {
-    return {
-      ...serverProps,
-    };
-  }, [serverProps]);
-
-  useEffect(() => {
-    startTransition(() => {
-      setServerPropsForRsc(resolvedServerPropsForRsc);
-    });
-    return () => {};
-  }, [resolvedServerPropsForRsc]);
-
   const value = useMemo(
     () => ({
       pending,
       locationServerProps: locationServerProps,
-      serverProps: resolvedServerProps,
+      serverProps,
       setServerProps: setServerPropsCallback,
       setLocationServerProps: setLocationServerPropsCallback,
       getProposedLocationServerProps: getProposedLocationServerPropsCallback,
@@ -170,7 +155,7 @@ export function ServerPropsProvider({
     [
       pending,
       locationServerProps,
-      resolvedServerProps,
+      serverProps,
       setServerPropsCallback,
       setLocationServerPropsCallback,
       getProposedLocationServerPropsCallback,

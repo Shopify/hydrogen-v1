@@ -13,7 +13,7 @@ import type {
 import type {PartialDeep} from 'type-fest';
 
 export interface MediaFileProps {
-  /** An object with fields that correspond to the Storefront API's [Media object](/api/storefront/reference/products/media). */
+  /** An object with fields that correspond to the Storefront API's [Media object](https://shopify.dev/api/storefront/reference/products/media). */
   data: PartialDeep<MediaEdgeType['node']>;
   /** The options for the `Image`, `Video`, or `ExternalVideo` components. */
   options?:
@@ -24,7 +24,7 @@ export interface MediaFileProps {
 
 /**
  * The `MediaFile` component renders the media for the Storefront API's
- * [Media object](/api/storefront/reference/products/media). It renders an `Image`, a
+ * [Media object](https://shopify.dev/api/storefront/reference/products/media). It renders an `Image`, a
  * `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the
  * `media` provided as a prop.
  */

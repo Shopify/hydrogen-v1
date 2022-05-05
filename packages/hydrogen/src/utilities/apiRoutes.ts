@@ -10,6 +10,11 @@ import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {findRoutePrefix} from './findRoutePrefix';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
+import {
+  emptySessionImplementation,
+  SessionApi,
+  SessionStorageAdapter,
+} from '../foundation/session/session';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -18,6 +23,7 @@ type RouteParams = Record<string, string>;
 type RequestOptions = {
   params: RouteParams;
   queryShop: (args: QueryShopArgs) => Promise<any>;
+  session: SessionApi | null;
 };
 type ResourceGetter = (
   request: Request,
@@ -36,6 +42,34 @@ export type ApiRouteMatch = {
   params: RouteParams;
 };
 
+export function extractPathFromRoutesKey(
+  routesKey: string,
+  dirPrefix: string | RegExp
+) {
+  let path = routesKey
+    .replace(dirPrefix, '')
+    .replace(/\.server\.(t|j)sx?$/, '')
+    /**
+     * Replace /index with /
+     */
+    .replace(/\/index$/i, '/')
+    /**
+     * Only lowercase the first letter. This allows the developer to use camelCase
+     * dynamic paths while ensuring their standard routes are normalized to lowercase.
+     */
+    .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
+    /**
+     * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
+     */
+    .replace(/\[(?:[.]{3})?(\w+?)\]/g, (_match, param: string) => `:${param}`);
+
+  if (path.endsWith('/') && path !== '/') {
+    path = path.substring(0, path.length - 1);
+  }
+
+  return path;
+}
+
 export function getApiRoutes(
   rawRoutes: HydrogenConfigRoutes
 ): Array<HydrogenApiRoute> {
@@ -53,28 +87,7 @@ export function getApiRoutes(
   const apiRoutes = keys
     .filter((key) => routes[key].api)
     .map((key) => {
-      let path = key
-        .replace(commonRoutePrefix, '')
-        .replace(/\.server\.(t|j)sx?$/, '')
-        /**
-         * Replace /index with /
-         */
-        .replace(/\/index$/i, '/')
-        /**
-         * Only lowercase the first letter. This allows the developer to use camelCase
-         * dynamic paths while ensuring their standard routes are normalized to lowercase.
-         */
-        .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
-        /**
-         * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
-         */
-        .replace(
-          /\[(?:[.]{3})?(\w+?)\]/g,
-          (_match, param: string) => `:${param}`
-        );
-
-      if (path.endsWith('/') && path !== '/')
-        path = path.substring(0, path.length - 1);
+      const path = extractPathFromRoutesKey(key, commonRoutePrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
@@ -183,15 +196,32 @@ function queryShopBuilder(
 export async function renderApiRoute(
   request: ServerComponentRequest,
   route: ApiRouteMatch,
-  shopifyConfig: HydrogenConfig['shopify']
+  shopifyConfig: HydrogenConfig['shopify'],
+  session?: SessionStorageAdapter
 ): Promise<Response | Request> {
   let response;
   const log = getLoggerWithContext(request);
+  let cookieToSet = '';
 
   try {
     response = await route.resource(request, {
       params: route.params,
       queryShop: queryShopBuilder(shopifyConfig, request),
+      session: session
+        ? {
+            async get() {
+              return session.get(request);
+            },
+            async set(key: string, value: string) {
+              const data = await session.get(request);
+              data[key] = value;
+              cookieToSet = await session.set(request, data);
+            },
+            async destroy() {
+              cookieToSet = await session.destroy(request);
+            },
+          }
+        : emptySessionImplementation(log),
     });
 
     if (!(response instanceof Response || response instanceof Request)) {
@@ -204,6 +234,14 @@ export async function renderApiRoute(
           },
         });
       }
+    }
+
+    if (!response) {
+      response = new Response(null);
+    }
+
+    if (cookieToSet) {
+      response.headers.set('Set-Cookie', cookieToSet);
     }
   } catch (e) {
     log.error(e);

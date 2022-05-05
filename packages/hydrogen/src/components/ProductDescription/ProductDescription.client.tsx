@@ -4,7 +4,7 @@ import {useProduct} from '../ProductProvider';
 
 /**
  * The `ProductDescription` component renders a `div` with
- * the product's [`descriptionHtml`](/api/storefront/reference/products/product).
+ * the product's [`descriptionHtml`](https://shopify.dev/api/storefront/reference/products/product).
  * It must be a descendent of the `ProductProvider` component.
  */
 export function ProductDescription<TTag extends ElementType = 'div'>(

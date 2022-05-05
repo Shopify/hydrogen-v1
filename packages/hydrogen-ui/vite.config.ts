@@ -1,4 +1,5 @@
-import path from 'path';
+/// <reference types="vitest" />
+import {resolve} from 'path';
 import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -7,7 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       // We overwrite this later in "rollupOptions.input", but it's required here so we can't remove it / comment it out
-      entry: path.resolve(__dirname, 'src/index.client.ts'),
+      entry: resolve(__dirname, 'src/index.client.ts'),
       name: 'hydrogen-ui',
       // put [name] at the end, so that we preserve the ".client.js" and ".server.js" naming conventions required for RSC
       fileName: () => `[name].js`,
@@ -21,8 +22,17 @@ export default defineConfig({
       // don't bundle these packages into our lib
       external: ['react', 'react-dom', 'react/jsx-runtime'],
       // the true entry points to the bundles
-      input: ['./src/index.client.ts', './src/index.server.ts'],
+      input: [
+        './src/index.client.ts',
+        './src/index.server.ts',
+        './src/index.shared.ts',
+      ],
     },
   },
   plugins: [react()],
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    setupFiles: './vitest.setup.ts',
+  },
 });

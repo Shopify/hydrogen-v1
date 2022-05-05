@@ -1,3 +1,9 @@
+---
+gid: 574c35e8-209f-8fv2-b896-b3763d8c060c
+title: queryShop
+description: The queryShop utility is a function that helps you query the Storefront API.
+---
+
 The `queryShop` utility is a function that helps you query the Storefront API. It's similar to the `useShopQuery` hook, which is available in server components.
 
 ## Example code

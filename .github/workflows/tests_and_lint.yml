@@ -50,7 +50,11 @@ jobs:
 
       - name: Lint the template code
         run: yarn lint
-        working-directory: ./examples/template-hydrogen-default
+        working-directory: ./templates/template-hydrogen-default
+
+      - name: Type check hydrogen-ui
+        run: yarn typecheck
+        working-directory: ./packages/hydrogen-ui
 
       - name: Run the unit tests
         run: yarn test
@@ -62,4 +66,4 @@ jobs:
 
       - name: Run the template code tests
         run: yarn test:ci
-        working-directory: ./examples/template-hydrogen-default
+        working-directory: ./templates/template-hydrogen-default

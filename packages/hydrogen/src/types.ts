@@ -8,6 +8,7 @@ import type {
   Product,
   MediaImage,
 } from './storefront-api-types';
+import type {SessionStorageAdapter} from './foundation/session/session';
 
 type CommonOptions = {
   App: any;
@@ -74,6 +75,7 @@ export type HydrogenConfig = {
   routes?: HydrogenConfigRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  session?: (log: Logger) => SessionStorageAdapter;
 };
 
 export type ClientHandlerConfig = {

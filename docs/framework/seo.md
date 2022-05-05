@@ -1,30 +1,36 @@
+---
+gid: f89f8b4b-65b3-4942-b597-3de1093c8f1f
+title: SEO
+description: Learn how to customize the output of SEO-related tags in your Hydrogen client and server components.
+---
+
 Hydrogen detects when a search engine crawls your shop and defaults to server-side rendering (SSR). This guide describes how to customize the output of SEO-related tags in your client and server components.
 
 ## How SEO works in Hydrogen
 
-Hydrogen includes an [`Seo`](/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](/custom-storefronts/hydrogen/getting-started):
+Hydrogen includes an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates):
 
-- [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
+- [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
 
-- [`Sitemap.xml.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx): A file that generates all products, collections, and pages URLs using the Storefront API
+- [`Sitemap.xml.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.jsx): A file that generates all products, collections, and pages URLs using the Storefront API
 
-- [`Robots.txt.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
+- [`Robots.txt.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
 
 ### `Seo` client component
 
-The [`Seo`](/api/hydrogen/components/primitive/seo) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](/api/storefront/2022-01/objects/Product) is used to generate the `<head>` tags for the products page.
+The [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) client component uses the data from Storefront API to generate the `<head>` tags that search engines look for. For example, [`Product.Seo`](https://shopify.dev/api/storefront/latest/objects/Product) is used to generate the `<head>` tags for the products page.
 
 You can customize the `<head>` tags at the route level:
 
-- [Default page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
-- [Home page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/index.server.jsx)
-- [Pages page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/pages/[handle].server.jsx)
-- [Product page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/products/[handle].server.jsx)
-- [Collection page](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/collections/[handle].server.jsx)
+- [Default page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
+- [Home page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/index.server.jsx)
+- [Pages page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/pages/[handle].server.jsx)
+- [Product page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/products/[handle].server.jsx)
+- [Collection page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/collections/[handle].server.jsx)
 
 ### `DefaultSeo` server component
 
-The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/components/DefaultSeo.server.jsx) server component fetches your shop name (`shop.name`) and description (`shop.description`). This component provides the default SEO values for every page on your website.
+The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx) server component fetches your shop name (`shop.name`) and description (`shop.description`). This component provides the default SEO values for every page on your website.
 
 You can override the default SEO values by passing in custom props:
 
@@ -97,6 +103,51 @@ export default function App({log, ...serverProps}) {
 
 {% endcodeblock %}
 
+## Overwriting title template
+
+The title template defaults to the pattern of `{page title} - {shop name}`. If you want to use a different pattern, then you can overwrite title template for all pages or for a single page.
+
+### Overwrite for all pages
+
+The following example shows how to overwrite title template for all pages (for example, `Fullstack Snow Board | Snowdevil`):
+
+{% codeblock file, filename: 'DefaultSeo.server.jsx' %}
+
+```jsx
+...
+  return (
+    <Seo
+      type="defaultSeo"
+      data={% raw %}{{
+        title: name,
+        description,
++       titleTemplate: `%s | ${name}`
+      }}{% endraw %}
+    />
+  );
+...
+```
+
+{% endcodeblock %}
+
+### Overwrite for a single page
+
+The following example shows how to overwrite title template for a single page:
+
+{% codeblock file, filename: '/mypage.server.jsx' %}
+
+```jsx
+import {Head} from '@shopify/hydrogen/client';
+
+return (
+  <Head titleTemplate="%s">
+    <title>My Page</title>
+  </Head>
+);
+```
+
+{% endcodeblock %}
+
 ## Imitating SEO robot behavior
 
 Hydrogen supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side.
@@ -105,9 +156,9 @@ To imitate the behaviour of a SEO robot and show the page content fully from ser
 
 ## Limitations and considerations
 
-The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Demo Store template:
+The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Demo Store template:
 
-- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](/api/usage/pagination-graphql) if your store has more than 250 resources.
+- The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](https://shopify.dev/api/usage/pagination-graphql) if your store has more than 250 resources.
 
   > Tip:
   > If your store has more resources than the limit, and you haven't customized the URLs of the resources, then we recommend using the Online Store version of the sitemap at `https://{store-domain}/sitemap.xml`.
@@ -116,10 +167,12 @@ The following limitations and considerations apply to the [XML sitemap](https://
 
 - The sitemap is cached for 24 hours.
 
-- By default, the sitemap uses the [`onlineStoreUrl`](/api/storefront/2022-01/objects/Product) field from the Storefront API as the URL. It falls back to the Demo Store template URL structure, which is based on resource's handle.
+- By default, the sitemap uses the [`onlineStoreUrl`](https://shopify.dev/api/storefront/latest/objects/Product) field from the Storefront API as the URL. It falls back to the Demo Store template URL structure, which is based on resource's handle.
+
+## Related components
+
+- [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo)
 
 ## Next steps
 
-- Learn how to manage the [state on the server](/custom-storefronts/hydrogen/framework/server-state) as you're building your Hydrogen app.
-- Get familiar with the [file-based routing system](/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen apps.

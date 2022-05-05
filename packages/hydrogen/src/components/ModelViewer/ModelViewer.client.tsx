@@ -13,11 +13,11 @@ import type {PartialDeep} from 'type-fest';
 interface ModelViewerProps {
   /** Any ReactNode elements. */
   children?: ReactNode;
-  /** An object with fields that correspond to the Storefront API's [Model3D object](/api/storefront/latest/objects/model3d). */
+  /** An object with fields that correspond to the Storefront API's [Model3D object](https://shopify.dev/api/storefront/latest/objects/model3d). */
   data: PartialDeep<Model3d>;
   /** A string of either `auto`, `lazy`, or `eager` to indicate the conditions for preloading. Refer to [loading in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-loading). */
   loading?: 'auto' | 'lazy' | 'eager';
-  /** A URL to display an image instead of the model. This is useful for showing the user something before a model is loaded and ready to render. If no URL is provided, then [Model3d.previewImage](/api/storefront/latest/objects/model3d) is used. Refer to [poster in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-poster). */
+  /** A URL to display an image instead of the model. This is useful for showing the user something before a model is loaded and ready to render. If no URL is provided, then [Model3d.previewImage](https://shopify.dev/api/storefront/latest/objects/model3d) is used. Refer to [poster in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-poster). */
   poster?: string;
   /** A string of either `auto`, `interaction`, or `manual` to indicate when the model should be revealed. Refer to [reveal in the <model-viewer> documentation](https://modelviewer.dev/docs/index.html#entrydocs-loading-attributes-reveal). */
   reveal?: 'auto' | 'interaction' | 'manual';
@@ -121,7 +121,7 @@ interface ModelViewerProps {
   onSceneGraphReady?: (event: Event) => void;
 }
 
-type PropsWeControl = 'src' | 'alt' | 'poster';
+type PropsWeControl = 'src' | 'poster';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -134,7 +134,7 @@ declare global {
 
 /**
  * The `ModelViewer` component renders a 3D model (with the `model-viewer` tag) for
- * the Storefront API's [Model3d object](/api/storefront/reference/products/model3d).
+ * the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d).
  */
 export function ModelViewer<TTag extends ElementType>(
   props: Props<TTag, PropsWeControl> & ModelViewerProps
@@ -287,7 +287,9 @@ export function ModelViewer<TTag extends ElementType>(
   }
 
   if (!data.alt) {
-    throw new Error(`<ModelViewer/> requires the 'data.alt' prop`);
+    console.warn(
+      `<ModelViewer/> requires the 'data.alt' prop for accessibility`
+    );
   }
 
   return (

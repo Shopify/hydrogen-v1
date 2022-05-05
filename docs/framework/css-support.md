@@ -1,4 +1,10 @@
-Hydrogen's [Demo Store template](/custom-storefronts/hydrogen/getting-started) is styled using the [Tailwind CSS](https://tailwindcss.com/) utility library. This guide describes the benefits of using Tailwind and how to remove it if you prefer to use another CSS framework.
+---
+gid: ea75625d-0b47-4f83-a010-848f7eb8d273
+title: Built-in CSS support
+description: Learn about the CSS support built into Hydrogen.
+---
+
+Hydrogen's [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates) is styled using the [Tailwind CSS](https://tailwindcss.com/) utility library. This guide describes the benefits of using Tailwind and how to remove it if you prefer to use another CSS framework.
 
 ## How it works
 
@@ -22,14 +28,10 @@ The following example shows Tailwind classes in use:
 ```html
 // The text is centered.
 <div class="text-center">
-  // The heading is larger than normal text, has a small margin below it, and is
-  bold.
+  // The heading is larger than normal text, has a small margin below it, and is bold.
   <h2 class="text-lg mb-4 font-bold">Hello, Hydrogen</h2>
-  // The paragraph text is grey. Specifically, it’s the 600 shade of gray (100
-  is lightest and 900 is darkest).
-  <p class="text-gray-600">
-    Welcome to your custom storefront. Let's get building.
-  </p>
+  // The paragraph text is grey. Specifically, it’s the 600 shade of gray (100 is lightest and 900 is darkest).
+  <p class="text-gray-600">Welcome to your custom storefront. Let's get building.</p>
 </div>
 ```
 
@@ -56,31 +58,31 @@ If you don't want to build with Tailwind's library and instead want to write you
 3. Remove Tailwind from `postcss.config.js`.
 4. Run the following commands:
 
-   {% codeblock terminal %}
+    {% codeblock terminal %}
 
-   ```bash?filename: 'Terminal', title: 'yarn'
-   // Switch to your app's directory
-   cd <directory>
+    ```bash?filename: 'Terminal', title: 'yarn'
+    // Switch to your app's directory
+    cd <directory>
 
-   // Install dependencies
-   yarn
+    // Install dependencies
+    yarn
 
-   // Start the development server
-   yarn dev
-   ```
+    // Start the development server
+    yarn dev
+    ```
 
-   ```bash?filename: 'Terminal', title: 'npm'
-   // Switch to your app's directory
-   cd <directory>
+    ```bash?filename: 'Terminal', title: 'npm'
+    // Switch to your app's directory
+    cd <directory>
 
-   // Install dependencies
-   npm i --legacy-peer-deps
+    // Install dependencies
+    npm i --legacy-peer-deps
 
-   // Start the development server
-   npm run dev
-   ```
+    // Start the development server
+    npm run dev
+    ```
 
-   {% endcodeblock %}
+    {% endcodeblock %}
 
 ## CSS Modules
 
@@ -104,10 +106,6 @@ export default MyComponent() {
 
 {% endcodeblock %}
 
-> Tip:
-> Explore an [example implementation of CSS Modules in GitHub](https://github.com/Shopify/hydrogen/tree/main/examples/css-modules).
-
 ## Next steps
 
-- Learn about [React Server Components](/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how the [page server component](/custom-storefronts/hydrogen/framework/pages) receives props, which includes custom versions of `request` and `response`.
+- Explore an [example implementation of CSS Modules in GitHub](https://github.com/Shopify/hydrogen/tree/main/examples/css-modules).

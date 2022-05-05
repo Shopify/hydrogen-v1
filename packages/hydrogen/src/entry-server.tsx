@@ -45,6 +45,7 @@ import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
+import {getSyncSessionApi} from './foundation/session/session';
 
 declare global {
   // This is provided by a Vite plugin
@@ -101,7 +102,17 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     request.ctx.buyerIpHeader = buyerIpHeader;
 
     const log = getLoggerWithContext(request);
+    const sessionApi = hydrogenConfig.session
+      ? hydrogenConfig.session(log)
+      : undefined;
     const componentResponse = new ServerComponentResponse();
+
+    request.ctx.session = getSyncSessionApi(
+      request,
+      componentResponse,
+      log,
+      sessionApi
+    );
 
     /**
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
@@ -134,7 +145,8 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
         const apiResponse = await renderApiRoute(
           request,
           apiRoute,
-          hydrogenConfig.shopify
+          hydrogenConfig.shopify,
+          sessionApi
         );
 
         return apiResponse instanceof Request
@@ -231,7 +243,7 @@ async function render(
    * TODO: Also add `Vary` headers for `accept-language` and any other keys
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
-  headers['cache-control'] = componentResponse.cacheControlHeader;
+  headers.set('cache-control', componentResponse.cacheControlHeader);
 
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
@@ -245,14 +257,19 @@ async function render(
     });
   }
 
-  headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+  headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
 
   if (flight) {
     html = html.replace(
       '</body>',
-      `${flightContainer({init: true, nonce, chunk: flight})}</body>`
+      () =>
+        `${flightContainer({
+          init: true,
+          nonce,
+          chunk: flight as string,
+        })}</body>`
     );
   }
 
@@ -371,8 +388,10 @@ async function stream(
        * queries which might be caught behind Suspense. Clarify this or add
        * additional checks downstream?
        */
-      responseOptions.headers['cache-control'] =
-        componentResponse.cacheControlHeader;
+      responseOptions.headers.set(
+        'cache-control',
+        componentResponse.cacheControlHeader
+      );
 
       if (isRedirect(responseOptions)) {
         return false;
@@ -384,7 +403,7 @@ async function stream(
           return false;
         }
 
-        responseOptions.headers[CONTENT_TYPE] = HTML_CONTENT_TYPE;
+        responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
         if (didError) {
@@ -775,7 +794,7 @@ function startWritingHtmlToServerResponse(
 }
 
 type ResponseOptions = {
-  headers: Record<string, string>;
+  headers: Headers;
   status: number;
   statusText?: string;
 };
@@ -785,8 +804,8 @@ function getResponseOptions(
   error?: Error
 ) {
   const responseInit = {} as ResponseOptions;
-  // @ts-ignore
-  responseInit.headers = Object.fromEntries(headers.entries());
+
+  responseInit.headers = headers;
 
   if (error) {
     responseInit.status = 500;
@@ -820,8 +839,8 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries(headers).forEach(([key, value]) =>
-    response.setHeader(key, value)
+  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+    response.setHeader(key, value as string)
   );
 }
 
