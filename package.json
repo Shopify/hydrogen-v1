@@ -11,7 +11,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "dev": "yarn turbo run dev --parallel --filter=hydrogen-ui --filter=@shopify/hydrogen",
+    "dev": "yarn turbo run dev --parallel --filter=@shopify/hydrogen-ui --filter=@shopify/hydrogen",
     "build": "yarn turbo run build",
     "lint": "run-p lint:js lint:language",
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src",
