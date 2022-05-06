@@ -15,6 +15,16 @@ yarn
 yarn dev
 ```
 
+To develop against a template, open a new terminal window or tab and choose from the available templates:
+
+- templates/template-hydrogen-default
+- templates/template-hydrogen-hello-world
+
+```bash
+cd templates/template-hydrogen-default
+yarn dev
+```
+
 Visit the dev environment at http://localhost:3000.
 
 To make changes to the Demo Store template, edit the files in `templates/template-hydrogen-default`.

@@ -11,7 +11,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "dev": "cross-env LOCAL_DEV=true yarn turbo run dev --parallel",
+    "dev": "yarn turbo run dev --parallel --filter=@shopify/hydrogen-ui --filter=@shopify/hydrogen",
     "build": "yarn turbo run build",
     "lint": "run-p lint:js lint:language",
     "lint:js": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx packages/*/src",
@@ -65,7 +65,7 @@
     "sirv": "^1.0.12",
     "ts-jest": "^26.5.4",
     "ts-node": "^10.2.1",
-    "turbo": "^1.1.2",
+    "turbo": "^1.2.8",
     "type-fest": "^2.12.0",
     "typescript": "^4.6.2",
     "vite": "^2.9.0",
