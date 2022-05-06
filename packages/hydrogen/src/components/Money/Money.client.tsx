@@ -10,7 +10,7 @@ interface MoneyProps<TTag> {
   data: PartialDeep<MoneyV2>;
   /** Whether to remove the currency symbol from the output. */
   withoutCurrency?: boolean;
-  /** If true, removes trailing zeros (fractional money) from the output. */
+  /** Whether to remove trailing zeros (fractional money) from the output. */
   withoutTrailingZeros?: boolean;
 }
 
