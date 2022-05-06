@@ -6,7 +6,6 @@ name: Oxygen Deployment
 on:
   workflow_dispatch:
   push:
-    branches: ['v1.x-2022-07']
 
 jobs:
   deploy_oxygen:
