@@ -12,7 +12,7 @@ The `Route` component is used to set up a route in Hydrogen that's independent o
 
 ```tsx
 import {Router, Route} from '@shopify/hydrogen';
-export default renderHydrogen(() => {
+function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
@@ -36,6 +36,7 @@ function Home() {
 function NotFound() {
   return <h1>Not found</h1>;
 }
+export default renderHydrogen(App);
 ```
 
 {% endcodeblock %}
