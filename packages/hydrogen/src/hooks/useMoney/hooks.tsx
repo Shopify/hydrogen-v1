@@ -43,9 +43,9 @@ export type UseMoneyValue = {
    */
   withoutTrailingZeros: string;
   /**
-   * A string without currency and without trailing zeros removed from the fractional part, if there were any. If there are not trailing zeros, they remain in the string.
-   * `$640.00` turns into `640`
-   * `$640.42` turns into `640.42`
+   * A string without currency and without trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains.
+   * For example, `$640.00` turns into `640`.
+   * `$640.42` turns into `640.42`.
    */
   withoutTrailingZerosAndCurrency: string;
 };
