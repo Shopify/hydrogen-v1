@@ -272,6 +272,8 @@ async function render(
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
 
+    console.log('render - customBody - stable');
+
     const customBody = await componentResponse.customBody;
     response = new Response(customBody, {
       status,
@@ -279,10 +281,13 @@ async function render(
       headers,
     });
 
-    postRequestTasks('ssr', status, request, componentResponse, [customBody]);
+    postRequestTasks('ssr', status, request, componentResponse);
+    cacheResponse(componentResponse, request, [customBody]);
 
     return response;
   }
+
+  console.log('render - stable');
 
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
@@ -306,7 +311,8 @@ async function render(
     headers,
   });
 
-  postRequestTasks('ssr', status, request, componentResponse, [html]);
+  postRequestTasks('ssr', status, request, componentResponse);
+  cacheResponse(componentResponse, request, [html]);
 
   return response;
 }
@@ -366,6 +372,8 @@ async function stream(
   let didError: Error | undefined;
 
   if (__WORKER__) {
+    console.log('stream - worker');
+
     const onCompleteAll = defer<true>();
     const encoder = new TextEncoder();
     const transform = new TransformStream();
@@ -496,8 +504,7 @@ async function stream(
             'str',
             responseOptions.status,
             request,
-            componentResponse,
-            chunks
+            componentResponse
           );
         }, 0);
       });
@@ -507,8 +514,7 @@ async function stream(
         'str',
         responseOptions.status,
         request,
-        componentResponse,
-        chunks
+        componentResponse
       );
     }
 
@@ -522,6 +528,8 @@ async function stream(
 
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
+    console.log('stream - node - stable');
+
     // Maintain a copy of streamed html so we can cache this at the end
     const originalWrite = response.write;
     const savedChunks: string[] = [];
@@ -531,8 +539,9 @@ async function stream(
       // @ts-ignore
       return originalWrite.apply(response, args);
     };
-
-    console.log('stream - node');
+    response.on('finish', () => {
+      cacheResponse(componentResponse, request, savedChunks);
+    });
 
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
@@ -562,8 +571,6 @@ async function stream(
           return;
         }
 
-        console.log('HERE');
-
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
 
         setTimeout(() => {
@@ -580,20 +587,15 @@ async function stream(
       async onAllReady() {
         log.trace('node complete stream');
 
-        console.log('HERE 1');
-
         if (componentResponse.canStream() || response.writableEnded) {
           postRequestTasks(
             'str',
             response.statusCode,
             request,
-            componentResponse,
-            savedChunks
+            componentResponse
           );
           return;
         }
-
-        console.log('HERE 2');
 
         writeHeadToServerResponse(response, componentResponse, log, didError);
 
@@ -601,24 +603,17 @@ async function stream(
           'str',
           response.statusCode,
           request,
-          componentResponse,
-          savedChunks
+          componentResponse
         );
-
-        console.log('HERE 3');
 
         if (isRedirect(response)) {
           // Redirects found after any async code
           return response.end();
         }
 
-        console.log('HERE 4');
-
         if (componentResponse.customBody) {
           return response.end(await componentResponse.customBody);
         }
-
-        console.log('HERE 5');
 
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
 
@@ -627,7 +622,6 @@ async function stream(
         }).then((scriptTags) => {
           // Piping ends the response so script tags
           // must be written before that.
-          console.log('HERE 6');
           response.write(scriptTags);
           pipe(response);
         });
@@ -685,21 +679,19 @@ async function hydrate(
   });
 
   if (__WORKER__) {
+    console.log('hydrate - worker');
+
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      postRequestTasks('rsc', 200, request, componentResponse, [
-        'hydrate - worker',
-      ]);
+      postRequestTasks('rsc', 200, request, componentResponse);
       return new Response(rscReadable);
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    postRequestTasks('rsc', 200, request, componentResponse, [
-      'hydrate - worker',
-    ]);
+    postRequestTasks('rsc', 200, request, componentResponse);
 
     return new Response(bufferedBody, {
       headers: {
@@ -707,6 +699,17 @@ async function hydrate(
       },
     });
   } else if (response) {
+    console.log('hydrate - node - stable');
+
+    const originalWrite = response.write;
+    const savedChunks: string[] = [];
+    response.write = (...args) => {
+      savedChunks.push(args[0].toString());
+      // console.log(args[0].toString());
+      // @ts-ignore
+      return originalWrite.apply(response, args);
+    };
+
     const rscWriter = await import(
       // @ts-ignore
       '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
@@ -719,9 +722,8 @@ async function hydrate(
     const stream = streamer.pipe(response) as Writable;
 
     stream.on('finish', function () {
-      postRequestTasks('rsc', response.statusCode, request, componentResponse, [
-        'hydrate',
-      ]);
+      postRequestTasks('rsc', response.statusCode, request, componentResponse);
+      cacheResponse(componentResponse, request, savedChunks);
     });
   }
 }
@@ -979,14 +981,12 @@ function postRequestTasks(
   type: RenderType,
   status: number,
   request: ServerComponentRequest,
-  componentResponse: ServerComponentResponse,
-  chunks: string[]
+  componentResponse: ServerComponentResponse
 ) {
   logServerResponse(type, request, status);
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
-  cacheResponse(componentResponse, request, chunks);
 }
 
 function cacheResponse(
@@ -1002,7 +1002,10 @@ function cacheResponse(
       const {headers, status, statusText} =
         getResponseOptions(componentResponse);
       headers.set('cache-control', componentResponse.cacheControlHeader);
-      headers.set('Content-Type', 'text/html; charset=UTF-8');
+      const currentHeader = headers.get('Content-Type');
+      if (currentHeader === '') {
+        headers.set('Content-Type', 'text/html; charset=UTF-8');
+      }
 
       console.log('Chunks', chunks.length);
       await cache.put(
