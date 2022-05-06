@@ -38,7 +38,6 @@ import {
   ssrRenderToReadableStream,
   rscRenderToReadableStream,
   createFromReadableStream,
-  isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
 import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
@@ -150,9 +149,7 @@ export const renderHydrogen = (
       }
     }
 
-    const isStreamable =
-      !isBotUA(url, request.headers.get('user-agent')) &&
-      (!!streamableResponse || (await isStreamingSupported()));
+    const isStreamable = !isBotUA(url, request.headers.get('user-agent'));
 
     let template =
       typeof indexTemplate === 'function'
@@ -476,15 +473,7 @@ async function stream(
       );
     }
 
-    if (await isStreamingSupported()) {
-      return new Response(transform.readable, responseOptions);
-    }
-
-    const bufferedBody = await bufferReadableStream(
-      transform.readable.getReader()
-    );
-
-    return new Response(bufferedBody, responseOptions);
+    return new Response(transform.readable, responseOptions);
   } else if (response) {
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
@@ -620,21 +609,8 @@ async function hydrate(
   if (__WORKER__) {
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
-    if (isStreamable && (await isStreamingSupported())) {
-      postRequestTasks('rsc', 200, request, componentResponse);
-      return new Response(rscReadable);
-    }
-
-    // Note: CFW does not support reader.piteTo nor iterable syntax
-    const bufferedBody = await bufferReadableStream(rscReadable.getReader());
-
     postRequestTasks('rsc', 200, request, componentResponse);
-
-    return new Response(bufferedBody, {
-      headers: {
-        'cache-control': componentResponse.cacheControlHeader,
-      },
-    });
+    return new Response(rscReadable);
   } else if (response) {
     const rscWriter = await import(
       // @ts-ignore
