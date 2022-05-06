@@ -42,7 +42,11 @@ export const ssrRenderToReadableStream = _ssrRenderToReadableStream as (
 ) => Promise<ReadableStream<Uint8Array> & {allReady: Promise<void>}>;
 
 export async function isStreamingSupported() {
-  return Boolean(globalThis.Oxygen?.env?.HYDROGEN_ENABLE_WORKER_STREAMING);
+  // rename this function to Oxygen specific check
+  if (globalThis.Oxygen) {
+    return Boolean(globalThis.Oxygen?.env?.HYDROGEN_ENABLE_WORKER_STREAMING);
+  }
+  return true;
 }
 
 export async function bufferReadableStream(
