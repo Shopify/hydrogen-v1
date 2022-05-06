@@ -10,7 +10,7 @@ import {
   PerformanceMetricsDebug,
 } from '@shopify/hydrogen/client';
 
-export default renderHydrogen(() => {
+function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
@@ -26,4 +26,6 @@ export default renderHydrogen(() => {
       </ShopifyProvider>
     </Suspense>
   );
-});
+}
+
+export default renderHydrogen(App);

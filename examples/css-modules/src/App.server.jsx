@@ -2,7 +2,7 @@ import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
-export default renderHydrogen(() => {
+function App() {
   return (
     <Suspense fallback="Loading...">
       <ShopifyProvider>
@@ -12,4 +12,6 @@ export default renderHydrogen(() => {
       </ShopifyProvider>
     </Suspense>
   );
-});
+}
+
+export default renderHydrogen(App);
