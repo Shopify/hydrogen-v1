@@ -42,8 +42,8 @@ export default function Product() {
 | Name | Type                                      | Description                                                                                                                                          |
 | ---- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | as?  | <code>TTag</code>                         | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                                        |
-| withoutCurrency? | <code>boolean</code> | If true, removes the currency symbol from the output. |
-| withoutTrailingZeros? | <code>boolean</code> | If true, removes trailing zeros (fractional money) from the output. If there are no trailing zeros, the fractional money amount remains. |
+| withoutCurrency? | <code>boolean</code> | Whether to remove the currency symbol from the output. |
+| withoutTrailingZeros? | <code>boolean</code> | Whether to remove trailing zeros (fractional money) from the output. If there are no trailing zeros, then the fractional money amount remains. |
 | data | <code>PartialDeep&#60;MoneyV2&#62;</code> | An object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). |
 
 ## Component type
