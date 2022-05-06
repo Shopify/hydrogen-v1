@@ -20,7 +20,7 @@ import {defineConfig} from '@shopify/hydrogen/config';
 /* All properties in this configuration file are required. */
 
 /* The `defineConfig` function is an optional utility that provides types for the configuration object. */
-export default defineConfig {
+export default defineConfig({
   /* The routes defined by Vite's import.meta.globEager method. */
   routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
   /* The information that your app needs to connect to the Storefront API. */
@@ -32,7 +32,7 @@ export default defineConfig {
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-04',
   },
-};
+});
 ```
 
 {% endcodeblock %}
@@ -50,9 +50,9 @@ By default, Hydrogen detects the common prefix of every route and removes it fro
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
-export default defineConfig {
+export default defineConfig({
   routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
-};
+});
 ```
 
 {% endcodeblock %}
@@ -62,7 +62,7 @@ If your app requires a more advanced configuration, then you can provide additio
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
-export default defineConfig {
+export default defineConfig({
   routes: {
     /* The file routes for server components and API handlers */
     files: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
@@ -76,7 +76,7 @@ export default defineConfig {
     */
     basePath: '/',
   },
-};
+});
 ```
 
 {% endcodeblock %}
@@ -88,7 +88,7 @@ The `shopify` property contains all the information that your app needs to conne
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
-export default defineConfig {
+export default defineConfig({
   shopify: {
     /* The app's locale */
     defaultLocale: 'EN-US',
@@ -101,7 +101,7 @@ export default defineConfig {
     /* The Storefront API version that your app uses */
     storefrontApiVersion: '2022-04',
   },
-};
+});
 ```
 
 {% endcodeblock %}
@@ -147,6 +147,48 @@ The function is called inside the [`ShopifyProvider`](https://shopify.dev/api/hy
 
 > Tip:
 > Consider caching the result of the function to speed up subsequent requests.
+
+### `session`
+
+The `session` property allows you to [configure sessions support](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions) in your Hydrogen app.
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+import {CookieSessionStorage} from '@shopify/hydrogen';
+
+export default defineConfig({
+  session: CookieSessionStorage('__session', {
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 30,
+  }),
+});
+```
+
+{% endcodeblock %}
+
+Learn more about [configuring sessions support](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions) in Hydrogen apps and all the available options.
+
+### `serverAnalyticsConnectors`
+
+The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#send-analytics-data-from-the-server-side) in your Hydrogen app.
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen';
+
+export default defineConfig({
+  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+});
+```
+
+{% endcodeblock %}
+
+Learn more about [analytics support in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics).
 
 ## Changing the configuration file location
 
