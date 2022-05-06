@@ -11,9 +11,13 @@ export interface ProductProviderProps {
   children: ReactNode;
   /** A [Product object](https://shopify.dev/api/storefront/reference/products/product). */
   data: PartialDeep<ProductType>;
-  /** The initially selected variant. If this is missing, then `selectedVariantId`
-   * in the returned `object` from the `useProduct` hook uses the first available variant
-   * or the first variant (if none are available).
+  /** The initially selected variant.
+   * The following logic applies to `initialVariantId`:
+   * If `initialVariantId` is provided, then it's used, even if it's out of stock.
+   * If `initialVariantId` is provided, but is `null`, then no variant is used.
+   * If nothing is passed to `initialVariantId`, and you're in a `ProductProvider`, then `selectedVariant.id` is used.
+   * If nothing is passed to `initialVariantId` and you're not in a `ProductProvider`, then the first available or in-stock variant is used.
+   * If nothing is passed to `initialVariantId`, you're not in a `ProductProvider`, and no variants are in stock, then the first variant is used.
    */
   initialVariantId?: Parameters<
     typeof useProductOptions
