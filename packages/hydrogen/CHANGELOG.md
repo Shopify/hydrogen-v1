@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.3
+
+### Patch Changes
+
+- [#1096](https://github.com/Shopify/hydrogen/pull/1096) [`0a15376e`](https://github.com/Shopify/hydrogen/commit/0a15376ec806054ddd5848d9dbfa6e50a85beb49) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Make performance data available with ClientAnalytics and optional for developers to include
+
+* [#1209](https://github.com/Shopify/hydrogen/pull/1209) [`d0dada0a`](https://github.com/Shopify/hydrogen/commit/d0dada0a0b3170d2cb885d2f29bbbef0c6d9e9e4) Thanks [@blittle](https://github.com/blittle)! - Make metafields optional within the ProductProvider. Fixes #1127
+
 ## 0.17.2
 
 ### Patch Changes
