@@ -1,10 +1,10 @@
+/* eslint-disable tsdoc/syntax */
 /**
  * THIS FILE IS AUTO-GENERATED, DO NOT EDIT
  * Based on Storefront API 2022-07
  * If changes need to happen to the types defined in this file, then generally the Storefront API needs to update, and then you can run `yarn graphql-types`
  * Except custom Scalars, which are defined in the `codegen.yml` file
  */
-/* eslint-disable */
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
@@ -6870,3 +6870,5 @@ export type WeightUnit =
   | 'OUNCES'
   /** 1 pound equals 16 ounces. */
   | 'POUNDS';
+
+/* eslint-enable tsdoc/syntax */

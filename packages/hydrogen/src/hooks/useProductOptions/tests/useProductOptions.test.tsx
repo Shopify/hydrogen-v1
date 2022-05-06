@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {useProductOptions} from '../useProductOptions';
+import {useProductOptions} from '../useProductOptions.client';
 import {
   SELLING_PLAN_GROUPS_CONNECTION,
   VARIANTS,
@@ -72,50 +72,6 @@ describe('useProductOptions', () => {
 
     expect(wrapper).toContainReactComponent('div', {
       children: JSON.stringify({Color: 'White', Size: 'Small'}),
-    });
-  });
-
-  it('computes selected variant based on options', async () => {
-    function Component() {
-      const {options, setSelectedOption, selectedVariant} = useProductOptions({
-        variants: VARIANTS,
-      });
-
-      return (
-        <>
-          <ul>
-            {options.map((option) => (
-              <li key={option.name}>
-                <ul>
-                  {option.values.map((value) => (
-                    <li key={value}>
-                      <button
-                        onClick={() => setSelectedOption(option.name, value)}
-                      >
-                        {value}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-          <div>{JSON.stringify(selectedVariant)}</div>
-        </>
-      );
-    }
-
-    const wrapper = await mount(<Component />);
-
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.edges[0].node),
-    });
-
-    await wrapper.find('button', {children: 'Black'})!.trigger('onClick');
-    await wrapper.find('button', {children: 'Large'})!.trigger('onClick');
-
-    expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.edges[1].node),
     });
   });
 

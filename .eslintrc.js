@@ -4,12 +4,22 @@ module.exports = {
   ignorePatterns: ['**/storefront-api-types.ts'],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
-  extends: ['plugin:node/recommended', 'plugin:hydrogen/typescript'],
+  extends: [
+    'plugin:node/recommended',
+    'plugin:hydrogen/recommended',
+    'plugin:hydrogen/typescript',
+  ],
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
   },
   rules: {
+    'jest/no-disabled-tests': 'off',
+    'jest/no-export': 'off',
+    'jsx-a11y/iframe-has-title': 'off',
+    'no-console': 'off',
+    'no-constant-condition': 'off',
+    'jest/no-done-callback': 'off',
     'tsdoc/syntax': 'error',
     'node/no-missing-import': [
       'error',
@@ -66,6 +76,15 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
   },
   overrides: [
+    {
+      files: ['packages/eslint-plugin/**'],
+      rules: {
+        'hydrogen/no-state-in-server-components': 'off',
+        'hydrogen/prefer-image-component': 'off',
+        'jsx-a11y/img-redundant-alt': 'off',
+        'no-prototype-builtins': 'off',
+      },
+    },
     {
       files: ['packages/playground/**'],
       rules: {

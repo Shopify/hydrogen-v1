@@ -1987,11 +1987,11 @@
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
 
 "@shopify/react-testing@^3.3.8":
-  version "3.3.8"
-  resolved "https://registry.yarnpkg.com/@shopify/react-testing/-/react-testing-3.3.8.tgz#1e9329ad266b51ba6dabb47f2af3730228c3dca1"
-  integrity sha512-vltc0BU8r0sqt7BE4jsq0/iIYVVqpzl7tLgM1CmQdpyFPE98fOu40rqdwQQNNZKkZV/SAc70fo7+gefpZyK6pQ==
+  version "3.3.10"
+  resolved "https://registry.yarnpkg.com/@shopify/react-testing/-/react-testing-3.3.10.tgz#34d870d2257ca1f547a6f8a8e0a6b478b9d77f9f"
+  integrity sha512-l1juWNqe4rRrP5bcOB6riJEd1Bb0BgfnGVKb9GB+o8QtTv1ti3YxGdyU+D/qpIuXBG5h5SNR2wgECdD4kpqVeg==
   dependencies:
-    "@shopify/useful-types" "^4.0.1"
+    "@shopify/useful-types" "^4.0.3"
     jest-matcher-utils "^26.6.2"
     react-reconciler "^0.26.2"
 
@@ -2006,10 +2006,10 @@
     stylelint-prettier "^1.2.0"
     stylelint-scss "^3.19.0"
 
-"@shopify/useful-types@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@shopify/useful-types/-/useful-types-4.0.1.tgz#02f02b1931be19c6c5b713b5ff7b08fb0931f850"
-  integrity sha512-zuCStF/ixl6VDurujc/itIkixrzGS7rkCA0ctAfCWOQbniWvGbBRsCe4hpR8XZuyC5NoG5pLHiGNzWZgGf2LoA==
+"@shopify/useful-types@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@shopify/useful-types/-/useful-types-4.0.3.tgz#06b5ba0a46e0879ae57edeaf93148f2ec151c9b7"
+  integrity sha512-vT48uKFSTfI3HPqtNI3lahWRDncFuuzBVfj2eUxEpQO//3Sn+IIo4zRPT9W4EHBiVWJyBeW5CTzVtvGhQma4EA==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"

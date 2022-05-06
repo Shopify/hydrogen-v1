@@ -184,7 +184,7 @@ describe('<DefaultPageSeo />', () => {
       );
 
       expect(wrapper).toContainReactComponent(Head, {
-        titleTemplate: titleTemplate,
+        titleTemplate,
       });
     });
   });

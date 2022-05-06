@@ -9,7 +9,7 @@ type HtmlOptions = {
   bodyAttrs?: Record<string, string>;
 };
 
-const HTML_ATTR_SEP_RE = /(?<!\=)"\s+/gim;
+const HTML_ATTR_SEP_RE = /(?<!=)"\s+/gim;
 const getHtmlAttrs = (template: string) =>
   template.match(/<html\s+([^>]+?)\s*>/s)?.[1] || '';
 const getBodyAttrs = (template: string) =>
@@ -56,7 +56,10 @@ export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
   }
 
   return (
-    <html {...attrsToProps(getHtmlAttrs(template))} {...htmlAttrs}>
+    <html // eslint-disable-line jsx-a11y/html-has-lang
+      {...attrsToProps(getHtmlAttrs(template))}
+      {...htmlAttrs}
+    >
       <head dangerouslySetInnerHTML={{__html: head}} />
       <body {...attrsToProps(getBodyAttrs(template))} {...bodyAttrs}>
         <div id="root">{children}</div>

@@ -385,6 +385,7 @@ async function stream(
       onCompleteAll.resolve(true);
     });
 
+    /* eslint-disable no-inner-declarations */
     async function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
@@ -422,6 +423,7 @@ async function stream(
         return true;
       }
     }
+    /* eslint-enable no-inner-declarations */
 
     const shouldReturnApp =
       (await prepareForStreaming(componentResponse.canStream())) ??
@@ -748,29 +750,25 @@ async function renderToBufferedString(
   ReactApp: JSX.Element,
   {log, nonce}: {log: Logger; nonce?: string}
 ): Promise<string> {
-  return new Promise<string>(async (resolve, reject) => {
-    if (__WORKER__) {
-      try {
-        const ssrReadable = await ssrRenderToReadableStream(ReactApp, {
-          nonce,
-          onError: (error) => log.error(error),
-        });
+  if (__WORKER__) {
+    const ssrReadable = await ssrRenderToReadableStream(ReactApp, {
+      nonce,
+      onError: (error) => log.error(error),
+    });
 
-        /**
-         * We want to wait until `allReady` resolves before fetching the
-         * stream body. Otherwise, React 18's streaming JS script/template tags
-         * will be included in the output and cause issues when loading
-         * the Client Components in the browser.
-         */
-        await ssrReadable.allReady;
+    /**
+     * We want to wait until `allReady` resolves before fetching the
+     * stream body. Otherwise, React 18's streaming JS script/template tags
+     * will be included in the output and cause issues when loading
+     * the Client Components in the browser.
+     */
+    await ssrReadable.allReady;
 
-        resolve(bufferReadableStream(ssrReadable.getReader()));
-      } catch (error: unknown) {
-        reject(error);
-      }
-    } else {
-      const writer = await createNodeWriter();
+    return bufferReadableStream(ssrReadable.getReader());
+  } else {
+    const writer = await createNodeWriter();
 
+    return new Promise<string>((resolve, reject) => {
       const {pipe} = ssrRenderToPipeableStream(ReactApp, {
         nonce,
         /**
@@ -788,8 +786,8 @@ async function renderToBufferedString(
         onShellError: reject,
         onError: (error) => log.error(error),
       });
-    }
-  });
+    });
+  }
 }
 
 export default renderHydrogen;

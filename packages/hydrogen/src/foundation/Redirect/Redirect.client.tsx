@@ -14,6 +14,7 @@ export default function Redirect({to}: RedirectProps) {
     } else {
       navigate(to);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;
