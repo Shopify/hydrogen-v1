@@ -1001,9 +1001,10 @@ function cacheResponse(
       // Do not cache a result when it past the max-age
       const {headers, status, statusText} =
         getResponseOptions(componentResponse);
+
       headers.set('cache-control', componentResponse.cacheControlHeader);
       const currentHeader = headers.get('Content-Type');
-      if (currentHeader === '') {
+      if (!currentHeader) {
         headers.set('Content-Type', 'text/html; charset=UTF-8');
       }
 
