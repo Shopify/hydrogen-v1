@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - https://hydrogen-preview.myshopify.com/api/2022-04/graphql.json:
+  - https://hydrogen-preview.myshopify.com/api/2022-07/graphql.json:
       headers:
         X-Shopify-Storefront-Access-Token: 3b580e70970c4528da70c98e097c2fa0
         content-type: application/json
@@ -18,7 +18,7 @@ generates:
           content:
             - '/** '
             - ' * THIS FILE IS AUTO-GENERATED, DO NOT EDIT'
-            - ' * Based on Storefront API 2022-04'
+            - ' * Based on Storefront API 2022-07'
             - ' * If changes need to happen to the types defined in this file, then generally the Storefront API needs to update, and then you can run `yarn graphql-types`'
             - ' * Except custom Scalars, which are defined in the `codegen.yml` file'
             - ' */'

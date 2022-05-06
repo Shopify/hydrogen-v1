@@ -80,7 +80,7 @@ describe('<ShopifyProvider />', () => {
           shopifyConfig={{
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
-            storefrontApiVersion: '2022-04',
+            storefrontApiVersion: '2022-07',
           }}
         >
           <Children />
@@ -89,7 +89,7 @@ describe('<ShopifyProvider />', () => {
 
       expect(provider).toContainReactComponent(ShopifyContext.Provider, {
         value: expect.objectContaining({
-          storefrontApiVersion: '2022-04',
+          storefrontApiVersion: '2022-07',
         }),
       });
     });
