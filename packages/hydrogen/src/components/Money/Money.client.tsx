@@ -8,7 +8,7 @@ interface MoneyProps<TTag> {
   as?: TTag;
   /** An object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). */
   data: PartialDeep<MoneyV2>;
-  /** If true, removes the currency symbol from the output. */
+  /** Whether to remove the currency symbol from the output. */
   withoutCurrency?: boolean;
   /** If true, removes trailing zeros (fractional money) from the output. */
   withoutTrailingZeros?: boolean;
