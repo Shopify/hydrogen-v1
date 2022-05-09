@@ -28,9 +28,9 @@ export default function DevTools() {
   let activePanelContent = null;
 
   switch (activePanel) {
-    case 'warnings':
+    case 'warnings': {
       const warningsMarkup = warnings
-        ? warnings.map((war, i) => <li key={war + i}>{war}</li>)
+        ? warnings.map((war, i) => <li key={war + i}>{war}</li>) // eslint-disable-line react/no-array-index-key
         : null;
       activePanelContent = (
         <>
@@ -48,6 +48,7 @@ export default function DevTools() {
         </>
       );
       break;
+    }
     case 'network':
       activePanelContent = (
         <>

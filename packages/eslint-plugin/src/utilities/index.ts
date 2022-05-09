@@ -22,7 +22,7 @@ export const deepCopy = <T>(obj: T): T => {
   if (typeof obj === 'object') {
     const copyArray = (arr: any[]): any => arr.map((val) => deepCopy(val));
     if (obj instanceof Array) return copyArray(obj);
-    const newObj = {} as T;
+    const newObj = {} as unknown as T;
     for (const key in obj) {
       const val = obj[key];
       if (val instanceof Array) {
@@ -66,7 +66,7 @@ export function merge<
       if (!hasKey || !(typeof mergedInto[curKey] === 'object'))
         mergedInto[curKey] = {} as unknown as R[typeof curKey];
 
-      Object.assign(mergedInto[curKey], fromVal);
+      Object.assign(mergedInto[curKey] as any, fromVal);
     } else {
       mergedInto[curKey] = fromVal as unknown as R[typeof curKey];
     }

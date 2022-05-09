@@ -94,11 +94,12 @@ export function Metafield<TTag extends ElementType>(
           {data.value}
         </a>
       );
-    case 'json':
+    case 'json': {
       const Wrapper = as ?? 'span';
       return (
         <Wrapper {...passthroughProps}>{JSON.stringify(data.value)}</Wrapper>
       );
+    }
     case 'file_reference': {
       if (data.reference?.__typename === 'MediaImage') {
         const ref = data.reference as MediaImage;
@@ -107,9 +108,8 @@ export function Metafield<TTag extends ElementType>(
         ) : null;
       }
     }
-    default: {
-      const Wrapper = as ?? 'span';
-      return <Wrapper {...passthroughProps}>{data.value.toString()}</Wrapper>;
-    }
   }
+
+  const Wrapper = as ?? 'span';
+  return <Wrapper {...passthroughProps}>{data.value.toString()}</Wrapper>;
 }

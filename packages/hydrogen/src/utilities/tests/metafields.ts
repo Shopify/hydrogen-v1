@@ -121,7 +121,7 @@ export function getMetafieldValue(type: MetafieldType) {
         value: faker.datatype.number(),
         unit: faker.random.arrayElement(['mm', 'cm', 'm', 'in', 'ft', 'yd']),
       });
-    case 'rating':
+    case 'rating': {
       const max = faker.datatype.number({min: 5, max: 10});
       const min = faker.datatype.number({min: 1, max: 4});
       return JSON.stringify({
@@ -129,6 +129,7 @@ export function getMetafieldValue(type: MetafieldType) {
         scale_min: min,
         value: faker.datatype.float({min, max, precision: 0.0001}),
       });
+    }
     default:
       return JSON.stringify(faker.datatype.json());
   }

@@ -1,2 +1,2 @@
-export {useProductOptions} from './useProductOptions';
+export {useProductOptions} from './useProductOptions.client';
 export * from './types';

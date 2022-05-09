@@ -22,7 +22,7 @@ export const preferImageComponent = createRule({
     schema: [],
   },
   defaultOptions: [],
-  create: function (context) {
+  create(context) {
     let hydrogenImportNode: TSESTree.ImportDeclaration | undefined;
     let lastImportNode: TSESTree.ImportDeclaration;
 
@@ -48,7 +48,7 @@ export const preferImageComponent = createRule({
             suggest: [
               {
                 messageId: 'replaceWithImage',
-                fix: function (fixer) {
+                fix(fixer) {
                   const tagFix = fixer.replaceTextRange(
                     [node.range[0] + 1, node.range[0] + 4],
                     IMAGE_COMPONENT_NAME

@@ -9,10 +9,8 @@ import {parseUrl} from './utils';
  * current request in progress.
  */
 
-/* eslint-disable no-var */
-/* eslint-disable @typescript-eslint/no-namespace */
 declare namespace globalThis {
-  var __logger: Logger;
+  let __logger: Logger;
 }
 
 export interface Logger {

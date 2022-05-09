@@ -3,7 +3,10 @@ export default {
     {
       files: ['*.ts', '*.tsx'],
       parser: '@typescript-eslint/parser',
-      extends: ['plugin:@typescript-eslint/recommended'],
+      extends: [
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
       rules: {
         'react/prop-types': 'off',
         '@typescript-eslint/no-empty-function': 'off',

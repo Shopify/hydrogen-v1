@@ -68,10 +68,8 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
 
   const amount = parseFloat(money.amount);
 
-  const standardCurrencyFormatter = new Intl.NumberFormat(locale, options);
-
   const value = useMemo(
-    () => standardCurrencyFormatter.format(amount),
+    () => new Intl.NumberFormat(locale, options).format(amount),
     [amount, locale, options]
   );
 
@@ -104,9 +102,7 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
   );
 
   const withoutTrailingZeros =
-    amount % 1 === 0
-      ? withoutTrailingZerosFormatter.format(amount)
-      : standardCurrencyFormatter.format(amount);
+    amount % 1 === 0 ? withoutTrailingZerosFormatter.format(amount) : value;
 
   const withoutTrailingZerosAndCurrency =
     amount % 1 === 0
@@ -139,7 +135,15 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
       withoutTrailingZeros,
       withoutTrailingZerosAndCurrency,
     }),
-    [baseParts, money, nameParts, narrowParts, value]
+    [
+      baseParts,
+      money,
+      nameParts,
+      narrowParts,
+      value,
+      withoutTrailingZeros,
+      withoutTrailingZerosAndCurrency,
+    ]
   );
 
   return moneyValue;

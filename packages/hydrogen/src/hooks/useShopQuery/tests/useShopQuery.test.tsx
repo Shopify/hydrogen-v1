@@ -60,7 +60,7 @@ describe('useShopQuery', () => {
     mockedFetch.mockResolvedValue(new Response(successResult, {status: 200}));
     const component = await mountComponent();
 
-    expect(cache.keys()).resolves.toHaveLength(0);
+    expect(await cache.keys()).toHaveLength(0);
 
     await component.act(async () => {
       await Promise.all(waitUntilPromises);
@@ -70,7 +70,7 @@ describe('useShopQuery', () => {
       children: successResult,
     });
 
-    expect(cache.keys()).resolves.toHaveLength(1);
+    expect(await cache.keys()).toHaveLength(1);
   });
 
   it('handles GraphQL errors with OK status', async () => {
@@ -78,7 +78,7 @@ describe('useShopQuery', () => {
     mockedFetch.mockResolvedValue(new Response(errorResult, {status: 200}));
     const component = await mountComponent();
 
-    expect(cache.keys()).resolves.toHaveLength(0);
+    expect(await cache.keys()).toHaveLength(0);
 
     await component.act(async () => {
       await Promise.all(waitUntilPromises);
@@ -88,6 +88,6 @@ describe('useShopQuery', () => {
       children: errorResult,
     });
 
-    expect(cache.keys()).resolves.toHaveLength(0);
+    expect(await cache.keys()).toHaveLength(0);
   });
 });
