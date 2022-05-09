@@ -74,7 +74,7 @@ export default function CountrySelector() {
 - export default function Product({country = {isoCode: 'US'}}) {
 + export default function Product() {
     const {handle} = useRouteParams();
-    const {countryCode = 'US'} = useSession();
++   const {countryCode = 'US'} = useSession();
     ...
   }
 ```
