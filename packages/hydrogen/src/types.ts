@@ -59,7 +59,7 @@ export type HydrogenConfigRoutes =
       dirPrefix?: string;
     };
 
-type ConfigFetcher<T> = (url: URL, request: Request) => T | Promise<T>;
+type ConfigFetcher<T> = (request: ServerComponentRequest) => T | Promise<T>;
 
 export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
 

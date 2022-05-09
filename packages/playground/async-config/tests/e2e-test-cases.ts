@@ -17,7 +17,20 @@ export default async function testCases({
 
     await page.goto(getServerUrl() + '/es/');
 
+    expect(await page.textContent('h1')).toContain('ES Home');
+    expect(await page.textContent('#locale')).toContain('ES-ES');
+  });
+
+  it('shows the homepage with the correct locale in RSC', async () => {
+    await page.goto(getServerUrl());
+
     expect(await page.textContent('h1')).toContain('Home');
+    expect(await page.textContent('#locale')).toContain('EN-US');
+
+    await page.click('#link');
+    await page.waitForURL('**/es');
+
+    expect(await page.textContent('h1')).toContain('ES Home');
     expect(await page.textContent('#locale')).toContain('ES-ES');
   });
 

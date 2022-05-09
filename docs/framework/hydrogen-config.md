@@ -114,8 +114,9 @@ For advanced use cases, you can provide a function that returns the same propert
 let myShopifyConfigCache = {};
 
 export default defineConfig({
-  shopify: (url: URL, request: Request) => {
-    // For example, you can change the configuration based on the URL
+  shopify: (request: ServerComponentRequest) => {
+    // For example, you can change the configuration based on the normalized URL
+    const url = new URL(request.normalizedUrl);
     const [firstUrlPart] = url.pathname.split('/');
 
     if (myShopifyConfigCache[firstUrlPart]) {

@@ -4,8 +4,10 @@ const sleep = (ms = 10) => new Promise((r) => setTimeout(r, ms));
 
 export default defineConfig({
   routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
-  shopify: async (url) => {
+  shopify: async (request) => {
     await sleep();
+
+    const url = new URL(request.normalizedUrl);
 
     return {
       defaultLocale: url.pathname.startsWith('/es') ? 'es-es' : 'en-us',

@@ -160,7 +160,7 @@ function queryShopBuilder(
   }: QueryShopArgs): Promise<T> {
     const shopifyConfig =
       typeof shopifyConfigGetter === 'function'
-        ? await shopifyConfigGetter(new URL(request.url), request)
+        ? await shopifyConfigGetter(request)
         : shopifyConfigGetter;
 
     if (!shopifyConfig) {

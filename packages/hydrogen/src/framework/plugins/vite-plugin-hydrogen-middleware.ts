@@ -54,8 +54,12 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
               headers: incomingMessage.headers as any,
             });
 
+            // @ts-expect-error Manually set `normalizedUrl` which a developer expects to be available
+            // via `ServerComponentRequest` during production runtime.
+            request.normalizedUrl = request.url;
+
             return typeof hydrogenConfig.shopify === 'function'
-              ? hydrogenConfig.shopify(url, request)
+              ? hydrogenConfig.shopify(request)
               : hydrogenConfig.shopify;
           },
         })

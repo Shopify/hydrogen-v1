@@ -7,7 +7,6 @@ import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {useUrl} from '../useUrl';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   const locale = shopifyConfig.defaultLocale ?? DEFAULT_LOCALE;
@@ -55,7 +54,7 @@ export function ShopifyProvider({
 
   if (typeof shopifyConfig === 'function') {
     const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
-      (shopifyConfig as ShopifyConfigFetcher)(useUrl(), request)
+      (shopifyConfig as ShopifyConfigFetcher)(request)
     );
 
     if (result.error) {
