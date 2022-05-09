@@ -666,7 +666,8 @@ export function CartProvider({
       return;
     }
     buyerIdentityUpdate({countryCode}, state);
-  }, [countryCode, state, buyerIdentityUpdate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countryCode]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
