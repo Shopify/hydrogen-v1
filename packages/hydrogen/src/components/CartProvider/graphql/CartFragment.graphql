@@ -24,6 +24,12 @@ fragment CartFragment on Cart {
           key
           value
         }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+        }
         merchandise {
           ... on ProductVariant {
             id
@@ -85,4 +91,5 @@ fragment CartFragment on Cart {
     code
     applicable
   }
+  totalQuantity
 }
