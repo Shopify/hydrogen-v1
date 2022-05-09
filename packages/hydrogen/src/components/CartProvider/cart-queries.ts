@@ -10,6 +10,7 @@ mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $numCartLines: Int
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -30,6 +31,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -108,6 +115,7 @@ mutation CartCreate($input: CartInput!, $numCartLines: Int = 250, $country: Coun
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -128,6 +136,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -206,6 +220,7 @@ mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250, 
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -226,6 +241,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -304,6 +325,7 @@ mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartL
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -324,6 +346,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -402,6 +430,7 @@ mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250, $
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -422,6 +451,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -505,6 +540,7 @@ mutation CartBuyerIdentityUpdate(
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -525,6 +561,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -603,6 +645,7 @@ mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $nu
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -623,6 +666,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -701,6 +750,7 @@ mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCa
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -721,6 +771,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -797,6 +853,7 @@ query CartQuery($id: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) 
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -817,6 +874,12 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {

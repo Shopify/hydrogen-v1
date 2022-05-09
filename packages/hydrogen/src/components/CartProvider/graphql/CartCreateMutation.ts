@@ -17,7 +17,7 @@ export type CartCreateMutation = {__typename?: 'Mutation'} & {
       cart?: Types.Maybe<
         {__typename?: 'Cart'} & Pick<
           Types.Cart,
-          'id' | 'checkoutUrl' | 'note' | 'totalQuantity'
+          'id' | 'checkoutUrl' | 'totalQuantity' | 'note'
         > & {
             buyerIdentity: {__typename?: 'CartBuyerIdentity'} & Pick<
               Types.CartBuyerIdentity,

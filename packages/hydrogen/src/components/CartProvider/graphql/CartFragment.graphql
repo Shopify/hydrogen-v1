@@ -3,6 +3,7 @@
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -91,5 +92,4 @@ fragment CartFragment on Cart {
     code
     applicable
   }
-  totalQuantity
 }

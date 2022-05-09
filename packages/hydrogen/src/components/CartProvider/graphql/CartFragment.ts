@@ -7,7 +7,7 @@ import * as Types from '../../../storefront-api-types';
 
 export type CartFragmentFragment = {__typename?: 'Cart'} & Pick<
   Types.Cart,
-  'id' | 'checkoutUrl' | 'note' | 'totalQuantity'
+  'id' | 'checkoutUrl' | 'totalQuantity' | 'note'
 > & {
     buyerIdentity: {__typename?: 'CartBuyerIdentity'} & Pick<
       Types.CartBuyerIdentity,
