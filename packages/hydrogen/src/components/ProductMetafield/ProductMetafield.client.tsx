@@ -60,7 +60,7 @@ export function ProductMetafield<TTag extends ElementType>(
     const productOrVariant = variantId ? `Variant` : 'Product';
 
     const logItems = {
-      variantId: variantId,
+      variantId,
       ProductId: product.id,
       namespace,
       keyName,

@@ -95,6 +95,7 @@ export function Image(props: ImageProps) {
     ? imgProps.loader({src: imgProps.src, options: imgProps.loaderOptions})
     : imgProps.src;
 
+  /* eslint-disable hydrogen/prefer-image-component */
   return (
     <img
       id={imgProps.id ?? ''}
@@ -106,6 +107,7 @@ export function Image(props: ImageProps) {
       height={imgProps.height ?? undefined}
     />
   );
+  /* eslint-enable hydrogen/prefer-image-component */
 }
 
 function convertShopifyImageData({

@@ -125,7 +125,12 @@ export function ServerStateProvider({
       setServerState: setServerStateCallback,
       getProposedServerState: getProposedServerStateCallback,
     }),
-    [serverState, setServerStateCallback, pending]
+    [
+      serverState,
+      getProposedServerStateCallback,
+      setServerStateCallback,
+      pending,
+    ]
   );
 
   return (

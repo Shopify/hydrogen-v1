@@ -1,3 +1,4 @@
+/* eslint-disable hydrogen/no-state-in-server-components */
 import React, {
   createContext,
   ReactNode,
@@ -90,7 +91,7 @@ export function ServerPropsProvider({
         setServerPropsForRsc((prev) => getNewValue(prev, input, propValue));
       });
     },
-    []
+    [setServerProps, setServerPropsForRsc]
   );
 
   const setLocationServerPropsCallback = useCallback<ServerPropsSetter>(
@@ -102,7 +103,7 @@ export function ServerPropsProvider({
         setLocationServerProps((prev) => getNewValue(prev, input, propValue));
       });
     },
-    []
+    [setServerProps, setServerPropsForRsc, setLocationServerProps]
   );
 
   const getProposedLocationServerPropsCallback =
@@ -146,7 +147,7 @@ export function ServerPropsProvider({
   const value = useMemo(
     () => ({
       pending,
-      locationServerProps: locationServerProps,
+      locationServerProps,
       serverProps,
       setServerProps: setServerPropsCallback,
       setLocationServerProps: setLocationServerPropsCallback,
@@ -168,3 +169,5 @@ export function ServerPropsProvider({
     </ServerPropsContext.Provider>
   );
 }
+
+/* eslint-enable hydrogen/no-state-in-server-components */

@@ -37,10 +37,12 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
 
   basePath ??= '/';
 
+  /* eslint-disable react-hooks/rules-of-hooks */
   const pageRoutes = useMemo(
     () => createPageRoutes(routes!, basePath, dirPrefix),
-    [routes, basePath]
+    [routes, basePath, dirPrefix]
   );
+  /* eslint-enable react-hooks/rules-of-hooks */
 
   let foundRoute, foundRouteDetails;
 

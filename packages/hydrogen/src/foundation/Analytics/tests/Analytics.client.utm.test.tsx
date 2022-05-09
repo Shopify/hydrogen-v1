@@ -2,7 +2,7 @@ import React from 'react';
 import {
   mountComponent,
   SomeClientComponent,
-} from './analytics-client-test-utils';
+} from './analytics-client-test-utils.client';
 import {ClientAnalytics} from '../ClientAnalytics';
 
 // This test is in its own file is due to the fact that I cannot set
@@ -21,7 +21,7 @@ describe('Analytics.client utm', () => {
       test: '123',
     };
 
-    await mountComponent(
+    return mountComponent(
       analyticsData,
       <>
         <SomeClientComponent

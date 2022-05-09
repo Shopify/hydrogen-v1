@@ -60,7 +60,7 @@ export function useServerRequest() {
   } catch {
     // If RSC cache failed it means this is not an RSC request.
     // Try getting SSR context instead:
-    request = useContext(RequestContextSSR);
+    request = useContext(RequestContextSSR); // eslint-disable-line react-hooks/rules-of-hooks
   }
 
   if (!request) {

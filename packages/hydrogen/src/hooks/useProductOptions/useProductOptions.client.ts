@@ -71,42 +71,22 @@ export function useProductOptions({
    * values.
    */
   useEffect(() => {
-    setSelectedVariant(initialVariantId);
-
-    const selectedOptions = selectedVariant?.selectedOptions
-      ? selectedVariant.selectedOptions.reduce((memo, optionSet) => {
-          memo[optionSet?.name ?? ''] = optionSet?.value ?? '';
-          return memo;
-        }, {} as SelectedOptions)
-      : {};
-    setSelectedOptions(selectedOptions);
-  }, [initialVariantId, variants]);
+    const variant = getSelectedVariant(variants, selectedOptions);
+    setSelectedVariant(variant);
+  }, [selectedOptions, variants]);
 
   /**
    * Allow the developer to select an option.
    */
   const setSelectedOption = useCallback(
     (name: string, value: string) => {
-      const newSelectedOptions = {
+      setSelectedOptions((selectedOptions) => ({
         ...selectedOptions,
         [name]: value,
-      };
-
-      setSelectedOptions(newSelectedOptions);
+      }));
     },
-    [selectedOptions]
+    [setSelectedOptions]
   );
-
-  useEffect(() => {
-    /**
-     * When selected options change, select the correct variant.
-     */
-    const variant = getSelectedVariant(variants, selectedOptions);
-
-    if (variant) {
-      setSelectedVariant(variant);
-    }
-  }, [variants, selectedOptions]);
 
   const isOptionInStock = useCallback(
     (option: string, value: string) => {

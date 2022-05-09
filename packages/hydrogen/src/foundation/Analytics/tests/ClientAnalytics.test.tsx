@@ -55,25 +55,27 @@ describe('Analytics - ClientAnalytics', () => {
     expect(mockPageViewCallback).toHaveBeenCalledTimes(2);
   });
 
-  it('should de-duplicate analytics events when set', async (done) => {
-    mockPageViewCallback.mockClear();
-    let calledTimes = 0;
-    pageViewSubscriber = ClientAnalytics.subscribe(
-      ClientAnalytics.eventNames.PAGE_VIEW,
-      (payload) => {
-        calledTimes++;
-        expect(calledTimes).toEqual(1);
-        expect(payload).toEqual({
-          test: '456',
-        });
-        done();
-      }
-    );
-    ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true, {
-      test: '123',
-    });
-    ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true, {
-      test: '456',
+  it('should de-duplicate analytics events when set', async () => {
+    return new Promise<void>((resolve) => {
+      mockPageViewCallback.mockClear();
+      let calledTimes = 0;
+      pageViewSubscriber = ClientAnalytics.subscribe(
+        ClientAnalytics.eventNames.PAGE_VIEW,
+        (payload) => {
+          calledTimes++;
+          expect(calledTimes).toEqual(1);
+          expect(payload).toEqual({
+            test: '456',
+          });
+          resolve();
+        }
+      );
+      ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true, {
+        test: '123',
+      });
+      ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true, {
+        test: '456',
+      });
     });
   });
 
