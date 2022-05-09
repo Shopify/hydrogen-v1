@@ -1,0 +1,14 @@
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      ['packages/*/src/**', 'packages/*/package.json', '!*.test.*', '!*.md']
+name: Docs Reminder
+jobs:
+  remind:
+    name: Docs Reminder
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shopify/docs-reminder-action@v2
