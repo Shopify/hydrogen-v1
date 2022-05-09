@@ -3,7 +3,7 @@
 'create-hydrogen-app': minor
 ---
 
-The selected country is now persisted a part of the session. This means that the page can be refreshed and the selected country will remain. This means there are a few breaking changes:
+The selected country is now persisted a part of the session. This means that the page can be refreshed and the country will still be selected. There are a few breaking changes:
 
 1. `useCountry()` hook now only returns the currently selected country. The `setCountry()` method has been removed.
 2. The `useCountry()` hook expects a `countryCode` and `countryName` to be a part of the user session.
