@@ -32,7 +32,7 @@ This hook returns an object with the following keys:
 
 | Key                    | Description                                                                                                                                                                         |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `locale` value in [ShopifyContext](https://shopify.dev/api/hydrogen/hooks/global/useshop). |
+| `localizedString`      | A string returned by `new Intl.NumberFormat` for the amount and currency code, using the `defaultLocale` value in [`hydrogenConfig.shopify`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). |
 | `currencyCode`         | The currency code from the `MoneyV2` object.                                                                                                                                        |
 | `currencyName`         | The name for the currency code, returned by `Intl.NumberFormat`.                                                                                                                    |
 | `currencySymbol`       | The currency symbol returned by `Intl.NumberFormat`.                                                                                                                                |

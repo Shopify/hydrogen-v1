@@ -211,7 +211,7 @@ function createErrorMessage(fetchError: Response | Error) {
     return `An error occurred while fetching from the Storefront API. ${
       // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
       fetchError.status === 403
-        ? `You may have a bad value in 'shopify.config.js'`
+        ? `You may have a bad value in 'hydrogen.config.js'`
         : `${fetchError.statusText}`
     }`;
   } else {

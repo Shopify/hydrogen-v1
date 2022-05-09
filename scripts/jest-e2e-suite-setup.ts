@@ -1,6 +1,6 @@
 import {copy, existsSync} from 'fs-extra';
 import * as http from 'http';
-import {resolve, dirname, basename} from 'path';
+import {resolve, dirname, basename, sep} from 'path';
 import sirv from 'sirv';
 import {
   createServer,
@@ -48,7 +48,11 @@ beforeAll(async () => {
     // start a server in that directory.
 
     const testCustomServe = resolve(
-      testPath.replace(/\.test\.([jt]s)$/, '.serve.$1')
+      dirname(testPath),
+      '..',
+      '..',
+      'test-utils',
+      basename(testPath).replace(/\.test\.([jt]s)$/, '.serve.$1')
     );
 
     if (existsSync(testCustomServe)) {

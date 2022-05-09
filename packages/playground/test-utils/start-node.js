@@ -1,10 +1,12 @@
 // @ts-check
+const path = require('path');
 // @ts-ignore
-const {createServer} = require('./dist/server');
-const {loadProdEnv} = require('./utils');
+const {loadProdEnv} = require('./load-prod-env');
 
-function createServerWithEnv() {
-  return loadProdEnv().then((env) => {
+function createServerWithEnv({cwd = process.cwd()} = {}) {
+  const {createServer} = require(path.join(cwd, 'dist', 'server'));
+
+  return loadProdEnv(cwd).then((env) => {
     Object.assign(process.env, env);
     return createServer();
   });

@@ -273,6 +273,24 @@ function MyPage({request}) {
 
 {% endcodeblock %}
 
+In some cases, you might want to use `ServerComponentRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components):
+
+{% codeblock file %}
+
+```jsx
+function MyPage({request}) {
+  // 🔴 You probably don't want to read `url`:
+  console.log(request.url);
+  // https://example.com/__rsc?state=%7B%22pathname%22%3A%22%2Fproducts%22%2C%22search%22%3A%22%22%7D
+
+  // ✅ You probably want the `normalizedUrl`:
+  console.log(request.normalizedUrl);
+  // https://example.com/products
+}
+```
+
+{% endcodeblock %}
+
 ### `response`: `ServerComponentResponse`
 
 You might want to customize the response returned from the Hydrogen server. For example, set a different status code or define custom headers.

@@ -5,11 +5,11 @@ import {getApiRoutes} from '../apiRoutes';
 const STUB_MODULE = {default: null, api: {}};
 
 it('converts API functions to routes', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/contact.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
 
   expect(routes).toEqual([
     {
@@ -22,13 +22,13 @@ it('converts API functions to routes', () => {
 });
 
 it('handles index API routes', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/index.server.jsx': STUB_MODULE,
     './routes/contact.server.jsx': STUB_MODULE,
     './routes/api/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
 
   expect(routes).toEqual([
     {
@@ -53,7 +53,7 @@ it('handles index API routes', () => {
 });
 
 it('handles nested index API routes', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/products/index.server.jsx': STUB_MODULE,
     './routes/products/[handle].server.jsx': STUB_MODULE,
     './routes/blogs/index.server.jsx': STUB_MODULE,
@@ -62,7 +62,7 @@ it('handles nested index API routes', () => {
     './routes/articles/[...handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
 
   expect(routes).toEqual([
     {
@@ -105,13 +105,13 @@ it('handles nested index API routes', () => {
 });
 
 it('handles dynamic paths', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/contact.server.jsx': STUB_MODULE,
     './routes/index.server.jsx': STUB_MODULE,
     './routes/products/[handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
   expect(routes).toEqual([
     {
       path: '/contact',
@@ -135,13 +135,13 @@ it('handles dynamic paths', () => {
 });
 
 it('handles catch all routes', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/contact.server.jsx': STUB_MODULE,
     './routes/index.server.jsx': STUB_MODULE,
     './routes/products/[...handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
   expect(routes).toEqual([
     {
       path: '/contact',
@@ -165,7 +165,7 @@ it('handles catch all routes', () => {
 });
 
 it('handles nested dynamic paths', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/contact.server.jsx': STUB_MODULE,
     './routes/index.server.jsx': STUB_MODULE,
     './routes/products/[handle].server.jsx': STUB_MODULE,
@@ -173,7 +173,7 @@ it('handles nested dynamic paths', () => {
     './routes/blogs/[handle]/[...articleHandle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
 
   expect(routes).toEqual([
     {
@@ -210,7 +210,7 @@ it('handles nested dynamic paths', () => {
 });
 
 it('prioritizes overrides next to dynamic paths', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/contact.server.jsx': STUB_MODULE,
     './routes/index.server.jsx': STUB_MODULE,
     './routes/products/[handle].server.jsx': STUB_MODULE,
@@ -219,7 +219,7 @@ it('prioritizes overrides next to dynamic paths', () => {
     './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
 
   expect(routes).toEqual([
     {
@@ -257,12 +257,12 @@ it('prioritizes overrides next to dynamic paths', () => {
 });
 
 it('handles typescript paths', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/contact.server.tsx': STUB_MODULE,
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
 
   expect(routes).toEqual([
     {
@@ -281,12 +281,12 @@ it('handles typescript paths', () => {
 });
 
 it('lowercases routes', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/Contact.server.jsx': STUB_MODULE,
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '*');
+  const routes = getApiRoutes(files);
 
   expect(routes).toEqual([
     {
@@ -305,12 +305,12 @@ it('lowercases routes', () => {
 });
 
 it('factors in the top-level path prefix', () => {
-  const pages: ImportGlobEagerOutput = {
+  const files: ImportGlobEagerOutput = {
     './routes/contact.server.jsx': STUB_MODULE,
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(pages, '/foo/*');
+  const routes = getApiRoutes({files, basePath: '/foo/*'});
 
   expect(routes).toEqual([
     {

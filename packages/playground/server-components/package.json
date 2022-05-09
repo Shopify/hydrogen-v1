@@ -4,8 +4,8 @@
   "version": "0.11.0",
   "scripts": {
     "_dev": "vite",
-    "start:node": "node start-node",
-    "start:worker": "node start-worker",
+    "start:node": "node ../test-utils/start-node",
+    "start:worker": "node ../test-utils/start-worker",
     "build": "yarn build:client && yarn build:server && yarn build:worker",
     "build:client": "vite build --outDir dist/client --manifest",
     "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",

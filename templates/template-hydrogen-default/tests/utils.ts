@@ -28,6 +28,8 @@ export async function startHydrogenServer() {
 }
 
 async function createNodeServer() {
+  // @ts-ignore
+  // eslint-disable-next-line node/no-missing-import
   const {createServer} = await import('../dist/server');
   const app = (await createServer()).app;
   const server = app.listen(0) as Server;
