@@ -1,53 +1,29 @@
-import {useCallback, useState, useEffect} from 'react';
-import {useCountry, useServerProps} from '@shopify/hydrogen/client';
+import {useCallback, useState, Suspense} from 'react';
+import {useCountry} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
 import SpinnerIcon from './SpinnerIcon.client';
 
-import {ArrowIcon, CheckIcon} from './CountrySelector.client';
+import {ArrowIcon, Countries} from './CountrySelector.client';
 
 /**
  * A client component that selects the appropriate country to display for products on a mobile storefront
  */
 export default function MobileCountrySelector() {
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [listboxOpen, setListboxOpen] = useState(false);
-  const [countries, setCountries] = useState([]);
-
-  if (error) {
-    throw error;
-  }
-
-  useEffect(() => {
-    if (listboxOpen && !isLoading && !countries.length) {
-      fetch('/countries')
-        .then((resp) => {
-          if (!resp.ok) throw new Error(resp.statusText);
-          else return resp.json();
-        })
-        .then((c) => setCountries(c))
-        .catch((e) => setError(e))
-        .finally(() => setLoading(false));
-    }
-  }, [listboxOpen, isLoading, countries.length]);
-
   const [selectedCountry] = useCountry();
 
-  const setCountry = useCallback(
-    (isoCode) => {
-      const newCountry = countries.find(
-        (country) => country.isoCode === isoCode,
-      );
-
-      fetch(`/countries`, {
-        body: JSON.stringify(newCountry),
-        method: 'POST',
-      }).then(() => {
+  const setCountry = useCallback(({isoCode, name}) => {
+    fetch(`/countries`, {
+      body: JSON.stringify({isoCode, name}),
+      method: 'POST',
+    })
+      .then(() => {
         window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    },
-    [countries],
-  );
+  }, []);
 
   return (
     <div className="mt-8 rounded border border-gray-200 w-full">
@@ -67,32 +43,27 @@ export default function MobileCountrySelector() {
                 >
                   Country
                 </Listbox.Option>
-                {!countries.length ? (
-                  <div className="flex justify-center">
-                    <SpinnerIcon />
-                  </div>
-                ) : null}
-                {countries.map((country) => {
-                  const isSelected =
-                    country.isoCode === selectedCountry.isoCode;
-                  return (
-                    <Listbox.Option
-                      key={country.isoCode}
-                      value={country.isoCode}
-                    >
-                      {({active}) => (
-                        <div
-                          className={`py-2 px-4 rounded flex justify-between items-center text-left w-full cursor-pointer ${
+                {listboxOpen && (
+                  <Suspense
+                    fallback={
+                      <div className="flex justify-center">
+                        <SpinnerIcon />
+                      </div>
+                    }
+                  >
+                    <Countries
+                      selectedCountry={selectedCountry}
+                      getClassName={(active) => {
+                        return (
+                          `py-2 px-4 rounded flex justify-between items-center text-left ` +
+                          `w-full cursor-pointer ${
                             active ? 'bg-gray-100' : null
-                          }`}
-                        >
-                          {country.name}
-                          {isSelected ? <CheckIcon /> : null}
-                        </div>
-                      )}
-                    </Listbox.Option>
-                  );
-                })}
+                          }`
+                        );
+                      }}
+                    />
+                  </Suspense>
+                )}
               </Listbox.Options>
             </>
           );

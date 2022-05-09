@@ -1,5 +1,5 @@
-import {useCallback, useState, useEffect} from 'react';
-import {useCountry, useServerProps} from '@shopify/hydrogen/client';
+import {useCallback, useState, Suspense} from 'react';
+import {useCountry, fetchSync} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
 import SpinnerIcon from './SpinnerIcon.client';
 
@@ -7,49 +7,21 @@ import SpinnerIcon from './SpinnerIcon.client';
  * A client component that selects the appropriate country to display for products on a website
  */
 export default function CountrySelector() {
-  const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [listboxOpen, setListboxOpen] = useState(false);
-  const [countries, setCountries] = useState([]);
-
-  if (error) {
-    throw error;
-  }
-
-  useEffect(() => {
-    if (listboxOpen && !isLoading && !countries.length) {
-      fetch('/countries')
-        .then((resp) => {
-          if (!resp.ok) throw new Error(resp.statusText);
-          else return resp.json();
-        })
-        .then((c) => setCountries(c))
-        .catch((e) => setError(e))
-        .finally(() => setLoading(false));
-    }
-  }, [listboxOpen, isLoading, countries.length]);
-
   const [selectedCountry] = useCountry();
 
-  const setCountry = useCallback(
-    (isoCode) => {
-      const newCountry = countries.find(
-        (country) => country.isoCode === isoCode,
-      );
-
-      fetch(`/countries`, {
-        body: JSON.stringify(newCountry),
-        method: 'POST',
+  const setCountry = useCallback(({isoCode, name}) => {
+    fetch(`/countries`, {
+      body: JSON.stringify({isoCode, name}),
+      method: 'POST',
+    })
+      .then(() => {
+        window.location.reload();
       })
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
-    [countries],
-  );
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <div className="hidden lg:block">
@@ -71,31 +43,25 @@ export default function CountrySelector() {
                   >
                     Country
                   </Listbox.Option>
-                  {!countries.length ? (
-                    <div className="flex justify-center">
-                      <SpinnerIcon />
-                    </div>
-                  ) : null}
-                  {countries.map((country) => {
-                    const isSelected =
-                      country.isoCode === selectedCountry.isoCode;
-                    return (
-                      <Listbox.Option
-                        key={country.isoCode}
-                        value={country.isoCode}
-                      >
-                        {({active}) => (
-                          <div
-                            className={`w-36 py-2 px-3 flex justify-between items-center text-left cursor-pointer rounded
-                          ${active ? 'bg-gray-200' : null}`}
-                          >
-                            {country.name}
-                            {isSelected ? <CheckIcon /> : null}
-                          </div>
-                        )}
-                      </Listbox.Option>
-                    );
-                  })}
+                  {listboxOpen && (
+                    <Suspense
+                      fallback={
+                        <div className="flex justify-center">
+                          <SpinnerIcon />
+                        </div>
+                      }
+                    >
+                      <Countries
+                        selectedCountry={selectedCountry}
+                        getClassName={(active) => {
+                          return (
+                            `w-36 py-2 px-3 flex justify-between items-center text-left cursor-pointer` +
+                            `rounded ${active ? 'bg-gray-200' : null}`
+                          );
+                        }}
+                      />
+                    </Suspense>
+                  )}
                 </div>
               </Listbox.Options>
             </>
@@ -104,6 +70,24 @@ export default function CountrySelector() {
       </Listbox>
     </div>
   );
+}
+
+export function Countries({selectedCountry, getClassName}) {
+  const countries = fetchSync('/countries').json();
+
+  return countries.map((country) => {
+    const isSelected = country.isoCode === selectedCountry.isoCode;
+    return (
+      <Listbox.Option key={country.isoCode} value={country}>
+        {({active}) => (
+          <div className={getClassName(active)}>
+            {country.name}
+            {isSelected ? <CheckIcon /> : null}
+          </div>
+        )}
+      </Listbox.Option>
+    );
+  });
 }
 
 export function CheckIcon() {
