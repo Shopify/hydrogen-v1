@@ -138,7 +138,7 @@ export const renderHydrogen = (
       const cachedResponse = await cacheInstance.match(request.cacheKey());
 
       if (cachedResponse) {
-        console.log('Cache matched');
+        console.log('[c] Cache matched');
         return cachedResponse;
       }
     }
@@ -167,9 +167,14 @@ export const renderHydrogen = (
       }
     }
 
+    const isStreamSupport = await isStreamingSupported();
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
+
+    console.log(
+      `[c] isStreamable: ${isStreamable} - streamableResponse: ${!!streamableResponse} - isStreamingSupported: ${isStreamSupport}`
+    );
 
     let template =
       typeof indexTemplate === 'function'
@@ -272,7 +277,7 @@ async function render(
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
 
-    console.log('render - customBody - stable');
+    console.log('[c] render - customBody - stable');
 
     const customBody = await componentResponse.customBody;
     response = new Response(customBody, {
@@ -287,7 +292,7 @@ async function render(
     return response;
   }
 
-  console.log('render - stable');
+  console.log('[c] render - stable');
 
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
@@ -372,22 +377,14 @@ async function stream(
   let didError: Error | undefined;
 
   if (__WORKER__) {
-    console.log('stream - worker');
+    console.log('[c] stream - worker');
 
     const onCompleteAll = defer<true>();
     const encoder = new TextEncoder();
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
-
-    // Maintain a copy of streamed html so we can cache this at the end
-    const originalWrite = writable.write;
-    const chunks: string[] = [];
-    writable.write = (chunk?: any) => {
-      console.log(chunk);
-      chunks.push(chunk);
-      return originalWrite(chunk);
-    };
+    const savedChunks: string[] = [];
 
     let ssrReadable: Awaited<ReturnType<typeof ssrRenderToReadableStream>>;
 
@@ -447,6 +444,7 @@ async function stream(
 
       if (flush) {
         if (componentResponse.customBody) {
+          console.log('[c] prepareForStreaming - 3');
           writable.write(encoder.encode(await componentResponse.customBody));
           return false;
         }
@@ -470,10 +468,12 @@ async function stream(
     if (shouldReturnApp) {
       let bufferedSsr = '';
       let isPendingSsrWrite = false;
+
       const writingSSR = bufferReadableStream(
         ssrReadable.getReader(),
         (chunk) => {
           bufferedSsr += chunk;
+          savedChunks.push(chunk);
 
           if (!isPendingSsrWrite) {
             isPendingSsrWrite = true;
@@ -499,6 +499,8 @@ async function stream(
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => {
+          console.log('[c] shouldReturnApp - 4');
+
           writable.close();
           postRequestTasks(
             'str',
@@ -506,9 +508,12 @@ async function stream(
             request,
             componentResponse
           );
+          cacheResponse(componentResponse, request, savedChunks);
         }, 0);
       });
     } else {
+      console.log('[c] shouldReturnApp - 5');
+
       writable.close();
       postRequestTasks(
         'str',
@@ -516,19 +521,30 @@ async function stream(
         request,
         componentResponse
       );
+      cacheResponse(componentResponse, request, savedChunks);
     }
+
+    console.log('[c] shouldReturnApp - 6');
 
     if (await isStreamingSupported()) {
       return new Response(transform.readable, responseOptions);
     }
 
+    console.log('[c] worker - bufferReadableStream');
+
     const bufferedBody = await bufferReadableStream(
-      transform.readable.getReader()
+      transform.readable.getReader(),
+      (chunk: string) => {
+        console.log('[c] bufferReadableStream');
+        savedChunks.push(chunk);
+      }
     );
+
+    console.log('[c] worker - stream - end');
 
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
-    console.log('stream - node - stable');
+    console.log('[c] stream - node - stable');
 
     // Maintain a copy of streamed html so we can cache this at the end
     const originalWrite = response.write;
@@ -679,19 +695,44 @@ async function hydrate(
   });
 
   if (__WORKER__) {
-    console.log('hydrate - worker');
+    console.log('[c] hydrate - worker');
 
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
+      console.log('[c] hydrate - isStreamable');
+
+      function readStream(stream: ReadableStream<Uint8Array>) {
+        console.log('[c] hydrate - readStream');
+        const savedChunks: string[] = [];
+        const reader = stream.getReader();
+        reader.read().then(function processText({done, value}): any {
+          const text = new TextDecoder().decode(value);
+          value && savedChunks.push(text);
+          if (done) {
+            cacheResponse(componentResponse, request, savedChunks);
+            return;
+          }
+          return reader.read().then(processText);
+        });
+      }
+
+      const rscReadableStreams = rscReadable.tee();
+      readStream(rscReadableStreams[1]);
+
       postRequestTasks('rsc', 200, request, componentResponse);
-      return new Response(rscReadable);
+      return new Response(rscReadableStreams[0]);
     }
+
+    console.log('[c] hydrate - bufferReadableStream');
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
     postRequestTasks('rsc', 200, request, componentResponse);
+    cacheResponse(componentResponse, request, [bufferedBody]);
+
+    console.log('[c] hydrate - end');
 
     return new Response(bufferedBody, {
       headers: {
@@ -699,7 +740,7 @@ async function hydrate(
       },
     });
   } else if (response) {
-    console.log('hydrate - node - stable');
+    console.log('[c] hydrate - node - stable');
 
     const originalWrite = response.write;
     const savedChunks: string[] = [];
@@ -1008,7 +1049,7 @@ function cacheResponse(
         headers.set('Content-Type', 'text/html; charset=UTF-8');
       }
 
-      console.log('Chunks', chunks.length);
+      console.log('[c]', chunks.join(''));
       await cache.put(
         request.cacheKey(),
         new Response(chunks.join(''), {
