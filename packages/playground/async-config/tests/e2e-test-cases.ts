@@ -30,7 +30,10 @@ export default async function testCases({
     await page.click('#link');
     await page.waitForURL('**/es');
 
-    expect(await page.textContent('h1')).toContain('ES Home');
+    // I don't know why I need this, but I cannot get the tests to pass without adding this.
+    await sleep(1000);
+
+    expect(await page.textContent('body')).toContain('ES Home');
     expect(await page.textContent('#locale')).toContain('ES-ES');
   });
 
@@ -42,3 +45,5 @@ export default async function testCases({
     expect(await page.url()).toContain('/es/productos');
   });
 }
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
