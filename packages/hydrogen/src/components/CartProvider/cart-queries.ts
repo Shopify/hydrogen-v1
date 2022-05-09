@@ -37,6 +37,10 @@ fragment CartFragment on Cart {
             amount
             currencyCode
           }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -139,6 +143,10 @@ fragment CartFragment on Cart {
         }
         estimatedCost {
           totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmount {
             amount
             currencyCode
           }
@@ -247,6 +255,10 @@ fragment CartFragment on Cart {
             amount
             currencyCode
           }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -352,6 +364,10 @@ fragment CartFragment on Cart {
             amount
             currencyCode
           }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -454,6 +470,10 @@ fragment CartFragment on Cart {
         }
         estimatedCost {
           totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmount {
             amount
             currencyCode
           }
@@ -567,6 +587,10 @@ fragment CartFragment on Cart {
             amount
             currencyCode
           }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -669,6 +693,10 @@ fragment CartFragment on Cart {
         }
         estimatedCost {
           totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmount {
             amount
             currencyCode
           }
@@ -777,6 +805,10 @@ fragment CartFragment on Cart {
             amount
             currencyCode
           }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
@@ -877,6 +909,10 @@ fragment CartFragment on Cart {
         }
         estimatedCost {
           totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmount {
             amount
             currencyCode
           }

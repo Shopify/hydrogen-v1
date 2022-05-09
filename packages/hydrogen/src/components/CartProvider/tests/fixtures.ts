@@ -9,6 +9,7 @@ export const CART = {
   attributes: [],
   buyerIdentity: {},
   discountCodes: [],
+  totalQuantity: 0,
   estimatedCost: {
     subtotalAmount: getPrice(),
     totalAmount: getPrice(),

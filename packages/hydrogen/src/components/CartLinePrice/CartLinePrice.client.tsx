@@ -20,22 +20,17 @@ export function CartLinePrice<TTag extends keyof JSX.IntrinsicElements>(
   const moneyV2 =
     priceType === 'regular'
       ? cartLine.estimatedCost.totalAmount
-      : cartLine.merchandise.compareAtPriceV2;
+      : cartLine.estimatedCost.compareAtAmount;
 
   if (moneyV2 == null) {
     return null;
   }
 
-  const price =
-    priceType === 'regular'
-      ? moneyV2.amount
-      : parseFloat(moneyV2.amount) * cartLine.quantity;
-
   return (
     <Money<TTag>
       {...passthroughProps}
       data={{
-        amount: `${price}`,
+        amount: `${moneyV2.amount}`,
         currencyCode: moneyV2.currencyCode,
       }}
     />

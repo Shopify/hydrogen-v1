@@ -38,6 +38,10 @@ export type CartFragmentFragment = {__typename?: 'Cart'} & Pick<
                   Types.MoneyV2,
                   'amount' | 'currencyCode'
                 >;
+                compareAtAmount: {__typename?: 'MoneyV2'} & Pick<
+                  Types.MoneyV2,
+                  'amount' | 'currencyCode'
+                >;
               };
               merchandise: {__typename?: 'ProductVariant'} & Pick<
                 Types.ProductVariant,
