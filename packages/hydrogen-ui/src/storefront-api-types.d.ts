@@ -1,4 +1,3 @@
-/* eslint-disable tsdoc/syntax */
 /**
  * THIS FILE IS AUTO-GENERATED, DO NOT EDIT
  * Based on Storefront API 2022-07
@@ -6870,5 +6869,3 @@ export type WeightUnit =
   | 'OUNCES'
   /** 1 pound equals 16 ounces. */
   | 'POUNDS';
-
-/* eslint-enable tsdoc/syntax */

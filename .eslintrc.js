@@ -1,7 +1,10 @@
 // @ts-check
 
 module.exports = {
-  ignorePatterns: ['**/storefront-api-types.ts'],
+  ignorePatterns: [
+    '**/storefront-api-types.ts',
+    '**/storefront-api-types.d.ts',
+  ],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
   extends: [
