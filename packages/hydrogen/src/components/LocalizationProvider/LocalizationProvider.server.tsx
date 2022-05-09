@@ -33,7 +33,7 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
   const {
     data: {localization},
   } = useShopQuery<LocalizationQuery>({
-    query: query,
+    query,
     variables: {language: languageCode},
     cache: CacheDays(),
     preload: props.preload,

@@ -48,58 +48,62 @@ describe('Analytics - ServerAnalyticsRoute', () => {
     expect(mockServerAnalyticsConnector2.mock.calls[0][0]).toEqual(request);
   });
 
-  it('should delegate json request', async (done) => {
-    const testRequest = new Request('__event', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        test: '123',
-      }),
-    });
-    const mockServerAnalyticsConnector = (
-      request: Request,
-      data?: any,
-      type?: string
-    ): void => {
-      expect(request).toEqual(testRequest);
-      expect(data).toEqual({
-        test: '123',
+  it('should delegate json request', async () => {
+    return new Promise<void>((resolve) => {
+      const testRequest = new Request('__event', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          test: '123',
+        }),
       });
-      expect(type).toEqual('json');
-      done();
-    };
-    const response = ServerAnalyticsRoute(testRequest, [
-      {
-        request: mockServerAnalyticsConnector,
-      },
-    ]);
+      const mockServerAnalyticsConnector = (
+        request: Request,
+        data?: any,
+        type?: string
+      ): void => {
+        expect(request).toEqual(testRequest);
+        expect(data).toEqual({
+          test: '123',
+        });
+        expect(type).toEqual('json');
+        resolve();
+      };
+      const response = ServerAnalyticsRoute(testRequest, [
+        {
+          request: mockServerAnalyticsConnector,
+        },
+      ]);
 
-    expect(response.status).toEqual(200);
+      expect(response.status).toEqual(200);
+    });
   });
 
-  it('should delegate text request', async (done) => {
-    const testRequest = new Request('__event', {
-      method: 'POST',
-      body: 'test123',
-    });
-    const mockServerAnalyticsConnector = (
-      request: Request,
-      data?: any,
-      type?: string
-    ): void => {
-      expect(request).toEqual(testRequest);
-      expect(data).toEqual('test123');
-      expect(type).toEqual('text');
-      done();
-    };
-    const response = ServerAnalyticsRoute(testRequest, [
-      {
-        request: mockServerAnalyticsConnector,
-      },
-    ]);
+  it('should delegate text request', async () => {
+    return new Promise<void>((resolve) => {
+      const testRequest = new Request('__event', {
+        method: 'POST',
+        body: 'test123',
+      });
+      const mockServerAnalyticsConnector = (
+        request: Request,
+        data?: any,
+        type?: string
+      ): void => {
+        expect(request).toEqual(testRequest);
+        expect(data).toEqual('test123');
+        expect(type).toEqual('text');
+        resolve();
+      };
+      const response = ServerAnalyticsRoute(testRequest, [
+        {
+          request: mockServerAnalyticsConnector,
+        },
+      ]);
 
-    expect(response.status).toEqual(200);
+      expect(response.status).toEqual(200);
+    });
   });
 });

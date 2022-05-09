@@ -40,6 +40,8 @@ This hook returns an object with the following keys:
 | `amount`               | The localized amount, without any currency symbols or non-number types from the `Intl.NumberFormat.formatToParts` parts.                                                            |
 | `parts`                | All parts returned by `Intl.NumberFormat.formatToParts`.                                                                                                                            |
 | `original`             | The original `MoneyV2` object passed as an argument.                                                                                                                                |
+| `withoutTrailingZeros`             | A string with trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains. For example, `$640.00` turns into `$640`. `$640.42` turns into `$640.42`. |
+| `withoutTrailingZerosAndCurrency`             | A string without currency and without trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains. For example, `$640.00` turns into `640`. `$640.42` turns into `640.42`.  |
 
 ## Related components
 

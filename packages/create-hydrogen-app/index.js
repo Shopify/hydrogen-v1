@@ -132,7 +132,7 @@ async function init() {
    * we add for use in the monorepo (LOCAL_DEV).
    */
   for (const scriptName of ['dev']) {
-    const match = pkg.scripts[scriptName].match(/(vite( .*)?)$/);
+    const match = pkg.scripts[scriptName].match(/(shopify( .*)?)$/);
     if (match) {
       pkg.scripts[scriptName] = match[0];
     }

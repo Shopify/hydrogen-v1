@@ -2,7 +2,7 @@ import React from 'react';
 import {
   mountComponent,
   SomeClientComponent,
-} from './analytics-client-test-utils';
+} from './analytics-client-test-utils.client';
 import {ClientAnalytics} from '../ClientAnalytics';
 
 describe('Analytics.client', () => {

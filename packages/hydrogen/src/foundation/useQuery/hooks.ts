@@ -85,7 +85,7 @@ function cachedQueryFnBuilder<T>(
   /**
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
-  async function cachedQueryFn() {
+  async function useCachedQueryFn() {
     // Call this hook before running any async stuff
     // to prevent losing the current React cycle.
     const request = useServerRequest();
@@ -157,5 +157,5 @@ function cachedQueryFnBuilder<T>(
     return newOutput;
   }
 
-  return cachedQueryFn;
+  return useCachedQueryFn;
 }

@@ -12,7 +12,7 @@ const options = {
 
 describe('Cookie', () => {
   beforeEach(() => {
-    spyOn(log, 'warn');
+    jest.spyOn(log, 'warn');
   });
   it('parses a cookie', () => {
     const cookie = new Cookie('__session', options);

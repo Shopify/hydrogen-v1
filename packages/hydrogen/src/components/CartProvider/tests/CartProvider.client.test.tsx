@@ -10,7 +10,7 @@ import {CartProvider} from '../CartProvider.client';
 
 const fetchCartMock = jest.fn(() => ({data: {}}));
 
-jest.mock('../hooks', () => {
+jest.mock('../hooks.client', () => {
   return {
     useCartFetch: () => fetchCartMock,
   };
