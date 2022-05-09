@@ -30,7 +30,7 @@ export default defineConfig({
     /* Your app's Storefront API access token */
     storefrontToken: '{storefront_api_access_token}',
     /* The Storefront API version that your app uses */
-    storefrontApiVersion: '2022-04',
+    storefrontApiVersion: '2022-07',
   },
 });
 ```
@@ -99,7 +99,7 @@ export default defineConfig({
     /* Your app's Storefront API access token */
     storefrontToken: '{storefront_api_access_token}',
     /* The Storefront API version that your app uses */
-    storefrontApiVersion: '2022-04',
+    storefrontApiVersion: '2022-07',
   },
 });
 ```
@@ -131,7 +131,7 @@ export default defineConfig({
         myShopifyConfigCache[firstUrlPart] = {
           storeDomain,
           storefrontToken,
-          storefrontApiVersion: '2022-04',
+          storefrontApiVersion: '2022-07',
         };
 
         return myShopifyConfigCache[firstUrlPart];
@@ -150,19 +150,24 @@ The function is called inside the [`ShopifyProvider`](https://shopify.dev/api/hy
 
 ### `session`
 
-The `session` property allows you to [configure sessions support](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions) in your Hydrogen app.
+The `session` property allows you to configure sessions support in your Hydrogen app. For more information about configuring sessions support in Hydrogen apps, refer to [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
 ```tsx
 import {CookieSessionStorage} from '@shopify/hydrogen';
-
 export default defineConfig({
+  /* The default session storage mechanism for Hydrogen. */
   session: CookieSessionStorage('__session', {
+    /* Tells the browser that the cookie should only be sent to the server if it's within the defined path.  */
     path: '/',
+    /* Whether to secure the cookie so that client JavaScript is unable to read it. */
     httpOnly: true,
+    /* Whether to secure the cookie so that the browser only sends it over HTTPS.  */
     secure: process.env.NODE_ENV === 'production',
+    /* Declares that the cookie should be restricted to a first-party or same-site context.  */
     sameSite: 'strict',
+    /* The number of seconds until the cookie expires. */
     maxAge: 60 * 60 * 24 * 30,
   }),
 });
@@ -170,25 +175,20 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-Learn more about [configuring sessions support](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions) in Hydrogen apps and all the available options.
-
 ### `serverAnalyticsConnectors`
 
-The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#send-analytics-data-from-the-server-side) in your Hydrogen app.
+The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#send-analytics-data-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics).
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
 ```tsx
 import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen';
-
 export default defineConfig({
   serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
 });
 ```
 
 {% endcodeblock %}
-
-Learn more about [analytics support in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics).
 
 ## Changing the configuration file location
 
