@@ -7,7 +7,6 @@ import SpinnerIcon from './SpinnerIcon.client';
  * A client component that selects the appropriate country to display for products on a website
  */
 export default function CountrySelector() {
-  const {setServerProps} = useServerProps();
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [listboxOpen, setListboxOpen] = useState(false);
@@ -41,11 +40,15 @@ export default function CountrySelector() {
       fetch(`/countries`, {
         body: JSON.stringify(newCountry),
         method: 'POST',
-      }).then(() => {
-        setServerProps('', '');
-      });
+      })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
-    [countries, setServerProps],
+    [countries],
   );
 
   return (

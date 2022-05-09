@@ -9,7 +9,6 @@ import {ArrowIcon, CheckIcon} from './CountrySelector.client';
  * A client component that selects the appropriate country to display for products on a mobile storefront
  */
 export default function MobileCountrySelector() {
-  const {setServerProps} = useServerProps();
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [listboxOpen, setListboxOpen] = useState(false);
@@ -44,10 +43,10 @@ export default function MobileCountrySelector() {
         body: JSON.stringify(newCountry),
         method: 'POST',
       }).then(() => {
-        setServerProps('', '');
+        window.location.reload();
       });
     },
-    [countries, setServerProps],
+    [countries],
   );
 
   return (
