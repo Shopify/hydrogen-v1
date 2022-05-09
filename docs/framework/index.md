@@ -45,7 +45,7 @@ By default, Hydrogen includes a [`@shopify/hydrogen/platforms/node`](https://git
 
 ### Worker (v8) runtime
 
-The Hydrogen app is hosted on a worker platform like [Oxygen](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-cloudflare-workers) or [Cloudflare](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-oxygen).
+The Hydrogen app is hosted on a worker platform like [Oxygen](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-oxygen) or [Cloudflare](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-cloudflare-workers).
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/worker`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/worker.ts) package for server-side rendering. The Cache API and KV API are powered by Oxygen, Cloudflare, or another runtime adapter.
 

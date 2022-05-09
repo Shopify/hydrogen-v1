@@ -23,7 +23,7 @@ export default () => {
      */
     rollupOptions.output = {
       ...rollupOptions.output,
-      chunkFileNames: '[hash].js',
+      chunkFileNames: 'assets/[hash].js',
     };
   }
 
