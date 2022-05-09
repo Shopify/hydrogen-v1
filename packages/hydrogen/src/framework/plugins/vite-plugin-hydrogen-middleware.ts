@@ -8,6 +8,9 @@ import {InMemoryCache} from '../cache/in-memory';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY = '/src/App.server';
 
+const virtualModuleId = 'virtual:hydrogen-config';
+const virtualProxyModuleId = virtualModuleId + ':proxy';
+
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
 
@@ -78,7 +81,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         );
     },
     async resolveId(source, importer) {
-      if (source === 'virtual:hydrogen-config') {
+      if (source === virtualModuleId) {
         const configPath = await findHydrogenConfigPath(
           config.root,
           pluginOptions.configPath
@@ -88,9 +91,15 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           skipSelf: true,
         });
       }
+
+      if (source === virtualProxyModuleId) {
+        // Virtual modules convention
+        // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
+        return '\0' + virtualProxyModuleId;
+      }
     },
     async load(id) {
-      if (id === 'virtual:hydrogen-config:proxy') {
+      if (id === '\0' + virtualProxyModuleId) {
         // Likely due to a bug in Vite, but the config cannot be loaded
         // directly using ssrLoadModule. It needs to be proxied as follows:
         return `import hc from 'virtual:hydrogen-config'; export default hc;`;
