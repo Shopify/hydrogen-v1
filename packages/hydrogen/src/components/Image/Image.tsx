@@ -17,6 +17,11 @@ export interface BaseImageProps {
    * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
    */
   loaderOptions?: ImageLoaderOptions['options'];
+  /** 
+   * A string that indicates how the browser should load an image.  
+   * [Img Loading Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading)
+   */
+  loading?: string
 }
 
 interface MediaImagePropsBase extends BaseImageProps {
@@ -57,6 +62,7 @@ export function Image(props: ImageProps) {
     height,
     loader,
     loaderOptions,
+    loading,
     ...passthroughProps
   } = props;
 
@@ -80,6 +86,7 @@ export function Image(props: ImageProps) {
         loaderOptions,
         id,
         alt,
+        loading,
       })
     : {
         src,
@@ -88,6 +95,7 @@ export function Image(props: ImageProps) {
         width,
         height,
         loader,
+        loading,
         loaderOptions: {width, height, ...loaderOptions},
       };
 
@@ -99,7 +107,7 @@ export function Image(props: ImageProps) {
   return (
     <img
       id={imgProps.id ?? ''}
-      loading="lazy"
+      loading={imgProps.loading ?? 'lazy'}
       alt={imgProps.alt ?? ''}
       {...passthroughProps}
       src={srcPath}
@@ -114,6 +122,7 @@ function convertShopifyImageData({
   data,
   options,
   loader,
+  loading,
   loaderOptions,
   id: propId,
   alt,
@@ -131,5 +140,6 @@ function convertShopifyImageData({
     height,
     loader: loader ? loader : shopifyImageLoader,
     loaderOptions: {...options, ...loaderOptions},
+    loading
   };
 }
