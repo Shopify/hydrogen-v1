@@ -50,6 +50,7 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -70,6 +71,16 @@ The `data` prop is an object with fields that correspond to the Storefront API's
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {
