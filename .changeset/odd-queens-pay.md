@@ -2,4 +2,4 @@
 '@shopify/hydrogen': patch
 ---
 
-Prevent JSON parsing from prototype poisoning attacks
+Prevent JSON parsing from prototype poisoning vulnerabilities
