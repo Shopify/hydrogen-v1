@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.18.0
+
+### Patch Changes
+
+- [#1241](https://github.com/Shopify/hydrogen/pull/1241) [`fe16b48a`](https://github.com/Shopify/hydrogen/commit/fe16b48a580082443425afcf5d4e34990a43fb47) Thanks [@blittle](https://github.com/blittle)! - Fix `dangerouslySetInnerHTML` prop inside the pages route
+
 ## 0.17.3
 
 ## 0.17.2
