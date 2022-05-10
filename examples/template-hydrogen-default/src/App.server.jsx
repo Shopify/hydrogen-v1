@@ -1,20 +1,28 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {CookieSessionStorage, Router, FileRoutes} from '@shopify/hydrogen';
+import {
+  CookieSessionStorage,
+  Router,
+  FileRoutes,
+  ShopifyProvider,
+} from '@shopify/hydrogen';
 import shopifyConfig from '../shopify.config';
 
 import Header from './rscComponent/Header.server';
 import Footer from './rscComponent/Footer.server';
 import ProductDetails from './rscComponent/ProductDetails.server';
 import CollectionDetails from './rscComponent/CollectionDetails.server';
+import Wizardlyhel from './rscComponent/Wizardlyhel.server';
 
 import Product from './routes/product.server';
 import Collection from './routes/collection.server';
 
 function App({routes, ssrMode}) {
   return (
-    <Router>
-      <FileRoutes routes={routes} ssrMode={ssrMode} />
-    </Router>
+    <ShopifyProvider shopifyConfig={shopifyConfig}>
+      <Router>
+        <FileRoutes routes={routes} ssrMode={ssrMode} />
+      </Router>
+    </ShopifyProvider>
   );
 }
 
@@ -37,5 +45,6 @@ export default renderHydrogen(App, {
     CollectionDetails: CollectionDetails,
     Product: Product,
     Collection: Collection,
+    Wizardlyhel: Wizardlyhel,
   },
 });

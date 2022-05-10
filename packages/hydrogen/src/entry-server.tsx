@@ -652,10 +652,23 @@ async function hydrate2(
   console.log(state);
   const Component: any = componentManifest[state.componentId];
 
-  console.log(Component);
+  // const ComponentApp: any = (
+  //   <ServerRequestProvider request={request} isRSC={true}>
+  //     <Component />
+  //   </ServerRequestProvider>
+  // );
+
+  const {AppRSC} = buildAppRSC({
+    App: Component,
+    state,
+    request,
+    response: componentResponse,
+    log,
+    routes,
+  });
 
   if (__WORKER__) {
-    const rscReadable = rscRenderToReadableStream(<Component />);
+    const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
       postRequestTasks('rsc', 200, request, componentResponse);
@@ -678,7 +691,7 @@ async function hydrate2(
       '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
     );
 
-    const streamer = rscWriter.renderToPipeableStream(<Component />);
+    const streamer = rscWriter.renderToPipeableStream(AppRSC);
     response.writeHead(200, 'ok', {
       'cache-control': componentResponse.cacheControlHeader,
     });
