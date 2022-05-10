@@ -5,7 +5,7 @@ import LoadingFallback from '../components/LoadingFallback';
 import ProductDetails from '../rscComponent/ProductDetails.server';
 import Header from '../rscComponent/Header.server';
 import Footer from '../rscComponent/Footer.server';
-import WizardlyhelWrapper from '../rscComponent/WizardlyhelWrapper.server';
+import Wizardlyhel from '../rscComponent/Wizardlyhel.server';
 
 export default function Product({ssrMode}) {
   return (
@@ -18,8 +18,8 @@ export default function Product({ssrMode}) {
         ssrMode={ssrMode}
       />
       <SSRSCWrapper
-        componentId="WizardlyhelWrapper"
-        Component={WizardlyhelWrapper}
+        componentId="Wizardlyhel"
+        Component={Wizardlyhel}
         ssrMode={ssrMode}
       />
       <SSRSCWrapper componentId="Footer" Component={Footer} ssrMode={ssrMode} />
