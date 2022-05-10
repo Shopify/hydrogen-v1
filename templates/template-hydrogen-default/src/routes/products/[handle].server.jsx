@@ -117,6 +117,33 @@ const QUERY = gql`
             createdAt
             updatedAt
             description
+            references(first: 10) {
+              edges {
+                node {
+                  ... on Metaobject {
+                    title: field(key: "title") {
+                      id
+                      value
+                    }
+                    description: field(key: "description") {
+                      id
+                      value
+                    }
+                    image: field(key: "image") {
+                      id
+                      value
+                      reference {
+                        ... on MediaImage {
+                          image {
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
             reference {
               __typename
               ... on MediaImage {

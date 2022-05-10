@@ -8,6 +8,7 @@ import {
   ProductPrice,
   AddToCartButton,
   BuyNowButton,
+  Image,
 } from '@shopify/hydrogen/client';
 import ProductOptions from './ProductOptions.client';
 import Gallery from './Gallery.client';
@@ -108,6 +109,33 @@ function ProductPrices() {
   );
 }
 
+function ProductFeatures({productFeatures}) {
+  return (
+    <div className="container border-t border-gray-200 py-8">
+      <h2 className="text-xl pb-8">Product features</h2>
+      <div className="grid grid-cols-2 gap-8">
+        {productFeatures.edges.map((edge) => {
+          const {title, image, description} = edge.node;
+
+          return (
+            <div className="w-full" key={title}>
+              <div className="bg-white rounded-lg overflow-hidden mb-10">
+                <Image data={image.reference.image} className="w-full" />
+                <div className="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
+                  <h3 className="text-lg pb-4">{title.value}</h3>
+                  <p className="text-base text-body-color leading-relaxed mb-7">
+                    {description.value}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function ProductDetails({product}) {
   const initialVariant = flattenConnection(product.variants)[0];
 
@@ -125,6 +153,11 @@ export default function ProductDetails({product}) {
       metafield.namespace === 'my_fields' &&
       metafield.key === 'lifetime_warranty',
   );
+  const productFeatures = productMetafields.find(
+    (metafield) =>
+      metafield.namespace === 'reference' &&
+      metafield.key === 'product_features',
+  ).references;
 
   return (
     <>
@@ -163,15 +196,17 @@ export default function ProductDetails({product}) {
             </div>
             {/* Product Options */}
             <div className="mt-8">
-              <ProductOptions />
-              {sizeChartMetafield?.value && (
-                <a
-                  href="#size-chart"
-                  className="block underline text-gray-500 text-sm tracking-wide my-4"
-                >
-                  Size Chart
-                </a>
-              )}
+              <div className="pb-4">
+                <ProductOptions />
+                {sizeChartMetafield?.value && (
+                  <a
+                    href="#size-chart"
+                    className="block underline text-gray-500 text-sm tracking-wide my-4"
+                  >
+                    Size Chart
+                  </a>
+                )}
+              </div>
               <AddToCartMarkup />
               <div className="flex items space-x-4">
                 {sustainableMetafield?.value && (
@@ -229,6 +264,9 @@ export default function ProductDetails({product}) {
             )}
           </div>
         </div>
+        {productFeatures.edges.length > 0 && (
+          <ProductFeatures productFeatures={productFeatures} />
+        )}
       </ProductProvider>
     </>
   );

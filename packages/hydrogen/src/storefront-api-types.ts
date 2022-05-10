@@ -4318,6 +4318,8 @@ export type Metafield = Node & {
   parentResource: MetafieldParentResource;
   /** Returns a reference object if the metafield definition's type is a resource reference. */
   reference?: Maybe<MetafieldReference>;
+  /** Returns a list of reference objects if the metafield definition's type is a resource reference. */
+  references?: {edges: {node: Maybe<MetafieldReference>}[]};
   /**
    * The type name of the metafield.
    * See the list of [supported types](https://shopify.dev/apps/metafields/definitions/types).
