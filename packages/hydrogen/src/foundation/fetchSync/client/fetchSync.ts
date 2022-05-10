@@ -1,3 +1,4 @@
+import {parseJSON} from '../../../utilities/parse';
 import {suspendFunction, preloadFunction} from '../../../utilities/suspense';
 import type {FetchResponse} from '../types';
 
@@ -14,7 +15,7 @@ export function fetchSync(url: string, options?: RequestInit): FetchResponse {
 
   return {
     response,
-    json: () => JSON.parse(text),
+    json: () => parseJSON(text),
     text: () => text,
   };
 }

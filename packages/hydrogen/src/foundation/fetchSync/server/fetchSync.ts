@@ -1,3 +1,4 @@
+import {parseJSON} from '../../../utilities/parse';
 import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/hooks';
 import type {FetchResponse} from '../types';
 
@@ -35,7 +36,7 @@ export function fetchSync(
 
   return {
     response,
-    json: () => JSON.parse(data),
+    json: () => parseJSON(data),
     text: () => data,
   };
 }

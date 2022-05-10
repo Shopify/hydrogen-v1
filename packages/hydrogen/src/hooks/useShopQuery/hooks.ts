@@ -10,6 +10,7 @@ import {sendMessageToClient} from '../../utilities/devtools';
 import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
 import {META_ENV_SSR} from '../../foundation/ssr-interop';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
+import {parseJSON} from '../../utilities/parse';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -21,7 +22,7 @@ export interface UseShopQueryResponse<T> {
 // https://spec.graphql.org/June2018/#sec-Response-Format
 const shouldCacheResponse = ([body]: [any, Response]) => {
   try {
-    return !JSON.parse(body)?.errors;
+    return !parseJSON(body)?.errors;
   } catch {
     // If we can't parse the response, then assume
     // an error and don't cache the response

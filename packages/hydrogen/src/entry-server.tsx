@@ -46,6 +46,7 @@ import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
+import {parseJSON} from './utilities/parse';
 
 declare global {
   // This is provided by a Vite plugin
@@ -599,7 +600,7 @@ async function hydrate(
     componentResponse,
   }: HydratorOptions
 ) {
-  const state = JSON.parse(url.searchParams.get('state') || '{}');
+  const state = parseJSON(url.searchParams.get('state') || '{}');
 
   const {AppRSC} = buildAppRSC({
     App,

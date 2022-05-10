@@ -7,6 +7,7 @@ import {hashKey} from '../../utilities/hash';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
 import {SessionSyncApi} from '../../foundation/session/session';
+import {parseJSON} from '../../utilities/parse';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
@@ -203,7 +204,7 @@ function getInitFromNodeRequest(request: any) {
 
 function normalizeUrl(rawUrl: string) {
   const url = new URL(rawUrl);
-  const state = JSON.parse(url.searchParams.get('state') ?? '');
+  const state = parseJSON(url.searchParams.get('state') ?? '');
   const normalizedUrl = new URL(state?.pathname ?? '', url.origin);
   normalizedUrl.search = state?.search;
 

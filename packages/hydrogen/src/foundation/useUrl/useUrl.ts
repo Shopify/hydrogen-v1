@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import {RSC_PATHNAME} from '../../constants';
+import {parseJSON} from '../../utilities/parse';
 import {useLocation} from '../Router/BrowserRouter.client';
 import {useEnvContext, META_ENV_SSR} from '../ssr-interop';
 
@@ -13,7 +14,7 @@ export function useUrl(): URL {
     );
 
     if (serverUrl.pathname === RSC_PATHNAME) {
-      const state = JSON.parse(serverUrl.searchParams.get('state') || '{}');
+      const state = parseJSON(serverUrl.searchParams.get('state') || '{}');
 
       const parsedUrl = `${serverUrl.origin}${state.pathname ?? ''}${
         state.search ?? ''
