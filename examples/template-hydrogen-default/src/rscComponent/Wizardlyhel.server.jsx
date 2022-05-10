@@ -1,30 +1,17 @@
 import gql from 'graphql-tag';
-import {
-  useShop,
-  useShopQuery,
-  flattenConnection,
-  Seo,
-  ShopifyProvider,
-} from '@shopify/hydrogen';
-import shopifyConfig from '../../shopify.config';
+import {useShop, useShopQuery, flattenConnection} from '@shopify/hydrogen';
 
 export default function Wizardlyhel() {
-  return (
-    <ShopifyProvider shopifyConfig={shopifyConfig}>
-      <InnerContent />
-    </ShopifyProvider>
-  );
+  return <InnerContent />;
 }
 
 function InnerContent() {
-  const {languageCode} = useShop();
-
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       handle: 'freestyle-collection',
       country: 'US',
-      language: languageCode,
+      language: 'EN',
       numProducts: 24,
     },
     preload: true,

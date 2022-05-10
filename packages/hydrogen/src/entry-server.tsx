@@ -108,6 +108,11 @@ export const renderHydrogen = (
 
     const request = new ServerComponentRequest(rawRequest);
     request.ctx.buyerIpHeader = buyerIpHeader;
+    request.ctx.shopifyConfig = {
+      ...shopifyConfig,
+      locale: 'EN-US',
+      languageCode: 'EN',
+    };
 
     const url = new URL(request.url);
     const log = getLoggerWithContext(request);
@@ -696,6 +701,9 @@ async function hydrate2(
     return new Response(bufferedBody, {
       headers: {
         'cache-control': componentResponse.cacheControlHeader,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers':
+          'Content-Type, Access-Control-Allow-Origin',
       },
     });
   } else if (response) {

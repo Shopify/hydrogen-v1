@@ -1,4 +1,3 @@
-import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';
 import type {CachingStrategy, PreloadOptions} from '../../types';
@@ -173,9 +172,17 @@ export function useShopQuery<T>({
 }
 
 function useCreateShopRequest(body: string) {
-  const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
-
   const request = useServerRequest();
+  console.log(request.ctx.shopifyConfig);
+
+  let storeDomain = '';
+  let storefrontToken = '';
+  let storefrontApiVersion = '';
+  if (request.ctx.shopifyConfig) {
+    storeDomain = request.ctx.shopifyConfig.storeDomain;
+    storefrontToken = request.ctx.shopifyConfig.storefrontToken;
+    storefrontApiVersion = request.ctx.shopifyConfig.storefrontApiVersion;
+  }
   const buyerIp = request.getBuyerIp();
 
   const extraHeaders = getStorefrontApiRequestHeaders({
