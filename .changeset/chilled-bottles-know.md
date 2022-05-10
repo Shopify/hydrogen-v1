@@ -2,7 +2,9 @@
 '@shopify/hydrogen': minor
 ---
 
-## A new config file `hydrogen.config.js` replaces the existing `shopify.config.js` in your Hydrogen app
+A new config file `hydrogen.config.js` replaces the existing `shopify.config.js` in your Hydrogen app.
+
+## Introducing `hydrogen.config.js`
 
 Hydrogen apps now expect a `hydrogen.config.js` in the root folder. This config file accepts Shopify storefront credentials, routes, session configuration, and more.
 
