@@ -90,7 +90,7 @@ export function useServerResponse(state: any) {
   return response;
 }
 
-export function useServerResponse2(state: any) {
+export function useServerResponse2(state: any, domain = '') {
   console.log('useServerResponse2', state);
   const key = JSON.stringify(state);
   const cache: ReturnType<typeof createResponseCache> =
@@ -103,7 +103,8 @@ export function useServerResponse2(state: any) {
 
   console.log(`fetch ${RSC_PATHNAME}2?state=` + encodeURIComponent(key));
   response = createFromFetch(
-    fetch(`${RSC_PATHNAME}2?state=` + encodeURIComponent(key))
+    fetch(domain + `${RSC_PATHNAME}2?state=` + encodeURIComponent(key)),
+    domain
   );
 
   cache.set(key, response);

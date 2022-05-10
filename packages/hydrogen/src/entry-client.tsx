@@ -84,11 +84,14 @@ function Content({
     pathname: window.location.pathname,
     search: window.location.search,
   });
-  const response = useServerResponse2({
-    ...serverProps,
-    componentId:
-      window.location.pathname === '/collection' ? 'Collection' : 'Product',
-  });
+  const response = useServerResponse2(
+    {
+      ...serverProps,
+      componentId:
+        window.location.pathname === '/collection' ? 'Collection' : 'Product',
+    }
+    // 'http://localhost:8080' // -- Optional
+  );
 
   return (
     <ServerPropsProvider

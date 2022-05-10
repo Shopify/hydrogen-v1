@@ -40,12 +40,12 @@ if (typeof jest !== 'undefined') {
   global.allClientComponents = allClientComponents;
 }
 
-function importClientComponent(moduleId) {
+function importClientComponent(moduleId, domain = '') {
   var modImport = allClientComponents[moduleId];
 
   if (!modImport) {
     if (moduleId && moduleId.startsWith('/assets/')) {
-      return import(moduleId)
+      return import(domain + moduleId)
     }
 
     return Promise.reject(new Error("Could not find client component " + moduleId));
@@ -59,7 +59,7 @@ function importClientComponent(moduleId) {
 var moduleCache = new Map(); // Start preloading the modules since we might need them soon.
 // This function doesn't suspend.
 
-function preloadModule(_ref) {
+function preloadModule(_ref, domain) {
   var id = _ref.id;
   if (moduleCache.has(id)) return;
 
@@ -69,7 +69,7 @@ function preloadModule(_ref) {
   } // Store the original promise first, then override cache with its result.
 
 
-  var promise = importClientComponent(id);
+  var promise = importClientComponent(id, domain);
   cacheResult(promise);
   promise.then(cacheResult, cacheResult);
 } // Actually require the module or suspend if it's not yet ready.
@@ -389,7 +389,7 @@ function resolveModule(response, id, model) {
   // For now we preload all modules as early as possible since it's likely
   // that we'll need them.
 
-  preloadModule(moduleReference);
+  preloadModule(moduleReference, response.domain);
 
   if (!chunk) {
     chunks.set(id, createResolvedModuleChunk(response, moduleReference));
@@ -567,8 +567,9 @@ function createFromReadableStream(stream) {
   return response;
 }
 
-function createFromFetch(promiseForResponse) {
+function createFromFetch(promiseForResponse, domain = '') {
   var response = createResponse$1();
+  response.domain = domain;
   promiseForResponse.then(function (r) {
     startReadingFromStream(response, r.body);
   }, function (e) {
