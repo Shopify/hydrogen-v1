@@ -7,9 +7,9 @@ import {
 export default defineConfig({
   routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
   shopify: {
-    storeDomain: 'shop1.shopify.hack-days.phil-mongeon.us.spin.dev',
-    storefrontToken: '339dd70cb00d1d97900c8db0702335e8',
-    storefrontApiVersion: 'unstable',
+    storeDomain: 'hydrogen-preview.myshopify.com',
+    storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
+    storefrontApiVersion: '2022-07',
   },
   session: CookieSessionStorage('__session', {
     path: '/',
