@@ -12,6 +12,7 @@ import Footer from './rscComponent/Footer.server';
 import ProductDetails from './rscComponent/ProductDetails.server';
 import CollectionDetails from './rscComponent/CollectionDetails.server';
 import Wizardlyhel from './rscComponent/Wizardlyhel.server';
+import Wizardlyhel2 from './rscComponent/Wizardlyhel2.server';
 
 import Product from './routes/product.server';
 import Collection from './routes/collection.server';
@@ -46,5 +47,6 @@ export default renderHydrogen(App, {
     Product: Product,
     Collection: Collection,
     Wizardlyhel: Wizardlyhel,
+    Wizardlyhel2: Wizardlyhel2,
   },
 });

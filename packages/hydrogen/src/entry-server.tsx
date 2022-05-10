@@ -93,6 +93,19 @@ export const renderHydrogen = (
       buyerIpHeader,
     } = options;
 
+    if (rawRequest.method === 'OPTIONS') {
+      console.log('OPTIONS', rawRequest.headers);
+      return new Response(null, {
+        status: 204,
+        headers: {
+          'Access-Control-Allow-Headers':
+            'Content-Type, Access-Control-Allow-Origin',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+        },
+      });
+    }
+
     const request = new ServerComponentRequest(rawRequest);
     request.ctx.buyerIpHeader = buyerIpHeader;
 
@@ -694,6 +707,9 @@ async function hydrate2(
     const streamer = rscWriter.renderToPipeableStream(AppRSC);
     response.writeHead(200, 'ok', {
       'cache-control': componentResponse.cacheControlHeader,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers':
+        'Content-Type, Access-Control-Allow-Origin',
     });
     const stream = streamer.pipe(response) as Writable;
 
