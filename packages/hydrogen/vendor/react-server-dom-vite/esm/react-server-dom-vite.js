@@ -44,6 +44,10 @@ function importClientComponent(moduleId) {
   var modImport = allClientComponents[moduleId];
 
   if (!modImport) {
+    if (moduleId && moduleId.startsWith('/assets/')) {
+      return import(moduleId)
+    }
+
     return Promise.reject(new Error("Could not find client component " + moduleId));
   }
 

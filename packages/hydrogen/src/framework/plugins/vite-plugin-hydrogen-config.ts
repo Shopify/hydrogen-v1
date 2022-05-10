@@ -16,16 +16,16 @@ export default () => {
     };
   }
 
-  if (!process.env.LOCAL_DEV) {
-    /**
-     * Ofuscate production asset name - To prevent ad blocker logics that blocks
-     * certain files due to how it is named.
-     */
-    rollupOptions.output = {
-      ...rollupOptions.output,
-      chunkFileNames: '[hash].js',
-    };
-  }
+  // if (!process.env.LOCAL_DEV) {
+  //   /**
+  //    * Ofuscate production asset name - To prevent ad blocker logics that blocks
+  //    * certain files due to how it is named.
+  //    */
+  //   rollupOptions.output = {
+  //     ...rollupOptions.output,
+  //     chunkFileNames: '[hash].js',
+  //   };
+  // }
 
   return {
     name: 'vite-plugin-hydrogen-config',

@@ -16,6 +16,9 @@ var esModuleLexer = require('es-module-lexer');
 var vite = require('vite');
 var fs = require('fs');
 var path = require('path');
+// var useHash;
+var config;
+var clientManifest;
 
 // $FlowFixMe[module-missing]
 var rscViteFileRE = /\/react-server-dom-vite.js/;
@@ -28,7 +31,8 @@ function ReactFlightVitePlugin() {
     return false;
   } : _ref$isServerComponen;
 
-  var config;
+  // useHash = _ref.useHash ?? true;
+
   return {
     name: 'vite-plugin-react-server-components',
     enforce: 'pre',
@@ -96,6 +100,7 @@ function ReactFlightVitePlugin() {
       }
     }
   };
+
 }
 
 var btoa = function (hash) {
@@ -123,8 +128,57 @@ var getComponentFilename = function (filepath) {
 };
 
 var getComponentId = function (filepath) {
-  return getComponentFilename(filepath) + "-" + hashCode(filepath);
+  return (config.command === 'build' && config.build.ssr)
+    ? getFileFromClientManifest(filepath)
+    : path.relative(config.root,filepath);
+  // return useHash
+  //   ? getComponentFilename(filepath) + "-" + hashCode(filepath)
+  //   : (config.command === 'build' && config.build.ssr) ? getFileFromClientManifest(filepath) : filepath;
 };
+
+
+function getFileFromClientManifest(manifestId) {
+  const manifest = getClientManifest();
+
+  const fileName = manifestId.split('/').pop();
+  const fileRE = new RegExp(`^_${fileName.split('.')[0]}\\.client\\.[\\w\\d]+\\.js$`);
+  const matchingKey = Object.keys(manifest).find((key) =>
+    key.endsWith(fileName) || fileRE.test(key)
+  );
+
+  if (!matchingKey) {
+    throw new Error(
+      `Could not find a matching entry in the manifest for: ${manifestId}`
+    );
+  }
+
+  return '/' + manifest[matchingKey].file;
+}
+
+function getClientManifest() {
+  if (config.command !== 'build') {
+    return {};
+  }
+
+  if (clientManifest) return clientManifest;
+
+  try {
+    const manifest = JSON.parse(
+      fs.readFileSync(
+        path.resolve(config.root, './dist/client/manifest.json'),
+        'utf-8'
+      )
+    );
+
+    clientManifest = manifest;
+
+    return manifest;
+  } catch (e) {
+    console.error(`Failed to load client manifest:`);
+    console.error(e);
+  }
+}
+
 async function proxyClientComponent(filepath, src) {
   var DEFAULT_EXPORT = 'default'; // Modify the import ID to avoid infinite wraps
 
@@ -160,6 +214,9 @@ var hashImportsPlugin = {
       return code.replace(/\/\*\s*HASH_BEGIN\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm, function (_, imports) {
         return imports.trim().replace(/"([^"]+?)":/gm, function (__, relativePath) {
           var absolutePath = path.resolve(path.dirname(id.split('?')[0]), relativePath);
+          // TODO this should be renamed to /assets/xyz.client.js in client build
+          // instead of relative paths. Right now it always relies on dynamic
+          // imports to download clients, not in the Vite client map.
           return "\"" + getComponentId(vite.normalizePath(absolutePath)) + "\":";
         });
       });
