@@ -1,4 +1,4 @@
-import {useState, Suspense} from 'react';
+import {useCallback, useState, Suspense} from 'react';
 import {useCountry} from '@shopify/hydrogen/client';
 import {Listbox} from '@headlessui/react';
 import SpinnerIcon from './SpinnerIcon.client';
@@ -10,11 +10,20 @@ import {ArrowIcon, Countries} from './CountrySelector.client';
  */
 export default function MobileCountrySelector() {
   const [listboxOpen, setListboxOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useCountry();
+  const [selectedCountry] = useCountry();
+
+  const setCountry = useCallback(({isoCode, name}) => {
+    fetch(`/countries`, {
+      body: JSON.stringify({isoCode, name}),
+      method: 'POST',
+    }).then(() => {
+      window.location.reload();
+    });
+  }, []);
 
   return (
     <div className="mt-8 rounded border border-gray-200 w-full">
-      <Listbox onChange={setSelectedCountry}>
+      <Listbox onChange={setCountry}>
         {({open}) => {
           setTimeout(() => setListboxOpen(open));
           return (

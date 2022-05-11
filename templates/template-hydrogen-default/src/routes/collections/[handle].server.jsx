@@ -1,4 +1,10 @@
-import {useShop, useShopQuery, flattenConnection, Seo} from '@shopify/hydrogen';
+import {
+  useSession,
+  useShop,
+  useShopQuery,
+  flattenConnection,
+  Seo,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
@@ -6,19 +12,16 @@ import Layout from '../../components/Layout.server';
 import ProductCard from '../../components/ProductCard';
 import NotFound from '../../components/NotFound.server';
 
-export default function Collection({
-  country = {isoCode: 'US'},
-  collectionProductCount = 24,
-  params,
-}) {
+export default function Collection({collectionProductCount = 24, params}) {
   const {languageCode} = useShop();
+  const {countryCode = 'US'} = useSession();
 
   const {handle} = params;
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       handle,
-      country: country.isoCode,
+      country: countryCode,
       language: languageCode,
       numProducts: collectionProductCount,
     },
