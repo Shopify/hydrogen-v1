@@ -39,7 +39,12 @@ export default defineConfig({
 
 ## Configuration properties
 
-There are two groupings of configuration properties in Hydrogen: [`routes`](#routes) and [`shopify`](#shopify).
+The following groupings of configuration properties can exist in Hydrogen:
+
+- [`routes`](#routes)
+- [`shopify`](#shopify)
+- [`session`](#session)
+- [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
 
 ### `routes`
 
@@ -151,7 +156,7 @@ The function is called inside the [`ShopifyProvider`](https://shopify.dev/api/hy
 
 ### `session`
 
-The `session` property allows you to configure sessions support in your Hydrogen app. For more information about configuring sessions support in Hydrogen apps, refer to [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
+The `session` property allows you to configure sessions support in your Hydrogen app. For more information about configuring sessions support in Hydrogen apps, refer to [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
@@ -162,9 +167,9 @@ export default defineConfig({
   session: CookieSessionStorage('__session', {
     /* Tells the browser that the cookie should only be sent to the server if it's within the defined path.  */
     path: '/',
-    /* Whether to secure the cookie so that client JavaScript is unable to read it. */
-    httpOnly: true,
     /* Whether to secure the cookie so that the browser only sends it over HTTPS.  */
+    httpOnly: true,
+    /* Whether to secure the cookie so that client JavaScript is unable to read it. */
     secure: process.env.NODE_ENV === 'production',
     /* Declares that the cookie should be restricted to a first-party or same-site context.  */
     sameSite: 'strict',
@@ -219,3 +224,5 @@ export default defineConfig({
 
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
 - Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn about the Hydrogen framework's built-in support for [session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen apps.

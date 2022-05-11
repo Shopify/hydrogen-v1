@@ -55,4 +55,5 @@ The `MemorySessionStorage` component is a server component that renders inside `
 
 ## Related framework topics
 
-- [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)

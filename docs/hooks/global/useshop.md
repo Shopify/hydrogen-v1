@@ -1,7 +1,7 @@
 ---
 gid: c850ae3e-fafd-11eb-9a03-0242ac130007
 title: useShop
-description: The useShop hook provides access to values within shopify.config.js.
+description: The useShop hook provides access to values within hydrogen.config.js.
 ---
 
 The `useShop` hook provides access to values within the `shopify` property in [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). It must be a descendent of a `ShopifyProvider` component.
@@ -33,3 +33,7 @@ The `useShop` hook returns an object with the following keys:
 ## Related components
 
 - [`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)
+
+## Related framework topics
+
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)

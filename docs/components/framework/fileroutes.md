@@ -54,3 +54,4 @@ The `FileRoutes` component is a server component that renders inside `App.server
 ## Related framework topics
 
 - [Routes](https://shopify.dev/custom-storefronts/hydrogen/framework/routes)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)

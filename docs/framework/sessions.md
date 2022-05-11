@@ -134,3 +134,4 @@ Hydrogen provides a [`Cookie`](https://shopify.dev/api/hydrogen/components/frame
 ## Next steps
 
 - Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
+- Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.
