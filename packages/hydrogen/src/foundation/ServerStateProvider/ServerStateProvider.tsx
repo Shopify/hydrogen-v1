@@ -103,6 +103,8 @@ export function ServerStateProvider({
       newValue = input;
     }
 
+    if (!newValue) return {...prev};
+
     if (__DEV__) {
       const privateProp = PRIVATE_PROPS.find((prop) => prop in newValue);
       if (privateProp) {
