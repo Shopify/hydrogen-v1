@@ -26,7 +26,7 @@ export class ServerComponentResponse implements Response {
 
   constructor(body?: BodyInit, init?: ResponseInit) {
     // @ts-ignore
-    this._response = new Response(body, init);
+    this._response = new GlobalResponse(body, init);
     this.headers = new Headers(init?.headers as any);
     this.session = {
       set(key, value) {},
