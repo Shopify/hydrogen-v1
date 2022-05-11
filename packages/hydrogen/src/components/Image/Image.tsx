@@ -18,8 +18,7 @@ export interface BaseImageProps {
    */
   loaderOptions?: ImageLoaderOptions['options'];
   /** 
-   * A string that indicates how the browser should load an image.  
-   * [Img Loading Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading)
+   * A string that indicates how the browser should [load an image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading).
    */
   loading?: string
 }
