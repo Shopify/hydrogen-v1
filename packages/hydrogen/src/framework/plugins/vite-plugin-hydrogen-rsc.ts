@@ -34,9 +34,7 @@ export default function () {
       await server.close();
 
       // At this point, the server has loaded all the components in the module graph
-      return Array.from(server.moduleGraph.fileToModulesMap.keys()).filter(
-        (item) => /\.client\.[jt]sx?$/.test(item)
-      );
+      return reactServerDomVite.findClientComponentsFromServer(server);
     },
   });
 }
