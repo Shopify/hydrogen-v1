@@ -27,6 +27,10 @@ export default function App() {
 
 The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
+## Related framework topics
+
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+
 ## Considerations
 
 - `ShopifyProvider` is specific to Hydrogen and currently doesn't work in Next.js or other frameworks.

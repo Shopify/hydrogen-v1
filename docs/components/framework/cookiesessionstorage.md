@@ -54,4 +54,5 @@ Don't use `CookieSessionStorage` if you expect to have more than 4kb of data wit
 
 ## Related framework topics
 
-- [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
