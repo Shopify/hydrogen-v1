@@ -18,9 +18,10 @@ export interface BaseImageProps {
    */
   loaderOptions?: ImageLoaderOptions['options'];
   /** 
-   * A string that indicates how the browser should [load an image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading).
+   * When true, the image will be eagerly loaded. Defaults to `false`. Should only be used when 
+   * the image is visible above the fold. For more information refer to [Image Element Loading Attr](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading).
    */
-  loading?: string
+  priority?: boolean
 }
 
 interface MediaImagePropsBase extends BaseImageProps {
@@ -61,7 +62,7 @@ export function Image(props: ImageProps) {
     height,
     loader,
     loaderOptions,
-    loading,
+    priority,
     ...passthroughProps
   } = props;
 
@@ -85,7 +86,7 @@ export function Image(props: ImageProps) {
         loaderOptions,
         id,
         alt,
-        loading,
+        priority,
       })
     : {
         src,
@@ -94,7 +95,7 @@ export function Image(props: ImageProps) {
         width,
         height,
         loader,
-        loading,
+        priority,
         loaderOptions: {width, height, ...loaderOptions},
       };
 
@@ -106,7 +107,7 @@ export function Image(props: ImageProps) {
   return (
     <img
       id={imgProps.id ?? ''}
-      loading={imgProps.loading ?? 'lazy'}
+      loading={priority ? 'eager' : 'lazy'}
       alt={imgProps.alt ?? ''}
       {...passthroughProps}
       src={srcPath}
@@ -121,7 +122,7 @@ function convertShopifyImageData({
   data,
   options,
   loader,
-  loading,
+  priority,
   loaderOptions,
   id: propId,
   alt,
@@ -139,6 +140,6 @@ function convertShopifyImageData({
     height,
     loader: loader ? loader : shopifyImageLoader,
     loaderOptions: {...options, ...loaderOptions},
-    loading
+    priority,
   };
 }
