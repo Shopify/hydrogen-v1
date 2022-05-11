@@ -16,7 +16,6 @@ declare global {
     [key: string]: any;
   };
 }
-debugger;
 
 // @ts-ignore
 globalThis.GlobalResponse = globalThis.Response;
