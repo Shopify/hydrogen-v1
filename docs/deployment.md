@@ -14,7 +14,7 @@ You're using the [most recent version of Hydrogen](https://github.com/Shopify/hy
 
 ## Deploy to Oxygen
 
-Oxygen is Shopify's recommended deployment platform for Hydrogen apps. This is because Oxygen is co-located with your shop's data in Shopify's data centers around the world.
+Oxygen is Shopify's recommended deployment platform for Hydrogen apps.
 
 > Note:
 > Shopify is currently working on Oxygen, but it's not available yet.
