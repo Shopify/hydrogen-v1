@@ -167,9 +167,9 @@ export default defineConfig({
   session: CookieSessionStorage('__session', {
     /* Tells the browser that the cookie should only be sent to the server if it's within the defined path.  */
     path: '/',
-    /* Whether to secure the cookie so that client JavaScript is unable to read it. */
-    httpOnly: true,
     /* Whether to secure the cookie so that the browser only sends it over HTTPS.  */
+    httpOnly: true,
+    /* Whether to secure the cookie so that client JavaScript is unable to read it. */
     secure: process.env.NODE_ENV === 'production',
     /* Declares that the cookie should be restricted to a first-party or same-site context.  */
     sameSite: 'strict',
