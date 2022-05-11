@@ -57,3 +57,4 @@ The `Cookie` component is a server component. For more information about compone
 ## Related framework topics
 
 - [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
