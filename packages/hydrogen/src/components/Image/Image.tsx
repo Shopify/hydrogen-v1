@@ -17,8 +17,8 @@ export interface BaseImageProps {
    * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
    */
   loaderOptions?: ImageLoaderOptions['options'];
-  /** 
-   * Whether the image will be immediately loaded. Defaults to `false`. This prop should be used only when 
+  /**
+   * Whether the image will be immediately loaded. Defaults to `false`. This prop should be used only when
    * the image is visible above the fold. For more information, refer to the
    * [Image Embed element's loading attribute](https://developer.mozilla.org/enUS/docs/Web/HTML/Element/img#attr-loading).
    */
