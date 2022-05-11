@@ -6,15 +6,14 @@ import {
   TransformStream,
 } from 'web-streams-polyfill/ponyfill';
 
-if (!globalThis.fetch) {
-  Object.assign(globalThis, {
-    fetch,
-    Request,
-    Response,
-    Headers,
-    AbortController,
-  });
-}
+// Make sure it can be compatible with node 18, Cloudflare and Vercel.
+Object.assign(globalThis, {
+  fetch,
+  Request,
+  Response,
+  Headers,
+  AbortController,
+});
 
 if (!globalThis.ReadableStream) {
   Object.assign(globalThis, {

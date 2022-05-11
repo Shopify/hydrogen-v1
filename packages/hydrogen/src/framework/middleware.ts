@@ -59,10 +59,7 @@ export function hydrogenMiddleware({
    * We're running in the Node.js runtime without access to `fetch`,
    * which is needed for proxy requests and server-side API requests.
    */
-  const webPolyfills =
-    !globalThis.fetch || !globalThis.ReadableStream
-      ? import('../utilities/web-api-polyfill')
-      : undefined;
+  const webPolyfills = import('../utilities/web-api-polyfill');
 
   return async function (
     request: IncomingMessage,
