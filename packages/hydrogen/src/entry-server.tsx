@@ -46,18 +46,12 @@ import {stripScriptsFromTemplate} from './utilities/template';
 import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
-<<<<<<< HEAD
-import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
-||||||| parent of a6a4966a (Implement some new stuff)
-import {getSyncSessionApi} from './foundation/session/session';
-=======
 import {
   getSyncSessionApi,
   SessionStorageAdapter,
 } from './foundation/session/session';
 import type {HeadersInit} from 'undici';
->>>>>>> a6a4966a (Implement some new stuff)
 
 declare global {
   // This is provided by a Vite plugin
@@ -119,20 +113,12 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     request.ctx.buyerIpHeader = buyerIpHeader;
 
     const log = getLoggerWithContext(request);
-<<<<<<< HEAD
-    const sessionApi = hydrogenConfig.session
-      ? hydrogenConfig.session(log)
-      : undefined;
-    const componentResponse = new ServerComponentResponse();
-||||||| parent of a6a4966a (Implement some new stuff)
-    const sessionApi = session ? session(log) : undefined;
-    const componentResponse = new ServerComponentResponse();
-=======
-    sessionApi = sessionApi ?? (session ? session(log) : undefined);
+    sessionApi =
+      sessionApi ??
+      (hydrogenConfig.session ? hydrogenConfig.session(log) : undefined);
     const componentResponse = new ServerComponentResponse(null, {
       headers: headers ? headers : {},
     });
->>>>>>> a6a4966a (Implement some new stuff)
 
     request.ctx.session = getSyncSessionApi(
       request,
@@ -918,7 +904,7 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+  Object.entries((headers as any).entries()).forEach(([key, value]) =>
     response.setHeader(key, value as string)
   );
 }
