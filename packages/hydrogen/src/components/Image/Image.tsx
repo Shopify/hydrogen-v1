@@ -18,8 +18,9 @@ export interface BaseImageProps {
    */
   loaderOptions?: ImageLoaderOptions['options'];
   /** 
-   * When true, the image will be eagerly loaded. Defaults to `false`. Should only be used when 
-   * the image is visible above the fold. For more information refer to [Image Element Loading Attr](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading).
+   * Whether the image will be immediately loaded. Defaults to `false`. This prop should be used only when 
+   * the image is visible above the fold. For more information, refer to the
+   * [Image Embed element's loading attribute](https://developer.mozilla.org/enUS/docs/Web/HTML/Element/img#attr-loading).
    */
   priority?: boolean;
 }
