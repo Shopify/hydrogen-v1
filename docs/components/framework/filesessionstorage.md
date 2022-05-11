@@ -58,4 +58,4 @@ Because `FileSessionStorage` relies on the file system, it shouldn't be used in 
 
 ## Related framework topics
 
-- [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)

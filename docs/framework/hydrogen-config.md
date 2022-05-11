@@ -39,7 +39,12 @@ export default defineConfig({
 
 ## Configuration properties
 
-There are two groupings of configuration properties in Hydrogen: [`routes`](#routes) and [`shopify`](#shopify).
+The following groupings of configuration properties can exist in Hydrogen:
+
+- [`routes`](#routes)
+- [`shopify`](#shopify)
+- [`session`](#session)
+- [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
 
 ### `routes`
 
@@ -151,7 +156,7 @@ The function is called inside the [`ShopifyProvider`](https://shopify.dev/api/hy
 
 ### `session`
 
-The `session` property allows you to configure sessions support in your Hydrogen app. For more information about configuring sessions support in Hydrogen apps, refer to [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
+The `session` property allows you to configure sessions support in your Hydrogen app. For more information about configuring sessions support in Hydrogen apps, refer to [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
