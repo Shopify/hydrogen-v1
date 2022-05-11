@@ -72,8 +72,10 @@ export default function NotFound({response}) {
 }
 
 const QUERY = gql`
-  query NotFoundProductDetails($country: CountryCode, $language: LanguageCode)
-  @inContext(country: $country, language: $language) {
+  query NotFoundProductDetails(
+    $countryCode: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $countryCode, language: $language) {
     products(first: 3) {
       edges {
         node {

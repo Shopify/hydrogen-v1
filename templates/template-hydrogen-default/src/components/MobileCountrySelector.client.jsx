@@ -16,13 +16,9 @@ export default function MobileCountrySelector() {
     fetch(`/countries`, {
       body: JSON.stringify({isoCode, name}),
       method: 'POST',
-    })
-      .then(() => {
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    }).then(() => {
+      window.location.reload();
+    });
   }, []);
 
   return (
