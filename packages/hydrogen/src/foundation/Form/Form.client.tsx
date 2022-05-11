@@ -58,7 +58,7 @@ export function Form({
         setLoading(false);
       });
     },
-    [action, method, formRef]
+    [onSubmit, startTransition, action, method, setRscResponseFromApiRoute]
   );
 
   return (

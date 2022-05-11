@@ -135,6 +135,7 @@ export function ServerStateProvider({
       serverState,
       getProposedServerStateCallback,
       setServerStateCallback,
+      setApiResponse,
       pending,
     ]
   );

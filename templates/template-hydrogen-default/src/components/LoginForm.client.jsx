@@ -21,11 +21,7 @@ export function LoginForm({error}) {
   const checkUserName = useCallback(
     (target) => {
       const valid = target.validity.valid;
-      if (valid) {
-        setInvalidUserName(false);
-      } else {
-        setInvalidUserName(true);
-      }
+      setInvalidUserName(!valid);
       return valid;
     },
     [setInvalidUserName],
@@ -34,11 +30,7 @@ export function LoginForm({error}) {
   const checkPassword = useCallback(
     (target) => {
       const valid = target.validity.valid;
-      if (valid) {
-        setInvalidPassword(false);
-      } else {
-        setInvalidPassword(true);
-      }
+      setInvalidPassword(!valid);
       return valid;
     },
     [setInvalidPassword],

@@ -1,3 +1,4 @@
+/* eslint-disable hydrogen/no-effects-in-server-components */
 /* eslint-disable hydrogen/no-state-in-server-components */
 import React, {
   Suspense,
@@ -145,3 +146,4 @@ function Error({error}: {error: Error}) {
 }
 
 /* eslint-enable hydrogen/no-state-in-server-components */
+/* eslint-enable hydrogen/no-effects-in-server-components */
