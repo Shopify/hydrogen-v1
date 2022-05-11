@@ -77,7 +77,7 @@ export default function ExternalImageWithLoader() {
 | height         | <code>height</code>                              | The integer value for the height of the image. This is a required prop when `src` is present.                                                                                                        |
 | loader?        | <code>(props: ImageLoaderOptions): string</code> | A custom function that generates the image URL. Parameters passed into this function includes `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values. |
 | loaderOptions? | <code>ImageLoaderOptions['options']</code>       | An object of `loader` function options. For example, if the `loader` function requires a `scale` option, then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`). |
-| priority? | <code>boolean</code>       | When true, the image will be eagerly loaded. Defaults to `false`. Should only be used when the image is visible above the fold. For more information refer to [Image Element Loading Attr](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading).   |
+| priority? | <code>boolean</code>       | Whether the image will be immediately loaded. Defaults to `false`. This prop should be used only when the image is visible above the fold. For more information, refer to the [Image Embed element's loading attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading).   |
 
 ## Component type
 
