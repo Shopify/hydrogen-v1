@@ -21,7 +21,7 @@ export interface BaseImageProps {
    * When true, the image will be eagerly loaded. Defaults to `false`. Should only be used when 
    * the image is visible above the fold. For more information refer to [Image Element Loading Attr](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading).
    */
-  priority?: boolean
+  priority?: boolean;
 }
 
 interface MediaImagePropsBase extends BaseImageProps {
@@ -107,7 +107,7 @@ export function Image(props: ImageProps) {
   return (
     <img
       id={imgProps.id ?? ''}
-      loading={priority ? 'eager' : 'lazy'}
+      loading={imgProps.priority ? 'eager' : 'lazy'}
       alt={imgProps.alt ?? ''}
       {...passthroughProps}
       src={srcPath}
