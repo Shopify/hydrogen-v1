@@ -4,6 +4,8 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 
 [Check out the docs](https://shopify.dev/custom-storefronts/hydrogen)
 
+[Run this template on Stackblitz](https://stackblitz.com/github/Shopify/hydrogen/tree/main/templates/template-hydrogen-default)
+
 ## What's in this template
 
 - Styling with [Tailwind](https://tailwindcss.com/)
