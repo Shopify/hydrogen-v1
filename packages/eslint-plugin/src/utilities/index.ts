@@ -2,6 +2,7 @@ import {parse, join} from 'path';
 import {ESLintUtils} from '@typescript-eslint/experimental-utils';
 
 export * from './react';
+export * from './ast';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PACKAGE_JSON = require('../../package.json');
