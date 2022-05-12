@@ -1,6 +1,6 @@
 {
-  "name": "template-hydrogen-hello-world-typescript",
-  "description": "Hello world template for @shopify/hydrogen",
+  "name": "example-typescript",
+  "description": "An example using typescript in Hydrogen",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
