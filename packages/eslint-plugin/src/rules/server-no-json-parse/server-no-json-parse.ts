@@ -13,7 +13,7 @@ export const serverNoJsonParse = createRule({
     type: 'suggestion',
     docs: {
       description:
-        'Prefer using the `Image` component instead of HTML `img` tags',
+        'JSON.parse() should not be used in server-side code due to security concerns.',
       category: 'Best Practices',
       recommended: 'warn',
     },
