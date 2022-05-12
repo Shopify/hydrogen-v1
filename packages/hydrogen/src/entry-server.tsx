@@ -511,13 +511,8 @@ async function stream(
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
     // Maintain a copy of streamed html so we can cache this at the end
-    const originalWrite = response.write;
-    const savedChunks: string[] = [];
-    response.write = (...args) => {
-      savedChunks.push(args[0].toString());
-      // @ts-ignore
-      return originalWrite.apply(response, args);
-    };
+    const savedChunks = tagOnResponseWrite(response);
+
     response.on('finish', () => {
       cacheResponse(componentResponse, request, savedChunks);
     });
@@ -545,10 +540,7 @@ async function stream(
           return response.end();
         }
 
-        if (!componentResponse.canStream()) {
-          console.log(componentResponse.body);
-          return;
-        }
+        if (!componentResponse.canStream()) return;
 
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
 
@@ -678,13 +670,7 @@ async function hydrate(
       },
     });
   } else if (response) {
-    const originalWrite = response.write;
-    const savedChunks: string[] = [];
-    response.write = (...args) => {
-      savedChunks.push(args[0].toString());
-      // @ts-ignore
-      return originalWrite.apply(response, args);
-    };
+    const savedChunks = tagOnResponseWrite(response);
 
     const rscWriter = await import(
       // @ts-ignore
@@ -953,6 +939,18 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
+}
+
+function tagOnResponseWrite(response: ServerResponse) {
+  const originalWrite = response.write;
+  const savedChunks: string[] = [];
+  response.write = (...args) => {
+    savedChunks.push(args[0].toString());
+    // @ts-ignore
+    return originalWrite.apply(response, args);
+  };
+
+  return savedChunks;
 }
 
 function storeWorkerRSCChunks(
