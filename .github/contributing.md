@@ -15,6 +15,16 @@ yarn
 yarn dev
 ```
 
+To develop against a template, open a new terminal window or tab and choose from the available templates:
+
+- templates/template-hydrogen-default
+- templates/template-hydrogen-hello-world
+
+```bash
+cd templates/template-hydrogen-default
+yarn dev
+```
+
 Visit the dev environment at http://localhost:3000.
 
 To make changes to the Demo Store template, edit the files in `templates/template-hydrogen-default`.
@@ -157,7 +167,7 @@ yarn workspace localdev dev
 1. In the directory you want to create your Hydrogen app, run `LOCAL=true create-hydrogen` and answer the prompts.
 1. Run `cd <your app>`.
 1. Run `yarn` or `npm i --legacy-peer-deps`.
-1. Optional. Replace default `shopify.config.js` with your own storefront credentials.
+1. Optional. Replace default `hydrogen.config.js` with your own storefront credentials.
 1. Run `yarn dev` or `npm run dev` to start your dev server.
 1. Open the dev server in your browser at http://localhost:3000.
 

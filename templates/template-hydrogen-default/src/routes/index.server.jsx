@@ -5,6 +5,7 @@ import {
   Link,
   Seo,
   CacheDays,
+  useSession,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -14,7 +15,9 @@ import ProductCard from '../components/ProductCard';
 import Welcome from '../components/Welcome.server';
 import {Suspense} from 'react';
 
-export default function Index({country = {isoCode: 'US'}}) {
+export default function Index() {
+  const {countryCode = 'US'} = useSession();
+
   return (
     <Layout hero={<GradientBackground />}>
       <Suspense fallback={null}>
@@ -23,10 +26,10 @@ export default function Index({country = {isoCode: 'US'}}) {
       <div className="relative mb-12">
         <Welcome />
         <Suspense fallback={<BoxFallback />}>
-          <FeaturedProductsBox country={country} />
+          <FeaturedProductsBox country={countryCode} />
         </Suspense>
         <Suspense fallback={<BoxFallback />}>
-          <FeaturedCollectionBox country={country} />
+          <FeaturedCollectionBox country={countryCode} />
         </Suspense>
       </div>
     </Layout>
@@ -65,7 +68,7 @@ function FeaturedProductsBox({country}) {
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
-      country: country.isoCode,
+      country,
       language: languageCode,
     },
     preload: true,
@@ -121,7 +124,7 @@ function FeaturedCollectionBox({country}) {
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
-      country: country.isoCode,
+      country,
       language: languageCode,
     },
     preload: true,

@@ -13,7 +13,7 @@ export function useProduct() {
   const data = useContext(ProductContext);
   let state: ProductOptionsHookValue | ProductOptionsContextFallback;
   try {
-    state = useContext(ProductOptionsContext) ?? {...stateFallback};
+    state = useContext(ProductOptionsContext) ?? {...stateFallback}; // eslint-disable-line react-hooks/rules-of-hooks
   } catch (error) {
     // for server components which can't use state
     state = {...stateFallback};

@@ -29,13 +29,25 @@ export type UseMoneyValue = {
   parts: Intl.NumberFormatPart[];
   /**
    * A string returned by `new Intl.NumberFormat` for the amount and currency code,
-   * using the `shopify.config.js` locale.
+   * using the `defaultLocale` value in [`hydrogenConfig.shopify`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
    */
   localizedString: string;
   /**
    * The `MoneyV2` object provided as an argument to the hook.
    */
   original: MoneyV2;
+  /**
+   * A string with trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains.
+   * For example, `$640.00` turns into `$640`.
+   * `$640.42` remains `$640.42`.
+   */
+  withoutTrailingZeros: string;
+  /**
+   * A string without currency and without trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains.
+   * For example, `$640.00` turns into `640`.
+   * `$640.42` turns into `640.42`.
+   */
+  withoutTrailingZerosAndCurrency: string;
 };
 
 /**
@@ -73,6 +85,30 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
     currencyDisplay: 'narrowSymbol',
   }).formatToParts(amount);
 
+  const withoutTrailingZerosFormatter = new Intl.NumberFormat(locale, {
+    ...options,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
+  const withoutCurrencyFormatter = new Intl.NumberFormat(locale);
+
+  const withoutTrailingZerosOrCurrencyFormatter = new Intl.NumberFormat(
+    locale,
+    {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }
+  );
+
+  const withoutTrailingZeros =
+    amount % 1 === 0 ? withoutTrailingZerosFormatter.format(amount) : value;
+
+  const withoutTrailingZerosAndCurrency =
+    amount % 1 === 0
+      ? withoutTrailingZerosOrCurrencyFormatter.format(amount)
+      : withoutCurrencyFormatter.format(amount);
+
   const moneyValue = useMemo<UseMoneyValue>(
     () => ({
       currencyCode: money.currencyCode,
@@ -96,8 +132,18 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
         .map((part) => part.value)
         .join(''),
       original: money,
+      withoutTrailingZeros,
+      withoutTrailingZerosAndCurrency,
     }),
-    [baseParts, money, nameParts, narrowParts, value]
+    [
+      baseParts,
+      money,
+      nameParts,
+      narrowParts,
+      value,
+      withoutTrailingZeros,
+      withoutTrailingZerosAndCurrency,
+    ]
   );
 
   return moneyValue;

@@ -7,7 +7,7 @@ import {
   MissingPropsErrorMessage,
 } from '../ShopPayButton.client';
 
-jest.mock('../../../hooks/useLoadScript/useLoadScript', () => {
+jest.mock('../../../hooks/useLoadScript/useLoadScript.client', () => {
   return {
     useLoadScript: () => 'done',
   };

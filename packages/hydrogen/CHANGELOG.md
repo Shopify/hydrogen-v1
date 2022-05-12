@@ -1,5 +1,118 @@
 # Changelog
 
+## 0.18.0
+
+### Minor Changes
+
+- [#1065](https://github.com/Shopify/hydrogen/pull/1065) [`81ae47fd`](https://github.com/Shopify/hydrogen/commit/81ae47fdb01be06af155a61e574d43c73122c414) Thanks [@frandiox](https://github.com/frandiox)! - A new config file `hydrogen.config.js` replaces the existing `shopify.config.js` in your Hydrogen app.
+
+  ## Introducing `hydrogen.config.js`
+
+  Hydrogen apps now expect a `hydrogen.config.js` in the root folder. This config file accepts Shopify storefront credentials, routes, session configuration, and more.
+
+  To migrate existing apps, you should create a `hydrogen.config.js` (or `hydrogen.config.ts`) file in your Hydrogen app:
+
+  ```js
+  import {defineConfig} from '@shopify/hydrogen/config';
+  import {
+    CookieSessionStorage,
+    PerformanceMetricsServerAnalyticsConnector,
+  } from '@shopify/hydrogen';
+
+  export default defineConfig({
+    routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+    shopify: {
+      storeDomain: 'YOUR_STORE.myshopify.com',
+      storefrontToken: 'YOUR_STOREFRONT_TOKEN',
+      storefrontApiVersion: '2022-07',
+    },
+    session: CookieSessionStorage('__session', {
+      path: '/',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 30,
+    }),
+    serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+  });
+  ```
+
+  Then, update your `App.server.jsx` to remove previous arguments from `renderHydrogen()`:
+
+  ```diff
+  import renderHydrogen from '@shopify/hydrogen/entry-server';
+
+  -function App({routes}) {
+  +function App() {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+  -      <ShopifyProvider shopifyConfig={shopifyConfig}>
+  +      <ShopifyProvider>
+          <CartProvider>
+            <DefaultSeo />
+            <Router>
+  -            <FileRoutes routes={routes} />
+  +            <FileRoutes />
+              <Route path="*" page={<NotFound />} />
+            </Router>
+          </CartProvider>
+          <PerformanceMetrics />
+          {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+        </ShopifyProvider>
+      </Suspense>
+    );
+  }
+
+  -const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+  -
+  -export default renderHydrogen(App, {
+  -  routes,
+  -  shopifyConfig,
+  -  session: CookieSessionStorage('__session', {
+  -    path: '/',
+  -    httpOnly: true,
+  -    secure: process.env.NODE_ENV === 'production',
+  -    sameSite: 'strict',
+  -    maxAge: 60 * 60 * 24 * 30,
+  -  }),
+  -  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+  -});
+  +export default renderHydrogen(App);
+  ```
+
+  Next, update `vite.config.js` in your app to remove references to `shopifyConfig`:
+
+  ```diff
+  import {defineConfig} from 'vite';
+  import hydrogen from '@shopify/hydrogen/plugin';
+  -import shopifyConfig from './shopify.config';
+
+  // https://vitejs.dev/config/
+  export default defineConfig({
+  -  plugins: [hydrogen(shopifyConfig)],
+  +  plugins: [hydrogen()],
+  ```
+
+  Finally, delete `shopify.config.js` from your app.
+
+  [Read more about the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+
+* [#1214](https://github.com/Shopify/hydrogen/pull/1214) [`58ef6d69`](https://github.com/Shopify/hydrogen/commit/58ef6d69f1148e7bc8452fa77e7e8f54396c6105) Thanks [@frehner](https://github.com/frehner)! - Upgraded SFAPI version to 2022-07
+
+- [#1232](https://github.com/Shopify/hydrogen/pull/1232) [`d3956d62`](https://github.com/Shopify/hydrogen/commit/d3956d623adb86371ab214b102b53c62ea9ce26c) Thanks [@arlyxiao](https://github.com/arlyxiao)! - Upgrade body-parser in hydrogen package
+
+### Patch Changes
+
+- [#1211](https://github.com/Shopify/hydrogen/pull/1211) [`f3d26511`](https://github.com/Shopify/hydrogen/commit/f3d26511b1b0b94de1a43f76a0be9d99b5f2a8f7) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Build chunks are inside assets folder
+
+* [#1215](https://github.com/Shopify/hydrogen/pull/1215) [`a0ed7c06`](https://github.com/Shopify/hydrogen/commit/a0ed7c06d045a0063a356097dafcc25e5361aad1) Thanks [@frehner](https://github.com/frehner)! - `useMoney` now returns two additional properties: `withoutTrailingZeros` and `withoutTrailingZerosAndCurrency`
+
+  `<Money />` now has two additional and optional props: `withoutMoney` and `withoutCurrency`.
+
+- [#1242](https://github.com/Shopify/hydrogen/pull/1242) [`c277c688`](https://github.com/Shopify/hydrogen/commit/c277c68836d6d75d509cc68c74e3ccd33706a0c7) Thanks [@blittle](https://github.com/blittle)! - Prevent JSON parsing from prototype poisoning vulnerabilities
+
+* [#1210](https://github.com/Shopify/hydrogen/pull/1210) [`a844d26e`](https://github.com/Shopify/hydrogen/commit/a844d26ef258c28fded5293054389b719f0b86f4) Thanks [@blittle](https://github.com/blittle)! - Add eslint back and fix stale product options
+
 ## 0.17.3
 
 ### Patch Changes

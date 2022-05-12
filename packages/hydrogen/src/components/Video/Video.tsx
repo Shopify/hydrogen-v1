@@ -33,6 +33,7 @@ export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/media-has-caption
     <video
       {...passthroughProps}
       id={id}

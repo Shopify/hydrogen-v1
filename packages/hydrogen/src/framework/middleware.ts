@@ -7,7 +7,6 @@ import {graphiqlHtml} from './graphiql';
 
 type HydrogenMiddlewareArgs = {
   dev?: boolean;
-  shopifyConfig?: ShopifyConfig;
   indexTemplate: string | ((url: string) => Promise<string>);
   getServerEntrypoint: () => any;
   devServer?: ViteDevServer;
@@ -15,20 +14,21 @@ type HydrogenMiddlewareArgs = {
 };
 
 export function graphiqlMiddleware({
-  shopifyConfig,
+  getShopifyConfig,
   dev,
 }: {
-  shopifyConfig: ShopifyConfig;
-  dev: boolean;
+  getShopifyConfig: (
+    request: IncomingMessage
+  ) => ShopifyConfig | Promise<ShopifyConfig>;
+  dev?: boolean;
 }) {
   return async function (
     request: IncomingMessage,
     response: ServerResponse,
     next: NextFunction
   ) {
-    const graphiqlRequest = dev && isGraphiqlRequest(request);
-
-    if (graphiqlRequest) {
+    if (dev && isGraphiqlRequest(request)) {
+      const shopifyConfig = await getShopifyConfig(request);
       return respondWithGraphiql(response, shopifyConfig);
     }
 
@@ -166,7 +166,7 @@ async function respondWithGraphiql(
 ) {
   if (!shopifyConfig) {
     throw new Error(
-      "You must provide shopifyConfig to Hydrogen's Vite middleware"
+      "You must provide a 'shopify' property in your Hydrogen config file"
     );
   }
 

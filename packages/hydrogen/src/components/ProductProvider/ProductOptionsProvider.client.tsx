@@ -16,7 +16,7 @@ export function ProductOptionsProvider({
   const product = useProduct();
   const productOptions = useProductOptions({
     variants: product.variantsConnection,
-    initialVariantId: initialVariantId,
+    initialVariantId,
   });
 
   return (

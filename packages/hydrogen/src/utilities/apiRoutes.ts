@@ -1,9 +1,14 @@
-import {ImportGlobEagerOutput, ShopifyConfig} from '../types';
+import {
+  HydrogenConfig,
+  HydrogenConfigRoutes,
+  ImportGlobEagerOutput,
+} from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
+import {findRoutePrefix} from './findRoutePrefix';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {
   emptySessionImplementation,
@@ -11,8 +16,8 @@ import {
   SessionStorageAdapter,
 } from '../foundation/session/session';
 
-let memoizedRoutes: Array<HydrogenApiRoute> = [];
-let memoizedPages: ImportGlobEagerOutput = {};
+let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
+let memoizedRawRoutes: ImportGlobEagerOutput = {};
 
 type RouteParams = Record<string, string>;
 type RequestOptions = {
@@ -37,7 +42,10 @@ export type ApiRouteMatch = {
   params: RouteParams;
 };
 
-export function extractPathFromRoutesKey(routesKey: string, dirPrefix: string) {
+export function extractPathFromRoutesKey(
+  routesKey: string,
+  dirPrefix: string | RegExp
+) {
   let path = routesKey
     .replace(dirPrefix, '')
     .replace(/\.server\.(t|j)sx?$/, '')
@@ -63,17 +71,23 @@ export function extractPathFromRoutesKey(routesKey: string, dirPrefix: string) {
 }
 
 export function getApiRoutes(
-  pages: ImportGlobEagerOutput | undefined,
-  topLevelPath = '*'
+  rawRoutes: HydrogenConfigRoutes
 ): Array<HydrogenApiRoute> {
-  if (!pages || memoizedPages === pages) return memoizedRoutes;
+  const routes = (rawRoutes.files ?? rawRoutes) as ImportGlobEagerOutput;
+  const topLevelPath = (rawRoutes.basePath ?? '*') as string;
+  const dirPrefix = rawRoutes.dirPrefix as string | undefined;
+
+  if (!routes || memoizedRawRoutes === routes) return memoizedApiRoutes;
 
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
-  const routes = Object.keys(pages)
-    .filter((key) => pages[key].api)
+  const keys = Object.keys(routes);
+  const commonRoutePrefix = dirPrefix ?? findRoutePrefix(keys);
+
+  const apiRoutes = keys
+    .filter((key) => routes[key].api)
     .map((key) => {
-      const path = extractPathFromRoutesKey(key, './routes');
+      const path = extractPathFromRoutesKey(key, commonRoutePrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
@@ -83,20 +97,20 @@ export function getApiRoutes(
 
       return {
         path: topLevelPrefix + path,
-        resource: pages[key].api,
-        hasServerComponent: !!pages[key].default,
+        resource: routes[key].api,
+        hasServerComponent: !!routes[key].default,
         exact,
       };
     });
 
-  memoizedRoutes = [
-    ...routes.filter((route) => !route.path.includes(':')),
-    ...routes.filter((route) => route.path.includes(':')),
+  memoizedApiRoutes = [
+    ...apiRoutes.filter((route) => !route.path.includes(':')),
+    ...apiRoutes.filter((route) => route.path.includes(':')),
   ];
 
-  memoizedPages = pages;
+  memoizedRawRoutes = routes;
 
-  return memoizedRoutes;
+  return memoizedApiRoutes;
 }
 
 export function getApiRouteFromURL(
@@ -137,13 +151,24 @@ interface QueryShopArgs {
 }
 
 function queryShopBuilder(
-  shopifyConfig: ShopifyConfig,
+  shopifyConfigGetter: HydrogenConfig['shopify'],
   request: ServerComponentRequest
 ) {
   return async function queryShop<T>({
     query,
     variables,
   }: QueryShopArgs): Promise<T> {
+    const shopifyConfig =
+      typeof shopifyConfigGetter === 'function'
+        ? await shopifyConfigGetter(request)
+        : shopifyConfigGetter;
+
+    if (!shopifyConfig) {
+      throw new Error(
+        'Shopify connection info was not found in Hydrogen config'
+      );
+    }
+
     const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
     const buyerIp = request.getBuyerIp();
 
@@ -171,7 +196,7 @@ function queryShopBuilder(
 export async function renderApiRoute(
   request: ServerComponentRequest,
   route: ApiRouteMatch,
-  shopifyConfig: ShopifyConfig,
+  shopifyConfig: HydrogenConfig['shopify'],
   session?: SessionStorageAdapter
 ): Promise<Response | Request> {
   let response;

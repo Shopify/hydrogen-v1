@@ -16,10 +16,10 @@ function expectTiming(
   let regex;
   if (duration) {
     regex = new RegExp(
-      `│ -?[0-9]+\.[0-9]{2}ms.*${method}.*${queryName} \\\(Took ${duration}\.00ms\\\)`
+      `│ -?[0-9]+\\.[0-9]{2}ms.*${method}.*${queryName} \\(Took ${duration}\\.00ms\\)`
     );
   } else {
-    regex = new RegExp(`│ -?[0-9]+\.[0-9]{2}ms.*${method}.*${queryName}`);
+    regex = new RegExp(`│ -?[0-9]+\\.[0-9]{2}ms.*${method}.*${queryName}`);
   }
 
   expect(mockCall).toEqual(expect.stringMatching(regex));

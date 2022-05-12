@@ -66,15 +66,11 @@ describe('CachingStrategy', () => {
     });
 
     it(`should throw error when ${methodName} override mode with something else other than private or public`, () => {
-      try {
+      expect(() =>
         testFunction.method({
           mode: 'no-store',
-        });
-      } catch (error: any) {
-        expect(error.message).toEqual(
-          "'mode' must be either 'public' or 'private'"
-        );
-      }
+        })
+      ).toThrow("'mode' must be either 'public' or 'private'");
     });
   });
 

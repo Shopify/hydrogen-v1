@@ -34,7 +34,7 @@ import {
   CartBuyerIdentityInput,
   AttributeInput,
 } from '../../storefront-api-types';
-import {useCartFetch} from './hooks';
+import {useCartFetch} from './hooks.client';
 import {CartContext} from './context';
 import {
   CartLineRemoveMutationVariables,
@@ -321,7 +321,7 @@ export function CartProvider({
       if (error) {
         dispatch({
           type: 'reject',
-          error: error,
+          error,
         });
       }
 
@@ -362,7 +362,7 @@ export function CartProvider({
           query: CartLineAdd,
           variables: {
             cartId: state.cart.id!,
-            lines: lines,
+            lines,
             numCartLines,
             country: countryCode,
           },
@@ -371,7 +371,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -408,7 +408,7 @@ export function CartProvider({
           query: CartLineRemove,
           variables: {
             cartId: state.cart.id!,
-            lines: lines,
+            lines,
             numCartLines,
             country: countryCode,
           },
@@ -454,7 +454,7 @@ export function CartProvider({
           query: CartLineUpdate,
           variables: {
             cartId: state.cart.id!,
-            lines: lines,
+            lines,
             numCartLines,
             country: countryCode,
           },
@@ -462,7 +462,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -499,7 +499,7 @@ export function CartProvider({
           query: CartNoteUpdate,
           variables: {
             cartId: state.cart.id!,
-            note: note,
+            note,
             numCartLines,
             country: countryCode,
           },
@@ -508,7 +508,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -546,7 +546,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -575,7 +575,7 @@ export function CartProvider({
           query: CartAttributesUpdate,
           variables: {
             cartId: state.cart.id!,
-            attributes: attributes,
+            attributes,
             numCartLines,
             country: countryCode,
           },
@@ -584,7 +584,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -616,7 +616,7 @@ export function CartProvider({
           query: CartDiscountCodesUpdate,
           variables: {
             cartId: state.cart.id!,
-            discountCodes: discountCodes,
+            discountCodes,
             numCartLines,
             country: countryCode,
           },
@@ -625,7 +625,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -666,6 +666,7 @@ export function CartProvider({
       return;
     }
     buyerIdentityUpdate({countryCode}, state);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryCode]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {

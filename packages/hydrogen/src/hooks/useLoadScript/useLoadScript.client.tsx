@@ -11,6 +11,7 @@ export function useLoadScript(
   options?: LoadScriptParams[1]
 ): ScriptState {
   const [status, setStatus] = useState<ScriptState>('loading');
+  const stringifiedOptions = JSON.stringify(options);
 
   useEffect(() => {
     async function loadScriptWrapper() {
@@ -24,7 +25,7 @@ export function useLoadScript(
     }
 
     loadScriptWrapper();
-  }, [url, JSON.stringify(options)]);
+  }, [url, stringifiedOptions, options]);
 
   return status;
 }

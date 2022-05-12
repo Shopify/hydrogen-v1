@@ -4,7 +4,7 @@ title: queryShop
 description: The queryShop utility is a function that helps you query the Storefront API.
 ---
 
-The `queryShop` utility is a function that helps you query the Storefront API. It's similar to the `useShopQuery` hook, which is available in server components. To use `queryShop`, pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`.
+The `queryShop` utility is a function that helps you query the Storefront API. It's similar to the `useShopQuery` hook, which is available in server components.
 
 ## Example code
 

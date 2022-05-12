@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "shopify hydrogen dev",
+    "dev": "cross-env LOCAL_DEV=true shopify hydrogen dev",
     "build": "shopify hydrogen build",
     "preview": "shopify hydrogen preview"
   },
@@ -15,7 +15,7 @@
     "@shopify/cli-hydrogen": "2.0.0"
   },
   "dependencies": {
-    "@shopify/hydrogen": "^0.17.3",
+    "@shopify/hydrogen": "^0.18.0",
     "react": "0.0.0-experimental-2bf7c02f0-20220314",
     "react-dom": "0.0.0-experimental-2bf7c02f0-20220314"
   }

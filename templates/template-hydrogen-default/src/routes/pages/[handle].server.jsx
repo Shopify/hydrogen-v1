@@ -24,7 +24,7 @@ export default function Page({params}) {
       <Seo type="page" data={page} />
       <h1 className="text-2xl font-bold">{page.title}</h1>
       <div
-        dangerouslySetInnerHTML={{_html: page.body}}
+        dangerouslySetInnerHTML={{__html: page.body}}
         className="prose mt-8"
       />
     </Layout>

@@ -1,3 +1,4 @@
+import {parseJSON} from '../../../utilities/parse';
 import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/hooks';
 import type {FetchResponse} from '../types';
 
@@ -12,7 +13,7 @@ export function fetchSync(
 ): FetchResponse {
   const {cache, preload, shouldCacheResponse, ...requestInit} = options ?? {};
 
-  const {data: useQueryResponse, error} = useQuery<[string, Response]>(
+  const {data: useQueryResponse, error} = useQuery<[string, Response]>( // eslint-disable-line react-hooks/rules-of-hooks
     [url, requestInit],
     async () => {
       const response = await globalThis.fetch(url, requestInit);
@@ -35,7 +36,7 @@ export function fetchSync(
 
   return {
     response,
-    json: () => JSON.parse(data),
+    json: () => parseJSON(data),
     text: () => data,
   };
 }

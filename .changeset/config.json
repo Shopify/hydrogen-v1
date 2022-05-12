@@ -11,6 +11,7 @@
     "template-hydrogen-default",
     "template-hydrogen-hello-world",
     "test-server-components",
+    "test-async-config",
     "hydrogen-playground",
     "@shopify/hydrogen-ui"
   ]

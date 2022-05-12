@@ -492,3 +492,4 @@ describe('Google Analytics 4', () => {
 
 - Learn how to [configure queries to preload](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries) in your Hydrogen app.
 - Learn how to customize the output of [SEO-related tags](https://shopify.dev/custom-storefronts/hydrogen/framework/seo) in your Hydrogen client and server components.
+- Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.

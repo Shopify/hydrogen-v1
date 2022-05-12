@@ -11,7 +11,7 @@ This document contains all the decisions that were taken since the beginning of 
 - Avoid creating a custom `hydrogen` CLI tool for development and building. Instead, use existing `vite` CLI included with the framework for building, and provide Hydrogen middleware as a plugin.
 - Hydrogen React components are exported and usable by other React frameworks, like Next.js and Gatsby.
 - Hydrogen React components are specific to Shopify and not generic to web applications. E.g. `LayoutGrid` would never be a component provided by Hydrogen, but `ProductOptions` would.
-- `shopify.config.js` is used for Shopify-specific config, like Storefront domain and accelerated checkout options.
+- `hydrogen.config.js` is used to specify all the runtime configuration in Hydrogen, like routes, Storefront domain and accelerated checkout options.
 - Use a custom `Link` component wrapped around [`ReactRouter`](https://reactrouter.com/) to fetch props from the server on page navigation.
 - `ShopifyProvider` is a wrapper component providing helpful context to the rest of the application and Hydrogen components.
 - Tobi will demo Hydrogen at Unite, but we will not be releasing Hydrogen yet to developers at Unite.

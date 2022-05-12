@@ -1,6 +1,6 @@
 import React from 'react';
 import {useShop} from '../../foundation/useShop';
-import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client';
 
 // By using 'never' in the "or" cases below, it makes these props "exclusive" and means that you cannot pass both of them; you must pass either one OR the other.
 type ShopPayButtonProps = {
@@ -25,7 +25,6 @@ type ShopPayButtonProps = {
 );
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'shop-pay-button': {
@@ -76,7 +75,8 @@ export function ShopPayButton({
   }
 
   return (
-    <div className={className} tabIndex={1}>
+    /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+    <div className={className} tabIndex={0}>
       {shopPayLoadedStatus === 'done' && (
         <shop-pay-button
           store-url={`https://${storeDomain}`}
@@ -84,6 +84,7 @@ export function ShopPayButton({
         />
       )}
     </div>
+    /* eslint-enable jsx-a11y/no-noninteractive-tabindex */
   );
 }
 

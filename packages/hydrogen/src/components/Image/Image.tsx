@@ -17,6 +17,12 @@ export interface BaseImageProps {
    * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
    */
   loaderOptions?: ImageLoaderOptions['options'];
+  /**
+   * Whether the image will be immediately loaded. Defaults to `false`. This prop should be used only when
+   * the image is visible above the fold. For more information, refer to the
+   * [Image Embed element's loading attribute](https://developer.mozilla.org/enUS/docs/Web/HTML/Element/img#attr-loading).
+   */
+  priority?: boolean;
 }
 
 interface MediaImagePropsBase extends BaseImageProps {
@@ -57,6 +63,7 @@ export function Image(props: ImageProps) {
     height,
     loader,
     loaderOptions,
+    priority,
     ...passthroughProps
   } = props;
 
@@ -80,6 +87,7 @@ export function Image(props: ImageProps) {
         loaderOptions,
         id,
         alt,
+        priority,
       })
     : {
         src,
@@ -88,6 +96,7 @@ export function Image(props: ImageProps) {
         width,
         height,
         loader,
+        priority,
         loaderOptions: {width, height, ...loaderOptions},
       };
 
@@ -95,10 +104,11 @@ export function Image(props: ImageProps) {
     ? imgProps.loader({src: imgProps.src, options: imgProps.loaderOptions})
     : imgProps.src;
 
+  /* eslint-disable hydrogen/prefer-image-component */
   return (
     <img
       id={imgProps.id ?? ''}
-      loading="lazy"
+      loading={imgProps.priority ? 'eager' : 'lazy'}
       alt={imgProps.alt ?? ''}
       {...passthroughProps}
       src={srcPath}
@@ -106,12 +116,14 @@ export function Image(props: ImageProps) {
       height={imgProps.height ?? undefined}
     />
   );
+  /* eslint-enable hydrogen/prefer-image-component */
 }
 
 function convertShopifyImageData({
   data,
   options,
   loader,
+  priority,
   loaderOptions,
   id: propId,
   alt,
@@ -129,5 +141,6 @@ function convertShopifyImageData({
     height,
     loader: loader ? loader : shopifyImageLoader,
     loaderOptions: {...options, ...loaderOptions},
+    priority,
   };
 }
