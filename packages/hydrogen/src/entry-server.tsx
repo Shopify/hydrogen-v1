@@ -138,13 +138,11 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       );
     }
 
-    const cacheInstance = getCache();
     // Check if we have cached response
-    if (cacheInstance) {
-      const cachedResponse = await cacheInstance.match(request.cacheKey());
+    if (cache) {
+      const cachedResponse = await cache.match(request.cacheKey());
 
       if (cachedResponse) {
-        console.log('[c] Cache matched');
         return cachedResponse;
       }
     }
@@ -173,14 +171,9 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       }
     }
 
-    const isStreamSupport = await isStreamingSupported();
     const isStreamable =
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
-
-    console.log(
-      `[c] isStreamable: ${isStreamable} - streamableResponse: ${!!streamableResponse} - isStreamingSupported: ${isStreamSupport}`
-    );
 
     let template =
       typeof indexTemplate === 'function'
@@ -271,9 +264,6 @@ async function render(
   let response: Response;
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
-
-    console.log('[c] render - customBody - stable');
-
     const customBody = await componentResponse.customBody;
     response = new Response(customBody, {
       status,
@@ -286,8 +276,6 @@ async function render(
 
     return response;
   }
-
-  console.log('[c] render - stable');
 
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
@@ -438,8 +426,9 @@ async function stream(
 
       if (flush) {
         if (componentResponse.customBody) {
-          console.log('[c] prepareForStreaming - 3');
-          writable.write(encoder.encode(await componentResponse.customBody));
+          const customBody = await componentResponse.customBody;
+          writable.write(encoder.encode(customBody));
+          cacheResponse(componentResponse, request, [customBody]);
           return false;
         }
 
@@ -494,8 +483,6 @@ async function stream(
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => {
-          console.log('[c] shouldReturnApp - 4');
-
           writable.close();
           postRequestTasks(
             'str',
@@ -507,8 +494,6 @@ async function stream(
         }, 0);
       });
     } else {
-      console.log('[c] shouldReturnApp - 5');
-
       writable.close();
       postRequestTasks(
         'str',
@@ -516,31 +501,17 @@ async function stream(
         request,
         componentResponse
       );
-      cacheResponse(componentResponse, request, savedChunks);
     }
-
-    console.log('[c] shouldReturnApp - 6');
 
     if (await isStreamingSupported()) {
       return new Response(transform.readable, responseOptions);
     }
 
-    console.log('[c] worker - bufferReadableStream');
-
     const bufferedBody = await bufferReadableStream(
-      transform.readable.getReader(),
-      (chunk: string) => {
-        console.log('[c] bufferReadableStream');
-        savedChunks.push(chunk);
-      }
+      transform.readable.getReader()
     );
-
-    console.log('[c] worker - stream - end');
-
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
-    console.log('[c] stream - node - stable');
-
     // Maintain a copy of streamed html so we can cache this at the end
     const originalWrite = response.write;
     const savedChunks: string[] = [];
@@ -700,15 +671,11 @@ async function hydrate(
       return new Response(rscReadableStreams[0]);
     }
 
-    console.log('[c] hydrate - bufferReadableStream');
-
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
     postRequestTasks('rsc', 200, request, componentResponse);
     cacheResponse(componentResponse, request, [bufferedBody]);
-
-    console.log('[c] hydrate - end');
 
     return new Response(bufferedBody, {
       headers: {
@@ -716,8 +683,6 @@ async function hydrate(
       },
     });
   } else if (response) {
-    console.log('[c] hydrate - node - stable');
-
     const originalWrite = response.write;
     const savedChunks: string[] = [];
     response.write = (...args) => {
@@ -1028,6 +993,7 @@ function cacheResponse(
       const {headers, status, statusText} =
         getResponseOptions(componentResponse);
 
+      console.log(status, Object.keys(headers));
       const url = new URL(request.url);
 
       headers.set('cache-control', componentResponse.cacheControlHeader);

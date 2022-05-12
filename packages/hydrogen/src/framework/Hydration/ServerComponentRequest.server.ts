@@ -167,20 +167,9 @@ export class ServerComponentRequest extends Request {
       );
     }
 
-    const req = new Request(url.href, this);
-
-    if (prevCacheKey && this.url === 'http://localhost:3000/') {
-      console.log('test key: ', prevCacheKey === req);
-    }
-
-    if (this.url === 'http://localhost:3000/') {
-      prevCacheKey = req;
-    }
-    return req;
+    return new Request(url.href, this);
   }
 }
-
-let prevCacheKey: Request;
 
 function mergeMapEntries(
   map1: PreloadQueriesByURL,
