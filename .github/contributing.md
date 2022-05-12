@@ -103,13 +103,13 @@ When merging PRs, please select the **Squash and Merge** option, which consolida
 
 If you are building or making changes to a component, be sure to read [What are headless components?](./contributing/headlesscomponents.md) and [How to build headless components](./contributing/howtobuildheadless.md).
 
-## Storefront API Typescript types
+## Storefront API TypeScript types
 
-You can directly import the Typescript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. If you're working on a component, you're not guarnateed to get an object in the exact shape as that type, so wrap it in `PartialDeep` which is imported from `type-fest`. This will also force the component to be more defensive in handling optional properties.
+You can directly import the TypeScript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. If you're working on a component, you're not guarnateed to get an object in the exact shape as that type, so wrap it in `PartialDeep` which is imported from `type-fest`. This will also force the component to be more defensive in handling optional properties.
 
 To update the types, follow the steps below, excluding the parts where you update the version.
 
-### Updating GraphQL and Typescript types to a new Storefront API version
+### Updating GraphQL and TypeScript types to a new Storefront API version
 
 We use `graphql-codegen` to automatically generate types for all of the Storefront API objects for a given version, and that version can be found in the `codegen.yml` file.
 
@@ -117,8 +117,8 @@ In order to update the supported Storefront API version:
 
 1. Update the Schema URL and the header comment in `codegen.yml`
 1. Run `yarn graphql-types`
-1. Fix any Typescript errors that now appear
-   1. One fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up
+1. Fix any TypeScript errors that now appear
+   1. One fast way to find them is to run `yarn build` from the monorepo root and see what TypeScript errors show up
    1. Another way is to clear the test cache with `yarn test --clearCache && yarn test`
 
 For context, updating the `codegen.yml` file and running the script does the following:

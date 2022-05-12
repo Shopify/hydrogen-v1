@@ -17,7 +17,7 @@ yarn add @shopify/hydrogen-ui
 Improve the developer experience:
 
 - [Add autocompletion for the Storefront API](#storefront-api-graphql-autocompletion)
-- [Add Typescript types for Storefront API objects](#typescript-types)
+- [Add TypeScript types for Storefront API objects](#typescript-types)
 
 ## Component Types
 
@@ -50,9 +50,9 @@ schema: node_modules/@shopify/hydrogen-ui/storefront.schema.json
 
 GraphQL autocompletion and validation will now work in `.graphql` files or in [`gql`](https://github.com/apollographql/graphql-tag) template literals!
 
-## Typescript Types
+## TypeScript Types
 
-To add Typescript types to your Storefront API objects, do the following:
+To add TypeScript types to your Storefront API objects, do the following:
 
 ```ts
 import type {Product} from '@shopify/hydrogen-ui/storefront-api-types';
@@ -60,7 +60,7 @@ import type {Product} from '@shopify/hydrogen-ui/storefront-api-types';
 const product: Product = {};
 ```
 
-You may also want to use Typescript's built-in helpers for creating your own object shapes, depending on needs. For example:
+You may also want to use TypeScript's built-in helpers for creating your own object shapes, depending on needs. For example:
 
 ```ts
 const partialProduct: Partial<Product> = {};
