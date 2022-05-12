@@ -4,9 +4,10 @@ import styles from './index.module.css';
 export default function Index() {
   return (
     <div className={styles.wrapper}>
-      <styles.StyleTag />
-      <h1>Hi</h1>
-      <Hello />
+      <>
+        <h1>Hi</h1>
+        <Hello />
+      </>
     </div>
   );
 }
