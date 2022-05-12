@@ -141,8 +141,16 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     // Check if we have cached response
     if (cache) {
       const cachedResponse = await cache.match(request.cacheKey());
-
       if (cachedResponse) {
+        // Only need to check for InMemory cache
+        // Cloudflare worker Cache API doesn't implement state-while-revalidate
+        const cacheStatus = cachedResponse.headers.get('cache');
+
+        if (cacheStatus === 'STALE') {
+          runDelayedFunction(async () => {
+            await cache.delete(request.cacheKey());
+          });
+        }
         return cachedResponse;
       }
     }
