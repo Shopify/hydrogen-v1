@@ -10,13 +10,13 @@
     "preview": "shopify hydrogen preview"
   },
   "devDependencies": {
-    "@shopify/cli": "latest",
-    "@shopify/cli-hydrogen": "latest",
-    "typescript": "^4.6.4",
-    "vite": "^2.9.0"
+    "vite": "^2.9.0",
+    "@shopify/cli": "1.0.9",
+    "@shopify/cli-hydrogen": "2.0.0",
+    "typescript": "^4.6.4"
   },
   "dependencies": {
-    "@shopify/hydrogen": "latest",
+    "@shopify/hydrogen": "^0.18.0",
     "react": "0.0.0-experimental-2bf7c02f0-20220314",
     "react-dom": "0.0.0-experimental-2bf7c02f0-20220314"
   }
