@@ -159,7 +159,11 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     }
 
     const isStreamable =
-      !isBotUA(url, request.headers.get('user-agent')) &&
+      !isBotUA(
+        url,
+        request.headers.get('user-agent'),
+        hydrogenConfig.botUserAgents
+      ) &&
       (!!streamableResponse || (await isStreamingSupported()));
 
     let template =

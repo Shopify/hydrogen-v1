@@ -74,6 +74,7 @@ export type HydrogenConfig = {
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   session?: (log: Logger) => SessionStorageAdapter;
+  botUserAgents?: Array<string>;
 };
 
 export type ClientHandlerConfig = {

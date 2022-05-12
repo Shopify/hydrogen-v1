@@ -140,6 +140,30 @@ export default async function testCases({
     expect(body).toContain('>footer!<');
   });
 
+  it('buffers HTML for custom bot', async () => {
+    const response = await fetch(getServerUrl() + '/stream', {
+      headers: {
+        'user-agent': 'custom bot',
+      },
+    });
+    const streamedChunks = [];
+
+    // This fetch response is not standard but a node-fetch polyfill.
+    // Therefore, the body is not a ReadableStream but a Node Readable.
+    // @ts-ignore
+    for await (const chunk of response.body) {
+      streamedChunks.push(chunk.toString());
+    }
+
+    expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
+
+    const body = streamedChunks.join('');
+    expect(body).toContain('var __flight=[];');
+    expect(body).toContain('__flight.push(`S1:"react.suspense"');
+    expect(body).toContain('<div c="5">');
+    expect(body).toContain('>footer!<');
+  });
+
   it('streams the RSC response', async () => {
     const response = await fetch(
       getServerUrl() +

@@ -1,3 +1,11 @@
+---
+'@shopify/hydrogen': patch
+---
+
+Hydrogen disables streaming and instead buffer renders the whole page for bot user agents.
+Now you can add custom user agents within `hydrogen.config.js` by adding a `botUserAgents` property:
+
+```ts
 import {CookieSessionStorage} from '@shopify/hydrogen';
 import {defineConfig} from '@shopify/hydrogen/config';
 
@@ -9,8 +17,6 @@ export default defineConfig({
     storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
     storefrontApiVersion: '2022-07',
   },
-  session: CookieSessionStorage('__session', {
-    expires: new Date(1749343178614),
-  }),
   botUserAgents: ['custom bot'],
 });
+```
