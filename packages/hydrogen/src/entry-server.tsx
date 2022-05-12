@@ -358,8 +358,6 @@ async function stream(
   let didError: Error | undefined;
 
   if (__WORKER__) {
-    console.log('[c] stream - worker');
-
     const onCompleteAll = defer<true>();
     const encoder = new TextEncoder();
     const transform = new TransformStream();
@@ -517,7 +515,6 @@ async function stream(
     const savedChunks: string[] = [];
     response.write = (...args) => {
       savedChunks.push(args[0].toString());
-      // console.log(args[0].toString());
       // @ts-ignore
       return originalWrite.apply(response, args);
     };
@@ -659,8 +656,6 @@ async function hydrate(
   });
 
   if (__WORKER__) {
-    console.log('[c] hydrate - worker');
-
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
@@ -687,7 +682,6 @@ async function hydrate(
     const savedChunks: string[] = [];
     response.write = (...args) => {
       savedChunks.push(args[0].toString());
-      // console.log(args[0].toString());
       // @ts-ignore
       return originalWrite.apply(response, args);
     };
@@ -989,11 +983,8 @@ function cacheResponse(
 
   if (cache && chunks.length > 0) {
     runDelayedFunction(async () => {
-      // Do not cache a result when it past the max-age
       const {headers, status, statusText} =
         getResponseOptions(componentResponse);
-
-      console.log(status, Object.keys(headers));
       const url = new URL(request.url);
 
       headers.set('cache-control', componentResponse.cacheControlHeader);
