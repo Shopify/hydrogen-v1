@@ -13,6 +13,7 @@ import ProductDetails from './rscComponent/ProductDetails.server';
 import CollectionDetails from './rscComponent/CollectionDetails.server';
 import Wizardlyhel from './rscComponent/Wizardlyhel.server';
 import Wizardlyhel2 from './rscComponent/Wizardlyhel2.server';
+import Welcome from './rscComponent/Welcome.server';
 
 import Product from './routes/product.server';
 import Collection from './routes/collection.server';
@@ -48,5 +49,6 @@ export default renderHydrogen(App, {
     Collection: Collection,
     Wizardlyhel: Wizardlyhel,
     Wizardlyhel2: Wizardlyhel2,
+    Welcome: Welcome,
   },
 });

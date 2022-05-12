@@ -173,7 +173,6 @@ export function useShopQuery<T>({
 
 function useCreateShopRequest(body: string) {
   const request = useServerRequest();
-  console.log(request.ctx.shopifyConfig);
 
   let storeDomain = '';
   let storefrontToken = '';
