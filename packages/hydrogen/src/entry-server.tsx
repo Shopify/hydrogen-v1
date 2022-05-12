@@ -693,25 +693,8 @@ async function hydrate(
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      console.log('[c] hydrate - isStreamable');
-
-      function readStream(stream: ReadableStream<Uint8Array>) {
-        console.log('[c] hydrate - readStream');
-        const savedChunks: string[] = [];
-        const reader = stream.getReader();
-        reader.read().then(function processText({done, value}): any {
-          const text = new TextDecoder().decode(value);
-          value && savedChunks.push(text);
-          if (done) {
-            cacheResponse(componentResponse, request, savedChunks);
-            return;
-          }
-          return reader.read().then(processText);
-        });
-      }
-
       const rscReadableStreams = rscReadable.tee();
-      readStream(rscReadableStreams[1]);
+      storeWorkerRSCChunks(rscReadableStreams[1], request, componentResponse);
 
       postRequestTasks('rsc', 200, request, componentResponse);
       return new Response(rscReadableStreams[0]);
@@ -1013,6 +996,25 @@ function postRequestTasks(
   request.savePreloadQueries();
 }
 
+function storeWorkerRSCChunks(
+  stream: ReadableStream<Uint8Array>,
+  request: ServerComponentRequest,
+  componentResponse: ServerComponentResponse
+) {
+  const savedChunks: string[] = [];
+  const reader = stream.getReader();
+
+  reader.read().then(function processText({done, value}): any {
+    const text = new TextDecoder().decode(value);
+    value && savedChunks.push(text);
+    if (done) {
+      cacheResponse(componentResponse, request, savedChunks);
+      return;
+    }
+    return reader.read().then(processText);
+  });
+}
+
 function cacheResponse(
   componentResponse: ServerComponentResponse,
   request: ServerComponentRequest,
@@ -1026,13 +1028,14 @@ function cacheResponse(
       const {headers, status, statusText} =
         getResponseOptions(componentResponse);
 
+      const url = new URL(request.url);
+
       headers.set('cache-control', componentResponse.cacheControlHeader);
       const currentHeader = headers.get('Content-Type');
-      if (!currentHeader) {
+      if (!currentHeader && url.pathname !== RSC_PATHNAME) {
         headers.set('Content-Type', 'text/html; charset=UTF-8');
       }
 
-      console.log('[c]', chunks.join(''));
       await cache.put(
         request.cacheKey(),
         new Response(chunks.join(''), {
