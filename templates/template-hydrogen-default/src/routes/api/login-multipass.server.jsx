@@ -1,7 +1,7 @@
-import Multipassify from 'multipassify';
+// import Multipassify from 'multipassify';
 import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
-import shopifyConfig from '../../../shopify.config';
+import shopifyConfig from '../../../hydrogen.config';
 
 export async function api(request, {session, queryShop}) {
   const searchParams = new URL(request.url).searchParams;
@@ -58,12 +58,13 @@ export async function api(request, {session, queryShop}) {
 }
 
 function encodeCustomerData(multipassSecret, customerEmail) {
+  return '';
   //Todo: this lib uses cryto that only works in NodeJS
-  const multipassify = new Multipassify(multipassSecret);
+  // const multipassify = new Multipassify(multipassSecret);
 
-  return multipassify.encode({
-    email: customerEmail,
-  });
+  // return multipassify.encode({
+  //   email: customerEmail,
+  // });
 }
 
 const LOGIN = gql`

@@ -34,6 +34,7 @@ import {
   CartLineUpdateInput,
   CartBuyerIdentityInput,
   AttributeInput,
+  CountryCode,
 } from '../../storefront-api-types';
 import {useCartFetch} from './hooks.client';
 import {CartContext} from './context';
@@ -66,8 +67,6 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
-import {useServerProps} from '../../foundation/useServerProps';
-import {ServerPropsContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
 import {ClientAnalytics} from '../../foundation/Analytics';
 
@@ -235,6 +234,7 @@ export function CartProvider({
   data: cart,
   cartFragment = defaultCartFragment,
   customerAccessToken,
+  countryCode = CountryCode.Us,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -263,10 +263,9 @@ export function CartProvider({
   cartFragment?: string;
   /* customer access token that is accessible on the server if there is a customer login */
   customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
+  /** ISO Country Code for i18n */
+  countryCode?: CountryCode;
 }) {
-  const {serverProps} = useServerProps() as ServerPropsContextValue;
-  const countryCode = serverProps?.country?.isoCode;
-
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
     : {status: 'uninitialized'};
