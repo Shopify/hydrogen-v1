@@ -7,6 +7,7 @@ import {
 } from '../../utilities';
 import type {Image as ImageType} from '../../storefront-api-types';
 import type {PartialDeep, Merge, MergeExclusive} from 'type-fest';
+import {Image as Image2} from './Image2';
 
 export interface BaseImageProps {
   /** A custom function that generates the image URL. Parameters passed into this function includes
@@ -106,15 +107,36 @@ export function Image(props: ImageProps) {
 
   /* eslint-disable hydrogen/prefer-image-component */
   return (
-    <img
-      id={imgProps.id ?? ''}
-      loading={imgProps.priority ? 'eager' : 'lazy'}
-      alt={imgProps.alt ?? ''}
-      {...passthroughProps}
-      src={srcPath}
-      width={imgProps.width ?? undefined}
-      height={imgProps.height ?? undefined}
-    />
+    <>
+      <img
+        id={imgProps.id ?? ''}
+        loading={imgProps.priority ? 'eager' : 'lazy'}
+        alt={imgProps.alt ?? ''}
+        {...passthroughProps}
+        src={srcPath}
+        width={imgProps.width ?? undefined}
+        height={imgProps.height ?? undefined}
+      />
+      <Image2
+        src=""
+        width={11}
+        height={11}
+        loader={(src, width, height, opts) => {
+          console.log(opts?.test);
+          // console.log(opts?.hey);
+          return '';
+        }}
+        loaderOptions={{test: 'hi'}}
+      />
+      <Image2
+        data={{}}
+        loader={(src, width, height, opts) => {
+          console.log(opts.crop);
+          return '';
+        }}
+        loaderOptions={{crop: 'left'}}
+      />
+    </>
   );
   /* eslint-enable hydrogen/prefer-image-component */
 }
