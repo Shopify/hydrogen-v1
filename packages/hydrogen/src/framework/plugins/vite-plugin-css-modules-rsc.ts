@@ -24,11 +24,11 @@ export default function cssModulesRsc() {
       enforce: 'post',
       transform(code, id) {
         if (id.includes('.module.') && cssMap.has(id)) {
-          return code.replace(
-            /export default .*$/gms,
+          return (
             `import React from 'react'; export const StyleTag = () => React.createElement('style', {dangerouslySetInnerHTML: {__html: ${JSON.stringify(
               cssMap.get(id)
-            )}}});`
+            )}}});` +
+            code.replace(/export default \{/gs, `export default {\n  StyleTag,`)
           );
         }
       },

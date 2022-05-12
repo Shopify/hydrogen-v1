@@ -91,7 +91,7 @@ Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-mod
 {% codeblock file, filename: 'src/components/Hello.client.jsx' %}
 
 ```js
-import * as styles from './styles.module.css';
+import styles from './styles.module.css';
 
 export default MyComponent() {
   return (

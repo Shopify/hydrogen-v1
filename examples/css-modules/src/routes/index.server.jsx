@@ -1,5 +1,5 @@
 import Hello from '../components/Hello.client';
-import * as styles from './index.module.css';
+import styles from './index.module.css';
 
 export default function Index() {
   return (
