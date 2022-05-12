@@ -86,18 +86,38 @@ If you don't want to build with Tailwind's library and instead want to write you
 
 ## CSS Modules
 
-Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module and exports them to a `StyleTag` component. To use CSS Modules in your Hydrogen app, you must render the style tag in the component along with your styles:
+Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module in your components. CSS Modules can be imported in both client and server components.
 
 {% codeblock file, filename: 'src/components/Hello.client.jsx' %}
 
 ```js
 import styles from './styles.module.css';
 
-export default MyComponent() {
+export default function MyComponent() {
   return (
     <div className={styles.wrapper}>
-      // A style is rendered inline
-      <styles.StyleTag />
+      <p>Hello</p>
+    </div>
+  );
+}
+```
+
+{% endcodeblock %}
+
+The CSS Module will be inlined in a `<style>` tag before your component.
+Currently, this tag is only added automatically for the default export in the file. If you want to render the styles in other named exports, you must do it manually by rendering `<styles.StyleTag />`:
+
+{% codeblock file, filename: 'src/components/Hello.client.jsx' %}
+
+```jsx
+import styles from './styles.module.css';
+
+export default MyComponent() {...}
+
+export function MyNamedComponent() {
+  return (
+    <div className={styles.wrapper}>
+      <styles.StyleTag /> 
       <p>Hello</p>
     </div>
   );
