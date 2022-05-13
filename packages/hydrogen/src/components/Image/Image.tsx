@@ -165,8 +165,8 @@ function ExternalImage<GenericLoaderOpts>({
 
   if (loader) {
     finalSrc = loader({src, width, height, ...loaderOptions});
-    if (typeof finalSrc !== 'string') {
-      throw new Error(`<Image/>: 'loader' did not return a string`);
+    if (typeof finalSrc !== 'string' || !finalSrc) {
+      throw new Error(`<Image/>: 'loader' did not return a valid string`);
     }
   }
 
