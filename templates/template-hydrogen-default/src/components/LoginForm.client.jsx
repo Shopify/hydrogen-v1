@@ -66,35 +66,39 @@ export default function LoginForm({shopName}) {
   }
 
   return (
-    <>
-      <h1 className="text-4xl">Sign in.</h1>
-      <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
-        {hasSubmitError && (
-          <div className="flex items-center justify-center mb-6 bg-zinc-500">
-            <p className="m-4 text-s text-white">
-              Sorry we did not recognize either your email or password. Please
-              try to sign in again or create a new account.
-            </p>
-          </div>
-        )}
-        {showEmailField && (
-          <EmailField
-            shopName={shopName}
-            email={email}
-            setEmail={setEmail}
-            emailError={emailError}
-          />
-        )}
-        {!showEmailField && <ValidEmail email={email} resetForm={resetForm} />}
-        {!showEmailField && (
-          <PasswordField
-            password={password}
-            setPassword={setPassword}
-            passwordError={passwordError}
-          />
-        )}
-      </form>
-    </>
+    <div className="flex justify-center">
+      <div className="max-w-md w-full">
+        <h1 className="text-4xl">Sign in.</h1>
+        <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
+          {hasSubmitError && (
+            <div className="flex items-center justify-center mb-6 bg-zinc-500">
+              <p className="m-4 text-s text-white">
+                Sorry we did not recognize either your email or password. Please
+                try to sign in again or create a new account.
+              </p>
+            </div>
+          )}
+          {showEmailField && (
+            <EmailField
+              shopName={shopName}
+              email={email}
+              setEmail={setEmail}
+              emailError={emailError}
+            />
+          )}
+          {!showEmailField && (
+            <ValidEmail email={email} resetForm={resetForm} />
+          )}
+          {!showEmailField && (
+            <PasswordField
+              password={password}
+              setPassword={setPassword}
+              passwordError={passwordError}
+            />
+          )}
+        </form>
+      </div>
+    </div>
   );
 }
 
