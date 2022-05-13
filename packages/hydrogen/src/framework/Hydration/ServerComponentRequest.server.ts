@@ -60,6 +60,7 @@ export class ServerComponentRequest extends Request {
     router: RouterContextData;
     buyerIpHeader?: string;
     session?: SessionSyncApi;
+    cssModules?: string[];
     [key: string]: any;
   };
 
@@ -93,6 +94,7 @@ export class ServerComponentRequest extends Request {
         normalizedRscUrl: this.normalizedUrl,
       },
       preloadQueries: new Map(),
+      cssModules: [],
     };
     this.cookies = this.parseCookies();
   }

@@ -199,7 +199,7 @@ export default async function testCases({
     expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
   });
 
-  it.only('adds style tags for CSS modules', async () => {
+  it('adds style tags for CSS modules', async () => {
     await page.goto(getServerUrl() + '/css-modules');
     expect(await page.textContent('h1')).toContain('CSS Modules');
 
@@ -210,7 +210,8 @@ export default async function testCases({
       className
     );
 
-    // Style tag is present in DOM
+    // Style tag is present in DOM, and it's unique
+    expect(await page.$$('style[data-module]')).toHaveLength(1);
     expect(await page.textContent('style')).toEqual(
       `.${className} {\n  color: red;\n}\n`
     );
