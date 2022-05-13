@@ -58,7 +58,7 @@ export async function api(request, {session, queryShop}) {
 }
 
 function encodeCustomerData(multipassSecret, customerEmail) {
-  return '';
+  return multipassSecret + customerEmail;
   //Todo: this lib uses cryto that only works in NodeJS
   // const multipassify = new Multipassify(multipassSecret);
 

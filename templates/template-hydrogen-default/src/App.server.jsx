@@ -6,6 +6,7 @@ import {
   ShopifyProvider,
   PerformanceMetrics,
   PerformanceMetricsDebug,
+  useCustomer,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import DefaultSeo from './components/DefaultSeo.server';
