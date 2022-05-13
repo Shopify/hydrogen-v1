@@ -28,12 +28,7 @@ if (globalThis.__flight && __flight.length > 0) {
         const encoder = new TextEncoder();
         const write = (chunk: string) => {
           const decodedChunk = decodeURIComponent(chunk);
-          decodedChunk
-            // 1. Duplicate the escape char (\) for already escaped characters (e.g. \n or \").
-            .replace(/\\/g, String.raw`\\`)
-            // 2. Escape existing backticks to allow wrapping the whole thing in `...`.
-            .replace(/`/g, String.raw`\``);
-          controller.enqueue(encoder.encode(chunk));
+          controller.enqueue(encoder.encode(decodedChunk));
           return 0;
         };
 
