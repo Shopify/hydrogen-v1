@@ -12,28 +12,48 @@ export default function LoginForm({shopName}) {
   const [password, setPassword] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(null);
 
-  function emailValidation(email) {
-    if (!email || email.trim() === '') {
-      return 'Please enter an email';
-    }
-  }
+  function onSubmit(event) {
+    event.preventDefault();
 
-  function onEmailSubmit() {
     setEmailError(null);
+    setHasSubmitError(false);
+    setPasswordError(null);
 
-    const error = emailValidation(email);
-
-    if (error) {
-      setEmailError(error);
-      return;
+    if (showEmailField) {
+      checkEmail(event);
+    } else {
+      checkPassword(event);
     }
-
-    setShowEmailField(false);
   }
 
-  function passwordValidation(password) {
-    if (!password || password.trim() === '') {
-      return 'Please enter a password';
+  function checkEmail(event) {
+    if (event.target.email.validity.valid) {
+      setShowEmailField(false);
+    } else {
+      setEmailError('Please enter a valid email');
+    }
+  }
+
+  async function checkPassword(event) {
+    const validity = event.target.password.validity;
+    if (validity.valid) {
+      const response = await callLoginApi({
+        email,
+        password,
+      });
+
+      if (response.error) {
+        setHasSubmitError(true);
+        resetForm();
+      } else {
+        navigate('/account');
+      }
+    } else {
+      setPasswordError(
+        validity.valueMissing
+          ? 'Please enter a password'
+          : 'Passwords must be at least 6 characters',
+      );
     }
   }
 
@@ -45,37 +65,10 @@ export default function LoginForm({shopName}) {
     setPasswordError(null);
   }
 
-  async function onPasswordSubmit() {
-    setHasSubmitError(false);
-    setPasswordError(null);
-
-    const error = passwordValidation(password);
-
-    if (error) {
-      setPasswordError(error);
-      return;
-    }
-
-    const response = await callLoginApi({
-      email,
-      password,
-    });
-
-    if (response.error) {
-      setHasSubmitError(true);
-      resetForm();
-    } else {
-      navigate('/account');
-    }
-  }
-
   return (
     <>
-      <h1 className="text-2xl font-bold">Sign in.</h1>
-      <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4"
-        onSubmit={onPasswordSubmit}
-      >
+      <h1 className="text-4xl">Sign in.</h1>
+      <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
         {hasSubmitError && (
           <div className="flex items-center justify-center mb-6 bg-zinc-500">
             <p className="m-4 text-s text-white">
@@ -90,23 +83,14 @@ export default function LoginForm({shopName}) {
             email={email}
             setEmail={setEmail}
             emailError={emailError}
-            onSubmit={onEmailSubmit}
           />
         )}
-        {!showEmailField && (
-          <ValidEmail
-            email={email}
-            onChangeEmail={() => {
-              setShowEmailField(true);
-            }}
-          />
-        )}
+        {!showEmailField && <ValidEmail email={email} resetForm={resetForm} />}
         {!showEmailField && (
           <PasswordField
             password={password}
             setPassword={setPassword}
             passwordError={passwordError}
-            onSubmit={onPasswordSubmit}
           />
         )}
       </form>
@@ -137,18 +121,19 @@ function callLoginApi({email, password}) {
     });
 }
 
-function EmailField({email, setEmail, emailError, shopName, onSubmit}) {
+function EmailField({email, setEmail, emailError, shopName}) {
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-4">
         <input
-          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline${
-            emailError ? ' border-red-500 mb-3' : ''
+          className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:outline-none focus:shadow-outline ${
+            emailError ? ' border-red-500' : 'border-gray-900'
           }`}
           id="email"
           name="email"
           type="email"
           autoComplete="email"
+          required
           placeholder="Email address"
           aria-label="Email address"
           value={email}
@@ -156,13 +141,14 @@ function EmailField({email, setEmail, emailError, shopName, onSubmit}) {
             setEmail(event.target.value);
           }}
         />
-        {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
+        <p className={`text-red-500 text-xs ${!emailError ? 'invisible' : ''}`}>
+          {emailError} &nbsp;
+        </p>
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold uppercase py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="button"
-          onClick={onSubmit}
+          className="bg-gray-900 text-white uppercase py-2 px-4 focus:outline-none focus:shadow-outline block w-full"
+          type="submit"
         >
           Next
         </button>
@@ -179,7 +165,7 @@ function EmailField({email, setEmail, emailError, shopName, onSubmit}) {
   );
 }
 
-function ValidEmail({email, onChangeEmail}) {
+function ValidEmail({email, resetForm}) {
   return (
     <div className="mb-6 flex items-center justify-between">
       <div>
@@ -196,9 +182,7 @@ function ValidEmail({email, onChangeEmail}) {
         <button
           className="inline-block align-baseline text-sm underline"
           type="button"
-          onClick={() => {
-            onChangeEmail();
-          }}
+          onClick={resetForm}
         >
           Change email
         </button>
@@ -207,14 +191,15 @@ function ValidEmail({email, onChangeEmail}) {
   );
 }
 
-function PasswordField({password, setPassword, passwordError, onSubmit}) {
+function PasswordField({password, setPassword, passwordError}) {
   return (
     <>
       <div className="mb-6">
         <input
-          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline${
-            passwordError ? ' border-red-500 mb-3' : ''
+          className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:outline-none focus:shadow-outline ${
+            passwordError ? ' border-red-500' : 'border-gray-900'
           }`}
+          autoFocus
           id="password"
           name="password"
           type="password"
@@ -222,24 +207,32 @@ function PasswordField({password, setPassword, passwordError, onSubmit}) {
           placeholder="Password"
           aria-label="Password"
           value={password}
+          minLength={8}
+          required
           onChange={(event) => {
             setPassword(event.target.value);
           }}
         />
-        {passwordError && (
-          <p className="text-red-500 text-xs">{passwordError}</p>
-        )}
+        <p
+          className={`text-red-500 text-xs ${
+            !passwordError ? 'invisible' : ''
+          }`}
+        >
+          {passwordError} &nbsp;
+        </p>
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold uppercase py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="button"
-          onClick={onSubmit}
+          className="bg-gray-900 text-white uppercase py-2 px-4 focus:outline-none focus:shadow-outline block w-full"
+          type="submit"
         >
           Sign in
         </button>
+      </div>
+      <div className="flex items-center justify-between mt-4">
+        <div className="flex-1"></div>
         <Link
-          className="inline-block align-baseline text-sm text-slate-400"
+          className="inline-block align-baseline text-sm text-gray-500"
           to="/account/recover"
         >
           Forgot password
