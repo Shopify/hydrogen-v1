@@ -102,7 +102,7 @@ export default function LoginForm({shopName}) {
   );
 }
 
-function callLoginApi({email, password}) {
+export function callLoginApi({email, password}) {
   return fetch(`/account/login`, {
     method: 'POST',
     headers: {
@@ -112,7 +112,7 @@ function callLoginApi({email, password}) {
     body: JSON.stringify({email, password}),
   })
     .then((res) => {
-      if (res.status === 200) {
+      if (res.ok) {
         return {};
       } else {
         return res.json();
