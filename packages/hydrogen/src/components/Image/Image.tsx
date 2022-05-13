@@ -108,8 +108,8 @@ function ShopifyImage({
       loading={loading ?? 'lazy'}
       {...rest}
       src={finalSrc}
-      width={finalWidth}
-      height={finalHeight}
+      width={finalWidth ?? undefined}
+      height={finalHeight ?? undefined}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
