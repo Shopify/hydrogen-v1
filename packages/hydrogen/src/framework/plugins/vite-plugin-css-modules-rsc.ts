@@ -66,7 +66,8 @@ function autoStyleTagPlugin() {
             ext: path.extname(id),
           })
         ) &&
-        cssModuleRE.test(code)
+        cssModuleRE.test(code) &&
+        code.includes('export default')
       ) {
         const s = new MagicString(code);
 
