@@ -873,9 +873,8 @@ function flightContainer({
   }
 
   if (chunk) {
-    const normalizedChunk = encodeURIComponent(chunk);
-
-    script += `__flight.push(\`${normalizedChunk}\`)`;
+    const encoder = new TextEncoder();
+    script += `__flight.push(${JSON.stringify(encoder.encode(chunk))})`;
   }
 
   return script + '</script>';

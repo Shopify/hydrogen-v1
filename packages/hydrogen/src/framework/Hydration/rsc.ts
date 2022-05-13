@@ -25,10 +25,8 @@ if (globalThis.__flight && __flight.length > 0) {
   try {
     rscReader = new ReadableStream({
       start(controller) {
-        const encoder = new TextEncoder();
         const write = (chunk: string) => {
-          const decodedChunk = decodeURIComponent(chunk);
-          controller.enqueue(encoder.encode(decodedChunk));
+          controller.enqueue(JSON.parse(chunk));
           return 0;
         };
 
