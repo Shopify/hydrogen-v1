@@ -85,15 +85,7 @@ export interface RequestHandler {
 
 export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
-    const {
-      indexTemplate,
-      streamableResponse,
-      dev,
-      cache,
-      context,
-      nonce,
-      buyerIpHeader,
-    } = options;
+    const {dev, cache, context, buyerIpHeader} = options;
 
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
@@ -145,16 +137,59 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
         // Only need to check for InMemory cache
         // Cloudflare worker Cache API doesn't implement state-while-revalidate
         const cacheStatus = cachedResponse.headers.get('cache');
+        console.log(
+          `cache ${cacheStatus?.padEnd(5)} ${decodeURIComponent(request.url)}`
+        );
 
         if (cacheStatus === 'STALE') {
           runDelayedFunction(async () => {
-            await cache.delete(request.cacheKey());
+            const lockCacheKey = request.cacheKey(true);
+            const lockCachedResponse = await cache.match(lockCacheKey);
+
+            // check if a revalidate request is already in progress
+            if (!lockCachedResponse) {
+              await cache.put(
+                lockCacheKey,
+                new Response(null, {
+                  headers: {
+                    'cache-control': 'max-age=10',
+                  },
+                })
+              );
+              try {
+                // Don't stream when creating a response for cache
+                await processRequest(
+                  url,
+                  request,
+                  sessionApi,
+                  options,
+                  componentResponse,
+                  true
+                );
+              } catch (e: any) {
+                console.log('Revalidate Error', e);
+              } finally {
+                await cache.delete(lockCacheKey);
+              }
+            }
           });
         }
         return cachedResponse;
       }
     }
+    return processRequest(url, request, sessionApi, options, componentResponse);
+  };
 
+  async function processRequest(
+    url: URL,
+    request: ServerComponentRequest,
+    sessionApi: any,
+    options: RequestHandlerOptions,
+    componentResponse: ServerComponentResponse,
+    revalidate = false
+  ) {
+    const {indexTemplate, streamableResponse, dev, nonce} = options;
+    const log = getLoggerWithContext(request);
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
     if (!isReactHydrationRequest && hydrogenConfig.routes) {
@@ -180,6 +215,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     }
 
     const isStreamable =
+      !revalidate &&
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
 
@@ -205,7 +241,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     };
 
     if (isReactHydrationRequest) {
-      return hydrate(url, params);
+      return hydrate(url, params, revalidate);
     }
 
     /**
@@ -217,8 +253,8 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       return stream(url, params);
     }
 
-    return render(url, params);
-  };
+    return render(url, params, revalidate);
+  }
 
   return handleRequest;
 };
@@ -235,7 +271,8 @@ function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
  */
 async function render(
   url: URL,
-  {App, request, template, componentResponse, nonce, log}: RendererOptions
+  {App, request, template, componentResponse, nonce, log}: RendererOptions,
+  revalidate: Boolean
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
@@ -280,7 +317,7 @@ async function render(
     });
 
     postRequestTasks('ssr', status, request, componentResponse);
-    cacheResponse(componentResponse, request, [customBody]);
+    cacheResponse(componentResponse, request, [customBody], revalidate);
 
     return response;
   }
@@ -308,7 +345,7 @@ async function render(
   });
 
   postRequestTasks('ssr', status, request, componentResponse);
-  cacheResponse(componentResponse, request, [html]);
+  cacheResponse(componentResponse, request, [html], revalidate);
 
   return response;
 }
@@ -643,7 +680,8 @@ async function hydrate(
     response,
     isStreamable,
     componentResponse,
-  }: HydratorOptions
+  }: HydratorOptions,
+  revalidate: Boolean
 ) {
   const state = parseJSON(url.searchParams.get('state') || '{}');
 
@@ -689,12 +727,18 @@ async function hydrate(
     response.writeHead(200, 'ok', {
       'cache-control': componentResponse.cacheControlHeader,
     });
+
     const stream = streamer.pipe(response) as Writable;
 
     stream.on('finish', function () {
       postRequestTasks('rsc', response.statusCode, request, componentResponse);
       cacheResponse(componentResponse, request, savedChunks);
     });
+  } else if (revalidate) {
+    // If we are caching
+    const rscReadable = rscRenderToReadableStream(AppRSC);
+    const bufferedBody = await bufferReadableStream(rscReadable.getReader());
+    cacheResponse(componentResponse, request, [bufferedBody]);
   }
 }
 
@@ -980,7 +1024,27 @@ function storeWorkerRSCChunks(
   });
 }
 
-function cacheResponse(
+async function cacheResponse(
+  componentResponse: ServerComponentResponse,
+  request: ServerComponentRequest,
+  chunks: string[],
+  revalidate?: Boolean
+) {
+  const cache = getCache();
+  console.log('cacheResponse');
+
+  if (cache && chunks.length > 0) {
+    if (revalidate) {
+      await saveCacheResponse(componentResponse, request, chunks);
+    } else {
+      runDelayedFunction(async () => {
+        await saveCacheResponse(componentResponse, request, chunks);
+      });
+    }
+  }
+}
+
+async function saveCacheResponse(
   componentResponse: ServerComponentResponse,
   request: ServerComponentRequest,
   chunks: string[]
@@ -988,25 +1052,24 @@ function cacheResponse(
   const cache = getCache();
 
   if (cache && chunks.length > 0) {
-    runDelayedFunction(async () => {
-      const {headers, status, statusText} =
-        getResponseOptions(componentResponse);
-      const url = new URL(request.url);
+    const {headers, status, statusText} = getResponseOptions(componentResponse);
+    const url = new URL(request.url);
 
-      headers.set('cache-control', componentResponse.cacheControlHeader);
-      const currentHeader = headers.get('Content-Type');
-      if (!currentHeader && url.pathname !== RSC_PATHNAME) {
-        headers.set('Content-Type', 'text/html; charset=UTF-8');
-      }
+    headers.set('cache-control', componentResponse.cacheControlHeader);
+    const currentHeader = headers.get('Content-Type');
+    if (!currentHeader && url.pathname !== RSC_PATHNAME) {
+      headers.set('Content-Type', 'text/html; charset=UTF-8');
+    }
 
-      await cache.put(
-        request.cacheKey(),
-        new Response(chunks.join(''), {
-          status,
-          statusText,
-          headers,
-        })
-      );
-    });
+    console.log(`cache PUT   ${decodeURIComponent(request.url)}`);
+
+    await cache.put(
+      request.cacheKey(),
+      new Response(chunks.join(''), {
+        status,
+        statusText,
+        headers,
+      })
+    );
   }
 }

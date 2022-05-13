@@ -6,7 +6,7 @@ import React from 'react';
 
 export class ServerComponentResponse extends Response {
   private wait = false;
-  private cacheOptions?: CachingStrategy;
+  private cacheOptions: CachingStrategy = CacheSeconds();
 
   public customStatus?: {code?: number; text?: string};
 
@@ -27,12 +27,19 @@ export class ServerComponentResponse extends Response {
     return !this.wait;
   }
 
-  cache(options: CachingStrategy) {
-    this.cacheOptions = options;
+  cache(options?: CachingStrategy) {
+    if (options) {
+      this.cacheOptions = options;
+    }
+    return this.cacheOptions;
   }
 
   get cacheControlHeader(): string {
-    return generateCacheControlHeader(this.cacheOptions || CacheSeconds());
+    return generateCacheControlHeader(this.cacheOptions);
+  }
+
+  cloneResponse(): Response {
+    return this.clone();
   }
 
   writeHead({

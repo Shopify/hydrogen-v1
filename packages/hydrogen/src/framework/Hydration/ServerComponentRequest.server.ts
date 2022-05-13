@@ -157,7 +157,7 @@ export class ServerComponentRequest extends Request {
    *
    * Developers can override this key by exporting `requestCacheKey(request)` from their `entry-server.jsx`.
    */
-  public cacheKey(): Request {
+  public cacheKey(lockKey = false): Request {
     const url = new URL(this.url);
 
     if (this.headers.has('accept-language')) {
@@ -165,6 +165,10 @@ export class ServerComponentRequest extends Request {
         'accept-language',
         this.headers.get('accept-language')!
       );
+    }
+
+    if (lockKey) {
+      url.searchParams.set('cache-lock', 'true');
     }
 
     return new Request(url.href, this);
