@@ -104,8 +104,7 @@ export default function MyComponent() {
 
 {% endcodeblock %}
 
-The CSS Module will be inlined in a `<style>` tag before your component.
-Currently, this tag is only added automatically for the default export in the file. If you want to render the styles in other named exports, you must do it manually by rendering `<styles.StyleTag />`:
+The CSS Module is inlined in a `<style>` tag before your component. Currently, this tag is only added automatically for the default export in the file. If you want to render the styles in other named exports, then you must do it manually by rendering `<styles.StyleTag />`:
 
 {% codeblock file, filename: 'src/components/Hello.client.jsx' %}
 

@@ -23,5 +23,5 @@ Optionally, update your wildcard imports to default or named imports:
 -import * as myStyles from './my.module.css';
 +import myStyles from './my.module.css';
 // Or
-+import {red, gren, blue} from './my.module.css';
++import {red, green, blue} from './my.module.css';
 ```
