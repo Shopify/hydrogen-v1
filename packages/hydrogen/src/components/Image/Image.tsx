@@ -83,7 +83,11 @@ function ShopifyImage({
     loaderOptions
   );
 
-  console.log('-----final1', finalHeight, finalWidth);
+  if (!finalWidth || !finalHeight) {
+    console.warn(
+      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties`
+    );
+  }
 
   let finalSrc = data.url;
 
@@ -94,14 +98,6 @@ function ShopifyImage({
       width: finalWidth,
       height: finalHeight,
     });
-  }
-
-  console.log('-----final2', finalHeight, finalWidth);
-
-  if (!finalWidth || !finalHeight) {
-    throw new Error(
-      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties`
-    );
   }
 
   /* eslint-disable hydrogen/prefer-image-component */
