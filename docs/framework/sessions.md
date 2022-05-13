@@ -133,8 +133,8 @@ export async function MyComponent() {
 
 {% endcodeblock %}
 
->Note:
->Session data is read-only within server components. To update or delete session data, use API functions.
+> Note:
+> Session data is read-only within server components. To update or delete session data, use API functions.
 
 ## Building custom session implementations
 
