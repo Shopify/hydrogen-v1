@@ -83,7 +83,7 @@ export default function AccountCreateForm() {
           )}
           <div className="mb-4">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:outline-none focus:shadow-outline ${
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
                 emailError ? ' border-red-500' : 'border-gray-900'
               }`}
               id="email"
@@ -108,10 +108,9 @@ export default function AccountCreateForm() {
           </div>
           <div className="mb-4">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:outline-none focus:shadow-outline ${
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
                 passwordError ? ' border-red-500' : 'border-gray-900'
               }`}
-              autoFocus
               id="password"
               name="password"
               type="password"
@@ -135,7 +134,7 @@ export default function AccountCreateForm() {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-gray-900 text-white uppercase py-2 px-4 focus:outline-none focus:shadow-outline block w-full"
+              className="bg-gray-900 text-white uppercase py-2 px-4 focus:shadow-outline block w-full"
               type="submit"
             >
               Create Account

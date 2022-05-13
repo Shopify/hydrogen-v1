@@ -16,12 +16,12 @@ export async function api(request, {queryShop}) {
   const jsonBody = await request.json();
 
   if (!jsonBody.email || jsonBody.email === '') {
-    return new Response(JSON.stringify({error: 'Incorrect email.'}), {
+    return new Response(JSON.stringify({error: 'Email required'}), {
       status: 400,
     });
   }
 
-  const {data, error} = await queryShop({
+  await queryShop({
     query: LOGIN,
     variables: {
       email: jsonBody.email,
@@ -29,21 +29,11 @@ export async function api(request, {queryShop}) {
     cache: NoStore(),
   });
 
-  if (
-    data?.customerRecover === null ||
-    data?.customerRecover?.customerUserErrors?.lenghth === 0
-  ) {
-    return new Response(null, {
-      status: 200,
-    });
-  } else {
-    return new Response(
-      JSON.stringify({
-        error: data?.customerRecover?.customerUserErrors || error,
-      }),
-      {status: 401},
-    );
-  }
+  // Ignore errors, we don't want to tell the user if the email was
+  // valid or not, thereby allowing them to determine who uses the site
+  return new Response(null, {
+    status: 200,
+  });
 }
 
 const LOGIN = gql`
