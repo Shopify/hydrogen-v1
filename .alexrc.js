@@ -15,5 +15,6 @@ module.exports = {
     'of-course',
     'special',
     'dive',
+    'attack',
   ],
 };
