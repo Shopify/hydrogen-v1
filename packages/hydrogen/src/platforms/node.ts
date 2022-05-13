@@ -15,6 +15,7 @@ import serveStatic from 'serve-static';
 import compression from 'compression';
 import bodyParser from 'body-parser';
 import connect, {NextHandleFunction} from 'connect';
+import {InMemoryCache} from '../framework/cache/in-memory';
 
 const handleRequest = entrypoint as RequestHandler;
 
@@ -25,6 +26,8 @@ type CreateServerOptions = {
 export async function createServer({cache}: CreateServerOptions = {}) {
   // @ts-ignore
   globalThis.Oxygen = {env: process.env};
+
+  const defaultCache = new InMemoryCache();
 
   const app = connect();
 
@@ -42,7 +45,7 @@ export async function createServer({cache}: CreateServerOptions = {}) {
     hydrogenMiddleware({
       getServerEntrypoint: () => handleRequest,
       indexTemplate,
-      cache,
+      cache: cache ?? defaultCache,
     })
   );
 

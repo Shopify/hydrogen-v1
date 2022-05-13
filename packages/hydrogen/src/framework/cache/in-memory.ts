@@ -5,27 +5,52 @@ type CacheMatch = {
   date: Date;
 };
 
-/**
- * This is an in-memory implementation of `Cache` that *barely*
- * works and is only meant to be used during development.
- */
-export class InMemoryCache {
-  private store: Map<string, CacheMatch>;
+export class InMemoryCache implements Cache {
+  #store: Map<string, CacheMatch>;
 
   constructor() {
-    this.store = new Map();
+    this.#store = new Map();
   }
 
-  put(request: Request, response: Response) {
+  add(request: RequestInfo): Promise<void> {
+    throw new Error('Method not implemented. Use `put` instead.');
+  }
+
+  addAll(requests: RequestInfo[]): Promise<void> {
+    throw new Error('Method not implemented. Use `put` instead.');
+  }
+
+  matchAll(
+    request?: RequestInfo,
+    options?: CacheQueryOptions
+  ): Promise<readonly Response[]> {
+    throw new Error('Method not implemented. Use `match` instead.');
+  }
+
+  async put(request: Request, response: Response) {
+    if (request.method !== 'GET') {
+      throw new TypeError('Cannot cache response to non-GET request.');
+    }
+
+    if (response.status === 206) {
+      throw new TypeError(
+        'Cannot cache response to a range request (206 Partial Content).'
+      );
+    }
+
+    if (response.headers.get('vary')?.includes('*')) {
+      throw new TypeError("Cannot cache response with 'Vary: *' header.");
+    }
+
     logCacheApiStatus('PUT-dev', request.url);
-    this.store.set(request.url, {
+    this.#store.set(request.url, {
       value: response,
       date: new Date(),
     });
   }
 
-  match(request: Request) {
-    const match = this.store.get(request.url);
+  async match(request: Request) {
+    const match = this.#store.get(request.url);
 
     if (!match) {
       logCacheApiStatus('MISS-dev', request.url);
@@ -48,7 +73,7 @@ export class InMemoryCache {
     const isMiss = age > maxAge + swr;
     if (isMiss) {
       logCacheApiStatus('MISS-dev', request.url);
-      this.store.delete(request.url);
+      this.#store.delete(request.url);
       return;
     }
 
@@ -66,15 +91,19 @@ export class InMemoryCache {
     return response;
   }
 
-  delete(request: Request) {
-    this.store.delete(request.url);
-    logCacheApiStatus('DELETE-dev', request.url);
+  async delete(request: Request) {
+    if (this.#store.has(request.url)) {
+      this.#store.delete(request.url);
+      logCacheApiStatus('DELETE-dev', request.url);
+      return true;
+    }
+    return false;
   }
 
   keys(request?: Request) {
     const cacheKeys = [] as Request[];
 
-    for (const url of this.store.keys()) {
+    for (const url of this.#store.keys()) {
       if (!request || request.url === url) {
         cacheKeys.push(new Request(url));
       }
