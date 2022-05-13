@@ -28,3 +28,7 @@ module.exports = {
 ```
 
 Then run `yarn link eslint-plugin-hydrogen` and `yarn lint:js` from within the Demo Store template (example: `/examples/template-hydrogen-default`).
+
+## Resources
+
+- [Naming conventions](https://eslint.org/docs/developer-guide/working-with-rules#rule-naming-conventions)

@@ -1,8 +1,10 @@
 import {
   createRule,
   isHook,
-  isServerComponent,
+  isServerComponentFile,
   getHookName,
+  insideReactComponent,
+  insideAPIRoute,
 } from '../../utilities';
 
 const BANNED_STATE_HOOKS = ['useState', 'useReducer'];
@@ -32,7 +34,8 @@ export const serverComponentBannedHooks = createRule({
         const hook = getHookName(node);
 
         if (
-          isServerComponent(context.getFilename()) &&
+          isServerComponentFile(context.getFilename()) &&
+          (insideReactComponent(node) || insideAPIRoute(node)) &&
           isHook(node) &&
           BANNED_HOOKS.includes(hook)
         ) {

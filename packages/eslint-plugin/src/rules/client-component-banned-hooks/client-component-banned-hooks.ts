@@ -1,7 +1,7 @@
 import {
   createRule,
   getHookName,
-  isClientComponent,
+  isClientComponentFile,
   isHook,
 } from '../../utilities';
 
@@ -30,7 +30,7 @@ export const clientComponentBannedHooks = createRule({
         const hook = getHookName(node);
 
         if (
-          isClientComponent(context.getFilename()) &&
+          isClientComponentFile(context.getFilename()) &&
           isHook(node) &&
           BANNED_HOOKS.includes(hook)
         ) {
