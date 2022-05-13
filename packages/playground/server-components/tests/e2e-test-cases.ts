@@ -12,7 +12,8 @@ type TestOptions = {
 
 // Encoded string of `JSON.stringify(encoder.encode('S1:"react.suspense"'))`
 const ENCODED_FLIGHT_START_CHUNK =
-  '{"0":83,"1":49,"2":58,"3":34,"4":114,"5":101,"6":97,"7":99,"8":116,"9":46,"10":115,"11":117,"12":115,"13":112,"14":101,"15":110,"16":115,"17":101,"18":34}';
+  // eslint-disable-next-line no-useless-escape
+  `{\"0\":83,\"1\":49,\"2\":58,\"3\":34,\"4\":114,\"5\":101,\"6\":97,\"7\":99,\"8\":116,\"9\":46,\"10\":115,\"11\":117,\"12\":115,\"13\":112,\"14\":101,\"15\":110,\"16\":115,\"17\":101,\"18\":34}`;
 
 export default async function testCases({
   getServerUrl,
