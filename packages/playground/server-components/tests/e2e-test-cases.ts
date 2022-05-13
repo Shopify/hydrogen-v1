@@ -43,6 +43,8 @@ export default async function testCases({
     expect(await page.textContent('.count')).toBe('Count is 0');
 
     await page.click('.increase');
+    // TODO: Fix test flakiness
+    await new Promise((res) => setTimeout(res, 100));
     expect(await page.textContent('.count')).toBe('Count is 1');
   });
 
