@@ -13,18 +13,14 @@ jobs:
       matrix:
         template: ['template-hydrogen-default', 'template-hydrogen-hello-world']
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           ref: 'v1.x-2022-07'
-      - name: Rename gitignore
-        run: |
+      - run: |
           mv templates/${{ matrix.template }}/_gitignore templates/${{ matrix.template }}/.gitignore
-      - name: Remove cross-env
-        run: |
+      - run: |
           sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/${{ matrix.template }}/package.json
-      - name: Push to stackblitz branch
-        run: |
+      - run: |
           git show-ref
           git config user.email "hydrogen@shopify.com"
           git config user.name "Hydrogen Bot"
