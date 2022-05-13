@@ -48,6 +48,23 @@ export default function cssModulesRsc() {
           );
         }
       },
+      renderChunk(code, chunk) {
+        if (
+          chunk.facadeModuleId &&
+          /\.client\.[jt]sx/.test(chunk.facadeModuleId)
+        ) {
+          const mods = Object.keys(chunk.modules || {});
+          if (
+            mods.some((m) => cssModuleRE.test(m) && /[?&]used(&|$)/.test(m))
+          ) {
+            // Client components that import CSS modules will preload them
+            // in the browser. By clearing this metadata, the module won't
+            // be preloaded since it is already inlined as a style tag.
+            // @ts-ignore
+            chunk.viteMetadata?.importedCss?.clear();
+          }
+        }
+      },
     },
   ] as Plugin[];
 }
