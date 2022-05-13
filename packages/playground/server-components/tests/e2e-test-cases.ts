@@ -199,7 +199,7 @@ export default async function testCases({
     expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
   });
 
-  it('adds style tags for CSS modules', async () => {
+  it.only('adds style tags for CSS modules', async () => {
     await page.goto(getServerUrl() + '/css-modules');
     expect(await page.textContent('h1')).toContain('CSS Modules');
 
@@ -212,7 +212,7 @@ export default async function testCases({
 
     // Style tag is present in DOM
     expect(await page.textContent('style')).toEqual(
-      `.${className} {\n    color: red;\n}`
+      `.${className} {\n  color: red;\n}\n`
     );
   });
 
