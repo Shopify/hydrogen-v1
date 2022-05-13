@@ -199,7 +199,7 @@ export default async function testCases({
     expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
   });
 
-  it.only('adds style tags for CSS modules', async () => {
+  it('adds style tags for CSS modules', async () => {
     await page.goto(getServerUrl() + '/css-modules');
     expect(await page.textContent('h1')).toContain('CSS Modules');
 
