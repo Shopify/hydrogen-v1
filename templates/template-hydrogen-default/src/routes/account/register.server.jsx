@@ -22,12 +22,12 @@ export async function api(request, {queryShop}) {
     jsonBody.password === ''
   ) {
     return new Response(
-      JSON.stringify({error: 'Incorrect email or password.'}),
+      JSON.stringify({error: 'Email and password are required'}),
       {status: 400},
     );
   }
 
-  const {data, error} = await queryShop({
+  const {data, error, errors} = await queryShop({
     query: LOGIN,
     variables: {
       input: {
@@ -40,7 +40,10 @@ export async function api(request, {queryShop}) {
     cache: NoStore(),
   });
 
+  const errorMessage = getErrorMessage(data, error, errors);
+
   if (
+    !errorMessage &&
     data &&
     data.customerCreate &&
     data.customerCreate.customer &&
@@ -52,7 +55,7 @@ export async function api(request, {queryShop}) {
   } else {
     return new Response(
       JSON.stringify({
-        error: data ? data.customerCreate.customerUserErrors : error,
+        error: errorMessage ?? 'Unknown error',
       }),
       {status: 401},
     );
@@ -73,3 +76,11 @@ const LOGIN = gql`
     }
   }
 `;
+
+function getErrorMessage(data, error, errors) {
+  if (error?.message) return error.message;
+  if (errors?.length) return errors[0].message ?? errors[0];
+  if (data?.customerCreate?.customerUserErrors?.length)
+    return data.customerCreate.customerUserErrors[0].message;
+  return null;
+}

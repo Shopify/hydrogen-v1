@@ -53,7 +53,7 @@ export default function AccountCreateForm() {
     });
 
     if (accountCreateResponse.error) {
-      setSubmitError(accountCreateResponse.error[0].message);
+      setSubmitError(accountCreateResponse.error);
       return;
     }
 
