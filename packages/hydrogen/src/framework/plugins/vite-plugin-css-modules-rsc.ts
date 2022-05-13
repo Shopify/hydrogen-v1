@@ -100,9 +100,11 @@ function autoStyleTagPlugin() {
         // 2. Wrap default export in a new component that includes the style tags
         s.replace(/export default/gm, 'const __defaultExport = ');
         s.append(
-          `\nexport default function ApplyStyleTags(props) {\n` +
+          `\nconst __ApplyStyleTags = function (props) {\n` +
             `  return <>{__styleTags.map(ST => <ST key={ST.key} />)}<__defaultExport {...props} /></>;` +
-            `\n}`
+            `\n}\n\n` +
+            `Object.defineProperty(__ApplyStyleTags, 'name', {value: 'ApplyStyleTags_' + (__defaultExport.name || '')});\n` +
+            `export default __ApplyStyleTags;`
         );
 
         return {
