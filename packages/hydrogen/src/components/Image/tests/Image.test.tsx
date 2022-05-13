@@ -57,15 +57,19 @@ describe('<Image />', () => {
         .spyOn(utilities, 'getShopifyImageDimensions')
         .mockReturnValue(mockDimensions);
 
-      const component = mount(<Image data={image} options={options} />);
+      const component = mount(<Image data={image} loaderOptions={options} />);
 
       expect(component).toContainReactComponent('img', {
         width: mockDimensions.width,
         height: mockDimensions.height,
       });
+
+      // @ts-expect-error clear the mock that was created earlier
+      utilities.getShopifyImageDimensions.mockClear();
     });
 
-    it('renders an `img` element without `width` and `height` attributes when invalid dimensions are provided', () => {
+    // eslint-disable-next-line jest/no-focused-tests
+    it.only('renders an `img` element without `width` and `height` attributes when invalid dimensions are provided', () => {
       const image = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
       });
@@ -78,11 +82,14 @@ describe('<Image />', () => {
       jest
         .spyOn(utilities, 'getShopifyImageDimensions')
         .mockReturnValue(mockDimensions);
-      const component = mount(<Image data={image} options={options} />);
+      const component = mount(<Image data={image} loaderOptions={options} />);
 
       const img = component.find('img');
       expect(img?.prop('width')).toBeUndefined();
       expect(img?.prop('height')).toBeUndefined();
+
+      // @ts-expect-error This was mocked out and needs to be restored
+      utilities.getShopifyImageDimensions.mockClear();
     });
 
     describe('Loaders', () => {
@@ -100,7 +107,7 @@ describe('<Image />', () => {
           .spyOn(utilities, 'shopifyImageLoader')
           .mockReturnValue(transformedSrc);
 
-        const component = mount(<Image data={image} options={options} />);
+        const component = mount(<Image data={image} loaderOptions={options} />);
 
         expect(shopifyImageLoaderSpy).toHaveBeenCalledWith({
           src: image.url,
@@ -109,6 +116,9 @@ describe('<Image />', () => {
         expect(component).toContainReactComponent('img', {
           src: transformedSrc,
         });
+
+        // @ts-expect-error This was mocked out and needs to be restored
+        utilities.shopifyImageLoader.mockClear();
       });
 
       it('uses the `loader` and a combination of both `options` and `loaderOptions` props to transform the src when these props are provided', () => {
@@ -127,7 +137,6 @@ describe('<Image />', () => {
         const component = mount(
           <Image
             data={image}
-            options={options}
             loader={loaderMock}
             loaderOptions={loaderOptions}
           />
@@ -148,6 +157,7 @@ describe('<Image />', () => {
       const image = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
       });
+
       const component = mount(
         <Image data={image} className="fancyImage" id="123" alt="Fancy image" />
       );
@@ -197,14 +207,18 @@ describe('<Image />', () => {
 
     describe('Width and height checks', () => {
       let consoleErrorSpy: jest.SpyInstance;
+      let consoleWarnSpy: jest.SpyInstance;
 
       beforeEach(() => {
         consoleErrorSpy = jest.spyOn(console, 'error');
         consoleErrorSpy.mockImplementation(() => {});
+        consoleWarnSpy = jest.spyOn(console, 'warn');
+        consoleWarnSpy.mockImplementation(() => {});
       });
 
       afterEach(() => {
         consoleErrorSpy.mockRestore();
+        consoleWarnSpy.mockRestore();
       });
 
       it('throws an error when the `width` is set to zero', () => {
@@ -215,7 +229,7 @@ describe('<Image />', () => {
         expect(() => {
           mount(<Image src={src} id={id} width={width} height={height} />);
         }).toThrowError(
-          `Image component: when 'src' is provided, 'width' and 'height' are required and needs to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
+          `<Image/>: when 'src' is provided, 'width' and 'height' are required and need to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
         );
       });
 
@@ -227,7 +241,7 @@ describe('<Image />', () => {
         expect(() => {
           mount(<Image src={src} id={id} width={width} height={height} />);
         }).toThrowError(
-          `Image component: when 'src' is provided, 'width' and 'height' are required and needs to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
+          `<Image/>: when 'src' is provided, 'width' and 'height' are required and need to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
         );
       });
     });
@@ -266,7 +280,7 @@ describe('<Image />', () => {
 
       expect(loaderMock).toHaveBeenCalledWith({
         src,
-        options: loaderOptions,
+        ...loaderOptions,
       });
     });
 

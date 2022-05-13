@@ -1,168 +1,189 @@
-import React from 'react';
-import {
-  ImageSizeOptions,
-  ImageLoaderOptions,
-  shopifyImageLoader,
-  getShopifyImageDimensions,
-} from '../../utilities';
+import * as React from 'react';
+import {getShopifyImageDimensions, shopifyImageLoader} from '../../utilities';
 import type {Image as ImageType} from '../../storefront-api-types';
-import type {PartialDeep, Merge, MergeExclusive} from 'type-fest';
-import {Image as Image2} from './Image2';
+import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
 
-export interface BaseImageProps {
-  /** A custom function that generates the image URL. Parameters passed into this function includes
-   * `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values.
-   */
-  loader?(props: ImageLoaderOptions): string;
-  /** An object of `loader` function options. For example, if the `loader` function requires a `scale` option,
-   * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
-   */
-  loaderOptions?: ImageLoaderOptions['options'];
-  /**
-   * Whether the image will be immediately loaded. Defaults to `false`. This prop should be used only when
-   * the image is visible above the fold. For more information, refer to the
-   * [Image Embed element's loading attribute](https://developer.mozilla.org/enUS/docs/Web/HTML/Element/img#attr-loading).
-   */
-  priority?: boolean;
+type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
+
+type ImageProps<GenericLoaderOpts> = Simplify<
+  ShopifyImageProps | ExternalImageProps<GenericLoaderOpts>
+>;
+
+export function Image<GenericLoaderOpts>(props: ImageProps<GenericLoaderOpts>) {
+  if (!props.data && !props.src) {
+    throw new Error(`<Image/>: requires either a 'data' or 'src' prop.`);
+  }
+
+  if (props.data && props.src) {
+    console.warn(
+      `<Image/>: using both 'data' and 'src' props is not supported; using the 'data' prop by default`
+    );
+  }
+
+  if (props.data) {
+    return <ShopifyImage {...props} />;
+  } else {
+    return <ExternalImage {...props} />;
+  }
 }
 
-interface MediaImagePropsBase extends BaseImageProps {
+export type ShopifyLoaderOptions = {
+  crop?: 'top' | 'bottom' | 'left' | 'right' | 'center';
+  scale?: 2 | 3;
+  width?: HtmlImageProps['width'] | ImageType['width'];
+  height?: HtmlImageProps['height'] | ImageType['height'];
+};
+export type ShopifyLoaderParams = Simplify<
+  ShopifyLoaderOptions & {
+    src: ImageType['url'];
+  }
+>;
+export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
   /** An object with fields that correspond to the Storefront API's
    * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
    */
   data: PartialDeep<ImageType>;
-  /** An object of image size options for Shopify CDN images. */
-  options?: ImageSizeOptions;
-}
+  /** A custom function that generates the image URL. Parameters passed into this function includes
+   * `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values.
+   */
+  loader?: (params: ShopifyLoaderParams) => string;
+  /** An object of `loader` function options. For example, if the `loader` function requires a `scale` option,
+   * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
+   */
+  loaderOptions?: ShopifyLoaderOptions;
+  /**
+   * 'src' should not be passed when 'data' is used
+   */
+  src?: never;
+};
 
-interface ExternalImagePropsBase extends BaseImageProps {
-  /** A URL string. This string can be an absolute path or a relative path depending on the `loader`. */
-  src: string;
-  /** The integer value for the width of the image. This is a required prop when `src` is present. */
-  width: number;
-  /** The integer value for the height of the image. This is a required prop when `src` is present. */
-  height: number;
-}
+function ShopifyImage({
+  data,
+  width,
+  height,
+  loading,
+  loader = shopifyImageLoader,
+  loaderOptions,
+  ...rest
+}: ShopifyImageProps) {
+  if (!data.url) {
+    throw new Error(`<Image/>: the 'data' prop requires the 'url' property`);
+  }
 
-type BaseElementProps = React.ImgHTMLAttributes<HTMLImageElement>;
-type MediaImageProps = Merge<BaseElementProps, MediaImagePropsBase>;
-type ExternalImageProps = Merge<BaseElementProps, ExternalImagePropsBase>;
-type ImageProps = MergeExclusive<MediaImageProps, ExternalImageProps>;
+  if (!data.altText && !rest.alt) {
+    console.warn(
+      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${
+        data.id ? `Image ID: ${data.id}` : ''
+      }`
+    );
+  }
 
-/**
- * The `Image` component renders an image for the Storefront API's
- * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
- */
-export function Image(props: ImageProps) {
-  const {
+  const {width: finalWidth, height: finalHeight} = getShopifyImageDimensions(
     data,
-    options,
-    src,
-    id,
-    alt,
-    width,
-    height,
-    loader,
-    loaderOptions,
-    priority,
-    ...passthroughProps
-  } = props;
+    loaderOptions
+  );
 
-  if (!data && !src) {
-    throw new Error(
-      'Image component: requires either an `data` or `src` prop.'
-    );
+  console.log('-----final1', finalHeight, finalWidth);
+
+  let finalSrc = data.url;
+
+  if (loader) {
+    finalSrc = loader({
+      ...loaderOptions,
+      src: data.url,
+      width: finalWidth,
+      height: finalHeight,
+    });
   }
 
-  if (!data && src && (!width || !height)) {
+  console.log('-----final2', finalHeight, finalWidth);
+
+  if (!finalWidth || !finalHeight) {
     throw new Error(
-      `Image component: when 'src' is provided, 'width' and 'height' are required and needs to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
+      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties`
     );
   }
-
-  const imgProps = data
-    ? convertShopifyImageData({
-        data,
-        options,
-        loader,
-        loaderOptions,
-        id,
-        alt,
-        priority,
-      })
-    : {
-        src,
-        id,
-        alt,
-        width,
-        height,
-        loader,
-        priority,
-        loaderOptions: {width, height, ...loaderOptions},
-      };
-
-  const srcPath = imgProps.loader
-    ? imgProps.loader({src: imgProps.src, options: imgProps.loaderOptions})
-    : imgProps.src;
 
   /* eslint-disable hydrogen/prefer-image-component */
   return (
-    <>
-      <img
-        id={imgProps.id ?? ''}
-        loading={imgProps.priority ? 'eager' : 'lazy'}
-        alt={imgProps.alt ?? ''}
-        {...passthroughProps}
-        src={srcPath}
-        width={imgProps.width ?? undefined}
-        height={imgProps.height ?? undefined}
-      />
-      <Image2
-        src=""
-        width={11}
-        height={11}
-        loader={(src, width, height, opts) => {
-          console.log(opts?.test);
-          // console.log(opts?.hey);
-          return '';
-        }}
-        loaderOptions={{test: 'hi'}}
-      />
-      <Image2
-        data={{}}
-        loader={(src, width, height, opts) => {
-          console.log(opts.crop);
-          return '';
-        }}
-        loaderOptions={{crop: 'left'}}
-      />
-    </>
+    <img
+      id={data.id ?? ''}
+      alt={data.altText ?? rest.alt ?? ''}
+      loading={loading ?? 'lazy'}
+      {...rest}
+      src={finalSrc}
+      width={finalWidth}
+      height={finalHeight}
+    />
   );
   /* eslint-enable hydrogen/prefer-image-component */
 }
 
-function convertShopifyImageData({
-  data,
-  options,
-  loader,
-  priority,
-  loaderOptions,
-  id: propId,
+type LoaderProps<GenericLoaderOpts> = {
+  src: HtmlImageProps['src'];
+  width: HtmlImageProps['width'];
+  height: HtmlImageProps['height'];
+  loaderOptions?: GenericLoaderOpts;
+};
+type ExternalImageProps<GenericLoaderOpts> = SetRequired<
+  HtmlImageProps,
+  'src' | 'width' | 'height'
+> & {
+  /** A custom function that generates the image URL. Parameters passed into this function includes
+   * `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values.
+   */
+  loader?: (params: LoaderProps<GenericLoaderOpts>) => string;
+  /** An object of `loader` function options. For example, if the `loader` function requires a `scale` option,
+   * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
+   */
+  loaderOptions?: GenericLoaderOpts;
+  /**
+   * 'data' should not be passed when 'src' is used
+   */
+  data?: never;
+};
+
+function ExternalImage<GenericLoaderOpts>({
+  src,
+  width,
+  height,
   alt,
-}: MediaImageProps & {id?: string; alt?: string}) {
-  const {url: src, altText, id} = data;
-  if (!src) {
-    throw new Error(`<Image/> requires 'data.url' when using the 'data' prop`);
+  loader,
+  loaderOptions,
+  loading,
+  ...rest
+}: ExternalImageProps<GenericLoaderOpts>) {
+  if (!width || !height) {
+    throw new Error(
+      `<Image/>: when 'src' is provided, 'width' and 'height' are required and need to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
+    );
   }
-  const {width, height} = getShopifyImageDimensions(data, options);
-  return {
-    src,
-    id: propId ? propId : id,
-    alt: alt ? alt : altText,
-    width,
-    height,
-    loader: loader ? loader : shopifyImageLoader,
-    loaderOptions: {...options, ...loaderOptions},
-    priority,
-  };
+
+  if (!alt) {
+    console.warn(
+      `<Image/>: when 'src' is provided, 'alt' should also be provided`
+    );
+  }
+
+  let finalSrc = src;
+
+  if (loader) {
+    finalSrc = loader({src, width, height, ...loaderOptions});
+    if (typeof finalSrc !== 'string') {
+      throw new Error(`<Image/>: 'loader' did not return a string`);
+    }
+  }
+
+  /* eslint-disable hydrogen/prefer-image-component */
+  return (
+    <img
+      {...rest}
+      src={finalSrc}
+      width={width}
+      height={height}
+      alt={alt ?? ''}
+      loading={loading ?? 'lazy'}
+    />
+  );
+  /* eslint-enable hydrogen/prefer-image-component */
 }
