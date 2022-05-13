@@ -239,14 +239,16 @@ describe('<CartProvider />', () => {
 
       wrapper.find('button')?.trigger('onClick');
 
-      expect(fetchCartMock).toHaveBeenLastCalledWith({
-        query: expect.stringContaining('mutation CartCreate'),
-        variables: {
-          input: {lines: linesMock},
-          numCartLines: undefined,
-          country: undefined,
-        },
-      });
+      expect(fetchCartMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          query: expect.stringContaining('mutation CartCreate'),
+          variables: expect.objectContaining({
+            input: expect.objectContaining({lines: linesMock}),
+            numCartLines: undefined,
+            country: 'US',
+          }),
+        })
+      );
     });
 
     it.skip('calls CartLineAddMutation with lines if cart id exist', () => {
@@ -449,10 +451,13 @@ describe('<CartProvider />', () => {
         variables: {
           input: {
             ...cartMock,
-            buyerIdentity: {customerAccessToken: mockCustomerAccessToken},
+            buyerIdentity: {
+              countryCode: 'US',
+              customerAccessToken: mockCustomerAccessToken,
+            },
           },
           numCartLines: undefined,
-          country: undefined,
+          country: 'US',
         },
       });
     });
@@ -501,10 +506,13 @@ describe('<CartProvider />', () => {
         variables: {
           input: {
             ...cartMock,
-            buyerIdentity: {customerAccessToken: cartInputCustomerAccessToken},
+            buyerIdentity: {
+              countryCode: 'US',
+              customerAccessToken: cartInputCustomerAccessToken,
+            },
           },
           numCartLines: undefined,
-          country: undefined,
+          country: 'US',
         },
       });
     });
