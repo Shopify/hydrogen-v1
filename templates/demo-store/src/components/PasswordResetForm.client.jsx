@@ -12,20 +12,28 @@ export default function PasswordResetForm({id, resetToken}) {
   const [passwordConfirm, setPasswordConfirm] = React.useState('');
   const [passwordConfirmError, setPasswordConfirmError] = React.useState(null);
 
-  function passwordValidation() {
+  function passwordValidation(form) {
     setPasswordError(null);
     setPasswordConfirmError(null);
 
     let hasError = false;
 
-    if (!password || password.trim() === '') {
+    if (!form.password.validity.valid) {
       hasError = true;
-      setPasswordError('Please enter a password');
+      setPasswordError(
+        form.password.validity.valueMissing
+          ? 'Please enter a password'
+          : 'Passwords must be at least 6 characters',
+      );
     }
 
-    if (!passwordConfirm || passwordConfirm.trim() === '') {
+    if (!form.passwordConfirm.validity.valid) {
       hasError = true;
-      setPasswordConfirmError('Please re-enter a password');
+      setPasswordConfirmError(
+        form.password.validity.valueMissing
+          ? 'Please re-enter a password'
+          : 'Passwords must be at least 6 characters',
+      );
     }
 
     if (password !== passwordConfirm) {
@@ -36,8 +44,10 @@ export default function PasswordResetForm({id, resetToken}) {
     return hasError;
   }
 
-  async function onSubmit() {
-    if (passwordValidation()) {
+  async function onSubmit(event) {
+    event.preventDefault();
+
+    if (passwordValidation(event.target)) {
       return;
     }
 
@@ -56,69 +66,80 @@ export default function PasswordResetForm({id, resetToken}) {
   }
 
   return (
-    <>
-      <h1 className="text-2xl font-bold">Reset Password.</h1>
-      <p>Enter a new password for your account.</p>
-      <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4"
-        onSubmit={onSubmit}
-      >
-        {submitError && (
-          <div className="flex items-center justify-center mb-6 bg-zinc-500">
-            <p className="m-4 text-s text-white">{submitError}</p>
+    <div className="flex justify-center">
+      <div className="max-w-md w-full">
+        <h1 className="text-4xl">Reset Password.</h1>
+        <p>Enter a new password for your account.</p>
+        <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
+          {submitError && (
+            <div className="flex items-center justify-center mb-6 bg-zinc-500">
+              <p className="m-4 text-s text-white">{submitError}</p>
+            </div>
+          )}
+          <div className="mb-4">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+                passwordError ? ' border-red-500' : 'border-gray-900'
+              }`}
+              autoFocus
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Password"
+              aria-label="Password"
+              value={password}
+              minLength={8}
+              required
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+            <p
+              className={`text-red-500 text-xs ${
+                !passwordError ? 'invisible' : ''
+              }`}
+            >
+              {passwordError} &nbsp;
+            </p>
           </div>
-        )}
-        <div className="mb-6">
-          <input
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline${
-              passwordError ? ' border-red-500 mb-3' : ''
-            }`}
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Password"
-            aria-label="Password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          {passwordError && (
-            <p className="text-red-500 text-xs">{passwordError}</p>
-          )}
-        </div>
-        <div className="mb-6">
-          <input
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline${
-              passwordConfirmError ? ' border-red-500 mb-3' : ''
-            }`}
-            id="passwordConfirm"
-            name="passwordConfirm"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Re-enter password"
-            aria-label="Re-enter password"
-            value={passwordConfirm}
-            onChange={(event) => {
-              setPasswordConfirm(event.target.value);
-            }}
-          />
-          {passwordConfirmError && (
-            <p className="text-red-500 text-xs">{passwordConfirmError}</p>
-          )}
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold uppercase py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-            onClick={onSubmit}
-          >
-            Save
-          </button>
-        </div>
-      </form>
-    </>
+          <div className="mb-4">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+                passwordConfirmError ? ' border-red-500' : 'border-gray-900'
+              }`}
+              id="passwordConfirm"
+              name="passwordConfirm"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Re-enter password"
+              aria-label="Re-enter password"
+              value={passwordConfirm}
+              required
+              minLength={8}
+              onChange={(event) => {
+                setPasswordConfirm(event.target.value);
+              }}
+            />
+            <p
+              className={`text-red-500 text-xs ${
+                !passwordConfirmError ? 'invisible' : ''
+              }`}
+            >
+              {passwordConfirmError} &nbsp;
+            </p>
+          </div>
+          <div className="flex items-center justify-between">
+            <button
+              className="bg-gray-900 text-white uppercase py-2 px-4 focus:shadow-outline block w-full"
+              type="submit"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
 
