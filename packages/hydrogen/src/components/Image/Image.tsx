@@ -45,8 +45,9 @@ export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
    * at the same time. If both `src` and `data` are passed, then `data` takes priority.
    */
   data: PartialDeep<ImageType>;
-  /** A custom function that generates the image URL. Parameters passed into this function includes
-   * `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values.
+  /** A custom function that generates the image URL. Parameters passed in 
+   * are either `ShopifyLoaderParams` if using the `data` prop, or the 
+   * `LoaderOptions` object that you pass to `loaderOptions`.
    */
   loader?: (params: ShopifyLoaderParams) => string;
   /** An object of `loader` function options. For example, if the `loader` function requires a `scale` option,
