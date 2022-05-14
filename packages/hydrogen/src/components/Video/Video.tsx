@@ -6,7 +6,7 @@ import type {PartialDeep} from 'type-fest';
 interface VideoProps {
   /** An object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video). */
   data: PartialDeep<VideoType>;
-  /** An object of image size options for the video's `previewImage`. */
+  /** An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL. */
   previewImageOptions?: Parameters<typeof shopifyImageLoader>[0];
 }
 
