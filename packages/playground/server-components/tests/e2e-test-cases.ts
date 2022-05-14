@@ -44,7 +44,7 @@ export default async function testCases({
 
     await page.click('.increase');
     // TODO: Fix test flakiness
-    await new Promise((res) => setTimeout(res, 300));
+    await new Promise((res) => setTimeout(res, 1000));
     expect(await page.textContent('.count')).toBe('Count is 1');
   });
 
@@ -407,12 +407,12 @@ export default async function testCases({
       await page.click('#increase');
 
       // TODO: Fix test flakiness
-      await new Promise((res) => setTimeout(res, 300));
+      await new Promise((res) => setTimeout(res, 1000));
       expect(await page.textContent('#counter')).toEqual('1');
       await page.click('#increase');
 
       // TODO: Fix test flakiness
-      await new Promise((res) => setTimeout(res, 300));
+      await new Promise((res) => setTimeout(res, 1000));
       expect(await page.textContent('#counter')).toEqual('2');
     });
   });
