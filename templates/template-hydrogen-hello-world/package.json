@@ -15,7 +15,7 @@
     "@shopify/cli-hydrogen": "2.0.0"
   },
   "dependencies": {
-    "@shopify/hydrogen": "^0.18.0",
+    "@shopify/hydrogen": "^0.19.0",
     "react": "0.0.0-experimental-2bf7c02f0-20220314",
     "react-dom": "0.0.0-experimental-2bf7c02f0-20220314"
   }
