@@ -118,6 +118,11 @@ function ShopifyImage({
 }
 
 type LoaderProps<GenericLoaderOpts> = {
+  /** A URL string. This string can be an absolute path or a relative path depending 
+   * on the `loader`. The `src` prop is required if `data` isn't used, but both 
+   * props shouldn't be used at the same time. If both `src` and `data` are passed, 
+   * then `data` takes priority. 
+   */
   src: HtmlImageProps['src'];
   width: HtmlImageProps['width'];
   height: HtmlImageProps['height'];
