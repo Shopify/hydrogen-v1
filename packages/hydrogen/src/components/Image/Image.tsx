@@ -157,7 +157,7 @@ type ExternalImageProps<GenericLoaderOpts> = SetRequired<
    */
   loaderOptions?: GenericLoaderOpts;
   /**
-   * 'data' should not be passed when 'src' is used
+   * 'data' shouldn't be passed when 'src' is used.
    */
   data?: never;
 };
