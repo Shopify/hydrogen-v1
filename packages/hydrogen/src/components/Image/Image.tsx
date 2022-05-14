@@ -39,8 +39,10 @@ export type ShopifyLoaderParams = Simplify<
   }
 >;
 export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
-  /** An object with fields that correspond to the Storefront API's
-   * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
+  /** An object with fields that correspond to the Storefront API's 
+   * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image). 
+   * The `data` prop is required if `src` isn't used, but both props shouldn't be used 
+   * at the same time. If both `src` and `data` are passed, then `data` takes priority.
    */
   data: PartialDeep<ImageType>;
   /** A custom function that generates the image URL. Parameters passed into this function includes
