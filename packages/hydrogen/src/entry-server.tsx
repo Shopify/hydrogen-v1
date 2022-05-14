@@ -216,7 +216,7 @@ async function render(
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
-  const {AppSSR, rscReadable} = buildAppSSR(
+  const {AppSSR} = buildAppSSR(
     {
       App,
       log,
