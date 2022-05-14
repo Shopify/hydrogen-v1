@@ -118,8 +118,8 @@ export default async function testCases({
     expect(streamedChunks.length).toBeGreaterThan(1); // Streamed more than 1 chunk
 
     const body = streamedChunks.join('');
-    expect(body).toContain('var __flight=[];');
-    expect(body).toContain(`__flight.push(${ENCODED_FLIGHT_START_CHUNK}`);
+    // expect(body).toContain('var __flight=[];');
+    // expect(body).toContain(`__flight.push(${ENCODED_FLIGHT_START_CHUNK}`);
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -140,8 +140,8 @@ export default async function testCases({
     // expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
 
     const body = streamedChunks.join('');
-    expect(body).toContain('var __flight=[];');
-    expect(body).toContain(`__flight.push(${ENCODED_FLIGHT_START_CHUNK}`);
+    // expect(body).toContain('var __flight=[];');
+    // expect(body).toContain(`__flight.push(${ENCODED_FLIGHT_START_CHUNK}`);
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
