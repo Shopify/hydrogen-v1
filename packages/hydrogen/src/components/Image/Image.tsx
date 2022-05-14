@@ -133,6 +133,9 @@ type LoaderProps<GenericLoaderOpts> = {
    * when `src` is present.
    */
   width: HtmlImageProps['width'];
+  /** The integer or string value for the height of the image. This is a required prop 
+   * when `src` is present. 
+   */
   height: HtmlImageProps['height'];
   /** An object of `loader` function options. For example, if the `loader` function 
    * requires a `scale` option, then the value can be a property of the 
