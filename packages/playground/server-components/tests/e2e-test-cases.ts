@@ -44,7 +44,7 @@ export default async function testCases({
 
     await page.click('.increase');
     // TODO: Fix test flakiness
-    await new Promise((res) => setTimeout(res, 100));
+    await new Promise((res) => setTimeout(res, 300));
     expect(await page.textContent('.count')).toBe('Count is 1');
   });
 
@@ -405,8 +405,14 @@ export default async function testCases({
       await page.goto(getServerUrl() + '/html-form');
       expect(await page.textContent('#counter')).toEqual('0');
       await page.click('#increase');
+
+      // TODO: Fix test flakiness
+      await new Promise((res) => setTimeout(res, 300));
       expect(await page.textContent('#counter')).toEqual('1');
       await page.click('#increase');
+
+      // TODO: Fix test flakiness
+      await new Promise((res) => setTimeout(res, 300));
       expect(await page.textContent('#counter')).toEqual('2');
     });
   });
