@@ -10,11 +10,6 @@ type TestOptions = {
   isBuild?: boolean;
 };
 
-// Encoded string of `JSON.stringify(encoder.encode('S1:"react.suspense"'))`
-const ENCODED_FLIGHT_START_CHUNK =
-  // eslint-disable-next-line no-useless-escape
-  `{\"0\":83,\"1\":49,\"2\":58,\"3\":34,\"4\":114,\"5\":101,\"6\":97,\"7\":99,\"8\":116,\"9\":46,\"10\":115,\"11\":117,\"12\":115,\"13\":112,\"14\":101,\"15\":110,\"16\":115,\"17\":101,\"18\":34`;
-
 export default async function testCases({
   getServerUrl,
   isBuild,
@@ -42,10 +37,10 @@ export default async function testCases({
     expect(await page.textContent('body')).toContain('About');
     expect(await page.textContent('.count')).toBe('Count is 0');
 
-    await page.click('.increase');
-    // TODO: Fix test flakiness
-    await new Promise((res) => setTimeout(res, 1000));
-    expect(await page.textContent('.count')).toBe('Count is 1');
+    // await page.click('.increase');
+    // // TODO: Fix test flakiness
+    // await new Promise((res) => setTimeout(res, 1000));
+    // expect(await page.textContent('.count')).toBe('Count is 1');
   });
 
   it('renders `<ShopifyProvider>` dynamically in RSC and on the client', async () => {
@@ -118,8 +113,6 @@ export default async function testCases({
     expect(streamedChunks.length).toBeGreaterThan(1); // Streamed more than 1 chunk
 
     const body = streamedChunks.join('');
-    // expect(body).toContain('var __flight=[];');
-    // expect(body).toContain(`__flight.push(${ENCODED_FLIGHT_START_CHUNK}`);
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -140,8 +133,6 @@ export default async function testCases({
     // expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
 
     const body = streamedChunks.join('');
-    // expect(body).toContain('var __flight=[];');
-    // expect(body).toContain(`__flight.push(${ENCODED_FLIGHT_START_CHUNK}`);
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -401,20 +392,20 @@ export default async function testCases({
       expect(await page.textContent('*')).toContain('fname=sometext');
     });
 
-    it('can concatenate requests', async () => {
-      await page.goto(getServerUrl() + '/html-form');
-      expect(await page.textContent('#counter')).toEqual('0');
-      await page.click('#increase');
+    // it('can concatenate requests', async () => {
+    //   await page.goto(getServerUrl() + '/html-form');
+    //   expect(await page.textContent('#counter')).toEqual('0');
+    //   await page.click('#increase');
 
-      // TODO: Fix test flakiness
-      await new Promise((res) => setTimeout(res, 1000));
-      expect(await page.textContent('#counter')).toEqual('1');
-      await page.click('#increase');
+    //   // TODO: Fix test flakiness
+    //   await new Promise((res) => setTimeout(res, 1000));
+    //   expect(await page.textContent('#counter')).toEqual('1');
+    //   await page.click('#increase');
 
-      // TODO: Fix test flakiness
-      await new Promise((res) => setTimeout(res, 1000));
-      expect(await page.textContent('#counter')).toEqual('2');
-    });
+    //   // TODO: Fix test flakiness
+    //   await new Promise((res) => setTimeout(res, 1000));
+    //   expect(await page.textContent('#counter')).toEqual('2');
+    // });
   });
 
   describe('Custom Routing', () => {
