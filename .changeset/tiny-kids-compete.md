@@ -2,4 +2,4 @@
 '@shopify/hydrogen': patch
 ---
 
-Encode flight response
+Remove flight chunk
