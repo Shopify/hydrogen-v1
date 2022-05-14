@@ -216,7 +216,7 @@ async function render(
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
-  const {AppSSR, rscReadable} = buildAppSSR(
+  const {AppSSR} = buildAppSSR(
     {
       App,
       log,
@@ -233,10 +233,9 @@ async function render(
     return template;
   }
 
-  let [html, flight] = await Promise.all([
-    renderToBufferedString(AppSSR, {log, nonce}).catch(onErrorShell),
-    bufferReadableStream(rscReadable.getReader()).catch(() => null),
-  ]);
+  let html = await renderToBufferedString(AppSSR, {log, nonce}).catch(
+    onErrorShell
+  );
 
   const {headers, status, statusText} = getResponseOptions(componentResponse);
 
@@ -261,18 +260,6 @@ async function render(
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
-
-  if (flight) {
-    html = html.replace(
-      '</body>',
-      () =>
-        `${flightContainer({
-          init: true,
-          nonce,
-          chunk: flight as string,
-        })}</body>`
-    );
-  }
 
   postRequestTasks('ssr', status, request, componentResponse);
 
@@ -320,13 +307,7 @@ async function stream(
   const rscToScriptTagReadable = new ReadableStream({
     start(controller) {
       log.trace('rsc start chunks');
-      let init = true;
-      const encoder = new TextEncoder();
-      bufferReadableStream(rscReadable.getReader(), (chunk) => {
-        const scriptTag = flightContainer({init, chunk, nonce});
-        controller.enqueue(encoder.encode(scriptTag));
-        init = false;
-      }).then(() => {
+      bufferReadableStream(rscReadable.getReader()).then(() => {
         log.trace('rsc finish chunks');
         return controller.close();
       });
@@ -856,33 +837,6 @@ async function createNodeWriter() {
   const streamImport = __WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
-}
-
-function flightContainer({
-  init,
-  chunk,
-  nonce,
-}: {
-  chunk?: string;
-  init?: boolean;
-  nonce?: string;
-}) {
-  let script = `<script${nonce ? ` nonce="${nonce}"` : ''}>`;
-  if (init) {
-    script += 'var __flight=[];';
-  }
-
-  if (chunk) {
-    const normalizedChunk = chunk
-      // 1. Duplicate the escape char (\) for already escaped characters (e.g. \n or \").
-      .replace(/\\/g, String.raw`\\`)
-      // 2. Escape existing backticks to allow wrapping the whole thing in `...`.
-      .replace(/`/g, String.raw`\``);
-
-    script += `__flight.push(\`${normalizedChunk}\`)`;
-  }
-
-  return script + '</script>';
 }
 
 function postRequestTasks(
