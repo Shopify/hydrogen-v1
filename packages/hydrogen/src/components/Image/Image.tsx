@@ -39,22 +39,22 @@ export type ShopifyLoaderParams = Simplify<
   }
 >;
 export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
-  /** An object with fields that correspond to the Storefront API's 
-   * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image). 
-   * The `data` prop is required if `src` isn't used, but both props shouldn't be used 
+  /** An object with fields that correspond to the Storefront API's
+   * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
+   * The `data` prop is required if `src` isn't used, but both props shouldn't be used
    * at the same time. If both `src` and `data` are passed, then `data` takes priority.
    */
   data: PartialDeep<ImageType>;
-  /** A custom function that generates the image URL. Parameters passed in 
-   * are either `ShopifyLoaderParams` if using the `data` prop, or the 
+  /** A custom function that generates the image URL. Parameters passed in
+   * are either `ShopifyLoaderParams` if using the `data` prop, or the
    * `LoaderOptions` object that you pass to `loaderOptions`.
    */
   loader?: (params: ShopifyLoaderParams) => string;
-  /** An object of `loader` function options. For example, if the `loader` function 
-   * requires a `scale` option, then the value can be a property of the 
-   * `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop 
-   * is used, the object shape will be `ShopifyLoaderOptions`. When the `src` 
-   * prop is used, the data shape is whatever you define it to be, and this shape 
+  /** An object of `loader` function options. For example, if the `loader` function
+   * requires a `scale` option, then the value can be a property of the
+   * `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop
+   * is used, the object shape will be `ShopifyLoaderOptions`. When the `src`
+   * prop is used, the data shape is whatever you define it to be, and this shape
    * will be passed to `loader`.
    */
   loaderOptions?: ShopifyLoaderOptions;
@@ -123,25 +123,25 @@ function ShopifyImage({
 }
 
 type LoaderProps<GenericLoaderOpts> = {
-  /** A URL string. This string can be an absolute path or a relative path depending 
-   * on the `loader`. The `src` prop is required if `data` isn't used, but both 
-   * props shouldn't be used at the same time. If both `src` and `data` are passed, 
-   * then `data` takes priority. 
+  /** A URL string. This string can be an absolute path or a relative path depending
+   * on the `loader`. The `src` prop is required if `data` isn't used, but both
+   * props shouldn't be used at the same time. If both `src` and `data` are passed,
+   * then `data` takes priority.
    */
   src: HtmlImageProps['src'];
-  /** The integer or string value for the width of the image. This is a required prop 
+  /** The integer or string value for the width of the image. This is a required prop
    * when `src` is present.
    */
   width: HtmlImageProps['width'];
-  /** The integer or string value for the height of the image. This is a required prop 
-   * when `src` is present. 
+  /** The integer or string value for the height of the image. This is a required prop
+   * when `src` is present.
    */
   height: HtmlImageProps['height'];
-  /** An object of `loader` function options. For example, if the `loader` function 
-   * requires a `scale` option, then the value can be a property of the 
-   * `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop 
-   * is used, the object shape will be `ShopifyLoaderOptions`. When the `src` 
-   * prop is used, the data shape is whatever you define it to be, and this shape 
+  /** An object of `loader` function options. For example, if the `loader` function
+   * requires a `scale` option, then the value can be a property of the
+   * `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop
+   * is used, the object shape will be `ShopifyLoaderOptions`. When the `src`
+   * prop is used, the data shape is whatever you define it to be, and this shape
    * will be passed to `loader`.
    */
   loaderOptions?: GenericLoaderOpts;
@@ -150,16 +150,16 @@ type ExternalImageProps<GenericLoaderOpts> = SetRequired<
   HtmlImageProps,
   'src' | 'width' | 'height'
 > & {
-  /** A custom function that generates the image URL. Parameters passed in 
-   * are either `ShopifyLoaderParams` if using the `data` prop, or the 
+  /** A custom function that generates the image URL. Parameters passed in
+   * are either `ShopifyLoaderParams` if using the `data` prop, or the
    * `LoaderOptions` object that you pass to `loaderOptions`.
    */
   loader?: (params: LoaderProps<GenericLoaderOpts>) => string;
-  /** An object of `loader` function options. For example, if the `loader` function 
-   * requires a `scale` option, then the value can be a property of the 
-   * `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop 
-   * is used, the object shape will be `ShopifyLoaderOptions`. When the `src` 
-   * prop is used, the data shape is whatever you define it to be, and this shape 
+  /** An object of `loader` function options. For example, if the `loader` function
+   * requires a `scale` option, then the value can be a property of the
+   * `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop
+   * is used, the object shape will be `ShopifyLoaderOptions`. When the `src`
+   * prop is used, the data shape is whatever you define it to be, and this shape
    * will be passed to `loader`.
    */
   loaderOptions?: GenericLoaderOpts;
