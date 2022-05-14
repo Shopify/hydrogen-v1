@@ -129,6 +129,9 @@ type LoaderProps<GenericLoaderOpts> = {
    * then `data` takes priority. 
    */
   src: HtmlImageProps['src'];
+  /** The integer or string value for the width of the image. This is a required prop 
+   * when `src` is present.
+   */
   width: HtmlImageProps['width'];
   height: HtmlImageProps['height'];
   /** An object of `loader` function options. For example, if the `loader` function 
