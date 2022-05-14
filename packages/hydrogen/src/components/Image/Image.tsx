@@ -59,7 +59,7 @@ export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
    */
   loaderOptions?: ShopifyLoaderOptions;
   /**
-   * 'src' should not be passed when 'data' is used
+   * 'src' shouldn't be passed when 'data' is used.
    */
   src?: never;
 };
