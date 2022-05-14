@@ -144,8 +144,9 @@ type ExternalImageProps<GenericLoaderOpts> = SetRequired<
   HtmlImageProps,
   'src' | 'width' | 'height'
 > & {
-  /** A custom function that generates the image URL. Parameters passed into this function includes
-   * `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values.
+  /** A custom function that generates the image URL. Parameters passed in 
+   * are either `ShopifyLoaderParams` if using the `data` prop, or the 
+   * `LoaderOptions` object that you pass to `loaderOptions`.
    */
   loader?: (params: LoaderProps<GenericLoaderOpts>) => string;
   /** An object of `loader` function options. For example, if the `loader` function 
