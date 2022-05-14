@@ -143,8 +143,12 @@ type ExternalImageProps<GenericLoaderOpts> = SetRequired<
    * `src` and an `options` object that contains the provided `width`, `height` and `loaderOptions` values.
    */
   loader?: (params: LoaderProps<GenericLoaderOpts>) => string;
-  /** An object of `loader` function options. For example, if the `loader` function requires a `scale` option,
-   * then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`).
+  /** An object of `loader` function options. For example, if the `loader` function 
+   * requires a `scale` option, then the value can be a property of the 
+   * `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop 
+   * is used, the object shape will be `ShopifyLoaderOptions`. When the `src` 
+   * prop is used, the data shape is whatever you define it to be, and this shape 
+   * will be passed to `loader`.
    */
   loaderOptions?: GenericLoaderOpts;
   /**
