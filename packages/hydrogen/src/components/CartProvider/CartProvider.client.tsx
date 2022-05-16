@@ -26,15 +26,15 @@ import {
   CartAttributesUpdate,
   CartDiscountCodesUpdate,
   CartQuery,
-} from '../../graphql/graphql-constants';
+} from './cart-queries';
 import {
   CartLineInput,
   CartInput,
   CartLineUpdateInput,
   CartBuyerIdentityInput,
   AttributeInput,
-} from '../../graphql/types/types';
-import {useCartFetch} from './hooks';
+} from '../../storefront-api-types';
+import {useCartFetch} from './hooks.client';
 import {CartContext} from './context';
 import {
   CartLineRemoveMutationVariables,
@@ -65,8 +65,10 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
-import {useServerState} from '../../foundation/useServerState';
-import {ServerStateContextValue} from '../../foundation';
+import {useServerProps} from '../../foundation/useServerProps';
+import {ServerPropsContextValue} from '../../foundation';
+import type {CartWithActions} from './types';
+import {ClientAnalytics} from '../../foundation/Analytics';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
@@ -229,34 +231,34 @@ export function CartProvider({
   onBuyerIdentityUpdate,
   onAttributesUpdate,
   onDiscountCodesUpdate,
-  cart,
+  data: cart,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
   numCartLines?: number;
-  /** A callback that is run automatically when a cart is created. */
+  /** A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API. */
   onCreate?: () => void;
-  /** A callback that is run automatically when a new cart line is added. */
+  /** A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API. */
   onLineAdd?: () => void;
-  /** A callback that is run automatically when a cart line is removed. */
+  /** A callback that is invoked when the process to remove a line item to the cart begins, but before the line item is removed from the Storefront API. */
   onLineRemove?: () => void;
-  /** A callback that is run automatically when a cart line is updated. */
+  /** A callback that is invoked when the process to update a line item in the cart begins, but before the line item is updated in the Storefront API. */
   onLineUpdate?: () => void;
-  /** A callback that is run automatically when the cart note is updated. */
+  /** A callback that is invoked when the process to add or update a note in the cart begins, but before the note is added or updated in the Storefront API. */
   onNoteUpdate?: () => void;
-  /** A callback that is run automatically when the cart's buyer identity is updated. */
+  /** A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API. */
   onBuyerIdentityUpdate?: () => void;
-  /** A callback that is run automatically when the cart's buyer identity is updated. */
+  /** A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API. */
   onAttributesUpdate?: () => void;
-  /** A callback that is run automatically when the cart's discount codes are updated. */
+  /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
   /**
-   * A cart object from the Storefront API to populate the initial state of the provider.
+   * An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).
    */
-  cart?: CartFragmentFragment;
+  data?: CartFragmentFragment;
 }) {
-  const {serverState} = useServerState() as ServerStateContextValue;
-  const countryCode = serverState?.country?.isoCode;
+  const {serverProps} = useServerProps() as ServerPropsContextValue;
+  const countryCode = serverProps?.country?.isoCode;
 
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
@@ -319,11 +321,21 @@ export function CartProvider({
       if (error) {
         dispatch({
           type: 'reject',
-          error: error,
+          error,
         });
       }
 
       if (data?.cartCreate?.cart) {
+        if (cart.lines) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.ADD_TO_CART,
+            true,
+            {
+              addedCartLines: cart.lines,
+              cart: data.cartCreate.cart,
+            }
+          );
+        }
         dispatch({
           type: 'resolve',
           cart: cartFromGraphQL(data.cartCreate.cart),
@@ -350,7 +362,7 @@ export function CartProvider({
           query: CartLineAdd,
           variables: {
             cartId: state.cart.id!,
-            lines: lines,
+            lines,
             numCartLines,
             country: countryCode,
           },
@@ -359,11 +371,19 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
         if (data?.cartLinesAdd?.cart) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.ADD_TO_CART,
+            true,
+            {
+              addedCartLines: lines,
+              cart: data.cartLinesAdd.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesAdd.cart),
@@ -388,7 +408,7 @@ export function CartProvider({
           query: CartLineRemove,
           variables: {
             cartId: state.cart.id!,
-            lines: lines,
+            lines,
             numCartLines,
             country: countryCode,
           },
@@ -402,6 +422,14 @@ export function CartProvider({
         }
 
         if (data?.cartLinesRemove?.cart) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.REMOVE_FROM_CART,
+            true,
+            {
+              removedCartLines: lines,
+              cart: data.cartLinesRemove.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesRemove.cart),
@@ -426,7 +454,7 @@ export function CartProvider({
           query: CartLineUpdate,
           variables: {
             cartId: state.cart.id!,
-            lines: lines,
+            lines,
             numCartLines,
             country: countryCode,
           },
@@ -434,11 +462,19 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
         if (data?.cartLinesUpdate?.cart) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.UPDATE_CART,
+            true,
+            {
+              updatedCartLines: lines,
+              oldCart: state.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartLinesUpdate.cart),
@@ -463,7 +499,7 @@ export function CartProvider({
           query: CartNoteUpdate,
           variables: {
             cartId: state.cart.id!,
-            note: note,
+            note,
             numCartLines,
             country: countryCode,
           },
@@ -472,7 +508,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -510,7 +546,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -539,7 +575,7 @@ export function CartProvider({
           query: CartAttributesUpdate,
           variables: {
             cartId: state.cart.id!,
-            attributes: attributes,
+            attributes,
             numCartLines,
             country: countryCode,
           },
@@ -548,7 +584,7 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
@@ -580,7 +616,7 @@ export function CartProvider({
           query: CartDiscountCodesUpdate,
           variables: {
             cartId: state.cart.id!,
-            discountCodes: discountCodes,
+            discountCodes,
             numCartLines,
             country: countryCode,
           },
@@ -589,11 +625,19 @@ export function CartProvider({
         if (error) {
           dispatch({
             type: 'reject',
-            error: error,
+            error,
           });
         }
 
         if (data?.cartDiscountCodesUpdate?.cart) {
+          ClientAnalytics.publish(
+            ClientAnalytics.eventNames.DISCOUNT_CODE_UPDATED,
+            true,
+            {
+              updatedDiscountCodes: discountCodes,
+              cart: data.cartDiscountCodesUpdate.cart,
+            }
+          );
           dispatch({
             type: 'resolve',
             cart: cartFromGraphQL(data.cartDiscountCodesUpdate.cart),
@@ -625,7 +669,7 @@ export function CartProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryCode]);
 
-  const cartContextValue = useMemo(() => {
+  const cartContextValue = useMemo<CartWithActions>(() => {
     return {
       ...('cart' in state
         ? state.cart
@@ -636,9 +680,19 @@ export function CartProvider({
           }),
       status: state.status,
       error: 'error' in state ? state.error : undefined,
+      totalQuantity:
+        'cart' in state
+          ? state.cart.lines.reduce((previous, current) => {
+              return previous + current.quantity;
+            }, 0)
+          : 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
-        addLineItem(lines, state);
+        if ('cart' in state && state.cart.id) {
+          addLineItem(lines, state);
+        } else {
+          cartCreate({lines});
+        }
       },
       linesRemove(lines: string[]) {
         removeLineItem(lines, state);
@@ -684,6 +738,7 @@ export function CartProvider({
 function cartFromGraphQL(cart: CartFragmentFragment): Cart {
   return {
     ...cart,
+    // @ts-expect-error While the cart still uses fragments, there will be a TS error here until we remove those fragments and get the type in-line
     lines: flattenConnection(cart.lines),
     note: cart.note ?? undefined,
   };

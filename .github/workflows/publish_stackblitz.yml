@@ -2,22 +2,27 @@ name: Publish to Stackblitz
 
 on:
   release:
-    types: [published]
+    types: [released]
   workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     name: Publish latest release to Stackblitz
+    strategy:
+      matrix:
+        template: ['template-hydrogen-default', 'template-hydrogen-hello-world']
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
-      - name: Rename gitignore
-        run: |
-          mv packages/dev/_gitignore packages/dev/.gitignore
-      - name: Push to stackblitz branch
-        uses: EndBug/add-and-commit@v7.4.0
+      - uses: actions/checkout@v2
         with:
-          branch: main
-          push: 'origin stackblitz --force'
-
+          ref: 'v1.x-2022-07'
+      - run: |
+          mv templates/${{ matrix.template }}/_gitignore templates/${{ matrix.template }}/.gitignore
+      - run: |
+          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/${{ matrix.template }}/package.json
+      - run: |
+          git show-ref
+          git config user.email "hydrogen@shopify.com"
+          git config user.name "Hydrogen Bot"
+          git commit -am "Update ${{ matrix.template }} on Stackblitz branch"
+          git push origin HEAD:stackblitz --force

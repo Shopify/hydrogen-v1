@@ -1,0 +1,42 @@
+name: Changesets
+
+on:
+  push:
+    branches:
+      - 'v[0-9].x-[0-9]+-[0-9]+'
+
+concurrency:
+  group: changeset-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'shopify'
+    name: Changelog PR or Release
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Install the packages
+        run: yarn install --frozen-lockfile --ignore-engines
+
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn run version
+          publish: yarn changeset tag
+          commit: '[ci] release ${{ github.ref_name }}'
+          title: '[ci] release ${{ github.ref_name }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

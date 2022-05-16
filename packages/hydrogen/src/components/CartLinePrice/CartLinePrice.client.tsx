@@ -1,9 +1,8 @@
-import React, {ElementType} from 'react';
+import React from 'react';
 import {useCartLine} from '../CartLineProvider';
 import {Money} from '../Money';
-import {Props} from '../types';
 
-export interface CartLinePriceProps {
+interface CartLinePriceProps {
   /** The type of price. Valid values:`regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
 }
@@ -12,8 +11,8 @@ export interface CartLinePriceProps {
  * The `CartLinePrice` component renders a `Money` component for the cart line merchandise's price or
  * compare at price. It must be a descendent of a `CartLineProvider` component.
  */
-export function CartLinePrice<TTag extends ElementType>(
-  props: Props<TTag> & CartLinePriceProps
+export function CartLinePrice<TTag extends keyof JSX.IntrinsicElements>(
+  props: Omit<React.ComponentProps<typeof Money>, 'data'> & CartLinePriceProps
 ) {
   const cartLine = useCartLine();
   const {priceType = 'regular', ...passthroughProps} = props;
@@ -28,14 +27,12 @@ export function CartLinePrice<TTag extends ElementType>(
   }
 
   return (
-    <Money
+    <Money<TTag>
       {...passthroughProps}
-      money={{
-        amount: price.amount * cartLine.quantity,
+      data={{
+        amount: `${parseFloat(price.amount) * cartLine.quantity}`,
         currencyCode: price.currencyCode,
       }}
-    >
-      {props.children}
-    </Money>
+    />
   );
 }

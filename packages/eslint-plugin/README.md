@@ -1,49 +1,55 @@
 <!-- This file is generated from the source code. Edit the files in /packages/eslint-plugin and run 'yarn generate-docs' at the root of this repo. -->
 
-# `eslint-plugin-hydrogen`
-
-Hydrogen provides an ESLint plugin to enforce Shopify’s javascript best practices and catch common issues when using React Server components in Hydrogen apps.
-
-## Configurations
-
-### Recommended
-
-This plugin exports a recommended configuration.
-
-To enable this configuration use the `extends` property in your `.eslintrc.js`
-config file:
-
-```ts
-{
-  extends: 'plugin:hydrogen/recommended',
-}
-```
-
-### Hydrogen
-
-This plugin exports a `hydrogen` configuration. Unlike the [recommended](#recommended) configuration, this excludes suggested third-party plugins and configurations. Instead, it enables only the `hydrogen` rules with their suggested defaults.
-
-To enable this configuration use the `extends` property in your `.eslintrc.js`
-config file:
-
-```ts
-{
-  extends: 'plugin:hydrogen/hydrogen',
-}
-```
-
-## Contributing
-
-If you've come here to help contribute – Thank you ❤️ Take a look at the [contributing docs](./.github/contributing.md) to get getting started.
+Hydrogen provides an [ESLint plugin](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin) that enforces Shopify’s JavaScript best practices and catches common issues when using [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components) in Hydrogen apps. This guide provides information about installing and configuring the ESLint plugin.
 
 ## Installation
 
-You'll first need to install [ESLint](http://eslint.org) in addition to this module.
+Run the following command to install [ESLint](https://eslint.org/) and the ESLint plugin:
+
+{% codeblock terminal %}
 
 ```bash
 yarn add --dev eslint eslint-plugin-hydrogen
 ```
 
-## Usage
+{% endcodeblock %}
 
-Hydrogen’s ESLint configurations come bundled in this package. To use them you must extend the relevant configuration in your project’s `.eslintrc.js`.
+## Configurations
+
+The ESLint configurations available in Hydrogen are bundled in the ESLint plugin. To use configurations, you need to extend the relevant configuration in your project’s `.eslintrc.js` configuration file. The ESLint plugin exports a [recommended](#recommended-configuration) and a [Hydrogen](#hydrogen-configuration) configuration.
+
+### Recommended configuration
+
+The recommended configuration enforces Shopify's JavaScript best practices and includes third-party plugins and configurations.
+
+To enable the recommended configuration, add the `extends` property in your `.eslintrc.js` config file:
+
+{% codeblock file, filename: '.eslintrc.js' %}
+
+```js
+{
+  extends: 'plugin:hydrogen/recommended',
+}
+```
+
+{% endcodeblock %}
+
+### Hydrogen configuration
+
+Unlike the recommended configuration, the Hydrogen configuration excludes suggested third-party plugins and configurations. It enables only the [Hydrogen rules](https://shopify.dev/custom-storefronts/hydrogen/best-practices/testing#hydrogen-rules) with their suggested defaults.
+
+To enable the Hydrogen configuration, add the `extends` property in your `.eslintrc.js` config file:
+
+{% codeblock file, filename: '.eslintrc.js' %}
+
+```js
+{
+  extends: 'plugin:hydrogen/hydrogen',
+}
+```
+
+{% endcodeblock %}
+
+## Contributing to Hydrogen's ESLint plugin
+
+Hydrogen's ESLint plugin is open source. Learn how to [contribute to the project on GitHub](https://github.com/Shopify/hydrogen/blob/main/packages/eslint-plugin/.github/CONTRIBUTING.md).

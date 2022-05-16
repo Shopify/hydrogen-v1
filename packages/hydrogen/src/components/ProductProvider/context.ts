@@ -1,29 +1,40 @@
 import {createContext} from 'react';
 import {ProductOptionsHookValue} from '../../hooks';
-import {GraphQLConnection, ParsedMetafield} from '../../types';
-import {ProductProviderFragmentFragment} from './ProductProviderFragment';
-import {Product} from './types';
-import {Collection, Image} from '../../graphql/types/types';
+import {ParsedMetafield} from '../../types';
+import type {
+  Collection,
+  Image,
+  Product as ProductType,
+  ProductVariant as ProductVariantType,
+  MediaEdge as MediaEdgeType,
+} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 export const ProductContext = createContext<ProductContextType | null>(null);
 
-export type ProductContextType = Omit<
-  Product,
-  | 'media'
-  | 'metafields'
-  | 'images'
-  | 'collections'
-  | 'variants'
-  | 'sellingPlanGroups'
-  | 'options'
-> &
-  ProductOptionsHookValue & {
-    media?: ProductProviderFragmentFragment['media']['edges'][0]['node'][];
-    mediaConnection?: ProductProviderFragmentFragment['media'];
+export type ProductContextType = PartialDeep<
+  Omit<
+    ProductType,
+    | 'media'
+    | 'metafields'
+    | 'images'
+    | 'collections'
+    | 'variants'
+    | 'sellingPlanGroups'
+    | 'options'
+  > & {
+    media?: MediaEdgeType['node'];
+    mediaConnection?: ProductType['media'];
     metafields?: ParsedMetafield[];
-    metafieldsConnection?: ProductProviderFragmentFragment['metafields'];
+    metafieldsConnection?: ProductType['metafields'];
     images?: Partial<Image>[];
-    imagesConnection?: GraphQLConnection<Partial<Image>>;
+    imagesConnection?: ProductType['images'];
     collections?: Partial<Collection>[];
-    collectionsConnection?: GraphQLConnection<Partial<Collection>>;
-  };
+    collectionsConnection?: ProductType['collections'];
+    variants?: Partial<ProductVariantType>[];
+    variantsConnection?: ProductType['variants'];
+  }
+>;
+
+export const ProductOptionsContext =
+  createContext<ProductOptionsHookValue | null>(null);

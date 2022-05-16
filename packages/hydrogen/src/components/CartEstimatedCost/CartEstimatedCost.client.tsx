@@ -1,7 +1,6 @@
-import React, {ElementType} from 'react';
+import React from 'react';
 import {useCart} from '../CartProvider';
 import {Money} from '../Money';
-import {Props} from '../types';
 
 export interface CartEstimatedCostProps {
   /** A string type that defines the type of cost needed. Valid values: `total`, `subtotal`, `tax`, or `duty`. */
@@ -11,12 +10,13 @@ export interface CartEstimatedCostProps {
 }
 
 /**
- * The [CartEstimatedCost](/api/storefront/reference/cart/cartestimatedcost) component renders a `Money` component with the
+ * The `CartEstimatedCost` component renders a `Money` component with the
  * cost associated with the `amountType` prop. If no `amountType` prop is specified, then it defaults to `totalAmount`.
  * If `children` is a function, then it will pass down the render props provided by the parent component.
  */
-export function CartEstimatedCost<TTag extends ElementType>(
-  props: Props<TTag> & CartEstimatedCostProps
+export function CartEstimatedCost<TTag extends keyof JSX.IntrinsicElements>(
+  props: Omit<React.ComponentProps<typeof Money>, 'data'> &
+    CartEstimatedCostProps
 ) {
   const {estimatedCost} = useCart();
   const {amountType = 'total', children, ...passthroughProps} = props;
@@ -37,7 +37,7 @@ export function CartEstimatedCost<TTag extends ElementType>(
   }
 
   return (
-    <Money {...passthroughProps} money={amount}>
+    <Money<TTag> {...passthroughProps} data={amount}>
       {children}
     </Money>
   );

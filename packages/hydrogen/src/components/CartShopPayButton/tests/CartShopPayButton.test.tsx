@@ -1,13 +1,13 @@
 import React from 'react';
 import {CartShopPayButton} from '../CartShopPayButton.client';
 import {CartProvider} from '../../CartProvider';
-import {SHOPIFY_CONFIG} from '../../../foundation/ShopifyProvider/tests/fixtures';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures';
 import {ShopPayButton} from '../../ShopPayButton';
-import {ShopifyProvider} from '../../../foundation';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('CartShopPayButton', () => {
+  const fetch = global.fetch;
+
   beforeEach(() => {
     // @ts-ignore
     global.fetch = jest.fn(async (_url, _init) => {
@@ -20,17 +20,24 @@ describe('CartShopPayButton', () => {
     });
   });
 
+  afterEach(() => {
+    global.fetch = fetch;
+  });
+
   it('renders a ShopPayButton', () => {
-    const wrapper = mountWithShopifyProvider(
-      <ShopifyProvider shopifyConfig={SHOPIFY_CONFIG}>
-        <CartProvider cart={CART_WITH_LINES}>
-          <CartShopPayButton />
-        </CartProvider>
-      </ShopifyProvider>
+    const wrapper = mountWithProviders(
+      <CartProvider data={CART_WITH_LINES}>
+        <CartShopPayButton />
+      </CartProvider>
     );
 
     expect(wrapper).toContainReactComponent(ShopPayButton, {
-      variantIds: [CART_WITH_LINES.lines.edges[0].node.merchandise.id],
+      variantIdsAndQuantities: [
+        {
+          id: CART_WITH_LINES.lines.edges[0].node.merchandise.id,
+          quantity: CART_WITH_LINES.lines.edges[0].node.quantity,
+        },
+      ],
     });
   });
 });

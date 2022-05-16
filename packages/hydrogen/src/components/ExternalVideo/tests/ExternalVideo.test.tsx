@@ -1,15 +1,15 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
 import {ExternalVideo} from '../ExternalVideo';
-import {getExternalVideo} from '../../../utilities/tests/media';
+import {getExternalVideoData} from '../../../utilities/tests/media';
 
 describe('<ExternalVideo />', () => {
   it('renders an iframe element with sensible defaults', () => {
-    const video = getExternalVideo();
-    const component = mount(<ExternalVideo video={video} />);
+    const video = getExternalVideoData();
+    const component = mount(<ExternalVideo data={video} />);
 
     expect(component).toContainReactComponent('iframe', {
-      src: video.embeddedUrl,
+      src: video.embedUrl,
       id: video.id,
       allow:
         'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
@@ -21,7 +21,7 @@ describe('<ExternalVideo />', () => {
   it('allows defaults to be overridden', () => {
     const component = mount(
       <ExternalVideo
-        video={getExternalVideo()}
+        data={getExternalVideoData()}
         id="hello"
         allow="autoplay"
         allowFullScreen={false}
@@ -44,8 +44,8 @@ describe('<ExternalVideo />', () => {
     };
     const component = mount(
       <ExternalVideo
-        video={getExternalVideo({
-          embeddedUrl: 'https://www.youtube.com/embed/a2YSgfwXc9c',
+        data={getExternalVideoData({
+          embedUrl: 'https://www.youtube.com/embed/a2YSgfwXc9c',
         })}
         options={options}
       />
@@ -58,11 +58,23 @@ describe('<ExternalVideo />', () => {
 
   it('allows passthrough props', () => {
     const component = mount(
-      <ExternalVideo video={getExternalVideo()} className="fancy" />
+      <ExternalVideo data={getExternalVideoData()} className="fancy" />
     );
 
     expect(component).toContainReactComponent('iframe', {
       className: 'fancy',
+    });
+  });
+
+  describe(`throws when necessary props aren't passed`, () => {
+    it(`data.embedUrl`, () => {
+      // to silence the test runner's console.error from being called
+      const consoleSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      expect(() => mount(<ExternalVideo data={{id: 'hi'}} />)).toThrow();
+      expect(console.error).toHaveBeenCalled();
+      consoleSpy.mockRestore();
     });
   });
 });

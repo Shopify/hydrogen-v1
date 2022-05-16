@@ -1,82 +1,48 @@
-import {MetafieldFragmentFragment} from '../..';
-import {GraphQLConnection} from '../../types';
-import {SellingPlanFragmentFragment} from './SellingPlanFragment';
-import {SellingPlanGroupsFragmentFragment} from './SellingPlanGroupsFragment';
-import {VariantFragmentFragment} from './VariantFragment';
-
-// Variants can be partials, but they _must_ have the following
-// fields in order to use the product options functionality:
-// - id
-// - selectedOptions
-export type Variant = Omit<
-  Partial<VariantFragmentFragment>,
-  'id' | 'selectedOptions' | 'metafields' | 'sellingPlanAllocations'
-> & {
-  id: VariantFragmentFragment['id'];
-  selectedOptions: VariantFragmentFragment['selectedOptions'];
-  metafields?: GraphQLConnection<Partial<MetafieldFragmentFragment>>;
-  sellingPlanAllocations?: GraphQLConnection<SellingPlanAllocation>;
-};
-
-export type SellingPlanGroup = Omit<
-  Partial<SellingPlanGroupsFragmentFragment>,
-  'options'
-> & {
-  options: SellingPlanGroupsFragmentFragment['options'];
-};
-
-// SellingPlans can be partials but they _must_ have an id in order
-// to work with the product options functionality
-export type SellingPlan = Omit<Partial<SellingPlanFragmentFragment>, 'id'> & {
-  id: SellingPlanFragmentFragment['id'];
-};
-
-// SellingPlanAllocations can be partial, but their sellingPlan _must_ have an id in order
-// to work with the product options functionality
-export type SellingPlanAllocation = Omit<
-  Partial<
-    VariantFragmentFragment['sellingPlanAllocations']['edges'][0]['node']
-  >,
-  'sellingPlan'
-> & {
-  sellingPlan: Omit<Partial<SellingPlanFragmentFragment>, 'id'> & {
-    id: SellingPlanFragmentFragment['id'];
-  };
-};
+import type {
+  SelectedOption as SelectedOptionType,
+  ProductVariant as ProductVariantType,
+  ProductVariantConnection,
+  SellingPlan as SellingPlanType,
+  SellingPlanAllocation as SellingPlanAllocationType,
+  SellingPlanGroup as SellingPlanGroupType,
+  SellingPlanConnection,
+} from '../../storefront-api-types';
 
 export type SelectedOptions = {
   [key: string]: string;
 };
 
-export type SelectVariantCallback = (variant: Variant) => void;
+export type SelectVariantCallback = (variant: ProductVariantType) => void;
 
 export type SelectOptionCallback = (
-  name: VariantFragmentFragment['selectedOptions'][0]['name'],
-  value: VariantFragmentFragment['selectedOptions'][0]['value']
+  name: SelectedOptionType['name'],
+  value: SelectedOptionType['value']
 ) => void;
 
 export type SelectOptionsCallback = (options: SelectedOptions) => void;
 
 export type OptionsInStockCallback = (
-  name: VariantFragmentFragment['selectedOptions'][0]['name'],
-  value: VariantFragmentFragment['selectedOptions'][0]['value']
+  name: SelectedOptionType['name'],
+  value: SelectedOptionType['value']
 ) => boolean;
 
-export type SelectedSellingPlanCallback = (sellingPlan: SellingPlan) => void;
+export type SelectedSellingPlanCallback = (
+  sellingPlan: SellingPlanType
+) => void;
 
 export interface OptionWithValues {
-  name: VariantFragmentFragment['selectedOptions'][0]['name'];
-  values: VariantFragmentFragment['selectedOptions'][0]['value'][];
+  name: SelectedOptionType['name'];
+  values: SelectedOptionType['value'][];
 }
 
 export interface ProductOptionsHookValue {
   /** An array of the variant `nodes` from the `VariantConnection`. */
-  variants: Variant[];
-  variantsConnection?: GraphQLConnection<Variant>;
+  variants: ProductVariantType[];
+  variantsConnection?: ProductVariantConnection;
   /** An array of the product's options and values. */
   options: OptionWithValues[];
   /** The selected variant. */
-  selectedVariant?: Variant;
+  selectedVariant?: ProductVariantType | null;
   /** A callback to set the selected variant to the variant passed as an argument. */
   setSelectedVariant: SelectVariantCallback;
   selectedOptions: SelectedOptions;
@@ -89,12 +55,12 @@ export interface ProductOptionsHookValue {
   /** A callback to set the selected selling plan to the one passed as an argument. */
   setSelectedSellingPlan: SelectedSellingPlanCallback;
   /** The selected selling plan. */
-  selectedSellingPlan?: SellingPlan;
+  selectedSellingPlan?: SellingPlanType;
   /** The selected selling plan allocation. */
-  selectedSellingPlanAllocation?: SellingPlanAllocation;
+  selectedSellingPlanAllocation?: SellingPlanAllocationType;
   /** The selling plan groups. */
-  sellingPlanGroups?: (Omit<SellingPlanGroup, 'sellingPlans'> & {
-    sellingPlans: SellingPlan[];
+  sellingPlanGroups?: (Omit<SellingPlanGroupType, 'sellingPlans'> & {
+    sellingPlans: SellingPlanType[];
   })[];
-  sellingPlanGroupsConnection?: GraphQLConnection<SellingPlanGroup>;
+  sellingPlanGroupsConnection?: SellingPlanConnection;
 }

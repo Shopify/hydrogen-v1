@@ -3,13 +3,14 @@ import faker from 'faker';
 import {getPrice} from './price';
 import {getUnitPriceMeasurement} from './unitPriceMeasurement';
 import {getAnyMedia, getPreviewImage} from './media';
-import {ProductVariant} from '../../graphql/types/types';
-import {ProductProviderFragmentFragment} from '../../components/ProductProvider/ProductProviderFragment';
+import {
+  ProductVariant,
+  Product as ProductType,
+} from '../../storefront-api-types';
 import {getRawMetafield} from './metafields';
+import type {PartialDeep} from 'type-fest';
 
-export function getProduct(
-  product: Partial<ProductProviderFragmentFragment> = {}
-) {
+export function getProduct(product: PartialDeep<ProductType> = {}) {
   return {
     id: product.id ?? faker.datatype.uuid(),
     handle: product.handle ?? faker.random.word(),
@@ -55,20 +56,23 @@ export function getProduct(
   };
 }
 
-export function getVariant(variant: Partial<ProductVariant> = {}) {
+export function getVariant(variant: PartialDeep<ProductVariant> = {}) {
   return {
     id: variant.id ?? faker.random.words(),
     title: variant.title ?? faker.random.words(),
     availableForSale: variant.availableForSale ?? faker.datatype.boolean(),
-    image: getPreviewImage(variant.image),
-    unitPrice: getPrice(variant.unitPrice),
-    unitPriceMeasurement: getUnitPriceMeasurement(variant.unitPriceMeasurement),
+    image: getPreviewImage(variant?.image ?? undefined),
+    unitPrice: getPrice(variant?.unitPrice ?? undefined),
+    unitPriceMeasurement: getUnitPriceMeasurement(
+      variant?.unitPriceMeasurement ?? undefined
+    ),
     priceV2: getPrice(variant.priceV2),
-    compareAtPriceV2: getPrice(variant.compareAtPriceV2),
+    compareAtPriceV2: getPrice(variant?.compareAtPriceV2 ?? undefined),
     selectedOptions: [
       {name: faker.random.word(), value: faker.random.word()},
       {name: faker.random.word(), value: faker.random.word()},
     ],
+    sellingPlanAllocations: [],
     metafields: variant.metafields ?? {
       edges: [
         {node: getRawMetafield()},

@@ -1,0 +1,1 @@
+Hydrogen provides an [ESLint plugin](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin) that enforces Shopify’s JavaScript best practices and catches common issues when using React Server Components in Hydrogen apps. This guide provides information about installing and configuring the ESLint plugin.

@@ -1,43 +1,39 @@
-import * as React from 'react';
-import {Props} from '../types';
-import {ImageSizeOptions, useImageUrl} from '../../utilities';
-import {VideoFragment as Fragment} from '../../graphql/graphql-constants';
+import React from 'react';
+import {shopifyImageLoader} from '../../utilities';
+import type {Video as VideoType} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
-import {
-  Video as VideoType,
-  VideoSource,
-  Image,
-} from '../../graphql/types/types';
-
-export interface VideoProps {
-  /** An object corresponding to the [GraphQL fragment](#graphql-fragment). */
-  video: {
-    id?: VideoType['id'];
-    previewImage?: Pick<Image, 'url'>;
-    sources: Pick<VideoSource, 'url' | 'mimeType'>[];
-  };
-  /** An object of image size options for the video's `previewImage`. */
-  options?: ImageSizeOptions;
+interface VideoProps {
+  /** An object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video). */
+  data: PartialDeep<VideoType>;
+  /** An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL. */
+  previewImageOptions?: Parameters<typeof shopifyImageLoader>[0];
 }
 
 /**
- * The `Video` component renders a `video` for the Storefront API's [`Video` object](/api/storefront/reference/products/video).
+ * The `Video` component renders a `video` for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
  */
-export function Video<TTag extends React.ElementType = 'video'>(
-  props: Props<TTag> & VideoProps
-) {
+export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
   const {
-    video,
-    options,
-    id = video.id,
+    data,
+    previewImageOptions,
+    id = data.id,
     playsInline = true,
     controls = true,
     ...passthroughProps
   } = props;
 
-  const posterUrl = useImageUrl(video.previewImage?.url, options);
+  const posterUrl = shopifyImageLoader({
+    src: data.previewImage?.url ?? '',
+    ...previewImageOptions,
+  });
+
+  if (!data.sources) {
+    throw new Error(`<Video/> requires a 'data.sources' array`);
+  }
 
   return (
+    // eslint-disable-next-line jsx-a11y/media-has-caption
     <video
       {...passthroughProps}
       id={id}
@@ -45,16 +41,18 @@ export function Video<TTag extends React.ElementType = 'video'>(
       controls={controls}
       poster={posterUrl}
     >
-      {video.sources.map((source) => (
-        <source
-          key={source.url}
-          src={source.url}
-          type={source.mimeType}
-        ></source>
-      ))}
+      {data.sources.map((source) => {
+        if (!(source?.url && source?.mimeType)) {
+          throw new Error(`<Video/> needs 'source.url' and 'source.mimeType'`);
+        }
+        return (
+          <source
+            key={source.url}
+            src={source.url}
+            type={source.mimeType}
+          ></source>
+        );
+      })}
     </video>
   );
 }
-
-Video.Fragment = Fragment;
-export const VideoFragment = Fragment;

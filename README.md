@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://hydrogen.shopify.dev"><img src="./docs/images/HydrogenLogo.png" alt="Hydrogen Logo"/></a>
+    <a href="https://hydrogen.shopify.dev"><img src="./.github/images/hydrogen-logo.svg" alt="Hydrogen Logo"/></a>
 </p>
 <p align="center">
     <a href="https://www.npmjs.com/package/@shopify/hydrogen"><img src="https://img.shields.io/npm/v/@shopify/hydrogen.svg?sanitize=true" alt="Version"></a>
@@ -17,14 +17,14 @@ Hydrogen is a **React-based framework** for building dynamic, **Shopify-powered*
 
 Spin up a Hydrogen app in your browser with our [playground](https://hydrogen.new/) or set up your local environment with the instructions below ⬇️
 
-**This is a developer preview of Hydrogen**. The documentation will be updated as Shopify [introduces new features and refines existing functionality](https://github.com/Shopify/hydrogen/releases). Production launches of Hydrogen custom storefronts aren't yet supported as Shopify is evolving the Hydrogen framework.
+**This is a developer preview of Hydrogen**. The documentation will be updated as Shopify [introduces new features and refines existing functionality](https://github.com/Shopify/hydrogen/releases).
 
 ## Getting Started
 
 **Requirements:**
 
 - `yarn` or `npm`
-- Node.js version 14.0 or higher
+- Node.js version 16.5.0 or higher
 
 **Installation:**
 
@@ -55,24 +55,19 @@ npm run dev
 
 2. Visit the development environment running at http://localhost:3000.
 
-Learn more about [getting started with Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/getting-started).
+Learn more about [getting started with Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/templates).
 
 ## Contributing to Hydrogen
 
-[Read our contributing guide](./docs/contributing.md)
+[Read our contributing guide](./.github/contributing.md)
 
 ## Other handy links
-
-🎁 Give us the gift of [feedback](https://www.surveymonkey.com/r/HydrogenFeedback).
-
-📍 Check out [Hydrogen examples on Github](https://github.com/Shopify/hydrogen-examples).
 
 🤩 [Learn more about Hydrogen](https://shopify.dev/hydrogen).
 
 👷‍♀️ Add `npm` packages to your project:
 
 - [`@shopify/hydrogen`](https://www.npmjs.com/package/@shopify/hydrogen)
-- [`@shopify/hydrogen-cli`](https://www.npmjs.com/package/@shopify/hydrogen-cli)
-- [`@shopify/hydrogen-plugin-sanity`](https://www.npmjs.com/package/@shopify/hydrogen-plugin-sanity)
 - [`create-hydrogen-app`](https://www.npmjs.com/package/create-hydrogen-app)
 - [`eslint-plugin-hydrogen`](https://www.npmjs.com/package/eslint-plugin-hydrogen)
+- [`hydrogen-plugin-sanity`](https://www.npmjs.com/package/hydrogen-plugin-sanity)

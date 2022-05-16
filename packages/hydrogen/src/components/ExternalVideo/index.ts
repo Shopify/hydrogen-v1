@@ -1,5 +1,1 @@
-export {
-  ExternalVideo,
-  ExternalVideoProps,
-  ExternalVideoFragment,
-} from './ExternalVideo';
+export {ExternalVideo} from './ExternalVideo';

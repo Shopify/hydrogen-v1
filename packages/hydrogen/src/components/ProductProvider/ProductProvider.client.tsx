@@ -1,53 +1,51 @@
 import React, {ReactNode, useMemo} from 'react';
 import {useProductOptions, useParsedMetafields} from '../../hooks';
 import {flattenConnection} from '../../utilities';
-import {ProductContext} from './context';
-import {Product} from './types';
-import {ProductProviderFragment as Fragment} from '../../graphql/graphql-constants';
+import {ProductContext, ProductContextType} from './context';
+import {ProductOptionsProvider} from './ProductOptionsProvider.client';
+import type {Product as ProductType} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
+
+export interface ProductProviderProps {
+  /** A `ReactNode` element. */
+  children: ReactNode;
+  /** A [Product object](https://shopify.dev/api/storefront/reference/products/product). */
+  data: PartialDeep<ProductType>;
+  /** The initially selected variant.
+   * The following logic applies to `initialVariantId`:
+   * If `initialVariantId` is provided, then it's used, even if it's out of stock.
+   * If `initialVariantId` is provided, but is `null`, then no variant is used.
+   * If nothing is passed to `initialVariantId`, and you're in a `ProductProvider`, then `selectedVariant.id` is used.
+   * If nothing is passed to `initialVariantId` and you're not in a `ProductProvider`, then the first available or in-stock variant is used.
+   * If nothing is passed to `initialVariantId`, you're not in a `ProductProvider`, and no variants are in stock, then the first variant is used.
+   */
+  initialVariantId?: Parameters<
+    typeof useProductOptions
+  >['0']['initialVariantId'];
+}
 
 /**
  * The `ProductProvider` component sets up a context with product details. Descendents of
- * this component can use the `useProduct` hook and the related `ProductX` or `SelectedVariantX` hooks.
+ * this component can use the `useProduct` hook.
  */
 export function ProductProvider({
   children,
-  product,
+  data: product,
   initialVariantId,
-}: {
-  /** A `ReactNode` element. */
-  children: ReactNode;
-  /** A [Product object](/api/storefront/reference/products/product). */
-  product: Product;
-  /** The initially selected variant. */
-  initialVariantId: string;
-}) {
-  const {
-    variants,
-    options,
-    selectedVariant,
-    setSelectedVariant,
-    selectedOptions,
-    setSelectedOption,
-    setSelectedOptions,
-    isOptionInStock,
-    selectedSellingPlan,
-    selectedSellingPlanAllocation,
-    setSelectedSellingPlan,
-    sellingPlanGroups,
-  } = useProductOptions({
-    variants: product.variants,
-    initialVariantId: initialVariantId,
-  });
-  const metafields = useParsedMetafields(product.metafields);
+}: ProductProviderProps) {
+  const metafields = useParsedMetafields(product.metafields || {});
 
-  const providerValue = useMemo(() => {
+  // @ts-expect-error The types here are broken on main, need to come back and fix them sometime
+  const providerValue = useMemo<ProductContextType>(() => {
     return {
       ...product,
       metafields,
       metafieldsConnection: product.metafields,
       media: product.media ? flattenConnection(product.media) : undefined,
       mediaConnection: product.media,
-      variants: variants,
+      variants: product.variants
+        ? flattenConnection(product.variants)
+        : undefined,
       variantsConnection: product.variants,
       images: product.images ? flattenConnection(product.images) : undefined,
       imagesConnection: product.images,
@@ -55,41 +53,14 @@ export function ProductProvider({
         ? flattenConnection(product.collections)
         : undefined,
       collectionsConnection: product.collections,
-      options,
-      selectedVariant,
-      setSelectedVariant,
-      selectedOptions,
-      setSelectedOption,
-      setSelectedOptions,
-      isOptionInStock,
-      selectedSellingPlan,
-      selectedSellingPlanAllocation,
-      setSelectedSellingPlan,
-      sellingPlanGroups,
     };
-  }, [
-    isOptionInStock,
-    metafields,
-    options,
-    product,
-    selectedOptions,
-    selectedSellingPlan,
-    selectedSellingPlanAllocation,
-    selectedVariant,
-    sellingPlanGroups,
-    setSelectedOption,
-    setSelectedOptions,
-    setSelectedSellingPlan,
-    setSelectedVariant,
-    variants,
-  ]);
+  }, [metafields, product]);
 
   return (
     <ProductContext.Provider value={providerValue}>
-      {children}
+      <ProductOptionsProvider initialVariantId={initialVariantId}>
+        {children}
+      </ProductOptionsProvider>
     </ProductContext.Provider>
   );
 }
-
-ProductProvider.Fragment = Fragment;
-export const ProductProviderFragment = Fragment;

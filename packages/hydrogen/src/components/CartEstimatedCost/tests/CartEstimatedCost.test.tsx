@@ -3,9 +3,11 @@ import {CartProvider} from '../../CartProvider';
 import {CART_WITH_LINES} from '../../CartProvider/tests/fixtures';
 import {CartEstimatedCost} from '../CartEstimatedCost.client';
 import {Money} from '../../Money';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('<CartEstimatedCost />', () => {
+  const fetch = global.fetch;
+
   beforeEach(() => {
     // @ts-ignore
     global.fetch = jest.fn(async (_url, _init) => {
@@ -18,9 +20,13 @@ describe('<CartEstimatedCost />', () => {
     });
   });
 
+  afterEach(() => {
+    global.fetch = fetch;
+  });
+
   it('renders a <Money />', () => {
-    const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={CART_WITH_LINES}>
+    const wrapper = mountWithProviders(
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost />
       </CartProvider>
     );
@@ -29,7 +35,7 @@ describe('<CartEstimatedCost />', () => {
   });
 
   it('does not render when no estimated cost', () => {
-    const wrapper = mountWithShopifyProvider(
+    const wrapper = mountWithProviders(
       <CartProvider>
         <CartEstimatedCost />
       </CartProvider>
@@ -39,54 +45,54 @@ describe('<CartEstimatedCost />', () => {
   });
 
   it('renders a totalAmount when total is the amountType', () => {
-    const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={CART_WITH_LINES}>
+    const wrapper = mountWithProviders(
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="total" />
       </CartProvider>
     );
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
   it('renders a subtotalAmount when subtotal is the amountType', () => {
-    const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={CART_WITH_LINES}>
+    const wrapper = mountWithProviders(
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="subtotal" />
       </CartProvider>
     );
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.subtotalAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
   it('renders a totalTaxAmount when tax is the amountType', () => {
-    const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={CART_WITH_LINES}>
+    const wrapper = mountWithProviders(
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="tax" />
       </CartProvider>
     );
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalTaxAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 
   it('renders a totalDutyAmount when duty is the amountType', () => {
-    const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={CART_WITH_LINES}>
+    const wrapper = mountWithProviders(
+      <CartProvider data={CART_WITH_LINES}>
         <CartEstimatedCost amountType="duty" />
       </CartProvider>
     );
 
     const expectedMoney = CART_WITH_LINES.estimatedCost.totalDutyAmount;
     expect(wrapper).toContainReactComponent(Money, {
-      money: expectedMoney,
+      data: expectedMoney,
     });
   });
 });

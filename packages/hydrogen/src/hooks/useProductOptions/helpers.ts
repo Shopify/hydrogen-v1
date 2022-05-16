@@ -1,6 +1,11 @@
-import {Variant, SelectedOptions, OptionWithValues} from './types';
+import {SelectedOptions, OptionWithValues} from './types';
+import type {ProductVariant as ProductVariantType} from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
-export function getAllOptionValues(variants: Variant[], option: string) {
+export function getAllOptionValues(
+  variants: ProductVariantType[],
+  option: string
+) {
   return Array.from(
     new Set(
       variants.map(
@@ -13,33 +18,38 @@ export function getAllOptionValues(variants: Variant[], option: string) {
 }
 
 export function getSelectedVariant(
-  variants: Variant[],
+  variants: PartialDeep<ProductVariantType>[],
   choices: SelectedOptions
-): Variant | undefined {
+): PartialDeep<ProductVariantType> | undefined {
   /**
    * Ensure the user has selected all the required options, not just some.
    */
   if (
     !variants.length ||
-    variants[0].selectedOptions.length !== Object.keys(choices).length
+    variants?.[0]?.selectedOptions?.length !== Object.keys(choices).length
   ) {
     return;
   }
 
-  return variants.find((variant) => {
+  return variants?.find((variant) => {
     return Object.entries(choices).every(([name, value]) => {
-      return variant.selectedOptions.some(
-        (option) => option.name === name && option.value === value
+      return variant?.selectedOptions?.some(
+        (option) => option?.name === name && option?.value === value
       );
     });
   });
 }
 
-export function getOptions(variants: Variant[]): OptionWithValues[] {
-  const map = variants.reduce((memo, variant: Variant) => {
-    variant.selectedOptions.forEach(({name, value}) => {
-      memo[name] = memo[name] || new Set();
-      memo[name].add(value);
+export function getOptions(
+  variants: PartialDeep<ProductVariantType>[]
+): OptionWithValues[] {
+  const map = variants.reduce((memo, variant) => {
+    if (!variant.selectedOptions) {
+      throw new Error(`getOptions requires 'variant.selectedOptions`);
+    }
+    variant?.selectedOptions?.forEach((opt) => {
+      memo[opt?.name ?? ''] = memo[opt?.name ?? ''] || new Set();
+      memo[opt?.name ?? ''].add(opt?.value ?? '');
     });
 
     return memo;

@@ -1,6 +1,5 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {useCart, useCartCheckoutUrl} from '../CartProvider';
-import {Props} from '../types';
+import {useCart} from '../CartProvider';
 
 type PropsWeControl = 'onClick';
 
@@ -8,22 +7,21 @@ type PropsWeControl = 'onClick';
  * The `CartCheckoutButton` component renders a button that redirects to the checkout URL for the cart.
  * It must be a descendent of a `CartProvider` component.
  */
-export function CartCheckoutButton<TTag extends React.ElementType = 'a'>(
-  props: Props<TTag, PropsWeControl> & {
+export function CartCheckoutButton(
+  props: Omit<JSX.IntrinsicElements['button'], PropsWeControl> & {
     /** A `ReactNode` element. */
     children: ReactNode;
   }
 ) {
   const [requestedCheckout, setRequestedCheckout] = useState(false);
-  const {status} = useCart();
-  const url = useCartCheckoutUrl();
+  const {status, checkoutUrl} = useCart();
   const {children, ...passthroughProps} = props;
 
   useEffect(() => {
-    if (requestedCheckout && url && status === 'idle') {
-      window.location.href = url;
+    if (requestedCheckout && checkoutUrl && status === 'idle') {
+      window.location.href = checkoutUrl;
     }
-  }, [requestedCheckout, status, url]);
+  }, [requestedCheckout, status, checkoutUrl]);
 
   return (
     <button

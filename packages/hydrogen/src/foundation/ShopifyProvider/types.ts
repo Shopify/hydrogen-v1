@@ -1,17 +1,16 @@
-import type {QueryClient} from 'react-query';
-import {ShopifyConfig} from '../../types';
+import type {CountryCode, LanguageCode} from '../../storefront-api-types';
+import type {ReactNode} from 'react';
+import type {ShopifyConfigFetcher, ShopifyConfig} from '../../types';
 
-export type ShopifyProviderValue = ShopifyConfig;
+export interface ShopifyContextValue
+  extends Omit<ShopifyConfig, 'defaultLocale'> {
+  locale: `${LanguageCode}-${CountryCode}`;
+  languageCode: `${LanguageCode}`;
+}
 
 export type ShopifyProviderProps = {
-  /** The contents of the `shopify.config.js` file. */
-  shopifyConfig: ShopifyConfig;
+  /** Shopify connection information. Defaults to the `shopify` property in the `hydrogen.config.js` file. */
+  shopifyConfig?: ShopifyConfig | ShopifyConfigFetcher;
   /** Any `ReactNode` elements. */
-  children?: React.ReactNode;
-  manager?: any;
+  children?: ReactNode;
 };
-
-export interface ReactQueryHydrationContext {
-  queryClient?: QueryClient;
-  dehydratedState?: any;
-}

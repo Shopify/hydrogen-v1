@@ -1,5 +1,5 @@
-declare module globalThis {
-  var __config: HydrogenConfig | undefined;
+declare namespace globalThis {
+  let __config: HydrogenConfig | undefined;
 }
 
 type HydrogenConfig = {

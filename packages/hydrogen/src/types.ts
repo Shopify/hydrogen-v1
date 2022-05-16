@@ -1,78 +1,102 @@
 import type {ServerResponse} from 'http';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
+import type {Logger} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import type {Metafield} from './graphql/types/types';
+import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
+import type {
+  Metafield,
+  ProductVariant,
+  Product,
+  MediaImage,
+} from './storefront-api-types';
+import type {SessionStorageAdapter} from './foundation/session/session';
 
-export type Renderer = (
-  url: URL,
-  options: {
-    request: ServerComponentRequest;
-    context?: Record<string, any>;
-    isReactHydrationRequest?: boolean;
-    dev?: boolean;
-  }
-) => Promise<
-  {
-    body: string;
-    componentResponse: ServerComponentResponse;
-  } & Record<string, any>
->;
+type CommonOptions = {
+  App: any;
+  routes?: ImportGlobEagerOutput;
+  request: ServerComponentRequest;
+  componentResponse: ServerComponentResponse;
+  log: Logger;
+  dev?: boolean;
+};
 
-export type Streamer = (
-  url: URL,
-  options: {
-    context: any;
-    request: ServerComponentRequest;
-    response: ServerResponse;
-    template: string;
-    dev?: boolean;
-  }
-) => void;
+export type RendererOptions = CommonOptions & {
+  template: string;
+  nonce?: string;
+};
 
-export type Hydrator = (
-  url: URL,
-  options: {
-    context: any;
-    request: ServerComponentRequest;
-    response: ServerResponse;
-    dev?: boolean;
-  }
-) => void;
+export type StreamerOptions = CommonOptions & {
+  response?: ServerResponse;
+  template: string;
+  nonce?: string;
+};
 
-export type EntryServerHandler = {
-  render: Renderer;
-  stream: Streamer;
-  hydrate: Hydrator;
+export type HydratorOptions = CommonOptions & {
+  response?: ServerResponse;
+  isStreamable: boolean;
 };
 
 export type ShopifyConfig = {
-  locale?: string;
+  defaultLocale?: string;
   storeDomain: string;
   storefrontToken: string;
-  graphqlApiVersion?: string;
+  storefrontApiVersion: string;
 };
 
 export type Hook = (
   params: {url: URL} & Record<string, any>
 ) => any | Promise<any>;
 
-export type ServerHandler = (
-  App: any,
-  hook?: Hook
-) => {
-  render: Renderer;
-  stream: Streamer;
-  hydrate: Hydrator;
+export type ImportGlobEagerOutput = Record<
+  string,
+  Record<'default' | 'api', any>
+>;
+
+export type HydrogenConfigRoutes =
+  | ImportGlobEagerOutput
+  | {
+      files: ImportGlobEagerOutput;
+      basePath?: string;
+      dirPrefix?: string;
+    };
+
+type ConfigFetcher<T> = (request: ServerComponentRequest) => T | Promise<T>;
+
+export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
+
+export type ServerAnalyticsConnector = {
+  request: (
+    request: Request,
+    data?: any,
+    contentType?: 'json' | 'text'
+  ) => void;
 };
 
-export type ClientHandler = (App: any, hook?: Hook) => Promise<void>;
+export type HydrogenConfig = {
+  routes?: HydrogenConfigRoutes;
+  shopify?: ShopifyConfig | ShopifyConfigFetcher;
+  serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  session?: (log: Logger) => SessionStorageAdapter;
+};
+
+export type ClientHandlerConfig = {
+  /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
+  strictMode?: boolean;
+  showDevTools?: boolean;
+};
+
+export type ClientHandler = (
+  App: React.ElementType,
+  config: ClientHandlerConfig
+) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
 }
 
-export type RawMetafield = Partial<Metafield>;
-export type ParsedMetafield = Omit<Partial<Metafield>, 'value'> & {
+export type ParsedMetafield = Omit<
+  Partial<Metafield>,
+  'value' | 'reference'
+> & {
   value?:
     | string
     | number
@@ -81,6 +105,7 @@ export type ParsedMetafield = Omit<Partial<Metafield>, 'value'> & {
     | Date
     | Rating
     | Measurement;
+  reference?: MediaImage | ProductVariant | Product | null;
 };
 
 export interface Rating {
@@ -94,13 +119,26 @@ export interface Measurement {
   value: number;
 }
 
-export interface CacheOptions {
-  private?: boolean;
+export type QueryKey = string | readonly unknown[];
+
+export type NoStoreStrategy = {
+  mode: string;
+};
+
+export interface AllCacheOptions {
+  mode?: string;
   maxAge?: number;
   staleWhileRevalidate?: number;
-  noStore?: boolean;
+  sMaxAge?: number;
+  staleIfError?: number;
 }
+
+export type CachingStrategy = AllCacheOptions;
 
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
+  purgeQueryCacheOnBuild?: boolean;
+  configPath?: string;
 }
+
+export type PreloadOptions = boolean | string;

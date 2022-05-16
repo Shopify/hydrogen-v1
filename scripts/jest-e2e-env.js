@@ -1,3 +1,5 @@
+// This file must be in JavaScript, not TS
+
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
@@ -25,9 +27,10 @@ module.exports = class PlaywrightEnvironment extends NodeEnvironment {
       return;
     }
 
-    const browser = (this.browser = await chromium.connect({
-      wsEndpoint,
-    }));
+    const browser =
+      (this.global.browser =
+      this.browser =
+        await chromium.connect(wsEndpoint));
     this.global.page = await browser.newPage();
   }
 

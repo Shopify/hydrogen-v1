@@ -1,9 +1,0 @@
-deploy:
-  override:
-    - >-
-      yarn workspace @shopify/hydrogen build &&
-      git diff &&
-      node_modules/.bin/lerna publish from-package
-      --no-git-tag-version
-      --no-push
-      --yes

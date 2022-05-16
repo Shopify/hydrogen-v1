@@ -1,78 +1,133 @@
-import {QueryFunctionContext, useQuery as useReactQuery} from 'react-query';
-import type {UseQueryOptions, QueryKey, QueryFunction} from 'react-query';
-import {CacheOptions} from '../../types';
+import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types';
+import {
+  getLoggerWithContext,
+  collectQueryCacheControlHeaders,
+  collectQueryTimings,
+  logCacheApiStatus,
+} from '../../utilities/log';
 import {
   deleteItemFromCache,
+  generateSubRequestCacheControlHeader,
   getItemFromCache,
   isStale,
   setItemInCache,
 } from '../../framework/cache';
+import {hashKey} from '../../utilities/hash';
 import {runDelayedFunction} from '../../framework/runtime';
+import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
-export interface HydrogenUseQueryOptions<
-  TQueryFnData = unknown,
-  TError = unknown,
-  TData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
-> extends UseQueryOptions<TQueryFnData, TError, TData, TQueryKey> {
-  cache: CacheOptions;
+export interface HydrogenUseQueryOptions {
+  /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
+   * determine which cache control header to set.
+   */
+  cache?: CachingStrategy;
+  /** Whether to [preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries).
+   * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
+   * to preload the query for all requests.
+   */
+  preload?: PreloadOptions;
+  /** A function that inspects the response body to determine if it should be cached.
+   */
+  shouldCacheResponse?: (body: any) => boolean;
 }
 
 /**
- * The `useQuery` hook is a wrapper around `useQuery` from `react-query`. It supports Suspense calls on the server and on the client.
+ * The `useQuery` hook executes an asynchronous operation like `fetch` in a way that
+ * supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this
+ * hook to call any third-party APIs from a server component.
+ *
+ * \> Note:
+ * \> If you're making a simple fetch call on the server, then we recommend using the [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync) hook instead.
  */
 export function useQuery<T>(
   /** A string or array to uniquely identify the current query. */
   key: QueryKey,
   /** An asynchronous query function like `fetch` which returns data. */
-  queryFn: QueryFunction<T>,
-  /** Options including `cache` to manage the cache behavior of the sub-request. */
-  queryOptions?: HydrogenUseQueryOptions<T, Error, T, QueryKey>
+  queryFn: () => Promise<T>,
+  /** The options to manage the cache behavior of the sub-request. */
+  queryOptions?: HydrogenUseQueryOptions
+) {
+  const request = useServerRequest();
+  const withCacheIdKey = [
+    '__QUERY_CACHE_ID__',
+    ...(typeof key === 'string' ? [key] : key),
+  ];
+  const fetcher = cachedQueryFnBuilder<T>(
+    withCacheIdKey,
+    queryFn,
+    queryOptions
+  );
+
+  collectQueryTimings(request, withCacheIdKey, 'requested');
+
+  if (queryOptions?.preload) {
+    request.savePreloadQuery({
+      preload: queryOptions?.preload,
+      key: withCacheIdKey,
+      fetcher,
+    });
+  }
+
+  return useRequestCacheData<T>(withCacheIdKey, fetcher);
+}
+
+function cachedQueryFnBuilder<T>(
+  key: QueryKey,
+  queryFn: () => Promise<T>,
+  queryOptions?: HydrogenUseQueryOptions
 ) {
   const resolvedQueryOptions = {
-    /**
-     * Prevent react-query from from retrying request failures. This sometimes bites developers
-     * because they will get back a 200 GraphQL response with errors, but not properly check
-     * for errors. This leads to a failed `queryFn` and react-query keeps running it, leading
-     * to a much slower response time and a poor developer experience.
-     */
-    retry: false,
     ...(queryOptions ?? {}),
   };
+
+  const shouldCacheResponse = queryOptions?.shouldCacheResponse ?? (() => true);
 
   /**
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
-  async function cachedQueryFn() {
+  async function useCachedQueryFn() {
+    // Call this hook before running any async stuff
+    // to prevent losing the current React cycle.
+    const request = useServerRequest();
+    const log = getLoggerWithContext(request);
+    const hashedKey = hashKey(key);
+
     const cacheResponse = await getItemFromCache(key);
 
     async function generateNewOutput() {
-      return await queryFn({} as QueryFunctionContext);
+      return await queryFn();
     }
 
     if (cacheResponse) {
       const [output, response] = cacheResponse;
 
+      collectQueryCacheControlHeaders(
+        request,
+        key,
+        response.headers.get('cache-control')
+      );
+
       /**
        * Important: Do this async
        */
-      if (isStale(response)) {
-        console.log(
-          '[useQuery] cache stale; generating new response in background'
-        );
+      if (isStale(response, resolvedQueryOptions?.cache)) {
+        logCacheApiStatus('STALE', hashedKey);
         const lockKey = `lock-${key}`;
 
         runDelayedFunction(async () => {
-          console.log(`[stale regen] fetching cache lock`);
+          logCacheApiStatus('UPDATING', hashedKey);
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
           await setItemInCache(lockKey, true);
           try {
             const output = await generateNewOutput();
-            await setItemInCache(key, output, resolvedQueryOptions?.cache);
+
+            if (shouldCacheResponse(output)) {
+              await setItemInCache(key, output, resolvedQueryOptions?.cache);
+            }
           } catch (e: any) {
-            console.error(`Error generating async response: ${e.message}`);
+            log.error(`Error generating async response: ${e.message}`);
           } finally {
             await deleteItemFromCache(lockKey);
           }
@@ -87,13 +142,20 @@ export function useQuery<T>(
     /**
      * Important: Do this async
      */
-    runDelayedFunction(
-      async () =>
-        await setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+    if (shouldCacheResponse(newOutput)) {
+      runDelayedFunction(() =>
+        setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+      );
+    }
+
+    collectQueryCacheControlHeaders(
+      request,
+      key,
+      generateSubRequestCacheControlHeader(resolvedQueryOptions?.cache)
     );
 
     return newOutput;
   }
 
-  return useReactQuery<T, Error>(key, cachedQueryFn, resolvedQueryOptions);
+  return useCachedQueryFn;
 }

@@ -1,1 +1,1 @@
-export {UnitPrice, UnitPriceFragment} from './UnitPrice.client';
+export {UnitPrice} from './UnitPrice.client';

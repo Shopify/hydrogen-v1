@@ -1,6 +1,6 @@
-declare module globalThis {
-  var __ctx: RuntimeContext | undefined;
-  var __cache: Cache | undefined;
+declare namespace globalThis {
+  let __ctx: RuntimeContext | undefined;
+  let __cache: Cache | undefined;
 }
 
 export interface RuntimeContext {

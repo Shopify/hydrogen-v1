@@ -4,7 +4,7 @@ import {
   UnitPriceMeasurementMeasuredUnit,
   UnitPriceMeasurementMeasuredType,
   UnitPriceMeasurement,
-} from '../../graphql/types/types';
+} from '../../storefront-api-types';
 
 export function getUnitPriceMeasurement(
   unitPriceMeasurement: Partial<UnitPriceMeasurement> = {}

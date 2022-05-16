@@ -1,13 +1,14 @@
 import React from 'react';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
-import {CurrencyCode} from '../../../graphql/types/types';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {CurrencyCode} from '../../../storefront-api-types';
 import {getPrice} from '../../../utilities/tests/price';
 import {Money} from '../Money.client';
+import {Link} from '../../Link/index';
 
 describe('<Money />', () => {
   it('renders a formatted money string', () => {
     const money = getPrice({currencyCode: CurrencyCode.Usd});
-    const component = mountWithShopifyProvider(<Money money={money} />);
+    const component = mountWithProviders(<Money data={money} />);
 
     expect(component).toContainReactText(`$${money.amount}`);
   });
@@ -16,31 +17,63 @@ describe('<Money />', () => {
     const money = getPrice({
       currencyCode: CurrencyCode.Eur,
     });
-    const component = mountWithShopifyProvider(<Money money={money} />);
+    const component = mountWithProviders(<Money data={money} />);
 
     expect(component).toContainReactText(`€${money.amount}`);
   });
 
   it('allows pass-through props to the wrapping component', () => {
-    const component = mountWithShopifyProvider(
-      <Money money={getPrice()} className="money" />
+    const component = mountWithProviders(
+      <Money data={getPrice()} className="money" />
     );
 
     expect(component).toHaveReactProps({className: 'money'});
   });
 
-  it('allows customization through a render function', () => {
-    const money = getPrice({
-      currencyCode: CurrencyCode.Cad,
-    });
-    const component = mountWithShopifyProvider(
-      <Money money={money}>
-        {(money) => <p>{`You owe ${money.amount}!`}</p>}
-      </Money>
+  it(`validates props when a component is passed to the 'as' prop`, () => {
+    const component = mountWithProviders(
+      <Money data={getPrice()} as={Link} to="/test" />
     );
 
-    expect(component).toContainReactComponent('p', {
-      children: `You owe ${money.amount}!`,
+    expect(component).toContainReactComponent(Link, {to: '/test'});
+  });
+
+  it(`removes trailing zeros when the prop is passed`, () => {
+    const money = getPrice({
+      currencyCode: CurrencyCode.Eur,
+      amount: '19.00',
     });
+    const component = mountWithProviders(
+      <Money data={money} withoutTrailingZeros />
+    );
+
+    expect(component).not.toContainReactText(`€${money.amount}`);
+    expect(component).toContainReactText(`€${19}`);
+  });
+
+  it(`removes the currency symbol when the prop is passed`, () => {
+    const money = getPrice({
+      currencyCode: CurrencyCode.Eur,
+    });
+    const component = mountWithProviders(
+      <Money data={money} withoutCurrency />
+    );
+
+    expect(component).not.toContainReactText(`€${money.amount}`);
+    expect(component).toContainReactText(`${money.amount}`);
+  });
+
+  it(`removes the currency symbol and trailing zeros when the props are both passed`, () => {
+    const money = getPrice({
+      currencyCode: CurrencyCode.Eur,
+      amount: '19.00',
+    });
+    const component = mountWithProviders(
+      <Money data={money} withoutCurrency withoutTrailingZeros />
+    );
+
+    expect(component).not.toContainReactText(`€${money.amount}`);
+    expect(component).not.toContainReactText(`${money.amount}`);
+    expect(component).toContainReactText(`19`);
   });
 });

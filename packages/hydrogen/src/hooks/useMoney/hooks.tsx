@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import {useShop} from '../../foundation/useShop';
-import {CurrencyCode, MoneyV2} from '../../graphql/types/types';
+import {CurrencyCode, MoneyV2} from '../../storefront-api-types';
 
 export type UseMoneyValue = {
   /**
@@ -29,34 +29,31 @@ export type UseMoneyValue = {
   parts: Intl.NumberFormatPart[];
   /**
    * A string returned by `new Intl.NumberFormat` for the amount and currency code,
-   * using the `shopify.config.js` locale.
+   * using the `defaultLocale` value in [`hydrogenConfig.shopify`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
    */
   localizedString: string;
   /**
    * The `MoneyV2` object provided as an argument to the hook.
    */
   original: MoneyV2;
-};
-
-// TODO: Remove this when Oxygen supports Intl properly (oxygen-sws#527)
-const NARROW_SYMBOL_MAP: Partial<Record<MoneyV2['currencyCode'], string>> = {
-  USD: '$',
-  AUD: '$',
-  CAD: '$',
-  NZD: '$',
-  EUR: '€',
-  GBP: '£',
-  INR: '₹',
-  RUB: '₽',
-  CNY: '¥',
-  JPY: '¥',
-  BRL: 'R$',
+  /**
+   * A string with trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains.
+   * For example, `$640.00` turns into `$640`.
+   * `$640.42` remains `$640.42`.
+   */
+  withoutTrailingZeros: string;
+  /**
+   * A string without currency and without trailing zeros removed from the fractional part, if any exist. If there are no trailing zeros, then the fractional part remains.
+   * For example, `$640.00` turns into `640`.
+   * `$640.42` turns into `640.42`.
+   */
+  withoutTrailingZerosAndCurrency: string;
 };
 
 /**
- * The `useMoney` hook takes a [`MoneyV2` object](/api/storefront/reference/common-objects/moneyv2) and returns a
+ * The `useMoney` hook takes a [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) and returns a
  * default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by
- * [`Intl.NumberFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
+ * [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
  */
 export function useMoney(money: MoneyV2): UseMoneyValue {
   const {locale} = useShop();
@@ -88,7 +85,31 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
     currencyDisplay: 'narrowSymbol',
   }).formatToParts(amount);
 
-  const moneyValue = useMemo(
+  const withoutTrailingZerosFormatter = new Intl.NumberFormat(locale, {
+    ...options,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
+  const withoutCurrencyFormatter = new Intl.NumberFormat(locale);
+
+  const withoutTrailingZerosOrCurrencyFormatter = new Intl.NumberFormat(
+    locale,
+    {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }
+  );
+
+  const withoutTrailingZeros =
+    amount % 1 === 0 ? withoutTrailingZerosFormatter.format(amount) : value;
+
+  const withoutTrailingZerosAndCurrency =
+    amount % 1 === 0
+      ? withoutTrailingZerosOrCurrencyFormatter.format(amount)
+      : withoutCurrencyFormatter.format(amount);
+
+  const moneyValue = useMemo<UseMoneyValue>(
     () => ({
       currencyCode: money.currencyCode,
       currencyName:
@@ -99,7 +120,6 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
         money.currencyCode,
       currencyNarrowSymbol:
         narrowParts.find((part) => part.type === 'currency')?.value ?? // e.g. "$"
-        NARROW_SYMBOL_MAP[money.currencyCode] ??
         '',
       parts: baseParts,
       localizedString: value,
@@ -112,8 +132,18 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
         .map((part) => part.value)
         .join(''),
       original: money,
+      withoutTrailingZeros,
+      withoutTrailingZerosAndCurrency,
     }),
-    [baseParts, money, nameParts, narrowParts, value]
+    [
+      baseParts,
+      money,
+      nameParts,
+      narrowParts,
+      value,
+      withoutTrailingZeros,
+      withoutTrailingZerosAndCurrency,
+    ]
   );
 
   return moneyValue;

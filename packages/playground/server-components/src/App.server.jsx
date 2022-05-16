@@ -1,22 +1,56 @@
-import {ShopifyServerProvider, DefaultRoutes} from '@shopify/hydrogen';
-import {Switch} from 'react-router-dom';
-import shopifyConfig from '../shopify.config';
+import renderHydrogen from '@shopify/hydrogen/entry-server';
+import {
+  Route,
+  Router,
+  FileRoutes,
+  ShopifyProvider,
+  setLogger,
+} from '@shopify/hydrogen';
 import {Suspense} from 'react';
+import Custom1 from './customRoutes/custom1.server';
+import Custom2 from './customRoutes/custom2.server';
+import LazyRoute from './customRoutes/lazyRoute.server';
+import ServerParams from './customRoutes/params.server';
 
-export default function App({...serverState}) {
-  const pages = import.meta.globEager('./pages/**/*.server.[jt]sx');
+setLogger({
+  trace() {},
+  debug() {},
+  warn(context, ...args) {
+    console.warn(...args);
+  },
+  error(context, ...args) {
+    console.error(...args);
+  },
+  fatal(context, ...args) {
+    console.error(...args);
+  },
+  options: () => ({}),
+});
 
+export default renderHydrogen(() => {
   return (
-    <ShopifyServerProvider shopifyConfig={shopifyConfig} {...serverState}>
-      <Suspense fallback={'Loading...'}>
-        <Switch>
-          <DefaultRoutes
-            pages={pages}
-            serverState={serverState}
-            fallback="Not Found"
-          />
-        </Switch>
-      </Suspense>
-    </ShopifyServerProvider>
+    <Suspense fallback={'Loading...'}>
+      <ShopifyProvider>
+        <Router>
+          <Route path="/custom1" page={<Custom1 />} />
+          <Route path="/custom2/:handle" page={<Custom2 />} />
+          <HasRouteChildren>
+            <Route path="/custom3" page={<Custom1 />} />
+          </HasRouteChildren>
+          <HasInternalRoute />
+          <Route path="/params/:handle" page={<ServerParams />} />
+          <FileRoutes />
+          <LazyRoute />
+        </Router>
+      </ShopifyProvider>
+    </Suspense>
   );
+});
+
+function HasRouteChildren({children}) {
+  return children;
+}
+
+function HasInternalRoute() {
+  return <Route path="/custom4" page={<Custom1 />} />;
 }

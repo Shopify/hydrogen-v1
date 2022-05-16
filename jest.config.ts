@@ -8,18 +8,19 @@ const config: Config.InitialOptions = {
     '!**/*/dist/**/*',
     '!**/*/fixtures/**/*',
   ],
-  testPathIgnorePatterns: ['<rootDir>/packages/playground/*'],
+  testPathIgnorePatterns: [
+    '<rootDir>/packages/playground/*',
+    '<rootDir>/examples/*',
+    '<rootDir>/templates/*',
+    '<rootDir>/packages/hydrogen-ui/*',
+  ],
   testTimeout: process.env.CI ? 30000 : 10000,
   watchPathIgnorePatterns: ['<rootDir>/temp', 'fixtures'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
   globals: {
+    __DEV__: true,
     'ts-jest': {
-      tsconfig: {
-        jsx: 'react',
-        esModuleInterop: true,
-        lib: ['ESNext', 'DOM'],
-        target: 'es6',
-      },
+      tsconfig: './packages/hydrogen/tsconfig.json',
     },
   },
   collectCoverageFrom: [

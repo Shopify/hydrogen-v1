@@ -1,9 +1,5 @@
 import React, {ReactNode, ElementType} from 'react';
-import {
-  useCart,
-  useCartLinesRemoveCallback,
-  useCartLinesUpdateCallback,
-} from '../CartProvider';
+import {useCart} from '../CartProvider';
 import {Props} from '../types';
 import {useCartLine} from '../CartLineProvider';
 
@@ -23,9 +19,7 @@ export function CartLineQuantityAdjustButton<
     adjust?: 'increase' | 'decrease' | 'remove';
   }
 ) {
-  const updateLines = useCartLinesUpdateCallback();
-  const removeLines = useCartLinesRemoveCallback();
-  const {status} = useCart();
+  const {status, linesRemove, linesUpdate} = useCart();
   const cartLine = useCartLine();
   const {children, adjust, ...passthroughProps} = props;
 
@@ -34,13 +28,19 @@ export function CartLineQuantityAdjustButton<
       disabled={status !== 'idle'}
       onClick={() => {
         if (adjust === 'remove') {
-          removeLines([cartLine.id]);
+          linesRemove([cartLine.id]);
           return;
         }
 
         const quantity =
           adjust === 'decrease' ? cartLine.quantity - 1 : cartLine.quantity + 1;
-        updateLines([{id: cartLine.id, quantity}]);
+
+        if (quantity <= 0) {
+          linesRemove([cartLine.id]);
+          return;
+        }
+
+        linesUpdate([{id: cartLine.id, quantity}]);
       }}
       {...passthroughProps}
     >

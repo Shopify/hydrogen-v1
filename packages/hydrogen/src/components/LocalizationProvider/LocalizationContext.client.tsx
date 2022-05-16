@@ -1,12 +1,10 @@
 import {createContext} from 'react';
-import {LocalizationQuery} from './LocalizationQuery';
+import type {LocalizationQuery} from './LocalizationProvider.server';
 
 export type Localization = LocalizationQuery['localization'];
 
 export interface LocalizationContextValue {
   country?: Localization['country'];
-  availableCountries: Localization['availableCountries'];
-  setCountry(country: Localization['country']): void;
 }
 
 export const LocalizationContext =

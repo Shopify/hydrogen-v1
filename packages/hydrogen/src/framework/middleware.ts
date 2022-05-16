@@ -1,112 +1,129 @@
-import {IncomingMessage, NextFunction} from 'connect';
-import http from 'http';
-import {ViteDevServer} from 'vite';
-import {ShopifyConfig} from '../types';
+import type {RequestHandler} from '../entry-server';
+import type {IncomingMessage, NextFunction} from 'connect';
+import type {ServerResponse} from 'http';
+import type {ViteDevServer} from 'vite';
+import type {ShopifyConfig} from '../types';
 import {graphiqlHtml} from './graphiql';
-import handleEvent from '../handle-event';
 
 type HydrogenMiddlewareArgs = {
   dev?: boolean;
-  shopifyConfig?: ShopifyConfig;
   indexTemplate: string | ((url: string) => Promise<string>);
-  getServerEntrypoint: () => Record<string, any> | Promise<Record<string, any>>;
+  getServerEntrypoint: () => any;
   devServer?: ViteDevServer;
   cache?: Cache;
 };
+
+export function graphiqlMiddleware({
+  getShopifyConfig,
+  dev,
+}: {
+  getShopifyConfig: (
+    request: IncomingMessage
+  ) => ShopifyConfig | Promise<ShopifyConfig>;
+  dev?: boolean;
+}) {
+  return async function (
+    request: IncomingMessage,
+    response: ServerResponse,
+    next: NextFunction
+  ) {
+    if (dev && isGraphiqlRequest(request)) {
+      const shopifyConfig = await getShopifyConfig(request);
+      return respondWithGraphiql(response, shopifyConfig);
+    }
+
+    next();
+  };
+}
+
+let entrypointError: Error | null = null;
 
 /**
  * Provides middleware to Node.js Express-like servers. Used by the Hydrogen
  * Vite dev server plugin as well as production Node.js implementation.
  */
-export default function hydrogenMiddleware({
+export function hydrogenMiddleware({
   dev,
-  shopifyConfig,
   cache,
   indexTemplate,
   getServerEntrypoint,
   devServer,
 }: HydrogenMiddlewareArgs) {
+  if (dev && devServer) {
+    // Store this globally for devtools
+    // @ts-ignore
+    globalThis.__viteDevServer = devServer;
+  }
+
+  /**
+   * We're running in the Node.js runtime without access to `fetch`,
+   * which is needed for proxy requests and server-side API requests.
+   */
+  const webPolyfills =
+    !globalThis.fetch || !globalThis.ReadableStream
+      ? import('../utilities/web-api-polyfill')
+      : undefined;
+
   return async function (
     request: IncomingMessage,
-    response: http.ServerResponse,
+    response: ServerResponse,
     next: NextFunction
   ) {
-    const graphiqlRequest = dev && isGraphiqlRequest(request);
-
-    if (graphiqlRequest) {
-      return respondWithGraphiql(response, shopifyConfig);
-    }
-
-    const url = new URL('http://' + request.headers.host + request.originalUrl);
-
-    const isReactHydrationRequest = url.pathname === '/react';
-
-    /**
-     * If it's a dev environment, it's assumed that Vite's dev server is handling
-     * any static or JS requests, so we need to ensure that we don't try to handle them.
-     *
-     * If it's a product environment, it's assumed that the developer is handling
-     * static requests with e.g. static middleware.
-     */
-    if (dev && !shouldInterceptRequest(request, isReactHydrationRequest)) {
-      return next();
-    }
-
     try {
-      /**
-       * We're running in the Node.js runtime without access to `fetch`,
-       * which is needed for proxy requests and server-side API requests.
-       */
-      if (!globalThis.fetch) {
-        const fetch = await import('node-fetch');
-        // @ts-ignore
-        globalThis.fetch = fetch.default;
-        // @ts-ignore
-        globalThis.Request = fetch.Request;
-        // @ts-ignore
-        globalThis.Response = fetch.Response;
-        // @ts-ignore
-        globalThis.Headers = fetch.Headers;
-      }
+      await webPolyfills;
 
-      /**
-       * Dynamically import ServerComponentResponse after the `fetch`
-       * polyfill has loaded above.
-       */
-      const {ServerComponentRequest} = await import(
-        './Hydration/ServerComponentRequest.server'
-      );
-
-      const eventResponse = await handleEvent(
-        /**
-         * Mimic a `FetchEvent`
-         */
-        {},
-        {
-          request: new ServerComponentRequest(request),
-          entrypoint: await getServerEntrypoint(),
-          indexTemplate,
-          streamableResponse: response,
-          dev,
-          cache,
+      const entrypoint = await Promise.resolve(getServerEntrypoint()).catch(
+        (error: Error) => {
+          // Errors are only thrown the first time we try to load the entry point.
+          // After refreshing the browser, this just loads an empty module
+          // and doesn't throw anymore. Store this error in the outer scope
+          // to keep throwing it on refresh until things are fixed.
+          entrypointError = error;
         }
       );
+
+      const handleRequest: RequestHandler = entrypoint?.default ?? entrypoint;
+
+      if (typeof handleRequest !== 'function') {
+        if (entrypointError) {
+          throw entrypointError;
+        } else {
+          // This means there is no error when loading the entry point but
+          // we are still not getting a function as the default export.
+          throw new Error(
+            'Something is wrong in your project. Make sure to add "export default renderHydrogen(...)" in your server entry file.'
+          );
+        }
+      }
+
+      entrypointError = null;
+
+      const eventResponse = await handleRequest(request, {
+        dev,
+        cache,
+        indexTemplate,
+        streamableResponse: response,
+      });
 
       /**
        * If a `Response` was returned, that means it was not streamed.
        * Convert the response into a proper Node.js response.
        */
       if (eventResponse) {
-        eventResponse.headers.forEach((value, key) => {
+        eventResponse.headers.forEach((value: string, key: string) => {
           response.setHeader(key, value);
         });
 
         response.statusCode = eventResponse.status;
-        response.end(eventResponse.body);
+
+        if (eventResponse.body) {
+          response.write(eventResponse.body);
+        }
+
+        response.end();
       }
     } catch (e: any) {
       if (dev && devServer) devServer.ssrFixStacktrace(e);
-      console.log(e.stack);
       response.statusCode = 500;
 
       /**
@@ -118,7 +135,7 @@ export default function hydrogenMiddleware({
       try {
         const template =
           typeof indexTemplate === 'function'
-            ? await indexTemplate(url.toString())
+            ? await indexTemplate(request.originalUrl ?? request.url ?? '')
             : indexTemplate;
         const html = template.replace(
           `<div id="root"></div>`,
@@ -136,16 +153,6 @@ export default function hydrogenMiddleware({
   };
 }
 
-function shouldInterceptRequest(
-  request: IncomingMessage,
-  isReactHydrationRequest: boolean
-) {
-  return (
-    /text\/html|application\/hydrogen/.test(request.headers['accept'] ?? '') ||
-    isReactHydrationRequest
-  );
-}
-
 /**
  * /graphiql and /___graphql are supported
  */
@@ -154,23 +161,23 @@ function isGraphiqlRequest(request: IncomingMessage) {
 }
 
 async function respondWithGraphiql(
-  response: http.ServerResponse,
+  response: ServerResponse,
   shopifyConfig?: ShopifyConfig
 ) {
   if (!shopifyConfig) {
     throw new Error(
-      "You must provide shopifyConfig to Hydrogen's Vite middleware"
+      "You must provide a 'shopify' property in your Hydrogen config file"
     );
   }
 
-  const {storeDomain, storefrontToken, graphqlApiVersion} = shopifyConfig;
+  const {storeDomain, storefrontToken, storefrontApiVersion} = shopifyConfig;
 
   response.setHeader('Content-Type', 'text/html');
   response.end(
     graphiqlHtml(
       storeDomain?.replace(/^https?:\/\//, ''),
       storefrontToken,
-      graphqlApiVersion
+      storefrontApiVersion
     )
   );
 }

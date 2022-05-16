@@ -1,50 +1,45 @@
 // @ts-check
-const {defineConfig} = require('eslint-define-config');
 
-module.exports = defineConfig({
-  ignorePatterns: ['**/graphql/types/types.ts'],
+module.exports = {
+  ignorePatterns: [
+    '**/storefront-api-types.ts',
+    '**/storefront-api-types.d.ts',
+  ],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
   extends: [
     'plugin:node/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
+    'plugin:hydrogen/recommended',
+    'plugin:hydrogen/typescript',
   ],
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
-  parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
   },
   rules: {
-    'tsdoc/syntax': 'warn',
-    'no-debugger': ['error'],
+    'jest/no-disabled-tests': 'off',
+    'jest/no-export': 'off',
+    'jsx-a11y/iframe-has-title': 'off',
+    'no-console': 'off',
+    'no-constant-condition': 'off',
+    'jest/no-done-callback': 'off',
+    'tsdoc/syntax': 'error',
     'node/no-missing-import': [
       'error',
       {
-        allowModules: ['types', 'testUtils', '@shopify/hydrogen'],
-        tryExtensions: ['.ts', '.js', '.jsx', '.tsx', '.d.ts'],
-      },
-    ],
-    'node/no-missing-require': [
-      'error',
-      {
+        allowModules: [
+          'types',
+          'testUtils',
+          '@shopify/hydrogen',
+          '@shopify/hydrogen-ui',
+        ],
         tryExtensions: ['.ts', '.js', '.jsx', '.tsx', '.d.ts'],
       },
     ],
     'node/no-extraneous-import': [
       'error',
       {
-        allowModules: [
-          '@shopify/hydrogen',
-          '@testing-library/react',
-          '@testing-library/user-event',
-          '@shopify/react-testing',
-        ],
+        allowModules: ['@shopify/hydrogen', '@shopify/react-testing'],
       },
     ],
     'node/no-extraneous-require': [
@@ -53,9 +48,7 @@ module.exports = defineConfig({
         allowModules: ['@shopify/hydrogen'],
       },
     ],
-    'node/no-deprecated-api': 'off',
     'node/no-unpublished-import': 'off',
-    'node/no-unpublished-require': 'off',
     'node/no-unsupported-features/es-syntax': 'off',
     'node/no-unsupported-features/es-builtins': [
       'error',
@@ -73,38 +66,33 @@ module.exports = defineConfig({
         ignores: [],
       },
     ],
-    'no-process-exit': 'off',
     'prefer-const': [
       'warn',
       {
         destructuring: 'all',
       },
     ],
-    'react/prop-types': 'off',
+    '@typescript-eslint/ban-types': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/naming-convention': 'off',
+    '@typescript-eslint/no-namespace': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
   overrides: [
+    {
+      files: ['packages/eslint-plugin/**'],
+      rules: {
+        'hydrogen/no-state-in-server-components': 'off',
+        'hydrogen/prefer-image-component': 'off',
+        'jsx-a11y/img-redundant-alt': 'off',
+        'no-prototype-builtins': 'off',
+      },
+    },
     {
       files: ['packages/playground/**'],
       rules: {
         'node/no-extraneous-import': 'off',
         'node/no-extraneous-require': 'off',
-      },
-    },
-    {
-      files: ['packages/create-hydrogen-app/template-*/**'],
-      rules: {
-        'node/no-missing-import': 'off',
-      },
-    },
-    {
-      files: [
-        'packages/dev/**',
-        'packages/localdev/**',
-        'packages/playground/**',
-      ],
-      rules: {
-        'react/react-in-jsx-scope': 'off',
-        'react/prop-types': 'off',
       },
     },
     {
@@ -119,4 +107,4 @@ module.exports = defineConfig({
       },
     },
   ],
-});
+};

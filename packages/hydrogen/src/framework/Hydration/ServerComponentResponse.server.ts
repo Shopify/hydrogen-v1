@@ -1,10 +1,14 @@
 import {renderToString} from 'react-dom/server';
-import {CacheOptions} from '../../types';
-import {generateCacheControlHeader} from '../cache';
+import {CacheSeconds, generateCacheControlHeader} from '../CachingStrategy';
+import type {CachingStrategy} from '../../types';
+import Redirect from '../../foundation/Redirect/Redirect.client';
+import React from 'react';
 
 export class ServerComponentResponse extends Response {
   private wait = false;
-  private cacheOptions?: CacheOptions;
+  private cacheOptions?: CachingStrategy;
+
+  public customStatus?: {code?: number; text?: string};
 
   /**
    * Allow custom body to be a string or a Promise.
@@ -23,17 +27,40 @@ export class ServerComponentResponse extends Response {
     return !this.wait;
   }
 
-  cache(options: CacheOptions) {
+  cache(options: CachingStrategy) {
     this.cacheOptions = options;
   }
 
   get cacheControlHeader(): string {
-    const options = {
-      ...DEFAULT_CACHE_OPTIONS,
-      ...(this.cacheOptions ?? {}),
-    };
+    return generateCacheControlHeader(this.cacheOptions || CacheSeconds());
+  }
 
-    return generateCacheControlHeader(options);
+  writeHead({
+    status,
+    statusText,
+    headers,
+  }: {
+    status?: number;
+    statusText?: string;
+    headers?: Record<string, any>;
+  } = {}) {
+    if (status || statusText) {
+      this.customStatus = {code: status, text: statusText};
+    }
+
+    if (headers) {
+      for (const [key, value] of Object.entries(headers)) {
+        this.headers.set(key, value);
+      }
+    }
+  }
+
+  redirect(location: string, status = 307) {
+    // writeHead is used for SSR, so that the server responds with a redirect
+    this.writeHead({status, headers: {location}});
+
+    // in the case of an RSC request, instead render a client component that will redirect
+    return React.createElement(Redirect, {to: location});
   }
 
   /**
@@ -53,8 +80,3 @@ export class ServerComponentResponse extends Response {
     return null;
   }
 }
-
-const DEFAULT_CACHE_OPTIONS: CacheOptions = {
-  maxAge: 60 * 60,
-  staleWhileRevalidate: 23 * 60 * 60,
-};

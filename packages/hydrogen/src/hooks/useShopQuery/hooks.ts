@@ -1,72 +1,221 @@
 import {useShop} from '../../foundation/useShop';
+import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';
-import {useQuery} from '../../foundation/useQuery';
-import type {CacheOptions} from '../../types';
-import {isClient, fetchBuilder, graphqlRequestBody} from '../../utilities';
+import type {CachingStrategy, PreloadOptions} from '../../types';
+import {graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
+import {useServerRequest} from '../../foundation/ServerRequestProvider';
+import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
+import {sendMessageToClient} from '../../utilities/devtools';
+import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
+import {META_ENV_SSR} from '../../foundation/ssr-interop';
+import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
+import {parseJSON} from '../../utilities/parse';
+
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
   data: T;
   errors: any;
 }
 
+// Check if the response body has GraphQL errors
+// https://spec.graphql.org/June2018/#sec-Response-Format
+const shouldCacheResponse = ([body]: [any, Response]) => {
+  try {
+    return !parseJSON(body)?.errors;
+  } catch {
+    // If we can't parse the response, then assume
+    // an error and don't cache the response
+    return false;
+  }
+};
+
 /**
- * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API.
- * \> Note:
- * \> It must be a descendent of a `ShopifyProvider` component.
+ * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
  */
 export function useShopQuery<T>({
   query,
   variables = {},
-  cache = {},
+  cache,
+  preload = false,
 }: {
-  /** A string of the GraphQL query. */
-  query: ASTNode | string;
+  /** A string of the GraphQL query.
+   * If no query is provided, useShopQuery will make no calls to the Storefront API.
+   */
+  query?: ASTNode | string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
-  /** An object containing cache-control options for the sub-request. */
-  cache?: CacheOptions;
+  /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to
+   * help you determine which cache control header to set.
+   */
+  cache?: CachingStrategy;
+  /** A string corresponding to a valid locale identifier like `en-us` used to make the request. */
+  locale?: string;
+  /** Whether to[preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries).
+   * Defaults to `false`. Specify `true` to preload the query for the URL or `'*'`
+   * to preload the query for all requests.
+   */
+  preload?: PreloadOptions;
 }): UseShopQueryResponse<T> {
-  if (isClient()) {
+  /**
+   * If no query is passed, we no-op here to allow developers to obey the Rules of Hooks.
+   */
+  if (!query) {
+    return {data: undefined as unknown as T, errors: undefined};
+  }
+
+  if (!META_ENV_SSR) {
     throw new Error(
       'Shopify Storefront API requests should only be made from the server.'
     );
   }
 
-  const {storeDomain, storefrontToken, graphqlApiVersion} = useShop();
+  const serverRequest = useServerRequest(); // eslint-disable-line react-hooks/rules-of-hooks
+  const log = getLoggerWithContext(serverRequest);
 
-  const body = graphqlRequestBody(query, variables);
-  const url = `https://${storeDomain}/api/${graphqlApiVersion}/graphql.json`;
-  const request = new Request(url, {
-    method: 'POST',
-    headers: {
-      'X-Shopify-Storefront-Access-Token': storefrontToken,
-      'content-type': 'application/json',
-    },
-    body,
-  });
+  const body = query ? graphqlRequestBody(query, variables) : '';
+  const {url, requestInit} = useCreateShopRequest(body); // eslint-disable-line react-hooks/rules-of-hooks
 
-  const {data} = useQuery<UseShopQueryResponse<T>>(
-    [storeDomain, graphqlApiVersion, body],
-    fetchBuilder<UseShopQueryResponse<T>>(request),
-    {cache}
-  );
+  let data: any;
+  let useQueryError: any;
+
+  try {
+    data = fetchSync(url, {
+      ...requestInit,
+      cache,
+      preload,
+      shouldCacheResponse,
+    }).json();
+  } catch (error: any) {
+    // Pass-through thrown promise for Suspense functionality
+    if (error?.then) {
+      throw error;
+    }
+
+    useQueryError = error;
+  }
+
+  /**
+   * The fetch request itself failed, so we handle that differently than a GraphQL error
+   */
+  if (useQueryError) {
+    const errorMessage = createErrorMessage(useQueryError);
+
+    log.error(errorMessage);
+    log.error(useQueryError);
+
+    if (getConfig().dev) {
+      throw new Error(errorMessage);
+    } else {
+      // in non-dev environments, we probably don't want super-detailed error messages for the user
+      throw new Error(
+        `The fetch attempt failed; there was an issue connecting to the data source.`
+      );
+    }
+  }
 
   /**
    * GraphQL errors get printed to the console but ultimately
    * get returned to the consumer.
    */
   if (data?.errors) {
-    const errors = data.errors instanceof Array ? data.errors : [data.errors];
-    for (const error of errors) {
-      console.error('GraphQL Error', error);
+    const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
 
+    for (const error of errors) {
       if (getConfig().dev) {
         throw new Error(error.message);
+      } else {
+        log.error('GraphQL Error', error);
       }
     }
-    console.error(`GraphQL errors: ${errors.length}`);
+    log.error(`GraphQL errors: ${errors.length}`);
   }
 
-  return data as UseShopQueryResponse<T>;
+  if (
+    __DEV__ &&
+    log.options().showUnusedQueryProperties &&
+    query &&
+    typeof query !== 'string' &&
+    data?.data
+  ) {
+    const fileLine = new Error('').stack
+      ?.split('\n')
+      .find((line) => line.includes('.server.'));
+    const [, functionName, fileName] =
+      fileLine?.match(/^\s*at (\w+) \(([^)]+)\)/) || [];
+
+    injectGraphQLTracker({
+      query,
+      data,
+      onUnusedData: ({queryName, properties}) => {
+        const footer = `Examine the list of fields above to confirm that they are being used.\n`;
+        const header = `Potentially overfetching fields in GraphQL query.\n`;
+        let info = `Query \`${queryName}\``;
+        if (fileName) {
+          info += ` in file \`${fileName}\` (function \`${functionName}\`)`;
+        }
+
+        const n = 6;
+        const shouldTrim = properties.length > n + 1;
+        const shownProperties = shouldTrim
+          ? properties.slice(0, n)
+          : properties;
+        const hiddenInfo = shouldTrim
+          ? `  ...and ${properties.length - shownProperties.length} more\n`
+          : '';
+
+        const warning =
+          header +
+          info +
+          `:\n• ${shownProperties.join(`\n• `)}\n` +
+          hiddenInfo +
+          footer;
+
+        log.warn(warning);
+        sendMessageToClient({type: 'warn', data: warning});
+      },
+    });
+  }
+
+  return data!;
+}
+
+function useCreateShopRequest(body: string) {
+  const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
+
+  const request = useServerRequest();
+  const buyerIp = request.getBuyerIp();
+
+  const extraHeaders = getStorefrontApiRequestHeaders({
+    buyerIp,
+    storefrontToken,
+  });
+
+  return {
+    key: [storeDomain, storefrontApiVersion, body],
+    url: `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
+    requestInit: {
+      body,
+      method: 'POST',
+      headers: {
+        'X-SDK-Variant': 'hydrogen',
+        'X-SDK-Version': storefrontApiVersion,
+        'content-type': 'application/json',
+        ...extraHeaders,
+      },
+    },
+  };
+}
+
+function createErrorMessage(fetchError: Response | Error) {
+  if (fetchError instanceof Response) {
+    return `An error occurred while fetching from the Storefront API. ${
+      // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
+      fetchError.status === 403
+        ? `You may have a bad value in 'hydrogen.config.js'`
+        : `${fetchError.statusText}`
+    }`;
+  } else {
+    return `Failed to connect to the Storefront API: ${fetchError.message}`;
+  }
 }

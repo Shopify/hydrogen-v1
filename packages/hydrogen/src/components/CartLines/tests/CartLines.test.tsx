@@ -4,9 +4,11 @@ import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {CartLineProductTitle} from '../../CartLineProductTitle';
 import {CART} from '../../CartProvider/tests/fixtures';
 import {CartProvider} from '../../CartProvider';
-import {mountWithShopifyProvider} from '../../../utilities/tests/shopify_provider';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('CartLines', () => {
+  const fetch = global.fetch;
+
   beforeEach(() => {
     // @ts-ignore
     global.fetch = jest.fn(async (_url, _init) => {
@@ -19,9 +21,13 @@ describe('CartLines', () => {
     });
   });
 
+  afterEach(() => {
+    global.fetch = fetch;
+  });
+
   it('renders items', () => {
-    const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={cart}>
+    const wrapper = mountWithProviders(
+      <CartProvider data={cart}>
         <CartLines>
           <CartLineProductTitle />
         </CartLines>
@@ -33,8 +39,8 @@ describe('CartLines', () => {
   });
 
   it('renders items in li if ul is provided as tag', () => {
-    const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={cart}>
+    const wrapper = mountWithProviders(
+      <CartProvider data={cart}>
         <CartLines as="ul">
           <CartLineProductTitle />
         </CartLines>
@@ -43,19 +49,6 @@ describe('CartLines', () => {
 
     expect(wrapper).toContainReactComponent('ul');
     expect(wrapper).toContainReactComponent('li');
-  });
-
-  it('uses render props if provided', () => {
-    const wrapper = mountWithShopifyProvider(
-      <CartProvider cart={cart}>
-        <CartLines>
-          {(line) => <p>{line.merchandise.product.title}</p>}
-        </CartLines>
-      </CartProvider>
-    );
-
-    expect(wrapper).toContainReactComponent('p', {children: 'Product 1'});
-    expect(wrapper).toContainReactComponent('p', {children: 'Product 2'});
   });
 });
 

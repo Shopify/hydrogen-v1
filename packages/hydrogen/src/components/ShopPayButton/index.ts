@@ -1,1 +1,1 @@
-export {ShopPayButton, ShopPayButtonProps} from './ShopPayButton.client';
+export {ShopPayButton} from './ShopPayButton.client';

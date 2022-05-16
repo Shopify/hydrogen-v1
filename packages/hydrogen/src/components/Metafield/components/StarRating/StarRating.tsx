@@ -1,16 +1,17 @@
-import React, {useMemo, ElementType} from 'react';
-import {Props} from '../../../types';
+import React, {useMemo} from 'react';
 import {Rating} from '../../../../types';
 
 export const STAR_EMPTY = '☆';
 export const STAR_FILLED = '★';
 
-export interface StarRatingProps {
+export interface StarRatingProps<TTag> {
   rating: Rating;
+  /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
+  as?: TTag;
 }
 
-export function StarRating<TTag extends ElementType>(
-  props: Props<TTag> & StarRatingProps
+export function StarRating<TTag extends keyof JSX.IntrinsicElements = 'div'>(
+  props: JSX.IntrinsicElements[TTag] & StarRatingProps<TTag>
 ) {
   const {as, rating, ...passthroughProps} = props;
 
@@ -38,7 +39,7 @@ export function StarRating<TTag extends ElementType>(
   return <Wrapper {...passthroughProps}>{starsArray}</Wrapper>;
 }
 
-export function Star({percentFilled}: {percentFilled: Number}) {
+export function Star({percentFilled}: {percentFilled: number}) {
   if (percentFilled === 100) {
     return <span>{STAR_FILLED}</span>;
   }

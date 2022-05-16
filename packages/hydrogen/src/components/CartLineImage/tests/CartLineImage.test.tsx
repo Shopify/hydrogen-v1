@@ -5,17 +5,19 @@ import {CartLineImage} from '../CartLineImage.client';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {Image} from '../../Image';
 
+const cartMerchandiseImage = {
+  url: 'https://cdn.shopify.com/someimage.jpg',
+  altText: 'The product',
+  width: 200,
+  height: 300,
+};
+
 it('displays the image', () => {
   const line = {
     ...CART_LINE,
     merchandise: {
       ...CART_LINE.merchandise,
-      image: {
-        url: 'https://cdn.shopify.com/someimage.jpg',
-        altText: 'The product',
-        width: 200,
-        height: 300,
-      },
+      image: {...cartMerchandiseImage},
     },
   };
 
@@ -26,7 +28,7 @@ it('displays the image', () => {
   );
 
   expect(wrapper).toContainReactComponent(Image, {
-    image: line.merchandise.image,
+    data: line.merchandise.image,
   });
 });
 
@@ -36,8 +38,7 @@ it('allows passthrough props', () => {
     merchandise: {
       ...CART_LINE.merchandise,
       image: {
-        url: 'https://cdn.shopify.com/someimage.jpg',
-        altText: 'The product',
+        ...cartMerchandiseImage,
       },
     },
   };
@@ -49,7 +50,7 @@ it('allows passthrough props', () => {
   );
 
   expect(wrapper).toContainReactComponent(Image, {
-    image: line.merchandise.image,
+    data: line.merchandise.image,
     className: 'w-full',
   });
 });

@@ -1,5 +1,0 @@
-fragment ExternalVideoFragment on ExternalVideo {
-  id
-  embeddedUrl
-  host
-}

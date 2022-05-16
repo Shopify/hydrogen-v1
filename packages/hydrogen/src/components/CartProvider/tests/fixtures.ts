@@ -1,5 +1,7 @@
-import {CART_LINE} from '../../../components/CartLineProvider/tests/fixtures';
-import {getPrice} from '../../../../src/utilities/tests/price';
+import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
+import {getPrice} from '../../../utilities/tests/price';
+import {flattenConnection} from '../../../utilities';
+import type {CartWithActions} from '../types';
 
 export const CART = {
   id: 'abc',
@@ -19,4 +21,33 @@ export const CART = {
 export const CART_WITH_LINES = {
   ...CART,
   lines: {edges: [{node: CART_LINE}]},
+};
+
+export const CART_WITH_LINES_FLATTENED = {
+  ...CART,
+  lines: flattenConnection(CART_WITH_LINES.lines),
+};
+
+export const CART_ACTIONS: CartWithActions = {
+  // @ts-ignore
+  lines: [],
+  attributes: [],
+  status: 'idle',
+  cartCreate: () => {},
+  linesAdd: () => {},
+  linesRemove: () => {},
+  linesUpdate: () => {},
+  noteUpdate: () => {},
+  buyerIdentityUpdate: () => {},
+  cartAttributesUpdate: () => {},
+  discountCodesUpdate: () => {},
+  totalQuantity: CART_WITH_LINES_FLATTENED.lines.reduce((prev, curr) => {
+    return prev + (curr?.quantity ?? 0);
+  }, 0),
+};
+
+// @ts-ignore
+export const CART_WITH_ACTIONS: CartWithActions = {
+  ...CART_ACTIONS,
+  ...CART_WITH_LINES_FLATTENED,
 };

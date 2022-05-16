@@ -29,15 +29,21 @@ fragment CartFragment on Cart {
             id
             availableForSale
             compareAtPriceV2 {
-              ...MoneyFragment
+              currencyCode
+              amount
             }
             priceV2 {
-              ...MoneyFragment
+              currencyCode
+              amount
             }
             requiresShipping
             title
             image {
-              ...ImageFragment
+              id
+              url
+              altText
+              width
+              height
             }
             product {
               handle
@@ -54,16 +60,20 @@ fragment CartFragment on Cart {
   }
   estimatedCost {
     subtotalAmount {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
     totalAmount {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
     totalDutyAmount {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
     totalTaxAmount {
-      ...MoneyFragment
+      currencyCode
+      amount
     }
   }
   note
@@ -73,5 +83,6 @@ fragment CartFragment on Cart {
   }
   discountCodes {
     code
+    applicable
   }
 }

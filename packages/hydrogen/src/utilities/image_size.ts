@@ -1,24 +1,9 @@
-import * as React from 'react';
-import {Image as ImageType} from '../graphql/types/types';
-
-export type Width = string | 'original';
-export type Height = string | 'original';
-export type Crop = 'top' | 'bottom' | 'left' | 'right' | 'center';
-export type Scale = 2 | 3;
-export type Format = 'jpg' | 'pjpg';
-
-export interface ImageSizeOptions {
-  width?: Width;
-  height?: Height;
-  crop?: Crop;
-  scale?: Scale;
-  format?: Format;
-}
-
-export interface ImageLoaderOptions {
-  src: string;
-  options?: {[key: string]: any};
-}
+import type {Image as ImageType} from '../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
+import type {
+  ShopifyLoaderOptions,
+  ShopifyLoaderParams,
+} from '../components/Image';
 
 // TODO: Are there other CDNs missing from here?
 const PRODUCTION_CDN_HOSTNAMES = [
@@ -27,65 +12,50 @@ const PRODUCTION_CDN_HOSTNAMES = [
   'shopify-assets.shopifycdn.com',
   'shopify-assets.shopifycdn.net',
 ];
-
 const LOCAL_CDN_HOSTNAMES = ['spin.dev'];
+const ALL_CDN_HOSTNAMES = [...PRODUCTION_CDN_HOSTNAMES, ...LOCAL_CDN_HOSTNAMES];
 
 /**
  * Adds image size parameters to an image URL hosted by Shopify's CDN
  */
-export function addImageSizeParametersToUrl(
-  url: string,
-  {width, height, crop, scale, format}: ImageSizeOptions
-) {
-  const newUrl = new URL(url);
-  const sizePath = width || height ? `_${width ?? ''}x${height ?? ''}` : '';
-  const cropPath = crop ? `_crop_${crop}` : '';
-  const scalePath = scale ? `@${scale}x` : '';
-  const progressive = format === 'pjpg' ? `.progressive` : '';
-  const asJPG = format === 'jpg' ? `.jpg` : '';
-
-  // We assume here that the last `.` is the delimiter
-  // between the file name and the file type
-  const fileDelimiterIndex = newUrl.pathname.lastIndexOf('.');
-  const fileName = newUrl.pathname.substr(0, fileDelimiterIndex);
-  const fileType = newUrl.pathname.substr(fileDelimiterIndex);
-  newUrl.pathname = `${fileName}${sizePath}${cropPath}${scalePath}${progressive}${fileType}${asJPG}`;
+export function addImageSizeParametersToUrl({
+  src,
+  width,
+  height,
+  crop,
+  scale,
+}: ShopifyLoaderParams) {
+  const newUrl = new URL(src);
+  width && newUrl.searchParams.append('width', width.toString());
+  height && newUrl.searchParams.append('height', height.toString());
+  crop && newUrl.searchParams.append('crop', crop);
+  scale && newUrl.searchParams.append('scale', scale.toString());
 
   return newUrl.toString();
 }
 
-export function shopifyImageLoader({src, options}: ImageLoaderOptions) {
-  const newSrc = new URL(src);
-  const allowedCDNHostnames =
-    PRODUCTION_CDN_HOSTNAMES.concat(LOCAL_CDN_HOSTNAMES);
-  const isShopifyServedImage = allowedCDNHostnames.some((allowedHostname) =>
+export function shopifyImageLoader(params: ShopifyLoaderParams) {
+  const newSrc = new URL(params.src);
+  const isShopifyServedImage = ALL_CDN_HOSTNAMES.some((allowedHostname) =>
     newSrc.hostname.endsWith(allowedHostname)
   );
 
   if (
     !isShopifyServedImage ||
-    options == null ||
-    (!options.width &&
-      !options.height &&
-      !options.crop &&
-      !options.scale &&
-      !options.format)
+    (!params.width && !params.height && !params.crop && !params.scale)
   ) {
-    return src;
+    return params.src;
   }
 
-  return addImageSizeParametersToUrl(src, options);
-}
-
-export function useImageUrl(src?: string, options?: ImageSizeOptions) {
-  return React.useMemo(() => {
-    return src ? shopifyImageLoader({src, options}) : src;
-  }, [options, src]);
+  return addImageSizeParametersToUrl(params);
 }
 
 export function getShopifyImageDimensions(
-  image: Pick<ImageType, 'altText' | 'url' | 'id' | 'width' | 'height'>,
-  options?: ImageSizeOptions
+  image: Pick<
+    PartialDeep<ImageType>,
+    'altText' | 'url' | 'id' | 'width' | 'height'
+  >,
+  options?: ShopifyLoaderOptions
 ) {
   // Storefront API could return null dimension values for images that are not hosted on Shopify CDN
   // The API dimensions references the image's intrinstic/natural dimensions and provides image aspect ratio information
@@ -94,10 +64,10 @@ export function getShopifyImageDimensions(
 
   if (apiWidth && apiHeight && (options?.width || options?.height)) {
     const optionWidth = options?.width
-      ? parseInt(options.width, 10)
+      ? parseInt(options.width.toString(), 10)
       : undefined;
     const optionHeight = options?.height
-      ? parseInt(options.height, 10)
+      ? parseInt(options.height.toString(), 10)
       : undefined;
 
     // Use option defined width & height

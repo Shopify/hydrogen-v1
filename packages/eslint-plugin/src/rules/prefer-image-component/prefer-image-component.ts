@@ -11,18 +11,18 @@ export const preferImageComponent = createRule({
     type: 'suggestion',
     docs: {
       description:
-        'Prefer using @shopify/hydrogen `Image` component in place of HTML `img` tags',
+        'Prefer using the `Image` component instead of HTML `img` tags',
       category: 'Best Practices',
       recommended: 'warn',
     },
     messages: {
-      preferImageComponent: `Use the \`Image\` component from '@shopify/hydrogen' in place of \`${IMAGE_TAG_NAME}\` tags.`,
-      replaceWithImage: `Replace the \`${IMAGE_TAG_NAME}\` with @shopify/hydrogen \`Image\`.`,
+      preferImageComponent: `Use the \`Image\` component from '@shopify/hydrogen' instead of \`${IMAGE_TAG_NAME}\` tags.`,
+      replaceWithImage: `Replace \`${IMAGE_TAG_NAME}\` tags with the \`Image\` component from @shopify/hydrogen.`,
     },
     schema: [],
   },
   defaultOptions: [],
-  create: function (context) {
+  create(context) {
     let hydrogenImportNode: TSESTree.ImportDeclaration | undefined;
     let lastImportNode: TSESTree.ImportDeclaration;
 
@@ -48,7 +48,7 @@ export const preferImageComponent = createRule({
             suggest: [
               {
                 messageId: 'replaceWithImage',
-                fix: function (fixer) {
+                fix(fixer) {
                   const tagFix = fixer.replaceTextRange(
                     [node.range[0] + 1, node.range[0] + 4],
                     IMAGE_COMPONENT_NAME

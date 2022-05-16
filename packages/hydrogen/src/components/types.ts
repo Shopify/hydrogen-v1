@@ -25,14 +25,13 @@ type PropsOf<TTag = any> = TTag extends ElementType
  * This is a "global" list of props we are always going to control, meaning
  * we'll omit the original prop definition if it exists.
  */
-type PropsWeControl = 'as' | 'children';
+type PropsWeControl = keyof OurProps;
 
 /**
  * This is the "global" list of our props, similar to above. It is applied to
  * every component using `Props`.
  */
-type OurProps<TTag> = {
-  as?: TTag;
+type OurProps = {
   children?: ReactNode;
 };
 
@@ -80,7 +79,7 @@ export type Props<TTag, TOmitableProps extends keyof any = __> = CleanProps<
   TTag,
   TOmitableProps
 > &
-  OurProps<TTag>;
+  OurProps;
 
 /**
  * While similar to `Props`, this props an additional second argument `TSlot` which represents the interface
@@ -92,5 +91,4 @@ export type PropsWithSlot<
   TOmitableProps extends keyof any = __
 > = CleanProps<TTag, TOmitableProps> & {
   children?: ReactNode | ((props: TSlot) => ReactElement);
-  as?: TTag;
 };

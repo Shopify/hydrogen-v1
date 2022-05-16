@@ -1,11 +1,38 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## 0.12.1
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+### Patch Changes
 
-## Unreleased
+- [#999](https://github.com/Shopify/hydrogen/pull/999) [`66cc632a`](https://github.com/Shopify/hydrogen/commit/66cc632a00123b1a5fffcd234c25a91e1a86bdf7) Thanks [@cartogram](https://github.com/cartogram)! - Fixes the rule: `server-component-banned-hooks` to allow the banned hooks in shared components.
+
+## 0.12.0
+
+### Minor Changes
+
+- [#877](https://github.com/Shopify/hydrogen/pull/877) [`a362a5dd`](https://github.com/Shopify/hydrogen/commit/a362a5dd02e94c7cdf62bb8d0d7e52e8676b415c) Thanks [@cartogram](https://github.com/cartogram)! - Breaking Change: New rules `client-component-banned-hooks` and `server-component-banned-hooks` added as generic rules to ban any non-supported hooks in each context. `server-component-banned-hooks` combines and replaces the `no-state-in-server-components` and `no-effects-in-server-components` rules. `client-component-banned-hooks` will flag usage of `useQuery` and `useShopQuery` in client components.
+
+## 0.11.0 - 2022-02-24
+
+- No updates. Transitive dependency bump.
+
+## 0.10.0 - 2022-01-25
+
+- No updates. Transitive dependency bump.
+
+## 0.9.0 - 2022-01-20
+
+- No updates. Transitive dependency bump.
+
+## 0.8.0 - 2021-12-07
+
+- No updates. Transitive dependency bump.
+
+## 0.7.1 - 2021-12-02
+
+- No updates. Transitive dependency bump.
+
+## 0.7.0 - 2021-11-22
 
 - New rule `hydrogen/no-effect-in-server-components`. This rule prevents using `useEffect` and `useLayoutEffect` in non-client components.
 

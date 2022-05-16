@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import {useCart} from '../CartProvider';
-import {ShopPayButton, ShopPayButtonProps} from '../ShopPayButton';
+import {ShopPayButton} from '../ShopPayButton';
 
 /**
  * The `CartShopPayButton` component renders a `ShopPayButton` for the items in the cart.
@@ -9,12 +9,20 @@ import {ShopPayButton, ShopPayButtonProps} from '../ShopPayButton';
 export function CartShopPayButton({
   /** A string of classes to apply to the `div` that wraps the `shop-pay-button` web component. */
   className,
-}: Omit<ShopPayButtonProps, 'variantIds'>) {
+}: Omit<React.ComponentProps<typeof ShopPayButton>, 'variantIds'>) {
   const {lines} = useCart();
 
-  const ids = useMemo(() => {
-    return lines.map((line) => line.merchandise.id);
+  const idsAndQuantities = useMemo(() => {
+    return lines.map((line) => ({
+      id: line.merchandise.id,
+      quantity: line.quantity,
+    }));
   }, [lines]);
 
-  return <ShopPayButton className={className} variantIds={ids}></ShopPayButton>;
+  return (
+    <ShopPayButton
+      className={className}
+      variantIdsAndQuantities={idsAndQuantities}
+    ></ShopPayButton>
+  );
 }

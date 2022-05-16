@@ -1,1 +1,1 @@
-export {ShopifyProvider, DEFAULT_API_VERSION} from './ShopifyProvider';
+export {ShopifyContext} from './ShopifyProvider.client';
