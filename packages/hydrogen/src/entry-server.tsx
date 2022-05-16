@@ -645,7 +645,7 @@ function buildAppRSC({App, log, state, request, response}: BuildAppOptions) {
   request.ctx.router.serverProps = serverProps;
 
   const AppRSC = (
-    <ServerRequestProvider request={request} isRSC={true}>
+    <ServerRequestProvider request={request}>
       <PreloadQueries request={request}>
         <App {...serverProps} />
         <Suspense fallback={null}>
@@ -678,7 +678,7 @@ function buildAppSSR(
 
   const AppSSR = (
     <Html {...htmlOptions}>
-      <ServerRequestProvider request={request} isRSC={false}>
+      <ServerRequestProvider request={request}>
         <ServerPropsProvider
           initialServerProps={state as any}
           setServerPropsForRsc={() => {}}
