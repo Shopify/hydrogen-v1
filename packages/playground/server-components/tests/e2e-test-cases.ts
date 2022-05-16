@@ -37,10 +37,8 @@ export default async function testCases({
     expect(await page.textContent('body')).toContain('About');
     expect(await page.textContent('.count')).toBe('Count is 0');
 
-    // await page.click('.increase');
-    // // TODO: Fix test flakiness
-    // await new Promise((res) => setTimeout(res, 1000));
-    // expect(await page.textContent('.count')).toBe('Count is 1');
+    await page.click('.increase');
+    expect(await page.textContent('.count')).toBe('Count is 1');
   });
 
   it('renders `<ShopifyProvider>` dynamically in RSC and on the client', async () => {
@@ -113,6 +111,8 @@ export default async function testCases({
     expect(streamedChunks.length).toBeGreaterThan(1); // Streamed more than 1 chunk
 
     const body = streamedChunks.join('');
+    expect(body).toContain('var __flight=[];');
+    expect(body).toContain('__flight.push(`S1:"react.suspense"');
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -128,11 +128,11 @@ export default async function testCases({
       streamedChunks.push(chunk.toString());
     }
 
-    // Worker test is returning 1 chunk, while node test are returning 2 chunk
-    // The second chunk is undefined
-    // expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
+    expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
 
     const body = streamedChunks.join('');
+    expect(body).toContain('var __flight=[];');
+    expect(body).toContain('__flight.push(`S1:"react.suspense"');
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -392,20 +392,14 @@ export default async function testCases({
       expect(await page.textContent('*')).toContain('fname=sometext');
     });
 
-    // it('can concatenate requests', async () => {
-    //   await page.goto(getServerUrl() + '/html-form');
-    //   expect(await page.textContent('#counter')).toEqual('0');
-    //   await page.click('#increase');
-
-    //   // TODO: Fix test flakiness
-    //   await new Promise((res) => setTimeout(res, 1000));
-    //   expect(await page.textContent('#counter')).toEqual('1');
-    //   await page.click('#increase');
-
-    //   // TODO: Fix test flakiness
-    //   await new Promise((res) => setTimeout(res, 1000));
-    //   expect(await page.textContent('#counter')).toEqual('2');
-    // });
+    it('can concatenate requests', async () => {
+      await page.goto(getServerUrl() + '/html-form');
+      expect(await page.textContent('#counter')).toEqual('0');
+      await page.click('#increase');
+      expect(await page.textContent('#counter')).toEqual('1');
+      await page.click('#increase');
+      expect(await page.textContent('#counter')).toEqual('2');
+    });
   });
 
   describe('Custom Routing', () => {
