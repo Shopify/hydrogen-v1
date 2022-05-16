@@ -112,7 +112,7 @@ export default async function testCases({
 
     const body = streamedChunks.join('');
     expect(body).toContain('var __flight=[];');
-    expect(body).toContain('__flight.push(`S1:"react.suspense"');
+    expect(body).toContain(`__flight.push("S1:\\"react.suspense\\"`);
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -132,7 +132,7 @@ export default async function testCases({
 
     const body = streamedChunks.join('');
     expect(body).toContain('var __flight=[];');
-    expect(body).toContain('__flight.push(`S1:"react.suspense"');
+    expect(body).toContain(`__flight.push("S1:\\"react.suspense\\"`);
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -197,6 +197,13 @@ export default async function testCases({
 
     expect(response.headers.get('Content-Type')).toEqual('text/plain');
     expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
+  });
+
+  it('properly escapes props in the SSR flight script chunks', async () => {
+    await page.goto(getServerUrl() + '/escaping');
+    expect(await page.textContent('body')).toContain(
+      "</script><script>alert('hi')</script>"
+    );
   });
 
   describe('HMR', () => {

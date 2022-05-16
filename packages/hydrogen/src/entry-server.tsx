@@ -873,13 +873,7 @@ function flightContainer({
   }
 
   if (chunk) {
-    const normalizedChunk = chunk
-      // 1. Duplicate the escape char (\) for already escaped characters (e.g. \n or \").
-      .replace(/\\/g, String.raw`\\`)
-      // 2. Escape existing backticks to allow wrapping the whole thing in `...`.
-      .replace(/`/g, String.raw`\``);
-
-    script += `__flight.push(\`${normalizedChunk}\`)`;
+    script += `__flight.push(${JSON.stringify(escapeScriptContent(chunk))})`;
   }
 
   return script + '</script>';
@@ -896,3 +890,21 @@ function postRequestTasks(
   logQueryTimings(type, request);
   request.savePreloadQueries();
 }
+
+/**
+ * This escaping function is borrowed from React core. It prevents flight syntax from
+ * prematurely ending the script tag. Untrusted script content should be made safe
+ * before using this api by the developer, but this ensures that the script cannot
+ * be early terminated or never terminated state.
+ * @see https://github.com/facebook/react/blob/4c03bb6ed01a448185d9a1554229208a9480560d/packages/react-dom/src/server/ReactDOMServerFormatConfig.js#L96
+ */
+function escapeScriptContent(scriptText: string) {
+  return ('' + scriptText).replace(scriptRegex, scriptReplacer);
+}
+const scriptRegex = /(<\/|<)(s)(cript)/gi;
+const scriptReplacer = (
+  match: string,
+  prefix: string,
+  s: string,
+  suffix: string
+) => `${prefix}${s === 's' ? '\\u0073' : '\\u0053'}${suffix}`;
