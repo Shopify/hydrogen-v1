@@ -5,6 +5,14 @@ import {getPreviewImage} from '../../../utilities/tests/media';
 import * as utilities from '../../../utilities';
 
 describe('<Image />', () => {
+  let consoleWarnSpy: jest.SpyInstance;
+  beforeEach(() => {
+    consoleWarnSpy = jest.spyOn(console, 'warn');
+    consoleWarnSpy.mockImplementation(() => {});
+  });
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
+  });
   describe('Shopify image data', () => {
     it('renders an `img` element', () => {
       const image = getPreviewImage();
@@ -65,11 +73,10 @@ describe('<Image />', () => {
       });
 
       // @ts-expect-error clear the mock that was created earlier
-      utilities.getShopifyImageDimensions.mockClear();
+      utilities.getShopifyImageDimensions.mockRestore();
     });
 
-    // eslint-disable-next-line jest/no-focused-tests
-    it.only('renders an `img` element without `width` and `height` attributes when invalid dimensions are provided', () => {
+    it('renders an `img` element without `width` and `height` attributes when invalid dimensions are provided', () => {
       const image = getPreviewImage({
         url: 'https://cdn.shopify.com/someimage.jpg',
       });
@@ -89,7 +96,7 @@ describe('<Image />', () => {
       expect(img?.prop('height')).toBeUndefined();
 
       // @ts-expect-error This was mocked out and needs to be restored
-      utilities.getShopifyImageDimensions.mockClear();
+      utilities.getShopifyImageDimensions.mockRestore();
     });
 
     describe('Loaders', () => {
@@ -101,7 +108,7 @@ describe('<Image />', () => {
         const transformedSrc =
           'https://cdn.shopify.com/someimage_100x200@2x.jpg';
 
-        const options = {width: '100', height: '200', scale: 2 as const};
+        const options = {width: 100, height: 200, scale: 2 as const};
 
         const shopifyImageLoaderSpy = jest
           .spyOn(utilities, 'shopifyImageLoader')
@@ -111,45 +118,14 @@ describe('<Image />', () => {
 
         expect(shopifyImageLoaderSpy).toHaveBeenCalledWith({
           src: image.url,
-          options,
+          ...options,
         });
         expect(component).toContainReactComponent('img', {
           src: transformedSrc,
         });
 
         // @ts-expect-error This was mocked out and needs to be restored
-        utilities.shopifyImageLoader.mockClear();
-      });
-
-      it('uses the `loader` and a combination of both `options` and `loaderOptions` props to transform the src when these props are provided', () => {
-        const image = getPreviewImage({
-          url: 'https://cdn.shopify.com/someimage.jpg',
-        });
-        const transformedSrc =
-          'https://cdn.shopify.com/someimage_150x200@2x.jpg';
-        const loaderMock = jest.fn().mockReturnValue(transformedSrc);
-        const options = {width: '150'};
-        const loaderOptions = {
-          height: 200,
-          scale: 2 as const,
-        };
-
-        const component = mount(
-          <Image
-            data={image}
-            loader={loaderMock}
-            loaderOptions={loaderOptions}
-          />
-        );
-
-        expect(component).toContainReactComponent('img', {
-          src: transformedSrc,
-        });
-
-        expect(loaderMock).toHaveBeenCalledWith({
-          src: image.url,
-          options: {...options, ...loaderOptions},
-        });
+        utilities.shopifyImageLoader.mockRestore();
       });
     });
 
@@ -207,18 +183,14 @@ describe('<Image />', () => {
 
     describe('Width and height checks', () => {
       let consoleErrorSpy: jest.SpyInstance;
-      let consoleWarnSpy: jest.SpyInstance;
 
       beforeEach(() => {
         consoleErrorSpy = jest.spyOn(console, 'error');
         consoleErrorSpy.mockImplementation(() => {});
-        consoleWarnSpy = jest.spyOn(console, 'warn');
-        consoleWarnSpy.mockImplementation(() => {});
       });
 
       afterEach(() => {
         consoleErrorSpy.mockRestore();
-        consoleWarnSpy.mockRestore();
       });
 
       it('throws an error when the `width` is set to zero', () => {

@@ -12,9 +12,10 @@ The `<Image/>` component and related utility functions were reworked and the fol
 - When using the `data` prop, `data.width` and `data.height` or `width` and `height` props are required
 - The `src` and `data` props are mutually exclusive
 - The `loader` prop now receives a singular param as an object
-- `options` is renamed to `loaderOptions`
+- `options` has been merged with `loaderOptions`. When using the `data` prop, `loaderOptions` will be the options for Shopify CDN images. When using the `src` prop, `loaderOptions` will be whatever you define them to be.
 - The TypeScript type `ImageSizeOptions` is now named `ShopifyLoaderOptions`
 - The TypeScript type `ImageLoaderOptions` is now named `ShopifyLoaderParams`
+- The `priority` prop was removed; use the HTML-standard `loading` prop instead
 
 ## `<Video/>`
 

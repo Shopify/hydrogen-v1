@@ -11,8 +11,13 @@ const options = {
 };
 
 describe('Cookie', () => {
+  let consoleWarnSpy: jest.SpyInstance;
   beforeEach(() => {
-    jest.spyOn(log, 'warn');
+    consoleWarnSpy = jest.spyOn(log, 'warn');
+    consoleWarnSpy.mockImplementation(() => {});
+  });
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
   });
   it('parses a cookie', () => {
     const cookie = new Cookie('__session', options);
