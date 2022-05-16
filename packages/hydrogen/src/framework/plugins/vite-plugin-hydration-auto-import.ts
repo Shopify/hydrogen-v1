@@ -34,7 +34,7 @@ export default () => {
 
         return {
           code: code.toString(),
-          map: code.generateMap(),
+          map: {mappings: ''},
         };
       }
 
