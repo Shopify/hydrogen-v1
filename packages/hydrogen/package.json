@@ -19,15 +19,19 @@
     "./plugin": {
       "node": "./dist/node/framework/plugin.js"
     },
-    "./marker": {
-      "import": "./dist/esnext/framework/ClientMarker/index.js"
-    },
     "./middleware": {
       "import": "./dist/esnext/framework/middleware.js",
       "node": "./dist/node/framework/middleware.js"
     },
-    "./worker": {
-      "import": "./dist/worker/handle-worker-event.js"
+    "./package.json": {
+      "import": "./package.json",
+      "node": "./package.json"
+    },
+    "./web-polyfills": {
+      "node": "./dist/node/utilities/web-api-polyfill"
+    },
+    "./vendor/*": {
+      "node": "./vendor/*"
     },
     "./*": {
       "import": "./dist/esnext/*.js",
@@ -37,21 +41,7 @@
   "types": "dist/esnext/index.d.ts",
   "files": [
     "dist",
-    "vendor",
-    "plugin.js",
-    "plugin.d.ts",
-    "entry-server.js",
-    "entry-server.d.ts",
-    "client.js",
-    "client.d.ts",
-    "config.js",
-    "config.d.ts",
-    "entry-client.js",
-    "entry-client.d.ts",
-    "marker.js",
-    "middleware.js",
-    "middleware.d.ts",
-    "web-polyfills.js"
+    "vendor"
   ],
   "scripts": {
     "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",

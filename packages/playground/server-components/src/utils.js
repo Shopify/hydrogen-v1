@@ -1,5 +1,5 @@
-import {defer} from '@shopify/hydrogen/dist/esnext/utilities/defer';
-import {useServerRequest} from '@shopify/hydrogen/dist/esnext/foundation/ServerRequestProvider';
+import {defer} from '@shopify/hydrogen/utilities/defer';
+import {useServerRequest} from '@shopify/hydrogen/foundation/ServerRequestProvider/index';
 
 export function createData(key, ms) {
   const {cache} = useServerRequest().ctx;
