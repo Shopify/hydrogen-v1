@@ -10,7 +10,7 @@ import {RSC_PATHNAME} from '../../constants';
 
 let rscReader: ReadableStream | null;
 
-let cache = new Map();
+const cache = new Map();
 
 /**
  * Much of this is borrowed from React's demo implementation:
@@ -55,5 +55,5 @@ export function useServerResponse(state: any) {
 }
 
 export function useRefresh() {
-  cache = new Map();
+  cache.clear();
 }
