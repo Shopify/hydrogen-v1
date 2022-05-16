@@ -65,6 +65,8 @@ function wrapInClientProxy(_ref) {
   var moduleRef = createModuleReference(id, value, name, isDefault);
 
   var get = function (target, prop, receiver) {
+    if (prop === '$$unwrappedValue') return value;
+    if (prop === '$$moduleReference') return moduleRef;
     return Reflect.get(isRsc() ? moduleRef : target, prop, receiver);
   };
 

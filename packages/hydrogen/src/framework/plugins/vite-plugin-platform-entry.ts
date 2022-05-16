@@ -48,10 +48,7 @@ export default () => {
     transform(code, id) {
       if (normalizePath(id).includes('/hydrogen/dist/esnext/platforms/')) {
         code = code
-          .replace(
-            '__SERVER_ENTRY__',
-            process.env.HYDROGEN_SERVER_ENTRY || HYDROGEN_DEFAULT_SERVER_ENTRY
-          )
+          .replace('__SERVER_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY)
           .replace(
             '__INDEX_TEMPLATE__',
             normalizePath(
