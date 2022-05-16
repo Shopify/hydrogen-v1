@@ -1,8 +1,5 @@
 export {
   addImageSizeParametersToUrl,
-  ImageSizeOptions,
-  ImageLoaderOptions,
-  useImageUrl,
   getShopifyImageDimensions,
   shopifyImageLoader,
 } from './image_size';

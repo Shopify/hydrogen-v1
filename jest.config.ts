@@ -20,12 +20,7 @@ const config: Config.InitialOptions = {
   globals: {
     __DEV__: true,
     'ts-jest': {
-      tsconfig: {
-        jsx: 'react',
-        esModuleInterop: true,
-        lib: ['ESNext', 'DOM'],
-        target: 'es6',
-      },
+      tsconfig: './packages/hydrogen/tsconfig.json',
     },
   },
   collectCoverageFrom: [

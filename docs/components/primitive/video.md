@@ -58,7 +58,7 @@ export default function MyProductVideo() {
 | Name     | Type                                        | Description                                                                                                                            |
 | -------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | data     | <code>PartialDeep&#60;VideoType&#62;</code> | An object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video). |
-| options? | <code>ImageSizeOptions</code>               | An object of image size options for the video's `previewImage`.                                                                        |
+| previewImageOptions? | <code>ShopifyLoaderParams</code>               | An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL.                                                                       |
 
 ## Component type
 
@@ -84,3 +84,4 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 ## Related components
 
 - [`MediaFile`](https://shopify.dev/api/hydrogen/components/primitive/mediafile)
+- [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image)
