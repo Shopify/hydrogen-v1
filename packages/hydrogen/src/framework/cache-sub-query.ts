@@ -83,9 +83,6 @@ export async function deleteItemFromCache(key: QueryKey) {
 /**
  * Manually check the response to see if it's stale.
  */
-export function isStale(
-  response: Response,
-  userCacheOptions?: CachingStrategy
-) {
-  return CacheApi.isStale(response, userCacheOptions);
+export function isStale(response: Response) {
+  return CacheApi.isStale(response);
 }
