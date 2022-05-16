@@ -8,7 +8,13 @@ import type {
 import type {QueryKey} from '../../types';
 import {collectQueryTimings} from '../../utilities/log';
 
-// Cache to inject current request in RSC
+/**
+ * Gets a "cache" object bound to the current React lifecycle. This allows
+ * us to provide a server-only hook for Suspense cache, grabbing the current
+ * request, and more. React has plans to introduce a generic `useRequest`
+ * hook in the flight runtime for this purpose, but for now, we will attach
+ * ourselves to the secret internals and hope we don't get fired.
+ */
 function getRequestCache() {
   const dispatcher =
     // @ts-ignore
