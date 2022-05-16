@@ -1,10 +1,9 @@
-import type {QueryKey, CachingStrategy} from '../types';
+import type {CachingStrategy} from '../types';
 import {getCache} from './runtime';
 import {
   CacheSeconds,
   generateCacheControlHeader,
 } from '../framework/CachingStrategy';
-import {hashKey} from '../utilities/hash';
 import {logCacheApiStatus} from '../utilities/log';
 
 function getCacheControlSetting(
@@ -21,17 +20,10 @@ function getCacheControlSetting(
   }
 }
 
-export function generateSubRequestCacheControlHeader(
+export function generateDefaultCacheControlHeader(
   userCacheOptions?: CachingStrategy
 ): string {
   return generateCacheControlHeader(getCacheControlSetting(userCacheOptions));
-}
-
-/**
- * Cache API is weird. We just need a full URL, so we make one up.
- */
-function getKeyUrl(key: string) {
-  return `https://shopify.dev/?${key}`;
 }
 
 /**
@@ -40,42 +32,36 @@ function getKeyUrl(key: string) {
  * as the response itself so it can be checked for staleness.
  */
 export async function getItemFromCache(
-  key: QueryKey
-): Promise<undefined | [any, Response]> {
+  request: Request
+): Promise<Response | undefined> {
   const cache = getCache();
   if (!cache) {
     return;
   }
 
-  const url = getKeyUrl(hashKey(key));
-  const request = new Request(url);
-
   const response = await cache.match(request);
   if (!response) {
-    logCacheApiStatus('MISS', url);
+    logCacheApiStatus('MISS', request.url);
     return;
   }
 
-  logCacheApiStatus('HIT', url);
+  logCacheApiStatus('HIT', request.url);
 
-  return [await response.json(), response];
+  return response;
 }
 
 /**
  * Put an item into the cache.
  */
 export async function setItemInCache(
-  key: QueryKey,
-  value: any,
+  request: Request,
+  response: Response,
   userCacheOptions?: CachingStrategy
 ) {
   const cache = getCache();
   if (!cache) {
     return;
   }
-
-  const url = getKeyUrl(hashKey(key));
-  const request = new Request(url);
 
   /**
    * We are manually managing staled request by adding this workaround.
@@ -115,45 +101,59 @@ export async function setItemInCache(
    *
    * `isStale` function will use the above information to test for stale-ness of a cached response
    */
-  const cacheControl = getCacheControlSetting(userCacheOptions);
-  const headers = new Headers({
-    'cache-control': generateSubRequestCacheControlHeader(
-      getCacheControlSetting(cacheControl, {
-        maxAge:
-          (cacheControl.maxAge || 0) + (cacheControl.staleWhileRevalidate || 0),
-      })
-    ),
-    'cache-put-date': new Date().toUTCString(),
-  });
+  if (userCacheOptions) {
+    const cacheControl = getCacheControlSetting(userCacheOptions);
 
-  const response = new Response(JSON.stringify(value), {headers});
+    // The padded cache-control abid by Cache API
+    request.headers.set(
+      'cache-control',
+      generateDefaultCacheControlHeader(
+        getCacheControlSetting(cacheControl, {
+          maxAge:
+            (cacheControl.maxAge || 0) +
+            (cacheControl.staleWhileRevalidate || 0),
+        })
+      )
+    );
+    // The cache-control we want to set on response
+    response.headers.set(
+      'cache-control',
+      generateDefaultCacheControlHeader(getCacheControlSetting(cacheControl))
+    );
+  }
+  response.headers.set('cache-put-date', new Date().toUTCString());
 
-  logCacheApiStatus('PUT', url);
+  logCacheApiStatus('PUT', request.url);
   await cache.put(request, response);
 }
 
-export async function deleteItemFromCache(key: QueryKey) {
+export async function deleteItemFromCache(request: Request) {
   const cache = getCache();
   if (!cache) return;
 
-  const url = getKeyUrl(hashKey(key));
-  const request = new Request(url);
-
-  logCacheApiStatus('DELETE', url);
+  logCacheApiStatus('DELETE', request.url);
   await cache.delete(request);
 }
 
 /**
  * Manually check the response to see if it's stale.
  */
-export function isStale(
-  response: Response,
-  userCacheOptions?: CachingStrategy
-) {
-  const responseMaxAge = getCacheControlSetting(userCacheOptions).maxAge || 0;
+export function isStale(response: Response) {
   const responseDate = response.headers.get('cache-put-date');
+  const cacheControl = response.headers.get('cache-control');
+  let responseMaxAge = 0;
 
-  if (!responseDate) return false;
+  if (cacheControl) {
+    const maxAgeMatch = cacheControl.match(/max-age=(\d*)/);
+    if (maxAgeMatch && maxAgeMatch.length > 1) {
+      responseMaxAge = parseFloat(maxAgeMatch[1]);
+    }
+  }
+
+  if (!responseDate) {
+    console.log('No cache-put-date', response.headers);
+    return false;
+  }
 
   const ageInMs =
     new Date().valueOf() - new Date(responseDate as string).valueOf();

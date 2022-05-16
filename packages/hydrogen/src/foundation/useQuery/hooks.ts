@@ -11,7 +11,7 @@ import {
   getItemFromCache,
   isStale,
   setItemInCache,
-} from '../../framework/cache';
+} from '../../framework/cache-sub-query';
 import {hashKey} from '../../utilities/hash';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
@@ -110,7 +110,7 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(response, resolvedQueryOptions?.cache)) {
+      if (isStale(response)) {
         logCacheApiStatus('STALE', hashedKey);
         const lockKey = `lock-${key}`;
 

@@ -1,4 +1,4 @@
-import {generateSubRequestCacheControlHeader} from '../cache';
+import {generateSubRequestCacheControlHeader} from '../cache-sub-query';
 import {CacheSeconds, NoStore} from '../CachingStrategy';
 
 describe('generateSubRequestCacheControlHeader', () => {

@@ -53,6 +53,13 @@ import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
+import {
+  deleteItemFromCache,
+  getItemFromCache,
+  isStale,
+  setItemInCache,
+} from './framework/cache';
+import {CacheSeconds} from './framework/CachingStrategy';
 
 declare global {
   // This is provided by a Vite plugin
@@ -132,28 +139,20 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
 
     // Check if we have cached response
     if (cache) {
-      const cachedResponse = await cache.match(request.cacheKey());
+      const cachedResponse = await getItemFromCache(request.cacheKey());
       if (cachedResponse) {
-        // Only need to check for InMemory cache
-        // Cloudflare worker Cache API doesn't implement state-while-revalidate
-        const cacheStatus = cachedResponse.headers.get('cache');
-        console.log(
-          `cache ${cacheStatus?.padEnd(5)} ${decodeURIComponent(request.url)}`
-        );
-
-        if (cacheStatus === 'STALE') {
+        if (isStale(cachedResponse)) {
           runDelayedFunction(async () => {
             const lockCacheKey = request.cacheKey(true);
-            const lockCachedResponse = await cache.match(lockCacheKey);
+            const lockCachedResponse = await getItemFromCache(lockCacheKey);
 
             // check if a revalidate request is already in progress
             if (!lockCachedResponse) {
-              await cache.put(
+              await setItemInCache(
                 lockCacheKey,
-                new Response(null, {
-                  headers: {
-                    'cache-control': 'max-age=10',
-                  },
+                new Response(null),
+                CacheSeconds({
+                  maxAge: 10,
                 })
               );
               try {
@@ -169,13 +168,15 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
               } catch (e: any) {
                 console.log('Revalidate Error', e);
               } finally {
-                await cache.delete(lockCacheKey);
+                await deleteItemFromCache(lockCacheKey);
               }
             }
           });
         }
         return cachedResponse;
       }
+    } else {
+      console.log('entry-server no cache instance');
     }
     return processRequest(url, request, sessionApi, options, componentResponse);
   };
@@ -192,7 +193,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     const log = getLoggerWithContext(request);
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    if (!isReactHydrationRequest && hydrogenConfig.routes) {
+    if (!isReactHydrationRequest && hydrogenConfig && hydrogenConfig.routes) {
       const apiRoute = getApiRoute(url, hydrogenConfig.routes);
 
       // The API Route might have a default export, making it also a server component
@@ -1031,7 +1032,6 @@ async function cacheResponse(
   revalidate?: Boolean
 ) {
   const cache = getCache();
-  console.log('cacheResponse');
 
   if (cache && chunks.length > 0) {
     if (revalidate) {
@@ -1061,15 +1061,14 @@ async function saveCacheResponse(
       headers.set('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    console.log(`cache PUT   ${decodeURIComponent(request.url)}`);
-
-    await cache.put(
+    await setItemInCache(
       request.cacheKey(),
       new Response(chunks.join(''), {
         status,
         statusText,
         headers,
-      })
+      }),
+      componentResponse.cache()
     );
   }
 }
