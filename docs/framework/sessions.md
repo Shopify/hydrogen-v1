@@ -96,7 +96,7 @@ In Hydrogen, you can use the [`useSession`](https://shopify.dev/api/hydrogen/hoo
 
 The following example shows an API route that's used to retrieve, set, and delete a `countryCode` within a session:
 
-{% codeblock file, filename: 'component.server.jsx' %}
+{% codeblock file, filename: 'my-api.server.js' %}
 
 ```ts
 export async function api(request, {session}) {
@@ -118,6 +118,23 @@ export async function api(request, {session}) {
 ```
 
 {% endcodeblock %}
+
+The following example shows a server component which reads data from the session:
+
+{% codeblock file, filename: 'my-component.server.jsx' %}
+
+```ts
+import {useSession} from '@shopify/hydrogen';
+
+export async function MyComponent() {
+  const {countryCode} = useSession();
+}
+```
+
+{% endcodeblock %}
+
+> Note:
+> Session data is read-only within server components. To update or delete session data, use API functions.
 
 ## Building custom session implementations
 
