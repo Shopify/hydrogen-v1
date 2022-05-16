@@ -76,7 +76,7 @@ If you don't want to build with Tailwind's library and instead want to write you
     cd <directory>
 
     // Install dependencies
-    npm i --legacy-peer-deps
+    npm i
 
     // Start the development server
     npm run dev
