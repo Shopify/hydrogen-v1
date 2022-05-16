@@ -29,8 +29,7 @@ export function generateSubRequestCacheControlHeader(
  * as the response itself so it can be checked for staleness.
  */
 export async function getItemFromCache(
-  key: QueryKey,
-  userCacheOptions?: CachingStrategy
+  key: QueryKey
 ): Promise<undefined | [any, Response]> {
   const cache = getCache();
 

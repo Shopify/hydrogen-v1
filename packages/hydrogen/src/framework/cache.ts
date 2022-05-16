@@ -47,6 +47,13 @@ export async function getItemFromCache(
 
   logCacheApiStatus('HIT', request.url);
 
+  if (isStale(response)) {
+    logCacheApiStatus('STALE', request.url);
+  }
+  console.log(
+    `isStale: ${isStale(response)} - ${response.headers.get('cache-control')}`
+  );
+
   return response;
 }
 
@@ -116,10 +123,12 @@ export async function setItemInCache(
       )
     );
     // The cache-control we want to set on response
-    response.headers.set(
-      'cache-control',
-      generateDefaultCacheControlHeader(getCacheControlSetting(cacheControl))
+    const cacheControlString = generateDefaultCacheControlHeader(
+      getCacheControlSetting(cacheControl)
     );
+    response.headers.set('cache-control', cacheControlString);
+    // CF will override cache-control on both request and response
+    response.headers.set('real-cache-control', cacheControlString);
   }
   response.headers.set('cache-put-date', new Date().toUTCString());
 
@@ -140,7 +149,7 @@ export async function deleteItemFromCache(request: Request) {
  */
 export function isStale(response: Response) {
   const responseDate = response.headers.get('cache-put-date');
-  const cacheControl = response.headers.get('cache-control');
+  const cacheControl = response.headers.get('real-cache-control');
   let responseMaxAge = 0;
 
   if (cacheControl) {
@@ -151,7 +160,6 @@ export function isStale(response: Response) {
   }
 
   if (!responseDate) {
-    console.log('No cache-put-date', response.headers);
     return false;
   }
 

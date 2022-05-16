@@ -3,7 +3,6 @@ import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
   collectQueryTimings,
-  logCacheApiStatus,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -12,7 +11,6 @@ import {
   isStale,
   setItemInCache,
 } from '../../framework/cache-sub-query';
-import {hashKey} from '../../utilities/hash';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
@@ -90,7 +88,6 @@ function cachedQueryFnBuilder<T>(
     // to prevent losing the current React cycle.
     const request = useServerRequest();
     const log = getLoggerWithContext(request);
-    const hashedKey = hashKey(key);
 
     const cacheResponse = await getItemFromCache(key);
 
@@ -111,11 +108,9 @@ function cachedQueryFnBuilder<T>(
        * Important: Do this async
        */
       if (isStale(response)) {
-        logCacheApiStatus('STALE', hashedKey);
-        const lockKey = `lock-${key}`;
+        const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
         runDelayedFunction(async () => {
-          logCacheApiStatus('UPDATING', hashedKey);
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
