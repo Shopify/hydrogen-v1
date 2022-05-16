@@ -1,5 +1,93 @@
 # Changelog
 
+## 0.19.0
+
+### Minor Changes
+
+- [#1053](https://github.com/Shopify/hydrogen/pull/1053) [`c407f304`](https://github.com/Shopify/hydrogen/commit/c407f304352e0b781fa8a729674153ee9b971977) Thanks [@blittle](https://github.com/blittle)! - The selected country is now persisted a part of the session. This means that the page can be refreshed and the country will still be selected. There are a few breaking changes:
+
+  1. `useCountry()` hook now only returns the currently selected country. The `setCountry()` method has been removed.
+  2. The `useCountry()` hook expects a `countryCode` and `countryName` to be a part of the user session.
+  3. The example `/countries` API route has been updated to accept a `POST` request to update the selected country. The CountrySelector components need to be updated to use that route.
+
+  ```diff
+  // src/routes/countries.server.jsx
+
+  -export async function api(request, {queryShop}) {
+  +export async function api(request, {queryShop, session}) {
+  +  if (request.method === 'POST') {
+  +    const {isoCode, name} = await request.json();
+  +
+  +    await session.set('countryCode', isoCode);
+  +    await session.set('countryName', name);
+  +
+  +    return 'success';
+  +  }
+
+     const {
+       data: {
+         localization: {availableCountries},
+       },
+     } = await queryShop({
+        query: QUERY,
+     });
+     return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
+  }
+  ```
+
+  ```diff
+  // src/components/CountrySelector.client.jsx
+
+  export default function CountrySelector() {
+    const [listboxOpen, setListboxOpen] = useState(false);
+
+  - const [selectedCountry, setSelectedCountry] = useCountry();
+  + const [selectedCountry] = useCountry();
+
+  + const setSelectedCountry = useCallback(
+  +   ({isoCode, name}) => {
+  +     fetch(`/countries`, {
+  +       body: JSON.stringify({isoCode, name}),
+  +       method: 'POST',
+  +     })
+  +       .then(() => {
+  +         window.location.reload();
+  +       })
+  +       .catch((error) => {
+  +         console.error(error);
+  +       });
+  +   },
+  +   [],
+  + );
+
+    return (
+        ...
+    );
+  }
+  ```
+
+  4. Each server component page that depends on the selected country pulls it from the session with `useSession()`, rather than `serverProps`.
+
+  ```diff
+  // src/routes/products/[handle].server.jsx
+  + import { useSession } from '@shopify/hydrogen';
+
+  - export default function Product({country = {isoCode: 'US'}}) {
+  + export default function Product() {
+      const {handle} = useRouteParams();
+  +   const {countryCode = 'US'} = useSession();
+      ...
+    }
+  ```
+
+### Patch Changes
+
+- [#1264](https://github.com/Shopify/hydrogen/pull/1264) [`dc966e86`](https://github.com/Shopify/hydrogen/commit/dc966e86b35ffc8a41d8d62e129884926b8db8bc) Thanks [@arlyxiao](https://github.com/arlyxiao)! - Add more bots into user agents
+
+* [#1245](https://github.com/Shopify/hydrogen/pull/1245) [`07866e82`](https://github.com/Shopify/hydrogen/commit/07866e8277dfa3195ef1896b16a58df495a9155f) Thanks [@0x15f](https://github.com/0x15f)! - [#1245](https://github.com/Shopify/hydrogen/pull/1245) - Support optional `priority` prop on Image component. When `true`, the image will be eagerly loaded. Defaults to `false`.
+
+- [#1272](https://github.com/Shopify/hydrogen/pull/1272) [`c1888652`](https://github.com/Shopify/hydrogen/commit/c188865255c5f20d9db285e375c57127030e23e6) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Remove flight chunk
+
 ## 0.18.0
 
 ### Minor Changes

@@ -6,7 +6,10 @@ export default () => {
     output: {},
   };
 
-  if (process.env.WORKER) {
+  const isWorker =
+    Boolean(process.env.WORKER) && process.env.WORKER !== 'undefined';
+
+  if (isWorker) {
     /**
      * By default, SSR dedupe logic gets bundled which runs `require('module')`.
      * We don't want this in our workers runtime, because `require` is not supported.
@@ -52,8 +55,8 @@ export default () => {
          * Tell Vite to bundle everything when we're building for Workers.
          * Otherwise, bundle RSC plugin as a workaround to apply the vendor alias above.
          */
-        noExternal: Boolean(process.env.WORKER) || [/react-server-dom-vite/],
-        target: process.env.WORKER ? 'webworker' : 'node',
+        noExternal: isWorker || [/react-server-dom-vite/],
+        target: isWorker ? 'webworker' : 'node',
       },
 
       // Reload when updating local Hydrogen lib
@@ -95,7 +98,7 @@ export default () => {
 
       define: {
         __DEV__: env.mode !== 'production',
-        __WORKER__: !!process.env.WORKER,
+        __WORKER__: isWorker,
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],

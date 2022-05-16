@@ -10,37 +10,7 @@ import {
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import {RSC_PATHNAME} from '../../constants';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __flight: Array<string>;
-}
-
 let rscReader: ReadableStream | null;
-
-if (globalThis.__flight && __flight.length > 0) {
-  const contentLoaded = new Promise((resolve) =>
-    document.addEventListener('DOMContentLoaded', resolve)
-  );
-
-  try {
-    rscReader = new ReadableStream({
-      start(controller) {
-        const encoder = new TextEncoder();
-        const write = (chunk: string) => {
-          controller.enqueue(encoder.encode(chunk));
-          return 0;
-        };
-
-        __flight.forEach(write);
-        __flight.push = write;
-
-        contentLoaded.then(() => controller.close());
-      },
-    });
-  } catch (_) {
-    // Old browser, will try a new hydration request later
-  }
-}
 
 function createResponseCache() {
   return new Map<string, any>();
