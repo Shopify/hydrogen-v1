@@ -12,7 +12,7 @@ const {copy} = require('./scripts/utils.js');
 
 const cwd = process.cwd();
 
-const TEMPLATES = ['hydrogen'];
+const TEMPLATES = ['hydrogen', 'hello-world-ts', 'hello-world'];
 
 const renameFiles = {
   _gitignore: '.gitignore',
@@ -91,8 +91,10 @@ async function init() {
     });
     template = t;
   }
-
-  const templateDir = path.join(__dirname, `template-${template}`);
+  const templateDir = path.join(
+    __dirname,
+    `templates/template-hydrogen-${template}`
+  );
 
   const write = (file, content) => {
     const targetPath = renameFiles[file]
