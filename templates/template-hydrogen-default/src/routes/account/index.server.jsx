@@ -1,17 +1,11 @@
-import {CacheCustom, useCustomer, useShop} from '@shopify/hydrogen';
+import {useCustomer, useShop, NoStore} from '@shopify/hydrogen';
 
 import AccountDetails from '../../components/AccountDetails.server';
 
 export default function Account({response}) {
+  response.cache(NoStore());
   // not very safe that multipassToken comes from useShop, need to restric it to server
   const {multipassSecret} = useShop();
-
-  // disabled full page cache
-  response.cache(
-    CacheCustom({
-      mode: 'no-store',
-    }),
-  );
 
   const customerAccessToken = useCustomer();
 

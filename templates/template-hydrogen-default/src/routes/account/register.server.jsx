@@ -4,7 +4,9 @@ import gql from 'graphql-tag';
 import Layout from '../../components/Layout.server';
 import AccountCreateForm from '../../components/AccountCreateForm.client';
 
-export default function Register() {
+export default function Register({response}) {
+  response.cache(NoStore());
+
   return (
     <Layout>
       <AccountCreateForm />

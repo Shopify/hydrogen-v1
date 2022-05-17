@@ -12,7 +12,7 @@ export async function api(request, {session, queryShop}) {
   const multipassSecret = shopifyConfig.multipassSecret;
 
   // Todo: get customer email from session
-  const customerEmail = 'michelle.ys.chen@gmail.com';
+  const customerEmail = 'some@email.com';
 
   const multipassToken = encodeCustomerData(multipassSecret, customerEmail);
 

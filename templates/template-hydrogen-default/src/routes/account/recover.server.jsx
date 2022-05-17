@@ -4,7 +4,9 @@ import gql from 'graphql-tag';
 import Layout from '../../components/Layout.server';
 import AccountRecoverForm from '../../components/AccountRecoverForm.client';
 
-export default function Recover() {
+export default function Recover({response}) {
+  response.cache(NoStore());
+
   return (
     <Layout>
       <AccountRecoverForm />

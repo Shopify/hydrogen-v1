@@ -9,7 +9,9 @@ import gql from 'graphql-tag';
 import Layout from '../../components/Layout.server';
 import LoginForm from '../../components/LoginForm.client';
 
-export default function Login() {
+export default function Login({response}) {
+  response.cache(NoStore({}));
+
   const {
     data: {
       shop: {name},
