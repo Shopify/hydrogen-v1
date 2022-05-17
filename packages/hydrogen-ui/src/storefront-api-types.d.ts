@@ -4,7 +4,6 @@
  * If changes need to happen to the types defined in this file, then generally the Storefront API needs to update, and then you can run `yarn graphql-types`
  * Except custom Scalars, which are defined in the `codegen.yml` file
  */
-/* eslint-disable */
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};

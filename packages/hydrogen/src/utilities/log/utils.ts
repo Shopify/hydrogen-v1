@@ -7,7 +7,7 @@ export function findQueryName(key: string) {
     return key.replace('"__QUERY_CACHE_ID__"', '').replace(/"/g, '');
   }
 
-  const match = decodeKey.match(/query ([^\s\()]*)\s?(|\(\{)/);
+  const match = decodeKey.match(/query ([^\s()]*)\s?(|\(\{)/);
   if (match && match.length > 1) {
     return match[1];
   }

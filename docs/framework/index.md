@@ -45,16 +45,16 @@ By default, Hydrogen includes a [`@shopify/hydrogen/platforms/node`](https://git
 
 ### Worker (v8) runtime
 
-The Hydrogen app is hosted on a worker platform like [Oxygen](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-cloudflare-workers) or [Cloudflare](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-oxygen).
+The Hydrogen app is hosted on a worker platform like [Oxygen](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-oxygen) or [Cloudflare](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-cloudflare-workers).
 
 By default, Hydrogen includes a [`@shopify/hydrogen/platforms/worker`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/worker.ts) package for server-side rendering. The Cache API and KV API are powered by Oxygen, Cloudflare, or another runtime adapter.
 
 ## Configuring default entry points
 
-Hydrogen's includes the following default entry points for your app:
+Hydrogen includes the following default entry points for your app:
 
-- **Client entry point**: [`@shopify/hydrogen/entry-client`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/entry-client.tsx), which is included in [`index.html`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/index.html) and used for hydration purposes
-- **Server entry point**: [`App.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/examples/template-hydrogen-default/src/App.server.jsx)
+- **Client entry point**: [`@shopify/hydrogen/entry-client`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/entry-client.tsx), which is included in [`index.html`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/index.html) and used for hydration purposes
+- **Server entry point**: [`App.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/App.server.jsx)
 
 ### Change the client entry point
 

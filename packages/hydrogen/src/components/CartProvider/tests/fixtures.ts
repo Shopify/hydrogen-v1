@@ -2,6 +2,7 @@ import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {getPrice} from '../../../utilities/tests/price';
 import {flattenConnection} from '../../../utilities';
 import type {CartWithActions} from '../types';
+import {defaultCartFragment} from '../cart-queries';
 
 export const CART = {
   id: 'abc',
@@ -44,6 +45,7 @@ export const CART_ACTIONS: CartWithActions = {
   totalQuantity: CART_WITH_LINES_FLATTENED.lines.reduce((prev, curr) => {
     return prev + (curr?.quantity ?? 0);
   }, 0),
+  cartFragment: defaultCartFragment,
 };
 
 // @ts-ignore

@@ -51,6 +51,16 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
+export type HydrogenConfigRoutes = {
+  files?: ImportGlobEagerOutput;
+  basePath?: string;
+  dirPrefix?: string;
+};
+
+type ConfigFetcher<T> = (request: ServerComponentRequest) => T | Promise<T>;
+
+export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
+
 export type ServerAnalyticsConnector = {
   request: (
     request: Request,
@@ -59,15 +69,14 @@ export type ServerAnalyticsConnector = {
   ) => void;
 };
 
-export type ServerHandlerConfig = {
-  routes?: ImportGlobEagerOutput;
-  shopifyConfig: ShopifyConfig;
+export type HydrogenConfig = {
+  routes?: HydrogenConfigRoutes | ImportGlobEagerOutput;
+  shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   session?: (log: Logger) => SessionStorageAdapter;
 };
 
 export type ClientHandlerConfig = {
-  shopifyConfig: ShopifyConfig;
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;
   showDevTools?: boolean;
@@ -127,6 +136,7 @@ export type CachingStrategy = AllCacheOptions;
 export interface HydrogenVitePluginOptions {
   devCache?: boolean;
   purgeQueryCacheOnBuild?: boolean;
+  configPath?: string;
 }
 
 export type PreloadOptions = boolean | string;

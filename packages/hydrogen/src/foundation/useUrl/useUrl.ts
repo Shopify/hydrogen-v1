@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import {RSC_PATHNAME} from '../../constants';
+import {parseJSON} from '../../utilities/parse';
 import {useLocation} from '../Router/BrowserRouter.client';
 import {useEnvContext, META_ENV_SSR} from '../ssr-interop';
 
@@ -8,10 +9,12 @@ import {useEnvContext, META_ENV_SSR} from '../ssr-interop';
  */
 export function useUrl(): URL {
   if (META_ENV_SSR) {
-    const serverUrl = new URL(useEnvContext((req) => req.url));
+    const serverUrl = new URL(
+      useEnvContext((req) => req.url) // eslint-disable-line react-hooks/rules-of-hooks
+    );
 
     if (serverUrl.pathname === RSC_PATHNAME) {
-      const state = JSON.parse(serverUrl.searchParams.get('state') || '{}');
+      const state = parseJSON(serverUrl.searchParams.get('state') || '{}');
 
       const parsedUrl = `${serverUrl.origin}${state.pathname ?? ''}${
         state.search ?? ''
@@ -27,6 +30,8 @@ export function useUrl(): URL {
    * We return a `URL` object instead of passing through `location` because
    * the URL object contains important info like hostname, etc.
    */
-  const location = useLocation();
-  return useMemo(() => new URL(window.location.href), [location]);
+  const location = useLocation(); // eslint-disable-line react-hooks/rules-of-hooks
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  return useMemo(() => new URL(window.location.href), [location]); // eslint-disable-line react-hooks/exhaustive-deps
 }

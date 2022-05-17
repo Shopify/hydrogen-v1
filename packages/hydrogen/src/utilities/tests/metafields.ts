@@ -3,6 +3,7 @@ import faker from 'faker';
 import type {Metafield} from '../../storefront-api-types';
 import {ParsedMetafield, Rating} from '../../types';
 import type {PartialDeep} from 'type-fest';
+import {parseJSON} from '../parse';
 
 export type MetafieldType =
   | 'single_line_text_field'
@@ -121,7 +122,7 @@ export function getMetafieldValue(type: MetafieldType) {
         value: faker.datatype.number(),
         unit: faker.random.arrayElement(['mm', 'cm', 'm', 'in', 'ft', 'yd']),
       });
-    case 'rating':
+    case 'rating': {
       const max = faker.datatype.number({min: 5, max: 10});
       const min = faker.datatype.number({min: 1, max: 4});
       return JSON.stringify({
@@ -129,6 +130,7 @@ export function getMetafieldValue(type: MetafieldType) {
         scale_min: min,
         value: faker.datatype.float({min, max, precision: 0.0001}),
       });
+    }
     default:
       return JSON.stringify(faker.datatype.json());
   }
@@ -164,7 +166,7 @@ export function getParsedMetafield(
     case 'dimension':
     case 'volume':
     case 'rating':
-      field.value = JSON.parse(rawField.value) as Rating;
+      field.value = parseJSON(rawField.value) as Rating;
       break;
     case 'color':
     case 'single_line_text_field':

@@ -60,7 +60,7 @@ export function useServerRequest() {
   } catch {
     // If RSC cache failed it means this is not an RSC request.
     // Try getting SSR context instead:
-    request = useContext(RequestContextSSR);
+    request = useContext(RequestContextSSR); // eslint-disable-line react-hooks/rules-of-hooks
   }
 
   if (!request) {
@@ -79,7 +79,7 @@ export function useServerRequest() {
 
 type RequestCacheResult<T> =
   | {data: T; error?: never} // success
-  | {data?: never; error: Response}; // failure
+  | {data?: never; error: Response | Error}; // failure
 
 /**
  * Returns data stored in the request cache.
@@ -87,7 +87,7 @@ type RequestCacheResult<T> =
  */
 export function useRequestCacheData<T>(
   key: QueryKey,
-  fetcher: () => Promise<T>
+  fetcher: () => T | Promise<T>
 ): RequestCacheResult<T> {
   const request = useServerRequest();
   const cache = request.ctx.cache;
@@ -105,7 +105,14 @@ export function useRequestCacheData<T>(
 
       if (!promise) {
         const startApiTime = getTime();
-        promise = fetcher().then(
+        const maybePromise = fetcher();
+
+        if (!(maybePromise instanceof Promise)) {
+          result = {data: maybePromise};
+          return result;
+        }
+
+        promise = maybePromise.then(
           (data) => {
             result = {data};
 

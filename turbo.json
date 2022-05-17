@@ -13,8 +13,7 @@
       "outputs": []
     },
     "dev": {
-      "cache": false,
-      "dependsOn": ["@shopify/hydrogen#build"]
+      "cache": false
     }
   }
 }

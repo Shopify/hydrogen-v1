@@ -54,6 +54,8 @@ export interface CartWithActions extends Cart {
   discountCodesUpdate: (discountCodes: string[]) => void;
   /** The total number of items in the cart, across all lines. If there are no lines, then the value is 0. */
   totalQuantity: number;
+  /** The fragment used to query the cart object for all queries and mutations. */
+  cartFragment: string;
 }
 
 export type State =

@@ -6,8 +6,7 @@ description: The Money component renders a string of the Storefront API's MoneyV
 
 The `Money` component renders a string of the Storefront API's
 [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the
-`defaultLocale` in the `shopify.config.js` file. If `children` is a function, then it will
-provide render props for the `children` corresponding to the object returned by the `useMoney` hook.
+`defaultLocale` in the [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
 
 ## Example code
 
@@ -42,6 +41,8 @@ export default function Product() {
 | Name | Type                                      | Description                                                                                                                                          |
 | ---- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | as?  | <code>TTag</code>                         | An HTML tag to be rendered as the base element wrapper. The default is `div`.                                                                        |
+| withoutCurrency? | <code>boolean</code> | Whether to remove the currency symbol from the output. |
+| withoutTrailingZeros? | <code>boolean</code> | Whether to remove trailing zeros (fractional money) from the output. If there are no trailing zeros, then the fractional money amount remains. For example, `$640.00` turns into `$640`. `$640.42` turns into `$640.42`. |
 | data | <code>PartialDeep&#60;MoneyV2&#62;</code> | An object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). |
 
 ## Component type

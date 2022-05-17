@@ -15,9 +15,19 @@ yarn
 yarn dev
 ```
 
+To develop against a template, open a new terminal window or tab and choose from the available templates:
+
+- templates/template-hydrogen-default
+- templates/template-hydrogen-hello-world
+
+```bash
+cd templates/template-hydrogen-default
+yarn dev
+```
+
 Visit the dev environment at http://localhost:3000.
 
-To make changes to the Demo Store template, edit the files in `examples/template-hydrogen-default`.
+To make changes to the Demo Store template, edit the files in `templates/template-hydrogen-default`.
 
 To modify Hydrogen framework, components, and hooks, edit the files in `packages/hydrogen`.
 
@@ -27,7 +37,8 @@ You can [inspect Vite plugin](https://github.com/antfu/vite-plugin-inspect) tran
 
 Hydrogen is a Yarn v1 monorepo. It consists of several key packages:
 
-- `examples/template-hydrogen-default`: The Demo Store template
+- `examples`: Illustrative proofs of concept demonstrating integrations and special use cases for Hydrogen
+- `templates`: Full working implementations of a Hydrogen storefront (including the Demo Store template)
 - `packages/hydrogen`: The Hydrogen React framework & SDK
 - `packages/create-hydrogen-app`: The CLI used to scaffold new projects
 - `packages/cli`: The CLI used to perform tasks in a Hydrogen app
@@ -92,13 +103,13 @@ When merging PRs, please select the **Squash and Merge** option, which consolida
 
 If you are building or making changes to a component, be sure to read [What are headless components?](./contributing/headlesscomponents.md) and [How to build headless components](./contributing/howtobuildheadless.md).
 
-## Storefront API Typescript types
+## Storefront API TypeScript types
 
-You can directly import the Typescript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. If you're working on a component, you're not guarnateed to get an object in the exact shape as that type, so wrap it in `PartialDeep` which is imported from `type-fest`. This will also force the component to be more defensive in handling optional properties.
+You can directly import the TypeScript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. If you're working on a component, you're not guarnateed to get an object in the exact shape as that type, so wrap it in `PartialDeep` which is imported from `type-fest`. This will also force the component to be more defensive in handling optional properties.
 
 To update the types, follow the steps below, excluding the parts where you update the version.
 
-### Updating GraphQL and Typescript types to a new Storefront API version
+### Updating GraphQL and TypeScript types to a new Storefront API version
 
 We use `graphql-codegen` to automatically generate types for all of the Storefront API objects for a given version, and that version can be found in the `codegen.yml` file.
 
@@ -106,8 +117,8 @@ In order to update the supported Storefront API version:
 
 1. Update the Schema URL and the header comment in `codegen.yml`
 1. Run `yarn graphql-types`
-1. Fix any Typescript errors that now appear
-   1. One fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up
+1. Fix any TypeScript errors that now appear
+   1. One fast way to find them is to run `yarn build` from the monorepo root and see what TypeScript errors show up
    1. Another way is to clear the test cache with `yarn test --clearCache && yarn test`
 
 For context, updating the `codegen.yml` file and running the script does the following:
@@ -135,7 +146,7 @@ Next, choose an option below.
 
 ### Option 1: `localdev` package
 
-This option creates a new Hydrogen app similar to `examples/template-hydrogen-default` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
+This option creates a new Hydrogen app similar to `templates/template-hydrogen-default` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
 
 ```terminal
 create-hydrogen packages/localdev
@@ -156,7 +167,7 @@ yarn workspace localdev dev
 1. In the directory you want to create your Hydrogen app, run `LOCAL=true create-hydrogen` and answer the prompts.
 1. Run `cd <your app>`.
 1. Run `yarn` or `npm i --legacy-peer-deps`.
-1. Optional. Replace default `shopify.config.js` with your own storefront credentials.
+1. Optional. Replace default `hydrogen.config.js` with your own storefront credentials.
 1. Run `yarn dev` or `npm run dev` to start your dev server.
 1. Open the dev server in your browser at http://localhost:3000.
 

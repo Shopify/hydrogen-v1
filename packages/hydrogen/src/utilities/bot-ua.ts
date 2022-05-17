@@ -8,6 +8,10 @@ const botUserAgents = [
   'applebot',
   'Baiduspider',
   'baiduspider',
+  'Bytespider',
+  '360Spider',
+  'PetalBot',
+  'Yisouspider',
   'bingbot',
   'Bingbot',
   'BingPreview',
@@ -41,6 +45,10 @@ const botUserAgents = [
   'W3C_Validator',
   'WhatsApp',
   'yandex',
+
+  // SEO Tools
+  'Seoradar',
+  'W3C html2txt',
 ];
 
 /**

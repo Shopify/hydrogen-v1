@@ -10,6 +10,7 @@ import {sendMessageToClient} from '../../utilities/devtools';
 import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
 import {META_ENV_SSR} from '../../foundation/ssr-interop';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
+import {parseJSON} from '../../utilities/parse';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -19,8 +20,15 @@ export interface UseShopQueryResponse<T> {
 
 // Check if the response body has GraphQL errors
 // https://spec.graphql.org/June2018/#sec-Response-Format
-const shouldCacheResponse = ([body]: [any, Response]) =>
-  !JSON.parse(body)?.errors;
+const shouldCacheResponse = ([body]: [any, Response]) => {
+  try {
+    return !parseJSON(body)?.errors;
+  } catch {
+    // If we can't parse the response, then assume
+    // an error and don't cache the response
+    return false;
+  }
+};
 
 /**
  * The `useShopQuery` hook allows you to make server-only GraphQL queries to the Storefront API. It must be a descendent of a `ShopifyProvider` component.
@@ -62,11 +70,11 @@ export function useShopQuery<T>({
     );
   }
 
-  const serverRequest = useServerRequest();
+  const serverRequest = useServerRequest(); // eslint-disable-line react-hooks/rules-of-hooks
   const log = getLoggerWithContext(serverRequest);
 
   const body = query ? graphqlRequestBody(query, variables) : '';
-  const {url, requestInit} = useCreateShopRequest(body);
+  const {url, requestInit} = useCreateShopRequest(body); // eslint-disable-line react-hooks/rules-of-hooks
 
   let data: any;
   let useQueryError: any;
@@ -204,7 +212,7 @@ function createErrorMessage(fetchError: Response | Error) {
     return `An error occurred while fetching from the Storefront API. ${
       // 403s to the SF API (almost?) always mean that your Shopify credentials are bad/wrong
       fetchError.status === 403
-        ? `You may have a bad value in 'shopify.config.js'`
+        ? `You may have a bad value in 'hydrogen.config.js'`
         : `${fetchError.statusText}`
     }`;
   } else {

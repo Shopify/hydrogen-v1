@@ -62,9 +62,9 @@ export function AddToCartButton(
           setAddingItem(true);
           linesAdd([
             {
-              quantity: quantity,
+              quantity,
               merchandiseId: variantId,
-              attributes: attributes,
+              attributes,
             },
           ]);
         }}

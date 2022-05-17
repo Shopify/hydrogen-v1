@@ -41,6 +41,6 @@ export function useEnvContext<T>(
   //@SSR if (META_ENV_SSR) return serverGetter(useServerRequest());
 
   return clientFallback && clientFallback.$$typeof === reactContextType
-    ? useContext(clientFallback as Context<T>)
+    ? useContext(clientFallback as Context<T>) // eslint-disable-line react-hooks/rules-of-hooks
     : (clientFallback as T);
 }

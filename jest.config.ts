@@ -11,6 +11,7 @@ const config: Config.InitialOptions = {
   testPathIgnorePatterns: [
     '<rootDir>/packages/playground/*',
     '<rootDir>/examples/*',
+    '<rootDir>/templates/*',
     '<rootDir>/packages/hydrogen-ui/*',
   ],
   testTimeout: process.env.CI ? 30000 : 10000,
@@ -19,12 +20,7 @@ const config: Config.InitialOptions = {
   globals: {
     __DEV__: true,
     'ts-jest': {
-      tsconfig: {
-        jsx: 'react',
-        esModuleInterop: true,
-        lib: ['ESNext', 'DOM'],
-        target: 'es6',
-      },
+      tsconfig: './packages/hydrogen/tsconfig.json',
     },
   },
   collectCoverageFrom: [

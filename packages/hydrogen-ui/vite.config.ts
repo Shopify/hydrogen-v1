@@ -27,6 +27,10 @@ export default defineConfig({
         './src/index.server.ts',
         './src/index.shared.ts',
       ],
+      output: {
+        // keep the folder structure of the components in the dist folder
+        preserveModules: true,
+      },
     },
   },
   plugins: [react()],

@@ -1,20 +1,25 @@
-import {Plugin, loadEnv, ResolvedConfig} from 'vite';
+import {Plugin, loadEnv, ResolvedConfig, normalizePath} from 'vite';
 import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
-import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
+import type {HydrogenVitePluginOptions} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
 
-export const HYDROGEN_DEFAULT_SERVER_ENTRY = '/src/App.server';
+export const HYDROGEN_DEFAULT_SERVER_ENTRY =
+  process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
-export default (
-  shopifyConfig: ShopifyConfig,
-  pluginOptions: HydrogenVitePluginOptions
-) => {
+const virtualModuleId = 'virtual:hydrogen-config';
+const virtualProxyModuleId = virtualModuleId + ':proxy';
+
+export default (pluginOptions: HydrogenVitePluginOptions) => {
+  let config: ResolvedConfig;
+
   return {
     name: 'vite-plugin-hydrogen-middleware',
-
+    configResolved(_config) {
+      config = _config;
+    },
     /**
      * By adding a middleware to the Vite dev server, we can handle SSR without needing
      * a custom node script. It works by handling any requests for `text/html` documents,
@@ -34,8 +39,30 @@ export default (
       // By running this middleware first, we avoid that.
       server.middlewares.use(
         graphiqlMiddleware({
-          shopifyConfig,
           dev: true,
+          getShopifyConfig: async (incomingMessage) => {
+            const {default: hydrogenConfig} = await server.ssrLoadModule(
+              'virtual:hydrogen-config:proxy'
+            );
+
+            // @ts-ignore
+            const {address = 'localhost', port = '3000'} =
+              server.httpServer?.address() || {};
+            const url = new URL(
+              `http://${address}:${port}${incomingMessage.url}`
+            );
+            const request = new Request(url.toString(), {
+              headers: incomingMessage.headers as any,
+            });
+
+            // @ts-expect-error Manually set `normalizedUrl` which a developer expects to be available
+            // via `ServerComponentRequest` during production runtime.
+            request.normalizedUrl = request.url;
+
+            return typeof hydrogenConfig.shopify === 'function'
+              ? hydrogenConfig.shopify(request)
+              : hydrogenConfig.shopify;
+          },
         })
       );
 
@@ -45,19 +72,40 @@ export default (
         server.middlewares.use(
           hydrogenMiddleware({
             dev: true,
-            shopifyConfig,
             indexTemplate: getIndexTemplate,
             getServerEntrypoint: () =>
-              server.ssrLoadModule(
-                process.env.HYDROGEN_SERVER_ENTRY ||
-                  HYDROGEN_DEFAULT_SERVER_ENTRY
-              ),
+              server.ssrLoadModule(HYDROGEN_DEFAULT_SERVER_ENTRY),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)
               : undefined,
           })
         );
+    },
+    async resolveId(source, importer) {
+      if (source === virtualModuleId) {
+        const configPath = await findHydrogenConfigPath(
+          config.root,
+          pluginOptions.configPath
+        );
+
+        return this.resolve(configPath, importer, {
+          skipSelf: true,
+        });
+      }
+
+      if (source === virtualProxyModuleId) {
+        // Virtual modules convention
+        // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
+        return '\0' + virtualProxyModuleId;
+      }
+    },
+    async load(id) {
+      if (id === '\0' + virtualProxyModuleId) {
+        // Likely due to a bug in Vite, but the config cannot be loaded
+        // directly using ssrLoadModule. It needs to be proxied as follows:
+        return `import hc from 'virtual:hydrogen-config'; export default hc;`;
+      }
     },
   } as Plugin;
 };
@@ -81,4 +129,28 @@ async function polyfillOxygenEnv(config: ResolvedConfig) {
   }
 
   globalThis.Oxygen = {env};
+}
+
+async function findHydrogenConfigPath(root: string, userProvidedPath?: string) {
+  let configPath = userProvidedPath;
+
+  if (!configPath) {
+    // Find the config file in the project root
+    const files = await fs.readdir(root);
+    configPath = files.find((file) => /^hydrogen\.config\.[jt]s$/.test(file));
+  }
+
+  if (configPath) {
+    configPath = normalizePath(configPath);
+
+    if (!configPath.startsWith('/'))
+      configPath = path.resolve(root, configPath);
+  }
+
+  return (
+    configPath ||
+    require.resolve(
+      '@shopify/hydrogen/dist/esnext/utilities/empty-hydrogen-config.js'
+    )
+  );
 }

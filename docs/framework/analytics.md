@@ -1,7 +1,7 @@
 ---
 gid: 044c475e-f28g-444b-a984-26e7ebb8bec4
 title: Analytics
-description: Learn about the analytics support build into Hydrogen apps.
+description: Learn about the analytics support built into Hydrogen apps.
 ---
 
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.
@@ -35,6 +35,7 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 | `REMOVE_FROM_CART`      | A customer removes an item from their cart                   |
 | `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated |
 | `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages.                      |
+| `PERFORMANCE`           | The performance metrics for page loads in a Hydrogen app. This is available when you opt in to `<PerformanceMetrics />`.   |
 
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
@@ -311,6 +312,53 @@ useEffect(() => {
 
 {% endcodeblock %}
 
+## Performance metrics
+
+Performance metrics provide insight into how fast pages are loading in your Hydrogen app. For example, you might want to gather the following metrics for full and sub page loads:
+
+- **Time to First Byte (TTFB)**: The time between a browser requesting a page and receiving the first byte of information from the server
+- **First Contentful Paint (FCP)**: The time it takes for a browser to render content on a page
+- **Largest Contentful Paint (LCP)**: The time it takes to render and interact with the largest content element on the page
+- **Duration**: The total amount of time it takes for a page to finish streaming
+
+You can opt in to receive performance metrics for page loads in your Hydrogen app by including `<PerformanceMetrics />` and `PerformanceMetricsServerAnalyticsConnector` in `App.server.js`.
+
+If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in your client component:
+
+{% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
+
+```jsx
+import {
+  PerformanceMetricsServerAnalyticsConnector,
+  ...
+} from '@shopify/hydrogen';
+import {
+  PerformanceMetrics,
+  PerformanceMetricsDebug,
+} from '@shopify/hydrogen/client';
+
+function App({routes}) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ShopifyProvider shopifyConfig={shopifyConfig}>
+        ...
+        <PerformanceMetrics />
+        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+      </ShopifyProvider>
+    </Suspense>
+  );
+}
+
+...
+
+export default renderHydrogen(App, {
+  ...
+  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+});
+```
+
+{% endcodeblock %}
+
 ## Example analytics connectors
 
 The following example shows an implementation of a client analytics connector with [Google Analytics 4](https://developers.google.com/analytics/devguides/collection/ga4):
@@ -444,3 +492,4 @@ describe('Google Analytics 4', () => {
 
 - Learn how to [configure queries to preload](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries) in your Hydrogen app.
 - Learn how to customize the output of [SEO-related tags](https://shopify.dev/custom-storefronts/hydrogen/framework/seo) in your Hydrogen client and server components.
+- Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.

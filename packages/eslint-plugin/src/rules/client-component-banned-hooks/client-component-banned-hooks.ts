@@ -1,7 +1,7 @@
 import {
   createRule,
   getHookName,
-  isClientComponent,
+  isClientComponentFile,
   isHook,
 } from '../../utilities';
 
@@ -12,8 +12,7 @@ export const clientComponentBannedHooks = createRule({
   meta: {
     type: 'problem',
     docs: {
-      //@ts-expect-error
-      description: `Prevent using ${new Intl.ListFormat('en').format(
+      description: `Prevent using ${new (Intl as any).ListFormat('en').format(
         BANNED_HOOKS
       )} in client components`,
       category: 'Possible Errors',
@@ -25,13 +24,13 @@ export const clientComponentBannedHooks = createRule({
     schema: [],
   },
   defaultOptions: [],
-  create: function (context) {
+  create(context) {
     return {
       CallExpression(node) {
         const hook = getHookName(node);
 
         if (
-          isClientComponent(context.getFilename()) &&
+          isClientComponentFile(context.getFilename()) &&
           isHook(node) &&
           BANNED_HOOKS.includes(hook)
         ) {

@@ -1,7 +1,5 @@
-/* eslint-disable no-var */
-/* eslint-disable @typescript-eslint/no-namespace */
 declare namespace globalThis {
-  var __config: HydrogenConfig | undefined;
+  let __config: HydrogenConfig | undefined;
 }
 
 type HydrogenConfig = {
