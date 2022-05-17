@@ -51,13 +51,11 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
-export type HydrogenConfigRoutes =
-  | ImportGlobEagerOutput
-  | {
-      files: ImportGlobEagerOutput;
-      basePath?: string;
-      dirPrefix?: string;
-    };
+export type HydrogenConfigRoutes = {
+  files?: ImportGlobEagerOutput;
+  basePath?: string;
+  dirPrefix?: string;
+};
 
 type ConfigFetcher<T> = (request: ServerComponentRequest) => T | Promise<T>;
 
@@ -72,7 +70,7 @@ export type ServerAnalyticsConnector = {
 };
 
 export type HydrogenConfig = {
-  routes?: HydrogenConfigRoutes;
+  routes?: HydrogenConfigRoutes | ImportGlobEagerOutput;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   session?: (log: Logger) => SessionStorageAdapter;
