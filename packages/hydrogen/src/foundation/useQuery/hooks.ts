@@ -10,7 +10,7 @@ import {
   getItemFromCache,
   isStale,
   setItemInCache,
-} from '../../framework/cache-sub-query';
+} from '../../framework/cache-sub-request';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 import {CacheSeconds} from '../../framework/CachingStrategy';
@@ -108,7 +108,7 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(response)) {
+      if (isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
         runDelayedFunction(async () => {

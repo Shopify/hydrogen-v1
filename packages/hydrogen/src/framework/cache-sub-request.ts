@@ -1,4 +1,4 @@
-import type {QueryKey, CachingStrategy} from '../types';
+import type {QueryKey, CachingStrategy, AllCacheOptions} from '../types';
 import {getCache} from './runtime';
 import {hashKey} from '../utilities/hash';
 import * as CacheApi from './cache';
@@ -15,11 +15,15 @@ function getKeyUrl(key: string) {
   return `https://shopify.dev/?${key}`;
 }
 
+function getCacheOption(userCacheOptions?: CachingStrategy): AllCacheOptions {
+  return userCacheOptions || CacheSeconds();
+}
+
 export function generateSubRequestCacheControlHeader(
   userCacheOptions?: CachingStrategy
 ): string {
   return CacheApi.generateDefaultCacheControlHeader(
-    userCacheOptions || CacheSeconds()
+    getCacheOption(userCacheOptions)
   );
 }
 
@@ -66,7 +70,11 @@ export async function setItemInCache(
   const request = new Request(url);
   const response = new Response(JSON.stringify(value));
 
-  await CacheApi.setItemInCache(request, response, userCacheOptions);
+  await CacheApi.setItemInCache(
+    request,
+    response,
+    getCacheOption(userCacheOptions)
+  );
 }
 
 export async function deleteItemFromCache(key: QueryKey) {
@@ -82,6 +90,6 @@ export async function deleteItemFromCache(key: QueryKey) {
 /**
  * Manually check the response to see if it's stale.
  */
-export function isStale(response: Response) {
-  return CacheApi.isStale(response);
+export function isStale(key: QueryKey, response: Response) {
+  return CacheApi.isStale(new Request(getKeyUrl(hashKey(key))), response);
 }

@@ -47,10 +47,6 @@ export async function getItemFromCache(
 
   logCacheApiStatus('HIT', request.url);
 
-  if (isStale(response)) {
-    logCacheApiStatus('STALE', request.url);
-  }
-
   return response;
 }
 
@@ -60,7 +56,7 @@ export async function getItemFromCache(
 export async function setItemInCache(
   request: Request,
   response: Response,
-  userCacheOptions?: CachingStrategy
+  userCacheOptions: CachingStrategy
 ) {
   const cache = getCache();
   if (!cache) {
@@ -105,28 +101,28 @@ export async function setItemInCache(
    *
    * `isStale` function will use the above information to test for stale-ness of a cached response
    */
-  if (userCacheOptions) {
-    const cacheControl = getCacheControlSetting(userCacheOptions);
 
-    // The padded cache-control abid by Cache API
-    request.headers.set(
-      'cache-control',
-      generateDefaultCacheControlHeader(
-        getCacheControlSetting(cacheControl, {
-          maxAge:
-            (cacheControl.maxAge || 0) +
-            (cacheControl.staleWhileRevalidate || 0),
-        })
-      )
-    );
-    // The cache-control we want to set on response
-    const cacheControlString = generateDefaultCacheControlHeader(
-      getCacheControlSetting(cacheControl)
-    );
-    response.headers.set('cache-control', cacheControlString);
-    // CF will override cache-control on both request and response
-    response.headers.set('real-cache-control', cacheControlString);
-  }
+  const cacheControl = getCacheControlSetting(userCacheOptions);
+
+  // The padded cache-control to mimic stale-while-revalidate
+  request.headers.set(
+    'cache-control',
+    generateDefaultCacheControlHeader(
+      getCacheControlSetting(cacheControl, {
+        maxAge:
+          (cacheControl.maxAge || 0) + (cacheControl.staleWhileRevalidate || 0),
+      })
+    )
+  );
+  // The cache-control we want to set on response
+  const cacheControlString = generateDefaultCacheControlHeader(
+    getCacheControlSetting(cacheControl)
+  );
+
+  // CF will override cache-control, so we need to keep a
+  // non-modified real-cache-control
+  response.headers.set('cache-control', cacheControlString);
+  response.headers.set('real-cache-control', cacheControlString);
   response.headers.set('cache-put-date', new Date().toUTCString());
 
   logCacheApiStatus('PUT', request.url);
@@ -144,7 +140,7 @@ export async function deleteItemFromCache(request: Request) {
 /**
  * Manually check the response to see if it's stale.
  */
-export function isStale(response: Response) {
+export function isStale(request: Request, response: Response) {
   const responseDate = response.headers.get('cache-put-date');
   const cacheControl = response.headers.get('real-cache-control');
   let responseMaxAge = 0;
@@ -164,5 +160,11 @@ export function isStale(response: Response) {
     new Date().valueOf() - new Date(responseDate as string).valueOf();
   const age = ageInMs / 1000;
 
-  return age > responseMaxAge;
+  const result = age > responseMaxAge;
+
+  if (result) {
+    logCacheApiStatus('STALE', request.url);
+  }
+
+  return result;
 }
