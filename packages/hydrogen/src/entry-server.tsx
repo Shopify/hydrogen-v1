@@ -317,8 +317,8 @@ async function stream(
       log.trace('rsc start chunks');
       const encoder = new TextEncoder();
       bufferReadableStream(rscReadable.getReader(), (chunk) => {
-        const scriptTag = flightContainer(chunk);
-        controller.enqueue(encoder.encode(scriptTag));
+        const metaTag = flightContainer(chunk);
+        controller.enqueue(encoder.encode(metaTag));
       }).then(() => {
         log.trace('rsc finish chunks');
         return controller.close();
