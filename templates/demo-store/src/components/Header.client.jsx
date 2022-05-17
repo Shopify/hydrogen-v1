@@ -3,7 +3,6 @@ import {Link} from '@shopify/hydrogen';
 
 import CartToggle from './CartToggle.client';
 import {useCartUI} from './CartUIProvider.client';
-import AccountIcon from './account/AccountIcon';
 import CountrySelector from './CountrySelector.client';
 import Navigation from './Navigation.client';
 import MobileNavigation from './MobileNavigation.client';
@@ -53,7 +52,7 @@ export default function Header({collections, storeName}) {
             </Link>
             <div className="flex justify-end w-20 lg:w-40">
               <Link to="/account" className="mr-2">
-                <AccountIcon />
+                <img src="/account-icon.svg" alt="User account" />
               </Link>
               <CartToggle
                 handleClick={() => {
