@@ -5062,25 +5062,6 @@ eslint-plugin-eslint-comments@^3.2.0:
     escape-string-regexp "^1.0.5"
     ignore "^5.0.5"
 
-eslint-plugin-hydrogen@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-hydrogen/-/eslint-plugin-hydrogen-0.11.0.tgz#c0e90c52c937c0daa5cbb3dec0dcdb7d7ffc7056"
-  integrity sha512-fM1KD0E9KwNOF8bGREuB7LTHoxUkb2qdmZmZErXNzbMx51HNt9CXojtGuyUdkTFt6gvYO11JDzPzVyBUyI4gxQ==
-  dependencies:
-    "@typescript-eslint/eslint-plugin" "^4.26.0"
-    "@typescript-eslint/experimental-utils" "^4.0.1"
-    "@typescript-eslint/parser" "^4.26.0"
-    "@typescript-eslint/types" "^4.20.0"
-    eslint "^7.27.0"
-    eslint-config-prettier "^8.3.0"
-    eslint-plugin-eslint-comments "^3.2.0"
-    eslint-plugin-jest "^24.3.0"
-    eslint-plugin-jsx-a11y "^6.4.0"
-    eslint-plugin-prettier "^3.4.0"
-    eslint-plugin-react "^7.24.0"
-    eslint-plugin-react-hooks "^4.2.0"
-    prettier "^2.0.0"
-
 eslint-plugin-jest@^24.3.0:
   version "24.7.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.7.0.tgz#206ac0833841e59e375170b15f8d0955219c4889"
@@ -10016,7 +9997,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -10173,15 +10154,13 @@ react-dom@0.0.0-experimental-2bf7c02f0-20220314:
     loose-envify "^1.1.0"
     scheduler "0.0.0-experimental-2bf7c02f0-20220314"
 
-react-dom@^0.0.0-experimental-ce1386028-20220428:
-  version "0.0.0-fec00a869"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-fec00a869.tgz#f952e11a31e446c00e87603998d7780bc51bdbd9"
-  integrity sha512-atB5i2HgCvbvhtGXq9oaX/BCL2AFZjnccougU8S9eulRFNQbNrfGNwIcj04PRo3XU1ZsBw5syL/5l596UaolKA==
+react-dom@18.2.0-next-e531a4a62-20220505:
+  version "18.2.0-next-e531a4a62-20220505"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0-next-e531a4a62-20220505.tgz#1020d2b2088cc4c7bb6420fbbd61178b5338a208"
+  integrity sha512-PgjEOWxZSMwLIRccBTYqCZ2NR75H+huKKkZIi4mAvNqAmoilIbPSXuGe2H5E2mN9lhDZWWsnWVHTQVV2wqE0Zw==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "0.0.0-fec00a869"
+    scheduler "0.23.0-next-e531a4a62-20220505"
 
 react-error-boundary@^3.1.3:
   version "3.1.4"
@@ -10237,15 +10216,12 @@ react@0.0.0-experimental-2bf7c02f0-20220314:
   dependencies:
     loose-envify "^1.1.0"
 
-react@^0.0.0-experimental-ce1386028-20220428:
-  version "0.0.0-fec00a869"
-  resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-fec00a869.tgz#1803f4f17cdd5adfdf614de2386c5fb5c84bbe91"
-  integrity sha512-FaS3ViFU4ag7cuhDHQgGK3DAdWaD8YFXzEbO/Qzz33Si7VEzRRdnyoegFwg7VkEKxR6CvCVP6revi9Tm3Gq+WQ==
+react@18.2.0-next-e531a4a62-20220505:
+  version "18.2.0-next-e531a4a62-20220505"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.2.0-next-e531a4a62-20220505.tgz#6930b93958232346dd5a20f7104bce70937defde"
+  integrity sha512-Kg5EIR3ZO6KEctwIT0zqJ5czlvrVoThm9CrPUC2VaDHrZ0S/I8OXSbNjE/8UHJhLRYs7wo7stwCAjWhT7FgP+A==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "0.0.0-fec00a869"
 
 read-pkg-up@^7.0.1:
   version "7.0.1"
@@ -10881,13 +10857,12 @@ scheduler@0.0.0-experimental-2bf7c02f0-20220314:
   dependencies:
     loose-envify "^1.1.0"
 
-scheduler@0.0.0-fec00a869:
-  version "0.0.0-fec00a869"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.0.0-fec00a869.tgz#e28ff1aa107e1d04d6e8901641b4fb1e3ba98577"
-  integrity sha512-0U25jnyBP6dRPYwaVW4WMYB0jJSYlrIHFmIuXv27X+KIHJr7vyE9gcFTqZ61NQTuxYLYepAHnUs4KgQEUDlI+g==
+scheduler@0.23.0-next-e531a4a62-20220505:
+  version "0.23.0-next-e531a4a62-20220505"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.23.0-next-e531a4a62-20220505.tgz#5abc12232066bcf71239005096d03199b77e9f06"
+  integrity sha512-sfMsfhR1NP1g20byrJ01tsW3AG5fF9EA2CKl5nP1SwyypDpezlOT50Al5JFsbHg5znjfoB7nWF6klMbUjTvTAA==
   dependencies:
     loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@^0.20.2:
   version "0.20.2"
@@ -12503,7 +12478,7 @@ unified-message-control@^3.0.0:
     unist-util-visit "^2.0.0"
     vfile-location "^3.0.0"
 
-unified@9.2.2, unified@^9.0.0, unified@^9.1.0:
+unified@^9.0.0, unified@^9.1.0:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/unified/-/unified-9.2.2.tgz#67649a1abfc3ab85d2969502902775eb03146975"
   integrity sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==
