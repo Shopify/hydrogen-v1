@@ -81,7 +81,6 @@ export default function PasswordResetForm({id, resetToken}) {
               className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
                 passwordError ? ' border-red-500' : 'border-gray-900'
               }`}
-              autoFocus
               id="password"
               name="password"
               type="password"
