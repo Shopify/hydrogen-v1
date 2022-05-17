@@ -21,7 +21,7 @@ import {
   preloadRequestCacheData,
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider';
-import {ServerResponse, IncomingMessage} from 'http';
+import type {ServerResponse, IncomingMessage} from 'http';
 import type {PassThrough as PassThroughType, Writable} from 'stream';
 import {
   getApiRouteFromURL,
@@ -166,7 +166,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
                   true
                 );
               } catch (e: any) {
-                console.log('Revalidate Error', e);
+                log.error('Cache revalidate error', e);
               } finally {
                 await deleteItemFromCache(lockCacheKey);
               }
@@ -175,8 +175,6 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
         }
         return cachedResponse;
       }
-    } else {
-      console.log('entry-server no cache instance');
     }
     return processRequest(url, request, sessionApi, options, componentResponse);
   };
@@ -681,7 +679,11 @@ async function hydrate(
       storeWorkerRSCChunks(rscReadableStreams[1], request, componentResponse);
 
       postRequestTasks('rsc', 200, request, componentResponse);
-      return new Response(rscReadableStreams[0]);
+      return new Response(rscReadableStreams[0], {
+        headers: {
+          'cache-control': componentResponse.cacheControlHeader,
+        },
+      });
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
@@ -704,9 +706,9 @@ async function hydrate(
     );
 
     const streamer = rscWriter.renderToPipeableStream(AppRSC);
-    response.writeHead(200, 'ok', {
-      'cache-control': componentResponse.cacheControlHeader,
-    });
+
+    response.statusCode = 200;
+    response.statusMessage = 'ok';
 
     const stream = streamer.pipe(response) as Writable;
 
@@ -718,7 +720,7 @@ async function hydrate(
     // If we are caching
     const rscReadable = rscRenderToReadableStream(AppRSC);
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
-    cacheResponse(componentResponse, request, [bufferedBody]);
+    cacheResponse(componentResponse, request, [bufferedBody], revalidate);
   }
 }
 

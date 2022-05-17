@@ -30,16 +30,16 @@ export class ServerComponentResponse extends Response {
   cache(options?: CachingStrategy) {
     if (options) {
       this.cacheOptions = options;
+      this.headers.set(
+        'cache-control',
+        generateCacheControlHeader(this.cacheOptions)
+      );
     }
     return this.cacheOptions;
   }
 
   get cacheControlHeader(): string {
     return generateCacheControlHeader(this.cacheOptions);
-  }
-
-  cloneResponse(): Response {
-    return this.clone();
   }
 
   writeHead({
