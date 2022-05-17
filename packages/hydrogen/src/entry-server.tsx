@@ -265,12 +265,7 @@ async function render(
   if (flight) {
     html = html.replace(
       '</body>',
-      () =>
-        `${flightContainer({
-          init: true,
-          nonce,
-          chunk: flight as string,
-        })}</body>`
+      () => flightContainer(flight as string) + '</body>'
     );
   }
 
@@ -320,12 +315,10 @@ async function stream(
   const rscToScriptTagReadable = new ReadableStream({
     start(controller) {
       log.trace('rsc start chunks');
-      let init = true;
       const encoder = new TextEncoder();
       bufferReadableStream(rscReadable.getReader(), (chunk) => {
-        const scriptTag = flightContainer({init, chunk, nonce});
+        const scriptTag = flightContainer(chunk);
         controller.enqueue(encoder.encode(scriptTag));
-        init = false;
       }).then(() => {
         log.trace('rsc finish chunks');
         return controller.close();
@@ -858,25 +851,8 @@ async function createNodeWriter() {
   return new PassThrough() as InstanceType<typeof PassThroughType>;
 }
 
-function flightContainer({
-  init,
-  chunk,
-  nonce,
-}: {
-  chunk?: string;
-  init?: boolean;
-  nonce?: string;
-}) {
-  let script = `<script${nonce ? ` nonce="${nonce}"` : ''}>`;
-  if (init) {
-    script += 'var __flight=[];';
-  }
-
-  if (chunk) {
-    script += `__flight.push(${JSON.stringify(escapeScriptContent(chunk))})`;
-  }
-
-  return script + '</script>';
+function flightContainer(chunk: string) {
+  return `<meta data-flight="${encodeURIComponent(chunk)}" />`;
 }
 
 function postRequestTasks(
@@ -890,21 +866,3 @@ function postRequestTasks(
   logQueryTimings(type, request);
   request.savePreloadQueries();
 }
-
-/**
- * This escaping function is borrowed from React core. It prevents flight syntax from
- * prematurely ending the script tag. Untrusted script content should be made safe
- * before using this api by the developer, but this ensures that the script cannot
- * be early terminated or never terminated state.
- * @see https://github.com/facebook/react/blob/4c03bb6ed01a448185d9a1554229208a9480560d/packages/react-dom/src/server/ReactDOMServerFormatConfig.js#L96
- */
-function escapeScriptContent(scriptText: string) {
-  return ('' + scriptText).replace(scriptRegex, scriptReplacer);
-}
-const scriptRegex = /(<\/|<)(s)(cript)/gi;
-const scriptReplacer = (
-  match: string,
-  prefix: string,
-  s: string,
-  suffix: string
-) => `${prefix}${s === 's' ? '\\u0073' : '\\u0053'}${suffix}`;
