@@ -14,5 +14,5 @@ export async function setCustomerAccessToken(
 }
 
 export async function removeCustomerAccessToken(session: SessionApi) {
-  await session.set(CUSTOMER_ACCESS_TOKEN_COOKIE_NAME, '');
+  await session.destroy();
 }

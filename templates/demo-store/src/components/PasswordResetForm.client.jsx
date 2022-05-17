@@ -144,7 +144,7 @@ export default function PasswordResetForm({id, resetToken}) {
 }
 
 function callPasswordResetApi({id, resetToken, password}) {
-  return fetch(`/api/reset`, {
+  return fetch(`/account/reset`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

@@ -2,6 +2,7 @@ import {useShopQuery, NoStore, flattenConnection} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
+import LogoutButton from './LogoutButton.client';
 import MoneyPrice from './MoneyPrice.client';
 
 export default function AccountDetails({customerAccessToken}) {
@@ -28,12 +29,9 @@ export default function AccountDetails({customerAccessToken}) {
     <Layout>
       <h1>{pageHeader}</h1>
       <div className="flex items-center justify-between">
-        <a
-          className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-          href="/api/logout"
-        >
+        <LogoutButton className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
           Logout
-        </a>
+        </LogoutButton>
       </div>
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4">
         <h2>Order History</h2>
