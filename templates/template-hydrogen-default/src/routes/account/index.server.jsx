@@ -1,4 +1,4 @@
-import {useCustomer, useShop, NoStore} from '@shopify/hydrogen';
+import {useCustomer, NoStore} from '@shopify/hydrogen';
 
 import AccountDetails from '../../components/AccountDetails.server';
 
