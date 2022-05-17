@@ -186,9 +186,10 @@ function useCreateShopRequest(body: string) {
   const storefrontApiVersion = storeConfig.storefrontApiVersion;
 
   const storeDomain =
-    Oxygen?.env?.[SHOPIFY_STORE_DOMAIN] ?? storeConfig.storeDomain;
+    globalThis?.Oxygen?.env?.[SHOPIFY_STORE_DOMAIN] ?? storeConfig.storeDomain;
   const storefrontToken =
-    Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN] ?? storeConfig.storefrontToken;
+    globalThis?.Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN] ??
+    storeConfig.storefrontToken;
 
   const request = useServerRequest();
   const buyerIp = request.getBuyerIp();

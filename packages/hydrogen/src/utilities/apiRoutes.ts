@@ -172,9 +172,11 @@ function queryShopBuilder(
 
     const storefrontApiVersion = shopifyConfig.storefrontApiVersion;
     const storeDomain =
-      Oxygen?.env?.[SHOPIFY_STORE_DOMAIN] ?? shopifyConfig.storeDomain;
+      globalThis?.Oxygen?.env?.[SHOPIFY_STORE_DOMAIN] ??
+      shopifyConfig.storeDomain;
     const storefrontToken =
-      Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN] ?? shopifyConfig.storefrontToken;
+      globalThis?.Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN] ??
+      shopifyConfig.storefrontToken;
     const buyerIp = request.getBuyerIp();
 
     const extraHeaders = getStorefrontApiRequestHeaders({
