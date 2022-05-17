@@ -28,6 +28,7 @@ export function App() {
 | ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | children               | <code>React.ReactNode</code> | Any `ReactNode` elements.                                                                                                                              |
 | data?                  | <code>Cart</code>            | An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).                   |
+| cartFragment | <code>string</code> | A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default is used if no argument is provided. |
 | numCartLines?          | <code>number</code>          | A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API.                             |
 | onCreate?              | <code>() => void</code>      | A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API.                             |
 | onLineAdd?             | <code>() => void</code>      | A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API.            |
@@ -134,6 +135,104 @@ The `data` prop is an object with fields that correspond to the Storefront API's
     code
     applicable
   }
+}
+```
+
+## Cart Fragment
+
+Providing a `cartFragment` to CartProvider allows you to customize the fields requested from the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for every query and mutation made by the CartProvider.
+
+The fragment must use the name `CartFragment` as it is referenced as such in each of the queries and mutations.
+
+If you don't provide a `cartFragment`, the following default value is used:
+
+```graphql
+fragment CartFragment on Cart {
+  id
+  checkoutUrl
+  buyerIdentity {
+    countryCode
+    customer {
+      id
+      email
+      firstName
+      lastName
+      displayName
+    }
+    email
+    phone
+  }
+  lines(first: $numCartLines) {
+    edges {
+      node {
+        id
+        quantity
+        attributes {
+          key
+          value
+        }
+        merchandise {
+          ... on ProductVariant {
+            id
+            availableForSale
+            compareAtPriceV2 {
+              ...MoneyFragment
+            }
+            priceV2 {
+              ...MoneyFragment
+            }
+            requiresShipping
+            title
+            image {
+              ...ImageFragment
+            }
+            product {
+              handle
+              title
+            }
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+  estimatedCost {
+    subtotalAmount {
+      ...MoneyFragment
+    }
+    totalAmount {
+      ...MoneyFragment
+    }
+    totalDutyAmount {
+      ...MoneyFragment
+    }
+    totalTaxAmount {
+      ...MoneyFragment
+    }
+  }
+  note
+  attributes {
+    key
+    value
+  }
+  discountCodes {
+    code
+  }
+}
+
+fragment MoneyFragment on MoneyV2 {
+  currencyCode
+  amount
+}
+fragment ImageFragment on Image {
+  id
+  url
+  altText
+  width
+  height
 }
 ```
 

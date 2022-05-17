@@ -8,6 +8,7 @@ import {
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation';
 import {Cart} from './types';
+import {useCart} from '../../hooks/useCart';
 
 export function useCartFetch() {
   const {storeDomain, storefrontApiVersion, storefrontToken} = useShop();
@@ -49,6 +50,7 @@ export function useCartFetch() {
 }
 
 export function useInstantCheckout() {
+  const {cartFragment} = useCart();
   const [cart, updateCart] = useState<Cart | undefined>();
   const [checkoutUrl, updateCheckoutUrl] = useState<Cart['checkoutUrl']>();
   const [error, updateError] = useState<string | undefined>();
@@ -61,7 +63,7 @@ export function useInstantCheckout() {
         CartCreateMutationVariables,
         CartCreateMutation
       >({
-        query: CartCreate,
+        query: CartCreate(cartFragment),
         variables: {
           input: cartInput,
         },
@@ -84,7 +86,7 @@ export function useInstantCheckout() {
         updateCheckoutUrl(dataCart.checkoutUrl);
       }
     },
-    [fetch]
+    [cartFragment, fetch]
   );
 
   return {cart, checkoutUrl, error, createInstantCheckout};
