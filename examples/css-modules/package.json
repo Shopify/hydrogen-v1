@@ -4,16 +4,13 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "yarn build:client && yarn build:server && yarn build:worker",
-    "build:client": "vite build --outDir dist/client --manifest",
-    "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
-    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker",
-    "serve": "node --enable-source-maps dist/server"
+    "dev": "cross-env LOCAL_DEV=true shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "preview": "shopify hydrogen preview"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.2",
-    "cross-env": "^7.0.3",
+    "@shopify/cli": "latest",
+    "@shopify/cli-hydrogen": "latest",
     "postcss": "^8.4.5",
     "vite": "^2.9.0"
   },

@@ -1746,42 +1746,7 @@
     widest-line "^3.1.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@1.6.4":
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.6.4.tgz#fd213265199a8ef93adb358e15a04d74927eb522"
-  integrity sha512-eUnh03MWxs3PHQUdZbo43ceLqmeOgGegsfimeqd6xfhcKwSv8dqarRyAoMCjg7P6Qm5qCjaNFZ6eS4ao349xvQ==
-  dependencies:
-    "@oclif/linewrap" "^1.0.0"
-    "@oclif/screen" "^3.0.2"
-    ansi-escapes "^4.3.2"
-    ansi-styles "^4.3.0"
-    cardinal "^2.1.1"
-    chalk "^4.1.2"
-    clean-stack "^3.0.1"
-    cli-progress "^3.10.0"
-    debug "^4.3.3"
-    ejs "^3.1.6"
-    fs-extra "^9.1.0"
-    get-package-type "^0.1.0"
-    globby "^11.1.0"
-    hyperlinker "^1.0.0"
-    indent-string "^4.0.0"
-    is-wsl "^2.2.0"
-    js-yaml "^3.14.1"
-    lodash "^4.17.21"
-    natural-orderby "^2.0.3"
-    object-treeify "^1.1.33"
-    password-prompt "^1.1.2"
-    semver "^7.3.5"
-    string-width "^4.2.3"
-    strip-ansi "^6.0.1"
-    supports-color "^8.1.1"
-    supports-hyperlinks "^2.2.0"
-    tslib "^2.3.1"
-    widest-line "^3.1.0"
-    wrap-ansi "^7.0.0"
-
-"@oclif/core@^1.2.0", "@oclif/core@^1.3.6":
+"@oclif/core@1.7.0", "@oclif/core@^1.2.0", "@oclif/core@^1.3.6":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.7.0.tgz#3b763b53eafa9afbb13cf7cdfeac0f8ddd8ab1af"
   integrity sha512-I4q4qgtnNG7ef4sBDrJhwADdi7RExQV7LnflnXaWZZDiUoqF9AdOjC4jjx40MK0rRrCehCUtPNZBcr3WmxuS4Q==
@@ -1906,37 +1871,39 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@shopify/cli-hydrogen@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@shopify/cli-hydrogen/-/cli-hydrogen-2.0.0.tgz#654338e744fd8572f988ee753f84dc46f7e5f0da"
-  integrity sha512-3y/9A65spfF63a/mdssSGZiPauyjR0wI+CKmsWTLmP6RR6npKfeUfNchr4f/ydvL0/vJTQyOviBeiGVM0kEc/g==
+"@shopify/cli-hydrogen@latest":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@shopify/cli-hydrogen/-/cli-hydrogen-2.0.3.tgz#d192225cc884875927a3eeb9acfce57855e6c3a2"
+  integrity sha512-ibDFugJkL0+v2Ca+mINjJJcKrmWgIhjuEd0tWCf+9EibtmMtLY9qax55md7uwWT/4lVZtFbMRJv19JF0ALVSnw==
   dependencies:
-    "@oclif/core" "1.3.6"
+    "@oclif/core" "1.7.0"
     "@shopify/mini-oxygen" "^0.0.5"
     "@types/prettier" "^2.4.4"
     prettier "^2.6.1"
-    vite "^2.9.1"
+    vite "^2.9.6"
 
-"@shopify/cli-kit@1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-1.0.9.tgz#aa24b86632ffdadca6beb47806550e90c6ce8125"
-  integrity sha512-Jf7aZ9n43dfkU3nkdib4LknqUmlboBiasHZisehG6Qc6OWcTDcnyKRpAWMhIKPYZUQzK2Sor7BIhyvP+OgADOw==
+"@shopify/cli-kit@2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-2.0.3.tgz#8725258e337d3cc8aeb799e1718b1b41af5ff98f"
+  integrity sha512-3H0NgyY7DNt5+7SUW57SPBaKN6GRapujeFNoMeyyctn01arrl3CcM9jlAjCVsFcQqZa3UI6JBuB0xcOyV6QR4w==
   dependencies:
-    "@oclif/core" "1.3.6"
+    "@oclif/core" "1.7.0"
     keytar "^7.9.0"
-    ngrok "^4.3.1"
     open "^8.4.0"
+    source-map-support "^0.5.21"
+    stacktracey "^2.1.8"
 
-"@shopify/cli@1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-1.0.9.tgz#65c1bda6c19652ea9e743a4c5517d9e577c584cd"
-  integrity sha512-stVo8flzP2oVnAEk5dxxzujTR0k9IJhbqTEaKJq5ccFta7v1fplCguMvH1Y/Cb+rexuJ49TEuh1SsKQEsY2Ujg==
+"@shopify/cli@latest":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-2.0.3.tgz#878ec422285e216b0f19672eb6d3578290cf17f4"
+  integrity sha512-onML3XbfqZGwca9CJB+iCOpJ03Cd8zypwYjTSoU+kYoPMVdrPRe1O+G0FKc6j68N/gCHK2h4/k/gRIKsxwxTlg==
   dependencies:
     "@bugsnag/js" "^7.16.2"
-    "@oclif/core" "1.6.4"
+    "@oclif/core" "1.7.0"
     "@oclif/plugin-help" "^5.1.12"
     "@oclif/plugin-plugins" "^2.1.0"
-    "@shopify/cli-kit" "1.0.9"
+    "@shopify/cli-kit" "2.0.3"
+    "@shopify/plugin-ngrok" "^0.2.4"
 
 "@shopify/mini-oxygen@^0.0.5":
   version "0.0.5"
@@ -1955,6 +1922,14 @@
     mime "^3.0.0"
     semiver "^1.1.0"
     typescript "^4.6.3"
+
+"@shopify/plugin-ngrok@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@shopify/plugin-ngrok/-/plugin-ngrok-0.2.4.tgz#0f105e5c326c2407cff6664668a1ba1cc89a0a04"
+  integrity sha512-GPwqJBAnLt/DJNqS9DYtIypXlE4P67d43xNYjGg/3WiiP/bM2G2f4ablsLk6VSMVv/LJjR8xYIT137aUNMNecw==
+  dependencies:
+    "@oclif/core" "1.3.6"
+    ngrok "^4.3.1"
 
 "@shopify/prettier-config@^1.1.2":
   version "1.1.2"
@@ -2973,6 +2948,13 @@ arrify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-3.0.0.tgz#ccdefb8eaf2a1d2ab0da1ca2ce53118759fd46bc"
   integrity sha512-tLkvA81vQG/XqE2mjDkGQHoOINtMHtysSnemrmoGe6PydDPMRbVugqyk4A6V/WDWEfm3l+0d8anA9r8cv/5Jaw==
+
+as-table@^1.0.36:
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/as-table/-/as-table-1.0.55.tgz#dc984da3937745de902cea1d45843c01bdbbec4f"
+  integrity sha512-xvsWESUJn0JN421Xb9MQw6AsMHRCUknCe0Wjlxvjud80mU4E6hQf1A6NzQKcYNmYw62MfzEtXc+badstZP3JpQ==
+  dependencies:
+    printable-characters "^1.0.42"
 
 asap@~2.0.3, asap@~2.0.6:
   version "2.0.6"
@@ -4341,6 +4323,11 @@ damerau-levenshtein@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.7.tgz#64368003512a1a6992593741a09a9d31a836f55d"
   integrity sha512-VvdQIPGdWP0SqFXghj79Wf/5LArmreyMsGLa6FG6iC4t3j7j5s71TrwWmT/4akbDQIqjfACkLZmjXhA7g2oUZw==
+
+data-uri-to-buffer@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-2.0.2.tgz#d296973d5a4897a5dbe31716d118211921f04770"
+  integrity sha512-ND9qDTLc6diwj+Xe5cdAgVTbLVdXbtxTJRXRhli8Mowuaan+0EJOtdqJ0QCHNSSPyoXGx9HX2/VMnKeC34AChA==
 
 data-urls@^2.0.0:
   version "2.0.0"
@@ -5889,6 +5876,14 @@ get-port@^3.1.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/get-port/-/get-port-3.2.0.tgz#dd7ce7de187c06c8bf353796ac71e099f0980ebc"
   integrity sha1-3Xzn3hh8Bsi/NTeWrHHgmfCYDrw=
+
+get-source@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/get-source/-/get-source-2.0.12.tgz#0b47d57ea1e53ce0d3a69f4f3d277eb8047da944"
+  integrity sha512-X5+4+iD+HoSeEED+uwrQ07BOQr0kEDFMVqqpBuI+RaZBpBpHCuXxo70bjar6f0b0u/DQJsJ7ssurpP0V60Az+w==
+  dependencies:
+    data-uri-to-buffer "^2.0.0"
+    source-map "^0.6.1"
 
 get-stdin@^8.0.0:
   version "8.0.0"
@@ -8849,6 +8844,11 @@ nanoid@^3.3.1:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.2.tgz#c89622fafb4381cd221421c69ec58547a1eec557"
   integrity sha512-CuHBogktKwpm5g2sRgv83jEy2ijFzBwMoYA60orPDR7ynsLijJDqgsi4RDGj3OJpy3Ieb+LYwiRmIOGyytgITA==
 
+nanoid@^3.3.3:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
+  integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
+
 nanomatch@^1.2.9:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"
@@ -9899,6 +9899,15 @@ postcss@^8, postcss@^8.1.6, postcss@^8.4.12, postcss@^8.4.5:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+postcss@^8.4.13:
+  version "8.4.13"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.13.tgz#7c87bc268e79f7f86524235821dfdf9f73e5d575"
+  integrity sha512-jtL6eTBrza5MPzy8oJLFuUscHDXTV5KcLlqAWHl5q5WYRfnNRGSmOZmOZ1T6Gy7A99mOZfqungmZMpMmCVJ8ZA==
+  dependencies:
+    nanoid "^3.3.3"
+    picocolors "^1.0.0"
+    source-map-js "^1.0.2"
+
 prebuild-install@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-7.0.1.tgz#c10075727c318efe72412f333e0ef625beaf3870"
@@ -9978,6 +9987,11 @@ pretty-format@^27.0.0, pretty-format@^27.0.2, pretty-format@^27.5.1:
     ansi-regex "^5.0.1"
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
+
+printable-characters@^1.0.42:
+  version "1.0.42"
+  resolved "https://registry.yarnpkg.com/printable-characters/-/printable-characters-1.0.42.tgz#3f18e977a9bd8eb37fcc4ff5659d7be90868b3d8"
+  integrity sha1-Pxjpd6m9jrN/zE/1ZZ176Qhos9g=
 
 process-nextick-args@~1.0.6:
   version "1.0.7"
@@ -11239,7 +11253,7 @@ source-map-resolve@^0.6.0:
     atob "^2.1.2"
     decode-uri-component "^0.2.0"
 
-source-map-support@^0.5.17, source-map-support@^0.5.19, source-map-support@^0.5.6:
+source-map-support@^0.5.17, source-map-support@^0.5.19, source-map-support@^0.5.21, source-map-support@^0.5.6:
   version "0.5.21"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.21.tgz#04fe7c7f9e1ed2d662233c28cb2b35b9f63f6e4f"
   integrity sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==
@@ -11382,6 +11396,14 @@ stackframe@^1.1.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/stackframe/-/stackframe-1.2.1.tgz#1033a3473ee67f08e2f2fc8eba6aef4f845124e1"
   integrity sha512-h88QkzREN/hy8eRdyNhhsO7RSJ5oyTqxxmmn0dzBIMUclZsjpfmrsg81vp8mjjAs2vAZ72nyWxRUwSwmh0e4xg==
+
+stacktracey@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/stacktracey/-/stacktracey-2.1.8.tgz#bf9916020738ce3700d1323b32bd2c91ea71199d"
+  integrity sha512-Kpij9riA+UNg7TnphqjH7/CzctQ/owJGNbFkfEeve4Z4uxT5+JapVLFXcsurIfN34gnTWZNJ/f7NMG0E8JDzTw==
+  dependencies:
+    as-table "^1.0.36"
+    get-source "^2.0.12"
 
 standard-as-callback@^2.1.0:
   version "2.1.0"
@@ -12369,11 +12391,6 @@ typescript@^4.3.4, typescript@^4.6.2, typescript@^4.6.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.3.tgz#eefeafa6afdd31d725584c67a0eaba80f6fc6c6c"
   integrity sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==
 
-typescript@^4.6.4:
-  version "4.6.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.4.tgz#caa78bbc3a59e6a5c510d35703f6a09877ce45e9"
-  integrity sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==
-
 typeson-registry@^1.0.0-alpha.39:
   version "1.0.0-alpha.39"
   resolved "https://registry.yarnpkg.com/typeson-registry/-/typeson-registry-1.0.0-alpha.39.tgz#9e0f5aabd5eebfcffd65a796487541196f4b1211"
@@ -12790,13 +12807,25 @@ vite-plugin-inspect@^0.3.6:
     sirv "^1.0.17"
     ufo "^0.7.9"
 
-vite@^2.7.10, vite@^2.9.0, vite@^2.9.1, vite@^2.9.5:
+vite@^2.7.10, vite@^2.9.0, vite@^2.9.5:
   version "2.9.5"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.5.tgz#08ef37ac7a6d879c96f328b791732c9a00ea25ea"
   integrity sha512-dvMN64X2YEQgSXF1lYabKXw3BbN6e+BL67+P3Vy4MacnY+UzT1AfkHiioFSi9+uiDUiaDy7Ax/LQqivk6orilg==
   dependencies:
     esbuild "^0.14.27"
     postcss "^8.4.12"
+    resolve "^1.22.0"
+    rollup "^2.59.0"
+  optionalDependencies:
+    fsevents "~2.3.2"
+
+vite@^2.9.6:
+  version "2.9.9"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.9.tgz#8b558987db5e60fedec2f4b003b73164cb081c5e"
+  integrity sha512-ffaam+NgHfbEmfw/Vuh6BHKKlI/XIAhxE5QSS7gFLIngxg171mg1P3a4LSRME0z2ZU1ScxoKzphkipcYwSD5Ew==
+  dependencies:
+    esbuild "^0.14.27"
+    postcss "^8.4.13"
     resolve "^1.22.0"
     rollup "^2.59.0"
   optionalDependencies:
