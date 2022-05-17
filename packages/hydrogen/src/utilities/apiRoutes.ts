@@ -1,3 +1,4 @@
+import {SHOPIFY_STORE_DOMAIN, SHOPIFY_STOREFRONT_TOKEN} from '../constants';
 import {
   HydrogenConfig,
   HydrogenConfigRoutes,
@@ -170,15 +171,27 @@ function queryShopBuilder(
     }
 
     const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
+
+    const storefrontTokenFromEnv =
+      typeof Oxygen !== 'undefined'
+        ? Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN]
+        : null;
+
+    const storeDomainFromEnv =
+      typeof Oxygen !== 'undefined'
+        ? Oxygen?.env?.[SHOPIFY_STORE_DOMAIN]
+        : null;
     const buyerIp = request.getBuyerIp();
 
     const extraHeaders = getStorefrontApiRequestHeaders({
       buyerIp,
-      storefrontToken,
+      storefrontToken: storefrontTokenFromEnv ?? storefrontToken,
     });
 
     const fetcher = fetchBuilder<T>(
-      `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
+      `https://${
+        storeDomainFromEnv ?? storeDomain
+      }/api/${storefrontApiVersion}/graphql.json`,
       {
         method: 'POST',
         body: graphqlRequestBody(query, variables),

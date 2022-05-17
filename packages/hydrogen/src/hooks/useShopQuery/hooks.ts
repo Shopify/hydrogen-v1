@@ -1,3 +1,4 @@
+import {SHOPIFY_STORE_DOMAIN, SHOPIFY_STOREFRONT_TOKEN} from '../../constants';
 import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import {ASTNode} from 'graphql';
@@ -181,7 +182,16 @@ export function useShopQuery<T>({
 }
 
 function useCreateShopRequest(body: string) {
-  const {storeDomain, storefrontToken, storefrontApiVersion} = useShop();
+  const storeConfig = useShop();
+  const storefrontApiVersion = storeConfig.storefrontApiVersion;
+  const storeDomain =
+    typeof Oxygen !== 'undefined'
+      ? Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN]
+      : storeConfig.storeDomain;
+  const storefrontToken =
+    typeof Oxygen !== 'undefined'
+      ? Oxygen?.env?.[SHOPIFY_STORE_DOMAIN]
+      : storeConfig.storefrontToken;
 
   const request = useServerRequest();
   const buyerIp = request.getBuyerIp();
