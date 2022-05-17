@@ -36,10 +36,13 @@ export default function cssModulesRsc() {
       enforce: 'post',
       transform(code, id) {
         if (id.includes('.module.') && cssMap.has(id)) {
+          const isDev = config.command === 'serve';
           const key = path.relative(config.root, id.split('?')[0]);
           return (
-            `import React from 'react';` +
-            `export const StyleTag = () => React.createElement('style', {dangerouslySetInnerHTML: {__html: ${JSON.stringify(
+            (isDev
+              ? `import {jsxDEV as _jsx} from 'react/jsx-dev-runtime';`
+              : `import {jsx as _jsx} from 'react/jsx-runtime';`) +
+            `export const StyleTag = () => _jsx('style', {dangerouslySetInnerHTML: {__html: ${JSON.stringify(
               cssMap.get(id)
             )}}});` +
             `\nStyleTag.key = '${key}';\n` +
