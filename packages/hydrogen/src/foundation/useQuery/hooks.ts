@@ -13,6 +13,7 @@ import {
 } from '../../framework/cache-sub-query';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
+import {CacheSeconds} from '../../framework/CachingStrategy';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -114,7 +115,13 @@ function cachedQueryFnBuilder<T>(
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
-          await setItemInCache(lockKey, true);
+          await setItemInCache(
+            lockKey,
+            true,
+            CacheSeconds({
+              maxAge: 10,
+            })
+          );
           try {
             const output = await generateNewOutput();
 

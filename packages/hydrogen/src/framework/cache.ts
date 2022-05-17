@@ -50,9 +50,6 @@ export async function getItemFromCache(
   if (isStale(response)) {
     logCacheApiStatus('STALE', request.url);
   }
-  console.log(
-    `isStale: ${isStale(response)} - ${response.headers.get('cache-control')}`
-  );
 
   return response;
 }
