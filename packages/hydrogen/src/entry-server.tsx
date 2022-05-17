@@ -13,7 +13,6 @@ import type {
   StreamerOptions,
   HydratorOptions,
   HydrogenConfig,
-  ImportGlobEagerOutput,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -629,19 +628,12 @@ async function hydrate(
   }
 }
 
-type SharedServerProps = {
+type BuildAppOptions = {
+  App: React.JSXElementConstructor<any>;
   state?: object | null;
   request: ServerComponentRequest;
   response: ServerComponentResponse;
   log: Logger;
-};
-
-type BuildAppOptions = {
-  App: React.JSXElementConstructor<SharedServerProps>;
-} & SharedServerProps;
-
-export type AppProps = SharedServerProps & {
-  routes?: ImportGlobEagerOutput;
 };
 
 function buildAppRSC({App, log, state, request, response}: BuildAppOptions) {
