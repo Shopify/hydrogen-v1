@@ -79,7 +79,7 @@ export async function api(request, {session, queryShop}) {
   } else {
     return new Response(
       JSON.stringify({
-        error: data ? data.customerAccessTokenCreate.customerUserErrors : error,
+        error: data?.customerAccessTokenCreate?.customerUserErrors ?? error,
       }),
       {status: 401},
     );
