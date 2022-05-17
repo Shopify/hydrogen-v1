@@ -46,7 +46,7 @@ export default function Layout({children, hero}) {
       </div>
       <div className="min-h-screen max-w-screen text-gray-700 font-sans">
         {/* <Header collections={collections} storeName={storeName} /> */}
-        {/* <Button label="Hello"></Button> */}
+        <Button label="Hello"></Button>
         {/* <Cart /> */}
         <main role="main" id="mainContent" className="relative bg-gray-50">
           <div className="mx-auto max-w-7xl p-4 md:py-5 md:px-8">

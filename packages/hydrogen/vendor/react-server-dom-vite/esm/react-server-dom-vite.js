@@ -47,7 +47,10 @@ function importClientComponent(moduleId) {
     return Promise.reject(new Error("Could not find client component " + moduleId));
   }
 
-  return typeof modImport === 'function' ? modImport() : Promise.resolve(modImport);
+  // Simulate a 1s pause when loading a module to reproduce Hydration error every time.
+  return typeof modImport === 'function' ? new Promise(r => setTimeout(r, 1000)).then(modImport) : Promise.resolve(modImport);
+  
+  // return typeof modImport === 'function' ? modImport() : Promise.resolve(modImport);
 } // The module cache contains all the modules we've preloaded so far.
 // If they're still pending they're a thenable.
 
@@ -77,6 +80,7 @@ function requireModule(_ref2) {
   var mod = moduleCache.get(id);
 
   if (!mod || mod instanceof Promise || mod instanceof Error) {
+    console.log(`${id} wasn't ready`)
     // This module is still being downloaded or
     // it has errored out. Pass it to Suspense.
     throw mod;
