@@ -1,1 +1,1 @@
-export {default} from './dist/esnext/entry-server';
+export {default, AppProps} from './dist/esnext/entry-server';
