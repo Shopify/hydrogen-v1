@@ -170,28 +170,20 @@ function queryShopBuilder(
       );
     }
 
-    const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
-
-    const storefrontTokenFromEnv =
-      typeof Oxygen !== 'undefined'
-        ? Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN]
-        : null;
-
-    const storeDomainFromEnv =
-      typeof Oxygen !== 'undefined'
-        ? Oxygen?.env?.[SHOPIFY_STORE_DOMAIN]
-        : null;
+    const storefrontApiVersion = shopifyConfig.storefrontApiVersion;
+    const storeDomain =
+      Oxygen?.env?.[SHOPIFY_STORE_DOMAIN] ?? shopifyConfig.storeDomain;
+    const storefrontToken =
+      Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN] ?? shopifyConfig.storefrontToken;
     const buyerIp = request.getBuyerIp();
 
     const extraHeaders = getStorefrontApiRequestHeaders({
       buyerIp,
-      storefrontToken: storefrontTokenFromEnv ?? storefrontToken,
+      storefrontToken,
     });
 
     const fetcher = fetchBuilder<T>(
-      `https://${
-        storeDomainFromEnv ?? storeDomain
-      }/api/${storefrontApiVersion}/graphql.json`,
+      `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
       {
         method: 'POST',
         body: graphqlRequestBody(query, variables),

@@ -184,14 +184,11 @@ export function useShopQuery<T>({
 function useCreateShopRequest(body: string) {
   const storeConfig = useShop();
   const storefrontApiVersion = storeConfig.storefrontApiVersion;
+
   const storeDomain =
-    typeof Oxygen !== 'undefined'
-      ? Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN]
-      : storeConfig.storeDomain;
+    Oxygen?.env?.[SHOPIFY_STORE_DOMAIN] ?? storeConfig.storeDomain;
   const storefrontToken =
-    typeof Oxygen !== 'undefined'
-      ? Oxygen?.env?.[SHOPIFY_STORE_DOMAIN]
-      : storeConfig.storefrontToken;
+    Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN] ?? storeConfig.storefrontToken;
 
   const request = useServerRequest();
   const buyerIp = request.getBuyerIp();
