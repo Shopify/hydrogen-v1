@@ -44,7 +44,6 @@ export type ShopifyConfig = {
   storeDomain: string;
   storefrontToken: string;
   storefrontApiVersion: string;
-  multipassSecret?: string;
 };
 
 export type Hook = (
