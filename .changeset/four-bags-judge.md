@@ -2,10 +2,6 @@
 '@shopify/hydrogen': minor
 ---
 
-Feature:
-
-- Enable full page caching when available
-
 Fixes:
 
 - Sub queries was not revalidating properly

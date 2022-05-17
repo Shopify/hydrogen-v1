@@ -13,6 +13,7 @@ import type {
   StreamerOptions,
   HydratorOptions,
   HydrogenConfig,
+  ImportGlobEagerOutput,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -30,13 +31,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {
-  setContext,
-  setCache,
-  RuntimeContext,
-  runDelayedFunction,
-  getCache,
-} from './framework/runtime';
+import {setContext, setCache, RuntimeContext} from './framework/runtime';
 import {setConfig} from './framework/config';
 import {
   ssrRenderToPipeableStream,
@@ -53,13 +48,6 @@ import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
-import {
-  deleteItemFromCache,
-  getItemFromCache,
-  isStale,
-  setItemInCache,
-} from './framework/cache';
-import {CacheSeconds} from './framework/CachingStrategy';
 
 declare global {
   // This is provided by a Vite plugin
@@ -92,7 +80,15 @@ export interface RequestHandler {
 
 export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
-    const {dev, cache, context, buyerIpHeader} = options;
+    const {
+      indexTemplate,
+      streamableResponse,
+      dev,
+      cache,
+      context,
+      nonce,
+      buyerIpHeader,
+    } = options;
 
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
@@ -137,61 +133,9 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       );
     }
 
-    // Check if we have cached response
-    if (cache) {
-      const cachedResponse = await getItemFromCache(request.cacheKey());
-      if (cachedResponse) {
-        if (isStale(cachedResponse)) {
-          runDelayedFunction(async () => {
-            const lockCacheKey = request.cacheKey(true);
-            const lockCachedResponse = await getItemFromCache(lockCacheKey);
-
-            // check if a revalidate request is already in progress
-            if (!lockCachedResponse) {
-              await setItemInCache(
-                lockCacheKey,
-                new Response(null),
-                CacheSeconds({
-                  maxAge: 10,
-                })
-              );
-              try {
-                // Don't stream when creating a response for cache
-                await processRequest(
-                  url,
-                  request,
-                  sessionApi,
-                  options,
-                  componentResponse,
-                  true
-                );
-              } catch (e: any) {
-                log.error('Cache revalidate error', e);
-              } finally {
-                await deleteItemFromCache(lockCacheKey);
-              }
-            }
-          });
-        }
-        return cachedResponse;
-      }
-    }
-    return processRequest(url, request, sessionApi, options, componentResponse);
-  };
-
-  async function processRequest(
-    url: URL,
-    request: ServerComponentRequest,
-    sessionApi: any,
-    options: RequestHandlerOptions,
-    componentResponse: ServerComponentResponse,
-    revalidate = false
-  ) {
-    const {indexTemplate, streamableResponse, dev, nonce} = options;
-    const log = getLoggerWithContext(request);
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    if (!isReactHydrationRequest && hydrogenConfig && hydrogenConfig.routes) {
+    if (!isReactHydrationRequest && hydrogenConfig.routes) {
       const apiRoute = getApiRoute(url, hydrogenConfig.routes);
 
       // The API Route might have a default export, making it also a server component
@@ -214,7 +158,6 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     }
 
     const isStreamable =
-      !revalidate &&
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
 
@@ -240,7 +183,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     };
 
     if (isReactHydrationRequest) {
-      return hydrate(url, params, revalidate);
+      return hydrate(url, params);
     }
 
     /**
@@ -252,8 +195,8 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       return stream(url, params);
     }
 
-    return render(url, params, revalidate);
-  }
+    return render(url, params);
+  };
 
   return handleRequest;
 };
@@ -270,8 +213,7 @@ function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
  */
 async function render(
   url: URL,
-  {App, request, template, componentResponse, nonce, log}: RendererOptions,
-  revalidate: Boolean
+  {App, request, template, componentResponse, nonce, log}: RendererOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
@@ -304,20 +246,16 @@ async function render(
    */
   headers.set('cache-control', componentResponse.cacheControlHeader);
 
-  let response: Response;
   if (componentResponse.customBody) {
     // This can be used to return sitemap.xml or any other custom response.
-    const customBody = await componentResponse.customBody;
-    response = new Response(customBody, {
+
+    postRequestTasks('ssr', status, request, componentResponse);
+
+    return new Response(await componentResponse.customBody, {
       status,
       statusText,
       headers,
     });
-
-    postRequestTasks('ssr', status, request, componentResponse);
-    cacheResponse(componentResponse, request, [customBody], revalidate);
-
-    return response;
   }
 
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
@@ -325,7 +263,6 @@ async function render(
   html = applyHtmlHead(html, request.ctx.head, template);
 
   postRequestTasks('ssr', status, request, componentResponse);
-  cacheResponse(componentResponse, request, [html], revalidate);
 
   return new Response(html, {
     status,
@@ -386,7 +323,6 @@ async function stream(
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
-    const savedChunks: string[] = [];
 
     let ssrReadable: Awaited<ReturnType<typeof ssrRenderToReadableStream>>;
 
@@ -447,9 +383,7 @@ async function stream(
 
       if (flush) {
         if (componentResponse.customBody) {
-          const customBody = await componentResponse.customBody;
-          writable.write(encoder.encode(customBody));
-          cacheResponse(componentResponse, request, [customBody]);
+          writable.write(encoder.encode(await componentResponse.customBody));
           return false;
         }
 
@@ -473,12 +407,10 @@ async function stream(
     if (shouldReturnApp) {
       let bufferedSsr = '';
       let isPendingSsrWrite = false;
-
       const writingSSR = bufferReadableStream(
         ssrReadable.getReader(),
         (chunk) => {
           bufferedSsr += chunk;
-          savedChunks.push(chunk);
 
           if (!isPendingSsrWrite) {
             isPendingSsrWrite = true;
@@ -503,16 +435,13 @@ async function stream(
 
       Promise.all([writingSSR, writingRSC]).then(() => {
         // Last SSR write might be pending, delay closing the writable one tick
-        setTimeout(() => {
-          writable.close();
-          postRequestTasks(
-            'str',
-            responseOptions.status,
-            request,
-            componentResponse
-          );
-          cacheResponse(componentResponse, request, savedChunks);
-        }, 0);
+        setTimeout(() => writable.close(), 0);
+        postRequestTasks(
+          'str',
+          responseOptions.status,
+          request,
+          componentResponse
+        );
       });
     } else {
       writable.close();
@@ -531,15 +460,9 @@ async function stream(
     const bufferedBody = await bufferReadableStream(
       transform.readable.getReader()
     );
+
     return new Response(bufferedBody, responseOptions);
   } else if (response) {
-    // Maintain a copy of streamed html so we can cache this at the end
-    const savedChunks = tagOnResponseWrite(response);
-
-    response.on('finish', () => {
-      cacheResponse(componentResponse, request, savedChunks);
-    });
-
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -573,7 +496,6 @@ async function stream(
         }, 0);
 
         bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) => {
-          savedChunks.push(chunk.toString());
           log.trace('rsc chunk');
           return response.write(chunk);
         });
@@ -611,14 +533,14 @@ async function stream(
 
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
 
-        bufferReadableStream(rscToScriptTagReadable.getReader(), (chunk) => {
-          savedChunks.push(chunk);
-        }).then((scriptTags) => {
-          // Piping ends the response so script tags
-          // must be written before that.
-          response.write(scriptTags);
-          pipe(response);
-        });
+        bufferReadableStream(rscToScriptTagReadable.getReader()).then(
+          (scriptTags) => {
+            // Piping ends the response so script tags
+            // must be written before that.
+            response.write(scriptTags);
+            pipe(response);
+          }
+        );
       },
       onShellError(error: any) {
         log.error(error);
@@ -658,8 +580,7 @@ async function hydrate(
     response,
     isStreamable,
     componentResponse,
-  }: HydratorOptions,
-  revalidate: Boolean
+  }: HydratorOptions
 ) {
   const state = parseJSON(url.searchParams.get('state') || '{}');
 
@@ -675,22 +596,14 @@ async function hydrate(
     const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
-      const rscReadableStreams = rscReadable.tee();
-      storeWorkerRSCChunks(rscReadableStreams[1], request, componentResponse);
-
       postRequestTasks('rsc', 200, request, componentResponse);
-      return new Response(rscReadableStreams[0], {
-        headers: {
-          'cache-control': componentResponse.cacheControlHeader,
-        },
-      });
+      return new Response(rscReadable);
     }
 
     // Note: CFW does not support reader.piteTo nor iterable syntax
     const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
     postRequestTasks('rsc', 200, request, componentResponse);
-    cacheResponse(componentResponse, request, [bufferedBody]);
 
     return new Response(bufferedBody, {
       headers: {
@@ -698,38 +611,36 @@ async function hydrate(
       },
     });
   } else if (response) {
-    const savedChunks = tagOnResponseWrite(response);
-
     const rscWriter = await import(
       // @ts-ignore
       '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
     );
 
     const streamer = rscWriter.renderToPipeableStream(AppRSC);
-
-    response.statusCode = 200;
-    response.statusMessage = 'ok';
-
+    response.writeHead(200, 'ok', {
+      'cache-control': componentResponse.cacheControlHeader,
+    });
     const stream = streamer.pipe(response) as Writable;
 
     stream.on('finish', function () {
       postRequestTasks('rsc', response.statusCode, request, componentResponse);
-      cacheResponse(componentResponse, request, savedChunks);
     });
-  } else if (revalidate) {
-    // If we are caching
-    const rscReadable = rscRenderToReadableStream(AppRSC);
-    const bufferedBody = await bufferReadableStream(rscReadable.getReader());
-    cacheResponse(componentResponse, request, [bufferedBody], revalidate);
   }
 }
 
-type BuildAppOptions = {
-  App: React.JSXElementConstructor<any>;
+type SharedServerProps = {
   state?: object | null;
   request: ServerComponentRequest;
   response: ServerComponentResponse;
   log: Logger;
+};
+
+type BuildAppOptions = {
+  App: React.JSXElementConstructor<SharedServerProps>;
+} & SharedServerProps;
+
+export type AppProps = SharedServerProps & {
+  routes?: ImportGlobEagerOutput;
 };
 
 function buildAppRSC({App, log, state, request, response}: BuildAppOptions) {
@@ -946,83 +857,4 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
-}
-
-function tagOnResponseWrite(response: ServerResponse) {
-  const originalWrite = response.write;
-  const savedChunks: string[] = [];
-  response.write = (...args) => {
-    savedChunks.push(args[0].toString());
-    // @ts-ignore
-    return originalWrite.apply(response, args);
-  };
-
-  return savedChunks;
-}
-
-function storeWorkerRSCChunks(
-  stream: ReadableStream<Uint8Array>,
-  request: ServerComponentRequest,
-  componentResponse: ServerComponentResponse
-) {
-  const savedChunks: string[] = [];
-  const reader = stream.getReader();
-
-  reader.read().then(function processText({done, value}): any {
-    const text = new TextDecoder().decode(value);
-    value && savedChunks.push(text);
-    if (done) {
-      cacheResponse(componentResponse, request, savedChunks);
-      return;
-    }
-    return reader.read().then(processText);
-  });
-}
-
-async function cacheResponse(
-  componentResponse: ServerComponentResponse,
-  request: ServerComponentRequest,
-  chunks: string[],
-  revalidate?: Boolean
-) {
-  const cache = getCache();
-
-  if (cache && chunks.length > 0) {
-    if (revalidate) {
-      await saveCacheResponse(componentResponse, request, chunks);
-    } else {
-      runDelayedFunction(async () => {
-        await saveCacheResponse(componentResponse, request, chunks);
-      });
-    }
-  }
-}
-
-async function saveCacheResponse(
-  componentResponse: ServerComponentResponse,
-  request: ServerComponentRequest,
-  chunks: string[]
-) {
-  const cache = getCache();
-
-  if (cache && chunks.length > 0) {
-    const {headers, status, statusText} = getResponseOptions(componentResponse);
-    const url = new URL(request.url);
-
-    headers.set('cache-control', componentResponse.cacheControlHeader);
-    const currentHeader = headers.get('Content-Type');
-    if (!currentHeader && url.pathname !== RSC_PATHNAME) {
-      headers.set('Content-Type', 'text/html; charset=UTF-8');
-    }
-
-    await setItemInCache(
-      request.cacheKey(),
-      new Response(chunks.join(''), {
-        status,
-        statusText,
-        headers,
-      }),
-      componentResponse.cache()
-    );
-  }
 }
