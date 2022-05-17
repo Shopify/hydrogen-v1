@@ -1,4 +1,7 @@
-import {SHOPIFY_STORE_DOMAIN, SHOPIFY_STOREFRONT_TOKEN} from '../constants';
+import {
+  SHOPIFY_STORE_DOMAIN,
+  SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN,
+} from '../constants';
 import {
   HydrogenConfig,
   HydrogenConfigRoutes,
@@ -175,7 +178,7 @@ function queryShopBuilder(
       globalThis?.Oxygen?.env?.[SHOPIFY_STORE_DOMAIN] ??
       shopifyConfig.storeDomain;
     const storefrontToken =
-      globalThis?.Oxygen?.env?.[SHOPIFY_STOREFRONT_TOKEN] ??
+      globalThis?.Oxygen?.env?.[SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN] ??
       shopifyConfig.storefrontToken;
     const buyerIp = request.getBuyerIp();
 

@@ -1,4 +1,8 @@
 import React, {useMemo} from 'react';
+import {
+  SHOPIFY_STORE_DOMAIN,
+  SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN,
+} from '../../constants';
 import {ShopifyProviderClient} from './ShopifyProvider.client';
 import type {ShopifyProviderProps} from './types';
 import type {CountryCode, LanguageCode} from '../../storefront-api-types';
@@ -79,6 +83,16 @@ export function ShopifyProvider({
   );
 
   request.ctx.shopifyConfig = shopifyProviderValue;
+
+  if (globalThis?.Oxygen?.env?.[SHOPIFY_STORE_DOMAIN]) {
+    request.ctx.shopifyConfig.storeDomain =
+      globalThis?.Oxygen?.env?.[SHOPIFY_STORE_DOMAIN];
+  }
+
+  if (globalThis?.Oxygen?.env?.[SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN]) {
+    request.ctx.shopifyConfig.storefrontToken =
+      globalThis?.Oxygen?.env?.[SHOPIFY_STOREFRONT_API_PUBLIC_TOKEN];
+  }
 
   return (
     <ShopifyProviderClient shopifyConfig={shopifyProviderValue}>
