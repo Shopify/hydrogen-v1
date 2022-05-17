@@ -616,11 +616,11 @@ async function hydrate(
     );
 
     const streamer = rscWriter.renderToPipeableStream(AppRSC);
-
-    response.statusCode = 200;
-    response.statusMessage = 'ok';
-
     const stream = streamer.pipe(response) as Writable;
+
+    response.writeHead(200, 'ok', {
+      'cache-control': componentResponse.cacheControlHeader,
+    });
 
     stream.on('finish', function () {
       postRequestTasks('rsc', response.statusCode, request, componentResponse);

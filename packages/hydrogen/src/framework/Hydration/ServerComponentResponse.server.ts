@@ -29,10 +29,6 @@ export class ServerComponentResponse extends Response {
 
   cache(options: CachingStrategy) {
     this.cacheOptions = options;
-    this.headers.set(
-      'cache-control',
-      generateCacheControlHeader(this.cacheOptions)
-    );
   }
 
   get cacheControlHeader(): string {
