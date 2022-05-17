@@ -144,6 +144,9 @@ You can provide the `cartFragment` prop to `CartProvider` to customize the field
 
 The fragment must use the name `CartFragment` because it's referenced that way in each of the queries and mutations.
 
+> Note:
+> If you provide a custom `cartFragment`, it must be a raw string. Utilities like [`gql`](https://github.com/apollographql/graphql-tag) will return an ASTNode instead of a string, and you should consult the documentation of the tool you are using to convert it to a string first.
+
 If you don't provide a `cartFragment` argument, then the following default value is used:
 
 ```graphql
