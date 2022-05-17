@@ -6,4 +6,4 @@ Deep copying libraries often work by iterating over an object’s own properties
 
 ## Rule details
 
-This rule prevents using `JSON.parse` in an hydrogen API route or server component.
+This rule prevents using `JSON.parse` in a Hydrogen API route or server component.
