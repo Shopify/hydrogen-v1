@@ -27,12 +27,15 @@ export class ServerComponentResponse extends Response {
     return !this.wait;
   }
 
-  cache(options: CachingStrategy) {
-    this.cacheOptions = options;
-    this.headers.set(
-      'cache-control',
-      generateCacheControlHeader(this.cacheOptions)
-    );
+  cache(options?: CachingStrategy) {
+    if (options) {
+      this.cacheOptions = options;
+      this.headers.set(
+        'cache-control',
+        generateCacheControlHeader(this.cacheOptions)
+      );
+    }
+    return this.cacheOptions;
   }
 
   get cacheControlHeader(): string {
