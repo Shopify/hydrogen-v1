@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@shopify/hydrogen": "^0.19.0",
-    "react": "0.0.0-experimental-2bf7c02f0-20220314",
-    "react-dom": "0.0.0-experimental-2bf7c02f0-20220314"
+    "react": "^0.0.0-experimental-357a61324-20220516",
+    "react-dom": "^0.0.0-experimental-357a61324-20220516"
   }
 }
