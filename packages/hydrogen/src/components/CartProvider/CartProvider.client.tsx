@@ -258,7 +258,7 @@ export function CartProvider({
    * An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).
    */
   data?: CartFragmentFragment;
-  /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default is used if no argument is provided. */
+  /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
 }) {
   const {serverProps} = useServerProps() as ServerPropsContextValue;

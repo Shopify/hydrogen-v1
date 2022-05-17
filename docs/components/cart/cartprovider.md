@@ -28,7 +28,7 @@ export function App() {
 | ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | children               | <code>React.ReactNode</code> | Any `ReactNode` elements.                                                                                                                              |
 | data?                  | <code>Cart</code>            | An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).                   |
-| cartFragment | <code>string</code> | A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default is used if no argument is provided. |
+| cartFragment | <code>string</code> | A [fragment](#cart-fragment) used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. |
 | numCartLines?          | <code>number</code>          | A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API.                             |
 | onCreate?              | <code>() => void</code>      | A callback that is invoked when the process to create a cart begins, but before the cart is created in the Storefront API.                             |
 | onLineAdd?             | <code>() => void</code>      | A callback that is invoked when the process to add a line item to the cart begins, but before the line item is added to the Storefront API.            |
@@ -138,13 +138,13 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 }
 ```
 
-## Cart Fragment
+## Cart fragment
 
-Providing a `cartFragment` to CartProvider allows you to customize the fields requested from the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for every query and mutation made by the CartProvider.
+You can provide the `cartFragment` prop to `CartProvider` to customize the fields requested from the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for every query and mutation made by `CartProvider`.
 
-The fragment must use the name `CartFragment` as it is referenced as such in each of the queries and mutations.
+The fragment must use the name `CartFragment` because it's referenced that way in each of the queries and mutations.
 
-If you don't provide a `cartFragment`, the following default value is used:
+If you don't provide a `cartFragment` argument, then the following default value is used:
 
 ```graphql
 fragment CartFragment on Cart {
