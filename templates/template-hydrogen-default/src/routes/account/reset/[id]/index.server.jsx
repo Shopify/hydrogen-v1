@@ -1,6 +1,10 @@
 import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
+/**
+ * This API route is used by the form on `/account/reset/[resetToken]`
+ * complete the reset of the user's password.
+ */
 export async function api(request, {session, queryShop}) {
   const jsonBody = await request.json();
 
