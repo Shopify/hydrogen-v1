@@ -47,6 +47,52 @@ describe('<CartProvider />', () => {
         }),
       });
     });
+
+    it('allows a query customization', () => {
+      const cartFragment = 'fragment CartFragment on Cart { foo }';
+      const linesMock: CartLineInput[] = [
+        {
+          merchandiseId: '123',
+        },
+      ];
+
+      const wrapper = mount(
+        <CartProvider cartFragment={cartFragment}>
+          <CartContext.Consumer>
+            {(cartContext) => {
+              return (
+                <button
+                  onClick={() => {
+                    cartContext?.linesAdd(linesMock);
+                  }}
+                >
+                  Add
+                </button>
+              );
+            }}
+          </CartContext.Consumer>
+        </CartProvider>
+      );
+
+      expect(wrapper).toContainReactComponent(CartContext.Provider, {
+        value: expect.objectContaining({
+          lines: [],
+          attributes: [],
+          cartFragment,
+        }),
+      });
+
+      wrapper.find('button')?.trigger('onClick');
+
+      expect(fetchCartMock).toHaveBeenLastCalledWith({
+        query: expect.stringContaining(cartFragment),
+        variables: {
+          input: {lines: linesMock},
+          numCartLines: undefined,
+          country: undefined,
+        },
+      });
+    });
   });
 
   describe('prop `data` exist', () => {

@@ -34,10 +34,7 @@ export default () => {
 
         return {
           code: code.toString(),
-          map: code.generateMap({
-            file: HYDROGEN_ENTRY_FILE,
-            source: HYDROGEN_ENTRY_FILE,
-          }),
+          map: {mappings: ''},
         };
       }
 

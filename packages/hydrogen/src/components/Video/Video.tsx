@@ -1,13 +1,13 @@
 import React from 'react';
-import {ImageSizeOptions, useImageUrl} from '../../utilities';
+import {shopifyImageLoader} from '../../utilities';
 import type {Video as VideoType} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
 interface VideoProps {
   /** An object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video). */
   data: PartialDeep<VideoType>;
-  /** An object of image size options for the video's `previewImage`. */
-  options?: ImageSizeOptions;
+  /** An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL. */
+  previewImageOptions?: Parameters<typeof shopifyImageLoader>[0];
 }
 
 /**
@@ -16,17 +16,17 @@ interface VideoProps {
 export function Video(props: JSX.IntrinsicElements['video'] & VideoProps) {
   const {
     data,
-    options,
+    previewImageOptions,
     id = data.id,
     playsInline = true,
     controls = true,
     ...passthroughProps
   } = props;
 
-  const posterUrl = useImageUrl(
-    data.previewImage?.url as string | undefined,
-    options
-  );
+  const posterUrl = shopifyImageLoader({
+    src: data.previewImage?.url ?? '',
+    ...previewImageOptions,
+  });
 
   if (!data.sources) {
     throw new Error(`<Video/> requires a 'data.sources' array`);

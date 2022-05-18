@@ -37,6 +37,7 @@ describe('useShopQuery', () => {
   const mockedFetch = jest.fn(originalFetch);
   let waitUntilPromises: Array<Promise<any>>;
   let cache: Cache;
+  let consoleErrorSpy: jest.SpyInstance;
 
   beforeAll(() => {
     globalThis.fetch = mockedFetch;
@@ -47,6 +48,12 @@ describe('useShopQuery', () => {
     setContext({waitUntil: (p: Promise<any>) => waitUntilPromises.push(p)});
     cache = new InMemoryCache() as unknown as Cache;
     setCache(cache);
+    consoleErrorSpy = jest.spyOn(console, 'error');
+    consoleErrorSpy.mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
   });
 
   afterAll(() => {

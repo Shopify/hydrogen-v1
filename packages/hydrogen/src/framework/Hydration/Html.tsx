@@ -49,10 +49,9 @@ export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
   if (import.meta.env.DEV) {
     // Fix React Refresh for async scripts.
     // https://github.com/vitejs/vite/issues/6759
-    head = head.replace(
-      />(\s*?import[\s\w]+?['"]\/@react-refresh)/,
-      ' async="">$1'
-    );
+    head =
+      '<script></script>' + // Fix for Firefox: https://bugzilla.mozilla.org/show_bug.cgi?id=1737882
+      head.replace(/>(\s*?import[\s\w]+?['"]\/@react-refresh)/, ' async="">$1');
   }
 
   return (
