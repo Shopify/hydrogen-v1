@@ -37,7 +37,8 @@ The `useCustomer` hook returns an object with the following keys:
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `customerAccessToken` | The access token of the logged in user. Should be passed as a prop to the [`CartProvider`](https://shopify.dev/api/hydrogen/components/cart/cartprovider) |
 
-If there is no logged in user, an empty object will be returned.
+> Note: 
+> If there's no logged in user, then an empty object is returned.
 
 ## Related hooks
 
