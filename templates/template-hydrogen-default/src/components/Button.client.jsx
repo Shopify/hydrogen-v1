@@ -1,4 +1,4 @@
-import {Link} from '@shopify/hydrogen/client';
+import {Link} from '@shopify/hydrogen';
 
 const DEFAULT_CLASSES =
   'block m-0 w-full items-center justify-center uppercase font-medium text-center px-6 py-4 rounded disabled:border-gray-300 disabled:bg-gray-300 disabled:cursor-not-allowed';

@@ -24,6 +24,7 @@ export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.serv
 // Exported here because users shouldn't be making `useShopQuery` calls from the client
 export * from './hooks/useShopQuery/hooks';
 export * from './foundation/useQuery/hooks';
+export * from './foundation/useServerProps';
 
 // Export server-only CartQuery here instead of `CartProvider.client` to prevent
 // it from being bundled with other client components
@@ -44,6 +45,8 @@ export {
 export {fetchSync} from './foundation/fetchSync/server/fetchSync';
 export {useServerAnalytics} from './foundation/Analytics';
 export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
+export {PerformanceMetrics} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.client';
+export {PerformanceMetricsDebug} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetricsDebug.client';
 
 export {useSession} from './foundation/useSession/useSession';
 export {CookieSessionStorage} from './foundation/CookieSessionStorage/CookieSessionStorage';

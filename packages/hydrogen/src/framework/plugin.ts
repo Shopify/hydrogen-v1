@@ -11,12 +11,14 @@ import hydrationAutoImport from './plugins/vite-plugin-hydration-auto-import';
 import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
 import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
+import clientImports from './plugins/vite-plugin-client-imports';
 
 export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
   return [
     process.env.VITE_INSPECT && inspect(),
     hydrogenConfig(),
     hydrogenClientMiddleware(),
+    clientImports(),
     hydrogenMiddleware(pluginOptions),
     react(),
     hydrationAutoImport(),

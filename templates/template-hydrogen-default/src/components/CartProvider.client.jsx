@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {CartProvider as ShopifyCartProvider} from '@shopify/hydrogen/client';
+import {CartProvider as ShopifyCartProvider} from '@shopify/hydrogen';
 
 import CartUIProvider, {useCartUI} from './CartUIProvider.client';
 

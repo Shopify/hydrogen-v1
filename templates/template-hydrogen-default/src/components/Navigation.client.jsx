@@ -1,4 +1,4 @@
-import {Link} from '@shopify/hydrogen/client';
+import {Link} from '@shopify/hydrogen';
 
 /**
  * A client component that defines the navigation for a web storefront

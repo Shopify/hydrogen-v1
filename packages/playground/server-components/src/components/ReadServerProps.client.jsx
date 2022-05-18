@@ -1,4 +1,4 @@
-import {useServerProps, Link} from '@shopify/hydrogen/client';
+import {useServerProps, Link} from '@shopify/hydrogen';
 
 export default function ReadServerProps() {
   const {serverProps, setServerProps} = useServerProps();

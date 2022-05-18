@@ -14,7 +14,7 @@ import {
   MediaFile,
   useShopQuery,
   MediaFile,
-} from '@shopify/hydrogen/client';
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 const QUERY = gql`

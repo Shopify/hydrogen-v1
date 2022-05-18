@@ -10,7 +10,7 @@ if the code was run on the client.
 ## Example code
 
 ```tsx
-import {isClient} from '@shopify/hydrogen/client';
+import {isClient} from '@shopify/hydrogen';
 
 export function MyComponent() {
   if (isClient()) {
