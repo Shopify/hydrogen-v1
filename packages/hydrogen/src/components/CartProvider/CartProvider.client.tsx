@@ -261,7 +261,7 @@ export function CartProvider({
   cartFragment?: string;
   /** A customer access token that's accessible on the server if there's a customer login. */
   customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
-  /** ISO Country Code for i18n */
+  /** The ISO country code for i18n. */
   countryCode?: CountryCode;
 }) {
   const initialStatus: State = cart
