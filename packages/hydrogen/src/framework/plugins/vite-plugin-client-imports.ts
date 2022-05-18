@@ -1,6 +1,6 @@
 import type {Plugin} from 'vite';
 
-export default function clientImports() {
+export default function clientImports(): Plugin {
   return {
     name: 'hydrogen:client-imports',
 
@@ -25,5 +25,5 @@ export default function clientImports() {
         return resolution.id;
       }
     },
-  } as Plugin;
+  };
 }
