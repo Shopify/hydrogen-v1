@@ -38,16 +38,23 @@ export default function cssModulesRsc() {
         if (id.includes('.module.') && cssMap.has(id)) {
           const isDev = config.command === 'serve';
           const key = path.relative(config.root, id.split('?')[0]);
-          return (
+          const s = new MagicString(code);
+          s.prepend(
             (isDev
               ? `import {jsxDEV as _jsx} from 'react/jsx-dev-runtime';`
               : `import {jsx as _jsx} from 'react/jsx-runtime';`) +
-            `export const StyleTag = () => _jsx('style', {dangerouslySetInnerHTML: {__html: ${JSON.stringify(
-              cssMap.get(id)
-            )}}});` +
-            `\nStyleTag.key = '${key}';\n` +
-            code.replace(/export default \{/gs, `export default {\n  StyleTag,`)
+              `export const StyleTag = () => _jsx('style', {dangerouslySetInnerHTML: {__html: ${JSON.stringify(
+                cssMap.get(id)
+              )}}});` +
+              `\nStyleTag.key = '${key}';\n`
           );
+
+          s.replace(/export default \{/gs, `export default {\n  StyleTag,`);
+
+          return {
+            code: s.toString(),
+            map: s.generateMap({file: id, source: id}),
+          };
         }
       },
     },
