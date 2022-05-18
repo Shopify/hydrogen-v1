@@ -2,6 +2,4 @@
 '@shopify/hydrogen': minor
 ---
 
-Fixes:
-
-- Sub queries was not revalidating properly
+Fixes an issue where cached sub-requests were not revalidating properly.
