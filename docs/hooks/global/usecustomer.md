@@ -44,6 +44,6 @@ The `useCustomer` hook returns an object with the following keys:
 
 - [`useCart`](https://shopify.dev/api/hydrogen/hooks/cart/usecart)
 
-## Related Components
+## Related components
 
 - [CartProvider](https://shopify.dev/api/hydrogen/components/cart/cartprovider)
