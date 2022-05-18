@@ -9,7 +9,7 @@ import {ShopifyProvider, CartProvider, useCustomer} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 export function App() {
-  const customerAccessToken = useCustomer();
+  const {customerAccessToken} = useCustomer();
   return (
     <Suspense fallback="Loading...">
       <ShopifyProvider>

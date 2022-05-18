@@ -15,7 +15,7 @@ import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 
 function App() {
-  const customerAccessToken = useCustomer();
+  const {customerAccessToken} = useCustomer();
 
   return (
     <Suspense fallback={<LoadingFallback />}>

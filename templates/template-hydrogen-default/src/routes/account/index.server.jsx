@@ -5,7 +5,7 @@ import AccountDetails from '../../components/AccountDetails.server';
 export default function Account({response}) {
   response.cache(NoStore());
 
-  const customerAccessToken = useCustomer();
+  const {customerAccessToken} = useCustomer();
 
   if (customerAccessToken && customerAccessToken !== '') {
     return <AccountDetails customerAccessToken={customerAccessToken} />;
