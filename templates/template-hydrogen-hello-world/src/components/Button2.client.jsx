@@ -1,3 +1,3 @@
 export function Button2({children}) {
-  return <button>{children}</button>;
+  return <div id="2">{children}</div>;
 }

@@ -5062,6 +5062,25 @@ eslint-plugin-eslint-comments@^3.2.0:
     escape-string-regexp "^1.0.5"
     ignore "^5.0.5"
 
+eslint-plugin-hydrogen@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-hydrogen/-/eslint-plugin-hydrogen-0.11.0.tgz#c0e90c52c937c0daa5cbb3dec0dcdb7d7ffc7056"
+  integrity sha512-fM1KD0E9KwNOF8bGREuB7LTHoxUkb2qdmZmZErXNzbMx51HNt9CXojtGuyUdkTFt6gvYO11JDzPzVyBUyI4gxQ==
+  dependencies:
+    "@typescript-eslint/eslint-plugin" "^4.26.0"
+    "@typescript-eslint/experimental-utils" "^4.0.1"
+    "@typescript-eslint/parser" "^4.26.0"
+    "@typescript-eslint/types" "^4.20.0"
+    eslint "^7.27.0"
+    eslint-config-prettier "^8.3.0"
+    eslint-plugin-eslint-comments "^3.2.0"
+    eslint-plugin-jest "^24.3.0"
+    eslint-plugin-jsx-a11y "^6.4.0"
+    eslint-plugin-prettier "^3.4.0"
+    eslint-plugin-react "^7.24.0"
+    eslint-plugin-react-hooks "^4.2.0"
+    prettier "^2.0.0"
+
 eslint-plugin-jest@^24.3.0:
   version "24.7.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.7.0.tgz#206ac0833841e59e375170b15f8d0955219c4889"
@@ -10162,6 +10181,13 @@ react-dom@^0.0.0-experimental-357a61324-20220516:
     loose-envify "^1.1.0"
     scheduler "0.0.0-experimental-357a61324-20220516"
 
+"react-dom@https://react-builds.vercel.app/api/prs/24480/packages/react-dom":
+  version "0.0.0-experimental-710429e5a-20220503"
+  resolved "https://react-builds.vercel.app/api/prs/24480/packages/react-dom#5b430cc3092778b4a56f90adef0e9585af50e1a0"
+  dependencies:
+    loose-envify "^1.1.0"
+    scheduler "https://react-builds.vercel.app/api/commits/710429e5aab0c3c9326f141e1cf47ae7ce6f440f/packages/scheduler"
+
 react-error-boundary@^3.1.3:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
@@ -10220,6 +10246,12 @@ react@^0.0.0-experimental-357a61324-20220516:
   version "0.0.0-experimental-357a61324-20220516"
   resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-357a61324-20220516.tgz#ffd1aaeae98145aba0b8cb96fe2e50c4e32d2f04"
   integrity sha512-atmB/ppgBtrXxguGjGIQlBkwRCaS+sk6+Bjhctc6ZMSvrYeD1fOxKktJR4/ObGs5ofzfcM2yopWCtQW0xlp/Rg==
+  dependencies:
+    loose-envify "^1.1.0"
+
+"react@https://react-builds.vercel.app/api/prs/24480/packages/react":
+  version "0.0.0-experimental-710429e5a-20220503"
+  resolved "https://react-builds.vercel.app/api/prs/24480/packages/react#d3f9ee02c65a4c6a0ce299e2430f9bad718e042a"
   dependencies:
     loose-envify "^1.1.0"
 
@@ -10871,6 +10903,12 @@ scheduler@^0.20.2:
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
+
+"scheduler@https://react-builds.vercel.app/api/commits/710429e5aab0c3c9326f141e1cf47ae7ce6f440f/packages/scheduler":
+  version "0.0.0-experimental-710429e5a-20220503"
+  resolved "https://react-builds.vercel.app/api/commits/710429e5aab0c3c9326f141e1cf47ae7ce6f440f/packages/scheduler#54ba42a85a44f9bdb3e7d2be6aa86e09db95b6bf"
+  dependencies:
+    loose-envify "^1.1.0"
 
 schema-utils@^2.6.5:
   version "2.7.1"
@@ -12478,7 +12516,7 @@ unified-message-control@^3.0.0:
     unist-util-visit "^2.0.0"
     vfile-location "^3.0.0"
 
-unified@^9.0.0, unified@^9.1.0:
+unified@9.2.2, unified@^9.0.0, unified@^9.1.0:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/unified/-/unified-9.2.2.tgz#67649a1abfc3ab85d2969502902775eb03146975"
   integrity sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==
