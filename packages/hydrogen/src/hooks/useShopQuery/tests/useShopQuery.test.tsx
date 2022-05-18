@@ -24,7 +24,7 @@ function mountComponent() {
   );
 
   return mountWithProviders(
-    <ServerRequestProvider request={request}>
+    <ServerRequestProvider request={request} isRSC={true}>
       <Suspense fallback={null}>
         <Component />
       </Suspense>

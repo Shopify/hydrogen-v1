@@ -51,7 +51,7 @@ function mountComponent(
   children: React.ReactChild
 ) {
   return mountWithProviders(
-    <ServerRequestProvider request={request}>
+    <ServerRequestProvider request={request} isRSC={true}>
       <Suspense fallback={null}>
         {children}
         <Suspense fallback={null}>

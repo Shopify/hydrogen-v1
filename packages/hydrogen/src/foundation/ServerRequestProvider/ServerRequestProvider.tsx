@@ -32,6 +32,13 @@ function getCacheForType(resource: () => Map<any, any>) {
     React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
       .ReactCurrentDispatcher.current;
 
+  // @ts-ignore
+  if (__DEV__ && typeof jest !== 'undefined' && !dispatcher.getCacheForType) {
+    // Jest does not have access to the RSC runtime, mock it here:
+    // @ts-ignore
+    return (globalThis.__jestRscCache ??= resource());
+  }
+
   return dispatcher.getCacheForType(resource);
 }
 
