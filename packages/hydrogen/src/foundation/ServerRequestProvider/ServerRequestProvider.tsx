@@ -24,6 +24,24 @@ type ServerRequestProviderProps = {
   children: JSX.Element;
 };
 
+// Note: use this only during RSC/Flight rendering. The React dispatcher
+// for SSR/Fizz rendering does not implement getCacheForType.
+function getCacheForType(resource: () => Map<any, any>) {
+  const dispatcher =
+    // @ts-ignore
+    React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
+      .ReactCurrentDispatcher.current;
+
+  // @ts-ignore
+  if (__DEV__ && typeof jest !== 'undefined' && !dispatcher.getCacheForType) {
+    // Jest does not have access to the RSC runtime, mock it here:
+    // @ts-ignore
+    return (globalThis.__jestRscCache ??= resource());
+  }
+
+  return dispatcher.getCacheForType(resource);
+}
+
 export function ServerRequestProvider({
   isRSC,
   request,
@@ -33,8 +51,7 @@ export function ServerRequestProvider({
     // Save the request object in a React cache that is
     // scoped to this current rendering.
 
-    // @ts-ignore
-    const requestCache = React.unstable_getCacheForType(requestCacheRSC);
+    const requestCache = getCacheForType(requestCacheRSC);
 
     requestCache.set(requestCacheRSC.key, request);
 
@@ -55,7 +72,7 @@ export function useServerRequest() {
   try {
     // This cache only works during RSC rendering:
     // @ts-ignore
-    const cache = React.unstable_getCacheForType(requestCacheRSC);
+    const cache = getCacheForType(requestCacheRSC);
     request = cache ? cache.get(requestCacheRSC.key) : null;
   } catch {
     // If RSC cache failed it means this is not an RSC request.
