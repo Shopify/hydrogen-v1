@@ -259,7 +259,7 @@ export function CartProvider({
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
-  /** customer access token that is accessible on the server if there is a customer login */
+  /** A customer access token that's accessible on the server if there's a customer login. */
   customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
   /** ISO Country Code for i18n */
   countryCode?: CountryCode;
