@@ -4,7 +4,7 @@ title: useCustomer
 description: The `useCustomer` hook returns the customer access token of the currently logged in user.
 ---
 
-The `useCustomer` hook returns an object representing the currently logged in user. It should only be used within server components.
+The `useCustomer` hook returns an object representing the currently logged in user. It can only be used within server components because the because we don't automatically send the `customerAccessToken` to the client. By default it remains secure in the session.
 
 ## Example code
 
