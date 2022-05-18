@@ -10,7 +10,7 @@ export default function clientImports(): Plugin {
     // This prevents other server-only imports from "leaking" into the client bundle.
     async resolveId(source, importer, {ssr}) {
       if (ssr) return;
-      if (!/\.client\.(j|t)sx?$/.test(importer ?? '')) return;
+      if (!/\.client\.(j|t)sx?/.test(importer ?? '')) return;
       if ('@shopify/hydrogen' !== source) return;
 
       const resolution = await this.resolve(
