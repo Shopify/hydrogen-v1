@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {createContext, useContext} from 'react';
 import {getTime} from '../../utilities/timing';
 import {hashKey} from '../../utilities/hash';
 import type {
@@ -8,48 +8,60 @@ import type {
 import type {QueryKey} from '../../types';
 import {collectQueryTimings} from '../../utilities/log';
 
-/**
- * Gets a "cache" object bound to the current React lifecycle. This allows
- * us to provide a server-only hook for Suspense cache, grabbing the current
- * request, and more. React has plans to introduce a generic `useRequest`
- * hook in the flight runtime for this purpose, but for now, we will attach
- * ourselves to the secret internals and hope we don't get fired.
- */
-function getRequestCache() {
-  const dispatcher =
-    // @ts-ignore
-    React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
-      .ReactCurrentDispatcher.current;
+// Context to inject current request in SSR
+const RequestContextSSR = createContext<ServerComponentRequest | null>(null);
 
-  if (!dispatcher.HydrogenServerCache) {
-    dispatcher.HydrogenServerCache = new Map();
-  }
-
-  // @ts-ignore
-  return dispatcher.HydrogenServerCache;
+// Cache to inject current request in RSC
+function requestCacheRSC() {
+  return new Map();
 }
 
-const requestKey = Symbol.for('HYDROGEN_REQUEST');
+requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
 
 type ServerRequestProviderProps = {
+  isRSC: boolean;
   request: ServerComponentRequest;
   children: JSX.Element;
 };
 
 export function ServerRequestProvider({
+  isRSC,
   request,
   children,
 }: ServerRequestProviderProps) {
-  const requestCache = getRequestCache();
+  if (isRSC) {
+    // Save the request object in a React cache that is
+    // scoped to this current rendering.
 
-  requestCache.set(requestKey, request);
+    // @ts-ignore
+    const requestCache = React.unstable_getCacheForType(requestCacheRSC);
 
-  return children;
+    requestCache.set(requestCacheRSC.key, request);
+
+    return children;
+  }
+
+  // Use a normal provider in SSR to make the request object
+  // available in the current rendering.
+  return (
+    <RequestContextSSR.Provider value={request}>
+      {children}
+    </RequestContextSSR.Provider>
+  );
 }
 
 export function useServerRequest() {
-  const cache = getRequestCache();
-  const request = cache ? cache.get(requestKey) : null;
+  let request: ServerComponentRequest | null;
+  try {
+    // This cache only works during RSC rendering:
+    // @ts-ignore
+    const cache = React.unstable_getCacheForType(requestCacheRSC);
+    request = cache ? cache.get(requestCacheRSC.key) : null;
+  } catch {
+    // If RSC cache failed it means this is not an RSC request.
+    // Try getting SSR context instead:
+    request = useContext(RequestContextSSR); // eslint-disable-line react-hooks/rules-of-hooks
+  }
 
   if (!request) {
     // @ts-ignore
