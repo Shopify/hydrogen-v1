@@ -6,7 +6,7 @@ import {
   ProductPrice,
   AddToCartButton,
   BuyNowButton,
-} from '@shopify/hydrogen/client';
+} from '@shopify/hydrogen';
 import ProductOptions from './ProductOptions.client';
 import Gallery from './Gallery.client';
 import {

@@ -67,7 +67,7 @@ If you want to add more custom `head` tags, then you can import `Head` from Hydr
 ```jsx
 // Import only client components.
 
-import {Head} from '@shopify/hydrogen/client';
+import {Head} from '@shopify/hydrogen';
 
 return (
   <Seo type="product" data={product} />
@@ -137,7 +137,7 @@ The following example shows how to overwrite title template for a single page:
 {% codeblock file, filename: '/mypage.server.jsx' %}
 
 ```jsx
-import {Head} from '@shopify/hydrogen/client';
+import {Head} from '@shopify/hydrogen';
 
 return (
   <Head titleTemplate="%s">
