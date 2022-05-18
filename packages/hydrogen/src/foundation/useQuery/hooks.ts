@@ -3,7 +3,6 @@ import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
   collectQueryTimings,
-  logCacheApiStatus,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -11,10 +10,10 @@ import {
   getItemFromCache,
   isStale,
   setItemInCache,
-} from '../../framework/cache';
-import {hashKey} from '../../utilities/hash';
+} from '../../framework/cache-sub-request';
 import {runDelayedFunction} from '../../framework/runtime';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
+import {CacheSeconds} from '../../framework/CachingStrategy';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -90,7 +89,6 @@ function cachedQueryFnBuilder<T>(
     // to prevent losing the current React cycle.
     const request = useServerRequest();
     const log = getLoggerWithContext(request);
-    const hashedKey = hashKey(key);
 
     const cacheResponse = await getItemFromCache(key);
 
@@ -110,16 +108,20 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(response, resolvedQueryOptions?.cache)) {
-        logCacheApiStatus('STALE', hashedKey);
-        const lockKey = `lock-${key}`;
+      if (isStale(key, response)) {
+        const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
         runDelayedFunction(async () => {
-          logCacheApiStatus('UPDATING', hashedKey);
           const lockExists = await getItemFromCache(lockKey);
           if (lockExists) return;
 
-          await setItemInCache(lockKey, true);
+          await setItemInCache(
+            lockKey,
+            true,
+            CacheSeconds({
+              maxAge: 10,
+            })
+          );
           try {
             const output = await generateNewOutput();
 
