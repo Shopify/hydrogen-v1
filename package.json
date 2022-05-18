@@ -29,7 +29,6 @@
     "hydrogen": "./packages/cli/bin/hydrogen",
     "h2": "./packages/cli/bin/hydrogen",
     "generate-docs": "node ./scripts/generate-docs.mjs",
-    "tophat": "node ./scripts/tophat",
     "graphql-types": "run-s graphql-types:hydrogen lint:schema",
     "graphql-types:hydrogen": "yarn workspace @shopify/hydrogen graphql-types"
   },
