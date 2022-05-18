@@ -920,8 +920,6 @@ const QUERY = gql`
 
 ## Related components
 
-- [`ProductTitle`](https://shopify.dev/api/hydrogen/components/product-variant/producttitle)
-- [`ProductDescription`](https://shopify.dev/api/hydrogen/components/product-variant/productdescription)
 - [`ProductPrice`](https://shopify.dev/api/hydrogen/components/product-variant/productprice)
 
 ## Related hooks

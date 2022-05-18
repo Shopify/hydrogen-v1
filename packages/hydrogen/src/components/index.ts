@@ -27,8 +27,6 @@ export type {
   CartAction,
 } from './CartProvider';
 export {ProductProvider, useProduct} from './ProductProvider';
-export {ProductDescription} from './ProductDescription';
-export {ProductTitle} from './ProductTitle';
 export {ProductPrice} from './ProductPrice';
 export {ProductMetafield} from './ProductMetafield';
 export {BuyNowButton} from './BuyNowButton';
