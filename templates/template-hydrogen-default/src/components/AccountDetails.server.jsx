@@ -1,4 +1,4 @@
-import {useShopQuery, NoStore, flattenConnection} from '@shopify/hydrogen';
+import {Seo, useShopQuery, NoStore, flattenConnection} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from './Layout.server';
@@ -22,11 +22,12 @@ export default function AccountDetails({customerAccessToken}) {
       : [];
 
   const pageHeader = customer
-    ? `Welcome ${customer.firstName || customer.email} !`
+    ? `Welcome ${customer.firstName || customer.email}!`
     : 'Account Details';
 
   return (
     <Layout>
+      <Seo type="noindex" data={{title: 'Account details'}} />
       <h1>{pageHeader}</h1>
       <div className="flex items-center justify-between">
         <LogoutButton className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">

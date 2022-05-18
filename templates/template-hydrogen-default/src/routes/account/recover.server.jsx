@@ -1,4 +1,4 @@
-import {NoStore} from '@shopify/hydrogen';
+import {NoStore, Seo} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
@@ -15,6 +15,7 @@ export default function Recover({response}) {
 
   return (
     <Layout>
+      <Seo type="noindex" data={{title: 'Recover password'}} />
       <AccountRecoverForm />
     </Layout>
   );

@@ -3,6 +3,7 @@ import {
   CacheDays,
   NoStore,
   setCustomerAccessToken,
+  Seo,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -24,6 +25,7 @@ export default function Login({response}) {
 
   return (
     <Layout>
+      <Seo type="noindex" data={{title: 'Login'}} />
       <LoginForm shopName={name} />
     </Layout>
   );
