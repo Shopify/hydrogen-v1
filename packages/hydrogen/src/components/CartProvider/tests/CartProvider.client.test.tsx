@@ -88,9 +88,9 @@ describe('<CartProvider />', () => {
       expect(fetchCartMock).toHaveBeenLastCalledWith({
         query: expect.stringContaining(cartFragment),
         variables: {
-          input: {lines: linesMock},
+          input: {lines: linesMock, buyerIdentity: {countryCode: 'US'}},
           numCartLines: undefined,
-          country: undefined,
+          country: 'US',
         },
       });
     });
