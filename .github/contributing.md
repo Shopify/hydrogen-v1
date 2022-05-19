@@ -280,7 +280,3 @@ To make updates to the plugin:
 1. Tell @frandiox what changes you made, as we need to use that personal branch to make changes upstream into the React PR.
 
 Eventually this will not be vendored and we can delete these instructions!
-
-```
-
-```
