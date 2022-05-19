@@ -221,19 +221,6 @@ Each mini-project under `packages/playground` contains a tests folder. You are w
 
 You can run a single E2E test by passing a keyword, which is matched using regex, e.g. `yarn test-e2e server` will run the `server-components` test.
 
-## Testing changes in another project
-
-From the root of the repo, run:
-
-```bash
-yarn tophat ../PATH/TO/PROJECT --packages [...PACKAGES_LIST]
-
-
-# example
-yarn tophat ../cartogram/hydrogen-shop --packages cli hydrogen eslint-plugin
-
-```
-
 ## Updating the `react-server-dom-vite` vendored plugin
 
 We have an [open PR](https://github.com/facebook/react/pull/22952) for `react-server-dom-vite`, which powers server components in Hydrogen. We're still aligning with the React team on this implementation.
