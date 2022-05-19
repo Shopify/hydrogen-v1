@@ -6,7 +6,7 @@ import React from 'react';
 
 export class ServerComponentResponse extends Response {
   private wait = false;
-  private cacheOptions?: CachingStrategy;
+  private cacheOptions: CachingStrategy = CacheSeconds();
 
   public customStatus?: {code?: number; text?: string};
 
@@ -32,7 +32,7 @@ export class ServerComponentResponse extends Response {
   }
 
   get cacheControlHeader(): string {
-    return generateCacheControlHeader(this.cacheOptions || CacheSeconds());
+    return generateCacheControlHeader(this.cacheOptions);
   }
 
   writeHead({

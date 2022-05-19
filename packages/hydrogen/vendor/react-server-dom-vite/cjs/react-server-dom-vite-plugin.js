@@ -13,6 +13,7 @@
 'use strict';
 
 var esModuleLexer = require('es-module-lexer');
+var MagicString = require('magic-string');
 var vite = require('vite');
 var fs = require('fs');
 var path = require('path');
@@ -176,11 +177,20 @@ function ReactFlightVitePlugin() {
        */
       if (rscViteFileRE.test(id)) {
         var INJECTING_RE = /\{\s*__INJECTED_CLIENT_IMPORTERS__[:\s]*null[,\s]*\}\s*;/;
+        var s = new MagicString(code);
+        id = id.split('?')[0];
 
         if (options && options.ssr) {
           // In SSR, directly use components already discovered by RSC
           // instead of globs to avoid bundling unused components.
-          return code.replace(INJECTING_RE, 'globalThis.__COMPONENT_INDEX');
+          s.replace(INJECTING_RE, 'globalThis.__COMPONENT_INDEX');
+          return {
+            code: s.toString(),
+            map: s.generateMap({
+              file: id,
+              source: id
+            })
+          };
         }
 
         var injectGlobs = function (clientComponents) {
@@ -193,11 +203,18 @@ function ReactFlightVitePlugin() {
               "/* HASH_BEGIN */ " + ("import.meta.glob('" + vite.normalizePath(glob) + "') /* HASH_END */")
             );
           }).join(', ') + ");";
-          return code.replace(INJECTING_RE, injectedGlobs);
+          s.replace(INJECTING_RE, injectedGlobs);
+          return {
+            code: s.toString(),
+            map: s.generateMap({
+              file: id,
+              source: id
+            })
+          };
         };
 
         if (config.command === 'serve') {
-          absoluteImporterPath = id.split('?')[0];
+          absoluteImporterPath = id;
           return injectGlobs(findClientComponentsForDev(server));
         }
 
@@ -299,12 +316,20 @@ var hashImportsPlugin = {
   transform: function (code, id) {
     // Turn relative import paths to lossy hashes
     if (rscViteFileRE.test(id)) {
-      return code.replace(/\/\*\s*HASH_BEGIN\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm, function (_, imports) {
+      var s = new MagicString(code);
+      s.replace(/\/\*\s*HASH_BEGIN\s*\*\/\s*([^]+?)\/\*\s*HASH_END\s*\*\//gm, function (_, imports) {
         return imports.trim().replace(/"([^"]+?)":/gm, function (__, relativePath) {
           var absolutePath = path.resolve(path.dirname(id.split('?')[0]), relativePath);
           return "\"" + getComponentId(vite.normalizePath(absolutePath)) + "\":";
         });
       });
+      return {
+        code: s.toString(),
+        map: s.generateMap({
+          file: id,
+          source: id
+        })
+      };
     }
   }
 }; // This can be used in custom findClientComponentsForClientBuild implementations

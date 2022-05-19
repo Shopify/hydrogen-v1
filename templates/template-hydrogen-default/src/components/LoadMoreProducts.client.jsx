@@ -1,4 +1,4 @@
-import {useServerProps} from '@shopify/hydrogen/client';
+import {useServerProps} from '@shopify/hydrogen';
 import SpinnerIcon from './SpinnerIcon.client';
 
 /**

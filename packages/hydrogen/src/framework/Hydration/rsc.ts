@@ -1,8 +1,6 @@
 // TODO should we move this file to src/foundation
 // so it is considered ESM instead of CJS?
 
-// @ts-ignore
-import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
 import {
   createFromFetch,
   createFromReadableStream,
@@ -77,9 +75,7 @@ if (flightChunks.length > 0) {
   }
 }
 
-function createResponseCache() {
-  return new Map<string, any>();
-}
+const cache = new Map();
 
 /**
  * Much of this is borrowed from React's demo implementation:
@@ -89,8 +85,6 @@ function createResponseCache() {
  */
 export function useServerResponse(state: any) {
   const key = JSON.stringify(state);
-  const cache: ReturnType<typeof createResponseCache> =
-    unstable_getCacheForType(createResponseCache);
 
   let response = cache.get(key);
   if (response) {
@@ -126,6 +120,5 @@ export function useServerResponse(state: any) {
 }
 
 export function useRefresh() {
-  const refreshCache = unstable_useCacheRefresh();
-  refreshCache();
+  cache.clear();
 }

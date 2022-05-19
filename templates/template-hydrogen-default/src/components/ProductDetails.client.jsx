@@ -3,12 +3,10 @@ import {
   useProduct,
   useParsedMetafields,
   ProductProvider,
-  ProductTitle,
-  ProductDescription,
   ProductPrice,
   AddToCartButton,
   BuyNowButton,
-} from '@shopify/hydrogen/client';
+} from '@shopify/hydrogen';
 import ProductOptions from './ProductOptions.client';
 import Gallery from './Gallery.client';
 import {
@@ -131,10 +129,9 @@ export default function ProductDetails({product}) {
       <ProductProvider data={product} initialVariantId={initialVariant.id}>
         <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-x-8 my-16">
           <div className="md:hidden mt-5 mb-8">
-            <ProductTitle
-              as="h1"
-              className="text-4xl font-bold text-black mb-4"
-            />
+            <h1 className="text-4xl font-bold text-black mb-4">
+              {product.title}
+            </h1>
             {product.vendor && (
               <div className="text-sm font-medium mb-2 text-gray-900">
                 {product.vendor}
@@ -150,10 +147,9 @@ export default function ProductDetails({product}) {
 
           <div>
             <div className="hidden md:block">
-              <ProductTitle
-                as="h1"
-                className="text-5xl font-bold text-black mb-4"
-              />
+              <h1 className="text-5xl font-bold text-black mb-4">
+                {product.title}
+              </h1>
               {product.vendor && (
                 <div className="text-sm font-medium mb-2 text-gray-900">
                   {product.vendor}
@@ -220,8 +216,9 @@ export default function ProductDetails({product}) {
                 )}
               </div>
             </div>
-            {/* Product Description */}
-            <ProductDescription className="prose border-t border-gray-200 pt-6 text-black text-md" />
+            <div className="prose border-t border-gray-200 pt-6 text-black text-md">
+              {product.description}
+            </div>
             {sizeChartMetafield?.value && (
               <div className="border-t border-gray-200">
                 <SizeChart />

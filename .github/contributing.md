@@ -166,7 +166,7 @@ yarn workspace localdev dev
 
 1. In the directory you want to create your Hydrogen app, run `LOCAL=true create-hydrogen` and answer the prompts.
 1. Run `cd <your app>`.
-1. Run `yarn` or `npm i --legacy-peer-deps`.
+1. Run `yarn` or `npm i`.
 1. Optional. Replace default `hydrogen.config.js` with your own storefront credentials.
 1. Run `yarn dev` or `npm run dev` to start your dev server.
 1. Open the dev server in your browser at http://localhost:3000.
@@ -220,19 +220,6 @@ End-to-end tests are powered by [Playwright and Chromium](https://playwright.dev
 Each mini-project under `packages/playground` contains a tests folder. You are welcome to modify an existing project or add a new project if it represents a different framework scenario, e.g. using a specific CSS framework or integration.
 
 You can run a single E2E test by passing a keyword, which is matched using regex, e.g. `yarn test-e2e server` will run the `server-components` test.
-
-## Testing changes in another project
-
-From the root of the repo, run:
-
-```bash
-yarn tophat ../PATH/TO/PROJECT --packages [...PACKAGES_LIST]
-
-
-# example
-yarn tophat ../cartogram/hydrogen-shop --packages cli hydrogen eslint-plugin
-
-```
 
 ## Updating the `react-server-dom-vite` vendored plugin
 

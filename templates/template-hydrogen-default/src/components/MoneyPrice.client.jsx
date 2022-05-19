@@ -1,4 +1,4 @@
-import {useMoney} from '@shopify/hydrogen/client';
+import {useMoney} from '@shopify/hydrogen';
 
 /**
  * A client component that defines the currency code, currency symbol, and amount of a product

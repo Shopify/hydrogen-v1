@@ -1,3 +1,4 @@
+// @ts-nocheck
 import '@shopify/react-testing';
 import '@shopify/react-testing/matchers';
 import './scripts/polyfillWebRuntime';

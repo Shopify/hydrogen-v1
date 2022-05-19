@@ -1,5 +1,63 @@
 # Changelog
 
+## 0.20.0
+
+### Minor Changes
+
+- [#1257](https://github.com/Shopify/hydrogen/pull/1257) [`5cd7a672`](https://github.com/Shopify/hydrogen/commit/5cd7a6727befe1e06f35b9ec68d4c81a8858d46f) Thanks [@frandiox](https://github.com/frandiox)! - Support for CSS Modules has been improved. It now behaves closer to the default behavior in Vite where styles are collected automatically.
+
+  Remove the `StyleTag` component that was needed before:
+
+  ```diff
+  export default function MyComponent() {
+    return (
+      <div>
+  -      <myStyles.StyleTag />
+        <h1>Title</h1>
+      </div>
+    );
+  }
+  ```
+
+  Optionally, update your wildcard imports to default or named imports:
+
+  ```diff
+  -import * as myStyles from './my.module.css';
+  +import myStyles from './my.module.css';
+  // Or
+  +import {red, green, blue} from './my.module.css';
+  ```
+
+* [#1271](https://github.com/Shopify/hydrogen/pull/1271) [`9d0359b8`](https://github.com/Shopify/hydrogen/commit/9d0359b87b0cfa04f12ffa9376e5b8ad72c560a3) Thanks [@frehner](https://github.com/frehner)! - ## `<Image/>`
+
+  The `<Image/>` component and related utility functions were reworked and the following changes apply:
+
+  - `useImageUrl` is no longer available; use `shopifyImageLoader` instead, which is available to run both server- and client-side.
+  - The TypeScript experience with `<Image/>` is improved; props will be validated better, and `loader` and `loaderOptions` will be better typed
+  - When using the `src` prop, `width` and `height` are now required
+  - When using the `data` prop, `data.width` and `data.height` or `width` and `height` props are required
+  - The `src` and `data` props are mutually exclusive
+  - The `loader` prop now receives a singular param as an object
+  - `options` has been merged with `loaderOptions`. When using the `data` prop, `loaderOptions` will be the options for Shopify CDN images. When using the `src` prop, `loaderOptions` will be whatever you define them to be.
+  - The TypeScript type `ImageSizeOptions` is now named `ShopifyLoaderOptions`
+  - The TypeScript type `ImageLoaderOptions` is now named `ShopifyLoaderParams`
+  - The `priority` prop was removed; use the HTML-standard `loading` prop instead
+
+  ## `<Video/>`
+
+  - The `<Video/>` component's `options` props was renamed to `imagePreviewOptions` to add clarity as to what the options were for.
+  - `imagePreviewOptions` matches the (newly updated) shape of `<Image/>`'s `loaderOptions`
+
+- [#1290](https://github.com/Shopify/hydrogen/pull/1290) [`437b1616`](https://github.com/Shopify/hydrogen/commit/437b1616fcfa15d8b4b2c033b364b2f74b99d6e4) Thanks [@jplhomer](https://github.com/jplhomer)! - Allow cart queries to be customized by adding a new `cartFragment` prop to `CartProvider`. [Learn more](https://shopify.dev/api/hydrogen/components/cart/cartprovider#cart-fragment).
+
+### Patch Changes
+
+- [#1247](https://github.com/Shopify/hydrogen/pull/1247) [`ee64873e`](https://github.com/Shopify/hydrogen/commit/ee64873ece372f9be2d6eb08b0594a91f4ed135a) Thanks [@frandiox](https://github.com/frandiox)! - Improve the way client components are discovered in order to reduce bundle sizes.
+
+* [#1276](https://github.com/Shopify/hydrogen/pull/1276) [`c6ce6a43`](https://github.com/Shopify/hydrogen/commit/c6ce6a43bbb944b67aec5fdc7e5566768846dac5) Thanks [@frandiox](https://github.com/frandiox)! - Fix page loading in Firefox during development ([known bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1737882)).
+
+- [#1286](https://github.com/Shopify/hydrogen/pull/1286) [`53270249`](https://github.com/Shopify/hydrogen/commit/5327024995ff7b8823ddb8ea835b3a5b95175841) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix some sourcemap warnings in server console
+
 ## 0.19.0
 
 ### Minor Changes

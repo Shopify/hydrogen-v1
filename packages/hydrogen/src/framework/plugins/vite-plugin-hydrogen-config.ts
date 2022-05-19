@@ -71,6 +71,7 @@ export default () => {
 
       optimizeDeps: {
         exclude: [
+          '@shopify/hydrogen',
           '@shopify/hydrogen/client',
           '@shopify/hydrogen/entry-client',
           '@shopify/hydrogen-ui',

@@ -1,5 +1,5 @@
 import {useCallback, useState, Suspense} from 'react';
-import {useCountry, fetchSync} from '@shopify/hydrogen/client';
+import {useCountry, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 import SpinnerIcon from './SpinnerIcon.client';
 

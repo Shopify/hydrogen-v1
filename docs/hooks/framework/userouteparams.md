@@ -24,7 +24,7 @@ export default function Page() {
 {% codeblock file, filename: 'component.client.jsx' %}
 
 ```jsx
-import {useRouteParams} from '@shopify/hydrogen/client';
+import {useRouteParams} from '@shopify/hydrogen';
 // Client component
 export default function Component() {
   const {handle} = useRouteParams();

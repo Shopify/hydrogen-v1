@@ -1,4 +1,4 @@
-import {useProduct} from '@shopify/hydrogen/client';
+import {useProduct} from '@shopify/hydrogen';
 
 /**
  * A client component that tracks a selected variant and/or selling plan state, as well as callbacks for modifying the state

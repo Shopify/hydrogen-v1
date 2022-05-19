@@ -11,7 +11,7 @@ import {
   CartShopPayButton,
   CartEstimatedCost,
   useCartLine,
-} from '@shopify/hydrogen/client';
+} from '@shopify/hydrogen';
 import {Dialog} from '@headlessui/react';
 
 import {useCartUI} from './CartUIProvider.client';
@@ -98,7 +98,7 @@ function LineInCart() {
         <Link to={`/products/${merchandise.product.handle}`}>
           <CartLineImage
             className="bg-white border border-black border-opacity-5 rounded-xl "
-            options={{width: 98, height: 98, crop: 'center'}}
+            loaderOptions={{width: 98, height: 98, crop: 'center'}}
           />
         </Link>
       </div>

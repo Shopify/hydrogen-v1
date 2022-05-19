@@ -13,6 +13,7 @@ import type {
   StreamerOptions,
   HydratorOptions,
   HydrogenConfig,
+  ImportGlobEagerOutput,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -628,10 +629,11 @@ async function hydrate(
     );
 
     const streamer = rscWriter.renderToPipeableStream(AppRSC);
+    const stream = streamer.pipe(response) as Writable;
+
     response.writeHead(200, 'ok', {
       'cache-control': componentResponse.cacheControlHeader,
     });
-    const stream = streamer.pipe(response) as Writable;
 
     stream.on('finish', function () {
       postRequestTasks('rsc', response.statusCode, request, componentResponse);
@@ -639,12 +641,19 @@ async function hydrate(
   }
 }
 
-type BuildAppOptions = {
-  App: React.JSXElementConstructor<any>;
+type SharedServerProps = {
   state?: object | null;
   request: ServerComponentRequest;
   response: ServerComponentResponse;
   log: Logger;
+};
+
+type BuildAppOptions = {
+  App: React.JSXElementConstructor<SharedServerProps>;
+} & SharedServerProps;
+
+export type AppProps = SharedServerProps & {
+  routes?: ImportGlobEagerOutput;
 };
 
 function buildAppRSC({App, log, state, request, response}: BuildAppOptions) {
