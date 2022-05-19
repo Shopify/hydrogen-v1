@@ -6,11 +6,14 @@ export default function clientImports(): Plugin {
 
     enforce: 'pre',
 
-    // When importer ends in `client.jsx`, and source is `@shopify/hydrogen`, replace with `@shopify/hydrogen/client`.
-    // This prevents other server-only imports from "leaking" into the client bundle.
+    /**
+     * When importer does not end in `server.jsx`, and source is `@shopify/hydrogen`,
+     * replace with `@shopify/hydrogen/client`. This prevents other server-only imports
+     * from "leaking" into the client bundle.
+     */
     async resolveId(source, importer, {ssr}) {
       if (ssr) return;
-      if (!/\.client\.(j|t)sx?/.test(importer ?? '')) return;
+      if (/\.server\.(j|t)sx?/.test(importer ?? '')) return;
       if ('@shopify/hydrogen' !== source) return;
 
       const resolution = await this.resolve(
