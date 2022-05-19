@@ -59,16 +59,8 @@ const botUARegex = new RegExp(botUserAgents.join('|'), 'i');
 /**
  * Determines if the request is from a bot, using the URL and User Agent
  */
-export function isBotUA(
-  url: URL,
-  userAgent: string | null,
-  customUserAgents: Array<string> | null = null
-): boolean {
+export function isBotUA(url: URL, userAgent: string | null): boolean {
   return (
-    url.searchParams.has('_bot') ||
-    (!!userAgent && botUARegex.test(userAgent)) ||
-    (!!userAgent &&
-      !!customUserAgents &&
-      new RegExp(customUserAgents.join('|'), 'i').test(userAgent))
+    url.searchParams.has('_bot') || (!!userAgent && botUARegex.test(userAgent))
   );
 }

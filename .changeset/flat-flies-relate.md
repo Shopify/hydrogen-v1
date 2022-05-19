@@ -2,8 +2,7 @@
 '@shopify/hydrogen': patch
 ---
 
-Hydrogen disables streaming and instead buffer renders the whole page for bot user agents.
-Now you can add custom user agents within `hydrogen.config.js` by adding a `botUserAgents` property:
+You can now easily disable streaming on any page conditionally with the `enableStreaming` option inside `hydrogen.config.js`:
 
 ```ts
 import {CookieSessionStorage} from '@shopify/hydrogen';
@@ -17,6 +16,8 @@ export default defineConfig({
     storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
     storefrontApiVersion: '2022-07',
   },
-  botUserAgents: ['custom bot'],
+  enableStreaming: (req) => req.headers.get('user-agent') !== 'custom bot',
 });
 ```
+
+By default all pages are stream rendered except for SEO bots. There shouldn't be many reasons to disable streaming, unless there is a custom bot not covered by Hydrogen's bot detection.
