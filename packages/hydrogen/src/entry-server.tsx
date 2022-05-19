@@ -306,7 +306,7 @@ async function stream(
   const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
     stripScriptsFromTemplate(template);
 
-  const {AppSSR, rscReadable} = buildAppSSR(
+  const {AppSSR, rscReadable, rscErrored} = buildAppSSR(
     {
       App,
       log,
@@ -380,7 +380,7 @@ async function stream(
     async function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
-        getResponseOptions(componentResponse, didError)
+        getResponseOptions(componentResponse, rscErrored ?? didError)
       );
 
       /**
@@ -406,9 +406,11 @@ async function stream(
         responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
-        if (didError) {
+        if (rscErrored ?? didError) {
           // This error was delayed until the headers were properly sent.
-          writable.write(encoder.encode(getErrorMarkup(didError)));
+          writable.write(
+            encoder.encode(getErrorMarkup((rscErrored ?? didError) as Error))
+          );
         }
 
         return true;
@@ -495,7 +497,12 @@ async function stream(
           componentResponse.cacheControlHeader
         );
 
-        writeHeadToServerResponse(response, componentResponse, log, didError);
+        writeHeadToServerResponse(
+          response,
+          componentResponse,
+          log,
+          rscErrored ?? didError
+        );
 
         if (isRedirect(response)) {
           // Return redirects early without further rendering/streaming
@@ -504,7 +511,10 @@ async function stream(
 
         if (!componentResponse.canStream()) return;
 
-        startWritingHtmlToServerResponse(response, dev ? didError : undefined);
+        startWritingHtmlToServerResponse(
+          response,
+          dev ? rscErrored ?? didError : undefined
+        );
 
         setTimeout(() => {
           log.trace('node pipe response');
@@ -529,7 +539,12 @@ async function stream(
           return;
         }
 
-        writeHeadToServerResponse(response, componentResponse, log, didError);
+        writeHeadToServerResponse(
+          response,
+          componentResponse,
+          log,
+          rscErrored ?? didError
+        );
 
         postRequestTasks(
           'str',
@@ -547,7 +562,10 @@ async function stream(
           return response.end(await componentResponse.customBody);
         }
 
-        startWritingHtmlToServerResponse(response, dev ? didError : undefined);
+        startWritingHtmlToServerResponse(
+          response,
+          dev ? rscErrored ?? didError : undefined
+        );
 
         bufferReadableStream(rscToScriptTagReadable.getReader()).then(
           (scriptTags) => {
@@ -609,7 +627,11 @@ async function hydrate(
   });
 
   if (__WORKER__) {
-    const rscReadable = rscRenderToReadableStream(AppRSC);
+    const rscReadable = rscRenderToReadableStream(AppRSC, {
+      onError(e) {
+        log.error(e);
+      },
+    });
 
     if (isStreamable && (await isStreamingSupported())) {
       postRequestTasks('rsc', 200, request, componentResponse);
@@ -632,7 +654,11 @@ async function hydrate(
       '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
     );
 
-    const streamer = rscWriter.renderToPipeableStream(AppRSC);
+    const streamer = rscWriter.renderToPipeableStream(AppRSC, {
+      onError(e: Error) {
+        log.error(e);
+      },
+    });
     const stream = streamer.pipe(response) as Writable;
 
     response.writeHead(200, 'ok', {
@@ -695,8 +721,17 @@ function buildAppSSR(
     response,
   });
 
-  const [rscReadableForFizz, rscReadableForFlight] =
-    rscRenderToReadableStream(AppRSC).tee();
+  let rscErrored;
+
+  const [rscReadableForFizz, rscReadableForFlight] = rscRenderToReadableStream(
+    AppRSC,
+    {
+      onError(e) {
+        rscErrored = e;
+        log.error(e);
+      },
+    }
+  ).tee();
 
   const rscResponse = createFromReadableStream(rscReadableForFizz);
   const RscConsumer = () => rscResponse.readRoot();
@@ -721,7 +756,7 @@ function buildAppSSR(
     </Html>
   );
 
-  return {AppSSR, rscReadable: rscReadableForFlight};
+  return {AppSSR, rscReadable: rscReadableForFlight, rscErrored};
 }
 
 function PreloadQueries({

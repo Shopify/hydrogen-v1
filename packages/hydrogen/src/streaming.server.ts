@@ -11,7 +11,10 @@ import {createFromReadableStream as _createFromReadableStream} from '@shopify/hy
 import type {Writable} from 'stream';
 
 export const rscRenderToReadableStream = _rscRenderToReadableStream as (
-  App: JSX.Element
+  App: JSX.Element,
+  options?: {
+    onError?: (error: Error) => void;
+  }
 ) => ReadableStream<Uint8Array>;
 
 export const createFromReadableStream = _createFromReadableStream as (
@@ -42,6 +45,7 @@ export const ssrRenderToReadableStream = _ssrRenderToReadableStream as (
 ) => Promise<ReadableStream<Uint8Array> & {allReady: Promise<void>}>;
 
 export async function isStreamingSupported() {
+  return true;
   return Boolean(globalThis.Oxygen?.env?.HYDROGEN_ENABLE_WORKER_STREAMING);
 }
 
