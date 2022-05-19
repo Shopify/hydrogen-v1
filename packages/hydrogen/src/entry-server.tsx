@@ -48,6 +48,7 @@ import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
+import {htmlEncode} from './utilities';
 
 declare global {
   // This is provided by a Vite plugin
@@ -217,7 +218,7 @@ async function render(
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
-  const {AppSSR} = buildAppSSR(
+  const {AppSSR, rscReadable} = buildAppSSR(
     {
       App,
       log,
@@ -234,9 +235,10 @@ async function render(
     return template;
   }
 
-  let html = await renderToBufferedString(AppSSR, {log, nonce}).catch(
-    onErrorShell
-  );
+  let [html, flight] = await Promise.all([
+    renderToBufferedString(AppSSR, {log, nonce}).catch(onErrorShell),
+    bufferReadableStream(rscReadable.getReader()).catch(() => null),
+  ]);
 
   const {headers, status, statusText} = getResponseOptions(componentResponse);
 
@@ -261,6 +263,13 @@ async function render(
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
+
+  if (flight) {
+    html = html.replace(
+      '</body>',
+      () => flightContainer(flight as string) + '</body>'
+    );
+  }
 
   postRequestTasks('ssr', status, request, componentResponse);
 
@@ -308,7 +317,11 @@ async function stream(
   const rscToScriptTagReadable = new ReadableStream({
     start(controller) {
       log.trace('rsc start chunks');
-      bufferReadableStream(rscReadable.getReader()).then(() => {
+      const encoder = new TextEncoder();
+      bufferReadableStream(rscReadable.getReader(), (chunk) => {
+        const metaTag = flightContainer(chunk);
+        controller.enqueue(encoder.encode(metaTag));
+      }).then(() => {
         log.trace('rsc finish chunks');
         return controller.close();
       });
@@ -846,6 +859,10 @@ async function createNodeWriter() {
   const streamImport = __WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
+}
+
+function flightContainer(chunk: string) {
+  return `<meta data-flight="${htmlEncode(chunk)}" />`;
 }
 
 function postRequestTasks(
