@@ -43,6 +43,7 @@ export {
 
 export {fetchSync} from './foundation/fetchSync/server/fetchSync';
 export {useServerAnalytics} from './foundation/Analytics';
+export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server';
 export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
 
 export {useSession} from './foundation/useSession/useSession';

@@ -5,6 +5,7 @@ import type {ServerComponentRequest} from '../../framework/Hydration/ServerCompo
 
 export type SessionSyncApi = {
   get: () => Record<string, string>;
+  set: (value: Record<string, string>) => void;
 };
 
 export type SessionApi = {
@@ -32,14 +33,20 @@ export function getSyncSessionApi(
   const sessionPromises: {[key: string]: ThrowablePromise} = {};
 
   return session
-    ? {
+    ? ({
         get() {
           if (!sessionPromises.getPromise) {
             sessionPromises.getPromise = wrapPromise(session.get(request));
           }
           return sessionPromises.getPromise.read();
         },
-      }
+        async set(value: Record<string, string>) {
+          componentResponse.headers.append(
+            'Set-Cookie',
+            await session.set(request, value)
+          );
+        },
+      } as SessionSyncApi)
     : emptySyncSessionImplementation(log);
 }
 
@@ -64,6 +71,10 @@ export const emptySyncSessionImplementation = function (log: Logger) {
     get() {
       log.warn('No session adapter has been configured!');
       return {};
+    },
+    set() {
+      log.warn('No session adapter has been configured!');
+      return;
     },
   };
 };

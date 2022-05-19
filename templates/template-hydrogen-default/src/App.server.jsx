@@ -1,5 +1,11 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, Route, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import {
+  Router,
+  Route,
+  FileRoutes,
+  ShopifyProvider,
+  ShopifyAnalytics,
+} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
@@ -10,7 +16,7 @@ import {
   PerformanceMetricsDebug,
 } from '@shopify/hydrogen/client';
 
-function App() {
+function App({request}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
@@ -23,6 +29,7 @@ function App() {
         </CartProvider>
         <PerformanceMetrics />
         {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+        <ShopifyAnalytics request={request} cookieName="__session" />
       </ShopifyProvider>
     </Suspense>
   );

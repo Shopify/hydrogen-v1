@@ -23,7 +23,7 @@ import {
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider';
 import type {ServerResponse, IncomingMessage} from 'http';
-import type {PassThrough as PassThroughType, Writable} from 'stream';
+import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
@@ -592,8 +592,9 @@ async function hydrate(
     response: componentResponse,
   });
 
+  const rscReadable = rscRenderToReadableStream(AppRSC);
   if (__WORKER__) {
-    const rscReadable = rscRenderToReadableStream(AppRSC);
+    // const rscReadable = rscRenderToReadableStream(AppRSC);
 
     if (isStreamable && (await isStreamingSupported())) {
       postRequestTasks('rsc', 200, request, componentResponse);
@@ -611,21 +612,29 @@ async function hydrate(
       },
     });
   } else if (response) {
-    const rscWriter = await import(
-      // @ts-ignore
-      '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
-    );
+    const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    const streamer = rscWriter.renderToPipeableStream(AppRSC);
-    const stream = streamer.pipe(response) as Writable;
+    postRequestTasks('rsc', 200, request, componentResponse);
 
-    response.writeHead(200, 'ok', {
-      'cache-control': componentResponse.cacheControlHeader,
+    return new Response(bufferedBody, {
+      headers: componentResponse.headers,
     });
 
-    stream.on('finish', function () {
-      postRequestTasks('rsc', response.statusCode, request, componentResponse);
-    });
+    // const rscWriter = await import(
+    //   // @ts-ignore
+    //   '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
+    // );
+
+    // const streamer = rscWriter.renderToPipeableStream(AppRSC);
+    // const stream = streamer.pipe(response) as Writable;
+
+    // response.writeHead(200, 'ok', {
+    //   'cache-control': componentResponse.cacheControlHeader,
+    // });
+
+    // stream.on('finish', function () {
+    //   postRequestTasks('rsc', response.statusCode, request, componentResponse);
+    // });
   }
 }
 

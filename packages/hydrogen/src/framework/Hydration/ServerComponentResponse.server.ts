@@ -15,6 +15,17 @@ export class ServerComponentResponse extends Response {
    */
   public customBody: string | Promise<string> = '';
 
+  constructor(
+    body?: BodyInit | null | undefined,
+    init?: ResponseInit | undefined
+  ) {
+    super(body, init);
+
+    this.headers.set(
+      'cache-control',
+      generateCacheControlHeader(this.cacheOptions)
+    );
+  }
   /**
    * Buffer the current response until all queries have resolved,
    * and prevent it from streaming back early.
@@ -29,6 +40,10 @@ export class ServerComponentResponse extends Response {
 
   cache(options: CachingStrategy) {
     this.cacheOptions = options;
+    this.headers.set(
+      'cache-control',
+      generateCacheControlHeader(this.cacheOptions)
+    );
   }
 
   get cacheControlHeader(): string {
