@@ -100,6 +100,14 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       hydrogenConfig = configFile.default as HydrogenConfig;
     }
 
+    const {default: hydrogenRoutes} = await import(
+      // @ts-ignore
+      // eslint-disable-next-line node/no-missing-import
+      'virtual:hydrogen-routes.server.jsx'
+    );
+
+    hydrogenConfig = {...hydrogenConfig, routes: hydrogenRoutes};
+
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 

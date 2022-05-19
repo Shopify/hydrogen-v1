@@ -1,4 +1,10 @@
-import {Plugin, loadEnv, ResolvedConfig, normalizePath} from 'vite';
+import {
+  Plugin,
+  loadEnv,
+  ResolvedConfig,
+  normalizePath,
+  ViteDevServer,
+} from 'vite';
 import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
@@ -12,8 +18,11 @@ export const HYDROGEN_DEFAULT_SERVER_ENTRY =
 const virtualModuleId = 'virtual:hydrogen-config';
 const virtualProxyModuleId = virtualModuleId + ':proxy';
 
+const virtualHydrogenRoutes = 'virtual:hydrogen-routes.server.jsx';
+
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
+  let server: ViteDevServer;
 
   return {
     name: 'vite-plugin-hydrogen-middleware',
@@ -26,7 +35,8 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
      * loading them in an SSR context, rendering them using the `entry-server` endpoint in the
      * user's project, and injecting the static HTML into the template.
      */
-    async configureServer(server) {
+    async configureServer(_server) {
+      server = _server;
       const resolve = (p: string) => path.resolve(server.config.root, p);
       async function getIndexTemplate(url: string) {
         const indexHtml = await fs.readFile(resolve('index.html'), 'utf-8');
@@ -99,12 +109,28 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
         return '\0' + virtualProxyModuleId;
       }
+
+      if (source === virtualHydrogenRoutes) {
+        return '\0' + virtualHydrogenRoutes;
+      }
     },
     async load(id) {
       if (id === '\0' + virtualProxyModuleId) {
         // Likely due to a bug in Vite, but the config cannot be loaded
         // directly using ssrLoadModule. It needs to be proxied as follows:
         return `import hc from 'virtual:hydrogen-config'; export default hc;`;
+      }
+
+      if (id === '\0' + virtualHydrogenRoutes) {
+        const {default: hc} = await server.ssrLoadModule(
+          'virtual:hydrogen-config:proxy'
+        );
+
+        return {
+          code:
+            `import 'virtual:hydrogen-config';` +
+            `\nexport default import.meta.globEager('${hc.routes}/**/*.server.[jt](s|sx)');`,
+        };
       }
     },
   } as Plugin;
