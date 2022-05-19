@@ -1,6 +1,6 @@
-import {htmlDecode, htmlEncode} from '../html';
+import {htmlDecode, htmlEncode} from '../html-encoding';
 
-describe('html', () => {
+describe('html encodgin', () => {
   describe('htmlEncode', () => {
     it('encodes things properly', () => {
       expect(htmlEncode('<div>')).toBe('&lt;div&gt;');
