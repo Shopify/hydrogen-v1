@@ -74,7 +74,7 @@ export type HydrogenConfig = {
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   session?: (log: Logger) => SessionStorageAdapter;
-  enableStreaming?: (request: Request) => boolean;
+  enableStreaming?: (request: ServerComponentRequest) => boolean;
 };
 
 export type ClientHandlerConfig = {
