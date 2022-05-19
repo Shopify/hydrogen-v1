@@ -48,6 +48,7 @@ import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
+import {htmlEncode} from './utilities';
 
 declare global {
   // This is provided by a Vite plugin
@@ -861,7 +862,7 @@ async function createNodeWriter() {
 }
 
 function flightContainer(chunk: string) {
-  return `<meta data-flight="${encodeURIComponent(chunk)}" />`;
+  return `<meta data-flight="${htmlEncode(chunk)}" />`;
 }
 
 function postRequestTasks(

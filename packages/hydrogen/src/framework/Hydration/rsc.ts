@@ -7,6 +7,7 @@ import {
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import {RSC_PATHNAME} from '../../constants';
+import {htmlDecode} from '../../utilities';
 
 let rscReader: ReadableStream | null;
 
@@ -17,7 +18,7 @@ const FLIGHT_ATTRIBUTE = 'data-flight';
 function addElementToFlightChunks(el: Element) {
   const chunk = el.getAttribute(FLIGHT_ATTRIBUTE);
   if (chunk) {
-    flightChunks.push(decodeURIComponent(chunk));
+    flightChunks.push(htmlDecode(chunk));
   }
 }
 

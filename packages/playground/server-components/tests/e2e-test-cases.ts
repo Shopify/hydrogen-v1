@@ -1,4 +1,5 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
+import {htmlEncode} from '../../../hydrogen/src/utilities';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
 
@@ -112,7 +113,7 @@ export default async function testCases({
 
     const body = streamedChunks.join('');
     expect(body).toContain(
-      `<meta data-flight="${encodeURIComponent('S1:"react.suspense"')}`
+      `<meta data-flight="${htmlEncode('S1:"react.suspense"')}`
     );
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
@@ -133,7 +134,7 @@ export default async function testCases({
 
     const body = streamedChunks.join('');
     expect(body).toContain(
-      `<meta data-flight="${encodeURIComponent('S1:"react.suspense"')}`
+      `<meta data-flight="${htmlEncode('S1:"react.suspense"')}`
     );
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
