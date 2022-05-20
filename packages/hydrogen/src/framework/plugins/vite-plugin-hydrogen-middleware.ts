@@ -11,6 +11,7 @@ import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
 import type {HydrogenVitePluginOptions} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
+import {viteception} from '../viteception';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
@@ -20,7 +21,7 @@ export const VIRTUAL_HYDROGEN_CONFIG_ID = 'virtual:hydrogen.config.ts';
 export const VIRTUAL_HYDROGEN_CONFIG_PROXY_ID =
   VIRTUAL_HYDROGEN_CONFIG_ID + ':proxy';
 
-const VIRTUAL_HYDROGEN_ROUTES_ID = 'virtual:hydrogen-routes.server.jsx';
+export const VIRTUAL_HYDROGEN_ROUTES_ID = 'virtual:hydrogen-routes.server.jsx';
 
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
@@ -117,7 +118,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         return '\0' + VIRTUAL_HYDROGEN_ROUTES_ID;
       }
     },
-    async load(id) {
+    load(id) {
       if (id === '\0' + VIRTUAL_HYDROGEN_CONFIG_PROXY_ID) {
         // Likely due to a bug in Vite, but the config cannot be loaded
         // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
@@ -125,18 +126,38 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       }
 
       if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_ID) {
-        const {default: hc} = await server.ssrLoadModule(
-          VIRTUAL_HYDROGEN_CONFIG_PROXY_ID
-        );
+        return importHydrogenConfig().then((hc) => {
+          const routesPath =
+            typeof hc.routes === 'string' ? hc.routes : hc.routes?.files;
 
-        return {
-          code:
-            `import '${VIRTUAL_HYDROGEN_CONFIG_ID}';` +
-            `\nexport default import.meta.globEager('${hc.routes}/**/*.server.[jt](s|sx)');`,
-        };
+          let code = `export default import.meta.globEager('./${path.join(
+            routesPath,
+            '**/*.server.[jt](s|sx)'
+          )}');`;
+
+          if (config.command === 'serve') {
+            // Add dependency on Hydrogen config for HMR
+            code += `\nimport '${VIRTUAL_HYDROGEN_CONFIG_ID}';`;
+          }
+
+          return {code};
+        });
       }
     },
   } as Plugin;
+
+  async function importHydrogenConfig() {
+    if (server) {
+      const loaded = await server.ssrLoadModule(
+        VIRTUAL_HYDROGEN_CONFIG_PROXY_ID
+      );
+
+      return loaded.default;
+    }
+
+    const {loaded} = await viteception([VIRTUAL_HYDROGEN_CONFIG_PROXY_ID]);
+    return loaded[0].default;
+  }
 };
 
 declare global {
