@@ -14,7 +14,7 @@ export interface CartEstimatedCostProps {
  * cost associated with the `amountType` prop. If no `amountType` prop is specified, then it defaults to `totalAmount`.
  * If `children` is a function, then it will pass down the render props provided by the parent component.
  */
-export function CartEstimatedCost<TTag extends keyof JSX.IntrinsicElements>(
+export function CartEstimatedCost(
   props: Omit<React.ComponentProps<typeof Money>, 'data'> &
     CartEstimatedCostProps
 ) {
@@ -37,7 +37,7 @@ export function CartEstimatedCost<TTag extends keyof JSX.IntrinsicElements>(
   }
 
   return (
-    <Money<TTag> {...passthroughProps} data={amount}>
+    <Money {...passthroughProps} data={amount}>
       {children}
     </Money>
   );
