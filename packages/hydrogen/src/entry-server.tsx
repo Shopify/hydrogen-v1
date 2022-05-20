@@ -187,7 +187,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     };
 
     if (isReactHydrationRequest) {
-      return hydrate(url, params);
+      return handleResponse(hydrate(url, params), streamableResponse);
     }
 
     /**
@@ -199,7 +199,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       return stream(url, params);
     }
 
-    return render(url, params);
+    return handleResponse(render(url, params), streamableResponse);
   };
 
   return handleRequest;
@@ -878,4 +878,32 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
+}
+
+/**
+ * Ensure Node.js environments handle the fetch Response correctly.
+ */
+function handleResponse(
+  fetchResponsePromise: Promise<Response | undefined>,
+  nodeResponse?: ServerResponse
+) {
+  if (!__WORKER__ && nodeResponse) {
+    fetchResponsePromise.then((response) => {
+      if (!response) return;
+
+      response.headers.forEach((value: string, key: string) => {
+        nodeResponse.setHeader(key, value);
+      });
+
+      nodeResponse.statusCode = response.status;
+
+      if (response.body) {
+        nodeResponse.write(response.body);
+      }
+
+      nodeResponse.end();
+    });
+  }
+
+  return fetchResponsePromise;
 }

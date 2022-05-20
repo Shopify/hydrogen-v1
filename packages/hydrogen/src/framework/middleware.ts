@@ -98,30 +98,12 @@ export function hydrogenMiddleware({
 
       entrypointError = null;
 
-      const eventResponse = await handleRequest(request, {
+      return handleRequest(request, {
         dev,
         cache,
         indexTemplate,
         streamableResponse: response,
       });
-
-      /**
-       * If a `Response` was returned, that means it was not streamed.
-       * Convert the response into a proper Node.js response.
-       */
-      if (eventResponse) {
-        eventResponse.headers.forEach((value: string, key: string) => {
-          response.setHeader(key, value);
-        });
-
-        response.statusCode = eventResponse.status;
-
-        if (eventResponse.body) {
-          response.write(eventResponse.body);
-        }
-
-        response.end();
-      }
     } catch (e: any) {
       if (dev && devServer) devServer.ssrFixStacktrace(e);
       response.statusCode = 500;
