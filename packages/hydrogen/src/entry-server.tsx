@@ -12,8 +12,8 @@ import type {
   RendererOptions,
   StreamerOptions,
   HydratorOptions,
-  HydrogenConfig,
   ImportGlobEagerOutput,
+  CompiledHydrogenConfig,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -49,6 +49,13 @@ import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
 
+// @ts-ignore
+// eslint-disable-next-line node/no-missing-import
+import virtualHydrogenConfig from 'virtual:hydrogen.config.ts';
+// @ts-ignore
+// eslint-disable-next-line node/no-missing-import
+import virtualHydrogenRoutes from 'virtual:hydrogen-routes.server.jsx';
+
 declare global {
   // This is provided by a Vite plugin
   // and will trigger tree-shaking.
@@ -78,7 +85,7 @@ export interface RequestHandler {
   >;
 }
 
-export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
+export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {
       indexTemplate,
@@ -93,23 +100,14 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
 
-    if (!hydrogenConfig) {
-      const configFile = await import(
-        // @ts-ignore
-        // eslint-disable-next-line node/no-missing-import
-        'virtual:hydrogen.config.ts'
-      );
-
-      hydrogenConfig = configFile.default as HydrogenConfig;
-    }
-
-    const {default: hydrogenRoutes} = await import(
-      // @ts-ignore
-      // eslint-disable-next-line node/no-missing-import
-      'virtual:hydrogen-routes.server.jsx'
-    );
-
-    hydrogenConfig = {...hydrogenConfig, routes: hydrogenRoutes};
+    const configRoutes = virtualHydrogenConfig.routes;
+    const hydrogenConfig: CompiledHydrogenConfig = {
+      ...virtualHydrogenConfig,
+      routes: {
+        ...(typeof configRoutes === 'string' ? null : configRoutes),
+        files: virtualHydrogenRoutes as ImportGlobEagerOutput,
+      },
+    };
 
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
@@ -146,8 +144,8 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    if (!isReactHydrationRequest && hydrogenConfig.routes) {
-      const apiRoute = getApiRoute(url, hydrogenConfig.routes);
+    if (!isReactHydrationRequest) {
+      const apiRoute = getApiRoute(url, hydrogenConfig.routes.files);
 
       // The API Route might have a default export, making it also a server component
       // If it does, only render the API route if the request method is GET
@@ -212,7 +210,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
   return handleRequest;
 };
 
-function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
+function getApiRoute(url: URL, routes: ImportGlobEagerOutput) {
   const apiRoutes = getApiRoutes(routes!);
   return getApiRouteFromURL(url, apiRoutes);
 }
