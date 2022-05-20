@@ -47,12 +47,11 @@ function resetPageAnalyticsData(): void {
   pageAnalyticsData = {};
 }
 
-function publish(eventname: string, guardDup = false, payload?: any) {
+function publish(eventname: string, guardDup = false, payload = {}) {
   if (isInvokedFromServer()) return;
 
   const namedspacedEventname = getNamedspacedEventname(eventname);
   const subs = subscribers[namedspacedEventname];
-  const combinedPayload = Object.assign({}, pageAnalyticsData, payload);
 
   // De-dup events due to re-renders
   if (guardDup) {
@@ -63,11 +62,11 @@ function publish(eventname: string, guardDup = false, payload?: any) {
     }
 
     const namespacedTimeout = setTimeout(() => {
-      publishEvent(subs, combinedPayload);
+      publishEvent(subs, Object.assign({}, pageAnalyticsData, payload));
     }, 100);
     guardDupEvents[namedspacedEventname] = namespacedTimeout;
   } else {
-    publishEvent(subs, combinedPayload);
+    publishEvent(subs, Object.assign({}, pageAnalyticsData, payload));
   }
 }
 
@@ -126,4 +125,5 @@ export const ClientAnalytics = {
   subscribe,
   pushToServer,
   eventNames,
+  hasSentPageView: false,
 };

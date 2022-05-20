@@ -7,6 +7,7 @@ export function Analytics({
   analyticsDataFromServer: any;
 }) {
   useEffect(() => {
+    ClientAnalytics.hasSentPageView = false;
     const urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.has('utm_source')) {
@@ -24,6 +25,9 @@ export function Analytics({
     }
 
     ClientAnalytics.pushToPageAnalyticsData(analyticsDataFromServer);
+    ClientAnalytics.subscribe(ClientAnalytics.eventNames.PAGE_VIEW, () => {
+      ClientAnalytics.hasSentPageView = true;
+    });
     ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true);
     if (analyticsDataFromServer.publishEventsOnNavigate) {
       analyticsDataFromServer.publishEventsOnNavigate.forEach(

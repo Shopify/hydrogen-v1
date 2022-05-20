@@ -10,16 +10,15 @@ import {ClientAnalytics} from '../../index';
 // } from './cart-utils';
 // import {getClientId} from './UniqueIdManager.client';
 import {buildUUID, addDataIf} from './utils';
+import {SESSION_COOKIE, USER_COOKIE} from './const';
 
-const USER_COOKIE = '_shopify_y';
-const SESSION_COOKIE = '_shopify_s';
-const longTermLength = 60 * 60 * 24 * 360; // ~1 year expiry
+const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
 const myShopifyDomain = 'myshopify.com';
 const oxygenDomain = 'shopify-oxygen-platform.workers.dev/';
 
-const APP = 'hydrogen';
 let isInit = false;
+let microSessionCount = 0;
 
 export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
   useEffect(() => {
@@ -43,33 +42,29 @@ export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
     ClientAnalytics.pushToPageAnalyticsData(
       {
         pageId: buildUUID(),
-        clientId: cookieData[USER_COOKIE],
+        userId: cookieData[USER_COOKIE],
         sessionId: cookieData[SESSION_COOKIE],
+        acceptedLanguage: cookieData['acceptedLanguage'],
       },
       'shopify'
     );
 
+    microSessionCount = 0;
+
+    // TODO: Fix with useEvent when ready
+    // RFC: https://github.com/reactjs/rfcs/blob/useevent/text/0000-useevent.md
     if (!isInit) {
       isInit = true;
 
       const eventNames = ClientAnalytics.eventNames;
 
-      ClientAnalytics.subscribe(eventNames.PAGE_VIEW, (payload) => {
-        try {
-          sendToServer(
-            wrapWithSchema({
-              ...buildBasePayload(payload),
-              event_name: 'page_rendered',
-              event_type: 'page_view',
-            })
-          );
-        } catch (error) {
-          console.error(
-            `Error Shopify analytics: ${eventNames.PAGE_VIEW}`,
-            error
-          );
-        }
-      });
+      ClientAnalytics.subscribe(eventNames.PAGE_VIEW, trackPageView);
+
+      // On a slow network, the pageview event could be already fired before
+      // we subscribed to the pageview event
+      if (ClientAnalytics.hasSentPageView) {
+        trackPageView(ClientAnalytics.getPageAnalyticsData());
+      }
 
       // ClientAnalytics.subscribe(eventNames.VIEWED_PRODUCT, (payload) => {
       //   try {
@@ -146,7 +141,6 @@ function updateCookie(cookieName: string, value: string, maxage: number) {
     path: '/',
   });
 
-  console.log(cookieString);
   document.cookie = cookieString;
   return cookieString;
 }
@@ -167,62 +161,80 @@ function getCookieDomain(): string {
   }
 }
 
-function wrapWithSchema(payload: any): any {
+function trackPageView(payload: any): void {
+  microSessionCount += 1;
+  try {
+    sendToServer(storefrontPageViewSchema(payload));
+  } catch (error) {
+    console.error(
+      `Error Shopify analytics: ${ClientAnalytics.eventNames.PAGE_VIEW}`,
+      error
+    );
+  }
+}
+
+function storefrontPageViewSchema(payload: any): any {
   return {
-    schema_id: 'customer_event/2.0',
-    payload,
+    schema_id: 'trekkie_storefront_page_view/1.2',
+    payload: buildStorefrontPageViewPayload(payload),
     metadata: {
       event_created_at_ms: Date.now(),
     },
   };
 }
 
-function buildBasePayload(payload: any): any {
+function buildStorefrontPageViewPayload(payload: any): any {
   let formattedData = {
-    shop_id: payload.shopId,
-    event_id: buildUUID(),
-    event_time: Date.now(),
-    event_source: APP,
-    api_client_id: '?', // TBD
-    channel: APP,
-    // sub_channel: // storefront id - from env
+    isPersistentCookie: true,
+    uniqToken: payload.shopify.userId,
+    visitToken: payload.shopify.sessionId,
+    microSessionId: payload.shopify.pageId,
+    microSessionCount,
 
-    currency: payload.currency,
-    page_id: payload.shopify.pageId,
-    page_url: document.location.href,
-    normalized_page_url: `${document.location.origin}${document.location.pathname}`,
-    query_params: document.location.search,
-    canonical_page_url: payload.canonicalPageUrl,
-    // search_string
+    url: document.location.href,
+    path: document.location.pathname,
+    search: document.location.search,
     referrer: document.referrer,
+    title: document.title,
 
-    client_id: payload.shopify.clientId,
-    client_id_type: 'shopify_y',
-    // 'is_persistent_cookie': 'figure out how to determine this', // tbd
+    api_client_id: '?',
+    shop_id: payload.shopId,
+    currency: payload.currency,
+    contentLanguage: payload.shopify.acceptedLanguage,
+    isMerchantRequest: isMerchantRequest(),
   };
 
   formattedData = addDataIf(
     {
-      collection_name: payload.collectionName,
-      collection_id: payload.collectionId,
+      pageType: payload.pageType,
     },
     formattedData
   );
 
-  if (payload.utm) {
-    formattedData = addDataIf(
-      {
-        utm_source: payload.utm.source,
-        utm_campaign: payload.utm.campaign,
-        utm_medium: payload.utm.medium,
-        utm_content: payload.utm.content,
-        utm_term: payload.utm.term,
-      },
-      formattedData
-    );
-  }
+  formattedData = addDataIf(
+    {
+      resourceType: payload.resourceType,
+      resourceId: payload.resourceId,
+    },
+    formattedData
+  );
+
+  formattedData = addDataIf(
+    {
+      customerId: payload.customerId,
+    },
+    formattedData
+  );
 
   return formattedData;
+}
+
+function isMerchantRequest(): Boolean {
+  const hostname = location.hostname;
+  if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
+    return true;
+  }
+  return false;
 }
 
 const BATCH_SENT_TIMEOUT = 500;
@@ -250,7 +262,7 @@ function sendToServer(data: any) {
 
     // Send to server
     try {
-      fetch('/__event?Shopify', {
+      fetch('/__event?shopify', {
         method: 'post',
         headers: {
           'cache-control': 'no-cache',

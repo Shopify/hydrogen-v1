@@ -1,11 +1,9 @@
 import React from 'react';
 import {ServerComponentRequest} from '../../../../framework/Hydration/ServerComponentRequest.server';
 import AnalyticsErrorBoundary from '../../../AnalyticsErrorBoundary.client';
+import {SESSION_COOKIE, USER_COOKIE} from './const';
 import {ShopifyAnalyticsClient} from './ShopifyAnalytics.client';
 import {buildUUID} from './utils';
-
-const USER_COOKIE = '_shopify_y';
-const SESSION_COOKIE = '_shopify_s';
 
 export function ShopifyAnalytics({
   request,
@@ -23,6 +21,8 @@ export function ShopifyAnalytics({
     ...cookies,
     [USER_COOKIE]: userCookie,
     [SESSION_COOKIE]: sessionCookie,
+    acceptedLanguage:
+      request.headers.get('Accept-Language')?.replace(/-.*/, '') || 'en',
   });
 
   return (
