@@ -36,7 +36,7 @@ export default function Product() {
 }
 ```
 
-### Example with `measurement`:
+### Calculate a unit price for a product variant
 
 ```tsx
 import {Money} from '@shopify/hydrogen';
