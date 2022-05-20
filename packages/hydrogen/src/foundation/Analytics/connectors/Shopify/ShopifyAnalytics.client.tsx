@@ -2,13 +2,6 @@ import {useEffect} from 'react';
 import {stringify} from 'worktop/cookie';
 import {Cookie} from '../../../Cookie/Cookie';
 import {ClientAnalytics} from '../../index';
-// import {
-//   formatProductsData,
-//   formatCartProductsData,
-//   flattenCartLines,
-//   formatProductData,
-// } from './cart-utils';
-// import {getClientId} from './UniqueIdManager.client';
 import {buildUUID, addDataIf} from './utils';
 import {SESSION_COOKIE, USER_COOKIE} from './const';
 
@@ -65,68 +58,6 @@ export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
       if (ClientAnalytics.hasSentPageView) {
         trackPageView(ClientAnalytics.getPageAnalyticsData());
       }
-
-      // ClientAnalytics.subscribe(eventNames.VIEWED_PRODUCT, (payload) => {
-      //   try {
-      //     sendToServer(
-      //       wrapWithSchema({
-      //         event_name: 'page_rendered',
-      //         event_type: 'viewed_product',
-      //         ...buildBasePayload(payload),
-      //         products: formatProductsData(payload.products),
-      //       })
-      //     );
-      //   } catch (error) {
-      //     console.error(
-      //       `Error Shopify analytics: ${eventNames.UPDATE_CART}`,
-      //       error
-      //     );
-      //   }
-      // });
-
-      // ClientAnalytics.subscribe(eventNames.ADD_TO_CART, (payload) => {
-      //   try {
-      //     sendToServer(
-      //       wrapWithSchema({
-      //         event_name: 'cart',
-      //         event_type: 'added_product',
-      //         ...buildBasePayload(payload),
-      //         products: formatCartProductsData(
-      //           payload.addedCartLines,
-      //           payload.cart
-      //         ),
-      //       })
-      //     );
-      //   } catch (error) {
-      //     console.error(
-      //       `Error Shopify analytics: ${eventNames.UPDATE_CART}`,
-      //       error
-      //     );
-      //   }
-      // });
-
-      // ClientAnalytics.subscribe(eventNames.UPDATE_CART, (payload) => {
-      //   try {
-      //     const oldCartLines = flattenCartLines(payload.oldCart.lines);
-      //     payload.updatedCartLines.forEach((line: any) => {
-      //       if (line.quantity > oldCartLines[line.id].quantity) {
-      //         sendToServer(
-      //           wrapWithSchema({
-      //             event_name: 'cart',
-      //             event_type: 'added_product',
-      //             ...buildBasePayload(payload),
-      //             products: formatProductData([line], oldCartLines),
-      //           })
-      //         );
-      //       }
-      //     });
-      //   } catch (error) {
-      //     console.error(
-      //       `Error Shopify analytics: ${eventNames.UPDATE_CART}`,
-      //       error
-      //     );
-      //   }
-      // });
     }
   });
 
