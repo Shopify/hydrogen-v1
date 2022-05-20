@@ -4,7 +4,7 @@ import {
   HYDROGEN_DEFAULT_SERVER_ENTRY,
   VIRTUAL_HYDROGEN_CONFIG_PROXY_ID,
 } from './vite-plugin-hydrogen-middleware';
-import {createServer} from 'vite';
+import {viteception} from '../viteception';
 
 export default function () {
   return reactServerDomVite({
@@ -20,21 +20,13 @@ export default function () {
       );
     },
     async findClientComponentsForClientBuild() {
-      // In client build, we create a local server to discover client compoents.
-      const server = await createServer({
-        clearScreen: false,
-        server: {middlewareMode: 'ssr'},
-      });
-
-      await Promise.all([
+      const {server} = await viteception([
         // Load server entry to discover client components early
-        server.ssrLoadModule(HYDROGEN_DEFAULT_SERVER_ENTRY),
+        HYDROGEN_DEFAULT_SERVER_ENTRY,
         // Route globs are placed in hydrogen.config.js and need to
         // be loaded to discover client components in routes
-        server.ssrLoadModule(VIRTUAL_HYDROGEN_CONFIG_PROXY_ID),
+        VIRTUAL_HYDROGEN_CONFIG_PROXY_ID,
       ]);
-
-      await server.close();
 
       // At this point, the server has loaded all the components in the module graph
       return reactServerDomVite.findClientComponentsFromServer(server);
