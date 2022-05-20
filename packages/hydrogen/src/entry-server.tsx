@@ -187,7 +187,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     };
 
     if (isReactHydrationRequest) {
-      return handleResponse(hydrate(url, params), streamableResponse);
+      return hydrate(url, params);
     }
 
     /**
@@ -199,10 +199,16 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       return stream(url, params);
     }
 
-    return handleResponse(render(url, params), streamableResponse);
+    return render(url, params);
   };
 
-  return handleRequest;
+  if (__WORKER__) return handleRequest;
+
+  return ((rawRequest, options) =>
+    handleFetchResponseInNode(
+      handleRequest(rawRequest, options),
+      options.streamableResponse
+    )) as RequestHandler;
 };
 
 function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
@@ -883,11 +889,11 @@ function postRequestTasks(
 /**
  * Ensure Node.js environments handle the fetch Response correctly.
  */
-function handleResponse(
+function handleFetchResponseInNode(
   fetchResponsePromise: Promise<Response | undefined>,
   nodeResponse?: ServerResponse
 ) {
-  if (!__WORKER__ && nodeResponse) {
+  if (nodeResponse) {
     fetchResponsePromise.then((response) => {
       if (!response) return;
 

@@ -98,7 +98,7 @@ export function hydrogenMiddleware({
 
       entrypointError = null;
 
-      return handleRequest(request, {
+      await handleRequest(request, {
         dev,
         cache,
         indexTemplate,
