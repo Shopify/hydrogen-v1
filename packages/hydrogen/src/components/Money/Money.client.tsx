@@ -40,7 +40,7 @@ export function Money<TTag extends React.ElementType>({
   measurementSeparator = '/',
   ...passthroughProps
 }: MoneyProps<TTag>) {
-  if (!isMoneyAmount(data)) {
+  if (!isMoney(data)) {
     throw new Error(
       `<Money/> needs a valid 'data' prop that has 'amount' and 'currencyCode'`
     );
@@ -75,9 +75,7 @@ export function Money<TTag extends React.ElementType>({
 }
 
 // required in order to narrow the money object down and make TS happy
-function isMoneyAmount(
-  maybeMoney: PartialDeep<MoneyV2>
-): maybeMoney is MoneyV2 {
+function isMoney(maybeMoney: PartialDeep<MoneyV2>): maybeMoney is MoneyV2 {
   return (
     typeof maybeMoney.amount === 'string' &&
     !!maybeMoney.amount &&
