@@ -128,7 +128,8 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
       if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_ID) {
         return importHydrogenConfig().then((hc) => {
           const routesPath =
-            typeof hc.routes === 'string' ? hc.routes : hc.routes?.files;
+            (typeof hc.routes === 'string' ? hc.routes : hc.routes?.files) ??
+            './src/routes';
 
           let code = `export default import.meta.globEager('./${path.join(
             routesPath,
