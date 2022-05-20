@@ -94,9 +94,12 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     const url = new URL(request.url);
 
     if (!hydrogenConfig) {
-      // @ts-ignore
-      // eslint-disable-next-line node/no-missing-import
-      const configFile = await import('virtual:hydrogen-config');
+      const configFile = await import(
+        // @ts-ignore
+        // eslint-disable-next-line node/no-missing-import
+        'virtual:hydrogen.config.ts'
+      );
+
       hydrogenConfig = configFile.default as HydrogenConfig;
     }
 

@@ -1,6 +1,9 @@
 // @ts-ignore
 import reactServerDomVite from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
-import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
+import {
+  HYDROGEN_DEFAULT_SERVER_ENTRY,
+  VIRTUAL_HYDROGEN_CONFIG_PROXY_ID,
+} from './vite-plugin-hydrogen-middleware';
 import {createServer} from 'vite';
 
 export default function () {
@@ -28,7 +31,7 @@ export default function () {
         server.ssrLoadModule(HYDROGEN_DEFAULT_SERVER_ENTRY),
         // Route globs are placed in hydrogen.config.js and need to
         // be loaded to discover client components in routes
-        server.ssrLoadModule('virtual:hydrogen-config:proxy'),
+        server.ssrLoadModule(VIRTUAL_HYDROGEN_CONFIG_PROXY_ID),
       ]);
 
       await server.close();

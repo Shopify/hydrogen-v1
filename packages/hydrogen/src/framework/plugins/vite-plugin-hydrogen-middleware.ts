@@ -15,8 +15,10 @@ import {InMemoryCache} from '../cache/in-memory';
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
-const virtualModuleId = 'virtual:hydrogen-config';
-const virtualProxyModuleId = virtualModuleId + ':proxy';
+export const VIRTUAL_HYDROGEN_CONFIG_ID = 'virtual:hydrogen.config.ts';
+// Note: do not use query string here, it breaks Vite
+export const VIRTUAL_HYDROGEN_CONFIG_PROXY_ID =
+  VIRTUAL_HYDROGEN_CONFIG_ID + ':proxy';
 
 const virtualHydrogenRoutes = 'virtual:hydrogen-routes.server.jsx';
 
@@ -52,7 +54,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           dev: true,
           getShopifyConfig: async (incomingMessage) => {
             const {default: hydrogenConfig} = await server.ssrLoadModule(
-              'virtual:hydrogen-config:proxy'
+              VIRTUAL_HYDROGEN_CONFIG_PROXY_ID
             );
 
             // @ts-ignore
@@ -69,9 +71,8 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
             // via `ServerComponentRequest` during production runtime.
             request.normalizedUrl = request.url;
 
-            return typeof hydrogenConfig.shopify === 'function'
-              ? hydrogenConfig.shopify(request)
-              : hydrogenConfig.shopify;
+            const {shopify} = hydrogenConfig;
+            return typeof shopify === 'function' ? shopify(request) : shopify;
           },
         })
       );
@@ -93,32 +94,34 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         );
     },
     async resolveId(source, importer) {
-      if (source === virtualModuleId) {
-        const configPath = await findHydrogenConfigPath(
+      if (source === VIRTUAL_HYDROGEN_CONFIG_ID) {
+        const hydrogenConfigPath = await findHydrogenConfigPath(
           config.root,
           pluginOptions.configPath
         );
 
-        return this.resolve(configPath, importer, {
+        // This direct dependency on a real file
+        // makes HMR work for the virtual module.
+        return this.resolve(hydrogenConfigPath, importer, {
           skipSelf: true,
         });
       }
 
-      if (source === virtualProxyModuleId) {
+      if (source === VIRTUAL_HYDROGEN_CONFIG_PROXY_ID) {
         // Virtual modules convention
         // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
-        return '\0' + virtualProxyModuleId;
+        return '\0' + VIRTUAL_HYDROGEN_CONFIG_PROXY_ID;
       }
 
       if (source === virtualHydrogenRoutes) {
         return '\0' + virtualHydrogenRoutes;
       }
     },
-    async load(id) {
-      if (id === '\0' + virtualProxyModuleId) {
+    load(id) {
+      if (id === '\0' + VIRTUAL_HYDROGEN_CONFIG_PROXY_ID) {
         // Likely due to a bug in Vite, but the config cannot be loaded
-        // directly using ssrLoadModule. It needs to be proxied as follows:
-        return `import hc from 'virtual:hydrogen-config'; export default hc;`;
+        // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
+        return `import hc from '${VIRTUAL_HYDROGEN_CONFIG_ID}'; export default hc;`;
       }
 
       if (id === '\0' + virtualHydrogenRoutes) {
