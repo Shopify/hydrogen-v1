@@ -12,7 +12,7 @@ interface CustomProps<ComponentGeneric extends React.ElementType> {
   withoutCurrency?: boolean;
   /** Whether to remove trailing zeros (fractional money) from the output. */
   withoutTrailingZeros?: boolean;
-  /** A [UnitPriceMeasurement object](https://shopify.dev/api/storefront/reference/products/unitpricemeasurement). */
+  /** A [UnitPriceMeasurement object](https://shopify.dev/api/storefront/latest/objects/unitpricemeasurement). */
   measurement?: PartialDeep<UnitPriceMeasurement>;
   /** Customizes the separator between the money output and the measurement output. Used with the `measurement` prop. Defaults to `'/'`. */
   measurementSeparator?: ReactNode;
