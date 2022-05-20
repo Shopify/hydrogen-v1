@@ -11,7 +11,7 @@ import {
   CartShopPayButton,
   CartEstimatedCost,
   useCartLine,
-} from '@shopify/hydrogen/client';
+} from '@shopify/hydrogen';
 import {Dialog} from '@headlessui/react';
 
 import {useCartUI} from './CartUIProvider.client';

@@ -45,6 +45,7 @@ The following groupings of configuration properties can exist in Hydrogen:
 - [`shopify`](#shopify)
 - [`session`](#session)
 - [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
+- [`enableStreaming`](#enablestreaming)
 
 ### `routes`
 
@@ -195,6 +196,26 @@ export default defineConfig({
 ```
 
 {% endcodeblock %}
+
+### `enableStreaming`
+
+By default, all routes in Hydrogen are stream rendered. Stream rendering is automatically disabled when the user agent is a bot. 
+
+Content should be immediately available to bots for SEO purposes. However, you might want to manually disable streaming for a specific page. A common use case is disabling streaming for a custom bot that's not recognized by Hydrogen's bot detection algorithm. You can disable streaming for a custom bot with the `enableStreaming` configuration property:
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen';
+export default defineConfig({
+  enableStreaming: (req) => req.headers.get('user-agent') !== 'custom bot',
+});
+```
+
+{% endcodeblock %}
+
+> Tip:
+> There are [performance benefits](https://shopify.dev/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
 
 ## Changing the configuration file location
 

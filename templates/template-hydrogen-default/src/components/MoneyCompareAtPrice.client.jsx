@@ -1,4 +1,4 @@
-import {useMoney} from '@shopify/hydrogen/client';
+import {useMoney} from '@shopify/hydrogen';
 
 /**
  * A client component that renders a product's compare at price

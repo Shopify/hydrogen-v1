@@ -1,4 +1,4 @@
-import {useProduct, MediaFile, Image} from '@shopify/hydrogen/client';
+import {useProduct, MediaFile, Image} from '@shopify/hydrogen';
 
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products

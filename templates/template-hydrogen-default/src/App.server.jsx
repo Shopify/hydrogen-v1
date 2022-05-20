@@ -5,16 +5,14 @@ import {
   FileRoutes,
   ShopifyProvider,
   ShopifyAnalytics,
+  PerformanceMetrics,
+  PerformanceMetricsDebug,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
-import {
-  PerformanceMetrics,
-  PerformanceMetricsDebug,
-} from '@shopify/hydrogen/client';
 
 function App({request}) {
   return (

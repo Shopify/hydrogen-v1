@@ -11,7 +11,7 @@ The `useNavigate` hook imperatively navigates between routes.
 {% codeblock file, filename: 'component.client.jsx' %}
 
 ```jsx
-import {useNavigate} from '@shopify/hydrogen/client';
+import {useNavigate} from '@shopify/hydrogen';
 
 function addToCart() {}
 
