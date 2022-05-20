@@ -87,7 +87,7 @@ export default function Product() {
 | withoutTrailingZeros? | <code>boolean</code> | Whether to remove trailing zeros (fractional money) from the output. If there are no trailing zeros, then the fractional money amount remains. For example, `$640.00` turns into `$640`. `$640.42` turns into `$640.42`. |
 | data | <code>PartialDeep&#60;MoneyV2&#62;</code> | An object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/latest/objects/moneyv2). |
 | measurement | <code>PartialDeep&#60;UnitPriceMeasurement&#62;</code> | A [UnitPriceMeasurement object](https://shopify.dev/api/storefront/latest/objects/unitpricemeasurement). |
-| measurementSeparator | <code>ReactNode</code> | When the `measurement` prop is used, `measurementSeparator` allows you to customize the separator between the money output and the measurement output. Defaults to `'/'` |
+| measurementSeparator | <code>ReactNode</code> | Customizes the separator between the money output and the measurement output. Used with the `measurement` prop. Defaults to `'/'`. |
 
 
 ## Component type
