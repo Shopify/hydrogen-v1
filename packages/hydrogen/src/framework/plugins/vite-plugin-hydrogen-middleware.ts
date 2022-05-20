@@ -20,7 +20,7 @@ export const VIRTUAL_HYDROGEN_CONFIG_ID = 'virtual:hydrogen.config.ts';
 export const VIRTUAL_HYDROGEN_CONFIG_PROXY_ID =
   VIRTUAL_HYDROGEN_CONFIG_ID + ':proxy';
 
-const virtualHydrogenRoutes = 'virtual:hydrogen-routes.server.jsx';
+const VIRTUAL_HYDROGEN_ROUTES_ID = 'virtual:hydrogen-routes.server.jsx';
 
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
@@ -113,25 +113,25 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         return '\0' + VIRTUAL_HYDROGEN_CONFIG_PROXY_ID;
       }
 
-      if (source === virtualHydrogenRoutes) {
-        return '\0' + virtualHydrogenRoutes;
+      if (source === VIRTUAL_HYDROGEN_ROUTES_ID) {
+        return '\0' + VIRTUAL_HYDROGEN_ROUTES_ID;
       }
     },
-    load(id) {
+    async load(id) {
       if (id === '\0' + VIRTUAL_HYDROGEN_CONFIG_PROXY_ID) {
         // Likely due to a bug in Vite, but the config cannot be loaded
         // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
         return `import hc from '${VIRTUAL_HYDROGEN_CONFIG_ID}'; export default hc;`;
       }
 
-      if (id === '\0' + virtualHydrogenRoutes) {
+      if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_ID) {
         const {default: hc} = await server.ssrLoadModule(
-          'virtual:hydrogen-config:proxy'
+          VIRTUAL_HYDROGEN_CONFIG_PROXY_ID
         );
 
         return {
           code:
-            `import 'virtual:hydrogen-config';` +
+            `import '${VIRTUAL_HYDROGEN_CONFIG_ID}';` +
             `\nexport default import.meta.globEager('${hc.routes}/**/*.server.[jt](s|sx)');`,
         };
       }
