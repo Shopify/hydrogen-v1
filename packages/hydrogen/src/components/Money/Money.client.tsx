@@ -14,7 +14,7 @@ interface CustomProps<ComponentGeneric extends React.ElementType> {
   withoutTrailingZeros?: boolean;
   /** A [UnitPriceMeasurement object](https://shopify.dev/api/storefront/reference/products/unitpricemeasurement). */
   measurement?: PartialDeep<UnitPriceMeasurement>;
-  /** When the `measurement` prop is used, `measurementSeparator` allows you to customize the separator between the money output and the measurement output. Defaults to `'/'` */
+  /** Customizes the separator between the money output and the measurement output. Used with the `measurement` prop. Defaults to `'/'`. */
   measurementSeparator?: ReactNode;
 }
 
