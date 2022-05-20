@@ -1,4 +1,9 @@
-import {useShopQuery, Seo, CacheDays} from '@shopify/hydrogen';
+import {
+  useShopQuery,
+  Seo,
+  CacheDays,
+  useServerAnalytics,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 /**
@@ -7,12 +12,18 @@ import gql from 'graphql-tag';
 export default function DefaultSeo() {
   const {
     data: {
-      shop: {name, description},
+      shop: {name, description, id},
     },
   } = useShopQuery({
     query: QUERY,
     cache: CacheDays(),
     preload: '*',
+  });
+
+  useServerAnalytics({
+    shopify: {
+      shopId: id,
+    },
   });
 
   return (
@@ -29,6 +40,7 @@ export default function DefaultSeo() {
 const QUERY = gql`
   query shopInfo {
     shop {
+      id
       name
       description
     }

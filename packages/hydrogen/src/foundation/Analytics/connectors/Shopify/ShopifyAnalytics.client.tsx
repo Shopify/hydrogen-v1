@@ -32,15 +32,14 @@ export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
     updateCookie(USER_COOKIE, cookieData[USER_COOKIE], longTermLength);
     updateCookie(SESSION_COOKIE, cookieData[SESSION_COOKIE], shortTermLength);
 
-    ClientAnalytics.pushToPageAnalyticsData(
-      {
+    ClientAnalytics.pushToPageAnalyticsData({
+      shopify: {
         pageId: buildUUID(),
         userId: cookieData[USER_COOKIE],
         sessionId: cookieData[SESSION_COOKIE],
         acceptedLanguage: cookieData['acceptedLanguage'],
       },
-      'shopify'
-    );
+    });
 
     microSessionCount = 0;
 
@@ -115,44 +114,48 @@ function storefrontPageViewSchema(payload: any): any {
 }
 
 function buildStorefrontPageViewPayload(payload: any): any {
+  const location = document.location;
+  const shopify = payload.shopify;
   let formattedData = {
     isPersistentCookie: true,
-    uniqToken: payload.shopify.userId,
-    visitToken: payload.shopify.sessionId,
-    microSessionId: payload.shopify.pageId,
+    uniqToken: shopify.userId,
+    visitToken: shopify.sessionId,
+    microSessionId: shopify.pageId,
     microSessionCount,
 
-    url: document.location.href,
-    path: document.location.pathname,
-    search: document.location.search,
+    url: location.href,
+    path: location.pathname,
+    search: location.search,
     referrer: document.referrer,
     title: document.title,
 
-    api_client_id: '?',
-    shop_id: payload.shopId,
-    currency: payload.currency,
-    contentLanguage: payload.shopify.acceptedLanguage,
+    api_client_id: 'hydrogen',
+    shop_id: stripGId(shopify.shopId),
+    currency: shopify.currency,
+    contentLanguage: shopify.acceptedLanguage,
     isMerchantRequest: isMerchantRequest(),
   };
 
   formattedData = addDataIf(
     {
-      pageType: payload.pageType,
+      pageType: shopify.pageType,
     },
     formattedData
   );
 
-  formattedData = addDataIf(
-    {
-      resourceType: payload.resourceType,
-      resourceId: payload.resourceId,
-    },
-    formattedData
-  );
+  if (shopify.resourceType && shopify.resourceId) {
+    formattedData = addDataIf(
+      {
+        resourceType: shopify.resourceType,
+        resourceId: stripGId(shopify.resourceId),
+      },
+      formattedData
+    );
+  }
 
   formattedData = addDataIf(
     {
-      customerId: payload.customerId,
+      customerId: shopify.customerId,
     },
     formattedData
   );
@@ -166,6 +169,10 @@ function isMerchantRequest(): Boolean {
     return true;
   }
   return false;
+}
+
+function stripGId(text: string): string {
+  return text.substring(text.lastIndexOf('/') + 1);
 }
 
 const BATCH_SENT_TIMEOUT = 500;

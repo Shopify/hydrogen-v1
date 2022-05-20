@@ -4,6 +4,7 @@ import {
   useShopQuery,
   Seo,
   useRouteParams,
+  useServerAnalytics,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -32,6 +33,16 @@ export default function Product() {
   if (!product) {
     return <NotFound />;
   }
+
+  useServerAnalytics({
+    shopify: {
+      pageType: 'product',
+      resourceType: 'product',
+      resourceId: product.id,
+    },
+  });
+
+  console.log('product details', product.id);
 
   return (
     <Layout>

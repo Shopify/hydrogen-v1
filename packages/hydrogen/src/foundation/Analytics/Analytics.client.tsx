@@ -11,8 +11,8 @@ export function Analytics({
     const urlParams = new URLSearchParams(window.location.search);
 
     if (urlParams.has('utm_source')) {
-      ClientAnalytics.pushToPageAnalyticsData(
-        {
+      ClientAnalytics.pushToPageAnalyticsData({
+        utm: {
           id: urlParams.get('utm_id'),
           source: urlParams.get('utm_source'),
           campaign: urlParams.get('utm_campaign'),
@@ -20,8 +20,7 @@ export function Analytics({
           content: urlParams.get('utm_content'),
           term: urlParams.get('utm_term'),
         },
-        'utm'
-      );
+      });
     }
 
     ClientAnalytics.pushToPageAnalyticsData(analyticsDataFromServer);
@@ -36,10 +35,6 @@ export function Analytics({
         }
       );
     }
-
-    return function cleanup() {
-      ClientAnalytics.resetPageAnalyticsData();
-    };
   }, [analyticsDataFromServer]);
 
   return null;

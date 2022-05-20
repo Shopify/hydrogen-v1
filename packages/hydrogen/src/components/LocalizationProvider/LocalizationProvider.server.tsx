@@ -6,6 +6,7 @@ import {CacheDays} from '../../framework/CachingStrategy';
 import {PreloadOptions} from '../../types';
 import {Country, CountryCode} from '../../storefront-api-types';
 import {useSession} from '../../foundation/useSession/useSession';
+import {useServerAnalytics} from '../../foundation/Analytics';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
@@ -39,6 +40,12 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
     preload: props.preload,
   });
 
+  useServerAnalytics({
+    shopify: {
+      currency: localization.country.currency.isoCode,
+    },
+  });
+
   return (
     <LocalizationClientProvider
       localization={
@@ -70,6 +77,9 @@ query Localization($language: LanguageCode)
     country {
       isoCode
       name
+      currency {
+        isoCode
+      }
     }
   }
 }

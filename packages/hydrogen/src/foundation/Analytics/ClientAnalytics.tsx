@@ -3,6 +3,7 @@ import type {Subscriber, Subscribers, SubscriberFunction} from './types';
 import {isServer} from '../../utilities';
 import {eventNames} from './const';
 import {EVENT_PATHNAME} from '../../constants';
+import merge from 'lodash-es/merge';
 
 type EventGuard = Record<string, NodeJS.Timeout>;
 
@@ -21,18 +22,10 @@ function isInvokedFromServer(): boolean {
   return false;
 }
 
-function pushToPageAnalyticsData(data: any, namespace?: string): void {
+function pushToPageAnalyticsData(data: any): void {
   if (isInvokedFromServer()) return;
 
-  if (namespace) {
-    pageAnalyticsData[namespace] = Object.assign(
-      {},
-      pageAnalyticsData[namespace] || {},
-      data
-    );
-  } else {
-    pageAnalyticsData = Object.assign({}, pageAnalyticsData, data);
-  }
+  pageAnalyticsData = merge({}, pageAnalyticsData, data);
 }
 
 function getPageAnalyticsData(): any {

@@ -6,6 +6,7 @@ import {
   Seo,
   CacheDays,
   useSession,
+  useServerAnalytics,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -17,6 +18,12 @@ import {Suspense} from 'react';
 
 export default function Index() {
   const {countryCode = 'US'} = useSession();
+
+  useServerAnalytics({
+    shopify: {
+      pageType: 'home',
+    },
+  });
 
   return (
     <Layout hero={<GradientBackground />}>
