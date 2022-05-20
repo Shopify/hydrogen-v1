@@ -7,7 +7,7 @@ interface CustomProps<ComponentGeneric extends React.ElementType> {
   /** An HTML tag or React Component to be rendered as the base element wrapper. The default is `div`. */
   as?: ComponentGeneric;
   /** An object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). */
-  data: Partial<MoneyV2>;
+  data: PartialDeep<MoneyV2>;
   /** Whether to remove the currency symbol from the output. */
   withoutCurrency?: boolean;
   /** Whether to remove trailing zeros (fractional money) from the output. */
