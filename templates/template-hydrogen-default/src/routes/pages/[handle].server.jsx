@@ -1,4 +1,9 @@
-import {useShop, useShopQuery, Seo} from '@shopify/hydrogen';
+import {
+  useShop,
+  useShopQuery,
+  Seo,
+  useServerAnalytics,
+} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
@@ -16,6 +21,12 @@ export default function Page({params}) {
   if (!data.pageByHandle) {
     return <NotFound />;
   }
+
+  useServerAnalytics({
+    shopify: {
+      pageType: 'page',
+    },
+  });
 
   const page = data.pageByHandle;
 

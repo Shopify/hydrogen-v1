@@ -4,6 +4,7 @@ import {
   useShopQuery,
   flattenConnection,
   Seo,
+  useServerAnalytics,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -31,6 +32,12 @@ export default function Collection({collectionProductCount = 24, params}) {
   if (data?.collection == null) {
     return <NotFound />;
   }
+
+  useServerAnalytics({
+    shopify: {
+      pageType: 'collection',
+    },
+  });
 
   const collection = data.collection;
   const products = flattenConnection(collection.products);
