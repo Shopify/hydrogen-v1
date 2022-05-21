@@ -1,5 +1,9 @@
 import * as React from 'react';
-import {getShopifyImageDimensions, shopifyImageLoader} from '../../utilities';
+import {
+  getShopifyImageDimensions,
+  shopifyImageLoader,
+  addImageSizeParametersToUrl,
+} from '../../utilities';
 import type {Image as ImageType} from '../../storefront-api-types';
 import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
 
@@ -107,6 +111,14 @@ function ShopifyImage({
     });
   }
 
+  const finalSrcset =
+    rest.srcSet ??
+    internalImageSrcSet({
+      ...loaderOptions,
+      src: data.url,
+      width: finalWidth,
+    });
+
   /* eslint-disable hydrogen/prefer-image-component */
   return (
     <img
@@ -117,6 +129,7 @@ function ShopifyImage({
       src={finalSrc}
       width={finalWidth ?? undefined}
       height={finalHeight ?? undefined}
+      srcSet={finalSrcset}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
@@ -212,4 +225,24 @@ function ExternalImage<GenericLoaderOpts>({
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
+}
+
+// based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
+// reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
+const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
+function internalImageSrcSet({src, width, crop, scale}: ShopifyLoaderParams) {
+  let setSizes = IMG_SRC_SET_SIZES;
+  if (width && width < IMG_SRC_SET_SIZES[IMG_SRC_SET_SIZES.length - 1])
+    setSizes = IMG_SRC_SET_SIZES.filter((size) => size <= width);
+  return setSizes
+    .map(
+      (size) =>
+        `${addImageSizeParametersToUrl({
+          src,
+          width: size,
+          crop,
+          scale,
+        })} ${size}w`
+    )
+    .join(', ');
 }
