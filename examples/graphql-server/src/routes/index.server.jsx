@@ -1,24 +1,11 @@
-import {useQuery} from '@shopify/hydrogen';
-import Examplesclient from '../components/Examples.client';
+import {Suspense} from 'react';
+
+import Greeting from '../components/Greeting.client';
 
 export default function Page() {
-  const {
-    data: {data},
-  } = useQuery(['home', 'hello-world'], async () => {
-    const response = await fetch('http://localhost:3000/api/graphql', {
-      method: 'POST',
-      body: JSON.stringify({query: `{hello}`}),
-    });
-
-    return await response.json();
-  });
-
-  console.log(data);
-
   return (
-    <p>
-      {data.hello}
-      <Examplesclient />
-    </p>
+    <Suspense fallback="loading...">
+      <Greeting />
+    </Suspense>
   );
 }
