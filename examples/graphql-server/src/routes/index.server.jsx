@@ -1,4 +1,5 @@
 import {useQuery} from '@shopify/hydrogen';
+import Examplesclient from '../components/Examples.client';
 
 export default function Page() {
   const {
@@ -14,5 +15,10 @@ export default function Page() {
 
   console.log(data);
 
-  return <p>{data.hello}</p>;
+  return (
+    <p>
+      {data.hello}
+      <Examplesclient />
+    </p>
+  );
 }
