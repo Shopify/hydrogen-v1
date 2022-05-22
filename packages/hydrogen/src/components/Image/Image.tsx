@@ -36,6 +36,7 @@ export type ShopifyLoaderOptions = {
   scale?: 2 | 3;
   width?: HtmlImageProps['width'] | ImageType['width'];
   height?: HtmlImageProps['height'] | ImageType['height'];
+  widths?: (HtmlImageProps['width'] | ImageType['width'])[];
 };
 export type ShopifyLoaderParams = Simplify<
   ShopifyLoaderOptions & {
@@ -230,9 +231,25 @@ function ExternalImage<GenericLoaderOpts>({
 // based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
 // reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
 const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
-function internalImageSrcSet({src, width, crop, scale}: ShopifyLoaderParams) {
-  let setSizes = IMG_SRC_SET_SIZES;
-  if (width && width < IMG_SRC_SET_SIZES[IMG_SRC_SET_SIZES.length - 1])
+function internalImageSrcSet({
+  src,
+  width,
+  crop,
+  scale,
+  widths,
+}: ShopifyLoaderParams) {
+  const hasCustomWidths = widths && Array.isArray(widths);
+  if (hasCustomWidths && widths.some((size) => isNaN(size as number)))
+    throw new Error(
+      `<Image/>: the 'widths' property of 'ShopifyLoaderOptions' must be an array of numbers`
+    );
+
+  let setSizes = hasCustomWidths ? widths : IMG_SRC_SET_SIZES;
+  if (
+    !hasCustomWidths &&
+    width &&
+    width < IMG_SRC_SET_SIZES[IMG_SRC_SET_SIZES.length - 1]
+  )
     setSizes = IMG_SRC_SET_SIZES.filter((size) => size <= width);
   return setSizes
     .map(
