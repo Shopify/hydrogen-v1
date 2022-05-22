@@ -96,7 +96,7 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 
 ## Image size options
 
-You can change the size and format of the image returned by the Shopify CDN.
+You can change the size, srcset, and format of the image returned by the Shopify CDN.
 
 | Key      | Description                                                                                             |
 | -------- | ------------------------------------------------------------------------------------------------------- |
@@ -104,6 +104,7 @@ You can change the size and format of the image returned by the Shopify CDN.
 | `height` | A string of the pixel height (for example, `100px`) or `original` for the original height of the image. |
 | `crop`   | Valid values: `top`, `bottom`, `left`, `right`, or `center`.                                            |
 | `scale`  | Valid values: 2 or 3.                                                                                   |
+| `widths` | An array of pixel widths to overwrite the default generated srcset, for example, `[300, 600, 800]`      |
 
 ## Related components
 
