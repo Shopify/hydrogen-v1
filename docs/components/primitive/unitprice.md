@@ -10,8 +10,7 @@ Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/c
 ## Example code
 
 ```tsx
-import {UnitPrice} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {UnitPrice, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   productByHandle(handle: "my-product") {

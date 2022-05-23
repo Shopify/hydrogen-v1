@@ -9,8 +9,7 @@ The `Video` component renders a `video` for the Storefront API's [Video object](
 ## Example code
 
 ```tsx
-import {Video} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {Video, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {

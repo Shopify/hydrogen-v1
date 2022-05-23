@@ -12,8 +12,7 @@ The `Image` component renders an image for the Storefront API's
 ```tsx
 /** Storefront API images */
 
-import {Image} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {Image, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   productByHandle(handle: "my-product") {

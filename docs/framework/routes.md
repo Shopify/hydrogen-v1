@@ -430,8 +430,7 @@ The following example shows how to create a custom sitemap by adding a new serve
 {% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
 ```jsx
-import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {flattenConnection, useShopQuery, gql} from '@shopify/hydrogen';
 
 export default function Sitemap({response}) {
   response.doNotStream();
@@ -503,8 +502,7 @@ The following example shows how to build a JSON API with custom responses by add
 {% codeblock file, filename: '/routes/my-products.server.jsx' %}
 
 ```jsx
-import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {flattenConnection, useShopQuery, gql} from '@shopify/hydrogen';
 
 export default function MyProducts({response}) {
   response.doNotStream();
@@ -545,8 +543,7 @@ The following example shows how to generate comma-separated values (CSV) file by
 {% codeblock file, filename: '/routes/spreadsheet.csv.server.jsx' %}
 
 ```jsx
-import gql from 'graphql-tag';
-import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
+import {flattenConnection, useShopQuery, gql} from '@shopify/hydrogen';
 
 export default function Report({response}) {
   response.doNotStream();
@@ -603,8 +600,7 @@ import {
   renderToString,
   Image,
 } from '@react-pdf/renderer';
-import gql from 'graphql-tag';
-import {useShopQuery} from '@shopify/hydrogen';
+import {useShopQuery, gql} from '@shopify/hydrogen';
 
 const styles = StyleSheet.create({
   page: {
