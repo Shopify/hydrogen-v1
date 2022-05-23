@@ -2,22 +2,15 @@ import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 /**
- * This API route is used by the form on `/account/reset/[id]/[resetToken]`
+ * This API route is used by the form on `/account/activate/[id]/[activationToken]`
  * complete the reset of the user's password.
  */
 export async function api(request, {session, queryShop}) {
   const jsonBody = await request.json();
 
-  if (
-    !jsonBody.id ||
-    jsonBody.id === '' ||
-    !jsonBody.password ||
-    jsonBody.password === '' ||
-    !jsonBody.resetToken ||
-    jsonBody.resetToken === ''
-  ) {
+  if (!jsonBody?.id || !jsonBody?.password || !jsonBody?.activationToken) {
     return new Response(
-      JSON.stringify({error: 'Incorrect password or reset token.'}),
+      JSON.stringify({error: 'Incorrect password or activation token.'}),
       {
         status: 400,
       },
@@ -25,25 +18,21 @@ export async function api(request, {session, queryShop}) {
   }
 
   const {data, errors} = await queryShop({
-    query: MUTATION,
+    query: ACTIVATE,
     variables: {
       id: `gid://shopify/Customer/${jsonBody.id}`,
       input: {
         password: jsonBody.password,
-        resetToken: jsonBody.resetToken,
+        activationToken: jsonBody.activationToken,
       },
     },
     cache: NoStore(),
   });
 
-  if (
-    data &&
-    data.customerReset &&
-    data.customerReset.customerAccessToken !== null
-  ) {
+  if (data?.customerActivate?.customerAccessToken) {
     await setCustomerAccessToken(
       session,
-      data.customerReset.customerAccessToken,
+      data.customerActivate.customerAccessToken,
     );
 
     return new Response(null, {
@@ -59,9 +48,9 @@ export async function api(request, {session, queryShop}) {
   }
 }
 
-const MUTATION = gql`
-  mutation customerReset($id: ID!, $input: CustomerResetInput!) {
-    customerReset(id: $id, input: $input) {
+const ACTIVATE = gql`
+  mutation customerActivate($id: ID!, $input: CustomerActivateInput!) {
+    customerActivate(id: $id, input: $input) {
       customerAccessToken {
         accessToken
         expiresAt
@@ -77,7 +66,7 @@ const MUTATION = gql`
 
 function getErrorMessage(data, errors) {
   if (errors?.length) return errors[0].message ?? errors[0];
-  if (data?.customerReset?.customerUserErrors?.length)
-    return data.customerReset.customerUserErrors[0].message;
+  if (data?.customerActivate?.customerUserErrors?.length)
+    return data.customerActivate.customerUserErrors[0].message;
   return null;
 }

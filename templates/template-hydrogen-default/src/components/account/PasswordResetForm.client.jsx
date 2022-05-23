@@ -57,8 +57,8 @@ export default function PasswordResetForm({id, resetToken}) {
       password,
     });
 
-    if (response?.error?.length > 0) {
-      setSubmitError(response.error[0].message);
+    if (response.error) {
+      setSubmitError(response.error);
       return;
     }
 
@@ -69,7 +69,7 @@ export default function PasswordResetForm({id, resetToken}) {
     <div className="flex justify-center">
       <div className="max-w-md w-full">
         <h1 className="text-4xl">Reset Password.</h1>
-        <p>Enter a new password for your account.</p>
+        <p className="mt-4">Enter a new password for your account.</p>
         <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
           {submitError && (
             <div className="flex items-center justify-center mb-6 bg-zinc-500">
@@ -152,7 +152,7 @@ function callPasswordResetApi({id, resetToken, password}) {
     body: JSON.stringify({id, resetToken, password}),
   })
     .then((res) => {
-      if (res.status === 200) {
+      if (res.ok) {
         return {};
       } else {
         return res.json();

@@ -2,7 +2,7 @@ import {NoStore, Seo} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
-import AccountCreateForm from '../../components/AccountCreateForm.client';
+import AccountCreateForm from '../../components/account/AccountCreateForm.client';
 
 export default function Register({response}) {
   response.cache(NoStore());
@@ -30,8 +30,8 @@ export async function api(request, {queryShop}) {
     );
   }
 
-  const {data, error, errors} = await queryShop({
-    query: LOGIN,
+  const {data, errors} = await queryShop({
+    query: MUTATION,
     variables: {
       input: {
         email: jsonBody.email,
@@ -43,7 +43,7 @@ export async function api(request, {queryShop}) {
     cache: NoStore(),
   });
 
-  const errorMessage = getErrorMessage(data, error, errors);
+  const errorMessage = getErrorMessage(data, errors);
 
   if (
     !errorMessage &&
@@ -65,7 +65,7 @@ export async function api(request, {queryShop}) {
   }
 }
 
-const LOGIN = gql`
+const MUTATION = gql`
   mutation customerCreate($input: CustomerCreateInput!) {
     customerCreate(input: $input) {
       customer {
@@ -80,8 +80,7 @@ const LOGIN = gql`
   }
 `;
 
-function getErrorMessage(data, error, errors) {
-  if (error?.message) return error.message;
+function getErrorMessage(data, errors) {
   if (errors?.length) return errors[0].message ?? errors[0];
   if (data?.customerCreate?.customerUserErrors?.length)
     return data.customerCreate.customerUserErrors[0].message;

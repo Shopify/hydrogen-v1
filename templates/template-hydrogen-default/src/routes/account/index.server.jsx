@@ -1,6 +1,6 @@
 import {useCustomer, NoStore} from '@shopify/hydrogen';
 
-import AccountDetails from '../../components/AccountDetails.server';
+import AccountDetails from '../../components/account/AccountDetails.server';
 
 export default function Account({response}) {
   response.cache(NoStore());

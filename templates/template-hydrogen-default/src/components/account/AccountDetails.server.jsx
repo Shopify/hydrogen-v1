@@ -1,9 +1,9 @@
 import {Seo, useShopQuery, NoStore, flattenConnection} from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
-import Layout from './Layout.server';
+import Layout from '../Layout.server';
 import LogoutButton from './LogoutButton.client';
-import MoneyPrice from './MoneyPrice.client';
+import MoneyPrice from '../MoneyPrice.client';
 
 export default function AccountDetails({customerAccessToken}) {
   const {data} = useShopQuery({

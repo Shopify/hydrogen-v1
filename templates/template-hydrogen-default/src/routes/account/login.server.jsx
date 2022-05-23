@@ -8,7 +8,7 @@ import {
 import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
-import LoginForm from '../../components/LoginForm.client';
+import LoginForm from '../../components/account/LoginForm.client';
 
 export default function Login({response}) {
   response.cache(NoStore({}));
