@@ -6,7 +6,6 @@ import {useServerRequest} from '../ServerRequestProvider';
 
 import type {ImportGlobEagerOutput} from '../../types';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client';
-import {findRoutePrefix} from '../../utilities/findRoutePrefix';
 
 interface FileRoutesProps {
   /** The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. */
@@ -80,17 +79,15 @@ interface HydrogenRoute {
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
-  dirPrefix?: string | RegExp
+  dirPrefix: string | RegExp = ''
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const keys = Object.keys(pages);
 
-  const commonRoutePrefix = dirPrefix ?? findRoutePrefix(keys);
-
   const routes = keys
     .map((key) => {
-      const path = extractPathFromRoutesKey(key, commonRoutePrefix);
+      const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match

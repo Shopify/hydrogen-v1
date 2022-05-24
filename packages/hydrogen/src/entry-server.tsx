@@ -14,6 +14,7 @@ import type {
   HydratorOptions,
   ImportGlobEagerOutput,
   ResolvedHydrogenConfig,
+  ResolvedHydrogenRoutes,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -100,13 +101,9 @@ export const renderHydrogen = (App: any) => {
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
 
-    const configRoutes = inlineHydrogenConfig.routes;
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
-      routes: {
-        ...(typeof configRoutes === 'string' ? null : configRoutes),
-        files: hydrogenRoutes as ImportGlobEagerOutput,
-      },
+      routes: hydrogenRoutes,
     };
 
     request.ctx.hydrogenConfig = hydrogenConfig;
@@ -145,7 +142,7 @@ export const renderHydrogen = (App: any) => {
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
     if (!isReactHydrationRequest) {
-      const apiRoute = getApiRoute(url, hydrogenConfig.routes.files);
+      const apiRoute = getApiRoute(url, hydrogenConfig.routes);
 
       // The API Route might have a default export, making it also a server component
       // If it does, only render the API route if the request method is GET
@@ -210,8 +207,8 @@ export const renderHydrogen = (App: any) => {
   return handleRequest;
 };
 
-function getApiRoute(url: URL, routes: ImportGlobEagerOutput) {
-  const apiRoutes = getApiRoutes(routes!);
+function getApiRoute(url: URL, routes: ResolvedHydrogenRoutes) {
+  const apiRoutes = getApiRoutes(routes);
   return getApiRouteFromURL(url, apiRoutes);
 }
 

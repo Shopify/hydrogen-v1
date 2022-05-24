@@ -1,6 +1,6 @@
 import {
   InlineHydrogenConfig,
-  HydrogenConfigRoutes,
+  ResolvedHydrogenRoutes,
   ImportGlobEagerOutput,
 } from '../types';
 import {matchPath} from './matchPath';
@@ -8,7 +8,6 @@ import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
 import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
-import {findRoutePrefix} from './findRoutePrefix';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {
   emptySessionImplementation,
@@ -70,24 +69,21 @@ export function extractPathFromRoutesKey(
   return path;
 }
 
-export function getApiRoutes(
-  rawRoutes: HydrogenConfigRoutes
-): Array<HydrogenApiRoute> {
-  const routes = (rawRoutes.files ?? rawRoutes) as ImportGlobEagerOutput;
-  const topLevelPath = (rawRoutes.basePath ?? '*') as string;
-  const dirPrefix = rawRoutes.dirPrefix as string | undefined;
-
+export function getApiRoutes({
+  files: routes,
+  basePath: topLevelPath,
+  dirPrefix,
+}: ResolvedHydrogenRoutes): Array<HydrogenApiRoute> {
   if (!routes || memoizedRawRoutes === routes) return memoizedApiRoutes;
 
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const keys = Object.keys(routes);
-  const commonRoutePrefix = dirPrefix ?? findRoutePrefix(keys);
 
   const apiRoutes = keys
     .filter((key) => routes[key].api)
     .map((key) => {
-      const path = extractPathFromRoutesKey(key, commonRoutePrefix);
+      const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
