@@ -11,7 +11,7 @@ interface CartLinePriceProps {
  * The `CartLinePrice` component renders a `Money` component for the cart line merchandise's price or
  * compare at price. It must be a descendent of a `CartLineProvider` component.
  */
-export function CartLinePrice<TTag extends keyof JSX.IntrinsicElements>(
+export function CartLinePrice(
   props: Omit<React.ComponentProps<typeof Money>, 'data'> & CartLinePriceProps
 ) {
   const cartLine = useCartLine();
@@ -27,7 +27,7 @@ export function CartLinePrice<TTag extends keyof JSX.IntrinsicElements>(
   }
 
   return (
-    <Money<TTag>
+    <Money
       {...passthroughProps}
       data={{
         amount: `${parseFloat(price.amount) * cartLine.quantity}`,

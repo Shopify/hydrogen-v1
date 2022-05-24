@@ -28,7 +28,6 @@ export type {
 } from './CartProvider';
 export {ProductProvider, useProduct} from './ProductProvider';
 export {ProductPrice} from './ProductPrice';
-export {ProductMetafield} from './ProductMetafield';
 export {BuyNowButton} from './BuyNowButton';
 export {ShopPayButton} from './ShopPayButton';
 export {useCountry} from '../hooks/useCountry';
