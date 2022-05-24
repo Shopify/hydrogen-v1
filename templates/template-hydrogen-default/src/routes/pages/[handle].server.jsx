@@ -22,13 +22,15 @@ export default function Page({params}) {
     return <NotFound />;
   }
 
+  const page = data.pageByHandle;
+
   useServerAnalytics({
     shopify: {
-      pageType: 'page',
+      pageType: ShopifyAnalyticsConstants.pageType.page,
+      resourceType: ShopifyAnalyticsConstants.resourceType.page,
+      resourceId: page.id,
     },
   });
-
-  const page = data.pageByHandle;
 
   return (
     <Layout>
@@ -46,6 +48,7 @@ const QUERY = gql`
   query PageDetails($language: LanguageCode, $handle: String!)
   @inContext(language: $language) {
     pageByHandle(handle: $handle) {
+      id
       title
       body
       title

@@ -5,6 +5,7 @@ import {
   Seo,
   useRouteParams,
   useServerAnalytics,
+  ShopifyAnalyticsConstants,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -36,13 +37,11 @@ export default function Product() {
 
   useServerAnalytics({
     shopify: {
-      pageType: 'product',
-      resourceType: 'product',
+      pageType: ShopifyAnalyticsConstants.pageType.product,
+      resourceType: ShopifyAnalyticsConstants.resourceType.product,
       resourceId: product.id,
     },
   });
-
-  console.log('product details', product.id);
 
   return (
     <Layout>

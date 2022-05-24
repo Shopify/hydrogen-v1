@@ -14,7 +14,6 @@ export function request(
     fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
       method: 'post',
       headers: {
-        'cache-control': 'no-cache',
         'content-type': 'text/plain',
       },
       body: JSON.stringify(data),

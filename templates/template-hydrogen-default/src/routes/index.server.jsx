@@ -7,6 +7,7 @@ import {
   CacheDays,
   useSession,
   useServerAnalytics,
+  ShopifyAnalyticsConstants,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -21,7 +22,7 @@ export default function Index() {
 
   useServerAnalytics({
     shopify: {
-      pageType: 'home',
+      pageType: ShopifyAnalyticsConstants.pageType.home,
     },
   });
 

@@ -129,8 +129,8 @@ function buildStorefrontPageViewPayload(payload: any): any {
     referrer: document.referrer,
     title: document.title,
 
-    api_client_id: 'hydrogen',
-    shop_id: stripGId(shopify.shopId),
+    apiClientId: 'hydrogen',
+    shopId: stripGId(shopify.shopId),
     currency: shopify.currency,
     contentLanguage: shopify.acceptedLanguage,
     isMerchantRequest: isMerchantRequest(),
@@ -200,11 +200,18 @@ function sendToServer(data: any) {
 
     // Send to server
     try {
-      fetch('/__event?shopify', {
+      // fetch('/__event?shopify', {
+      //   method: 'post',
+      //   headers: {
+      //     'cache-control': 'no-cache',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(batchedDataToBeSent),
+      // });
+      fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
         method: 'post',
         headers: {
-          'cache-control': 'no-cache',
-          'Content-Type': 'application/json',
+          'content-type': 'text/plain',
         },
         body: JSON.stringify(batchedDataToBeSent),
       });

@@ -4,6 +4,7 @@ import {
   flattenConnection,
   useSession,
   useServerAnalytics,
+  ShopifyAnalyticsConstants,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -46,7 +47,7 @@ export default function NotFound({response}) {
 
   useServerAnalytics({
     shopify: {
-      pageType: '404',
+      pageType: ShopifyAnalyticsConstants.pageType.notFound,
     },
   });
 

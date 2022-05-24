@@ -47,6 +47,7 @@ export {fetchSync} from './foundation/fetchSync/server/fetchSync';
 export {useServerAnalytics} from './foundation/Analytics';
 export * as ShopifyAnalyticsServerConnector from './foundation/Analytics/connectors/Shopify/ShopifyAnalyticsServerConnector.server';
 export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server';
+export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const';
 export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
 export {PerformanceMetrics} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.client';
 export {PerformanceMetricsDebug} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetricsDebug.client';

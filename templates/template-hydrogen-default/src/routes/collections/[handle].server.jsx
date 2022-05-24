@@ -5,6 +5,7 @@ import {
   flattenConnection,
   Seo,
   useServerAnalytics,
+  ShopifyAnalyticsConstants,
 } from '@shopify/hydrogen';
 import gql from 'graphql-tag';
 
@@ -35,7 +36,9 @@ export default function Collection({collectionProductCount = 24, params}) {
 
   useServerAnalytics({
     shopify: {
-      pageType: 'collection',
+      pageType: ShopifyAnalyticsConstants.pageType.collection,
+      resourceType: ShopifyAnalyticsConstants.resourceType.collection,
+      resourceId: data.collection.id,
     },
   });
 
@@ -79,6 +82,7 @@ const QUERY = gql`
     $numProducts: Int!
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
+      id
       title
       descriptionHtml
       description
