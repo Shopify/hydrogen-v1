@@ -12,7 +12,12 @@ import gql from 'graphql-tag';
 export default function DefaultSeo() {
   const {
     data: {
-      shop: {name, description, id},
+      shop: {
+        name,
+        description,
+        id,
+        paymentSettings: {currencyCode},
+      },
     },
   } = useShopQuery({
     query: QUERY,
@@ -23,6 +28,7 @@ export default function DefaultSeo() {
   useServerAnalytics({
     shopify: {
       shopId: id,
+      currency: currencyCode,
     },
   });
 
@@ -43,6 +49,9 @@ const QUERY = gql`
       id
       name
       description
+      paymentSettings {
+        currencyCode
+      }
     }
   }
 `;
