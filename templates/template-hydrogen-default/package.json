@@ -17,8 +17,8 @@
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
-    "@shopify/cli": "2.0.9",
-    "@shopify/cli-hydrogen": "2.0.9",
+    "@shopify/cli": "2.0.10",
+    "@shopify/cli-hydrogen": "2.0.10",
     "@shopify/prettier-config": "^1.1.2",
     "@tailwindcss/typography": "^0.5.2",
     "autoprefixer": "^10.4.2",

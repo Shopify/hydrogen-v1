@@ -1871,10 +1871,10 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@shopify/cli-hydrogen@2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@shopify/cli-hydrogen/-/cli-hydrogen-2.0.9.tgz#0a8afa571c50cc9532c444d2961f02857fcd6169"
-  integrity sha512-U1DQSOMo5Hexrh08M49AsNcZqpq06StK8QUMsI6hZom2VhJ1Udmr89gsTvLZMrpb475SnoB+jRFsgPs6sHBgaQ==
+"@shopify/cli-hydrogen@2.0.10":
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/@shopify/cli-hydrogen/-/cli-hydrogen-2.0.10.tgz#a00f3e97e3f363676191f53325b0e1c6fa6c02e7"
+  integrity sha512-o0a4UsdupvrGCwPQi9ygZ/yaahmrfwy1BbwMeBZW1dzIKmrupFc+aK/fnfMKGm4sohAjoafivy+WNbf1hZreIg==
   dependencies:
     "@oclif/core" "1.7.0"
     "@shopify/mini-oxygen" "^0.0.5"
@@ -1882,10 +1882,10 @@
     prettier "^2.6.1"
     vite "^2.9.6"
 
-"@shopify/cli-kit@2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-2.0.9.tgz#377428cfc2e29f56896e6660457aa2744e80aee0"
-  integrity sha512-SSTrcizKoc+zTBR1uu/VytESMYbEE25B7240yxeloDtmc3SBxak6mBtfcIeD75BM9YlerfaL7stkDexCz4G7Mw==
+"@shopify/cli-kit@2.0.10":
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-2.0.10.tgz#584ca98002b4613216b7b144cf7ac454cdb30941"
+  integrity sha512-k8Ub4w4j7FN7ziveCEqSnNd8pcbEh8vMCAR9gznwS53a3TJLHxUtzz7Xk2V7v1fG+LSuQhx2Ie5QZvxehRrWLg==
   dependencies:
     "@oclif/core" "1.7.0"
     envfile "^6.17.0"
@@ -1894,16 +1894,16 @@
     source-map-support "^0.5.21"
     stacktracey "^2.1.8"
 
-"@shopify/cli@2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-2.0.9.tgz#4e02235c79db80be4851c87c5a028a2c54a8abac"
-  integrity sha512-tYKhNPR8mXHue0se/d38M79g/WrE1w67hGeTt6/qayt7IRYy8ODpJ13DJrROpZrRP4g3YIy0n2ZnHTKCEbnZOw==
+"@shopify/cli@2.0.10":
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-2.0.10.tgz#554f36764abcae40f1dc3344e37594669ba7605c"
+  integrity sha512-YhoMSdPqczQljkSPletWSGyfDTdoQBtUyszPfG91PyDywPYKiTDaDFXkO9mwGr2VuW8ZNFXe51KbRgsLyg+3jg==
   dependencies:
     "@bugsnag/js" "^7.16.2"
     "@oclif/core" "1.7.0"
     "@oclif/plugin-help" "^5.1.12"
     "@oclif/plugin-plugins" "^2.1.0"
-    "@shopify/cli-kit" "2.0.9"
+    "@shopify/cli-kit" "2.0.10"
     "@shopify/plugin-ngrok" "^0.2.4"
 
 "@shopify/mini-oxygen@^0.0.5":
