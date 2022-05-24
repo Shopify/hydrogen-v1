@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-extraneous-import
 import gql from 'graphql-tag';
 import {injectGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
 
