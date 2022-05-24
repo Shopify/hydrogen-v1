@@ -850,9 +850,7 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries((headers as any).raw()).forEach(([key, value]) =>
-    response.setHeader(key, value as string)
-  );
+  setServerHeaders(headers, response);
 }
 
 function isRedirect(response: {status?: number; statusCode?: number}) {
@@ -897,9 +895,7 @@ function handleFetchResponseInNode(
     fetchResponsePromise.then((response) => {
       if (!response) return;
 
-      response.headers.forEach((value: string, key: string) => {
-        nodeResponse.setHeader(key, value);
-      });
+      setServerHeaders(response.headers, nodeResponse);
 
       nodeResponse.statusCode = response.status;
 
@@ -912,4 +908,14 @@ function handleFetchResponseInNode(
   }
 
   return fetchResponsePromise;
+}
+
+// From fetch Headers to Node Response
+function setServerHeaders(headers: Headers, nodeResponse: ServerResponse) {
+  // Headers.raw is only implemented in node-fetch, which is used by Hydrogen in dev and prod.
+  // It is the only way for now to access `set-cookie` header as an array.
+  // https://github.com/Shopify/hydrogen/issues/1228
+  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+    nodeResponse.setHeader(key, value as string)
+  );
 }
