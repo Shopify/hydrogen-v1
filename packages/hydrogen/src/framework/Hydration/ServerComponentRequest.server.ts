@@ -3,7 +3,7 @@ import {getTime} from '../../utilities/timing';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
 import type {
-  CompiledHydrogenConfig,
+  ResolvedHydrogenConfig,
   PreloadOptions,
   QueryKey,
 } from '../../types';
@@ -55,7 +55,7 @@ export class ServerComponentRequest extends Request {
   public ctx: {
     cache: Map<string, any>;
     head: HeadData;
-    hydrogenConfig?: CompiledHydrogenConfig;
+    hydrogenConfig?: ResolvedHydrogenConfig;
     shopifyConfig?: ShopifyContextValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;

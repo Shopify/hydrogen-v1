@@ -57,7 +57,7 @@ export type HydrogenConfigRoutes = {
   dirPrefix?: string;
 };
 
-export type CompiledHydrogenConfigRoutes = Omit<
+export type ResolvedHydrogenConfigRoutes = Omit<
   HydrogenConfigRoutes,
   'files'
 > & {
@@ -76,15 +76,15 @@ export type ServerAnalyticsConnector = {
   ) => void;
 };
 
-export type HydrogenConfig = {
+export type InlineHydrogenConfig = {
   routes?: HydrogenConfigRoutes | string;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   session?: (log: Logger) => SessionStorageAdapter;
 };
 
-export type CompiledHydrogenConfig = Omit<HydrogenConfig, 'routes'> & {
-  routes: CompiledHydrogenConfigRoutes;
+export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
+  routes: ResolvedHydrogenConfigRoutes;
 };
 
 export type ClientHandlerConfig = {

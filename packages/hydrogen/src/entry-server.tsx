@@ -13,7 +13,7 @@ import type {
   StreamerOptions,
   HydratorOptions,
   ImportGlobEagerOutput,
-  CompiledHydrogenConfig,
+  ResolvedHydrogenConfig,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -51,10 +51,10 @@ import {parseJSON} from './utilities/parse';
 
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
-import virtualHydrogenConfig from 'virtual:hydrogen.config.ts';
+import inlineHydrogenConfig from 'virtual:hydrogen.config.ts';
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
-import virtualHydrogenRoutes from 'virtual:hydrogen-routes.server.jsx';
+import hydrogenRoutes from 'virtual:hydrogen-routes.server.jsx';
 
 declare global {
   // This is provided by a Vite plugin
@@ -100,12 +100,12 @@ export const renderHydrogen = (App: any) => {
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
 
-    const configRoutes = virtualHydrogenConfig.routes;
-    const hydrogenConfig: CompiledHydrogenConfig = {
-      ...virtualHydrogenConfig,
+    const configRoutes = inlineHydrogenConfig.routes;
+    const hydrogenConfig: ResolvedHydrogenConfig = {
+      ...inlineHydrogenConfig,
       routes: {
         ...(typeof configRoutes === 'string' ? null : configRoutes),
-        files: virtualHydrogenRoutes as ImportGlobEagerOutput,
+        files: hydrogenRoutes as ImportGlobEagerOutput,
       },
     };
 

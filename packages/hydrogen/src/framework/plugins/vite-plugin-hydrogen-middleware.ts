@@ -127,14 +127,19 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
 
       if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_ID) {
         return importHydrogenConfig().then((hc) => {
-          const routesPath =
+          let routesPath =
             (typeof hc.routes === 'string' ? hc.routes : hc.routes?.files) ??
             './src/routes';
 
-          let code = `export default import.meta.globEager('./${path.join(
-            routesPath,
-            '**/*.server.[jt](s|sx)'
-          )}');`;
+          if (!routesPath.includes('*')) {
+            if (!routesPath.endsWith('/')) {
+              routesPath += '/';
+            }
+
+            routesPath += '**/*.server.[jt](s|sx)';
+          }
+
+          let code = `export default import.meta.globEager('${routesPath}');`;
 
           if (config.command === 'serve') {
             // Add dependency on Hydrogen config for HMR

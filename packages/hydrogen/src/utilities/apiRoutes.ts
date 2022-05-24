@@ -1,5 +1,5 @@
 import {
-  HydrogenConfig,
+  InlineHydrogenConfig,
   HydrogenConfigRoutes,
   ImportGlobEagerOutput,
 } from '../types';
@@ -151,7 +151,7 @@ interface QueryShopArgs {
 }
 
 function queryShopBuilder(
-  shopifyConfigGetter: HydrogenConfig['shopify'],
+  shopifyConfigGetter: InlineHydrogenConfig['shopify'],
   request: ServerComponentRequest
 ) {
   return async function queryShop<T>({
@@ -196,7 +196,7 @@ function queryShopBuilder(
 export async function renderApiRoute(
   request: ServerComponentRequest,
   route: ApiRouteMatch,
-  shopifyConfig: HydrogenConfig['shopify'],
+  shopifyConfig: InlineHydrogenConfig['shopify'],
   session?: SessionStorageAdapter
 ): Promise<Response | Request> {
   let response;
