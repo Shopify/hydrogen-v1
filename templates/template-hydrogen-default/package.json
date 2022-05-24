@@ -6,21 +6,19 @@
   "private": true,
   "scripts": {
     "dev": "cross-env LOCAL_DEV=true shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "preview": "shopify hydrogen preview",
     "lint": "npm-run-all lint:*",
     "lint:js": "eslint --resolve-plugins-relative-to . --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src",
-    "build": "yarn build:client && yarn build:server && yarn build:worker",
-    "build:client": "vite build --outDir dist/client --manifest",
-    "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
-    "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker",
-    "serve": "node --enable-source-maps dist/server",
+    "build:server": "shopify hydrogen build --target node",
+    "serve": "node --enable-source-maps dist/node",
     "test": "WATCH=true vitest",
-    "test:ci": "yarn build && vitest run",
-    "preview": "shopify hydrogen preview"
+    "test:ci": "yarn build && vitest run"
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
-    "@shopify/cli": "1.0.9",
-    "@shopify/cli-hydrogen": "2.0.0",
+    "@shopify/cli": "2.0.9",
+    "@shopify/cli-hydrogen": "2.0.9",
     "@shopify/prettier-config": "^1.1.2",
     "@tailwindcss/typography": "^0.5.2",
     "autoprefixer": "^10.4.2",
