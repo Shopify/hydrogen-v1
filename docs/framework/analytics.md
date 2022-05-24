@@ -341,7 +341,7 @@ function App({routes}) {
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         ...
         <PerformanceMetrics />
-        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+        {process.env.NODE_ENV === 'development' && <PerformanceMetricsDebug />}
       </ShopifyProvider>
     </Suspense>
   );
