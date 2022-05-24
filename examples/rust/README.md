@@ -1,4 +1,4 @@
-# Hydrogen App
+# Rust Example
 
 Hydrogen is a React framework and SDK that you can use to build fast and dynamic Shopify custom storefronts.
 
@@ -28,6 +28,8 @@ cargo install wasm-pack
 Build rust lib and add the lib into dependency
 
 ```bash
+npx degit Shopify/hydrogen/examples/rust hydrogen-app && cd hydrogen-app
+yarn
 yarn build:wasm:nodejs or wasm-pack build --target nodejs
 yarn add ./rust-functions/pkg
 ```
