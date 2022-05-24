@@ -2,7 +2,7 @@
 import reactServerDomVite from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
 import {
   HYDROGEN_DEFAULT_SERVER_ENTRY,
-  VIRTUAL_HYDROGEN_CONFIG_PROXY_ID,
+  VIRTUAL_HYDROGEN_ROUTES_PROXY_ID,
 } from './vite-plugin-hydrogen-middleware';
 import {viteception} from '../viteception';
 
@@ -23,9 +23,9 @@ export default function () {
       const {server} = await viteception([
         // Load server entry to discover client components early
         HYDROGEN_DEFAULT_SERVER_ENTRY,
-        // Route globs are placed in hydrogen.config.js and need to
+        // Route globs are placed in a virtual module and need to
         // be loaded to discover client components in routes
-        VIRTUAL_HYDROGEN_CONFIG_PROXY_ID,
+        VIRTUAL_HYDROGEN_ROUTES_PROXY_ID,
       ]);
 
       // At this point, the server has loaded all the components in the module graph

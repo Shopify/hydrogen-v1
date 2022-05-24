@@ -19,9 +19,12 @@ export const HYDROGEN_DEFAULT_SERVER_ENTRY =
 export const VIRTUAL_HYDROGEN_CONFIG_ID = 'virtual:hydrogen.config.ts';
 // Note: do not use query string here, it breaks Vite
 export const VIRTUAL_HYDROGEN_CONFIG_PROXY_ID =
-  VIRTUAL_HYDROGEN_CONFIG_ID + ':proxy';
+  VIRTUAL_HYDROGEN_CONFIG_ID.replace('virtual', 'virtual:proxy');
 
 export const VIRTUAL_HYDROGEN_ROUTES_ID = 'virtual:hydrogen-routes.server.jsx';
+
+export const VIRTUAL_HYDROGEN_ROUTES_PROXY_ID =
+  VIRTUAL_HYDROGEN_ROUTES_ID.replace('virtual', 'virtual:proxy');
 
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
@@ -108,21 +111,27 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         });
       }
 
-      if (source === VIRTUAL_HYDROGEN_CONFIG_PROXY_ID) {
+      if (
+        [
+          VIRTUAL_HYDROGEN_CONFIG_PROXY_ID,
+          VIRTUAL_HYDROGEN_ROUTES_PROXY_ID,
+          VIRTUAL_HYDROGEN_ROUTES_ID,
+        ].includes(source)
+      ) {
         // Virtual modules convention
         // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
-        return '\0' + VIRTUAL_HYDROGEN_CONFIG_PROXY_ID;
-      }
 
-      if (source === VIRTUAL_HYDROGEN_ROUTES_ID) {
-        return '\0' + VIRTUAL_HYDROGEN_ROUTES_ID;
+        return '\0' + source;
       }
     },
     load(id) {
+      // Likely due to a bug in Vite, but virtual modules cannot be loaded
+      // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
       if (id === '\0' + VIRTUAL_HYDROGEN_CONFIG_PROXY_ID) {
-        // Likely due to a bug in Vite, but the config cannot be loaded
-        // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
         return `import hc from '${VIRTUAL_HYDROGEN_CONFIG_ID}'; export default hc;`;
+      }
+      if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_PROXY_ID) {
+        return `import hr from '${VIRTUAL_HYDROGEN_ROUTES_ID}'; export default hr;`;
       }
 
       if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_ID) {

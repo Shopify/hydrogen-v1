@@ -51,13 +51,6 @@ import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
 import {htmlEncode} from './utilities';
 
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
-import inlineHydrogenConfig from 'virtual:hydrogen.config.ts';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
-import hydrogenRoutes from 'virtual:hydrogen-routes.server.jsx';
-
 declare global {
   // This is provided by a Vite plugin
   // and will trigger tree-shaking.
@@ -101,6 +94,18 @@ export const renderHydrogen = (App: any) => {
 
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
+
+    const {default: inlineHydrogenConfig} = await import(
+      // @ts-ignore
+      // eslint-disable-next-line node/no-missing-import
+      'virtual:hydrogen.config.ts'
+    );
+
+    const {default: hydrogenRoutes} = await import(
+      // @ts-ignore
+      // eslint-disable-next-line node/no-missing-import
+      'virtual:hydrogen-routes.server.jsx'
+    );
 
     const hydrogenConfig: ResolvedHydrogenConfig = {
       ...inlineHydrogenConfig,
