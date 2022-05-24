@@ -81,6 +81,7 @@ export type InlineHydrogenConfig = {
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   session?: (log: Logger) => SessionStorageAdapter;
+  enableStreaming?: (request: ServerComponentRequest) => boolean;
 };
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {

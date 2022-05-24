@@ -12,4 +12,7 @@ export default defineConfig({
   session: CookieSessionStorage('__session', {
     expires: new Date(1749343178614),
   }),
+  enableStreaming: (req) => {
+    return req.headers.get('user-agent') !== 'custom bot';
+  },
 });

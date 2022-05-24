@@ -12,8 +12,7 @@
     "test": "jest",
     "dev": "yarn build --preserveWatchOutput -w",
     "build": "tsc -p .",
-    "prepack": "yarn build",
-    "tophat": "node ./scripts/tophat"
+    "prepack": "yarn build"
   },
   "repository": {
     "type": "git",

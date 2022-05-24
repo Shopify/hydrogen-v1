@@ -24,7 +24,7 @@ import {
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider';
 import type {ServerResponse, IncomingMessage} from 'http';
-import type {PassThrough as PassThroughType, Writable} from 'stream';
+import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
@@ -49,6 +49,7 @@ import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
+import {htmlEncode} from './utilities';
 
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
@@ -164,6 +165,9 @@ export const renderHydrogen = (App: any) => {
     }
 
     const isStreamable =
+      (hydrogenConfig.enableStreaming
+        ? hydrogenConfig.enableStreaming(request)
+        : true) &&
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!streamableResponse || (await isStreamingSupported()));
 
@@ -223,7 +227,7 @@ async function render(
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
-  const {AppSSR} = buildAppSSR(
+  const {AppSSR, rscReadable} = buildAppSSR(
     {
       App,
       log,
@@ -240,9 +244,10 @@ async function render(
     return template;
   }
 
-  let html = await renderToBufferedString(AppSSR, {log, nonce}).catch(
-    onErrorShell
-  );
+  let [html, flight] = await Promise.all([
+    renderToBufferedString(AppSSR, {log, nonce}).catch(onErrorShell),
+    bufferReadableStream(rscReadable.getReader()).catch(() => null),
+  ]);
 
   const {headers, status, statusText} = getResponseOptions(componentResponse);
 
@@ -267,6 +272,13 @@ async function render(
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
+
+  if (flight) {
+    html = html.replace(
+      '</body>',
+      () => flightContainer(flight as string) + '</body>'
+    );
+  }
 
   postRequestTasks('ssr', status, request, componentResponse);
 
@@ -314,7 +326,11 @@ async function stream(
   const rscToScriptTagReadable = new ReadableStream({
     start(controller) {
       log.trace('rsc start chunks');
-      bufferReadableStream(rscReadable.getReader()).then(() => {
+      const encoder = new TextEncoder();
+      bufferReadableStream(rscReadable.getReader(), (chunk) => {
+        const metaTag = flightContainer(chunk);
+        controller.enqueue(encoder.encode(metaTag));
+      }).then(() => {
         log.trace('rsc finish chunks');
         return controller.close();
       });
@@ -598,41 +614,18 @@ async function hydrate(
     response: componentResponse,
   });
 
-  if (__WORKER__) {
-    const rscReadable = rscRenderToReadableStream(AppRSC);
+  const rscReadable = rscRenderToReadableStream(AppRSC);
 
-    if (isStreamable && (await isStreamingSupported())) {
-      postRequestTasks('rsc', 200, request, componentResponse);
-      return new Response(rscReadable);
-    }
+  // Note: CFW does not support reader.piteTo nor iterable syntax
+  const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    // Note: CFW does not support reader.piteTo nor iterable syntax
-    const bufferedBody = await bufferReadableStream(rscReadable.getReader());
+  postRequestTasks('rsc', 200, request, componentResponse);
 
-    postRequestTasks('rsc', 200, request, componentResponse);
-
-    return new Response(bufferedBody, {
-      headers: {
-        'cache-control': componentResponse.cacheControlHeader,
-      },
-    });
-  } else if (response) {
-    const rscWriter = await import(
-      // @ts-ignore
-      '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
-    );
-
-    const streamer = rscWriter.renderToPipeableStream(AppRSC);
-    const stream = streamer.pipe(response) as Writable;
-
-    response.writeHead(200, 'ok', {
+  return new Response(bufferedBody, {
+    headers: {
       'cache-control': componentResponse.cacheControlHeader,
-    });
-
-    stream.on('finish', function () {
-      postRequestTasks('rsc', response.statusCode, request, componentResponse);
-    });
-  }
+    },
+  });
 }
 
 type SharedServerProps = {
@@ -852,6 +845,10 @@ async function createNodeWriter() {
   const streamImport = __WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
+}
+
+function flightContainer(chunk: string) {
+  return `<meta data-flight="${htmlEncode(chunk)}" />`;
 }
 
 function postRequestTasks(

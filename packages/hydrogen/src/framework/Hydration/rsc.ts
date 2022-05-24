@@ -7,8 +7,74 @@ import {
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import {RSC_PATHNAME} from '../../constants';
+import {htmlDecode} from '../../utilities';
 
 let rscReader: ReadableStream | null;
+
+// Hydrate an SSR response from <meta> tags placed in the DOM.
+const flightChunks: string[] = [];
+const FLIGHT_ATTRIBUTE = 'data-flight';
+
+function addElementToFlightChunks(el: Element) {
+  const chunk = el.getAttribute(FLIGHT_ATTRIBUTE);
+  if (chunk) {
+    flightChunks.push(htmlDecode(chunk));
+  }
+}
+
+// Get initial payload
+document
+  .querySelectorAll('[' + FLIGHT_ATTRIBUTE + ']')
+  .forEach(addElementToFlightChunks);
+
+// Create a mutation observer on the document to detect when new
+// <meta data-flight> tags are added, and add them to the array.
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    mutation.addedNodes.forEach((node) => {
+      if (
+        node instanceof HTMLElement &&
+        node.tagName === 'META' &&
+        node.hasAttribute(FLIGHT_ATTRIBUTE)
+      ) {
+        addElementToFlightChunks(node);
+      }
+    });
+  });
+});
+
+observer.observe(document.documentElement, {
+  childList: true,
+  subtree: true,
+});
+
+if (flightChunks.length > 0) {
+  const contentLoaded = new Promise((resolve) =>
+    document.addEventListener('DOMContentLoaded', resolve)
+  );
+
+  try {
+    rscReader = new ReadableStream({
+      start(controller) {
+        const encoder = new TextEncoder();
+        const write = (chunk: string) => {
+          controller.enqueue(encoder.encode(chunk));
+          return 0;
+        };
+
+        flightChunks.forEach(write);
+        flightChunks.push = write;
+
+        contentLoaded.then(() => {
+          controller.close();
+          observer.disconnect();
+        });
+      },
+    });
+  } catch (_) {
+    // Old browser, will try a new hydration request later
+  }
+}
 
 const cache = new Map();
 
