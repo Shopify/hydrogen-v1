@@ -250,19 +250,6 @@ async function render(
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
   headers.set('cache-control', componentResponse.cacheControlHeader);
-
-  if (componentResponse.customBody) {
-    // This can be used to return sitemap.xml or any other custom response.
-
-    postRequestTasks('ssr', status, request, componentResponse);
-
-    return new Response(await componentResponse.customBody, {
-      status,
-      statusText,
-      headers,
-    });
-  }
-
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
@@ -398,11 +385,6 @@ async function stream(
       }
 
       if (flush) {
-        if (componentResponse.customBody) {
-          writable.write(encoder.encode(await componentResponse.customBody));
-          return false;
-        }
-
         responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
@@ -541,10 +523,6 @@ async function stream(
         if (isRedirect(response)) {
           // Redirects found after any async code
           return response.end();
-        }
-
-        if (componentResponse.customBody) {
-          return response.end(await componentResponse.customBody);
         }
 
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);
