@@ -14,8 +14,8 @@ import {
   MediaFile,
   useShopQuery,
   MediaFile,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 const QUERY = gql`
   query product($handle: String!) {

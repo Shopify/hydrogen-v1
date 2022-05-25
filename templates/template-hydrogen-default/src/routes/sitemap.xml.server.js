@@ -1,5 +1,4 @@
-import {flattenConnection} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {flattenConnection, gql} from '@shopify/hydrogen';
 
 const MAX_URLS = 250; // the google limit is 50K, however, SF API only allow querying for 250 resources each time
 

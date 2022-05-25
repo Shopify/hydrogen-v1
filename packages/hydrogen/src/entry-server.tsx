@@ -202,7 +202,13 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     return render(url, params);
   };
 
-  return handleRequest;
+  if (__WORKER__) return handleRequest;
+
+  return ((rawRequest, options) =>
+    handleFetchResponseInNode(
+      handleRequest(rawRequest, options),
+      options.streamableResponse
+    )) as RequestHandler;
 };
 
 function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
@@ -799,9 +805,7 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries((headers as any).raw()).forEach(([key, value]) =>
-    response.setHeader(key, value as string)
-  );
+  setServerHeaders(headers, response);
 }
 
 function isRedirect(response: {status?: number; statusCode?: number}) {
@@ -833,4 +837,40 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
+}
+
+/**
+ * Ensure Node.js environments handle the fetch Response correctly.
+ */
+function handleFetchResponseInNode(
+  fetchResponsePromise: Promise<Response | undefined>,
+  nodeResponse?: ServerResponse
+) {
+  if (nodeResponse) {
+    fetchResponsePromise.then((response) => {
+      if (!response) return;
+
+      setServerHeaders(response.headers, nodeResponse);
+
+      nodeResponse.statusCode = response.status;
+
+      if (response.body) {
+        nodeResponse.write(response.body);
+      }
+
+      nodeResponse.end();
+    });
+  }
+
+  return fetchResponsePromise;
+}
+
+// From fetch Headers to Node Response
+function setServerHeaders(headers: Headers, nodeResponse: ServerResponse) {
+  // Headers.raw is only implemented in node-fetch, which is used by Hydrogen in dev and prod.
+  // It is the only way for now to access `set-cookie` header as an array.
+  // https://github.com/Shopify/hydrogen/issues/1228
+  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+    nodeResponse.setHeader(key, value as string)
+  );
 }
