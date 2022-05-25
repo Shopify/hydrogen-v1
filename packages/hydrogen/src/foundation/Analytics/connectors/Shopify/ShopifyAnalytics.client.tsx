@@ -69,12 +69,10 @@ export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
 }
 
 function updateCookie(cookieName: string, value: string, maxage: number) {
-  const isProd = process.env.NODE_ENV === 'production';
   const cookieString = stringify(cookieName, value, {
     maxage,
     domain: getCookieDomain(),
-    secure: isProd,
-    httponly: isProd,
+    secure: process.env.NODE_ENV === 'production',
     samesite: 'Lax',
     path: '/',
   });
