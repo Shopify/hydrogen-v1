@@ -8,8 +8,7 @@
     "dev": "cross-env LOCAL_DEV=true shopify hydrogen dev",
     "build": "shopify hydrogen build",
     "preview": "shopify hydrogen preview",
-    "lint": "npm-run-all lint:*",
-    "lint:js": "eslint --resolve-plugins-relative-to . --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src",
+    "lint": "eslint --resolve-plugins-relative-to . --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src",
     "test": "WATCH=true vitest",
     "test:ci": "yarn build --target node && vitest run"
   },
@@ -23,7 +22,6 @@
     "cross-env": "^7.0.3",
     "eslint": "^7.31.0",
     "eslint-plugin-hydrogen": "^0.12.1",
-    "npm-run-all": "^4.1.5",
     "playwright": "^1.19.2",
     "postcss": "^8.4.5",
     "prettier": "^2.3.2",
