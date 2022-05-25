@@ -211,4 +211,73 @@ describe('AddToCartButton', () => {
       });
     });
   });
+
+  describe('given an on click event handler', () => {
+    it('calls the on click event handler', () => {
+      const mockOnClick = jest.fn();
+      const component = mountWithProviders(
+        <CartProvider>
+          <AddToCartButton onClick={mockOnClick}>Add to cart</AddToCartButton>
+        </CartProvider>
+      );
+
+      component.find('button')?.trigger('onClick');
+
+      expect(mockOnClick).toBeCalled();
+    });
+
+    it('calls the default behaviour of add lines', () => {
+      const mockLinesAdd = jest.fn();
+      const component = mountWithCartProvider(
+        <AddToCartButton onClick={() => {}}>Add to cart</AddToCartButton>,
+        {
+          linesAdd: mockLinesAdd,
+        }
+      );
+
+      component.find('button')?.trigger('onClick');
+
+      expect(mockLinesAdd).toBeCalled();
+    });
+
+    describe('and event preventDefault is called', () => {
+      it('calls the on click event handler without calling the default behaviour of add lines', () => {
+        const mockOnClick = jest.fn((event) => {
+          event.preventDefault();
+        });
+        const mockLinesAdd = jest.fn();
+        const component = mountWithCartProvider(
+          <AddToCartButton onClick={mockOnClick}>Add to cart</AddToCartButton>,
+          {
+            linesAdd: mockLinesAdd,
+          }
+        );
+
+        component
+          .find('button')
+          ?.trigger('onClick', new MouseEvent('click', {cancelable: true}));
+
+        expect(mockOnClick).toBeCalled();
+        expect(mockLinesAdd).not.toBeCalled();
+      });
+    });
+
+    describe('and the on click handler returns false', () => {
+      it('calls the on click event handler without calling the default behaviour of add lines', () => {
+        const mockOnClick = jest.fn(() => false);
+        const mockLinesAdd = jest.fn();
+        const component = mountWithCartProvider(
+          <AddToCartButton onClick={mockOnClick}>Add to cart</AddToCartButton>,
+          {
+            linesAdd: mockLinesAdd,
+          }
+        );
+
+        component.find('button')?.trigger('onClick');
+
+        expect(mockOnClick).toBeCalled();
+        expect(mockLinesAdd).not.toBeCalled();
+      });
+    });
+  });
 });

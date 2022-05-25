@@ -1,4 +1,10 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+  MouseEvent,
+} from 'react';
 import {useCart} from '../CartProvider';
 import {useProductOptions} from '../ProductOptionsProvider';
 
@@ -12,6 +18,8 @@ interface AddToCartButtonProps {
   variantId?: string | null;
   /** The item quantity. */
   quantity?: number;
+  /** A click event handler. Default behaviour triggers unless prevented */
+  onClick?: (event?: MouseEvent) => void | boolean;
   /** Any ReactNode elements. */
   children: ReactNode;
   /** The text that is announced by the screen reader when the item is being added to the cart. Used for accessibility purposes only and not displayed on the page. */
@@ -33,6 +41,7 @@ export function AddToCartButton(
     variantId: explicitVariantId,
     quantity = 1,
     attributes,
+    onClick,
     children,
     accessibleAddingToCartLabel,
     ...passthroughProps
@@ -53,22 +62,27 @@ export function AddToCartButton(
     }
   }, [status, addingItem]);
 
+  const handleAddItem = useCallback(
+    (event?: MouseEvent) => {
+      if (onClick) {
+        const clickShouldContinue = onClick(event);
+        if (clickShouldContinue === false || event?.defaultPrevented) return;
+      }
+      setAddingItem(true);
+      linesAdd([
+        {
+          quantity,
+          merchandiseId: variantId,
+          attributes,
+        },
+      ]);
+    },
+    [onClick, linesAdd, quantity, variantId, attributes]
+  );
+
   return (
     <>
-      <button
-        {...passthroughProps}
-        disabled={disabled}
-        onClick={() => {
-          setAddingItem(true);
-          linesAdd([
-            {
-              quantity,
-              merchandiseId: variantId,
-              attributes,
-            },
-          ]);
-        }}
-      >
+      <button {...passthroughProps} disabled={disabled} onClick={handleAddItem}>
         {children}
       </button>
       {accessibleAddingToCartLabel ? (
