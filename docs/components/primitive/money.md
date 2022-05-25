@@ -11,8 +11,7 @@ The `Money` component renders a string of the Storefront API's
 ## Example code
 
 ```tsx
-import {Money} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {Money, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   productByHandle(handle: "my-product") {
@@ -39,8 +38,7 @@ export default function Product() {
 ### Calculate a unit price for a product variant
 
 ```tsx
-import {Money} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {Money, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   productByHandle(handle: "my-product") {

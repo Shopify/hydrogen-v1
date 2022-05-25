@@ -1,5 +1,4 @@
-import {useShop, useShopQuery, Seo} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {useShop, useShopQuery, Seo, gql} from '@shopify/hydrogen';
 
 import Layout from '../../components/Layout.server';
 import NotFound from '../../components/NotFound.server';

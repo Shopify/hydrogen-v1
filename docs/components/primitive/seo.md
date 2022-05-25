@@ -9,8 +9,7 @@ The `Seo` component renders SEO information on a webpage.
 ## Example code
 
 ```tsx
-import {Seo, useShopQuery, useRouteParams} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {Seo, useShopQuery, useRouteParams, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query PageDetails($handle: String!) {

@@ -10,8 +10,7 @@ API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/produc
 ## Example code
 
 ```tsx
-import {ExternalVideo} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {ExternalVideo, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {

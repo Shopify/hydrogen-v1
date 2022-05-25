@@ -10,6 +10,7 @@ export {
   isClient,
   getTime,
 } from './utilities';
+export {gql} from './utilities/graphql-tag';
 
 export {FileRoutes} from './foundation/FileRoutes/FileRoutes.server';
 export {Route} from './foundation/Route/Route.server';

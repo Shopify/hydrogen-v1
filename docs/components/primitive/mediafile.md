@@ -12,8 +12,7 @@ The `MediaFile` component renders the media for the Storefront API's
 ## Example code
 
 ```tsx
-import {MediaFile, useShopQuery} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {MediaFile, useShopQuery, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {

@@ -4,8 +4,8 @@ import {
   useShopQuery,
   Seo,
   useRouteParams,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 import ProductDetails from '../../components/ProductDetails.client';
 import NotFound from '../../components/NotFound.server';
