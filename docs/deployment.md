@@ -23,20 +23,38 @@ Oxygen is Shopify's recommended deployment platform for Hydrogen apps.
 
 By default, Hydrogen targets a Workers runtime like Oxygen. However, you can also deploy your Hydrogen app to [Node.js](https://nodejs.org/en/), an open-source JavaScript runtime environment.
 
-Run and preview your Hydrogen app by executing the following commands:
+Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) which suits basic production use cases.
 
-{% codeblock terminal %}
+Run and preview your Hydrogen app in Node.js by executing the following commands:
 
-```bash
+1. Install peer dependencies required to run the built-in Node.js entrypoint:
 
-yarn build --target node
+    {% codeblock terminal %}
 
-yarn preview --target node
-```
+    ```bash?title: 'yarn'
+    yarn add body-parser compression serve-static
+    ```
 
-{% endcodeblock %}
+    ```bash?title: 'npm'
+    npm install body-parser compression serve-static
+    ```
 
-The production version of your app will be running at http://localhost:3000.
+    {% endcodeblock %}
+
+2. Build your Hydrogen app for production, and preview the app locally:
+
+    {% codeblock terminal %}
+
+    ```bash
+
+    yarn build --target node
+
+    yarn preview --target node
+    ```
+
+    {% endcodeblock %}
+
+    The production version of your app will be running at http://localhost:3000.
 
 You can inspect and deploy the compiled version of your Node.js Hydrogen app from `dist/node`.
 
