@@ -8,7 +8,7 @@ import {SESSION_COOKIE, USER_COOKIE} from './const';
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
 const myShopifyDomain = 'myshopify.com';
-const oxygenDomain = 'shopify-oxygen-platform.workers.dev/';
+const oxygenDomain = 'myshopify.dev';
 
 let isInit = false;
 let microSessionCount = 0;
@@ -85,14 +85,11 @@ function getCookieDomain(): string {
   const hostname = location.hostname;
   const hostnameParts = hostname.split('.');
 
-  if (hostname === 'localhost') {
+  if (hostname === 'localhost' || hostname.indexOf(oxygenDomain) !== -1) {
     return '';
   } else if (hostname.indexOf(myShopifyDomain) !== -1) {
     return `.${hostnameParts.slice(-3).join('.')}`;
-  } else if (hostname.indexOf(oxygenDomain) !== -1) {
-    return `.${hostnameParts.slice(-4).join('.')}`;
-  }
-  {
+  } else {
     return `.${hostnameParts.slice(-2).join('.')}`;
   }
 }
