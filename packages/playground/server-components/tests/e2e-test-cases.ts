@@ -162,7 +162,7 @@ export default async function testCases({
     expect(body).toContain('>footer!<');
   });
 
-  it('streams the RSC response', async () => {
+  it('buffers the RSC response', async () => {
     const response = await fetch(
       getServerUrl() +
         `${RSC_PATHNAME}?state=` +
@@ -178,7 +178,7 @@ export default async function testCases({
       streamedChunks.push(chunk.toString());
     }
 
-    expect(streamedChunks.length).toBeGreaterThan(1);
+    expect(streamedChunks.length).toBe(1);
 
     const body = streamedChunks.join('');
     expect(body).toContain('S1:"react.suspense"');
@@ -214,14 +214,6 @@ export default async function testCases({
       'hello=world',
       'hello2=world2',
     ]);
-  });
-
-  it('uses the provided custom body', async () => {
-    const response = await fetch(getServerUrl() + '/custom-body');
-    const body = await response.text();
-
-    expect(response.headers.get('Content-Type')).toEqual('text/plain');
-    expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
   });
 
   it('properly escapes props in the SSR flight script chunks', async () => {

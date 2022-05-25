@@ -23,7 +23,7 @@ import {
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider';
 import type {ServerResponse, IncomingMessage} from 'http';
-import type {PassThrough as PassThroughType, Writable} from 'stream';
+import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
@@ -202,7 +202,13 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     return render(url, params);
   };
 
-  return handleRequest;
+  if (__WORKER__) return handleRequest;
+
+  return ((rawRequest, options) =>
+    handleFetchResponseInNode(
+      handleRequest(rawRequest, options),
+      options.streamableResponse
+    )) as RequestHandler;
 };
 
 function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
@@ -250,19 +256,6 @@ async function render(
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
   headers.set('cache-control', componentResponse.cacheControlHeader);
-
-  if (componentResponse.customBody) {
-    // This can be used to return sitemap.xml or any other custom response.
-
-    postRequestTasks('ssr', status, request, componentResponse);
-
-    return new Response(await componentResponse.customBody, {
-      status,
-      statusText,
-      headers,
-    });
-  }
-
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
@@ -377,7 +370,7 @@ async function stream(
     });
 
     /* eslint-disable no-inner-declarations */
-    async function prepareForStreaming(flush: boolean) {
+    function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
         getResponseOptions(componentResponse, rscErrored ?? didError)
@@ -398,11 +391,6 @@ async function stream(
       }
 
       if (flush) {
-        if (componentResponse.customBody) {
-          writable.write(encoder.encode(await componentResponse.customBody));
-          return false;
-        }
-
         responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
@@ -419,7 +407,7 @@ async function stream(
     /* eslint-enable no-inner-declarations */
 
     const shouldReturnApp =
-      (await prepareForStreaming(componentResponse.canStream())) ??
+      prepareForStreaming(componentResponse.canStream()) ??
       (await onCompleteAll.promise.then(prepareForStreaming));
 
     if (shouldReturnApp) {
@@ -526,7 +514,7 @@ async function stream(
           return response.write(chunk);
         });
       },
-      async onAllReady() {
+      onAllReady() {
         log.trace('node complete stream');
 
         if (componentResponse.canStream() || response.writableEnded) {
@@ -556,10 +544,6 @@ async function stream(
         if (isRedirect(response)) {
           // Redirects found after any async code
           return response.end();
-        }
-
-        if (componentResponse.customBody) {
-          return response.end(await componentResponse.customBody);
         }
 
         startWritingHtmlToServerResponse(
@@ -626,49 +610,21 @@ async function hydrate(
     response: componentResponse,
   });
 
-  if (__WORKER__) {
-    const rscReadable = rscRenderToReadableStream(AppRSC, {
-      onError(e) {
-        log.error(e);
-      },
-    });
+  const rscReadable = rscRenderToReadableStream(AppRSC, {
+    onError(e) {
+      log.error(e);
+    },
+  });
 
-    if (isStreamable && (await isStreamingSupported())) {
-      postRequestTasks('rsc', 200, request, componentResponse);
-      return new Response(rscReadable);
-    }
+  const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    // Note: CFW does not support reader.piteTo nor iterable syntax
-    const bufferedBody = await bufferReadableStream(rscReadable.getReader());
+  postRequestTasks('rsc', 200, request, componentResponse);
 
-    postRequestTasks('rsc', 200, request, componentResponse);
-
-    return new Response(bufferedBody, {
-      headers: {
-        'cache-control': componentResponse.cacheControlHeader,
-      },
-    });
-  } else if (response) {
-    const rscWriter = await import(
-      // @ts-ignore
-      '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
-    );
-
-    const streamer = rscWriter.renderToPipeableStream(AppRSC, {
-      onError(e: Error) {
-        log.error(e);
-      },
-    });
-    const stream = streamer.pipe(response) as Writable;
-
-    response.writeHead(200, 'ok', {
+  return new Response(bufferedBody, {
+    headers: {
       'cache-control': componentResponse.cacheControlHeader,
-    });
-
-    stream.on('finish', function () {
-      postRequestTasks('rsc', response.statusCode, request, componentResponse);
-    });
-  }
+    },
+  });
 }
 
 type SharedServerProps = {
@@ -879,9 +835,7 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries((headers as any).raw()).forEach(([key, value]) =>
-    response.setHeader(key, value as string)
-  );
+  setServerHeaders(headers, response);
 }
 
 function isRedirect(response: {status?: number; statusCode?: number}) {
@@ -913,4 +867,40 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
+}
+
+/**
+ * Ensure Node.js environments handle the fetch Response correctly.
+ */
+function handleFetchResponseInNode(
+  fetchResponsePromise: Promise<Response | undefined>,
+  nodeResponse?: ServerResponse
+) {
+  if (nodeResponse) {
+    fetchResponsePromise.then((response) => {
+      if (!response) return;
+
+      setServerHeaders(response.headers, nodeResponse);
+
+      nodeResponse.statusCode = response.status;
+
+      if (response.body) {
+        nodeResponse.write(response.body);
+      }
+
+      nodeResponse.end();
+    });
+  }
+
+  return fetchResponsePromise;
+}
+
+// From fetch Headers to Node Response
+function setServerHeaders(headers: Headers, nodeResponse: ServerResponse) {
+  // Headers.raw is only implemented in node-fetch, which is used by Hydrogen in dev and prod.
+  // It is the only way for now to access `set-cookie` header as an array.
+  // https://github.com/Shopify/hydrogen/issues/1228
+  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+    nodeResponse.setHeader(key, value as string)
+  );
 }

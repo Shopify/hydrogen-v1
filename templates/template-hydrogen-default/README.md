@@ -13,7 +13,6 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 - Unit testing with [Vitest](https://vitest.dev) and [Testing Library](https://testing-library.com)
 - Code formatting with [Prettier](https://prettier.io)
 - Javascript linting with [ESLint](https://eslint.org) and the Hydrogen [ESLint plugin](https://github.com/Shopify/hydrogen/tree/main/packages/eslint-plugin)
-- CSS linting with [Stylelint](https://stylelint.io)
 
 ## Getting started
 
