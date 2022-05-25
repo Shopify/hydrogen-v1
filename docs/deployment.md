@@ -23,11 +23,10 @@ Oxygen is Shopify's recommended deployment platform for Hydrogen apps.
 
 By default, Hydrogen targets a Workers runtime like Oxygen. However, you can also deploy your Hydrogen app to [Node.js](https://nodejs.org/en/), an open-source JavaScript runtime environment.
 
-Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) which suits basic production use cases.
+Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) which suits basic production use cases. You can run and preview your Hydrogen app in Node.js by completing the following steps.
 
-Run and preview your Hydrogen app in Node.js by executing the following commands:
 
-1. Install peer dependencies required to run the built-in Node.js entrypoint:
+1. Install the peer dependencies required to run the built-in Node.js entrypoint:
 
     {% codeblock terminal %}
 
@@ -41,7 +40,7 @@ Run and preview your Hydrogen app in Node.js by executing the following commands
 
     {% endcodeblock %}
 
-2. Build your Hydrogen app for production, and preview the app locally:
+2. Build your Hydrogen app for production and preview the app locally:
 
     {% codeblock terminal %}
 
@@ -54,9 +53,7 @@ Run and preview your Hydrogen app in Node.js by executing the following commands
 
     {% endcodeblock %}
 
-    The production version of your app will be running at http://localhost:3000.
-
-You can inspect and deploy the compiled version of your Node.js Hydrogen app from `dist/node`.
+    The production version of your app will be running at http://localhost:3000. You can inspect and deploy the compiled version of your Node.js Hydrogen app from `dist/node`.
 
 ### Apply extra middleware
 
@@ -127,7 +124,7 @@ If you want to use a different Node.js framework like [Express](https://expressj
 
     {% endcodeblock %}
 
-2. Use this new file as the entry for your build command. If the script is located in `<root>/server.js`, then you would run the following:
+2. Use the new file as the entry point for your build command. For example, if the script is located in `<root>/server.js`, then you would run the following command:
 
     {% codeblock terminal %}
 
