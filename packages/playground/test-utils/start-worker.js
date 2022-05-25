@@ -8,7 +8,7 @@ async function createServer({root = process.cwd()} = {}) {
   const mf = new Miniflare({
     scriptPath: path.resolve(root, 'dist/worker/index.js'),
     sitePath: path.resolve(root, 'dist/client'),
-    bindings: await loadProdEnv(root),
+    bindings: loadProdEnv(root),
   });
 
   const app = mf.createServer();

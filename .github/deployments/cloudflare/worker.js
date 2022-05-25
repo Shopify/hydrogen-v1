@@ -37,6 +37,11 @@ async function handleEvent(event) {
       return await handleAsset(url, event);
     }
 
+    // TODO: Switch to module syntax and transfer args to process.env
+    if (!globalThis.process) {
+      globalThis.process = {env: {}};
+    }
+
     return await handleRequest(event.request, {
       indexTemplate,
       cache: caches.default,

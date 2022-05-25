@@ -1,7 +1,7 @@
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 
 export default function setup({handleRequest, indexTemplate}) {
-  process.env = {...globalThis};
+  globalThis.process = {env: globalThis};
 
   function isAsset(url) {
     return /\.(png|jpe?g|gif|css|js|svg|ico|map)$/i.test(url.pathname);

@@ -33,7 +33,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         return await server.transformIndexHtml(url, indexHtml);
       }
 
-      await addEnvVarsToProcessEnv(server.config);
+      addEnvVarsToProcessEnv(server.config);
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
       // By running this middleware first, we avoid that.
@@ -110,8 +110,8 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
   } as Plugin;
 };
 
-async function addEnvVarsToProcessEnv(config: ResolvedConfig) {
-  const env = await loadEnv(config.mode, config.root, '');
+function addEnvVarsToProcessEnv(config: ResolvedConfig) {
+  const env = loadEnv(config.mode, config.root, '');
 
   const publicPrefixes = Array.isArray(config.envPrefix)
     ? config.envPrefix
@@ -120,10 +120,10 @@ async function addEnvVarsToProcessEnv(config: ResolvedConfig) {
   for (const key of Object.keys(env)) {
     if (publicPrefixes.some((prefix) => key.startsWith(prefix))) {
       delete env[key];
+    } else {
+      process.env[key] = env[key];
     }
   }
-
-  process.env = env;
 }
 
 async function findHydrogenConfigPath(root: string, userProvidedPath?: string) {

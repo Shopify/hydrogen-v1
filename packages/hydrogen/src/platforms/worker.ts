@@ -14,7 +14,8 @@ export default {
     env: unknown,
     context: {waitUntil: (promise: Promise<any>) => void}
   ) {
-    process.env = {...process.env, ...(env as Record<string, string>)};
+    // @ts-ignore NodeJS.ProcessEnv is not relevant here, because we're in a Worker.
+    globalThis.process = {env};
 
     try {
       return (await handleRequest(request, {
