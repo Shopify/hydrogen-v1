@@ -25,7 +25,7 @@ function App() {
           </Router>
         </CartProvider>
         <PerformanceMetrics />
-        {process.env.NODE_ENV === 'development' && <PerformanceMetricsDebug />}
+        {import.meta.env.DEV && <PerformanceMetricsDebug />}
       </ShopifyProvider>
     </Suspense>
   );
