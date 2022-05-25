@@ -1,9 +1,8 @@
-import {getNamedspacedEventname} from './utils';
+import {getNamedspacedEventname, mergeDeep} from './utils';
 import type {Subscriber, Subscribers, SubscriberFunction} from './types';
 import {isServer} from '../../utilities';
 import {eventNames} from './const';
 import {EVENT_PATHNAME} from '../../constants';
-import merge from 'lodash-es/merge';
 
 type EventGuard = Record<string, NodeJS.Timeout>;
 
@@ -25,7 +24,7 @@ function isInvokedFromServer(): boolean {
 function pushToPageAnalyticsData(data: any): void {
   if (isInvokedFromServer()) return;
 
-  pageAnalyticsData = merge({}, pageAnalyticsData, data);
+  pageAnalyticsData = mergeDeep(pageAnalyticsData, data);
 }
 
 function getPageAnalyticsData(): any {

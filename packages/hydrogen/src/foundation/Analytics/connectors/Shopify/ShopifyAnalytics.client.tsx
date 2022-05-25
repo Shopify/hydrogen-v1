@@ -67,9 +67,12 @@ function updateCookie(cookieName: string, value: string, maxage: number) {
   const cookieString = stringify(cookieName, value, {
     maxage,
     domain: getCookieDomain(),
-    samesite: 'Lax',
+    secure: process.env.NODE_ENV === 'production',
+    samesite: 'Strict',
     path: '/',
   });
+
+  console.log(cookieString);
 
   document.cookie = cookieString;
   return cookieString;
@@ -82,12 +85,12 @@ function getCookieDomain(): string {
   if (hostname === 'localhost') {
     return '';
   } else if (hostname.indexOf(myShopifyDomain) !== -1) {
-    return `.${hostnameParts.slice(-3)}`;
+    return `.${hostnameParts.slice(-3).join('.')}`;
   } else if (hostname.indexOf(oxygenDomain) !== -1) {
-    return `.${hostnameParts.slice(-4)}`;
+    return `.${hostnameParts.slice(-4).join('.')}`;
   }
   {
-    return `.${hostnameParts.slice(-2)}`;
+    return `.${hostnameParts.slice(-2).join('.')}`;
   }
 }
 
@@ -171,8 +174,8 @@ function isMerchantRequest(): Boolean {
   return false;
 }
 
-function stripGId(text: string): string {
-  return text.substring(text.lastIndexOf('/') + 1);
+function stripGId(text: string): number {
+  return parseInt(text.substring(text.lastIndexOf('/') + 1));
 }
 
 const BATCH_SENT_TIMEOUT = 500;
