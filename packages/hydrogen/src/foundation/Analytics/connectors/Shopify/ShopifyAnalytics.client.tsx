@@ -37,6 +37,7 @@ export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
         pageId: buildUUID(),
         userId: cookieData[USER_COOKIE],
         sessionId: cookieData[SESSION_COOKIE],
+        storefrontId: cookieData['storefrontId'],
         acceptedLanguage: cookieData['acceptedLanguage'],
       },
     });
@@ -64,11 +65,13 @@ export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
 }
 
 function updateCookie(cookieName: string, value: string, maxage: number) {
+  const isProd = process.env.NODE_ENV === 'production';
   const cookieString = stringify(cookieName, value, {
     maxage,
     domain: getCookieDomain(),
-    secure: process.env.NODE_ENV === 'production',
-    samesite: 'Strict',
+    secure: isProd,
+    httponly: isProd,
+    samesite: 'Lax',
     path: '/',
   });
 
@@ -120,6 +123,10 @@ function buildStorefrontPageViewPayload(payload: any): any {
   const location = document.location;
   const shopify = payload.shopify;
   let formattedData = {
+    appId: 6167201,
+    channel: 'hydrogen',
+    subchannel: shopify.storefrontId,
+
     isPersistentCookie: true,
     uniqToken: shopify.userId,
     visitToken: shopify.sessionId,
@@ -132,11 +139,10 @@ function buildStorefrontPageViewPayload(payload: any): any {
     referrer: document.referrer,
     title: document.title,
 
-    apiClientId: 'hydrogen',
     shopId: stripGId(shopify.shopId),
     currency: shopify.currency,
     contentLanguage: shopify.acceptedLanguage,
-    isMerchantRequest: isMerchantRequest(),
+    isMerchantRequest: false, //isMerchantRequest(),
   };
 
   formattedData = addDataIf(
@@ -166,13 +172,13 @@ function buildStorefrontPageViewPayload(payload: any): any {
   return formattedData;
 }
 
-function isMerchantRequest(): Boolean {
-  const hostname = location.hostname;
-  if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
-    return true;
-  }
-  return false;
-}
+// function isMerchantRequest(): Boolean {
+//   const hostname = location.hostname;
+//   if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
+//     return true;
+//   }
+//   return false;
+// }
 
 function stripGId(text: string): number {
   return parseInt(text.substring(text.lastIndexOf('/') + 1));

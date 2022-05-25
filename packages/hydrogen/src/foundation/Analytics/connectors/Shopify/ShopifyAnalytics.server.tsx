@@ -16,11 +16,13 @@ export function ShopifyAnalytics({
   const cookies = session?.get();
   const userCookie = (cookies && cookies[USER_COOKIE]) || buildUUID();
   const sessionCookie = (cookies && cookies[SESSION_COOKIE]) || buildUUID();
+  const storefrontId = Oxygen.env.SHOPIFY_STOREFRONT_ID || 0;
 
   session?.set({
     ...cookies,
     [USER_COOKIE]: userCookie,
     [SESSION_COOKIE]: sessionCookie,
+    storefrontId,
     acceptedLanguage:
       request.headers.get('Accept-Language')?.replace(/-.*/, '') || 'en',
   });
