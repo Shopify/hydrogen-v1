@@ -4989,6 +4989,25 @@ eslint-plugin-eslint-comments@^3.2.0:
     escape-string-regexp "^1.0.5"
     ignore "^5.0.5"
 
+eslint-plugin-hydrogen@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-hydrogen/-/eslint-plugin-hydrogen-0.11.0.tgz#c0e90c52c937c0daa5cbb3dec0dcdb7d7ffc7056"
+  integrity sha512-fM1KD0E9KwNOF8bGREuB7LTHoxUkb2qdmZmZErXNzbMx51HNt9CXojtGuyUdkTFt6gvYO11JDzPzVyBUyI4gxQ==
+  dependencies:
+    "@typescript-eslint/eslint-plugin" "^4.26.0"
+    "@typescript-eslint/experimental-utils" "^4.0.1"
+    "@typescript-eslint/parser" "^4.26.0"
+    "@typescript-eslint/types" "^4.20.0"
+    eslint "^7.27.0"
+    eslint-config-prettier "^8.3.0"
+    eslint-plugin-eslint-comments "^3.2.0"
+    eslint-plugin-jest "^24.3.0"
+    eslint-plugin-jsx-a11y "^6.4.0"
+    eslint-plugin-prettier "^3.4.0"
+    eslint-plugin-react "^7.24.0"
+    eslint-plugin-react-hooks "^4.2.0"
+    prettier "^2.0.0"
+
 eslint-plugin-jest@^24.3.0:
   version "24.7.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-24.7.0.tgz#206ac0833841e59e375170b15f8d0955219c4889"
@@ -12064,7 +12083,7 @@ unified-message-control@^3.0.0:
     unist-util-visit "^2.0.0"
     vfile-location "^3.0.0"
 
-unified@^9.0.0:
+unified@9.2.2, unified@^9.0.0:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/unified/-/unified-9.2.2.tgz#67649a1abfc3ab85d2969502902775eb03146975"
   integrity sha512-Sg7j110mtefBD+qunSLO1lqOEKdrwBFBrR6Qd8f4uwkhWNlbkaqwHse6e7QvD3AP/MNoJdEDLaf8OxYyoWgorQ==
