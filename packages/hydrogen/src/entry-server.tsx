@@ -299,7 +299,7 @@ async function stream(
   const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
     stripScriptsFromTemplate(template);
 
-  const {AppSSR, rscReadable, rscErrored} = buildAppSSR(
+  const {AppSSR, rscReadable, rscDidError} = buildAppSSR(
     {
       App,
       log,
@@ -324,7 +324,7 @@ async function stream(
     },
   });
 
-  let didError: Error | undefined;
+  let ssrDidError: Error | undefined;
 
   if (__WORKER__) {
     const onCompleteAll = defer<true>();
@@ -341,7 +341,7 @@ async function stream(
         bootstrapScripts,
         bootstrapModules,
         onError(error) {
-          didError = error;
+          ssrDidError = error;
 
           if (dev && !writable.closed && !!responseOptions.status) {
             writable.write(getErrorMarkup(error));
@@ -373,7 +373,7 @@ async function stream(
     function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
-        getResponseOptions(componentResponse, rscErrored ?? didError)
+        getResponseOptions(componentResponse, rscDidError ?? ssrDidError)
       );
 
       /**
@@ -394,10 +394,12 @@ async function stream(
         responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
-        if (rscErrored ?? didError) {
+        if (rscDidError ?? ssrDidError) {
           // This error was delayed until the headers were properly sent.
           writable.write(
-            encoder.encode(getErrorMarkup((rscErrored ?? didError) as Error))
+            encoder.encode(
+              getErrorMarkup((rscDidError ?? ssrDidError) as Error)
+            )
           );
         }
 
@@ -489,7 +491,7 @@ async function stream(
           response,
           componentResponse,
           log,
-          rscErrored ?? didError
+          rscDidError ?? ssrDidError
         );
 
         if (isRedirect(response)) {
@@ -501,7 +503,7 @@ async function stream(
 
         startWritingHtmlToServerResponse(
           response,
-          dev ? rscErrored ?? didError : undefined
+          dev ? rscDidError ?? ssrDidError : undefined
         );
 
         setTimeout(() => {
@@ -531,7 +533,7 @@ async function stream(
           response,
           componentResponse,
           log,
-          rscErrored ?? didError
+          rscDidError ?? ssrDidError
         );
 
         postRequestTasks(
@@ -548,7 +550,7 @@ async function stream(
 
         startWritingHtmlToServerResponse(
           response,
-          dev ? rscErrored ?? didError : undefined
+          dev ? rscDidError ?? ssrDidError : undefined
         );
 
         bufferReadableStream(rscToScriptTagReadable.getReader()).then(
@@ -572,7 +574,7 @@ async function stream(
         }
       },
       onError(error: any) {
-        didError = error;
+        ssrDidError = error;
 
         if (dev && response.headersSent) {
           // Calling write would flush headers automatically.
@@ -677,13 +679,13 @@ function buildAppSSR(
     response,
   });
 
-  let rscErrored;
+  let rscDidError;
 
   const [rscReadableForFizz, rscReadableForFlight] = rscRenderToReadableStream(
     AppRSC,
     {
       onError(e) {
-        rscErrored = e;
+        rscDidError = e;
         log.error(e);
       },
     }
@@ -712,7 +714,7 @@ function buildAppSSR(
     </Html>
   );
 
-  return {AppSSR, rscReadable: rscReadableForFlight, rscErrored};
+  return {AppSSR, rscReadable: rscReadableForFlight, rscDidError};
 }
 
 function PreloadQueries({
