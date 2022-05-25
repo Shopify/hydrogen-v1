@@ -33,7 +33,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         return await server.transformIndexHtml(url, indexHtml);
       }
 
-      await polyfillOxygenEnv(server.config);
+      await addEnvVarsToProcessEnv(server.config);
 
       // The default vite middleware rewrites the URL `/graphqil` to `/index.html`
       // By running this middleware first, we avoid that.
@@ -110,12 +110,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
   } as Plugin;
 };
 
-declare global {
-  // eslint-disable-next-line no-var
-  var Oxygen: {env: any; [key: string]: any};
-}
-
-async function polyfillOxygenEnv(config: ResolvedConfig) {
+async function addEnvVarsToProcessEnv(config: ResolvedConfig) {
   const env = await loadEnv(config.mode, config.root, '');
 
   const publicPrefixes = Array.isArray(config.envPrefix)
@@ -128,7 +123,7 @@ async function polyfillOxygenEnv(config: ResolvedConfig) {
     }
   }
 
-  globalThis.Oxygen = {env};
+  process.env = env;
 }
 
 async function findHydrogenConfigPath(root: string, userProvidedPath?: string) {
