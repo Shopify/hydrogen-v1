@@ -3,7 +3,7 @@ import {stringify} from 'worktop/cookie';
 import {Cookie} from '../../../Cookie/Cookie';
 import {ClientAnalytics} from '../../index';
 import {buildUUID, addDataIf} from './utils';
-import {SESSION_COOKIE, USER_COOKIE} from './const';
+import {SHOPIFY_S, SHOPIFY_Y} from './const';
 
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
@@ -15,49 +15,53 @@ let microSessionCount = 0;
 
 export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
   useEffect(() => {
-    // Find our session cookie
-    const sessionCookie = new Cookie(cookieName);
-    const cookieData = sessionCookie.parse(document.cookie);
+    try {
+      // Find our session cookie
+      const sessionCookie = new Cookie(cookieName);
+      const cookieData = sessionCookie.parse(document.cookie);
 
-    /**
-     * Set user and session cookies and refresh the expiry time
-     *
-     * Hydrogen page navigation done by a fetch API. However, multiple set-cookie
-     * headers or a single set-cookie header with multiple cookies does not work
-     * with fetch API.
-     *
-     * We are storing all cookie values inside a single cookie and restore it on
-     * the client side with the expected expiry
-     */
-    updateCookie(USER_COOKIE, cookieData[USER_COOKIE], longTermLength);
-    updateCookie(SESSION_COOKIE, cookieData[SESSION_COOKIE], shortTermLength);
+      /**
+       * Set user and session cookies and refresh the expiry time
+       *
+       * Hydrogen page navigation done by a fetch API. However, multiple set-cookie
+       * headers or a single set-cookie header with multiple cookies does not work
+       * with fetch API.
+       *
+       * We are storing all cookie values inside a single cookie and restore it on
+       * the client side with the expected expiry
+       */
+      updateCookie(SHOPIFY_Y, cookieData[SHOPIFY_Y], longTermLength);
+      updateCookie(SHOPIFY_S, cookieData[SHOPIFY_S], shortTermLength);
 
-    ClientAnalytics.pushToPageAnalyticsData({
-      shopify: {
-        pageId: buildUUID(),
-        userId: cookieData[USER_COOKIE],
-        sessionId: cookieData[SESSION_COOKIE],
-        storefrontId: cookieData['storefrontId'],
-        acceptedLanguage: cookieData['acceptedLanguage'],
-      },
-    });
+      ClientAnalytics.pushToPageAnalyticsData({
+        shopify: {
+          pageId: buildUUID(),
+          userId: cookieData[SHOPIFY_Y],
+          sessionId: cookieData[SHOPIFY_S],
+          storefrontId: cookieData['storefrontId'],
+          acceptedLanguage: cookieData['acceptedLanguage'],
+        },
+      });
 
-    microSessionCount = 0;
+      microSessionCount = 0;
 
-    // TODO: Fix with useEvent when ready
-    // RFC: https://github.com/reactjs/rfcs/blob/useevent/text/0000-useevent.md
-    if (!isInit) {
-      isInit = true;
+      // TODO: Fix with useEvent when ready
+      // RFC: https://github.com/reactjs/rfcs/blob/useevent/text/0000-useevent.md
+      if (!isInit) {
+        isInit = true;
 
-      const eventNames = ClientAnalytics.eventNames;
+        const eventNames = ClientAnalytics.eventNames;
 
-      ClientAnalytics.subscribe(eventNames.PAGE_VIEW, trackPageView);
+        ClientAnalytics.subscribe(eventNames.PAGE_VIEW, trackPageView);
 
-      // On a slow network, the pageview event could be already fired before
-      // we subscribed to the pageview event
-      if (ClientAnalytics.hasSentPageView) {
-        trackPageView(ClientAnalytics.getPageAnalyticsData());
+        // On a slow network, the pageview event could be already fired before
+        // we subscribed to the pageview event
+        if (ClientAnalytics.hasSentPageView) {
+          trackPageView(ClientAnalytics.getPageAnalyticsData());
+        }
       }
+    } catch (err) {
+      console.log(err);
     }
   });
 
@@ -222,6 +226,7 @@ function sendToServer(data: any) {
         body: JSON.stringify(batchedDataToBeSent),
       });
     } catch (error) {
+      console.log(error);
       // Fallback to client-side
       // fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
       //   method: 'post',

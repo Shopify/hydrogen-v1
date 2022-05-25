@@ -1,5 +1,5 @@
-export const USER_COOKIE = '_shopify_y';
-export const SESSION_COOKIE = '_shopify_s';
+export const SHOPIFY_Y = '_shopify_y';
+export const SHOPIFY_S = '_shopify_s';
 
 // Shopify analytics constants
 const article = 'article';
