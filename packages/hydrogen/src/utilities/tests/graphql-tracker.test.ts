@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import {gql} from '../graphql-tag';
 import {injectGraphQLTracker, TIMEOUT_MS} from '../graphql-tracker';
 
 const query = gql`
