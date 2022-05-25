@@ -364,7 +364,7 @@ async function stream(
     });
 
     /* eslint-disable no-inner-declarations */
-    async function prepareForStreaming(flush: boolean) {
+    function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
         getResponseOptions(componentResponse, didError)
@@ -399,7 +399,7 @@ async function stream(
     /* eslint-enable no-inner-declarations */
 
     const shouldReturnApp =
-      (await prepareForStreaming(componentResponse.canStream())) ??
+      prepareForStreaming(componentResponse.canStream()) ??
       (await onCompleteAll.promise.then(prepareForStreaming));
 
     if (shouldReturnApp) {
@@ -498,7 +498,7 @@ async function stream(
           return response.write(chunk);
         });
       },
-      async onAllReady() {
+      onAllReady() {
         log.trace('node complete stream');
 
         if (componentResponse.canStream() || response.writableEnded) {
