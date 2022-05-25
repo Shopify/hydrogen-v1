@@ -10,10 +10,8 @@
     "preview": "shopify hydrogen preview",
     "lint": "npm-run-all lint:*",
     "lint:js": "eslint --resolve-plugins-relative-to . --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src",
-    "build:server": "shopify hydrogen build --target node",
-    "serve": "node --enable-source-maps dist/node",
     "test": "WATCH=true vitest",
-    "test:ci": "yarn build:server && vitest run"
+    "test:ci": "yarn build --target node && vitest run"
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
