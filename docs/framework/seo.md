@@ -14,7 +14,7 @@ Hydrogen includes an [`Seo`](https://shopify.dev/api/hydrogen/components/primiti
 
 - [`Sitemap.xml.server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.js): A file that generates all products, collections, and pages URLs using the Storefront API
 
-- [`Robots.txt.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
+- [`Robots.txt.server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
 
 ### `Seo` client component
 
