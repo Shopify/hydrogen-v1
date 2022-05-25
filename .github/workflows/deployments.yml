@@ -41,8 +41,7 @@ jobs:
       - name: Build for workers
         working-directory: ./templates/template-hydrogen-default
         run: |
-          yarn build:client
-          yarn cross-env WORKER=true vite build --outDir dist/worker --ssr worker
+          yarn shopify hydrogen build
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@1.3.0
@@ -84,8 +83,7 @@ jobs:
       - name: Build for Netlify Functions
         working-directory: ./templates/template-hydrogen-default
         run: |
-          yarn build:client
-          yarn cross-env WORKER=true vite build --ssr @netlify/hydrogen-platform/handler
+          yarn shopify hydrogen build --target worker --entry @netlify/hydrogen-platform/handler
 
       - name: Install Netlify CLI
         run: |

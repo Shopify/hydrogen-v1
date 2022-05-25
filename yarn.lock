@@ -1882,10 +1882,33 @@
     prettier "^2.6.1"
     vite "^2.9.6"
 
+"@shopify/cli-hydrogen@latest":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@shopify/cli-hydrogen/-/cli-hydrogen-2.0.13.tgz#5e596d67ebb552ec4ea738be7c5ef7d198cfb948"
+  integrity sha512-4mZydExroRinj5IgOVtplcXj4kOcgT0Sgs3Erg4Es+fE4GaI546wBF80DK0uvG1XfD8o2Uj8OkYkFysuPYARjA==
+  dependencies:
+    "@oclif/core" "1.7.0"
+    "@shopify/mini-oxygen" "^0.0.5"
+    "@types/prettier" "^2.4.4"
+    prettier "^2.6.1"
+    vite "^2.9.6"
+
 "@shopify/cli-kit@2.0.10":
   version "2.0.10"
   resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-2.0.10.tgz#584ca98002b4613216b7b144cf7ac454cdb30941"
   integrity sha512-k8Ub4w4j7FN7ziveCEqSnNd8pcbEh8vMCAR9gznwS53a3TJLHxUtzz7Xk2V7v1fG+LSuQhx2Ie5QZvxehRrWLg==
+  dependencies:
+    "@oclif/core" "1.7.0"
+    envfile "^6.17.0"
+    keytar "^7.9.0"
+    open "^8.4.0"
+    source-map-support "^0.5.21"
+    stacktracey "^2.1.8"
+
+"@shopify/cli-kit@2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-2.0.13.tgz#9a6f0a0c935f4f684a49309ff7f3f81e5e63ceb5"
+  integrity sha512-yuUGO9fj2+FsjZYa67diAsw8ZvVYd/LKHicFiTLvCbrkRmNUl24LvkR6Ob98xfmsF6j2/jKxNvyYPq8dQLaOQg==
   dependencies:
     "@oclif/core" "1.7.0"
     envfile "^6.17.0"
@@ -1904,6 +1927,18 @@
     "@oclif/plugin-help" "^5.1.12"
     "@oclif/plugin-plugins" "^2.1.0"
     "@shopify/cli-kit" "2.0.10"
+    "@shopify/plugin-ngrok" "^0.2.4"
+
+"@shopify/cli@latest":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-2.0.13.tgz#0516caf0bb09f60a5723f9980381962f2dfbd244"
+  integrity sha512-z6wjwnAmB3bXrI6UOixdhSXGAlmrwxJLpsapDEabRYRaGxp4rhUI0X5s07bl2ZLTBFpMqpwB9yRg/rw4i/bKvw==
+  dependencies:
+    "@bugsnag/js" "^7.16.2"
+    "@oclif/core" "1.7.0"
+    "@oclif/plugin-help" "^5.1.12"
+    "@oclif/plugin-plugins" "^2.1.0"
+    "@shopify/cli-kit" "2.0.13"
     "@shopify/plugin-ngrok" "^0.2.4"
 
 "@shopify/mini-oxygen@^0.0.5":
