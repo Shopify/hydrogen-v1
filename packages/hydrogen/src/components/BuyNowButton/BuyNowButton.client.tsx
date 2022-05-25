@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback, MouseEvent} from 'react';
 import type {ReactNode} from 'react';
 import {useInstantCheckout} from '../CartProvider';
 
@@ -7,6 +7,8 @@ interface BuyNowButtonProps {
   quantity?: number;
   /** The ID of the variant. */
   variantId: string;
+  /** A click event handler. Default behaviour triggers unless prevented */
+  onClick?: (event?: MouseEvent) => void | boolean;
   /** An array of cart line attributes that belong to the item being added to the cart. */
   attributes?: {
     key: string;
@@ -26,8 +28,14 @@ export function BuyNowButton(
   const {createInstantCheckout, checkoutUrl} = useInstantCheckout();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const {quantity, variantId, attributes, children, ...passthroughProps} =
-    props;
+  const {
+    quantity,
+    variantId,
+    onClick,
+    attributes,
+    children,
+    ...passthroughProps
+  } = props;
 
   useEffect(() => {
     if (checkoutUrl) {
@@ -35,18 +43,25 @@ export function BuyNowButton(
     }
   }, [checkoutUrl]);
 
-  const handleBuyNow = useCallback(() => {
-    setLoading(true);
-    createInstantCheckout({
-      lines: [
-        {
-          quantity: quantity ?? 1,
-          merchandiseId: variantId,
-          attributes,
-        },
-      ],
-    });
-  }, [setLoading, createInstantCheckout, quantity, variantId, attributes]);
+  const handleBuyNow = useCallback(
+    (event?: MouseEvent) => {
+      if (onClick) {
+        const clickShouldContinue = onClick(event);
+        if (clickShouldContinue === false || event?.defaultPrevented) return;
+      }
+      setLoading(true);
+      createInstantCheckout({
+        lines: [
+          {
+            quantity: quantity ?? 1,
+            merchandiseId: variantId,
+            attributes,
+          },
+        ],
+      });
+    },
+    [onClick, createInstantCheckout, quantity, variantId, attributes]
+  );
 
   return (
     <button

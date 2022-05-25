@@ -28,17 +28,17 @@ describe('BuyNowButton', () => {
 
   it('renders a button', () => {
     const component = mountWithProviders(
-      <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
+      <BuyNowButton variantId="1">Buy now</BuyNowButton>
     );
     expect(component).toContainReactComponent('button', {
-      children: 'Add to Cart',
+      children: 'Buy now',
     });
   });
 
   it('can optionally disable the button', () => {
     const component = mountWithProviders(
       <BuyNowButton disabled={true} variantId="1">
-        Add to Cart
+        Buy now
       </BuyNowButton>
     );
 
@@ -50,7 +50,7 @@ describe('BuyNowButton', () => {
   it('allows pass-through props', () => {
     const component = mountWithProviders(
       <BuyNowButton className="fancy-button" variantId="1">
-        Add to Cart
+        Buy now
       </BuyNowButton>
     );
 
@@ -70,7 +70,7 @@ describe('BuyNowButton', () => {
           quantity={4}
           variantId="SKU123"
         >
-          Add to Cart
+          Buy now
         </BuyNowButton>
       );
 
@@ -95,7 +95,7 @@ describe('BuyNowButton', () => {
 
     it('disables the button', () => {
       const component = mountWithProviders(
-        <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
+        <BuyNowButton variantId="1">Buy now</BuyNowButton>
       );
 
       expect(component).toContainReactComponent('button', {
@@ -133,12 +133,74 @@ describe('BuyNowButton', () => {
     });
 
     it('redirects to checkout', () => {
-      mountWithProviders(
-        <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
-      );
+      mountWithProviders(<BuyNowButton variantId="1">Buy now</BuyNowButton>);
 
       expect(mockSetHref).toHaveBeenCalledTimes(1);
       expect(mockSetHref).toHaveBeenCalledWith('/checkout?id=123');
+    });
+  });
+
+  describe('given an on click event handler', () => {
+    it('calls the on click event handler', () => {
+      const mockOnClick = jest.fn();
+      const component = mountWithProviders(
+        <BuyNowButton onClick={mockOnClick} variantId="1">
+          Buy now
+        </BuyNowButton>
+      );
+
+      component.find('button')?.trigger('onClick');
+
+      expect(mockOnClick).toBeCalled();
+    });
+
+    it('calls the default behaviour of create instant checkout', () => {
+      const mockOnClick = jest.fn();
+      const component = mountWithProviders(
+        <BuyNowButton onClick={mockOnClick} variantId="1">
+          Buy now
+        </BuyNowButton>
+      );
+
+      component.find('button')?.trigger('onClick');
+
+      expect(mockCreateInstantCheckout).toBeCalled();
+    });
+
+    describe('and event preventDefault is called', () => {
+      it('calls the on click event handler without calling the default behaviour of creating instant checkout', () => {
+        const mockOnClick = jest.fn((event) => {
+          event.preventDefault();
+        });
+        const component = mountWithProviders(
+          <BuyNowButton onClick={mockOnClick} variantId="1">
+            Buy now
+          </BuyNowButton>
+        );
+
+        component
+          .find('button')
+          ?.trigger('onClick', new MouseEvent('click', {cancelable: true}));
+
+        expect(mockOnClick).toBeCalled();
+        expect(mockCreateInstantCheckout).not.toBeCalled();
+      });
+    });
+
+    describe('and the on click handler returns false', () => {
+      it('calls the on click event handler without calling the default behaviour of add lines', () => {
+        const mockOnClick = jest.fn(() => false);
+        const component = mountWithProviders(
+          <BuyNowButton onClick={mockOnClick} variantId="1">
+            Buy now
+          </BuyNowButton>
+        );
+
+        component.find('button')?.trigger('onClick');
+
+        expect(mockOnClick).toBeCalled();
+        expect(mockCreateInstantCheckout).not.toBeCalled();
+      });
     });
   });
 });
