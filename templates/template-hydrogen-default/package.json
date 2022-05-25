@@ -13,7 +13,7 @@
     "build:server": "shopify hydrogen build --target node",
     "serve": "node --enable-source-maps dist/node",
     "test": "WATCH=true vitest",
-    "test:ci": "yarn build && vitest run"
+    "test:ci": "yarn build:server && vitest run"
   },
   "prettier": "@shopify/prettier-config",
   "devDependencies": {
