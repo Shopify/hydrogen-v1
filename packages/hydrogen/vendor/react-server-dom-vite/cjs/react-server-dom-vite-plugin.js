@@ -93,6 +93,7 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
 }
 
 var rscViteFileRE = /\/react-server-dom-vite.js/;
+var noProxyRE = /[&?]no-proxy($|&)/;
 function ReactFlightVitePlugin() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref$isServerComponen = _ref.isServerComponentImporterAllowed,
@@ -161,7 +162,23 @@ function ReactFlightVitePlugin() {
     },
     load: function (id) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      return options.ssr && shouldCheckClientComponent(id) ? wrapIfClientComponent(id) : null;
+      if (!options.ssr || !shouldCheckClientComponent(id)) return;
+
+      if (server) {
+        var mod = server.moduleGraph.idToModuleMap.get(id.replace('/@fs', ''));
+
+        if (mod && mod.importers) {
+          if (Array.from(mod.importers).every(function (impMod) {
+            return noProxyRE.test(impMod.id);
+          })) {
+            // This module is only imported from client components
+            // so we don't need to create a module reference
+            return;
+          }
+        }
+      }
+
+      return wrapIfClientComponent(id);
     },
     transform: function (code, id) {
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -284,7 +301,7 @@ async function proxyClientComponent(filepath, src) {
 }
 
 function shouldCheckClientComponent(id) {
-  return /\.[jt]sx?($|\?)/.test(id) && !/[&?]no-proxy($|&)/.test(id);
+  return /\.[jt]sx?($|\?)/.test(id) && !noProxyRE.test(id);
 }
 
 function findClientComponentsForDev(server) {
