@@ -24,24 +24,12 @@ The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templa
 
 ## Retrieve a customer access token
 
-You can use the [`useCustomer`](https://shopify.dev/api/hydrogen/hooks/global/usecustomer) hook to retrieve the customer access token within the current session. Use the `customerAccessToken` prop in the [`CartProvider`](https://shopify.dev/api/hydrogen/components/cart/cartprovider) component to associate a cart with the logged in user:
+You can retrieve a customer access token using the [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession) hook:
 
-{% codeblock file, filename: "App.server.js" %}
+{% codeblock file, filename: 'component.server.jsx' %}
 
-```jsx
-import {ShopifyProvider, CartProvider, useCustomer} from '@shopify/hydrogen';
-import {Suspense} from 'react';
-export function App() {
-  const {customerAccessToken} = useCustomer();
-  return (
-    <Suspense fallback="Loading...">
-      <ShopifyProvider>
-        <CartProvider customerAccessToken={customerAccessToken}>
-        ...
-      </ShopifyProvider>
-    </Suspense>
-  );
-}
+```js
+const { customerAccessToken } = useSession()
 ```
 
 {% endcodeblock %}
@@ -61,7 +49,7 @@ Pages that require authentication shouldn't be indexed by bots. For example, bot
 ## Related components and hooks
 
 - [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo)
-- [`useCustomer`](https://shopify.dev/api/hydrogen/hooks/global/usecustomer)
+- [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession)
 
 ## Next steps
 
