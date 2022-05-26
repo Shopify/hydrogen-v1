@@ -4,8 +4,8 @@ import {
   flattenConnection,
   LocalizationProvider,
   CacheHours,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 import Header from './Header.client';
 import Footer from './Footer.server';

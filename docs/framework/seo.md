@@ -12,9 +12,9 @@ Hydrogen includes an [`Seo`](https://shopify.dev/api/hydrogen/components/primiti
 
 - [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
 
-- [`Sitemap.xml.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.jsx): A file that generates all products, collections, and pages URLs using the Storefront API
+- [`Sitemap.xml.server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.js): A file that generates all products, collections, and pages URLs using the Storefront API
 
-- [`Robots.txt.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
+- [`Robots.txt.server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
 
 ### `Seo` client component
 
@@ -154,9 +154,21 @@ Hydrogen supports SEO by inspecting the `user-agent` for every request, and buff
 
 To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?\_bot` query parameter at the end of the webpage's URL.
 
+## Removing SEO with noindex
+
+Pages that require authentication shouldn't be indexed by bots. For example, bots shouldn't index login and account pages. You can tell bots to not index a page by passing `noindex` to the `Seo` component:
+
+{% codeblock file, filename: '/account/login.server.jsx' %}
+
+```jsx
+<Seo type="noindex" data={% raw %}{{title: 'Login'}}{% endraw %} />
+```
+
+{% endcodeblock %}
+
 ## Limitations and considerations
 
-The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Demo Store template:
+The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.js) that's included in the Demo Store template:
 
 - The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](https://shopify.dev/api/usage/pagination-graphql) if your store has more than 250 resources.
 
