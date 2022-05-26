@@ -1,9 +1,14 @@
 import React from 'react';
-import {MoneyV2, UnitPriceMeasurement} from '../../storefront-api-types';
+import type {
+  MoneyV2,
+  UnitPriceMeasurement,
+  Product,
+} from '../../storefront-api-types';
 import {Money} from '../Money';
-import {useProduct} from '../ProductProvider';
+import type {PartialDeep} from 'type-fest';
 
 export interface ProductPriceProps {
+  data: PartialDeep<Product>;
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
   priceType?: 'regular' | 'compareAt';
   /** The type of value. Valid values: `min` (default), `max` or `unit`. */
@@ -16,15 +21,15 @@ export interface ProductPriceProps {
  * The `ProductPrice` component renders a `Money` component with the product
  * [`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
  */
-export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
+export function ProductPrice(
   props: Omit<React.ComponentProps<typeof Money>, 'data' | 'measurement'> &
     ProductPriceProps
 ) {
-  const product = useProduct();
   const {
     priceType = 'regular',
     variantId,
     valueType = 'min',
+    data: product,
     ...passthroughProps
   } = props;
 
@@ -36,7 +41,8 @@ export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
   let measurement: Partial<UnitPriceMeasurement> | undefined | null;
 
   const variant = variantId
-    ? product?.variants?.find((variant) => variant?.id === variantId)
+    ? product?.variants?.nodes?.find((variant) => variant?.id === variantId) ??
+      null
     : null;
 
   if (priceType === 'compareAt') {

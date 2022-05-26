@@ -2,7 +2,6 @@ import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {Money} from '../../Money';
-import {ProductProvider} from '../../ProductProvider';
 import {ProductPrice} from '../ProductPrice.client';
 
 describe('<ProductPrice />', () => {
@@ -11,10 +10,7 @@ describe('<ProductPrice />', () => {
       const product = getProduct();
       const variant = product?.variants?.edges?.[0]?.node;
       const price = mountWithProviders(
-        // @ts-ignore the mock data doesn't match exactly
-        <ProductProvider data={product} initialVariantId="">
-          <ProductPrice variantId={variant?.id} />
-        </ProductProvider>
+        <ProductPrice data={product} variantId={variant?.id} />
       );
 
       expect(price).toContainReactComponent(Money, {
@@ -26,10 +22,11 @@ describe('<ProductPrice />', () => {
       const product = getProduct();
       const variant = product?.variants?.edges?.[0]?.node;
       const price = mountWithProviders(
-        // @ts-ignore the mock data doesn't match exactly
-        <ProductProvider data={product} initialVariantId="">
-          <ProductPrice priceType="compareAt" variantId={variant?.id} />
-        </ProductProvider>
+        <ProductPrice
+          data={product}
+          priceType="compareAt"
+          variantId={variant?.id}
+        />
       );
 
       expect(price).toContainReactComponent(Money, {
@@ -41,10 +38,7 @@ describe('<ProductPrice />', () => {
       const product = getProduct();
       const variant = product?.variants?.edges?.[0]?.node;
       const component = mountWithProviders(
-        // @ts-ignore mock data doesn't match exactly
-        <ProductProvider data={product}>
-          <ProductPrice valueType="unit" variantId={variant?.id} />
-        </ProductProvider>
+        <ProductPrice data={product} valueType="unit" variantId={variant?.id} />
       );
 
       expect(component).toContainReactComponent(Money, {
@@ -56,12 +50,7 @@ describe('<ProductPrice />', () => {
 
   it("renders <Money /> with the product's minimum regular price by default", () => {
     const product = getProduct();
-    const price = mountWithProviders(
-      // @ts-ignore the mock data doesn't match exactly
-      <ProductProvider data={product} initialVariantId="">
-        <ProductPrice />
-      </ProductProvider>
-    );
+    const price = mountWithProviders(<ProductPrice data={product} />);
 
     expect(price).toContainReactComponent(Money, {
       data: product.priceRange.minVariantPrice,
@@ -71,10 +60,7 @@ describe('<ProductPrice />', () => {
   it("renders <Money /> with the product's maximum regular price when `valueType` is `max`", () => {
     const product = getProduct();
     const price = mountWithProviders(
-      // @ts-ignore the mock data doesn't match exactly
-      <ProductProvider data={product} initialVariantId="">
-        <ProductPrice valueType="max" />
-      </ProductProvider>
+      <ProductPrice data={product} valueType="max" />
     );
 
     expect(price).toContainReactComponent(Money, {
@@ -85,10 +71,7 @@ describe('<ProductPrice />', () => {
   it("renders <Money /> with the product's minimum compareAt price when the `priceType` is `compareAt`", () => {
     const product = getProduct();
     const price = mountWithProviders(
-      // @ts-ignore the mock data doesn't match exactly
-      <ProductProvider data={product} initialVariantId="">
-        <ProductPrice priceType="compareAt" />
-      </ProductProvider>
+      <ProductPrice data={product} priceType="compareAt" />
     );
 
     expect(price).toContainReactComponent(Money, {
@@ -99,10 +82,7 @@ describe('<ProductPrice />', () => {
   it("renders <Money /> with the product's maximum compareAt price when `valueType` is `max` and `priceType` is `compareAt`", () => {
     const product = getProduct();
     const price = mountWithProviders(
-      // @ts-ignore the mock data doesn't match exactly
-      <ProductProvider data={product} initialVariantId="">
-        <ProductPrice valueType="max" priceType="compareAt" />
-      </ProductProvider>
+      <ProductPrice data={product} valueType="max" priceType="compareAt" />
     );
 
     expect(price).toContainReactComponent(Money, {
@@ -111,11 +91,9 @@ describe('<ProductPrice />', () => {
   });
 
   it('supports passthrough props', () => {
+    const product = getProduct();
     const price = mountWithProviders(
-      // @ts-ignore the mock data doesn't match exactly
-      <ProductProvider data={getProduct()} initialVariantId="">
-        <ProductPrice className="emphasized" />
-      </ProductProvider>
+      <ProductPrice data={product} className="emphasized" />
     );
 
     expect(price).toContainReactComponent(Money, {

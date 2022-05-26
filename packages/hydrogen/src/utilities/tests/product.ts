@@ -10,7 +10,9 @@ import {
 import {getRawMetafield} from './metafields';
 import type {PartialDeep} from 'type-fest';
 
-export function getProduct(product: PartialDeep<ProductType> = {}) {
+export function getProduct(
+  product: PartialDeep<ProductType> = {}
+): ProductType {
   return {
     id: product.id ?? faker.datatype.uuid(),
     handle: product.handle ?? faker.random.word(),
