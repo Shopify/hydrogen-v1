@@ -6,7 +6,6 @@ import {
   ShopifyProvider,
   PerformanceMetrics,
   PerformanceMetricsDebug,
-  useCustomer,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import DefaultSeo from './components/DefaultSeo.server';
@@ -15,8 +14,6 @@ import LoadingFallback from './components/LoadingFallback';
 import ServerCartProvider from './components/ServerCartProvider.server';
 
 function App() {
-  const {customerAccessToken} = useCustomer();
-
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
