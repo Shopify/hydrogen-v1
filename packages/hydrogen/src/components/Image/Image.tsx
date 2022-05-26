@@ -116,13 +116,17 @@ function ShopifyImage({
     });
   }
 
+  // determining what the intended width of the image is. For example, if the width is specified and lower than the image width, then that is the maximum image width
+  // to prevent generating a srcset with widths bigger than needed or to generate images that would distort because of being larger than original
+  const maxWidth =
+    width && finalWidth && width < finalWidth ? width : finalWidth;
   const finalSrcset =
     rest.srcSet ??
     internalImageSrcSet({
       ...loaderOptions,
       widths,
       src: data.url,
-      width: finalWidth,
+      width: maxWidth,
       loader,
     });
 
