@@ -18,19 +18,23 @@ export default function Page({params}) {
     variables: {language: languageCode, handle},
   });
 
+  useServerAnalytics(
+    data.pageByHandle
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.page,
+            resourceType: ShopifyAnalyticsConstants.resourceType.page,
+            resourceId: data.pageByHandle.id,
+          },
+        }
+      : null,
+  );
+
   if (!data.pageByHandle) {
     return <NotFound />;
   }
 
   const page = data.pageByHandle;
-
-  useServerAnalytics({
-    shopify: {
-      pageType: ShopifyAnalyticsConstants.pageType.page,
-      resourceType: ShopifyAnalyticsConstants.resourceType.page,
-      resourceId: page.id,
-    },
-  });
 
   return (
     <Layout>

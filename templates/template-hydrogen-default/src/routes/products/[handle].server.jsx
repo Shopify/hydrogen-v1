@@ -31,17 +31,21 @@ export default function Product() {
     preload: true,
   });
 
+  useServerAnalytics(
+    product
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.product,
+            resourceType: ShopifyAnalyticsConstants.resourceType.product,
+            resourceId: product.id,
+          },
+        }
+      : null,
+  );
+
   if (!product) {
     return <NotFound />;
   }
-
-  useServerAnalytics({
-    shopify: {
-      pageType: ShopifyAnalyticsConstants.pageType.product,
-      resourceType: ShopifyAnalyticsConstants.resourceType.product,
-      resourceId: product.id,
-    },
-  });
 
   return (
     <Layout>

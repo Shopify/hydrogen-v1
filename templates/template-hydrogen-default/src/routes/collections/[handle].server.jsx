@@ -30,17 +30,21 @@ export default function Collection({collectionProductCount = 24, params}) {
     preload: true,
   });
 
+  useServerAnalytics(
+    data?.collection
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.collection,
+            resourceType: ShopifyAnalyticsConstants.resourceType.collection,
+            resourceId: data.collection.id,
+          },
+        }
+      : null,
+  );
+
   if (data?.collection == null) {
     return <NotFound />;
   }
-
-  useServerAnalytics({
-    shopify: {
-      pageType: ShopifyAnalyticsConstants.pageType.collection,
-      resourceType: ShopifyAnalyticsConstants.resourceType.collection,
-      resourceId: data.collection.id,
-    },
-  });
 
   const collection = data.collection;
   const products = flattenConnection(collection.products);
