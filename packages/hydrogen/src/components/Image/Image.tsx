@@ -67,7 +67,7 @@ export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
    */
   src?: never;
   /**
-   * `widths` An array of pixel widths to overwrite the default generated srcset. For example, `[300, 600, 800]`.
+   * An array of pixel widths to overwrite the default generated srcset. For example, `[300, 600, 800]`.
    */
   widths?: (HtmlImageProps['width'] | ImageType['width'])[];
 };
