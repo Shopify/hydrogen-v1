@@ -5,16 +5,16 @@ import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
 
 type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
-type ImageProps<GenericLoaderOpts> = Simplify<
-  ShopifyImageProps | ExternalImageProps<GenericLoaderOpts>
->;
+type ImageProps<GenericLoaderOpts> =
+  | ShopifyImageProps
+  | ExternalImageProps<GenericLoaderOpts>;
 
 export function Image<GenericLoaderOpts>(props: ImageProps<GenericLoaderOpts>) {
   if (!props.data && !props.src) {
     throw new Error(`<Image/>: requires either a 'data' or 'src' prop.`);
   }
 
-  if (props.data && props.src) {
+  if (import.meta.env.DEV && props.data && props.src) {
     console.warn(
       `<Image/>: using both 'data' and 'src' props is not supported; using the 'data' prop by default`
     );
@@ -44,7 +44,7 @@ export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
    * The `data` prop is required if `src` isn't used, but both props shouldn't be used
    * at the same time. If both `src` and `data` are passed, then `data` takes priority.
    */
-  data: PartialDeep<ImageType>;
+  data: SetRequired<PartialDeep<ImageType>, 'url'>;
   /** A custom function that generates the image URL. Parameters passed in
    * are either `ShopifyLoaderParams` if using the `data` prop, or the
    * `LoaderOptions` object that you pass to `loaderOptions`.
@@ -77,11 +77,11 @@ function ShopifyImage({
     throw new Error(`<Image/>: the 'data' prop requires the 'url' property`);
   }
 
-  if (!data.altText && !rest.alt) {
+  if (import.meta.env.DEV && !data.altText && !rest.alt) {
     console.warn(
-      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${
-        data.id ? `Image ID: ${data.id}` : ''
-      }`
+      `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${`Image: ${
+        data.id ?? data.url
+      }`}`
     );
   }
 
@@ -90,9 +90,11 @@ function ShopifyImage({
     loaderOptions
   );
 
-  if (!finalWidth || !finalHeight) {
+  if ((import.meta.env.DEV && !finalWidth) || !finalHeight) {
     console.warn(
-      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties`
+      `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${
+        data.id ?? data.url
+      }`}`
     );
   }
 
@@ -105,6 +107,13 @@ function ShopifyImage({
       width: finalWidth,
       height: finalHeight,
     });
+    if (typeof finalSrc !== 'string' || !finalSrc) {
+      throw new Error(
+        `<Image/>: 'loader' did not return a valid string. ${`Image: ${
+          data.id ?? data.url
+        }`}`
+      );
+    }
   }
 
   /* eslint-disable hydrogen/prefer-image-component */
@@ -148,7 +157,7 @@ type LoaderProps<GenericLoaderOpts> = {
 };
 type ExternalImageProps<GenericLoaderOpts> = SetRequired<
   HtmlImageProps,
-  'src' | 'width' | 'height'
+  'src' | 'width' | 'height' | 'alt'
 > & {
   /** A custom function that generates the image URL. Parameters passed in
    * are either `ShopifyLoaderParams` if using the `data` prop, or the
@@ -185,9 +194,9 @@ function ExternalImage<GenericLoaderOpts>({
     );
   }
 
-  if (!alt) {
+  if (import.meta.env.DEV && !alt) {
     console.warn(
-      `<Image/>: when 'src' is provided, 'alt' should also be provided`
+      `<Image/>: when 'src' is provided, 'alt' should also be provided. ${`Image: ${src}`}`
     );
   }
 
