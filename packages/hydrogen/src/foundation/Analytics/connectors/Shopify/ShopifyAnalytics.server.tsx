@@ -19,7 +19,7 @@ export function ShopifyAnalytics({
     ...cookies,
     [SHOPIFY_Y]: (cookies && cookies[SHOPIFY_Y]) || buildUUID(),
     [SHOPIFY_S]: (cookies && cookies[SHOPIFY_S]) || buildUUID(),
-    storefrontId: Oxygen.env.SHOPIFY_STOREFRONT_ID || 0,
+    storefrontId: globalThis.Oxygen?.env?.SHOPIFY_STOREFRONT_ID || '0',
     acceptedLanguage:
       request.headers.get('Accept-Language')?.replace(/-.*/, '') || 'en',
   });
