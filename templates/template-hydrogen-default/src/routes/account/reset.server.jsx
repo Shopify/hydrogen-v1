@@ -1,5 +1,4 @@
-import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {NoStore, setCustomerAccessToken, gql} from '@shopify/hydrogen';
 
 /**
  * This API route is used by the form on `/account/reset/[id]/[resetToken]`

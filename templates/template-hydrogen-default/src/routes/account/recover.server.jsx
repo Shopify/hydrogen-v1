@@ -1,5 +1,4 @@
-import {NoStore, Seo} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {NoStore, Seo, gql} from '@shopify/hydrogen';
 
 import Layout from '../../components/Layout.server';
 import AccountRecoverForm from '../../components/account/AccountRecoverForm.client';

@@ -4,8 +4,8 @@ import {
   NoStore,
   setCustomerAccessToken,
   Seo,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 import Layout from '../../components/Layout.server';
 import LoginForm from '../../components/account/LoginForm.client';

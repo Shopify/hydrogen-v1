@@ -1,5 +1,10 @@
-import {Seo, useShopQuery, NoStore, flattenConnection} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {
+  Seo,
+  useShopQuery,
+  NoStore,
+  flattenConnection,
+  gql,
+} from '@shopify/hydrogen';
 
 import Layout from '../Layout.server';
 import LogoutButton from './LogoutButton.client';
