@@ -77,8 +77,6 @@ function updateCookie(cookieName: string, value: string, maxage: number) {
     path: '/',
   });
 
-  console.log(cookieString);
-
   document.cookie = cookieString;
   return cookieString;
 }

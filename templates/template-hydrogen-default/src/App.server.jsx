@@ -14,7 +14,7 @@ import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
 import CartProvider from './components/CartProvider.client';
 
-function App({request}) {
+function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
@@ -27,7 +27,7 @@ function App({request}) {
         </CartProvider>
         <PerformanceMetrics />
         {import.meta.env.LOCAL_DEV && <PerformanceMetricsDebug />}
-        <ShopifyAnalytics request={request} cookieName="__session" />
+        <ShopifyAnalytics cookieName="__session" />
       </ShopifyProvider>
     </Suspense>
   );

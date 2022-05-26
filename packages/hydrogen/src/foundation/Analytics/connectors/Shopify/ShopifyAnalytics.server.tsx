@@ -1,17 +1,12 @@
 import React from 'react';
-import {ServerComponentRequest} from '../../../../framework/Hydration/ServerComponentRequest.server';
 import AnalyticsErrorBoundary from '../../../AnalyticsErrorBoundary.client';
+import {useServerRequest} from '../../../ServerRequestProvider';
 import {SHOPIFY_S, SHOPIFY_Y} from './const';
 import {ShopifyAnalyticsClient} from './ShopifyAnalytics.client';
 import {buildUUID} from './utils';
 
-export function ShopifyAnalytics({
-  request,
-  cookieName,
-}: {
-  request: ServerComponentRequest;
-  cookieName: string;
-}) {
+export function ShopifyAnalytics({cookieName}: {cookieName: string}) {
+  const request = useServerRequest();
   const session = request.ctx.session;
   const cookies = session?.get();
 
