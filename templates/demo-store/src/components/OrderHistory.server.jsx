@@ -14,7 +14,10 @@ function Orders({orders}) {
   return (
     <div className="flex mt-4">
       {orders.map((order) => (
-        <div key={order.id} className="bg-white p-4 w-1/2 mr-4 text-sm">
+        <div
+          key={order.id}
+          className="bg-white p-4 w-1/2 mr-4 text-sm last:mr-0"
+        >
           <div>{ORDER_STATUS[order.fulfillmentStatus]}</div>
           <div>
             {flattenConnection(order.lineItems).map(({variant}) => (

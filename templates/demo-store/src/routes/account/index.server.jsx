@@ -7,6 +7,7 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
+import {getApiErrorMessage} from '../../components/utilities/api.helper';
 import AccountDetails from '../../components/account/AccountDetails.client';
 import AddressBook from '../../components/account/AddressBook.client';
 import Layout from '../../components/Layout.server';
@@ -120,7 +121,7 @@ export async function api(request, {session, queryShop}) {
     cache: NoStore(),
   });
 
-  const error = getErrorMessage(data, errors);
+  const error = getApiErrorMessage('customerUpdate', data, errors);
 
   if (error) return new Response(JSON.stringify({error}), {status: 400});
 
@@ -143,6 +144,13 @@ function AuthenticatedAccount({customer, addresses, defaultAddress}) {
       <div className="flex justify-center mt-10">
         <div className="max-w-md w-full">
           <h1 className="text-5xl">{pageHeader}</h1>
+          {customer?.firstName ? (
+            <div className="mt-2">Welcome to your account.</div>
+          ) : null}
+          <div className="flex">
+            <span className="flex-1"></span>
+            <LogoutButton className="font-medium underline" />
+          </div>
           <OrderHistory orders={orders} />
           <AccountDetails
             firstName={customer.firstName}
@@ -151,7 +159,6 @@ function AuthenticatedAccount({customer, addresses, defaultAddress}) {
             email={customer.email}
           />
           <AddressBook defaultAddress={defaultAddress} addresses={addresses} />
-          <LogoutButton />
         </div>
       </div>
     </Layout>
@@ -242,10 +249,3 @@ const MUTATION = gql`
     }
   }
 `;
-
-function getErrorMessage(data, errors) {
-  if (errors?.length) return errors[0].message ?? errors[0];
-  if (data?.customerUpdate?.customerUserErrors?.length)
-    return data.customerUpdate.customerUserErrors[0].message;
-  return null;
-}

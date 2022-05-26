@@ -8,7 +8,7 @@ export default function LogoutButton(props) {
   }, []);
   return (
     <button {...props} onClick={logout}>
-      Logout
+      Sign out
     </button>
   );
 }

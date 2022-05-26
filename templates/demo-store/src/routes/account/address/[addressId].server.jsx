@@ -1,4 +1,5 @@
 import {NoStore, gql} from '@shopify/hydrogen';
+import {getApiErrorMessage} from '../../../components/utilities/api.helper';
 
 export async function api(request, {params, session, queryShop}) {
   const {customerAccessToken} = await session.get();
@@ -28,7 +29,7 @@ async function deleteAddress(customerAccessToken, params, queryShop) {
     cache: NoStore(),
   });
 
-  const error = getErrorMessage('customerAddressDelete', data, errors);
+  const error = getApiErrorMessage('customerAddressDelete', data, errors);
 
   if (error) return new Response(JSON.stringify({error}), {status: 400});
 
@@ -71,7 +72,7 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
     cache: NoStore(),
   });
 
-  const error = getErrorMessage('customerAddressUpdate', data, errors);
+  const error = getApiErrorMessage('customerAddressUpdate', data, errors);
 
   if (error) return new Response(JSON.stringify({error}), {status: 400});
 
@@ -82,7 +83,11 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
       customerAccessToken,
     );
 
-    const error = getErrorMessage('customerDefaultAddressUpdate', data, errors);
+    const error = getApiErrorMessage(
+      'customerDefaultAddressUpdate',
+      data,
+      errors,
+    );
 
     if (error) return new Response(JSON.stringify({error}), {status: 400});
   }
@@ -151,10 +156,3 @@ const DELETE_ADDRESS = gql`
     }
   }
 `;
-
-function getErrorMessage(field, data, errors) {
-  if (errors?.length) return errors[0].message ?? errors[0];
-  if (data?.[field]?.customerUserErrors?.length)
-    return data[field].customerUserErrors[0].message;
-  return null;
-}

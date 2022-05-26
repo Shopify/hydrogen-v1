@@ -1,5 +1,6 @@
 import {NoStore, gql} from '@shopify/hydrogen';
 import {setDefaultAddress} from './address/[addressId].server';
+import {getApiErrorMessage} from '../../components/utilities/api.helper';
 
 export async function api(request, {session, queryShop}) {
   if (request.method !== 'POST')
@@ -48,7 +49,7 @@ export async function api(request, {session, queryShop}) {
     cache: NoStore(),
   });
 
-  const error = getErrorMessage(data, errors);
+  const error = getApiErrorMessage('customerAddressCreate', data, errors);
 
   if (error) return new Response(JSON.stringify({error}), {status: 400});
 
@@ -59,7 +60,7 @@ export async function api(request, {session, queryShop}) {
       customerAccessToken,
     );
 
-    const error = getErrorMessage(
+    const error = getApiErrorMessage(
       'customerDefaultAddressUpdate',
       defaultDataResponse,
       errors,
@@ -91,10 +92,3 @@ const CREATE_ADDRESS = gql`
     }
   }
 `;
-
-function getErrorMessage(data, errors) {
-  if (errors?.length) return errors[0].message ?? errors[0];
-  if (data?.customerAddressCreate?.customerUserErrors?.length)
-    return data.customerAddressCreate.customerUserErrors[0].message;
-  return null;
-}
