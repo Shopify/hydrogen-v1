@@ -1,5 +1,3 @@
-import {removeCustomerAccessToken} from '@shopify/hydrogen';
-
 export async function api(request, {session}) {
   if (request.method !== 'POST')
     return new Response('Post required to logout', {
