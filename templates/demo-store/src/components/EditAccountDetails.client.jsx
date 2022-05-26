@@ -300,8 +300,7 @@ function callAccountUpdateApi({
         return res.json();
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
       return {
         error: 'Error saving account. Please try again.',
       };

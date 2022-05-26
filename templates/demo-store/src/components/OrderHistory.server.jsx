@@ -19,6 +19,7 @@ function Orders({orders}) {
           <div>
             {flattenConnection(order.lineItems).map(({variant}) => (
               <Image
+                key={variant.image.url}
                 data={variant.image}
                 loaderOptions={{height: 80}}
                 className="border mt-2"
@@ -55,5 +56,3 @@ function EmptyOrders() {
     </>
   );
 }
-
-const UNFULFILLED = 'UNFULFILLED';

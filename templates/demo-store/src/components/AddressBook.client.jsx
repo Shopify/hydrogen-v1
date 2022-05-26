@@ -19,7 +19,7 @@ export default function AddressBook({addresses, defaultAddress}) {
 
   async function deleteAddress(id) {
     const response = await callDeleteAddressApi(id);
-    if (response.error) alert(error);
+    if (response.error) alert(response.error);
     else setServerProps('rerender', !serverProps.rerender);
   }
 
@@ -80,6 +80,7 @@ function Address({address, defaultAddress, deleteAddress}) {
         </p>
       ) : null}
       {address.formatted.map((line, index) => (
+        /* eslint-disable-next-line react/no-array-index-key */
         <div className="pt-1" key={line + index}>
           {line}
         </div>
@@ -117,8 +118,7 @@ function callDeleteAddressApi(id) {
         return res.json();
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
       return {
         error: 'Error removing address. Please try again.',
       };

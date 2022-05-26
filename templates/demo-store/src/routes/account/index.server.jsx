@@ -22,6 +22,7 @@ export default function Account({response, editingAccount, editingAddress}) {
 
   if (!customerAccessToken) return response.redirect('/account/login');
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
@@ -100,8 +101,7 @@ export async function api(request, {session, queryShop}) {
 
   if (!customerAccessToken) return new Response(null, {status: 401});
 
-  const {email, phone, firstName, lastName, currentPassword, newPassword} =
-    await request.json();
+  const {email, phone, firstName, lastName, newPassword} = await request.json();
 
   const customer = {};
 

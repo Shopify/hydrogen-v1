@@ -1,9 +1,9 @@
 import {useServerProps} from '@shopify/hydrogen';
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 
 export default function EditAddress({address, defaultAddress}) {
   const {setServerProps} = useServerProps();
-  const close = useCallback(() => setServerProps('editingAddress', null));
+  const close = () => setServerProps('editingAddress', null);
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
@@ -99,7 +99,7 @@ export default function EditAddress({address, defaultAddress}) {
               id="company"
               name="company"
               type="text"
-              autoComplete="company"
+              autoComplete="organization"
               placeholder="Company"
               aria-label="Company"
               value={company}
@@ -193,7 +193,7 @@ export default function EditAddress({address, defaultAddress}) {
               id="phone"
               name="phone"
               type="tel"
-              autoComplete="phone"
+              autoComplete="tel"
               placeholder="Phone"
               aria-label="Phone"
               value={phone}
@@ -284,8 +284,7 @@ function callUpdateAddressApi({
         return res.json();
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch(() => {
       return {
         error: 'Error saving address. Please try again.',
       };

@@ -21,7 +21,8 @@ export default function OrderDetails({response}) {
 
   if (!customerAccessToken) return response.redirect('/account/login');
 
-  const {data, errors} = useShopQuery({
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const {data} = useShopQuery({
     query: QUERY,
     variables: {
       orderId: decodeURIComponent(orderId),
@@ -45,28 +46,26 @@ export default function OrderDetails({response}) {
 
           <div className="mt-4">
             {flattenConnection(order.lineItems).map(({variant}) => (
-              <>
-                <div className="flex h-20 font-medium">
-                  <Image
-                    className="border mr-4"
-                    data={variant.image}
-                    loaderOptions={{height: 80}}
-                  />
-                  <div className="w-full">
-                    <div className="flex w-full">
-                      <span className="flex-1 mr-4">{variant.title}</span>
-                      <span>
-                        <Money data={variant.priceV2} />
-                      </span>
-                    </div>
-                    {variant.selectedOptions.map((option) => (
-                      <div className="text-sm">
-                        {option.name}: {option.value}
-                      </div>
-                    ))}
+              <div key={variant.id} className="flex h-20 font-medium">
+                <Image
+                  className="border mr-4"
+                  data={variant.image}
+                  loaderOptions={{height: 80}}
+                />
+                <div className="w-full">
+                  <div className="flex w-full">
+                    <span className="flex-1 mr-4">{variant.title}</span>
+                    <span>
+                      <Money data={variant.priceV2} />
+                    </span>
                   </div>
+                  {variant.selectedOptions.map((option) => (
+                    <div className="text-sm" key={option.value + option.name}>
+                      {option.name}: {option.value}
+                    </div>
+                  ))}
                 </div>
-              </>
+              </div>
             ))}
           </div>
           <div className="mt-4 w-full flex">
@@ -178,6 +177,7 @@ const QUERY = gql`
           edges {
             node {
               variant {
+                id
                 title
                 priceV2 {
                   currencyCode
