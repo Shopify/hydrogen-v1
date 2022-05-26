@@ -123,6 +123,7 @@ function ShopifyImage({
       widths,
       src: data.url,
       width: finalWidth,
+      loader,
     });
 
   /* eslint-disable hydrogen/prefer-image-component */
@@ -237,6 +238,7 @@ type InternalShopifySrcSetGeneratorsParams = Simplify<
   ShopifyLoaderOptions & {
     src: ImageType['url'];
     widths?: (HtmlImageProps['width'] | ImageType['width'])[];
+    loader?: (params: ShopifyLoaderParams) => string;
   }
 >;
 // based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
@@ -248,6 +250,7 @@ function internalImageSrcSet({
   crop,
   scale,
   widths,
+  loader,
 }: InternalShopifySrcSetGeneratorsParams) {
   const hasCustomWidths = widths && Array.isArray(widths);
   if (hasCustomWidths && widths.some((size) => isNaN(size as number)))
@@ -262,10 +265,11 @@ function internalImageSrcSet({
     width < IMG_SRC_SET_SIZES[IMG_SRC_SET_SIZES.length - 1]
   )
     setSizes = IMG_SRC_SET_SIZES.filter((size) => size <= width);
+  const srcGenerator = loader ? loader : addImageSizeParametersToUrl;
   return setSizes
     .map(
       (size) =>
-        `${addImageSizeParametersToUrl({
+        `${srcGenerator({
           src,
           width: size,
           crop,
