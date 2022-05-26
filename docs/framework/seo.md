@@ -154,6 +154,18 @@ Hydrogen supports SEO by inspecting the `user-agent` for every request, and buff
 
 To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?\_bot` query parameter at the end of the webpage's URL.
 
+## Removing SEO with noindex
+
+Pages that require authentication shouldn't be indexed by bots. For example, bots shouldn't index login and account pages. You can tell bots to not index a page by passing `noindex` to the `Seo` component:
+
+{% codeblock file, filename: '/account/login.server.jsx' %}
+
+```jsx
+<Seo type="noindex" data={{title: 'Login'}} />
+```
+
+{% endcodeblock %}
+
 ## Limitations and considerations
 
 The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.js) that's included in the Demo Store template:

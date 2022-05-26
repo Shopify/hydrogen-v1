@@ -11,19 +11,19 @@ import {Suspense} from 'react';
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
 import LoadingFallback from './components/LoadingFallback';
-import CartProvider from './components/CartProvider.client';
+import ServerCartProvider from './components/ServerCartProvider.server';
 
 function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
-        <CartProvider>
+        <ServerCartProvider>
           <DefaultSeo />
           <Router>
             <FileRoutes />
             <Route path="*" page={<NotFound />} />
           </Router>
-        </CartProvider>
+        </ServerCartProvider>
         <PerformanceMetrics />
         {import.meta.env.DEV && <PerformanceMetricsDebug />}
       </ShopifyProvider>
