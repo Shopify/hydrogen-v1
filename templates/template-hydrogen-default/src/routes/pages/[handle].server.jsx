@@ -3,6 +3,7 @@ import {
   useShopQuery,
   Seo,
   useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
