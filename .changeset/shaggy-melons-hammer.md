@@ -14,6 +14,6 @@ Add an end-to-end implementation of customer account creation, login, reset pass
 8. `/account/activate/[id]/[activationToken]` - This is a form to activate a new user. The user should only reach this form from a link in their email. Submits the password and `activationToken` to `/account/activate`, On success, forwards the user to `/account`.
 9. `/account/activate` - An API route to activate the user with a password.
 
-Note: At the moment, the email sent to the user for password resets has the web storefront domain, instead of your hydrogen domain. This will be resolved, but in the mean time, you can manually replace the domain with your hydrogen domain to proceed.
+Note: At the moment, the email sent to the user for password resets has the web storefront domain, instead of your Hydrogen domain. This will be resolved, but in the mean time, you can manually replace the domain with your Hydrogen domain to proceed.
 
 A later release will include a large account admin implementation.

@@ -4,7 +4,7 @@ import Layout from '../../components/Layout.server';
 import LoginForm from '../../components/account/LoginForm.client';
 
 export default function Login({response}) {
-  response.cache(NoStore({}));
+  response.cache(NoStore());
 
   const {
     data: {
