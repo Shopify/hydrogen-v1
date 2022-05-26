@@ -3,8 +3,8 @@ import {
   Seo,
   CacheDays,
   useServerAnalytics,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 /**
  * A server component that fetches a `shop.name` and sets default values and templates for every page on a website

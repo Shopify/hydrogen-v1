@@ -6,7 +6,7 @@ description: Learn how to deploy your Hydrogen app to Oxygen and other runtimes.
 
 {% include hydrogen/developer-preview.md %}
 
-You can deploy a Hydrogen app to most [Node.js and Worker runtimes](https://shopify.dev/custom-storefronts/hydrogen/framework#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen app to [Oxygen](#deploy-to-oxygen), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), [Cloudflare Workers](#deploy-to-cloudflare-workers), and [Netlify](#deploy-to-netlify).
+You can deploy a Hydrogen app to most [Worker and Node.js runtimes](https://shopify.dev/custom-storefronts/hydrogen/framework#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen app to [Oxygen](#deploy-to-oxygen), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), [Cloudflare Workers](#deploy-to-cloudflare-workers), and [Netlify](#deploy-to-netlify).
 
 ## Requirements
 
@@ -21,35 +21,50 @@ Oxygen is Shopify's recommended deployment platform for Hydrogen apps.
 
 ## Deploy to Node.js
 
-You can deploy your Hydrogen app to [Node.js](https://nodejs.org/en/), an open-source JavaScript runtime environment.
+By default, Hydrogen targets a Workers runtime like Oxygen. However, you can also deploy your Hydrogen app to [Node.js](https://nodejs.org/en/), an open-source JavaScript runtime environment.
 
-1. Check the port (`$PORT`) that's specified in the [`server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/server.js) file.
+Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) which suits basic production use cases. You can run and preview your Hydrogen app in Node.js by completing the following steps.
 
-2. Run your Hydrogen app on the port specified by executing the following commands:
+
+1. Install the peer dependencies required to run the built-in Node.js entrypoint:
+
+    {% codeblock terminal %}
+
+    ```bash?title: 'yarn'
+    yarn add body-parser compression serve-static
+    ```
+
+    ```bash?title: 'npm'
+    npm install body-parser compression serve-static
+    ```
+
+    {% endcodeblock %}
+
+2. Build your Hydrogen app for production and preview the app locally:
 
     {% codeblock terminal %}
 
     ```bash
 
-    yarn build
+    yarn build --target node
 
-    yarn serve
+    yarn preview --target node
     ```
 
     {% endcodeblock %}
 
-    If you're using the default port, then the production version of your app will be running at http://localhost:8080.
+    The production version of your app will be running at http://localhost:3000. You can inspect and deploy the compiled version of your Node.js Hydrogen app from `dist/node`.
 
 ### Apply extra middleware
 
-If you're using the default server entry point in the `build:server` script (`@shopify/hydrogen/platforms/node`), then the generated server bundle (`dist/server/index.js`) consists of a simple Node.js server that uses [Connect](https://github.com/senchalabs/connect) middleware.
+If you're using the default server entry point in the `build --target node` script (`@shopify/hydrogen/platforms/node`), then the generated server bundle (`dist/node/index.js`) consists of a simple Node.js server that uses [Connect](https://github.com/senchalabs/connect) middleware.
 
 This bundle also exports the `createServer` function, which you can call programmatically to apply extra middleware:
 
-{% codeblock %}
+{% codeblock file, filename: 'server.js' %}
 
 ```js
-const {createServer} = require('./dist/server');
+const {createServer} = require('./dist/node');
 
 // This function accepts an optional
 // `cache` instance parameter: https://developer.mozilla.org/en-US/docs/Web/API/Cache.
@@ -109,26 +124,27 @@ If you want to use a different Node.js framework like [Express](https://expressj
 
     {% endcodeblock %}
 
-2. Update the scripts in `package.json` to specify your new entry point. If the scripts are located in `<root>/server.js`, then the changes would look like the following:
+2. Use the new file as the entry point for your build command. For example, if the script is located in `<root>/server.js`, then you would run the following command:
 
-    ```json
-    // Remove this line
-    - "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
+    {% codeblock terminal %}
 
-    // Add this line
-    + "build:server": "vite build --outDir dist/server --ssr server",
+    ```bash
+
+    yarn build --entry server --target node
     ```
 
-3. Run the server bundle:
+    {% endcodeblock %}
+
+3. Preview the server bundle:
 
     {% codeblock terminal %}
 
     ```bash?title: 'yarn'
-    yarn serve
+    yarn preview --target node
     ```
 
     ```bash?title: 'node'
-    node dist/server
+    node dist/node
     ```
 
     {% endcodeblock %}
@@ -141,22 +157,22 @@ Update the scripts in `package.json` to specify your new entry point:
 
 ```json
 // Remove this line
-- "build:server": "vite build --outDir dist/server --ssr @shopify/hydrogen/platforms/node",
+- "build": "shopify hydrogen build",
 
 // Add this line
-+ "build:server": "vite build --outDir dist/server --ssr src/App.server",
++ "build": "shopify hydrogen build --entry src/App.server --target node",
 ```
 
 This exposes a `handleRequest` function that can be imported in your server or serverless function:
 
-{% codeblock %}
+{% codeblock file, filename: 'server.js' %}
 
 ```js
 // Polyfill Web APIs like `fetch` and `ReadableStream`
 require('@shopify/hydrogen/web-polyfills');
 
 const fs = require('fs');
-const handleRequest = require('./dist/server');
+const handleRequest = require('./dist/node');
 
 const indexTemplate = fs.readFileSync('./dist/client/index.html', 'utf-8');
 
@@ -186,7 +202,7 @@ You can deploy your project to any platform that supports Docker-based hosting, 
 
     WORKDIR /app
     RUN yarn
-    RUN yarn build
+    RUN yarn build --target node
 
     FROM gcr.io/distroless/nodejs:16 AS run-env
     ENV NODE_ENV production
@@ -195,7 +211,7 @@ You can deploy your project to any platform that supports Docker-based hosting, 
     EXPOSE ${PORT:-8080}
 
     WORKDIR /app
-    CMD ["dist/server/index.js"]
+    CMD ["dist/node/index.js"]
     ```
 
     {% endcodeblock %}
@@ -330,10 +346,10 @@ You can deploy your Hydrogen app to Cloudflare Workers, a serverless application
     ```json
 
     // Remove this line
-    - "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr @shopify/hydrogen/platforms/worker",
+    - "build": "shopify hydrogen build",
 
     // Add this line
-    + "build:worker": "cross-env WORKER=true vite build --outDir dist/worker --ssr worker",
+    + "build": "shopify hydrogen build --entry worker",
     ```
 
 6. Deploy your project with [Wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update):

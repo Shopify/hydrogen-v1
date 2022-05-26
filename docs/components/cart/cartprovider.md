@@ -142,7 +142,7 @@ The `data` prop is an object with fields that correspond to the Storefront API's
 
 You can provide the `cartFragment` prop to `CartProvider` to customize the fields requested from the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for every query and mutation made by `CartProvider`.
 
-The fragment must use the name `CartFragment` because it's referenced that way in each of the queries and mutations. If you provide a custom `cartFragment`, then it must be a raw string. Utilities like [`gql`](https://github.com/apollographql/graphql-tag) will return an `ASTNode` instead of a `string`, and you should consult the documentation of the tool you are using to convert it to a string first.
+The fragment must use the name `CartFragment` because it's referenced that way in each of the queries and mutations. If you provide a custom `cartFragment`, then it must be a raw string. For GraphQL syntax highlighting, you should use the `gql` utility exported from `@shopify/hydrogen` instead of [`graphql-tag`](https://github.com/apollographql/graphql-tag) because the latter returns an `ASTNode` instead of a `string`.
 
 If you don't provide a `cartFragment` argument, then the following default value is used:
 

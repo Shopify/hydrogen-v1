@@ -10,8 +10,7 @@ this component can use the `useProduct` hook.
 ## Example code
 
 ```tsx
-import {ProductProvider} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {ProductProvider, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query product($handle: String!) {

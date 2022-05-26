@@ -1,4 +1,3 @@
-import {renderToString} from 'react-dom/server';
 import {CacheSeconds, generateCacheControlHeader} from '../CachingStrategy';
 import type {CachingStrategy} from '../../types';
 import Redirect from '../../foundation/Redirect/Redirect.client';
@@ -76,22 +75,5 @@ export class ServerComponentResponse extends Response {
 
     // in the case of an RSC request, instead render a client component that will redirect
     return React.createElement(Redirect, {to: location});
-  }
-
-  /**
-   * Send the response from a Server Component. Renders React components to string,
-   * and returns `null` to make React happy.
-   */
-  send(body: any) {
-    if (
-      typeof body === 'object' &&
-      body.$$typeof === Symbol.for('react.element')
-    ) {
-      this.customBody = renderToString(body);
-    } else {
-      this.customBody = body;
-    }
-
-    return null;
   }
 }

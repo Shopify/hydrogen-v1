@@ -10,8 +10,7 @@ It must be a descendent of a `LocalizationProvider` component.
 ## Example code
 
 ```tsx
-import {useCountry} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {useCountry, gql} from '@shopify/hydrogen';
 
 export function MyComponent() {
   const [country, setCountry] = useCountry();

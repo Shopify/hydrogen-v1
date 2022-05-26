@@ -8,8 +8,8 @@ import {
   useSession,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 import Layout from '../components/Layout.server';
 import FeaturedCollection from '../components/FeaturedCollection';

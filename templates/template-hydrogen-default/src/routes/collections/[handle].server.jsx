@@ -6,8 +6,8 @@ import {
   Seo,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 import LoadMoreProducts from '../../components/LoadMoreProducts.client';
 import Layout from '../../components/Layout.server';

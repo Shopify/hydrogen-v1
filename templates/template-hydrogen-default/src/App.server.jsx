@@ -26,7 +26,7 @@ function App({request}) {
           </Router>
         </CartProvider>
         <PerformanceMetrics />
-        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+        {import.meta.env.LOCAL_DEV && <PerformanceMetricsDebug />}
         <ShopifyAnalytics request={request} cookieName="__session" />
       </ShopifyProvider>
     </Suspense>
