@@ -83,7 +83,10 @@ jobs:
       - name: Build for Netlify Functions
         working-directory: ./templates/template-hydrogen-default
         run: |
-          yarn shopify hydrogen build --target worker --entry @netlify/hydrogen-platform/handler
+          vite build --outDir dist/client --manifest
+          WORKER=true vite build --ssr @netlify/hydrogen-platform/handler
+          # TODO: Add support for ssrOutDir to the Shopify Hydrogen CLI
+          # yarn shopify hydrogen build --target worker --entry @netlify/hydrogen-platform/handler --ssrOutDir .netlify/edge-functions/handler
 
       - name: Install Netlify CLI
         run: |
@@ -93,7 +96,7 @@ jobs:
         id: netlify-deploy
         working-directory: ./templates/template-hydrogen-default
         run: |
-          netlify deploy --build --json | jq -r '.deploy_url' > deploy.txt
+          netlify deploy --build --prod --json | jq -r '.deploy_url' > deploy.txt
           echo "::set-output name=deploy-url::$(cat deploy.txt)"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
