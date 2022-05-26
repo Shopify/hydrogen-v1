@@ -161,7 +161,7 @@ Pages that require authentication shouldn't be indexed by bots. For example, bot
 {% codeblock file, filename: '/account/login.server.jsx' %}
 
 ```jsx
-<Seo type="noindex" data={{title: 'Login'}} />
+<Seo type="noindex" data={% raw %}{{title: 'Login'}}{% endraw %} />
 ```
 
 {% endcodeblock %}
