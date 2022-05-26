@@ -1,11 +1,4 @@
-import {
-  useShopQuery,
-  CacheDays,
-  NoStore,
-  setCustomerAccessToken,
-  Seo,
-  gql,
-} from '@shopify/hydrogen';
+import {useShopQuery, CacheDays, NoStore, Seo, gql} from '@shopify/hydrogen';
 
 import Layout from '../../components/Layout.server';
 import LoginForm from '../../components/account/LoginForm.client';
@@ -66,13 +59,11 @@ export async function api(request, {session, queryShop}) {
   });
 
   if (
-    data &&
-    data.customerAccessTokenCreate &&
-    data.customerAccessTokenCreate.customerAccessToken !== null
+    data?.customerAccessTokenCreate?.customerAccessToken?.accessToken !== null
   ) {
-    await setCustomerAccessToken(
-      session,
-      data.customerAccessTokenCreate.customerAccessToken,
+    await session.set(
+      'customerAccessToken',
+      data.customerAccessTokenCreate.customerAccessToken.accessToken,
     );
 
     return new Response(null, {

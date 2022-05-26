@@ -9,7 +9,7 @@ export async function api(request, {session}) {
       },
     });
 
-  await removeCustomerAccessToken(session);
+  await session.set('customerAccessToken', null);
 
   return new Response();
 }

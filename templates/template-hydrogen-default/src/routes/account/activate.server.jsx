@@ -1,4 +1,4 @@
-import {NoStore, setCustomerAccessToken, gql} from '@shopify/hydrogen';
+import {NoStore, gql} from '@shopify/hydrogen';
 
 /**
  * This API route is used by the form on `/account/activate/[id]/[activationToken]`
@@ -28,10 +28,10 @@ export async function api(request, {session, queryShop}) {
     cache: NoStore(),
   });
 
-  if (data?.customerActivate?.customerAccessToken) {
-    await setCustomerAccessToken(
-      session,
-      data.customerActivate.customerAccessToken,
+  if (data?.customerActivate?.customerAccessToken?.accessToken) {
+    await session.set(
+      'customerAccessToken',
+      data.customerActivate.customerAccessToken.accessToken,
     );
 
     return new Response(null, {
