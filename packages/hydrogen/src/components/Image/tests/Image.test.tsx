@@ -144,6 +144,23 @@ describe('<Image />', () => {
         alt: 'Fancy image',
       });
     });
+
+    it('generates a default srcset', () => {
+      const mockUrl = 'https://cdn.shopify.com/someimage.jpg';
+      const sizes = [352, 832, 1200, 1920, 2560];
+      const expectedSrcset = sizes
+        .map((size) => `${mockUrl}?width=${size} ${size}w`)
+        .join(', ');
+      const image = getPreviewImage({
+        url: mockUrl,
+      });
+
+      const component = mount(<Image data={image} />);
+
+      expect(component).toContainReactComponent('img', {
+        srcSet: expectedSrcset,
+      });
+    });
   });
 
   describe('External image', () => {
