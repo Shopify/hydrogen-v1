@@ -38,8 +38,8 @@ export function App() {
 | onBuyerIdentityUpdate? | <code>() => void</code>      | A callback that is invoked when the process to update the buyer identity begins, but before the buyer identity is updated in the Storefront API.                                                                         |
 | onAttributesUpdate?    | <code>() => void</code>      | A callback that is invoked when the process to update the cart attributes begins, but before the attributes are updated in the Storefront API.                                                                           |
 | onDiscountCodesUpdate? | <code>() => void</code>      | A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API.                                                                   |
-| customerAccessToken?   | <code>string</code>          | The token that identifies the user that's logged in. This is necessary to associate the cart to an authenticated user.                                                                                                   |
-| countryCode            | <code>string</code>          | The ISO country code for i18n.                                                                                                                                                                                           |
+| customerAccessToken?   | <code>CartBuyerIdentityInput['customerAccessToken']</code>          | The token that identifies the user that's logged in. This is necessary to associate the cart to an authenticated user.                                                                                                   |
+| countryCode?            | <code>CountryCode</code>          | The ISO country code for i18n.                                                                                                                                                                                           |
 
 ## Component type
 
