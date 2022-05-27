@@ -1,5 +1,5 @@
 ---
-'template-hydrogen-default': minor
+'demo-store': minor
 ---
 
 Removes Stylelint from default template
