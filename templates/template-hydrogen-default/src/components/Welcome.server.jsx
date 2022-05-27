@@ -3,8 +3,8 @@ import {
   useShopQuery,
   flattenConnection,
   Link,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 import {Suspense} from 'react';
 
 function ExternalIcon() {

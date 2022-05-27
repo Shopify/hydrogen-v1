@@ -6,7 +6,6 @@ import {
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
-import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {
@@ -141,7 +140,7 @@ interface QueryShopArgs {
   /** A string of the GraphQL query.
    * If no query is provided, then the `useShopQuery` makes no calls to the Storefront API.
    */
-  query: ASTNode | string;
+  query: string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
 }

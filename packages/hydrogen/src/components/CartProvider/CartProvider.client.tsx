@@ -34,6 +34,7 @@ import {
   CartLineUpdateInput,
   CartBuyerIdentityInput,
   AttributeInput,
+  CountryCode,
 } from '../../storefront-api-types';
 import {useCartFetch} from './hooks.client';
 import {CartContext} from './context';
@@ -66,8 +67,6 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
-import {useServerProps} from '../../foundation/useServerProps';
-import {ServerPropsContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
 import {ClientAnalytics} from '../../foundation/Analytics';
 
@@ -234,6 +233,8 @@ export function CartProvider({
   onDiscountCodesUpdate,
   data: cart,
   cartFragment = defaultCartFragment,
+  customerAccessToken,
+  countryCode = CountryCode.Us,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -254,16 +255,15 @@ export function CartProvider({
   onAttributesUpdate?: () => void;
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
-  /**
-   * An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).
-   */
+  /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
+  /** A customer access token that's accessible on the server if there's a customer login. */
+  customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
 }) {
-  const {serverProps} = useServerProps() as ServerPropsContextValue;
-  const countryCode = serverProps?.country?.isoCode;
-
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
     : {status: 'uninitialized'};
@@ -310,6 +310,13 @@ export function CartProvider({
         cart.buyerIdentity.countryCode = countryCode;
       }
 
+      if (customerAccessToken && !cart.buyerIdentity?.customerAccessToken) {
+        if (cart.buyerIdentity == null) {
+          cart.buyerIdentity = {};
+        }
+        cart.buyerIdentity.customerAccessToken = customerAccessToken;
+      }
+
       const {data, error} = await fetchCart<
         CartCreateMutationVariables,
         CartCreateMutation
@@ -351,7 +358,14 @@ export function CartProvider({
         );
       }
     },
-    [onCreate, countryCode, fetchCart, cartFragment, numCartLines]
+    [
+      onCreate,
+      countryCode,
+      fetchCart,
+      cartFragment,
+      numCartLines,
+      customerAccessToken,
+    ]
   );
 
   const addLineItem = useCallback(
@@ -669,9 +683,9 @@ export function CartProvider({
     if (state.status !== 'idle') {
       return;
     }
-    buyerIdentityUpdate({countryCode}, state);
+    buyerIdentityUpdate({countryCode, customerAccessToken}, state);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countryCode]);
+  }, [countryCode, customerAccessToken]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {

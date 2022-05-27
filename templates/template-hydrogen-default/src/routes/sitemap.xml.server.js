@@ -1,26 +1,23 @@
-import {flattenConnection, useShopQuery, useShop} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {flattenConnection, gql} from '@shopify/hydrogen';
 
 const MAX_URLS = 250; // the google limit is 50K, however, SF API only allow querying for 250 resources each time
 
-export default function Sitemap({request, response}) {
-  response.doNotStream();
-
-  const {languageCode} = useShop();
-
-  const {data} = useShopQuery({
+export async function api(request, {queryShop}) {
+  const {data} = await queryShop({
     query: QUERY,
     variables: {
-      language: languageCode,
+      language: 'EN',
       urlLimits: MAX_URLS,
     },
-    // Cache the page for 24 hours
-    cache: {maxAge: 60 * 60 * 24},
   });
 
-  response.headers.set('content-type', 'application/xml');
-
-  return response.send(shopSitemap(data, request.url));
+  return new Response(shopSitemap(data, new URL(request.url).origin), {
+    headers: {
+      'content-type': 'application/xml',
+      // Cache for 24 hours
+      'cache-control': `max-age=${60 * 60 * 24}`,
+    },
+  });
 }
 
 function shopSitemap(data, baseUrl) {
@@ -105,7 +102,7 @@ function renderUrlTag({url, lastMod, changeFreq, image}) {
         </image:image>`
           : ''
       }
-      
+
     </url>
   `;
 }

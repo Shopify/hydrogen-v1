@@ -1,6 +1,5 @@
 import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
-import {ASTNode} from 'graphql';
 import type {CachingStrategy, PreloadOptions} from '../../types';
 import {graphqlRequestBody} from '../../utilities';
 import {getConfig} from '../../framework/config';
@@ -42,7 +41,7 @@ export function useShopQuery<T>({
   /** A string of the GraphQL query.
    * If no query is provided, useShopQuery will make no calls to the Storefront API.
    */
-  query?: ASTNode | string;
+  query?: string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to
@@ -135,7 +134,6 @@ export function useShopQuery<T>({
     __DEV__ &&
     log.options().showUnusedQueryProperties &&
     query &&
-    typeof query !== 'string' &&
     data?.data
   ) {
     const fileLine = new Error('').stack

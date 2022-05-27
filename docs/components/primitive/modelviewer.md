@@ -10,8 +10,7 @@ the Storefront API's [Model3d object](https://shopify.dev/api/storefront/referen
 ## Example code
 
 ```tsx
-import {ModelViewer} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {ModelViewer, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {

@@ -19,7 +19,7 @@ export default () => {
     };
   }
 
-  if (!process.env.LOCAL_DEV) {
+  if (process.env.NODE_ENV !== 'development') {
     /**
      * Ofuscate production asset name - To prevent ad blocker logics that blocks
      * certain files due to how it is named.

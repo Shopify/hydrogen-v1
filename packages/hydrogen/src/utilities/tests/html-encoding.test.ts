@@ -1,6 +1,6 @@
 import {htmlDecode, htmlEncode} from '../html-encoding';
 
-describe('html encodgin', () => {
+describe('html encoding', () => {
   describe('htmlEncode', () => {
     it('encodes things properly', () => {
       expect(htmlEncode('<div>')).toBe('&lt;div&gt;');
@@ -21,6 +21,10 @@ M2:{&quot;id&quot;:&quot;ShopifyProvider-MTY2NjM5NzU1NQ&quot;,&quot;name&quot;:&
 M2:{&quot;id&quot;:&quot;ShopifyProvider-MTY2NjM5NzU1NQ&quot;,&quot;name&quot;:&quot;ShopifyProviderClient&quot;}`)
       ).toBe(`S1:"react.suspense"
 M2:{"id":"ShopifyProvider-MTY2NjM5NzU1NQ","name":"ShopifyProviderClient"}`);
+    });
+
+    it('does not double-decode ampersands', () => {
+      expect(htmlDecode(`drink: g&amp;gt;`)).toBe(`drink: g&gt;`);
     });
   });
 });
