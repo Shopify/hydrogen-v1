@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import type {Reducer} from 'react';
-import {flattenConnection} from '../../utilities';
+import {flattenConnection} from '../../utilities/flattenConnection';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
@@ -68,7 +68,7 @@ import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
 import type {CartWithActions} from './types';
-import {ClientAnalytics} from '../../foundation/Analytics';
+import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {

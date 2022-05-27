@@ -53,7 +53,6 @@ export function ShopifyProvider({
   let actualShopifyConfig: ShopifyConfig;
 
   if (typeof shopifyConfig === 'function') {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
       (shopifyConfig as ShopifyConfigFetcher)(request)
     );
