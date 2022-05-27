@@ -45,7 +45,7 @@ export {
 } from './framework/CachingStrategy';
 
 export {fetchSync} from './foundation/fetchSync/server/fetchSync';
-export {useServerAnalytics} from './foundation/Analytics';
+export {useServerAnalytics} from './foundation/Analytics/hook';
 export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
 export {PerformanceMetrics} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.client';
 export {PerformanceMetricsDebug} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetricsDebug.client';
