@@ -256,19 +256,6 @@ async function render(
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
   headers.set('cache-control', componentResponse.cacheControlHeader);
-
-  if (componentResponse.customBody) {
-    // This can be used to return sitemap.xml or any other custom response.
-
-    postRequestTasks('ssr', status, request, componentResponse);
-
-    return new Response(await componentResponse.customBody, {
-      status,
-      statusText,
-      headers,
-    });
-  }
-
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
@@ -383,7 +370,7 @@ async function stream(
     });
 
     /* eslint-disable no-inner-declarations */
-    async function prepareForStreaming(flush: boolean) {
+    function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
         getResponseOptions(componentResponse, didError)
@@ -404,11 +391,6 @@ async function stream(
       }
 
       if (flush) {
-        if (componentResponse.customBody) {
-          writable.write(encoder.encode(await componentResponse.customBody));
-          return false;
-        }
-
         responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
@@ -423,7 +405,7 @@ async function stream(
     /* eslint-enable no-inner-declarations */
 
     const shouldReturnApp =
-      (await prepareForStreaming(componentResponse.canStream())) ??
+      prepareForStreaming(componentResponse.canStream()) ??
       (await onCompleteAll.promise.then(prepareForStreaming));
 
     if (shouldReturnApp) {
@@ -522,7 +504,7 @@ async function stream(
           return response.write(chunk);
         });
       },
-      async onAllReady() {
+      onAllReady() {
         log.trace('node complete stream');
 
         if (componentResponse.canStream() || response.writableEnded) {
@@ -547,10 +529,6 @@ async function stream(
         if (isRedirect(response)) {
           // Redirects found after any async code
           return response.end();
-        }
-
-        if (componentResponse.customBody) {
-          return response.end(await componentResponse.customBody);
         }
 
         startWritingHtmlToServerResponse(response, dev ? didError : undefined);

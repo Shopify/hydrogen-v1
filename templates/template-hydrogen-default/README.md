@@ -43,12 +43,6 @@ yarn preview
 yarn build
 ```
 
-Then, you can run a local `server.js` using the production build with:
-
-```bash
-yarn serve
-```
-
 ## Running tests
 
 This project contains basic end-to-end (E2E) tests in the `/tests/e2e` folder powered by [Vitest](https://vitest.dev).
