@@ -13,10 +13,13 @@ import Layout from '../components/Layout.server';
 import FeaturedCollection from '../components/FeaturedCollection';
 import ProductCard from '../components/ProductCard';
 import Welcome from '../components/Welcome.server';
-import {Suspense} from 'react';
+import {Suspense, useState} from 'react';
 
 export default function Index() {
-  const {countryCode = 'US'} = useSession();
+  if (true) {
+    const [count, setCount] = useState(0);
+    const {countryCode = 'US'} = useSession();
+  }
 
   return (
     <Layout hero={<GradientBackground />}>
