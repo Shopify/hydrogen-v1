@@ -13,13 +13,13 @@ export const preferImageComponent = createRule({
       description:
         'Prefer using the `Image` component instead of HTML `img` tags',
       recommended: 'warn',
+      category: 'Best Practices',
     },
     messages: {
       preferImageComponent: `Use the \`Image\` component from '@shopify/hydrogen' instead of \`${IMAGE_TAG_NAME}\` tags.`,
       replaceWithImage: `Replace \`${IMAGE_TAG_NAME}\` tags with the \`Image\` component from @shopify/hydrogen.`,
     },
     schema: [],
-    hasSuggestions: true,
   },
   defaultOptions: [],
   create(context) {
