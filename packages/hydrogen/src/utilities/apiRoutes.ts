@@ -70,9 +70,9 @@ export function extractPathFromRoutesKey(
 
 export function getApiRoutes({
   files: routes,
-  basePath: topLevelPath,
-  dirPrefix,
-}: ResolvedHydrogenRoutes): Array<HydrogenApiRoute> {
+  basePath: topLevelPath = '',
+  dirPrefix = '',
+}: Partial<ResolvedHydrogenRoutes>): Array<HydrogenApiRoute> {
   if (!routes || memoizedRawRoutes === routes) return memoizedApiRoutes;
 
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
