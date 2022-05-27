@@ -16,15 +16,19 @@ import {viteception} from '../viteception';
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
-export const VIRTUAL_HYDROGEN_CONFIG_ID = 'virtual:hydrogen.config.ts';
-// Note: do not use query string here, it breaks Vite
-export const VIRTUAL_HYDROGEN_CONFIG_PROXY_ID =
-  VIRTUAL_HYDROGEN_CONFIG_ID.replace('virtual', 'virtual:proxy');
+// The character ":" breaks Vite with Node >= 16.15. Use "_" instead
+const VIRTUAL_PREFIX = 'virtual__';
+const PROXY_PREFIX = 'proxy__';
 
-export const VIRTUAL_HYDROGEN_ROUTES_ID = 'virtual:hydrogen-routes.server.jsx';
+const HYDROGEN_CONFIG_ID = 'hydrogen.config.ts';
+const VIRTUAL_HYDROGEN_CONFIG_ID = VIRTUAL_PREFIX + HYDROGEN_CONFIG_ID;
+const VIRTUAL_PROXY_HYDROGEN_CONFIG_ID =
+  VIRTUAL_PREFIX + PROXY_PREFIX + HYDROGEN_CONFIG_ID;
 
-export const VIRTUAL_HYDROGEN_ROUTES_PROXY_ID =
-  VIRTUAL_HYDROGEN_ROUTES_ID.replace('virtual', 'virtual:proxy');
+const HYDROGEN_ROUTES_ID = 'hydrogen-routes.server.jsx';
+const VIRTUAL_HYDROGEN_ROUTES_ID = VIRTUAL_PREFIX + HYDROGEN_ROUTES_ID;
+export const VIRTUAL_PROXY_HYDROGEN_ROUTES_ID =
+  VIRTUAL_PREFIX + PROXY_PREFIX + HYDROGEN_ROUTES_ID;
 
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
@@ -58,7 +62,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           dev: true,
           getShopifyConfig: async (incomingMessage) => {
             const {default: hydrogenConfig} = await server.ssrLoadModule(
-              VIRTUAL_HYDROGEN_CONFIG_PROXY_ID
+              VIRTUAL_PROXY_HYDROGEN_CONFIG_ID
             );
 
             // @ts-ignore
@@ -113,8 +117,8 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
 
       if (
         [
-          VIRTUAL_HYDROGEN_CONFIG_PROXY_ID,
-          VIRTUAL_HYDROGEN_ROUTES_PROXY_ID,
+          VIRTUAL_PROXY_HYDROGEN_CONFIG_ID,
+          VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
           VIRTUAL_HYDROGEN_ROUTES_ID,
         ].includes(source)
       ) {
@@ -127,10 +131,10 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
     load(id) {
       // Likely due to a bug in Vite, but virtual modules cannot be loaded
       // directly using ssrLoadModule from a Vite plugin. It needs to be proxied as follows:
-      if (id === '\0' + VIRTUAL_HYDROGEN_CONFIG_PROXY_ID) {
+      if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_CONFIG_ID) {
         return `import hc from '${VIRTUAL_HYDROGEN_CONFIG_ID}'; export default hc;`;
       }
-      if (id === '\0' + VIRTUAL_HYDROGEN_ROUTES_PROXY_ID) {
+      if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_ROUTES_ID) {
         return `import hr from '${VIRTUAL_HYDROGEN_ROUTES_ID}'; export default hr;`;
       }
 
@@ -172,13 +176,13 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
   async function importHydrogenConfig() {
     if (server) {
       const loaded = await server.ssrLoadModule(
-        VIRTUAL_HYDROGEN_CONFIG_PROXY_ID
+        VIRTUAL_PROXY_HYDROGEN_CONFIG_ID
       );
 
       return loaded.default;
     }
 
-    const {loaded} = await viteception([VIRTUAL_HYDROGEN_CONFIG_PROXY_ID]);
+    const {loaded} = await viteception([VIRTUAL_PROXY_HYDROGEN_CONFIG_ID]);
     return loaded[0].default;
   }
 };

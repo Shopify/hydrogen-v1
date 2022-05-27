@@ -98,13 +98,13 @@ export const renderHydrogen = (App: any) => {
     const {default: inlineHydrogenConfig} = await import(
       // @ts-ignore
       // eslint-disable-next-line node/no-missing-import
-      'virtual:hydrogen.config.ts'
+      'virtual__hydrogen.config.ts'
     );
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore
       // eslint-disable-next-line node/no-missing-import
-      'virtual:hydrogen-routes.server.jsx'
+      'virtual__hydrogen-routes.server.jsx'
     );
 
     const hydrogenConfig: ResolvedHydrogenConfig = {
