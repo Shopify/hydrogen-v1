@@ -200,6 +200,10 @@ type ObserveCallback = (isVisible: boolean) => void;
 
 const observers: Map<Identifier, Observer> = new Map();
 
+/**
+ * Inspired by Next.js's hook of the same name:
+ * @see https://github.com/vercel/next.js/blob/0613f76f3862f49df46949d103e85514b566ede8/packages/next/client/use-intersection.tsx
+ */
 function useIntersection<T extends Element>(
   options: ObserverOptions
 ): [(element: T | null) => void, boolean] {
