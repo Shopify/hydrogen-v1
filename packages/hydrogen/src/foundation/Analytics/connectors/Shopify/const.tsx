@@ -50,11 +50,4 @@ export const ShopifyAnalyticsConstants = {
     policy,
     search,
   },
-  resourceType: {
-    article,
-    blog,
-    collection,
-    page,
-    product,
-  },
 };

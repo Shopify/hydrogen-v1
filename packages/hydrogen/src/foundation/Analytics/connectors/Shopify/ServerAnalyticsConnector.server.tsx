@@ -21,6 +21,5 @@ export function request(
       console.log(error);
       // send to bugsnag? oxygen?
     });
-    console.log('Shopify analytics', data);
   }
 }

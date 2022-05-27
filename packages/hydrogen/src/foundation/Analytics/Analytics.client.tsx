@@ -10,18 +10,12 @@ export function Analytics({
     ClientAnalytics.hasSentPageView = false;
     const urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.has('utm_source')) {
-      ClientAnalytics.pushToPageAnalyticsData({
-        utm: {
-          id: urlParams.get('utm_id'),
-          source: urlParams.get('utm_source'),
-          campaign: urlParams.get('utm_campaign'),
-          medium: urlParams.get('utm_medium'),
-          content: urlParams.get('utm_content'),
-          term: urlParams.get('utm_term'),
-        },
-      });
-    }
+    addUTMData(urlParams, 'id');
+    addUTMData(urlParams, 'source');
+    addUTMData(urlParams, 'campaign');
+    addUTMData(urlParams, 'medium');
+    addUTMData(urlParams, 'content');
+    addUTMData(urlParams, 'term');
 
     ClientAnalytics.pushToPageAnalyticsData(analyticsDataFromServer);
     ClientAnalytics.subscribe(ClientAnalytics.eventNames.PAGE_VIEW, () => {
@@ -38,4 +32,14 @@ export function Analytics({
   }, [analyticsDataFromServer]);
 
   return null;
+}
+
+function addUTMData(urlParams: URLSearchParams, key: string) {
+  if (urlParams.has(`utm_${key}`)) {
+    ClientAnalytics.pushToPageAnalyticsData({
+      utm: {
+        [key]: urlParams.get(`utm_${key}`),
+      },
+    });
+  }
 }

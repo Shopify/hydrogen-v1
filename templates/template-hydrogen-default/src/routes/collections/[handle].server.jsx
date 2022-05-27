@@ -35,7 +35,6 @@ export default function Collection({collectionProductCount = 24, params}) {
       ? {
           shopify: {
             pageType: ShopifyAnalyticsConstants.pageType.collection,
-            resourceType: ShopifyAnalyticsConstants.resourceType.collection,
             resourceId: data.collection.id,
           },
         }

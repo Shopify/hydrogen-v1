@@ -139,7 +139,7 @@ function buildStorefrontPageViewPayload(payload: any): any {
     shopId: stripGId(shopify.shopId),
     currency: shopify.currency,
     contentLanguage: shopify.acceptedLanguage,
-    isMerchantRequest: false, //isMerchantRequest(),
+    isMerchantRequest: isMerchantRequest(),
   };
 
   formattedData = addDataIf(
@@ -149,10 +149,10 @@ function buildStorefrontPageViewPayload(payload: any): any {
     formattedData
   );
 
-  if (shopify.resourceType && shopify.resourceId) {
+  if (shopify.resourceId) {
     formattedData = addDataIf(
       {
-        resourceType: shopify.resourceType,
+        resourceType: getResourceType(shopify.resourceId),
         resourceId: stripGId(shopify.resourceId),
       },
       formattedData
@@ -169,16 +169,24 @@ function buildStorefrontPageViewPayload(payload: any): any {
   return formattedData;
 }
 
-// function isMerchantRequest(): Boolean {
-//   const hostname = location.hostname;
-//   if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
-//     return true;
-//   }
-//   return false;
-// }
+function isMerchantRequest(): Boolean {
+  const hostname = location.hostname;
+  if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
+    return true;
+  }
+  return false;
+}
 
 function stripGId(text: string): number {
+  console.log('GId:', text);
   return parseInt(text.substring(text.lastIndexOf('/') + 1));
+}
+
+function getResourceType(text: string): string {
+  return text
+    .substring(0, text.lastIndexOf('/'))
+    .replace(/.*shopify\//, '')
+    .toLowerCase();
 }
 
 const BATCH_SENT_TIMEOUT = 500;

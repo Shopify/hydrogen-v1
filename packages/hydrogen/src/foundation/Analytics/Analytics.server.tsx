@@ -15,7 +15,9 @@ export function Analytics() {
   if (cache.size === 0 && !cache.has(DELAY_KEY_1)) {
     analyticDelay(cache, DELAY_KEY_1, 50);
   }
+  // If this delay is created, execute it
   cache.has(DELAY_KEY_1) && cache.get(DELAY_KEY_1).call();
+  // clean up this key so that it won't be saved to the preload cache
   cache.delete(DELAY_KEY_1);
 
   // Make sure all queries have returned before rendering the Analytics server component
@@ -28,8 +30,8 @@ export function Analytics() {
 
   // If all queries has returned (could be from cached queries),
   // delay Analytic component by another 1ms (put this component
-  // to the end of the scheduled queue) so that other scheduled
-  // work can be processed by react first
+  // to the end of the render queue) so that other scheduled
+  // render work can be processed by React's concurrent render first
   if (cache.size > 1 && !cache.has(DELAY_KEY_2)) {
     analyticDelay(cache, DELAY_KEY_2, 1);
   }

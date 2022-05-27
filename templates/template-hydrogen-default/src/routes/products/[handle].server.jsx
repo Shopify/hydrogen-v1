@@ -36,7 +36,6 @@ export default function Product() {
       ? {
           shopify: {
             pageType: ShopifyAnalyticsConstants.pageType.product,
-            resourceType: ShopifyAnalyticsConstants.resourceType.product,
             resourceId: product.id,
           },
         }

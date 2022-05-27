@@ -54,11 +54,11 @@ function publish(eventname: string, guardDup = false, payload = {}) {
     }
 
     const namespacedTimeout = setTimeout(() => {
-      publishEvent(subs, Object.assign({}, pageAnalyticsData, payload));
+      publishEvent(subs, mergeDeep(pageAnalyticsData, payload));
     }, 100);
     guardDupEvents[namedspacedEventname] = namespacedTimeout;
   } else {
-    publishEvent(subs, Object.assign({}, pageAnalyticsData, payload));
+    publishEvent(subs, mergeDeep(pageAnalyticsData, payload));
   }
 }
 

@@ -24,7 +24,6 @@ export default function Page({params}) {
       ? {
           shopify: {
             pageType: ShopifyAnalyticsConstants.pageType.page,
-            resourceType: ShopifyAnalyticsConstants.resourceType.page,
             resourceId: data.pageByHandle.id,
           },
         }
