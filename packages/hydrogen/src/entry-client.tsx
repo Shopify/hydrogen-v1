@@ -101,6 +101,7 @@ function Content({
       response = createFromFetch(
         fetch(`${RSC_PATHNAME}?state=` + encodeURIComponent(key))
       );
+      cache.set(key, response);
       rerender();
     });
   }
