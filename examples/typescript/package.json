@@ -12,6 +12,7 @@
   "devDependencies": {
     "@shopify/cli": "latest",
     "@shopify/cli-hydrogen": "latest",
+    "@types/react": "^18.0.9",
     "typescript": "^4.6.4",
     "vite": "^2.9.0"
   },
