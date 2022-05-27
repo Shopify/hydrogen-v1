@@ -30,7 +30,6 @@
     "@headlessui/react": "^1.6.3",
     "@shopify/hydrogen": "^0.21.0",
     "clsx": "^1.1.1",
-    "graphql-tag": "^2.12.6",
     "react": "^18.1.0",
     "react-dom": "^18.1.0"
   }

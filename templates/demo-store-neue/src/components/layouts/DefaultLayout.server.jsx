@@ -3,8 +3,8 @@ import {
   useShopQuery,
   LocalizationProvider,
   CacheHours,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 import {Suspense} from 'react';
 import {Header, Footer} from '~/components/sections';
