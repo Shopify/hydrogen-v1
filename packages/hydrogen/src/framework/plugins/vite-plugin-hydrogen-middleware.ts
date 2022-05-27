@@ -1,4 +1,4 @@
-import {Plugin, loadEnv, ResolvedConfig, ViteDevServer} from 'vite';
+import {Plugin, loadEnv, ResolvedConfig} from 'vite';
 import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
@@ -11,8 +11,6 @@ export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
 export default (pluginOptions: HydrogenVitePluginOptions) => {
-  let server: ViteDevServer;
-
   return {
     name: 'hydrogen:middleware',
     /**
@@ -21,8 +19,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
      * loading them in an SSR context, rendering them using the `entry-server` endpoint in the
      * user's project, and injecting the static HTML into the template.
      */
-    async configureServer(_server) {
-      server = _server;
+    async configureServer(server) {
       const resolve = (p: string) => path.resolve(server.config.root, p);
       async function getIndexTemplate(url: string) {
         const indexHtml = await fs.readFile(resolve('index.html'), 'utf-8');

@@ -30,12 +30,6 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
     configResolved(_config) {
       config = _config;
     },
-    /**
-     * By adding a middleware to the Vite dev server, we can handle SSR without needing
-     * a custom node script. It works by handling any requests for `text/html` documents,
-     * loading them in an SSR context, rendering them using the `entry-server` endpoint in the
-     * user's project, and injecting the static HTML into the template.
-     */
     async configureServer(_server) {
       server = _server;
     },
