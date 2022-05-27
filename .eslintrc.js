@@ -82,7 +82,7 @@ module.exports = {
     {
       files: ['packages/eslint-plugin/**'],
       rules: {
-        'hydrogen/no-state-in-server-components': 'off',
+        'hydrogen/server-component-banned-hooks': 'off',
         'hydrogen/prefer-image-component': 'off',
         'jsx-a11y/img-redundant-alt': 'off',
         'no-prototype-builtins': 'off',
