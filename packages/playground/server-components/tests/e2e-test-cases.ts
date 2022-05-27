@@ -221,6 +221,7 @@ export default async function testCases({
     expect(await page.textContent('body')).toContain(
       "</script><script>alert('hi')</script>"
     );
+    expect(await page.textContent('body')).toContain(`"fiddle"`);
   });
 
   it('adds style tags for CSS modules', async () => {
