@@ -76,15 +76,13 @@ if (flightChunks.length > 0) {
   }
 }
 
-const cache = new Map();
-
 /**
  * Much of this is borrowed from React's demo implementation:
  * @see https://github.com/reactjs/server-components-demo/blob/main/src/Cache.client.js
  *
  * Note that we'd want to add some other constraints and controls around caching here.
  */
-export function useServerResponse(state: any) {
+export function useServerResponse(state: any, cache: Map<string, any>) {
   const key = JSON.stringify(state);
 
   let response = cache.get(key);
@@ -118,8 +116,4 @@ export function useServerResponse(state: any) {
   cache.clear();
   cache.set(key, response);
   return response;
-}
-
-export function useRefresh() {
-  cache.clear();
 }

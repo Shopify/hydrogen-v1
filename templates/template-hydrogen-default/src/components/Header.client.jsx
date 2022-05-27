@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Link} from '@shopify/hydrogen';
+import {Link, useRefreshCache} from '@shopify/hydrogen';
 
 import CartToggle from './CartToggle.client';
 import {useCartUI} from './CartUIProvider.client';
@@ -15,6 +15,7 @@ export default function Header({collections, storeName}) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [scrollbarWidth, setScrollbarWidth] = useState(0);
   const {isCartOpen} = useCartUI();
+  const refresh = useRefreshCache();
 
   useEffect(() => {
     const scrollbarWidth =
@@ -36,6 +37,13 @@ export default function Header({collections, storeName}) {
             paddingRight: isCartOpen ? scrollbarWidth : 0,
           }}
         >
+          <button
+            onClick={() => {
+              refresh();
+            }}
+          >
+            Refresh
+          </button>
           <div className="text-center w-full flex justify-between items-center">
             <CountrySelector />
             <MobileNavigation
