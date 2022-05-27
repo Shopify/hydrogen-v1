@@ -191,6 +191,10 @@ type ExternalImageProps<GenericLoaderOpts> = SetRequired<
    * 'data' shouldn't be passed when 'src' is used.
    */
   data?: never;
+  /**
+   * An array of pixel widths to generate a srcset. For example, `[300, 600, 800]`.
+   */
+  widths?: HtmlImageProps['width'][];
 };
 
 function ExternalImage<GenericLoaderOpts>({
@@ -200,6 +204,7 @@ function ExternalImage<GenericLoaderOpts>({
   alt,
   loader,
   loaderOptions,
+  widths,
   loading,
   ...rest
 }: ExternalImageProps<GenericLoaderOpts>) {
@@ -215,6 +220,15 @@ function ExternalImage<GenericLoaderOpts>({
     );
   }
 
+  if (
+    widths &&
+    Array.isArray(widths) &&
+    widths.some((size) => isNaN(size as number))
+  )
+    throw new Error(
+      `<Image/>: the 'widths' property must be an array of numbers`
+    );
+
   let finalSrc = src;
 
   if (loader) {
@@ -222,6 +236,25 @@ function ExternalImage<GenericLoaderOpts>({
     if (typeof finalSrc !== 'string' || !finalSrc) {
       throw new Error(`<Image/>: 'loader' did not return a valid string`);
     }
+  }
+  let finalSrcset = rest.srcSet ?? undefined;
+
+  if (!finalSrcset && loader && widths) {
+    // Height is a requirement in the LoaderProps, so  to keep the aspect ratio, we must determine the height based on the default values
+    const heightToWidthRatio =
+      parseInt(height as string) / parseInt(width as string);
+    finalSrcset = widths
+      ?.map((width) => parseInt(width as string, 10))
+      ?.map(
+        (width) =>
+          `${loader({
+            ...loaderOptions,
+            src,
+            width,
+            height: Math.floor(width * heightToWidthRatio),
+          })} ${width}w`
+      )
+      .join(', ');
   }
 
   /* eslint-disable hydrogen/prefer-image-component */
@@ -233,6 +266,7 @@ function ExternalImage<GenericLoaderOpts>({
       height={height}
       alt={alt ?? ''}
       loading={loading ?? 'lazy'}
+      srcSet={finalSrcset}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
@@ -258,9 +292,7 @@ function internalImageSrcSet({
 }: InternalShopifySrcSetGeneratorsParams) {
   const hasCustomWidths = widths && Array.isArray(widths);
   if (hasCustomWidths && widths.some((size) => isNaN(size as number)))
-    throw new Error(
-      `<Image/>: the 'widths' property of 'ShopifyLoaderOptions' must be an array of numbers`
-    );
+    throw new Error(`<Image/>: the 'widths' must be an array of numbers`);
 
   let setSizes = hasCustomWidths ? widths : IMG_SRC_SET_SIZES;
   if (
