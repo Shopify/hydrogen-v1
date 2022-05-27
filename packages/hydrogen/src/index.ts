@@ -31,7 +31,7 @@ export {
   CacheMonths,
   CacheCustom,
 } from './framework/CachingStrategy';
-export {useServerAnalytics} from './foundation/Analytics';
+export {useServerAnalytics} from './foundation/Analytics/hook';
 export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
 export {useSession} from './foundation/useSession/useSession';
 export {CookieSessionStorage} from './foundation/CookieSessionStorage/CookieSessionStorage';
