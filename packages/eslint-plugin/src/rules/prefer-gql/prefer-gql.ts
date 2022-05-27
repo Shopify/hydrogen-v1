@@ -33,11 +33,7 @@ export const preferGQL = createRule({
           node.source.value === '@shopify/hydrogen' ? node : hydrogenImportNode;
         lastImportNode = node;
 
-        if (
-          imported.includes('gql') &&
-          node.source.value !== '@shopify/hydrogen'
-          // node !== hydrogenImportNode
-        ) {
+        if (imported.includes('gql') && node !== hydrogenImportNode) {
           return context.report({
             node,
             messageId: 'preferGQL',

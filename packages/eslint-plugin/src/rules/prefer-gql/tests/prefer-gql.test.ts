@@ -12,21 +12,10 @@ const ruleTester = new TSESLint.RuleTester({
   },
 });
 
-function error(options: {suggestion?: string} = {}) {
-  const suggestions = options.suggestion
-    ? {
-        suggestions: [
-          {
-            output: options.suggestion,
-            messageId: 'replaceWithGQL' as const,
-          },
-        ],
-      }
-    : {};
+function error(options: {fix?: string} = {}) {
   return {
     type: AST_NODE_TYPES.ImportDeclaration,
     messageId: 'preferGQL' as const,
-    ...suggestions,
   };
 }
 
@@ -44,30 +33,27 @@ ruleTester.run('hydrogen/prefer-gql', preferGQL, {
           import {gql} from 'graphql-tag';
         `,
       errors: [error()],
+      output: dedent`
+        import {gql} from '@shopify/hydrogen';
+      `,
     },
     {
       code: dedent`
-      import {gql} from 'graphql-tag';
-      `,
-      errors: [
-        error({
-          suggestion: dedent`
-            import {gql} from '@shopify/hydrogen';
+          import {gql} from 'graphql-tag';
           `,
-        }),
-      ],
+      errors: [error()],
+      output: dedent`
+        import {gql} from '@shopify/hydrogen';
+      `,
     },
     {
       code: dedent`
-        import {Image} from '@shopify/hydrogen';
-        import {gql} from 'graphql-tag';
-      `,
-      errors: [
-        error({
-          suggestion: `import {Image, gql} from '@shopify/hydrogen';
+            import {Image} from '@shopify/hydrogen';
+            import {gql} from 'graphql-tag';
+          `,
+      errors: [error()],
+      output: `import {Image, gql} from '@shopify/hydrogen';
 `,
-        }),
-      ],
     },
   ],
 });
