@@ -110,8 +110,6 @@ describe('<Money />', () => {
       />
     );
 
-    console.log(component.debug());
-
     expect(component).toContainReactComponent(MeasurementSeparator);
     expect(component).toContainReactText(`${measurement.referenceUnit}`);
   });
