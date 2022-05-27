@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
-import {loadScript} from '../../../../utilities';
-import {ClientAnalytics} from '../../index';
+import {loadScript} from '../../../../utilities/load_script';
+import {ClientAnalytics} from '../../ClientAnalytics';
 import {useShop} from '../../../useShop';
 
 declare global {
