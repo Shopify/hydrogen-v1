@@ -16,11 +16,11 @@ jobs:
         with:
           ref: 'v1.x-2022-07'
       - run: |
-          mv templates/template-hydrogen-default/_gitignore templates/template-hydrogen-default/.gitignore
-          mv templates/template-hydrogen-hello-world/_gitignore templates/template-hydrogen-hello-world/.gitignore
+          mv templates/demo-store/_gitignore templates/demo-store/.gitignore
+          mv templates/hello-world/_gitignore templates/hello-world/.gitignore
       - run: |
-          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/template-hydrogen-default/package.json
-          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/template-hydrogen-hello-world/package.json
+          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/demo-store/package.json
+          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/hello-world/package.json
       - run: |
           git show-ref
           git config user.email "hydrogen@shopify.com"
