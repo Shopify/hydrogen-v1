@@ -128,3 +128,17 @@ Examples:
 * `src/routes/collections/[handle].server.jsx`
 * `src/routes/products/[handle].server.jsx`
 * `src/routes/pages/[handle].server.jsx`
+
+## Hydrogen analytics connect with checkout analytics
+
+There is a strict requirement for the analytic cookies to be set at the 1st party
+domain. This means that when a buyer navigates from your Hydrogen storefront to
+Shopify checkout, the domain name must stay the same.
+
+You can acheive this by assigning a subdomain to your online store. For example:
+
+* Set your Hydrogen store domain at `https://www.my-awesome-hydrogen-store.com`
+* Attach a new subdomain to your online store at `https://checkout.my-awesome-hydrogen-store.com`
+
+> Note: It is expected behaviour that Hydrogen analytics and checkout analytics do not connect
+when in development and preview mode. This will only connect in production mode.

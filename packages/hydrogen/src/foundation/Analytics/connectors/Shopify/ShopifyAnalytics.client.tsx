@@ -61,7 +61,7 @@ export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
         }
       }
     } catch (err) {
-      console.log(err);
+      // Do nothing
     }
   });
 
@@ -120,9 +120,9 @@ function buildStorefrontPageViewPayload(payload: any): any {
   const location = document.location;
   const shopify = payload.shopify;
   let formattedData = {
-    appId: 6167201,
+    appClientId: 6167201,
     channel: 'hydrogen',
-    subchannel: shopify.storefrontId,
+    hydrogenStorefrontId: shopify.storefrontId,
 
     isPersistentCookie: true,
     uniqToken: shopify.userId,
@@ -139,8 +139,14 @@ function buildStorefrontPageViewPayload(payload: any): any {
     shopId: stripGId(shopify.shopId),
     currency: shopify.currency,
     contentLanguage: shopify.acceptedLanguage,
-    isMerchantRequest: isMerchantRequest(),
   };
+
+  formattedData = addDataIf(
+    {
+      isMerchantRequest: isMerchantRequest(),
+    },
+    formattedData
+  );
 
   formattedData = addDataIf(
     {
@@ -178,7 +184,6 @@ function isMerchantRequest(): Boolean {
 }
 
 function stripGId(text: string): number {
-  console.log('GId:', text);
   return parseInt(text.substring(text.lastIndexOf('/') + 1));
 }
 
@@ -214,14 +219,16 @@ function sendToServer(data: any) {
 
     // Send to server
     try {
-      // fetch('/__event?shopify', {
-      //   method: 'post',
-      //   headers: {
-      //     'cache-control': 'no-cache',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(batchedDataToBeSent),
-      // });
+      fetch('/__event?shopify', {
+        method: 'post',
+        headers: {
+          'cache-control': 'no-cache',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(batchedDataToBeSent),
+      });
+    } catch (error) {
+      // Fallback to client-side
       fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
         method: 'post',
         headers: {
@@ -229,16 +236,6 @@ function sendToServer(data: any) {
         },
         body: JSON.stringify(batchedDataToBeSent),
       });
-    } catch (error) {
-      console.log(error);
-      // Fallback to client-side
-      // fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
-      //   method: 'post',
-      //   headers: {
-      //     'content-type': 'text/plain',
-      //   },
-      //   body: JSON.stringify(batchedDataToBeSent),
-      // });
     }
   }, BATCH_SENT_TIMEOUT);
 }
