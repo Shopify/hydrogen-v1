@@ -1,5 +1,4 @@
-import {useShopQuery, Seo, CacheDays} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {useShopQuery, Seo, CacheDays, gql} from '@shopify/hydrogen';
 
 import {Suspense} from 'react';
 

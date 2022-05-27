@@ -1,5 +1,4 @@
-import {useShop, useShopQuery, Seo} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {useShop, useShopQuery, Seo, gql} from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
 
