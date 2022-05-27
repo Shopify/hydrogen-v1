@@ -17,8 +17,7 @@ export function request(
         'content-type': 'text/plain',
       },
       body: JSON.stringify(data),
-    }).catch((error) => {
-      console.log(error);
+    }).catch((err) => {
       // send to bugsnag? oxygen?
     });
   }
