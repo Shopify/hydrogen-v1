@@ -13,7 +13,7 @@ import Layout from '../components/Layout.server';
 import FeaturedCollection from '../components/FeaturedCollection';
 import ProductCard from '../components/ProductCard';
 import Welcome from '../components/Welcome.server';
-import {Suspense, useState} from 'react';
+import {Suspense} from 'react';
 
 export default function Index() {
   const {countryCode = 'US'} = useSession();
