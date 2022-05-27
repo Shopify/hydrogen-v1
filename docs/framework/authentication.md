@@ -21,6 +21,9 @@ The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templa
 | `/account/reset` | An API route to update the new password for the user. |
 | `/account/activate/[id]/[activationToken]` | A form to activate the new user. The user should only reach this form from a link in their email. The user submits the password and `activationToken` to `/account/activate`. On success, the user is redirected to `/account`. |
 | `/account/activate` | An API route to activate the user account. |
+| `/address` | An API route for creating a new address. |
+| `/address/[addressId]` | An API route for updating and deleting an address. |
+| `/orders/[orderId]` | A page to view the details of an order. Requires the user to be authenticated. |
 
 ## Retrieve a customer access token
 
