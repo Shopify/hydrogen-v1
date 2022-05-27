@@ -1,9 +1,7 @@
 // @ts-ignore
 import reactServerDomVite from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
-import {
-  HYDROGEN_DEFAULT_SERVER_ENTRY,
-  VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
-} from './vite-plugin-hydrogen-middleware';
+import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
+import {VIRTUAL_PROXY_HYDROGEN_ROUTES_ID} from './vite-plugin-hydrogen-virtual-files';
 import {viteception} from '../viteception';
 
 export default function () {
