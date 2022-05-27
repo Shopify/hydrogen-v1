@@ -98,28 +98,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       [forwardedRef, setIntersectionRef]
     );
 
-    const signalPrefetchIntent = () => {
-      /**
-       * startTransition to yield to more important updates
-       */
-      startTransition(() => {
-        if (prefetch) {
-          setMaybePrefetch(true);
-        }
-      });
-    };
-
-    const cancelPrefetchIntent = () => {
-      /**
-       * startTransition to yield to more important updates
-       */
-      startTransition(() => {
-        if (prefetch) {
-          setMaybePrefetch(false);
-        }
-      });
-    };
-
     useEffect(() => {
       startTransition(() => {
         if (isVisible && prefetch) {
@@ -144,21 +122,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       }
     }, [maybePrefetch]);
 
-    const onMouseEnter = composeEventHandlers(
-      props.onMouseEnter,
-      signalPrefetchIntent
-    );
-    const onMouseLeave = composeEventHandlers(
-      props.onMouseLeave,
-      cancelPrefetchIntent
-    );
-    const onFocus = composeEventHandlers(props.onFocus, signalPrefetchIntent);
-    const onBlur = composeEventHandlers(props.onBlur, cancelPrefetchIntent);
-    const onTouchStart = composeEventHandlers(
-      props.onTouchStart,
-      signalPrefetchIntent
-    );
-
     return (
       <>
         <a
@@ -171,11 +134,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           ])}
           ref={setRef}
           onClick={internalClick}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          onTouchStart={onTouchStart}
           href={props.to}
         >
           {props.children}
@@ -206,23 +164,6 @@ function Prefetch({pathname}: {pathname: string}) {
     encodeURIComponent(JSON.stringify(proposedServerState));
 
   return <link rel="prefetch" as="fetch" href={href} />;
-}
-
-/**
- * Credit: Remix's <Link> component.
- */
-export function composeEventHandlers<
-  EventType extends React.SyntheticEvent | Event
->(
-  theirHandler: ((event: EventType) => any) | undefined,
-  ourHandler: (event: EventType) => any
-): (event: EventType) => any {
-  return (event) => {
-    theirHandler?.(event);
-    if (!event.defaultPrevented) {
-      ourHandler(event);
-    }
-  };
 }
 
 function isModifiedEvent(event: React.MouseEvent) {
