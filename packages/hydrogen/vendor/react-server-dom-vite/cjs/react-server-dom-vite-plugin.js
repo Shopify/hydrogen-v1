@@ -18,6 +18,8 @@ var vite = require('vite');
 var fs = require('fs');
 var path = require('path');
 
+var assign = Object.assign;
+
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
   if (typeof o === "string") return _arrayLikeToArray(o, minLen);
@@ -94,48 +96,29 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
 
 var rscViteFileRE = /\/react-server-dom-vite.js/;
 var noProxyRE = /[&?]no-proxy($|&)/;
+
+var isClientComponent = function (id) {
+  return /\.client\.[jt]sx?($|\?)/.test(id);
+};
+
 function ReactFlightVitePlugin() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      serverBuildEntries = _ref.serverBuildEntries,
       _ref$isServerComponen = _ref.isServerComponentImporterAllowed,
       isServerComponentImporterAllowed = _ref$isServerComponen === void 0 ? function (importer) {
     return false;
-  } : _ref$isServerComponen,
-      _ref$isClientComponen = _ref.isClientComponent,
-      isClientComponent = _ref$isClientComponen === void 0 ? function (id) {
-    return /\.client\.[jt]sx?($|\?)/.test(id);
-  } : _ref$isClientComponen,
-      findClientComponentsForClientBuild = _ref.findClientComponentsForClientBuild;
+  } : _ref$isServerComponen;
 
   var config;
   var server;
   var invalidateTimeout;
-  var absoluteImporterPath;
+  var globImporterPath;
 
-  function invalidateImporter() {
+  function invalidateGlobImporter() {
     clearTimeout(invalidateTimeout);
     invalidateTimeout = setTimeout(function () {
-      return server.watcher.emit('change', absoluteImporterPath);
+      return server.watcher.emit('change', globImporterPath);
     }, 100);
-  }
-
-  function wrapIfClientComponent(id) {
-    var handle = function (isClient) {
-      if (!isClient) return null;
-
-      if (server) {
-        var moduleNode = server.moduleGraph.getModuleById(id);
-
-        if (!moduleNode.__isClientComponent) {
-          moduleNode.__isClientComponent = true;
-          if (absoluteImporterPath) invalidateImporter();
-        }
-      }
-
-      return proxyClientComponent(id.split('?')[0]);
-    };
-
-    var tmp = isClientComponent(id);
-    return typeof tmp === 'boolean' ? handle(tmp) : tmp.then(handle);
   }
 
   return {
@@ -144,7 +127,8 @@ function ReactFlightVitePlugin() {
     configureServer: function (_server) {
       server = _server;
     },
-    configResolved: function (_config) {
+    configResolved: async function (_config) {
+      await esModuleLexer.init;
       config = _config; // By pushing this plugin at the end of the existing array,
       // we enforce running it *after* Vite resolves import.meta.glob.
 
@@ -162,7 +146,7 @@ function ReactFlightVitePlugin() {
     },
     load: function (id) {
       var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      if (!options.ssr || !shouldCheckClientComponent(id)) return;
+      if (!options.ssr || !isClientComponent(id) || noProxyRE.test(id)) return;
 
       if (server) {
         var mod = server.moduleGraph.idToModuleMap.get(id.replace('/@fs', ''));
@@ -175,14 +159,28 @@ function ReactFlightVitePlugin() {
             // so we don't need to create a module reference
             return;
           }
+        } // Mark module as a client component.
+
+
+        var moduleNode = server.moduleGraph.getModuleById(id);
+        if (!moduleNode.meta) moduleNode.meta = {};
+
+        if (!moduleNode.meta.isClientComponent) {
+          moduleNode.meta.isClientComponent = true;
+          if (globImporterPath) invalidateGlobImporter();
         }
       }
 
-      return wrapIfClientComponent(id);
+      return proxyClientComponent(id.split('?')[0]);
     },
     transform: function (code, id) {
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
+      // Add more information for this module in the graph.
+      // It will be used later to discover client boundaries.
+      if (server && options.ssr && /\.[jt]sx?($|\?)/.test(id)) {
+        augmentModuleGraph(server.moduleGraph, id, code);
+      }
       /**
        * In order to allow dynamic component imports from RSC, we use Vite's import.meta.glob.
        * This hook replaces the glob placeholders with resolved paths to all client components.
@@ -192,6 +190,8 @@ function ReactFlightVitePlugin() {
        * If the paths are relative to the root instead, Vite won't add the querystring
        * and we will have duplicated files in the browser (with duplicated contexts, etc).
        */
+
+
       if (rscViteFileRE.test(id)) {
         var INJECTING_RE = /\{\s*__INJECTED_CLIENT_IMPORTERS__[:\s]*null[,\s]*\}\s*;/;
         var s = new MagicString(code);
@@ -231,16 +231,15 @@ function ReactFlightVitePlugin() {
         };
 
         if (config.command === 'serve') {
-          absoluteImporterPath = id;
-          return injectGlobs(findClientComponentsForDev(server));
+          globImporterPath = id;
+          return injectGlobs(findClientBoundaries(server.moduleGraph));
         }
 
-        if (!findClientComponentsForClientBuild) {
-          throw new Error('[react-server-dom-vite] Parameter findClientComponentsForClientBuild is required for client build');
+        if (!serverBuildEntries) {
+          throw new Error('[react-server-dom-vite] Parameter serverBuildEntries is required for client build');
         }
 
-        var tmp = findClientComponentsForClientBuild(config);
-        return Array.isArray(tmp) ? injectGlobs(tmp) : tmp.then(injectGlobs);
+        return findClientBoundariesForClientBuild(serverBuildEntries).then(injectGlobs);
       }
     }
   };
@@ -277,7 +276,6 @@ async function proxyClientComponent(filepath, src) {
   var DEFAULT_EXPORT = 'default'; // Modify the import ID to avoid infinite wraps
 
   var importFrom = filepath + "?no-proxy";
-  await esModuleLexer.init;
 
   if (!src) {
     src = await fs.promises.readFile(filepath, 'utf-8');
@@ -300,23 +298,22 @@ async function proxyClientComponent(filepath, src) {
   return proxyCode;
 }
 
-function shouldCheckClientComponent(id) {
-  return /\.[jt]sx?($|\?)/.test(id) && !noProxyRE.test(id);
-}
+function findClientBoundaries(moduleGraph) {
+  var clientBoundaries = []; // eslint-disable-next-line no-for-of-loops/no-for-of-loops
 
-function findClientComponentsForDev(server) {
-  var clientComponents = []; // eslint-disable-next-line no-for-of-loops/no-for-of-loops
-
-  var _iterator = _createForOfIteratorHelper(server.moduleGraph.fileToModulesMap.values()),
+  var _iterator = _createForOfIteratorHelper(moduleGraph.fileToModulesMap.values()),
       _step;
 
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var set = _step.value;
       var clientModule = Array.from(set).find(function (moduleNode) {
-        return moduleNode.__isClientComponent;
+        return moduleNode.meta && moduleNode.meta.isClientComponent;
       });
-      if (clientModule) clientComponents.push(clientModule.file);
+
+      if (clientModule && isDirectImportInServer(clientModule)) {
+        clientBoundaries.push(clientModule.file);
+      }
     }
   } catch (err) {
     _iterator.e(err);
@@ -324,7 +321,28 @@ function findClientComponentsForDev(server) {
     _iterator.f();
   }
 
-  return clientComponents;
+  return clientBoundaries;
+}
+
+async function findClientBoundariesForClientBuild(serverEntries) {
+  // Viteception
+  var server = await vite.createServer({
+    clearScreen: false,
+    server: {
+      middlewareMode: 'ssr'
+    }
+  });
+
+  try {
+    // Load server entries to discover client components
+    await Promise.all(serverEntries.map(server.ssrLoadModule));
+  } catch (error) {
+    error.message = 'Could not load server build entries: ' + error.message;
+    throw error;
+  }
+
+  await server.close();
+  return findClientBoundaries(server.moduleGraph);
 }
 
 var hashImportsPlugin = {
@@ -349,8 +367,119 @@ var hashImportsPlugin = {
       };
     }
   }
-}; // This can be used in custom findClientComponentsForClientBuild implementations
+};
+/**
+ * A client module should behave as a client boundary
+ * if it is imported by the server before encountering
+ * another boundary in the process.
+ * Traverse the module graph upwards to find non client
+ * components that import the current module.
+ */
 
-ReactFlightVitePlugin.findClientComponentsFromServer = findClientComponentsForDev;
+function isDirectImportInServer(currentMod, originalMod) {
+  // TODO: this should use recursion in any module that exports
+  // the original one, not only in full facade files.
+  if (!originalMod || currentMod.meta?.isFacade) {
+    return Array.from(currentMod.importers).some(function (importer) {
+      return (// eslint-disable-next-line no-unused-vars
+        isDirectImportInServer(importer, originalMod || currentMod)
+      );
+    });
+  } // Not enough information: safer to assume it is
+  // imported in server to create a new boundary.
+
+
+  if (!currentMod.meta || !originalMod.meta) return true; // If current module is a client component, stop checking
+  // parents since this can be the actual boundary.
+
+  if (isClientComponent(currentMod.file)) return false; // If current module is not a client component, assume
+  // it is a server component on a shared component
+  // that will be imported in the server to be safe.
+  // However, due to the lack of tree-shaking in the dev module graph,
+  // we need to manually make sure this module is importing something from
+  // the original module before marking it as client boundary.
+  // -- TODO: this only checks namedExports right now. It should
+  // consider default exports and variable renaming in facade modules.
+
+  return currentMod.meta.imports.some(function (imp) {
+    return imp.action === 'import' && (imp.from === originalMod.file || imp.variables?.some(function (_ref2) {
+      var name = _ref2[0];
+      return originalMod.meta?.namedExports.includes(name);
+    }));
+  });
+}
+
+function resolveModPath(modPath, dirname, retryExtension) {
+  var absolutePath;
+
+  try {
+    absolutePath = modPath.startsWith('.') ? path.resolve(dirname, modPath) : modPath;
+    return require.resolve((modPath.startsWith('.') ? path.resolve(dirname, modPath) : modPath) + (retryExtension ?? ''));
+  } catch (error) {
+    if (!/\.[jt]sx?$/.test(absolutePath) && retryExtension !== '.tsx') {
+      // Node cannot infer .[jt]sx extensions.
+      // Append them here and retry a couple of times.
+      return resolveModPath(absolutePath, dirname, retryExtension ? '.tsx' : '.jsx');
+    }
+  }
+}
+
+function augmentModuleGraph(moduleGraph, id, code) {
+  var currentModule = moduleGraph.getModuleById(id);
+  if (!currentModule) return;
+
+  var _id$split = id.split('?'),
+      source = _id$split[0];
+
+  var dirname = path.dirname(source);
+
+  var _parse2 = esModuleLexer.parse(code),
+      rawImports = _parse2[0],
+      namedExports = _parse2[1],
+      isFacade = _parse2[2]; // This is currently not used but it should be considered
+  // to improve the crawling in `isDirectImportInServer`.
+
+
+  var imports = [];
+  rawImports.forEach(function (_ref3) {
+    var startMod = _ref3.s,
+        endMod = _ref3.e,
+        dynamicImportIndex = _ref3.d,
+        startStatement = _ref3.ss,
+        endStatement = _ref3.se;
+    if (dynamicImportIndex !== -1) return; // Skip dynamic imports for now
+
+    var modPath = code.slice(startMod, endMod);
+    var resolvedPath = resolveModPath(modPath.split('?')[0], dirname);
+    if (!resolvedPath) return; // Virtual modules or other exceptions
+
+    var _code$slice$split$0$s = code.slice(startStatement, endStatement).split(/\s+from\s+['"]/m)[0].split(/\s+(.+)/m),
+        action = _code$slice$split$0$s[0],
+        variables = _code$slice$split$0$s[1];
+
+    imports.push({
+      action: action,
+      // 'import' or 'export'
+      variables: variables // [['originalName', 'alias']]
+      .replace(/[{}]/gm, '').trim().split(/\s*,\s*/m).map(function (s) {
+        return s.split(/\s+as\s+/m);
+      }).filter(Boolean),
+      from: resolvedPath,
+      // '/absolute/path'
+      originalFrom: modPath // './path' or '3plib/subpath'
+
+    });
+  });
+
+  if (!currentModule.meta) {
+    currentModule.meta = {};
+  }
+
+  assign(currentModule.meta, {
+    isFacade: isFacade,
+    namedExports: namedExports,
+    imports: imports
+  });
+}
 
 module.exports = ReactFlightVitePlugin;
