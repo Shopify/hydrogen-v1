@@ -4,6 +4,7 @@ module.exports = {
   ignorePatterns: [
     '**/storefront-api-types.ts',
     '**/storefront-api-types.d.ts',
+    'examples/**',
   ],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],

@@ -299,7 +299,7 @@ async function stream(
   const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
     stripScriptsFromTemplate(template);
 
-  const {AppSSR, rscReadable} = buildAppSSR(
+  const {AppSSR, rscReadable, rscDidError} = buildAppSSR(
     {
       App,
       log,
@@ -324,7 +324,7 @@ async function stream(
     },
   });
 
-  let didError: Error | undefined;
+  let ssrDidError: Error | undefined;
 
   if (__WORKER__) {
     const onCompleteAll = defer<true>();
@@ -341,7 +341,7 @@ async function stream(
         bootstrapScripts,
         bootstrapModules,
         onError(error) {
-          didError = error;
+          ssrDidError = error;
 
           if (dev && !writable.closed && !!responseOptions.status) {
             writable.write(getErrorMarkup(error));
@@ -373,7 +373,7 @@ async function stream(
     function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
-        getResponseOptions(componentResponse, didError)
+        getResponseOptions(componentResponse, rscDidError ?? ssrDidError)
       );
 
       /**
@@ -394,9 +394,13 @@ async function stream(
         responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
-        if (didError) {
+        if (rscDidError ?? ssrDidError) {
           // This error was delayed until the headers were properly sent.
-          writable.write(encoder.encode(getErrorMarkup(didError)));
+          writable.write(
+            encoder.encode(
+              getErrorMarkup((rscDidError ?? ssrDidError) as Error)
+            )
+          );
         }
 
         return true;
@@ -483,7 +487,12 @@ async function stream(
           componentResponse.cacheControlHeader
         );
 
-        writeHeadToServerResponse(response, componentResponse, log, didError);
+        writeHeadToServerResponse(
+          response,
+          componentResponse,
+          log,
+          rscDidError ?? ssrDidError
+        );
 
         if (isRedirect(response)) {
           // Return redirects early without further rendering/streaming
@@ -492,7 +501,10 @@ async function stream(
 
         if (!componentResponse.canStream()) return;
 
-        startWritingHtmlToServerResponse(response, dev ? didError : undefined);
+        startWritingHtmlToServerResponse(
+          response,
+          dev ? rscDidError ?? ssrDidError : undefined
+        );
 
         setTimeout(() => {
           log.trace('node pipe response');
@@ -517,7 +529,12 @@ async function stream(
           return;
         }
 
-        writeHeadToServerResponse(response, componentResponse, log, didError);
+        writeHeadToServerResponse(
+          response,
+          componentResponse,
+          log,
+          rscDidError ?? ssrDidError
+        );
 
         postRequestTasks(
           'str',
@@ -531,7 +548,10 @@ async function stream(
           return response.end();
         }
 
-        startWritingHtmlToServerResponse(response, dev ? didError : undefined);
+        startWritingHtmlToServerResponse(
+          response,
+          dev ? rscDidError ?? ssrDidError : undefined
+        );
 
         bufferReadableStream(rscToScriptTagReadable.getReader()).then(
           (scriptTags) => {
@@ -554,7 +574,7 @@ async function stream(
         }
       },
       onError(error: any) {
-        didError = error;
+        ssrDidError = error;
 
         if (dev && response.headersSent) {
           // Calling write would flush headers automatically.
@@ -592,9 +612,12 @@ async function hydrate(
     response: componentResponse,
   });
 
-  const rscReadable = rscRenderToReadableStream(AppRSC);
+  const rscReadable = rscRenderToReadableStream(AppRSC, {
+    onError(e) {
+      log.error(e);
+    },
+  });
 
-  // Note: CFW does not support reader.piteTo nor iterable syntax
   const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
   postRequestTasks('rsc', 200, request, componentResponse);
@@ -656,8 +679,17 @@ function buildAppSSR(
     response,
   });
 
-  const [rscReadableForFizz, rscReadableForFlight] =
-    rscRenderToReadableStream(AppRSC).tee();
+  let rscDidError;
+
+  const [rscReadableForFizz, rscReadableForFlight] = rscRenderToReadableStream(
+    AppRSC,
+    {
+      onError(e) {
+        rscDidError = e;
+        log.error(e);
+      },
+    }
+  ).tee();
 
   const rscResponse = createFromReadableStream(rscReadableForFizz);
   const RscConsumer = () => rscResponse.readRoot();
@@ -682,7 +714,7 @@ function buildAppSSR(
     </Html>
   );
 
-  return {AppSSR, rscReadable: rscReadableForFlight};
+  return {AppSSR, rscReadable: rscReadableForFlight, rscDidError};
 }
 
 function PreloadQueries({
