@@ -1,12 +1,13 @@
-import type {ServerAnalyticsConnector} from '../../types';
+import type {ResolvedHydrogenConfig} from '../../types';
 import {log} from '../../utilities/log';
 
-export function ServerAnalyticsRoute(
+export async function ServerAnalyticsRoute(
   request: Request,
-  serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>
+  {hydrogenConfig}: {hydrogenConfig: ResolvedHydrogenConfig}
 ) {
   const requestHeader = request.headers;
   const requestUrl = request.url;
+  const serverAnalyticsConnectors = hydrogenConfig.serverAnalyticsConnectors;
 
   if (requestHeader.get('Content-Length') === '0') {
     serverAnalyticsConnectors?.forEach((connector) => {
