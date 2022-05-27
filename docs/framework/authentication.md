@@ -16,7 +16,7 @@ The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templa
 | `/account/login` | A page for the user to enter their credentials and log in.                                        |
 | `/account/logout` | An API route that expects a `POST` request to delete the current session.                                               |
 | `/account/register` | A form for the user to set up a new account. On success, the user is redirected to `/account`. |
-| `/account/recover` | A form for the user to initiate a password reset. If the form is sent successfully, then an email is sent to the user with a link to reset their password. Clicking the link leads the user to the `/account/reset/[resetToken]` page. |
+| `/account/recover` | A form for the user to initiate a password reset. If the form is sent successfully, then an email is sent to the user with a link to reset their password. Clicking the link leads the user to the `/account/reset/[id]/[resetToken]` page. |
 | `/account/reset/[id]/[resetToken]` | A form for the user to enter a new password. The user submits the new password and `resetToken` to `/account/reset`. On success, the user is redirected to `/account`. |
 | `/account/reset` | An API route to update the new password for the user. |
 | `/account/activate/[id]/[activationToken]` | A form to activate the new user. The user should only reach this form from a link in their email. The user submits the password and `activationToken` to `/account/activate`. On success, the user is redirected to `/account`. |
@@ -27,7 +27,7 @@ The [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templa
 
 ## Retrieve a customer access token
 
-You can retrieve a customer access token using the [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession) hook:
+You can retrieve a customer access token using the [`useSession`](https://shopify.dev/api/hydrogen/hooks/framework/usesession) hook. If the `customerAccessToken` isn't defined, then the user isn't logged in.
 
 {% codeblock file, filename: 'component.server.jsx' %}
 
