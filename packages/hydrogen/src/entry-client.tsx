@@ -1,4 +1,3 @@
-/* eslint-disable hydrogen/no-state-in-server-components */
 import React, {
   Suspense,
   useState,
@@ -133,5 +132,3 @@ function Error({error}: {error: Error}) {
     </div>
   );
 }
-
-/* eslint-enable hydrogen/no-state-in-server-components */
