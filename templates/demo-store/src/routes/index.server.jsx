@@ -16,10 +16,7 @@ import Welcome from '../components/Welcome.server';
 import {Suspense, useState} from 'react';
 
 export default function Index() {
-  if (true) {
-    const [count, setCount] = useState(0);
-    const {countryCode = 'US'} = useSession();
-  }
+  const {countryCode = 'US'} = useSession();
 
   return (
     <Layout hero={<GradientBackground />}>
