@@ -37,8 +37,8 @@
     "@types/dedent": "^0.7.0",
     "@types/jest": "^27.5.1",
     "dedent": "^0.7.0",
-    "jest": "^28.1.0",
-    "ts-jest": "^28.0.3"
+    "jest": "^27.0.0",
+    "ts-jest": "^27.0.0"
   },
   "peerDependencies": {
     "eslint": ">=8.0.0"
