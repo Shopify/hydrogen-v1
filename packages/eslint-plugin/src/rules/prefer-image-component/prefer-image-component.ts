@@ -19,6 +19,7 @@ export const preferImageComponent = createRule({
       replaceWithImage: `Replace \`${IMAGE_TAG_NAME}\` tags with the \`Image\` component from @shopify/hydrogen.`,
     },
     schema: [],
+    hasSuggestions: true,
   },
   defaultOptions: [],
   create(context) {

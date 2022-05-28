@@ -93,6 +93,12 @@ module.exports = {
       },
     },
     {
+      files: ['packages/hydrogen/src/utilities/tests/*'],
+      rules: {
+        'hydrogen/prefer-gql': 'off',
+      },
+    },
+    {
       files: ['packages/playground/**'],
       rules: {
         'node/no-extraneous-import': 'off',
