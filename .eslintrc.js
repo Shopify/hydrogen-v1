@@ -6,9 +6,6 @@ module.exports = {
     '**/storefront-api-types.d.ts',
     'examples/**',
   ],
-  settings: {
-    'import/internal-regex': '^type\\-fest$',
-  },
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
   extends: [
