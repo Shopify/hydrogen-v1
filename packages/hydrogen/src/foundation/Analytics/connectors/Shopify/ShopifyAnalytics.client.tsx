@@ -150,13 +150,17 @@ function buildStorefrontPageViewPayload(payload: any): any {
   );
 
   if (shopify.resourceId) {
-    formattedData = addDataIf(
-      {
-        resourceType: getResourceType(shopify.resourceId),
-        resourceId: stripGId(shopify.resourceId),
-      },
-      formattedData
-    );
+    try {
+      formattedData = addDataIf(
+        {
+          resourceType: getResourceType(shopify.resourceId),
+          resourceId: stripGId(shopify.resourceId),
+        },
+        formattedData
+      );
+    } catch (err) {
+      // do nothing
+    }
   }
 
   formattedData = addDataIf(
