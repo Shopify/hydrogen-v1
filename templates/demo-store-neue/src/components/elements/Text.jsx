@@ -1,23 +1,38 @@
 import clsx from 'clsx';
+import {missingClass, formatText} from '~/lib/utils';
 
 export default function Text({
   as = 'span',
   size = 'copy',
-  className = '',
+  width = 'default',
+  className,
+  format,
   children,
 }) {
   const Component = as;
 
+  const sizes = {
+    lead: 'text-lead font-medium',
+    copy: 'text-copy',
+    fine: 'text-fine',
+  };
+
+  const widths = {
+    default: 'max-w-prose',
+    narrow: 'max-w-prose-narrow',
+    wide: 'max-w-prose-wide',
+  };
+
   const styles = clsx(
-    {
-      'text-lead font-medium': size === 'lead',
-      'text-copy': size === 'copy',
-      'text-fine': size === 'fine',
-      'whitespace-pre-wrap': className.includes('whitespace') === false,
-      'max-w-prose': className.includes('max-w') === false,
-    },
+    missingClass(className, 'max-w-') && widths[width],
+    missingClass(className, 'whitespace-') && 'whitespace-pre-wrap',
+    sizes[size],
     className,
   );
 
-  return <Component className={styles}>{children}</Component>;
+  return (
+    <Component className={styles}>
+      {format ? formatText(children) : children}
+    </Component>
+  );
 }

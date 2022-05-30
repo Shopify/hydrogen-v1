@@ -8,3 +8,5 @@ export {default as Locations} from './Locations';
 export {default as ProductSwimlane} from './ProductSwimlane';
 export {default as Header} from './Header.client';
 export {default as Footer} from './Footer.server';
+
+export {default as PageHeader} from './PageHeader';

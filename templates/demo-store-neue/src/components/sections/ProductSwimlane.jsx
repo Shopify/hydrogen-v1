@@ -1,5 +1,6 @@
 import {ProductCard} from '~/components/blocks';
 import {Heading} from '../elements';
+import PageSection from './PageSection';
 
 const dummyProduct = {
   label: 'Limited Edition',
@@ -21,7 +22,7 @@ const dummyProducts = new Array(12).fill(dummyProduct);
 
 export default function ProductSwimlane({title, products = dummyProducts}) {
   return (
-    <section className="grid gap-4 pt-8 pb-2 bg-stone-50 md:gap-7 lg:pt-8 xl:pt-16 xl:pb-8">
+    <PageSection heading="Featured Products" padding="y">
       <Heading size="lead" className="px-4 md:px-8 lg:px-12">
         {title}
       </Heading>
@@ -36,6 +37,6 @@ export default function ProductSwimlane({title, products = dummyProducts}) {
           );
         })}
       </div>
-    </section>
+    </PageSection>
   );
 }

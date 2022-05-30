@@ -1,5 +1,6 @@
 import {Link, Image} from '@shopify/hydrogen';
 import {Heading} from '../elements';
+import PageSection from './PageSection';
 
 const dummyCollections = [
   {
@@ -29,8 +30,7 @@ export default function FeaturedCollections({
   collections = dummyCollections,
 }) {
   return (
-    <section className="grid gap-6 p-m md:p-l lg:p-xl bg-primary/20">
-      <Heading size="lead">{title}</Heading>
+    <PageSection heading={title}>
       <ul className="grid md:grid-cols-3 gap-m">
         {collections.map((collection) => (
           <li key={collection.id}>
@@ -51,6 +51,6 @@ export default function FeaturedCollections({
           </li>
         ))}
       </ul>
-    </section>
+    </PageSection>
   );
 }
