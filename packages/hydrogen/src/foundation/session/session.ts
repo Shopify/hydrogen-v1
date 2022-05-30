@@ -4,6 +4,7 @@ import type {ServerComponentResponse} from '../../framework/Hydration/ServerComp
 import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
 
 export type SessionSyncApi = {
+  name: string;
   get: () => Record<string, string>;
   set: (value: Record<string, string>) => void;
 };
@@ -15,6 +16,7 @@ export type SessionApi = {
 };
 
 export type SessionStorageAdapter = {
+  name: string;
   get: (request: Request) => Promise<Record<string, string>>;
   set: (request: Request, value: Record<string, string>) => Promise<string>;
   destroy: (request: Request) => Promise<string>;
@@ -34,6 +36,7 @@ export function getSyncSessionApi(
 
   return session
     ? ({
+        name: session.name,
         get() {
           if (!sessionPromises.getPromise) {
             sessionPromises.getPromise = wrapPromise(session.get(request));
@@ -52,6 +55,7 @@ export function getSyncSessionApi(
 
 export const emptySessionImplementation = function (log: Logger) {
   return {
+    name: 'no-session',
     async get() {
       log.warn('No session adapter has been configured!');
       return {};

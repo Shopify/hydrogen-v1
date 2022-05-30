@@ -5,10 +5,11 @@ import {SHOPIFY_S, SHOPIFY_Y} from './const';
 import {ShopifyAnalyticsClient} from './ShopifyAnalytics.client';
 import {buildUUID} from './utils';
 
-export function ShopifyAnalytics({cookieName}: {cookieName: string}) {
+export function ShopifyAnalytics() {
   const request = useServerRequest();
   const session = request.ctx.session;
   const cookies = session?.get();
+  const cookieName = session?.name || 'no-session';
 
   session?.set({
     ...cookies,

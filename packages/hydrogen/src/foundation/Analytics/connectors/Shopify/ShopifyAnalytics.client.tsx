@@ -121,7 +121,6 @@ function buildStorefrontPageViewPayload(payload: any): any {
   const shopify = payload.shopify;
   let formattedData = {
     appClientId: 6167201,
-    channel: 'hydrogen',
     hydrogenStorefrontId: shopify.storefrontId,
 
     isPersistentCookie: true,
