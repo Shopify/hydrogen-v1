@@ -10,8 +10,16 @@ import type {
 } from './storefront-api-types';
 import type {SessionStorageAdapter} from './foundation/session/session';
 
-export type RendererOptions = {
-  AppSSR: any;
+export type AssembleHtmlParams = {
+  ssr: string;
+  rsc?: string;
+  routes?: ImportGlobEagerOutput;
+  request: ServerComponentRequest;
+  template: string;
+};
+
+export type RunSsrParams = {
+  state: Record<string, any>;
   rsc: {readable: ReadableStream; didError: () => Error | undefined};
   routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
@@ -19,17 +27,11 @@ export type RendererOptions = {
   log: Logger;
   dev?: boolean;
   template: string;
-  templateScriptTags: string[];
   nonce?: string;
+  nodeResponse?: ServerResponse;
 };
 
-export type StreamerOptions = RendererOptions & {
-  bootstrapScripts: string[];
-  bootstrapModules: string[];
-  response?: ServerResponse;
-};
-
-export type RscAppParams = {
+export type RunRscParams = {
   App: any;
   state: Record<string, any>;
   log: Logger;
