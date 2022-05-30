@@ -31,25 +31,27 @@ export default function Header({collections, storeName}) {
         }`}
       >
         <div
-          className="h-full flex lg:flex-col place-content-between"
+          className="flex h-full lg:flex-col place-content-between"
           style={{
             paddingRight: isCartOpen ? scrollbarWidth : 0,
           }}
         >
-          <div className="text-center w-full flex justify-between items-center">
-            <CountrySelector />
-            <MobileNavigation
-              collections={collections}
-              isOpen={isMobileNavOpen}
-              setIsOpen={setIsMobileNavOpen}
-            />
+          <div className="flex items-center justify-between w-full text-center">
+            <div className="w-20 lg:w-40">
+              <CountrySelector />
+              <MobileNavigation
+                collections={collections}
+                isOpen={isMobileNavOpen}
+                setIsOpen={setIsMobileNavOpen}
+              />
+            </div>
             <Link
-              className="font-black uppercase text-3xl tracking-widest"
+              className="flex-grow text-3xl font-black tracking-widest uppercase"
               to="/"
             >
               {storeName}
             </Link>
-            <div className="flex">
+            <div className="flex justify-end w-20 lg:w-40">
               <Link to="/account" className="mr-2">
                 <AccountIcon />
               </Link>

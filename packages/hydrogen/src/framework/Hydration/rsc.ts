@@ -7,7 +7,6 @@ import {
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import {RSC_PATHNAME} from '../../constants';
-import {htmlDecode} from '../../utilities';
 
 let rscReader: ReadableStream | null;
 
@@ -16,9 +15,10 @@ const flightChunks: string[] = [];
 const FLIGHT_ATTRIBUTE = 'data-flight';
 
 function addElementToFlightChunks(el: Element) {
+  // We don't need to decode, because `.getAttribute` already decodes
   const chunk = el.getAttribute(FLIGHT_ATTRIBUTE);
   if (chunk) {
-    flightChunks.push(htmlDecode(chunk));
+    flightChunks.push(chunk);
   }
 }
 

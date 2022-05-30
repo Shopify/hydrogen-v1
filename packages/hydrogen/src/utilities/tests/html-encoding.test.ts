@@ -1,4 +1,4 @@
-import {htmlDecode, htmlEncode} from '../html-encoding';
+import {htmlEncode} from '../html-encoding';
 
 describe('html encoding', () => {
   describe('htmlEncode', () => {
@@ -10,21 +10,6 @@ M2:{"id":"ShopifyProvider-MTY2NjM5NzU1NQ","name":"ShopifyProviderClient"}`)
       ).toBe(`S1:&quot;react.suspense&quot;
 M2:{&quot;id&quot;:&quot;ShopifyProvider-MTY2NjM5NzU1NQ&quot;,&quot;name&quot;:&quot;ShopifyProviderClient&quot;}`);
       expect(htmlEncode(`how's it going?`)).toBe(`how&#39;s it going?`);
-    });
-  });
-
-  describe('htmlDecode', () => {
-    it('decodes things properly', () => {
-      expect(htmlDecode('&lt;div&gt;')).toBe('<div>');
-      expect(
-        htmlDecode(`S1:&quot;react.suspense&quot;
-M2:{&quot;id&quot;:&quot;ShopifyProvider-MTY2NjM5NzU1NQ&quot;,&quot;name&quot;:&quot;ShopifyProviderClient&quot;}`)
-      ).toBe(`S1:"react.suspense"
-M2:{"id":"ShopifyProvider-MTY2NjM5NzU1NQ","name":"ShopifyProviderClient"}`);
-    });
-
-    it('does not double-decode ampersands', () => {
-      expect(htmlDecode(`drink: g&amp;gt;`)).toBe(`drink: g&gt;`);
     });
   });
 });
