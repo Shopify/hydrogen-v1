@@ -12,7 +12,7 @@ const oxygenDomain = 'myshopify.dev';
 let isInit = false;
 let microSessionCount = 0;
 
-export function ShopifyAnalyticsClient({serverData}: {serverData: any}) {
+export function ShopifyAnalyticsClient({cookieDomain}: {cookieDomain: string}) {
   useEffect(() => {
     try {
       // Find Shopify cookies
@@ -23,16 +23,14 @@ export function ShopifyAnalyticsClient({serverData}: {serverData: any}) {
       /**
        * Set user and session cookies and refresh the expiry time
        */
-      updateCookie(SHOPIFY_Y, shopifyYCookie, longTermLength);
-      updateCookie(SHOPIFY_S, shopifySCookie, shortTermLength);
+      updateCookie(SHOPIFY_Y, shopifyYCookie, longTermLength, cookieDomain);
+      updateCookie(SHOPIFY_S, shopifySCookie, shortTermLength, cookieDomain);
 
       ClientAnalytics.pushToPageAnalyticsData({
         shopify: {
           pageId: buildUUID(),
           userId: shopifyYCookie,
           sessionId: shopifySCookie,
-          storefrontId: serverData['storefrontId'],
-          acceptedLanguage: serverData['acceptedLanguage'],
         },
       });
 
@@ -61,10 +59,15 @@ export function ShopifyAnalyticsClient({serverData}: {serverData: any}) {
   return null;
 }
 
-function updateCookie(cookieName: string, value: string, maxage: number) {
+function updateCookie(
+  cookieName: string,
+  value: string,
+  maxage: number,
+  cookieDomain: string
+) {
   const cookieString = stringify(cookieName, value, {
     maxage,
-    domain: getCookieDomain(),
+    domain: getCookieDomain(cookieDomain),
     secure: process.env.NODE_ENV === 'production',
     samesite: 'Lax',
     path: '/',
@@ -74,16 +77,15 @@ function updateCookie(cookieName: string, value: string, maxage: number) {
   return cookieString;
 }
 
-function getCookieDomain(): string {
+function getCookieDomain(cookieDomain: string): string {
   const hostname = location.hostname;
-  const hostnameParts = hostname.split('.');
 
-  if (hostname === 'localhost' || hostname.indexOf(oxygenDomain) !== -1) {
-    return '';
-  } else if (hostname.indexOf(myShopifyDomain) !== -1) {
-    return `.${hostnameParts.slice(-3).join('.')}`;
+  if (hostname.indexOf(myShopifyDomain) !== -1) {
+    return `.${hostname.split('.').slice(-3).join('.')}`;
+  } else if (hostname.indexOf(cookieDomain) !== -1) {
+    return `.${cookieDomain}`;
   } else {
-    return `.${hostnameParts.slice(-2).join('.')}`;
+    return '';
   }
 }
 
@@ -116,7 +118,7 @@ function buildStorefrontPageViewPayload(payload: any): any {
     appClientId: 6167201,
     hydrogenStorefrontId: shopify.storefrontId,
 
-    isPersistentCookie: true,
+    isPersistentCookie: shopify.isPersistentCookie,
     uniqToken: shopify.userId,
     visitToken: shopify.sessionId,
     microSessionId: shopify.pageId,

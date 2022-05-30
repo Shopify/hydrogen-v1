@@ -21,8 +21,7 @@ export default defineConfig({
 });
 ```
 
-In the `App.server.jsx`, include `ShopifyAnalytics`. `cookieName` must be
-the same one you used for session storage.
+In the `App.server.jsx`, include `ShopifyAnalytics`.
 
 ```jsx
 function App() {
@@ -30,12 +29,22 @@ function App() {
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
         ...
-        <ShopifyAnalytics cookieName="__session" />
+        <ShopifyAnalytics />
       </ShopifyProvider>
     </Suspense>
   );
 }
 ```
+
+If you have a custom domain, you can set the cookie domain of the Shopify analytics
+component.
+
+```jsx
+<ShopifyAnalytics cookieDomain="my-shop.com" />
+```
+
+Otherwise, this component will use the `storeDomain` value in the `hydrogen.config.js`
+as the default cookie domain.
 
 ## Shopify Analytics data
 
@@ -100,9 +109,9 @@ Examples:
 * `src/routes/index.server.jsx`
 * `src/components/NotFound.server.jsx`
 
-### (optional) `resourceType` and `resourceId`
+### (optional) `resourceId`
 
-Identify the page template type for your routes that uses Shopify resources.
+Identify the resource id for your routes that uses Shopify resources.
 Only applies to the following page routes:
 
 * article
@@ -116,7 +125,6 @@ useServerAnalytics(
   data?.collection
     ? {
         shopify: {
-          resourceType: ShopifyAnalyticsConstants.resourceType.collection,
           resourceId: data.collection.id,
         },
       }
@@ -128,6 +136,35 @@ Examples:
 * `src/routes/collections/[handle].server.jsx`
 * `src/routes/products/[handle].server.jsx`
 * `src/routes/pages/[handle].server.jsx`
+
+## `ShopifyAnalyticsConstants`
+
+A list of `pageType` constants for Shopify analytics
+
+| Page type | Description |
+| ---- | ----------- |
+| article | An article page |
+| blog | A blog page |
+| captcha | A captcha page |
+| cart | A cart page |
+| collection | A collection page |
+| customersAccount | The customer account page |
+| customersActivateAccount | The activate customer account page |
+| customersAddresses | The customer address page |
+| customersLogin | The customer login page |
+| customersOrder | The customer order page |
+| customersRegister | The customer register account page |
+| customersResetPassword | The customer reset password page |
+| giftCard | A gift card page |
+| home | The home page |
+| listCollections | A collections list page (ex. `/collections` on Online Store) |
+| forbidden | A forbidden page |
+| notFound | The not found page |
+| page | A custom content page |
+| password | The password page |
+| product | A product page |
+| policy | The policy page |
+| search | A search page |
 
 ## Hydrogen analytics connect with checkout analytics
 
