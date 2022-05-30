@@ -41,105 +41,6 @@ export function App() {
 | customerAccessToken?   | <code>CartBuyerIdentityInput['customerAccessToken']</code>          | The token that identifies the user that's logged in. This is necessary to associate the cart to an authenticated user.                                                                                                   |
 | countryCode?            | <code>CountryCode</code>          | The ISO country code for i18n.                                                                                                                                                                                           |
 
-## Component type
-
-The `CartProvider` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart):
-
-```graphql
-{
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              currencyCode
-              amount
-            }
-            priceV2 {
-              currencyCode
-              amount
-            }
-            requiresShipping
-            title
-            image {
-              id
-              url
-              altText
-              width
-              height
-            }
-            product {
-              id
-              handle
-              title
-              vendor
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      currencyCode
-      amount
-    }
-    totalAmount {
-      currencyCode
-      amount
-    }
-    totalDutyAmount {
-      currencyCode
-      amount
-    }
-    totalTaxAmount {
-      currencyCode
-      amount
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-    applicable
-  }
-}
-```
-
 ## Cart fragment
 
 You can provide the `cartFragment` prop to `CartProvider` to customize the fields requested from the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for every query and mutation made by `CartProvider`.
@@ -237,6 +138,10 @@ fragment ImageFragment on Image {
   height
 }
 ```
+
+## Component type
+
+The `CartProvider` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 

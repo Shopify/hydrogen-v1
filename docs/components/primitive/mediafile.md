@@ -99,54 +99,6 @@ export function MyComponent() {
 
 The `MediaFile` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Media object](https://shopify.dev/api/storefront/reference/products/media):
-
-```graphql
-{
-  ... on MediaImage {
-    mediaContentType
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-  }
-  ... on Video {
-    mediaContentType
-    id
-    previewImage {
-      url
-    }
-    sources {
-      mimeType
-      url
-    }
-  }
-  ... on ExternalVideo {
-    mediaContentType
-    id
-    embedUrl
-    host
-  }
-  ... on Model3d {
-    mediaContentType
-    id
-    alt
-    mediaContentType
-    previewImage {
-      url
-    }
-    sources {
-      url
-    }
-  }
-}
-```
-
 ## Related components
 
 - [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image)
