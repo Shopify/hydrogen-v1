@@ -17,17 +17,17 @@ yarn dev
 
 To develop against a template, open a new terminal window or tab and choose from the available templates:
 
-- templates/template-hydrogen-default
-- templates/template-hydrogen-hello-world
+- templates/demo-store
+- templates/hello-world
 
 ```bash
-cd templates/template-hydrogen-default
+cd templates/demo-store
 yarn dev
 ```
 
 Visit the dev environment at http://localhost:3000.
 
-To make changes to the Demo Store template, edit the files in `templates/template-hydrogen-default`.
+To make changes to the Demo Store template, edit the files in `templates/demo-store`.
 
 To modify Hydrogen framework, components, and hooks, edit the files in `packages/hydrogen`.
 
@@ -189,7 +189,7 @@ Next, choose an option below.
 
 ### Option 1: `localdev` package
 
-This option creates a new Hydrogen app similar to `templates/template-hydrogen-default` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
+This option creates a new Hydrogen app similar to `templates/demo-store` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
 
 ```terminal
 create-hydrogen packages/localdev

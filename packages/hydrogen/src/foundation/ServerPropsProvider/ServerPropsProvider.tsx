@@ -1,4 +1,3 @@
-/* eslint-disable hydrogen/no-state-in-server-components */
 import React, {
   createContext,
   ReactNode,
@@ -169,5 +168,3 @@ export function ServerPropsProvider({
     </ServerPropsContext.Provider>
   );
 }
-
-/* eslint-enable hydrogen/no-state-in-server-components */

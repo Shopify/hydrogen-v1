@@ -1,8 +1,8 @@
 import {getNamedspacedEventname, mergeDeep} from './utils';
 import type {Subscriber, Subscribers, SubscriberFunction} from './types';
-import {isServer} from '../../utilities';
 import {eventNames} from './const';
 import {EVENT_PATHNAME} from '../../constants';
+import {META_ENV_SSR} from '../ssr-interop';
 
 type EventGuard = Record<string, NodeJS.Timeout>;
 
@@ -14,7 +14,7 @@ const USAGE_ERROR =
   'ClientAnalytics should only be used within the useEffect callback or event handlers';
 
 function isInvokedFromServer(): boolean {
-  if (isServer()) {
+  if (META_ENV_SSR) {
     console.warn(USAGE_ERROR);
     return true;
   }

@@ -37,11 +37,9 @@ function SomeApiDelayServerComponent({
 
       throw promise;
     });
-    /* eslint-disable react-hooks/rules-of-hooks */
     useServerAnalytics({
       [delayKey]: delay,
     });
-    /* eslint-enable react-hooks/rules-of-hooks */
   }
   return <div>Api delay - {delay}</div>;
 }

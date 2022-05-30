@@ -33,13 +33,13 @@ jobs:
         run: yarn workspace @shopify/hydrogen build
 
       - name: Make updates for Cloudflare Workers runtime
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
         run: |
           cp ../../.github/deployments/cloudflare/* .
           yarn add @cloudflare/kv-asset-handler
 
       - name: Build for workers
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
         run: |
           yarn shopify hydrogen build --entry worker
 
@@ -49,7 +49,7 @@ jobs:
           CF_ACCOUNT_ID: ${{ secrets.DEPLOYMENT_CF_ACCOUNT_ID }}
         with:
           apiToken: ${{ secrets.DEPLOYMENT_CF_API_TOKEN }}
-          workingDirectory: ./templates/template-hydrogen-default
+          workingDirectory: ./templates/demo-store
 
       - name: Run health check
         run: |
@@ -75,15 +75,18 @@ jobs:
         run: yarn workspace @shopify/hydrogen build
 
       - name: Make updates for Netlify Edge Functions runtime
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
         run: |
           cp ../../.github/deployments/netlify/* .
           yarn add @netlify/hydrogen-platform
 
       - name: Build for Netlify Functions
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
         run: |
-          yarn shopify hydrogen build --target worker --entry @netlify/hydrogen-platform/handler
+          yarn vite build --outDir dist/client --manifest
+          WORKER=true yarn vite build --ssr @netlify/hydrogen-platform/handler
+          # TODO: Add support for ssrOutDir to the Shopify Hydrogen CLI
+          # yarn shopify hydrogen build --target worker --entry @netlify/hydrogen-platform/handler --ssrOutDir .netlify/edge-functions/handler
 
       - name: Install Netlify CLI
         run: |
@@ -91,9 +94,9 @@ jobs:
 
       - name: Deploy to Netlify
         id: netlify-deploy
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
         run: |
-          netlify deploy --build --json | jq -r '.deploy_url' > deploy.txt
+          netlify deploy --build --prod --json | jq -r '.deploy_url' > deploy.txt
           echo "::set-output name=deploy-url::$(cat deploy.txt)"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

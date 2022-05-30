@@ -279,7 +279,7 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-#### Parameters
+### Parameters
 
 The following table describes the request function parameters for `ServerAnalyticsConnector`:
 

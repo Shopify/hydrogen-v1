@@ -751,7 +751,7 @@ export type CartLineEstimatedCost = {
   /** The amount of the merchandise line. */
   amount: MoneyV2;
   /** The compare at amount of the merchandise line. */
-  compareAtAmount: MoneyV2;
+  compareAtAmount?: Maybe<MoneyV2>;
   /** The estimated cost of the merchandise line before discounts. */
   subtotalAmount: MoneyV2;
   /** The estimated total cost of the merchandise line. */
