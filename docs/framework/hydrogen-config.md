@@ -17,12 +17,10 @@ The Hydrogen configuration file contains information that's needed at runtime fo
 ```tsx
 import {defineConfig} from '@shopify/hydrogen/config';
 
-/* All properties in this configuration file are required. */
-
 /* The `defineConfig` function is an optional utility that provides types for the configuration object. */
 export default defineConfig({
   /* The routes defined by Vite's import.meta.globEager method. */
-  routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+  routes: '/src/routes',
   /* The information that your app needs to connect to the Storefront API. */
   shopify: {
     /* The domain of your Shopify store */
@@ -49,15 +47,14 @@ The following groupings of configuration properties can exist in Hydrogen:
 
 ### `routes`
 
-The `routes` property is where you can provide server components and API handlers using Vite's [`import.meta.globEager`](https://vitejs.dev/guide/features.html#glob-import) method.
-
-By default, Hydrogen detects the common prefix of every route and removes it from the URLs. In the following example, `./src/routes` would be detected as the common prefix:
+The `routes` property is where you can provide a path to find server components and API handlers. Its default value is `/src/routes` but it can be customized to any directory specified **from the project root**:
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
 export default defineConfig({
-  routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+  /* Path from the project root to the files for server components and API handlers */
+  routes: '/path/to/routes',
 });
 ```
 
@@ -70,14 +67,9 @@ If your app requires a more advanced configuration, then you can provide additio
 ```tsx
 export default defineConfig({
   routes: {
-    /* The file routes for server components and API handlers */
-    files: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
-    /* (Optional) The portion of the file route path that shouldn't be a part of the URL.
-     * You need to modify this if you want to import your routes from a location other
-     than the default `src/routes`.
-    */
-    dirPrefix: './src/routes',
-    /* (Optional) A path that's prepended to all file routes. You can modify `basePath`
+    /* Path from the project root to the files for server components and API handlers */
+    files: '/path/to/routes',
+    /* A path that's prepended to all file routes. You can modify `basePath`
      * if you want to prefix all file routes. For example, you can prefix all file routes with a locale.
     */
     basePath: '/',
