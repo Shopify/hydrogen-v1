@@ -21,9 +21,19 @@ export function useNavigate() {
     path: string,
     options: NavigationOptions = {replace: false, reloadDocument: false}
   ) => {
+    const clientState = options?.clientState || {};
+
     // @todo wait for RSC and then change focus for a11y?
-    if (options?.replace)
-      router.history.replace(path, options?.clientState || {});
-    else router.history.push(path, options?.clientState || {});
+    if (options?.replace) {
+      router.history.replace(path, clientState);
+      return;
+    }
+
+    if (options?.reloadDocument) {
+      window.location.href = path;
+      return;
+    }
+
+    router.history.push(path, clientState);
   };
 }
