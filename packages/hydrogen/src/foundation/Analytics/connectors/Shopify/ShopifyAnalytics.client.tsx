@@ -1,6 +1,5 @@
 import {useEffect} from 'react';
-import {stringify} from 'worktop/cookie';
-import {Cookie} from '../../../Cookie/Cookie';
+import {parse, stringify} from 'worktop/cookie';
 import {ClientAnalytics} from '../../index';
 import {buildUUID, addDataIf} from './utils';
 import {SHOPIFY_S, SHOPIFY_Y} from './const';
@@ -13,33 +12,27 @@ const oxygenDomain = 'myshopify.dev';
 let isInit = false;
 let microSessionCount = 0;
 
-export function ShopifyAnalyticsClient({cookieName}: {cookieName: string}) {
+export function ShopifyAnalyticsClient({serverData}: {serverData: any}) {
   useEffect(() => {
     try {
-      // Find our session cookie
-      const sessionCookie = new Cookie(cookieName);
-      const cookieData = sessionCookie.parse(document.cookie);
+      // Find Shopify cookies
+      const cookieData = parse(document.cookie);
+      const shopifyYCookie = cookieData[SHOPIFY_Y] || buildUUID();
+      const shopifySCookie = cookieData[SHOPIFY_S] || buildUUID();
 
       /**
        * Set user and session cookies and refresh the expiry time
-       *
-       * Hydrogen page navigation done by a fetch API. However, multiple set-cookie
-       * headers or a single set-cookie header with multiple cookies does not work
-       * with fetch API.
-       *
-       * We are storing all cookie values inside a single cookie and restore it on
-       * the client side with the expected expiry
        */
-      updateCookie(SHOPIFY_Y, cookieData[SHOPIFY_Y], longTermLength);
-      updateCookie(SHOPIFY_S, cookieData[SHOPIFY_S], shortTermLength);
+      updateCookie(SHOPIFY_Y, shopifyYCookie, longTermLength);
+      updateCookie(SHOPIFY_S, shopifySCookie, shortTermLength);
 
       ClientAnalytics.pushToPageAnalyticsData({
         shopify: {
           pageId: buildUUID(),
-          userId: cookieData[SHOPIFY_Y],
-          sessionId: cookieData[SHOPIFY_S],
-          storefrontId: cookieData['storefrontId'],
-          acceptedLanguage: cookieData['acceptedLanguage'],
+          userId: shopifyYCookie,
+          sessionId: shopifySCookie,
+          storefrontId: serverData['storefrontId'],
+          acceptedLanguage: serverData['acceptedLanguage'],
         },
       });
 
