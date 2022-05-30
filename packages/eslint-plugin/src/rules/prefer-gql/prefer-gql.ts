@@ -8,7 +8,6 @@ export const preferGQL = createRule({
     type: 'suggestion',
     docs: {
       description: 'Prefer using the `gql` utility from hydrogen',
-      category: 'Best Practices',
       recommended: 'warn',
     },
     messages: {
