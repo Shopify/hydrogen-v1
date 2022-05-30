@@ -5,6 +5,7 @@
 export function stripScriptsFromTemplate(template: string) {
   const bootstrapScripts = [] as string[];
   const bootstrapModules = [] as string[];
+  const templateScriptTags = [] as string[];
 
   const scripts = template.matchAll(
     /<script\n*?.+?src="(?<script>([^"]+?))"\n*.*?><\/script>/g
@@ -15,6 +16,8 @@ export function stripScriptsFromTemplate(template: string) {
 
     if (!scriptName) continue;
 
+    templateScriptTags.push(match[0]);
+
     if (match[0].includes(`type="module"`)) {
       bootstrapModules.push(scriptName);
     } else {
@@ -24,5 +27,10 @@ export function stripScriptsFromTemplate(template: string) {
     template = template.replace(match[0], '');
   }
 
-  return {noScriptTemplate: template, bootstrapScripts, bootstrapModules};
+  return {
+    noScriptTemplate: template,
+    templateScriptTags,
+    bootstrapScripts,
+    bootstrapModules,
+  };
 }

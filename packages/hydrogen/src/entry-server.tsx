@@ -11,9 +11,8 @@ import {defer} from './utilities/defer';
 import type {
   RendererOptions,
   StreamerOptions,
-  HydratorOptions,
+  RscAppParams,
   HydrogenConfig,
-  ImportGlobEagerOutput,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -174,32 +173,77 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
       template = template.default;
     }
 
+    const state: Record<string, any> = isReactHydrationRequest
+      ? parseJSON(url.searchParams.get('state') || '{}')
+      : {pathname: url.pathname, search: url.search};
+
+    const rsc = runRSC({App, state, log, request, componentResponse});
+
+    if (isReactHydrationRequest) {
+      const buffered = await bufferReadableStream(rsc.readable.getReader());
+      postRequestTasks('rsc', 200, request, componentResponse);
+
+      return new Response(buffered, {
+        headers: {
+          'cache-control': componentResponse.cacheControlHeader,
+        },
+      });
+    }
+
+    const [rscReadableForFizz, rscReadableForFlight] = rsc.readable.tee();
+    rsc.readable = rscReadableForFlight;
+    const rscResponse = createFromReadableStream(rscReadableForFizz);
+    const RscConsumer = () => rscResponse.readRoot();
+
+    const {
+      noScriptTemplate,
+      templateScriptTags,
+      bootstrapScripts,
+      bootstrapModules,
+    } = stripScriptsFromTemplate(template);
+
+    const AppSSR = (
+      <Html template={noScriptTemplate}>
+        <ServerRequestProvider request={request} isRSC={false}>
+          <ServerPropsProvider
+            initialServerProps={state as any}
+            setServerPropsForRsc={() => {}}
+          >
+            <PreloadQueries request={request}>
+              <Suspense fallback={null}>
+                <RscConsumer />
+              </Suspense>
+              <Suspense fallback={null}>
+                <Analytics />
+              </Suspense>
+            </PreloadQueries>
+          </ServerPropsProvider>
+        </ServerRequestProvider>
+      </Html>
+    );
+
     const params = {
-      App,
       log,
       dev,
+      rsc,
       nonce,
+      AppSSR,
       request,
-      template,
       isStreamable,
       componentResponse,
       response: streamableResponse,
+      template: noScriptTemplate,
+      bootstrapScripts,
+      bootstrapModules,
+      templateScriptTags,
     };
-
-    if (isReactHydrationRequest) {
-      return hydrate(url, params);
-    }
 
     /**
      * Stream back real-user responses, but for bots/etc,
      * use `render` instead. This is because we need to inject <head>
      * things for SEO reasons.
      */
-    if (isStreamable) {
-      return stream(url, params);
-    }
-
-    return render(url, params);
+    return isStreamable ? stream(params) : render(params);
   };
 
   if (__WORKER__) return handleRequest;
@@ -221,23 +265,16 @@ function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
  * and returning any initial state that needs to be hydrated into the client version of the app.
  * NOTE: This is currently only used for SEO bots or Worker runtime (where Stream is not yet supported).
  */
-async function render(
-  url: URL,
-  {App, request, template, componentResponse, nonce, log}: RendererOptions
-) {
-  const state = {pathname: url.pathname, search: url.search};
-
-  const {AppSSR, rscReadable} = buildAppSSR(
-    {
-      App,
-      log,
-      state,
-      request,
-      response: componentResponse,
-    },
-    {template}
-  );
-
+async function render({
+  AppSSR,
+  rsc,
+  request,
+  template,
+  componentResponse,
+  templateScriptTags,
+  nonce,
+  log,
+}: RendererOptions) {
   function onErrorShell(error: Error) {
     log.error(error);
     componentResponse.writeHead({status: 500});
@@ -246,8 +283,12 @@ async function render(
 
   let [html, flight] = await Promise.all([
     renderToBufferedString(AppSSR, {log, nonce}).catch(onErrorShell),
-    bufferReadableStream(rscReadable.getReader()).catch(() => null),
+    bufferReadableStream(rsc.readable.getReader()).catch(() => null),
   ]);
+
+  if (templateScriptTags.length > 0) {
+    html = html.replace('</head>', templateScriptTags.join('') + '</head>');
+  }
 
   const {headers, status, statusText} = getResponseOptions(componentResponse);
 
@@ -280,41 +321,26 @@ async function render(
  * Stream a response to the client. NOTE: This omits custom `<head>`
  * information, so this method should not be used by crawlers.
  */
-async function stream(
-  url: URL,
-  {
-    App,
-    request,
-    response,
-    componentResponse,
-    template,
-    nonce,
-    dev,
-    log,
-  }: StreamerOptions
-) {
-  const state = {pathname: url.pathname, search: url.search};
+async function stream({
+  rsc,
+  AppSSR,
+  request,
+  response,
+  componentResponse,
+  bootstrapScripts,
+  bootstrapModules,
+  template,
+  nonce,
+  dev,
+  log,
+}: StreamerOptions) {
   log.trace('start stream');
-
-  const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
-    stripScriptsFromTemplate(template);
-
-  const {AppSSR, rscReadable, rscDidError} = buildAppSSR(
-    {
-      App,
-      log,
-      state,
-      request,
-      response: componentResponse,
-    },
-    {template: noScriptTemplate}
-  );
 
   const rscToScriptTagReadable = new ReadableStream({
     start(controller) {
       log.trace('rsc start chunks');
       const encoder = new TextEncoder();
-      bufferReadableStream(rscReadable.getReader(), (chunk) => {
+      bufferReadableStream(rsc.readable.getReader(), (chunk) => {
         const metaTag = flightContainer(chunk);
         controller.enqueue(encoder.encode(metaTag));
       }).then(() => {
@@ -373,7 +399,7 @@ async function stream(
     function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
-        getResponseOptions(componentResponse, rscDidError ?? ssrDidError)
+        getResponseOptions(componentResponse, rsc.didError() ?? ssrDidError)
       );
 
       /**
@@ -394,11 +420,11 @@ async function stream(
         responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
-        if (rscDidError ?? ssrDidError) {
+        if (rsc.didError() ?? ssrDidError) {
           // This error was delayed until the headers were properly sent.
           writable.write(
             encoder.encode(
-              getErrorMarkup((rscDidError ?? ssrDidError) as Error)
+              getErrorMarkup((rsc.didError() ?? ssrDidError) as Error)
             )
           );
         }
@@ -491,7 +517,7 @@ async function stream(
           response,
           componentResponse,
           log,
-          rscDidError ?? ssrDidError
+          rsc.didError() ?? ssrDidError
         );
 
         if (isRedirect(response)) {
@@ -503,7 +529,7 @@ async function stream(
 
         startWritingHtmlToServerResponse(
           response,
-          dev ? rscDidError ?? ssrDidError : undefined
+          dev ? rsc.didError() ?? ssrDidError : undefined
         );
 
         setTimeout(() => {
@@ -533,7 +559,7 @@ async function stream(
           response,
           componentResponse,
           log,
-          rscDidError ?? ssrDidError
+          rsc.didError() ?? ssrDidError
         );
 
         postRequestTasks(
@@ -550,7 +576,7 @@ async function stream(
 
         startWritingHtmlToServerResponse(
           response,
-          dev ? rscDidError ?? ssrDidError : undefined
+          dev ? rsc.didError() ?? ssrDidError : undefined
         );
 
         bufferReadableStream(rscToScriptTagReadable.getReader()).then(
@@ -589,63 +615,10 @@ async function stream(
 }
 
 /**
- * Stream a hydration response to the client.
+ * Run the RSC/Flight part of the App
  */
-async function hydrate(
-  url: URL,
-  {
-    App,
-    log,
-    request,
-    response,
-    isStreamable,
-    componentResponse,
-  }: HydratorOptions
-) {
-  const state = parseJSON(url.searchParams.get('state') || '{}');
-
-  const {AppRSC} = buildAppRSC({
-    App,
-    log,
-    state,
-    request,
-    response: componentResponse,
-  });
-
-  const rscReadable = rscRenderToReadableStream(AppRSC, {
-    onError(e) {
-      log.error(e);
-    },
-  });
-
-  const bufferedBody = await bufferReadableStream(rscReadable.getReader());
-
-  postRequestTasks('rsc', 200, request, componentResponse);
-
-  return new Response(bufferedBody, {
-    headers: {
-      'cache-control': componentResponse.cacheControlHeader,
-    },
-  });
-}
-
-type SharedServerProps = {
-  state?: object | null;
-  request: ServerComponentRequest;
-  response: ServerComponentResponse;
-  log: Logger;
-};
-
-type BuildAppOptions = {
-  App: React.JSXElementConstructor<SharedServerProps>;
-} & SharedServerProps;
-
-export type AppProps = SharedServerProps & {
-  routes?: ImportGlobEagerOutput;
-};
-
-function buildAppRSC({App, log, state, request, response}: BuildAppOptions) {
-  const hydrogenServerProps = {request, response, log};
+function runRSC({App, state, log, request, componentResponse}: RscAppParams) {
+  const hydrogenServerProps = {request, response: componentResponse, log};
   const serverProps = {
     ...state,
     ...hydrogenServerProps,
@@ -664,57 +637,15 @@ function buildAppRSC({App, log, state, request, response}: BuildAppOptions) {
     </ServerRequestProvider>
   );
 
-  return {AppRSC};
-}
-
-function buildAppSSR(
-  {App, state, request, response, log}: BuildAppOptions,
-  htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
-) {
-  const {AppRSC} = buildAppRSC({
-    App,
-    log,
-    state,
-    request,
-    response,
+  let rscDidError: Error;
+  const rscReadable = rscRenderToReadableStream(AppRSC, {
+    onError(e) {
+      rscDidError = e;
+      log.error(e);
+    },
   });
 
-  let rscDidError;
-
-  const [rscReadableForFizz, rscReadableForFlight] = rscRenderToReadableStream(
-    AppRSC,
-    {
-      onError(e) {
-        rscDidError = e;
-        log.error(e);
-      },
-    }
-  ).tee();
-
-  const rscResponse = createFromReadableStream(rscReadableForFizz);
-  const RscConsumer = () => rscResponse.readRoot();
-
-  const AppSSR = (
-    <Html {...htmlOptions}>
-      <ServerRequestProvider request={request} isRSC={false}>
-        <ServerPropsProvider
-          initialServerProps={state as any}
-          setServerPropsForRsc={() => {}}
-        >
-          <PreloadQueries request={request}>
-            <Suspense fallback={null}>
-              <RscConsumer />
-            </Suspense>
-            <Suspense fallback={null}>
-              <Analytics />
-            </Suspense>
-          </PreloadQueries>
-        </ServerPropsProvider>
-      </ServerRequestProvider>
-    </Html>
-  );
-
-  return {AppSSR, rscReadable: rscReadableForFlight, rscDidError};
+  return {readable: rscReadable, didError: () => rscDidError};
 }
 
 function PreloadQueries({
