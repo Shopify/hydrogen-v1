@@ -141,7 +141,7 @@ export function ModelViewer<TTag extends ElementType>(
   const [modelViewer, setModelViewer] = useState<undefined | HTMLElement>(
     undefined
   );
-  const callbackRef = useCallback((node) => {
+  const callbackRef = useCallback((node: HTMLElement) => {
     setModelViewer(node);
   }, []);
   const {data, id = data.id, children, className, ...passthroughProps} = props;
