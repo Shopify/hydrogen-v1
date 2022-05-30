@@ -46,7 +46,6 @@ export const FileSessionStorage = function (
     let data: Record<string, string> | undefined;
 
     return {
-      name,
       async get(request: Request): Promise<Record<string, string>> {
         if (data) return data;
 

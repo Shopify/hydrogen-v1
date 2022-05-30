@@ -18,7 +18,6 @@ export const MemorySessionStorage = function (
     const cookie = new Cookie(name, options);
 
     return {
-      name,
       async get(request: Request): Promise<Record<string, string>> {
         const sid = cookie.getSessionId(request);
         let sessionData;

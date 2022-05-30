@@ -623,7 +623,9 @@ async function hydrate(
   postRequestTasks('rsc', 200, request, componentResponse);
 
   return new Response(bufferedBody, {
-    headers: componentResponse.headers,
+    headers: {
+      'cache-control': componentResponse.cacheControlHeader,
+    },
   });
 }
 

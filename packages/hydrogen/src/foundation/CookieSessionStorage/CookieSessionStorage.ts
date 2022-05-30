@@ -15,7 +15,6 @@ export const CookieSessionStorage = function (
     let parsed = false;
 
     return {
-      name,
       async get(request: Request): Promise<Record<string, string>> {
         if (!parsed) {
           const cookieValue = request.headers.get('cookie');
