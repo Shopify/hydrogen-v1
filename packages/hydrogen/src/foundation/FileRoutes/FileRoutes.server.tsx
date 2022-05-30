@@ -30,8 +30,8 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
   if (!routes) {
     const fileRoutes = request.ctx.hydrogenConfig!.routes;
     routes = fileRoutes.files;
-    dirPrefix ??= fileRoutes?.dirPrefix as string;
-    basePath ??= fileRoutes?.basePath as string;
+    dirPrefix ??= fileRoutes.dirPrefix;
+    basePath ??= fileRoutes.basePath;
   }
 
   basePath ??= '/';

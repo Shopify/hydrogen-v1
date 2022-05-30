@@ -30,21 +30,19 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
     configResolved(_config) {
       config = _config;
     },
-    async configureServer(_server) {
+    configureServer(_server) {
       server = _server;
     },
-    async resolveId(source, importer) {
+    resolveId(source, importer) {
       if (source === VIRTUAL_HYDROGEN_CONFIG_ID) {
-        const hydrogenConfigPath = await findHydrogenConfigPath(
+        return findHydrogenConfigPath(
           config.root,
           pluginOptions.configPath
+        ).then((hcPath: string) =>
+          // This direct dependency on a real file
+          // makes HMR work for the virtual module.
+          this.resolve(hcPath, importer, {skipSelf: true})
         );
-
-        // This direct dependency on a real file
-        // makes HMR work for the virtual module.
-        return this.resolve(hydrogenConfigPath, importer, {
-          skipSelf: true,
-        });
       }
 
       if (
