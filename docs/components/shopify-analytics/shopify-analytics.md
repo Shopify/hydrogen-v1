@@ -176,6 +176,7 @@ You can acheive this by assigning a subdomain to your online store. For example:
 
 * Set your Hydrogen store domain at `https://www.my-awesome-hydrogen-store.com`
 * Attach a new subdomain to your online store at `https://checkout.my-awesome-hydrogen-store.com`
+* Set the cookieDomain to the same root domain `<ShopifyAnalytics cookieDomain="my-awesome-hydrogen-store.com" />`
 
 > Note: It is expected behaviour that Hydrogen analytics and checkout analytics do not connect
 when in development and preview mode. This will only connect in production mode.
