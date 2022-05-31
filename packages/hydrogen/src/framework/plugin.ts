@@ -3,6 +3,7 @@ import hydrogenConfig from './plugins/vite-plugin-hydrogen-config';
 import type {Plugin} from 'vite';
 import hydrogenMiddleware from './plugins/vite-plugin-hydrogen-middleware';
 import hydrogenClientMiddleware from './plugins/vite-plugin-hydrogen-client-middleware';
+import hydrogenVirtualFiles from './plugins/vite-plugin-hydrogen-virtual-files';
 import platformEntry from './plugins/vite-plugin-platform-entry';
 import rsc from './plugins/vite-plugin-hydrogen-rsc';
 import ssrInterop from './plugins/vite-plugin-ssr-interop';
@@ -20,6 +21,7 @@ export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
     hydrogenClientMiddleware(),
     clientImports(),
     hydrogenMiddleware(pluginOptions),
+    hydrogenVirtualFiles(pluginOptions),
     react(),
     hydrationAutoImport(),
     ssrInterop(),

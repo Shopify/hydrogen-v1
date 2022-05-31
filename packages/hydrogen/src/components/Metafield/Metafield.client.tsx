@@ -91,7 +91,7 @@ export function Metafield<TTag extends ElementType>(
     case 'url':
       return (
         <a href={data.value as string} {...passthroughProps}>
-          {data.value}
+          {data.value as string}
         </a>
       );
     case 'json': {

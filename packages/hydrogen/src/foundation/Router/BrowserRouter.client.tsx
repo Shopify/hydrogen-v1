@@ -8,6 +8,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useCallback,
+  ReactNode,
 } from 'react';
 import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider';
 import {META_ENV_SSR} from '../ssr-interop';
@@ -23,10 +24,10 @@ export const RouterContext = createContext<RouterContextValue | {}>({});
 let isFirstLoad = true;
 const positions: Record<string, number> = {};
 
-export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
-  history: pHistory,
-  children,
-}) => {
+export const BrowserRouter: FC<{
+  history?: BrowserHistory;
+  children: ReactNode;
+}> = ({history: pHistory, children}) => {
   if (META_ENV_SSR) return <>{children}</>;
   /* eslint-disable react-hooks/rules-of-hooks */
 

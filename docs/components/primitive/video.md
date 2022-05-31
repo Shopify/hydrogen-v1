@@ -63,23 +63,6 @@ export default function MyProductVideo() {
 
 The `Video` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video):
-
-```graphql
-{
-  id
-  previewImage {
-    url
-  }
-  sources {
-    mimeType
-    url
-  }
-}
-```
-
 ## Related components
 
 - [`MediaFile`](https://shopify.dev/api/hydrogen/components/primitive/mediafile)
