@@ -1,4 +1,3 @@
-// eslint-disable-next-line hydrogen/prefer-gql
 import {gql} from '../graphql-tag';
 import ast from 'graphql-tag';
 
