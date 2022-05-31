@@ -62,9 +62,9 @@ Analytic cookies must be set at the first-party domain. This means that when a b
 
 You can achieve this by assigning a sub-domain to your online store. For example, you can do the following tasks:
 
-* Set your Hydrogen store domain at `https://www.my-awesome-hydrogen-store.com`
-* Attach a new subdomain to your online store at `https://checkout.my-awesome-hydrogen-store.com`
-* Set the cookieDomain to the same root domain `<ShopifyAnalytics cookieDomain="my-awesome-hydrogen-store.com" />`
+- Set your Hydrogen store domain to `https://www.my-awesome-hydrogen-store.com`.
+- Attach a new sub-domain to your online store at `https://checkout.my-awesome-hydrogen-store.com`.
+- Set the `cookieDomain` to the same root domain at `<ShopifyAnalytics cookieDomain="my-awesome-hydrogen-store.com" />`.
 
 > Note: It is expected behaviour that Hydrogen analytics and checkout analytics do not connect
 when in development and preview mode. This will only connect in production mode.
