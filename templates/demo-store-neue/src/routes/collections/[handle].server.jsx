@@ -13,6 +13,8 @@ import {PageHeader, Section} from '~/components/sections';
 import {Button, Grid, Text} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 
+import {PRODUCT_CARD_FIELDS} from '~/components/blocks/ProductCard';
+
 export default function Collection({pageBy = 12, params}) {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
@@ -70,6 +72,7 @@ export default function Collection({pageBy = 12, params}) {
 }
 
 const QUERY = gql`
+  ${PRODUCT_CARD_FIELDS}
   query CollectionDetails(
     $handle: String!
     $country: CountryCode
@@ -96,44 +99,7 @@ const QUERY = gql`
         edges {
           cursor
           node {
-            id
-            title
-            publishedAt
-            handle
-            description
-            priceRange {
-              minVariantPrice {
-                amount
-                currencyCode
-              }
-              maxVariantPrice {
-                amount
-                currencyCode
-              }
-            }
-            options {
-              name
-              values
-            }
-            variants(first: 1) {
-              nodes {
-                id
-                image {
-                  url
-                  altText
-                  width
-                  height
-                }
-                priceV2 {
-                  amount
-                  currencyCode
-                }
-                compareAtPriceV2 {
-                  amount
-                  currencyCode
-                }
-              }
-            }
+            ...ProductCardFields
           }
         }
         pageInfo {

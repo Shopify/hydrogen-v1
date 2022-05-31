@@ -78,3 +78,94 @@ export const location = {
     },
   },
 };
+
+export const footer = [
+  {
+    id: 1,
+    title: 'Community',
+    links: [
+      {
+        id: 1,
+        url: 'https://discord.gg/ppSbThrFaS',
+        title: 'Discord',
+      },
+      {
+        id: 2,
+        url: 'https://github.com/Shopify/hydrogen',
+        title: 'Github',
+      },
+      {
+        id: 3,
+        url: 'https://twitter.com/shopifydevs',
+        title: 'Twitter',
+      },
+      {
+        id: 4,
+        url: '/',
+        title: 'Forums',
+      },
+      {
+        id: 5,
+        url: '/',
+        title: 'Support',
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: 'Learning',
+    links: [
+      {
+        id: 6,
+        url: 'https://shopify.dev/custom-storefronts/hydrogen',
+        title: 'End-to-end Tutorial',
+      },
+      {
+        id: 7,
+        url: 'https://shopify.dev/custom-storefronts/hydrogen',
+        title: 'Documentation',
+      },
+      {
+        id: 8,
+        url: '/',
+        title: 'A Book on Hydrogen',
+      },
+      {
+        id: 9,
+        url: 'https://youtube.com',
+        title: 'Popular Youtube Series',
+      },
+      {
+        id: 10,
+        url: 'https://github.com/Shopify/awesome-hydrogen',
+        title: 'Awesome Repo',
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: 'More from Shopify',
+    links: [
+      {
+        id: 1,
+        title: 'Content & Metafields',
+        url: '/',
+      },
+      {
+        id: 2,
+        title: 'Shop Pay',
+        url: '/',
+      },
+      {
+        id: 3,
+        title: 'Audiences',
+        url: '/',
+      },
+      {
+        id: 4,
+        title: 'Markets',
+        url: '/',
+      },
+    ],
+  },
+];

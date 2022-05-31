@@ -156,7 +156,7 @@ const QUERY = gql`
         title
       }
       title
-      variants(first: 250) {
+      variants(first: 100) {
         edges {
           node {
             availableForSale

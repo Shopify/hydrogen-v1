@@ -1,4 +1,4 @@
-import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
+import {Image, Link, Money, useMoney, gql} from '@shopify/hydrogen';
 import clsx from 'clsx';
 import {Text} from '~/components/elements';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
@@ -74,3 +74,31 @@ function CompareAtPrice({data, className}) {
     </span>
   );
 }
+
+export const PRODUCT_CARD_FIELDS = gql`
+  fragment ProductCardFields on Product {
+    id
+    title
+    publishedAt
+    handle
+    variants(first: 1) {
+      nodes {
+        id
+        image {
+          url
+          altText
+          width
+          height
+        }
+        priceV2 {
+          amount
+          currencyCode
+        }
+        compareAtPriceV2 {
+          amount
+          currencyCode
+        }
+      }
+    }
+  }
+`;

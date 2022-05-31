@@ -28,9 +28,10 @@ const mockCollections = [
 export default function FeaturedCollections({
   title = 'Collections',
   collections = mockCollections,
+  passthroughProps,
 }) {
   return (
-    <Section heading={title}>
+    <Section heading={title} {...passthroughProps}>
       <Grid items={collections.length}>
         {collections.map((collection) => (
           <Link key={collection.id} to={collection.url}>

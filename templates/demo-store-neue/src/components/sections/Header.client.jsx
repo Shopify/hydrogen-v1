@@ -23,17 +23,17 @@ export default function Header({title}) {
       dark
         ? 'bg-primary/80 text-contrast shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
-    } flex items-center sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-xl px-xl py-l`,
+    } flex items-center sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-16 px-12 py-8`,
   };
 
   return (
     <header role="banner" className={styles.container}>
       {/* TODO: Have dynamic component for Mobile vs. Desktop headers */}
-      <div className="flex gap-xl">
+      <div className="flex gap-12">
         <Link className={`${styles.text} font-medium`} to="/">
           {title}
         </Link>
-        <nav className="flex gap-l">
+        <nav className="flex gap-8">
           {/* TODO: Replace with Navigation API */}
           <Link className={styles.text} to="/collections/freestyle-collection">
             Shop
@@ -46,7 +46,7 @@ export default function Header({title}) {
           </Link>
         </nav>
       </div>
-      <div className="flex items-center gap-xs">
+      <div className="flex items-center gap-1">
         <form className="flex items-center">
           <Input type="search" placeholder="Search" />
           <button type="submit" className={styles.button}>

@@ -42,7 +42,7 @@ export default function Location({params}) {
           <div className="flex flex-col gap-8 md:flex-row">
             <div className="grid gap-8">
               <div className="grid gap-2">
-                <Heading level={3} size="copy">
+                <Heading as="h3" size="copy">
                   Address
                 </Heading>
                 <address
@@ -61,7 +61,7 @@ export default function Location({params}) {
                 </a>
               </div>
               <div className="grid gap-2">
-                <Heading level={3} size="copy">
+                <Heading as="h3" size="copy">
                   Contact us:
                 </Heading>
                 <a className="underline" href={`tel:${phone.value}`}>
@@ -73,7 +73,7 @@ export default function Location({params}) {
               </div>
             </div>
             <div className="flex flex-col items-start gap-2">
-              <Heading level={3} size="copy">
+              <Heading as="h3" size="copy">
                 Hours
               </Heading>
               <ul>

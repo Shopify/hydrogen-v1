@@ -3,23 +3,13 @@ import {missingClass, formatText} from '~/lib/utils';
 
 export default function Heading({
   as = 'h2',
-  level,
   size = 'heading',
   width = 'default',
   format = true,
   className = '',
   children,
 }) {
-  const levels = {
-    1: 'h1',
-    2: 'h2',
-    3: 'h3',
-    4: 'h4',
-    5: 'h5',
-    6: 'h6',
-  };
-
-  const Component = level ? levels[level] : as;
+  const Component = as;
 
   const sizes = {
     display: 'font-bold text-display',

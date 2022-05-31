@@ -33,11 +33,11 @@ export default function Locations({
 }) {
   return (
     <Section heading={title}>
-      <ul className="grid md:grid-cols-3 gap-m">
+      <ul className="grid gap-4 md:grid-cols-3">
         {locations.map((location) => (
           <li key={location.id}>
             <Link to={location.url}>
-              <div className="grid gap-m">
+              <div className="grid gap-4">
                 <div className="">
                   <Image
                     className="rounded shadow-border overflow-clip inline-block aspect-square md:aspect-[4/3] object-fill"
