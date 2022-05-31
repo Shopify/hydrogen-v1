@@ -216,19 +216,12 @@ export default async function testCases({
     ]);
   });
 
-  it('uses the provided custom body', async () => {
-    const response = await fetch(getServerUrl() + '/custom-body');
-    const body = await response.text();
-
-    expect(response.headers.get('Content-Type')).toEqual('text/plain');
-    expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
-  });
-
   it('properly escapes props in the SSR flight script chunks', async () => {
     await page.goto(getServerUrl() + '/escaping');
     expect(await page.textContent('body')).toContain(
       "</script><script>alert('hi')</script>"
     );
+    expect(await page.textContent('body')).toContain(`"fiddle"`);
   });
 
   it('adds style tags for CSS modules', async () => {

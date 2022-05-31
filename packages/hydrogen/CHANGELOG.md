@@ -1,5 +1,150 @@
 # Changelog
 
+## 0.22.0
+
+### Minor Changes
+
+- [#930](https://github.com/Shopify/hydrogen/pull/930) [`750baf8f`](https://github.com/Shopify/hydrogen/commit/750baf8ff069d0e06fb92e78a142049a1ce2b1ae) Thanks [@michenly](https://github.com/michenly)! - With the introduction of authenticated pages, we also now provide the ability to prevent pages from being indexed by bots. You can do so by passing `noindex` to the `Seo` component:
+
+  ```jsx
+  <Seo type="noindex" data={{title: 'Login'}} />
+  ```
+
+* [#1313](https://github.com/Shopify/hydrogen/pull/1313) [`ed1933e3`](https://github.com/Shopify/hydrogen/commit/ed1933e339927322d8008034982b05ff4590e6d8) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change**: The `routes` property in `hydrogen.config.js` file has been simplified. It is now a string that represents the path to the routes from the project root:
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+  -  routes: import('./src/routes/**/*.server.[jt](s|sx)'),
+  +  routes: '/src/routes',
+  });
+  ```
+
+  Its default value is `/src/routes` so this property can be removed when using this directory.
+
+  In the object syntax version, `dirPrefix` is removed and `files` becomes a string:
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+    routes: {
+  -   files: import('./src/routes/**/*.server.[jt](s|sx)'),
+  -   dirPrefix: './src/routes',
+  +   files: '/src/routes',
+      basePath: '/',
+    },
+  });
+  ```
+
+- [#1332](https://github.com/Shopify/hydrogen/pull/1332) [`5ec1bc62`](https://github.com/Shopify/hydrogen/commit/5ec1bc62cf9e4348aa389d4154f8c80dccfb96bb) Thanks [@frandiox](https://github.com/frandiox)! - A new `gql` utility is exported from `@shopify/hydrogen` that replaces `graphql-tag` dependency when using `useShopQuery`. It helps reducing bundle size in production when compared to the original `graphql-tag`.
+
+  Before:
+
+  ```js
+  import gql from 'graphql-tag';
+
+  // ...
+
+  useShopQuery({
+    query: gql`...`,
+    // ...
+  });
+  ```
+
+  After:
+
+  ```js
+  import {gql} from '@shopify/hydrogen';
+
+  // ...
+
+  useShopQuery({
+    query: gql`...`,
+    // ...
+  });
+  ```
+
+* [#1340](https://github.com/Shopify/hydrogen/pull/1340) [`631832ec`](https://github.com/Shopify/hydrogen/commit/631832ecaef26b918e774515ada6b80668ec5e4e) Thanks [@jplhomer](https://github.com/jplhomer)! - **Breaking change**: The `response.send()` function has been removed. Use `export async function api()` to send custom responses instead.
+
+### Patch Changes
+
+- [#1371](https://github.com/Shopify/hydrogen/pull/1371) [`84a2fd09`](https://github.com/Shopify/hydrogen/commit/84a2fd09b7150b1d5e1f92b786f4a6af09e18739) Thanks [@frehner](https://github.com/frehner)! - Made updates to `<Image/>`:
+
+  - Fixed some TypeScript type issues with Image.
+  - `data.url` and `alt` are now required props in Typescript, but won't break the actual component if you don't pass them.
+
+* [#1348](https://github.com/Shopify/hydrogen/pull/1348) [`211093e5`](https://github.com/Shopify/hydrogen/commit/211093e5f1a9e2ad115eb667746bfa2c6dd05b82) Thanks [@developit](https://github.com/developit)! - Fix HTML double-decoding in flight response
+
+- [#1345](https://github.com/Shopify/hydrogen/pull/1345) [`331ff3c0`](https://github.com/Shopify/hydrogen/commit/331ff3c0f58143df3e7c542116f9a94838710352) Thanks [@frandiox](https://github.com/frandiox)! - Reduce the amount of user app files downloaded in the browser.
+
+* [#1322](https://github.com/Shopify/hydrogen/pull/1322) [`36bd77c4`](https://github.com/Shopify/hydrogen/commit/36bd77c4619ec071ea11b764bb16b5670b0afa6b) Thanks [@frandiox](https://github.com/frandiox)! - Fix server hanging in Node.js environment when not using Hydrogen Middleware.
+
+- [#1360](https://github.com/Shopify/hydrogen/pull/1360) [`d9b0d03b`](https://github.com/Shopify/hydrogen/commit/d9b0d03b64d2207b314d15fc0acf6a5143610b92) Thanks [@blittle](https://github.com/blittle)! - Fix a problem where encoded html content props passed from server to client components would get double decoded, and break hydration on app load.
+
+* [#1355](https://github.com/Shopify/hydrogen/pull/1355) [`c45a45e8`](https://github.com/Shopify/hydrogen/commit/c45a45e895b8407da04c6b4608e7f16170452c24) Thanks [@jplhomer](https://github.com/jplhomer)! - Ensure all Hydrogen components are exported properly
+
+- [#1339](https://github.com/Shopify/hydrogen/pull/1339) [`fef4cb84`](https://github.com/Shopify/hydrogen/commit/fef4cb8496d985d37b6113865ac1252f78058aaa) Thanks [@jplhomer](https://github.com/jplhomer)! - Use `import.meta.env.DEV` instead of `process.env.LOCAL_DEV` to hash asset filenames and show performance metrics debugging
+
+* [#1320](https://github.com/Shopify/hydrogen/pull/1320) [`7e9df897`](https://github.com/Shopify/hydrogen/commit/7e9df897465012cd0cf374a1a35deb2ca8a16fc3) Thanks [@jplhomer](https://github.com/jplhomer)! - Properly log errors during flight responses
+
+- [#1363](https://github.com/Shopify/hydrogen/pull/1363) [`0941d3be`](https://github.com/Shopify/hydrogen/commit/0941d3be12b52edc045b898864435f591fc2c42e) Thanks [@frandiox](https://github.com/frandiox)! - Remove some server utilities from client build.
+
+## 0.21.0
+
+### Minor Changes
+
+- [#1327](https://github.com/Shopify/hydrogen/pull/1327) [`ce56311f`](https://github.com/Shopify/hydrogen/commit/ce56311fc1b63df22f77b199980439548f76997a) Thanks [@frehner](https://github.com/frehner)! - **Breaking Change**: `<Money />` updates and `<UnitPrice />` Removed.
+
+  - `<UnitPrice/>` has been removed
+  - `<Money/>` has two new props: `measurement` and `measurementSeparator` which do the work that `UnitPrice` used to do
+  - The TypeScript types for `<Money/>` have been improved and should provide a better typed experience now
+
+* [#1216](https://github.com/Shopify/hydrogen/pull/1216) [`771786a6`](https://github.com/Shopify/hydrogen/commit/771786a6475c4caadb1abe5f6644e2b5c2abc021) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fixes an issue where cached sub-requests were not revalidating properly.
+
+- [#1304](https://github.com/Shopify/hydrogen/pull/1304) [`aa196150`](https://github.com/Shopify/hydrogen/commit/aa19615024de4fe16d548429665a863e9aae0248) Thanks [@frehner](https://github.com/frehner)! - Removed `<ProductTitle/>` and `<ProductDescription/>` components. To migrate, use `{product.title}` and `{product.description}` instead.
+
+* [#1335](https://github.com/Shopify/hydrogen/pull/1335) [`0d90f92b`](https://github.com/Shopify/hydrogen/commit/0d90f92b448b0c4d99be3e5f5fa25d0b70a8315e) Thanks [@blittle](https://github.com/blittle)! - **Breaking Change**
+
+  The `<ProductMetafield />` component has been removed. Instead, directly use the `<Metafield>` component.
+
+### Patch Changes
+
+- [#1311](https://github.com/Shopify/hydrogen/pull/1311) [`3e3fd72f`](https://github.com/Shopify/hydrogen/commit/3e3fd72f7016c0993deceefc121306cf957ef564) Thanks [@jplhomer](https://github.com/jplhomer)! - Client components no longer need to use `@shopify/hydrogen/client` as the import path. All Hydrogen components can now be imported from `@shopify/hydrogen` regardless of their context.
+
+* [#1259](https://github.com/Shopify/hydrogen/pull/1259) [`110e9aca`](https://github.com/Shopify/hydrogen/commit/110e9aca385d553e3a87fea406f8bd8a43a0788f) Thanks [@blittle](https://github.com/blittle)! - You can now easily disable streaming on any page conditionally with the `enableStreaming` option inside `hydrogen.config.js`:
+
+  ```ts
+  import {CookieSessionStorage} from '@shopify/hydrogen';
+  import {defineConfig} from '@shopify/hydrogen/config';
+
+  export default defineConfig({
+    routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+    shopify: {
+      defaultLocale: 'en-us',
+      storeDomain: 'hydrogen-preview.myshopify.com',
+      storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
+      storefrontApiVersion: '2022-07',
+    },
+    enableStreaming: (req) => req.headers.get('user-agent') !== 'custom bot',
+  });
+  ```
+
+  By default all pages are stream rendered except for SEO bots. There shouldn't be many reasons to disable streaming, unless there is a custom bot not covered by Hydrogen's bot detection.
+
+- [#1318](https://github.com/Shopify/hydrogen/pull/1318) [`668a24da`](https://github.com/Shopify/hydrogen/commit/668a24daebf180747a002c8020c2e712f5d9a458) Thanks [@blittle](https://github.com/blittle)! - Buffer RSC flight responses. There isn't any benefit to streaming them, because we start a transition on page navigation. Buffering also fixes caching problems on the flight response.
+
+* [#1293](https://github.com/Shopify/hydrogen/pull/1293) [`e378ed61`](https://github.com/Shopify/hydrogen/commit/e378ed6199553f64d9e73ad27f9409ef501aa724) Thanks [@jplhomer](https://github.com/jplhomer)! - Reverts [#1272](https://github.com/Shopify/hydrogen/pull/1272) and properly escapes terminating script sequences
+
+- [#1283](https://github.com/Shopify/hydrogen/pull/1283) [`eea82cb0`](https://github.com/Shopify/hydrogen/commit/eea82cb02064471d274e534c557caa5d3527bc93) Thanks [@jplhomer](https://github.com/jplhomer)! - Hydrogen has been updated to use the latest stable version of React.
+
+  To update an existing Hydrogen app:
+
+  ```bash
+  yarn add react@latest react-dom@latest
+  ```
+
 ## 0.20.0
 
 ### Minor Changes

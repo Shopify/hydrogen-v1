@@ -1,14 +1,12 @@
 import {
-  HydrogenConfig,
-  HydrogenConfigRoutes,
+  InlineHydrogenConfig,
+  ResolvedHydrogenRoutes,
   ImportGlobEagerOutput,
 } from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
-import type {ASTNode} from 'graphql';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
-import {findRoutePrefix} from './findRoutePrefix';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {
   emptySessionImplementation,
@@ -70,24 +68,21 @@ export function extractPathFromRoutesKey(
   return path;
 }
 
-export function getApiRoutes(
-  rawRoutes: HydrogenConfigRoutes
-): Array<HydrogenApiRoute> {
-  const routes = (rawRoutes.files ?? rawRoutes) as ImportGlobEagerOutput;
-  const topLevelPath = (rawRoutes.basePath ?? '*') as string;
-  const dirPrefix = rawRoutes.dirPrefix as string | undefined;
-
+export function getApiRoutes({
+  files: routes,
+  basePath: topLevelPath = '',
+  dirPrefix = '',
+}: Partial<ResolvedHydrogenRoutes>): Array<HydrogenApiRoute> {
   if (!routes || memoizedRawRoutes === routes) return memoizedApiRoutes;
 
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const keys = Object.keys(routes);
-  const commonRoutePrefix = dirPrefix ?? findRoutePrefix(keys);
 
   const apiRoutes = keys
     .filter((key) => routes[key].api)
     .map((key) => {
-      const path = extractPathFromRoutesKey(key, commonRoutePrefix);
+      const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
@@ -145,13 +140,13 @@ interface QueryShopArgs {
   /** A string of the GraphQL query.
    * If no query is provided, then the `useShopQuery` makes no calls to the Storefront API.
    */
-  query: ASTNode | string;
+  query: string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
 }
 
 function queryShopBuilder(
-  shopifyConfigGetter: HydrogenConfig['shopify'],
+  shopifyConfigGetter: InlineHydrogenConfig['shopify'],
   request: ServerComponentRequest
 ) {
   return async function queryShop<T>({
@@ -196,7 +191,7 @@ function queryShopBuilder(
 export async function renderApiRoute(
   request: ServerComponentRequest,
   route: ApiRouteMatch,
-  shopifyConfig: HydrogenConfig['shopify'],
+  shopifyConfig: InlineHydrogenConfig['shopify'],
   session?: SessionStorageAdapter
 ): Promise<Response | Request> {
   let response;

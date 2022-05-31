@@ -1,8 +1,8 @@
 // @ts-check
 
 /**
- * This is a temporary script meant to copy `templates/template-hydrogen-default` to `./template-hydrogen`
- * while we are actively developing H2 in `templates/template-hydrogen-default`. Eventually, something else might happen.
+ * This is a temporary script meant to copy `templates/demo-store` to `./template-hydrogen`
+ * while we are actively developing H2 in `templates/demo-store`. Eventually, something else might happen.
  */
 
 const path = require('path');
@@ -15,7 +15,7 @@ const devPath = path.resolve(
   '..',
   '..',
   'templates',
-  'template-hydrogen-default'
+  'demo-store'
 );
 const templatePath = path.resolve(__dirname, '..', './template-hydrogen');
 const skipFiles = ['node_modules', 'dist', '.stackblitzrc'];

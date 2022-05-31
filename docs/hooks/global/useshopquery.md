@@ -9,8 +9,7 @@ The `useShopQuery` hook allows you to make server-only GraphQL queries to the St
 ## Example code
 
 ```tsx
-import {useShopQuery} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {useShopQuery, gql} from '@shopify/hydrogen';
 
 export default function Blog() {
   const {data} = useShopQuery({

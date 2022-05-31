@@ -35,8 +35,9 @@ export function MediaFile({
 }: MediaFileProps) {
   switch (data.mediaContentType) {
     case 'IMAGE': {
-      const dataImage = (data as PartialDeep<MediaImageType>).image;
-      if (!dataImage) {
+      const dataImage = (data as PartialDeep<MediaImageType>)
+        .image as ShopifyImageProps['data'];
+      if (!dataImage || !dataImage.url) {
         console.warn(
           `No "image" property was found on the "data" prop for <MediaFile/>, for the "type='image'"`
         );
