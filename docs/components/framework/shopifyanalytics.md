@@ -91,7 +91,7 @@ Provide the following data to `useServerAnalytics` to view information from the 
 
 ### `ShopifyAnalytics` constants
 
-The following table provides a list of valid values for the `pageType` and `resourceType` properties:
+The following table provides a list of valid values for the `pageType` property:
 
 | Value     |  Description         |
 | -------- | --------------------- |
