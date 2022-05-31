@@ -92,17 +92,6 @@ export default function Product() {
 
 The `Money` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2):
-
-```graphql
-{
-  currencyCode
-  amount
-}
-```
-
 ## Related hooks
 
 - [`useMoney`](https://shopify.dev/api/hydrogen/hooks/primitive/usemoney)
