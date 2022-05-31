@@ -8,6 +8,7 @@ type EventGuard = Record<string, NodeJS.Timeout>;
 
 const subscribers: Subscribers = {};
 let pageAnalyticsData: any = {};
+let isFirstPageViewSent: Boolean = false;
 const guardDupEvents: EventGuard = {};
 
 const USAGE_ERROR =
@@ -54,15 +55,31 @@ function publish(eventname: string, guardDup = false, payload = {}) {
     }
 
     const namespacedTimeout = setTimeout(() => {
-      publishEvent(subs, mergeDeep(pageAnalyticsData, payload));
+      publishEvent(
+        namedspacedEventname,
+        subs,
+        mergeDeep(pageAnalyticsData, payload)
+      );
     }, 100);
     guardDupEvents[namedspacedEventname] = namespacedTimeout;
   } else {
-    publishEvent(subs, mergeDeep(pageAnalyticsData, payload));
+    publishEvent(
+      namedspacedEventname,
+      subs,
+      mergeDeep(pageAnalyticsData, payload)
+    );
   }
 }
 
-function publishEvent(subs: Record<string, SubscriberFunction>, payload: any) {
+function publishEvent(
+  eventname: string,
+  subs: Record<string, SubscriberFunction>,
+  payload: any
+) {
+  if (!isFirstPageViewSent && eventname === eventNames.PAGE_VIEW) {
+    isFirstPageViewSent = true;
+  }
+
   if (subs) {
     Object.keys(subs).forEach((key) => {
       subs[key](payload);
@@ -109,6 +126,10 @@ function pushToServer(init?: RequestInit, searchParam?: string) {
   );
 }
 
+function hasSentFirstPageView() {
+  return isFirstPageViewSent;
+}
+
 export const ClientAnalytics = {
   pushToPageAnalyticsData,
   getPageAnalyticsData,
@@ -117,5 +138,5 @@ export const ClientAnalytics = {
   subscribe,
   pushToServer,
   eventNames,
-  hasSentPageView: false,
+  hasSentFirstPageView,
 };

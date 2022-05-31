@@ -47,7 +47,7 @@ export function ShopifyAnalyticsClient({cookieDomain}: {cookieDomain: string}) {
 
         // On a slow network, the pageview event could be already fired before
         // we subscribed to the pageview event
-        if (ClientAnalytics.hasSentPageView) {
+        if (ClientAnalytics.hasSentFirstPageView()) {
           trackPageView(ClientAnalytics.getPageAnalyticsData());
         }
       }

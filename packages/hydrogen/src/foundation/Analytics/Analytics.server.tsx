@@ -13,7 +13,7 @@ export function Analytics() {
   // If render cache is empty, create a 50 ms delay so that React doesn't resolve this
   // component too early and potentially cause a mismatch in hydration
   if (cache.size === 0 && !cache.has(DELAY_KEY_1)) {
-    analyticDelay(cache, DELAY_KEY_1, 50);
+    analyticsDelay(cache, DELAY_KEY_1, 50);
   }
   // If this delay is created, execute it
   cache.has(DELAY_KEY_1) && cache.get(DELAY_KEY_1).call();
@@ -33,7 +33,7 @@ export function Analytics() {
   // to the end of the render queue) so that other scheduled
   // render work can be processed by React's concurrent render first
   if (cache.size > 1 && !cache.has(DELAY_KEY_2)) {
-    analyticDelay(cache, DELAY_KEY_2, 1);
+    analyticsDelay(cache, DELAY_KEY_2, 1);
   }
   cache.has(DELAY_KEY_2) && cache.get(DELAY_KEY_2).call();
   cache.delete(DELAY_KEY_2);
@@ -45,7 +45,7 @@ export function Analytics() {
   );
 }
 
-function analyticDelay(
+function analyticsDelay(
   cache: Map<string, any>,
   delayKey: string,
   delay: number
