@@ -33,14 +33,6 @@ module.exports = {
         '2xl': '96em',
       },
       spacing: {
-        xs: '0.25rem',
-        s: '0.5rem',
-        m: '1rem',
-        l: '2rem',
-        xl: '3rem',
-        '2xl': '4rem',
-        '3xl': '8rem',
-        '4xl': '16rem',
         nav: 'var(--height-nav)',
       },
       fontFamily: {

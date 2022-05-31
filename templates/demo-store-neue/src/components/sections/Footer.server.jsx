@@ -98,14 +98,14 @@ const menusPlaceholder = [
 
 export default function Footer({menus = menusPlaceholder}) {
   const styles = {
-    section: 'grid gap-m',
-    nav: 'grid gap-s',
+    section: 'grid gap-4',
+    nav: 'grid gap-2',
   };
 
   return (
     <footer
       role="contentinfo"
-      className="grid items-start w-full grid-cols-4 border-b bg-primary text-contrast gap-xl px-xl py-l"
+      className="grid items-start w-full grid-cols-4 gap-12 px-12 py-8 border-b bg-primary text-contrast"
     >
       {menus.map((menu) => (
         <section key={menu.id} className={styles.section}>

@@ -34,7 +34,7 @@ export default function FeaturedCollections({
       <Grid items={collections.length}>
         {collections.map((collection) => (
           <Link key={collection.id} to={collection.url}>
-            <div className="grid gap-m">
+            <div className="grid gap-4">
               <Image
                 className="rounded shadow-border overflow-clip inline-block aspect-square md:aspect-[4/3] object-cover"
                 width={'100%'}

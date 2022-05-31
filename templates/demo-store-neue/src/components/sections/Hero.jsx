@@ -41,7 +41,7 @@ export default function Hero({
             />
           ))}
         </div>
-        <div className="flex flex-col items-baseline justify-between gap-4 bg-gradient-to-t from-primary/60 px-xl py-l text-contrast">
+        <div className="flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t from-primary/60 text-contrast">
           <Heading
             format={false}
             as="h2"

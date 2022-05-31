@@ -19,8 +19,8 @@ export default function Homepage() {
       </Suspense>
       <Hero height="full" top />
       <FeaturedCollections title="Collections" />
-      <ProductSwimlane title="Featured Products" />
       <Hero />
+      <ProductSwimlane title="Featured Products" />
       <Locations />
     </Layout>
   );
