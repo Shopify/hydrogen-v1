@@ -14,7 +14,6 @@ export const serverNoJsonParse = createRule({
     docs: {
       description:
         'JSON.parse() should not be used in server-side code due to security concerns.',
-      category: 'Best Practices',
       recommended: 'warn',
     },
     messages: {

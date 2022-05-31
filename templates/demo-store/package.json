@@ -20,7 +20,7 @@
     "@tailwindcss/typography": "^0.5.2",
     "autoprefixer": "^10.4.2",
     "cross-env": "^7.0.3",
-    "eslint": "^7.31.0",
+    "eslint": "^8.16.0",
     "eslint-plugin-hydrogen": "^0.12.1",
     "playwright": "^1.19.2",
     "postcss": "^8.4.5",
