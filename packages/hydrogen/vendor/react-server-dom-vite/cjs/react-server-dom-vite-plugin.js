@@ -18,8 +18,6 @@ var vite = require('vite');
 var fs = require('fs');
 var path = require('path');
 
-var assign = Object.assign;
-
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
   if (typeof o === "string") return _arrayLikeToArray(o, minLen);
@@ -94,6 +92,8 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
   };
 }
 
+var assign = Object.assign;
+
 var rscViteFileRE = /\/react-server-dom-vite.js/;
 var noProxyRE = /[&?]no-proxy($|&)/;
 
@@ -136,9 +136,25 @@ function ReactFlightVitePlugin() {
     },
     resolveId: function (source, importer) {
       if (!importer) return null;
+
+      if (noProxyRE.test(source)) {
+        var _source$split = source.split('?'),
+            id = _source$split[0],
+            query = _source$split[1];
+
+        return this.resolve(id, importer, {
+          skipSelf: true
+        }).then(function (result) {
+          return assign({}, result, {
+            id: result.id + (query ? "?" + query : ''),
+            moduleSideEffects: false
+          });
+        });
+      }
       /**
        * Throw errors when non-Server Components try to load Server Components.
        */
+
 
       if (/\.server(\.[jt]sx?)?$/.test(source) && !(/(\.server\.[jt]sx?|index\.html)$/.test(importer) || isServerComponentImporterAllowed(importer, source))) {
         throw new Error("Cannot import " + source + " from \"" + importer + "\". " + 'By react-server convention, .server.js files can only be imported from other .server.js files. ' + 'That way nobody accidentally sends these to the client by indirectly importing it.');
@@ -292,10 +308,13 @@ async function proxyClientComponent(filepath, src) {
   exportStatements.forEach(function (key) {
     var isDefault = key === DEFAULT_EXPORT;
     var componentName = isDefault ? getComponentFilename(filepath) : key;
-    proxyCode += "export " + (isDefault ? DEFAULT_EXPORT : "const " + componentName + " =") + " wrapInClientProxy({ name: '" + componentName + "', id: '" + getComponentId(filepath) + "', value: allImports['" + key + "'], isDefault: " + // eslint-disable-next-line react-internal/safe-string-coercion
+    proxyCode += "export " + (isDefault ? DEFAULT_EXPORT : "const " + componentName + " =") + " /* @__PURE__ */wrapInClientProxy({ name: '" + componentName + "', id: '" + getComponentId(filepath) + "', value: allImports['" + key + "'], isDefault: " + // eslint-disable-next-line react-internal/safe-string-coercion
     String(isDefault) + " });\n";
   });
-  return proxyCode;
+  return {
+    code: proxyCode,
+    moduleSideEffects: false
+  };
 }
 
 function findClientBoundaries(moduleGraph) {
