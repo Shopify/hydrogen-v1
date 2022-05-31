@@ -44,7 +44,7 @@ function App() {
 {% endcodeblock %}
 
 If you have a custom domain or you're using sub-domains, then you can set the cookie domain of
-the Shopify analytics component so that cookies persists for your root domain.
+the `ShopifyAnalytics` component so that cookies persists for your root domain:
 
 ```jsx
 <ShopifyAnalytics cookieDomain="my-shop.com" />
