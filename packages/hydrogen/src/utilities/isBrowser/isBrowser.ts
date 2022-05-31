@@ -2,5 +2,5 @@
  * if the code was run in the browser.
  */
 export function isBrowser() {
-  return typeof window !== 'undefined';
+  return typeof document !== 'undefined';
 }
