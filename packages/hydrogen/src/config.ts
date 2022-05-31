@@ -1,5 +1,5 @@
-import type {HydrogenConfig} from './types';
+import type {InlineHydrogenConfig} from './types';
 
-export const defineConfig = (params: HydrogenConfig) => params;
+export const defineConfig = (params: InlineHydrogenConfig) => params;
 
-export type {HydrogenConfig};
+export type {InlineHydrogenConfig as HydrogenConfig};

@@ -26,8 +26,6 @@
     "test:vite-ci": "cross-env FORCE_COLOR=true jest && jest --config jest-e2e.config.ts",
     "test:hydrogen-ui": "yarn workspace @shopify/hydrogen-ui test:ci",
     "version": "changeset version && node -p \"'export const LIB_VERSION = \\'' + require('./packages/hydrogen/package.json').version + '\\';'\" > packages/hydrogen/src/version.ts",
-    "hydrogen": "./packages/cli/bin/hydrogen",
-    "h2": "./packages/cli/bin/hydrogen",
     "generate-docs": "node ./scripts/generate-docs.mjs",
     "graphql-types": "run-s graphql-types:hydrogen lint:schema",
     "graphql-types:hydrogen": "yarn workspace @shopify/hydrogen graphql-types"
@@ -47,7 +45,7 @@
     "alex": "^9.1.0",
     "chalk": "^4.1.2",
     "cross-env": "^7.0.3",
-    "eslint": "^7.23.0",
+    "eslint": "^8.16.0",
     "eslint-plugin-hydrogen": "^0.12.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-react": "^7.29.3",
