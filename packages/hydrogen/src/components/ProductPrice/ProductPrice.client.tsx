@@ -34,7 +34,7 @@ export function ProductPrice(
   } = props;
 
   if (product == null) {
-    throw new Error('Expected a ProductProvider context, but none was found');
+    throw new Error(`<ProductPrice/> requires a product as the 'data' prop`);
   }
 
   let price: Partial<MoneyV2> | undefined | null;

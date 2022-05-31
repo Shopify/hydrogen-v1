@@ -5,18 +5,16 @@ description: The ProductPrice component renders a Money component with the produ
 ---
 
 The `ProductPrice` component renders a `Money` component with the product
-[`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
+[`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
 
 ## Example code
 
 ```tsx
-import {ProductPrice, ProductProvider} from '@shopify/hydrogen';
+import {ProductPrice} from '@shopify/hydrogen';
 
 export function Product({product}) {
   return (
-    <ProductProvider data={product}>
-      <ProductPrice priceType="compareAt" valueType="max" />
-    </ProductProvider>
+    <ProductPrice product={product} priceType="compareAt" valueType="max" />
   );
 }
 ```
