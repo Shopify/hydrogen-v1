@@ -5,19 +5,19 @@ import {Heading, Grid} from '~/components/elements';
 const mockCollections = [
   {
     id: '1',
-    url: '/',
+    url: '/collections/freestyle-collection',
     image: 'https://picsum.photos/seed/3/912',
     title: 'Bath',
   },
   {
     id: '2',
-    url: '/',
+    url: '/collections/freestyle-collection',
     image: 'https://picsum.photos/seed/4/912',
     title: 'Swim',
   },
   {
     id: '3',
-    url: '/',
+    url: '/collections/freestyle-collection',
     image: 'https://picsum.photos/seed/5/912',
     title: 'Gifts',
   },

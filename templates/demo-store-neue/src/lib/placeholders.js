@@ -1,4 +1,4 @@
-export const mockProduct = {
+export const product = {
   label: 'Limited Edition' /* Metafield */,
   id: 'gid://shopify/Product/6730850828344',
   title: 'The Hydrogen',
@@ -31,8 +31,7 @@ export const mockProduct = {
       {
         id: 'gid://shopify/ProductVariant/41007289630776',
         image: {
-          url:
-            'https://cdn.shopify.com/s/files/1/0551/4566/0472/products/hydrogen-morning.jpg?v=1636146509',
+          url: 'https://cdn.shopify.com/s/files/1/0551/4566/0472/products/hydrogen-morning.jpg?v=1636146509',
           altText: 'The Hydrogen snowboard, color Morning',
           width: 1200,
           height: 1504,
@@ -47,5 +46,35 @@ export const mockProduct = {
         },
       },
     ],
+  },
+};
+
+export const location = {
+  metaobject: {
+    id: 'gid://shopify/Metaobject/7176248',
+    featured_image: {
+      reference: {
+        image: {
+          url: 'https://cdn.shopify.com/s/files/1/0551/4566/0472/files/kotn-toronto.jpg?v=1653965858',
+          width: 4400,
+          height: 2927,
+        },
+      },
+    },
+    title: {
+      value: 'Toronto',
+    },
+    address: {
+      value: '754 Queen St W\nToronto, ON\nM4M 3N8',
+    },
+    hours: {
+      value: '["Monday-Saturday: 11am-6pm","Sunday: 12pm-6pm"]',
+    },
+    email: {
+      value: 'toronto@snowdevil.com',
+    },
+    phone: {
+      value: '416-363-5656',
+    },
   },
 };

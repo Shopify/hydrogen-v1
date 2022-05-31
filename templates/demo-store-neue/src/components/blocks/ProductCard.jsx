@@ -1,8 +1,8 @@
 import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 import clsx from 'clsx';
 import {Text} from '~/components/elements';
-import {isRangedPricing, isDiscounted, isNewArrival} from '~/lib/utils';
-import {mockProduct} from '~/lib/placeholders';
+import {isDiscounted, isNewArrival} from '~/lib/utils';
+import {product as mockProduct} from '~/lib/placeholders';
 
 export default function ProductCard({product = mockProduct, label, className}) {
   let cardLabel;
@@ -53,7 +53,6 @@ export default function ProductCard({product = mockProduct, label, className}) {
                 />
               )}
             </Text>
-            {/* <Text className="opacity-50">11 Colors Available</Text> */}
           </div>
         </div>
       </div>
@@ -63,9 +62,8 @@ export default function ProductCard({product = mockProduct, label, className}) {
 
 // <Money className="opacity-50 strike" data={compareAtPrice} />
 function CompareAtPrice({data, className}) {
-  const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} = useMoney(
-    data,
-  );
+  const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} =
+    useMoney(data);
 
   const styles = clsx('strike', className);
 

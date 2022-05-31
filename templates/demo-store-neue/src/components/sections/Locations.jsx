@@ -4,21 +4,21 @@ import Section from './Section';
 const mockLocations = [
   {
     id: '1',
-    url: '/',
+    url: '/locations/toronto',
     image: 'https://picsum.photos/seed/31/912',
     title: '31 Crosby Street, NYC',
     subtitle: 'Open Now',
   },
   {
     id: '2',
-    url: '/',
+    url: '/locations/toronto',
     image: 'https://picsum.photos/seed/41/912',
     title: '1-5-2 Aobadai, Meguro-Ku, Tokyo, Japan',
     subtitle: 'Opens at 11am',
   },
   {
     id: '3',
-    url: '/',
+    url: '/locations/toronto',
     image: 'https://picsum.photos/seed/51/912',
     title: 'Shop 9, Albert Coates Lane, Melbourne',
     subtitle: 'Opens at 12am',
