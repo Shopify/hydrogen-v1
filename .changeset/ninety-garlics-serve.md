@@ -3,7 +3,7 @@
 'create-hydrogen-app': minor
 ---
 
-The `routes` property in `hydrogen.config.js` file has been simplified. It is now a string that represents the path to the routes from the project root:
+**Breaking change**: The `routes` property in `hydrogen.config.js` file has been simplified. It is now a string that represents the path to the routes from the project root:
 
 ```diff
 // hydrogen.config.js
