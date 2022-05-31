@@ -36,13 +36,13 @@ export default function Header({title}) {
         <nav className="flex gap-8">
           {/* TODO: Replace with Navigation API */}
           <Link className={styles.text} to="/collections/freestyle-collection">
-            Shop
+            Collections
           </Link>
           <Link className={styles.text} to="/">
-            Learn
+            Products
           </Link>
           <Link className={styles.text} to="/">
-            About
+            Locations
           </Link>
         </nav>
       </div>

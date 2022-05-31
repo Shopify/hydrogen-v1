@@ -49,7 +49,7 @@ export default function Collection({pageBy = 12, params}) {
               {collection.description}
             </Text>
           </div>
-          <div className="flex justify-end gap-4 md:gap-6 lg:gap-8">
+          <div className="flex items-baseline justify-end gap-4 md:gap-6 lg:gap-8">
             {/* TODO: This will only get the amount on the page, not the total amount. I don't think you actually can grab the total number of products in a collection today. */}
             <Text>{products.length}</Text>
             {/* TODO: Convert to Filter dropdown */}

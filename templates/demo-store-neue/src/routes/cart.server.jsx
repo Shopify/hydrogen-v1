@@ -188,7 +188,7 @@ export function TailwindCart() {
       {/* Order summary */}
       <section
         aria-labelledby="summary-heading"
-        className="px-4 py-6 mt-16 rounded-lg bg-gray-50 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5"
+        className="sticky px-4 py-6 mt-16 rounded-lg top-24 bg-gray-50 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5"
       >
         <h2 id="summary-heading" className="text-lg font-medium text-gray-900">
           Order summary

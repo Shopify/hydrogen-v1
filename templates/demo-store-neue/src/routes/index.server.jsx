@@ -18,7 +18,7 @@ import {
   Locations,
 } from '~/components/sections';
 
-import {MEDIA_FIELDS} from '~/lib/fragments';
+import {MEDIA_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Homepage() {
   const {languageCode} = useShop();
@@ -34,17 +34,27 @@ export default function Homepage() {
   });
 
   // TODO: Make Hero Banners match to collections if these don't
-  const heroBanners = data?.metaobjects?.nodes;
+  // const heroBanners = data?.heroBanners?.nodes;
+
+  const {heroBanners, featuredCollections, featuredProducts, locations} = data;
 
   return (
     <Layout>
       <Suspense fallback={null}>
         <SeoForHomepage />
       </Suspense>
-      <Hero data={heroBanners[0]} height="full" top />
-      <FeaturedCollections title="Collections" />
-      {heroBanners[1] && <Hero data={heroBanners[1]} />}
-      <ProductSwimlane title="Featured Products" />
+      {heroBanners?.nodes[0] && (
+        <Hero data={heroBanners?.nodes[0]} height="full" top />
+      )}
+      <FeaturedCollections
+        data={featuredCollections.nodes}
+        title="Collections"
+      />
+      {heroBanners?.nodes[1] && <Hero data={heroBanners.nodes[1]} />}
+      <ProductSwimlane
+        products={featuredProducts.nodes}
+        title="Featured Products"
+      />
       <Locations />
     </Layout>
   );
@@ -83,9 +93,10 @@ const SEO_QUERY = gql`
 
 const QUERY = gql`
   ${MEDIA_FIELDS}
+  ${PRODUCT_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    metaobjects(type: "hero_banners", first: 2) {
+    heroBanners: metaobjects(type: "hero_banners", first: 2) {
       nodes {
         title: field(key: "title") {
           value
@@ -112,6 +123,24 @@ const QUERY = gql`
         text_color: field(key: "text_color") {
           value
         }
+      }
+    }
+    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
+      nodes {
+        id
+        title
+        handle
+        image {
+          altText
+          width
+          height
+          url
+        }
+      }
+    }
+    featuredProducts: products(first: 12) {
+      nodes {
+        ...ProductCardFields
       }
     }
   }

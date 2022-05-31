@@ -11,7 +11,7 @@ export default function ProductCard({product = mockProduct, label, className}) {
     image,
     priceV2: price,
     compareAtPriceV2: compareAtPrice,
-  } = product.variants.nodes[0];
+  } = product?.variants?.nodes[0];
 
   if (label) {
     cardLabel = label;
