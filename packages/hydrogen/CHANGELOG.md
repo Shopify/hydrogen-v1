@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.22.1
+
+### Patch Changes
+
+- [#1394](https://github.com/Shopify/hydrogen/pull/1394) [`3a681ac2`](https://github.com/Shopify/hydrogen/commit/3a681ac289cc7850f79bc080a445bc6c0b6926fb) Thanks [@jplhomer](https://github.com/jplhomer)! - Make graphql-tag a dependency instead of a devDependency
+
 ## 0.22.0
 
 ### Minor Changes
