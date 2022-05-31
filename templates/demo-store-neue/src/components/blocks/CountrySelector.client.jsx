@@ -1,7 +1,7 @@
 import {useCallback, useState, Suspense} from 'react';
 import {useCountry, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
-import Icon from '~/components/elements/Icon';
+import {IconChevronDown} from '~/components/elements';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
@@ -28,8 +28,7 @@ export default function CountrySelector() {
             <>
               <Listbox.Button className="flex items-center justify-between w-full">
                 <span className="">{selectedCountry.name}</span>
-                <Icon
-                  type="chevron-down"
+                <IconChevronDown
                   className={`w-5 h-5 transition-transform duration-300 ${
                     open ? 'rotate-180' : null
                   }`}

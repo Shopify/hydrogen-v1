@@ -1,6 +1,12 @@
 import {Link, useUrl} from '@shopify/hydrogen';
 
-import {Icon, Input} from '~/components/elements';
+import {
+  IconSearch,
+  IconHelp,
+  IconAccount,
+  IconBag,
+  Input,
+} from '~/components/elements';
 
 /**
  * A client component that specifies the content of the header on the website
@@ -44,17 +50,17 @@ export default function Header({title}) {
         <form className="flex items-center">
           <Input type="search" placeholder="Search" />
           <button type="submit" className={styles.button}>
-            <Icon type="search" />
+            <IconSearch />
           </button>
         </form>
         <Link className={styles.button} to={'help'}>
-          <Icon type="help" />
+          <IconHelp />
         </Link>
         <button className={styles.button}>
-          <Icon type="account" />
+          <IconAccount />
         </button>
         <button className={styles.button}>
-          <Icon type="bag" />
+          <IconBag />
         </button>
       </div>
     </header>
