@@ -32,7 +32,7 @@ export default function Layout({children}) {
             Skip to content
           </a>
         </div>
-        {/* <div className="bg-primary text-contrast py-s md:py-m px-m md:px-lg lg:px-xl">
+        {/* <div className="px-4 py-2 bg-primary text-contrast md:py-4 md:px-8 lg:px-16">
           <Text>Wrong Country Banner</Text>
         </div> */}
         <Suspense fallback={null}>
