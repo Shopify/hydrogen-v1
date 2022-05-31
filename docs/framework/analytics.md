@@ -487,6 +487,10 @@ describe('Google Analytics 4', () => {
 
 {% endcodeblock %}
 
+## Related components
+
+- [`ShopifyAnalytics`](https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics)
+
 ## Next steps
 
 - Learn how to [configure queries to preload](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries) in your Hydrogen app.
