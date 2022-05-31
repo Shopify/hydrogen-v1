@@ -413,8 +413,8 @@ function resolveModPath(modPath, dirname, retryExtension) {
   var absolutePath;
 
   try {
-    absolutePath = modPath.startsWith('.') ? path.resolve(dirname, modPath) : modPath;
-    return require.resolve((modPath.startsWith('.') ? path.resolve(dirname, modPath) : modPath) + (retryExtension || ''));
+    absolutePath = modPath.startsWith('.') ? vite.normalizePath(path.resolve(dirname, modPath)) : modPath;
+    return vite.normalizePath(require.resolve(absolutePath + (retryExtension || '')));
   } catch (error) {
     if (!/\.[jt]sx?$/.test(absolutePath) && retryExtension !== '.tsx') {
       // Node cannot infer .[jt]sx extensions.
@@ -431,7 +431,7 @@ function augmentModuleGraph(moduleGraph, id, code) {
   var _id$split = id.split('?'),
       source = _id$split[0];
 
-  var dirname = path.dirname(source);
+  var dirname = vite.normalizePath(path.dirname(source));
 
   var _parse2 = esModuleLexer.parse(code),
       rawImports = _parse2[0],
