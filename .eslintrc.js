@@ -113,11 +113,5 @@ module.exports = {
         'node/no-missing-import': 'off',
       },
     },
-    {
-      files: ['**/*.server.*'],
-      rules: {
-        'react-hooks/rules-of-hooks': 'off',
-      },
-    },
   ],
 };
