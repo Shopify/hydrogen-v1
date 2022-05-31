@@ -6,7 +6,8 @@ description: The ShopifyAnalytics component sends commerce-related analytics to 
 
 The `ShopifyAnalytics` component sends commerce-related analytics to Shopify. By adding the `ShopifyAnalytics` component to your Hydrogen app, you can view key sales, orders, and online store visitor data from the [Analytics dashboard in your Shopify admin](https://help.shopify.com/en/manual/reports-and-analytics/shopify-reports/overview-dashboard).
 
-> Note: This is a still a work in progress. Only Online Store page view and session related analytic reports are working at this moment.
+> Note: 
+> Currently, only Online Store page view and session-related analytic reports can be configured with the `ShopifyAnalytics` component. Additional analytics functionality will be available in the coming weeks.
 
 ## Configuration
 
