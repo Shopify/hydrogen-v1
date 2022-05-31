@@ -397,6 +397,14 @@ function MyPage({custom, props, here}) {
 
 {% endcodeblock %}
 
+### Built-in routes
+
+Hydrogen provides a few built-in routes
+
+1. `/__health` - A health check route that responds witha 200 status and no body. You can use this route within your infrastructure to verify your app is healthy and able to respond to requests.
+2. `/__rsc` - An internal route used to re-render server components. It's called by the hydrogen front-end when the route changes, or server props change. You should never need to manually request this route.
+3. `/__event` - An internal route used to save client observability events. You should never need to manually request this route.
+
 ## Related components and hooks
 
 - [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
