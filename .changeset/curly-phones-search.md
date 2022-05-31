@@ -28,4 +28,4 @@ Optional analytics components that allows you to send ecommerce related analytic
 Shopify. Adding the Shopify analytics components will allow the Shopify admin - Analytics
 dashboard to work.
 
-For information, see [Shopify Analytics](https://shopify.dev/custom-storefronts/hydrogen/componenets/framework/shopifyanalytics)
+For information, see [Shopify Analytics](https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics)

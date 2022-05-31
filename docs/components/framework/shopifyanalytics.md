@@ -45,31 +45,31 @@ function App() {
 
 {% endcodeblock %}
 
-If you have a custom domain or you are using sub domains, you can set the cookie domain of
-the Shopify analytics component so that cookies persists for your root domain.
+If you have a custom domain or you're using sub-domains, then you can set the cookie domain of
+the `ShopifyAnalytics` component so that cookies persists for your root domain:
+
+{% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
 <ShopifyAnalytics cookieDomain="my-shop.com" />
 ```
 
-Otherwise, this component will use the `storeDomain` value in the `hydrogen.config.js`
-as the default cookie domain or leave it blank when the specified cookie domain does
-not match `window.location.hostname`.
+{% endcodeblock %}
 
-### Hydrogen analytics connect with checkout analytics
+If you're not using custom domains or sub-domains, then the `ShopifyAnalytics` component uses the `storeDomain` value in the Hydrogen configuration file as the default cookie domain or leaves it blank when the specified cookie domain doesn't match `window.location.hostname`.
 
-There is a strict requirement for the analytic cookies to be set at the 1st party
-domain. This means that when a buyer navigates from your Hydrogen storefront to
-Shopify checkout, the domain name must stay the same.
+### Connecting Hydrogen analytics with Shopify checkout
 
-You can acheive this by assigning a subdomain to your online store. For example:
+Analytic cookies must be set at the first-party domain. This means that when a buyer navigates from your Hydrogen storefront to Shopify checkout, the domain name must stay the same.
 
-* Set your Hydrogen store domain at `https://www.my-awesome-hydrogen-store.com`
-* Attach a new subdomain to your online store at `https://checkout.my-awesome-hydrogen-store.com`
-* Set the cookieDomain to the same root domain `<ShopifyAnalytics cookieDomain="my-awesome-hydrogen-store.com" />`
+You can achieve this by assigning a sub-domain to your online store. For example, you can do the following tasks:
 
-> Note: It is expected behaviour that Hydrogen analytics and checkout analytics do not connect
-when in development and preview mode. This will only connect in production mode.
+- Set your Hydrogen store domain to `https://www.my-awesome-hydrogen-store.com`.
+- Attach a new sub-domain to your online store at `https://checkout.my-awesome-hydrogen-store.com`.
+- Set the `cookieDomain` to the same root domain at `<ShopifyAnalytics cookieDomain="my-awesome-hydrogen-store.com" />`.
+
+> Note: 
+> Hydrogen analytics and Shopify checkout can only be connected in production. They can't be connected in development and preview modes. 
 
 ## Shopify Analytics data
 
