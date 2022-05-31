@@ -24,7 +24,7 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-After you've updated your Hydrogen configuration file, add the `ShopifyAnalytics` component in `App.server.jsx`. The `cookieName` prop must be the same one you used for [session storage](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions):
+After you've updated your Hydrogen configuration file, add the `ShopifyAnalytics` component in `App.server.jsx`.
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
@@ -34,7 +34,7 @@ function App() {
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
         ...
-        <ShopifyAnalytics cookieName="__session" />
+        <ShopifyAnalytics />
       </ShopifyProvider>
     </Suspense>
   );
@@ -42,6 +42,32 @@ function App() {
 ```
 
 {% endcodeblock %}
+
+If you have a custom domain or you are using sub domains, you can set the cookie domain of
+the Shopify analytics component so that cookies persists for your root domain.
+
+```jsx
+<ShopifyAnalytics cookieDomain="my-shop.com" />
+```
+
+Otherwise, this component will use the `storeDomain` value in the `hydrogen.config.js`
+as the default cookie domain or leave it blank when the specified cookie domain does
+not match `window.location.hostname`.
+
+### Hydrogen analytics connect with checkout analytics
+
+There is a strict requirement for the analytic cookies to be set at the 1st party
+domain. This means that when a buyer navigates from your Hydrogen storefront to
+Shopify checkout, the domain name must stay the same.
+
+You can acheive this by assigning a subdomain to your online store. For example:
+
+* Set your Hydrogen store domain at `https://www.my-awesome-hydrogen-store.com`
+* Attach a new subdomain to your online store at `https://checkout.my-awesome-hydrogen-store.com`
+* Set the cookieDomain to the same root domain `<ShopifyAnalytics cookieDomain="my-awesome-hydrogen-store.com" />`
+
+> Note: It is expected behaviour that Hydrogen analytics and checkout analytics do not connect
+when in development and preview mode. This will only connect in production mode.
 
 ## Shopify Analytics data
 
@@ -52,8 +78,7 @@ Provide the following data to `useServerAnalytics` to view information from the 
 | shopId | The ID of your Shopify store. | [DefaultSeo.server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx) |
 | currency | The currency being presented to the buyer on the webpage. | [DefaultSeo.server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx) |
 | pageType? | The page template type for your routes. For a list of valid values, refer to [ShopifyAnalytics constants](#shopifyanalytics-constants). | [collections/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/collections/%5Bhandle%5D.server.jsx) |
-| resourceType? | The page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. For a list of valid values, refer to [ShopifyAnalytics constants](#shopifyanalytics-constants). | [products/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/products/%5Bhandle%5D.server.jsx) |
-| resourceId? | The ID of the page template type for the routes that use Shopify resources. | [pages/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/pages/%5Bhandle%5D.server.jsx) |
+| resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. | [products/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/products/%5Bhandle%5D.server.jsx) |
 
 ### `ShopifyAnalytics` constants
 
