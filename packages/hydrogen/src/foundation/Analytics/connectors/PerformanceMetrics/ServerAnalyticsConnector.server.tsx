@@ -1,3 +1,5 @@
+import {log} from '../../../../utilities/log';
+
 export function request(
   requestUrl: string,
   requestHeader: Headers,
@@ -23,8 +25,8 @@ export function request(
           event_sent_at_ms: new Date().getTime(),
         },
       }),
-    }).catch((error) => {
-      // send to bugsnag? oxygen?
+    }).catch((err) => {
+      log.error(err);
     });
   }
 }

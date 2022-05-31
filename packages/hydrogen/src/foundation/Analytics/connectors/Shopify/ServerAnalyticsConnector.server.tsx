@@ -1,3 +1,5 @@
+import {log} from '../../../../utilities/log';
+
 export function request(
   requestUrl: string,
   requestHeader: Headers,
@@ -18,7 +20,7 @@ export function request(
       },
       body: JSON.stringify(data),
     }).catch((err) => {
-      // send to bugsnag? oxygen?
+      log.error(err);
     });
   }
 }
