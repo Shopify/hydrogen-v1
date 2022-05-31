@@ -1,6 +1,6 @@
 /** The `isClient` utility is a function that returns a boolean indicating
- * if the code was run on the client.
+ * if the code was run in the browser.
  */
-export function isClient() {
+export function isBrowser() {
   return typeof window !== 'undefined';
 }
