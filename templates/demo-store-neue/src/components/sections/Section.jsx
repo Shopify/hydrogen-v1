@@ -2,12 +2,15 @@ import clsx from 'clsx';
 import {Heading} from '~/components/elements';
 
 export default function Section({
+  as = 'section',
   heading,
   children,
   className,
   divider,
   padding = 'all',
 }) {
+  const Component = as;
+
   const paddings = {
     x: 'px-4 md:px-8 lg:px-12',
     y: 'py-4 md:py-8 lg:py-12',
@@ -16,9 +19,9 @@ export default function Section({
   };
 
   const dividers = {
-    top: 'border-t border-lightest',
-    bottom: 'border-b border-lightest',
-    both: 'border-y border-lightest',
+    top: 'border-t border-light',
+    bottom: 'border-b border-light',
+    both: 'border-y border-light',
   };
 
   const styles = clsx(
@@ -29,13 +32,13 @@ export default function Section({
   );
 
   return (
-    <section className={styles}>
+    <Component className={styles}>
       {heading && (
         <Heading size="lead" className={padding === 'y' && paddings['x']}>
           {heading}
         </Heading>
       )}
       {children}
-    </section>
+    </Component>
   );
 }

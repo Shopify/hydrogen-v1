@@ -17,17 +17,20 @@ export default function Hero({data = mockData, height, top}) {
             <SpreadMedia data={spread_secondary.reference} />
           )}
         </div>
-        <div className="flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t from-primary/60 text-contrast">
-          <Heading as="h2" size="display" className="max-w-prose-narrow">
+        <div className="flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
+          <Heading
+            as="h2"
+            width="narrow"
+            size="display"
+            className="max-w-prose-narrow"
+          >
             {title.value}
           </Heading>
-          <Text color="contrast" as="p" size="lead">
+          <Text format width="narrow" as="p" size="lead">
             {byline.value}
           </Text>
           <Link to={cta.url}>
-            <Text color="contrast" size="lead">
-              {cta.value}
-            </Text>
+            <Text size="lead">{cta.value}</Text>
           </Link>
         </div>
       </section>

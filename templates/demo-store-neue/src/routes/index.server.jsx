@@ -54,6 +54,7 @@ export default function Homepage() {
       <ProductSwimlane
         products={featuredProducts.nodes}
         title="Featured Products"
+        divider="bottom"
       />
       <Locations />
     </Layout>

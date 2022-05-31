@@ -17,11 +17,10 @@ export default function Header({title}) {
   const dark = pathname === '/';
 
   const styles = {
-    text: `${dark ? 'text-contrast' : 'text-primary'}`,
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
       dark
-        ? 'bg-primary/80 text-contrast shadow-darkHeader'
+        ? 'bg-primary/80 dark:bg-contrast/80 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
     } flex items-center sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-16 px-12 py-8`,
   };
@@ -30,27 +29,23 @@ export default function Header({title}) {
     <header role="banner" className={styles.container}>
       {/* TODO: Have dynamic component for Mobile vs. Desktop headers */}
       <div className="flex gap-12">
-        <Link className={`${styles.text} font-medium`} to="/">
+        <Link className={`font-medium`} to="/">
           {title}
         </Link>
         <nav className="flex gap-8">
           {/* TODO: Replace with Navigation API */}
-          <Link className={styles.text} to="/collections">
-            Collections
-          </Link>
-          <Link className={styles.text} to="/products">
-            Products
-          </Link>
-          <Link className={styles.text} to="/locations">
-            Locations
-          </Link>
+          <Link to="/collections">Collections</Link>
+          <Link to="/products">Products</Link>
+          <Link to="/locations">Locations</Link>
         </nav>
       </div>
       <div className="flex items-center gap-1">
-        <form action={'/search'} className="flex items-center">
+        <form action={'/search'} className="flex items-center gap-2">
           <Input
             className={
-              dark ? 'focus:border-contrast/20' : 'focus:border-primary/20'
+              dark
+                ? 'focus:border-contrast/20 dark:focus:border-primary/20'
+                : 'focus:border-primary/20'
             }
             type="search"
             variant="minisearch"

@@ -14,7 +14,7 @@ module.exports = {
       colors: {
         primary: withOpacityValue('--color-primary'),
         contrast: withOpacityValue('--color-contrast'),
-        notice: withOpacityValue('--color-notice'),
+        notice: withOpacityValue('--color-accent'),
       },
       borderColor: {
         lightest: 'rgb(var(--color-primary) / 0.02)',
