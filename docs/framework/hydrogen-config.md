@@ -47,7 +47,7 @@ The following groupings of configuration properties can exist in Hydrogen:
 
 ### `routes`
 
-The `routes` property specifies a path to find server components and API handlers. The default value is `/src/routes`, but you can customize the value to any directory specified from the project root:
+The `routes` property specifies a path to find server components and API handlers. The default value for the `routes` property is `/src/routes`, but you can specify the value to any path that starts from the project root:
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
@@ -191,7 +191,7 @@ export default defineConfig({
 
 ### `enableStreaming`
 
-By default, all routes in Hydrogen are stream rendered. Stream rendering is automatically disabled when the user agent is a bot. 
+By default, all routes in Hydrogen are stream rendered. Stream rendering is automatically disabled when the user agent is a bot.
 
 Content should be immediately available to bots for SEO purposes. However, you might want to manually disable streaming for a specific page. A common use case is disabling streaming for a custom bot that's not recognized by Hydrogen's bot detection algorithm. You can disable streaming for a custom bot with the `enableStreaming` configuration property:
 
