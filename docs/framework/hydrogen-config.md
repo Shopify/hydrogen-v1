@@ -47,7 +47,7 @@ The following groupings of configuration properties can exist in Hydrogen:
 
 ### `routes`
 
-The `routes` property is where you can provide a path to find server components and API handlers. Its default value is `/src/routes` but it can be customized to any directory specified **from the project root**:
+The `routes` property specifies a path to find server components and API handlers. The default value is `/src/routes`, but you can customize the value to any directory specified from the project root:
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
 

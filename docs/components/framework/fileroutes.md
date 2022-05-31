@@ -1,12 +1,12 @@
 ---
 gid: 182b039d-d09d-4513-8759-b51412cc8293
 title: FileRoutes
-description: The `FileRoutes` component builds a set of Hydrogen routes.
+description: The FileRoutes component builds a set of Hydrogen routes.
 ---
 
-The `FileRoutes` component builds a set of Hydrogen routes. By default, it loads the routes specified in [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) when no props are passed.
+The `FileRoutes` component builds a set of Hydrogen routes. By default, it loads the routes specified in [the Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) when no props are passed.
 
-It is also possible to override the default behavior and use custom routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. You can have multiple instances of this component to source file routes from multiple locations.
+You can override the default behavior and use custom routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. You can have multiple instances of the `FileRoutes` component to source file routes from multiple locations.
 
 ## Example code
 
