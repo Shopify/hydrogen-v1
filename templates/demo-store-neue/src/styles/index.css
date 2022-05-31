@@ -45,7 +45,7 @@
   }
 
   body {
-    @apply text-base antialiased font-sans text-primary bg-contrast border-primary;
+    @apply text-base antialiased font-sans text-primary/90 bg-contrast border-primary/10;
   }
 
   html {

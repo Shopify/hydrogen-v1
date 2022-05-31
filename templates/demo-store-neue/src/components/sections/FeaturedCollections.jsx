@@ -1,8 +1,8 @@
+import Section from './Section';
 import {Link, Image} from '@shopify/hydrogen';
-import {Heading} from '../elements';
-import PageSection from './PageSection';
+import {Heading, Grid} from '~/components/elements';
 
-const dummyCollections = [
+const mockCollections = [
   {
     id: '1',
     url: '/',
@@ -27,30 +27,26 @@ const dummyCollections = [
 
 export default function FeaturedCollections({
   title = 'Collections',
-  collections = dummyCollections,
+  collections = mockCollections,
 }) {
   return (
-    <PageSection heading={title}>
-      <ul className="grid md:grid-cols-3 gap-m">
+    <Section heading={title}>
+      <Grid items={collections.length}>
         {collections.map((collection) => (
-          <li key={collection.id}>
-            <Link to={collection.url}>
-              <div className="grid gap-m">
-                <div className="">
-                  <Image
-                    className="rounded shadow-border overflow-clip inline-block aspect-square md:aspect-[4/3] object-cover"
-                    width={'100%'}
-                    height={336}
-                    alt={`Image of ${collection.title}`}
-                    src={collection.image}
-                  />
-                </div>
-                <Heading size="copy">{collection.title}</Heading>
-              </div>
-            </Link>
-          </li>
+          <Link key={collection.id} to={collection.url}>
+            <div className="grid gap-m">
+              <Image
+                className="rounded shadow-border overflow-clip inline-block aspect-square md:aspect-[4/3] object-cover"
+                width={'100%'}
+                height={336}
+                alt={`Image of ${collection.title}`}
+                src={collection.image}
+              />
+              <Heading size="copy">{collection.title}</Heading>
+            </div>
+          </Link>
         ))}
-      </ul>
-    </PageSection>
+      </Grid>
+    </Section>
   );
 }

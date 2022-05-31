@@ -1,7 +1,7 @@
 import {Link, Image} from '@shopify/hydrogen';
-import {Heading} from '../elements';
+import Section from './Section';
 
-const dummyLocations = [
+const mockLocations = [
   {
     id: '1',
     url: '/',
@@ -29,11 +29,10 @@ const dummyLocations = [
 
 export default function Locations({
   title = 'Locations',
-  locations = dummyLocations,
+  locations = mockLocations,
 }) {
   return (
-    <section className="grid gap-6 p-m md:p-l lg:p-xl bg-primary/fade-7">
-      <Heading size="lead">{title}</Heading>
+    <Section heading={title}>
       <ul className="grid md:grid-cols-3 gap-m">
         {locations.map((location) => (
           <li key={location.id}>
@@ -54,6 +53,6 @@ export default function Locations({
           </li>
         ))}
       </ul>
-    </section>
+    </Section>
   );
 }

@@ -6,13 +6,15 @@ import {
 } from '~/components/sections';
 import {Text, Button} from '~/components/elements';
 
-export default function NotFound() {
+export default function NotFound({type = 'page'}) {
+  const heading = `We’ve lost this ${type}`;
+  const description = `We couldn’t find the ${type} you’re looking for. Try checking the URL or heading back to the home page.`;
+
   return (
     <Layout>
-      <PageHeader heading="We’ve lost this page">
+      <PageHeader heading={heading}>
         <Text format width="narrow" as="p">
-          We couldn’t find the page you’re looking for. Try checking the URL or
-          heading back to the home page.
+          {description}
         </Text>
         <Button width="auto" variant="secondary" to={'/'}>
           Take me to the home page

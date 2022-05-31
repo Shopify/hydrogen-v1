@@ -1,67 +1,78 @@
-import {Image, Link} from '@shopify/hydrogen';
+import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 import clsx from 'clsx';
-import {Text} from '../elements';
+import {Text} from '~/components/elements';
+import {isRangedPricing, isDiscounted, isNewArrival} from '~/lib/utils';
+import {mockProduct} from '~/lib/placeholders';
 
-export default function ProductCard({product, className}) {
-  const {compareAtPrice, price, handle, label, createdAt, image, title} =
-    product;
-
+export default function ProductCard({product = mockProduct, label, className}) {
   let cardLabel;
-  var today = new Date();
-  var newArrivalDate = new Date(new Date().setDate(today.getDate() - 30));
+
+  const {
+    image,
+    priceV2: price,
+    compareAtPriceV2: compareAtPrice,
+  } = product.variants.nodes[0];
 
   if (label) {
     cardLabel = label;
-  } else if (compareAtPrice.amount > price.amount) {
+  } else if (price.amount > compareAtPrice?.amount) {
     cardLabel = 'Sale';
-  } else if (createdAt > newArrivalDate) {
+  } else if (isNewArrival(product.publishedAt)) {
     cardLabel = 'New';
   }
 
   const styles = clsx('grid gap-6', className);
 
   return (
-    <Link to={`/products/${handle}`}>
+    <Link to={`/products/${product.handle}`}>
       <div className={styles}>
         <div className="relative rounded overflow-clip image-border">
           <Text
             as="label"
-            className="absolute top-0 right-0 m-4 leading-none text-right text-notice"
+            size="fine"
+            className="absolute top-0 right-0 m-4 text-right text-notice"
           >
             {cardLabel}
           </Text>
-          <Image
-            width={336}
-            height={424}
-            className="aspect-[4/5] "
-            src={image}
-            alt="Alt Tag"
-          />
+          <Image className="aspect-[4/5]" data={image} alt="Alt Tag" />
         </div>
-        <div className="grid gap-2">
+        <div className="grid gap-1">
           <Text
-            className="w-full overflow-hidden leading-none whitespace-nowrap text-ellipsis "
+            className="w-full overflow-hidden whitespace-nowrap text-ellipsis "
             as="h3"
           >
-            {title}
+            {product.title}
           </Text>
           <div className="flex gap-4">
-            <div className="flex gap-4">
-              <Text>
-                {price.symbol}
-                {price.amount}
-              </Text>
-              {compareAtPrice.amount > price.amount && (
-                <Text className="opacity-50 strike">
-                  {compareAtPrice.symbol}
-                  {compareAtPrice.amount}
-                </Text>
+            <Text className="flex gap-4">
+              <Money withoutTrailingZeros data={price} />
+              {isDiscounted(price, compareAtPrice) && (
+                <CompareAtPrice
+                  className={'opacity-50'}
+                  data={compareAtPrice}
+                />
               )}
-            </div>
-            <Text className="opacity-50">11 Colors Available</Text>
+            </Text>
+            {/* <Text className="opacity-50">11 Colors Available</Text> */}
           </div>
         </div>
       </div>
     </Link>
+  );
+}
+
+// <Money className="opacity-50 strike" data={compareAtPrice} />
+function CompareAtPrice({data, className}) {
+  const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} = useMoney(
+    data,
+  );
+
+  const styles = clsx('strike', className);
+
+  return (
+    <span className={styles}>
+      {currencyNarrowSymbol}
+      {withoutTrailingZerosAndCurrency}
+    </span>
   );
 }
