@@ -453,17 +453,18 @@ function augmentModuleGraph(moduleGraph, id, code) {
     var resolvedPath = resolveModPath(modPath.split('?')[0], dirname);
     if (!resolvedPath) return; // Virtual modules or other exceptions
 
-    var _code$slice$split$0$s = code.slice(startStatement, endStatement).split(/\s+from\s+['"]/m)[0].split(/\s+(.+)/m),
+    var _code$slice$split$0$s = code.slice(startStatement, endStatement).split(/\s+(from\s+)?['"]/m)[0].split(/\s+(.+)/m),
         action = _code$slice$split$0$s[0],
-        variables = _code$slice$split$0$s[1];
+        _code$slice$split$0$s2 = _code$slice$split$0$s[1],
+        variables = _code$slice$split$0$s2 === void 0 ? '' : _code$slice$split$0$s2;
 
     imports.push({
       action: action,
       // 'import' or 'export'
       variables: variables // [['originalName', 'alias']]
-      .replace(/[{}]/gm, '').trim().split(/\s*,\s*/m).map(function (s) {
+      .replace(/[{}]/gm, '').trim().split(/\s*,\s*/m).filter(Boolean).map(function (s) {
         return s.split(/\s+as\s+/m);
-      }).filter(Boolean),
+      }),
       from: resolvedPath,
       // '/absolute/path'
       originalFrom: modPath // './path' or '3plib/subpath'
