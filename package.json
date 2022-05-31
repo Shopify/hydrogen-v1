@@ -64,7 +64,6 @@
     "shelljs": "^0.8.4",
     "sirv": "^1.0.12",
     "ts-jest": "^26.5.4",
-    "ts-node": "^10.8.0",
     "turbo": "^1.2.8",
     "type-fest": "^2.12.0",
     "typescript": "^4.7.2",
