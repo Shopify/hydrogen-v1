@@ -58,9 +58,7 @@ If you're not using custom domains or sub-domains, then the `ShopifyAnalytics` c
 
 ### Connecting Hydrogen analytics with Shopify checkout
 
-There is a strict requirement for the analytic cookies to be set at the 1st party
-domain. This means that when a buyer navigates from your Hydrogen storefront to
-Shopify checkout, the domain name must stay the same.
+Analytic cookies must be set at the first-party domain. This means that when a buyer navigates from your Hydrogen storefront to Shopify checkout, the domain name must stay the same.
 
 You can acheive this by assigning a subdomain to your online store. For example:
 
