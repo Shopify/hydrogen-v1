@@ -379,7 +379,7 @@ var hashImportsPlugin = {
 function isDirectImportInServer(currentMod, originalMod) {
   // TODO: this should use recursion in any module that exports
   // the original one, not only in full facade files.
-  if (!originalMod || currentMod.meta?.isFacade) {
+  if (!originalMod || (currentMod.meta || {}).isFacade) {
     return Array.from(currentMod.importers).some(function (importer) {
       return (// eslint-disable-next-line no-unused-vars
         isDirectImportInServer(importer, originalMod || currentMod)
@@ -402,9 +402,9 @@ function isDirectImportInServer(currentMod, originalMod) {
   // consider default exports and variable renaming in facade modules.
 
   return currentMod.meta.imports.some(function (imp) {
-    return imp.action === 'import' && (imp.from === originalMod.file || imp.variables?.some(function (_ref2) {
+    return imp.action === 'import' && (imp.from === originalMod.file || (imp.variables || []).some(function (_ref2) {
       var name = _ref2[0];
-      return originalMod.meta?.namedExports.includes(name);
+      return originalMod.meta.namedExports.includes(name);
     }));
   });
 }
@@ -414,7 +414,7 @@ function resolveModPath(modPath, dirname, retryExtension) {
 
   try {
     absolutePath = modPath.startsWith('.') ? path.resolve(dirname, modPath) : modPath;
-    return require.resolve((modPath.startsWith('.') ? path.resolve(dirname, modPath) : modPath) + (retryExtension ?? ''));
+    return require.resolve((modPath.startsWith('.') ? path.resolve(dirname, modPath) : modPath) + (retryExtension || ''));
   } catch (error) {
     if (!/\.[jt]sx?$/.test(absolutePath) && retryExtension !== '.tsx') {
       // Node cannot infer .[jt]sx extensions.
