@@ -54,9 +54,7 @@ the `ShopifyAnalytics` component so that cookies persists for your root domain:
 
 {% endcodeblock %}
 
-Otherwise, this component will use the `storeDomain` value in the `hydrogen.config.js`
-as the default cookie domain or leave it blank when the specified cookie domain does
-not match `window.location.hostname`.
+If you're not using custom domains or sub-domains, then the `ShopifyAnalytics` component uses the `storeDomain` value in the Hydrogen configuration file as the default cookie domain or leaves it blank when the specified cookie domain doesn't match `window.location.hostname`.
 
 ### Hydrogen analytics connect with checkout analytics
 
