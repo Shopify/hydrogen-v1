@@ -29,7 +29,7 @@ export default function Header({title}) {
         </Link>
         <nav className="flex gap-l">
           {/* TODO: Replace with Navigation API */}
-          <Link className={styles.text} to="/">
+          <Link className={styles.text} to="/collections/freestyle-collection">
             Shop
           </Link>
           <Link className={styles.text} to="/">

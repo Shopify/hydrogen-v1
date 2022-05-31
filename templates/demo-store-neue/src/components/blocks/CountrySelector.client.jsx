@@ -1,4 +1,4 @@
-import {useState, Suspense} from 'react';
+import {useCallback, useState, Suspense} from 'react';
 import {useCountry, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 import Icon from '~/components/elements/Icon';
@@ -8,12 +8,20 @@ import Icon from '~/components/elements/Icon';
  */
 export default function CountrySelector() {
   const [listboxOpen, setListboxOpen] = useState(false);
+  const [selectedCountry] = useCountry();
 
-  const [selectedCountry, setSelectedCountry] = useCountry();
+  const setCountry = useCallback(({isoCode, name}) => {
+    fetch(`/api/countries`, {
+      body: JSON.stringify({isoCode, name}),
+      method: 'POST',
+    }).then(() => {
+      window.location.reload();
+    });
+  }, []);
 
   return (
     <div className="relative">
-      <Listbox onChange={setSelectedCountry}>
+      <Listbox onChange={setCountry}>
         {({open}) => {
           setTimeout(() => setListboxOpen(open));
           return (
@@ -28,8 +36,8 @@ export default function CountrySelector() {
                 />
               </Listbox.Button>
 
-              <Listbox.Options className="">
-                <div className="">
+              <Listbox.Options className="absolute z-10 mt-2">
+                <div className="h-64 p-4 overflow-y-auto rounded-lg drop-shadow-2xl">
                   <Listbox.Option disabled className="">
                     Country
                   </Listbox.Option>
@@ -39,8 +47,8 @@ export default function CountrySelector() {
                         selectedCountry={selectedCountry}
                         getClassName={(active) => {
                           return (
-                            `w-36 py-2 px-3 flex justify-between items-center text-left cursor-pointer` +
-                            `rounded ${active ? 'bg-gray-200' : null}`
+                            `w-full cursor-pointer py-2 px-3 flex justify-between items-center text-left cursor-pointer` +
+                            `rounded ${active ? '' : null}`
                           );
                         }}
                       />

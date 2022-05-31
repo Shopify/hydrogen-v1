@@ -42,14 +42,21 @@ export default function Hero({
           ))}
         </div>
         <div className="flex flex-col items-baseline justify-between gap-4 bg-gradient-to-t from-primary/60 px-xl py-l text-contrast">
-          <Heading as="h2" size="display" className="max-w-prose-narrow">
+          <Heading
+            format={false}
+            as="h2"
+            size="display"
+            className="max-w-prose-narrow"
+          >
             {title}
           </Heading>
-          <Text as="p" size="lead">
+          <Text color="contrast" as="p" size="lead">
             {subtitle}
           </Text>
           <Link to={cta.url}>
-            <Text size="lead">{cta.label}</Text>
+            <Text color="contrast" size="lead">
+              {cta.label}
+            </Text>
           </Link>
         </div>
       </section>

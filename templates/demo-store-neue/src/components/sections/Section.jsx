@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import {Heading} from '~/components/elements';
 
-export default function PageSection({
+export default function Section({
   heading,
   children,
   className,

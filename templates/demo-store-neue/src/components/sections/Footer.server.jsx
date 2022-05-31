@@ -74,7 +74,7 @@ const menusPlaceholder = [
     links: [
       {
         id: 1,
-        title: 'Content &amp; Metafields',
+        title: 'Content & Metafields',
         url: '/',
       },
       {

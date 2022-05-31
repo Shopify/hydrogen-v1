@@ -1,24 +1,24 @@
 import {Link, Image} from '@shopify/hydrogen';
-import {Heading} from '../elements';
+import Section from './Section';
 
-const dummyLocations = [
+const mockLocations = [
   {
     id: '1',
-    url: '/',
+    url: '/locations/toronto',
     image: 'https://picsum.photos/seed/31/912',
     title: '31 Crosby Street, NYC',
     subtitle: 'Open Now',
   },
   {
     id: '2',
-    url: '/',
+    url: '/locations/toronto',
     image: 'https://picsum.photos/seed/41/912',
     title: '1-5-2 Aobadai, Meguro-Ku, Tokyo, Japan',
     subtitle: 'Opens at 11am',
   },
   {
     id: '3',
-    url: '/',
+    url: '/locations/toronto',
     image: 'https://picsum.photos/seed/51/912',
     title: 'Shop 9, Albert Coates Lane, Melbourne',
     subtitle: 'Opens at 12am',
@@ -29,11 +29,10 @@ const dummyLocations = [
 
 export default function Locations({
   title = 'Locations',
-  locations = dummyLocations,
+  locations = mockLocations,
 }) {
   return (
-    <section className="grid gap-6 p-m md:p-l lg:p-xl bg-primary/fade-7">
-      <Heading size="lead">{title}</Heading>
+    <Section heading={title}>
       <ul className="grid md:grid-cols-3 gap-m">
         {locations.map((location) => (
           <li key={location.id}>
@@ -54,6 +53,6 @@ export default function Locations({
           </li>
         ))}
       </ul>
-    </section>
+    </Section>
   );
 }
