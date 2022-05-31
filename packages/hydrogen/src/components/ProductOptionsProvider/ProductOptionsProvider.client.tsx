@@ -66,7 +66,7 @@ export function ProductOptionsProvider({
    * Track the selectedOptions within the hook. If a `initialVariantId`
    * is passed, use that to select initial options.
    */
-  const [selectedOptions, setSelectedOptions] = useState(
+  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(
     selectedVariant?.selectedOptions
       ? selectedVariant.selectedOptions.reduce((memo, optionSet) => {
           memo[optionSet?.name ?? ''] = optionSet?.value ?? '';
@@ -126,7 +126,7 @@ export function ProductOptionsProvider({
    * that is also a requirement.
    */
   const [selectedSellingPlan, setSelectedSellingPlan] = useState<
-    SellingPlan | undefined
+    PartialDeep<SellingPlan> | undefined
   >(undefined);
 
   const selectedSellingPlanAllocation = useMemo<

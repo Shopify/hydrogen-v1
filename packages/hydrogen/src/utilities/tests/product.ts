@@ -12,7 +12,7 @@ import type {PartialDeep} from 'type-fest';
 
 export function getProduct(
   product: PartialDeep<ProductType> = {}
-): ProductType {
+): PartialDeep<ProductType> {
   return {
     id: product.id ?? faker.datatype.uuid(),
     handle: product.handle ?? faker.random.word(),
@@ -28,37 +28,34 @@ export function getProduct(
       minVariantPrice: getPrice(product.compareAtPriceRange?.minVariantPrice),
     },
     media: product.media ?? {
-      edges: [
-        {node: getAnyMedia()},
-        {node: getAnyMedia()},
-        {node: getAnyMedia()},
-        {node: getAnyMedia()},
-        {node: getAnyMedia()},
-        {node: getAnyMedia()},
+      nodes: [
+        getAnyMedia(),
+        getAnyMedia(),
+        getAnyMedia(),
+        getAnyMedia(),
+        getAnyMedia(),
       ],
     },
     variants: product.variants ?? {
-      edges: [
-        {node: getVariant()},
-        {node: getVariant()},
-        {node: getVariant()},
-        {node: getVariant()},
-        {node: getVariant()},
-        {node: getVariant()},
-        {node: getVariant()},
+      nodes: [
+        getVariant(),
+        getVariant(),
+        getVariant(),
+        getVariant(),
+        getVariant(),
+        getVariant(),
+        getVariant(),
       ],
     },
     metafields: product.metafields ?? {
-      edges: [
-        {node: getRawMetafield()},
-        {node: getRawMetafield()},
-        {node: getRawMetafield()},
-      ],
+      nodes: [getRawMetafield(), getRawMetafield(), getRawMetafield()],
     },
   };
 }
 
-export function getVariant(variant: PartialDeep<ProductVariant> = {}) {
+export function getVariant(
+  variant: PartialDeep<ProductVariant> = {}
+): PartialDeep<ProductVariant> {
   return {
     id: variant.id ?? faker.random.words(),
     title: variant.title ?? faker.random.words(),
@@ -74,6 +71,7 @@ export function getVariant(variant: PartialDeep<ProductVariant> = {}) {
       {name: faker.random.word(), value: faker.random.word()},
       {name: faker.random.word(), value: faker.random.word()},
     ],
+    // @ts-expect-error until we mock out a selling plan, TS will complain here
     sellingPlanAllocations: [],
     metafields: variant.metafields ?? {
       edges: [

@@ -45,8 +45,6 @@ export type ProductOptionsHookValue = PartialDeep<{
   /** The selected variant. */
   selectedVariant?: ProductVariantType | null;
   selectedOptions: SelectedOptions;
-  /** A callback that returns a boolean indicating if the option is in stock. */
-  isOptionInStock: OptionsInStockCallback;
   /** The selected selling plan. */
   selectedSellingPlan?: SellingPlanType;
   /** The selected selling plan allocation. */
@@ -65,4 +63,6 @@ export type ProductOptionsHookValue = PartialDeep<{
   setSelectedOptions: SelectOptionsCallback;
   /** A callback to set the selected selling plan to the one passed as an argument. */
   setSelectedSellingPlan: SelectedSellingPlanCallback;
+  /** A callback that returns a boolean indicating if the option is in stock. */
+  isOptionInStock: OptionsInStockCallback;
 };
