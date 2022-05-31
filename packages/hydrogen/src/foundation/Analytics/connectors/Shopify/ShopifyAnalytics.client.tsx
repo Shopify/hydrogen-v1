@@ -103,7 +103,7 @@ function trackPageView(payload: any): void {
 
 function storefrontPageViewSchema(payload: any): any {
   return {
-    schema_id: 'trekkie_storefront_page_view/1.2',
+    schema_id: 'trekkie_storefront_page_view/1.4',
     payload: buildStorefrontPageViewPayload(payload),
     metadata: {
       event_created_at_ms: Date.now(),
@@ -116,7 +116,7 @@ function buildStorefrontPageViewPayload(payload: any): any {
   const shopify = payload.shopify;
   let formattedData = {
     appClientId: 6167201,
-    hydrogenStorefrontId: shopify.storefrontId,
+    hydrogenSubchannelId: shopify.storefrontId,
 
     isPersistentCookie: shopify.isPersistentCookie,
     uniqToken: shopify.userId,
