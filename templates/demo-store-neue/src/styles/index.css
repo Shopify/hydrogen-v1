@@ -60,10 +60,10 @@
     display: none;
   }
 
-  input[type="search"]::-webkit-search-decoration,
-  input[type="search"]::-webkit-search-cancel-button,
-  input[type="search"]::-webkit-search-results-button,
-  input[type="search"]::-webkit-search-results-decoration {
+  input[type='search']::-webkit-search-decoration,
+  input[type='search']::-webkit-search-cancel-button,
+  input[type='search']::-webkit-search-results-button,
+  input[type='search']::-webkit-search-results-decoration {
     -webkit-appearance: none;
   }
 }
@@ -76,7 +76,7 @@
   .strike {
     position: relative;
     &::before {
-      content: "";
+      content: '';
       display: block;
       position: absolute;
       width: 108%;
@@ -92,7 +92,7 @@
   .image-border {
     @apply relative;
     &::before {
-      content: " ";
+      content: ' ';
       @apply absolute block top-0 left-0 w-full h-full shadow-border rounded;
     }
   }

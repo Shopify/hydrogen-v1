@@ -25,8 +25,9 @@ export default function Hero({
   return (
     <Link to={cta.url}>
       <section
-        className={`relative justify-end flex flex-col w-full ${top &&
-          '-mt-nav'} ${height === 'full' ? 'h-screen' : 'h-[50rem]'}`}
+        className={`relative justify-end flex flex-col w-full ${
+          top && '-mt-nav'
+        } ${height === 'full' ? 'h-screen' : 'h-[50rem]'}`}
       >
         <div className="absolute inset-0 grid flex-grow grid-flow-col pointer-events-none -z-10 content-stretch overflow-clip">
           {images.map((image, i) => (
