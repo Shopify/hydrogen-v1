@@ -141,6 +141,7 @@ function ReactFlightVitePlugin() {
         return this.resolve(id, importer, {
           skipSelf: true
         }).then(function (result) {
+          if (!result) return null;
           return assign({}, result, {
             id: result.id + (query ? "?" + query : ''),
             moduleSideEffects: false

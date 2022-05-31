@@ -15,6 +15,7 @@ if (process.env.NODE_ENV !== "production") {
 'use strict';
 
 var React = require('react');
+var util = require('util');
 
 var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
@@ -67,31 +68,144 @@ function flushBuffered(destination) {
     destination.flush();
   }
 }
+var VIEW_SIZE = 2048;
+var currentView = null;
+var writtenBytes = 0;
+var destinationHasCapacity = true;
 function beginWriting(destination) {
-  // Older Node streams like http.createServer don't have this.
-  if (typeof destination.cork === 'function') {
-    destination.cork();
+  currentView = new Uint8Array(VIEW_SIZE);
+  writtenBytes = 0;
+  destinationHasCapacity = true;
+}
+
+function writeStringChunk(destination, stringChunk) {
+  if (stringChunk.length === 0) {
+    return;
+  } // maximum possible view needed to encode entire string
+
+
+  if (stringChunk.length * 3 > VIEW_SIZE) {
+    if (writtenBytes > 0) {
+      writeToDestination(destination, currentView.subarray(0, writtenBytes));
+      currentView = new Uint8Array(VIEW_SIZE);
+      writtenBytes = 0;
+    }
+
+    writeToDestination(destination, textEncoder.encode(stringChunk));
+    return;
+  }
+
+  var target = currentView;
+
+  if (writtenBytes > 0) {
+    target = currentView.subarray(writtenBytes);
+  }
+
+  var _textEncoder$encodeIn = textEncoder.encodeInto(stringChunk, target),
+      read = _textEncoder$encodeIn.read,
+      written = _textEncoder$encodeIn.written;
+
+  writtenBytes += written;
+
+  if (read < stringChunk.length) {
+    writeToDestination(destination, currentView);
+    currentView = new Uint8Array(VIEW_SIZE);
+    writtenBytes = textEncoder.encodeInto(stringChunk.slice(read), currentView).written;
+  }
+
+  if (writtenBytes === VIEW_SIZE) {
+    writeToDestination(destination, currentView);
+    currentView = new Uint8Array(VIEW_SIZE);
+    writtenBytes = 0;
   }
 }
-function writeChunkAndReturn(destination, chunk) {
-  var nodeBuffer = chunk; // close enough
 
-  return destination.write(nodeBuffer);
+function writeViewChunk(destination, chunk) {
+  if (chunk.byteLength === 0) {
+    return;
+  }
+
+  if (chunk.byteLength > VIEW_SIZE) {
+    // this chunk may overflow a single view which implies it was not
+    // one that is cached by the streaming renderer. We will enqueu
+    // it directly and expect it is not re-used
+    if (writtenBytes > 0) {
+      writeToDestination(destination, currentView.subarray(0, writtenBytes));
+      currentView = new Uint8Array(VIEW_SIZE);
+      writtenBytes = 0;
+    }
+
+    writeToDestination(destination, chunk);
+    return;
+  }
+
+  var bytesToWrite = chunk;
+  var allowableBytes = currentView.length - writtenBytes;
+
+  if (allowableBytes < bytesToWrite.byteLength) {
+    // this chunk would overflow the current view. We enqueue a full view
+    // and start a new view with the remaining chunk
+    if (allowableBytes === 0) {
+      // the current view is already full, send it
+      writeToDestination(destination, currentView);
+    } else {
+      // fill up the current view and apply the remaining chunk bytes
+      // to a new view.
+      currentView.set(bytesToWrite.subarray(0, allowableBytes), writtenBytes);
+      writtenBytes += allowableBytes;
+      writeToDestination(destination, currentView);
+      bytesToWrite = bytesToWrite.subarray(allowableBytes);
+    }
+
+    currentView = new Uint8Array(VIEW_SIZE);
+    writtenBytes = 0;
+  }
+
+  currentView.set(bytesToWrite, writtenBytes);
+  writtenBytes += bytesToWrite.byteLength;
+
+  if (writtenBytes === VIEW_SIZE) {
+    writeToDestination(destination, currentView);
+    currentView = new Uint8Array(VIEW_SIZE);
+    writtenBytes = 0;
+  }
+}
+
+function writeChunk(destination, chunk) {
+  if (typeof chunk === 'string') {
+    writeStringChunk(destination, chunk);
+  } else {
+    writeViewChunk(destination, chunk);
+  }
+}
+
+function writeToDestination(destination, view) {
+  var currentHasCapacity = destination.write(view);
+  destinationHasCapacity = destinationHasCapacity && currentHasCapacity;
+}
+
+function writeChunkAndReturn(destination, chunk) {
+  writeChunk(destination, chunk);
+  return destinationHasCapacity;
 }
 function completeWriting(destination) {
-  // Older Node streams like http.createServer don't have this.
-  if (typeof destination.uncork === 'function') {
-    destination.uncork();
+  if (currentView && writtenBytes > 0) {
+    destination.write(currentView.subarray(0, writtenBytes));
   }
+
+  currentView = null;
+  writtenBytes = 0;
+  destinationHasCapacity = true;
 }
 function close(destination) {
   destination.end();
 }
+var textEncoder = new util.TextEncoder();
 function stringToChunk(content) {
   return content;
 }
 function stringToPrecomputedChunk(content) {
-  return Buffer.from(content, 'utf8');
+  return textEncoder.encode(content);
 }
 function closeWithError(destination, error) {
   // $FlowFixMe: This is an Error object or the destination accepts other types.
@@ -460,7 +574,7 @@ var startInlineScript = stringToPrecomputedChunk('<script>');
 var endInlineScript = stringToPrecomputedChunk('</script>');
 var startScriptSrc = stringToPrecomputedChunk('<script src="');
 var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
-var endAsyncScript = stringToPrecomputedChunk('" async=""></script>'); // Allows us to keep track of what we've already written so we can refer back to it.
+var endAsyncScript = stringToPrecomputedChunk('" async=""></script>');
 
 var textSeparator = stringToPrecomputedChunk('<!-- -->');
 
@@ -495,6 +609,10 @@ var startPendingSuspenseBoundary1 = stringToPrecomputedChunk('<!--$?--><template
 var startPendingSuspenseBoundary2 = stringToPrecomputedChunk('"></template>');
 var startClientRenderedSuspenseBoundary = stringToPrecomputedChunk('<!--$!-->');
 var endSuspenseBoundary = stringToPrecomputedChunk('<!--/$-->');
+var clientRenderedSuspenseBoundaryError1 = stringToPrecomputedChunk('<template data-hash="');
+var clientRenderedSuspenseBoundaryError1A = stringToPrecomputedChunk('" data-msg="');
+var clientRenderedSuspenseBoundaryError1B = stringToPrecomputedChunk('" data-stack="');
+var clientRenderedSuspenseBoundaryError2 = stringToPrecomputedChunk('"></template>');
 var startSegmentHTML = stringToPrecomputedChunk('<div hidden id="');
 var startSegmentHTML2 = stringToPrecomputedChunk('">');
 var endSegmentHTML = stringToPrecomputedChunk('</div>');
@@ -524,7 +642,7 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 // const SUSPENSE_PENDING_START_DATA = '$?';
 // const SUSPENSE_FALLBACK_START_DATA = '$!';
 //
-// function clientRenderBoundary(suspenseBoundaryID) {
+// function clientRenderBoundary(suspenseBoundaryID, errorHash, errorMsg, errorComponentStack) {
 //   // Find the fallback's first element.
 //   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
 //   if (!suspenseIdNode) {
@@ -536,6 +654,11 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 //   const suspenseNode = suspenseIdNode.previousSibling;
 //   // Tag it to be client rendered.
 //   suspenseNode.data = SUSPENSE_FALLBACK_START_DATA;
+//   // assign error metadata to first sibling
+//   let dataset = suspenseIdNode.dataset;
+//   if (errorHash) dataset.hash = errorHash;
+//   if (errorMsg) dataset.msg = errorMsg;
+//   if (errorComponentStack) dataset.stack = errorComponentStack;
 //   // Tell React to retry it if the parent already hydrated.
 //   if (suspenseNode._reactRetry) {
 //     suspenseNode._reactRetry();
@@ -619,7 +742,7 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 
 var completeSegmentFunction = 'function $RS(a,b){a=document.getElementById(a);b=document.getElementById(b);for(a.parentNode.removeChild(a);a.firstChild;)b.parentNode.insertBefore(a.firstChild,b);b.parentNode.removeChild(b)}';
 var completeBoundaryFunction = 'function $RC(a,b){a=document.getElementById(a);b=document.getElementById(b);b.parentNode.removeChild(b);if(a){a=a.previousSibling;var f=a.parentNode,c=a.nextSibling,e=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d)if(0===e)break;else e--;else"$"!==d&&"$?"!==d&&"$!"!==d||e++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;b.firstChild;)f.insertBefore(b.firstChild,c);a.data="$";a._reactRetry&&a._reactRetry()}}';
-var clientRenderFunction = 'function $RX(a){if(a=document.getElementById(a))a=a.previousSibling,a.data="$!",a._reactRetry&&a._reactRetry()}';
+var clientRenderFunction = 'function $RX(b,c,d,e){var a=document.getElementById(b);a&&(b=a.previousSibling,b.data="$!",a=a.dataset,c&&(a.hash=c),d&&(a.msg=d),e&&(a.stack=e),b._reactRetry&&b._reactRetry())}';
 var completeSegmentScript1Full = stringToPrecomputedChunk(completeSegmentFunction + ';$RS("');
 var completeSegmentScript1Partial = stringToPrecomputedChunk('$RS("');
 var completeSegmentScript2 = stringToPrecomputedChunk('","');
@@ -630,7 +753,9 @@ var completeBoundaryScript2 = stringToPrecomputedChunk('","');
 var completeBoundaryScript3 = stringToPrecomputedChunk('")</script>');
 var clientRenderScript1Full = stringToPrecomputedChunk(clientRenderFunction + ';$RX("');
 var clientRenderScript1Partial = stringToPrecomputedChunk('$RX("');
-var clientRenderScript2 = stringToPrecomputedChunk('")</script>');
+var clientRenderScript1A = stringToPrecomputedChunk('"');
+var clientRenderScript2 = stringToPrecomputedChunk(')</script>');
+var clientRenderErrorScriptArgInterstitial = stringToPrecomputedChunk(',');
 
 var rendererSigil;
 
@@ -1562,7 +1687,7 @@ function performWork(request) {
 }
 
 function flushCompletedChunks(request, destination) {
-  beginWriting(destination);
+  beginWriting();
 
   try {
     // We emit module chunks first in the stream so that
