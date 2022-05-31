@@ -7,7 +7,6 @@ import {graphiqlHtml} from './graphiql';
 
 type HydrogenMiddlewareArgs = {
   dev?: boolean;
-  shopifyConfig?: ShopifyConfig;
   indexTemplate: string | ((url: string) => Promise<string>);
   getServerEntrypoint: () => any;
   devServer?: ViteDevServer;
@@ -15,20 +14,21 @@ type HydrogenMiddlewareArgs = {
 };
 
 export function graphiqlMiddleware({
-  shopifyConfig,
+  getShopifyConfig,
   dev,
 }: {
-  shopifyConfig: ShopifyConfig;
-  dev: boolean;
+  getShopifyConfig: (
+    request: IncomingMessage
+  ) => ShopifyConfig | Promise<ShopifyConfig>;
+  dev?: boolean;
 }) {
   return async function (
     request: IncomingMessage,
     response: ServerResponse,
     next: NextFunction
   ) {
-    const graphiqlRequest = dev && isGraphiqlRequest(request);
-
-    if (graphiqlRequest) {
+    if (dev && isGraphiqlRequest(request)) {
+      const shopifyConfig = await getShopifyConfig(request);
       return respondWithGraphiql(response, shopifyConfig);
     }
 
@@ -98,30 +98,12 @@ export function hydrogenMiddleware({
 
       entrypointError = null;
 
-      const eventResponse = await handleRequest(request, {
+      await handleRequest(request, {
         dev,
         cache,
         indexTemplate,
         streamableResponse: response,
       });
-
-      /**
-       * If a `Response` was returned, that means it was not streamed.
-       * Convert the response into a proper Node.js response.
-       */
-      if (eventResponse) {
-        eventResponse.headers.forEach((value: string, key: string) => {
-          response.setHeader(key, value);
-        });
-
-        response.statusCode = eventResponse.status;
-
-        if (eventResponse.body) {
-          response.write(eventResponse.body);
-        }
-
-        response.end();
-      }
     } catch (e: any) {
       if (dev && devServer) devServer.ssrFixStacktrace(e);
       response.statusCode = 500;
@@ -166,7 +148,7 @@ async function respondWithGraphiql(
 ) {
   if (!shopifyConfig) {
     throw new Error(
-      "You must provide shopifyConfig to Hydrogen's Vite middleware"
+      "You must provide a 'shopify' property in your Hydrogen config file"
     );
   }
 

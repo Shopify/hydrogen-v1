@@ -1,4 +1,5 @@
 import {IncomingMessage} from 'http';
+import {RSC_PATHNAME} from '../../../constants';
 import {PreloadOptions} from '../../../types';
 import {
   PreloadQueryEntry,
@@ -103,6 +104,20 @@ describe('ServerComponentRequest', () => {
     request.ctx.buyerIpHeader = 'foo';
 
     expect(request.getBuyerIp()).toBe('234.5.6.7');
+  });
+
+  it('provides a normalized URL for both RSC and standard requests', () => {
+    const request = createServerComponentRequest(
+      'https://shopify.dev/foo?bar=baz'
+    );
+    expect(request.normalizedUrl).toBe('https://shopify.dev/foo?bar=baz');
+
+    const rscRequest = createServerComponentRequest(
+      `https://shopify.dev${RSC_PATHNAME}?state=${encodeURIComponent(
+        JSON.stringify({pathname: '/foo', search: '?bar=baz'})
+      )}`
+    );
+    expect(rscRequest.normalizedUrl).toBe('https://shopify.dev/foo?bar=baz');
   });
 });
 

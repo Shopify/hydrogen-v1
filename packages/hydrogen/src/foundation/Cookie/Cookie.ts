@@ -1,5 +1,6 @@
 import {parse, stringify as stringifyCookie} from 'worktop/cookie';
 import {log} from '../../utilities/log';
+import {parseJSON} from '../../utilities/parse';
 
 export type CookieOptions = {
   /** Whether to secure the cookie so that the browser only sends it over HTTPS. Some
@@ -65,7 +66,7 @@ export class Cookie {
 
   parse(cookie: string) {
     try {
-      const data = JSON.parse(parse(cookie)[this.name]);
+      const data = parseJSON(parse(cookie)[this.name]);
       this.data = data;
     } catch (e) {
       // failure to parse cookie

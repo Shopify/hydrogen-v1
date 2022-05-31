@@ -9,8 +9,7 @@ The `Video` component renders a `video` for the Storefront API's [Video object](
 ## Example code
 
 ```tsx
-import {Video} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {Video, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {
@@ -58,29 +57,13 @@ export default function MyProductVideo() {
 | Name     | Type                                        | Description                                                                                                                            |
 | -------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | data     | <code>PartialDeep&#60;VideoType&#62;</code> | An object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video). |
-| options? | <code>ImageSizeOptions</code>               | An object of image size options for the video's `previewImage`.                                                                        |
+| previewImageOptions? | <code>ShopifyLoaderParams</code>               | An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL.                                                                       |
 
 ## Component type
 
 The `Video` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video):
-
-```graphql
-{
-  id
-  previewImage {
-    url
-  }
-  sources {
-    mimeType
-    url
-  }
-}
-```
-
 ## Related components
 
 - [`MediaFile`](https://shopify.dev/api/hydrogen/components/primitive/mediafile)
+- [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image)

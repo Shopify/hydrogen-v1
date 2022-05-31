@@ -47,7 +47,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     } = props;
 
     const internalClick = useCallback(
-      (e) => {
+      (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         if (onClick) onClick(e);
         if (
           !reloadDocument && // do regular browser stuff
@@ -61,13 +61,22 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           const replace =
             !!_replace || createPath(location) === createPath({pathname: to});
 
-          navigate(props.to, {
+          navigate(to, {
             replace,
             clientState,
           });
         }
       },
-      [reloadDocument, target, _replace, to, clientState, onClick, location]
+      [
+        reloadDocument,
+        target,
+        _replace,
+        to,
+        clientState,
+        onClick,
+        location,
+        navigate,
+      ]
     );
 
     const signalPrefetchIntent = () => {

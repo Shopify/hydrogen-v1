@@ -8,6 +8,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useCallback,
+  ReactNode,
 } from 'react';
 import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider';
 import {META_ENV_SSR} from '../ssr-interop';
@@ -23,11 +24,12 @@ export const RouterContext = createContext<RouterContextValue | {}>({});
 let isFirstLoad = true;
 const positions: Record<string, number> = {};
 
-export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
-  history: pHistory,
-  children,
-}) => {
+export const BrowserRouter: FC<{
+  history?: BrowserHistory;
+  children: ReactNode;
+}> = ({history: pHistory, children}) => {
   if (META_ENV_SSR) return <>{children}</>;
+  /* eslint-disable react-hooks/rules-of-hooks */
 
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [location, setLocation] = useState(history.location);
@@ -35,6 +37,7 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
 
   const {pending, locationServerProps, setLocationServerProps} =
     useInternalServerProps();
+
   useScrollRestoration({
     location,
     pending,
@@ -57,7 +60,15 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
     });
 
     return () => unlisten();
-  }, [history, location, setLocationChanged]);
+  }, [
+    history,
+    location,
+    setLocationChanged,
+    setLocation,
+    setLocationServerProps,
+  ]);
+
+  /* eslint-enable react-hooks/rules-of-hooks */
 
   return (
     <RouterContext.Provider
@@ -175,6 +186,7 @@ function useScrollRestoration({
     location.pathname,
     location.search,
     location.hash,
+    location.key,
     pending,
     serverProps.pathname,
     serverProps.search,

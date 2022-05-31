@@ -5,7 +5,6 @@ import React, {
   Fragment,
   type ElementType,
 } from 'react';
-// @ts-expect-error hydrateRoot isn't on the TS types yet, but we're using React 18 so it exists
 import {hydrateRoot} from 'react-dom/client';
 import type {ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
@@ -14,7 +13,7 @@ import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
 
-const DevTools = React.lazy(() => import('./components/DevTools'));
+const DevTools = React.lazy(() => import('./components/DevTools.client'));
 
 const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
   const root = document.getElementById('root');
@@ -116,7 +115,7 @@ function Error({error}: {error: Error}) {
       }}
     >
       <h1 style={{fontSize: '2em', marginBottom: '1em', fontWeight: 'bold'}}>
-        Something's wrong here...
+        Something&apos;s wrong here...
       </h1>
 
       <div style={{fontSize: '1.1em'}}>

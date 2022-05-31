@@ -15,9 +15,19 @@ yarn
 yarn dev
 ```
 
+To develop against a template, open a new terminal window or tab and choose from the available templates:
+
+- templates/demo-store
+- templates/hello-world
+
+```bash
+cd templates/demo-store
+yarn dev
+```
+
 Visit the dev environment at http://localhost:3000.
 
-To make changes to the Demo Store template, edit the files in `templates/template-hydrogen-default`.
+To make changes to the Demo Store template, edit the files in `templates/demo-store`.
 
 To modify Hydrogen framework, components, and hooks, edit the files in `packages/hydrogen`.
 
@@ -85,6 +95,49 @@ Follow the prompts to select which package(s) are affected by your change, and w
 
 > **Important**: Until our official release, we will only release `minor` and `patch` updates. This means that breaking changes will be included in minor releases. Once we officially launch Hydrogen, we'll switch to `1.0.0` and follow a normal semantic release pattern.
 
+## Contributing Examples
+
+Hydrogen welcomes example projects to the repository to showcase different types of Hydrogen integrations inside the `/examples` folder.
+
+To contribute a new example, start by creating a folder in the `/examples` directory:
+
+```bash
+mkdir examples/EXAMPLE_NAME
+```
+
+Next, add a `README.md` with instructions for installing and running your example. Be sure to update the StackBlitz and `npx degit` URLs with your example folder name:
+
+````md
+# EXAMPLE_NAME Example
+
+Hydrogen is a React framework and SDK that you can use to build fast and dynamic Shopify custom storefronts.
+
+[Check out the docs](https://shopify.dev/custom-storefronts/hydrogen)
+
+[Run this example on StackBlitz](https://stackblitz.com/fork/github/shopify/hydrogen/tree/stackblitz/examples/EXAMPLE_NAME)
+
+## Getting started
+
+**Requirements:**
+
+- Node.js version 16.5.0 or higher
+- Yarn
+
+```bash
+npx degit Shopify/hydrogen/examples/EXAMPLE_NAME hydrogen-app
+yarn
+yarn dev
+```
+
+Remember to update `hydrogen.config.js` with your shop's domain and Storefront API token!
+````
+
+Finally, add the minimum amount of code necessary to properly demonstrate the features of your example.
+
+Inside `package.json`, you must always use `latest` as the Hydrogen version.
+
+When you are ready, submit your PR for approval. Upon acceptance, a Hydrogen team member will merge your PR. Note that the example will not be available on StackBlitz or `npx degit` until the next time the "Publish to StackBlitz" GitHub Action runs, which is after a new release.
+
 ## Merging PRs
 
 When merging PRs, please select the **Squash and Merge** option, which consolidates all the changes from the PR into a single commit. This helps reduce the commit noise in our Git repository.
@@ -93,13 +146,13 @@ When merging PRs, please select the **Squash and Merge** option, which consolida
 
 If you are building or making changes to a component, be sure to read [What are headless components?](./contributing/headlesscomponents.md) and [How to build headless components](./contributing/howtobuildheadless.md).
 
-## Storefront API Typescript types
+## Storefront API TypeScript types
 
-You can directly import the Typescript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. If you're working on a component, you're not guarnateed to get an object in the exact shape as that type, so wrap it in `PartialDeep` which is imported from `type-fest`. This will also force the component to be more defensive in handling optional properties.
+You can directly import the TypeScript type from `/packages/src/storefront-api-types.ts` which will match the full shape of the object from the Storefront API. If you're working on a component, you're not guarnateed to get an object in the exact shape as that type, so wrap it in `PartialDeep` which is imported from `type-fest`. This will also force the component to be more defensive in handling optional properties.
 
 To update the types, follow the steps below, excluding the parts where you update the version.
 
-### Updating GraphQL and Typescript types to a new Storefront API version
+### Updating GraphQL and TypeScript types to a new Storefront API version
 
 We use `graphql-codegen` to automatically generate types for all of the Storefront API objects for a given version, and that version can be found in the `codegen.yml` file.
 
@@ -107,8 +160,8 @@ In order to update the supported Storefront API version:
 
 1. Update the Schema URL and the header comment in `codegen.yml`
 1. Run `yarn graphql-types`
-1. Fix any Typescript errors that now appear
-   1. One fast way to find them is to run `yarn build` from the monorepo root and see what Typescript errors show up
+1. Fix any TypeScript errors that now appear
+   1. One fast way to find them is to run `yarn build` from the monorepo root and see what TypeScript errors show up
    1. Another way is to clear the test cache with `yarn test --clearCache && yarn test`
 
 For context, updating the `codegen.yml` file and running the script does the following:
@@ -136,7 +189,7 @@ Next, choose an option below.
 
 ### Option 1: `localdev` package
 
-This option creates a new Hydrogen app similar to `templates/template-hydrogen-default` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
+This option creates a new Hydrogen app similar to `templates/demo-store` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
 
 ```terminal
 create-hydrogen packages/localdev
@@ -156,8 +209,8 @@ yarn workspace localdev dev
 
 1. In the directory you want to create your Hydrogen app, run `LOCAL=true create-hydrogen` and answer the prompts.
 1. Run `cd <your app>`.
-1. Run `yarn` or `npm i --legacy-peer-deps`.
-1. Optional. Replace default `shopify.config.js` with your own storefront credentials.
+1. Run `yarn` or `npm i`.
+1. Optional. Replace default `hydrogen.config.js` with your own storefront credentials.
 1. Run `yarn dev` or `npm run dev` to start your dev server.
 1. Open the dev server in your browser at http://localhost:3000.
 
@@ -210,19 +263,6 @@ End-to-end tests are powered by [Playwright and Chromium](https://playwright.dev
 Each mini-project under `packages/playground` contains a tests folder. You are welcome to modify an existing project or add a new project if it represents a different framework scenario, e.g. using a specific CSS framework or integration.
 
 You can run a single E2E test by passing a keyword, which is matched using regex, e.g. `yarn test-e2e server` will run the `server-components` test.
-
-## Testing changes in another project
-
-From the root of the repo, run:
-
-```bash
-yarn tophat ../PATH/TO/PROJECT --packages [...PACKAGES_LIST]
-
-
-# example
-yarn tophat ../cartogram/hydrogen-shop --packages cli hydrogen eslint-plugin
-
-```
 
 ## Updating the `react-server-dom-vite` vendored plugin
 

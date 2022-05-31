@@ -91,9 +91,9 @@ const {data} = useShopQuery({
 const data = fetchSync('https://my.api.com/data.json', {
   headers: {
     accept: 'application/json',
-    // Preloads queries for every request
-    preload: '*',
   },
+  // Preloads queries for every request
+  preload: '*',
 }).json();
 ```
 

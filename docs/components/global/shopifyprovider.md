@@ -10,27 +10,26 @@ The `ShopifyProvider` component wraps your entire app and provides support for h
 
 ```tsx
 import {ShopifyProvider} from '@shopify/hydrogen';
-import shopifyConfig from '../shopify.config';
 
 export default function App() {
-  return (
-    <ShopifyProvider shopifyConfig={shopifyConfig}>
-      {/* Routes, Pages, etc */}
-    </ShopifyProvider>
-  );
+  return <ShopifyProvider>{/* Routes, Pages, etc */}</ShopifyProvider>;
 }
 ```
 
 ## Props
 
-| Name          | Type                       | Description                                   |
-| ------------- | -------------------------- | --------------------------------------------- |
-| shopifyConfig | <code>ShopifyConfig</code> | The contents of the `shopify.config.js` file. |
-| children?     | <code>React</code>         | Any `ReactNode` elements.                     |
+| Name           | Type                                                   | Description                                                                                                                                                                       |
+| -------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| shopifyConfig? | <code>ShopifyConfig &#124; ShopifyConfigFetcher</code> | Shopify connection information. Defaults to [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). |
+| children?      | <code>React</code>                                     | Any `ReactNode` elements.                                                                                                                                                         |
 
 ## Component type
 
 The `ShopifyProvider` component is a server component that renders inside `App.server.jsx`. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+
+## Related framework topics
+
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
 
 ## Considerations
 

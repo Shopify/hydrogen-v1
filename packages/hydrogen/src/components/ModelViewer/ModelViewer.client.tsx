@@ -5,7 +5,7 @@ import React, {
   ElementType,
   useCallback,
 } from 'react';
-import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client';
 import {Props} from '../types';
 import type {Model3d} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
@@ -124,7 +124,6 @@ interface ModelViewerProps {
 type PropsWeControl = 'src' | 'poster';
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'model-viewer': any;
@@ -142,7 +141,7 @@ export function ModelViewer<TTag extends ElementType>(
   const [modelViewer, setModelViewer] = useState<undefined | HTMLElement>(
     undefined
   );
-  const callbackRef = useCallback((node) => {
+  const callbackRef = useCallback((node: HTMLElement) => {
     setModelViewer(node);
   }, []);
   const {data, id = data.id, children, className, ...passthroughProps} = props;

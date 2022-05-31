@@ -2,7 +2,6 @@ import React from 'react';
 import {MoneyV2, UnitPriceMeasurement} from '../../storefront-api-types';
 import {Money} from '../Money';
 import {useProduct} from '../ProductProvider';
-import {UnitPrice} from '../UnitPrice';
 
 export interface ProductPriceProps {
   /** The type of price. Valid values: `regular` (default) or `compareAt`. */
@@ -18,10 +17,7 @@ export interface ProductPriceProps {
  * [`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
  */
 export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
-  props: (
-    | Omit<React.ComponentProps<typeof UnitPrice>, 'data' | 'measurement'>
-    | Omit<React.ComponentProps<typeof Money>, 'data'>
-  ) &
+  props: Omit<React.ComponentProps<typeof Money>, 'data' | 'measurement'> &
     ProductPriceProps
 ) {
   const product = useProduct();
@@ -74,13 +70,9 @@ export function ProductPrice<TTag extends keyof JSX.IntrinsicElements>(
 
   if (measurement) {
     return (
-      <UnitPrice<TTag>
-        {...passthroughProps}
-        data={price}
-        measurement={measurement}
-      />
+      <Money {...passthroughProps} data={price} measurement={measurement} />
     );
   }
 
-  return <Money<TTag> {...passthroughProps} data={price} />;
+  return <Money {...passthroughProps} data={price} />;
 }

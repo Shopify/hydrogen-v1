@@ -5,8 +5,8 @@ import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 
 import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
-import type {ShopifyConfig} from '../../types';
-import {useServerRequest} from '../ServerRequestProvider';
+import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types';
+import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   const locale = shopifyConfig.defaultLocale ?? DEFAULT_LOCALE;
@@ -30,21 +30,53 @@ export const SHOPIFY_PROVIDER_CONTEXT_KEY = Symbol.for('SHOPIFY_PROVIDER_RSC');
  * because it's automatically wrapped around your app in `renderHydrogen()`.
  */
 export function ShopifyProvider({
+  /**
+   * Shopify connection information. Defaults to
+   * [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
+   */
   shopifyConfig,
+  /** Any `ReactNode` elements. */
   children,
 }: ShopifyProviderProps): JSX.Element {
+  const request = useServerRequest();
+
   if (!shopifyConfig) {
-    throw new Error(
-      'The `shopifyConfig` prop should be passed to `ShopifyProvider`'
+    shopifyConfig = request.ctx.hydrogenConfig?.shopify;
+
+    if (!shopifyConfig) {
+      throw new Error(
+        'The `shopifyConfig` prop should be passed to `ShopifyProvider`'
+      );
+    }
+  }
+
+  let actualShopifyConfig: ShopifyConfig;
+
+  if (typeof shopifyConfig === 'function') {
+    const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
+      (shopifyConfig as ShopifyConfigFetcher)(request)
     );
+
+    if (result.error) {
+      if (result.error instanceof Error) {
+        throw result.error;
+      }
+
+      throw new Error(
+        `Failed to load Shopify config: ${result.error.statusText}`
+      );
+    }
+
+    actualShopifyConfig = result.data;
+  } else {
+    actualShopifyConfig = shopifyConfig;
   }
 
   const shopifyProviderValue = useMemo(
-    () => makeShopifyContext(shopifyConfig),
-    [shopifyConfig]
+    () => makeShopifyContext(actualShopifyConfig),
+    [actualShopifyConfig]
   );
 
-  const request = useServerRequest();
   request.ctx.shopifyConfig = shopifyProviderValue;
 
   return (

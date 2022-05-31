@@ -14,6 +14,6 @@
 
 ## Package exports notes:
 
-- Until Typescript can resolve package.exports, we include package.typesVersions to help alias the package.exports shortened filenames to the `.d.ts` files.
+- Until TypeScript can resolve package.exports, we include package.typesVersions to help alias the package.exports shortened filenames to the `.d.ts` files.
 
 - Until ESLint can resolve package.exports, we added hydrogen-ui to `.eslintrc.js`->`node/no-missing-import.allowModules`

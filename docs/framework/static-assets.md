@@ -16,7 +16,7 @@ The following example shows how to render the `/src/icon.png` image:
 
 ```js
 import icon from '../icon.png';
-import {Image} from '@shopify/hydrogen/client';
+import {Image} from '@shopify/hydrogen';
 
 export default function Hero() {
   return <Image src={icon} width="100" height="50" />;

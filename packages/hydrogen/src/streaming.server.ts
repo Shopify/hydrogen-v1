@@ -11,7 +11,10 @@ import {createFromReadableStream as _createFromReadableStream} from '@shopify/hy
 import type {Writable} from 'stream';
 
 export const rscRenderToReadableStream = _rscRenderToReadableStream as (
-  App: JSX.Element
+  App: JSX.Element,
+  options?: {
+    onError?: (error: Error) => void;
+  }
 ) => ReadableStream<Uint8Array>;
 
 export const createFromReadableStream = _createFromReadableStream as (

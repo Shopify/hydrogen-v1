@@ -13,7 +13,8 @@ import type {
   StreamerOptions,
   HydratorOptions,
   ImportGlobEagerOutput,
-  ServerHandlerConfig,
+  ResolvedHydrogenConfig,
+  ResolvedHydrogenRoutes,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -23,7 +24,7 @@ import {
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider';
 import type {ServerResponse, IncomingMessage} from 'http';
-import type {PassThrough as PassThroughType, Writable} from 'stream';
+import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
@@ -46,6 +47,8 @@ import {RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
+import {parseJSON} from './utilities/parse';
+import {htmlEncode} from './utilities';
 
 declare global {
   // This is provided by a Vite plugin
@@ -76,15 +79,7 @@ export interface RequestHandler {
   >;
 }
 
-export const renderHydrogen = (
-  App: any,
-  {
-    shopifyConfig,
-    routes,
-    serverAnalyticsConnectors,
-    session,
-  }: ServerHandlerConfig
-) => {
+export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {
       indexTemplate,
@@ -97,11 +92,32 @@ export const renderHydrogen = (
     } = options;
 
     const request = new ServerComponentRequest(rawRequest);
+    const url = new URL(request.url);
+
+    const {default: inlineHydrogenConfig} = await import(
+      // @ts-ignore
+      // eslint-disable-next-line node/no-missing-import
+      'virtual__hydrogen.config.ts'
+    );
+
+    const {default: hydrogenRoutes} = await import(
+      // @ts-ignore
+      // eslint-disable-next-line node/no-missing-import
+      'virtual__hydrogen-routes.server.jsx'
+    );
+
+    const hydrogenConfig: ResolvedHydrogenConfig = {
+      ...inlineHydrogenConfig,
+      routes: hydrogenRoutes,
+    };
+
+    request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
-    const url = new URL(request.url);
     const log = getLoggerWithContext(request);
-    const sessionApi = session ? session(log) : undefined;
+    const sessionApi = hydrogenConfig.session
+      ? hydrogenConfig.session(log)
+      : undefined;
     const componentResponse = new ServerComponentResponse();
 
     request.ctx.session = getSyncSessionApi(
@@ -122,13 +138,16 @@ export const renderHydrogen = (
       url.pathname === EVENT_PATHNAME ||
       EVENT_PATHNAME_REGEX.test(url.pathname)
     ) {
-      return ServerAnalyticsRoute(request, serverAnalyticsConnectors);
+      return ServerAnalyticsRoute(
+        request,
+        hydrogenConfig.serverAnalyticsConnectors
+      );
     }
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    if (!isReactHydrationRequest && routes) {
-      const apiRoute = getApiRoute(url, {routes});
+    if (!isReactHydrationRequest) {
+      const apiRoute = getApiRoute(url, hydrogenConfig.routes);
 
       // The API Route might have a default export, making it also a server component
       // If it does, only render the API route if the request method is GET
@@ -139,7 +158,7 @@ export const renderHydrogen = (
         const apiResponse = await renderApiRoute(
           request,
           apiRoute,
-          shopifyConfig,
+          hydrogenConfig.shopify,
           sessionApi
         );
 
@@ -149,7 +168,10 @@ export const renderHydrogen = (
       }
     }
 
-    const isStreamable = !isBotUA(url, request.headers.get('user-agent'));
+    const isStreamable =
+      (hydrogenConfig.enableStreaming
+        ? hydrogenConfig.enableStreaming(request)
+        : true) && !isBotUA(url, request.headers.get('user-agent'));
 
     let template =
       typeof indexTemplate === 'function'
@@ -164,7 +186,6 @@ export const renderHydrogen = (
       App,
       log,
       dev,
-      routes,
       nonce,
       request,
       template,
@@ -189,10 +210,16 @@ export const renderHydrogen = (
     return render(url, params);
   };
 
-  return handleRequest;
+  if (__WORKER__) return handleRequest;
+
+  return ((rawRequest, options) =>
+    handleFetchResponseInNode(
+      handleRequest(rawRequest, options),
+      options.streamableResponse
+    )) as RequestHandler;
 };
 
-function getApiRoute(url: URL, {routes}: {routes: ImportGlobEagerOutput}) {
+function getApiRoute(url: URL, routes: ResolvedHydrogenRoutes) {
   const apiRoutes = getApiRoutes(routes);
   return getApiRouteFromURL(url, apiRoutes);
 }
@@ -204,27 +231,17 @@ function getApiRoute(url: URL, {routes}: {routes: ImportGlobEagerOutput}) {
  */
 async function render(
   url: URL,
-  {
-    App,
-    routes,
-    request,
-    componentResponse,
-    log,
-    template,
-    nonce,
-    dev,
-  }: RendererOptions
+  {App, request, template, componentResponse, nonce, log}: RendererOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
 
   const {AppSSR, rscReadable} = buildAppSSR(
     {
       App,
+      log,
       state,
       request,
       response: componentResponse,
-      routes,
-      log,
     },
     {template}
   );
@@ -247,19 +264,6 @@ async function render(
    * we want to shard our full-page cache for all Hydrogen storefronts.
    */
   headers.set('cache-control', componentResponse.cacheControlHeader);
-
-  if (componentResponse.customBody) {
-    // This can be used to return sitemap.xml or any other custom response.
-
-    postRequestTasks('ssr', status, request, componentResponse);
-
-    return new Response(await componentResponse.customBody, {
-      status,
-      statusText,
-      headers,
-    });
-  }
-
   headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
 
   html = applyHtmlHead(html, request.ctx.head, template);
@@ -267,12 +271,7 @@ async function render(
   if (flight) {
     html = html.replace(
       '</body>',
-      () =>
-        `${flightContainer({
-          init: true,
-          nonce,
-          chunk: flight as string,
-        })}</body>`
+      () => flightContainer(flight as string) + '</body>'
     );
   }
 
@@ -293,14 +292,13 @@ async function stream(
   url: URL,
   {
     App,
-    routes,
     request,
     response,
     componentResponse,
-    log,
     template,
     nonce,
     dev,
+    log,
   }: StreamerOptions
 ) {
   const state = {pathname: url.pathname, search: url.search};
@@ -309,14 +307,13 @@ async function stream(
   const {noScriptTemplate, bootstrapScripts, bootstrapModules} =
     stripScriptsFromTemplate(template);
 
-  const {AppSSR, rscReadable} = buildAppSSR(
+  const {AppSSR, rscReadable, rscDidError} = buildAppSSR(
     {
       App,
+      log,
       state,
       request,
       response: componentResponse,
-      log,
-      routes,
     },
     {template: noScriptTemplate}
   );
@@ -324,12 +321,10 @@ async function stream(
   const rscToScriptTagReadable = new ReadableStream({
     start(controller) {
       log.trace('rsc start chunks');
-      let init = true;
       const encoder = new TextEncoder();
       bufferReadableStream(rscReadable.getReader(), (chunk) => {
-        const scriptTag = flightContainer({init, chunk, nonce});
-        controller.enqueue(encoder.encode(scriptTag));
-        init = false;
+        const metaTag = flightContainer(chunk);
+        controller.enqueue(encoder.encode(metaTag));
       }).then(() => {
         log.trace('rsc finish chunks');
         return controller.close();
@@ -337,7 +332,7 @@ async function stream(
     },
   });
 
-  let didError: Error | undefined;
+  let ssrDidError: Error | undefined;
 
   if (__WORKER__) {
     const onCompleteAll = defer<true>();
@@ -354,7 +349,7 @@ async function stream(
         bootstrapScripts,
         bootstrapModules,
         onError(error) {
-          didError = error;
+          ssrDidError = error;
 
           if (dev && !writable.closed && !!responseOptions.status) {
             writable.write(getErrorMarkup(error));
@@ -382,10 +377,11 @@ async function stream(
       onCompleteAll.resolve(true);
     });
 
-    async function prepareForStreaming(flush: boolean) {
+    /* eslint-disable no-inner-declarations */
+    function prepareForStreaming(flush: boolean) {
       Object.assign(
         responseOptions,
-        getResponseOptions(componentResponse, didError)
+        getResponseOptions(componentResponse, rscDidError ?? ssrDidError)
       );
 
       /**
@@ -403,25 +399,25 @@ async function stream(
       }
 
       if (flush) {
-        if (componentResponse.customBody) {
-          writable.write(encoder.encode(await componentResponse.customBody));
-          return false;
-        }
-
         responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
         writable.write(encoder.encode(DOCTYPE));
 
-        if (didError) {
+        if (rscDidError ?? ssrDidError) {
           // This error was delayed until the headers were properly sent.
-          writable.write(encoder.encode(getErrorMarkup(didError)));
+          writable.write(
+            encoder.encode(
+              getErrorMarkup((rscDidError ?? ssrDidError) as Error)
+            )
+          );
         }
 
         return true;
       }
     }
+    /* eslint-enable no-inner-declarations */
 
     const shouldReturnApp =
-      (await prepareForStreaming(componentResponse.canStream())) ??
+      prepareForStreaming(componentResponse.canStream()) ??
       (await onCompleteAll.promise.then(prepareForStreaming));
 
     if (shouldReturnApp) {
@@ -491,7 +487,12 @@ async function stream(
           componentResponse.cacheControlHeader
         );
 
-        writeHeadToServerResponse(response, componentResponse, log, didError);
+        writeHeadToServerResponse(
+          response,
+          componentResponse,
+          log,
+          rscDidError ?? ssrDidError
+        );
 
         if (isRedirect(response)) {
           // Return redirects early without further rendering/streaming
@@ -500,7 +501,10 @@ async function stream(
 
         if (!componentResponse.canStream()) return;
 
-        startWritingHtmlToServerResponse(response, dev ? didError : undefined);
+        startWritingHtmlToServerResponse(
+          response,
+          dev ? rscDidError ?? ssrDidError : undefined
+        );
 
         setTimeout(() => {
           log.trace('node pipe response');
@@ -512,7 +516,7 @@ async function stream(
           return response.write(chunk);
         });
       },
-      async onAllReady() {
+      onAllReady() {
         log.trace('node complete stream');
 
         if (componentResponse.canStream() || response.writableEnded) {
@@ -525,7 +529,12 @@ async function stream(
           return;
         }
 
-        writeHeadToServerResponse(response, componentResponse, log, didError);
+        writeHeadToServerResponse(
+          response,
+          componentResponse,
+          log,
+          rscDidError ?? ssrDidError
+        );
 
         postRequestTasks(
           'str',
@@ -539,11 +548,10 @@ async function stream(
           return response.end();
         }
 
-        if (componentResponse.customBody) {
-          return response.end(await componentResponse.customBody);
-        }
-
-        startWritingHtmlToServerResponse(response, dev ? didError : undefined);
+        startWritingHtmlToServerResponse(
+          response,
+          dev ? rscDidError ?? ssrDidError : undefined
+        );
 
         bufferReadableStream(rscToScriptTagReadable.getReader()).then(
           (scriptTags) => {
@@ -566,7 +574,7 @@ async function stream(
         }
       },
       onError(error: any) {
-        didError = error;
+        ssrDidError = error;
 
         if (dev && response.headersSent) {
           // Calling write would flush headers automatically.
@@ -585,69 +593,56 @@ async function stream(
  */
 async function hydrate(
   url: URL,
-  {
-    App,
-    routes,
-    request,
-    response,
-    componentResponse,
-    isStreamable,
-    log,
-  }: HydratorOptions
+  {App, log, request, componentResponse}: HydratorOptions
 ) {
-  const state = JSON.parse(url.searchParams.get('state') || '{}');
+  const state = parseJSON(url.searchParams.get('state') || '{}');
 
   const {AppRSC} = buildAppRSC({
     App,
+    log,
     state,
     request,
     response: componentResponse,
-    log,
-    routes,
   });
 
-  if (__WORKER__) {
-    const rscReadable = rscRenderToReadableStream(AppRSC);
+  const rscReadable = rscRenderToReadableStream(AppRSC, {
+    onError(e) {
+      log.error(e);
+    },
+  });
 
-    postRequestTasks('rsc', 200, request, componentResponse);
-    return new Response(rscReadable);
-  } else if (response) {
-    const rscWriter = await import(
-      // @ts-ignore
-      '@shopify/hydrogen/vendor/react-server-dom-vite/writer.node.server'
-    );
+  const bufferedBody = await bufferReadableStream(rscReadable.getReader());
 
-    const streamer = rscWriter.renderToPipeableStream(AppRSC);
-    response.writeHead(200, 'ok', {
+  postRequestTasks('rsc', 200, request, componentResponse);
+
+  return new Response(bufferedBody, {
+    headers: {
       'cache-control': componentResponse.cacheControlHeader,
-    });
-    const stream = streamer.pipe(response) as Writable;
-
-    stream.on('finish', function () {
-      postRequestTasks('rsc', response.statusCode, request, componentResponse);
-    });
-  }
+    },
+  });
 }
 
-type BuildAppOptions = {
-  App: React.JSXElementConstructor<any>;
+type SharedServerProps = {
   state?: object | null;
   request: ServerComponentRequest;
   response: ServerComponentResponse;
   log: Logger;
+};
+
+type BuildAppOptions = {
+  App: React.JSXElementConstructor<SharedServerProps>;
+} & SharedServerProps;
+
+export type AppProps = SharedServerProps & {
   routes?: ImportGlobEagerOutput;
 };
 
-function buildAppRSC({
-  App,
-  state,
-  request,
-  response,
-  log,
-  routes,
-}: BuildAppOptions) {
+function buildAppRSC({App, log, state, request, response}: BuildAppOptions) {
   const hydrogenServerProps = {request, response, log};
-  const serverProps = {...state, ...hydrogenServerProps, routes};
+  const serverProps = {
+    ...state,
+    ...hydrogenServerProps,
+  };
 
   request.ctx.router.serverProps = serverProps;
 
@@ -666,20 +661,28 @@ function buildAppRSC({
 }
 
 function buildAppSSR(
-  {App, state, request, response, log, routes}: BuildAppOptions,
+  {App, state, request, response, log}: BuildAppOptions,
   htmlOptions: Omit<Parameters<typeof Html>[0], 'children'> & {}
 ) {
   const {AppRSC} = buildAppRSC({
     App,
+    log,
     state,
     request,
     response,
-    log,
-    routes,
   });
 
-  const [rscReadableForFizz, rscReadableForFlight] =
-    rscRenderToReadableStream(AppRSC).tee();
+  let rscDidError;
+
+  const [rscReadableForFizz, rscReadableForFlight] = rscRenderToReadableStream(
+    AppRSC,
+    {
+      onError(e) {
+        rscDidError = e;
+        log.error(e);
+      },
+    }
+  ).tee();
 
   const rscResponse = createFromReadableStream(rscReadableForFizz);
   const RscConsumer = () => rscResponse.readRoot();
@@ -704,7 +707,7 @@ function buildAppSSR(
     </Html>
   );
 
-  return {AppSSR, rscReadable: rscReadableForFlight};
+  return {AppSSR, rscReadable: rscReadableForFlight, rscDidError};
 }
 
 function PreloadQueries({
@@ -724,29 +727,25 @@ async function renderToBufferedString(
   ReactApp: JSX.Element,
   {log, nonce}: {log: Logger; nonce?: string}
 ): Promise<string> {
-  return new Promise<string>(async (resolve, reject) => {
-    if (__WORKER__) {
-      try {
-        const ssrReadable = await ssrRenderToReadableStream(ReactApp, {
-          nonce,
-          onError: (error) => log.error(error),
-        });
+  if (__WORKER__) {
+    const ssrReadable = await ssrRenderToReadableStream(ReactApp, {
+      nonce,
+      onError: (error) => log.error(error),
+    });
 
-        /**
-         * We want to wait until `allReady` resolves before fetching the
-         * stream body. Otherwise, React 18's streaming JS script/template tags
-         * will be included in the output and cause issues when loading
-         * the Client Components in the browser.
-         */
-        await ssrReadable.allReady;
+    /**
+     * We want to wait until `allReady` resolves before fetching the
+     * stream body. Otherwise, React 18's streaming JS script/template tags
+     * will be included in the output and cause issues when loading
+     * the Client Components in the browser.
+     */
+    await ssrReadable.allReady;
 
-        resolve(bufferReadableStream(ssrReadable.getReader()));
-      } catch (error: unknown) {
-        reject(error);
-      }
-    } else {
-      const writer = await createNodeWriter();
+    return bufferReadableStream(ssrReadable.getReader());
+  } else {
+    const writer = await createNodeWriter();
 
+    return new Promise<string>((resolve, reject) => {
       const {pipe} = ssrRenderToPipeableStream(ReactApp, {
         nonce,
         /**
@@ -764,8 +763,8 @@ async function renderToBufferedString(
         onShellError: reject,
         onError: (error) => log.error(error),
       });
-    }
-  });
+    });
+  }
 }
 
 export default renderHydrogen;
@@ -831,9 +830,7 @@ function writeHeadToServerResponse(
     response.statusMessage = statusText;
   }
 
-  Object.entries((headers as any).raw()).forEach(([key, value]) =>
-    response.setHeader(key, value as string)
-  );
+  setServerHeaders(headers, response);
 }
 
 function isRedirect(response: {status?: number; statusCode?: number}) {
@@ -851,31 +848,8 @@ async function createNodeWriter() {
   return new PassThrough() as InstanceType<typeof PassThroughType>;
 }
 
-function flightContainer({
-  init,
-  chunk,
-  nonce,
-}: {
-  chunk?: string;
-  init?: boolean;
-  nonce?: string;
-}) {
-  let script = `<script${nonce ? ` nonce="${nonce}"` : ''}>`;
-  if (init) {
-    script += 'var __flight=[];';
-  }
-
-  if (chunk) {
-    const normalizedChunk = chunk
-      // 1. Duplicate the escape char (\) for already escaped characters (e.g. \n or \").
-      .replace(/\\/g, String.raw`\\`)
-      // 2. Escape existing backticks to allow wrapping the whole thing in `...`.
-      .replace(/`/g, String.raw`\``);
-
-    script += `__flight.push(\`${normalizedChunk}\`)`;
-  }
-
-  return script + '</script>';
+function flightContainer(chunk: string) {
+  return `<meta data-flight="${htmlEncode(chunk)}" />`;
 }
 
 function postRequestTasks(
@@ -888,4 +862,40 @@ function postRequestTasks(
   logCacheControlHeaders(type, request, componentResponse);
   logQueryTimings(type, request);
   request.savePreloadQueries();
+}
+
+/**
+ * Ensure Node.js environments handle the fetch Response correctly.
+ */
+function handleFetchResponseInNode(
+  fetchResponsePromise: Promise<Response | undefined>,
+  nodeResponse?: ServerResponse
+) {
+  if (nodeResponse) {
+    fetchResponsePromise.then((response) => {
+      if (!response) return;
+
+      setServerHeaders(response.headers, nodeResponse);
+
+      nodeResponse.statusCode = response.status;
+
+      if (response.body) {
+        nodeResponse.write(response.body);
+      }
+
+      nodeResponse.end();
+    });
+  }
+
+  return fetchResponsePromise;
+}
+
+// From fetch Headers to Node Response
+function setServerHeaders(headers: Headers, nodeResponse: ServerResponse) {
+  // Headers.raw is only implemented in node-fetch, which is used by Hydrogen in dev and prod.
+  // It is the only way for now to access `set-cookie` header as an array.
+  // https://github.com/Shopify/hydrogen/issues/1228
+  Object.entries((headers as any).raw()).forEach(([key, value]) =>
+    nodeResponse.setHeader(key, value as string)
+  );
 }

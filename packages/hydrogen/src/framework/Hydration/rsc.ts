@@ -1,8 +1,6 @@
 // TODO should we move this file to src/foundation
 // so it is considered ESM instead of CJS?
 
-// @ts-ignore
-import {unstable_getCacheForType, unstable_useCacheRefresh} from 'react';
 import {
   createFromFetch,
   createFromReadableStream,
@@ -10,14 +8,47 @@ import {
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import {RSC_PATHNAME} from '../../constants';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __flight: Array<string>;
-}
-
 let rscReader: ReadableStream | null;
 
-if (globalThis.__flight && __flight.length > 0) {
+// Hydrate an SSR response from <meta> tags placed in the DOM.
+const flightChunks: string[] = [];
+const FLIGHT_ATTRIBUTE = 'data-flight';
+
+function addElementToFlightChunks(el: Element) {
+  // We don't need to decode, because `.getAttribute` already decodes
+  const chunk = el.getAttribute(FLIGHT_ATTRIBUTE);
+  if (chunk) {
+    flightChunks.push(chunk);
+  }
+}
+
+// Get initial payload
+document
+  .querySelectorAll('[' + FLIGHT_ATTRIBUTE + ']')
+  .forEach(addElementToFlightChunks);
+
+// Create a mutation observer on the document to detect when new
+// <meta data-flight> tags are added, and add them to the array.
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    mutation.addedNodes.forEach((node) => {
+      if (
+        node instanceof HTMLElement &&
+        node.tagName === 'META' &&
+        node.hasAttribute(FLIGHT_ATTRIBUTE)
+      ) {
+        addElementToFlightChunks(node);
+      }
+    });
+  });
+});
+
+observer.observe(document.documentElement, {
+  childList: true,
+  subtree: true,
+});
+
+if (flightChunks.length > 0) {
   const contentLoaded = new Promise((resolve) =>
     document.addEventListener('DOMContentLoaded', resolve)
   );
@@ -31,10 +62,13 @@ if (globalThis.__flight && __flight.length > 0) {
           return 0;
         };
 
-        __flight.forEach(write);
-        __flight.push = write;
+        flightChunks.forEach(write);
+        flightChunks.push = write;
 
-        contentLoaded.then(() => controller.close());
+        contentLoaded.then(() => {
+          controller.close();
+          observer.disconnect();
+        });
       },
     });
   } catch (_) {
@@ -42,9 +76,7 @@ if (globalThis.__flight && __flight.length > 0) {
   }
 }
 
-function createResponseCache() {
-  return new Map<string, any>();
-}
+const cache = new Map();
 
 /**
  * Much of this is borrowed from React's demo implementation:
@@ -54,8 +86,6 @@ function createResponseCache() {
  */
 export function useServerResponse(state: any) {
   const key = JSON.stringify(state);
-  const cache: ReturnType<typeof createResponseCache> =
-    unstable_getCacheForType(createResponseCache);
 
   let response = cache.get(key);
   if (response) {
@@ -91,6 +121,5 @@ export function useServerResponse(state: any) {
 }
 
 export function useRefresh() {
-  const refreshCache = unstable_useCacheRefresh();
-  refreshCache();
+  cache.clear();
 }

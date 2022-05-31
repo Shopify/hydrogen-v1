@@ -2,11 +2,16 @@ import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
-import type {PreloadOptions, QueryKey} from '../../types';
+import type {
+  ResolvedHydrogenConfig,
+  PreloadOptions,
+  QueryKey,
+} from '../../types';
 import {hashKey} from '../../utilities/hash';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
 import {SessionSyncApi} from '../../foundation/session/session';
+import {parseJSON} from '../../utilities/parse';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
@@ -45,11 +50,12 @@ export class ServerComponentRequest extends Request {
   public cookies: Map<string, string>;
   public id: string;
   public time: number;
-  public preloadURL: string;
+  public normalizedUrl: string;
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
   public ctx: {
     cache: Map<string, any>;
     head: HeadData;
+    hydrogenConfig?: ResolvedHydrogenConfig;
     shopifyConfig?: ShopifyContextValue;
     queryCacheControl: Array<QueryCacheControlHeaders>;
     queryTimings: Array<QueryTiming>;
@@ -70,12 +76,11 @@ export class ServerComponentRequest extends Request {
       super(getUrlFromNodeRequest(input), getInitFromNodeRequest(input));
     }
 
-    const referer = this.headers.get('referer');
-
     this.time = getTime();
     this.id = generateId();
-    this.preloadURL =
-      this.isRscRequest() && referer && referer !== '' ? referer : this.url;
+    this.normalizedUrl = this.isRscRequest()
+      ? normalizeUrl(this.url)
+      : this.url;
 
     this.ctx = {
       cache: new Map(),
@@ -89,7 +94,7 @@ export class ServerComponentRequest extends Request {
       queryTimings: [],
       analyticsData: {
         url: this.url,
-        normalizedRscUrl: this.preloadURL,
+        normalizedRscUrl: this.normalizedUrl,
       },
       preloadQueries: new Map(),
     };
@@ -122,9 +127,9 @@ export class ServerComponentRequest extends Request {
   }
 
   public getPreloadQueries(): PreloadQueriesByURL | undefined {
-    if (preloadCache.has(this.preloadURL)) {
+    if (preloadCache.has(this.normalizedUrl)) {
       const combinedPreloadQueries: PreloadQueriesByURL = new Map();
-      const urlPreloadCache = preloadCache.get(this.preloadURL);
+      const urlPreloadCache = preloadCache.get(this.normalizedUrl);
 
       mergeMapEntries(combinedPreloadQueries, urlPreloadCache);
       mergeMapEntries(combinedPreloadQueries, preloadCache.get(PRELOAD_ALL));
@@ -136,7 +141,7 @@ export class ServerComponentRequest extends Request {
   }
 
   public savePreloadQueries() {
-    preloadCache.set(this.preloadURL, this.ctx.preloadQueries);
+    preloadCache.set(this.normalizedUrl, this.ctx.preloadQueries);
   }
 
   /**
@@ -199,4 +204,13 @@ function getInitFromNodeRequest(request: any) {
   }
 
   return init;
+}
+
+function normalizeUrl(rawUrl: string) {
+  const url = new URL(rawUrl);
+  const state = parseJSON(url.searchParams.get('state') ?? '');
+  const normalizedUrl = new URL(state?.pathname ?? '', url.origin);
+  normalizedUrl.search = state?.search;
+
+  return normalizedUrl.toString();
 }

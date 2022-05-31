@@ -5,6 +5,7 @@ import path from 'path';
 import {promises as fsp} from 'fs';
 import type {CookieOptions} from '../Cookie/Cookie';
 import {Logger} from '../../utilities/log';
+import {parseJSON} from '../../utilities/parse';
 
 async function wait() {
   return new Promise((resolve) => setTimeout(resolve));
@@ -104,7 +105,7 @@ async function getFile(
       const textContent = await fsp.readFile(file, {encoding: 'utf-8'});
 
       try {
-        content = JSON.parse(textContent) as SessionFile;
+        content = parseJSON(textContent) as SessionFile;
       } catch (error) {
         log.warn(`Cannot parse existing session file: ${file}`);
         content = defaultFileContent;

@@ -37,7 +37,6 @@ function SomeApiDelayServerComponent({
 
       throw promise;
     });
-
     useServerAnalytics({
       [delayKey]: delay,
     });

@@ -1,6 +1,8 @@
 name: Publish to Stackblitz
 
 on:
+  # Note: the `released` event does not currently work because
+  # a bot is the creator of the release. Run this manually instead.
   release:
     types: [released]
   workflow_dispatch:
@@ -10,17 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     name: Publish latest release to Stackblitz
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           ref: 'v1.x-2022-07'
-      - name: Rename gitignore
-        run: |
-          mv templates/template-hydrogen-default/_gitignore templates/template-hydrogen-default/.gitignore
-      - name: Push to stackblitz branch
-        run: |
+      - run: |
+          mv templates/demo-store/_gitignore templates/demo-store/.gitignore
+          mv templates/hello-world/_gitignore templates/hello-world/.gitignore
+      - run: |
+          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/demo-store/package.json
+          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/hello-world/package.json
+      - run: |
           git show-ref
           git config user.email "hydrogen@shopify.com"
           git config user.name "Hydrogen Bot"
-          git commit -am "Update Stackblitz branch"
+          git commit -am "Update templates on Stackblitz branch"
           git push origin HEAD:stackblitz --force

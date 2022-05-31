@@ -1,8 +1,10 @@
 import {
   createRule,
   isHook,
-  isServerComponent,
+  isServerComponentFile,
   getHookName,
+  insideReactComponent,
+  insideAPIRoute,
 } from '../../utilities';
 
 const BANNED_STATE_HOOKS = ['useState', 'useReducer'];
@@ -14,11 +16,9 @@ export const serverComponentBannedHooks = createRule({
   meta: {
     type: 'problem',
     docs: {
-      //@ts-expect-error
-      description: `Prevent using ${new Intl.ListFormat('en').format(
+      description: `Prevent using ${new (Intl as any).ListFormat('en').format(
         BANNED_HOOKS
       )} in server and shared components`,
-      category: 'Possible Errors',
       recommended: 'error',
     },
     messages: {
@@ -27,13 +27,14 @@ export const serverComponentBannedHooks = createRule({
     schema: [],
   },
   defaultOptions: [],
-  create: function (context) {
+  create(context) {
     return {
       CallExpression(node) {
         const hook = getHookName(node);
 
         if (
-          isServerComponent(context.getFilename()) &&
+          isServerComponentFile(context.getFilename()) &&
+          (insideReactComponent(node) || insideAPIRoute(node)) &&
           isHook(node) &&
           BANNED_HOOKS.includes(hook)
         ) {

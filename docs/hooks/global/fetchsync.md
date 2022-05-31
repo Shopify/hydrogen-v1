@@ -1,10 +1,10 @@
 ---
 gid: 61a65cab-2745-412a-91ab-ab15b15424z5
 title: fetchSync
-description: The fetchSync hook makes third-party API requests and is the recommended way to make simple fetch calls on the server.
+description: The fetchSync hook makes API requests and is the recommended way to make simple fetch calls on the server and on the client.
 ---
 
-The `fetchSync` hook makes third-party API requests and is the recommended way to make simple fetch calls on the server. It's designed similar to the [Web API's `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch), only in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html).
+The `fetchSync` hook makes API requests and is the recommended way to make simple fetch calls on the server and on the client. It's designed similar to the [Web API's `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch), only in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html).
 
 ## Example code
 
@@ -88,12 +88,12 @@ The `fetchSync` function returns an object with the following keys:
 
 ## `fetchSync` in client components
 
-If you're using `fetchSync` in a client component, then make sure to import the function from `@shopify/hydrogen/client`. You can't provide options for caching and preloading in client components:
+If you're using `fetchSync` in a client component, then you can't provide options for caching and preloading in client components:
 
 {% codeblock file, filename: "MyComponent.client.js" %}
 
 ```jsx
-import {fetchSync} from '@shopify/hydrogen/client';
+import {fetchSync} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 export function MyComponent() {
   return (

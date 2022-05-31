@@ -1,6 +1,6 @@
 import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 import type {ReactNode} from 'react';
-import type {ShopifyConfig} from '../../types';
+import type {ShopifyConfigFetcher, ShopifyConfig} from '../../types';
 
 export interface ShopifyContextValue
   extends Omit<ShopifyConfig, 'defaultLocale'> {
@@ -9,9 +9,8 @@ export interface ShopifyContextValue
 }
 
 export type ShopifyProviderProps = {
-  /** The contents of the `shopify.config.js` file. */
-  shopifyConfig: ShopifyConfig;
+  /** Shopify connection information. Defaults to the `shopify` property in the `hydrogen.config.js` file. */
+  shopifyConfig?: ShopifyConfig | ShopifyConfigFetcher;
   /** Any `ReactNode` elements. */
   children?: ReactNode;
-  manager?: any;
 };
