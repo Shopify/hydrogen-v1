@@ -46,9 +46,13 @@ function App() {
 If you have a custom domain or you're using sub-domains, then you can set the cookie domain of
 the `ShopifyAnalytics` component so that cookies persists for your root domain:
 
+{% codeblock file, filename: 'App.server.jsx' %}
+
 ```jsx
 <ShopifyAnalytics cookieDomain="my-shop.com" />
 ```
+
+{% endcodeblock %}
 
 Otherwise, this component will use the `storeDomain` value in the `hydrogen.config.js`
 as the default cookie domain or leave it blank when the specified cookie domain does
