@@ -28,6 +28,7 @@
   "prettier": "@shopify/prettier-config",
   "dependencies": {
     "@headlessui/react": "^1.6.3",
+    "@heroicons/react": "^1.0.6",
     "@shopify/hydrogen": "^0.21.0",
     "clsx": "^1.1.1",
     "react": "^18.1.0",

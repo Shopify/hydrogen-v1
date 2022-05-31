@@ -5,7 +5,7 @@ export default function Heading({
   as = 'h2',
   size = 'heading',
   width = 'default',
-  format = true,
+  format,
   className = '',
   children,
 }) {

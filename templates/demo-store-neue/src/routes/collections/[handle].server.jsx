@@ -13,7 +13,7 @@ import {PageHeader, Section} from '~/components/sections';
 import {Button, Grid, Text} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 
-import {PRODUCT_CARD_FIELDS} from '~/components/blocks/ProductCard';
+import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Collection({pageBy = 12, params}) {
   const {languageCode} = useShop();

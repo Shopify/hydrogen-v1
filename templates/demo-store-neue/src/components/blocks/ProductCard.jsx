@@ -62,8 +62,9 @@ export default function ProductCard({product = mockProduct, label, className}) {
 
 // <Money className="opacity-50 strike" data={compareAtPrice} />
 function CompareAtPrice({data, className}) {
-  const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} =
-    useMoney(data);
+  const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} = useMoney(
+    data,
+  );
 
   const styles = clsx('strike', className);
 
@@ -74,31 +75,3 @@ function CompareAtPrice({data, className}) {
     </span>
   );
 }
-
-export const PRODUCT_CARD_FIELDS = gql`
-  fragment ProductCardFields on Product {
-    id
-    title
-    publishedAt
-    handle
-    variants(first: 1) {
-      nodes {
-        id
-        image {
-          url
-          altText
-          width
-          height
-        }
-        priceV2 {
-          amount
-          currencyCode
-        }
-        compareAtPriceV2 {
-          amount
-          currencyCode
-        }
-      }
-    }
-  }
-`;

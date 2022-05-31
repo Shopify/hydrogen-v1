@@ -18,7 +18,7 @@ export default function Header({title}) {
 
   const styles = {
     text: `${dark ? 'text-contrast' : 'text-primary'}`,
-    button: 'flex items-center justify-center w-8 h-8',
+    button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
       dark
         ? 'bg-primary/80 text-contrast shadow-darkHeader'
@@ -47,8 +47,16 @@ export default function Header({title}) {
         </nav>
       </div>
       <div className="flex items-center gap-1">
-        <form className="flex items-center">
-          <Input type="search" placeholder="Search" />
+        <form action={'/search'} className="flex items-center">
+          <Input
+            className={
+              dark ? 'focus:border-contrast/20' : 'focus:border-primary/20'
+            }
+            type="search"
+            variant="minisearch"
+            placeholder="Search"
+            name="q"
+          />
           <button type="submit" className={styles.button}>
             <IconSearch />
           </button>
@@ -59,10 +67,23 @@ export default function Header({title}) {
         <button className={styles.button}>
           <IconAccount />
         </button>
-        <button className={styles.button}>
+        <Link to={'/cart'} className={styles.button}>
           <IconBag />
-        </button>
+          <CartBadge dark={dark} quantity={1} />
+        </Link>
       </div>
     </header>
+  );
+}
+
+function CartBadge({dark, quantity}) {
+  return (
+    <div
+      className={`${
+        dark ? 'text-primary bg-contrast' : 'text-contrast bg-primary'
+      } absolute bottom-1 right-1 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px`}
+    >
+      <span>{quantity}</span>
+    </div>
   );
 }

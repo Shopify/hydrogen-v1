@@ -1,36 +1,18 @@
 import {Image, Link} from '@shopify/hydrogen';
 import {Heading, Text} from '../elements';
+import {hero as mockData} from '~/lib/placeholders';
 
-const placeholder = {
-  title: 'All-Weather,\nAll-Season…',
-  subtitle: 'The Mason Horse Bit Loafer // Vibram 1757',
-  images: [
-    'https://picsum.photos/seed/1/1480',
-    'https://picsum.photos/seed/2/1480',
-  ],
-  cta: {
-    label: 'Shop Now →',
-    url: '/redirect',
-  },
-};
+export default function Hero({data = mockData, height, top}) {
+  const {title, byline, cta, url, spread, spread_secondary, text_color} = data;
 
-export default function Hero({
-  title = placeholder.title,
-  subtitle = placeholder.subtitle,
-  images = placeholder.images,
-  cta = placeholder.cta,
-  height,
-  top,
-}) {
   return (
-    <Link to={cta.url}>
+    <Link to={url.value}>
       <section
-        className={`relative justify-end flex flex-col w-full ${
-          top && '-mt-nav'
-        } ${height === 'full' ? 'h-screen' : 'h-[50rem]'}`}
+        className={`relative justify-end flex flex-col w-full ${top &&
+          '-mt-nav'} ${height === 'full' ? 'h-screen' : 'h-[50rem]'}`}
       >
         <div className="absolute inset-0 grid flex-grow grid-flow-col pointer-events-none -z-10 content-stretch overflow-clip">
-          {images.map((image, i) => (
+          {/* {images.map((image, i) => (
             <Image
               key={i}
               width={1480}
@@ -39,23 +21,20 @@ export default function Hero({
               className="block object-cover w-auto h-full"
               src={image}
             />
-          ))}
+          ))} */}
+          {spread.value && <></>}
+          {spread_secondary.value && <></>}
         </div>
         <div className="flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t from-primary/60 text-contrast">
-          <Heading
-            format={false}
-            as="h2"
-            size="display"
-            className="max-w-prose-narrow"
-          >
-            {title}
+          <Heading as="h2" size="display" className="max-w-prose-narrow">
+            {title.value}
           </Heading>
           <Text color="contrast" as="p" size="lead">
-            {subtitle}
+            {byline.value}
           </Text>
           <Link to={cta.url}>
             <Text color="contrast" size="lead">
-              {cta.label}
+              {cta.value}
             </Text>
           </Link>
         </div>

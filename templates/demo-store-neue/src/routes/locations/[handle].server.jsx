@@ -23,7 +23,7 @@ export default function Location({params}) {
 
   const {featured_image, title, address, hours, email, phone} = data.metaobject;
 
-  const directions_link = `https://www.google.com/maps/dir/?api=1&destination=${address.value.replace(
+  const directions_link = `https://www.google.com/maps/dir/?api=1&destination=${address?.value?.replace(
     /(\r\n|\n|\r)/gm,
     '',
   )}`;
@@ -45,12 +45,17 @@ export default function Location({params}) {
                 <Heading as="h3" size="copy">
                   Address
                 </Heading>
-                <address
-                  className="not-italic"
-                  dangerouslySetInnerHTML={{
-                    __html: address.value.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
-                  }}
-                />
+                {address?.value && (
+                  <address
+                    className="not-italic"
+                    dangerouslySetInnerHTML={{
+                      __html: address?.value?.replace(
+                        /(?:\r\n|\r|\n)/g,
+                        '<br/>',
+                      ),
+                    }}
+                  />
+                )}
                 <a
                   className="underline"
                   href={directions_link}
