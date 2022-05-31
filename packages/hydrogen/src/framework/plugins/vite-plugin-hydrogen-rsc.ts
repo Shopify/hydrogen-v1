@@ -1,12 +1,13 @@
 // @ts-ignore
 import reactServerDomVite from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
 import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
+import {VIRTUAL_PROXY_HYDROGEN_ROUTES_ID} from './vite-plugin-hydrogen-virtual-files';
 
 export default function () {
   return reactServerDomVite({
     serverBuildEntries: [
       HYDROGEN_DEFAULT_SERVER_ENTRY,
-      'virtual:hydrogen-config:proxy',
+      VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
     ],
     isServerComponentImporterAllowed(importer: string, source: string) {
       return (
