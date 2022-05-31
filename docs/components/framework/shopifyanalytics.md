@@ -60,7 +60,7 @@ If you're not using custom domains or sub-domains, then the `ShopifyAnalytics` c
 
 Analytic cookies must be set at the first-party domain. This means that when a buyer navigates from your Hydrogen storefront to Shopify checkout, the domain name must stay the same.
 
-You can acheive this by assigning a subdomain to your online store. For example:
+You can achieve this by assigning a sub-domain to your online store. For example, you can do the following tasks:
 
 * Set your Hydrogen store domain at `https://www.my-awesome-hydrogen-store.com`
 * Attach a new subdomain to your online store at `https://checkout.my-awesome-hydrogen-store.com`
