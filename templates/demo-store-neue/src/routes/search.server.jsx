@@ -50,7 +50,7 @@ export default function Search({pageBy = 12, params}) {
   const results = data?.products?.nodes;
 
   return (
-    <SearchPage>
+    <SearchPage query={decodeURI(query)}>
       <Section>
         <Grid>
           {results.map((product) => (
@@ -62,18 +62,13 @@ export default function Search({pageBy = 12, params}) {
   );
 }
 
-function SearchPage({children}) {
+function SearchPage({query, children}) {
   return (
     <Layout>
       <PageHeader>
         <Heading>Search</Heading>
         <form className="relative flex w-full text-heading">
-          <Input
-            defaultValue={'Search result'}
-            type="search"
-            variant="search"
-            name="q"
-          />
+          <Input defaultValue={query} type="search" variant="search" name="q" />
           <button className="absolute right-0 py-2" type="submit">
             Go
           </button>
