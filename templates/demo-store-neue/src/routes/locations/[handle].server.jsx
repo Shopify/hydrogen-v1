@@ -1,10 +1,10 @@
-// TODO: Custom Content Model
 import {useShopQuery, useRouteParams, Seo, gql, Image} from '@shopify/hydrogen';
+
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
-import {Text, Button, Heading} from '~/components/elements';
+import {PageHeader, Section} from '~/components/sections';
+import {Text, Heading} from '~/components/elements';
 import {formatPhoneNumber} from '~/lib/utils';
-import {location as mockLocation} from '~/lib/placeholders';
 
 export default function Location({params}) {
   const {handle} = useRouteParams();
@@ -21,7 +21,8 @@ export default function Location({params}) {
     return <NotFound type="location" />;
   }
 
-  const {featured_image, title, address, hours, email, phone} = data.metaobject;
+  const {featured_image, title, description, address, hours, email, phone} =
+    data.metaobject;
 
   const directions_link = `https://www.google.com/maps/dir/?api=1&destination=${address?.value?.replace(
     /(\r\n|\n|\r)/gm,
@@ -30,17 +31,55 @@ export default function Location({params}) {
 
   return (
     <Layout>
-      <section className="flex flex-col items-center gap-12 pb-16 md:flex-row">
-        <Image
-          className="object-cover w-full md:w-1/2 md:aspect-[2/3] lg:aspect-square aspect-square"
-          width={1000}
-          height={1000}
-          data={featured_image.reference.image}
-        />
-        <div className="grid w-full gap-8 md:w-1/2">
-          <h1 className="text-2xl">{title.value}</h1>
+      {title?.value && (
+        <PageHeader
+          className={
+            'grid items-baseline grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          }
+        >
+          <div className="grid gap-4 lg:col-span-2">
+            <Heading as="h1" size="heading" className="inline-block">
+              {title.value}
+            </Heading>
+            {description?.value && <Text>{description.value}</Text>}
+          </div>
           <div className="flex flex-col gap-8 md:flex-row">
-            <div className="grid gap-8">
+            <div className="flex gap-8">
+              <div className="grid gap-4">
+                {(phone?.value || email?.value) && (
+                  <div className="grid justify-start gap-2">
+                    <Heading as="h3" size="copy">
+                      Contact us:
+                    </Heading>
+                    {phone?.value && (
+                      <a href={`tel:${phone.value}`}>
+                        <Text className="pb-px border-b">
+                          {formatPhoneNumber(phone.value)}
+                        </Text>
+                      </a>
+                    )}
+                    {email?.value && (
+                      <a href={`mailto:${email.value}`}>
+                        <Text className="pb-px border-b">{email.value}</Text>
+                      </a>
+                    )}
+                  </div>
+                )}
+                {hours?.value && (
+                  <div className="flex flex-col items-start gap-2">
+                    <Heading as="h3" size="copy">
+                      Hours
+                    </Heading>
+                    <ul>
+                      {JSON.parse(hours.value).map((hour, i) => (
+                        <Text as="li" key={i}>
+                          {hour}
+                        </Text>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
               <div className="grid gap-2">
                 <Heading as="h3" size="copy">
                   Address
@@ -56,42 +95,26 @@ export default function Location({params}) {
                     }}
                   />
                 )}
-                <a
-                  className="underline"
-                  href={directions_link}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <Text>Get directions</Text>
-                </a>
+                {directions_link && (
+                  <a
+                    href={directions_link}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <Text className="pb-px border-b">Get directions</Text>
+                  </a>
+                )}
               </div>
-              <div className="grid gap-2">
-                <Heading as="h3" size="copy">
-                  Contact us:
-                </Heading>
-                <a className="underline" href={`tel:${phone.value}`}>
-                  <Text>{formatPhoneNumber(phone.value)}</Text>
-                </a>
-                <a className="underline" href={`mailto:${email.value}`}>
-                  <Text>{email.value}</Text>
-                </a>
-              </div>
-            </div>
-            <div className="flex flex-col items-start gap-2">
-              <Heading as="h3" size="copy">
-                Hours
-              </Heading>
-              <ul>
-                {JSON.parse(hours.value).map((hour, i) => (
-                  <Text as="li" key={i}>
-                    {hour}
-                  </Text>
-                ))}
-              </ul>
             </div>
           </div>
-        </div>
-      </section>
+        </PageHeader>
+      )}
+      <Section>
+        <Image
+          className="object-cover aspect-[3/2]"
+          data={featured_image.reference.image}
+        />
+      </Section>
     </Layout>
   );
 }
@@ -112,6 +135,9 @@ const QUERY = gql`
         }
       }
       title: field(key: "title") {
+        value
+      }
+      description: field(key: "description") {
         value
       }
       address: field(key: "address") {
