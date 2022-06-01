@@ -25,10 +25,12 @@ export type LoggerOptions = {
   showUnusedQueryProperties?: boolean;
 };
 
+export type LoggerConfig = Partial<Exclude<Logger, 'options'>> & LoggerOptions;
+
 export type RenderType = 'str' | 'rsc' | 'ssr' | 'api';
 
 type LoggerContext = Record<string, any>;
-export const defaultLogger = {
+const defaultLogger = {
   trace(context: LoggerContext, ...args: Array<any>) {
     // Re-enable following line to show trace debugging information
     // console.log(context.id, ...args);
@@ -63,14 +65,19 @@ export function getLoggerWithContext(context: any): Logger {
 
 export const log: Logger = getLoggerWithContext({});
 
-export function setLogger(newLogger: Logger) {
-  currentLogger = newLogger;
+export function setLogger(config: LoggerConfig) {
+  const options = {} as LoggerOptions;
+  currentLogger = {...defaultLogger, ...config, options: () => options};
+
+  for (const key of Object.keys(config) as (keyof LoggerOptions)[]) {
+    if (!(key in defaultLogger)) {
+      delete currentLogger[key as keyof Logger];
+      options[key] = config[key];
+    }
+  }
 }
 
-export function setLoggerOptions(options: LoggerOptions) {
-  setLogger({...currentLogger, options: () => options});
-}
-
+// For tests
 export function resetLogger() {
   currentLogger = defaultLogger;
 }

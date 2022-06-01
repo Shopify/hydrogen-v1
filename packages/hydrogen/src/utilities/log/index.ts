@@ -1,7 +1,6 @@
 export {
   log,
   setLogger,
-  setLoggerOptions,
   getLoggerWithContext,
   Logger,
   logServerResponse,
