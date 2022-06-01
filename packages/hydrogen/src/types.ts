@@ -10,29 +10,33 @@ import type {
 } from './storefront-api-types';
 import type {SessionStorageAdapter} from './foundation/session/session';
 
-type CommonOptions = {
-  App: any;
+export type AssembleHtmlParams = {
+  ssrHtml: string;
+  rscPayload?: string;
   routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
-  componentResponse: ServerComponentResponse;
+  template: string;
+};
+
+export type RunSsrParams = {
+  state: Record<string, any>;
+  rsc: {readable: ReadableStream; didError: () => Error | undefined};
+  routes?: ImportGlobEagerOutput;
+  request: ServerComponentRequest;
+  response: ServerComponentResponse;
   log: Logger;
   dev?: boolean;
-};
-
-export type RendererOptions = CommonOptions & {
   template: string;
   nonce?: string;
+  nodeResponse?: ServerResponse;
 };
 
-export type StreamerOptions = CommonOptions & {
-  response?: ServerResponse;
-  template: string;
-  nonce?: string;
-};
-
-export type HydratorOptions = CommonOptions & {
-  response?: ServerResponse;
-  isStreamable: boolean;
+export type RunRscParams = {
+  App: any;
+  state: Record<string, any>;
+  log: Logger;
+  request: ServerComponentRequest;
+  response: ServerComponentResponse;
 };
 
 export type ShopifyConfig = {
