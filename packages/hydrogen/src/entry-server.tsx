@@ -444,16 +444,6 @@ async function runSSR({
 
     return new Response(bufferedBody, responseOptions);
   } else if (nodeResponse) {
-    const setupResponse = () => {
-      /**
-       * TODO: Also add `Vary` headers for `accept-language` and any other keys
-       * we want to shard our full-page cache for all Hydrogen storefronts.
-       */
-      nodeResponse.setHeader('cache-control', response.cacheControlHeader);
-
-      writeHeadToNodeResponse(nodeResponse, response, log, didError());
-    };
-
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -461,20 +451,19 @@ async function runSSR({
       onShellReady() {
         log.trace('node ready to stream');
 
-        if (isRedirect(nodeResponse)) {
-          // Return redirects early without further rendering/streaming
-          setupResponse();
-          return nodeResponse.end();
-        }
-
-        if (!response.canStream()) return;
-
         /**
          * TODO: This assumes `response.cache()` has been called _before_ any
          * queries which might be caught behind Suspense. Clarify this or add
          * additional checks downstream?
          */
-        setupResponse();
+        writeHeadToNodeResponse(nodeResponse, response, log, didError());
+
+        if (isRedirect(nodeResponse)) {
+          // Return redirects early without further rendering/streaming
+          return nodeResponse.end();
+        }
+
+        if (!response.canStream()) return;
 
         startWritingToNodeResponse(nodeResponse, dev ? didError() : undefined);
 
@@ -497,8 +486,9 @@ async function runSSR({
           return;
         }
 
+        writeHeadToNodeResponse(nodeResponse, response, log, didError());
+
         if (isRedirect(nodeResponse)) {
-          setupResponse();
           // Redirects found after any async code
           return nodeResponse.end();
         }
@@ -510,13 +500,10 @@ async function runSSR({
 
         let ssrHtml = '';
         bufferedResponse.on('data', (chunk) => (ssrHtml += chunk.toString()));
-
         bufferedResponse.once('error', (error) => (ssrDidError = error));
-
         bufferedResponse.once('end', async () => {
           const rscPayload = await bufferedRscPromise;
 
-          setupResponse();
           const error = didError();
           startWritingToNodeResponse(nodeResponse, dev ? error : undefined);
 
@@ -653,6 +640,12 @@ function writeHeadToNodeResponse(
 ) {
   if (nodeResponse.headersSent) return;
   log.trace('writeHeadToNodeResponse');
+
+  /**
+   * TODO: Also add `Vary` headers for `accept-language` and any other keys
+   * we want to shard our full-page cache for all Hydrogen storefronts.
+   */
+  nodeResponse.setHeader('cache-control', componentResponse.cacheControlHeader);
 
   const {headers, status, statusText} = getResponseOptions(
     componentResponse,
