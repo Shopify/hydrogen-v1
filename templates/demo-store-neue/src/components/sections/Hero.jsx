@@ -18,17 +18,14 @@ export default function Hero({data = mockData, height, top}) {
           )}
         </div>
         <div className="flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
-          <Heading
-            as="h2"
-            width="narrow"
-            size="display"
-            className="max-w-prose-narrow"
-          >
+          <Heading as="h2" size="display" format className="max-w-md">
             {title.value}
           </Heading>
-          <Text format width="narrow" as="p" size="lead">
-            {byline.value}
-          </Text>
+          {byline && (
+            <Text format width="narrow" as="p" size="lead">
+              {byline.value}
+            </Text>
+          )}
           <Link to={url.value}>
             <Text size="lead">{cta.value}</Text>
           </Link>
@@ -47,6 +44,7 @@ function SpreadMedia({data}) {
         alt={data.alt || 'Marketing Banner Video'}
         className="block object-cover w-full h-full"
         data={data}
+        controls={false}
         muted
         loop
         playsInline

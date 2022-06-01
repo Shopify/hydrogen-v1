@@ -78,7 +78,7 @@ function SearchPage({query, children}) {
   return (
     <Layout>
       <PageHeader>
-        <Heading as="h1" size="lead">
+        <Heading as="h1" size="copy">
           Search
         </Heading>
         <form className="relative flex w-full text-heading">

@@ -29,7 +29,7 @@ export default function Header({title}) {
     <header role="banner" className={styles.container}>
       {/* TODO: Have dynamic component for Mobile vs. Desktop headers */}
       <div className="flex gap-12">
-        <Link className={`font-medium`} to="/">
+        <Link className={`font-bold`} to="/">
           {title}
         </Link>
         <nav className="flex gap-8">
@@ -75,7 +75,9 @@ function CartBadge({dark, quantity}) {
   return (
     <div
       className={`${
-        dark ? 'text-primary bg-contrast' : 'text-contrast bg-primary'
+        dark
+          ? 'text-primary bg-contrast dark:text-contrast dark:bg-primary'
+          : 'text-contrast bg-primary'
       } absolute bottom-1 right-1 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px`}
     >
       <span>{quantity}</span>
