@@ -5,7 +5,7 @@ import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server';
 
 describe('HydrogenRequest', () => {
   it('converts node request to Fetch API request', () => {
-    const request = createServerComponentRequest('/', {
+    const request = createHydrogenRequest('/', {
       'user-agent': 'Shopify Computer',
     });
     expect(request.headers.get('user-agent')).toBe('Shopify Computer');
@@ -13,12 +13,12 @@ describe('HydrogenRequest', () => {
 
   describe('Cookies', () => {
     it('creats a empty Map of cookies by default', () => {
-      const request = createServerComponentRequest('/');
+      const request = createHydrogenRequest('/');
       expect(request.cookies.size).toBe(0);
     });
 
     it('provides just a really nice interface for Cookies', () => {
-      const request = createServerComponentRequest('/', {
+      const request = createHydrogenRequest('/', {
         cookie: 'shopifyCartId=12345; favoriteFruit=apple;',
       });
 
@@ -31,7 +31,7 @@ describe('HydrogenRequest', () => {
       const productIds = ['productId1=', 'productId2='];
       const serializedProductIds = JSON.stringify(productIds);
 
-      const request = createServerComponentRequest('/', {
+      const request = createHydrogenRequest('/', {
         cookie: `shopifyCartId=12345; ${cookieKey}=${serializedProductIds}`,
       });
 
@@ -42,7 +42,7 @@ describe('HydrogenRequest', () => {
   });
 
   it('does not save preload queries when preload key is not present', () => {
-    const request = createServerComponentRequest(`https://localhost:3000/`);
+    const request = createHydrogenRequest(`https://localhost:3000/`);
     request.savePreloadQuery(createPreloadQueryEntry('test1'));
     request.savePreloadQueries();
 
@@ -51,7 +51,7 @@ describe('HydrogenRequest', () => {
   });
 
   it('saves preload queries', () => {
-    const request = createServerComponentRequest(`https://localhost:3000/`);
+    const request = createHydrogenRequest(`https://localhost:3000/`);
     request.savePreloadQuery(createPreloadQueryEntry('test1', true));
     request.savePreloadQueries();
 
@@ -70,11 +70,11 @@ describe('HydrogenRequest', () => {
   });
 
   it('get preload queries on sub-sequent load', () => {
-    const request = createServerComponentRequest(`https://localhost:3000/`);
+    const request = createHydrogenRequest(`https://localhost:3000/`);
     request.savePreloadQuery(createPreloadQueryEntry('test1', true));
     request.savePreloadQueries();
 
-    const request2 = createServerComponentRequest(`https://localhost:3000/`);
+    const request2 = createHydrogenRequest(`https://localhost:3000/`);
 
     const preloadQueries = request2.getPreloadQueries();
     expect(preloadQueries).toBeDefined();
@@ -91,25 +91,23 @@ describe('HydrogenRequest', () => {
   });
 
   it('populates buyer IP using Node socket by default', () => {
-    const request = createServerComponentRequest('/', undefined, '123.4.5.6');
+    const request = createHydrogenRequest('/', undefined, '123.4.5.6');
 
     expect(request.getBuyerIp()).toBe('123.4.5.6');
   });
 
   it('allows buyer IP header to be overridden', () => {
-    const request = createServerComponentRequest('/', {foo: '234.5.6.7'});
+    const request = createHydrogenRequest('/', {foo: '234.5.6.7'});
     request.ctx.buyerIpHeader = 'foo';
 
     expect(request.getBuyerIp()).toBe('234.5.6.7');
   });
 
   it('provides a normalized URL for both RSC and standard requests', () => {
-    const request = createServerComponentRequest(
-      'https://shopify.dev/foo?bar=baz'
-    );
+    const request = createHydrogenRequest('https://shopify.dev/foo?bar=baz');
     expect(request.normalizedUrl).toBe('https://shopify.dev/foo?bar=baz');
 
-    const rscRequest = createServerComponentRequest(
+    const rscRequest = createHydrogenRequest(
       `https://shopify.dev${RSC_PATHNAME}?state=${encodeURIComponent(
         JSON.stringify({pathname: '/foo', search: '?bar=baz'})
       )}`
@@ -118,7 +116,7 @@ describe('HydrogenRequest', () => {
   });
 });
 
-function createServerComponentRequest(
+function createHydrogenRequest(
   url: string,
   headers?: Record<string, string>,
   remoteAddress?: string
