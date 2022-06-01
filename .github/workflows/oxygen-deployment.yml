@@ -14,13 +14,12 @@ jobs:
     name: Deploy to Oxygen
     steps:
       - name: Check out the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'yarn'
 
       - name: Install the packages
         run: yarn install --frozen-lockfile --ignore-engines
