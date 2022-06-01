@@ -1,7 +1,8 @@
 import {useShopQuery, Image, Link, gql} from '@shopify/hydrogen';
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {PageHeader, Section} from '~/components/sections';
-import {Heading, Text, Button, Grid} from '~/components/elements';
+import {Grid} from '~/components/elements';
+import {LOCATION_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Locations() {
   const {data} = useShopQuery({
@@ -20,7 +21,7 @@ export default function Locations() {
       <Section>
         <Grid items={locations.length === 3 ? 3 : 2}>
           {locations.map((location, i) => (
-            <Card key={i} />
+            <Card data={location} key={i} />
           ))}
         </Grid>
       </Section>
@@ -28,55 +29,26 @@ export default function Locations() {
   );
 }
 
-function Card() {
-  const imageData = {
-    url:
-      'https://cdn.shopify.com/s/files/1/0551/4566/0472/products/hydrogen-morning.jpg?v=1636146509',
-    altText: 'The Hydrogen snowboard, color Morning',
-    width: 1200,
-    height: 1504,
-  };
+function Card({to, data}) {
   return (
-    <Link to={'/locations/toronto'} className="grid gap-4">
-      <div className="image-border">
-        <Image className="object-cover aspect-[3/2]" data={imageData} />
+    <Link to={to || `/locations/${data.handle}`} className="grid gap-4">
+      <div className="rounded image-border overflow-clip">
+        <Image
+          className="object-cover aspect-[3/2]"
+          data={data.featured_image.reference.image}
+        />
       </div>
-      <div>Location Name</div>
+      <div>{data.title.value}</div>
     </Link>
   );
 }
 
 const QUERY = gql`
+  ${LOCATION_CARD_FIELDS}
   query Locations($pageBy: Int) {
     stores: metaobjects(first: $pageBy, type: "stores") {
       nodes {
-        id
-        featured_image: field(key: "featured_image") {
-          reference {
-            ... on MediaImage {
-              image {
-                url
-                width
-                height
-              }
-            }
-          }
-        }
-        title: field(key: "title") {
-          value
-        }
-        address: field(key: "address") {
-          value
-        }
-        hours: field(key: "hours") {
-          value
-        }
-        email: field(key: "email") {
-          value
-        }
-        phone: field(key: "phone") {
-          value
-        }
+        ...LocationCardFields
       }
     }
   }

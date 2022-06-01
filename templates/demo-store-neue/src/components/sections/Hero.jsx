@@ -29,7 +29,7 @@ export default function Hero({data = mockData, height, top}) {
           <Text format width="narrow" as="p" size="lead">
             {byline.value}
           </Text>
-          <Link to={cta.url}>
+          <Link to={url.value}>
             <Text size="lead">{cta.value}</Text>
           </Link>
         </div>

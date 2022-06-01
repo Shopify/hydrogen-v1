@@ -18,7 +18,11 @@ import {
   Locations,
 } from '~/components/sections';
 
-import {MEDIA_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {
+  LOCATION_CARD_FIELDS,
+  MEDIA_FIELDS,
+  PRODUCT_CARD_FIELDS,
+} from '~/lib/fragments';
 
 export default function Homepage() {
   const {languageCode} = useShop();
@@ -52,11 +56,11 @@ export default function Homepage() {
       />
       {heroBanners?.nodes[1] && <Hero data={heroBanners.nodes[1]} />}
       <ProductSwimlane
-        products={featuredProducts.nodes}
+        data={featuredProducts.nodes}
         title="Featured Products"
         divider="bottom"
       />
-      <Locations />
+      <Locations data={locations.nodes} />
     </Layout>
   );
 }
@@ -95,6 +99,7 @@ const SEO_QUERY = gql`
 const QUERY = gql`
   ${MEDIA_FIELDS}
   ${PRODUCT_CARD_FIELDS}
+  ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
     heroBanners: metaobjects(type: "hero_banners", first: 2) {
@@ -142,6 +147,11 @@ const QUERY = gql`
     featuredProducts: products(first: 12) {
       nodes {
         ...ProductCardFields
+      }
+    }
+    locations: metaobjects(first: 3, type: "stores") {
+      nodes {
+        ...LocationCardFields
       }
     }
   }

@@ -1,58 +1,30 @@
 import {Link, Image} from '@shopify/hydrogen';
+import {Grid} from '~/components/elements';
 import Section from './Section';
-
-const mockLocations = [
-  {
-    id: '1',
-    url: '/locations/toronto',
-    image: 'https://picsum.photos/seed/31/912',
-    title: '31 Crosby Street, NYC',
-    subtitle: 'Open Now',
-  },
-  {
-    id: '2',
-    url: '/locations/toronto',
-    image: 'https://picsum.photos/seed/41/912',
-    title: '1-5-2 Aobadai, Meguro-Ku, Tokyo, Japan',
-    subtitle: 'Opens at 11am',
-  },
-  {
-    id: '3',
-    url: '/locations/toronto',
-    image: 'https://picsum.photos/seed/51/912',
-    title: 'Shop 9, Albert Coates Lane, Melbourne',
-    subtitle: 'Opens at 12am',
-  },
-];
 
 // TODO: This should be consolidated with FeaturedCollections into a more generic presentational component
 
-export default function Locations({
-  title = 'Locations',
-  locations = mockLocations,
-}) {
+export default function Locations({title = 'Locations', data}) {
   return (
     <Section heading={title}>
-      <ul className="grid gap-4 md:grid-cols-3">
-        {locations.map((location) => (
-          <li key={location.id}>
-            <Link to={location.url}>
-              <div className="grid gap-4">
-                <div className="">
-                  <Image
-                    className="rounded shadow-border overflow-clip inline-block aspect-square md:aspect-[4/3] object-fill"
-                    width={'100%'}
-                    height={336}
-                    alt={`Image of ${location.title}`}
-                    src={location.image}
-                  />
-                </div>
-                <h3>{location.title}</h3>
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <Grid items={data.length}>
+        {data && data.map((location, i) => <Card data={location} key={i} />)}
+      </Grid>
     </Section>
+  );
+}
+
+// TODO: Abstract this duplicate (also found in /routes/locations/index.server.jsx)
+function Card({to, data}) {
+  return (
+    <Link to={to || `/locations/${data.handle}`} className="grid gap-4">
+      <div className="rounded image-border overflow-clip">
+        <Image
+          className="object-cover aspect-[3/2]"
+          data={data.featured_image.reference.image}
+        />
+      </div>
+      <div>{data.title.value}</div>
+    </Link>
   );
 }

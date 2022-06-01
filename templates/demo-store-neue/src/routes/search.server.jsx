@@ -27,10 +27,22 @@ export default function Search({pageBy = 12, params}) {
   const query = searchParams.get('q');
 
   if (!query) {
+    const {data} = useShopQuery({
+      query: NO_RESULTS_QUERY,
+      variables: {
+        handle,
+        country: countryCode,
+        language: languageCode,
+        pageBy,
+        query,
+      },
+      preload: true,
+    });
+
     return (
       <SearchPage>
-        <FeaturedCollections />
-        <ProductSwimlane />
+        <FeaturedCollections data={data.featuredCollections.nodes} />
+        <ProductSwimlane data={data.featuredProducts.nodes} />
       </SearchPage>
     );
   }
@@ -66,7 +78,9 @@ function SearchPage({query, children}) {
   return (
     <Layout>
       <PageHeader>
-        <Heading>Search</Heading>
+        <Heading as="h1" size="lead">
+          Search
+        </Heading>
         <form className="relative flex w-full text-heading">
           <Input defaultValue={query} type="search" variant="search" name="q" />
           <button className="absolute right-0 py-2" type="submit">
@@ -97,6 +111,31 @@ const QUERY = gql`
         endCursor
         hasNextPage
         hasPreviousPage
+      }
+    }
+  }
+`;
+
+const NO_RESULTS_QUERY = gql`
+  ${PRODUCT_CARD_FIELDS}
+  query homepage($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
+      nodes {
+        id
+        title
+        handle
+        image {
+          altText
+          width
+          height
+          url
+        }
+      }
+    }
+    featuredProducts: products(first: 12) {
+      nodes {
+        ...ProductCardFields
       }
     }
   }
