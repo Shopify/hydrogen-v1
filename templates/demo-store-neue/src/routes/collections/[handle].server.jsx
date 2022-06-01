@@ -10,12 +10,15 @@ import {
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
 import {PageHeader, Section} from '~/components/sections';
-import {Button, Grid, Text} from '~/components/elements';
-import {ProductCard} from '~/components/blocks';
+import {Text} from '~/components/elements';
+import ProductGrid from '~/components/sections/ProductGrid.client';
 
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
-export default function Collection({pageBy = 12, params}) {
+// Setting this low to test functionality.
+const pageBy = 2;
+
+export default function Collection({params}) {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
@@ -27,7 +30,7 @@ export default function Collection({pageBy = 12, params}) {
       handle,
       country: countryCode,
       language: languageCode,
-      numProducts: pageBy,
+      pageBy,
     },
     preload: true,
   });
@@ -38,10 +41,10 @@ export default function Collection({pageBy = 12, params}) {
 
   const collection = data.collection;
   const products = flattenConnection(data.collection.products);
-  const hasNextPage = data.collection.products.pageInfo.hasNextPage;
 
   return (
     <Layout>
+      <Seo type="collection" data={collection} />
       <PageHeader heading={collection.title}>
         <div className="flex items-baseline justify-between w-full">
           <div>
@@ -60,15 +63,28 @@ export default function Collection({pageBy = 12, params}) {
         </div>
       </PageHeader>
       <Section>
-        <Grid>
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </Grid>
+        <ProductGrid data={data} />
       </Section>
-      <Section>{hasNextPage && <Button>Load More</Button>}</Section>
     </Layout>
   );
+}
+
+export async function api(request, {params, queryShop}) {
+  if (request.method !== 'POST') {
+    return new Response(405, {Allow: 'POST'});
+  }
+
+  const cursor = new URL(request.url).searchParams.get('cursor');
+  const {handle} = params;
+
+  return await queryShop({
+    query: QUERY,
+    variables: {
+      handle,
+      cursor,
+      pageBy,
+    },
+  });
 }
 
 const QUERY = gql`
@@ -77,7 +93,7 @@ const QUERY = gql`
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
-    $numProducts: Int!
+    $pageBy: Int!
     $cursor: String
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
@@ -95,7 +111,7 @@ const QUERY = gql`
         height
         altText
       }
-      products(first: $numProducts, after: $cursor) {
+      products(first: $pageBy, after: $cursor) {
         edges {
           cursor
           node {
@@ -104,6 +120,7 @@ const QUERY = gql`
         }
         pageInfo {
           hasNextPage
+          endCursor
         }
       }
     }
