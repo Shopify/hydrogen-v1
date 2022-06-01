@@ -4,7 +4,6 @@ import {
   logCacheControlHeaders,
   collectQueryCacheControlHeaders,
   resetLogger,
-  setLoggerOptions,
 } from '../index';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 import {ServerComponentResponse} from '../../../framework/Hydration/ServerComponentResponse.server';
@@ -26,10 +25,7 @@ describe('cache header log', () => {
       options: jest.fn(() => ({})),
     };
 
-    setLogger(mockLogger);
-    setLoggerOptions({
-      showCacheControlHeader: true,
-    });
+    setLogger({...mockLogger, showCacheControlHeader: true});
   });
 
   afterEach(() => {
