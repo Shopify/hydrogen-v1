@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../../framework/Hydration/HydrogenRequest.server';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ServerRequestProvider} from '../../ServerRequestProvider';
 import {useServerAnalytics} from '../hook';
@@ -10,9 +10,7 @@ function mountComponent(analyticsData?: any) {
     return <div>{JSON.stringify(result)}</div>;
   }
 
-  const request = new ServerComponentRequest(
-    new Request('https://examples.com')
-  );
+  const request = new HydrogenRequest(new Request('https://examples.com'));
 
   return mountWithProviders(
     <ServerRequestProvider request={request} isRSC={true}>

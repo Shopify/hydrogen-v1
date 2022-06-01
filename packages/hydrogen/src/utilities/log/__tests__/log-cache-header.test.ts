@@ -6,7 +6,7 @@ import {
   resetLogger,
   setLoggerOptions,
 } from '../index';
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../../framework/Hydration/HydrogenRequest.server';
 import {ServerComponentResponse} from '../../../framework/Hydration/ServerComponentResponse.server';
 
 let mockLogger: jest.Mocked<Logger>;
@@ -42,7 +42,7 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
@@ -66,7 +66,7 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
@@ -90,7 +90,7 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;
@@ -123,7 +123,7 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
     } as ServerComponentResponse;

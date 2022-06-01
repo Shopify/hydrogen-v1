@@ -1,6 +1,6 @@
 import type {ServerResponse} from 'http';
 import type {Logger} from './utilities/log/log';
-import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import type {HydrogenRequest} from './framework/Hydration/HydrogenRequest.server';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {
   Metafield,
@@ -14,7 +14,7 @@ export type AssembleHtmlParams = {
   ssrHtml: string;
   rscPayload?: string;
   routes?: ImportGlobEagerOutput;
-  request: ServerComponentRequest;
+  request: HydrogenRequest;
   template: string;
 };
 
@@ -22,7 +22,7 @@ export type RunSsrParams = {
   state: Record<string, any>;
   rsc: {readable: ReadableStream; didError: () => Error | undefined};
   routes?: ImportGlobEagerOutput;
-  request: ServerComponentRequest;
+  request: HydrogenRequest;
   response: ServerComponentResponse;
   log: Logger;
   dev?: boolean;
@@ -35,7 +35,7 @@ export type RunRscParams = {
   App: any;
   state: Record<string, any>;
   log: Logger;
-  request: ServerComponentRequest;
+  request: HydrogenRequest;
   response: ServerComponentResponse;
 };
 
@@ -68,7 +68,7 @@ export type ResolvedHydrogenRoutes = {
   basePath: string;
 };
 
-type ConfigFetcher<T> = (request: ServerComponentRequest) => T | Promise<T>;
+type ConfigFetcher<T> = (request: HydrogenRequest) => T | Promise<T>;
 
 export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
 
@@ -85,7 +85,7 @@ export type InlineHydrogenConfig = {
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   session?: (log: Logger) => SessionStorageAdapter;
-  enableStreaming?: (request: ServerComponentRequest) => boolean;
+  enableStreaming?: (request: HydrogenRequest) => boolean;
 };
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {

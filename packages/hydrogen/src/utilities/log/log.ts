@@ -1,4 +1,4 @@
-import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../framework/Hydration/HydrogenRequest.server';
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 import {parseUrl} from './utils';
@@ -90,7 +90,7 @@ const SERVER_RESPONSE_MAP: Record<string, string> = {
 
 export function logServerResponse(
   type: RenderType,
-  request: ServerComponentRequest,
+  request: HydrogenRequest,
   responseStatus: number
 ) {
   const log = getLoggerWithContext(request);

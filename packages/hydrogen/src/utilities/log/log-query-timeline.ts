@@ -1,4 +1,4 @@
-import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../framework/Hydration/HydrogenRequest.server';
 import {QueryKey} from '../../types';
 import {hashKey} from '../hash';
 import {findQueryName, parseUrl} from './utils';
@@ -26,7 +26,7 @@ const TIMING_MAPPING = {
 };
 
 export function collectQueryTimings(
-  request: ServerComponentRequest,
+  request: HydrogenRequest,
   queryKey: QueryKey,
   timingType: TimingType,
   duration?: number
@@ -39,10 +39,7 @@ export function collectQueryTimings(
   });
 }
 
-export function logQueryTimings(
-  type: RenderType,
-  request: ServerComponentRequest
-) {
+export function logQueryTimings(type: RenderType, request: HydrogenRequest) {
   const log = getLoggerWithContext(request);
   if (!log.options().showQueryTiming) {
     return;

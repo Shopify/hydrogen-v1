@@ -2,7 +2,7 @@ import React, {Suspense} from 'react';
 import {useShopQuery} from '../hooks';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ServerRequestProvider} from '../../../foundation/ServerRequestProvider';
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../../framework/Hydration/HydrogenRequest.server';
 import {setCache, setContext} from '../../../framework/runtime';
 import {InMemoryCache} from '../../../framework/cache/in-memory';
 
@@ -19,9 +19,7 @@ function mountComponent() {
     return <div>{JSON.stringify(result)}</div>;
   }
 
-  const request = new ServerComponentRequest(
-    new Request('https://example.com')
-  );
+  const request = new HydrogenRequest(new Request('https://example.com'));
 
   return mountWithProviders(
     <ServerRequestProvider request={request} isRSC={true}>

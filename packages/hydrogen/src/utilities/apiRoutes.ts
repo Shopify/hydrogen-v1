@@ -5,7 +5,7 @@ import {
 } from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
-import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
+import type {HydrogenRequest} from '../framework/Hydration/HydrogenRequest.server';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {
@@ -147,7 +147,7 @@ interface QueryShopArgs {
 
 function queryShopBuilder(
   shopifyConfigGetter: InlineHydrogenConfig['shopify'],
-  request: ServerComponentRequest
+  request: HydrogenRequest
 ) {
   return async function queryShop<T>({
     query,
@@ -189,7 +189,7 @@ function queryShopBuilder(
 }
 
 export async function renderApiRoute(
-  request: ServerComponentRequest,
+  request: HydrogenRequest,
   route: ApiRouteMatch,
   shopifyConfig: InlineHydrogenConfig['shopify'],
   session?: SessionStorageAdapter
@@ -245,7 +245,7 @@ export async function renderApiRoute(
 
   logServerResponse(
     'api',
-    request as ServerComponentRequest,
+    request as HydrogenRequest,
     (response as Response).status ?? 200
   );
 

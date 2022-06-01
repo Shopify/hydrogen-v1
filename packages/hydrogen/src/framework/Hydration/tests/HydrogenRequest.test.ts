@@ -1,12 +1,9 @@
 import {IncomingMessage} from 'http';
 import {RSC_PATHNAME} from '../../../constants';
 import {PreloadOptions} from '../../../types';
-import {
-  PreloadQueryEntry,
-  ServerComponentRequest,
-} from '../ServerComponentRequest.server';
+import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server';
 
-describe('ServerComponentRequest', () => {
+describe('HydrogenRequest', () => {
   it('converts node request to Fetch API request', () => {
     const request = createServerComponentRequest('/', {
       'user-agent': 'Shopify Computer',
@@ -125,7 +122,7 @@ function createServerComponentRequest(
   url: string,
   headers?: Record<string, string>,
   remoteAddress?: string
-): ServerComponentRequest {
+): HydrogenRequest {
   // @ts-ignore
   const nodeRequest = new IncomingMessage();
   nodeRequest.method = 'GET';
@@ -134,7 +131,7 @@ function createServerComponentRequest(
   // @ts-ignore
   nodeRequest.socket = {remoteAddress: remoteAddress ?? '127.0.0.1'};
 
-  return new ServerComponentRequest(nodeRequest);
+  return new HydrogenRequest(nodeRequest);
 }
 
 function createPreloadQueryEntry(

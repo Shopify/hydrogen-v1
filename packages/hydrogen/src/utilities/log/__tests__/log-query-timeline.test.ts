@@ -1,4 +1,4 @@
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../../framework/Hydration/HydrogenRequest.server';
 import {Logger, setLogger, resetLogger, setLoggerOptions} from '../index';
 import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
 
@@ -53,7 +53,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'rendered');
@@ -77,7 +77,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'requested');
@@ -119,7 +119,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
 
@@ -144,7 +144,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'resolved', 120);

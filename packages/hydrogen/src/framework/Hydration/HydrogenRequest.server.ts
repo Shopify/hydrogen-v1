@@ -46,7 +46,7 @@ const PRELOAD_ALL = '*';
  * - Adds a `cookies` map for easy access
  * - Adds a static constructor to convert a Node.js `IncomingMessage` to a Request.
  */
-export class ServerComponentRequest extends Request {
+export class HydrogenRequest extends Request {
   public cookies: Map<string, string>;
   public id: string;
   public time: number;

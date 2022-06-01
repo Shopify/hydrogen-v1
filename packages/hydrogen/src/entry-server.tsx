@@ -16,7 +16,7 @@ import type {
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from './framework/Hydration/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
@@ -89,7 +89,7 @@ export const renderHydrogen = (App: any) => {
       streamableResponse: nodeResponse,
     } = options;
 
-    const request = new ServerComponentRequest(rawRequest);
+    const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
 
     const {default: inlineHydrogenConfig} = await import(
@@ -575,7 +575,7 @@ function PreloadQueries({
   request,
   children,
 }: {
-  request: ServerComponentRequest;
+  request: HydrogenRequest;
   children: React.ReactNode;
 }) {
   const preloadQueries = request.getPreloadQueries();
@@ -679,7 +679,7 @@ function flightContainer(chunk: string) {
 function postRequestTasks(
   type: RenderType,
   status: number,
-  request: ServerComponentRequest,
+  request: HydrogenRequest,
   response: ServerComponentResponse
 ) {
   logServerResponse(type, request, status);
