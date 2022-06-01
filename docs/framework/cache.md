@@ -161,7 +161,7 @@ To enable logging for the cache API status, set `logger.showCacheApiStatus` to `
 [Cache] MISS   query Localization
 ```
 
-To enable logging for cache control headers, set `logger.showCacheControlHeader` to `true` in [Hydrogen config](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components). A cache control header report displays for each page request. The report includes the associated queries
+To enable logging for cache control headers, set `logger.showCacheControlHeader` to `true` in [Hydrogen config](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger). A cache control header report displays for each page request. The report includes the associated queries
 that built the request and the cache control headers:
 
 ```sh
