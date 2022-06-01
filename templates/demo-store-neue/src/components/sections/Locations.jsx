@@ -18,7 +18,7 @@ export default function Locations({title = 'Locations', data}) {
 function Card({to, data}) {
   return (
     <Link to={to || `/locations/${data.handle}`} className="grid gap-4">
-      <div className="rounded image-border overflow-clip">
+      <div className="card-image">
         <Image
           alt={
             data.featured_image.reference.image.altText ||

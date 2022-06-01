@@ -11,7 +11,7 @@
   --font-size-fine: 0.75rem; /* text-xs */
   --font-size-copy: 0.875rem; /* text-sm */
   --font-size-lead: 1rem; /* text-base */
-  --font-size-heading: 1.25rem; /* text-2xl */
+  --font-size-heading: 2rem; /* text-2xl */
   --font-size-display: 3rem; /* text-4xl */
 
   @media (min-width: 32em) {
@@ -89,8 +89,8 @@
     }
   }
 
-  .image-border {
-    @apply relative;
+  .card-image {
+    @apply relative rounded overflow-clip;
     &::before {
       content: ' ';
       @apply absolute block top-0 left-0 w-full h-full shadow-border rounded;

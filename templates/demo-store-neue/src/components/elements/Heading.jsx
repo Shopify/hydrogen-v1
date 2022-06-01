@@ -27,7 +27,7 @@ export default function Heading({
   const styles = clsx(
     missingClass(className, 'whitespace-') && 'whitespace-pre-wrap',
     missingClass(className, 'max-w-') && widths[width],
-    sizes[size],
+    missingClass(className, 'font-') && sizes[size],
     className,
   );
 

@@ -44,7 +44,7 @@ function Card({data}) {
   return (
     <Link to={`/collections/${data.handle}`} className="grid gap-4">
       {data?.image && (
-        <div className="image-border">
+        <div className="card-image">
           <Image
             className="object-cover w-full aspect-[3/2]"
             data={data.image}

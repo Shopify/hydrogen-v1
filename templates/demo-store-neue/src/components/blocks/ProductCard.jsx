@@ -28,7 +28,7 @@ export default function ProductCard({product, label, className}) {
   return (
     <Link to={`/products/${product.handle}`}>
       <div className={styles}>
-        <div className="relative rounded overflow-clip image-border">
+        <div className="card-image">
           <Text
             as="label"
             size="fine"

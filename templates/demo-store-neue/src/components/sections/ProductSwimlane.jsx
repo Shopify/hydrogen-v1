@@ -11,16 +11,19 @@ export default function ProductSwimlane({
   count = 12,
   ...passthroughProps
 }) {
-  const products = (data) => {
+  const products = (data, count) => {
+    // If the data is already provided, there's no need to query it, so we'll just return the data
     if (typeof data === 'array') {
       return data;
     }
 
+    // If the data provided is a productId, we will query the productRecommendations API.
+    // To make sure we have enough products for the swimlane, we'll combine the results with our top selling products.
     if (typeof data === 'string') {
       const {data: products} = useShopQuery({
         query: RECOMMENDED_PRODUCTS,
         variables: {
-          count: 12,
+          count: count,
           productId: data,
         },
       });
@@ -32,15 +35,22 @@ export default function ProductSwimlane({
             array.findIndex((value2) => value2.id === value.id) === index,
         );
 
+      const originalProduct = mergedProducts
+        .map((item) => item.id)
+        .indexOf(data);
+
+      mergedProducts.splice(originalProduct, 1);
+
       return mergedProducts;
     }
 
+    // If no data is provided, we'll go and query the top products
     const {
       data: {products},
     } = useShopQuery({
       query: TOP_PRODUCTS,
       variables: {
-        count: 12,
+        count: count,
       },
     });
 
@@ -50,7 +60,7 @@ export default function ProductSwimlane({
   return (
     <Section heading={title} padding="y" {...passthroughProps}>
       <div className="grid grid-flow-col gap-6 px-4 pb-4 overflow-x-scroll md:pb-8 snap-x scroll-px-4 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
-        {products(data).map((product) => (
+        {products(data, count).map((product) => (
           <ProductCard
             product={product}
             key={product.id}
@@ -64,11 +74,11 @@ export default function ProductSwimlane({
 
 const RECOMMENDED_PRODUCTS = gql`
   ${PRODUCT_CARD_FIELDS}
-  query productRecommendations($productId: ID!) {
+  query productRecommendations($productId: ID!, $count: Int) {
     recommended: productRecommendations(productId: $productId) {
       ...ProductCardFields
     }
-    additional: products(first: 12, sortKey: BEST_SELLING) {
+    additional: products(first: $count, sortKey: BEST_SELLING) {
       nodes {
         ...ProductCardFields
       }
