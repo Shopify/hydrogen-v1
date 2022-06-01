@@ -116,24 +116,6 @@ export default function MyProductModel() {
 
 The `ModelViewer` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Model3D object](https://shopify.dev/api/storefront/latest/objects/model3d):
-
-```graphql
-{
-  id
-  alt
-  mediaContentType
-  previewImage {
-    url
-  }
-  sources {
-    url
-  }
-}
-```
-
 ## Related components
 
 - [`MediaFile`](https://shopify.dev/api/hydrogen/components/primitive/mediafile)

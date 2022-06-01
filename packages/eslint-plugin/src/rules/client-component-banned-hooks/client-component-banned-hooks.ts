@@ -15,7 +15,6 @@ export const clientComponentBannedHooks = createRule({
       description: `Prevent using ${new (Intl as any).ListFormat('en').format(
         BANNED_HOOKS
       )} in client components`,
-      category: 'Possible Errors',
       recommended: 'error',
     },
     messages: {

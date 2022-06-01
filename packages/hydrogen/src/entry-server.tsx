@@ -11,7 +11,8 @@ import type {
   AssembleHtmlParams,
   RunSsrParams,
   RunRscParams,
-  HydrogenConfig,
+  ResolvedHydrogenConfig,
+  ResolvedHydrogenRoutes,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
@@ -77,7 +78,7 @@ export interface RequestHandler {
   >;
 }
 
-export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
+export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {
       dev,
@@ -92,12 +93,22 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     const request = new ServerComponentRequest(rawRequest);
     const url = new URL(request.url);
 
-    if (!hydrogenConfig) {
+    const {default: inlineHydrogenConfig} = await import(
       // @ts-ignore
       // eslint-disable-next-line node/no-missing-import
-      const configFile = await import('virtual:hydrogen-config');
-      hydrogenConfig = configFile.default as HydrogenConfig;
-    }
+      'virtual__hydrogen.config.ts'
+    );
+
+    const {default: hydrogenRoutes} = await import(
+      // @ts-ignore
+      // eslint-disable-next-line node/no-missing-import
+      'virtual__hydrogen-routes.server.jsx'
+    );
+
+    const hydrogenConfig: ResolvedHydrogenConfig = {
+      ...inlineHydrogenConfig,
+      routes: hydrogenRoutes,
+    };
 
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
@@ -134,7 +145,7 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
 
     const isReactHydrationRequest = url.pathname === RSC_PATHNAME;
 
-    if (!isReactHydrationRequest && hydrogenConfig.routes) {
+    if (!isReactHydrationRequest) {
       const apiRoute = getApiRoute(url, hydrogenConfig.routes);
 
       // The API Route might have a default export, making it also a server component
@@ -213,8 +224,8 @@ export const renderHydrogen = (App: any, hydrogenConfig?: HydrogenConfig) => {
     )) as RequestHandler;
 };
 
-function getApiRoute(url: URL, routes: NonNullable<HydrogenConfig['routes']>) {
-  const apiRoutes = getApiRoutes(routes!);
+function getApiRoute(url: URL, routes: ResolvedHydrogenRoutes) {
+  const apiRoutes = getApiRoutes(routes);
   return getApiRouteFromURL(url, apiRoutes);
 }
 
