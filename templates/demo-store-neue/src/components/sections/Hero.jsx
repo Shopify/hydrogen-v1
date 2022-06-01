@@ -3,14 +3,7 @@ import {Heading, Text} from '../elements';
 import {hero as mockData} from '~/lib/placeholders';
 
 export default function Hero({data = mockData, height, top}) {
-  const {title, byline, cta, url, spread, text_color, spread_secondary} = data;
-
-  const color = text_color.value.toLowerCase();
-
-  const colors = {
-    contrast: 'text-contrast dark:text-primary',
-    primary: 'text-primary dark:text-contrast',
-  };
+  const {title, byline, cta, url, spread, spread_secondary, text_color} = data;
 
   return (
     <Link to={url.value}>
@@ -25,9 +18,7 @@ export default function Hero({data = mockData, height, top}) {
             <SpreadMedia data={spread_secondary.reference} />
           )}
         </div>
-        <div
-          className={`${colors[color]} flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t dark:from-contrast/60 from-primary/60`}
-        >
+        <div className="flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
           <Heading as="h2" size="display" format className="max-w-md">
             {title.value}
           </Heading>
