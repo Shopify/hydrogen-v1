@@ -152,25 +152,7 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-To enable logging for the cache API status, call `setLoggerOptions` and set `showCacheApiStatus` to `true`:
-
-{% codeblock file, filename: '/src/App.server.jsx' %}
-
-```js
-import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {setLoggerOptions} from '@shopify/hydrogen';
-
-setLoggerOptions({showCacheApiStatus: true});
-
-function App() {
-  /* ... */
-}
-// ...
-```
-
-{% endcodeblock %}
-
-The status of the cache updates on each query:
+To enable logging for the cache API status, set `logger.showCacheApiStatus` to `true` in [Hydrogen config](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger). The status of the cache updates on each query:
 
 ```sh
 [Cache] MISS   query shopInfo
@@ -179,25 +161,7 @@ The status of the cache updates on each query:
 [Cache] MISS   query Localization
 ```
 
-To enable logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader` to `true`:
-
-{% codeblock file, filename: '/src/App.server.jsx' %}
-
-```js
-import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {setLoggerOptions} from '@shopify/hydrogen';
-
-setLoggerOptions({showCacheControlHeader: true});
-
-function App() {
-  /* ... */
-}
-// ...
-```
-
-{% endcodeblock %}
-
-A cache control header report displays for each page request. The report includes the associated queries
+To enable logging for cache control headers, set `logger.showCacheControlHeader` to `true` in [Hydrogen config](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components). A cache control header report displays for each page request. The report includes the associated queries
 that built the request and the cache control headers:
 
 ```sh
