@@ -8,8 +8,9 @@ export default function Hero({data = mockData, height, top}) {
   return (
     <Link to={url.value}>
       <section
-        className={`relative justify-end flex flex-col w-full ${top &&
-          '-mt-nav'} ${height === 'full' ? 'h-screen' : 'h-[50rem]'}`}
+        className={`relative justify-end flex flex-col w-full ${
+          top && '-mt-nav'
+        } ${height === 'full' ? 'h-screen' : 'h-[50rem]'}`}
       >
         <div className="absolute inset-0 grid flex-grow grid-flow-col pointer-events-none auto-cols-fr -z-10 content-stretch overflow-clip">
           {spread?.reference && <SpreadMedia data={spread.reference} />}

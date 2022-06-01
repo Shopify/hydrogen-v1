@@ -12,8 +12,9 @@ export default function Grid({
   const Component = as;
 
   const layouts = {
-    default: `grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${items >= 4 &&
-      'lg:grid-cols-4'}`,
+    default: `grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${
+      items >= 4 && 'lg:grid-cols-4'
+    }`,
     auto: 'auto-cols-auto',
   };
 

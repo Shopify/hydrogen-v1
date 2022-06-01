@@ -15,8 +15,7 @@ export const hero = {
   spread: {
     reference: {
       image: {
-        url:
-          'https://cdn.shopify.com/s/files/1/0551/4566/0472/files/spread-01.jpg?v=1654019522',
+        url: 'https://cdn.shopify.com/s/files/1/0551/4566/0472/files/spread-01.jpg?v=1654019522',
         width: 1512,
         height: 1968,
       },
@@ -25,8 +24,7 @@ export const hero = {
   spread_secondary: {
     reference: {
       image: {
-        url:
-          'https://cdn.shopify.com/s/files/1/0551/4566/0472/files/spread-02.jpg?v=1654019521',
+        url: 'https://cdn.shopify.com/s/files/1/0551/4566/0472/files/spread-02.jpg?v=1654019521',
         width: 1512,
         height: 1968,
       },
@@ -70,8 +68,7 @@ export const product = {
       {
         id: 'gid://shopify/ProductVariant/41007289630776',
         image: {
-          url:
-            'https://cdn.shopify.com/s/files/1/0551/4566/0472/products/hydrogen-morning.jpg?v=1636146509',
+          url: 'https://cdn.shopify.com/s/files/1/0551/4566/0472/products/hydrogen-morning.jpg?v=1636146509',
           altText: 'The Hydrogen snowboard, color Morning',
           width: 1200,
           height: 1504,
@@ -95,8 +92,7 @@ export const location = {
     featured_image: {
       reference: {
         image: {
-          url:
-            'https://cdn.shopify.com/s/files/1/0551/4566/0472/files/kotn-toronto.jpg?v=1653965858',
+          url: 'https://cdn.shopify.com/s/files/1/0551/4566/0472/files/kotn-toronto.jpg?v=1653965858',
           width: 4400,
           height: 2927,
         },

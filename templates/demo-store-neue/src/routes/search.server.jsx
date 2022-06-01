@@ -119,7 +119,7 @@ const QUERY = gql`
 const NO_RESULTS_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
+  @inContext(country: $country, language: $language) {
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
       nodes {
         id

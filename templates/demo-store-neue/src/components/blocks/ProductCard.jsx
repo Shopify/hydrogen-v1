@@ -62,9 +62,8 @@ export default function ProductCard({product = mockProduct, label, className}) {
 
 // <Money className="opacity-50 strike" data={compareAtPrice} />
 function CompareAtPrice({data, className}) {
-  const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} = useMoney(
-    data,
-  );
+  const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} =
+    useMoney(data);
 
   const styles = clsx('strike', className);
 
