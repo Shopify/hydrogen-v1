@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {HydrogenRequest} from '../../../framework/Hydration/HydrogenRequest.server';
+import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ServerRequestProvider} from '../../ServerRequestProvider';
 import {Analytics} from '../Analytics.server';

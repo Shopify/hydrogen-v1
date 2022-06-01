@@ -1,4 +1,4 @@
-import {HydrogenRequest} from '../../framework/Hydration/HydrogenRequest.server';
+import {HydrogenRequest} from '../../framework/HydrogenRequest.server';
 import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
 import {QueryKey} from '../../types';
 import {hashKey} from '../hash';

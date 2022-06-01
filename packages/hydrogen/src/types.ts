@@ -1,6 +1,6 @@
 import type {ServerResponse} from 'http';
 import type {Logger} from './utilities/log/log';
-import type {HydrogenRequest} from './framework/Hydration/HydrogenRequest.server';
+import type {HydrogenRequest} from './framework/HydrogenRequest.server';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {
   Metafield,

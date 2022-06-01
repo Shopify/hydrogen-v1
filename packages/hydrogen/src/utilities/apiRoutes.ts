@@ -5,7 +5,7 @@ import {
 } from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
-import type {HydrogenRequest} from '../framework/Hydration/HydrogenRequest.server';
+import type {HydrogenRequest} from '../framework/HydrogenRequest.server';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {

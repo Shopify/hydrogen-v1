@@ -16,7 +16,7 @@ import type {
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import {HydrogenRequest} from './framework/Hydration/HydrogenRequest.server';
+import {HydrogenRequest} from './framework/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,

@@ -6,7 +6,7 @@
  */
 
 import {useContext, Context} from 'react';
-import type {HydrogenRequest} from '../framework/Hydration/HydrogenRequest.server';
+import type {HydrogenRequest} from '../framework/HydrogenRequest.server';
 //@SSR import {useServerRequest} from './ServerRequestProvider';
 
 // This is replaced by Vite to import.meta.env.SSR

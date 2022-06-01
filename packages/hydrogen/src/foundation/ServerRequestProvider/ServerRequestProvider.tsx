@@ -4,7 +4,7 @@ import {hashKey} from '../../utilities/hash';
 import type {
   PreloadQueriesByURL,
   HydrogenRequest,
-} from '../../framework/Hydration/HydrogenRequest.server';
+} from '../../framework/HydrogenRequest.server';
 import type {QueryKey} from '../../types';
 import {collectQueryTimings} from '../../utilities/log';
 

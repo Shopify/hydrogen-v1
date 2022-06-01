@@ -2,7 +2,7 @@ import React, {Suspense} from 'react';
 import {useShopQuery} from '../hooks';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ServerRequestProvider} from '../../../foundation/ServerRequestProvider';
-import {HydrogenRequest} from '../../../framework/Hydration/HydrogenRequest.server';
+import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
 import {setCache, setContext} from '../../../framework/runtime';
 import {InMemoryCache} from '../../../framework/cache/in-memory';
 

@@ -1,4 +1,4 @@
-import {HydrogenRequest} from '../../../framework/Hydration/HydrogenRequest.server';
+import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
 import {Logger, setLogger, resetLogger, setLoggerOptions} from '../index';
 import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
 

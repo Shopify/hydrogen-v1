@@ -6,7 +6,7 @@ import {
   getLoggerWithContext,
   resetLogger,
 } from '../log';
-import {HydrogenRequest} from '../../../framework/Hydration/HydrogenRequest.server';
+import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
 import {setLoggerOptions} from '..';
 
 let mockLogger: jest.Mocked<Logger>;

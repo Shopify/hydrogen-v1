@@ -1,4 +1,4 @@
-import {HydrogenRequest} from '../../framework/Hydration/HydrogenRequest.server';
+import {HydrogenRequest} from '../../framework/HydrogenRequest.server';
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 import {parseUrl} from './utils';
