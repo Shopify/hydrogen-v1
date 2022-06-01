@@ -27,7 +27,11 @@ setLogger({
   options: () => ({}),
 });
 
-export default renderHydrogen(() => {
+export default renderHydrogen(({request, response}) => {
+  if (request.headers.get('user-agent') === 'custom bot') {
+    response.doNotStream();
+  }
+
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider>

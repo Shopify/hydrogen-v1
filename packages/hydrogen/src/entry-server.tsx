@@ -175,9 +175,6 @@ export const renderHydrogen = (App: any) => {
     }
 
     const isStreamable =
-      (hydrogenConfig.enableStreaming
-        ? hydrogenConfig.enableStreaming(request)
-        : true) &&
       !isBotUA(url, request.headers.get('user-agent')) &&
       (!!nodeResponse || (await isStreamingSupported()));
 
