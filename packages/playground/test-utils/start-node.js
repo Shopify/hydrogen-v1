@@ -6,10 +6,9 @@ const {loadProdEnv} = require('./load-prod-env');
 function createServerWithEnv({cwd = process.cwd()} = {}) {
   const {createServer} = require(path.join(cwd, 'dist', 'node'));
 
-  return loadProdEnv(cwd).then((env) => {
-    Object.assign(process.env, env);
-    return createServer();
-  });
+  const env = loadProdEnv(cwd);
+  Object.assign(process.env, env);
+  return createServer();
 }
 
 if (require.main === module) {

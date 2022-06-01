@@ -23,9 +23,6 @@ type CreateServerOptions = {
 };
 
 export async function createServer({cache}: CreateServerOptions = {}) {
-  // @ts-ignore
-  globalThis.Oxygen = {env: process.env};
-
   const app = connect();
 
   app.use(compression() as NextHandleFunction);

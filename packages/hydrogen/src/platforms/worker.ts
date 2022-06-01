@@ -8,23 +8,14 @@ import indexTemplate from '__INDEX_TEMPLATE__?raw';
 
 const handleRequest = entrypoint as RequestHandler;
 
-declare global {
-  // eslint-disable-next-line no-var
-  var globalThis: {
-    Oxygen: {env: any};
-    [key: string]: any;
-  };
-}
-
 export default {
   async fetch(
     request: Request,
     env: unknown,
     context: {waitUntil: (promise: Promise<any>) => void}
   ) {
-    if (!globalThis.Oxygen) {
-      globalThis.Oxygen = {env};
-    }
+    // @ts-ignore NodeJS.ProcessEnv is not relevant here, because we're in a Worker.
+    globalThis.process = {env};
 
     try {
       return (await handleRequest(request, {

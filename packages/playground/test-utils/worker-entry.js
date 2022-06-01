@@ -1,8 +1,16 @@
 import {getAssetFromKV} from '@cloudflare/kv-asset-handler';
 
 export default function setup({handleRequest, indexTemplate}) {
-  // Mock Oxygen global
-  globalThis.Oxygen = {env: globalThis};
+  // TODO: Switch to module syntax and grab variables that way instead.
+  const varAllowList = ['PRIVATE_VARIABLE', 'HYDROGEN_ENABLE_WORKER_STREAMING'];
+
+  globalThis.process = {env: {}};
+
+  varAllowList.forEach((key) => {
+    if (globalThis[key]) {
+      process.env[key] = globalThis[key];
+    }
+  });
 
   function isAsset(url) {
     return /\.(png|jpe?g|gif|css|js|svg|ico|map)$/i.test(url.pathname);

@@ -51,13 +51,13 @@ export default Component() {
 
 ### Private variables
 
-In Hydrogen, any variable from `.env` files that isn't prefixed with `PUBLIC_` is treated as a server runtime variable in non-production environments. These variables aren't exposed to the browser and can only be accessed from server components using the global `Oxygen.env` object:
+In Hydrogen, any variable from `.env` files that isn't prefixed with `PUBLIC_` is treated as a server runtime variable in non-production environments. These variables aren't exposed to the browser and can only be accessed from server components using the global `process.env` object:
 
 {% codeblock file, filename: 'Page.server.jsx' %}
 
-```
+``` js
 export default Page() {
-  const token = Oxygen.env.MY_SECRET_API_TOKEN
+  const token = process.env.MY_SECRET_API_TOKEN
 
   // ...
 }
