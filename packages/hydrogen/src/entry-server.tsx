@@ -37,7 +37,6 @@ import {
   ssrRenderToReadableStream,
   rscRenderToReadableStream,
   createFromReadableStream,
-  isStreamingSupported,
   bufferReadableStream,
 } from './streaming.server';
 import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
@@ -177,9 +176,7 @@ export const renderHydrogen = (App: any) => {
     const isStreamable =
       (hydrogenConfig.enableStreaming
         ? hydrogenConfig.enableStreaming(request)
-        : true) &&
-      !isBotUA(url, request.headers.get('user-agent')) &&
-      (!!nodeResponse || (await isStreamingSupported()));
+        : true) && !isBotUA(url, request.headers.get('user-agent'));
 
     if (!isStreamable) response.doNotStream();
 
