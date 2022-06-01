@@ -29,22 +29,21 @@ export type LoggerConfig = Partial<Exclude<Logger, 'options'>> & LoggerOptions;
 
 export type RenderType = 'str' | 'rsc' | 'ssr' | 'api';
 
-type LoggerContext = Record<string, any>;
-const defaultLogger = {
-  trace(context: LoggerContext, ...args: Array<any>) {
+const defaultLogger: Logger = {
+  trace(context, ...args) {
     // Re-enable following line to show trace debugging information
     // console.log(context.id, ...args);
   },
-  debug(context: LoggerContext, ...args: Array<any>) {
+  debug(context, ...args) {
     console.log(...args);
   },
-  warn(context: LoggerContext, ...args: Array<any>) {
+  warn(context, ...args) {
     console.warn(yellow('WARN: '), ...args);
   },
-  error(context: LoggerContext, ...args: Array<any>) {
+  error(context, ...args) {
     console.error(red('ERROR: '), ...args);
   },
-  fatal(context: LoggerContext, ...args: Array<any>) {
+  fatal(context, ...args) {
     console.error(red('FATAL: '), ...args);
   },
   options: () => ({} as LoggerOptions),
