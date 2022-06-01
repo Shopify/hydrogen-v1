@@ -11,8 +11,8 @@ import type {
 import type {SessionStorageAdapter} from './foundation/session/session';
 
 export type AssembleHtmlParams = {
-  ssr: string;
-  rsc?: string;
+  ssrHtml: string;
+  rscPayload?: string;
   routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
   template: string;
@@ -23,7 +23,7 @@ export type RunSsrParams = {
   rsc: {readable: ReadableStream; didError: () => Error | undefined};
   routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
-  componentResponse: ServerComponentResponse;
+  response: ServerComponentResponse;
   log: Logger;
   dev?: boolean;
   template: string;
@@ -36,7 +36,7 @@ export type RunRscParams = {
   state: Record<string, any>;
   log: Logger;
   request: ServerComponentRequest;
-  componentResponse: ServerComponentResponse;
+  response: ServerComponentResponse;
 };
 
 export type ShopifyConfig = {

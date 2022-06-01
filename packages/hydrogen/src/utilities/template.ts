@@ -24,9 +24,5 @@ export function stripScriptsFromTemplate(template: string) {
     template = template.replace(match[0], '');
   }
 
-  return {
-    noScriptTemplate: template,
-    bootstrapScripts,
-    bootstrapModules,
-  };
+  return {noScriptTemplate: template, bootstrapScripts, bootstrapModules};
 }
