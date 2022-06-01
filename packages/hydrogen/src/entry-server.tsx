@@ -239,10 +239,9 @@ function assembleHtml({
   if (rscPayload) {
     html = html.replace(
       '</body>',
-      () =>
-        (rscPayload.startsWith('<')
-          ? rscPayload
-          : flightContainer(rscPayload as string)) + '</body>'
+      // This must be a function to avoid replacing
+      // special patterns like `$1` in `String.replace`.
+      () => flightContainer(rscPayload) + '</body>'
     );
   }
 
