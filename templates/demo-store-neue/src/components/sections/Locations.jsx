@@ -20,6 +20,10 @@ function Card({to, data}) {
     <Link to={to || `/locations/${data.handle}`} className="grid gap-4">
       <div className="rounded image-border overflow-clip">
         <Image
+          alt={
+            data.featured_image.reference.image.altText ||
+            `Image of the ${data.title.value} location`
+          }
           className="object-cover aspect-[3/2]"
           data={data.featured_image.reference.image}
         />

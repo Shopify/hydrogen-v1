@@ -4,14 +4,16 @@ import {Text} from '~/components/elements';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
 import {product as mockProduct} from '~/lib/placeholders';
 
-export default function ProductCard({product = mockProduct, label, className}) {
+export default function ProductCard({product, label, className}) {
   let cardLabel;
+
+  const cardData = product?.variants ? product : mockProduct;
 
   const {
     image,
     priceV2: price,
     compareAtPriceV2: compareAtPrice,
-  } = product?.variants?.nodes[0];
+  } = cardData?.variants?.nodes[0];
 
   if (label) {
     cardLabel = label;
@@ -34,7 +36,9 @@ export default function ProductCard({product = mockProduct, label, className}) {
           >
             {cardLabel}
           </Text>
-          <Image className="aspect-[4/5]" data={image} alt="Alt Tag" />
+          {image && (
+            <Image className="aspect-[4/5]" data={image} alt="Alt Tag" />
+          )}
         </div>
         <div className="grid gap-1">
           <Text

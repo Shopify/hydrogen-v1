@@ -27,9 +27,7 @@ export default function Hero({data = mockData, height, top}) {
               {byline.value}
             </Text>
           )}
-          <Link to={url.value}>
-            <Text size="lead">{cta.value}</Text>
-          </Link>
+          <Text size="lead">{cta.value}</Text>
         </div>
       </section>
     </Link>
