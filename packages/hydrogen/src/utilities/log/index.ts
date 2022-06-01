@@ -4,7 +4,6 @@ export {
   getLoggerWithContext,
   Logger,
   logServerResponse,
-  resetLogger,
 } from './log';
 export {
   collectQueryCacheControlHeaders,

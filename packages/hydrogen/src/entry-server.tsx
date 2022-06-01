@@ -113,12 +113,10 @@ export const renderHydrogen = (App: any) => {
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
-    if (hydrogenConfig.logger) {
-      setLogger(hydrogenConfig.logger);
-    }
+    setLogger(hydrogenConfig.logger);
+    const log = getLoggerWithContext(request);
 
     const response = new ServerComponentResponse();
-    const log = getLoggerWithContext(request);
     const sessionApi = hydrogenConfig.session
       ? hydrogenConfig.session(log)
       : undefined;

@@ -65,7 +65,12 @@ export function getLoggerWithContext(context: any): Logger {
 
 export const log: Logger = getLoggerWithContext({});
 
-export function setLogger(config: LoggerConfig) {
+export function setLogger(config?: LoggerConfig) {
+  if (!config) {
+    currentLogger = defaultLogger;
+    return;
+  }
+
   const options = {} as LoggerOptions;
   currentLogger = {...defaultLogger, ...config, options: () => options};
 
@@ -75,11 +80,6 @@ export function setLogger(config: LoggerConfig) {
       options[key] = config[key];
     }
   }
-}
-
-// For tests
-export function resetLogger() {
-  currentLogger = defaultLogger;
 }
 
 const SERVER_RESPONSE_MAP: Record<string, string> = {

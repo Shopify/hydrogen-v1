@@ -3,7 +3,6 @@ import {
   setLogger,
   logCacheControlHeaders,
   collectQueryCacheControlHeaders,
-  resetLogger,
 } from '../index';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 import {ServerComponentResponse} from '../../../framework/Hydration/ServerComponentResponse.server';
@@ -29,7 +28,7 @@ describe('cache header log', () => {
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
   });
 
   it('should log cache control header for main request', () => {

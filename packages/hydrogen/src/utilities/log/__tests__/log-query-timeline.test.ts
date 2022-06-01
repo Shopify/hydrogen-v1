@@ -1,5 +1,5 @@
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
-import {Logger, setLogger, resetLogger} from '../log';
+import {Logger, setLogger} from '../log';
 import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
 
 let mockLogger: jest.Mocked<Logger>;
@@ -40,7 +40,7 @@ describe('cache header log', () => {
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
   });
 
   it('should log query timing', () => {

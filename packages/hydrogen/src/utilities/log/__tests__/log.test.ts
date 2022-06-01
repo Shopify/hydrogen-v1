@@ -4,7 +4,6 @@ import {
   Logger,
   logServerResponse,
   getLoggerWithContext,
-  resetLogger,
 } from '../log';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
 
@@ -28,7 +27,7 @@ describe('log', () => {
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
   });
 
   it('should return the wrapped mockLogger instance when log is called', () => {
