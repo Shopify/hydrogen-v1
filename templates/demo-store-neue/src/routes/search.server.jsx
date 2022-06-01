@@ -78,11 +78,17 @@ function SearchPage({query, children}) {
   return (
     <Layout>
       <PageHeader>
-        <Heading as="h1" size="copy">
+        <Heading as="h1" size="copy" format={false}>
           Search
         </Heading>
         <form className="relative flex w-full text-heading">
-          <Input defaultValue={query} type="search" variant="search" name="q" />
+          <Input
+            placeholder="Search for products"
+            defaultValue={query}
+            type="search"
+            variant="search"
+            name="q"
+          />
           <button className="absolute right-0 py-2" type="submit">
             Go
           </button>
