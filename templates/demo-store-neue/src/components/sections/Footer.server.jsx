@@ -40,6 +40,10 @@ export default function Footer({menus = mockData}) {
         </Heading>
         <CountrySelector />
       </section>
+      <div className="col-span-4">
+        &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
+        Licensed Open Source project. This website is carbon neutral.
+      </div>
     </Section>
   );
 }

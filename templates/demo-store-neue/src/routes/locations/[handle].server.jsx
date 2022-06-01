@@ -44,7 +44,7 @@ export default function Location({params}) {
             {description?.value && <Text>{description.value}</Text>}
           </div>
           <div className="flex flex-col gap-8 md:flex-row">
-            <div className="flex gap-8">
+            <div className="flex items-start gap-8">
               <div className="grid gap-4">
                 {(phone?.value || email?.value) && (
                   <div className="grid justify-start gap-2">
@@ -53,14 +53,16 @@ export default function Location({params}) {
                     </Heading>
                     {phone?.value && (
                       <a href={`tel:${phone.value}`}>
-                        <Text className="pb-px border-b">
+                        <Text className="pb-px border-b border-primary/50">
                           {formatPhoneNumber(phone.value)}
                         </Text>
                       </a>
                     )}
                     {email?.value && (
                       <a href={`mailto:${email.value}`}>
-                        <Text className="pb-px border-b">{email.value}</Text>
+                        <Text className="pb-px border-b border-primary/50">
+                          {email.value}
+                        </Text>
                       </a>
                     )}
                   </div>
@@ -101,7 +103,9 @@ export default function Location({params}) {
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    <Text className="pb-px border-b">Get directions</Text>
+                    <Text className="pb-px border-b border-primary/50">
+                      Get directions
+                    </Text>
                   </a>
                 )}
               </div>
