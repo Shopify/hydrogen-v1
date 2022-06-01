@@ -51,7 +51,7 @@ module.exports = {
       },
       boxShadow: {
         border: 'inset 0px 0px 0px 1px rgb(var(--color-primary) / 0.08)',
-        darkHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.1)',
+        darkHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.4)',
       },
     },
   },

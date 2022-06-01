@@ -20,7 +20,7 @@ export default function Header({title}) {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
       dark
-        ? 'bg-primary/80 dark:bg-contrast/80 text-contrast dark:text-primary shadow-darkHeader'
+        ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
     } flex items-center sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-16 px-12 py-8`,
   };
