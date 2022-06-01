@@ -1,7 +1,7 @@
 import type {ServerResponse} from 'http';
 import type {Logger} from './utilities/log/log';
 import type {HydrogenRequest} from './framework/HydrogenRequest.server';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
+import type {HydrogenResponse} from './framework/HydrogenResponse.server';
 import type {
   Metafield,
   ProductVariant,
@@ -23,7 +23,7 @@ export type RunSsrParams = {
   rsc: {readable: ReadableStream; didError: () => Error | undefined};
   routes?: ImportGlobEagerOutput;
   request: HydrogenRequest;
-  response: ServerComponentResponse;
+  response: HydrogenResponse;
   log: Logger;
   dev?: boolean;
   template: string;
@@ -36,7 +36,7 @@ export type RunRscParams = {
   state: Record<string, any>;
   log: Logger;
   request: HydrogenRequest;
-  response: ServerComponentResponse;
+  response: HydrogenResponse;
 };
 
 export type ShopifyConfig = {

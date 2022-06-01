@@ -1,9 +1,9 @@
-import {CacheSeconds, generateCacheControlHeader} from '../CachingStrategy';
-import type {CachingStrategy} from '../../types';
-import Redirect from '../../foundation/Redirect/Redirect.client';
+import {CacheSeconds, generateCacheControlHeader} from './CachingStrategy';
+import type {CachingStrategy} from '../types';
+import Redirect from '../foundation/Redirect/Redirect.client';
 import React from 'react';
 
-export class ServerComponentResponse extends Response {
+export class HydrogenResponse extends Response {
   private wait = false;
   private cacheOptions: CachingStrategy = CacheSeconds();
 

@@ -1,5 +1,5 @@
 import {HydrogenRequest} from '../../framework/HydrogenRequest.server';
-import {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
+import {HydrogenResponse} from '../../framework/HydrogenResponse.server';
 import {QueryKey} from '../../types';
 import {hashKey} from '../hash';
 import {findQueryName, parseUrl} from './utils';
@@ -29,7 +29,7 @@ export function collectQueryCacheControlHeaders(
 export function logCacheControlHeaders(
   type: RenderType,
   request: HydrogenRequest,
-  response?: ServerComponentResponse
+  response?: HydrogenResponse
 ) {
   const log = getLoggerWithContext(request);
   if (!log.options().showCacheControlHeader) {

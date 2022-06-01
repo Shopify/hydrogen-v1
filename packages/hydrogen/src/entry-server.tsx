@@ -15,7 +15,7 @@ import type {
   ResolvedHydrogenRoutes,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
-import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
+import {HydrogenResponse} from './framework/HydrogenResponse.server';
 import {HydrogenRequest} from './framework/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
@@ -112,7 +112,7 @@ export const renderHydrogen = (App: any) => {
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
-    const response = new ServerComponentResponse();
+    const response = new HydrogenResponse();
     const log = getLoggerWithContext(request);
     const sessionApi = hydrogenConfig.session
       ? hydrogenConfig.session(log)
@@ -608,7 +608,7 @@ type ResponseOptions = {
 };
 
 function getResponseOptions(
-  {headers, status, customStatus}: ServerComponentResponse,
+  {headers, status, customStatus}: HydrogenResponse,
   error?: Error
 ) {
   const responseInit = {} as ResponseOptions;
@@ -630,7 +630,7 @@ function getResponseOptions(
 
 function writeHeadToNodeResponse(
   nodeResponse: ServerResponse,
-  componentResponse: ServerComponentResponse,
+  componentResponse: HydrogenResponse,
   log: Logger,
   error?: Error
 ) {
@@ -680,7 +680,7 @@ function postRequestTasks(
   type: RenderType,
   status: number,
   request: HydrogenRequest,
-  response: ServerComponentResponse
+  response: HydrogenResponse
 ) {
   logServerResponse(type, request, status);
   logCacheControlHeaders(type, request, response);
