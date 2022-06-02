@@ -2,7 +2,7 @@ import type {
   CachingStrategy,
   AllCacheOptions,
   NoStoreStrategy,
-} from '../../types';
+} from '../../../types';
 
 const PUBLIC = 'public';
 const PRIVATE = 'private';

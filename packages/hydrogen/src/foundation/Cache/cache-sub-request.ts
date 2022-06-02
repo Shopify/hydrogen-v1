@@ -1,8 +1,8 @@
-import type {QueryKey, CachingStrategy, AllCacheOptions} from '../types';
-import {getCache} from './runtime';
-import {hashKey} from '../utilities/hash';
+import type {QueryKey, CachingStrategy, AllCacheOptions} from '../../types';
+import {getCache} from '../../framework/runtime';
+import {hashKey} from '../../utilities/hash';
 import * as CacheApi from './cache';
-import {CacheSeconds} from './CachingStrategy';
+import {CacheSeconds} from './strategies';
 
 /**
  * Wrapper Cache functions for sub queries

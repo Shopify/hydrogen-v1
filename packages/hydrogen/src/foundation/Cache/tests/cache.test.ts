@@ -1,5 +1,5 @@
 import {generateSubRequestCacheControlHeader} from '../cache-sub-request';
-import {CacheSeconds, NoStore} from '../CachingStrategy';
+import {CacheSeconds, NoStore} from '../strategies';
 
 describe('generateSubRequestCacheControlHeader', () => {
   it('generates CacheSeconds caching strategy by default', () => {
