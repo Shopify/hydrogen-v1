@@ -16,7 +16,10 @@ import type {
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import {
+  RuntimeContext,
+  ServerComponentRequest,
+} from './framework/Hydration/ServerComponentRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
@@ -30,8 +33,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {setContext, setCache, RuntimeContext} from './framework/runtime';
-import {setConfig} from './framework/config';
+import {setCache} from './framework/runtime';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -125,9 +127,8 @@ export const renderHydrogen = (App: any) => {
     /**
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
      */
+    request.ctx.runtime = context;
     setCache(cache);
-    setContext(context);
-    setConfig({dev});
 
     if (
       url.pathname === EVENT_PATHNAME ||
@@ -270,7 +271,10 @@ async function runSSR({
     stripScriptsFromTemplate(template);
 
   const AppSSR = (
-    <Html template={response.canStream() ? noScriptTemplate : template}>
+    <Html
+      template={response.canStream() ? noScriptTemplate : template}
+      hydrogenConfig={request.ctx.hydrogenConfig!}
+    >
       <ServerRequestProvider request={request} isRSC={false}>
         <ServerPropsProvider
           initialServerProps={state as any}

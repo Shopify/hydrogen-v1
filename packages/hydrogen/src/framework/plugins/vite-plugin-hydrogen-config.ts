@@ -100,6 +100,7 @@ export default () => {
       define: {
         __HYDROGEN_DEV__: env.mode !== 'production',
         __HYDROGEN_WORKER__: isWorker,
+        __HYDROGEN_TEST__: false, // Used in unit tests
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],

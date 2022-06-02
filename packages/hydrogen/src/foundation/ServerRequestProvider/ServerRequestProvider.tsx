@@ -32,12 +32,8 @@ function getCacheForType(resource: () => Map<any, any>) {
     React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
       .ReactCurrentDispatcher.current;
 
-  if (
-    __HYDROGEN_DEV__ &&
-    // @ts-ignore
-    typeof jest !== 'undefined' &&
-    !dispatcher.getCacheForType
-  ) {
+  // @ts-ignore
+  if (__HYDROGEN_TEST__ && !dispatcher.getCacheForType) {
     // Jest does not have access to the RSC runtime, mock it here:
     // @ts-ignore
     return (globalThis.__jestRscCache ??= resource());
@@ -86,7 +82,7 @@ export function useServerRequest() {
 
   if (!request) {
     // @ts-ignore
-    if (__HYDROGEN_DEV__ && typeof jest !== 'undefined') {
+    if (__HYDROGEN_TEST__) {
       // Unit tests are not wrapped in ServerRequestProvider.
       // This mocks it, instead of providing it in every test.
       return {ctx: {}} as ServerComponentRequest;

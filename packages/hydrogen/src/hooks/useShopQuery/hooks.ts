@@ -2,7 +2,6 @@ import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import type {CachingStrategy, PreloadOptions} from '../../types';
 import {graphqlRequestBody} from '../../utilities';
-import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
@@ -103,7 +102,7 @@ export function useShopQuery<T>({
     log.error(errorMessage);
     log.error(useQueryError);
 
-    if (getConfig().dev) {
+    if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
       throw new Error(errorMessage);
     } else {
       // in non-dev environments, we probably don't want super-detailed error messages for the user
@@ -121,7 +120,7 @@ export function useShopQuery<T>({
     const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
 
     for (const error of errors) {
-      if (getConfig().dev) {
+      if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
         throw new Error(error.message);
       } else {
         log.error('GraphQL Error', error);

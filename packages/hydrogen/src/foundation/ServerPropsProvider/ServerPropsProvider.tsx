@@ -11,6 +11,8 @@ import React, {
 declare global {
   // eslint-disable-next-line no-var
   var __HYDROGEN_DEV__: boolean;
+  // eslint-disable-next-line no-var
+  var __HYDROGEN_TEST__: boolean;
 }
 
 const PRIVATE_PROPS = ['request', 'response'] as const;
