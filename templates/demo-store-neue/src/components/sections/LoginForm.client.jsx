@@ -128,9 +128,9 @@ export function callLoginApi({email, password}) {
 function EmailField({email, setEmail, emailError, shopName}) {
   return (
     <>
-      <div className="mb-4">
+      <div className="mb-3">
         <input
-          className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
             emailError ? ' border-red-500' : 'border-gray-900'
           }`}
           id="email"
@@ -146,20 +146,22 @@ function EmailField({email, setEmail, emailError, shopName}) {
             setEmail(event.target.value);
           }}
         />
-        <p className={`text-red-500 text-xs ${!emailError ? 'invisible' : ''}`}>
-          {emailError} &nbsp;
-        </p>
+        {!emailError ? (
+          ''
+        ) : (
+          <p className={`text-red-500 text-xs`}>{emailError} &nbsp;</p>
+        )}
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 text-white uppercase py-2 px-4 focus:shadow-outline block w-full"
+          className="bg-gray-900 rounded text-white py-2 px-4 focus:shadow-outline block w-full"
           type="submit"
         >
           Next
         </button>
       </div>
-      <div className="flex items-center mt-4">
-        <p className="align-baseline text-sm">
+      <div className="flex items-center mt-8 border-t  border-gray-200">
+        <p className="align-baseline text-sm mt-6">
           New to {shopName}? &nbsp;
           <Link className="inline underline" to="/account/register">
             Create an account
@@ -172,7 +174,7 @@ function EmailField({email, setEmail, emailError, shopName}) {
 
 function ValidEmail({email, resetForm}) {
   return (
-    <div className="mb-6 flex items-center justify-between">
+    <div className="mb-3 flex items-center justify-between">
       <div>
         <p>{email}</p>
         <input
@@ -199,9 +201,9 @@ function ValidEmail({email, resetForm}) {
 function PasswordField({password, setPassword, passwordError}) {
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-3">
         <input
-          className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
             passwordError ? ' border-red-500' : 'border-gray-900'
           }`}
           id="password"
@@ -218,17 +220,15 @@ function PasswordField({password, setPassword, passwordError}) {
             setPassword(event.target.value);
           }}
         />
-        <p
-          className={`text-red-500 text-xs ${
-            !passwordError ? 'invisible' : ''
-          }`}
-        >
-          {passwordError} &nbsp;
-        </p>
+        {!passwordError ? (
+          ''
+        ) : (
+          <p className={`text-red-500 text-xs`}> {passwordError} &nbsp;</p>
+        )}
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 text-white uppercase py-2 px-4 focus:shadow-outline block w-full"
+          className="bg-gray-900 text-white rounded py-2 px-4 focus:shadow-outline block w-full"
           type="submit"
         >
           Sign in
