@@ -204,7 +204,12 @@ export default defineConfig({
     /* Overrides the default `log.trace` behavior. */
     trace: (request, ...args) => console.log(request.url, ...args),
     /* Overrides the default `log.error` behavior. */
-    error: (request, error) => myErrorTrackingService.send(error, {request}),
+    error: async (request, error) => {
+      console.error(error);
+      // Methods can return promises. Hydrogen won't block the current
+      // request but it will await for them before the runtime instance ends.
+      await myErrorTrackingService.send(request, error);
+    },
     /* ... */
 
     /* Logs the cache status of each stored entry: `PUT`, `HIT`, `MISS` or `STALE`. */
