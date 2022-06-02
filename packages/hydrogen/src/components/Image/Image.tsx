@@ -14,7 +14,7 @@ export function Image<GenericLoaderOpts>(props: ImageProps<GenericLoaderOpts>) {
     throw new Error(`<Image/>: requires either a 'data' or 'src' prop.`);
   }
 
-  if (__DEV__ && props.data && props.src) {
+  if (__HYDROGEN_DEV__ && props.data && props.src) {
     console.warn(
       `<Image/>: using both 'data' and 'src' props is not supported; using the 'data' prop by default`
     );
@@ -77,7 +77,7 @@ function ShopifyImage({
     throw new Error(`<Image/>: the 'data' prop requires the 'url' property`);
   }
 
-  if (__DEV__ && !data.altText && !rest.alt) {
+  if (__HYDROGEN_DEV__ && !data.altText && !rest.alt) {
     console.warn(
       `<Image/>: the 'data' prop should have the 'altText' property, or the 'alt' prop, and one of them should not be empty. ${`Image: ${
         data.id ?? data.url
@@ -90,7 +90,7 @@ function ShopifyImage({
     loaderOptions
   );
 
-  if ((__DEV__ && !finalWidth) || !finalHeight) {
+  if ((__HYDROGEN_DEV__ && !finalWidth) || !finalHeight) {
     console.warn(
       `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${
         data.id ?? data.url
@@ -194,7 +194,7 @@ function ExternalImage<GenericLoaderOpts>({
     );
   }
 
-  if (__DEV__ && !alt) {
+  if (__HYDROGEN_DEV__ && !alt) {
     console.warn(
       `<Image/>: when 'src' is provided, 'alt' should also be provided. ${`Image: ${src}`}`
     );

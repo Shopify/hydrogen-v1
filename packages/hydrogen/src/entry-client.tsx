@@ -38,7 +38,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     config = JSON.parse(root.dataset.clientConfig ?? '{}');
   } catch (error: any) {
     config = {};
-    if (__DEV__) {
+    if (__HYDROGEN_DEV__) {
       console.warn(
         'Could not parse client configuration in browser',
         error.message
@@ -68,7 +68,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     </>,
     {
       onRecoverableError(e: any) {
-        if (__DEV__ && !hasCaughtError) {
+        if (__HYDROGEN_DEV__ && !hasCaughtError) {
           hasCaughtError = true;
           console.log(
             `React encountered an error while attempting to hydrate the application. ` +

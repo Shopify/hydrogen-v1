@@ -54,7 +54,7 @@ declare global {
   // This is provided by a Vite plugin
   // and will trigger tree-shaking.
   // eslint-disable-next-line no-var
-  var __WORKER__: boolean;
+  var __HYDROGEN_WORKER__: boolean;
 }
 
 const DOCTYPE = '<!DOCTYPE html>';
@@ -193,7 +193,7 @@ export const renderHydrogen = (App: any) => {
     });
   };
 
-  if (__WORKER__) return handleRequest;
+  if (__HYDROGEN_WORKER__) return handleRequest;
 
   return ((rawRequest, options) =>
     handleFetchResponseInNode(
@@ -311,7 +311,7 @@ async function runSSR({
       })
     : rscReadableForFlight;
 
-  if (__WORKER__) {
+  if (__HYDROGEN_WORKER__) {
     const encoder = new TextEncoder();
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
@@ -670,7 +670,7 @@ async function createNodeWriter() {
   // when building for workers, even though this code
   // does not run in a worker. Looks like tree-shaking
   // kicks in after the import analysis/bundle.
-  const streamImport = __WORKER__ ? '' : 'stream';
+  const streamImport = __HYDROGEN_WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
 }
