@@ -49,6 +49,7 @@ import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
 import {htmlEncode} from './utilities';
+import {splitCookiesString} from 'set-cookie-parser';
 
 declare global {
   // This is provided by a Vite plugin
@@ -717,12 +718,19 @@ function handleFetchResponseInNode(
   return fetchResponsePromise;
 }
 
-// From fetch Headers to Node Response
+/**
+ * Convert Headers to outgoing Node.js headers.
+ * Specifically, parse set-cookie headers to split them properly as separate
+ * `set-cookie` headers rather than a single, combined header.
+ */
 function setNodeHeaders(headers: Headers, nodeResponse: ServerResponse) {
-  // Headers.raw is only implemented in node-fetch, which is used by Hydrogen in dev and prod.
-  // It is the only way for now to access `set-cookie` header as an array.
-  // https://github.com/Shopify/hydrogen/issues/1228
-  Object.entries((headers as any).raw()).forEach(([key, value]) =>
-    nodeResponse.setHeader(key, value as string)
-  );
+  for (const [key, value] of headers.entries()) {
+    nodeResponse.setHeader(key, value);
+    if (key.toLowerCase() === 'set-cookie') {
+      const cookies = splitCookiesString(value);
+      cookies.forEach((cookie) => {
+        nodeResponse.setHeader('set-cookies', cookie);
+      });
+    }
+  }
 }
