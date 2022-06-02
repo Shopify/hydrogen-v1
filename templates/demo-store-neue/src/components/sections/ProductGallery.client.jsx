@@ -5,27 +5,16 @@ import {Fragment, useState} from 'react';
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products
  */
-export default function Gallery() {
-  const {descriptionHtml, media} = useProduct();
-  const [selectedIndex, setSelectedIndex] = useState();
+export default function Gallery({className}) {
+  const {media} = useProduct();
 
   if (!media.length) {
     return null;
   }
 
-  const featuredMedia = media[1];
-  const mediaFiles = media.slice(1);
-
-  let featuredExtraProps = {
-    interactionPromptThreshold: '50',
-    ar: true,
-    loading: 'eager',
-    disableZoom: true,
-  };
-
   return (
-    <div className="bg-white bg-productPhotos rounded-xl shadow-productPhotos overflow-clip py-10 w-full md:w-[33.5rem] relative grid items-center justify-start">
-      {mediaFiles.map((med) => {
+    <div className={`w-full grid grid-cols-2 gap-2 md:gap-4 ${className}`}>
+      {media.map((med, i) => {
         let extraProps = {};
 
         if (med.mediaContentType === 'MODEL_3D') {
@@ -43,16 +32,19 @@ export default function Gallery() {
         };
 
         return (
-          <div className="relative" key={med.id || med.image.id}>
+          <div
+            className={`${
+              i % 3 === 0 ? 'col-span-1 md:col-span-2' : 'col-span-1'
+            } aspect-square`}
+            key={med.id || med.image.id}
+          >
             <MediaFile
               tabIndex="0"
-              className={`object-scale-down w-full h-full ${
+              className={` w-full h-full ${
                 med.mediaContentType !== 'MODEL_3D' && 'mix-blend-multiply'
               } aspect-square`}
               data={data}
               options={{
-                height: '485',
-                width: '485',
                 crop: 'center',
               }}
               {...extraProps}

@@ -9,7 +9,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
-import {ProductSwimlane} from '~/components/sections';
+import {ProductSwimlane, Section} from '~/components/sections';
 import {Heading, Text} from '~/components/elements';
 import ProductGallery from '~/components/sections/ProductGallery.client';
 import ProductForm from '~/components/sections/ProductForm.client';
@@ -38,14 +38,22 @@ export default function Product() {
   return (
     <ProductProvider data={product}>
       <Layout>
-        <ProductGallery />
-        <section>
-          <Heading as="h1">{product.title}</Heading>
-          {product.vendor && <Text>{product.vendor}</Text>}
-          <ProductForm />
-          <div></div>
-        </section>
-        <ProductSwimlane title="Related Products" data={product.id} />
+        <Section>
+          <div class="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
+            <ProductGallery className="w-full lg:col-span-2" />
+            <section className="sticky min-h-screen top-[6rem] lg:top-[8rem] xl:top-[10rem]">
+              <Heading as="h1">{product.title}</Heading>
+              {product.vendor && (
+                <Text className={'opacity-50 font-medium'}>
+                  {product.vendor}
+                </Text>
+              )}
+              <ProductForm />
+              <div></div>
+            </section>
+          </div>
+          <ProductSwimlane title="Related Products" data={product.id} />
+        </Section>
       </Layout>
     </ProductProvider>
   );
