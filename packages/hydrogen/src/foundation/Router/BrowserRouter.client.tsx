@@ -47,7 +47,7 @@ export const BrowserRouter: FC<{
   });
 
   useLayoutEffect(() => {
-    const unlisten = history.listen(({location: newLocation}) => {
+    const unlisten = history.listen(({location: newLocation, action}) => {
       positions[location.key] = window.scrollY;
 
       setLocationServerProps({
@@ -56,7 +56,16 @@ export const BrowserRouter: FC<{
       });
 
       setLocation(newLocation);
-      setScrollNeedsRestoration(!!(newLocation.state as any)?.restoreScroll);
+
+      const state = (newLocation.state ?? {}) as Record<string, any>;
+
+      /**
+       * "pop" navigations, like forward/backward buttons, always restore scroll position
+       * regardless of what the original forward navigation intent was.
+       */
+      const needsScrollRestoration = action === 'POP' || !!state.restoreScroll;
+
+      setScrollNeedsRestoration(needsScrollRestoration);
     });
 
     return () => unlisten();
