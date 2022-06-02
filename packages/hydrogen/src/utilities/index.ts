@@ -12,7 +12,7 @@ export {
 export {loadScript} from './load_script';
 export {wrapPromise} from './suspense';
 export {flattenConnection} from './flattenConnection';
-export {isClient} from './isClient';
+export {isBrowser} from './isBrowser';
 export {isServer} from './isServer';
 export {getMeasurementAsParts, getMeasurementAsString} from './measurement';
 export {parseMetafieldValue} from './parseMetafieldValue';

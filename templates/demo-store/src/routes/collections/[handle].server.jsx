@@ -89,6 +89,7 @@ const QUERY = gql`
       products(first: $numProducts) {
         edges {
           node {
+            id
             title
             vendor
             handle

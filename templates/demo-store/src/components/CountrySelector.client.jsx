@@ -51,8 +51,8 @@ export default function CountrySelector() {
                         selectedCountry={selectedCountry}
                         getClassName={(active) => {
                           return (
-                            `w-36 py-2 px-3 flex justify-between items-center text-left cursor-pointer` +
-                            `rounded ${active ? 'bg-gray-200' : null}`
+                            `w-36 py-2 px-3 flex justify-between items-center text-left cursor-pointer rounded` +
+                            `${active ? ' bg-gray-200' : ''}`
                           );
                         }}
                       />

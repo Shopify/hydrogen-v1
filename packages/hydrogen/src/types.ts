@@ -1,5 +1,5 @@
 import type {ServerResponse} from 'http';
-import type {Logger} from './utilities/log/log';
+import type {Logger, LoggerConfig} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {
@@ -10,29 +10,33 @@ import type {
 } from './storefront-api-types';
 import type {SessionStorageAdapter} from './foundation/session/session';
 
-type CommonOptions = {
-  App: any;
+export type AssembleHtmlParams = {
+  ssrHtml: string;
+  rscPayload?: string;
   routes?: ImportGlobEagerOutput;
   request: ServerComponentRequest;
-  componentResponse: ServerComponentResponse;
+  template: string;
+};
+
+export type RunSsrParams = {
+  state: Record<string, any>;
+  rsc: {readable: ReadableStream; didError: () => Error | undefined};
+  routes?: ImportGlobEagerOutput;
+  request: ServerComponentRequest;
+  response: ServerComponentResponse;
   log: Logger;
   dev?: boolean;
-};
-
-export type RendererOptions = CommonOptions & {
   template: string;
   nonce?: string;
+  nodeResponse?: ServerResponse;
 };
 
-export type StreamerOptions = CommonOptions & {
-  response?: ServerResponse;
-  template: string;
-  nonce?: string;
-};
-
-export type HydratorOptions = CommonOptions & {
-  response?: ServerResponse;
-  isStreamable: boolean;
+export type RunRscParams = {
+  App: any;
+  state: Record<string, any>;
+  log: Logger;
+  request: ServerComponentRequest;
+  response: ServerComponentResponse;
 };
 
 export type ShopifyConfig = {
@@ -80,6 +84,7 @@ export type InlineHydrogenConfig = {
   routes?: InlineHydrogenRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
   enableStreaming?: (request: ServerComponentRequest) => boolean;
 };
