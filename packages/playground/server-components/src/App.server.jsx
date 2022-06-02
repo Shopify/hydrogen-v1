@@ -6,7 +6,11 @@ import Custom2 from './customRoutes/custom2.server';
 import LazyRoute from './customRoutes/lazyRoute.server';
 import ServerParams from './customRoutes/params.server';
 
-export default renderHydrogen(() => {
+export default renderHydrogen(({request, response}) => {
+  if (request.headers.get('user-agent') === 'custom bot') {
+    response.doNotStream();
+  }
+
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider>

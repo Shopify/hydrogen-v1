@@ -86,7 +86,6 @@ export type InlineHydrogenConfig = {
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
-  enableStreaming?: (request: ServerComponentRequest) => boolean;
 };
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {

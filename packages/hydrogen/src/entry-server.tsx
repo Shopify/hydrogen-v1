@@ -175,12 +175,9 @@ export const renderHydrogen = (App: any) => {
       });
     }
 
-    const isStreamable =
-      (hydrogenConfig.enableStreaming
-        ? hydrogenConfig.enableStreaming(request)
-        : true) && !isBotUA(url, request.headers.get('user-agent'));
-
-    if (!isStreamable) response.doNotStream();
+    if (isBotUA(url, request.headers.get('user-agent'))) {
+      response.doNotStream();
+    }
 
     return runSSR({
       log,
