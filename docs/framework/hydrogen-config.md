@@ -45,6 +45,7 @@ The following groupings of configuration properties can exist in Hydrogen:
 - [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
 - [`enableStreaming`](#enablestreaming)
 - [`logger`](#logger)
+- [`strictMode`](#strictmode)
 
 ### `routes`
 
@@ -240,6 +241,25 @@ export default defineConfig({
 ```
 
 {% endcodeblock %}
+
+### `strictMode`
+
+[Strict mode](https://reactjs.org/docs/strict-mode.html) is enabled by default for all Hydrogen apps in development. It includes [strict effects](https://github.com/reactwg/react-18/discussions/19), which mounts and unmounts components multiple times to catch potential issues with user or third-party code.
+
+If strict effects cause problems for your app, then you can turn off strict mode.
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+export default defineConfig({
+  strictMode: false, 
+});
+```
+
+{% endcodeblock %}
+
+> Caution:
+> If you turn off strict mode, then we recommended that you still include the `StrictMode` component at as high of a level as possible in your React tree to catch errors.
 
 ## Changing the configuration file location
 
