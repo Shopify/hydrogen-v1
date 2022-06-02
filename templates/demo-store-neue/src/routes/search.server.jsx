@@ -26,27 +26,6 @@ export default function Search({pageBy = 12, params}) {
 
   const query = searchParams.get('q');
 
-  if (!query) {
-    const {data} = useShopQuery({
-      query: NO_RESULTS_QUERY,
-      variables: {
-        handle,
-        country: countryCode,
-        language: languageCode,
-        pageBy,
-        query,
-      },
-      preload: true,
-    });
-
-    return (
-      <SearchPage>
-        <FeaturedCollections data={data.featuredCollections.nodes} />
-        <ProductSwimlane data={data.featuredProducts.nodes} />
-      </SearchPage>
-    );
-  }
-
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
@@ -61,10 +40,30 @@ export default function Search({pageBy = 12, params}) {
 
   const results = data?.products?.nodes;
 
+  if (!query || results.length === 0) {
+    return (
+      <SearchPage query={query ? decodeURI(query) : null}>
+        {results.length === 0 && (
+          <Section padding="x">
+            <Text className="opacity-50">No results, try something else.</Text>
+          </Section>
+        )}
+        <FeaturedCollections
+          title="Trending Collections"
+          data={data.featuredCollections.nodes}
+        />
+        <ProductSwimlane
+          title="Trending Products"
+          data={data.featuredProducts.nodes}
+        />
+      </SearchPage>
+    );
+  }
+
   return (
     <SearchPage query={decodeURI(query)}>
       <Section>
-        <Grid>
+        <Grid layout="products">
           {results.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -82,7 +81,13 @@ function SearchPage({query, children}) {
           Search
         </Heading>
         <form className="relative flex w-full text-heading">
-          <Input defaultValue={query} type="search" variant="search" name="q" />
+          <Input
+            defaultValue={query}
+            placeholder="Search…"
+            type="search"
+            variant="search"
+            name="q"
+          />
           <button className="absolute right-0 py-2" type="submit">
             Go
           </button>
@@ -113,13 +118,6 @@ const QUERY = gql`
         hasPreviousPage
       }
     }
-  }
-`;
-
-const NO_RESULTS_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
-  query homepage($country: CountryCode, $language: LanguageCode)
-  @inContext(country: $country, language: $language) {
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
       nodes {
         id

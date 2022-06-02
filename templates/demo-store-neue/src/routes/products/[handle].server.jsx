@@ -9,15 +9,14 @@ import {
 } from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
-import {PageHeader, Section} from '~/components/sections';
-import {Heading, Text, Button} from '~/components/elements';
+import {ProductSwimlane} from '~/components/sections';
+import {Heading, Text} from '~/components/elements';
 import ProductGallery from '~/components/sections/ProductGallery.client';
 import ProductForm from '~/components/sections/ProductForm.client';
-
+import {NotFound} from '~/components/pages';
 export default function Product() {
   const {handle} = useRouteParams();
   const {countryCode = 'US'} = useSession();
-
   const {languageCode} = useShop();
 
   const {
@@ -33,7 +32,7 @@ export default function Product() {
   });
 
   if (!product) {
-    return <NotFound />;
+    return <NotFound type="product" />;
   }
 
   return (
@@ -46,7 +45,7 @@ export default function Product() {
           <ProductForm />
           <div></div>
         </section>
-        <section>Related products</section>
+        <ProductSwimlane title="Related Products" data={product.id} />
       </Layout>
     </ProductProvider>
   );

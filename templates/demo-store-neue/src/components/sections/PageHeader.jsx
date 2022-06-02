@@ -7,8 +7,9 @@ export default function PageHeader({
   children,
 }) {
   const variants = {
-    default: 'grid w-full gap-8 p-12 justify-items-start',
-    allCollections: 'flex justify-between items-baseline gap-8 p-12',
+    default: 'grid w-full gap-8 p-4 py-8 md:p-8 lg:p-12 justify-items-start',
+    allCollections:
+      'flex justify-between items-baseline gap-8 p-4 md:p-8 lg:p-12',
   };
   const styles = clsx(variants[variant], className);
   return (

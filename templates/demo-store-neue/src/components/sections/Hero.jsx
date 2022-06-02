@@ -10,12 +10,22 @@ export default function Hero({data = mockData, height, top}) {
       <section
         className={`relative justify-end flex flex-col w-full ${
           top && '-mt-nav'
-        } ${height === 'full' ? 'h-screen' : 'h-[50rem]'}`}
+        } ${
+          height === 'full'
+            ? 'h-screen'
+            : 'aspect-[4/5] sm:aspect-square md:aspect-[5/4] lg:aspect-[3/2] xl:aspect-[2/1]'
+        }`}
       >
         <div className="absolute inset-0 grid flex-grow grid-flow-col pointer-events-none auto-cols-fr -z-10 content-stretch overflow-clip">
-          {spread?.reference && <SpreadMedia data={spread.reference} />}
+          {spread?.reference && (
+            <div className="">
+              <SpreadMedia data={spread.reference} />
+            </div>
+          )}
           {spread_secondary?.reference && (
-            <SpreadMedia data={spread_secondary.reference} />
+            <div className="hidden md:block">
+              <SpreadMedia data={spread_secondary.reference} />
+            </div>
           )}
         </div>
         <div className="flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
@@ -27,9 +37,7 @@ export default function Hero({data = mockData, height, top}) {
               {byline.value}
             </Text>
           )}
-          <Link to={url.value}>
-            <Text size="lead">{cta.value}</Text>
-          </Link>
+          <Text size="lead">{cta.value}</Text>
         </div>
       </section>
     </Link>
