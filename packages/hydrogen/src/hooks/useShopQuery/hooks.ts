@@ -102,7 +102,7 @@ export function useShopQuery<T>({
     log.error(errorMessage);
     log.error(useQueryError);
 
-    if (__DEV__) {
+    if (__DEV__ && !__TEST__) {
       throw new Error(errorMessage);
     } else {
       // in non-dev environments, we probably don't want super-detailed error messages for the user
@@ -120,7 +120,7 @@ export function useShopQuery<T>({
     const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
 
     for (const error of errors) {
-      if (__DEV__) {
+      if (__DEV__ && !__TEST__) {
         throw new Error(error.message);
       } else {
         log.error('GraphQL Error', error);
