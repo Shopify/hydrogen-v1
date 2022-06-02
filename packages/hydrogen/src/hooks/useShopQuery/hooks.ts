@@ -131,7 +131,7 @@ export function useShopQuery<T>({
   }
 
   if (
-    __DEV__ &&
+    __HYDROGEN_DEV__ &&
     log.options().showUnusedQueryProperties &&
     query &&
     data?.data

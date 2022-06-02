@@ -98,8 +98,8 @@ export default () => {
       },
 
       define: {
-        __DEV__: env.mode !== 'production',
-        __WORKER__: isWorker,
+        __HYDROGEN_DEV__: env.mode !== 'production',
+        __HYDROGEN_WORKER__: isWorker,
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],

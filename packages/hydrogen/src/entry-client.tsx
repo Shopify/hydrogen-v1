@@ -54,7 +54,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
     </>,
     {
       onRecoverableError(e: any) {
-        if (__DEV__ && !hasCaughtError) {
+        if (__HYDROGEN_DEV__ && !hasCaughtError) {
           hasCaughtError = true;
           console.log(
             `React encountered an error while attempting to hydrate the application. ` +
