@@ -59,7 +59,7 @@ function doLog(
 ) {
   const maybePromise = currentLogger[method](request, ...args);
   if (maybePromise instanceof Promise) {
-    request?.ctx?.runtime?.waitUntil(maybePromise);
+    request?.ctx?.runtime?.waitUntil?.(maybePromise);
   }
 }
 
