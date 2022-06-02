@@ -318,7 +318,7 @@ export default function MyProducts({response}) {
 
 #### `response.doNotStream()`
 
-By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). To customize a response, you need to tell Hydrogen that your server component plans to modify it in some way by calling `response.doNotStream()`:
+By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). However, it is possible to disable streaming per-route and return a fully buffered response, which can be beneficial in some scenarios like [handling custom SEO bots](https://shopify.dev/custom-storefronts/hydrogen/framework/seo#checking-for-custom-robots). To disable streaming, simply call `response.doNotStream()`:
 
 {% codeblock file %}
 
@@ -331,6 +331,9 @@ export default function CustomPage({response}) {
 ```
 
 {% endcodeblock %}
+
+> Tip:
+> There are [performance benefits](https://shopify.dev/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
 
 You can use `response` to set headers or status codes using the `Response` API:
 

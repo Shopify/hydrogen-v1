@@ -148,11 +148,33 @@ return (
 
 {% endcodeblock %}
 
-## Imitating SEO robot behavior
+## SEO robot behavior
 
-Hydrogen supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side.
+By default, all routes in Hydrogen are stream rendered. However, Hydrogen supports SEO by inspecting the `user-agent` for every request, disabling streaming, and buffering the response to fully render it on server-side.
 
-To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?\_bot` query parameter at the end of the webpage's URL.
+### Imitating robot behavior
+
+To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?_bot` query parameter at the end of the webpage's URL.
+
+### Checking for custom robots
+
+If you find a bot that's not recognized by Hydrogen's bot detection algorithm, you can [manually disable streaming](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#response-donotstream) to buffer the response and make the content immediately available to bots:
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```jsx
+function App({request, response}) {
+  if (request.headers.get('user-agent') === 'custom bot') {
+    response.doNotStream();
+  }
+
+  return <Suspense fallback={'Loading...'}>{/*...*/}</Suspense>;
+}
+
+export default renderHydrogen(App);
+```
+
+{% endcodeblock %}
 
 ## Removing SEO with noindex
 
