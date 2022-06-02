@@ -9,7 +9,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
-import {ProductSwimlane} from '~/components/sections';
+import {Section, ProductSwimlane} from '~/components/sections';
 import {Heading, Text} from '~/components/elements';
 import ProductGallery from '~/components/sections/ProductGallery.client';
 import ProductForm from '~/components/sections/ProductForm.client';

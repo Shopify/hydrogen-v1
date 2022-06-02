@@ -15,7 +15,7 @@ import ProductGrid from '~/components/sections/ProductGrid.client';
 
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
-// Setting this low to test functionality.
+// TODO: Change this to 12 when complete
 const pageBy = 2;
 
 export default function Collection({params}) {
