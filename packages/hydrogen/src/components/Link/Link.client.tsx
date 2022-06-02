@@ -44,7 +44,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       replace: _replace,
       to,
       onClick,
-      clientState = {},
+      clientState,
       prefetch = true,
       restoreScroll = true,
     } = props;
