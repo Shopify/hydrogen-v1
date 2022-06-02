@@ -80,7 +80,7 @@ export default function AccountDetails({customerAccessToken}) {
       : [];
 
   const heading = customer
-    ? `Welcome, ${customer.firstName || customer.email}`
+    ? `Welcome ${customer.firstName ? `, ${customer.firstName}` : ``}`
     : 'Account Details';
 
   const {featuredCollections, featuredProducts, locations} = data;
