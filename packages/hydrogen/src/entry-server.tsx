@@ -19,7 +19,7 @@ import {HydrogenResponse} from './framework/HydrogenResponse.server';
 import {
   HydrogenRequest,
   RuntimeContext,
-} from './framework/HydrogenRequest.server';
+} from './foundation/HydrogenRequest/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
