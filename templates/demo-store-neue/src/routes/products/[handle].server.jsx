@@ -38,13 +38,21 @@ export default function Product() {
   return (
     <ProductProvider data={product}>
       <Layout>
-        <ProductGallery />
-        <section>
-          <Heading as="h1">{product.title}</Heading>
-          {product.vendor && <Text>{product.vendor}</Text>}
-          <ProductForm />
-          <div></div>
-        </section>
+        <Section className="pb-6 md:p-8 lg:p-12">
+          <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
+            <ProductGallery className="w-full lg:col-span-2" />
+            <section className="sticky py-4 px-4 md:px-0 top-[6rem] lg:top-[8rem] xl:top-[10rem]">
+              <Heading as="h1">{product.title}</Heading>
+              {product.vendor && (
+                <Text className={'opacity-50 font-medium'}>
+                  {product.vendor}
+                </Text>
+              )}
+              <ProductForm />
+              <div></div>
+            </section>
+          </div>
+        </Section>
         <ProductSwimlane title="Related Products" data={product.id} />
       </Layout>
     </ProductProvider>

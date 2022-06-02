@@ -1,31 +1,20 @@
 import {useProduct, MediaFile} from '@shopify/hydrogen/client';
-import {Tab} from '@headlessui/react';
-import {Fragment, useState} from 'react';
 
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products
  */
-export default function Gallery() {
-  const {descriptionHtml, media} = useProduct();
-  const [selectedIndex, setSelectedIndex] = useState();
+export default function Gallery({className}) {
+  const {media} = useProduct();
 
   if (!media.length) {
     return null;
   }
 
-  const featuredMedia = media[1];
-  const mediaFiles = media.slice(1);
-
-  let featuredExtraProps = {
-    interactionPromptThreshold: '50',
-    ar: true,
-    loading: 'eager',
-    disableZoom: true,
-  };
-
   return (
-    <div className="bg-white bg-productPhotos rounded-xl shadow-productPhotos overflow-clip py-10 w-full md:w-[33.5rem] relative grid items-center justify-start">
-      {mediaFiles.map((med) => {
+    <div
+      className={`grid grid-flow-col md:grid-flow-row gap-4 px-4 pb-4 overflow-x-scroll snap-x snap-center w-full  md:grid-cols-2 ${className}`}
+    >
+      {media.map((med, i) => {
         let extraProps = {};
 
         if (med.mediaContentType === 'MODEL_3D') {
@@ -43,16 +32,19 @@ export default function Gallery() {
         };
 
         return (
-          <div className="relative" key={med.id || med.image.id}>
+          <div
+            className={`${
+              i % 3 === 0 ? 'md:col-span-2' : 'md:col-span-1'
+            } aspect-square md:w-full w-[80vw]`}
+            key={med.id || med.image.id}
+          >
             <MediaFile
               tabIndex="0"
-              className={`object-scale-down w-full h-full ${
+              className={` w-full h-full ${
                 med.mediaContentType !== 'MODEL_3D' && 'mix-blend-multiply'
               } aspect-square`}
               data={data}
               options={{
-                height: '485',
-                width: '485',
                 crop: 'center',
               }}
               {...extraProps}

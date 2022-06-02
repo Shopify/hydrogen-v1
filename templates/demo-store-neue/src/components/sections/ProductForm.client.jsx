@@ -1,8 +1,40 @@
-import {useProduct} from '@shopify/hydrogen';
+import {useEffect} from 'react';
+import {useProduct, useUrl, useNavigate} from '@shopify/hydrogen';
 import {Heading, Text} from '~/components/elements';
 
 export default function ProductForm() {
+  const {pathname, search} = useUrl();
+  const navigate = useNavigate();
+
+  let params = new URLSearchParams(search);
+
   const {options, setSelectedOption, selectedOptions} = useProduct();
+
+  useEffect(() => {
+    options.map(({name, values}) => {
+      const currentValue = params.get(name.toLowerCase());
+      if (currentValue) {
+        const matchedValue = values.filter(
+          (value) => value.toLowerCase() === currentValue,
+        );
+        setSelectedOption(name, matchedValue[0]);
+      }
+    });
+  }, []);
+
+  function handleChange(name, value) {
+    setSelectedOption(name, value);
+    params.set(
+      encodeURIComponent(name.toLowerCase()),
+      encodeURIComponent(value.toLowerCase()),
+    );
+    navigate(
+      `${pathname}?${params.toString()}`,
+      {replace: true},
+      {reloadDocument: false},
+    );
+  }
+
   return (
     <form>
       {
@@ -27,7 +59,7 @@ export default function ProductForm() {
                           name={`option[${name}]`}
                           value={value}
                           checked={checked}
-                          onChange={() => setSelectedOption(name, value)}
+                          onChange={() => handleChange(name, value)}
                         />
                         <div
                           className={`p-2 border cursor-pointer rounded text-sm md:text-md ${
