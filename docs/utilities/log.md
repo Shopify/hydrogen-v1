@@ -36,5 +36,5 @@ The `log` utility exposes the following methods for logging information at diffe
 
 ## Swap logger implementation and options
 
-Hydrogen includes a default logger implementation that can be swapped for a logger of your choice. It is also possible to show debug information for cache and queries by providing extra options. See [Hydrogen config](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger) for more information.
+Hydrogen includes a default logger implementation that can be swapped for a logger of your choice. You can also show debugging information for cache and queries by providing extra options. For more information, refer to [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger).
 

@@ -212,18 +212,18 @@ export default defineConfig({
 
 ## Logger
 
-The [`log` utility](https://shopify.dev/api/hydrogen/utilities/log)'s default behavior is mapping to the global `console` object. However, this behavior can be customized in the configuration object.
+The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
 
-Pass [any method](https://shopify.dev/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override it. The first argument of each log method will contain a `request` object if the log was called in the same context as a request. Aside from that, the following boolean options are also available:
+You can pass [any method](https://shopify.dev/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
 ```tsx
 export default defineConfig({
   logger: {
-    /* Overrides the default `log.trace` behavior */
+    /* Overrides the default `log.trace` behavior. */
     trace: (request, ...args) => console.log(request.url, ...args),
-    /* Overrides the default `log.error` behavior */
+    /* Overrides the default `log.error` behavior. */
     error: (request, error) => myErrorTrackingService.send(error, {request}),
     /* ... */
 
