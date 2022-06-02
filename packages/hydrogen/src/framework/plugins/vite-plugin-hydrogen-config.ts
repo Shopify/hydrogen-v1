@@ -100,6 +100,7 @@ export default () => {
       define: {
         __DEV__: env.mode !== 'production',
         __WORKER__: isWorker,
+        __TEST__: false, // Used in unit tests
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],

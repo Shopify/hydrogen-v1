@@ -19,6 +19,7 @@ const config: Config.InitialOptions = {
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
   globals: {
     __DEV__: true,
+    __TEST__: true,
     'ts-jest': {
       tsconfig: './packages/hydrogen/tsconfig.json',
     },

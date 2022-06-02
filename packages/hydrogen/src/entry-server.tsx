@@ -34,7 +34,6 @@ import {
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
 import {setCache} from './framework/runtime';
-import {setConfig} from './framework/config';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -130,7 +129,6 @@ export const renderHydrogen = (App: any) => {
      */
     request.ctx.runtime = context;
     setCache(cache);
-    setConfig({dev});
 
     if (
       url.pathname === EVENT_PATHNAME ||
@@ -273,7 +271,10 @@ async function runSSR({
     stripScriptsFromTemplate(template);
 
   const AppSSR = (
-    <Html template={response.canStream() ? noScriptTemplate : template}>
+    <Html
+      template={response.canStream() ? noScriptTemplate : template}
+      hydrogenConfig={request.ctx.hydrogenConfig!}
+    >
       <ServerRequestProvider request={request} isRSC={false}>
         <ServerPropsProvider
           initialServerProps={state as any}
