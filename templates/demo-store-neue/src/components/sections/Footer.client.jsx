@@ -12,7 +12,7 @@ import {Disclosure} from '@headlessui/react';
 export default function Footer({menus = mockData}) {
   const styles = {
     footer:
-      'grid items-start w-full grid-flow-row grid-cols-1 gap-6 py-8 border-b md:gap-8 lg:gap-12 md:grid-cols-2 lg:grid-cols-4 bg-primary dark:bg-contrast dark:text-primary text-contrast',
+      'grid items-start w-full grid-flow-row grid-cols-1 gap-6 py-8 px-4 md:px-8 lg:px-12 border-b md:gap-8 lg:gap-12 md:grid-cols-2 lg:grid-cols-4 bg-primary dark:bg-contrast dark:text-primary text-contrast',
     section: 'grid gap-4',
     nav: 'grid gap-2 pb-6',
   };

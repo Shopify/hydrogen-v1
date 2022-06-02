@@ -13,6 +13,7 @@
   --font-size-lead: 1rem; /* text-base */
   --font-size-heading: 2rem; /* text-2xl */
   --font-size-display: 3rem; /* text-4xl */
+  --color-shop-pay: #5a31f4;
 
   @media (min-width: 32em) {
   }

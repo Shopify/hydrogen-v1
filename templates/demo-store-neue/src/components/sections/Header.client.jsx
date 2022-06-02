@@ -1,4 +1,4 @@
-import {Link, useUrl} from '@shopify/hydrogen';
+import {Link, useUrl, useCart} from '@shopify/hydrogen';
 import {useMedia} from 'react-use';
 
 import {
@@ -27,6 +27,8 @@ export default function Header({title}) {
 }
 
 function MobileHeader({title, home}) {
+  const {totalQuantity} = useCart();
+
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
@@ -75,7 +77,7 @@ function MobileHeader({title, home}) {
         </button>
         <Link to={'/cart'} className={styles.button}>
           <IconBag />
-          <CartBadge dark={home} quantity={1} />
+          <CartBadge dark={home} quantity={totalQuantity} />
         </Link>
       </div>
     </header>
@@ -83,6 +85,8 @@ function MobileHeader({title, home}) {
 }
 
 function DesktopHeader({title, home}) {
+  const {totalQuantity} = useCart();
+
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
@@ -131,7 +135,7 @@ function DesktopHeader({title, home}) {
         </button>
         <Link to={'/cart'} className={styles.button}>
           <IconBag />
-          <CartBadge dark={home} quantity={1} />
+          <CartBadge dark={home} quantity={totalQuantity} />
         </Link>
       </div>
     </header>
