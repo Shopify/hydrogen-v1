@@ -33,7 +33,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {setCache} from './framework/runtime';
+import {setCache} from './foundation/runtime';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,

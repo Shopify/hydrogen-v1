@@ -1,5 +1,5 @@
 import type {CachingStrategy} from '../../types';
-import {getCache} from '../../framework/runtime';
+import {getCache} from '../runtime';
 import {CacheSeconds, generateCacheControlHeader} from './strategies';
 import {logCacheApiStatus} from '../../utilities/log';
 
