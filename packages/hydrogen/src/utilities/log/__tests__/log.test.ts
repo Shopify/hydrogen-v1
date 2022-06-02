@@ -177,7 +177,7 @@ describe('log', () => {
       const clog = getLoggerWithContext({
         ctx: {
           runtime: {waitUntil: (p: Promise<any>) => waitUntilPromises.push(p)},
-        } as unknown as ServerComponentRequest['ctx'],
+        } as unknown as HydrogenRequest['ctx'],
       });
 
       (clog as any)[method]('no promise 1');

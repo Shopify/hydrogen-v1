@@ -54,7 +54,7 @@ let currentLogger = defaultLogger as Logger;
 
 function doLog(
   method: keyof typeof defaultLogger,
-  request: Partial<ServerComponentRequest>,
+  request: Partial<HydrogenRequest>,
   ...args: any[]
 ) {
   const maybePromise = currentLogger[method](request, ...args);
@@ -64,7 +64,7 @@ function doLog(
 }
 
 export function getLoggerWithContext(
-  context: Partial<ServerComponentRequest>
+  context: Partial<HydrogenRequest>
 ): Logger {
   return {
     trace: (...args) => doLog('trace', context, ...args),
