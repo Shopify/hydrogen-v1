@@ -33,7 +33,7 @@ export const BrowserRouter: FC<{
 
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [location, setLocation] = useState(history.location);
-  const [locationChanged, setLocationChanged] = useState(false);
+  const [scrollNeedsRestoration, setScrollNeedsRestoration] = useState(false);
 
   const {pending, locationServerProps, setLocationServerProps} =
     useInternalServerProps();
@@ -42,8 +42,8 @@ export const BrowserRouter: FC<{
     location,
     pending,
     serverProps: locationServerProps,
-    locationChanged,
-    onFinishNavigating: () => setLocationChanged(false),
+    scrollNeedsRestoration,
+    onFinishNavigating: () => setScrollNeedsRestoration(false),
   });
 
   useLayoutEffect(() => {
@@ -56,14 +56,14 @@ export const BrowserRouter: FC<{
       });
 
       setLocation(newLocation);
-      setLocationChanged(true);
+      setScrollNeedsRestoration(!!(newLocation.state as any)?.restoreScroll);
     });
 
     return () => unlisten();
   }, [
     history,
     location,
-    setLocationChanged,
+    setScrollNeedsRestoration,
     setLocation,
     setLocationServerProps,
   ]);
@@ -112,13 +112,13 @@ function useScrollRestoration({
   location,
   pending,
   serverProps,
-  locationChanged,
+  scrollNeedsRestoration,
   onFinishNavigating,
 }: {
   location: Location;
   pending: boolean;
   serverProps: LocationServerProps;
-  locationChanged: boolean;
+  scrollNeedsRestoration: boolean;
   onFinishNavigating: () => void;
 }) {
   /**
@@ -141,7 +141,7 @@ function useScrollRestoration({
 
   useLayoutEffect(() => {
     // The app has just loaded
-    if (isFirstLoad || !locationChanged) {
+    if (isFirstLoad || !scrollNeedsRestoration) {
       isFirstLoad = false;
       return;
     }
@@ -190,7 +190,7 @@ function useScrollRestoration({
     pending,
     serverProps.pathname,
     serverProps.search,
-    locationChanged,
+    scrollNeedsRestoration,
     onFinishNavigating,
   ]);
 }

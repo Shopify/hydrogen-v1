@@ -17,6 +17,8 @@ export interface LinkProps
   reloadDocument?: boolean;
   /** Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). */
   prefetch?: boolean;
+  /** Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to true. */
+  restoreScroll?: boolean;
 }
 
 /**
@@ -42,8 +44,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       replace: _replace,
       to,
       onClick,
-      clientState,
+      clientState = {},
       prefetch = true,
+      restoreScroll = true,
     } = props;
 
     const internalClick = useCallback(
@@ -63,19 +66,21 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
           navigate(to, {
             replace,
+            restoreScroll,
             clientState,
           });
         }
       },
       [
+        onClick,
         reloadDocument,
         target,
         _replace,
-        to,
-        clientState,
-        onClick,
         location,
+        to,
         navigate,
+        clientState,
+        restoreScroll,
       ]
     );
 
@@ -141,6 +146,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             'clientState',
             'reloadDocument',
             'prefetch',
+            'restoreScroll',
           ])}
           ref={ref}
           onClick={internalClick}
