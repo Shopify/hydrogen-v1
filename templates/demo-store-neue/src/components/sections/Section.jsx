@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import {Heading} from '~/components/elements';
+import {missingClass} from '~/lib/utils';
 
 export default function Section({
   as = 'section',
@@ -26,7 +27,7 @@ export default function Section({
 
   const styles = clsx(
     'w-full grid gap-4 md:gap-8',
-    paddings[padding],
+    missingClass(className, 'p[xy]?-') && paddings[padding],
     dividers[divider],
     className,
   );

@@ -1,6 +1,4 @@
 import {useProduct, MediaFile} from '@shopify/hydrogen/client';
-import {Tab} from '@headlessui/react';
-import {Fragment, useState} from 'react';
 
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products
@@ -13,7 +11,9 @@ export default function Gallery({className}) {
   }
 
   return (
-    <div className={`w-full grid grid-cols-2 gap-2 md:gap-4 ${className}`}>
+    <div
+      className={`grid grid-flow-col md:grid-flow-row gap-4 px-4 pb-4 overflow-x-scroll snap-x snap-center w-full  md:grid-cols-2 ${className}`}
+    >
       {media.map((med, i) => {
         let extraProps = {};
 
@@ -34,8 +34,8 @@ export default function Gallery({className}) {
         return (
           <div
             className={`${
-              i % 3 === 0 ? 'col-span-1 md:col-span-2' : 'col-span-1'
-            } aspect-square`}
+              i % 3 === 0 ? 'md:col-span-2' : 'md:col-span-1'
+            } aspect-square md:w-full w-[80vw]`}
             key={med.id || med.image.id}
           >
             <MediaFile
