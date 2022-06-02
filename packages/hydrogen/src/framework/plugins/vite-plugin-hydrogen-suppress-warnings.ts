@@ -2,7 +2,7 @@ import {Plugin} from 'vite';
 
 export default () => {
   return {
-    name: 'hydrogen:supress-warnings',
+    name: 'hydrogen:suppress-warnings',
     configResolved(config) {
       // TODO: Fix the actual issues that cause these warnings
       const filterOut = (msg: string) =>

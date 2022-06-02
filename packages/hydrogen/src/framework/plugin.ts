@@ -13,7 +13,7 @@ import inspect from 'vite-plugin-inspect';
 import react from '@vitejs/plugin-react';
 import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
 import clientImports from './plugins/vite-plugin-client-imports';
-import supressWarnings from './plugins/vite-plugin-hydrogen-supress-warnings';
+import suppressWarnings from './plugins/vite-plugin-hydrogen-suppress-warnings';
 
 export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
   return [
@@ -29,7 +29,7 @@ export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
     cssModulesRsc(),
     rsc(),
     platformEntry(),
-    supressWarnings(),
+    suppressWarnings(),
     pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ] as Plugin[];
 };
