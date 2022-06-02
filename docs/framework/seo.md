@@ -150,7 +150,7 @@ return (
 
 ## SEO robot behavior
 
-By default, all routes in Hydrogen are stream rendered. However, Hydrogen supports SEO by inspecting the `user-agent` for every request, disabling streaming, and buffering the response to fully render it on server-side.
+By default, all routes in Hydrogen are stream rendered. However, Hydrogen supports SEO by inspecting the `user-agent` for every request, disabling streaming, and buffering the response to fully render it on the server-side.
 
 ### Imitating robot behavior
 

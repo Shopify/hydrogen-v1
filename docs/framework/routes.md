@@ -318,7 +318,7 @@ export default function MyProducts({response}) {
 
 #### `response.doNotStream()`
 
-By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). However, it is possible to disable streaming per-route and return a fully buffered response, which can be beneficial in some scenarios like [handling custom SEO bots](https://shopify.dev/custom-storefronts/hydrogen/framework/seo#checking-for-custom-robots). To disable streaming, simply call `response.doNotStream()`:
+By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). However, you can also disable streaming for each route and return a fully buffered response. This is helpful in scenarios like [handling custom SEO bots](https://shopify.dev/custom-storefronts/hydrogen/framework/seo#checking-for-custom-robots). To disable streaming, call `response.doNotStream()`:
 
 {% codeblock file %}
 
