@@ -13,7 +13,7 @@ export default function ProductSwimlane({
 }) {
   const products = (data, count) => {
     // If the data is already provided, there's no need to query it, so we'll just return the data
-    if (typeof data === 'array') {
+    if (typeof data === 'object') {
       return data;
     }
 
