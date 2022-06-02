@@ -126,9 +126,9 @@ function DesktopHeader({title, home}) {
         <Link className={styles.button} to={'help'}>
           <IconHelp />
         </Link>
-        <button className={styles.button}>
+        <Link to={'/account'} className={styles.button}>
           <IconAccount />
-        </button>
+        </Link>
         <Link to={'/cart'} className={styles.button}>
           <IconBag />
           <CartBadge dark={home} quantity={1} />
