@@ -3,8 +3,6 @@ import {
   setLogger,
   logCacheControlHeaders,
   collectQueryCacheControlHeaders,
-  resetLogger,
-  setLoggerOptions,
 } from '../index';
 import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
 import {HydrogenResponse} from '../../../framework/HydrogenResponse.server';
@@ -26,14 +24,11 @@ describe('cache header log', () => {
       options: jest.fn(() => ({})),
     };
 
-    setLogger(mockLogger);
-    setLoggerOptions({
-      showCacheControlHeader: true,
-    });
+    setLogger({...mockLogger, showCacheControlHeader: true});
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
   });
 
   it('should log cache control header for main request', () => {

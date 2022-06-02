@@ -1,5 +1,5 @@
 import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
-import {Logger, setLogger, resetLogger, setLoggerOptions} from '../index';
+import {Logger, setLogger} from '../log';
 import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
 
 let mockLogger: jest.Mocked<Logger>;
@@ -36,14 +36,11 @@ describe('cache header log', () => {
       options: jest.fn(() => ({})),
     };
 
-    setLogger(mockLogger);
-    setLoggerOptions({
-      showQueryTiming: true,
-    });
+    setLogger({...mockLogger, showQueryTiming: true});
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
   });
 
   it('should log query timing', () => {

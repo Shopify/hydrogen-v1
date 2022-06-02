@@ -184,13 +184,15 @@ function processSymbolChunk(request, id, name) {
 // eslint-disable-next-line no-unused-vars
 var MODULE_TAG = Symbol.for('react.module.reference');
 function getModuleKey(reference) {
+  if (typeof reference === 'string') reference = globalThis.__STRING_REFERENCE_INDEX[reference];
   return reference.filepath + '#' + reference.name;
 }
-function getModuleReference(reference) {
-  if (typeof reference === 'string') return globalThis.__STRING_REFERENCE_INDEX[reference];
-  return reference && reference.$$typeof === MODULE_TAG ? reference : undefined;
+function isModuleReference(reference) {
+  if (typeof reference === 'string') return !!globalThis.__STRING_REFERENCE_INDEX[reference];
+  return reference.$$typeof === MODULE_TAG;
 }
 function resolveModuleMetaData(config, moduleReference) {
+  if (typeof moduleReference === 'string') moduleReference = globalThis.__STRING_REFERENCE_INDEX[moduleReference];
   return {
     id: moduleReference.filepath,
     name: moduleReference.name
@@ -506,7 +508,7 @@ var startInlineScript = stringToPrecomputedChunk('<script>');
 var endInlineScript = stringToPrecomputedChunk('</script>');
 var startScriptSrc = stringToPrecomputedChunk('<script src="');
 var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
-var endAsyncScript = stringToPrecomputedChunk('" async=""></script>'); // Allows us to keep track of what we've already written so we can refer back to it.
+var endAsyncScript = stringToPrecomputedChunk('" async=""></script>');
 
 var textSeparator = stringToPrecomputedChunk('<!-- -->');
 
@@ -541,6 +543,10 @@ var startPendingSuspenseBoundary1 = stringToPrecomputedChunk('<!--$?--><template
 var startPendingSuspenseBoundary2 = stringToPrecomputedChunk('"></template>');
 var startClientRenderedSuspenseBoundary = stringToPrecomputedChunk('<!--$!-->');
 var endSuspenseBoundary = stringToPrecomputedChunk('<!--/$-->');
+var clientRenderedSuspenseBoundaryError1 = stringToPrecomputedChunk('<template data-hash="');
+var clientRenderedSuspenseBoundaryError1A = stringToPrecomputedChunk('" data-msg="');
+var clientRenderedSuspenseBoundaryError1B = stringToPrecomputedChunk('" data-stack="');
+var clientRenderedSuspenseBoundaryError2 = stringToPrecomputedChunk('"></template>');
 var startSegmentHTML = stringToPrecomputedChunk('<div hidden id="');
 var startSegmentHTML2 = stringToPrecomputedChunk('">');
 var endSegmentHTML = stringToPrecomputedChunk('</div>');
@@ -570,7 +576,7 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 // const SUSPENSE_PENDING_START_DATA = '$?';
 // const SUSPENSE_FALLBACK_START_DATA = '$!';
 //
-// function clientRenderBoundary(suspenseBoundaryID) {
+// function clientRenderBoundary(suspenseBoundaryID, errorHash, errorMsg, errorComponentStack) {
 //   // Find the fallback's first element.
 //   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
 //   if (!suspenseIdNode) {
@@ -582,6 +588,11 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 //   const suspenseNode = suspenseIdNode.previousSibling;
 //   // Tag it to be client rendered.
 //   suspenseNode.data = SUSPENSE_FALLBACK_START_DATA;
+//   // assign error metadata to first sibling
+//   let dataset = suspenseIdNode.dataset;
+//   if (errorHash) dataset.hash = errorHash;
+//   if (errorMsg) dataset.msg = errorMsg;
+//   if (errorComponentStack) dataset.stack = errorComponentStack;
 //   // Tell React to retry it if the parent already hydrated.
 //   if (suspenseNode._reactRetry) {
 //     suspenseNode._reactRetry();
@@ -665,7 +676,7 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 
 var completeSegmentFunction = 'function $RS(a,b){a=document.getElementById(a);b=document.getElementById(b);for(a.parentNode.removeChild(a);a.firstChild;)b.parentNode.insertBefore(a.firstChild,b);b.parentNode.removeChild(b)}';
 var completeBoundaryFunction = 'function $RC(a,b){a=document.getElementById(a);b=document.getElementById(b);b.parentNode.removeChild(b);if(a){a=a.previousSibling;var f=a.parentNode,c=a.nextSibling,e=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d)if(0===e)break;else e--;else"$"!==d&&"$?"!==d&&"$!"!==d||e++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;b.firstChild;)f.insertBefore(b.firstChild,c);a.data="$";a._reactRetry&&a._reactRetry()}}';
-var clientRenderFunction = 'function $RX(a){if(a=document.getElementById(a))a=a.previousSibling,a.data="$!",a._reactRetry&&a._reactRetry()}';
+var clientRenderFunction = 'function $RX(b,c,d,e){var a=document.getElementById(b);a&&(b=a.previousSibling,b.data="$!",a=a.dataset,c&&(a.hash=c),d&&(a.msg=d),e&&(a.stack=e),b._reactRetry&&b._reactRetry())}';
 var completeSegmentScript1Full = stringToPrecomputedChunk(completeSegmentFunction + ';$RS("');
 var completeSegmentScript1Partial = stringToPrecomputedChunk('$RS("');
 var completeSegmentScript2 = stringToPrecomputedChunk('","');
@@ -676,7 +687,9 @@ var completeBoundaryScript2 = stringToPrecomputedChunk('","');
 var completeBoundaryScript3 = stringToPrecomputedChunk('")</script>');
 var clientRenderScript1Full = stringToPrecomputedChunk(clientRenderFunction + ';$RX("');
 var clientRenderScript1Partial = stringToPrecomputedChunk('$RX("');
-var clientRenderScript2 = stringToPrecomputedChunk('")</script>');
+var clientRenderScript1A = stringToPrecomputedChunk('"');
+var clientRenderScript2 = stringToPrecomputedChunk(')</script>');
+var clientRenderErrorScriptArgInterstitial = stringToPrecomputedChunk(',');
 
 var rendererSigil;
 
@@ -1004,7 +1017,7 @@ function attemptResolveElement(type, key, ref, props) {
     throw new Error('Refs cannot be used in server components, nor passed to client components.');
   }
 
-  if (getModuleReference(type)) {
+  if (type != null && isModuleReference(type)) {
     // This is a reference to a client component.
     return [REACT_ELEMENT_TYPE, type, key, props];
   }
@@ -1354,59 +1367,56 @@ function resolveModelToJSON(request, parent, key, value) {
     }
   }
 
-  if (value === null) {
-    return null;
+  if (value == null) {
+    return value;
   }
 
-  var moduleReference = getModuleReference(value);
+  if (typeof value === 'object' || isModuleReference(value)) {
+    if (isModuleReference(value)) {
+      var moduleReference = value;
+      var moduleKey = getModuleKey(moduleReference);
+      var writtenModules = request.writtenModules;
+      var existingId = writtenModules.get(moduleKey);
 
-  if (moduleReference) {
-    var moduleKey = getModuleKey(moduleReference);
-    var writtenModules = request.writtenModules;
-    var existingId = writtenModules.get(moduleKey);
+      if (existingId !== undefined) {
+        if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
+          // If we're encoding the "type" of an element, we can refer
+          // to that by a lazy reference instead of directly since React
+          // knows how to deal with lazy values. This lets us suspend
+          // on this component rather than its parent until the code has
+          // loaded.
+          return serializeByRefID(existingId);
+        }
 
-    if (existingId !== undefined) {
-      if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
-        // If we're encoding the "type" of an element, we can refer
-        // to that by a lazy reference instead of directly since React
-        // knows how to deal with lazy values. This lets us suspend
-        // on this component rather than its parent until the code has
-        // loaded.
-        return serializeByRefID(existingId);
+        return serializeByValueID(existingId);
       }
 
-      return serializeByValueID(existingId);
-    }
+      try {
+        var moduleMetaData = resolveModuleMetaData(request.bundlerConfig, moduleReference);
+        request.pendingChunks++;
+        var moduleId = request.nextChunkId++;
+        emitModuleChunk(request, moduleId, moduleMetaData);
+        writtenModules.set(moduleKey, moduleId);
 
-    try {
-      var moduleMetaData = resolveModuleMetaData(request.bundlerConfig, moduleReference);
-      request.pendingChunks++;
-      var moduleId = request.nextChunkId++;
-      emitModuleChunk(request, moduleId, moduleMetaData);
-      writtenModules.set(moduleKey, moduleId);
+        if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
+          // If we're encoding the "type" of an element, we can refer
+          // to that by a lazy reference instead of directly since React
+          // knows how to deal with lazy values. This lets us suspend
+          // on this component rather than its parent until the code has
+          // loaded.
+          return serializeByRefID(moduleId);
+        }
 
-      if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
-        // If we're encoding the "type" of an element, we can refer
-        // to that by a lazy reference instead of directly since React
-        // knows how to deal with lazy values. This lets us suspend
-        // on this component rather than its parent until the code has
-        // loaded.
-        return serializeByRefID(moduleId);
+        return serializeByValueID(moduleId);
+      } catch (x) {
+        request.pendingChunks++;
+
+        var _errorId = request.nextChunkId++;
+
+        emitErrorChunk(request, _errorId, x);
+        return serializeByValueID(_errorId);
       }
-
-      return serializeByValueID(moduleId);
-    } catch (x) {
-      request.pendingChunks++;
-
-      var _errorId = request.nextChunkId++;
-
-      emitErrorChunk(request, _errorId, x);
-      return serializeByValueID(_errorId);
-    }
-  }
-
-  if (typeof value === 'object') {
-    if (value.$$typeof === REACT_PROVIDER_TYPE) {
+    } else if (value.$$typeof === REACT_PROVIDER_TYPE) {
       var providerKey = value._context._globalName;
       var writtenProviders = request.writtenProviders;
       var providerId = writtenProviders.get(key);

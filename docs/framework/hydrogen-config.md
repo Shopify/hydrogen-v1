@@ -43,7 +43,7 @@ The following groupings of configuration properties can exist in Hydrogen:
 - [`shopify`](#shopify)
 - [`session`](#session)
 - [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
-- [`enableStreaming`](#enablestreaming)
+- [`logger`](#logger)
 
 ### `routes`
 
@@ -189,25 +189,36 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-### `enableStreaming`
+### `logger`
 
-By default, all routes in Hydrogen are stream rendered. Stream rendering is automatically disabled when the user agent is a bot.
+The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
 
-Content should be immediately available to bots for SEO purposes. However, you might want to manually disable streaming for a specific page. A common use case is disabling streaming for a custom bot that's not recognized by Hydrogen's bot detection algorithm. You can disable streaming for a custom bot with the `enableStreaming` configuration property:
+You can pass [any method](https://shopify.dev/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
 ```tsx
-import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen';
 export default defineConfig({
-  enableStreaming: (req) => req.headers.get('user-agent') !== 'custom bot',
+  logger: {
+    /* Overrides the default `log.trace` behavior. */
+    trace: (request, ...args) => console.log(request.url, ...args),
+    /* Overrides the default `log.error` behavior. */
+    error: (request, error) => myErrorTrackingService.send(error, {request}),
+    /* ... */
+
+    /* Logs the cache status of each stored entry: `PUT`, `HIT`, `MISS` or `STALE`. */
+    showCacheApiStatus: true,
+    /* Logs the cache control headers of the main document and its sub queries. */
+    showCacheControlHeader: true,
+    /* Logs the timeline of when queries are being requested, resolved, and rendered. */
+    showQueryTiming: true,
+    /* Logs warnings in your app if you're over-fetching data from the Storefront API. */
+    showUnusedQueryProperties: true,
+  }
 });
 ```
 
 {% endcodeblock %}
-
-> Tip:
-> There are [performance benefits](https://shopify.dev/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
 
 ## Changing the configuration file location
 

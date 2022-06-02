@@ -9,10 +9,6 @@ import {parseUrl} from './utils';
  * current request in progress.
  */
 
-declare namespace globalThis {
-  let __logger: Logger;
-}
-
 export interface Logger {
   trace: (...args: Array<any>) => void;
   debug: (...args: Array<any>) => void;
@@ -29,57 +25,60 @@ export type LoggerOptions = {
   showUnusedQueryProperties?: boolean;
 };
 
+export type LoggerConfig = Partial<Exclude<Logger, 'options'>> & LoggerOptions;
+
 export type RenderType = 'str' | 'rsc' | 'ssr' | 'api';
 
-const defaultLogger = {
-  trace(context: {[key: string]: any}, ...args: Array<any>) {
+const defaultLogger: Logger = {
+  trace(context, ...args) {
     // Re-enable following line to show trace debugging information
     // console.log(context.id, ...args);
   },
-  debug(context: {[key: string]: any}, ...args: Array<any>) {
+  debug(context, ...args) {
     console.log(...args);
   },
-  warn(context: {[key: string]: any}, ...args: Array<any>) {
+  warn(context, ...args) {
     console.warn(yellow('WARN: '), ...args);
   },
-  error(context: {[key: string]: any}, ...args: Array<any>) {
+  error(context, ...args) {
     console.error(red('ERROR: '), ...args);
   },
-  fatal(context: {[key: string]: any}, ...args: Array<any>) {
+  fatal(context, ...args) {
     console.error(red('FATAL: '), ...args);
   },
-  options: () => ({}),
+  options: () => ({} as LoggerOptions),
 };
 
-globalThis.__logger = defaultLogger as Logger;
+let currentLogger = defaultLogger as Logger;
 
-function buildLogger(this: any): Logger {
+export function getLoggerWithContext(context: any): Logger {
   return {
-    trace: (...args) => globalThis.__logger.trace(this, ...args),
-    debug: (...args) => globalThis.__logger.debug(this, ...args),
-    warn: (...args) => globalThis.__logger.warn(this, ...args),
-    error: (...args) => globalThis.__logger.error(this, ...args),
-    fatal: (...args) => globalThis.__logger.fatal(this, ...args),
-    options: () => globalThis.__logger.options(),
+    trace: (...args) => currentLogger.trace(context, ...args),
+    debug: (...args) => currentLogger.debug(context, ...args),
+    warn: (...args) => currentLogger.warn(context, ...args),
+    error: (...args) => currentLogger.error(context, ...args),
+    fatal: (...args) => currentLogger.fatal(context, ...args),
+    options: () => currentLogger.options(),
   };
 }
 
-export const log: Logger = buildLogger.call({});
+export const log: Logger = getLoggerWithContext({});
 
-export function getLoggerWithContext(context: any = {}): Logger {
-  return buildLogger.call(context);
-}
+export function setLogger(config?: LoggerConfig) {
+  if (!config) {
+    currentLogger = defaultLogger;
+    return;
+  }
 
-export function setLogger(newLogger: Logger) {
-  globalThis.__logger = newLogger;
-}
+  const options = {} as LoggerOptions;
+  currentLogger = {...defaultLogger, ...config, options: () => options};
 
-export function setLoggerOptions(options: LoggerOptions) {
-  globalThis.__logger.options = () => options;
-}
-
-export function resetLogger() {
-  globalThis.__logger = defaultLogger;
+  for (const key of Object.keys(config) as (keyof LoggerOptions)[]) {
+    if (!(key in defaultLogger)) {
+      delete currentLogger[key as keyof Logger];
+      options[key] = config[key];
+    }
+  }
 }
 
 const SERVER_RESPONSE_MAP: Record<string, string> = {
