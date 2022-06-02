@@ -1,17 +1,26 @@
 import {
   Seo,
   useShopQuery,
+  useShop,
+  useSession,
   NoStore,
   flattenConnection,
   gql,
 } from '@shopify/hydrogen';
 
-import {PageHeader} from '~/components/sections';
+import {
+  FeaturedCollections,
+  PageHeader,
+  ProductSwimlane,
+  Locations,
+} from '~/components/sections';
 import {Text, Button} from '~/components/elements';
 
 import Layout from '../layouts/DefaultLayout.server';
 import LogoutButton from '../elements/LogoutButton.client';
 import MoneyPrice from '../blocks/MoneyPrice.client';
+
+import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 function EmptyOrders(props) {
   const {heading} = props;
@@ -64,11 +73,16 @@ function OrderHistory(props) {
 }
 
 export default function AccountDetails({customerAccessToken}) {
+  const {languageCode} = useShop();
+  const {countryCode = 'US'} = useSession();
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       customerAccessToken,
+      language: languageCode,
+      country: countryCode,
     },
+    preload: true,
     cache: NoStore(),
   });
 
@@ -93,12 +107,24 @@ export default function AccountDetails({customerAccessToken}) {
       ) : (
         <EmptyOrders heading={heading} />
       )}
+      <FeaturedCollections
+        title="Popular Collections"
+        data={featuredCollections.nodes}
+      />
+      <ProductSwimlane data={featuredProducts.nodes} />
+      <Locations data={locations.nodes} />
     </Layout>
   );
 }
 
 const QUERY = gql`
-  query CustomerDetails($customerAccessToken: String!) {
+  ${LOCATION_CARD_FIELDS}
+  ${PRODUCT_CARD_FIELDS}
+  query CustomerDetails(
+    $customerAccessToken: String!
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
     customer(customerAccessToken: $customerAccessToken) {
       firstName
       email
@@ -115,6 +141,29 @@ const QUERY = gql`
               currencyCode
             }
           }
+        }
+      }
+    }
+    locations: metaobjects(first: 3, type: "stores") {
+      nodes {
+        ...LocationCardFields
+      }
+    }
+    featuredProducts: products(first: 12) {
+      nodes {
+        ...ProductCardFields
+      }
+    }
+    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
+      nodes {
+        id
+        title
+        handle
+        image {
+          altText
+          width
+          height
+          url
         }
       }
     }
