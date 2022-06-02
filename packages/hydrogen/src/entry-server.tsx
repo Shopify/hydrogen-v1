@@ -708,10 +708,20 @@ function handleFetchResponseInNode(
       nodeResponse.statusCode = response.status;
 
       if (response.body) {
-        nodeResponse.write(response.body);
+        if (response.body instanceof ReadableStream) {
+          const reader = response.body.getReader();
+          reader.read().then(function write({done, value}) {
+            value && nodeResponse.write(value);
+            !done && reader.read().then(write);
+            done && nodeResponse.end();
+          });
+        } else {
+          nodeResponse.write(response.body);
+          nodeResponse.end();
+        }
+      } else {
+        nodeResponse.end();
       }
-
-      nodeResponse.end();
     });
   }
 
