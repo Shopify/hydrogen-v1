@@ -159,16 +159,35 @@ describe('log', () => {
     });
 
     it('gets logger for a given context', () => {
-      const clog = getLoggerWithContext({some: 'data'});
+      const clog = getLoggerWithContext({url: 'example.com'});
 
       (clog as any)[method](`hydrogen: ${method}`);
       expect((mockLogger as any)[method]).toHaveBeenCalled();
       expect(((mockLogger as any)[method] as any).mock.calls[0][0]).toEqual({
-        some: 'data',
+        url: 'example.com',
       });
       expect(((mockLogger as any)[method] as any).mock.calls[0][1]).toBe(
         `hydrogen: ${method}`
       );
+    });
+
+    it('marks async calls for waitUntil', () => {
+      const waitUntilPromises = [] as Array<Promise<any>>;
+
+      const clog = getLoggerWithContext({
+        ctx: {
+          runtime: {waitUntil: (p: Promise<any>) => waitUntilPromises.push(p)},
+        } as unknown as ServerComponentRequest['ctx'],
+      });
+
+      (clog as any)[method]('no promise 1');
+      (clog as any)[method]('no promise 2');
+      expect(waitUntilPromises).toHaveLength(0);
+
+      setLogger({[method]: async () => null});
+      (clog as any)[method]('promise 1');
+      (clog as any)[method]('promise 2');
+      expect(waitUntilPromises).toHaveLength(2);
     });
   });
 });
