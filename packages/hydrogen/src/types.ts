@@ -1,5 +1,5 @@
 import type {ServerResponse} from 'http';
-import type {Logger} from './utilities/log/log';
+import type {Logger, LoggerConfig} from './utilities/log/log';
 import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
 import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
 import type {
@@ -84,6 +84,7 @@ export type InlineHydrogenConfig = {
   routes?: InlineHydrogenRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
 };
 

@@ -43,6 +43,7 @@ The following groupings of configuration properties can exist in Hydrogen:
 - [`shopify`](#shopify)
 - [`session`](#session)
 - [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
+- [`logger`](#logger)
 
 ### `routes`
 
@@ -159,9 +160,9 @@ export default defineConfig({
   session: CookieSessionStorage('__session', {
     /* Tells the browser that the cookie should only be sent to the server if it's within the defined path.  */
     path: '/',
-    /* Whether to secure the cookie so that the browser only sends it over HTTPS.  */
+    /* Whether to secure the cookie so that client-side JavaScript can't read the cookie. */
     httpOnly: true,
-    /* Whether to secure the cookie so that client JavaScript is unable to read it. */
+    /* Whether to secure the cookie so that the browser only sends the cookie over HTTPS.  */
     secure: process.env.NODE_ENV === 'production',
     /* Declares that the cookie should be restricted to a first-party or same-site context.  */
     sameSite: 'strict',
@@ -183,6 +184,37 @@ The `serverAnalyticsConnectors` property allows you to [send analytics data from
 import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen';
 export default defineConfig({
   serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+});
+```
+
+{% endcodeblock %}
+
+## Logger
+
+The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
+
+You can pass [any method](https://shopify.dev/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+export default defineConfig({
+  logger: {
+    /* Overrides the default `log.trace` behavior. */
+    trace: (request, ...args) => console.log(request.url, ...args),
+    /* Overrides the default `log.error` behavior. */
+    error: (request, error) => myErrorTrackingService.send(error, {request}),
+    /* ... */
+
+    /* Logs the cache status of each stored entry: `PUT`, `HIT`, `MISS` or `STALE`. */
+    showCacheApiStatus: true,
+    /* Logs the cache control headers of the main document and its sub queries. */
+    showCacheControlHeader: true,
+    /* Logs the timeline of when queries are being requested, resolved, and rendered. */
+    showQueryTiming: true,
+    /* Logs warnings in your app if you're over-fetching data from the Storefront API. */
+    showUnusedQueryProperties: true,
+  }
 });
 ```
 

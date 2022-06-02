@@ -31,4 +31,4 @@ A Boolean indicating if the code was run on the server.
 
 ## Related utilities
 
-- [`isClient`](api/hydrogen/utilities/isclient)
+- [`isBrowser`](https://shopify.dev/api/hydrogen/utilities/isbrowser)

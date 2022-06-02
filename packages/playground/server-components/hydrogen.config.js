@@ -11,4 +11,8 @@ export default defineConfig({
   session: CookieSessionStorage('__session', {
     expires: new Date(1749343178614),
   }),
+  logger: {
+    trace() {},
+    debug() {},
+  },
 });
