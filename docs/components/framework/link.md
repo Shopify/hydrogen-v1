@@ -30,8 +30,17 @@ However, if you are building a user interface that should fetch a new server com
 
 ```jsx
 import {Link} from '@shopify/hydrogen';
-export default function Index() {
-  return <Link to="/?new=param" restoreScroll={false}>Update page</Link>;
+export default function Index({request}) {
+  const url = new URL(request.normalizedUrl);
+
+  return (
+    <>
+      <p>Current param is: {url.searchParams.get('param')}</p>
+      <Link to="/?param=foo" restoreScroll={false}>
+        Update param to foo
+      </Link>
+    </>
+  );
 }
 ```
 
