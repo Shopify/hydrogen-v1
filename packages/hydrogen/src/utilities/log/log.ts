@@ -9,12 +9,13 @@ import {parseUrl} from './utils';
  * current request in progress.
  */
 
+type LoggerMethod = (...args: Array<any>) => void | Promise<any>;
 export interface Logger {
-  trace: (...args: Array<any>) => void;
-  debug: (...args: Array<any>) => void;
-  warn: (...args: Array<any>) => void;
-  error: (...args: Array<any>) => void;
-  fatal: (...args: Array<any>) => void;
+  trace: LoggerMethod;
+  debug: LoggerMethod;
+  warn: LoggerMethod;
+  error: LoggerMethod;
+  fatal: LoggerMethod;
   options: () => LoggerOptions;
 }
 
@@ -51,13 +52,26 @@ const defaultLogger: Logger = {
 
 let currentLogger = defaultLogger as Logger;
 
-export function getLoggerWithContext(context: any): Logger {
+function doLog(
+  method: keyof typeof defaultLogger,
+  request: Partial<ServerComponentRequest>,
+  ...args: any[]
+) {
+  const maybePromise = currentLogger[method](request, ...args);
+  if (maybePromise instanceof Promise) {
+    request?.ctx?.runtime?.waitUntil?.(maybePromise);
+  }
+}
+
+export function getLoggerWithContext(
+  context: Partial<ServerComponentRequest>
+): Logger {
   return {
-    trace: (...args) => currentLogger.trace(context, ...args),
-    debug: (...args) => currentLogger.debug(context, ...args),
-    warn: (...args) => currentLogger.warn(context, ...args),
-    error: (...args) => currentLogger.error(context, ...args),
-    fatal: (...args) => currentLogger.fatal(context, ...args),
+    trace: (...args) => doLog('trace', context, ...args),
+    debug: (...args) => doLog('debug', context, ...args),
+    warn: (...args) => doLog('warn', context, ...args),
+    error: (...args) => doLog('error', context, ...args),
+    fatal: (...args) => doLog('fatal', context, ...args),
     options: () => currentLogger.options(),
   };
 }

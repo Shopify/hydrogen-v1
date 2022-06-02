@@ -16,7 +16,10 @@ import type {
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {HydrogenResponse} from './framework/HydrogenResponse.server';
-import {HydrogenRequest} from './framework/HydrogenRequest.server';
+import {
+  HydrogenRequest,
+  RuntimeContext,
+} from './framework/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
@@ -30,8 +33,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {setContext, setCache, RuntimeContext} from './framework/runtime';
-import {setConfig} from './framework/config';
+import {setCache} from './framework/runtime';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -52,7 +54,7 @@ declare global {
   // This is provided by a Vite plugin
   // and will trigger tree-shaking.
   // eslint-disable-next-line no-var
-  var __WORKER__: boolean;
+  var __HYDROGEN_WORKER__: boolean;
 }
 
 const DOCTYPE = '<!DOCTYPE html>';
@@ -125,9 +127,8 @@ export const renderHydrogen = (App: any) => {
     /**
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
      */
+    request.ctx.runtime = context;
     setCache(cache);
-    setContext(context);
-    setConfig({dev});
 
     if (
       url.pathname === EVENT_PATHNAME ||
@@ -192,7 +193,7 @@ export const renderHydrogen = (App: any) => {
     });
   };
 
-  if (__WORKER__) return handleRequest;
+  if (__HYDROGEN_WORKER__) return handleRequest;
 
   return ((rawRequest, options) =>
     handleFetchResponseInNode(
@@ -270,7 +271,10 @@ async function runSSR({
     stripScriptsFromTemplate(template);
 
   const AppSSR = (
-    <Html template={response.canStream() ? noScriptTemplate : template}>
+    <Html
+      template={response.canStream() ? noScriptTemplate : template}
+      hydrogenConfig={request.ctx.hydrogenConfig!}
+    >
       <ServerRequestProvider request={request} isRSC={false}>
         <ServerPropsProvider
           initialServerProps={state as any}
@@ -307,7 +311,7 @@ async function runSSR({
       })
     : rscReadableForFlight;
 
-  if (__WORKER__) {
+  if (__HYDROGEN_WORKER__) {
     const encoder = new TextEncoder();
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
@@ -666,7 +670,7 @@ async function createNodeWriter() {
   // when building for workers, even though this code
   // does not run in a worker. Looks like tree-shaking
   // kicks in after the import analysis/bundle.
-  const streamImport = __WORKER__ ? '' : 'stream';
+  const streamImport = __HYDROGEN_WORKER__ ? '' : 'stream';
   const {PassThrough} = await import(streamImport);
   return new PassThrough() as InstanceType<typeof PassThroughType>;
 }

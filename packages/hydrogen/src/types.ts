@@ -80,7 +80,7 @@ export type ServerAnalyticsConnector = {
   ) => void;
 };
 
-export type InlineHydrogenConfig = {
+export type InlineHydrogenConfig = ClientConfig & {
   routes?: InlineHydrogenRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
@@ -92,7 +92,7 @@ export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
   routes: ResolvedHydrogenRoutes;
 };
 
-export type ClientHandlerConfig = {
+export type ClientConfig = {
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;
   showDevTools?: boolean;
@@ -100,7 +100,7 @@ export type ClientHandlerConfig = {
 
 export type ClientHandler = (
   App: React.ElementType,
-  config: ClientHandlerConfig
+  config: ClientConfig
 ) => Promise<void>;
 
 export interface GraphQLConnection<T> {

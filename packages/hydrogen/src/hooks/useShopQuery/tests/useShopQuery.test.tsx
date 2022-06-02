@@ -3,7 +3,7 @@ import {useShopQuery} from '../hooks';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ServerRequestProvider} from '../../../foundation/ServerRequestProvider';
 import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
-import {setCache, setContext} from '../../../framework/runtime';
+import {setCache} from '../../../framework/runtime';
 import {InMemoryCache} from '../../../framework/cache/in-memory';
 
 jest.mock('../../../foundation/ssr-interop', () => {
@@ -13,6 +13,8 @@ jest.mock('../../../foundation/ssr-interop', () => {
   };
 });
 
+let waitUntilPromises = [] as Array<Promise<any>>;
+
 function mountComponent() {
   function Component() {
     const result = useShopQuery({query: 'query { test {} }'});
@@ -20,6 +22,10 @@ function mountComponent() {
   }
 
   const request = new HydrogenRequest(new Request('https://example.com'));
+
+  request.ctx.runtime = {
+    waitUntil: (p: Promise<any>) => waitUntilPromises.push(p),
+  };
 
   return mountWithProviders(
     <ServerRequestProvider request={request} isRSC={true}>
@@ -33,7 +39,6 @@ function mountComponent() {
 describe('useShopQuery', () => {
   const originalFetch = globalThis.fetch;
   const mockedFetch = jest.fn(originalFetch);
-  let waitUntilPromises: Array<Promise<any>>;
   let cache: Cache;
   let consoleErrorSpy: jest.SpyInstance;
 
@@ -43,7 +48,6 @@ describe('useShopQuery', () => {
 
   beforeEach(() => {
     waitUntilPromises = [];
-    setContext({waitUntil: (p: Promise<any>) => waitUntilPromises.push(p)});
     cache = new InMemoryCache() as unknown as Cache;
     setCache(cache);
     consoleErrorSpy = jest.spyOn(console, 'error');
@@ -56,7 +60,6 @@ describe('useShopQuery', () => {
 
   afterAll(() => {
     globalThis.fetch = originalFetch;
-    setContext(undefined);
     setCache(undefined);
   });
 

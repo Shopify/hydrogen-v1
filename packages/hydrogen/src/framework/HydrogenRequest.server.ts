@@ -9,6 +9,10 @@ import {RSC_PATHNAME} from '../constants';
 import {SessionSyncApi} from '../foundation/session/session';
 import {parseJSON} from '../utilities/parse';
 
+export interface RuntimeContext {
+  waitUntil: (fn: Promise<any>) => void;
+}
+
 export type PreloadQueryEntry = {
   key: QueryKey;
   fetcher: () => Promise<unknown>;
@@ -60,6 +64,7 @@ export class HydrogenRequest extends Request {
     router: RouterContextData;
     buyerIpHeader?: string;
     session?: SessionSyncApi;
+    runtime?: RuntimeContext;
     [key: string]: any;
   };
 
