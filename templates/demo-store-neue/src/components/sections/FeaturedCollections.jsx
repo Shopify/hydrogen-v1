@@ -17,7 +17,7 @@ export default function FeaturedCollections({
             <div className="grid gap-4">
               {collection?.image && (
                 <Image
-                  className="rounded shadow-border overflow-clip inline-block aspect-square md:aspect-[3/2] object-cover"
+                  className="rounded shadow-border overflow-clip inline-block aspect-[5/4] md:aspect-[3/2] object-cover"
                   width={'100%'}
                   height={336}
                   alt={`Image of ${collection.title}`}

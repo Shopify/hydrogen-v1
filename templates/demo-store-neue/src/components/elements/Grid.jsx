@@ -12,7 +12,7 @@ export default function Grid({
   const Component = as;
 
   const layouts = {
-    default: `grid-cols-1 sm:grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${
+    default: `grid-cols-1 md:grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${
       items >= 4 && 'lg:grid-cols-4'
     }`,
     products: `grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${
@@ -22,7 +22,7 @@ export default function Grid({
   };
 
   const gaps = {
-    default: 'grid gap-2 md:gap-4 lg:gap-6',
+    default: 'grid gap-2 gap-y-6 md:gap-4 lg:gap-6',
   };
 
   const flows = {

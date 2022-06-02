@@ -17,7 +17,7 @@ export default function Header({title}) {
   const {pathname} = useUrl();
 
   const home = pathname === '/';
-  const isDesktop = useMedia('(min-width: 60em)');
+  const isDesktop = useMedia('(min-width: 60em)', false);
 
   return isDesktop ? (
     <DesktopHeader home={home} title={title} />

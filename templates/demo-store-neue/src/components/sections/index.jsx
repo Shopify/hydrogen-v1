@@ -7,6 +7,6 @@ export {default as Locations} from './Locations';
 // TODO: Abstract Swimlane as a generic presentational component
 export {default as ProductSwimlane} from './ProductSwimlane';
 export {default as Header} from './Header.client';
-export {default as Footer} from './Footer.server';
+export {default as Footer} from './Footer.client';
 export {default as Section} from './Section';
 export {default as PageHeader} from './PageHeader';
