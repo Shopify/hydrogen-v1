@@ -2,7 +2,7 @@
 '@shopify/hydrogen': minor
 ---
 
-The `setLogger` and `setLoggerOptions` utilities have been removed. The same information can now be passed under the `logger` property in Hydrogen config:
+**Breaking change**: The `setLogger` and `setLoggerOptions` utilities have been removed. The same information can now be passed under the `logger` property in Hydrogen config:
 
 ```diff
 // App.server.jsx

@@ -2,7 +2,7 @@
 '@shopify/hydrogen': minor
 ---
 
-The `enableStreaming` config option has been deprecated. The same feature can be done directly in the app:
+**Breaking change**: The `enableStreaming` config option has been deprecated. The same feature can be done directly in the app:
 
 ```diff
 // hydrogen.config.js
