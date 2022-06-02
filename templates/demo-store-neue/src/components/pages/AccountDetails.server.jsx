@@ -6,14 +6,34 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
+import {PageHeader} from '~/components/sections';
+import {Text, Button} from '~/components/elements';
+
 import Layout from '../layouts/DefaultLayout.server';
 import LogoutButton from '../elements/LogoutButton.client';
 import MoneyPrice from '../blocks/MoneyPrice.client';
 
-function OrderHistory(props) {
-  const orders = props.orders;
+function EmptyOrders(props) {
+  const {heading} = props;
   return (
-    <div>
+    <PageHeader heading={heading}>
+      <LogoutButton className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+        Logout
+      </LogoutButton>
+      <Text width="narrow" as="p">
+        You haven't made any orders yet.
+      </Text>
+      <Button width="auto" variant="secondary" to={'/'}>
+        Start shopping
+      </Button>
+    </PageHeader>
+  );
+}
+
+function OrderHistory(props) {
+  const {orders} = props;
+  return (
+    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4">
       <h2>Order History</h2>
       <table className="min-w-full table-fixed text-sm text-left mt-6">
         <thead>
@@ -59,26 +79,20 @@ export default function AccountDetails({customerAccessToken}) {
       ? flattenConnection(customer.orders)
       : [];
 
-  const pageHeader = customer
-    ? `Welcome ${customer.firstName || customer.email}!`
+  const heading = customer
+    ? `Welcome, ${customer.firstName || customer.email}`
     : 'Account Details';
+
+  const {featuredCollections, featuredProducts, locations} = data;
 
   return (
     <Layout>
       <Seo type="noindex" data={{title: 'Account details'}} />
-      <h1>{pageHeader}</h1>
-      <div className="flex items-center justify-between">
-        <LogoutButton className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-          Logout
-        </LogoutButton>
-      </div>
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4">
-        {orders.length ? (
-          <OrderHistory orders={orders} />
-        ) : (
-          <div>No orders</div>
-        )}
-      </div>
+      {orders.length ? (
+        <OrderHistory orders={orders} />
+      ) : (
+        <EmptyOrders heading={heading} />
+      )}
     </Layout>
   );
 }
