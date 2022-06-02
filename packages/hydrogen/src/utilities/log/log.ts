@@ -1,4 +1,4 @@
-import {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../framework/HydrogenRequest.server';
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing';
 import {parseUrl} from './utils';
@@ -54,7 +54,7 @@ let currentLogger = defaultLogger as Logger;
 
 function doLog(
   method: keyof typeof defaultLogger,
-  request: Partial<ServerComponentRequest>,
+  request: Partial<HydrogenRequest>,
   ...args: any[]
 ) {
   const maybePromise = currentLogger[method](request, ...args);
@@ -64,7 +64,7 @@ function doLog(
 }
 
 export function getLoggerWithContext(
-  context: Partial<ServerComponentRequest>
+  context: Partial<HydrogenRequest>
 ): Logger {
   return {
     trace: (...args) => doLog('trace', context, ...args),
@@ -103,7 +103,7 @@ const SERVER_RESPONSE_MAP: Record<string, string> = {
 
 export function logServerResponse(
   type: RenderType,
-  request: ServerComponentRequest,
+  request: HydrogenRequest,
   responseStatus: number
 ) {
   const log = getLoggerWithContext(request);

@@ -113,7 +113,7 @@ For advanced use cases, you can provide a function that returns the same propert
 let myShopifyConfigCache = {};
 
 export default defineConfig({
-  shopify: (request: ServerComponentRequest) => {
+  shopify: (request: HydrogenRequest) => {
     // For example, you can change the configuration based on the normalized URL
     const url = new URL(request.normalizedUrl);
     const [firstUrlPart] = url.pathname.split('/');

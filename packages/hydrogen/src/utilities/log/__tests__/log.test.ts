@@ -5,7 +5,7 @@ import {
   logServerResponse,
   getLoggerWithContext,
 } from '../log';
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
 
 let mockLogger: jest.Mocked<Logger>;
 
@@ -97,7 +97,7 @@ describe('log', () => {
       method: 'GET',
       url: 'http://localhost:3000/',
       time: 1000,
-    } as ServerComponentRequest;
+    } as HydrogenRequest;
     logServerResponse('str', request, 500);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
@@ -111,7 +111,7 @@ describe('log', () => {
       method: 'GET',
       url: 'http://localhost:3000/',
       time: 1000,
-    } as ServerComponentRequest;
+    } as HydrogenRequest;
     logServerResponse('str', request, 200);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
@@ -125,7 +125,7 @@ describe('log', () => {
       method: 'GET',
       url: 'http://localhost:3000/',
       time: 1000,
-    } as ServerComponentRequest;
+    } as HydrogenRequest;
     logServerResponse('str', request, 301);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
@@ -139,7 +139,7 @@ describe('log', () => {
       method: 'GET',
       url: 'http://localhost:3000/',
       time: 1000,
-    } as ServerComponentRequest;
+    } as HydrogenRequest;
     logServerResponse('str', request, 404);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
@@ -177,7 +177,7 @@ describe('log', () => {
       const clog = getLoggerWithContext({
         ctx: {
           runtime: {waitUntil: (p: Promise<any>) => waitUntilPromises.push(p)},
-        } as unknown as ServerComponentRequest['ctx'],
+        } as unknown as HydrogenRequest['ctx'],
       });
 
       (clog as any)[method]('no promise 1');

@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ServerRequestProvider} from '../../ServerRequestProvider';
 import {Analytics} from '../Analytics.server';
@@ -15,7 +15,7 @@ function SomeApiDelayServerComponent({
   request,
 }: {
   delay: number;
-  request: ServerComponentRequest;
+  request: HydrogenRequest;
 }) {
   const cache = request.ctx.cache;
   const delayKey = `api-${delay}`;
@@ -44,10 +44,7 @@ function SomeApiDelayServerComponent({
   return <div>Api delay - {delay}</div>;
 }
 
-function mountComponent(
-  request: ServerComponentRequest,
-  children: React.ReactChild
-) {
+function mountComponent(request: HydrogenRequest, children: React.ReactChild) {
   return mountWithProviders(
     <ServerRequestProvider request={request} isRSC={true}>
       <Suspense fallback={null}>
@@ -62,9 +59,7 @@ function mountComponent(
 
 describe('Analytics.server', () => {
   it('should introduce delay if no cache queries are detected', async () => {
-    const request = new ServerComponentRequest(
-      new Request('https://examples.com')
-    );
+    const request = new HydrogenRequest(new Request('https://examples.com'));
     const analyticsData = {
       test: '123',
     };
@@ -88,9 +83,7 @@ describe('Analytics.server', () => {
   });
 
   it('should wait for all cache queries', async () => {
-    const request = new ServerComponentRequest(
-      new Request('https://examples.com')
-    );
+    const request = new HydrogenRequest(new Request('https://examples.com'));
     await mountComponent(
       request,
       <>

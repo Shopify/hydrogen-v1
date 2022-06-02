@@ -1,17 +1,13 @@
-import type {ShopifyContextValue} from '../../foundation/ShopifyProvider/types';
-import {getTime} from '../../utilities/timing';
-import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
-import type {QueryTiming} from '../../utilities/log/log-query-timeline';
-import type {
-  ResolvedHydrogenConfig,
-  PreloadOptions,
-  QueryKey,
-} from '../../types';
-import {hashKey} from '../../utilities/hash';
+import type {ShopifyContextValue} from '../foundation/ShopifyProvider/types';
+import {getTime} from '../utilities/timing';
+import type {QueryCacheControlHeaders} from '../utilities/log/log-cache-header';
+import type {QueryTiming} from '../utilities/log/log-query-timeline';
+import type {ResolvedHydrogenConfig, PreloadOptions, QueryKey} from '../types';
+import {hashKey} from '../utilities/hash';
 import {HelmetData as HeadData} from 'react-helmet-async';
-import {RSC_PATHNAME} from '../../constants';
-import {SessionSyncApi} from '../../foundation/session/session';
-import {parseJSON} from '../../utilities/parse';
+import {RSC_PATHNAME} from '../constants';
+import {SessionSyncApi} from '../foundation/session/session';
+import {parseJSON} from '../utilities/parse';
 
 export interface RuntimeContext {
   waitUntil: (fn: Promise<any>) => void;
@@ -50,7 +46,7 @@ const PRELOAD_ALL = '*';
  * - Adds a `cookies` map for easy access
  * - Adds a static constructor to convert a Node.js `IncomingMessage` to a Request.
  */
-export class ServerComponentRequest extends Request {
+export class HydrogenRequest extends Request {
   public cookies: Map<string, string>;
   public id: string;
   public time: number;

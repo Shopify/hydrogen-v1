@@ -15,11 +15,11 @@ import type {
   ResolvedHydrogenRoutes,
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
-import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
+import {HydrogenResponse} from './framework/HydrogenResponse.server';
 import {
+  HydrogenRequest,
   RuntimeContext,
-  ServerComponentRequest,
-} from './framework/Hydration/ServerComponentRequest.server';
+} from './framework/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
@@ -91,7 +91,7 @@ export const renderHydrogen = (App: any) => {
       streamableResponse: nodeResponse,
     } = options;
 
-    const request = new ServerComponentRequest(rawRequest);
+    const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
 
     const {default: inlineHydrogenConfig} = await import(
@@ -117,7 +117,7 @@ export const renderHydrogen = (App: any) => {
     setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
-    const response = new ServerComponentResponse();
+    const response = new HydrogenResponse();
     const sessionApi = hydrogenConfig.session
       ? hydrogenConfig.session(log)
       : undefined;
@@ -578,7 +578,7 @@ function PreloadQueries({
   request,
   children,
 }: {
-  request: ServerComponentRequest;
+  request: HydrogenRequest;
   children: React.ReactNode;
 }) {
   const preloadQueries = request.getPreloadQueries();
@@ -611,7 +611,7 @@ type ResponseOptions = {
 };
 
 function getResponseOptions(
-  {headers, status, customStatus}: ServerComponentResponse,
+  {headers, status, customStatus}: HydrogenResponse,
   error?: Error
 ) {
   const responseInit = {} as ResponseOptions;
@@ -633,7 +633,7 @@ function getResponseOptions(
 
 function writeHeadToNodeResponse(
   nodeResponse: ServerResponse,
-  componentResponse: ServerComponentResponse,
+  componentResponse: HydrogenResponse,
   log: Logger,
   error?: Error
 ) {
@@ -682,8 +682,8 @@ function flightContainer(chunk: string) {
 function postRequestTasks(
   type: RenderType,
   status: number,
-  request: ServerComponentRequest,
-  response: ServerComponentResponse
+  request: HydrogenRequest,
+  response: HydrogenResponse
 ) {
   logServerResponse(type, request, status);
   logCacheControlHeaders(type, request, response);

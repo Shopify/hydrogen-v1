@@ -4,8 +4,8 @@ import {
   logCacheControlHeaders,
   collectQueryCacheControlHeaders,
 } from '../index';
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
-import {ServerComponentResponse} from '../../../framework/Hydration/ServerComponentResponse.server';
+import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
+import {HydrogenResponse} from '../../../framework/HydrogenResponse.server';
 
 let mockLogger: jest.Mocked<Logger>;
 
@@ -37,10 +37,10 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
-    } as ServerComponentResponse;
+    } as HydrogenResponse;
 
     logCacheControlHeaders('str', request, response);
 
@@ -61,10 +61,10 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
-    } as ServerComponentResponse;
+    } as HydrogenResponse;
 
     logCacheControlHeaders('rsc', request, response);
 
@@ -85,10 +85,10 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
-    } as ServerComponentResponse;
+    } as HydrogenResponse;
 
     collectQueryCacheControlHeaders(
       request,
@@ -118,10 +118,10 @@ describe('cache header log', () => {
       ctx: {
         queryCacheControl: [],
       },
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     const response = {
       cacheControlHeader: 'public, max-age=1, stale-while-revalidate=9',
-    } as ServerComponentResponse;
+    } as HydrogenResponse;
 
     collectQueryCacheControlHeaders(
       request,
