@@ -8,7 +8,7 @@ import {
 } from '~/components/sections';
 import {Text, Button} from '~/components/elements';
 
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FIELDS, LOCATION_CARD_FIELDS} from '~/lib/fragments';
 
 export default function NotFound({type = 'page'}) {
   const {languageCode} = useShop();
@@ -48,6 +48,7 @@ export default function NotFound({type = 'page'}) {
 
 const QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
+  ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
@@ -70,33 +71,7 @@ const QUERY = gql`
     }
     locations: metaobjects(first: 3, type: "stores") {
       nodes {
-        id
-        featured_image: field(key: "featured_image") {
-          reference {
-            ... on MediaImage {
-              image {
-                url
-                width
-                height
-              }
-            }
-          }
-        }
-        title: field(key: "title") {
-          value
-        }
-        address: field(key: "address") {
-          value
-        }
-        hours: field(key: "hours") {
-          value
-        }
-        email: field(key: "email") {
-          value
-        }
-        phone: field(key: "phone") {
-          value
-        }
+        ...LocationCardFields
       }
     }
   }

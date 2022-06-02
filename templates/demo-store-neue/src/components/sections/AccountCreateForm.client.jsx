@@ -81,9 +81,9 @@ export default function AccountCreateForm() {
               <p className="m-4 text-s text-white">{submitError}</p>
             </div>
           )}
-          <div className="mb-4">
+          <div className="mb-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+              className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
                 emailError ? ' border-red-500' : 'border-gray-900'
               }`}
               id="email"
@@ -98,17 +98,15 @@ export default function AccountCreateForm() {
                 setEmail(event.target.value);
               }}
             />
-            <p
-              className={`text-red-500 text-xs ${
-                !emailError ? 'invisible' : ''
-              }`}
-            >
-              {emailError} &nbsp;
-            </p>
+            {!emailError ? (
+              ''
+            ) : (
+              <p className={`text-red-500 text-xs`}>{emailError} &nbsp;</p>
+            )}
           </div>
-          <div className="mb-4">
+          <div className="mb-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+              className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
                 passwordError ? ' border-red-500' : 'border-gray-900'
               }`}
               id="password"
@@ -124,17 +122,15 @@ export default function AccountCreateForm() {
                 setPassword(event.target.value);
               }}
             />
-            <p
-              className={`text-red-500 text-xs ${
-                !passwordError ? 'invisible' : ''
-              }`}
-            >
-              {passwordError} &nbsp;
-            </p>
+            {!passwordError ? (
+              ''
+            ) : (
+              <p className={`text-red-500 text-xs`}>{passwordError} &nbsp;</p>
+            )}
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-gray-900 text-white uppercase py-2 px-4 focus:shadow-outline block w-full"
+              className="bg-gray-900 text-white rounded py-2 px-4 focus:shadow-outline block w-full"
               type="submit"
             >
               Create Account
