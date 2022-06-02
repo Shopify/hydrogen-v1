@@ -6,7 +6,7 @@ import React, {
   type ElementType,
 } from 'react';
 import {hydrateRoot} from 'react-dom/client';
-import type {ClientHandler} from './types';
+import type {ClientConfig, ClientHandler} from './types';
 import {ErrorBoundary} from 'react-error-boundary';
 import {useServerResponse} from './framework/Hydration/rsc';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
@@ -15,7 +15,7 @@ import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerP
 
 const DevTools = React.lazy(() => import('./components/DevTools.client'));
 
-const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
+const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   const root = document.getElementById('root');
 
   if (!root) {
@@ -33,8 +33,22 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
     });
   }
 
-  // default to StrictMode on, unless explicitly turned off
-  const RootComponent = config?.strictMode !== false ? StrictMode : Fragment;
+  let config: ClientConfig;
+  try {
+    config = JSON.parse(root.dataset.clientConfig ?? '{}');
+  } catch (error: any) {
+    config = {};
+    if (__DEV__) {
+      console.warn(
+        'Could not parse client configuration in browser',
+        error.message
+      );
+    }
+  }
+
+  const RootComponent =
+    // Default to StrictMode on, unless explicitly turned off
+    config.strictMode !== false ? StrictMode : Fragment;
 
   let hasCaughtError = false;
 
@@ -48,7 +62,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper, config) => {
           </Suspense>
         </ErrorBoundary>
       </RootComponent>
-      {typeof DevTools !== 'undefined' && config?.showDevTools ? (
+      {typeof DevTools !== 'undefined' && config.showDevTools ? (
         <DevTools />
       ) : null}
     </>,
