@@ -1,7 +1,6 @@
 import {Image, Video, Link} from '@shopify/hydrogen';
 import {Heading, Text} from '../elements';
 import {hero as mockData} from '~/lib/placeholders';
-import {useMedia} from 'react-use';
 
 export default function Hero({data = mockData, height, top}) {
   const {title, byline, cta, url, spread, spread_secondary, text_color} = data;
@@ -11,7 +10,11 @@ export default function Hero({data = mockData, height, top}) {
       <section
         className={`relative justify-end flex flex-col w-full ${
           top && '-mt-nav'
-        } ${height === 'full' ? 'h-screen' : 'h-[50rem]'}`}
+        } ${
+          height === 'full'
+            ? 'h-screen'
+            : 'aspect-[4/5] sm:aspect-square md:aspect-[5/4] lg:aspect-[3/2] xl:aspect-[2/1]'
+        }`}
       >
         <div className="absolute inset-0 grid flex-grow grid-flow-col pointer-events-none auto-cols-fr -z-10 content-stretch overflow-clip">
           {spread?.reference && (

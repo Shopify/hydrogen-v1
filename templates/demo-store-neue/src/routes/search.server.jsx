@@ -63,7 +63,7 @@ export default function Search({pageBy = 12, params}) {
   return (
     <SearchPage query={decodeURI(query)}>
       <Section>
-        <Grid>
+        <Grid layout="products">
           {results.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -83,7 +83,7 @@ function SearchPage({query, children}) {
         <form className="relative flex w-full text-heading">
           <Input
             defaultValue={query}
-            placeholder="Enter a product name, type, or keyword"
+            placeholder="Search…"
             type="search"
             variant="search"
             name="q"
