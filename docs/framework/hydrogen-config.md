@@ -189,7 +189,7 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-## Logger
+### `logger`
 
 The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
 
