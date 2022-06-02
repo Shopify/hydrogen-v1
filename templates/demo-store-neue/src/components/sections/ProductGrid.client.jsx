@@ -1,10 +1,11 @@
 import {flattenConnection} from '@shopify/hydrogen';
-import {useState} from 'react';
+import {useState, useRef, useEffect} from 'react';
 
 import {Grid} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 
 export default function ProductGrid({data}) {
+  const nextButtonRef = useRef(null);
   const initialProducts = flattenConnection(data.collection.products);
   const {hasNextPage, endCursor} = data.collection.products.pageInfo;
 
@@ -29,6 +30,27 @@ export default function ProductGrid({data}) {
     setPending(false);
   };
 
+  const handleIntersect = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        fetchProducts();
+      }
+    });
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersect, {
+      threshold: 0.1,
+      rootMargin: '100px',
+    });
+
+    if (nextButtonRef.current) observer.observe(nextButtonRef.current);
+
+    return () => {
+      if (nextButtonRef.current) observer.unobserve(nextButtonRef.current);
+    };
+  }, [nextButtonRef, cursor]);
+
   return (
     <>
       <Grid>
@@ -36,11 +58,13 @@ export default function ProductGrid({data}) {
           <ProductCard key={product.id} product={product} />
         ))}
       </Grid>
+
       {nextPage && (
         <button
           className={`bg-white border border-gray-50 font-medium p-2 disabled:bg-gray-50`}
           disabled={pending}
           onClick={fetchProducts}
+          ref={nextButtonRef}
         >
           {pending ? 'Loading...' : 'Load more products'}
         </button>

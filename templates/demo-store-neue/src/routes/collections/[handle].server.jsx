@@ -16,7 +16,7 @@ import ProductGrid from '~/components/sections/ProductGrid.client';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 // Setting this low to test functionality.
-const pageBy = 2;
+const pageBy = 4;
 
 export default function Collection({params}) {
   const {languageCode} = useShop();
