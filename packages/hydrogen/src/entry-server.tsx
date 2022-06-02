@@ -14,7 +14,7 @@ import type {
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
 } from './types';
-import {Html, applyHtmlHead} from './framework/Hydration/Html';
+import {Html, applyHtmlHead} from './foundation/Html/Html';
 import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
 import {
   HydrogenRequest,
