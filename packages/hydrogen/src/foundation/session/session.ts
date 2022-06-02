@@ -1,6 +1,6 @@
 import {Logger} from '../../utilities/log';
 import {wrapPromise} from '../../utilities/suspense';
-import type {HydrogenResponse} from '../../framework/HydrogenResponse.server';
+import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server';
 import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
 
 export type SessionSyncApi = {

@@ -5,7 +5,7 @@ import {
   collectQueryCacheControlHeaders,
 } from '../index';
 import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
-import {HydrogenResponse} from '../../../framework/HydrogenResponse.server';
+import {HydrogenResponse} from '../../../foundation/HydrogenResponse/HydrogenResponse.server';
 
 let mockLogger: jest.Mocked<Logger>;
 

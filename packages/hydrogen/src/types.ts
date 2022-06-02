@@ -1,7 +1,7 @@
 import type {ServerResponse} from 'http';
 import type {Logger, LoggerConfig} from './utilities/log/log';
 import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
-import type {HydrogenResponse} from './framework/HydrogenResponse.server';
+import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
 import type {
   Metafield,
   ProductVariant,
