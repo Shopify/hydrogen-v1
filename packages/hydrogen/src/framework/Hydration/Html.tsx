@@ -1,12 +1,14 @@
 /// <reference types="vite/client" />
 import React, {ReactNode} from 'react';
 import type {HelmetData as HeadData} from 'react-helmet-async';
+import {ClientConfig, ResolvedHydrogenConfig} from '../../types';
 
 type HtmlOptions = {
   children: ReactNode;
   template: string;
   htmlAttrs?: Record<string, string>;
   bodyAttrs?: Record<string, string>;
+  hydrogenConfig: ResolvedHydrogenConfig;
 };
 
 const HTML_ATTR_SEP_RE = /(?<!=)"\s+/gim;
@@ -42,7 +44,18 @@ function propsToAttrs(props: Record<string, string>) {
     .join(' ');
 }
 
-export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
+const clientConfigOptions = [
+  'strictMode',
+  'showDevTools',
+] as (keyof ClientConfig)[];
+
+export function Html({
+  children,
+  template,
+  htmlAttrs,
+  bodyAttrs,
+  hydrogenConfig,
+}: HtmlOptions) {
   let head = template.match(/<head>(.+?)<\/head>/s)![1] || '';
 
   // @ts-ignore
@@ -54,6 +67,18 @@ export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
       head.replace(/>(\s*?import[\s\w]+?['"]\/@react-refresh)/, ' async="">$1');
   }
 
+  const clientConfig = {} as ClientConfig;
+  for (const key of clientConfigOptions) {
+    if (hydrogenConfig[key] != null) {
+      clientConfig[key] = hydrogenConfig[key];
+    }
+  }
+
+  const clientConfigAttr =
+    Object.keys(clientConfig).length > 0
+      ? JSON.stringify(clientConfig)
+      : undefined;
+
   return (
     <html // eslint-disable-line jsx-a11y/html-has-lang
       {...attrsToProps(getHtmlAttrs(template))}
@@ -61,7 +86,9 @@ export function Html({children, template, htmlAttrs, bodyAttrs}: HtmlOptions) {
     >
       <head dangerouslySetInnerHTML={{__html: head}} />
       <body {...attrsToProps(getBodyAttrs(template))} {...bodyAttrs}>
-        <div id="root">{children}</div>
+        <div id="root" data-client-config={clientConfigAttr}>
+          {children}
+        </div>
       </body>
     </html>
   );
