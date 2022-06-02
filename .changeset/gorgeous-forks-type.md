@@ -1,5 +1,4 @@
 ---
-'demo-store': patch
 'create-hydrogen-app': patch
 ---
 
