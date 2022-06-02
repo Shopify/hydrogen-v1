@@ -31,7 +31,6 @@ import {
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
 import {setContext, setCache, RuntimeContext} from './framework/runtime';
-import {setConfig} from './framework/config';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -127,7 +126,6 @@ export const renderHydrogen = (App: any) => {
      */
     setCache(cache);
     setContext(context);
-    setConfig({dev});
 
     if (
       url.pathname === EVENT_PATHNAME ||
