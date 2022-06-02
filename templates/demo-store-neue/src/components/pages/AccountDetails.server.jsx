@@ -10,6 +10,39 @@ import Layout from '../layouts/DefaultLayout.server';
 import LogoutButton from '../elements/LogoutButton.client';
 import MoneyPrice from '../blocks/MoneyPrice.client';
 
+function OrderHistory(props) {
+  const orders = props.orders;
+  return (
+    <div>
+      <h2>Order History</h2>
+      <table className="min-w-full table-fixed text-sm text-left mt-6">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Date</th>
+            <th>Payment Status</th>
+            <th>Fulfillment Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order.id}>
+              <td>#{order.orderNumber}</td>
+              <td>{new Date(order.processedAt).toDateString()}</td>
+              <td>{order.financialStatus}</td>
+              <td>{order.fulfillmentStatus}</td>
+              <td>
+                <MoneyPrice money={order.currentTotalPrice} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function AccountDetails({customerAccessToken}) {
   const {data} = useShopQuery({
     query: QUERY,
@@ -40,31 +73,11 @@ export default function AccountDetails({customerAccessToken}) {
         </LogoutButton>
       </div>
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4">
-        <h2>Order History</h2>
-        <table className="min-w-full table-fixed text-sm text-left mt-6">
-          <thead>
-            <tr>
-              <th>Order</th>
-              <th>Date</th>
-              <th>Payment Status</th>
-              <th>Fulfillment Status</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>#{order.orderNumber}</td>
-                <td>{new Date(order.processedAt).toDateString()}</td>
-                <td>{order.financialStatus}</td>
-                <td>{order.fulfillmentStatus}</td>
-                <td>
-                  <MoneyPrice money={order.currentTotalPrice} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {orders.length ? (
+          <OrderHistory orders={orders} />
+        ) : (
+          <div>No orders</div>
+        )}
       </div>
     </Layout>
   );
