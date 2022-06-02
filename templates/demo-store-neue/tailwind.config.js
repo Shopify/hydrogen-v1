@@ -15,6 +15,7 @@ module.exports = {
         primary: withOpacityValue('--color-primary'),
         contrast: withOpacityValue('--color-contrast'),
         notice: withOpacityValue('--color-accent'),
+        shopPay: 'var(--color-shop-pay)',
       },
       borderColor: {
         lightest: 'rgb(var(--color-primary) / 0.02)',

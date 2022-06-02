@@ -9,10 +9,11 @@ import {
 } from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
-import {ProductSwimlane} from '~/components/sections';
+import {Section, ProductSwimlane} from '~/components/sections';
 import {Heading, Text} from '~/components/elements';
-import ProductGallery from '~/components/sections/ProductGallery.client';
-import ProductForm from '~/components/sections/ProductForm.client';
+import ProductGallery from '~/components/sections/products/ProductGallery.client';
+import ProductForm from '~/components/sections/products/ProductForm.client';
+import ProductInfo from '~/components/sections/products/ProductInfo.client';
 import {NotFound} from '~/components/pages';
 export default function Product() {
   const {handle} = useRouteParams();
@@ -49,7 +50,7 @@ export default function Product() {
                 </Text>
               )}
               <ProductForm />
-              <div></div>
+              <ProductInfo />
             </section>
           </div>
         </Section>

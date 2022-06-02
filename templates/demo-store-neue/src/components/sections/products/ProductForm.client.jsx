@@ -1,23 +1,42 @@
-import {useEffect} from 'react';
-import {useProduct, useUrl, useNavigate} from '@shopify/hydrogen';
-import {Heading, Text} from '~/components/elements';
+import {useEffect, useState} from 'react';
+import {
+  useProduct,
+  isClient,
+  useUrl,
+  AddToCartButton,
+  ShopPayButton,
+} from '@shopify/hydrogen';
+import {Heading, Text, Button} from '~/components/elements';
 
 export default function ProductForm() {
   const {pathname, search} = useUrl();
-  const navigate = useNavigate();
+  const [params, setParams] = useState(new URLSearchParams(search));
 
-  let params = new URLSearchParams(search);
+  const {options, setSelectedOption, selectedOptions, selectedVariant} =
+    useProduct();
 
-  const {options, setSelectedOption, selectedOptions} = useProduct();
+  const isOutOfStock = !selectedVariant.availableForSale;
 
   useEffect(() => {
     options.map(({name, values}) => {
       const currentValue = params.get(name.toLowerCase());
       if (currentValue) {
         const matchedValue = values.filter(
-          (value) => value.toLowerCase() === currentValue,
+          (value) => encodeURIComponent(value.toLowerCase()) === currentValue,
         );
         setSelectedOption(name, matchedValue[0]);
+      } else {
+        setParams(
+          params.set(
+            encodeURIComponent(name.toLowerCase()),
+            encodeURIComponent(selectedOptions[name].toLowerCase()),
+          ),
+        );
+        window.history.replaceState(
+          null,
+          '',
+          `${pathname}?${params.toString()}`,
+        );
       }
     });
   }, []);
@@ -28,11 +47,9 @@ export default function ProductForm() {
       encodeURIComponent(name.toLowerCase()),
       encodeURIComponent(value.toLowerCase()),
     );
-    navigate(
-      `${pathname}?${params.toString()}`,
-      {replace: true},
-      {reloadDocument: false},
-    );
+    if (isClient()) {
+      window.history.replaceState(null, '', `${pathname}?${params.toString()}`);
+    }
   }
 
   return (
@@ -40,6 +57,9 @@ export default function ProductForm() {
       {
         <>
           {options.map(({name, values}) => {
+            if (values.length === 1) {
+              return null;
+            }
             return (
               <fieldset key={name} className="mt-8">
                 <Heading as="legend" size="lead">
@@ -77,6 +97,28 @@ export default function ProductForm() {
           })}
         </>
       }
+      <div>
+        <AddToCartButton
+          variantId={selectedVariant.id}
+          quantity={1}
+          attributes={[{key: 'Engraving', value: 'Hello world'}]}
+          accessibleAddingToCartLabel="Adding item to your cart"
+          disabled={isOutOfStock}
+        >
+          <Button as="span">
+            {isOutOfStock ? 'Out of stock' : 'Add to bag'}
+          </Button>
+        </AddToCartButton>
+        {isOutOfStock ? (
+          <p className="text-center text-black">Available in 2-3 weeks</p>
+        ) : (
+          <ShopPayButton
+            variantIdsAndQuantities={[{id: selectedVariant.id, quantity: 1}]}
+          >
+            Buy it now
+          </ShopPayButton>
+        )}
+      </div>
     </form>
   );
 }

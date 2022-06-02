@@ -16,6 +16,7 @@ export default function ProductGrid({data}) {
 
   const fetchProducts = async () => {
     setPending(true);
+    // TODO: Update this logic to use Hydrogen hooks (URL, fetchSync) where appropriate.
     const url = new URL(window.location.href);
     url.searchParams.set('cursor', cursor);
 
