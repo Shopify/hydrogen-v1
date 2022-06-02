@@ -270,7 +270,10 @@ async function runSSR({
     stripScriptsFromTemplate(template);
 
   const AppSSR = (
-    <Html template={response.canStream() ? noScriptTemplate : template}>
+    <Html
+      template={response.canStream() ? noScriptTemplate : template}
+      hydrogenConfig={request.ctx.hydrogenConfig!}
+    >
       <ServerRequestProvider request={request} isRSC={false}>
         <ServerPropsProvider
           initialServerProps={state as any}
