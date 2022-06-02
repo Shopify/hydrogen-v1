@@ -4,6 +4,9 @@ import {
   useCartLine,
   CartLineProvider,
   CartShopPayButton,
+  Image,
+  Link,
+  Money,
 } from '@shopify/hydrogen';
 
 /*
@@ -166,7 +169,7 @@ export default function CartDetails() {
 }
 
 function CartLineItem() {
-  const {id, price, productTitle, quantity} = useCartLine();
+  const {id, price, productTitle, quantity, merchandise} = useCartLine();
 
   const product = {
     id: 1,
@@ -181,11 +184,10 @@ function CartLineItem() {
     imageAlt: "Front of men's Basic Tee in sienna.",
   };
   return (
-    <li key={product.id} className="flex py-6 sm:py-10">
+    <li key={id} className="flex py-6 sm:py-10">
       <div className="flex-shrink-0">
-        <img
-          src={product.imageSrc}
-          alt={product.imageAlt}
+        <Image
+          data={merchandise.image}
           className="object-cover object-center w-24 h-24 rounded-md sm:w-48 sm:h-48"
         />
       </div>
@@ -195,34 +197,37 @@ function CartLineItem() {
           <div>
             <div className="flex justify-between">
               <h3 className="text-sm">
-                <a
-                  href={product.href}
+                <Link
+                  to={`/products/${merchandise.product.title}`}
                   className="font-medium text-gray-700 hover:text-gray-800"
                 >
-                  {product.name}
-                </a>
+                  {merchandise.product.title}
+                </Link>
               </h3>
             </div>
             <div className="flex mt-1 text-sm">
-              <p className="text-gray-500">{product.color}</p>
-              {product.size ? (
+              <p className="text-gray-500">
+                {merchandise.selectedOptions[0].value}
+              </p>
+              {merchandise.selectedOptions[1].value ? (
                 <p className="pl-4 ml-4 text-gray-500 border-l border-gray-200">
-                  {product.size}
+                  {merchandise.selectedOptions[1].value}
                 </p>
               ) : null}
             </div>
             <p className="mt-1 text-sm font-medium text-gray-900">
-              {product.price}
+              <Money data={merchandise.priceV2} />
             </p>
           </div>
 
           <div className="mt-4 sm:mt-0 sm:pr-9">
             <label htmlFor={`quantity-${id}`} className="sr-only">
-              Quantity, {product.name}
+              Quantity, {quantity}
             </label>
             <select
               id={`quantity-${id}`}
               name={`quantity-${id}`}
+              defaultValue={quantity}
               className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value={1}>1</option>
