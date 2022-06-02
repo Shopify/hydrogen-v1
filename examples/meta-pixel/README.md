@@ -1,8 +1,8 @@
 # Meta Pixel Example
 
-Hydrogen is a React framework and SDK that you can use to build fast and dynamic Shopify custom storefronts.
+An example of using [Meta Pixel](https://developers.facebook.com/docs/meta-pixel) on Hydrogen.
 
-[Check out the docs](https://shopify.dev/custom-storefronts/hydrogen)
+[`/src/components/MetaPixel.client.js`](./src/components/MetaPixel.client.jsx) loads the Meta Pixel library and subscribes to a `PageView` event.
 
 [Run this example on StackBlitz](https://stackblitz.com/fork/github/shopify/hydrogen/tree/stackblitz/examples/meta-pixel)
 

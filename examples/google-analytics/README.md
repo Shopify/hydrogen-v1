@@ -1,8 +1,8 @@
 # Google Analytics Example
 
-Hydrogen is a React framework and SDK that you can use to build fast and dynamic Shopify custom storefronts.
+An example of using [Google Analytics](https://analytics.google.com/analytics/web/) on Hydrogen.
 
-[Check out the docs](https://shopify.dev/custom-storefronts/hydrogen)
+[`/src/components/GoogleAnalytics.client.js`](./src/components/GoogleAnalytics.client.jsx) loads the GA library and subscribes to a `PageView` event.
 
 [Run this example on StackBlitz](https://stackblitz.com/fork/github/shopify/hydrogen/tree/stackblitz/examples/google-analytics)
 

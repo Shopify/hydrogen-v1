@@ -25,6 +25,7 @@ export function GoogleAnalytics() {
       });
 
       // Listen for events from Hydrogen
+      // https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#default-events
       ClientAnalytics.subscribe(
         ClientAnalytics.eventNames.PAGE_VIEW,
         (payload) => {

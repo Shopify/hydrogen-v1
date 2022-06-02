@@ -1,10 +1,12 @@
-# API Route Example
+# API Routes Example
 
-Hydrogen is a React framework and SDK that you can use to build fast and dynamic Shopify custom storefronts.
+An example of using API routes on Hydrogen.
 
-[Check out the docs](https://shopify.dev/custom-storefronts/hydrogen)
+- [`/src/routes/newsletter.server.jsx`](./src/routes/newsletter.server.jsx) exports an `api` function, enabling POST requests to `/newsletter`.
 
-[Run this example on StackBlitz](https://stackblitz.com/fork/github/shopify/hydrogen/tree/stackblitz/examples/api-route)
+- [`/src/components/NewsletterForm.client.jsx`](./src/components/NewsletterForm.client.jsx) contains the form which posts the data.
+
+[Run this example on StackBlitz](https://stackblitz.com/fork/github/shopify/hydrogen/tree/stackblitz/examples/api-routes)
 
 ## Getting started
 
