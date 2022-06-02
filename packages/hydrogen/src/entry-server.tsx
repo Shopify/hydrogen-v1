@@ -16,7 +16,10 @@ import type {
 } from './types';
 import {Html, applyHtmlHead} from './framework/Hydration/Html';
 import {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
+import {
+  RuntimeContext,
+  ServerComponentRequest,
+} from './framework/Hydration/ServerComponentRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
@@ -30,7 +33,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {setContext, setCache, RuntimeContext} from './framework/runtime';
+import {setCache} from './framework/runtime';
 import {setConfig} from './framework/config';
 import {
   ssrRenderToPipeableStream,
@@ -125,8 +128,8 @@ export const renderHydrogen = (App: any) => {
     /**
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
      */
+    request.ctx.runtime = context;
     setCache(cache);
-    setContext(context);
     setConfig({dev});
 
     if (
