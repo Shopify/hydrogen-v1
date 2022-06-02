@@ -40,34 +40,41 @@ function EmptyOrders(props) {
 }
 
 function OrderHistory(props) {
-  const {orders} = props;
+  const {orders, heading} = props;
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-6 mb-4">
-      <h2>Order History</h2>
-      <table className="min-w-full table-fixed text-sm text-left mt-6">
-        <thead>
-          <tr>
-            <th>Order</th>
-            <th>Date</th>
-            <th>Payment Status</th>
-            <th>Fulfillment Status</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>#{order.orderNumber}</td>
-              <td>{new Date(order.processedAt).toDateString()}</td>
-              <td>{order.financialStatus}</td>
-              <td>{order.fulfillmentStatus}</td>
-              <td>
-                <MoneyPrice money={order.currentTotalPrice} />
-              </td>
+    <div>
+      <PageHeader heading={heading}>
+        <LogoutButton className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+          Logout
+        </LogoutButton>
+      </PageHeader>
+      <div className="w-full grid gap-4 md:gap-8 p-4 py-6 md:p-8 lg:p-12">
+        <h2 className="font-bold text-lead">Order History</h2>
+        <table className="min-w-full table-fixed text-sm text-left mt-2">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Date</th>
+              <th>Payment Status</th>
+              <th>Fulfillment Status</th>
+              <th>Total</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>#{order.orderNumber}</td>
+                <td>{new Date(order.processedAt).toDateString()}</td>
+                <td>{order.financialStatus}</td>
+                <td>{order.fulfillmentStatus}</td>
+                <td>
+                  <MoneyPrice money={order.currentTotalPrice} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -94,7 +101,7 @@ export default function AccountDetails({customerAccessToken}) {
       : [];
 
   const heading = customer
-    ? `Welcome ${customer.firstName ? `, ${customer.firstName}` : ``}`
+    ? `Welcome${customer.firstName ? `, ${customer.firstName}` : ``}`
     : 'Account Details';
 
   const {featuredCollections, featuredProducts, locations} = data;
@@ -103,7 +110,7 @@ export default function AccountDetails({customerAccessToken}) {
     <Layout>
       <Seo type="noindex" data={{title: 'Account details'}} />
       {orders.length ? (
-        <OrderHistory orders={orders} />
+        <OrderHistory orders={orders} heading={heading} />
       ) : (
         <EmptyOrders heading={heading} />
       )}
