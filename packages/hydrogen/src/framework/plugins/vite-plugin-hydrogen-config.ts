@@ -94,6 +94,8 @@ export default () => {
           'react-server-dom-vite/client-proxy',
           // https://github.com/vitejs/vite/issues/6215
           'react/jsx-runtime',
+          // https://github.com/nfriedly/set-cookie-parser/issues/50
+          'set-cookie-parser',
         ],
       },
 

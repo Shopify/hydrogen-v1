@@ -725,12 +725,10 @@ function handleFetchResponseInNode(
  */
 function setNodeHeaders(headers: Headers, nodeResponse: ServerResponse) {
   for (const [key, value] of headers.entries()) {
-    nodeResponse.setHeader(key, value);
     if (key.toLowerCase() === 'set-cookie') {
-      const cookies = splitCookiesString(value);
-      cookies.forEach((cookie) => {
-        nodeResponse.setHeader('set-cookies', cookie);
-      });
+      nodeResponse.setHeader('set-cookie', splitCookiesString(value));
+    } else {
+      nodeResponse.setHeader(key, value);
     }
   }
 }
