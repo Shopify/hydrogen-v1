@@ -14,4 +14,8 @@ export default defineConfig({
   enableStreaming: (req) => {
     return req.headers.get('user-agent') !== 'custom bot';
   },
+  logger: {
+    trace() {},
+    debug() {},
+  },
 });

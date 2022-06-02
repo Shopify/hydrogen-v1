@@ -4,10 +4,8 @@ import {
   Logger,
   logServerResponse,
   getLoggerWithContext,
-  resetLogger,
 } from '../log';
 import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
-import {setLoggerOptions} from '..';
 
 let mockLogger: jest.Mocked<Logger>;
 
@@ -29,7 +27,7 @@ describe('log', () => {
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
   });
 
   it('should return the wrapped mockLogger instance when log is called', () => {
@@ -47,11 +45,10 @@ describe('log', () => {
       warn: jest.fn(),
       error: jest.fn(),
       fatal: jest.fn(),
-      options: jest.fn(() => ({
-        showCacheControlHeader: true,
-      })),
+      options: jest.fn(() => ({})),
     };
-    setLogger(mockLogger2);
+
+    setLogger({...mockLogger2, showCacheControlHeader: true});
 
     log.debug('test');
     expect(mockLogger2.debug).toHaveBeenCalled();
@@ -62,17 +59,15 @@ describe('log', () => {
     expect(mockLogger2.debug.mock.calls[0][1]).toEqual('test');
   });
 
-  it('should set showCacheControlHeader option when setLoggerOptions is called', () => {
-    setLoggerOptions({
-      showCacheControlHeader: true,
-    });
+  it('should set showCacheControlHeader option correctly', () => {
+    setLogger({showCacheControlHeader: true});
     expect(log.options()).toEqual({
       showCacheControlHeader: true,
     });
   });
 
-  it('should set showCacheApiStatus option when setLoggerOptions is called', () => {
-    setLoggerOptions({
+  it('should set showCacheApiStatus option correctly', () => {
+    setLogger({
       showCacheApiStatus: true,
     });
     expect(log.options()).toEqual({
@@ -80,14 +75,14 @@ describe('log', () => {
     });
   });
 
-  it('should return the correct options when setLoggerOptions is set multiple times', () => {
-    setLoggerOptions({
+  it('should set multiple options correctly', () => {
+    setLogger({
       showCacheControlHeader: true,
     });
     expect(log.options()).toEqual({
       showCacheControlHeader: true,
     });
-    setLoggerOptions({
+    setLogger({
       showCacheApiStatus: true,
       showCacheControlHeader: true,
     });

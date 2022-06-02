@@ -41,7 +41,7 @@ import {
 } from './streaming.server';
 import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
-import {RenderType} from './utilities/log/log';
+import {setLogger, RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
 import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
@@ -112,8 +112,10 @@ export const renderHydrogen = (App: any) => {
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
-    const response = new ServerComponentResponse();
+    setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
+
+    const response = new ServerComponentResponse();
     const sessionApi = hydrogenConfig.session
       ? hydrogenConfig.session(log)
       : undefined;

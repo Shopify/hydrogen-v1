@@ -44,6 +44,7 @@ The following groupings of configuration properties can exist in Hydrogen:
 - [`session`](#session)
 - [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
 - [`enableStreaming`](#enablestreaming)
+- [`logger`](#logger)
 
 ### `routes`
 
@@ -208,6 +209,37 @@ export default defineConfig({
 
 > Tip:
 > There are [performance benefits](https://shopify.dev/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
+
+## Logger
+
+The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
+
+You can pass [any method](https://shopify.dev/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+export default defineConfig({
+  logger: {
+    /* Overrides the default `log.trace` behavior. */
+    trace: (request, ...args) => console.log(request.url, ...args),
+    /* Overrides the default `log.error` behavior. */
+    error: (request, error) => myErrorTrackingService.send(error, {request}),
+    /* ... */
+
+    /* Logs the cache status of each stored entry: `PUT`, `HIT`, `MISS` or `STALE`. */
+    showCacheApiStatus: true,
+    /* Logs the cache control headers of the main document and its sub queries. */
+    showCacheControlHeader: true,
+    /* Logs the timeline of when queries are being requested, resolved, and rendered. */
+    showQueryTiming: true,
+    /* Logs warnings in your app if you're over-fetching data from the Storefront API. */
+    showUnusedQueryProperties: true,
+  }
+});
+```
+
+{% endcodeblock %}
 
 ## Changing the configuration file location
 
