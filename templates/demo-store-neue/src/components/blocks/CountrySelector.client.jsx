@@ -26,7 +26,7 @@ export default function CountrySelector() {
           setTimeout(() => setListboxOpen(open));
           return (
             <>
-              <Listbox.Button className="flex items-center justify-between w-full">
+              <Listbox.Button className="flex items-center justify-between w-full border border-gray-500 p-2 rounded-sm">
                 <span className="">{selectedCountry.name}</span>
                 <IconChevronDown
                   className={`w-5 h-5 transition-transform duration-300 ${
@@ -35,18 +35,15 @@ export default function CountrySelector() {
                 />
               </Listbox.Button>
 
-              <Listbox.Options className="absolute z-10 mt-2">
-                <div className="h-64 p-4 overflow-y-auto rounded-lg drop-shadow-2xl">
-                  <Listbox.Option disabled className="">
-                    Country
-                  </Listbox.Option>
+              <Listbox.Options className="absolute z-10 mt-2 black border border-gray-500 p-2 w-full">
+                <div className="max-h-48 overflow-y-auto">
                   {listboxOpen && (
                     <Suspense fallback={<div>Loading…</div>}>
                       <Countries
                         selectedCountry={selectedCountry}
                         getClassName={(active) => {
                           return (
-                            `w-full cursor-pointer py-2 px-3 flex justify-between items-center text-left cursor-pointer` +
+                            `w-full cursor-pointer py-2 flex justify-start items-center text-left cursor-pointer` +
                             `rounded ${active ? '' : null}`
                           );
                         }}
@@ -74,7 +71,11 @@ export function Countries({selectedCountry, getClassName}) {
         {({active}) => (
           <div className={getClassName(active)}>
             {country.name}
-            {isSelected ? <CheckIcon /> : null}
+            {isSelected ? (
+              <span className="ml-2">
+                <CheckIcon />
+              </span>
+            ) : null}
           </div>
         )}
       </Listbox.Option>
@@ -94,7 +95,7 @@ export function CheckIcon() {
     >
       <path
         d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z"
-        stroke="#354CF6"
+        stroke="#FFFFFF"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
