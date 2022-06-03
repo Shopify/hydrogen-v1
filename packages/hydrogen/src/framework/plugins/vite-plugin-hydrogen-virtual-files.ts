@@ -1,7 +1,7 @@
 import {Plugin, ResolvedConfig, normalizePath, ViteDevServer} from 'vite';
 import path from 'path';
 import {promises as fs} from 'fs';
-import type {HydrogenVitePluginOptions} from '../../types';
+import type {HydrogenVitePluginOptions} from '../types';
 import {viteception} from '../viteception';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
@@ -136,6 +136,7 @@ async function findHydrogenConfigPath(root: string, userProvidedPath?: string) {
   return (
     configPath ||
     require.resolve(
+      // @ts-ignore
       '@shopify/hydrogen/dist/esnext/utilities/empty-hydrogen-config.js'
     )
   );

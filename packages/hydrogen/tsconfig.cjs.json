@@ -1,7 +1,6 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "./tsconfig.json",
   "include": ["./src/framework"],
-  "exclude": ["**/tests", "**/__tests__"],
   "compilerOptions": {
     "outDir": "./dist/node",
     "module": "commonjs",

@@ -37,7 +37,7 @@
   ],
   "scripts": {
     "dev": "run-p dev-hoist  \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
-    "dev-esnext": "tsc -w --incremental --p tsconfig.build.json",
+    "dev-esnext": "tsc -w --incremental --p tsconfig.esm.json",
     "dev-node": "tsc -w --incremental --p tsconfig.cjs.json",
     "dev-hoist": "yarn copy-cjs ../../node_modules/@shopify/hydrogen/dist/node && yarn hoist-files",
     "dev-graphql": "graphql-codegen --config codegen.yml --watch",
@@ -46,7 +46,7 @@
     "hoist-dist": "cpy dist ../../node_modules/@shopify/hydrogen",
     "prebuild": "rimraf dist ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "build": "run-p build-esnext build-node && yarn build-hoist",
-    "build-esnext": "tsc --p tsconfig.build.json",
+    "build-esnext": "tsc --p tsconfig.esm.json",
     "build-node": "tsc --p tsconfig.cjs.json",
     "build-hoist": "yarn copy-cjs dist/node && yarn hoist-files && yarn hoist-dist",
     "lint": "eslint --ext .ts src/** --no-error-on-unmatched-pattern",
