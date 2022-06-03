@@ -19,6 +19,7 @@ import {Text, Button} from '~/components/elements';
 import Layout from '../layouts/DefaultLayout.server';
 import LogoutButton from '../elements/LogoutButton.client';
 import MoneyPrice from '../blocks/MoneyPrice.client';
+import OrderCard from '../blocks/OrderCard.client';
 
 import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
@@ -50,30 +51,14 @@ function OrderHistory(props) {
       </PageHeader>
       <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
         <h2 className="font-bold text-lead">Order History</h2>
-        <table className="min-w-full mt-2 text-sm text-left table-fixed">
-          <thead>
-            <tr>
-              <th>Order</th>
-              <th>Date</th>
-              <th>Payment Status</th>
-              <th>Fulfillment Status</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>#{order.orderNumber}</td>
-                <td>{new Date(order.processedAt).toDateString()}</td>
-                <td>{order.financialStatus}</td>
-                <td>{order.fulfillmentStatus}</td>
-                <td>
-                  <MoneyPrice money={order.currentTotalPrice} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ul
+          role="list"
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
+          {orders.map((order) => (
+            <OrderCard order={order} />
+          ))}
+        </ul>
       </div>
     </div>
   );
@@ -135,7 +120,7 @@ const QUERY = gql`
     customer(customerAccessToken: $customerAccessToken) {
       firstName
       email
-      orders(first: 250) {
+      orders(first: 25, sortKey: PROCESSED_AT, reverse: true) {
         edges {
           node {
             id
@@ -146,6 +131,21 @@ const QUERY = gql`
             currentTotalPrice {
               amount
               currencyCode
+            }
+            lineItems(first: 30) {
+              edges {
+                node {
+                  variant {
+                    image {
+                      url
+                      height
+                      width
+                      altText
+                    }
+                  }
+                  title
+                }
+              }
             }
           }
         }
