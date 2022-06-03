@@ -47,22 +47,21 @@ export default () => {
     },
     transform(code, id) {
       if (normalizePath(id).includes('/hydrogen/dist/esnext/platforms/')) {
-        code = code
-          .replace('__SERVER_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY)
-          .replace(
-            '__INDEX_TEMPLATE__',
-            normalizePath(
-              path.resolve(
-                config.root,
-                config.build.outDir,
-                '..',
-                'client',
-                'index.html'
-              )
-            )
-          );
-
         const ms = new MagicString(code);
+
+        ms.replace('__SERVER_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY);
+
+        const indexTemplatePath = normalizePath(
+          path.resolve(
+            config.root,
+            config.build.outDir,
+            '..',
+            'client',
+            'index.html'
+          )
+        );
+        ms.replace('__INDEX_TEMPLATE__', indexTemplatePath);
+
         return {
           code: ms.toString(),
           map: ms.generateMap({file: id, source: id}),
@@ -83,10 +82,7 @@ export default () => {
         // default export instead of exporting an
         // object containing a 'default' property.
         if (value.type === 'chunk' && !isESM) {
-          value.code = value.code.replace(
-            /((^|;)[\s]*)exports\[['"]default['"]\]\s*=/m,
-            '$1module.exports ='
-          );
+          value.code += `\nmodule.exports = exports.default || exports;`;
         }
       }
     },

@@ -15,8 +15,8 @@ import {
   flattenConnection,
   useShopQuery,
   Metafield,
-} from '@shopify/hydrogen/client';
-import gql from 'graphql-tag';
+  gql,
+} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query product($handle: String!) {

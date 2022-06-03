@@ -1,0 +1,6 @@
+[build]
+publish = "dist/client"
+command = "echo 'Already built; skipping'"
+
+[dev]
+framework = "#static"

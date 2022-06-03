@@ -10,11 +10,11 @@ Hydrogen detects when a search engine crawls your shop and defaults to server-si
 
 Hydrogen includes an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates):
 
-- [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
+- [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
 
-- [`Sitemap.xml.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.jsx): A file that generates all products, collections, and pages URLs using the Storefront API
+- [`Sitemap.xml.server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.js): A file that generates all products, collections, and pages URLs using the Storefront API
 
-- [`Robots.txt.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
+- [`Robots.txt.server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
 
 ### `Seo` client component
 
@@ -22,15 +22,15 @@ The [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) client co
 
 You can customize the `<head>` tags at the route level:
 
-- [Default page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx)
-- [Home page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/index.server.jsx)
-- [Pages page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/pages/[handle].server.jsx)
-- [Product page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/products/[handle].server.jsx)
-- [Collection page](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/collections/[handle].server.jsx)
+- [Default page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx)
+- [Home page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/index.server.jsx)
+- [Pages page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/pages/[handle].server.jsx)
+- [Product page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/products/[handle].server.jsx)
+- [Collection page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/collections/[handle].server.jsx)
 
 ### `DefaultSeo` server component
 
-The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx) server component fetches your shop name (`shop.name`) and description (`shop.description`). This component provides the default SEO values for every page on your website.
+The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) server component fetches your shop name (`shop.name`) and description (`shop.description`). This component provides the default SEO values for every page on your website.
 
 You can override the default SEO values by passing in custom props:
 
@@ -67,7 +67,7 @@ If you want to add more custom `head` tags, then you can import `Head` from Hydr
 ```jsx
 // Import only client components.
 
-import {Head} from '@shopify/hydrogen/client';
+import {Head} from '@shopify/hydrogen';
 
 return (
   <Seo type="product" data={product} />
@@ -137,7 +137,7 @@ The following example shows how to overwrite title template for a single page:
 {% codeblock file, filename: '/mypage.server.jsx' %}
 
 ```jsx
-import {Head} from '@shopify/hydrogen/client';
+import {Head} from '@shopify/hydrogen';
 
 return (
   <Head titleTemplate="%s">
@@ -148,15 +148,49 @@ return (
 
 {% endcodeblock %}
 
-## Imitating SEO robot behavior
+## SEO robot behavior
 
-Hydrogen supports SEO by inspecting the `user-agent` for every request, and buffering the response to fully render it on server-side.
+By default, all routes in Hydrogen are stream rendered. However, Hydrogen supports SEO by inspecting the `user-agent` for every request, disabling streaming, and buffering the response to fully render it on the server-side.
 
-To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?\_bot` query parameter at the end of the webpage's URL.
+### Imitating robot behavior
+
+To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?_bot` query parameter at the end of the webpage's URL.
+
+### Checking for custom robots
+
+If you find a bot that's not recognized by Hydrogen's bot detection algorithm, you can [manually disable streaming](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#response-donotstream) to buffer the response and make the content immediately available to bots:
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```jsx
+function App({request, response}) {
+  if (request.headers.get('user-agent') === 'custom bot') {
+    response.doNotStream();
+  }
+
+  return <Suspense fallback={'Loading...'}>{/*...*/}</Suspense>;
+}
+
+export default renderHydrogen(App);
+```
+
+{% endcodeblock %}
+
+## Removing SEO with noindex
+
+Pages that require authentication shouldn't be indexed by bots. For example, bots shouldn't index login and account pages. You can tell bots to not index a page by passing `noindex` to the `Seo` component:
+
+{% codeblock file, filename: '/account/login.server.jsx' %}
+
+```jsx
+<Seo type="noindex" data={% raw %}{{title: 'Login'}}{% endraw %} />
+```
+
+{% endcodeblock %}
 
 ## Limitations and considerations
 
-The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/sitemap.xml.server.jsx) that's included in the Demo Store template:
+The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.js) that's included in the Demo Store template:
 
 - The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](https://shopify.dev/api/usage/pagination-graphql) if your store has more than 250 resources.
 

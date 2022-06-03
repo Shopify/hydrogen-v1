@@ -69,8 +69,8 @@
     "vitest": "^0.9.4"
   },
   "peerDependencies": {
-    "react": "0.0.0-experimental-2bf7c02f0-20220314",
-    "react-dom": "0.0.0-experimental-2bf7c02f0-20220314"
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
   },
   "dependencies": {
     "type-fest": "^2.12.2"

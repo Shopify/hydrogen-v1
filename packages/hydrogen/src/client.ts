@@ -6,6 +6,7 @@ export * from './foundation/ServerPropsProvider';
 export * from './foundation/useUrl';
 export {Head} from './foundation/Head';
 export * from './utilities';
+export {gql} from './utilities/graphql-tag';
 export {ClientAnalytics} from './foundation/Analytics';
 export {useRouteParams} from './foundation/useRouteParams/useRouteParams';
 export {useNavigate} from './foundation/useNavigate/useNavigate';

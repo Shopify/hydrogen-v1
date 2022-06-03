@@ -10,8 +10,7 @@ API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/produc
 ## Example code
 
 ```tsx
-import {ExternalVideo} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {ExternalVideo, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {
@@ -59,18 +58,6 @@ export default function MyProductVideo() {
 ## Component type
 
 The `ExternalVideo` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo):
-
-```graphql
-{
-  id
-  embedUrl
-  host
-}
-```
 
 ## Related components
 

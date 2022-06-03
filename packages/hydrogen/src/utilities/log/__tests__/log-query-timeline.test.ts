@@ -1,5 +1,5 @@
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
-import {Logger, setLogger, resetLogger, setLoggerOptions} from '../index';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
+import {Logger, setLogger} from '../log';
 import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
 
 let mockLogger: jest.Mocked<Logger>;
@@ -36,14 +36,11 @@ describe('cache header log', () => {
       options: jest.fn(() => ({})),
     };
 
-    setLogger(mockLogger);
-    setLoggerOptions({
-      showQueryTiming: true,
-    });
+    setLogger({...mockLogger, showQueryTiming: true});
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
   });
 
   it('should log query timing', () => {
@@ -53,7 +50,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'rendered');
@@ -77,7 +74,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'requested');
@@ -119,7 +116,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
 
@@ -144,7 +141,7 @@ describe('cache header log', () => {
         queryTimings: [],
       },
       time: Date.now(),
-    } as unknown as ServerComponentRequest;
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'resolved', 120);
