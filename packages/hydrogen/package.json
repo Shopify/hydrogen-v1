@@ -12,31 +12,23 @@
   "license": "MIT",
   "main": "dist/esnext/index.js",
   "exports": {
-    ".": {
-      "import": "./dist/esnext/index.js",
-      "node": "./dist/esnext/index.js"
-    },
+    ".": "./dist/esnext/index.js",
     "./plugin": {
-      "node": "./dist/node/framework/plugin.js"
+      "import": "./dist/esnext/framework/plugin.js",
+      "require": "./dist/node/framework/plugin.js"
     },
+    "./plugin.cjs": "./plugin.cjs",
     "./middleware": {
       "import": "./dist/esnext/framework/middleware.js",
-      "node": "./dist/node/framework/middleware.js"
-    },
-    "./package.json": {
-      "import": "./package.json",
-      "node": "./package.json"
+      "require": "./dist/node/framework/middleware.js"
     },
     "./web-polyfills": {
-      "node": "./dist/node/utilities/web-api-polyfill"
+      "import": "./dist/esnext/utilities/web-api-polyfill",
+      "require": "./dist/node/utilities/web-api-polyfill"
     },
-    "./vendor/*": {
-      "node": "./vendor/*"
-    },
-    "./*": {
-      "import": "./dist/esnext/*.js",
-      "node": "./dist/esnext/*.js"
-    }
+    "./vendor/*": "./vendor/*",
+    "./package.json": "./package.json",
+    "./*": "./dist/esnext/*.js"
   },
   "types": "dist/esnext/index.d.ts",
   "files": [
@@ -44,16 +36,19 @@
     "vendor"
   ],
   "scripts": {
-    "dev": "run-p dev-copy \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
+    "dev": "run-p dev-hoist  \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
     "dev-esnext": "tsc -w --incremental --p tsconfig.build.json",
     "dev-node": "tsc -w --incremental --p tsconfig.cjs.json",
-    "dev-copy": "cpy --parents *.[jt]s *.json vendor ../../node_modules/@shopify/hydrogen",
+    "dev-hoist": "yarn copy-cjs ../../node_modules/@shopify/hydrogen/dist/node && yarn hoist-files",
     "dev-graphql": "graphql-codegen --config codegen.yml --watch",
+    "copy-cjs": "cpy --flat --rename=package.json src/package.cjs.json",
+    "hoist-files": "cpy *.{c,}{j,t}s *.json vendor ../../node_modules/@shopify/hydrogen",
+    "hoist-dist": "cpy dist ../../node_modules/@shopify/hydrogen",
     "prebuild": "rimraf dist ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
-    "build": "run-p build-esnext build-node && yarn build-copy",
+    "build": "run-p build-esnext build-node && yarn build-hoist",
     "build-esnext": "tsc --p tsconfig.build.json",
     "build-node": "tsc --p tsconfig.cjs.json",
-    "build-copy": "cpy --parents *.[jt]s *.json dist vendor ../../node_modules/@shopify/hydrogen",
+    "build-hoist": "yarn copy-cjs dist/node && yarn hoist-files && yarn hoist-dist",
     "lint": "eslint --ext .ts src/** --no-error-on-unmatched-pattern",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "graphql-types": "graphql-codegen --config codegen.yml && yarn format",
@@ -88,7 +83,7 @@
     "@types/uuid": "^8.3.4",
     "@types/ws": "^8.2.0",
     "babel-loader": "^8.2.2",
-    "cpy-cli": "3.1.1",
+    "cpy-cli": "^4.1.0",
     "mkdirp": "^1.0.4",
     "npm-run-all": "^4.1.5",
     "postcss": "^8",

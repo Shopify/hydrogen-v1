@@ -1,0 +1,5 @@
+{
+  "name": "hydrogen-cjs",
+  "type": "commonjs",
+  "comment": "This is used to instruct Vite to use 'require' when importing the plugin from dist/node"
+}
