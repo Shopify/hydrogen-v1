@@ -87,8 +87,8 @@ export const product = {
 };
 
 export const location = {
-  metaobject: {
-    id: 'gid://shopify/Metaobject/7176248',
+  contentEntry: {
+    id: 'gid://shopify/contentEntry/7176248',
     featured_image: {
       reference: {
         image: {

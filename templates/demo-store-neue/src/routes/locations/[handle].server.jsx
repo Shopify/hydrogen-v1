@@ -17,12 +17,12 @@ export default function Location({params}) {
     preload: true,
   });
 
-  if (data?.metaobject == null) {
+  if (data?.contentEntry == null) {
     return <NotFound type="location" />;
   }
 
   const {featured_image, title, description, address, hours, email, phone} =
-    data.metaobject;
+    data.contentEntry;
 
   const directions_link = `https://www.google.com/maps/dir/?api=1&destination=${address?.value?.replace(
     /(\r\n|\n|\r)/gm,
@@ -125,7 +125,7 @@ export default function Location({params}) {
 
 const QUERY = gql`
   query store($handle: String!) {
-    metaobject(byHandle: {type: "stores", handle: $handle}) {
+    contentEntry(byHandle: {type: "stores", handle: $handle}) {
       id
       featured_image: field(key: "featured_image") {
         reference {
