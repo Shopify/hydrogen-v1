@@ -7,7 +7,22 @@ export class HydrogenResponse extends Response {
   private wait = false;
   private cacheOptions: CachingStrategy = CacheSeconds();
 
-  public customStatus?: {code?: number; text?: string};
+  private customStatus?: number;
+  private customStatusText?: string;
+
+  public get status() {
+    return this.customStatus ?? super.status;
+  }
+  public set status(number: number) {
+    this.customStatus = number;
+  }
+
+  public get statusText() {
+    return this.customStatusText ?? super.statusText;
+  }
+  public set statusText(text: string) {
+    this.customStatusText = text;
+  }
 
   /**
    * Buffer the current response until all queries have resolved,
@@ -29,29 +44,9 @@ export class HydrogenResponse extends Response {
     return generateCacheControlHeader(this.cacheOptions);
   }
 
-  writeHead({
-    status,
-    statusText,
-    headers,
-  }: {
-    status?: number;
-    statusText?: string;
-    headers?: Record<string, any>;
-  } = {}) {
-    if (status || statusText) {
-      this.customStatus = {code: status, text: statusText};
-    }
-
-    if (headers) {
-      for (const [key, value] of Object.entries(headers)) {
-        this.headers.set(key, value);
-      }
-    }
-  }
-
   redirect(location: string, status = 307) {
-    // writeHead is used for SSR, so that the server responds with a redirect
-    this.writeHead({status, headers: {location}});
+    this.status = status;
+    this.headers.set('location', location);
 
     // in the case of an RSC request, instead render a client component that will redirect
     return React.createElement(Redirect, {to: location});
