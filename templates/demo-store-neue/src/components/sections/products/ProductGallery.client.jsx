@@ -40,9 +40,7 @@ export default function Gallery({className}) {
           >
             <MediaFile
               tabIndex="0"
-              className={` w-full h-full ${
-                med.mediaContentType !== 'MODEL_3D' && 'mix-blend-multiply'
-              } aspect-square`}
+              className={` w-full h-full aspect-square`}
               data={data}
               options={{
                 crop: 'center',

@@ -20,24 +20,24 @@ export function IconMenu() {
         y1="6.375"
         x2="17"
         y2="6.375"
-        stroke="#151515"
-        stroke-width="1.25"
+        stroke="currentColor"
+        strokeWidth="1.25"
       />
       <line
         x1="3"
         y1="10.375"
         x2="17"
         y2="10.375"
-        stroke="#151515"
-        stroke-width="1.25"
+        stroke="currentColor"
+        strokeWidth="1.25"
       />
       <line
         x1="3"
         y1="14.375"
         x2="17"
         y2="14.375"
-        stroke="#151515"
-        stroke-width="1.25"
+        stroke="currentColor"
+        strokeWidth="1.25"
       />
     </Icon>
   );
@@ -52,7 +52,7 @@ export function IconClose() {
         x2="15.7556"
         y2="15.6218"
         stroke="#151515"
-        stroke-width="1.25"
+        strokeWidth="1.25"
       />
       <line
         y1="-0.625"
@@ -60,7 +60,7 @@ export function IconClose() {
         y2="-0.625"
         transform="matrix(-0.707107 0.707107 0.707107 0.707107 16 4.75)"
         stroke="#151515"
-        stroke-width="1.25"
+        strokeWidth="1.25"
       />
     </Icon>
   );
@@ -88,7 +88,7 @@ export function IconArrow({direction = 'right'}) {
   return (
     <Icon className={`w-5 h-5 ${rotate}`}>
       <title>Arrow</title>
-      <path d="M7 3L14 10L7 17" stroke="#151515" stroke-width="1.25" />
+      <path d="M7 3L14 10L7 17" stroke="#151515" strokeWidth="1.25" />
     </Icon>
   );
 }
@@ -116,7 +116,7 @@ export function IconCaret({direction = 'down'}) {
   return (
     <Icon>
       <title>Caret</title>
-      <path d="M14 8L10 12L6 8" stroke="#151515" stroke-width="1.25" />
+      <path d="M14 8L10 12L6 8" stroke="#151515" strokeWidth="1.25" />
     </Icon>
   );
 }
@@ -125,8 +125,8 @@ export function IconSelect() {
   return (
     <Icon>
       <title>Select</title>
-      <path d="M7 8.5L10 6.5L13 8.5" stroke="#151515" stroke-width="1.25" />
-      <path d="M13 11.5L10 13.5L7 11.5" stroke="#151515" stroke-width="1.25" />
+      <path d="M7 8.5L10 6.5L13 8.5" stroke="#151515" strokeWidth="1.25" />
+      <path d="M13 11.5L10 13.5L7 11.5" stroke="#151515" strokeWidth="1.25" />
     </Icon>
   );
 }

@@ -6,6 +6,7 @@ import {
   IconHelp,
   IconAccount,
   IconBag,
+  IconMenu,
   Input,
   Heading,
 } from '~/components/elements';
@@ -42,7 +43,7 @@ function MobileHeader({title, home}) {
     <header role="banner" className={styles.container}>
       <div className="flex items-center justify-start w-full gap-4">
         <button className={styles.button}>
-          <IconAccount />
+          <IconMenu />
         </button>
         <form action={'/search'} className="items-center gap-2 sm:flex">
           <button type="submit" className={styles.button}>

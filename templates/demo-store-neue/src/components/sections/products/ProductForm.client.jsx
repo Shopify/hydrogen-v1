@@ -15,7 +15,7 @@ export default function ProductForm() {
   const {options, setSelectedOption, selectedOptions, selectedVariant} =
     useProduct();
 
-  const isOutOfStock = !selectedVariant.availableForSale;
+  const isOutOfStock = !selectedVariant?.availableForSale || false;
 
   useEffect(() => {
     options.map(({name, values}) => {
