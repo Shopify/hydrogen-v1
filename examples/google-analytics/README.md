@@ -2,16 +2,13 @@
 
 An example of using [Google Analytics](https://analytics.google.com/analytics/web/) on Hydrogen.
 
-[`/src/components/GoogleAnalytics.client.js`](./src/components/GoogleAnalytics.client.jsx) loads the GA library and subscribes to a `PageView` event.
+[`GoogleAnalytics.client.js`](./src/components/GoogleAnalytics.client.jsx) loads the GA library and subscribes to a `PageView` event.
 
 [Run this example on StackBlitz](https://stackblitz.com/fork/github/shopify/hydrogen/tree/stackblitz/examples/google-analytics)
 
 ## Getting started
 
-**Requirements:**
-
-- Node.js version 16.5.0 or higher
-- Yarn
+1. Clone this example.
 
 ```bash
 npx degit Shopify/hydrogen/examples/google-analytics hydrogen-app
@@ -19,17 +16,6 @@ yarn
 yarn dev
 ```
 
-## Building for production
+2. Update your `TRACKING_ID` (/src/components/GoogleAnalytics.client.jsx)
 
-```bash
-yarn build
-```
-
-## Previewing a production build
-
-To run a local preview of your Hydrogen app in an environment similar to Oxygen, build your Hydrogen app and then run `yarn preview`:
-
-```bash
-yarn build
-yarn preview
-```
+3. Open the app in the browser to trigger a `page_view` event.
