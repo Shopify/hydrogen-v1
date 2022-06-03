@@ -26,7 +26,7 @@ function EmptyOrders(props) {
   const {heading} = props;
   return (
     <PageHeader heading={heading}>
-      <LogoutButton className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+      <LogoutButton className="inline-block text-sm font-bold text-blue-500 align-baseline hover:text-blue-800">
         Logout
       </LogoutButton>
       <Text width="narrow" as="p">
@@ -44,13 +44,13 @@ function OrderHistory(props) {
   return (
     <div>
       <PageHeader heading={heading}>
-        <LogoutButton className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+        <LogoutButton className="inline-block text-sm font-bold text-blue-500 align-baseline hover:text-blue-800">
           Logout
         </LogoutButton>
       </PageHeader>
-      <div className="w-full grid gap-4 md:gap-8 p-4 py-6 md:p-8 lg:p-12">
+      <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
         <h2 className="font-bold text-lead">Order History</h2>
-        <table className="min-w-full table-fixed text-sm text-left mt-2">
+        <table className="min-w-full mt-2 text-sm text-left table-fixed">
           <thead>
             <tr>
               <th>Order</th>
@@ -151,7 +151,7 @@ const QUERY = gql`
         }
       }
     }
-    locations: metaobjects(first: 3, type: "stores") {
+    locations: contentEntries(first: 3, type: "stores") {
       nodes {
         ...LocationCardFields
       }

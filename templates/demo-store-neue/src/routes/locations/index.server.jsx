@@ -46,7 +46,7 @@ function Card({to, data}) {
 const QUERY = gql`
   ${LOCATION_CARD_FIELDS}
   query Locations($pageBy: Int) {
-    stores: metaobjects(first: $pageBy, type: "stores") {
+    stores: contentEntries(first: $pageBy, type: "stores") {
       nodes {
         ...LocationCardFields
       }

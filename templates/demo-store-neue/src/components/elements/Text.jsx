@@ -15,6 +15,7 @@ export default function Text({
   const colors = {
     default: 'inherit',
     primary: 'text-primary/90',
+    subtle: 'text-primary/50',
     notice: 'text-notice',
     contrast: 'text-contrast/90',
   };

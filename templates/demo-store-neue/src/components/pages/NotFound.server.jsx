@@ -69,7 +69,7 @@ const QUERY = gql`
         ...ProductCardFields
       }
     }
-    locations: metaobjects(first: 3, type: "stores") {
+    locations: contentEntries(first: 3, type: "stores") {
       nodes {
         ...LocationCardFields
       }

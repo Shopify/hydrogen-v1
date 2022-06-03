@@ -102,7 +102,7 @@ const QUERY = gql`
   ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
-    heroBanners: metaobjects(type: "hero_banners", first: 2) {
+    heroBanners: contentEntries(type: "hero_banners", first: 2) {
       nodes {
         title: field(key: "title") {
           value
@@ -149,7 +149,7 @@ const QUERY = gql`
         ...ProductCardFields
       }
     }
-    locations: metaobjects(first: 3, type: "stores") {
+    locations: contentEntries(first: 3, type: "stores") {
       nodes {
         ...LocationCardFields
       }

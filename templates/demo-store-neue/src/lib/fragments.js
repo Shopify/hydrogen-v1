@@ -66,7 +66,7 @@ export const PRODUCT_CARD_FIELDS = gql`
 `;
 
 export const LOCATION_CARD_FIELDS = gql`
-  fragment LocationCardFields on Metaobject {
+  fragment LocationCardFields on ContentEntry {
     id
     handle
     featured_image: field(key: "featured_image") {
