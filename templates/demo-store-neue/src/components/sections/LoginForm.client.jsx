@@ -160,7 +160,7 @@ function EmailField({email, setEmail, emailError, shopName}) {
           Next
         </button>
       </div>
-      <div className="flex items-center mt-8 border-t  border-gray-200">
+      <div className="flex items-center mt-8 border-t  border-gray-300">
         <p className="align-baseline text-sm mt-6">
           New to {shopName}? &nbsp;
           <Link className="inline underline" to="/account/register">
