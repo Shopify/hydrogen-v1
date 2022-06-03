@@ -10,9 +10,9 @@ import {
   getItemFromCache,
   isStale,
   setItemInCache,
-} from '../../framework/cache-sub-request';
+} from '../Cache/cache-sub-request';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {CacheSeconds} from '../../framework/CachingStrategy';
+import {CacheSeconds} from '../Cache/strategies';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you

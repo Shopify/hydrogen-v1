@@ -30,7 +30,7 @@ export {
   CacheWeeks,
   CacheMonths,
   CacheCustom,
-} from './framework/CachingStrategy';
+} from './foundation/Cache/strategies';
 export {useServerAnalytics} from './foundation/Analytics/hook';
 export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
 export {useSession} from './foundation/useSession/useSession';

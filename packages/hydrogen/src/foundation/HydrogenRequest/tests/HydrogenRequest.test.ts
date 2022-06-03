@@ -1,6 +1,6 @@
 import {IncomingMessage} from 'http';
-import {RSC_PATHNAME} from '../../constants';
-import {PreloadOptions} from '../../types';
+import {RSC_PATHNAME} from '../../../constants';
+import {PreloadOptions} from '../../../types';
 import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server';
 
 describe('HydrogenRequest', () => {

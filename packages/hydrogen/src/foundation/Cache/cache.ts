@@ -1,10 +1,7 @@
-import type {CachingStrategy} from '../types';
-import {getCache} from './runtime';
-import {
-  CacheSeconds,
-  generateCacheControlHeader,
-} from '../framework/CachingStrategy';
-import {logCacheApiStatus} from '../utilities/log';
+import type {CachingStrategy} from '../../types';
+import {getCache} from '../runtime';
+import {CacheSeconds, generateCacheControlHeader} from './strategies';
+import {logCacheApiStatus} from '../../utilities/log';
 
 function getCacheControlSetting(
   userCacheOptions?: CachingStrategy,

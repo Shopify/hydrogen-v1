@@ -14,12 +14,12 @@ import type {
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
 } from './types';
-import {Html, applyHtmlHead} from './framework/Hydration/Html';
-import {HydrogenResponse} from './framework/HydrogenResponse.server';
+import {Html, applyHtmlHead} from './foundation/Html/Html';
+import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
 import {
   HydrogenRequest,
   RuntimeContext,
-} from './framework/HydrogenRequest.server';
+} from './foundation/HydrogenRequest/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
@@ -33,7 +33,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {setCache} from './framework/runtime';
+import {setCache} from './foundation/runtime';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,

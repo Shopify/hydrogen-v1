@@ -2,8 +2,8 @@ import React, {Suspense} from 'react';
 import {useShopQuery} from '../hooks';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ServerRequestProvider} from '../../../foundation/ServerRequestProvider';
-import {HydrogenRequest} from '../../../framework/HydrogenRequest.server';
-import {setCache} from '../../../framework/runtime';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
+import {setCache} from '../../../foundation/runtime';
 import {InMemoryCache} from '../../../framework/cache/in-memory';
 
 jest.mock('../../../foundation/ssr-interop', () => {
