@@ -56,7 +56,7 @@ export default function OrderCard(props) {
           <div className="flex-col text-left justify-center">
             <Text
               as="h3"
-              className="w-full overflow-hidden whitespace-nowrap text-ellipsis mb-2"
+              className="w-full overflow-hidden whitespace-nowrap text-ellipsis mb-1"
               size="copy"
               color="primary"
             >
