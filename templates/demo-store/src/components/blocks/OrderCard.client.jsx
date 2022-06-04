@@ -1,4 +1,5 @@
 import {Image, Link, flattenConnection} from '@shopify/hydrogen';
+import {Text} from '~/components/elements';
 
 function fulfillmentStatus(status) {
   let text = status;
@@ -45,7 +46,7 @@ export default function OrderCard(props) {
   return (
     <li className="col-span-1 flex flex-col text-center bg-white rounded border-gray-200 border divide-y divide-gray-200">
       <Link to="#">
-        <div className="flex-1 flex flex-row p-8 align-middle">
+        <div className="flex-1 flex flex-row lg:p-8 p-6 items-center">
           <Image
             key={lineItems[0].variant?.image?.url}
             className="lg:w-48 lg:h-48 md:w-36 md:h-36 w-32 h-32 flex"
@@ -53,21 +54,30 @@ export default function OrderCard(props) {
             data={lineItems[0].variant?.image}
           />
           <div className="flex-col text-left justify-center">
-            <h3 className="text-gray-900 font-medium">
+            <Text
+              as="h3"
+              className="w-full overflow-hidden whitespace-nowrap text-ellipsis mb-2"
+              size="copy"
+              color="primary"
+            >
               {lineItems[0].title}{' '}
               {lineItems.length > 1 && `+ ${lineItems.length - 1} more`}
-            </h3>
-            <dl className="mt-1 flex-grow flex flex-col justify-between">
+            </Text>
+            <dl className="grid grid-gap-1">
               <dt className="sr-only">Order ID</dt>
-              <dd className="text-gray-500 text-sm">
-                Order No. {order.orderNumber}
+              <dd className="text-gray-500">
+                <Text size="copy" color="subtle">
+                  Order No. {order.orderNumber}
+                </Text>
               </dd>
               <dt className="sr-only">Order Date</dt>
-              <dd className="text-gray-500 text-sm mt-1">
-                {new Date(order.processedAt).toDateString()}
+              <dd className="text-gray-500">
+                <Text size="copy" color="subtle">
+                  {new Date(order.processedAt).toDateString()}
+                </Text>
               </dd>
               <dt className="sr-only">Fulfillment Status</dt>
-              <dd className="mt-3">
+              <dd className="mt-2">
                 <span
                   className={`px-3 py-1 text-xs font-medium rounded-full ${
                     order.fulfillmentStatus === 'FULFILLED'
@@ -75,7 +85,9 @@ export default function OrderCard(props) {
                       : 'bg-gray-200 text-gray-500'
                   }`}
                 >
-                  {fulfillmentStatus(order.fulfillmentStatus)}
+                  <Text size="fine">
+                    {fulfillmentStatus(order.fulfillmentStatus)}
+                  </Text>
                 </span>
               </dd>
             </dl>
