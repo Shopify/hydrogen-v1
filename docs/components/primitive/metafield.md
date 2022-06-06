@@ -5,10 +5,7 @@ description: The Metafield component renders the value of a Storefront API's Met
 ---
 
 The `Metafield` component renders the value of a Storefront
-API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
-
-When no render function is provided, it renders a smart default of the
-Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
+API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 

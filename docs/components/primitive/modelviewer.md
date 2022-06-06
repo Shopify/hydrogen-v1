@@ -5,7 +5,7 @@ description: The ModelViewer component renders a 3D model (with the model-viewer
 ---
 
 The `ModelViewer` component renders a 3D model (with the `model-viewer` tag) for
-the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d).
+the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
