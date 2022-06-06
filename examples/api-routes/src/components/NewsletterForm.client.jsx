@@ -1,3 +1,4 @@
+import {fetchSync} from '@shopify/hydrogen';
 import {useState} from 'react';
 
 export default function NewsletterForm() {
@@ -5,7 +6,7 @@ export default function NewsletterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/newsletter', {
+    const response = await fetchSync('/newsletter', {
       method: 'POST',
       body: JSON.stringify({email}),
     });
