@@ -216,9 +216,15 @@ export default defineConfig({
     showCacheApiStatus: true,
     /* Logs the cache control headers of the main document and its sub queries. */
     showCacheControlHeader: true,
-    /* Logs the timeline of when queries are being requested, resolved, and rendered. */
+    /* Logs the timeline of when queries are being requested, resolved, and rendered.
+    * This is an experimental feature. As a result, functionality is subject to change.
+    * You can provide feedback on this feature by submitting an issue in GitHub:
+    * https://github.com/Shopify/hydrogen/issues.*/
     showQueryTiming: true,
-    /* Logs warnings in your app if you're over-fetching data from the Storefront API. */
+    /* Logs warnings in your app if you're over-fetching data from the Storefront API.
+     * This is an experimental feature. As a result, functionality is subject to change.
+     * You can provide feedback on this feature by submitting an issue in GitHub:
+     * https://github.com/Shopify/hydrogen/issues. */
     showUnusedQueryProperties: true,
   }
 });
@@ -236,7 +242,7 @@ If strict effects cause problems for your app, then you can turn off strict mode
 
 ```tsx
 export default defineConfig({
-  strictMode: false, 
+  strictMode: false,
 });
 ```
 

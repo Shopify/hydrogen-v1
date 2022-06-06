@@ -4,6 +4,13 @@ title: Preloaded queries
 description: Learn how to configure queries to preload in your Hydrogen app.
 ---
 
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>Preloaded queries is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by [submitting an issue in GitHub](https://github.com/Shopify/hydrogen/issues).</p>
+
+</aside>
+
 This guide provides information on how preloaded queries work and how to configure them in your Hydrogen app.
 
 ## How preloaded queries work
@@ -100,6 +107,13 @@ const data = fetchSync('https://my.api.com/data.json', {
 {% endcodeblock %}
 
 ## Test a preloaded query
+
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>The `showQueryTiming` property is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by [submitting an issue in GitHub](https://github.com/Shopify/hydrogen/issues).</p>
+
+</aside>
 
 To test a preloaded query, enable the `logger.showQueryTiming` property in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger).
 
