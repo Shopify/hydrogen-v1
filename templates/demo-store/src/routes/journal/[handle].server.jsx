@@ -5,9 +5,11 @@ import {
   gql,
   Image,
   CacheDays,
+  Head,
 } from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
+
 const dateFormatOptions = {
   year: 'numeric',
   month: 'long',
@@ -31,6 +33,15 @@ export default function Page({params, response}) {
   ).format(new Date(publishedAt));
   return (
     <Layout>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&display=swap"
+          rel="stylesheet"
+          preload="true"
+        />
+      </Head>
       <Seo type="page" data={data.blog.articleByHandle} />
       <section className="w-2/4 m-auto gap-4 md:gap-8 p-4 py-6 md:p-8 lg:p-12">
         <h1 className="text-4xl font-bold w-4/5 m-auto">{title}</h1>
@@ -41,7 +52,7 @@ export default function Page({params, response}) {
         <Image data={data.blog.articleByHandle.image} className="mt-16" />
         <div
           dangerouslySetInnerHTML={{__html: contentHtml}}
-          className="prose w-4/5 m-auto mt-16 max-w-max mb-24"
+          className="w-4/5 m-auto mt-16 max-w-max mb-24 font-['Fraunces'] prose-strong:font-sans"
         />
       </section>
     </Layout>
