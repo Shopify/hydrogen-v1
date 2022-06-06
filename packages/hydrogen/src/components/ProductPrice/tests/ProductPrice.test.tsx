@@ -8,7 +8,7 @@ describe('<ProductPrice />', () => {
   describe('variantId prop is provided', () => {
     it("renders <Money /> with the variant's price", () => {
       const product = getProduct();
-      const variant = product?.variants?.edges?.[0]?.node;
+      const variant = product?.variants?.nodes?.[0];
       const price = mountWithProviders(
         <ProductPrice data={product} variantId={variant?.id} />
       );
@@ -20,7 +20,7 @@ describe('<ProductPrice />', () => {
 
     it("renders <Money /> with the variant's minimum compareAt price", () => {
       const product = getProduct();
-      const variant = product?.variants?.edges?.[0]?.node;
+      const variant = product?.variants?.nodes?.[0];
       const price = mountWithProviders(
         <ProductPrice
           data={product}
@@ -36,7 +36,7 @@ describe('<ProductPrice />', () => {
 
     it('renders <Money /> with unit prices when valueType is `unit`', () => {
       const product = getProduct();
-      const variant = product?.variants?.edges?.[0]?.node;
+      const variant = product?.variants?.nodes?.[0];
       const component = mountWithProviders(
         <ProductPrice data={product} valueType="unit" variantId={variant?.id} />
       );
@@ -53,7 +53,7 @@ describe('<ProductPrice />', () => {
     const price = mountWithProviders(<ProductPrice data={product} />);
 
     expect(price).toContainReactComponent(Money, {
-      data: product.priceRange.minVariantPrice,
+      data: product.priceRange?.minVariantPrice,
     });
   });
 
@@ -64,7 +64,7 @@ describe('<ProductPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      data: product.priceRange.maxVariantPrice,
+      data: product.priceRange?.maxVariantPrice,
     });
   });
 
@@ -75,7 +75,7 @@ describe('<ProductPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      data: product.compareAtPriceRange.minVariantPrice,
+      data: product.compareAtPriceRange?.minVariantPrice,
     });
   });
 
@@ -86,7 +86,7 @@ describe('<ProductPrice />', () => {
     );
 
     expect(price).toContainReactComponent(Money, {
-      data: product.compareAtPriceRange.maxVariantPrice,
+      data: product.compareAtPriceRange?.maxVariantPrice,
     });
   });
 

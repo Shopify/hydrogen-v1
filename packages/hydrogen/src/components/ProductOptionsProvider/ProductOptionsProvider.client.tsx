@@ -55,23 +55,25 @@ export function ProductOptionsProvider({
   const options = useMemo(() => getOptions(variants), [variants]);
 
   /**
-   * Track the selectedVariant within the hook. If `initialVariantId`
-   * is passed, use that as an initial value.
+   * Track the selectedVariant within the provider.
    */
   const [selectedVariant, setSelectedVariant] = useState<
     PartialDeep<ProductVariantType> | undefined | null
   >(() => getVariantBasedOnIdProp(explicitVariantId, variants));
 
   /**
-   * Track the selectedOptions within the hook. If a `initialVariantId`
+   * Track the selectedOptions within the provider. If a `initialVariantId`
    * is passed, use that to select initial options.
    */
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(
     selectedVariant?.selectedOptions
-      ? selectedVariant.selectedOptions.reduce((memo, optionSet) => {
-          memo[optionSet?.name ?? ''] = optionSet?.value ?? '';
-          return memo;
-        }, {} as SelectedOptions)
+      ? selectedVariant.selectedOptions.reduce<SelectedOptions>(
+          (memo, optionSet) => {
+            memo[optionSet?.name ?? ''] = optionSet?.value ?? '';
+            return memo;
+          },
+          {}
+        )
       : {}
   );
 
@@ -81,10 +83,11 @@ export function ProductOptionsProvider({
    * then the selected variant and options will reference incorrect
    * values.
    */
-  useEffect(() => {
-    const variant = getSelectedVariant(variants, selectedOptions);
-    setSelectedVariant(getVariantBasedOnIdProp(variant?.id, variants));
-  }, [selectedOptions, variants]);
+  // useEffect(() => {
+  //   const variant = getSelectedVariant(variants, selectedOptions);
+  //   console.log('effect');
+  //   setSelectedVariant(getVariantBasedOnIdProp(variant?.id, variants));
+  // }, [selectedOptions, variants]);
 
   /**
    * Allow the developer to select an option.

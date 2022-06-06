@@ -50,6 +50,7 @@ export function getProduct(
     metafields: product.metafields ?? {
       nodes: [getRawMetafield(), getRawMetafield(), getRawMetafield()],
     },
+    sellingPlanGroups: product.sellingPlanGroups ?? {nodes: []},
   };
 }
 

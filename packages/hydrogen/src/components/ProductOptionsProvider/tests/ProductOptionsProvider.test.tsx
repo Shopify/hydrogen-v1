@@ -1,38 +1,15 @@
 import React from 'react';
-import {ProductOptionsContext} from '../context';
 import {ProductOptionsProvider} from '../ProductOptionsProvider.client';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {getProduct} from '../../../utilities/tests/product';
 import {useProductOptions} from '../../../hooks/useProductOptions';
-import {VARIANTS} from './fixtures';
+import {
+  VARIANTS,
+  VARIANTS_WITH_SELLING_PLANS,
+  SELLING_PLAN_GROUPS_CONNECTION,
+} from './fixtures';
 
 describe('<ProductOptionsProvider />', () => {
-  it('sets up a product context for the provided product options', () => {
-    const prod = getProduct();
-    const productOptionsProvider = mountWithProviders(
-      <ProductOptionsProvider data={prod} initialVariantId="">
-        Hello world
-      </ProductOptionsProvider>
-    );
-
-    expect(productOptionsProvider).toProvideReactContext(
-      ProductOptionsContext,
-      expect.objectContaining({
-        options: expect.any(Object),
-        selectedVariant: undefined,
-        selectedOptions: expect.any(Object),
-        selectedSellingPlan: undefined,
-        selectedSellingPlanAllocation: undefined,
-        sellingPlanGroups: [],
-        setSelectedVariant: expect.any(Function),
-        setSelectedOptions: expect.any(Function),
-        setSelectedOption: expect.any(Function),
-        isOptionInStock: expect.any(Function),
-        setSelectedSellingPlan: expect.any(Function),
-      })
-    );
-  });
-
   it('renders its children', () => {
     const Children = () => null;
     const prod = getProduct();
@@ -51,7 +28,7 @@ describe('<ProductOptionsProvider />', () => {
       return <div>{JSON.stringify(options)}</div>;
     }
 
-    const prod = getProduct();
+    const prod = getProduct({variants: VARIANTS});
 
     const wrapper = await mountWithProviders(
       <ProductOptionsProvider data={prod} initialVariantId="">
@@ -102,10 +79,10 @@ describe('<ProductOptionsProvider />', () => {
       );
     }
 
-    const prod = getProduct();
+    const prod = getProduct({variants: VARIANTS});
 
     const wrapper = await mountWithProviders(
-      <ProductOptionsProvider data={prod} initialVariantId="">
+      <ProductOptionsProvider data={prod}>
         <Component />
       </ProductOptionsProvider>
     );
@@ -114,7 +91,7 @@ describe('<ProductOptionsProvider />', () => {
       children: JSON.stringify({Color: 'Black', Size: 'Small'}),
     });
 
-    await wrapper.find('button', {children: 'White'})!.trigger('onClick');
+    await wrapper.find('button', {children: 'White'})?.trigger('onClick');
 
     expect(wrapper).toContainReactComponent('div', {
       children: JSON.stringify({Color: 'White', Size: 'Small'}),
@@ -123,18 +100,19 @@ describe('<ProductOptionsProvider />', () => {
 
   it('computes selected options based on initial selected variant', async () => {
     function Component() {
-      // const {selectedOptions} = useProductOptions({
-      //   variants: VARIANTS,
-      //   initialVariantId: VARIANTS.edges[0].node.id,
-      // });
       const {selectedOptions} = useProductOptions();
       return <div>{JSON.stringify(selectedOptions)}</div>;
     }
 
-    const prod = getProduct();
+    const prod = getProduct({
+      variants: VARIANTS,
+    });
 
     const wrapper = await mountWithProviders(
-      <ProductOptionsProvider data={prod} initialVariantId="">
+      <ProductOptionsProvider
+        data={prod}
+        initialVariantId={VARIANTS.nodes?.[0]?.id}
+      >
         <Component />
       </ProductOptionsProvider>
     );
@@ -146,14 +124,11 @@ describe('<ProductOptionsProvider />', () => {
 
   it('provides list of variants', async () => {
     function Component() {
-      // const {variants} = useProductOptions({
-      //   variants: VARIANTS,
-      // });
       const {variants} = useProductOptions();
       return <div>{JSON.stringify(variants)}</div>;
     }
 
-    const prod = getProduct();
+    const prod = getProduct({variants: VARIANTS});
 
     const wrapper = await mountWithProviders(
       <ProductOptionsProvider data={prod} initialVariantId="">
@@ -162,17 +137,12 @@ describe('<ProductOptionsProvider />', () => {
     );
 
     expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS),
+      children: JSON.stringify(VARIANTS.nodes),
     });
   });
 
   it('provides setSelectedVariant callback', async () => {
     function Component() {
-      // const {variants, selectedVariant, setSelectedVariant} = useProductOptions(
-      //   {
-      //     variants: VARIANTS,
-      //   }
-      // );
       const {variants, selectedVariant, setSelectedVariant} =
         useProductOptions();
 
@@ -201,32 +171,29 @@ describe('<ProductOptionsProvider />', () => {
       );
     }
 
-    const prod = getProduct();
+    const prod = getProduct({variants: VARIANTS});
 
     const wrapper = await mountWithProviders(
-      <ProductOptionsProvider data={prod} initialVariantId="">
+      <ProductOptionsProvider data={prod}>
         <Component />
       </ProductOptionsProvider>
     );
 
     expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.edges[0].node),
+      children: JSON.stringify(VARIANTS.nodes?.[0]),
     });
 
     await wrapper
-      .find('select', {name: 'variant'})!
-      .trigger('onChange', {target: {value: VARIANTS.edges[1].node.id}});
+      .find('select', {name: 'variant'})
+      ?.trigger('onChange', {target: {value: VARIANTS.nodes?.[1]?.id}});
 
     expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.edges[1].node),
+      children: JSON.stringify(VARIANTS.nodes?.[1]),
     });
   });
 
   it('provides out of stock helper', async () => {
     function Component() {
-      // const {options, setSelectedOption, isOptionInStock} = useProductOptions({
-      // variants: VARIANTS,
-      // });
       const {options, setSelectedOption, isOptionInStock} = useProductOptions();
 
       return (
@@ -258,7 +225,7 @@ describe('<ProductOptionsProvider />', () => {
       );
     }
 
-    const prod = getProduct();
+    const prod = getProduct({variants: VARIANTS});
 
     const wrapper = await mountWithProviders(
       <ProductOptionsProvider data={prod} initialVariantId="">
@@ -282,34 +249,12 @@ describe('<ProductOptionsProvider />', () => {
 
   it('supports selecting a selling plan', async () => {
     function Component() {
-      // const {
-      //   setSelectedSellingPlan,
-      //   selectedSellingPlan,
-      //   selectedSellingPlanAllocation,
-      //   sellingPlanGroups,
-      // } = useProductOptions({
-      //   variants: VARIANTS_WITH_SELLING_PLANS,
-      //   sellingPlanGroups: SELLING_PLAN_GROUPS_CONNECTION,
-      //   initialVariantId: VARIANTS_WITH_SELLING_PLANS.edges[0].node.id,
-      // });
       const {
         setSelectedSellingPlan,
         selectedSellingPlan,
         selectedSellingPlanAllocation,
         sellingPlanGroups,
       } = useProductOptions();
-
-      const selectSellingPlanMarkup = selectedSellingPlan ? (
-        <div id="selectedSellingPlan">
-          {JSON.stringify(selectedSellingPlan)}
-        </div>
-      ) : null;
-      const selectedSellingPlanAllocationMarkup =
-        selectedSellingPlanAllocation ? (
-          <div id="selectedSellingPlanAllocation">
-            {JSON.stringify(selectedSellingPlanAllocation)}
-          </div>
-        ) : null;
 
       return (
         <>
@@ -334,16 +279,30 @@ describe('<ProductOptionsProvider />', () => {
               </div>
             );
           })}
-          {selectSellingPlanMarkup}
-          {selectedSellingPlanAllocationMarkup}
+          {selectedSellingPlan ? (
+            <div id="selectedSellingPlan">
+              {JSON.stringify(selectedSellingPlan)}
+            </div>
+          ) : null}
+          {selectedSellingPlanAllocation ? (
+            <div id="selectedSellingPlanAllocation">
+              {JSON.stringify(selectedSellingPlanAllocation)}
+            </div>
+          ) : null}
         </>
       );
     }
 
-    const prod = getProduct();
+    const prod = getProduct({
+      variants: VARIANTS_WITH_SELLING_PLANS,
+      sellingPlanGroups: SELLING_PLAN_GROUPS_CONNECTION,
+    });
 
     const wrapper = await mountWithProviders(
-      <ProductOptionsProvider data={prod} initialVariantId="">
+      <ProductOptionsProvider
+        data={prod}
+        initialVariantId={VARIANTS_WITH_SELLING_PLANS.nodes?.[0]?.id}
+      >
         <Component />
       </ProductOptionsProvider>
     );
@@ -356,8 +315,8 @@ describe('<ProductOptionsProvider />', () => {
     });
 
     await wrapper
-      .find('button', {children: 'Deliver every week'})!
-      .trigger('onClick');
+      .find('button', {children: 'Deliver every week'})
+      ?.trigger('onClick');
 
     expect(wrapper).toContainReactComponentTimes('div', 1, {
       id: 'selectedSellingPlan',

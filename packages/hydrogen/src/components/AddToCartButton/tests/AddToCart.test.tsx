@@ -25,9 +25,12 @@ describe('AddToCartButton', () => {
   });
 
   it('renders a button', () => {
+    const product = getProduct();
     const component = mountWithProviders(
       <CartProvider>
-        <AddToCartButton variantId="123">Add to cart</AddToCartButton>
+        <ProductOptionsProvider data={product}>
+          <AddToCartButton variantId="123">Add to cart</AddToCartButton>
+        </ProductOptionsProvider>
       </CartProvider>
     );
 
@@ -37,11 +40,14 @@ describe('AddToCartButton', () => {
   });
 
   it('allows passthrough props', () => {
+    const product = getProduct();
     const component = mountWithProviders(
       <CartProvider>
-        <AddToCartButton variantId="123" className="bg-blue-600">
-          Add to cart
-        </AddToCartButton>
+        <ProductOptionsProvider data={product}>
+          <AddToCartButton variantId="123" className="bg-blue-600">
+            Add to cart
+          </AddToCartButton>
+        </ProductOptionsProvider>
       </CartProvider>
     );
 
@@ -52,8 +58,11 @@ describe('AddToCartButton', () => {
 
   describe('when variantId is set explicity', () => {
     it('renders a disabled button if the variantId is null', () => {
+      const product = getProduct();
       const component = mountWithCartProvider(
-        <AddToCartButton variantId={null}>Add to cart</AddToCartButton>
+        <ProductOptionsProvider data={product}>
+          <AddToCartButton variantId={null}>Add to cart</AddToCartButton>
+        </ProductOptionsProvider>
       );
 
       expect(component).toContainReactComponentTimes('button', 1, {
@@ -62,10 +71,13 @@ describe('AddToCartButton', () => {
     });
 
     it('calls linesAdd with the variantId', () => {
+      const product = getProduct();
       const mockLinesAdd = jest.fn();
       const id = '123';
       const component = mountWithCartProvider(
-        <AddToCartButton variantId={id}>Add to cart</AddToCartButton>,
+        <ProductOptionsProvider data={product}>
+          <AddToCartButton variantId={id}>Add to cart</AddToCartButton>
+        </ProductOptionsProvider>,
         {linesAdd: mockLinesAdd, cart: {id: '456'}}
       );
       component.find('button')?.trigger('onClick');
@@ -84,12 +96,12 @@ describe('AddToCartButton', () => {
       it('calls linesAdd with the initialVariantId', () => {
         const mockLinesAdd = jest.fn();
         const product = getProduct();
-        const selectedVariant = product?.variants?.edges?.[0]?.node;
+        const selectedVariant = product?.variants?.nodes?.[0];
 
         const component = mountWithCartProvider(
           <ProductOptionsProvider
             data={product}
-            initialVariantId={selectedVariant.id}
+            initialVariantId={selectedVariant?.id}
           >
             <AddToCartButton>Add to cart</AddToCartButton>
           </ProductOptionsProvider>,
@@ -112,13 +124,11 @@ describe('AddToCartButton', () => {
         const mockLinesAdd = jest.fn();
         const product = getProduct({
           variants: {
-            edges: [
-              {
-                node: getVariant({
-                  availableForSale: true,
-                  id: 'some variant id',
-                }) as any,
-              },
+            nodes: [
+              getVariant({
+                availableForSale: true,
+                id: 'some variant id',
+              }),
             ],
           },
         });
@@ -162,9 +172,12 @@ describe('AddToCartButton', () => {
 
   describe('when the button is clicked', () => {
     it('disables the button', () => {
+      const product = getProduct();
       const component = mountWithProviders(
         <CartProvider>
-          <AddToCartButton variantId="123">Add to cart</AddToCartButton>
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton variantId="123">Add to cart</AddToCartButton>
+          </ProductOptionsProvider>
         </CartProvider>
       );
 
@@ -176,14 +189,18 @@ describe('AddToCartButton', () => {
     });
 
     it('renders a message for screen readers when an accessible label is provided', () => {
+      const product = getProduct();
+
       const component = mountWithProviders(
         <CartProvider>
-          <AddToCartButton
-            accessibleAddingToCartLabel="Adding product to your cart"
-            variantId="123"
-          >
-            Add to cart
-          </AddToCartButton>
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton
+              accessibleAddingToCartLabel="Adding product to your cart"
+              variantId="123"
+            >
+              Add to cart
+            </AddToCartButton>
+          </ProductOptionsProvider>
         </CartProvider>
       );
 
