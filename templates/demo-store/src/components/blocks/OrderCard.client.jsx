@@ -44,7 +44,7 @@ export default function OrderCard(props) {
       ? flattenConnection(order.lineItems)
       : [];
   return (
-    <li className="col-span-1 flex flex-col text-center bg-white rounded border-gray-200 border divide-y divide-gray-200">
+    <li className="col-span-1 flex flex-col text-center rounded border-gray-200 border divide-y divide-gray-200">
       <Link to="#">
         <div className="flex-1 flex flex-row lg:p-8 p-6 items-center">
           <Image
