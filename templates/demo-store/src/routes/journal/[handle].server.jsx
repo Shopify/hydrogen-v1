@@ -41,7 +41,6 @@ export default function Page({params, response}) {
         <link
           href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&display=swap"
           rel="stylesheet"
-          preload="true"
         />
       </Head>
       <Seo type="page" data={data.blog.articleByHandle} />
