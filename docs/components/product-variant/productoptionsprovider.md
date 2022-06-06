@@ -227,37 +227,35 @@ const QUERY = gql`
       sellingPlanGroups(first: $numProductSellingPlanGroups) {
         nodes {
           sellingPlans(first: $numProductSellingPlans) {
-            edges {
-              node {
-                id
-                description
+            nodes {
+              id
+              description
+              name
+              options {
                 name
-                options {
-                  name
-                  value
-                }
-                priceAdjustments {
-                  orderCount
-                  adjustmentValue {
-                    ... on SellingPlanFixedAmountPriceAdjustment {
-                      adjustmentAmount {
-                        currencyCode
-                        amount
-                      }
-                    }
-                    ... on SellingPlanFixedPriceAdjustment {
-                      price {
-                        currencyCode
-                        amount
-                      }
-                    }
-                    ... on SellingPlanPercentagePriceAdjustment {
-                      adjustmentPercentage
+                value
+              }
+              priceAdjustments {
+                orderCount
+                adjustmentValue {
+                  ... on SellingPlanFixedAmountPriceAdjustment {
+                    adjustmentAmount {
+                      currencyCode
+                      amount
                     }
                   }
+                  ... on SellingPlanFixedPriceAdjustment {
+                    price {
+                      currencyCode
+                      amount
+                    }
+                  }
+                  ... on SellingPlanPercentagePriceAdjustment {
+                    adjustmentPercentage
+                  }
                 }
-                recurringDeliveries
               }
+              recurringDeliveries
             }
           }
           appName
