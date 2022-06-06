@@ -4,7 +4,7 @@ title: ProductOptionsProvider
 description: The ProductOptionsProvider component sets up a context with selected product variant state.
 ---
 
-The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the `useProductOptions` hook.
+The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions) hook.
 
 ## Example code
 
