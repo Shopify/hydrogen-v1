@@ -1,7 +1,7 @@
 ---
 gid: 80d51c7e-fafe-11eb-9a03-0242ac130003
 title: ProductOptionsProvider
-description: The ProductOptionsProvider component sets up a context with selected product variant state.
+description: The ProductOptionsProvider component sets up a context with state that tracks the selected variant and options.
 ---
 
 The `ProductOptionsProvider` component sets up a context with state that tracks the selected variant and options. Descendents of this component can use the [`useProductOptions`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions) hook.
