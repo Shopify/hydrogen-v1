@@ -61,18 +61,18 @@ export default function OrderCard(props) {
             <dl className="grid grid-gap-1">
               <dt className="sr-only">Order ID</dt>
               <dd>
-                <Text size="fine" color="subtle">
+                <Text size="copy" color="subtle">
                   Order No. {order.orderNumber}
                 </Text>
               </dd>
               <dt className="sr-only">Order Date</dt>
               <dd>
-                <Text size="fine" color="subtle">
+                <Text size="copy" color="subtle">
                   {new Date(order.processedAt).toDateString()}
                 </Text>
               </dd>
               <dt className="sr-only">Fulfillment Status</dt>
-              <dd className="mt-1">
+              <dd className="mt-2">
                 <span
                   className={`px-3 py-1 text-xs font-medium rounded-full ${
                     order.fulfillmentStatus === 'FULFILLED'
@@ -95,7 +95,7 @@ export default function OrderCard(props) {
             to="#"
             className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
           >
-            <span className="ml-3">View Order Details</span>
+            <span className="ml-3">View Details</span>
           </Link>
         </div>
       </div>
