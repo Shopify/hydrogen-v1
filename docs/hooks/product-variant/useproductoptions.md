@@ -166,6 +166,6 @@ The [Product object](https://shopify.dev/api/storefront/reference/products/produ
 | `$numProductSellingPlanGroups`             | The number of `SellingPlanGroups` objects to query for in a `SellingPlanGroupConnection`.             |
 | `$$numProductSellingPlans`                 | The number of `SellingPlan` objects to query for in a `SellingPlanConnection`.                        |
 
-## Related
+## Related components
 
 - [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
