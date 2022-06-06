@@ -115,7 +115,7 @@ function trackPageView(payload: any): void {
 function storefrontPageViewSchema(payload: any): any {
   return [
     {
-      schema_id: 'trekkie_storefront_page_view/1.4',
+      schema_id: 'trekkie_storefront_page_view/1.2',
       payload: buildStorefrontPageViewPayload(payload),
       metadata: {
         event_created_at_ms: Date.now(),
