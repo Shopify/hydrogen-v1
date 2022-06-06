@@ -33,5 +33,5 @@ The `ProductPrice` component is a client component, which means that it renders 
 
 ## Related components
 
-- [`ProductProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productprovider)
+- [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
 - [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)

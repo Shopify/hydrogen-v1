@@ -13,13 +13,13 @@ describe('<ProductOptionsProvider />', () => {
   it('renders its children', () => {
     const Children = () => null;
     const prod = getProduct();
-    const productProvider = mountWithProviders(
+    const productOptionsProvider = mountWithProviders(
       <ProductOptionsProvider data={prod} initialVariantId="">
         <Children />
       </ProductOptionsProvider>
     );
 
-    expect(productProvider).toContainReactComponent(Children);
+    expect(productOptionsProvider).toContainReactComponent(Children);
   });
 
   it('returns a structured list of options and values', async () => {
