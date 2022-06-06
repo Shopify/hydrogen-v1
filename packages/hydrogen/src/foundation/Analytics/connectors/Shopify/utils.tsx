@@ -55,7 +55,7 @@ export function hexTime(): string {
 }
 
 export function addDataIf(
-  keyValuePairs: Record<string, string | number | Boolean>,
+  keyValuePairs: Record<string, string | number | Boolean | undefined>,
   formattedData: any
 ): any {
   Object.entries(keyValuePairs).forEach(([key, value]) => {

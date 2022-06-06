@@ -7,7 +7,7 @@ import {SHOPIFY_S, SHOPIFY_Y} from './const';
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
 const myShopifyDomain = 'myshopify.com';
-const oxygenDomain = 'myshopify.dev';
+// const oxygenDomain = 'myshopify.dev';
 
 let isInit = false;
 let microSessionCount = 0;
@@ -44,6 +44,17 @@ export function ShopifyAnalyticsClient({cookieDomain}: {cookieDomain: string}) {
         const eventNames = ClientAnalytics.eventNames;
 
         ClientAnalytics.subscribe(eventNames.PAGE_VIEW, trackPageView);
+        ClientAnalytics.subscribe(eventNames.ADD_TO_CART, (payload: any) => {
+          microSessionCount += 1;
+          try {
+            sendToServer(storefrontAddToCartSchema(payload));
+          } catch (error) {
+            console.error(
+              `Error Shopify analytics: ${ClientAnalytics.eventNames.ADD_TO_CART}`,
+              error
+            );
+          }
+        });
 
         // On a slow network, the pageview event could be already fired before
         // we subscribed to the pageview event
@@ -102,33 +113,29 @@ function trackPageView(payload: any): void {
 }
 
 function storefrontPageViewSchema(payload: any): any {
-  return {
-    schema_id: 'trekkie_storefront_page_view/1.4',
-    payload: buildStorefrontPageViewPayload(payload),
-    metadata: {
-      event_created_at_ms: Date.now(),
+  return [
+    {
+      schema_id: 'trekkie_storefront_page_view/1.4',
+      payload: buildStorefrontPageViewPayload(payload),
+      metadata: {
+        event_created_at_ms: Date.now(),
+      },
     },
-  };
+  ];
 }
 
-function buildStorefrontPageViewPayload(payload: any): any {
-  const location = document.location;
+function buildBasePayload(payload: any): any {
   const shopify = payload.shopify;
   let formattedData = {
     appClientId: 6167201,
     hydrogenSubchannelId: shopify.storefrontId,
 
-    isPersistentCookie: shopify.isPersistentCookie,
     uniqToken: shopify.userId,
     visitToken: shopify.sessionId,
     microSessionId: shopify.pageId,
     microSessionCount,
 
-    url: location.href,
-    path: location.pathname,
-    search: location.search,
     referrer: document.referrer,
-    title: document.title,
 
     shopId: stripGId(shopify.shopId),
     currency: shopify.currency,
@@ -163,6 +170,23 @@ function buildStorefrontPageViewPayload(payload: any): any {
     }
   }
 
+  return formattedData;
+}
+
+function buildStorefrontPageViewPayload(payload: any): any {
+  const location = document.location;
+  const shopify = payload.shopify;
+  let formattedData = {
+    ...buildBasePayload(payload),
+
+    isPersistentCookie: shopify.isPersistentCookie,
+
+    url: location.href,
+    path: location.pathname,
+    search: location.search,
+    title: document.title,
+  };
+
   formattedData = addDataIf(
     {
       customerId: shopify.customerId,
@@ -173,16 +197,84 @@ function buildStorefrontPageViewPayload(payload: any): any {
   return formattedData;
 }
 
+function storefrontAddToCartSchema(payload: any): any[] {
+  const addToCartPayloads: any[] = [];
+  const cartItems = flattenProductLines(payload.cart.lines.edges);
+  const basePayload = buildBasePayload(payload);
+
+  payload.addedCartLines.forEach((product: any) => {
+    addToCartPayloads.push({
+      schema_id: 'trekkie_storefront_track_added_product/1.1',
+      payload: {
+        ...basePayload,
+        ...buildStorefrontAddToCartPayload(
+          cartItems[product.merchandiseId || product.id]
+        ),
+        quantity: `${product.quantity}`,
+      },
+      metadata: {
+        event_created_at_ms: Date.now(),
+      },
+    });
+  });
+
+  return addToCartPayloads;
+}
+
+function buildStorefrontAddToCartPayload(variant: any): any {
+  let formattedData = {
+    productId: stripGId(variant.product.id),
+    name: variant.product.title,
+
+    variantId: `${stripGId(variant.id)}`,
+    variant: variant.title,
+
+    price: parseInt(variant.priceV2.amount),
+  };
+
+  formattedData = addDataIf(
+    {
+      sku: variant.sku,
+    },
+    formattedData
+  );
+
+  formattedData = addDataIf(
+    {
+      category: variant.product.productType,
+    },
+    formattedData
+  );
+
+  formattedData = addDataIf(
+    {
+      brand: variant.product.vendor,
+    },
+    formattedData
+  );
+
+  return formattedData;
+}
+
+function flattenProductLines(lines: any): Record<string, any> {
+  const products: Record<string, any> = {};
+  lines.forEach((line: any) => {
+    const product: any = line.node.merchandise;
+    products[product.id] = product;
+  });
+  return products;
+}
+
 function isMerchantRequest(): Boolean {
-  const hostname = location.hostname;
-  if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
-    return true;
-  }
+  // const hostname = location.hostname;
+  // if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
+  //   return true;
+  // }
   return false;
 }
 
-function stripGId(text: string): number {
-  return parseInt(text.substring(text.lastIndexOf('/') + 1));
+function stripGId(text?: string): number | undefined {
+  return text ? parseInt(text.substring(text.lastIndexOf('/') + 1)) : undefined;
 }
 
 function getResourceType(text: string): string {
@@ -196,8 +288,8 @@ const BATCH_SENT_TIMEOUT = 500;
 let batchedData: any[] = [];
 let batchedTimeout: NodeJS.Timeout | null;
 
-function sendToServer(data: any) {
-  batchedData.push(data);
+function sendToServer(events: any[]) {
+  batchedData = batchedData.concat(events);
 
   if (batchedTimeout) {
     clearTimeout(batchedTimeout);
@@ -217,11 +309,18 @@ function sendToServer(data: any) {
 
     // Send to server
     try {
-      fetch('/__event?shopify', {
+      // fetch('/__event?shopify', {
+      //   method: 'post',
+      //   headers: {
+      //     'cache-control': 'no-cache',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(batchedDataToBeSent),
+      // });
+      fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
         method: 'post',
         headers: {
-          'cache-control': 'no-cache',
-          'Content-Type': 'application/json',
+          'content-type': 'text/plain',
         },
         body: JSON.stringify(batchedDataToBeSent),
       });
