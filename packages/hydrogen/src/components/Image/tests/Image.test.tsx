@@ -283,6 +283,7 @@ describe('<Image />', () => {
     });
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it.skip(`typescript types`, () => {
     // this test is actually just using //@ts-expect-error as the assertion, and don't need to execute in order to have TS validation on them
     // I don't love this idea, but at the moment I also don't have other great ideas for how to easily test our component TS types
