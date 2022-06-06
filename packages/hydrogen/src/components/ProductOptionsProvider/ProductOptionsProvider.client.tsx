@@ -65,16 +65,8 @@ export function ProductOptionsProvider({
    * Track the selectedOptions within the provider. If a `initialVariantId`
    * is passed, use that to select initial options.
    */
-  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(
-    selectedVariant?.selectedOptions
-      ? selectedVariant.selectedOptions.reduce<SelectedOptions>(
-          (memo, optionSet) => {
-            memo[optionSet?.name ?? ''] = optionSet?.value ?? '';
-            return memo;
-          },
-          {}
-        )
-      : {}
+  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(() =>
+    getSelectedOptions(selectedVariant)
   );
 
   /**
@@ -84,7 +76,12 @@ export function ProductOptionsProvider({
    * values.
    */
   useEffect(() => {
-    setSelectedVariant(getVariantBasedOnIdProp(explicitVariantId, variants));
+    const newSelectedVariant = getVariantBasedOnIdProp(
+      explicitVariantId,
+      variants
+    );
+    setSelectedVariant(newSelectedVariant);
+    setSelectedOptions(getSelectedOptions(newSelectedVariant));
   }, [explicitVariantId, variants]);
 
   /**
@@ -213,6 +210,20 @@ function getVariantBasedOnIdProp(
   if (explicitVariantId === undefined) {
     return variants.find((variant) => variant?.availableForSale) || variants[0];
   }
+}
+
+function getSelectedOptions(
+  selectedVariant: PartialDeep<ProductVariantType> | undefined | null
+): SelectedOptions {
+  return selectedVariant?.selectedOptions
+    ? selectedVariant.selectedOptions.reduce<SelectedOptions>(
+        (memo, optionSet) => {
+          memo[optionSet?.name ?? ''] = optionSet?.value ?? '';
+          return memo;
+        },
+        {}
+      )
+    : {};
 }
 
 function isProductVariantArray(
