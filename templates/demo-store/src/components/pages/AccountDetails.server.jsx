@@ -41,7 +41,11 @@ export default function AccountDetails({customerAccessToken}) {
       : [];
 
   const heading = customer
-    ? `Welcome${customer.firstName ? `, ${customer.firstName}` : ``}`
+    ? `Welcome${
+        customer.firstName
+          ? `, ${customer.firstName}.`
+          : `Welcome to your account.`
+      }`
     : 'Account Details';
 
   const {featuredCollections, featuredProducts, locations} = data;

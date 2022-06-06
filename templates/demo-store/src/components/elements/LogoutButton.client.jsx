@@ -1,4 +1,5 @@
 import {useCallback} from 'react';
+import Text from './Text';
 
 export default function LogoutButton(props) {
   const logout = useCallback(() => {
@@ -8,7 +9,9 @@ export default function LogoutButton(props) {
   }, []);
   return (
     <button {...props} onClick={logout}>
-      Logout
+      <Text className="font-normal text-base text-gray-400" size="fine">
+        Sign out
+      </Text>
     </button>
   );
 }
