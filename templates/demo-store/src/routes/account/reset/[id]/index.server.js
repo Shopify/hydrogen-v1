@@ -1,5 +1,4 @@
-import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {NoStore, gql} from '@shopify/hydrogen';
 
 /**
  * This API route is used by the form on `/account/reset/[resetToken]`
@@ -41,8 +40,8 @@ export async function api(request, {session, queryShop}) {
     data.customerReset &&
     data.customerReset.customerAccessToken !== null
   ) {
-    await setCustomerAccessToken(
-      session,
+    await session.set(
+      'customerAccessToken',
       data.customerReset.customerAccessToken,
     );
 

@@ -23,7 +23,6 @@ export default function Account({response, editingAccount, editingAddress}) {
 
   if (!customerAccessToken) return response.redirect('/account/login');
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
@@ -43,7 +42,7 @@ export default function Account({response, editingAccount, editingAddress}) {
     originalId: address.id,
   }));
 
-  const defaultAddress = customer.defaultAddress.id.substring(
+  const defaultAddress = customer?.defaultAddress?.id?.substring(
     0,
     customer.defaultAddress.id.lastIndexOf('?'),
   );

@@ -1,6 +1,5 @@
 // import Multipassify from 'multipassify';
-import {NoStore, setCustomerAccessToken} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {NoStore, gql} from '@shopify/hydrogen';
 import shopifyConfig from '../../../hydrogen.config';
 
 export async function api(request, {session, queryShop}) {
@@ -29,8 +28,8 @@ export async function api(request, {session, queryShop}) {
     data.customerAccessTokenCreateWithMultipass &&
     data.customerAccessTokenCreateWithMultipass.customerAccessToken !== null
   ) {
-    await setCustomerAccessToken(
-      session,
+    await session.set(
+      'customerAccessToken',
       data.customerAccessTokenCreateWithMultipass.customerAccessToken,
     );
 

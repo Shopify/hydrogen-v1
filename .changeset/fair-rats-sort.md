@@ -7,4 +7,3 @@ With the introduction of authenticated pages, we also now provide the ability to
 ```jsx
 <Seo type="noindex" data={{title: 'Login'}} />
 ```
-

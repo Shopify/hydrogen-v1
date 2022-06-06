@@ -21,7 +21,6 @@ export default function OrderDetails({response}) {
 
   if (!customerAccessToken) return response.redirect('/account/login');
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
@@ -84,16 +83,6 @@ export default function OrderDetails({response}) {
             <span className="flex-1">Total</span>
             <Money data={order.currentTotalPrice}></Money>
           </div>
-
-          <h3 className="mt-4 font-medium text-sm text-gray-500">
-            Payment method
-          </h3>
-          <p className="mt-1">Shop Pay</p>
-          <hr className="mt-6 border-gray-300" />
-
-          <h3 className="mt-6 font-medium text-sm text-gray-500">Cart used</h3>
-          <p className="mt-1">Visa (**** 0412)</p>
-          <hr className="mt-6 border-gray-300" />
 
           <h3 className="mt-6 font-medium text-sm text-gray-500">Date</h3>
           <p className="mt-1">{order.processedAt}</p>
