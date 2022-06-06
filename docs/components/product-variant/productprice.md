@@ -4,7 +4,7 @@ title: ProductPrice
 description: The ProductPrice component renders a Money component with the product priceRange's maxVariantPrice or minVariantPrice, for either the regular price or compare at price range.
 ---
 
-The `ProductPrice` component renders a `Money` component with the product
+The `ProductPrice` component renders a [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money) component with the product
 [`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
 
 ## Example code
