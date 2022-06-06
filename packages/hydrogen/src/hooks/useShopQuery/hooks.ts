@@ -74,16 +74,23 @@ export function useShopQuery<T>({
   const body = query ? graphqlRequestBody(query, variables) : '';
   const {url, requestInit} = useCreateShopRequest(body); // eslint-disable-line react-hooks/rules-of-hooks
 
+  let text: string;
   let data: any;
   let useQueryError: any;
 
   try {
-    data = fetchSync(url, {
+    text = fetchSync(url, {
       ...requestInit,
       cache,
       preload,
       shouldCacheResponse,
-    }).json();
+    }).text();
+
+    try {
+      data = JSON.parse(text);
+    } catch (error: any) {
+      useQueryError = new Error('Unable to parse response\n' + text);
+    }
   } catch (error: any) {
     // Pass-through thrown promise for Suspense functionality
     if (error?.then) {
