@@ -5,7 +5,7 @@ description: The ExternalVideo component renders an embedded video for the Store
 ---
 
 The `ExternalVideo` component renders an embedded video for the Storefront
-API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
+API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
