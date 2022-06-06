@@ -49,35 +49,30 @@ export default function OrderCard(props) {
         <div className="flex-1 flex flex-row lg:p-8 p-6 items-center">
           <Image
             key={lineItems[0].variant?.image?.url}
-            className="lg:w-48 lg:h-48 md:w-36 md:h-36 w-32 h-32 flex"
+            className="lg:w-42 lg:h-42 md:w-36 md:h-36 w-32 h-32 flex"
             alt={lineItems[0].variant?.image?.altText}
             data={lineItems[0].variant?.image}
           />
           <div className="flex-col text-left justify-center">
-            <Text
-              as="h3"
-              className="w-full overflow-hidden whitespace-nowrap text-ellipsis mb-1"
-              size="copy"
-              color="primary"
-            >
+            <Text as="h3" className="mb-1" size="copy" color="primary">
               {lineItems[0].title}{' '}
               {lineItems.length > 1 && `+ ${lineItems.length - 1} more`}
             </Text>
             <dl className="grid grid-gap-1">
               <dt className="sr-only">Order ID</dt>
-              <dd className="text-gray-500">
-                <Text size="copy" color="subtle">
+              <dd>
+                <Text size="fine" color="subtle">
                   Order No. {order.orderNumber}
                 </Text>
               </dd>
               <dt className="sr-only">Order Date</dt>
-              <dd className="text-gray-500">
-                <Text size="copy" color="subtle">
+              <dd>
+                <Text size="fine" color="subtle">
                   {new Date(order.processedAt).toDateString()}
                 </Text>
               </dd>
               <dt className="sr-only">Fulfillment Status</dt>
-              <dd className="mt-2">
+              <dd className="mt-1">
                 <span
                   className={`px-3 py-1 text-xs font-medium rounded-full ${
                     order.fulfillmentStatus === 'FULFILLED'
