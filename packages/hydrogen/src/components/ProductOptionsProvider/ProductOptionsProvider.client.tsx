@@ -83,11 +83,9 @@ export function ProductOptionsProvider({
    * then the selected variant and options will reference incorrect
    * values.
    */
-  // useEffect(() => {
-  //   const variant = getSelectedVariant(variants, selectedOptions);
-  //   console.log('effect');
-  //   setSelectedVariant(getVariantBasedOnIdProp(variant?.id, variants));
-  // }, [selectedOptions, variants]);
+  useEffect(() => {
+    setSelectedVariant(getVariantBasedOnIdProp(explicitVariantId, variants));
+  }, [explicitVariantId, variants]);
 
   /**
    * Allow the developer to select an option.
