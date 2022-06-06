@@ -22,7 +22,7 @@ export function injectGraphQLTracker({
   data,
   onUnusedData,
 }: TrackerParams) {
-  if (__DEV__ && typeof query === 'string') {
+  if (__HYDROGEN_DEV__ && typeof query === 'string') {
     query = gqlDev`${query}`;
   }
 
