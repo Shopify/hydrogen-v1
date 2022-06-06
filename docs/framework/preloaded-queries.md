@@ -108,6 +108,13 @@ const data = fetchSync('https://my.api.com/data.json', {
 
 ## Test a preloaded query
 
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>The `showQueryTiming` property is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by [submitting an issue in GitHub](https://github.com/Shopify/hydrogen/issues).</p>
+
+</aside>
+
 To test a preloaded query, enable the `logger.showQueryTiming` property in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger).
 
 The [`showQueryTiming`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
