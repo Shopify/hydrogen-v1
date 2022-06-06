@@ -10,11 +10,7 @@ import {
 
 import {DefaultLayout as Layout} from '~/components/layouts';
 
-const dateFormatOptions = {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-};
+const BLOG_HANDLE = 'journal';
 
 export default function Page({params, response}) {
   response.cache(CacheDays());
@@ -23,14 +19,20 @@ export default function Page({params, response}) {
   const {handle} = params;
   const {data} = useShopQuery({
     query: QUERY,
-    variables: {language: languageCode, handle},
+    variables: {
+      language: languageCode,
+      blogHandle: BLOG_HANDLE,
+      articleHandle: handle,
+    },
   });
 
   const {title, publishedAt, contentHtml, author} = data.blog.articleByHandle;
-  const formattedDate = new Intl.DateTimeFormat(
-    locale,
-    dateFormatOptions,
-  ).format(new Date(publishedAt));
+  const formattedDate = new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date(publishedAt));
+
   return (
     <Layout>
       <Head>
@@ -62,10 +64,13 @@ export default function Page({params, response}) {
 }
 
 const QUERY = gql`
-  query PageDetails($language: LanguageCode, $handle: String!)
-  @inContext(language: $language) {
-    blog(handle: "journal") {
-      articleByHandle(handle: $handle) {
+  query ArticleDetails(
+    $language: LanguageCode
+    $blogHandle: String!
+    $articleHandle: String!
+  ) @inContext(language: $language) {
+    blog(handle: $blogHandle) {
+      articleByHandle(handle: $articleHandle) {
         title
         contentHtml
         publishedAt
