@@ -154,11 +154,11 @@ By default, all routes in Hydrogen are stream rendered. However, Hydrogen suppor
 
 ### Imitating robot behavior
 
-To imitate the behaviour of a SEO robot and show the page content fully from server render for initial render, add the `?_bot` query parameter at the end of the webpage's URL.
+To imitate the behaviour of an SEO robot and show the page content fully from server render for an initial render, add the `?_bot` query parameter at the end of the webpage's URL.
 
 ### Checking for custom robots
 
-If you find a bot that's not recognized by Hydrogen's bot detection algorithm, you can [manually disable streaming](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#response-donotstream) to buffer the response and make the content immediately available to bots:
+If you find a bot that's not recognized by Hydrogen's bot detection algorithm, then you can [manually disable streaming](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#response-donotstream) to buffer the response and make the content immediately available to bots:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 

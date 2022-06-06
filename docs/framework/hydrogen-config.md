@@ -207,7 +207,7 @@ export default defineConfig({
     error: async (request, error) => {
       console.error(error);
       // Methods can return promises. Hydrogen won't block the current
-      // request but it will await for them before the runtime instance ends.
+      // request but it will wait for the promises to be returned before the runtime instance ends.
       await myErrorTrackingService.send(request, error);
     },
     /* ... */

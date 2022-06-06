@@ -34,7 +34,7 @@ The `useNavigate` hook returns a function which accepts the following values:
 | Name    | Description                                                                                                                                                                                                                  |
 | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | path    | The path you want to navigate to.                                                                                                                                                                                            |
-| options | The options for the configuration object: `replace`, `reloadDocument`, `clientState`, `scroll`. For more information the options, refer to the [Link component](https://shopify.dev/api/hydrogen/components/framework/link). |
+| options | The options for the configuration object: `replace`, `reloadDocument`, `clientState`, `scroll`. For more information on the options, refer to the [Link component](https://shopify.dev/api/hydrogen/components/framework/link). |
 
 ## Considerations
 
