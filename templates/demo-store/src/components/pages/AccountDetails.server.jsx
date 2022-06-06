@@ -49,7 +49,7 @@ export default function AccountDetails({customerAccessToken}) {
   return (
     <Layout>
       <Seo type="noindex" data={{title: 'Account details'}} />
-      <OrderHistory orders={orders} heading={heading} />
+      {orders && <OrderHistory orders={orders} heading={heading} />}
       <FeaturedCollections
         title="Popular Collections"
         data={featuredCollections.nodes}
