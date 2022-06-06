@@ -709,12 +709,9 @@ function handleFetchResponseInNode(
 
       if (response.body) {
         if (response.body instanceof ReadableStream) {
-          const reader = response.body.getReader();
-          reader.read().then(function write({done, value}) {
-            value && nodeResponse.write(value);
-            !done && reader.read().then(write);
-            done && nodeResponse.end();
-          });
+          bufferReadableStream(response.body.getReader(), (chunk) => {
+            nodeResponse.write(chunk);
+          }).then(() => nodeResponse.end());
         } else {
           nodeResponse.write(response.body);
           nodeResponse.end();
