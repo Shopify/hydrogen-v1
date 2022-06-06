@@ -43,16 +43,18 @@ export default function Page({params, response}) {
         />
       </Head>
       <Seo type="page" data={data.blog.articleByHandle} />
-      <section className="w-2/4 m-auto gap-4 md:gap-8 p-4 py-6 md:p-8 lg:p-12">
-        <h1 className="text-4xl font-bold w-4/5 m-auto">{title}</h1>
-        <span className="block m-auto w-4/5 mt-6 text-base">
+      <section className="w-[51rem] m-auto mt-12 max-w-full">
+        <h1 className="text-4xl font-bold px-6 md:px-24">{title}</h1>
+        <span className="block mt-6 px-6 md:px-24">
           {formattedDate} &middot; {author.name}
         </span>
-        <span></span>
-        <Image data={data.blog.articleByHandle.image} className="mt-16" />
+        <Image
+          data={data.blog.articleByHandle.image}
+          className="mt-8 md:mt-16"
+        />
         <div
           dangerouslySetInnerHTML={{__html: contentHtml}}
-          className="w-4/5 m-auto mt-16 max-w-max mb-24 font-['Fraunces'] prose-strong:font-sans"
+          className="mt-8 md:mt-16 px-6 md:px-24 mb-24 font-['Fraunces'] prose-strong:font-sans"
         />
       </section>
     </Layout>
