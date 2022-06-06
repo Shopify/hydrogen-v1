@@ -276,7 +276,7 @@ export function Product() {
   const {data} = useShopQuery({query: QUERY});
 
   return (
-    <ProductOptionsProvider data={data.product} initialVariantId="some-id">{/* Your JSX */}</ProductProvider>
+    <ProductOptionsProvider data={data.product} initialVariantId="some-id">{/* Your JSX */}</ProductOptionsProvider>
   );
 }
 ```
