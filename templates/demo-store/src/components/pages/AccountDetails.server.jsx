@@ -19,6 +19,7 @@ import {
 
 import Layout from '../layouts/DefaultLayout.server';
 import OrderHistory from '../sections/OrderHistory.client';
+import AddressBook from '../sections/AddressBook.client';
 
 import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
@@ -31,6 +32,7 @@ export default function AccountDetails({customerAccessToken}) {
       customerAccessToken,
       language: languageCode,
       country: countryCode,
+      withAddressDetails: !!editingAddress,
     },
     preload: true,
     cache: NoStore(),
@@ -62,33 +64,13 @@ export default function AccountDetails({customerAccessToken}) {
     <Layout>
       <Seo type="noindex" data={{title: 'Account details'}} />
       {orders && <OrderHistory orders={orders} heading={heading} />}
-      <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
-        <h2 className="font-bold text-lead">Account Details</h2>
-        <div className="lg:p-8 p-6 border border-gray-200 rounded">
-          <div className="flex">
-            <h3 className="font-bold text-base flex-1">Profile & Security</h3>
-            <button className="underline text-sm font-normal">Edit</button>
-          </div>
-          <div className="mt-4 text-sm text-gray-500">Name</div>
-          <p className="mt-1">
-            {customer.firstName || customer.lastName
-              ? (customer.firstName && customer.firstName + ' ') +
-                customer.lastName
-              : 'Add name'}{' '}
-          </p>
 
-          <div className="mt-4 text-sm text-gray-500">Contact</div>
-          <p className="mt-1">{customer.phone ?? 'Add mobile'}</p>
-
-          <div className="mt-4 text-sm text-gray-500">Email address</div>
-          <p className="mt-1">{customer.email}</p>
-
-          <div className="mt-4 text-sm text-gray-500">Password</div>
-          <p className="mt-1">**************</p>
-        </div>
-      </div>
       <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
         <h3 className="font-bold text-lead">Address Book</h3>
+        <AddressBook
+          addresses={customer.addresses}
+          defaultAddress={customer.defaultAddress}
+        />
       </div>
       <FeaturedCollections
         title="Popular Collections"
@@ -107,12 +89,35 @@ const QUERY = gql`
     $customerAccessToken: String!
     $country: CountryCode
     $language: LanguageCode
+    $withAddressDetails: Boolean!
   ) @inContext(country: $country, language: $language) {
     customer(customerAccessToken: $customerAccessToken) {
       firstName
       lastName
       email
-      orders(first: 25, sortKey: PROCESSED_AT, reverse: true) {
+      phone
+      defaultAddress {
+        id
+        formatted
+      }
+      addresses(first: 6) {
+        edges {
+          node {
+            id
+            formatted
+            firstName @include(if: $withAddressDetails)
+            lastName @include(if: $withAddressDetails)
+            company @include(if: $withAddressDetails)
+            address1 @include(if: $withAddressDetails)
+            address2 @include(if: $withAddressDetails)
+            country @include(if: $withAddressDetails)
+            province @include(if: $withAddressDetails)
+            city @include(if: $withAddressDetails)
+            phone @include(if: $withAddressDetails)
+          }
+        }
+      }
+      orders(first: 250, sortKey: PROCESSED_AT, reverse: true) {
         edges {
           node {
             id
@@ -164,6 +169,24 @@ const QUERY = gql`
           height
           url
         }
+      }
+    }
+  }
+`;
+
+const MUTATION = gql`
+  mutation customerUpdate(
+    $customer: CustomerUpdateInput!
+    $customerAccessToken: String!
+  ) {
+    customerUpdate(
+      customer: $customer
+      customerAccessToken: $customerAccessToken
+    ) {
+      customerUserErrors {
+        code
+        field
+        message
       }
     }
   }

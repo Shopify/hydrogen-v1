@@ -38,7 +38,7 @@ export default function AccountActivateForm({id, activationToken}) {
 
     if (password !== passwordConfirm) {
       hasError = true;
-      setPasswordConfirmError('The two password entered did not match.');
+      setPasswordConfirmError('The two passwords entered did not match.');
     }
 
     return hasError;

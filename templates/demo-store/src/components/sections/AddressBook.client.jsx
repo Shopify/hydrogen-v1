@@ -1,297 +1,117 @@
-import {useCallback, useState} from 'react';
 import {useServerProps} from '@shopify/hydrogen';
+import {useMemo, useState} from 'react';
 
-function emailValidation(email) {
-  if (email.validity.valid) return null;
+export default function AddressBook({addresses, defaultAddress}) {
+  const {serverProps, setServerProps} = useServerProps();
 
-  return email.validity.valueMissing
-    ? 'Please enter an email'
-    : 'Please enter a valid email';
-}
+  const {fullDefaultAddress, addressesWithoutDefault} = useMemo(() => {
+    const defaultAddressIndex = addresses.findIndex(
+      (address) => address.id === defaultAddress,
+    );
+    return {
+      addressesWithoutDefault: [
+        ...addresses.slice(0, defaultAddressIndex),
+        ...addresses.slice(defaultAddressIndex + 1, addresses.length),
+      ],
+      fullDefaultAddress: addresses[defaultAddressIndex],
+    };
+  }, [addresses, defaultAddress]);
 
-function passwordValidation(password) {
-  if (password.validity.valid) return null;
-
-  if (password.validity.valueMissing) {
-    return 'Please enter a password';
-  }
-
-  return 'Password must be at least 6 characters';
-}
-
-export default function EditAccountDetails({
-  firstName: _firstName = '',
-  lastName: _lastName = '',
-  phone: _phone = '',
-  email: _email = '',
-}) {
-  const {setServerProps} = useServerProps();
-
-  const close = useCallback(
-    () => setServerProps('editingAccount', false),
-    [setServerProps],
-  );
-
-  const [saving, setSaving] = useState(false);
-  const [firstName, setFirstName] = useState(_firstName);
-  const [lastName, setLastName] = useState(_lastName);
-  const [phone, setPhone] = useState(_phone);
-  const [email, setEmail] = useState(_email);
-  const [emailError, setEmailError] = useState(null);
-  const [currentPasswordError, setCurrentPasswordError] = useState();
-  const [newPasswordError, setNewPasswordError] = useState();
-  const [newPassword2Error, setNewPassword2Error] = useState();
-  const [submitError, setSubmitError] = useState(null);
-
-  async function onSubmit(event) {
-    event.preventDefault();
-
-    setEmailError(null);
-    setCurrentPasswordError(null);
-    setNewPasswordError(null);
-    setNewPassword2Error(null);
-
-    const emailError = emailValidation(event.target.email);
-    if (emailError) {
-      setEmailError(emailError);
-    }
-
-    let currentPasswordError, newPasswordError, newPassword2Error;
-
-    // Only validate the password fields if the current password has a value
-    if (event.target.currentPassword.value) {
-      currentPasswordError = passwordValidation(event.target.currentPassword);
-      if (currentPasswordError) {
-        setCurrentPasswordError(currentPasswordError);
-      }
-
-      newPasswordError = passwordValidation(event.target.newPassword);
-      if (newPasswordError) {
-        setNewPasswordError(newPasswordError);
-      }
-
-      newPassword2Error =
-        event.target.newPassword.value !== event.target.newPassword2.value
-          ? 'The two passwords entered did not match'
-          : null;
-      if (newPassword2Error) {
-        setNewPassword2Error(newPassword2Error);
-      }
-    }
-
-    if (
-      emailError ||
-      currentPasswordError ||
-      newPasswordError ||
-      newPassword2Error
-    ) {
-      return;
-    }
-
-    setSaving(true);
-
-    const accountUpdateResponse = await callAccountUpdateApi({
-      email,
-      newPassword: event.target.newPassword.value,
-      currentPassword: event.target.currentPassword.value,
-      phone,
-      firstName,
-      lastName,
-    });
-
-    setSaving(false);
-
-    if (accountUpdateResponse.error) {
-      setSubmitError(accountUpdateResponse.error);
-      return;
-    }
-
-    close();
+  async function deleteAddress(id) {
+    const response = await callDeleteAddressApi(id);
+    if (response.error) alert(response.error);
+    else setServerProps('rerender', !serverProps.rerender);
   }
 
   return (
-    <div className="flex justify-center mt-8">
-      <div className="max-w-md w-full">
-        <button onClick={close}>{'< Back'}</button>
-        <h1 className="text-5xl mt-4">Edit account details</h1>
-        <form noValidate className="mt-6" onSubmit={onSubmit}>
-          {submitError && (
-            <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-white">{submitError}</p>
-            </div>
-          )}
-          <h2 className="text-xl font-medium">Profile</h2>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
-              id="firstname"
-              name="firstname"
-              type="text"
-              autoComplete="given-name"
-              placeholder="First name"
-              aria-label="First name"
-              value={firstName}
-              onChange={(event) => {
-                setFirstName(event.target.value);
-              }}
-            />
-          </div>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
-              id="lastname"
-              name="lastname"
-              type="text"
-              autoComplete="family-name"
-              placeholder="Last name"
-              aria-label="Last name"
-              value={lastName}
-              onChange={(event) => {
-                setLastName(event.target.value);
-              }}
-            />
-          </div>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
-              id="phone"
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              placeholder="Mobile"
-              aria-label="Mobile"
-              value={phone}
-              onChange={(event) => {
-                setPhone(event.target.value);
-              }}
-            />
-          </div>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
-                emailError ? ' border-red-500' : 'border-gray-900'
-              }`}
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              placeholder="Email address"
-              aria-label="Email address"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-            />
-            <p
-              className={`text-red-500 text-xs ${
-                !emailError ? 'invisible' : ''
-              }`}
-            >
-              {emailError} &nbsp;
-            </p>
-          </div>
-          <h2 className="text-xl font-medium mt-4">Security</h2>
-          <Password
-            name="currentPassword"
-            label="Current password"
-            passwordError={currentPasswordError}
-          />
-          <Password
-            name="newPassword"
-            label="New password"
-            passwordError={newPasswordError}
-          />
-          <p
-            className={`text-sm font-medium ${
-              currentPasswordError || newPasswordError ? 'text-red-500' : ''
-            }`}
+    <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
+      <h3 className="font-bold text-lead">Address Book</h3>
+      <div>
+        {!addresses?.length ? (
+          <p className="mt-2 text-sm text-gray-500">No address yet</p>
+        ) : null}
+        <div className="flex items-center justify-between mt-2">
+          <button
+            onClick={() => setServerProps('editingAddress', 'NEW')}
+            className="text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
           >
-            Passwords must be at least 6 characters.
-          </p>
-          <Password
-            name="newPassword2"
-            label="Re-enter new password"
-            passwordError={newPassword2Error}
-          />
-          <p
-            className={`text-red-500 text-xs ${
-              !newPassword2Error ? 'invisible' : ''
-            }`}
-          >
-            {newPassword2Error} &nbsp;
-          </p>
-          <div className="mt-4">
-            <button
-              className="bg-gray-900 border border-gray-900 text-white uppercase py-3 px-4 focus:shadow-outline block w-full"
-              type="submit"
-              disabled={saving}
-            >
-              Save
-            </button>
-          </div>
-          <div>
-            <button
-              className="mt-3 text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
-              onClick={close}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+            Add an address
+          </button>
+        </div>
+        {addresses?.length ? (
+          <>
+            {fullDefaultAddress ? (
+              <Address
+                address={fullDefaultAddress}
+                defaultAddress
+                deleteAddress={deleteAddress.bind(
+                  null,
+                  fullDefaultAddress.originalId,
+                )}
+              />
+            ) : null}
+            {addressesWithoutDefault.map((address) => (
+              <Address
+                key={address.id}
+                address={address}
+                deleteAddress={deleteAddress.bind(null, address.originalId)}
+              />
+            ))}
+          </>
+        ) : null}
       </div>
     </div>
   );
 }
 
-function Password({name, passwordError, label}) {
-  const [password, setPassword] = useState('');
+function Address({address, defaultAddress, deleteAddress}) {
+  const {setServerProps} = useServerProps();
+  const [showConfirmRemove, setShowConfirmRemove] = useState(false);
 
   return (
-    <div className="mt-3">
-      <input
-        className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
-          passwordError ? ' border-red-500' : 'border-gray-900'
-        }`}
-        id={name}
-        name={name}
-        type="password"
-        autoComplete={name === 'currentPassword' ? 'current-password' : null}
-        placeholder={label}
-        aria-label={label}
-        value={password}
-        minLength={8}
-        required
-        onChange={(event) => {
-          setPassword(event.target.value);
-        }}
-      />
+    <div className="bg-white p-4 mt-4">
+      {showConfirmRemove ? (
+        <ConfirmRemove
+          deleteAddress={deleteAddress}
+          close={() => setShowConfirmRemove(false)}
+        />
+      ) : null}
+      {defaultAddress ? (
+        <p className="mb-2 text-sm text-gray-500 font-medium">
+          Default Delivery Address
+        </p>
+      ) : null}
+      {address.formatted.map((line, index) => (
+        /* eslint-disable-next-line react/no-array-index-key */
+        <div className="pt-1" key={line + index}>
+          {line}
+        </div>
+      ))}
+
+      <div className="flex font-medium mt-4">
+        <button
+          onClick={() => setServerProps('editingAddress', address.id)}
+          className="text-left flex-1 underline"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => setShowConfirmRemove(true)}
+          className="text-left text-gray-500"
+        >
+          Remove
+        </button>
+      </div>
     </div>
   );
 }
 
-function callAccountUpdateApi({
-  email,
-  phone,
-  firstName,
-  lastName,
-  currentPassword,
-  newPassword,
-}) {
-  return fetch(`/account`, {
-    method: 'PATCH',
+function callDeleteAddressApi(id) {
+  return fetch(`/account/address/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      email,
-      phone,
-      firstName,
-      lastName,
-      currentPassword,
-      newPassword,
-    }),
   })
     .then((res) => {
       if (res.ok) {
@@ -302,7 +122,43 @@ function callAccountUpdateApi({
     })
     .catch(() => {
       return {
-        error: 'Error saving account. Please try again.',
+        error: 'Error removing address. Please try again.',
       };
     });
+}
+
+function ConfirmRemove({close, deleteAddress}) {
+  return (
+    <>
+      <div className="fixed w-full h-full bg-white opacity-95 z-50 top-0 left-0"></div>
+      <div className="fixed w-full h-full z-50 top-0 left-0">
+        <div className="flex justify-center mt-64 items-center">
+          <div className="bg-gray-50 max-w-md w-full p-4">
+            <div className="text-xl">Confirm removal</div>
+            <div>Are you sure you wish to remove this address?</div>
+
+            <div className="mt-6">
+              <button
+                onClick={() => {
+                  close();
+                  deleteAddress();
+                }}
+                className="bg-gray-900 border border-gray-900 text-white uppercase py-3 px-4 focus:shadow-outline block w-full"
+              >
+                Confirm
+              </button>
+            </div>
+            <div>
+              <button
+                onClick={close}
+                className="mt-3 text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
