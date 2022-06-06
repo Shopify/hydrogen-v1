@@ -21,10 +21,9 @@ export default function Index() {
 
 ## Scroll restoration
 
-By default, when a `<Link>` component is clicked, Hydrogen emulates default browser behavior and attempts to restore the scroll position previously used in the visitor's session. For new pages, this defaults to scrolling to the top of the page.
+By default, when you click a `<Link>` component, Hydrogen emulates default browser behavior and attempts to restore the scroll position that was previously used in the visitor's session. For new pages, the  `<Link>` component defaults to scrolling to the top of the page.
 
-However, if you are building a user interface that should fetch a new server components request and update the URL but not modify scroll position, then you can disable scroll restoration using the `restoreScroll` prop:
-
+However, if you want to build a user interface that re-renders server components and updates the URL, but doesn't modify the scroll position, then you can disable scroll restoration using the `scroll` prop:
 
 {% codeblock file, filename: 'index.server.jsx' %}
 
@@ -36,7 +35,7 @@ export default function Index({request}) {
   return (
     <>
       <p>Current param is: {url.searchParams.get('param')}</p>
-      <Link to="/?param=foo" restoreScroll={false}>
+      <Link to="/?param=foo" scroll={false}>
         Update param to foo
       </Link>
     </>
@@ -55,7 +54,7 @@ export default function Index({request}) {
 | clientState?    | <code>any</code>     | The custom client state with the navigation.                                                                                                                                                                                                  |
 | reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                                                                           |
 | prefetch?       | <code>boolean</code> | Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). |
-| restoreScroll?  | <code>boolean</code> | Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to `true`.                                                                                                                                    |
+| scroll?         | <code>boolean</code> | Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to `true`.                                                                                                                                    |
 
 ## Component type
 

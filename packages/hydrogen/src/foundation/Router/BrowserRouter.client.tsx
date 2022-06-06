@@ -63,7 +63,7 @@ export const BrowserRouter: FC<{
        * "pop" navigations, like forward/backward buttons, always restore scroll position
        * regardless of what the original forward navigation intent was.
        */
-      const needsScrollRestoration = action === 'POP' || !!state.restoreScroll;
+      const needsScrollRestoration = action === 'POP' || !!state.scroll;
 
       setScrollNeedsRestoration(needsScrollRestoration);
     });

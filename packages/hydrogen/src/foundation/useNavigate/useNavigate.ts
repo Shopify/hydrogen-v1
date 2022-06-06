@@ -11,7 +11,7 @@ type NavigationOptions = {
   clientState?: any;
 
   /** Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to true. */
-  restoreScroll?: any;
+  scroll?: any;
 };
 
 /**
@@ -26,7 +26,7 @@ export function useNavigate() {
   ) => {
     const state = {
       ...options?.clientState,
-      restoreScroll: options?.restoreScroll ?? true,
+      scroll: options?.scroll ?? true,
     };
 
     // @todo wait for RSC and then change focus for a11y?

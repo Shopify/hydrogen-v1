@@ -86,7 +86,7 @@ describe('<Link />', () => {
     });
 
     const component = mountWithProviders(
-      <Link to="/products/hydrogen" restoreScroll={false}>
+      <Link to="/products/hydrogen" scroll={false}>
         Link
       </Link>,
       {
