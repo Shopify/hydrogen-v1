@@ -1,11 +1,5 @@
 # Changelog
 
-## 0.23.0
-
-### Patch Changes
-
-- [#1415](https://github.com/Shopify/hydrogen/pull/1415) [`43f96465`](https://github.com/Shopify/hydrogen/commit/43f964653ea3b08c11c2482ae71da1726694be2a) Thanks [@BradMurchison](https://github.com/BradMurchison)! - Small styling fix to country selector in demo store template
-
 ## 0.22.1
 
 ## 0.22.0
