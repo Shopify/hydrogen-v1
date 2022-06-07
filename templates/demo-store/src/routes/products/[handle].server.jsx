@@ -81,10 +81,64 @@ const QUERY = gql`
       }
       handle
       id
+      vendor
       media(first: 6) {
-        edges {
-          node {
+        nodes {
+          ... on MediaImage {
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+          }
+          ... on Video {
+            mediaContentType
+            id
+            previewImage {
+              url
+            }
+            sources {
+              mimeType
+              url
+            }
+          }
+          ... on ExternalVideo {
+            mediaContentType
+            id
+            embedUrl
+            host
+          }
+          ... on Model3d {
+            mediaContentType
+            id
+            alt
+            mediaContentType
+            previewImage {
+              url
+            }
+            sources {
+              url
+            }
+          }
+        }
+      }
+      metafields(first: 20) {
+        nodes {
+          id
+          type
+          namespace
+          key
+          value
+          createdAt
+          updatedAt
+          description
+          reference {
+            __typename
             ... on MediaImage {
+              id
               mediaContentType
               image {
                 id
@@ -92,63 +146,6 @@ const QUERY = gql`
                 altText
                 width
                 height
-              }
-            }
-            ... on Video {
-              mediaContentType
-              id
-              previewImage {
-                url
-              }
-              sources {
-                mimeType
-                url
-              }
-            }
-            ... on ExternalVideo {
-              mediaContentType
-              id
-              embedUrl
-              host
-            }
-            ... on Model3d {
-              mediaContentType
-              id
-              alt
-              mediaContentType
-              previewImage {
-                url
-              }
-              sources {
-                url
-              }
-            }
-          }
-        }
-      }
-      metafields(first: 20) {
-        edges {
-          node {
-            id
-            type
-            namespace
-            key
-            value
-            createdAt
-            updatedAt
-            description
-            reference {
-              __typename
-              ... on MediaImage {
-                id
-                mediaContentType
-                image {
-                  id
-                  url
-                  altText
-                  width
-                  height
-                }
               }
             }
           }
@@ -170,74 +167,69 @@ const QUERY = gql`
       }
       title
       variants(first: 250) {
-        edges {
-          node {
-            availableForSale
-            compareAtPriceV2 {
-              amount
-              currencyCode
-            }
+        nodes {
+          availableForSale
+          compareAtPriceV2 {
+            amount
+            currencyCode
+          }
+          id
+          image {
             id
-            image {
+            url
+            altText
+            width
+            height
+          }
+          metafields(first: 10) {
+            nodes {
               id
-              url
-              altText
-              width
-              height
-            }
-            metafields(first: 10) {
-              edges {
-                node {
+              type
+              namespace
+              key
+              value
+              createdAt
+              updatedAt
+              description
+              reference {
+                __typename
+                ... on MediaImage {
                   id
-                  type
-                  namespace
-                  key
-                  value
-                  createdAt
-                  updatedAt
-                  description
-                  reference {
-                    __typename
-                    ... on MediaImage {
-                      id
-                      mediaContentType
-                      image {
-                        id
-                        url
-                        altText
-                        width
-                        height
-                      }
-                    }
+                  mediaContentType
+                  image {
+                    id
+                    url
+                    altText
+                    width
+                    height
                   }
                 }
               }
             }
-            priceV2 {
-              amount
-              currencyCode
-            }
-            selectedOptions {
-              name
-              value
-            }
-            sku
-            title
-            unitPrice {
-              amount
-              currencyCode
-            }
-            unitPriceMeasurement {
-              measuredType
-              quantityUnit
-              quantityValue
-              referenceUnit
-              referenceValue
-            }
+          }
+          priceV2 {
+            amount
+            currencyCode
+          }
+          selectedOptions {
+            name
+            value
+          }
+          sku
+          title
+          unitPrice {
+            amount
+            currencyCode
+          }
+          unitPriceMeasurement {
+            measuredType
+            quantityUnit
+            quantityValue
+            referenceUnit
+            referenceValue
           }
         }
       }
-      vendor
     }
   }
 `;

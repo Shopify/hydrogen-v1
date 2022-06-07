@@ -1,10 +1,11 @@
-import {useProduct, MediaFile, Image} from '@shopify/hydrogen';
+import {useProductOptions, MediaFile, Image} from '@shopify/hydrogen';
 
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products
  */
-export default function Gallery() {
-  const {media, selectedVariant} = useProduct();
+export default function Gallery({product}) {
+  const {selectedVariant} = useProductOptions();
+  const media = product.media.nodes;
 
   const featuredMedia = selectedVariant.image || media[0]?.image;
   const featuredMediaSrc = featuredMedia?.url.split('?')[0];

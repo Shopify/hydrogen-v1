@@ -5,7 +5,7 @@ description: The useProductOptions hook returns an object that enables you to ke
 ---
 
 The `useProductOptions` hook returns an object that enables you to keep track of the
-selected variant and/or selling plan state, as well as callbacks for modifying the state.
+selected variant and/or selling plan state, as well as callbacks for modifying the state. The `useProductOptions` hook must be a child of the [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider) component.
 
 ## Example code
 
@@ -16,9 +16,7 @@ selected variant and/or selling plan state, as well as callbacks for modifying t
 import {useProductOptions} from '@shopify/hydrogen';
 
 export function MyComponent() {
-  const {variants, selectedVariant, setSelectedVariant} = useProductOptions({
-    variants: product.variants,
-  });
+  const {variants, selectedVariant, setSelectedVariant} = useProductOptions();
 
   return (
     <>
@@ -168,6 +166,6 @@ The [Product object](https://shopify.dev/api/storefront/reference/products/produ
 | `$numProductSellingPlanGroups`             | The number of `SellingPlanGroups` objects to query for in a `SellingPlanGroupConnection`.             |
 | `$$numProductSellingPlans`                 | The number of `SellingPlan` objects to query for in a `SellingPlanConnection`.                        |
 
-## Related hooks
+## Related components
 
-- [`useProduct`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproduct)
+- [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)

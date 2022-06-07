@@ -1,6 +1,6 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {useCart} from '../CartProvider';
-import {useProduct} from '../ProductProvider';
+import {useProductOptions} from '../ProductOptionsProvider';
 
 interface AddToCartButtonProps {
   /** An array of cart line attributes that belong to the item being added to the cart. */
@@ -38,12 +38,12 @@ export function AddToCartButton(
     ...passthroughProps
   } = props;
   const {status, linesAdd} = useCart();
-  const product = useProduct();
-  const variantId = explicitVariantId ?? product?.selectedVariant?.id ?? '';
+  const {selectedVariant} = useProductOptions();
+  const variantId = explicitVariantId ?? selectedVariant?.id ?? '';
   const disabled =
     explicitVariantId === null ||
     variantId === '' ||
-    product?.selectedVariant === null ||
+    selectedVariant === null ||
     addingItem ||
     passthroughProps.disabled;
 
