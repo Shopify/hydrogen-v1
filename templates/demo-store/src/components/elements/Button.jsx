@@ -24,7 +24,7 @@ export default function Button({
   };
 
   const styles = clsx(
-    'border inline-block rounded font-medium text-center py-3 px-6 max-w-xl leading-none',
+    'border inline-block rounded font-medium text-center py-3 px-6 max-w-sm leading-none',
     missingClass(className, 'bg-') && variants[variant],
     missingClass(className, 'w-') && widths[width],
     className,

@@ -9,7 +9,7 @@ export default function LogoutButton(props) {
   }, []);
   return (
     <button {...props} onClick={logout}>
-      <Text className="font-normal text-base text-gray-400" size="fine">
+      <Text className="font-normal text-base text-gray-400" size="copy">
         Sign out
       </Text>
     </button>

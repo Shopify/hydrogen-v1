@@ -158,22 +158,6 @@ export default function EditAddress({address, defaultAddress}) {
           <div className="mt-3">
             <input
               className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
-              id="state"
-              name="state"
-              type="text"
-              autoComplete="address-level1"
-              placeholder="State"
-              required
-              aria-label="State"
-              value={province}
-              onChange={(event) => {
-                setProvince(event.target.value);
-              }}
-            />
-          </div>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
               id="city"
               name="city"
               type="text"
@@ -184,6 +168,22 @@ export default function EditAddress({address, defaultAddress}) {
               value={city}
               onChange={(event) => {
                 setCity(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
+              id="state"
+              name="state"
+              type="text"
+              autoComplete="address-level1"
+              placeholder="State"
+              required
+              aria-label="State"
+              value={province}
+              onChange={(event) => {
+                setProvince(event.target.value);
               }}
             />
           </div>

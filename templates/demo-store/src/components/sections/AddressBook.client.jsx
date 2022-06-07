@@ -1,5 +1,6 @@
 import {useServerProps} from '@shopify/hydrogen';
 import {useMemo, useState} from 'react';
+import {Text, Button} from '../elements';
 
 export default function AddressBook({addresses, defaultAddress}) {
   const {serverProps, setServerProps} = useServerProps();
@@ -27,19 +28,18 @@ export default function AddressBook({addresses, defaultAddress}) {
     <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
       <h3 className="font-bold text-lead">Address Book</h3>
       <div>
-        {!addresses?.length ? (
-          <p className="mt-2 text-sm text-gray-500">No address yet</p>
-        ) : null}
-        <div className="flex items-center justify-between mt-2">
-          <button
+        {!addresses?.length ? <Text size="copy">No address yet</Text> : null}
+        <div className="flex items-center justify-between mb-6">
+          <Button
+            className="mt-2 text-sm w-full"
             onClick={() => setServerProps('editingAddress', 'NEW')}
-            className="text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
+            variant="secondary"
           >
-            Add an address
-          </button>
+            Add an Address
+          </Button>
         </div>
         {addresses?.length ? (
-          <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {fullDefaultAddress ? (
               <Address
                 address={fullDefaultAddress}
@@ -57,7 +57,7 @@ export default function AddressBook({addresses, defaultAddress}) {
                 deleteAddress={deleteAddress.bind(null, address.originalId)}
               />
             ))}
-          </>
+          </div>
         ) : null}
       </div>
     </div>
@@ -69,7 +69,7 @@ function Address({address, defaultAddress, deleteAddress}) {
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
 
   return (
-    <div className="bg-white p-4 mt-4">
+    <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
       {showConfirmRemove ? (
         <ConfirmRemove
           deleteAddress={deleteAddress}
@@ -77,27 +77,29 @@ function Address({address, defaultAddress, deleteAddress}) {
         />
       ) : null}
       {defaultAddress ? (
-        <p className="mb-2 text-sm text-gray-500 font-medium">
-          Default Delivery Address
-        </p>
-      ) : null}
-      {address.formatted.map((line, index) => (
-        /* eslint-disable-next-line react/no-array-index-key */
-        <div className="pt-1" key={line + index}>
-          {line}
+        <div className="mb-3 flex flex-row">
+          <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-200 text-gray-500">
+            Default
+          </span>
         </div>
-      ))}
+      ) : null}
+      <ul className="flex-1 flex-row">
+        {address.formatted.map((line, index) => (
+          /* eslint-disable-next-line react/no-array-index-key */
+          <li key={line + index}>{line}</li>
+        ))}
+      </ul>
 
-      <div className="flex font-medium mt-4">
+      <div className="flex flex-row font-medium mt-6">
         <button
           onClick={() => setServerProps('editingAddress', address.id)}
-          className="text-left flex-1 underline"
+          className="text-left underline text-sm"
         >
           Edit
         </button>
         <button
           onClick={() => setShowConfirmRemove(true)}
-          className="text-left text-gray-500"
+          className="text-left text-gray-500 ml-6 text-sm"
         >
           Remove
         </button>

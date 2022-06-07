@@ -12,10 +12,14 @@ export default function OrderHistory({orders}) {
 function EmptyOrders() {
   return (
     <div>
-      <Text width="narrow" as="p">
+      <Text size="sm" width="narrow" as="p">
         You haven't made any orders yet.
       </Text>
-      <Button width="auto" variant="secondary" to={'/'}>
+      <Button
+        className="text-sm mt-2 w-full max-w-md"
+        variant="secondary"
+        to={'/'}
+      >
         Start shopping
       </Button>
     </div>
