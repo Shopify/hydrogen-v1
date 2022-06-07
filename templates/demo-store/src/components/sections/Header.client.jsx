@@ -14,26 +14,23 @@ import {
 /**
  * A client component that specifies the content of the header on the website
  */
-export default function Header({title}) {
-  const {pathname} = useUrl();
-
-  const home = pathname === '/';
+export default function Header({title, menu}) {
   const isDesktop = useMedia('(min-width: 60em)', false);
+  const {pathname} = useUrl();
+  const isHome = pathname === '/';
 
   return isDesktop ? (
-    <DesktopHeader home={home} title={title} />
+    <DesktopHeader isHome={isHome} title={title} menu={menu} />
   ) : (
-    <MobileHeader home={home} title={title} />
+    <MobileHeader isHome={isHome} title={title} menu={menu} />
   );
 }
 
-function MobileHeader({title, home}) {
-  const {totalQuantity} = useCart();
-
+function MobileHeader({title, isHome, menu}) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
-      home
+      isHome
         ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
     } flex items-center h-12 md:h-16 sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`,
@@ -51,7 +48,7 @@ function MobileHeader({title, home}) {
           </button>
           <Input
             className={
-              home
+              isHome
                 ? 'focus:border-contrast/20 dark:focus:border-primary/20'
                 : 'focus:border-primary/20'
             }
@@ -67,7 +64,7 @@ function MobileHeader({title, home}) {
         className="flex items-center self-stretch leading-[3rem] md:leading-[4rem] justify-center flex-grow w-full h-full"
         to="/"
       >
-        <Heading className="font-bold text-center" as={home ? 'h1' : 'h2'}>
+        <Heading className="font-bold text-center" as={isHome ? 'h1' : 'h2'}>
           {title}
         </Heading>
       </Link>
@@ -78,20 +75,18 @@ function MobileHeader({title, home}) {
         </button>
         <Link to={'/cart'} className={styles.button}>
           <IconBag />
-          <CartBadge dark={home} quantity={totalQuantity} />
+          <CartBadge dark={isHome} />
         </Link>
       </div>
     </header>
   );
 }
 
-function DesktopHeader({title, home}) {
-  const {totalQuantity} = useCart();
-
+function DesktopHeader({title, isHome, menu}) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
-      home
+      isHome
         ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
     } flex items-center sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`,
@@ -105,17 +100,23 @@ function DesktopHeader({title, home}) {
           {title}
         </Link>
         <nav className="flex gap-8">
-          {/* TODO: Replace with Navigation API */}
-          <Link to="/collections">Collections</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/locations">Locations</Link>
+          {/* Top level menu items */}
+          {(menu?.items || []).map(({url, title, items: subItems}) => {
+            if (!url) return null;
+            const to = new URL(url).pathname;
+            return (
+              <Link key={url} to={to}>
+                {title}
+              </Link>
+            );
+          })}
         </nav>
       </div>
       <div className="flex items-center gap-1">
         <form action={'/search'} className="flex items-center gap-2">
           <Input
             className={
-              home
+              isHome
                 ? 'focus:border-contrast/20 dark:focus:border-primary/20'
                 : 'focus:border-primary/20'
             }
@@ -136,14 +137,16 @@ function DesktopHeader({title, home}) {
         </Link>
         <Link to={'/cart'} className={styles.button}>
           <IconBag />
-          <CartBadge dark={home} quantity={totalQuantity} />
+          <CartBadge dark={isHome} />
         </Link>
       </div>
     </header>
   );
 }
 
-function CartBadge({dark, quantity}) {
+function CartBadge({dark}) {
+  const {totalQuantity} = useCart();
+
   return (
     <div
       className={`${
@@ -152,7 +155,7 @@ function CartBadge({dark, quantity}) {
           : 'text-contrast bg-primary'
       } absolute bottom-1 right-1 text-[0.625rem] font-medium subpixel-antialiased h-3 min-w-[0.75rem] flex items-center justify-center leading-none text-center rounded-full w-auto px-[0.125rem] pb-px`}
     >
-      <span>{quantity}</span>
+      <span>{totalQuantity}</span>
     </div>
   );
 }

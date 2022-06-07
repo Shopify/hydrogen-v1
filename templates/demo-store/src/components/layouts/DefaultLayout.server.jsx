@@ -9,6 +9,9 @@ import {
 import {Suspense} from 'react';
 import {Header, Footer} from '~/components/sections';
 
+const HEADER_MENU_HANDLE = 'main-menu';
+const FOOTER_MENU_HANDLE = 'footer-menu';
+
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
@@ -19,10 +22,16 @@ export default function Layout({children}) {
     query: QUERY,
     variables: {
       language: languageCode,
+      headerMenuHandle: HEADER_MENU_HANDLE,
+      footerMenuHandle: FOOTER_MENU_HANDLE,
     },
     cache: CacheHours(),
     preload: '*',
   });
+
+  const shopName = data ? data.shop.name : 'Hydrogen Demo Store';
+  const headerMenu = data ? data.headerMenu : null;
+  const footerMenu = data ? data.footerMenu : null;
 
   return (
     <LocalizationProvider preload="*">
@@ -36,21 +45,66 @@ export default function Layout({children}) {
           <Text>Wrong Country Banner</Text>
         </div> */}
         <Suspense fallback={null}>
-          <Header title={data ? data.shop.name : 'Hydrogen Demo Store'} />
+          <Header title={shopName} menu={headerMenu} />
         </Suspense>
         <main role="main" id="mainContent" className="flex-grow">
           <Suspense fallback={null}>{children}</Suspense>
         </main>
-        <Footer />
+        <Footer menu={footerMenu} />
       </div>
     </LocalizationProvider>
   );
 }
 
 const QUERY = gql`
-  query layoutContent($language: LanguageCode) @inContext(language: $language) {
+  fragment MenuItem on MenuItem {
+    id
+    resourceId
+    tags
+    title
+    type
+    url
+  }
+
+  query layout(
+    $language: LanguageCode
+    $headerMenuHandle: String!
+    $footerMenuHandle: String!
+  ) @inContext(language: $language) {
     shop {
       name
+    }
+
+    headerMenu: menu(handle: $headerMenuHandle) {
+      id
+      handle
+      itemsCount
+      title
+      items {
+        ...MenuItem
+        items {
+          ...MenuItem
+          items {
+            ...MenuItem
+          }
+        }
+      }
+    }
+
+    footerMenu: menu(handle: $footerMenuHandle) {
+      id
+      handle
+      itemsCount
+      title
+      items {
+        ...MenuItem
+        items {
+          ...MenuItem
+          items {
+            ...MenuItem
+          }
+        }
+      }
     }
   }
 `;
