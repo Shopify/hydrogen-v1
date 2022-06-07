@@ -615,18 +615,13 @@ function getResponseOptions(
   {headers, status, statusText}: HydrogenResponse,
   error?: Error
 ) {
-  const responseInit = {} as ResponseOptions;
+  const responseInit = {
+    headers,
+    status: error ? 500 : status,
+  } as ResponseOptions;
 
-  responseInit.headers = headers;
-
-  if (error) {
-    responseInit.status = 500;
-  } else {
-    responseInit.status = status ?? 200;
-
-    if (statusText) {
-      responseInit.statusText = statusText;
-    }
+  if (!error && statusText) {
+    responseInit.statusText = statusText;
   }
 
   return responseInit;
