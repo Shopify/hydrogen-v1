@@ -62,6 +62,7 @@ function lint() {
 
 try {
   lint();
+  console.log(`✅ No changeset issues detected.`);
 } catch (e) {
   console.error(`❌ ${e.message}`);
   // eslint-disable-next-line no-process-exit
