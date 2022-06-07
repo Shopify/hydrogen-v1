@@ -6,7 +6,6 @@ description: The CartEstimatedCost component renders a Money component with the 
 
 The `CartEstimatedCost` component renders a `Money` component with the
 cost associated with the `amountType` prop. If no `amountType` prop is specified, then it defaults to `totalAmount`.
-If `children` is a function, then it will pass down the render props provided by the parent component.
 
 ## Example code
 

@@ -16,4 +16,9 @@ export default defineConfig({
       storefrontApiVersion: '2022-07',
     };
   },
+  logger: {
+    trace() {},
+    debug() {},
+  },
+  showDevTools: true,
 });

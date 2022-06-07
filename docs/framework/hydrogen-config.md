@@ -43,7 +43,8 @@ The following groupings of configuration properties can exist in Hydrogen:
 - [`shopify`](#shopify)
 - [`session`](#session)
 - [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
-- [`enableStreaming`](#enablestreaming)
+- [`logger`](#logger)
+- [`strictMode`](#strictmode)
 
 ### `routes`
 
@@ -112,7 +113,7 @@ For advanced use cases, you can provide a function that returns the same propert
 let myShopifyConfigCache = {};
 
 export default defineConfig({
-  shopify: (request: ServerComponentRequest) => {
+  shopify: (request: HydrogenRequest) => {
     // For example, you can change the configuration based on the normalized URL
     const url = new URL(request.normalizedUrl);
     const [firstUrlPart] = url.pathname.split('/');
@@ -160,9 +161,9 @@ export default defineConfig({
   session: CookieSessionStorage('__session', {
     /* Tells the browser that the cookie should only be sent to the server if it's within the defined path.  */
     path: '/',
-    /* Whether to secure the cookie so that the browser only sends it over HTTPS.  */
+    /* Whether to secure the cookie so that client-side JavaScript can't read the cookie. */
     httpOnly: true,
-    /* Whether to secure the cookie so that client JavaScript is unable to read it. */
+    /* Whether to secure the cookie so that the browser only sends the cookie over HTTPS.  */
     secure: process.env.NODE_ENV === 'production',
     /* Declares that the cookie should be restricted to a first-party or same-site context.  */
     sameSite: 'strict',
@@ -189,25 +190,66 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-### `enableStreaming`
+### `logger`
 
-By default, all routes in Hydrogen are stream rendered. Stream rendering is automatically disabled when the user agent is a bot.
+The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
 
-Content should be immediately available to bots for SEO purposes. However, you might want to manually disable streaming for a specific page. A common use case is disabling streaming for a custom bot that's not recognized by Hydrogen's bot detection algorithm. You can disable streaming for a custom bot with the `enableStreaming` configuration property:
+You can pass [any method](https://shopify.dev/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
 ```tsx
-import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen';
 export default defineConfig({
-  enableStreaming: (req) => req.headers.get('user-agent') !== 'custom bot',
+  logger: {
+    /* Overrides the default `log.trace` behavior. */
+    trace: (request, ...args) => console.log(request.url, ...args),
+    /* Overrides the default `log.error` behavior. */
+    error: async (request, error) => {
+      console.error(error);
+      // Methods can return promises. Hydrogen won't block the current
+      // request but it will wait for the promises to be returned before the runtime instance ends.
+      await myErrorTrackingService.send(request, error);
+    },
+    /* ... */
+
+    /* Logs the cache status of each stored entry: `PUT`, `HIT`, `MISS` or `STALE`. */
+    showCacheApiStatus: true,
+    /* Logs the cache control headers of the main document and its sub queries. */
+    showCacheControlHeader: true,
+    /* Logs the timeline of when queries are being requested, resolved, and rendered.
+    * This is an experimental feature. As a result, functionality is subject to change.
+    * You can provide feedback on this feature by submitting an issue in GitHub:
+    * https://github.com/Shopify/hydrogen/issues.*/
+    showQueryTiming: true,
+    /* Logs warnings in your app if you're over-fetching data from the Storefront API.
+     * This is an experimental feature. As a result, functionality is subject to change.
+     * You can provide feedback on this feature by submitting an issue in GitHub:
+     * https://github.com/Shopify/hydrogen/issues. */
+    showUnusedQueryProperties: true,
+  }
 });
 ```
 
 {% endcodeblock %}
 
-> Tip:
-> There are [performance benefits](https://shopify.dev/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
+### `strictMode`
+
+[Strict mode](https://reactjs.org/docs/strict-mode.html) is enabled by default for all Hydrogen apps in development. It includes [strict effects](https://github.com/reactwg/react-18/discussions/19), which mounts and unmounts components multiple times to catch potential issues with user or third-party code.
+
+If strict effects cause problems for your app, then you can turn off strict mode.
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+export default defineConfig({
+  strictMode: false,
+});
+```
+
+{% endcodeblock %}
+
+> Caution:
+> If you turn off strict mode, then we recommended that you still include the `StrictMode` component at as high of a level as possible in your React tree to catch errors.
 
 ## Changing the configuration file location
 

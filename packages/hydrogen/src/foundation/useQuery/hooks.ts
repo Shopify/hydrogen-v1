@@ -10,10 +10,9 @@ import {
   getItemFromCache,
   isStale,
   setItemInCache,
-} from '../../framework/cache-sub-request';
-import {runDelayedFunction} from '../../framework/runtime';
+} from '../Cache/cache-sub-request';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {CacheSeconds} from '../../framework/CachingStrategy';
+import {CacheSeconds} from '../Cache/strategies';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -111,29 +110,35 @@ function cachedQueryFnBuilder<T>(
       if (isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
-        runDelayedFunction(async () => {
-          const lockExists = await getItemFromCache(lockKey);
-          if (lockExists) return;
+        // Run revalidation asynchronously
+        const revalidatingPromise = getItemFromCache(lockKey).then(
+          async (lockExists) => {
+            if (lockExists) return;
 
-          await setItemInCache(
-            lockKey,
-            true,
-            CacheSeconds({
-              maxAge: 10,
-            })
-          );
-          try {
-            const output = await generateNewOutput();
+            await setItemInCache(
+              lockKey,
+              true,
+              CacheSeconds({
+                maxAge: 10,
+              })
+            );
 
-            if (shouldCacheResponse(output)) {
-              await setItemInCache(key, output, resolvedQueryOptions?.cache);
+            try {
+              const output = await generateNewOutput();
+
+              if (shouldCacheResponse(output)) {
+                await setItemInCache(key, output, resolvedQueryOptions?.cache);
+              }
+            } catch (e: any) {
+              log.error(`Error generating async response: ${e.message}`);
+            } finally {
+              await deleteItemFromCache(lockKey);
             }
-          } catch (e: any) {
-            log.error(`Error generating async response: ${e.message}`);
-          } finally {
-            await deleteItemFromCache(lockKey);
           }
-        });
+        );
+
+        // Asynchronously wait for it in workers
+        request.ctx.runtime?.waitUntil?.(revalidatingPromise);
       }
 
       return output;
@@ -145,9 +150,13 @@ function cachedQueryFnBuilder<T>(
      * Important: Do this async
      */
     if (shouldCacheResponse(newOutput)) {
-      runDelayedFunction(() =>
-        setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+      const setItemInCachePromise = setItemInCache(
+        key,
+        newOutput,
+        resolvedQueryOptions?.cache
       );
+
+      request.ctx.runtime?.waitUntil?.(setItemInCachePromise);
     }
 
     collectQueryCacheControlHeaders(
