@@ -19,6 +19,10 @@ function lint() {
 
     let foundPackage;
 
+    /**
+     * We have to manually lint for this due to an issue with changesets:
+     * @see https://github.com/changesets/changesets/issues/436
+     */
     if (
       (foundPackage = ignoredPackages.find((ignoredPackage) =>
         frontmatter[1].includes(ignoredPackage)
@@ -28,6 +32,22 @@ function lint() {
         `The changeset ${filePath} contains an ignored package: ${foundPackage}. ` +
           `Please remove it from the changeset. If it is the only package in the changeset, ` +
           `remove the changeset entirely.`
+      );
+    }
+
+    /**
+     * Ensure the first line of the changeset is NOT a markdown header:
+     */
+    const fileContentsWithoutFrontmatter = fileContents
+      .replace(/^---\n([\s\S]*?)\n---/m, '')
+      .trim();
+
+    if (fileContentsWithoutFrontmatter.startsWith('#')) {
+      throw new Error(
+        `The first line of changeset ${filePath} begins with a header: \n\n${
+          fileContentsWithoutFrontmatter.split('\n')[0]
+        }\n\n` +
+          `Changesets must begin with plain text. You may use markdown headers later in the body if desired.`
       );
     }
   });
