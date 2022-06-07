@@ -9,6 +9,10 @@ export default function Index() {
 }
 
 export async function api(request) {
+  if (request.method !== 'POST') {
+    return new Response(405, {Allow: 'POST'});
+  }
+
   // Read form JSON and return the email.
   const {email} = await request.json();
   return {email, status: 'subscribed'};
