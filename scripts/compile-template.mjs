@@ -9,6 +9,7 @@ const OTHER_FILES = [
   `README.md`,
   '.stackblitzrc',
   'public/favicon.ico',
+  'src/index.css',
 ];
 
 (async () => {
