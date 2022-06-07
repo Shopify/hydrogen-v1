@@ -1011,13 +1011,13 @@ function attemptResolveElement(type, key, ref, props) {
     throw new Error('Refs cannot be used in server components, nor passed to client components.');
   }
 
-  if (type != null && isModuleReference(type)) {
-    // This is a reference to a client component.
-    return [REACT_ELEMENT_TYPE, type, key, props];
-  }
-
   if (typeof type === 'function') {
-    // This is a server-side component.
+    if (isModuleReference(type)) {
+      // This is a reference to a client component.
+      return [REACT_ELEMENT_TYPE, type, key, props];
+    } // This is a server-side component.
+
+
     return type(props);
   } else if (typeof type === 'string') {
     // This is a host element. E.g. HTML.
@@ -1035,6 +1035,11 @@ function attemptResolveElement(type, key, ref, props) {
 
     return [REACT_ELEMENT_TYPE, type, key, props];
   } else if (type != null && typeof type === 'object') {
+    if (isModuleReference(type)) {
+      // This is a reference to a client component.
+      return [REACT_ELEMENT_TYPE, type, key, props];
+    }
+
     switch (type.$$typeof) {
       case REACT_LAZY_TYPE:
         {
@@ -1439,7 +1444,7 @@ function resolveModelToJSON(request, parent, key, value) {
         // Verify that this is a simple plain object.
         if (objectName(value) !== 'Object') {
           error('Only plain objects can be passed to client components from server components. ' + 'Built-ins like %s are not supported. ' + 'Remove %s from these props: %s', objectName(value), describeKeyForErrorMessage(key), describeObjectForErrorMessage(parent));
-        } else if (!isSimpleObject(value)) {
+        } else if (typeof value === 'object' && !isSimpleObject(value)) {
           error('Only plain objects can be passed to client components from server components. ' + 'Classes or other objects with methods are not supported. ' + 'Remove %s from these props: %s', describeKeyForErrorMessage(key), describeObjectForErrorMessage(parent, key));
         } else if (Object.getOwnPropertySymbols) {
           var symbols = Object.getOwnPropertySymbols(value);
@@ -1748,6 +1753,9 @@ function renderToReadableStream(model, options, context) {
       startFlowing(request, controller);
     },
     cancel: function (reason) {}
+  }, // $FlowFixMe size() methods are not allowed on byte streams.
+  {
+    highWaterMark: 0
   });
   return stream;
 }
