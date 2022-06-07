@@ -1,6 +1,6 @@
 import {useServerProps} from '@shopify/hydrogen';
 import {useState} from 'react';
-import {Button} from '../elements';
+import {Button, Text} from '../elements';
 import PageHeader from './PageHeader';
 
 export default function EditAddress({address, defaultAddress}) {
@@ -52,11 +52,16 @@ export default function EditAddress({address, defaultAddress}) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="flex-grow justify-center my-12">
-        <div className="max-w-md w-full">
-          <button onClick={close}>{'< Back'}</button>
-          <PageHeader heading={address ? 'Edit address' : 'Add address'} />
-          <form noValidate className="mt-6" onSubmit={onSubmit}>
+      <div className="flex-grow justify-center my-12 mx-auto min-w-full md:min-w-[50%]">
+        <PageHeader heading={address ? 'Edit address' : 'Add address'}>
+          <button onClick={close}>
+            <Text className="underline" color="subtle">
+              Return to Account Overview
+            </Text>
+          </button>
+        </PageHeader>
+        <div className="p-4 md:px-8 lg:px-12 max-w-md">
+          <form noValidate onSubmit={onSubmit}>
             {submitError && (
               <div className="flex items-center justify-center mb-6 bg-zinc-500">
                 <p className="m-4 text-s text-white">{submitError}</p>
@@ -143,22 +148,6 @@ export default function EditAddress({address, defaultAddress}) {
             <div className="mt-3">
               <input
                 className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="country"
-                name="country"
-                type="text"
-                autoComplete="country-name"
-                placeholder="Country"
-                required
-                aria-label="Country"
-                value={country}
-                onChange={(event) => {
-                  setCountry(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
                 id="city"
                 name="city"
                 type="text"
@@ -191,6 +180,22 @@ export default function EditAddress({address, defaultAddress}) {
             <div className="mt-3">
               <input
                 className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+                id="country"
+                name="country"
+                type="text"
+                autoComplete="country-name"
+                placeholder="Country"
+                required
+                aria-label="Country"
+                value={country}
+                onChange={(event) => {
+                  setCountry(event.target.value);
+                }}
+              />
+            </div>
+            <div className="mt-3">
+              <input
+                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
                 id="phone"
                 name="phone"
                 type="tel"
@@ -210,17 +215,17 @@ export default function EditAddress({address, defaultAddress}) {
                 name="defaultAddress"
                 id="defaultAddress"
                 checked={isDefaultAddress}
-                className="accent-black"
+                className="border-1 border-gray-500 rounded-sm"
                 onChange={() => setIsDefaultAddress(!isDefaultAddress)}
               />
               <label
-                className="ml-1 inline-block text-gray-800"
+                className="ml-2 inline-block text-gray-800 text-sm"
                 htmlFor="defaultAddress"
               >
                 Set as default address
               </label>
             </div>
-            <div className="mt-6">
+            <div className="mt-8">
               <Button
                 className="focus:shadow-outline rounded w-full"
                 type="submit"

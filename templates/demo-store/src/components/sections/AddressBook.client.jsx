@@ -28,7 +28,11 @@ export default function AddressBook({addresses, defaultAddress}) {
     <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
       <h3 className="font-bold text-lead">Address Book</h3>
       <div>
-        {!addresses?.length ? <Text size="copy">No address yet</Text> : null}
+        {!addresses?.length ? (
+          <Text size="copy" color="subtle">
+            No address yet
+          </Text>
+        ) : null}
         <div className="flex items-center justify-between mb-6">
           <Button
             className="mt-2 text-sm w-full"
