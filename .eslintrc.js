@@ -12,12 +12,14 @@ module.exports = {
     'plugin:node/recommended',
     'plugin:hydrogen/recommended',
     'plugin:hydrogen/typescript',
+    'plugin:import/recommended',
   ],
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
   },
   rules: {
+    'import/newline-after-import': ['error'],
     'jest/no-disabled-tests': 'off',
     'jest/no-export': 'off',
     'jsx-a11y/iframe-has-title': 'off',
