@@ -7,7 +7,7 @@ description: Learn about the Hydrogen framework's built-in support for session m
 <aside class="note beta">
 <h4>Experimental feature</h4>
 
-<p>Session management is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by [submitting an issue in GitHub](https://github.com/Shopify/hydrogen/issues).</p>
+<p>Session management is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
 
 </aside>
 
