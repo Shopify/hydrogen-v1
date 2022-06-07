@@ -1,5 +1,212 @@
 # Changelog
 
+## 0.23.0
+
+### Minor Changes
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - **Breaking change**
+
+  The utility `isClient` has been renamed to `isBrowser`. This is because the utility really checks if the running context is a browser, _not_ if the context is a client component.
+
+  All client components by default also run on the server when they are server rendered. If you don't want that to happen, use the `isBrowser()` hook. Remember that anything not server rendered will be unavailable for SEO bots.
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Add `scroll` prop to `Link` and `navigate` to allow the scroll restoration behavior to be disabled.
+
+  By default, when a `<Link>` component is clicked, Hydrogen emulates default browser behavior and attempts to restore the scroll position previously used in the visitor's session. For new pages, this defaults to scrolling to the top of the page.
+
+  However, if you are building a user interface that should fetch a new server components request and update the URL but not modify scroll position, then you can disable scroll restoration using the `scroll` prop:
+
+  ```jsx
+  import {Link} from '@shopify/hydrogen';
+  export default function Index({request}) {
+    const url = new URL(request.normalizedUrl);
+
+    return (
+      <>
+        <p>Current param is: {url.searchParams.get('param')}</p>
+        <Link to="/?param=foo" scroll={false}>
+          Update param to foo
+        </Link>
+      </>
+    );
+  }
+  ```
+
+- [#1325](https://github.com/Shopify/hydrogen/pull/1325) [`572c18d1`](https://github.com/Shopify/hydrogen/commit/572c18d1893b212cfc3f1be3043a67dcca251629) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - - Fix clientAnalytics not waiting for all server analytics data before sending page view event
+
+  - Fix server analytics connector erroring out after more than 1 server analytics connectors are attached
+  - Shopify analytics components
+
+  # Updates to server analytics connectors
+
+  The server analytics connector interface has updated to
+
+  ```jsx
+  export function request(
+    requestUrl: string,
+    requestHeader: Headers,
+    data?: any,
+    contentType?: string
+  ): void {
+    // Do something with the analytic event.
+  }
+  ```
+
+  # Introducing Shopify analytics
+
+  Optional analytics components that allows you to send ecommerce related analytics to
+  Shopify. Adding the Shopify analytics components will allow the Shopify admin - Analytics
+  dashboard to work.
+
+  For information, see [Shopify Analytics](https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics)
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - With the introduction of authenticated pages, we also now provide the ability to prevent pages from being indexed by bots. You can do so by passing `noindex` to the `Seo` component:
+
+  ```jsx
+  <Seo type="noindex" data={{title: 'Login'}} />
+  ```
+
+- [#1397](https://github.com/Shopify/hydrogen/pull/1397) [`fbd185ab`](https://github.com/Shopify/hydrogen/commit/fbd185ab47e7335992b7844af0ef0b0aea6d70a5) Thanks [@frehner](https://github.com/frehner)! - ## `<ProductProvider/>` and `<ProductOptionsProvider/>`
+
+  - `<ProductProvider/>` has been removed
+    - `<ProductPrice/>` was the only component left that used it; now it requires a `data` prop that takes in the product object
+  - `<ProductOptionsProvider/>` now maintains and provides the state that `useProductOptions` used to keep track of by itself. This change enables you to use multiple `useProductOptions` hook calls and have them share the same state (such as selected variant, options, etc.)
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - **Breaking change**: The `setLogger` and `setLoggerOptions` utilities have been removed. The same information can now be passed under the `logger` property in Hydrogen config:
+
+  ```diff
+  // App.server.jsx
+
+  -import {setLogger, setLoggerOptions} from '@shopify/hydrogen';
+
+  -setLogger({
+  -  trace() {},
+  -  error() {},
+  -  // ...
+  -});
+
+  -setLoggerOptions({
+  -  showQueryTiming: true,
+  -  showCacheControlHeader: true,
+  -  // ...
+  -});
+
+  function App() {
+    // ...
+  }
+
+  export default renderHydrogen(App);
+  ```
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+    // ...
+  + logger: {
+  +   trace() {},
+  +   error() {},
+  +   showQueryTiming: true,
+  +   showCacheControlHeader: true,
+  +   // ...
+  + },
+  });
+  ```
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - The `response.writeHead` method has been removed, while `response.status` and `response.statusText` are now writable.
+
+  ```diff
+  function App({response}) {
+  - response.writeHead({
+  -   headers: {'custom-header': 'value'},
+  -   status: 404,
+  - });
+  + response.headers.set('custom-header', 'value');
+  + response.status = 404;
+  }
+  ```
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - **Breaking change**: The client configuration, including the `strictMode` option, has been moved from custom client entry handlers to the Hydrogen configuration file. If you had a custom client entry file just to pass client options, you can remove it and do the same in `hydrogen.config.js`:
+
+  ```diff
+  // Custom client entry handler
+
+  -renderHydrogen(ClientWrapper, {strictMode: false});
+  +renderHydrogen(ClientWrapper);
+  ```
+
+  ```diff
+  // hydrogen.config.jsx
+
+  export default defineConfig({
+  +  strictMode: false,
+  });
+  ```
+
+  To remove a custom client entry handler in case it's not needed anymore, delete the custom file and change `index.html`:
+
+  ```diff
+  <body>
+    <div id="root"></div>
+  - <script type="module" src="/src/custom-client-entry"></script>
+  + <script type="module" src="/@shopify/hydrogen/entry-client"></script>
+  </body>
+  ```
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - **Breaking change**: The `enableStreaming` config option has been deprecated. The same feature can be done directly in the app:
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+    shopify: {
+      // ...
+    },
+  - enableStreaming: (req) => {
+  -   return req.headers.get('user-agent') !== 'custom bot';
+  - },
+  });
+  ```
+
+  ```diff
+  // App.server.jsx
+
+  -function App() {
+  +function App({request, response}) {
+  + if (request.headers.get('user-agent') === 'custom bot') {
+  +   response.doNotStream();
+  + }
+
+    return <Suspense fallback={'Loading...'}>{/*...*/}</Suspense>;
+  }
+
+  export default renderHydrogen(App);
+  ```
+
+### Patch Changes
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Rename internal Hydrogen global variables that could conflict with third party libraries that use the same names.
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Improve component bundling to reduce the total amount of JS files downloaded in the browser.
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Reduce CPU consumption when rendering React Server Components.
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Confusing warnings that are not actionable have been removed.
+
+- [#1460](https://github.com/Shopify/hydrogen/pull/1460) [`18056879`](https://github.com/Shopify/hydrogen/commit/18056879f1ea1dc54f146184bfdd4f01f24df636) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fix doc links
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Propagate a better error message when the response from the storefront API is not JSON parseable
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Enable streaming by default for all platforms
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Properly support Node v18
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Custom loggers can return promises from their methods. Hydrogen will await for them after the current request is over but before the runtime instance ends.
+
+* [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Workers context (e.g. `waitUntil`) is now scoped to the current request instead of globally available.
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - [#1245] - Generate a default srcset for an image returned by the Shopify CDN on the Image component and allow using a custom set of `widths.`
+
 ## 0.22.1
 
 ### Patch Changes
