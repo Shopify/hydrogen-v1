@@ -293,6 +293,7 @@ async function proxyClientComponent(filepath, src) {
   var DEFAULT_EXPORT = 'default'; // Modify the import ID to avoid infinite wraps
 
   var importFrom = filepath + "?no-proxy";
+  await esModuleLexer.init;
 
   if (!src) {
     src = await fs.promises.readFile(filepath, 'utf-8');
@@ -430,7 +431,7 @@ function isDirectImportInServer(currentMod, originalMod) {
 }
 
 function resolveModPath(modPath, dirname, retryExtension) {
-  var absolutePath;
+  var absolutePath = '';
 
   try {
     absolutePath = modPath.startsWith('.') ? vite.normalizePath(path.resolve(dirname, modPath)) : modPath;
