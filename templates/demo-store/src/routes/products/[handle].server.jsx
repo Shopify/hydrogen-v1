@@ -4,6 +4,8 @@ import {
   useShopQuery,
   Seo,
   useRouteParams,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
@@ -28,6 +30,17 @@ export default function Product() {
     },
     preload: true,
   });
+
+  useServerAnalytics(
+    product
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.product,
+            resourceId: product.id,
+          },
+        }
+      : null,
+  );
 
   if (!product) {
     return <NotFound />;

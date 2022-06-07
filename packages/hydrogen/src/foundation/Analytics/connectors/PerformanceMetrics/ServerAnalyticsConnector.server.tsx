@@ -1,9 +1,12 @@
+import {log} from '../../../../utilities/log';
+
 export function request(
-  request: Request,
+  requestUrl: string,
+  requestHeader: Headers,
   data?: any,
   contentType?: string
 ): void {
-  const url = new URL(request.url);
+  const url = new URL(requestUrl);
   if (url.search === '?performance' && contentType === 'json') {
     const initTime = new Date().getTime();
 
@@ -11,8 +14,8 @@ export function request(
       method: 'post',
       headers: {
         'content-type': 'text/plain',
-        'x-forwarded-for': request.headers.get('x-forwarded-for') || '',
-        'user-agent': request.headers.get('user-agent') || '',
+        'x-forwarded-for': requestHeader.get('x-forwarded-for') || '',
+        'user-agent': requestHeader.get('user-agent') || '',
       },
       body: JSON.stringify({
         schema_id: 'hydrogen_buyer_performance/2.0',
@@ -22,8 +25,8 @@ export function request(
           event_sent_at_ms: new Date().getTime(),
         },
       }),
-    }).catch((error) => {
-      // send to bugsnag? oxygen?
+    }).catch((err) => {
+      log.error(err);
     });
   }
 }
