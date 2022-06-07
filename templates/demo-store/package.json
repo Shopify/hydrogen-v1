@@ -31,7 +31,6 @@
     "@heroicons/react": "^1.0.6",
     "@shopify/hydrogen": "^0.22.1",
     "clsx": "^1.1.1",
-    "graphql-tag": "^2.12.6",
     "install": "^0.13.0",
     "npm": "^8.12.1",
     "react": "^18.1.0",
