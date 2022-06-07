@@ -122,8 +122,9 @@ export function MyComponent() {
 }
 ```
 
-#### Considerations
+### Considerations
 
+- To make sure you have all the data necessary for the `useProductOptions` hook, refer to the Storefront API's [ProductVariant object](https://shopify.dev/api/storefront/latest/objects/ProductVariant).
 - If your product requires a selling plan, then make sure to display that as required in your user interface. If it doesn't require a selling plan, then you might want to offer a "one-time purchase" option which triggers `setSelectedSellingPlan(null)`.
 - You can use `selectedSellingPlanAllocation` to display the price adjustments for the selected variant when a given selling plan is active.
 
@@ -155,130 +156,6 @@ This hook returns a single object with the following keys:
 | `selectedSellingPlan`           | The selected selling plan.                                                    |
 | `selectedSellingPlanAllocation` | The selected selling plan allocation.                                         |
 | `sellingPlanGroups`             | The selling plan groups.                                                      |
-
-## Storefront API data
-
-The following GraphQL query corresponds to the Storefront API's [ProductVariant object](https://shopify.dev/api/storefront/latest/objects/ProductVariant). Using the query ensures that you have all the data necessary for the `useProductOptions` hook:
-
-```graphql
-{
-  id
-  title
-  availableForSale
-  image {
-    id
-    url
-    altText
-    width
-    height
-  }
-  unitPriceMeasurement {
-    measuredType
-    quantityUnit
-    quantityValue
-    referenceUnit
-    referenceValue
-  }
-  unitPrice {
-    currencyCode
-    amount
-  }
-  priceV2 {
-    currencyCode
-    amount
-  }
-  compareAtPriceV2 {
-    currencyCode
-    amount
-  }
-  selectedOptions {
-    name
-    value
-  }
-  metafields(first: $numProductVariantMetafields) {
-    edges {
-      node {
-        id
-        type
-        namespace
-        key
-        value
-        createdAt
-        updatedAt
-        description
-        reference @include(if: $includeReferenceMetafieldDetails) {
-          __typename
-          ... on MediaImage {
-            id
-            mediaContentType
-            image {
-              id
-              url
-              altText
-              width
-              height
-            }
-          }
-        }
-      }
-    }
-  }
-  sellingPlanAllocations(first: $numProductVariantSellingPlanAllocations) {
-    edges {
-      node {
-        priceAdjustments {
-          compareAtPrice {
-            currencyCode
-            amount
-          }
-          perDeliveryPrice {
-            currencyCode
-            amount
-          }
-          price {
-            currencyCode
-            amount
-          }
-          unitPrice {
-            currencyCode
-            amount
-          }
-        }
-        sellingPlan {
-          id
-          description
-          name
-          options {
-            name
-            value
-          }
-          priceAdjustments {
-            orderCount
-            adjustmentValue {
-              ... on SellingPlanFixedAmountPriceAdjustment {
-                adjustmentAmount {
-                  currencyCode
-                  amount
-                }
-              }
-              ... on SellingPlanFixedPriceAdjustment {
-                price {
-                  currencyCode
-                  amount
-                }
-              }
-              ... on SellingPlanPercentagePriceAdjustment {
-                adjustmentPercentage
-              }
-            }
-          }
-          recurringDeliveries
-        }
-      }
-    }
-  }
-}
-```
 
 ### Variables
 

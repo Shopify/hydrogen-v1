@@ -49,7 +49,7 @@ yarn install
 yarn dev
 
 # Using `npm`
-npm i --legacy-peer-deps
+npm i
 npm run dev
 ```
 

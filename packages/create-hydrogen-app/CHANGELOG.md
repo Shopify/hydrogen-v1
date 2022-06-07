@@ -1,5 +1,59 @@
 # Changelog
 
+## 0.22.1
+
+## 0.22.0
+
+### Minor Changes
+
+- [#1313](https://github.com/Shopify/hydrogen/pull/1313) [`ed1933e3`](https://github.com/Shopify/hydrogen/commit/ed1933e339927322d8008034982b05ff4590e6d8) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change**: The `routes` property in `hydrogen.config.js` file has been simplified. It is now a string that represents the path to the routes from the project root:
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+  -  routes: import('./src/routes/**/*.server.[jt](s|sx)'),
+  +  routes: '/src/routes',
+  });
+  ```
+
+  Its default value is `/src/routes` so this property can be removed when using this directory.
+
+  In the object syntax version, `dirPrefix` is removed and `files` becomes a string:
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+    routes: {
+  -   files: import('./src/routes/**/*.server.[jt](s|sx)'),
+  -   dirPrefix: './src/routes',
+  +   files: '/src/routes',
+      basePath: '/',
+    },
+  });
+  ```
+
+* [#930](https://github.com/Shopify/hydrogen/pull/930) [`750baf8f`](https://github.com/Shopify/hydrogen/commit/750baf8ff069d0e06fb92e78a142049a1ce2b1ae) Thanks [@michenly](https://github.com/michenly)! - Add an end-to-end implementation of customer account creation, login, reset password, and logout. The following routes are added:
+
+  1. `/account` - An account settings page for the current logged in user. At the moment mostly unimplemented. If the user accesses the route while not logged in, they will be forwarded to `/account/login`.
+  2. `/account/login` - A page for the user to present their credentials and login.
+  3. `/account/logout` - An API route that expects a `POST` to delete the current session.
+  4. `/account/register` - Contains a form for the user to setup a new account. On success, forwards the user to `/account`
+  5. `/account/recover` - A form for the user to fill out to _initiate_ a password reset. If the form succeeds, an email will be sent to the user with a link to reset their password. Clicking the link leads the user to the page `/account/reset/[resetToken]`.
+  6. `/account/reset/[id]/[resetToken]` - A form to enter a new password. Submits the new password and `resetToken` to `/account/reset`. On success, forwards the user to `/account`.
+  7. `/account/reset` - An API route to update the user with a new password.
+  8. `/account/activate/[id]/[activationToken]` - This is a form to activate a new user. The user should only reach this form from a link in their email. Submits the password and `activationToken` to `/account/activate`, On success, forwards the user to `/account`.
+  9. `/account/activate` - An API route to activate the user with a password.
+
+  Note: At the moment, the email sent to the user for password resets has the web storefront domain, instead of your Hydrogen domain. This will be resolved, but in the mean time, you can manually replace the domain with your Hydrogen domain to proceed.
+
+  A later release will include a large account admin implementation.
+
+## 0.21.0
+
+## 0.20.0
+
 ## 0.19.0
 
 ### Minor Changes
@@ -284,7 +338,7 @@
   }, []);
   ```
 
-  See an example on how this could be done inside the Demo Store template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/templates/template-hydrogen-default/src/components/CountrySelector.client.jsx)
+  See an example on how this could be done inside the Demo Store template [country selector](https://github.com/Shopify/hydrogen/blob/v1.x-2022-07/templates/demo-store/src/components/CountrySelector.client.jsx)
 
 * [#698](https://github.com/Shopify/hydrogen/pull/698) [`6f30b9a1`](https://github.com/Shopify/hydrogen/commit/6f30b9a1327f06d648a01dd94d539c7dcb3061e0) Thanks [@jplhomer](https://github.com/jplhomer)! - Basic end-to-end tests have been added to the default Hydrogen template. You can run tests in development:
 

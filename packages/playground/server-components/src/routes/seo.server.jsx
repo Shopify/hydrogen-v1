@@ -1,6 +1,6 @@
 import {Suspense} from 'react';
 import {createData} from '../utils';
-import {Head} from '@shopify/hydrogen/client';
+import {Head} from '@shopify/hydrogen';
 
 // Page with many Suspense boundaries to test streaming
 export default function Index() {

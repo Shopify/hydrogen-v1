@@ -5,14 +5,7 @@ description: The Metafield component renders the value of a Storefront API's Met
 ---
 
 The `Metafield` component renders the value of a Storefront
-API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
-
-When a render function is provided, it passes the Metafield object with a value
-that was parsed according to the Metafield's `type` field. For more information,
-refer to the [Render props](#render-props) section.
-
-When no render function is provided, it renders a smart default of the
-Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
+API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -58,44 +51,9 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 | `variant_reference`      | A `span` containing the variant reference GID.                                                                                                                                                            |
 | `url`                    | An `a` tag with the `href` corresponding to the URL and the label corresponding to the URL.                                                                                                               |
 
-## Render props
-
-The `Metafield` components provides the Metafield object with a `value` that was parsed according to the `Metafield`'s `type` field. For details on the parsed value, refer to the [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue) utility.
-
 ## Component type
 
 The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield):
-
-```graphql
-{
-  id
-  type
-  namespace
-  key
-  value
-  createdAt
-  updatedAt
-  description
-  reference @include(if: $includeReferenceMetafieldDetails) {
-    __typename
-    ... on MediaImage {
-      id
-      mediaContentType
-      image {
-        id
-        url
-        altText
-        width
-        height
-      }
-    }
-  }
-}
-```
 
 ### Variables
 
@@ -104,7 +62,3 @@ The [Metafield object](https://shopify.dev/api/storefront/reference/common-objec
 | Variable                            | Description                                                                                                                                                                        |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `$includeReferenceMetafieldDetails` | A boolean indicating if the reference type should be queried. Only applicable to `file_reference`, `product_reference`, `variant_reference`, and `page_reference` metafield types. |
-
-## Related components
-
-- [`ProductMetafield`](https://shopify.dev/api/hydrogen/components/product-variant/productmetafield)

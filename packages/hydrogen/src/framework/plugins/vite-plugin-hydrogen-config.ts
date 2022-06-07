@@ -19,7 +19,7 @@ export default () => {
     };
   }
 
-  if (!process.env.LOCAL_DEV) {
+  if (process.env.NODE_ENV !== 'development') {
     /**
      * Ofuscate production asset name - To prevent ad blocker logics that blocks
      * certain files due to how it is named.
@@ -71,6 +71,7 @@ export default () => {
 
       optimizeDeps: {
         exclude: [
+          '@shopify/hydrogen',
           '@shopify/hydrogen/client',
           '@shopify/hydrogen/entry-client',
           '@shopify/hydrogen-ui',
@@ -93,12 +94,15 @@ export default () => {
           'react-server-dom-vite/client-proxy',
           // https://github.com/vitejs/vite/issues/6215
           'react/jsx-runtime',
+          // https://github.com/nfriedly/set-cookie-parser/issues/50
+          'set-cookie-parser',
         ],
       },
 
       define: {
-        __DEV__: env.mode !== 'production',
-        __WORKER__: isWorker,
+        __HYDROGEN_DEV__: env.mode !== 'production',
+        __HYDROGEN_WORKER__: isWorker,
+        __HYDROGEN_TEST__: false, // Used in unit tests
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],

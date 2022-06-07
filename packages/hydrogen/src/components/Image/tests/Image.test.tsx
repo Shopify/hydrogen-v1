@@ -173,6 +173,7 @@ describe('<Image />', () => {
           width={width}
           height={height}
           loading={loading}
+          alt=""
         />
       );
 
@@ -199,7 +200,9 @@ describe('<Image />', () => {
         const height = 100;
 
         expect(() => {
-          mount(<Image src={src} id={id} width={width} height={height} />);
+          mount(
+            <Image src={src} id={id} width={width} height={height} alt="" />
+          );
         }).toThrowError(
           `<Image/>: when 'src' is provided, 'width' and 'height' are required and need to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
         );
@@ -211,7 +214,9 @@ describe('<Image />', () => {
         const height = 0;
 
         expect(() => {
-          mount(<Image src={src} id={id} width={width} height={height} />);
+          mount(
+            <Image src={src} id={id} width={width} height={height} alt="" />
+          );
         }).toThrowError(
           `<Image/>: when 'src' is provided, 'width' and 'height' are required and need to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
         );
@@ -243,6 +248,7 @@ describe('<Image />', () => {
           height={height}
           loader={loaderMock}
           loaderOptions={loaderOptions}
+          alt=""
         />
       );
 
@@ -275,5 +281,33 @@ describe('<Image />', () => {
         alt: 'Fancy image',
       });
     });
+  });
+
+  // eslint-disable-next-line jest/expect-expect
+  it.skip(`typescript types`, () => {
+    // this test is actually just using //@ts-expect-error as the assertion, and don't need to execute in order to have TS validation on them
+    // I don't love this idea, but at the moment I also don't have other great ideas for how to easily test our component TS types
+
+    // no errors in these situations
+    <Image data={{url: ''}} />;
+    <Image src="" width="" height="" alt="" />;
+
+    // @ts-expect-error data.url
+    <Image data={{}} />;
+
+    // @ts-expect-error data and src
+    <Image data={{url: ''}} src="" width="" height="" />;
+
+    // @ts-expect-error foo is invalid
+    <Image data={{url: ''}} foo="bar" />;
+
+    // @ts-expect-error must have alt
+    <Image src="" width="" height="" />;
+
+    // @ts-expect-error must have width
+    <Image src="" alt="" height="" />;
+
+    // @ts-expect-error must have height
+    <Image src="" alt="" width="" />;
   });
 });

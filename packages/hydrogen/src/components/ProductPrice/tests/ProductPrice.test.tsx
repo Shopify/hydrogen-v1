@@ -2,7 +2,6 @@ import React from 'react';
 import {getProduct} from '../../../utilities/tests/product';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {Money} from '../../Money';
-import {UnitPrice} from '../../UnitPrice';
 import {ProductProvider} from '../../ProductProvider';
 import {ProductPrice} from '../ProductPrice.client';
 
@@ -38,7 +37,7 @@ describe('<ProductPrice />', () => {
       });
     });
 
-    it('renders <UnitPrice /> when valueType is `unit`', () => {
+    it('renders <Money /> with unit prices when valueType is `unit`', () => {
       const product = getProduct();
       const variant = product?.variants?.edges?.[0]?.node;
       const component = mountWithProviders(
@@ -48,7 +47,7 @@ describe('<ProductPrice />', () => {
         </ProductProvider>
       );
 
-      expect(component).toContainReactComponent(UnitPrice, {
+      expect(component).toContainReactComponent(Money, {
         data: variant?.unitPrice,
         measurement: variant?.unitPriceMeasurement,
       });

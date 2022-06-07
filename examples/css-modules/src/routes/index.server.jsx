@@ -1,12 +1,13 @@
 import Hello from '../components/Hello.client';
-import * as styles from './index.module.css';
+import styles from './index.module.css';
 
 export default function Index() {
   return (
     <div className={styles.wrapper}>
-      <styles.StyleTag />
-      <h1>Hi</h1>
-      <Hello />
+      <>
+        <h1>Hi</h1>
+        <Hello />
+      </>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import type {Reducer} from 'react';
-import {flattenConnection} from '../../utilities';
+import {flattenConnection} from '../../utilities/flattenConnection';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
@@ -26,6 +26,7 @@ import {
   CartAttributesUpdate,
   CartDiscountCodesUpdate,
   CartQuery,
+  defaultCartFragment,
 } from './cart-queries';
 import {
   CartLineInput,
@@ -33,6 +34,7 @@ import {
   CartLineUpdateInput,
   CartBuyerIdentityInput,
   AttributeInput,
+  CountryCode,
 } from '../../storefront-api-types';
 import {useCartFetch} from './hooks.client';
 import {CartContext} from './context';
@@ -65,10 +67,8 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
-import {useServerProps} from '../../foundation/useServerProps';
-import {ServerPropsContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
-import {ClientAnalytics} from '../../foundation/Analytics';
+import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
@@ -232,6 +232,9 @@ export function CartProvider({
   onAttributesUpdate,
   onDiscountCodesUpdate,
   data: cart,
+  cartFragment = defaultCartFragment,
+  customerAccessToken,
+  countryCode = CountryCode.Us,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -252,14 +255,15 @@ export function CartProvider({
   onAttributesUpdate?: () => void;
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
-  /**
-   * An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).
-   */
+  /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
+  /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
+  cartFragment?: string;
+  /** A customer access token that's accessible on the server if there's a customer login. */
+  customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
 }) {
-  const {serverProps} = useServerProps() as ServerPropsContextValue;
-  const countryCode = serverProps?.country?.isoCode;
-
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
     : {status: 'uninitialized'};
@@ -274,7 +278,7 @@ export function CartProvider({
       dispatch({type: 'cartFetch'});
 
       const {data} = await fetchCart<CartQueryQueryVariables, CartQueryQuery>({
-        query: CartQuery,
+        query: CartQuery(cartFragment),
         variables: {
           id: cartId,
           numCartLines,
@@ -290,7 +294,7 @@ export function CartProvider({
 
       dispatch({type: 'resolve', cart: cartFromGraphQL(data.cart)});
     },
-    [fetchCart, numCartLines, countryCode]
+    [fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const cartCreate = useCallback(
@@ -306,11 +310,18 @@ export function CartProvider({
         cart.buyerIdentity.countryCode = countryCode;
       }
 
+      if (customerAccessToken && !cart.buyerIdentity?.customerAccessToken) {
+        if (cart.buyerIdentity == null) {
+          cart.buyerIdentity = {};
+        }
+        cart.buyerIdentity.customerAccessToken = customerAccessToken;
+      }
+
       const {data, error} = await fetchCart<
         CartCreateMutationVariables,
         CartCreateMutation
       >({
-        query: CartCreate,
+        query: CartCreate(cartFragment),
         variables: {
           input: cart,
           numCartLines,
@@ -347,7 +358,14 @@ export function CartProvider({
         );
       }
     },
-    [onCreate, fetchCart, numCartLines, countryCode]
+    [
+      onCreate,
+      countryCode,
+      fetchCart,
+      cartFragment,
+      numCartLines,
+      customerAccessToken,
+    ]
   );
 
   const addLineItem = useCallback(
@@ -359,7 +377,7 @@ export function CartProvider({
           CartLineAddMutationVariables,
           CartLineAddMutation
         >({
-          query: CartLineAdd,
+          query: CartLineAdd(cartFragment),
           variables: {
             cartId: state.cart.id!,
             lines,
@@ -391,7 +409,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, numCartLines, onLineAdd, countryCode]
+    [onLineAdd, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const removeLineItem = useCallback(
@@ -405,7 +423,7 @@ export function CartProvider({
           CartLineRemoveMutationVariables,
           CartLineRemoveMutation
         >({
-          query: CartLineRemove,
+          query: CartLineRemove(cartFragment),
           variables: {
             cartId: state.cart.id!,
             lines,
@@ -437,7 +455,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onLineRemove, numCartLines, countryCode]
+    [onLineRemove, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const updateLineItem = useCallback(
@@ -451,7 +469,7 @@ export function CartProvider({
           CartLineUpdateMutationVariables,
           CartLineUpdateMutation
         >({
-          query: CartLineUpdate,
+          query: CartLineUpdate(cartFragment),
           variables: {
             cartId: state.cart.id!,
             lines,
@@ -482,7 +500,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onLineUpdate, numCartLines, countryCode]
+    [onLineUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const noteUpdate = useCallback(
@@ -496,7 +514,7 @@ export function CartProvider({
           CartNoteUpdateMutationVariables,
           CartNoteUpdateMutation
         >({
-          query: CartNoteUpdate,
+          query: CartNoteUpdate(cartFragment),
           variables: {
             cartId: state.cart.id!,
             note,
@@ -520,7 +538,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onNoteUpdate, numCartLines, countryCode]
+    [onNoteUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const buyerIdentityUpdate = useCallback(
@@ -534,7 +552,7 @@ export function CartProvider({
           CartBuyerIdentityUpdateMutationVariables,
           CartBuyerIdentityUpdateMutation
         >({
-          query: CartBuyerIdentityUpdate,
+          query: CartBuyerIdentityUpdate(cartFragment),
           variables: {
             cartId: state.cart.id!,
             buyerIdentity,
@@ -558,7 +576,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onBuyerIdentityUpdate, numCartLines, countryCode]
+    [onBuyerIdentityUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const cartAttributesUpdate = useCallback(
@@ -572,7 +590,7 @@ export function CartProvider({
           CartAttributesUpdateMutationVariables,
           CartAttributesUpdateMutation
         >({
-          query: CartAttributesUpdate,
+          query: CartAttributesUpdate(cartFragment),
           variables: {
             cartId: state.cart.id!,
             attributes,
@@ -596,7 +614,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onAttributesUpdate, numCartLines, countryCode]
+    [onAttributesUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const discountCodesUpdate = useCallback(
@@ -613,7 +631,7 @@ export function CartProvider({
           CartDiscountCodesUpdateMutationVariables,
           CartDiscountCodesUpdateMutation
         >({
-          query: CartDiscountCodesUpdate,
+          query: CartDiscountCodesUpdate(cartFragment),
           variables: {
             cartId: state.cart.id!,
             discountCodes,
@@ -645,7 +663,7 @@ export function CartProvider({
         }
       }
     },
-    [fetchCart, onDiscountCodesUpdate, numCartLines, countryCode]
+    [onDiscountCodesUpdate, fetchCart, cartFragment, numCartLines, countryCode]
   );
 
   const didFetchCart = useRef(false);
@@ -665,9 +683,9 @@ export function CartProvider({
     if (state.status !== 'idle') {
       return;
     }
-    buyerIdentityUpdate({countryCode}, state);
+    buyerIdentityUpdate({countryCode, customerAccessToken}, state);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countryCode]);
+  }, [countryCode, customerAccessToken]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
@@ -714,11 +732,13 @@ export function CartProvider({
       ) {
         discountCodesUpdate(discountCodes, state);
       },
+      cartFragment,
     };
   }, [
     state,
     cart,
     cartCreate,
+    cartFragment,
     addLineItem,
     removeLineItem,
     updateLineItem,

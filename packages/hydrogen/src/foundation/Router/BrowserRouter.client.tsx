@@ -8,6 +8,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useCallback,
+  ReactNode,
 } from 'react';
 import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider';
 import {META_ENV_SSR} from '../ssr-interop';
@@ -23,16 +24,16 @@ export const RouterContext = createContext<RouterContextValue | {}>({});
 let isFirstLoad = true;
 const positions: Record<string, number> = {};
 
-export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
-  history: pHistory,
-  children,
-}) => {
+export const BrowserRouter: FC<{
+  history?: BrowserHistory;
+  children: ReactNode;
+}> = ({history: pHistory, children}) => {
   if (META_ENV_SSR) return <>{children}</>;
   /* eslint-disable react-hooks/rules-of-hooks */
 
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [location, setLocation] = useState(history.location);
-  const [locationChanged, setLocationChanged] = useState(false);
+  const [scrollNeedsRestoration, setScrollNeedsRestoration] = useState(false);
 
   const {pending, locationServerProps, setLocationServerProps} =
     useInternalServerProps();
@@ -41,12 +42,12 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
     location,
     pending,
     serverProps: locationServerProps,
-    locationChanged,
-    onFinishNavigating: () => setLocationChanged(false),
+    scrollNeedsRestoration,
+    onFinishNavigating: () => setScrollNeedsRestoration(false),
   });
 
   useLayoutEffect(() => {
-    const unlisten = history.listen(({location: newLocation}) => {
+    const unlisten = history.listen(({location: newLocation, action}) => {
       positions[location.key] = window.scrollY;
 
       setLocationServerProps({
@@ -55,14 +56,23 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
       });
 
       setLocation(newLocation);
-      setLocationChanged(true);
+
+      const state = (newLocation.state ?? {}) as Record<string, any>;
+
+      /**
+       * "pop" navigations, like forward/backward buttons, always restore scroll position
+       * regardless of what the original forward navigation intent was.
+       */
+      const needsScrollRestoration = action === 'POP' || !!state.scroll;
+
+      setScrollNeedsRestoration(needsScrollRestoration);
     });
 
     return () => unlisten();
   }, [
     history,
     location,
-    setLocationChanged,
+    setScrollNeedsRestoration,
     setLocation,
     setLocationServerProps,
   ]);
@@ -111,13 +121,13 @@ function useScrollRestoration({
   location,
   pending,
   serverProps,
-  locationChanged,
+  scrollNeedsRestoration,
   onFinishNavigating,
 }: {
   location: Location;
   pending: boolean;
   serverProps: LocationServerProps;
-  locationChanged: boolean;
+  scrollNeedsRestoration: boolean;
   onFinishNavigating: () => void;
 }) {
   /**
@@ -140,7 +150,7 @@ function useScrollRestoration({
 
   useLayoutEffect(() => {
     // The app has just loaded
-    if (isFirstLoad || !locationChanged) {
+    if (isFirstLoad || !scrollNeedsRestoration) {
       isFirstLoad = false;
       return;
     }
@@ -189,7 +199,7 @@ function useScrollRestoration({
     pending,
     serverProps.pathname,
     serverProps.search,
-    locationChanged,
+    scrollNeedsRestoration,
     onFinishNavigating,
   ]);
 }
