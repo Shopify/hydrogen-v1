@@ -97,4 +97,4 @@ A flat array whose elements correspond to the `node` value in each element of th
 
 ## Related hooks
 
-- [useProduct](https://shopify.dev/api/hydrogen/hooks/product-variant/useproduct)
+- [useProductOptions](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)
