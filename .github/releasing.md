@@ -27,7 +27,7 @@ A new snapshot release will be created with your changes and tagged on NPM with 
 yarn add @shopify/hydrogen@unstable
 
 # or start a new project:
-npx init @shopify/hydrogen@unstable
+npx @shopify/hydrogen@unstable
 ```
 
 ## Common problems

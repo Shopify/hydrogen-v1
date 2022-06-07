@@ -12,7 +12,7 @@ $ yarn create @shopify/hydrogen
 # npm
 $ npm init @shopify/hydrogen
 # npx
-$ npx init @shopify/hydrogen
+$ npx @shopify/hydrogen
 ```
 
 **Demo Store** is the default template installed when creating a new Hydrogen storefront. It’s a complete Hydrogen storefront that uses live production data provided by Shopify. It includes demonstration implementations of a homepage, product detail pages, collections, data-fetching, caching strategies, Tailwind integration, and more. It showcases Shopify’s opinionated best practices for building storefronts with Hydrogen, and some advanced features of the framework. Pick this template to inspect a working Hydrogen codebase, or to use as a starting point for your own build.
@@ -26,7 +26,7 @@ $ yarn create @shopify/hydrogen --template hello-world
 # npm
 $ npm init @shopify/hydrogen --template hello-world
 # npx
-$ npx init @shopify/hydrogen --template hello-world
+$ npx @shopify/hydrogen --template hello-world
 ```
 
 **Hello World** is a minimal implementation of a Hydrogen app. It has few dependencies and very little boilerplate. Pick this template to start building from scratch.
