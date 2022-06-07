@@ -9,9 +9,6 @@ export function GoogleAnalytics() {
     if (!init) {
       init = true;
 
-      // Load the gtag script
-      loadScript(URL).catch(() => {});
-
       // gtag initialization code
       window.dataLayer = window.dataLayer || [];
       function gtag() {
@@ -23,6 +20,9 @@ export function GoogleAnalytics() {
       gtag('config', TRACKING_ID, {
         send_page_view: false,
       });
+
+      // Load the gtag script
+      loadScript(URL).catch(() => {});
 
       // Listen for events from Hydrogen
       // https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#default-events
