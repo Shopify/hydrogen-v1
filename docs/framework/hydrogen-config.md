@@ -17,12 +17,10 @@ The Hydrogen configuration file contains information that's needed at runtime fo
 ```tsx
 import {defineConfig} from '@shopify/hydrogen/config';
 
-/* All properties in this configuration file are required. */
-
 /* The `defineConfig` function is an optional utility that provides types for the configuration object. */
 export default defineConfig({
   /* The routes defined by Vite's import.meta.globEager method. */
-  routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+  routes: '/src/routes',
   /* The information that your app needs to connect to the Storefront API. */
   shopify: {
     /* The domain of your Shopify store */
@@ -45,18 +43,19 @@ The following groupings of configuration properties can exist in Hydrogen:
 - [`shopify`](#shopify)
 - [`session`](#session)
 - [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
+- [`logger`](#logger)
+- [`strictMode`](#strictmode)
 
 ### `routes`
 
-The `routes` property is where you can provide server components and API handlers using Vite's [`import.meta.globEager`](https://vitejs.dev/guide/features.html#glob-import) method.
-
-By default, Hydrogen detects the common prefix of every route and removes it from the URLs. In the following example, `./src/routes` would be detected as the common prefix:
+The `routes` property specifies a path to find server components and API handlers. The default value for the `routes` property is `/src/routes`, but you can specify the value to any path that starts from the project root:
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```tsx
 export default defineConfig({
-  routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+  /* Path from the project root to the files for server components and API handlers */
+  routes: '/path/to/routes',
 });
 ```
 
@@ -69,14 +68,9 @@ If your app requires a more advanced configuration, then you can provide additio
 ```tsx
 export default defineConfig({
   routes: {
-    /* The file routes for server components and API handlers */
-    files: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
-    /* (Optional) The portion of the file route path that shouldn't be a part of the URL.
-     * You need to modify this if you want to import your routes from a location other
-     than the default `src/routes`.
-    */
-    dirPrefix: './src/routes',
-    /* (Optional) A path that's prepended to all file routes. You can modify `basePath`
+    /* Path from the project root to the files for server components and API handlers */
+    files: '/path/to/routes',
+    /* A path that's prepended to all file routes. You can modify `basePath`
      * if you want to prefix all file routes. For example, you can prefix all file routes with a locale.
     */
     basePath: '/',
@@ -119,7 +113,7 @@ For advanced use cases, you can provide a function that returns the same propert
 let myShopifyConfigCache = {};
 
 export default defineConfig({
-  shopify: (request: ServerComponentRequest) => {
+  shopify: (request: HydrogenRequest) => {
     // For example, you can change the configuration based on the normalized URL
     const url = new URL(request.normalizedUrl);
     const [firstUrlPart] = url.pathname.split('/');
@@ -167,9 +161,9 @@ export default defineConfig({
   session: CookieSessionStorage('__session', {
     /* Tells the browser that the cookie should only be sent to the server if it's within the defined path.  */
     path: '/',
-    /* Whether to secure the cookie so that the browser only sends it over HTTPS.  */
+    /* Whether to secure the cookie so that client-side JavaScript can't read the cookie. */
     httpOnly: true,
-    /* Whether to secure the cookie so that client JavaScript is unable to read it. */
+    /* Whether to secure the cookie so that the browser only sends the cookie over HTTPS.  */
     secure: process.env.NODE_ENV === 'production',
     /* Declares that the cookie should be restricted to a first-party or same-site context.  */
     sameSite: 'strict',
@@ -195,6 +189,67 @@ export default defineConfig({
 ```
 
 {% endcodeblock %}
+
+### `logger`
+
+The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.
+
+You can pass [any method](https://shopify.dev/api/hydrogen/utilities/log#methods) of the `log` utility in the `logger` object to override the default behavior. The first argument of each log method contains a `request` object if the log was called in the same context as a request. The following Boolean options are also available:
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+export default defineConfig({
+  logger: {
+    /* Overrides the default `log.trace` behavior. */
+    trace: (request, ...args) => console.log(request.url, ...args),
+    /* Overrides the default `log.error` behavior. */
+    error: async (request, error) => {
+      console.error(error);
+      // Methods can return promises. Hydrogen won't block the current
+      // request but it will wait for the promises to be returned before the runtime instance ends.
+      await myErrorTrackingService.send(request, error);
+    },
+    /* ... */
+
+    /* Logs the cache status of each stored entry: `PUT`, `HIT`, `MISS` or `STALE`. */
+    showCacheApiStatus: true,
+    /* Logs the cache control headers of the main document and its sub queries. */
+    showCacheControlHeader: true,
+    /* Logs the timeline of when queries are being requested, resolved, and rendered.
+    * This is an experimental feature. As a result, functionality is subject to change.
+    * You can provide feedback on this feature by submitting an issue in GitHub:
+    * https://github.com/Shopify/hydrogen/issues.*/
+    showQueryTiming: true,
+    /* Logs warnings in your app if you're over-fetching data from the Storefront API.
+     * This is an experimental feature. As a result, functionality is subject to change.
+     * You can provide feedback on this feature by submitting an issue in GitHub:
+     * https://github.com/Shopify/hydrogen/issues. */
+    showUnusedQueryProperties: true,
+  }
+});
+```
+
+{% endcodeblock %}
+
+### `strictMode`
+
+[Strict mode](https://reactjs.org/docs/strict-mode.html) is enabled by default for all Hydrogen apps in development. It includes [strict effects](https://github.com/reactwg/react-18/discussions/19), which mounts and unmounts components multiple times to catch potential issues with user or third-party code.
+
+If strict effects cause problems for your app, then you can turn off strict mode.
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+export default defineConfig({
+  strictMode: false,
+});
+```
+
+{% endcodeblock %}
+
+> Caution:
+> If you turn off strict mode, then we recommended that you still include the `StrictMode` component at as high of a level as possible in your React tree to catch errors.
 
 ## Changing the configuration file location
 

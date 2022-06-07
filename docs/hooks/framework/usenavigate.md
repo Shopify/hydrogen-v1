@@ -11,7 +11,7 @@ The `useNavigate` hook imperatively navigates between routes.
 {% codeblock file, filename: 'component.client.jsx' %}
 
 ```jsx
-import {useNavigate} from '@shopify/hydrogen/client';
+import {useNavigate} from '@shopify/hydrogen';
 
 function addToCart() {}
 
@@ -27,24 +27,14 @@ export default function ClientComponent() {
 
 {% endcodeblock %}
 
-## Arguments
-
-The `useNavigate` hook takes the following arguments:
-
-| Argument        | Description                                                                                |
-| --------------- | ------------------------------------------------------------------------------------------ |
-| replace?        | Whether to update the state object or URL of the current history entry. Defaults to false. |
-| reloadDocument? | Whether to reload the whole document on navigation.                                        |
-| clientState?    | The custom client state with the navigation.                                               |
-
 ## Return value
 
-The `useNavigate` hook returns the following values:
+The `useNavigate` hook returns a function which accepts the following values:
 
-| Name    | Description                                                                                                                                                                                                        |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| path    | The path you want to navigate to.                                                                                                                                                                                  |
-| options | The options for the configuration object: `replace`, `reloadDocument`, `clientState`. For more information the options, refer to the [Link component](https://shopify.dev/api/hydrogen/components/framework/link). |
+| Name    | Description                                                                                                                                                                                                                  |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| path    | The path you want to navigate to.                                                                                                                                                                                            |
+| options | The options for the configuration object: `replace`, `reloadDocument`, `clientState`, `scroll`. For more information on the options, refer to the [Link component](https://shopify.dev/api/hydrogen/components/framework/link). |
 
 ## Considerations
 

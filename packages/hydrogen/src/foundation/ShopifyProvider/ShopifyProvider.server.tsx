@@ -18,6 +18,7 @@ function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
     storefrontApiVersion: shopifyConfig.storefrontApiVersion,
+    multipassSecret: shopifyConfig.multipassSecret,
   };
 }
 
@@ -53,7 +54,6 @@ export function ShopifyProvider({
   let actualShopifyConfig: ShopifyConfig;
 
   if (typeof shopifyConfig === 'function') {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
       (shopifyConfig as ShopifyConfigFetcher)(request)
     );

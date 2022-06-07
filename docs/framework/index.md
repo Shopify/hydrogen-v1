@@ -53,8 +53,8 @@ By default, Hydrogen includes a [`@shopify/hydrogen/platforms/worker`](https://g
 
 Hydrogen includes the following default entry points for your app:
 
-- **Client entry point**: [`@shopify/hydrogen/entry-client`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/entry-client.tsx), which is included in [`index.html`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/index.html) and used for hydration purposes
-- **Server entry point**: [`App.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/App.server.jsx)
+- **Client entry point**: [`@shopify/hydrogen/entry-client`](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/entry-client.tsx), which is included in [`index.html`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/index.html) and used for hydration purposes
+- **Server entry point**: [`App.server.jsx`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/App.server.jsx)
 
 ### Change the client entry point
 
@@ -79,23 +79,6 @@ export default renderHydrogen(ClientWrapper);
 ```
 
 {% endcodeblock %}
-
-#### Strict mode
-
-[Strict mode](https://reactjs.org/docs/strict-mode.html) is enabled by default for all Hydrogen apps in development. It includes [strict effects](https://github.com/reactwg/react-18/discussions/19), which mounts and unmounts components multiple times to catch potential issues with user or third-party code.
-
-If strict effects cause problems for your app, then you can turn off strict mode. Create a `src/entry-client.jsx` file in your project and set `strictMode` to `false`:
-
-{% codeblock file, filename: 'src/entry-client.jsx' %}
-
-```jsx
-renderHydrogen(ClientWrapper, {strictMode: false});
-```
-
-{% endcodeblock %}
-
-> Caution:
-> If you turn off strict mode, then we recommended that you still include the `StrictMode` component at as high of a level as possible in your React tree to catch errors.
 
 ### Change the server entry point
 

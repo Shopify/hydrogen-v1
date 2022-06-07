@@ -28,7 +28,7 @@ function parseModel(response, json) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function resolveModuleReference(moduleData) {
+function resolveModuleReference(bundlerConfig, moduleData) {
   return moduleData;
 } // Vite import globs will be injected here.
 
@@ -355,9 +355,10 @@ function parseModelTuple(response, value) {
 
   return value;
 }
-function createResponse() {
+function createResponse(bundlerConfig) {
   var chunks = new Map();
   var response = {
+    _bundlerConfig: bundlerConfig,
     _chunks: chunks,
     readRoot: readRoot
   };
@@ -381,7 +382,7 @@ function resolveModule(response, id, model) {
   var chunks = response._chunks;
   var chunk = chunks.get(id);
   var moduleMetaData = parseModel(response, model);
-  var moduleReference = resolveModuleReference(moduleMetaData); // TODO: Add an option to encode modules that are lazy loaded.
+  var moduleReference = resolveModuleReference(response._bundlerConfig, moduleMetaData); // TODO: Add an option to encode modules that are lazy loaded.
   // For now we preload all modules as early as possible since it's likely
   // that we'll need them.
 
@@ -517,11 +518,11 @@ function createFromJSONCallback(response) {
   };
 }
 
-function createResponse$1() {
+function createResponse$1(bundlerConfig) {
   // NOTE: CHECK THE COMPILER OUTPUT EACH TIME YOU CHANGE THIS.
   // It should be inlined to one object literal but minor changes can break it.
   var stringDecoder =  createStringDecoder() ;
-  var response = createResponse();
+  var response = createResponse(bundlerConfig);
   response._partialRow = '';
 
   {

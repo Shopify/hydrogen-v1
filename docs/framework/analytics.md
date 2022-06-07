@@ -51,7 +51,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
     {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
     ```jsx
-    import {ClientAnalytics} from '@shopify/hydrogen/client';
+    import {ClientAnalytics} from '@shopify/hydrogen';
 
     let init = false;
     export default function AnalyticsListener() {
@@ -212,7 +212,7 @@ To send analytics data from the server-side, complete the following steps:
     {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
     ```jsx
-    import {ClientAnalytics} from '@shopify/hydrogen/client';
+    import {ClientAnalytics} from '@shopify/hydrogen';
 
     let init = false;
     export default function AnalyticsListener() {
@@ -279,7 +279,7 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-#### Parameters
+### Parameters
 
 The following table describes the request function parameters for `ServerAnalyticsConnector`:
 
@@ -330,12 +330,10 @@ If you want to see performance debug metrics displayed in your browser console l
 ```jsx
 import {
   PerformanceMetricsServerAnalyticsConnector,
-  ...
-} from '@shopify/hydrogen';
-import {
   PerformanceMetrics,
   PerformanceMetricsDebug,
-} from '@shopify/hydrogen/client';
+  ...
+} from '@shopify/hydrogen';
 
 function App({routes}) {
   return (
@@ -343,7 +341,7 @@ function App({routes}) {
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         ...
         <PerformanceMetrics />
-        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+        {import.meta.env.DEV && <PerformanceMetricsDebug />}
       </ShopifyProvider>
     </Suspense>
   );
@@ -367,7 +365,7 @@ The following example shows an implementation of a client analytics connector wi
 
 ```jsx
 import {useEffect} from 'react';
-import {ClientAnalytics, loadScript} from '@shopify/hydrogen/client';
+import {ClientAnalytics, loadScript} from '@shopify/hydrogen';
 
 const GTAG_ID = '<YOUR_GTAG_ID>';
 const URL = `https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`;

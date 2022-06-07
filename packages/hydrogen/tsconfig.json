@@ -8,7 +8,7 @@
     "outDir": "./dist/esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "types": ["jest", "@shopify/react-testing/matchers"],
     "strict": true,
     "noUnusedLocals": true,
