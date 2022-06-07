@@ -5,7 +5,7 @@
 The `hydrogen/cli` package provides interactive project scaffolding for Hydrogen apps and other useful commands to help you build on `@shopify/hydrogen`.
 
 > Note:
-> The CLI doesn't currently generate the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates). Run `npx @shopify/hydrogen` to scaffold a new project with the Demo Store template. To contribute to the Demo Store template, update the [template files](https://github.com/Shopify/hydrogen/tree/main/templates/template-hydrogen-default).
+> The CLI doesn't currently generate the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates). Run `npx @shopify/create-hydrogen` to scaffold a new project with the Demo Store template. To contribute to the Demo Store template, update the [template files](https://github.com/Shopify/hydrogen/tree/main/templates/template-hydrogen-default).
 
 ## Installation
 

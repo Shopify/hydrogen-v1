@@ -36,7 +36,7 @@ yarn create @shopify/hydrogen
 npm init @shopify/hydrogen
 
 # Using `npx`
-npx @shopify/hydrogen
+npx @shopify/create-hydrogen
 ```
 
 **Running locally:**
