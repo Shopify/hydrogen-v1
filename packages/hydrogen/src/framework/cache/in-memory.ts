@@ -1,5 +1,3 @@
-import {logCacheApiStatus} from '../../utilities/log';
-
 type CacheMatch = {
   value: Response;
   date: Date;
@@ -17,7 +15,6 @@ export class InMemoryCache {
   }
 
   put(request: Request, response: Response) {
-    logCacheApiStatus('PUT-dev', request.url);
     this.store.set(request.url, {
       value: response,
       date: new Date(),
@@ -28,7 +25,6 @@ export class InMemoryCache {
     const match = this.store.get(request.url);
 
     if (!match) {
-      logCacheApiStatus('MISS-dev', request.url);
       return;
     }
 
@@ -47,7 +43,6 @@ export class InMemoryCache {
 
     const isMiss = age > maxAge + swr;
     if (isMiss) {
-      logCacheApiStatus('MISS-dev', request.url);
       this.store.delete(request.url);
       return;
     }
@@ -57,7 +52,6 @@ export class InMemoryCache {
     const headers = new Headers(value.headers);
     headers.set('cache', isStale ? 'STALE' : 'HIT');
     headers.set('date', date.toUTCString());
-    logCacheApiStatus(`${headers.get('cache')}-dev`, request.url);
 
     const response = new Response(value.body, {
       headers,
@@ -68,7 +62,6 @@ export class InMemoryCache {
 
   delete(request: Request) {
     this.store.delete(request.url);
-    logCacheApiStatus('DELETE-dev', request.url);
   }
 
   keys(request?: Request) {

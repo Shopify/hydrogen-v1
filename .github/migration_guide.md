@@ -253,9 +253,9 @@ return (
 
 Additionally, consider adding the `Seo` component to the following places using the current demo store as a reference:
 
-- **Home page**: [`src/pages/index.server.jsx`](https://github.com/Shopify/hydrogen/blob/8ea40b5e119883ca380406edc123d9cb10ca8650/examples/template-hydrogen-default/src/pages/index.server.jsx#L22)
-- **Collections route**: [`/src/pages/collections/[handle].server.jsx`](https://github.com/Shopify/hydrogen/blob/8ea40b5e119883ca380406edc123d9cb10ca8650/examples/template-hydrogen-default/src/pages/collections/[handle].server.jsx#L42)
-- **Pages route**: [`/src/pages/pages/[handle].server.jsx`](https://github.com/Shopify/hydrogen/blob/8ea40b5e119883ca380406edc123d9cb10ca8650/examples/template-hydrogen-default/src/pages/pages/[handle].server.jsx#L19)
+- **Home page**: [`src/pages/index.server.jsx`](https://github.com/Shopify/hydrogen/blob/8ea40b5e119883ca380406edc123d9cb10ca8650/examples/demo-store/src/pages/index.server.jsx#L22)
+- **Collections route**: [`/src/pages/collections/[handle].server.jsx`](https://github.com/Shopify/hydrogen/blob/8ea40b5e119883ca380406edc123d9cb10ca8650/examples/demo-store/src/pages/collections/[handle].server.jsx#L42)
+- **Pages route**: [`/src/pages/pages/[handle].server.jsx`](https://github.com/Shopify/hydrogen/blob/8ea40b5e119883ca380406edc123d9cb10ca8650/examples/demo-store/src/pages/pages/[handle].server.jsx#L19)
 
 Learn more about [how SEO works in Hydrogen](https://shopify.dev/custom-storefronts/hydrogen/framework/seo).
 

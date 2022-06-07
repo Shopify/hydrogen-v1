@@ -1,8 +1,11 @@
-import {ImportGlobEagerOutput, ShopifyConfig} from '../types';
+import {
+  InlineHydrogenConfig,
+  ResolvedHydrogenRoutes,
+  ImportGlobEagerOutput,
+} from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
-import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
-import type {ASTNode} from 'graphql';
+import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {
@@ -11,8 +14,8 @@ import {
   SessionStorageAdapter,
 } from '../foundation/session/session';
 
-let memoizedRoutes: Array<HydrogenApiRoute> = [];
-let memoizedPages: ImportGlobEagerOutput = {};
+let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
+let memoizedRawRoutes: ImportGlobEagerOutput = {};
 
 type RouteParams = Record<string, string>;
 type RequestOptions = {
@@ -37,7 +40,10 @@ export type ApiRouteMatch = {
   params: RouteParams;
 };
 
-export function extractPathFromRoutesKey(routesKey: string, dirPrefix: string) {
+export function extractPathFromRoutesKey(
+  routesKey: string,
+  dirPrefix: string | RegExp
+) {
   let path = routesKey
     .replace(dirPrefix, '')
     .replace(/\.server\.(t|j)sx?$/, '')
@@ -62,18 +68,21 @@ export function extractPathFromRoutesKey(routesKey: string, dirPrefix: string) {
   return path;
 }
 
-export function getApiRoutes(
-  pages: ImportGlobEagerOutput | undefined,
-  topLevelPath = '*'
-): Array<HydrogenApiRoute> {
-  if (!pages || memoizedPages === pages) return memoizedRoutes;
+export function getApiRoutes({
+  files: routes,
+  basePath: topLevelPath = '',
+  dirPrefix = '',
+}: Partial<ResolvedHydrogenRoutes>): Array<HydrogenApiRoute> {
+  if (!routes || memoizedRawRoutes === routes) return memoizedApiRoutes;
 
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
-  const routes = Object.keys(pages)
-    .filter((key) => pages[key].api)
+  const keys = Object.keys(routes);
+
+  const apiRoutes = keys
+    .filter((key) => routes[key].api)
     .map((key) => {
-      const path = extractPathFromRoutesKey(key, './routes');
+      const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
@@ -83,20 +92,20 @@ export function getApiRoutes(
 
       return {
         path: topLevelPrefix + path,
-        resource: pages[key].api,
-        hasServerComponent: !!pages[key].default,
+        resource: routes[key].api,
+        hasServerComponent: !!routes[key].default,
         exact,
       };
     });
 
-  memoizedRoutes = [
-    ...routes.filter((route) => !route.path.includes(':')),
-    ...routes.filter((route) => route.path.includes(':')),
+  memoizedApiRoutes = [
+    ...apiRoutes.filter((route) => !route.path.includes(':')),
+    ...apiRoutes.filter((route) => route.path.includes(':')),
   ];
 
-  memoizedPages = pages;
+  memoizedRawRoutes = routes;
 
-  return memoizedRoutes;
+  return memoizedApiRoutes;
 }
 
 export function getApiRouteFromURL(
@@ -131,19 +140,30 @@ interface QueryShopArgs {
   /** A string of the GraphQL query.
    * If no query is provided, then the `useShopQuery` makes no calls to the Storefront API.
    */
-  query: ASTNode | string;
+  query: string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
 }
 
 function queryShopBuilder(
-  shopifyConfig: ShopifyConfig,
-  request: ServerComponentRequest
+  shopifyConfigGetter: InlineHydrogenConfig['shopify'],
+  request: HydrogenRequest
 ) {
   return async function queryShop<T>({
     query,
     variables,
   }: QueryShopArgs): Promise<T> {
+    const shopifyConfig =
+      typeof shopifyConfigGetter === 'function'
+        ? await shopifyConfigGetter(request)
+        : shopifyConfigGetter;
+
+    if (!shopifyConfig) {
+      throw new Error(
+        'Shopify connection info was not found in Hydrogen config'
+      );
+    }
+
     const {storeDomain, storefrontApiVersion, storefrontToken} = shopifyConfig;
     const buyerIp = request.getBuyerIp();
 
@@ -169,9 +189,9 @@ function queryShopBuilder(
 }
 
 export async function renderApiRoute(
-  request: ServerComponentRequest,
+  request: HydrogenRequest,
   route: ApiRouteMatch,
-  shopifyConfig: ShopifyConfig,
+  shopifyConfig: InlineHydrogenConfig['shopify'],
   session?: SessionStorageAdapter
 ): Promise<Response | Request> {
   let response;
@@ -225,7 +245,7 @@ export async function renderApiRoute(
 
   logServerResponse(
     'api',
-    request as ServerComponentRequest,
+    request as HydrogenRequest,
     (response as Response).status ?? 200
   );
 

@@ -1,38 +1,19 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {
-  Route,
-  Router,
-  FileRoutes,
-  ShopifyProvider,
-  setLogger,
-  CookieSessionStorage,
-} from '@shopify/hydrogen';
-import shopifyConfig from '../shopify.config';
+import {Route, Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import Custom1 from './customRoutes/custom1.server';
 import Custom2 from './customRoutes/custom2.server';
 import LazyRoute from './customRoutes/lazyRoute.server';
 import ServerParams from './customRoutes/params.server';
 
-setLogger({
-  trace() {},
-  debug() {},
-  warn(context, ...args) {
-    console.warn(...args);
-  },
-  error(context, ...args) {
-    console.error(...args);
-  },
-  fatal(context, ...args) {
-    console.error(...args);
-  },
-  options: () => ({}),
-});
+export default renderHydrogen(({request, response}) => {
+  if (request.headers.get('user-agent') === 'custom bot') {
+    response.doNotStream();
+  }
 
-function App({routes}) {
   return (
     <Suspense fallback={'Loading...'}>
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
+      <ShopifyProvider>
         <Router>
           <Route path="/custom1" page={<Custom1 />} />
           <Route path="/custom2/:handle" page={<Custom2 />} />
@@ -41,22 +22,12 @@ function App({routes}) {
           </HasRouteChildren>
           <HasInternalRoute />
           <Route path="/params/:handle" page={<ServerParams />} />
-          <FileRoutes routes={routes} />
+          <FileRoutes />
           <LazyRoute />
         </Router>
       </ShopifyProvider>
     </Suspense>
   );
-}
-
-const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
-
-export default renderHydrogen(App, {
-  shopifyConfig,
-  routes,
-  session: CookieSessionStorage('__session', {
-    expires: new Date(1749343178614),
-  }),
 });
 
 function HasRouteChildren({children}) {

@@ -3,18 +3,16 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
-import type {HydrogenVitePluginOptions, ShopifyConfig} from '../../types';
+import type {HydrogenVitePluginOptions} from '../../types';
 import {InMemoryCache} from '../cache/in-memory';
+import {VIRTUAL_PROXY_HYDROGEN_CONFIG_ID} from './vite-plugin-hydrogen-virtual-files';
 
-export const HYDROGEN_DEFAULT_SERVER_ENTRY = '/src/App.server';
+export const HYDROGEN_DEFAULT_SERVER_ENTRY =
+  process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
-export default (
-  shopifyConfig: ShopifyConfig,
-  pluginOptions: HydrogenVitePluginOptions
-) => {
+export default (pluginOptions: HydrogenVitePluginOptions) => {
   return {
-    name: 'vite-plugin-hydrogen-middleware',
-
+    name: 'hydrogen:middleware',
     /**
      * By adding a middleware to the Vite dev server, we can handle SSR without needing
      * a custom node script. It works by handling any requests for `text/html` documents,
@@ -34,8 +32,29 @@ export default (
       // By running this middleware first, we avoid that.
       server.middlewares.use(
         graphiqlMiddleware({
-          shopifyConfig,
           dev: true,
+          getShopifyConfig: async (incomingMessage) => {
+            const {default: hydrogenConfig} = await server.ssrLoadModule(
+              VIRTUAL_PROXY_HYDROGEN_CONFIG_ID
+            );
+
+            // @ts-ignore
+            const {address = 'localhost', port = '3000'} =
+              server.httpServer?.address() || {};
+            const url = new URL(
+              `http://${address}:${port}${incomingMessage.url}`
+            );
+            const request = new Request(url.toString(), {
+              headers: incomingMessage.headers as any,
+            });
+
+            // @ts-expect-error Manually set `normalizedUrl` which a developer expects to be available
+            // via `HydrogenRequest` during production runtime.
+            request.normalizedUrl = request.url;
+
+            const {shopify} = hydrogenConfig;
+            return typeof shopify === 'function' ? shopify(request) : shopify;
+          },
         })
       );
 
@@ -45,13 +64,9 @@ export default (
         server.middlewares.use(
           hydrogenMiddleware({
             dev: true,
-            shopifyConfig,
             indexTemplate: getIndexTemplate,
             getServerEntrypoint: () =>
-              server.ssrLoadModule(
-                process.env.HYDROGEN_SERVER_ENTRY ||
-                  HYDROGEN_DEFAULT_SERVER_ENTRY
-              ),
+              server.ssrLoadModule(HYDROGEN_DEFAULT_SERVER_ENTRY),
             devServer: server,
             cache: pluginOptions?.devCache
               ? (new InMemoryCache() as unknown as Cache)

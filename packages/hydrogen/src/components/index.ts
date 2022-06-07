@@ -26,11 +26,11 @@ export type {
   CartWithActions,
   CartAction,
 } from './CartProvider';
-export {ProductProvider, useProduct} from './ProductProvider';
-export {ProductDescription} from './ProductDescription';
-export {ProductTitle} from './ProductTitle';
+export {
+  ProductOptionsProvider,
+  useProductOptions,
+} from './ProductOptionsProvider';
 export {ProductPrice} from './ProductPrice';
-export {ProductMetafield} from './ProductMetafield';
 export {BuyNowButton} from './BuyNowButton';
 export {ShopPayButton} from './ShopPayButton';
 export {useCountry} from '../hooks/useCountry';

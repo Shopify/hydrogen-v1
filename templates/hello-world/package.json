@@ -1,0 +1,22 @@
+{
+  "name": "hello-world",
+  "description": "Hello world template for @shopify/hydrogen",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env LOCAL_DEV=true shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "preview": "shopify hydrogen preview"
+  },
+  "devDependencies": {
+    "@shopify/cli": "2.0.10",
+    "@shopify/cli-hydrogen": "2.0.10",
+    "vite": "^2.9.0"
+  },
+  "dependencies": {
+    "@shopify/hydrogen": "^0.23.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
+  }
+}

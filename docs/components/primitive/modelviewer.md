@@ -5,13 +5,12 @@ description: The ModelViewer component renders a 3D model (with the model-viewer
 ---
 
 The `ModelViewer` component renders a 3D model (with the `model-viewer` tag) for
-the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d).
+the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
 ```tsx
-import {ModelViewer} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {ModelViewer, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {
@@ -116,24 +115,6 @@ export default function MyProductModel() {
 ## Component type
 
 The `ModelViewer` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Model3D object](https://shopify.dev/api/storefront/latest/objects/model3d):
-
-```graphql
-{
-  id
-  alt
-  mediaContentType
-  previewImage {
-    url
-  }
-  sources {
-    url
-  }
-}
-```
 
 ## Related components
 

@@ -43,4 +43,4 @@ The `useSession` hook returns all data within the current session. The return ty
 
 ## Related framework topics
 
-- [Sessions](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)
+- [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions)

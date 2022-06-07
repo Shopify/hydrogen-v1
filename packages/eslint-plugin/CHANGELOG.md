@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.2
+
+### Patch Changes
+
+- [#1373](https://github.com/Shopify/hydrogen/pull/1373) [`66fdc75c`](https://github.com/Shopify/hydrogen/commit/66fdc75c3494acbb668b1053cac24846ed522217) Thanks [@cartogram](https://github.com/cartogram)! - This package now supports eslint >= 8
+
+* [#1367](https://github.com/Shopify/hydrogen/pull/1367) [`9514271c`](https://github.com/Shopify/hydrogen/commit/9514271c709f717dfdbdd5620b17661f6ebba651) Thanks [@cartogram](https://github.com/cartogram)! - Updates default hydrogen eslint config to ignore `rule-of-hooks` rule inside server components.
+
 ## 0.12.1
 
 ### Patch Changes

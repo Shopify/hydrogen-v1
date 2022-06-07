@@ -51,7 +51,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
     {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
     ```jsx
-    import {ClientAnalytics} from '@shopify/hydrogen/client';
+    import {ClientAnalytics} from '@shopify/hydrogen';
 
     let init = false;
     export default function AnalyticsListener() {
@@ -212,7 +212,7 @@ To send analytics data from the server-side, complete the following steps:
     {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
     ```jsx
-    import {ClientAnalytics} from '@shopify/hydrogen/client';
+    import {ClientAnalytics} from '@shopify/hydrogen';
 
     let init = false;
     export default function AnalyticsListener() {
@@ -256,7 +256,7 @@ To send analytics data from the server-side, complete the following steps:
     {% codeblock file, filename: 'MyServerAnalyticsConnector.jsx' %}
 
     ```jsx
-    export function request(request, data, contentType) {
+    export function request(requestUrl, requestHeader, data, contentType) {
      // Send your analytics request to third-party analytics
     }
     ```
@@ -279,15 +279,16 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-#### Parameters
+### Parameters
 
 The following table describes the request function parameters for `ServerAnalyticsConnector`:
 
-| Parameter     | Type           | Description                                       |
-| ------------- | -------------- | ------------------------------------------------- |
-| `request`     | request        | The analytics request object.                      |
-| `data`        | object or text | The result from `.json()` or `.text()`.           |
-| `contentType` | string         | The content type. Valid values: `json` or `text`. |
+| Parameter       | Type           | Description                                       |
+| --------------- | -------------- | ------------------------------------------------- |
+| `requestUrl`    | string         | The analytics request url.                        |
+| `requestHeader` | Headers        | The analytics request headers object.             |
+| `data`          | object or text | The result from `.json()` or `.text()`.           |
+| `contentType`   | string         | The content type. Valid values: `json` or `text`. |
 
 ## Unsubscribe from an event
 
@@ -330,12 +331,10 @@ If you want to see performance debug metrics displayed in your browser console l
 ```jsx
 import {
   PerformanceMetricsServerAnalyticsConnector,
-  ...
-} from '@shopify/hydrogen';
-import {
   PerformanceMetrics,
   PerformanceMetricsDebug,
-} from '@shopify/hydrogen/client';
+  ...
+} from '@shopify/hydrogen';
 
 function App({routes}) {
   return (
@@ -343,7 +342,7 @@ function App({routes}) {
       <ShopifyProvider shopifyConfig={shopifyConfig}>
         ...
         <PerformanceMetrics />
-        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+        {import.meta.env.DEV && <PerformanceMetricsDebug />}
       </ShopifyProvider>
     </Suspense>
   );
@@ -367,7 +366,7 @@ The following example shows an implementation of a client analytics connector wi
 
 ```jsx
 import {useEffect} from 'react';
-import {ClientAnalytics, loadScript} from '@shopify/hydrogen/client';
+import {ClientAnalytics, loadScript} from '@shopify/hydrogen';
 
 const GTAG_ID = '<YOUR_GTAG_ID>';
 const URL = `https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`;
@@ -488,7 +487,12 @@ describe('Google Analytics 4', () => {
 
 {% endcodeblock %}
 
+## Related components
+
+- [`ShopifyAnalytics`](https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics)
+
 ## Next steps
 
 - Learn how to [configure queries to preload](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries) in your Hydrogen app.
 - Learn how to customize the output of [SEO-related tags](https://shopify.dev/custom-storefronts/hydrogen/framework/seo) in your Hydrogen client and server components.
+- Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.

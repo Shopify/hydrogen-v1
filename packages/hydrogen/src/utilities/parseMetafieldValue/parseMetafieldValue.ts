@@ -1,5 +1,6 @@
 import type {Metafield} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
+import {parseJSON} from '../parse';
 
 /**
  * The `parseMetafieldValue` function parses a [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield)'s `value` from a string into a sensible type corresponding to the [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield)'s `type`.
@@ -24,7 +25,7 @@ export function parseMetafieldValue(metafield: PartialDeep<Metafield>) {
     case 'dimension':
     case 'volume':
     case 'rating':
-      return JSON.parse(metafield.value);
+      return parseJSON(metafield.value);
     case 'color':
     case 'single_line_text_field':
     case 'multi_line_text_field':

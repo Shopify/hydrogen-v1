@@ -1,12 +1,13 @@
 import {parse, stringify as stringifyCookie} from 'worktop/cookie';
 import {log} from '../../utilities/log';
+import {parseJSON} from '../../utilities/parse';
 
 export type CookieOptions = {
-  /** Whether to secure the cookie so that the browser only sends it over HTTPS. Some
-   * browsers [don't work with secure cookies on localhost](https://owasp.org/www-community/controls/SecureCookieAttribute).
+  /** Whether to secure the cookie so that [client-side JavaScript can't read the cookie](https://owasp.org/www-community/HttpOnly).
    */
   httpOnly?: boolean;
-  /** Whether to secure the cookie so that [client JavaScript is unable to read it](https://owasp.org/www-community/HttpOnly).
+  /** Whether to secure the cookie so that the browser only sends the cookie over HTTPS. Some
+   * browsers [don't work with secure cookies on localhost](https://owasp.org/www-community/controls/SecureCookieAttribute).
    */
   secure?: boolean;
   /** Declares that the cookie should be restricted to a first-party
@@ -65,7 +66,7 @@ export class Cookie {
 
   parse(cookie: string) {
     try {
-      const data = JSON.parse(parse(cookie)[this.name]);
+      const data = parseJSON(parse(cookie)[this.name]);
       this.data = data;
     } catch (e) {
       // failure to parse cookie

@@ -27,7 +27,30 @@ A new snapshot release will be created with your changes and tagged on NPM with 
 yarn add @shopify/hydrogen@unstable
 
 # or start a new project:
-npx create-hydrogen-app@unstable
+npx @shopify/create-hydrogen@unstable
+```
+
+## Releasing experimental versions
+
+Sometimes, you might want to publish the latest version of the main branch as an NPM release to test in standalone apps. Or you want to test a new, unmerged feature in an NPM release.
+
+To do so, you can merge your code into the `experimental` branch. Feel free to "recycle" the existing branch (delete it or force-push your code). Since NPM releases are permanent, existing developers working on a previously-released experimental version will be bound to the timestamped release number.
+
+> Note:
+> The `experimental` branch should be treated as ephemeral, and you should NOT develop your features directly in the branch. Instead, use a separate feature branch and merge it into `experimental` to perform releases.
+
+To release an experimental version:
+
+1. Merge your changes into the `experimental` branch.
+2. Visit the Shipit page for `Hydrogen Experimental` and click **Deploy** on the commit you want to release
+
+A new snapshot release will be created with your changes and tagged on NPM with `experimental`. You can install the experimental version of Hydrogen using this tag:
+
+```bash
+yarn add @shopify/hydrogen@experimental
+
+# or start a new project:
+npx create-hydrogen-app@experimental
 ```
 
 ## Common problems

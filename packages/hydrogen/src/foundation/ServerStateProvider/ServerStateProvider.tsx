@@ -9,7 +9,7 @@ import React, {
 
 declare global {
   // eslint-disable-next-line no-var
-  var __DEV__: boolean;
+  var __HYDROGEN_DEV__: boolean;
 }
 
 const PRIVATE_PROPS = ['request', 'response'] as const;
@@ -103,7 +103,9 @@ export function ServerStateProvider({
       newValue = input;
     }
 
-    if (__DEV__) {
+    if (!newValue) return {...prev};
+
+    if (__HYDROGEN_DEV__) {
       const privateProp = PRIVATE_PROPS.find((prop) => prop in newValue);
       if (privateProp) {
         console.warn(

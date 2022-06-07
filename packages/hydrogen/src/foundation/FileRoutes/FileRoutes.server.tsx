@@ -9,11 +9,11 @@ import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client'
 
 interface FileRoutesProps {
   /** The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. */
-  routes: ImportGlobEagerOutput;
+  routes?: ImportGlobEagerOutput;
   /** A path that's prepended to all file routes. You can modify `basePath` if you want to prefix all file routes. For example, you can prefix all file routes with a locale. */
   basePath?: string;
   /** The portion of the file route path that shouldn't be a part of the URL. You need to modify this if you want to import routes from a location other than the default `src/routes`. */
-  dirPrefix?: string;
+  dirPrefix?: string | RegExp;
 }
 
 /**
@@ -21,22 +21,25 @@ interface FileRoutesProps {
  * [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. You can have multiple
  * instances of this component to source file routes from multiple locations.
  */
-export function FileRoutes({
-  routes,
-  basePath = '/',
-  dirPrefix = './routes',
-}: FileRoutesProps) {
+export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
   const request = useServerRequest();
   const {routeRendered, serverProps} = request.ctx.router;
 
   if (routeRendered) return null;
 
-  /* eslint-disable react-hooks/rules-of-hooks */
+  if (!routes) {
+    const fileRoutes = request.ctx.hydrogenConfig!.routes;
+    routes = fileRoutes.files;
+    dirPrefix ??= fileRoutes.dirPrefix;
+    basePath ??= fileRoutes.basePath;
+  }
+
+  basePath ??= '/';
+
   const pageRoutes = useMemo(
-    () => createPageRoutes(routes, basePath, dirPrefix),
+    () => createPageRoutes(routes!, basePath, dirPrefix),
     [routes, basePath, dirPrefix]
   );
-  /* eslint-enable react-hooks/rules-of-hooks */
 
   let foundRoute, foundRouteDetails;
 
@@ -74,11 +77,13 @@ interface HydrogenRoute {
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
-  dirPrefix: string
+  dirPrefix: string | RegExp = ''
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
-  const routes = Object.keys(pages)
+  const keys = Object.keys(pages);
+
+  const routes = keys
     .map((key) => {
       const path = extractPathFromRoutesKey(key, dirPrefix);
 

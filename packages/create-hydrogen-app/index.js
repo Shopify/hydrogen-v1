@@ -157,14 +157,12 @@ async function init() {
    */
   const usesYarn = pkgManager === 'yarn' || process.env.LOCAL;
 
-  console.log(
-    cyan(`  ${usesYarn ? `yarn` : `npm install --legacy-peer-deps`}`)
-  );
+  console.log(cyan(`  ${usesYarn ? `yarn` : `npm install`}`));
   console.log(cyan(`  ${usesYarn ? `yarn dev` : `npm run dev`}`));
   console.log(
     `\nYour project will display inventory from the Hydrogen Demo Store. ` +
       `To connect this project to your Shopify store's inventory instead, ` +
-      `update ${yellow(packageName + '/shopify.config.js')} with your ` +
+      `update ${yellow(packageName + '/hydrogen.config.js')} with your ` +
       `store ID and Storefront API key.\n`
   );
 }

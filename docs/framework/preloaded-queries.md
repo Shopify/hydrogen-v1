@@ -4,6 +4,13 @@ title: Preloaded queries
 description: Learn how to configure queries to preload in your Hydrogen app.
 ---
 
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>Preloaded queries is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
+
+</aside>
+
 This guide provides information on how preloaded queries work and how to configure them in your Hydrogen app.
 
 ## How preloaded queries work
@@ -91,9 +98,9 @@ const {data} = useShopQuery({
 const data = fetchSync('https://my.api.com/data.json', {
   headers: {
     accept: 'application/json',
-    // Preloads queries for every request
-    preload: '*',
   },
+  // Preloads queries for every request
+  preload: '*',
 }).json();
 ```
 
@@ -101,21 +108,16 @@ const data = fetchSync('https://my.api.com/data.json', {
 
 ## Test a preloaded query
 
-To test a preloaded query, enable the `showQueryTiming` property in `App.server.js`. The [`showQueryTiming`](https://shopify.dev/api/hydrogen/utilities/log#logger-options) property logs the timeline of when queries are being requested, resolved, and rendered.
+<aside class="note beta">
+<h4>Experimental feature</h4>
 
-{% codeblock file, filename: "App.server.js" %}
+<p>The `showQueryTiming` property is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
 
-```js
-import {setLoggerOptions} from '@shopify/hydrogen';
-...
-setLoggerOptions({
-  showQueryTiming: true
-})
-```
+</aside>
 
-{% endcodeblock %}
+To test a preloaded query, enable the `logger.showQueryTiming` property in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger).
 
-If a query is preloaded, but isn't being used, then a warning displays in the server log:
+The [`showQueryTiming`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
 
 ![Shows a screenshot of preloaded query warning](/assets/custom-storefronts/hydrogen/preload-query-warning.png)
 

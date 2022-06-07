@@ -1,5 +1,622 @@
 # Changelog
 
+## 0.23.0
+
+### Minor Changes
+
+- [#1389](https://github.com/Shopify/hydrogen/pull/1389) [`9a21108f`](https://github.com/Shopify/hydrogen/commit/9a21108f6ff89474db9ff8bec26733fcbe744bdc) Thanks [@blittle](https://github.com/blittle)! - **Breaking change**
+
+  The utility `isClient` has been renamed to `isBrowser`. This is because the utility really checks if the running context is a browser, _not_ if the context is a client component.
+
+  All client components by default also run on the server when they are server rendered. If you don't want that to happen, use the `isBrowser()` hook. Remember that anything not server rendered will be unavailable for SEO bots.
+
+* [#1431](https://github.com/Shopify/hydrogen/pull/1431) [`6975bdb9`](https://github.com/Shopify/hydrogen/commit/6975bdb90cfdc03562d21cec09150c52ff31ff78) Thanks [@jplhomer](https://github.com/jplhomer)! - Add `scroll` prop to `Link` and `navigate` to allow the scroll restoration behavior to be disabled.
+
+  By default, when a `<Link>` component is clicked, Hydrogen emulates default browser behavior and attempts to restore the scroll position previously used in the visitor's session. For new pages, this defaults to scrolling to the top of the page.
+
+  However, if you are building a user interface that should fetch a new server components request and update the URL but not modify scroll position, then you can disable scroll restoration using the `scroll` prop:
+
+  ```jsx
+  import {Link} from '@shopify/hydrogen';
+  export default function Index({request}) {
+    const url = new URL(request.normalizedUrl);
+
+    return (
+      <>
+        <p>Current param is: {url.searchParams.get('param')}</p>
+        <Link to="/?param=foo" scroll={false}>
+          Update param to foo
+        </Link>
+      </>
+    );
+  }
+  ```
+
+- [#1325](https://github.com/Shopify/hydrogen/pull/1325) [`572c18d1`](https://github.com/Shopify/hydrogen/commit/572c18d1893b212cfc3f1be3043a67dcca251629) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - - Fix clientAnalytics not waiting for all server analytics data before sending page view event
+
+  - Fix server analytics connector erroring out after more than 1 server analytics connectors are attached
+  - Shopify analytics components
+
+  # Updates to server analytics connectors
+
+  The server analytics connector interface has updated to
+
+  ```jsx
+  export function request(
+    requestUrl: string,
+    requestHeader: Headers,
+    data?: any,
+    contentType?: string
+  ): void {
+    // Do something with the analytic event.
+  }
+  ```
+
+  # Introducing Shopify analytics
+
+  Optional analytics components that allows you to send ecommerce related analytics to
+  Shopify. Adding the Shopify analytics components will allow the Shopify admin - Analytics
+  dashboard to work.
+
+  For information, see [Shopify Analytics](https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics)
+
+* [#1334](https://github.com/Shopify/hydrogen/pull/1334) [`58e039d4`](https://github.com/Shopify/hydrogen/commit/58e039d45cf69b670628f9f7ea62cb7c2d8425d9) Thanks [@blittle](https://github.com/blittle)! - With the introduction of authenticated pages, we also now provide the ability to prevent pages from being indexed by bots. You can do so by passing `noindex` to the `Seo` component:
+
+  ```jsx
+  <Seo type="noindex" data={{title: 'Login'}} />
+  ```
+
+- [#1397](https://github.com/Shopify/hydrogen/pull/1397) [`fbd185ab`](https://github.com/Shopify/hydrogen/commit/fbd185ab47e7335992b7844af0ef0b0aea6d70a5) Thanks [@frehner](https://github.com/frehner)! - ## `<ProductProvider/>` and `<ProductOptionsProvider/>`
+
+  - `<ProductProvider/>` has been removed
+    - `<ProductPrice/>` was the only component left that used it; now it requires a `data` prop that takes in the product object
+  - `<ProductOptionsProvider/>` now maintains and provides the state that `useProductOptions` used to keep track of by itself. This change enables you to use multiple `useProductOptions` hook calls and have them share the same state (such as selected variant, options, etc.)
+
+* [#1403](https://github.com/Shopify/hydrogen/pull/1403) [`979f8177`](https://github.com/Shopify/hydrogen/commit/979f81775a4bfa83276030da07cb012e6cb08e2f) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change**: The `setLogger` and `setLoggerOptions` utilities have been removed. The same information can now be passed under the `logger` property in Hydrogen config:
+
+  ```diff
+  // App.server.jsx
+
+  -import {setLogger, setLoggerOptions} from '@shopify/hydrogen';
+
+  -setLogger({
+  -  trace() {},
+  -  error() {},
+  -  // ...
+  -});
+
+  -setLoggerOptions({
+  -  showQueryTiming: true,
+  -  showCacheControlHeader: true,
+  -  // ...
+  -});
+
+  function App() {
+    // ...
+  }
+
+  export default renderHydrogen(App);
+  ```
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+    // ...
+  + logger: {
+  +   trace() {},
+  +   error() {},
+  +   showQueryTiming: true,
+  +   showCacheControlHeader: true,
+  +   // ...
+  + },
+  });
+  ```
+
+- [#1433](https://github.com/Shopify/hydrogen/pull/1433) [`cd354d3a`](https://github.com/Shopify/hydrogen/commit/cd354d3a6205b5a8ef14426040121ac620c8c158) Thanks [@frandiox](https://github.com/frandiox)! - The `response.writeHead` method has been removed, while `response.status` and `response.statusText` are now writable.
+
+  ```diff
+  function App({response}) {
+  - response.writeHead({
+  -   headers: {'custom-header': 'value'},
+  -   status: 404,
+  - });
+  + response.headers.set('custom-header', 'value');
+  + response.status = 404;
+  }
+  ```
+
+* [#1418](https://github.com/Shopify/hydrogen/pull/1418) [`512cb009`](https://github.com/Shopify/hydrogen/commit/512cb009fadeb1907fafa2cef8b568081799335f) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change**: The client configuration, including the `strictMode` option, has been moved from custom client entry handlers to the Hydrogen configuration file. If you had a custom client entry file just to pass client options, you can remove it and do the same in `hydrogen.config.js`:
+
+  ```diff
+  // Custom client entry handler
+
+  -renderHydrogen(ClientWrapper, {strictMode: false});
+  +renderHydrogen(ClientWrapper);
+  ```
+
+  ```diff
+  // hydrogen.config.jsx
+
+  export default defineConfig({
+  +  strictMode: false,
+  });
+  ```
+
+  To remove a custom client entry handler in case it's not needed anymore, delete the custom file and change `index.html`:
+
+  ```diff
+  <body>
+    <div id="root"></div>
+  - <script type="module" src="/src/custom-client-entry"></script>
+  + <script type="module" src="/@shopify/hydrogen/entry-client"></script>
+  </body>
+  ```
+
+- [#1401](https://github.com/Shopify/hydrogen/pull/1401) [`335b70ce`](https://github.com/Shopify/hydrogen/commit/335b70ce67f9f137875fcd18f32e00c1b1b4c533) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change**: The `enableStreaming` config option has been deprecated. The same feature can be done directly in the app:
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+    shopify: {
+      // ...
+    },
+  - enableStreaming: (req) => {
+  -   return req.headers.get('user-agent') !== 'custom bot';
+  - },
+  });
+  ```
+
+  ```diff
+  // App.server.jsx
+
+  -function App() {
+  +function App({request, response}) {
+  + if (request.headers.get('user-agent') === 'custom bot') {
+  +   response.doNotStream();
+  + }
+
+    return <Suspense fallback={'Loading...'}>{/*...*/}</Suspense>;
+  }
+
+  export default renderHydrogen(App);
+  ```
+
+### Patch Changes
+
+- [#1425](https://github.com/Shopify/hydrogen/pull/1425) [`e213aa86`](https://github.com/Shopify/hydrogen/commit/e213aa8656b17bf649fef714befa99b9618aae45) Thanks [@frandiox](https://github.com/frandiox)! - Rename internal Hydrogen global variables that could conflict with third party libraries that use the same names.
+
+* [#1361](https://github.com/Shopify/hydrogen/pull/1361) [`cf2ef664`](https://github.com/Shopify/hydrogen/commit/cf2ef664cd1e91bc53fc34698ac23797c398e74f) Thanks [@frandiox](https://github.com/frandiox)! - Improve component bundling to reduce the total amount of JS files downloaded in the browser.
+
+- [#1452](https://github.com/Shopify/hydrogen/pull/1452) [`ed1586a7`](https://github.com/Shopify/hydrogen/commit/ed1586a758fd36bddcc422a75db8a7971ce946d5) Thanks [@frandiox](https://github.com/frandiox)! - Reduce CPU consumption when rendering React Server Components.
+
+* [#1399](https://github.com/Shopify/hydrogen/pull/1399) [`583ce40c`](https://github.com/Shopify/hydrogen/commit/583ce40c97391bb22e6e15e736e6237e9a1ea085) Thanks [@frandiox](https://github.com/frandiox)! - Confusing warnings that are not actionable have been removed.
+
+- [#1460](https://github.com/Shopify/hydrogen/pull/1460) [`18056879`](https://github.com/Shopify/hydrogen/commit/18056879f1ea1dc54f146184bfdd4f01f24df636) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fix doc links
+
+* [#1444](https://github.com/Shopify/hydrogen/pull/1444) [`0b4ee487`](https://github.com/Shopify/hydrogen/commit/0b4ee4876998923f206f6d28b1a3ef95c9616e59) Thanks [@blittle](https://github.com/blittle)! - Propagate a better error message when the response from the storefront API is not JSON parseable
+
+- [#1227](https://github.com/Shopify/hydrogen/pull/1227) [`8eae0a07`](https://github.com/Shopify/hydrogen/commit/8eae0a07ab02e61ac8742e42488825090ca0aa37) Thanks [@jplhomer](https://github.com/jplhomer)! - Enable streaming by default for all platforms
+
+* [#1427](https://github.com/Shopify/hydrogen/pull/1427) [`7115d7d8`](https://github.com/Shopify/hydrogen/commit/7115d7d8dc291b7e5b4dda200baf8a906a005cc8) Thanks [@jplhomer](https://github.com/jplhomer)! - Properly support Node v18
+
+- [#1424](https://github.com/Shopify/hydrogen/pull/1424) [`446c12bf`](https://github.com/Shopify/hydrogen/commit/446c12bffa08eadccfd27afe8b5f34c77a61d134) Thanks [@frandiox](https://github.com/frandiox)! - Custom loggers can return promises from their methods. Hydrogen will await for them after the current request is over but before the runtime instance ends.
+
+* [#1423](https://github.com/Shopify/hydrogen/pull/1423) [`aaf9efa4`](https://github.com/Shopify/hydrogen/commit/aaf9efa45dc9453e95be8e3020c259368ac5f4d0) Thanks [@frandiox](https://github.com/frandiox)! - Workers context (e.g. `waitUntil`) is now scoped to the current request instead of globally available.
+
+- [#1330](https://github.com/Shopify/hydrogen/pull/1330) [`c7dc6440`](https://github.com/Shopify/hydrogen/commit/c7dc644059206e7080c33d9f7e0096c168ae593e) Thanks [@ejfranco06](https://github.com/ejfranco06)! - [#1245] - Generate a default srcset for an image returned by the Shopify CDN on the Image component and allow using a custom set of `widths.`
+
+## 0.22.1
+
+### Patch Changes
+
+- [#1394](https://github.com/Shopify/hydrogen/pull/1394) [`3a681ac2`](https://github.com/Shopify/hydrogen/commit/3a681ac289cc7850f79bc080a445bc6c0b6926fb) Thanks [@jplhomer](https://github.com/jplhomer)! - Make graphql-tag a dependency instead of a devDependency
+
+## 0.22.0
+
+### Minor Changes
+
+- [#930](https://github.com/Shopify/hydrogen/pull/930) [`750baf8f`](https://github.com/Shopify/hydrogen/commit/750baf8ff069d0e06fb92e78a142049a1ce2b1ae) Thanks [@michenly](https://github.com/michenly)! - With the introduction of authenticated pages, we also now provide the ability to prevent pages from being indexed by bots. You can do so by passing `noindex` to the `Seo` component:
+
+  ```jsx
+  <Seo type="noindex" data={{title: 'Login'}} />
+  ```
+
+* [#1313](https://github.com/Shopify/hydrogen/pull/1313) [`ed1933e3`](https://github.com/Shopify/hydrogen/commit/ed1933e339927322d8008034982b05ff4590e6d8) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change**: The `routes` property in `hydrogen.config.js` file has been simplified. It is now a string that represents the path to the routes from the project root:
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+  -  routes: import('./src/routes/**/*.server.[jt](s|sx)'),
+  +  routes: '/src/routes',
+  });
+  ```
+
+  Its default value is `/src/routes` so this property can be removed when using this directory.
+
+  In the object syntax version, `dirPrefix` is removed and `files` becomes a string:
+
+  ```diff
+  // hydrogen.config.js
+
+  export default defineConfig({
+    routes: {
+  -   files: import('./src/routes/**/*.server.[jt](s|sx)'),
+  -   dirPrefix: './src/routes',
+  +   files: '/src/routes',
+      basePath: '/',
+    },
+  });
+  ```
+
+- [#1332](https://github.com/Shopify/hydrogen/pull/1332) [`5ec1bc62`](https://github.com/Shopify/hydrogen/commit/5ec1bc62cf9e4348aa389d4154f8c80dccfb96bb) Thanks [@frandiox](https://github.com/frandiox)! - A new `gql` utility is exported from `@shopify/hydrogen` that replaces `graphql-tag` dependency when using `useShopQuery`. It helps reducing bundle size in production when compared to the original `graphql-tag`.
+
+  Before:
+
+  ```js
+  import gql from 'graphql-tag';
+
+  // ...
+
+  useShopQuery({
+    query: gql`...`,
+    // ...
+  });
+  ```
+
+  After:
+
+  ```js
+  import {gql} from '@shopify/hydrogen';
+
+  // ...
+
+  useShopQuery({
+    query: gql`...`,
+    // ...
+  });
+  ```
+
+* [#1340](https://github.com/Shopify/hydrogen/pull/1340) [`631832ec`](https://github.com/Shopify/hydrogen/commit/631832ecaef26b918e774515ada6b80668ec5e4e) Thanks [@jplhomer](https://github.com/jplhomer)! - **Breaking change**: The `response.send()` function has been removed. Use `export async function api()` to send custom responses instead.
+
+### Patch Changes
+
+- [#1371](https://github.com/Shopify/hydrogen/pull/1371) [`84a2fd09`](https://github.com/Shopify/hydrogen/commit/84a2fd09b7150b1d5e1f92b786f4a6af09e18739) Thanks [@frehner](https://github.com/frehner)! - Made updates to `<Image/>`:
+
+  - Fixed some TypeScript type issues with Image.
+  - `data.url` and `alt` are now required props in Typescript, but won't break the actual component if you don't pass them.
+
+* [#1348](https://github.com/Shopify/hydrogen/pull/1348) [`211093e5`](https://github.com/Shopify/hydrogen/commit/211093e5f1a9e2ad115eb667746bfa2c6dd05b82) Thanks [@developit](https://github.com/developit)! - Fix HTML double-decoding in flight response
+
+- [#1345](https://github.com/Shopify/hydrogen/pull/1345) [`331ff3c0`](https://github.com/Shopify/hydrogen/commit/331ff3c0f58143df3e7c542116f9a94838710352) Thanks [@frandiox](https://github.com/frandiox)! - Reduce the amount of user app files downloaded in the browser.
+
+* [#1322](https://github.com/Shopify/hydrogen/pull/1322) [`36bd77c4`](https://github.com/Shopify/hydrogen/commit/36bd77c4619ec071ea11b764bb16b5670b0afa6b) Thanks [@frandiox](https://github.com/frandiox)! - Fix server hanging in Node.js environment when not using Hydrogen Middleware.
+
+- [#1360](https://github.com/Shopify/hydrogen/pull/1360) [`d9b0d03b`](https://github.com/Shopify/hydrogen/commit/d9b0d03b64d2207b314d15fc0acf6a5143610b92) Thanks [@blittle](https://github.com/blittle)! - Fix a problem where encoded html content props passed from server to client components would get double decoded, and break hydration on app load.
+
+* [#1355](https://github.com/Shopify/hydrogen/pull/1355) [`c45a45e8`](https://github.com/Shopify/hydrogen/commit/c45a45e895b8407da04c6b4608e7f16170452c24) Thanks [@jplhomer](https://github.com/jplhomer)! - Ensure all Hydrogen components are exported properly
+
+- [#1339](https://github.com/Shopify/hydrogen/pull/1339) [`fef4cb84`](https://github.com/Shopify/hydrogen/commit/fef4cb8496d985d37b6113865ac1252f78058aaa) Thanks [@jplhomer](https://github.com/jplhomer)! - Use `import.meta.env.DEV` instead of `process.env.LOCAL_DEV` to hash asset filenames and show performance metrics debugging
+
+* [#1320](https://github.com/Shopify/hydrogen/pull/1320) [`7e9df897`](https://github.com/Shopify/hydrogen/commit/7e9df897465012cd0cf374a1a35deb2ca8a16fc3) Thanks [@jplhomer](https://github.com/jplhomer)! - Properly log errors during flight responses
+
+- [#1363](https://github.com/Shopify/hydrogen/pull/1363) [`0941d3be`](https://github.com/Shopify/hydrogen/commit/0941d3be12b52edc045b898864435f591fc2c42e) Thanks [@frandiox](https://github.com/frandiox)! - Remove some server utilities from client build.
+
+## 0.21.0
+
+### Minor Changes
+
+- [#1327](https://github.com/Shopify/hydrogen/pull/1327) [`ce56311f`](https://github.com/Shopify/hydrogen/commit/ce56311fc1b63df22f77b199980439548f76997a) Thanks [@frehner](https://github.com/frehner)! - **Breaking Change**: `<Money />` updates and `<UnitPrice />` Removed.
+
+  - `<UnitPrice/>` has been removed
+  - `<Money/>` has two new props: `measurement` and `measurementSeparator` which do the work that `UnitPrice` used to do
+  - The TypeScript types for `<Money/>` have been improved and should provide a better typed experience now
+
+* [#1216](https://github.com/Shopify/hydrogen/pull/1216) [`771786a6`](https://github.com/Shopify/hydrogen/commit/771786a6475c4caadb1abe5f6644e2b5c2abc021) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fixes an issue where cached sub-requests were not revalidating properly.
+
+- [#1304](https://github.com/Shopify/hydrogen/pull/1304) [`aa196150`](https://github.com/Shopify/hydrogen/commit/aa19615024de4fe16d548429665a863e9aae0248) Thanks [@frehner](https://github.com/frehner)! - Removed `<ProductTitle/>` and `<ProductDescription/>` components. To migrate, use `{product.title}` and `{product.description}` instead.
+
+* [#1335](https://github.com/Shopify/hydrogen/pull/1335) [`0d90f92b`](https://github.com/Shopify/hydrogen/commit/0d90f92b448b0c4d99be3e5f5fa25d0b70a8315e) Thanks [@blittle](https://github.com/blittle)! - **Breaking Change**
+
+  The `<ProductMetafield />` component has been removed. Instead, directly use the `<Metafield>` component.
+
+### Patch Changes
+
+- [#1311](https://github.com/Shopify/hydrogen/pull/1311) [`3e3fd72f`](https://github.com/Shopify/hydrogen/commit/3e3fd72f7016c0993deceefc121306cf957ef564) Thanks [@jplhomer](https://github.com/jplhomer)! - Client components no longer need to use `@shopify/hydrogen/client` as the import path. All Hydrogen components can now be imported from `@shopify/hydrogen` regardless of their context.
+
+* [#1259](https://github.com/Shopify/hydrogen/pull/1259) [`110e9aca`](https://github.com/Shopify/hydrogen/commit/110e9aca385d553e3a87fea406f8bd8a43a0788f) Thanks [@blittle](https://github.com/blittle)! - You can now easily disable streaming on any page conditionally with the `enableStreaming` option inside `hydrogen.config.js`:
+
+  ```ts
+  import {CookieSessionStorage} from '@shopify/hydrogen';
+  import {defineConfig} from '@shopify/hydrogen/config';
+
+  export default defineConfig({
+    routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+    shopify: {
+      defaultLocale: 'en-us',
+      storeDomain: 'hydrogen-preview.myshopify.com',
+      storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
+      storefrontApiVersion: '2022-07',
+    },
+    enableStreaming: (req) => req.headers.get('user-agent') !== 'custom bot',
+  });
+  ```
+
+  By default all pages are stream rendered except for SEO bots. There shouldn't be many reasons to disable streaming, unless there is a custom bot not covered by Hydrogen's bot detection.
+
+- [#1318](https://github.com/Shopify/hydrogen/pull/1318) [`668a24da`](https://github.com/Shopify/hydrogen/commit/668a24daebf180747a002c8020c2e712f5d9a458) Thanks [@blittle](https://github.com/blittle)! - Buffer RSC flight responses. There isn't any benefit to streaming them, because we start a transition on page navigation. Buffering also fixes caching problems on the flight response.
+
+* [#1293](https://github.com/Shopify/hydrogen/pull/1293) [`e378ed61`](https://github.com/Shopify/hydrogen/commit/e378ed6199553f64d9e73ad27f9409ef501aa724) Thanks [@jplhomer](https://github.com/jplhomer)! - Reverts [#1272](https://github.com/Shopify/hydrogen/pull/1272) and properly escapes terminating script sequences
+
+- [#1283](https://github.com/Shopify/hydrogen/pull/1283) [`eea82cb0`](https://github.com/Shopify/hydrogen/commit/eea82cb02064471d274e534c557caa5d3527bc93) Thanks [@jplhomer](https://github.com/jplhomer)! - Hydrogen has been updated to use the latest stable version of React.
+
+  To update an existing Hydrogen app:
+
+  ```bash
+  yarn add react@latest react-dom@latest
+  ```
+
+## 0.20.0
+
+### Minor Changes
+
+- [#1257](https://github.com/Shopify/hydrogen/pull/1257) [`5cd7a672`](https://github.com/Shopify/hydrogen/commit/5cd7a6727befe1e06f35b9ec68d4c81a8858d46f) Thanks [@frandiox](https://github.com/frandiox)! - Support for CSS Modules has been improved. It now behaves closer to the default behavior in Vite where styles are collected automatically.
+
+  Remove the `StyleTag` component that was needed before:
+
+  ```diff
+  export default function MyComponent() {
+    return (
+      <div>
+  -      <myStyles.StyleTag />
+        <h1>Title</h1>
+      </div>
+    );
+  }
+  ```
+
+  Optionally, update your wildcard imports to default or named imports:
+
+  ```diff
+  -import * as myStyles from './my.module.css';
+  +import myStyles from './my.module.css';
+  // Or
+  +import {red, green, blue} from './my.module.css';
+  ```
+
+* [#1271](https://github.com/Shopify/hydrogen/pull/1271) [`9d0359b8`](https://github.com/Shopify/hydrogen/commit/9d0359b87b0cfa04f12ffa9376e5b8ad72c560a3) Thanks [@frehner](https://github.com/frehner)! - ## `<Image/>`
+
+  The `<Image/>` component and related utility functions were reworked and the following changes apply:
+
+  - `useImageUrl` is no longer available; use `shopifyImageLoader` instead, which is available to run both server- and client-side.
+  - The TypeScript experience with `<Image/>` is improved; props will be validated better, and `loader` and `loaderOptions` will be better typed
+  - When using the `src` prop, `width` and `height` are now required
+  - When using the `data` prop, `data.width` and `data.height` or `width` and `height` props are required
+  - The `src` and `data` props are mutually exclusive
+  - The `loader` prop now receives a singular param as an object
+  - `options` has been merged with `loaderOptions`. When using the `data` prop, `loaderOptions` will be the options for Shopify CDN images. When using the `src` prop, `loaderOptions` will be whatever you define them to be.
+  - The TypeScript type `ImageSizeOptions` is now named `ShopifyLoaderOptions`
+  - The TypeScript type `ImageLoaderOptions` is now named `ShopifyLoaderParams`
+  - The `priority` prop was removed; use the HTML-standard `loading` prop instead
+
+  ## `<Video/>`
+
+  - The `<Video/>` component's `options` props was renamed to `imagePreviewOptions` to add clarity as to what the options were for.
+  - `imagePreviewOptions` matches the (newly updated) shape of `<Image/>`'s `loaderOptions`
+
+- [#1290](https://github.com/Shopify/hydrogen/pull/1290) [`437b1616`](https://github.com/Shopify/hydrogen/commit/437b1616fcfa15d8b4b2c033b364b2f74b99d6e4) Thanks [@jplhomer](https://github.com/jplhomer)! - Allow cart queries to be customized by adding a new `cartFragment` prop to `CartProvider`. [Learn more](https://shopify.dev/api/hydrogen/components/cart/cartprovider#cart-fragment).
+
+### Patch Changes
+
+- [#1247](https://github.com/Shopify/hydrogen/pull/1247) [`ee64873e`](https://github.com/Shopify/hydrogen/commit/ee64873ece372f9be2d6eb08b0594a91f4ed135a) Thanks [@frandiox](https://github.com/frandiox)! - Improve the way client components are discovered in order to reduce bundle sizes.
+
+* [#1276](https://github.com/Shopify/hydrogen/pull/1276) [`c6ce6a43`](https://github.com/Shopify/hydrogen/commit/c6ce6a43bbb944b67aec5fdc7e5566768846dac5) Thanks [@frandiox](https://github.com/frandiox)! - Fix page loading in Firefox during development ([known bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1737882)).
+
+- [#1286](https://github.com/Shopify/hydrogen/pull/1286) [`53270249`](https://github.com/Shopify/hydrogen/commit/5327024995ff7b8823ddb8ea835b3a5b95175841) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix some sourcemap warnings in server console
+
+## 0.19.0
+
+### Minor Changes
+
+- [#1053](https://github.com/Shopify/hydrogen/pull/1053) [`c407f304`](https://github.com/Shopify/hydrogen/commit/c407f304352e0b781fa8a729674153ee9b971977) Thanks [@blittle](https://github.com/blittle)! - The selected country is now persisted a part of the session. This means that the page can be refreshed and the country will still be selected. There are a few breaking changes:
+
+  1. `useCountry()` hook now only returns the currently selected country. The `setCountry()` method has been removed.
+  2. The `useCountry()` hook expects a `countryCode` and `countryName` to be a part of the user session.
+  3. The example `/countries` API route has been updated to accept a `POST` request to update the selected country. The CountrySelector components need to be updated to use that route.
+
+  ```diff
+  // src/routes/countries.server.jsx
+
+  -export async function api(request, {queryShop}) {
+  +export async function api(request, {queryShop, session}) {
+  +  if (request.method === 'POST') {
+  +    const {isoCode, name} = await request.json();
+  +
+  +    await session.set('countryCode', isoCode);
+  +    await session.set('countryName', name);
+  +
+  +    return 'success';
+  +  }
+
+     const {
+       data: {
+         localization: {availableCountries},
+       },
+     } = await queryShop({
+        query: QUERY,
+     });
+     return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
+  }
+  ```
+
+  ```diff
+  // src/components/CountrySelector.client.jsx
+
+  export default function CountrySelector() {
+    const [listboxOpen, setListboxOpen] = useState(false);
+
+  - const [selectedCountry, setSelectedCountry] = useCountry();
+  + const [selectedCountry] = useCountry();
+
+  + const setSelectedCountry = useCallback(
+  +   ({isoCode, name}) => {
+  +     fetch(`/countries`, {
+  +       body: JSON.stringify({isoCode, name}),
+  +       method: 'POST',
+  +     })
+  +       .then(() => {
+  +         window.location.reload();
+  +       })
+  +       .catch((error) => {
+  +         console.error(error);
+  +       });
+  +   },
+  +   [],
+  + );
+
+    return (
+        ...
+    );
+  }
+  ```
+
+  4. Each server component page that depends on the selected country pulls it from the session with `useSession()`, rather than `serverProps`.
+
+  ```diff
+  // src/routes/products/[handle].server.jsx
+  + import { useSession } from '@shopify/hydrogen';
+
+  - export default function Product({country = {isoCode: 'US'}}) {
+  + export default function Product() {
+      const {handle} = useRouteParams();
+  +   const {countryCode = 'US'} = useSession();
+      ...
+    }
+  ```
+
+### Patch Changes
+
+- [#1264](https://github.com/Shopify/hydrogen/pull/1264) [`dc966e86`](https://github.com/Shopify/hydrogen/commit/dc966e86b35ffc8a41d8d62e129884926b8db8bc) Thanks [@arlyxiao](https://github.com/arlyxiao)! - Add more bots into user agents
+
+* [#1245](https://github.com/Shopify/hydrogen/pull/1245) [`07866e82`](https://github.com/Shopify/hydrogen/commit/07866e8277dfa3195ef1896b16a58df495a9155f) Thanks [@0x15f](https://github.com/0x15f)! - [#1245](https://github.com/Shopify/hydrogen/pull/1245) - Support optional `priority` prop on Image component. When `true`, the image will be eagerly loaded. Defaults to `false`.
+
+- [#1272](https://github.com/Shopify/hydrogen/pull/1272) [`c1888652`](https://github.com/Shopify/hydrogen/commit/c188865255c5f20d9db285e375c57127030e23e6) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Remove flight chunk
+
+## 0.18.0
+
+### Minor Changes
+
+- [#1065](https://github.com/Shopify/hydrogen/pull/1065) [`81ae47fd`](https://github.com/Shopify/hydrogen/commit/81ae47fdb01be06af155a61e574d43c73122c414) Thanks [@frandiox](https://github.com/frandiox)! - A new config file `hydrogen.config.js` replaces the existing `shopify.config.js` in your Hydrogen app.
+
+  ## Introducing `hydrogen.config.js`
+
+  Hydrogen apps now expect a `hydrogen.config.js` in the root folder. This config file accepts Shopify storefront credentials, routes, session configuration, and more.
+
+  To migrate existing apps, you should create a `hydrogen.config.js` (or `hydrogen.config.ts`) file in your Hydrogen app:
+
+  ```js
+  import {defineConfig} from '@shopify/hydrogen/config';
+  import {
+    CookieSessionStorage,
+    PerformanceMetricsServerAnalyticsConnector,
+  } from '@shopify/hydrogen';
+
+  export default defineConfig({
+    routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+    shopify: {
+      storeDomain: 'YOUR_STORE.myshopify.com',
+      storefrontToken: 'YOUR_STOREFRONT_TOKEN',
+      storefrontApiVersion: '2022-07',
+    },
+    session: CookieSessionStorage('__session', {
+      path: '/',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 30,
+    }),
+    serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+  });
+  ```
+
+  Then, update your `App.server.jsx` to remove previous arguments from `renderHydrogen()`:
+
+  ```diff
+  import renderHydrogen from '@shopify/hydrogen/entry-server';
+
+  -function App({routes}) {
+  +function App() {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+  -      <ShopifyProvider shopifyConfig={shopifyConfig}>
+  +      <ShopifyProvider>
+          <CartProvider>
+            <DefaultSeo />
+            <Router>
+  -            <FileRoutes routes={routes} />
+  +            <FileRoutes />
+              <Route path="*" page={<NotFound />} />
+            </Router>
+          </CartProvider>
+          <PerformanceMetrics />
+          {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+        </ShopifyProvider>
+      </Suspense>
+    );
+  }
+
+  -const routes = import.meta.globEager('./routes/**/*.server.[jt](s|sx)');
+  -
+  -export default renderHydrogen(App, {
+  -  routes,
+  -  shopifyConfig,
+  -  session: CookieSessionStorage('__session', {
+  -    path: '/',
+  -    httpOnly: true,
+  -    secure: process.env.NODE_ENV === 'production',
+  -    sameSite: 'strict',
+  -    maxAge: 60 * 60 * 24 * 30,
+  -  }),
+  -  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+  -});
+  +export default renderHydrogen(App);
+  ```
+
+  Next, update `vite.config.js` in your app to remove references to `shopifyConfig`:
+
+  ```diff
+  import {defineConfig} from 'vite';
+  import hydrogen from '@shopify/hydrogen/plugin';
+  -import shopifyConfig from './shopify.config';
+
+  // https://vitejs.dev/config/
+  export default defineConfig({
+  -  plugins: [hydrogen(shopifyConfig)],
+  +  plugins: [hydrogen()],
+  ```
+
+  Finally, delete `shopify.config.js` from your app.
+
+  [Read more about the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+
+* [#1214](https://github.com/Shopify/hydrogen/pull/1214) [`58ef6d69`](https://github.com/Shopify/hydrogen/commit/58ef6d69f1148e7bc8452fa77e7e8f54396c6105) Thanks [@frehner](https://github.com/frehner)! - Upgraded SFAPI version to 2022-07
+
+- [#1232](https://github.com/Shopify/hydrogen/pull/1232) [`d3956d62`](https://github.com/Shopify/hydrogen/commit/d3956d623adb86371ab214b102b53c62ea9ce26c) Thanks [@arlyxiao](https://github.com/arlyxiao)! - Upgrade body-parser in hydrogen package
+
+### Patch Changes
+
+- [#1211](https://github.com/Shopify/hydrogen/pull/1211) [`f3d26511`](https://github.com/Shopify/hydrogen/commit/f3d26511b1b0b94de1a43f76a0be9d99b5f2a8f7) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Build chunks are inside assets folder
+
+* [#1215](https://github.com/Shopify/hydrogen/pull/1215) [`a0ed7c06`](https://github.com/Shopify/hydrogen/commit/a0ed7c06d045a0063a356097dafcc25e5361aad1) Thanks [@frehner](https://github.com/frehner)! - `useMoney` now returns two additional properties: `withoutTrailingZeros` and `withoutTrailingZerosAndCurrency`
+
+  `<Money />` now has two additional and optional props: `withoutMoney` and `withoutCurrency`.
+
+- [#1242](https://github.com/Shopify/hydrogen/pull/1242) [`c277c688`](https://github.com/Shopify/hydrogen/commit/c277c68836d6d75d509cc68c74e3ccd33706a0c7) Thanks [@blittle](https://github.com/blittle)! - Prevent JSON parsing from prototype poisoning vulnerabilities
+
+* [#1210](https://github.com/Shopify/hydrogen/pull/1210) [`a844d26e`](https://github.com/Shopify/hydrogen/commit/a844d26ef258c28fded5293054389b719f0b86f4) Thanks [@blittle](https://github.com/blittle)! - Add eslint back and fix stale product options
+
 ## 0.17.3
 
 ### Patch Changes
