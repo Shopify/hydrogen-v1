@@ -18,7 +18,7 @@ export function request(
   data?: any,
   contentType?: string
 ): void {
-  // Do something with the analytic event
+  // Do something with the analytic event.
 }
 ```
 
