@@ -1,0 +1,25 @@
+name: Compile templates
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Compile the typescript templates and push them to main
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Install the packages
+        run: yarn install --frozen-lockfile --ignore-engines --network-timeout 36000
+
+      - name: Compile hello-world
+        run: node scripts/compile-template.mjs hello-world
+
+      - name: Push to main branch
+        run: |
+          git show-ref
+          git config user.email "hydrogen@shopify.com"
+          git config user.name "Hydrogen Bot"
+          git push origin HEAD:main --force
