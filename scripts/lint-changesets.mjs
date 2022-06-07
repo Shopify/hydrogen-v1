@@ -35,7 +35,7 @@ function lint() {
       );
     }
 
-    console.log(`No ignored packages found in changeset ${filePath}.`);
+    console.log(`✅ No ignored packages found in changeset ${filePath}.`);
 
     /**
      * Ensure the first line of the changeset is NOT a markdown header:
@@ -54,14 +54,16 @@ function lint() {
       );
     }
 
-    console.log(`First line begins with plain text in changeset ${filePath}.`);
+    console.log(
+      `✅ First line begins with plain text in changeset ${filePath}.`
+    );
   });
 }
 
 try {
   lint();
 } catch (e) {
-  console.error(e.message);
+  console.error(`❌ ${e.message}`);
   // eslint-disable-next-line no-process-exit
   process.exit(1);
 }
