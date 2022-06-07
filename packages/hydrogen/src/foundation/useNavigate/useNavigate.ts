@@ -9,6 +9,9 @@ type NavigationOptions = {
 
   /** The custom client state with the navigation. */
   clientState?: any;
+
+  /** Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to true. */
+  scroll?: any;
 };
 
 /**
@@ -21,9 +24,16 @@ export function useNavigate() {
     path: string,
     options: NavigationOptions = {replace: false, reloadDocument: false}
   ) => {
+    const state = {
+      ...options?.clientState,
+      scroll: options?.scroll ?? true,
+    };
+
     // @todo wait for RSC and then change focus for a11y?
-    if (options?.replace)
-      router.history.replace(path, options?.clientState || {});
-    else router.history.push(path, options?.clientState || {});
+    if (options?.replace) {
+      router.history.replace(path, state);
+    } else {
+      router.history.push(path, state);
+    }
   };
 }

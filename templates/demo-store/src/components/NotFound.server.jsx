@@ -39,7 +39,8 @@ function NotFoundHero() {
 export default function NotFound({response}) {
   if (response) {
     response.doNotStream();
-    response.writeHead({status: 404, statusText: 'Not found'});
+    response.status = 404;
+    response.statusText = 'Not found';
   }
 
   const {countryCode = 'US'} = useSession();

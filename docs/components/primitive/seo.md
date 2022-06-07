@@ -4,7 +4,7 @@ title: Seo
 description: The Seo component renders SEO information on a webpage.
 ---
 
-The `Seo` component renders SEO information on a webpage.
+The `Seo` component renders SEO information on a webpage. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 

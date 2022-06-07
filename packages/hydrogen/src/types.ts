@@ -1,7 +1,7 @@
 import type {ServerResponse} from 'http';
-import type {Logger} from './utilities/log/log';
-import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
+import type {Logger, LoggerConfig} from './utilities/log/log';
+import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
+import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
 import type {
   Metafield,
   ProductVariant,
@@ -10,29 +10,33 @@ import type {
 } from './storefront-api-types';
 import type {SessionStorageAdapter} from './foundation/session/session';
 
-type CommonOptions = {
-  App: any;
+export type AssembleHtmlParams = {
+  ssrHtml: string;
+  rscPayload?: string;
   routes?: ImportGlobEagerOutput;
-  request: ServerComponentRequest;
-  componentResponse: ServerComponentResponse;
+  request: HydrogenRequest;
+  template: string;
+};
+
+export type RunSsrParams = {
+  state: Record<string, any>;
+  rsc: {readable: ReadableStream; didError: () => Error | undefined};
+  routes?: ImportGlobEagerOutput;
+  request: HydrogenRequest;
+  response: HydrogenResponse;
   log: Logger;
   dev?: boolean;
-};
-
-export type RendererOptions = CommonOptions & {
   template: string;
   nonce?: string;
+  nodeResponse?: ServerResponse;
 };
 
-export type StreamerOptions = CommonOptions & {
-  response?: ServerResponse;
-  template: string;
-  nonce?: string;
-};
-
-export type HydratorOptions = CommonOptions & {
-  response?: ServerResponse;
-  isStreamable: boolean;
+export type RunRscParams = {
+  App: any;
+  state: Record<string, any>;
+  log: Logger;
+  request: HydrogenRequest;
+  response: HydrogenResponse;
 };
 
 export type ShopifyConfig = {
@@ -40,6 +44,7 @@ export type ShopifyConfig = {
   storeDomain: string;
   storefrontToken: string;
   storefrontApiVersion: string;
+  multipassSecret?: string;
 };
 
 export type Hook = (
@@ -51,13 +56,20 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
-export type HydrogenConfigRoutes = {
-  files?: ImportGlobEagerOutput;
-  basePath?: string;
-  dirPrefix?: string;
+export type InlineHydrogenRoutes =
+  | string
+  | {
+      files: string;
+      basePath?: string;
+    };
+
+export type ResolvedHydrogenRoutes = {
+  files: ImportGlobEagerOutput;
+  dirPrefix: string;
+  basePath: string;
 };
 
-type ConfigFetcher<T> = (request: ServerComponentRequest) => T | Promise<T>;
+type ConfigFetcher<T> = (request: HydrogenRequest) => T | Promise<T>;
 
 export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
 
@@ -70,15 +82,19 @@ export type ServerAnalyticsConnector = {
   ) => void;
 };
 
-export type HydrogenConfig = {
-  routes?: HydrogenConfigRoutes | ImportGlobEagerOutput;
+export type InlineHydrogenConfig = ClientConfig & {
+  routes?: InlineHydrogenRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
-  enableStreaming?: (request: ServerComponentRequest) => boolean;
 };
 
-export type ClientHandlerConfig = {
+export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
+  routes: ResolvedHydrogenRoutes;
+};
+
+export type ClientConfig = {
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;
   showDevTools?: boolean;
@@ -86,7 +102,7 @@ export type ClientHandlerConfig = {
 
 export type ClientHandler = (
   App: React.ElementType,
-  config: ClientHandlerConfig
+  config: ClientConfig
 ) => Promise<void>;
 
 export interface GraphQLConnection<T> {

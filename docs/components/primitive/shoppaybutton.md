@@ -4,7 +4,7 @@ title: ShopPayButton
 description: The ShopPayButton component renders a button that redirects to the Shop Pay checkout.
 ---
 
-The `ShopPayButton` component renders a button that redirects to the Shop Pay checkout.
+The `ShopPayButton` component renders a button that redirects to the Shop Pay checkout. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
