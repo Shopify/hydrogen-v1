@@ -1,38 +1,48 @@
 import {NoStore, gql} from '@shopify/hydrogen';
-import {getApiErrorMessage} from '../../components/utilities/api.helper';
 
 /**
- * This API route is used by the form on `/account/activate/[id]/[activationToken]`
+ * This API route is used by the form on `/account/reset/[resetToken]`
  * complete the reset of the user's password.
  */
 export async function api(request, {session, queryShop}) {
   const jsonBody = await request.json();
 
-  if (!jsonBody?.id || !jsonBody?.password || !jsonBody?.activationToken) {
+  if (
+    !jsonBody.id ||
+    jsonBody.id === '' ||
+    !jsonBody.password ||
+    jsonBody.password === '' ||
+    !jsonBody.resetToken ||
+    jsonBody.resetToken === ''
+  ) {
     return new Response(
-      JSON.stringify({error: 'Incorrect password or activation token.'}),
+      JSON.stringify({error: 'Incorrect password or reset token.'}),
       {
         status: 400,
       },
     );
   }
 
-  const {data, errors} = await queryShop({
-    query: ACTIVATE,
+  const {data, error} = await queryShop({
+    query: LOGIN,
     variables: {
       id: `gid://shopify/Customer/${jsonBody.id}`,
       input: {
         password: jsonBody.password,
-        activationToken: jsonBody.activationToken,
+        resetToken: jsonBody.resetToken,
       },
     },
     cache: NoStore(),
   });
 
-  if (data?.customerActivate?.customerAccessToken?.accessToken) {
+  if (
+    data &&
+    data.customerReset &&
+    data.customerReset.customerAccessToken !== null
+  ) {
     await session.set(
       'customerAccessToken',
-      data.customerActivate.customerAccessToken.accessToken,
+      data.customerReset.customerAccessToken,
     );
 
     return new Response(null, {
@@ -41,16 +51,16 @@ export async function api(request, {session, queryShop}) {
   } else {
     return new Response(
       JSON.stringify({
-        error: getApiErrorMessage('customerActivate', data, errors),
+        error: data ? data.customerReset.customerUserErrors : error,
       }),
       {status: 401},
     );
   }
 }
 
-const ACTIVATE = gql`
-  mutation customerActivate($id: ID!, $input: CustomerActivateInput!) {
-    customerActivate(id: $id, input: $input) {
+const LOGIN = gql`
+  mutation customerReset($id: ID!, $input: CustomerResetInput!) {
+    customerReset(id: $id, input: $input) {
       customerAccessToken {
         accessToken
         expiresAt

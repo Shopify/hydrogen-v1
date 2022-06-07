@@ -5,14 +5,7 @@ description: The Metafield component renders the value of a Storefront API's Met
 ---
 
 The `Metafield` component renders the value of a Storefront
-API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
-
-When a render function is provided, it passes the Metafield object with a value
-that was parsed according to the Metafield's `type` field. For more information,
-refer to the [Render props](#render-props) section.
-
-When no render function is provided, it renders a smart default of the
-Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
+API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -57,10 +50,6 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 | `page_reference`         | A `span` containing the page reference GID.                                                                                                                                                               |
 | `variant_reference`      | A `span` containing the variant reference GID.                                                                                                                                                            |
 | `url`                    | An `a` tag with the `href` corresponding to the URL and the label corresponding to the URL.                                                                                                               |
-
-## Render props
-
-The `Metafield` components provides the Metafield object with a `value` that was parsed according to the `Metafield`'s `type` field. For details on the parsed value, refer to the [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue) utility.
 
 ## Component type
 

@@ -1,5 +1,5 @@
 {
   "installDependencies": true,
-  "startCommand": "npm run dev",
+  "startCommand": "yarn vite",
   "compileTrigger": "save"
 }

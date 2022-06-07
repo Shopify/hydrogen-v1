@@ -5,7 +5,7 @@ description: The Image component renders an image for the Storefront API's Image
 ---
 
 The `Image` component renders an image for the Storefront API's
-[Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
+[Image object](https://shopify.dev/api/storefront/reference/common-objects/image). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 

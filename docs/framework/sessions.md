@@ -4,6 +4,13 @@ title: Session management
 description: Learn about the Hydrogen framework's built-in support for session management.
 ---
 
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>Session management is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
+
+</aside>
+
 The Hydrogen framework includes built-in support for session management. This guide provides an introduction to how sessions work in your Hydrogen app.
 
 ## What's a session?

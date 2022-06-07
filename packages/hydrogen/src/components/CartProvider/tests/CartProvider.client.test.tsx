@@ -17,6 +17,10 @@ jest.mock('../hooks.client', () => {
   };
 });
 
+jest.mock('../../../foundation/useServerProps', () => ({
+  userServerProps: jest.fn(),
+}));
+
 describe('<CartProvider />', () => {
   beforeEach(() => {
     fetchCartMock.mockReturnValue({data: {}});
