@@ -1,5 +1,9 @@
 import * as React from 'react';
-import {getShopifyImageDimensions, shopifyImageLoader} from '../../utilities';
+import {
+  getShopifyImageDimensions,
+  shopifyImageLoader,
+  addImageSizeParametersToUrl,
+} from '../../utilities';
 import type {Image as ImageType} from '../../storefront-api-types';
 import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
 
@@ -62,6 +66,10 @@ export type ShopifyImageProps = Omit<HtmlImageProps, 'src'> & {
    * 'src' shouldn't be passed when 'data' is used.
    */
   src?: never;
+  /**
+   * An array of pixel widths to overwrite the default generated srcset. For example, `[300, 600, 800]`.
+   */
+  widths?: (HtmlImageProps['width'] | ImageType['width'])[];
 };
 
 function ShopifyImage({
@@ -71,6 +79,7 @@ function ShopifyImage({
   loading,
   loader = shopifyImageLoader,
   loaderOptions,
+  widths,
   ...rest
 }: ShopifyImageProps) {
   if (!data.url) {
@@ -116,6 +125,20 @@ function ShopifyImage({
     }
   }
 
+  // determining what the intended width of the image is. For example, if the width is specified and lower than the image width, then that is the maximum image width
+  // to prevent generating a srcset with widths bigger than needed or to generate images that would distort because of being larger than original
+  const maxWidth =
+    width && finalWidth && width < finalWidth ? width : finalWidth;
+  const finalSrcset =
+    rest.srcSet ??
+    internalImageSrcSet({
+      ...loaderOptions,
+      widths,
+      src: data.url,
+      width: maxWidth,
+      loader,
+    });
+
   /* eslint-disable hydrogen/prefer-image-component */
   return (
     <img
@@ -126,6 +149,7 @@ function ShopifyImage({
       src={finalSrc}
       width={finalWidth ?? undefined}
       height={finalHeight ?? undefined}
+      srcSet={finalSrcset}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
@@ -176,6 +200,10 @@ type ExternalImageProps<GenericLoaderOpts> = SetRequired<
    * 'data' shouldn't be passed when 'src' is used.
    */
   data?: never;
+  /**
+   * An array of pixel widths to generate a srcset. For example, `[300, 600, 800]`.
+   */
+  widths?: HtmlImageProps['width'][];
 };
 
 function ExternalImage<GenericLoaderOpts>({
@@ -185,6 +213,7 @@ function ExternalImage<GenericLoaderOpts>({
   alt,
   loader,
   loaderOptions,
+  widths,
   loading,
   ...rest
 }: ExternalImageProps<GenericLoaderOpts>) {
@@ -200,6 +229,15 @@ function ExternalImage<GenericLoaderOpts>({
     );
   }
 
+  if (
+    widths &&
+    Array.isArray(widths) &&
+    widths.some((size) => isNaN(size as number))
+  )
+    throw new Error(
+      `<Image/>: the 'widths' property must be an array of numbers`
+    );
+
   let finalSrc = src;
 
   if (loader) {
@@ -207,6 +245,25 @@ function ExternalImage<GenericLoaderOpts>({
     if (typeof finalSrc !== 'string' || !finalSrc) {
       throw new Error(`<Image/>: 'loader' did not return a valid string`);
     }
+  }
+  let finalSrcset = rest.srcSet ?? undefined;
+
+  if (!finalSrcset && loader && widths) {
+    // Height is a requirement in the LoaderProps, so  to keep the aspect ratio, we must determine the height based on the default values
+    const heightToWidthRatio =
+      parseInt(height as string) / parseInt(width as string);
+    finalSrcset = widths
+      ?.map((width) => parseInt(width as string, 10))
+      ?.map(
+        (width) =>
+          `${loader({
+            ...loaderOptions,
+            src,
+            width,
+            height: Math.floor(width * heightToWidthRatio),
+          })} ${width}w`
+      )
+      .join(', ');
   }
 
   /* eslint-disable hydrogen/prefer-image-component */
@@ -218,7 +275,51 @@ function ExternalImage<GenericLoaderOpts>({
       height={height}
       alt={alt ?? ''}
       loading={loading ?? 'lazy'}
+      srcSet={finalSrcset}
     />
   );
   /* eslint-enable hydrogen/prefer-image-component */
+}
+
+type InternalShopifySrcSetGeneratorsParams = Simplify<
+  ShopifyLoaderOptions & {
+    src: ImageType['url'];
+    widths?: (HtmlImageProps['width'] | ImageType['width'])[];
+    loader?: (params: ShopifyLoaderParams) => string;
+  }
+>;
+// based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
+// reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
+const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
+function internalImageSrcSet({
+  src,
+  width,
+  crop,
+  scale,
+  widths,
+  loader,
+}: InternalShopifySrcSetGeneratorsParams) {
+  const hasCustomWidths = widths && Array.isArray(widths);
+  if (hasCustomWidths && widths.some((size) => isNaN(size as number)))
+    throw new Error(`<Image/>: the 'widths' must be an array of numbers`);
+
+  let setSizes = hasCustomWidths ? widths : IMG_SRC_SET_SIZES;
+  if (
+    !hasCustomWidths &&
+    width &&
+    width < IMG_SRC_SET_SIZES[IMG_SRC_SET_SIZES.length - 1]
+  )
+    setSizes = IMG_SRC_SET_SIZES.filter((size) => size <= width);
+  const srcGenerator = loader ? loader : addImageSizeParametersToUrl;
+  return setSizes
+    .map(
+      (size) =>
+        `${srcGenerator({
+          src,
+          width: size,
+          crop,
+          scale,
+        })} ${size}w`
+    )
+    .join(', ');
 }
