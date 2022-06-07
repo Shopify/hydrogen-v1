@@ -251,7 +251,7 @@
   And update the `preview` script in your `package.json`:
 
   ```diff
-  -    "preview": "npx @shopify/hydrogen-cli@latest preview",
+  -    "preview": "npx @shopify/create-hydrogen-cli@latest preview",
   +    "preview": "shopify hydrogen preview",
   ```
 
