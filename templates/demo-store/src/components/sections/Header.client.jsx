@@ -101,15 +101,11 @@ function DesktopHeader({title, isHome, menu}) {
         </Link>
         <nav className="flex gap-8">
           {/* Top level menu items */}
-          {(menu?.items || []).map((item) => {
-            if (!item?.url) return null;
-            // const {to, target} = parseMenuItem(item)
-            return (
-              <Link key={item.id} to={item.to} target={item.target}>
-                {item.title}
-              </Link>
-            );
-          })}
+          {(menu?.items || []).map((item) => (
+            <Link key={item.id} to={item.to} target={item.target}>
+              {item.title}
+            </Link>
+          ))}
         </nav>
       </div>
       <div className="flex items-center gap-1">
