@@ -8,9 +8,10 @@ import {
 
 import {Suspense} from 'react';
 import {Header, Footer} from '~/components/sections';
+import {parseMenu} from '~/lib/utils';
 
-const HEADER_MENU_HANDLE = 'main-menu';
-const FOOTER_MENU_HANDLE = 'footer-menu';
+const HEADER_MENU_HANDLE = 'header-hydrogen';
+const FOOTER_MENU_HANDLE = 'footer-hydrogen';
 
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
@@ -30,8 +31,10 @@ export default function Layout({children}) {
   });
 
   const shopName = data ? data.shop.name : 'Hydrogen Demo Store';
-  const headerMenu = data ? data.headerMenu : null;
-  const footerMenu = data ? data.footerMenu : null;
+  const shopDomain = data ? data.shop.primaryDomain.url : null;
+
+  const headerMenu = parseMenu(data ? data.headerMenu : null, shopDomain);
+  const footerMenu = parseMenu(data ? data.footerMenu : null, shopDomain);
 
   return (
     <LocalizationProvider preload="*">
@@ -73,6 +76,9 @@ const QUERY = gql`
   ) @inContext(language: $language) {
     shop {
       name
+      primaryDomain {
+        url
+      }
     }
 
     headerMenu: menu(handle: $headerMenuHandle) {
@@ -82,12 +88,6 @@ const QUERY = gql`
       title
       items {
         ...MenuItem
-        items {
-          ...MenuItem
-          items {
-            ...MenuItem
-          }
-        }
       }
     }
 
@@ -100,9 +100,6 @@ const QUERY = gql`
         ...MenuItem
         items {
           ...MenuItem
-          items {
-            ...MenuItem
-          }
         }
       }
     }
