@@ -1,6 +1,5 @@
 ---
 '@shopify/hydrogen': minor
-'demo-store': minor
 ---
 
 - Fix clientAnalytics not waiting for all server analytics data before sending page view event
