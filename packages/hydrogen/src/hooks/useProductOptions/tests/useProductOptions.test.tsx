@@ -153,6 +153,34 @@ describe('useProductOptions', () => {
     });
   });
 
+  it('allows setSelectedVariant to be called with null to deselect', async () => {
+    function Component() {
+      const {selectedVariant, setSelectedVariant} = useProductOptions({
+        variants: VARIANTS,
+      });
+
+      return (
+        <>
+          <label htmlFor="variant">Variant</label>
+          <button onClick={() => setSelectedVariant(null)}>Unselect</button>
+          <div>{JSON.stringify(selectedVariant)}</div>
+        </>
+      );
+    }
+
+    const wrapper = await mount(<Component />);
+
+    expect(wrapper).toContainReactComponent('div', {
+      children: JSON.stringify(VARIANTS.edges[0].node),
+    });
+
+    await wrapper.find('button')!.trigger('onClick');
+
+    expect(wrapper).toContainReactComponent('div', {
+      children: JSON.stringify(null),
+    });
+  });
+
   it('provides out of stock helper', async () => {
     function Component() {
       const {options, setSelectedOption, isOptionInStock} = useProductOptions({
