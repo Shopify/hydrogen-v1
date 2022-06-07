@@ -17,7 +17,7 @@ export * from './foundation/useServerProps';
 export {FileRoutes} from './foundation/FileRoutes/FileRoutes.server';
 export {Route} from './foundation/Route/Route.server';
 export {Router} from './foundation/Router/Router.server';
-export {log, setLogger, setLoggerOptions, Logger} from './utilities/log';
+export {log, type Logger} from './utilities/log';
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
 export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server';
 export {
@@ -30,7 +30,7 @@ export {
   CacheWeeks,
   CacheMonths,
   CacheCustom,
-} from './framework/CachingStrategy';
+} from './foundation/Cache/strategies';
 export {useServerAnalytics} from './foundation/Analytics/hook';
 export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
 export {useSession} from './foundation/useSession/useSession';
