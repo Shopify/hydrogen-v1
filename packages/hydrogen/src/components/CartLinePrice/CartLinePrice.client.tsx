@@ -26,13 +26,5 @@ export function CartLinePrice(
     return null;
   }
 
-  return (
-    <Money
-      {...passthroughProps}
-      data={{
-        amount: `${moneyV2.amount}`,
-        currencyCode: moneyV2.currencyCode,
-      }}
-    />
-  );
+  return <Money {...passthroughProps} data={moneyV2} />;
 }

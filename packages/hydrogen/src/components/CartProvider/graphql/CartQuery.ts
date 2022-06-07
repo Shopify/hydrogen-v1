@@ -46,9 +46,11 @@ export type CartQueryQuery = {__typename?: 'QueryRoot'} & {
                       Types.MoneyV2,
                       'amount' | 'currencyCode'
                     >;
-                    compareAtAmount: {__typename?: 'MoneyV2'} & Pick<
-                      Types.MoneyV2,
-                      'amount' | 'currencyCode'
+                    compareAtAmount?: Types.Maybe<
+                      {__typename?: 'MoneyV2'} & Pick<
+                        Types.MoneyV2,
+                        'amount' | 'currencyCode'
+                      >
                     >;
                   };
                   merchandise: {__typename?: 'ProductVariant'} & Pick<

@@ -149,7 +149,7 @@ export type Article = HasMetafields &
     metafield?: Maybe<Metafield>;
     /**
      * A paginated list of metafields associated with the resource.
-     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
      *
      */
     metafields: MetafieldConnection;
@@ -334,7 +334,7 @@ export type Blog = HasMetafields &
     metafield?: Maybe<Metafield>;
     /**
      * A paginated list of metafields associated with the resource.
-     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
      *
      */
     metafields: MetafieldConnection;
@@ -947,36 +947,6 @@ export type CheckoutLineItemsArgs = {
 };
 
 /** Specifies the fields required to update a checkout's attributes. */
-export type CheckoutAttributesUpdateInput = {
-  /**
-   * Allows setting partial addresses on a Checkout, skipping the full validation of attributes.
-   * The required attributes are city, province, and country.
-   * Full validation of the addresses is still done at completion time. Defaults to `false` with
-   * each operation.
-   *
-   */
-  allowPartialAddresses?: InputMaybe<Scalars['Boolean']>;
-  /** A list of extra information that is added to the checkout. */
-  customAttributes?: InputMaybe<Array<AttributeInput>>;
-  /** The text of an optional note that a shop owner can attach to the checkout. */
-  note?: InputMaybe<Scalars['String']>;
-};
-
-/** Return type for `checkoutAttributesUpdate` mutation. */
-export type CheckoutAttributesUpdatePayload = {
-  __typename?: 'CheckoutAttributesUpdatePayload';
-  /** The updated checkout object. */
-  checkout: Checkout;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
-/** Specifies the fields required to update a checkout's attributes. */
 export type CheckoutAttributesUpdateV2Input = {
   /**
    * Allows setting partial addresses on a Checkout, skipping the full validation of attributes.
@@ -1038,57 +1008,9 @@ export type CheckoutCompleteFreePayload = {
   userErrors: Array<UserError>;
 };
 
-/** Return type for `checkoutCompleteWithCreditCard` mutation. */
-export type CheckoutCompleteWithCreditCardPayload = {
-  __typename?: 'CheckoutCompleteWithCreditCardPayload';
-  /** The checkout on which the payment was applied. */
-  checkout: Checkout;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /** A representation of the attempted payment. */
-  payment?: Maybe<Payment>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
 /** Return type for `checkoutCompleteWithCreditCardV2` mutation. */
 export type CheckoutCompleteWithCreditCardV2Payload = {
   __typename?: 'CheckoutCompleteWithCreditCardV2Payload';
-  /** The checkout on which the payment was applied. */
-  checkout?: Maybe<Checkout>;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /** A representation of the attempted payment. */
-  payment?: Maybe<Payment>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
-/** Return type for `checkoutCompleteWithTokenizedPayment` mutation. */
-export type CheckoutCompleteWithTokenizedPaymentPayload = {
-  __typename?: 'CheckoutCompleteWithTokenizedPaymentPayload';
-  /** The checkout on which the payment was applied. */
-  checkout: Checkout;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /** A representation of the attempted payment. */
-  payment?: Maybe<Payment>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
-/** Return type for `checkoutCompleteWithTokenizedPaymentV2` mutation. */
-export type CheckoutCompleteWithTokenizedPaymentV2Payload = {
-  __typename?: 'CheckoutCompleteWithTokenizedPaymentV2Payload';
   /** The checkout on which the payment was applied. */
   checkout?: Maybe<Checkout>;
   /** The list of errors that occurred from executing the mutation. */
@@ -1164,17 +1086,6 @@ export type CheckoutCreatePayload = {
   userErrors: Array<UserError>;
 };
 
-/** Return type for `checkoutCustomerAssociate` mutation. */
-export type CheckoutCustomerAssociatePayload = {
-  __typename?: 'CheckoutCustomerAssociatePayload';
-  /** The updated checkout object. */
-  checkout: Checkout;
-  /** The associated customer object. */
-  customer?: Maybe<Customer>;
-  /** The list of errors that occurred from executing the mutation. */
-  userErrors: Array<UserError>;
-};
-
 /** Return type for `checkoutCustomerAssociateV2` mutation. */
 export type CheckoutCustomerAssociateV2Payload = {
   __typename?: 'CheckoutCustomerAssociateV2Payload';
@@ -1191,39 +1102,11 @@ export type CheckoutCustomerAssociateV2Payload = {
   userErrors: Array<UserError>;
 };
 
-/** Return type for `checkoutCustomerDisassociate` mutation. */
-export type CheckoutCustomerDisassociatePayload = {
-  __typename?: 'CheckoutCustomerDisassociatePayload';
-  /** The updated checkout object. */
-  checkout: Checkout;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
 /** Return type for `checkoutCustomerDisassociateV2` mutation. */
 export type CheckoutCustomerDisassociateV2Payload = {
   __typename?: 'CheckoutCustomerDisassociateV2Payload';
   /** The updated checkout object. */
   checkout?: Maybe<Checkout>;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
-/** Return type for `checkoutDiscountCodeApply` mutation. */
-export type CheckoutDiscountCodeApplyPayload = {
-  __typename?: 'CheckoutDiscountCodeApplyPayload';
-  /** The updated checkout object. */
-  checkout: Checkout;
   /** The list of errors that occurred from executing the mutation. */
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
@@ -1252,20 +1135,6 @@ export type CheckoutDiscountCodeRemovePayload = {
   __typename?: 'CheckoutDiscountCodeRemovePayload';
   /** The updated checkout object. */
   checkout?: Maybe<Checkout>;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
-/** Return type for `checkoutEmailUpdate` mutation. */
-export type CheckoutEmailUpdatePayload = {
-  __typename?: 'CheckoutEmailUpdatePayload';
-  /** The checkout object with the updated email. */
-  checkout: Checkout;
   /** The list of errors that occurred from executing the mutation. */
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
@@ -1376,34 +1245,6 @@ export enum CheckoutErrorCode {
   /** Unable to apply discount. */
   UnableToApply = 'UNABLE_TO_APPLY',
 }
-
-/** Return type for `checkoutGiftCardApply` mutation. */
-export type CheckoutGiftCardApplyPayload = {
-  __typename?: 'CheckoutGiftCardApplyPayload';
-  /** The updated checkout object. */
-  checkout: Checkout;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
-/** Return type for `checkoutGiftCardRemove` mutation. */
-export type CheckoutGiftCardRemovePayload = {
-  __typename?: 'CheckoutGiftCardRemovePayload';
-  /** The updated checkout object. */
-  checkout: Checkout;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
 
 /** Return type for `checkoutGiftCardRemoveV2` mutation. */
 export type CheckoutGiftCardRemoveV2Payload = {
@@ -1551,20 +1392,6 @@ export type CheckoutLineItemsUpdatePayload = {
   userErrors: Array<UserError>;
 };
 
-/** Return type for `checkoutShippingAddressUpdate` mutation. */
-export type CheckoutShippingAddressUpdatePayload = {
-  __typename?: 'CheckoutShippingAddressUpdatePayload';
-  /** The updated checkout object. */
-  checkout: Checkout;
-  /** The list of errors that occurred from executing the mutation. */
-  checkoutUserErrors: Array<CheckoutUserError>;
-  /**
-   * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
-   */
-  userErrors: Array<UserError>;
-};
-
 /** Return type for `checkoutShippingAddressUpdateV2` mutation. */
 export type CheckoutShippingAddressUpdateV2Payload = {
   __typename?: 'CheckoutShippingAddressUpdateV2Payload';
@@ -1627,7 +1454,7 @@ export type Collection = HasMetafields &
     metafield?: Maybe<Metafield>;
     /**
      * A paginated list of metafields associated with the resource.
-     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
      *
      */
     metafields: MetafieldConnection;
@@ -2311,24 +2138,6 @@ export type CreditCard = {
  * a Shopify vaulted credit card payment.
  *
  */
-export type CreditCardPaymentInput = {
-  /** The amount of the payment. */
-  amount: Scalars['Money'];
-  /** The billing address for the payment. */
-  billingAddress: MailingAddressInput;
-  /** A unique client generated key used to avoid duplicate charges. When a duplicate payment is found, the original is returned instead of creating a new one. For more information, refer to [Idempotent requests](https://shopify.dev/api/usage/idempotent-requests). */
-  idempotencyKey: Scalars['String'];
-  /** Executes the payment in test mode if possible. Defaults to `false`. */
-  test?: InputMaybe<Scalars['Boolean']>;
-  /** The ID returned by Shopify's Card Vault. */
-  vaultId: Scalars['String'];
-};
-
-/**
- * Specifies the fields required to complete a checkout with
- * a Shopify vaulted credit card payment.
- *
- */
 export type CreditCardPaymentInputV2 = {
   /** The billing address for the payment. */
   billingAddress: MailingAddressInput;
@@ -2724,7 +2533,7 @@ export type Customer = HasMetafields & {
   metafield?: Maybe<Metafield>;
   /**
    * A paginated list of metafields associated with the resource.
-   * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+   * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
    *
    */
   metafields: MetafieldConnection;
@@ -3450,7 +3259,7 @@ export type HasMetafields = {
   metafield?: Maybe<Metafield>;
   /**
    * A paginated list of metafields associated with the resource.
-   * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+   * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
    *
    */
   metafields: MetafieldConnection;
@@ -4475,76 +4284,26 @@ export type Mutation = {
   cartLinesUpdate?: Maybe<CartLinesUpdatePayload>;
   /** Updates the note on the cart. */
   cartNoteUpdate?: Maybe<CartNoteUpdatePayload>;
-  /**
-   * Updates the attributes of a checkout if `allowPartialAddresses` is `true`.
-   * @deprecated Use `checkoutAttributesUpdateV2` instead
-   */
-  checkoutAttributesUpdate?: Maybe<CheckoutAttributesUpdatePayload>;
   /** Updates the attributes of a checkout if `allowPartialAddresses` is `true`. */
   checkoutAttributesUpdateV2?: Maybe<CheckoutAttributesUpdateV2Payload>;
   /** Completes a checkout without providing payment information. You can use this mutation for free items or items whose purchase price is covered by a gift card. */
   checkoutCompleteFree?: Maybe<CheckoutCompleteFreePayload>;
-  /**
-   * Completes a checkout using a credit card token from Shopify's Vault.
-   * @deprecated Use `checkoutCompleteWithCreditCardV2` instead
-   */
-  checkoutCompleteWithCreditCard?: Maybe<CheckoutCompleteWithCreditCardPayload>;
   /** Completes a checkout using a credit card token from Shopify's card vault. Before you can complete checkouts using CheckoutCompleteWithCreditCardV2, you need to  [_request payment processing_](https://shopify.dev/apps/channels/getting-started#request-payment-processing). */
   checkoutCompleteWithCreditCardV2?: Maybe<CheckoutCompleteWithCreditCardV2Payload>;
-  /**
-   * Completes a checkout with a tokenized payment.
-   * @deprecated Use `checkoutCompleteWithTokenizedPaymentV2` instead
-   */
-  checkoutCompleteWithTokenizedPayment?: Maybe<CheckoutCompleteWithTokenizedPaymentPayload>;
-  /**
-   * Completes a checkout with a tokenized payment.
-   * @deprecated Use `checkoutCompleteWithTokenizedPaymentV3` instead
-   */
-  checkoutCompleteWithTokenizedPaymentV2?: Maybe<CheckoutCompleteWithTokenizedPaymentV2Payload>;
   /** Completes a checkout with a tokenized payment. */
   checkoutCompleteWithTokenizedPaymentV3?: Maybe<CheckoutCompleteWithTokenizedPaymentV3Payload>;
   /** Creates a new checkout. */
   checkoutCreate?: Maybe<CheckoutCreatePayload>;
-  /**
-   * Associates a customer to the checkout.
-   * @deprecated Use `checkoutCustomerAssociateV2` instead
-   */
-  checkoutCustomerAssociate?: Maybe<CheckoutCustomerAssociatePayload>;
   /** Associates a customer to the checkout. */
   checkoutCustomerAssociateV2?: Maybe<CheckoutCustomerAssociateV2Payload>;
-  /**
-   * Disassociates the current checkout customer from the checkout.
-   * @deprecated Use `checkoutCustomerDisassociateV2` instead
-   */
-  checkoutCustomerDisassociate?: Maybe<CheckoutCustomerDisassociatePayload>;
   /** Disassociates the current checkout customer from the checkout. */
   checkoutCustomerDisassociateV2?: Maybe<CheckoutCustomerDisassociateV2Payload>;
-  /**
-   * Applies a discount to an existing checkout using a discount code.
-   * @deprecated Use `checkoutDiscountCodeApplyV2` instead
-   */
-  checkoutDiscountCodeApply?: Maybe<CheckoutDiscountCodeApplyPayload>;
   /** Applies a discount to an existing checkout using a discount code. */
   checkoutDiscountCodeApplyV2?: Maybe<CheckoutDiscountCodeApplyV2Payload>;
   /** Removes the applied discounts from an existing checkout. */
   checkoutDiscountCodeRemove?: Maybe<CheckoutDiscountCodeRemovePayload>;
-  /**
-   * Updates the email on an existing checkout.
-   * @deprecated Use `checkoutEmailUpdateV2` instead
-   */
-  checkoutEmailUpdate?: Maybe<CheckoutEmailUpdatePayload>;
   /** Updates the email on an existing checkout. */
   checkoutEmailUpdateV2?: Maybe<CheckoutEmailUpdateV2Payload>;
-  /**
-   * Applies a gift card to an existing checkout using a gift card code. This will replace all currently applied gift cards.
-   * @deprecated Use `checkoutGiftCardsAppend` instead
-   */
-  checkoutGiftCardApply?: Maybe<CheckoutGiftCardApplyPayload>;
-  /**
-   * Removes an applied gift card from the checkout.
-   * @deprecated Use `checkoutGiftCardRemoveV2` instead
-   */
-  checkoutGiftCardRemove?: Maybe<CheckoutGiftCardRemovePayload>;
   /** Removes an applied gift card from the checkout. */
   checkoutGiftCardRemoveV2?: Maybe<CheckoutGiftCardRemoveV2Payload>;
   /** Appends gift cards to an existing checkout. */
@@ -4557,11 +4316,6 @@ export type Mutation = {
   checkoutLineItemsReplace?: Maybe<CheckoutLineItemsReplacePayload>;
   /** Updates line items on a checkout. */
   checkoutLineItemsUpdate?: Maybe<CheckoutLineItemsUpdatePayload>;
-  /**
-   * Updates the shipping address of an existing checkout.
-   * @deprecated Use `checkoutShippingAddressUpdateV2` instead
-   */
-  checkoutShippingAddressUpdate?: Maybe<CheckoutShippingAddressUpdatePayload>;
   /** Updates the shipping address of an existing checkout. */
   checkoutShippingAddressUpdateV2?: Maybe<CheckoutShippingAddressUpdateV2Payload>;
   /** Updates the shipping lines on an existing checkout. */
@@ -4661,12 +4415,6 @@ export type MutationCartNoteUpdateArgs = {
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutAttributesUpdateArgs = {
-  checkoutId: Scalars['ID'];
-  input: CheckoutAttributesUpdateInput;
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
 export type MutationCheckoutAttributesUpdateV2Args = {
   checkoutId: Scalars['ID'];
   input: CheckoutAttributesUpdateV2Input;
@@ -4678,27 +4426,9 @@ export type MutationCheckoutCompleteFreeArgs = {
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutCompleteWithCreditCardArgs = {
-  checkoutId: Scalars['ID'];
-  payment: CreditCardPaymentInput;
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
 export type MutationCheckoutCompleteWithCreditCardV2Args = {
   checkoutId: Scalars['ID'];
   payment: CreditCardPaymentInputV2;
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutCompleteWithTokenizedPaymentArgs = {
-  checkoutId: Scalars['ID'];
-  payment: TokenizedPaymentInput;
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutCompleteWithTokenizedPaymentV2Args = {
-  checkoutId: Scalars['ID'];
-  payment: TokenizedPaymentInputV2;
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
@@ -4714,31 +4444,14 @@ export type MutationCheckoutCreateArgs = {
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutCustomerAssociateArgs = {
-  checkoutId: Scalars['ID'];
-  customerAccessToken: Scalars['String'];
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
 export type MutationCheckoutCustomerAssociateV2Args = {
   checkoutId: Scalars['ID'];
   customerAccessToken: Scalars['String'];
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutCustomerDisassociateArgs = {
-  checkoutId: Scalars['ID'];
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
 export type MutationCheckoutCustomerDisassociateV2Args = {
   checkoutId: Scalars['ID'];
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutDiscountCodeApplyArgs = {
-  checkoutId: Scalars['ID'];
-  discountCode: Scalars['String'];
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
@@ -4753,27 +4466,9 @@ export type MutationCheckoutDiscountCodeRemoveArgs = {
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutEmailUpdateArgs = {
-  checkoutId: Scalars['ID'];
-  email: Scalars['String'];
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
 export type MutationCheckoutEmailUpdateV2Args = {
   checkoutId: Scalars['ID'];
   email: Scalars['String'];
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutGiftCardApplyArgs = {
-  checkoutId: Scalars['ID'];
-  giftCardCode: Scalars['String'];
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutGiftCardRemoveArgs = {
-  appliedGiftCardId: Scalars['ID'];
-  checkoutId: Scalars['ID'];
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
@@ -4810,12 +4505,6 @@ export type MutationCheckoutLineItemsReplaceArgs = {
 export type MutationCheckoutLineItemsUpdateArgs = {
   checkoutId: Scalars['ID'];
   lineItems: Array<CheckoutLineItemUpdateInput>;
-};
-
-/** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
-export type MutationCheckoutShippingAddressUpdateArgs = {
-  checkoutId: Scalars['ID'];
-  shippingAddress: MailingAddressInput;
 };
 
 /** The schema’s entry-point for mutations. This acts as the public, top-level API from which all mutation queries must start. */
@@ -4973,7 +4662,7 @@ export type Order = HasMetafields &
     metafield?: Maybe<Metafield>;
     /**
      * A paginated list of metafields associated with the resource.
-     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
      *
      */
     metafields: MetafieldConnection;
@@ -5247,7 +4936,7 @@ export type Page = HasMetafields &
     metafield?: Maybe<Metafield>;
     /**
      * A paginated list of metafields associated with the resource.
-     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
      *
      */
     metafields: MetafieldConnection;
@@ -5467,7 +5156,7 @@ export type Product = HasMetafields &
     metafield?: Maybe<Metafield>;
     /**
      * A paginated list of metafields associated with the resource.
-     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
      *
      */
     metafields: MetafieldConnection;
@@ -5806,7 +5495,7 @@ export type ProductVariant = HasMetafields &
     metafield?: Maybe<Metafield>;
     /**
      * A paginated list of metafields associated with the resource.
-     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
      *
      */
     metafields: MetafieldConnection;
@@ -6493,7 +6182,7 @@ export type Shop = HasMetafields &
     metafield?: Maybe<Metafield>;
     /**
      * A paginated list of metafields associated with the resource.
-     * @deprecated The `metafields` field will be removed in the future in favor of using [aliases](https://graphql.org/learn/queries/#aliases) with the `metafield` field.
+     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
      *
      */
     metafields: MetafieldConnection;
@@ -6633,50 +6322,6 @@ export type StringEdge = {
   cursor: Scalars['String'];
   /** The item at the end of StringEdge. */
   node: Scalars['String'];
-};
-
-/**
- * Specifies the fields required to complete a checkout with
- * a tokenized payment.
- *
- */
-export type TokenizedPaymentInput = {
-  /** The amount of the payment. */
-  amount: Scalars['Money'];
-  /** The billing address for the payment. */
-  billingAddress: MailingAddressInput;
-  /** A unique client generated key used to avoid duplicate charges. When a duplicate payment is found, the original is returned instead of creating a new one. For more information, refer to [Idempotent requests](https://shopify.dev/api/usage/idempotent-requests). */
-  idempotencyKey: Scalars['String'];
-  /** Public Hash Key used for AndroidPay payments only. */
-  identifier?: InputMaybe<Scalars['String']>;
-  /** A simple string or JSON containing the required payment data for the tokenized payment. */
-  paymentData: Scalars['String'];
-  /** Executes the payment in test mode if possible. Defaults to `false`. */
-  test?: InputMaybe<Scalars['Boolean']>;
-  /** The type of payment token. */
-  type: Scalars['String'];
-};
-
-/**
- * Specifies the fields required to complete a checkout with
- * a tokenized payment.
- *
- */
-export type TokenizedPaymentInputV2 = {
-  /** The billing address for the payment. */
-  billingAddress: MailingAddressInput;
-  /** A unique client generated key used to avoid duplicate charges. When a duplicate payment is found, the original is returned instead of creating a new one. For more information, refer to [Idempotent requests](https://shopify.dev/api/usage/idempotent-requests). */
-  idempotencyKey: Scalars['String'];
-  /** Public Hash Key used for AndroidPay payments only. */
-  identifier?: InputMaybe<Scalars['String']>;
-  /** The amount and currency of the payment. */
-  paymentAmount: MoneyInput;
-  /** A simple string or JSON containing the required payment data for the tokenized payment. */
-  paymentData: Scalars['String'];
-  /** Whether to execute the payment in test mode, if possible. Test mode is not supported in production stores. Defaults to `false`. */
-  test?: InputMaybe<Scalars['Boolean']>;
-  /** The type of payment token. */
-  type: Scalars['String'];
 };
 
 /**
