@@ -84,10 +84,10 @@ Provide the following data to `useServerAnalytics` to view information from the 
 
 | Prop     |  Description         | Example code       |
 | -------- | ------------------- | ------------------- |
-| shopId | The ID of your Shopify store. | [DefaultSeo.server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx) |
-| currency | The currency being presented to the buyer on the webpage. | [DefaultSeo.server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/DefaultSeo.server.jsx) |
-| pageType? | The page template type for your routes. For a list of valid values, refer to [ShopifyAnalytics constants](#shopifyanalytics-constants). | [collections/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/collections/%5Bhandle%5D.server.jsx) |
-| resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. | [products/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/products/%5Bhandle%5D.server.jsx) |
+| shopId | The ID of your Shopify store. | [DefaultSeo.server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) |
+| currency | The currency being presented to the buyer on the webpage. | [DefaultSeo.server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) |
+| pageType? | The page template type for your routes. For a list of valid values, refer to [ShopifyAnalytics constants](#shopifyanalytics-constants). | [collections/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/collections/%5Bhandle%5D.server.jsx) |
+| resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. | [products/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/products/%5Bhandle%5D.server.jsx) |
 
 ### `ShopifyAnalytics` constants
 
