@@ -31,6 +31,7 @@ export {
   CacheMonths,
   CacheCustom,
 } from './foundation/Cache/strategies';
+export {useRequestContext} from './foundation/useRequestContext';
 export {useServerAnalytics} from './foundation/Analytics/hook';
 export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server';
 export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const';

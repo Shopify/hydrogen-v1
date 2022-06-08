@@ -69,6 +69,7 @@ export class HydrogenRequest extends Request {
     buyerIpHeader?: string;
     session?: SessionSyncApi;
     runtime?: RuntimeContext;
+    scopes: Map<string, Record<string, any>>;
     [key: string]: any;
   };
 
@@ -102,6 +103,7 @@ export class HydrogenRequest extends Request {
         normalizedRscUrl: this.normalizedUrl,
       },
       preloadQueries: new Map(),
+      scopes: new Map(),
     };
     this.cookies = this.parseCookies();
   }
