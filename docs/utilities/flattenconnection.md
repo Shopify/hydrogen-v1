@@ -85,11 +85,11 @@ export function Product({handle}) {
 
 | Argument                                                                                                                                                                                                   | Required |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| A connection object with the field `edges` whose value is an array of objects corresponding to `{node: Value}`. For example, any of the [Product connections](/api/storefront/reference/products/product). | Yes      |
+| A connection object with the field `nodes` whose value is an array of objects corresponding to `Value`, or `edges` whose value is an array of objects corresponding to `{node: Value}`. For example, any of the [Product connections](/api/storefront/reference/products/product). | Yes      |
 
 ## Return type
 
-A flat array whose elements correspond to the `node` value in each element of the original `edges` array.
+A flat array whose elements correspond to the `node` value in each element of the original `edges` array, or the `node` itself.
 
 ## Related components
 
