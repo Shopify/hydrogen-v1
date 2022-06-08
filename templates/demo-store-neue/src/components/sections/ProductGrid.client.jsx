@@ -1,5 +1,4 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
-import {flattenConnection} from '@shopify/hydrogen';
 
 import {Grid} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
@@ -22,7 +21,7 @@ export default function ProductGrid({data}) {
 
     const response = await fetch(url, {method: 'POST'});
     const json = await response.json();
-    const newProducts = flattenConnection(json.data.collection.products);
+    const newProducts = json.data.collection.products.nodes;
     const {endCursor, hasNextPage} = json.data.collection.products.pageInfo;
 
     setProducts([...products, ...newProducts]);

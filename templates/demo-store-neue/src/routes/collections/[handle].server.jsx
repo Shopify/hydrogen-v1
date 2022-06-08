@@ -24,7 +24,7 @@ export default function Collection({params}) {
   const {handle} = params;
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: COLLECTION_QUERY,
     variables: {
       handle,
       country: countryCode,
@@ -87,8 +87,9 @@ export async function api(request, {params, queryShop}) {
   const cursor = new URL(request.url).searchParams.get('cursor');
   const {handle} = params;
 
+  // TODO: Pass country/locale params for multi-currency
   return await queryShop({
-    query: QUERY,
+    query: PAGINATE_QUERY,
     variables: {
       handle,
       cursor,
@@ -97,7 +98,24 @@ export async function api(request, {params, queryShop}) {
   });
 }
 
-const QUERY = gql`
+const PAGINATE_QUERY = gql`
+  ${PRODUCT_CARD_FIELDS}
+  query CollectionPage($handle: String!, $pageBy: Int!, $cursor: String) {
+    collection(handle: $handle) {
+      products(first: $pageBy, after: $cursor) {
+        nodes {
+          ...ProductCardFields
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+const COLLECTION_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query CollectionDetails(
     $handle: String!
@@ -109,7 +127,6 @@ const QUERY = gql`
     collection(handle: $handle) {
       id
       title
-      descriptionHtml
       description
       seo {
         description
