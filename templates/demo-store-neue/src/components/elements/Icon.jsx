@@ -51,7 +51,7 @@ export function IconClose() {
         y1="4.30806"
         x2="15.7556"
         y2="15.6218"
-        stroke="#151515"
+        stroke="currentColor"
         strokeWidth="1.25"
       />
       <line
@@ -59,7 +59,7 @@ export function IconClose() {
         x2="16"
         y2="-0.625"
         transform="matrix(-0.707107 0.707107 0.707107 0.707107 16 4.75)"
-        stroke="#151515"
+        stroke="currentColor"
         strokeWidth="1.25"
       />
     </Icon>
@@ -88,7 +88,7 @@ export function IconArrow({direction = 'right'}) {
   return (
     <Icon className={`w-5 h-5 ${rotate}`}>
       <title>Arrow</title>
-      <path d="M7 3L14 10L7 17" stroke="#151515" strokeWidth="1.25" />
+      <path d="M7 3L14 10L7 17" stroke="currentColor" strokeWidth="1.25" />
     </Icon>
   );
 }
@@ -114,9 +114,9 @@ export function IconCaret({direction = 'down'}) {
   }
 
   return (
-    <Icon>
+    <Icon className={`w-5 h-5 ${rotate}`}>
       <title>Caret</title>
-      <path d="M14 8L10 12L6 8" stroke="#151515" strokeWidth="1.25" />
+      <path d="M14 8L10 12L6 8" stroke="currentColor" strokeWidth="1.25" />
     </Icon>
   );
 }
@@ -125,8 +125,12 @@ export function IconSelect() {
   return (
     <Icon>
       <title>Select</title>
-      <path d="M7 8.5L10 6.5L13 8.5" stroke="#151515" strokeWidth="1.25" />
-      <path d="M13 11.5L10 13.5L7 11.5" stroke="#151515" strokeWidth="1.25" />
+      <path d="M7 8.5L10 6.5L13 8.5" stroke="currentColor" strokeWidth="1.25" />
+      <path
+        d="M13 11.5L10 13.5L7 11.5"
+        stroke="currentColor"
+        strokeWidth="1.25"
+      />
     </Icon>
   );
 }

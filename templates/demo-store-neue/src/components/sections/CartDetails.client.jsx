@@ -11,13 +11,10 @@ import {
   Money,
 } from '@shopify/hydrogen';
 
-// TODO: Replace with our own icons
-
-import {CheckIcon, ClockIcon} from '@heroicons/react/solid';
 import {Button, Heading, IconClose, Text} from '../elements';
 
 export default function CartDetails() {
-  const {lines, note, checkoutUrl, estimatedCost} = useCart();
+  const {lines, checkoutUrl, estimatedCost} = useCart();
 
   return (
     <form className="flex flex-col-reverse gap-8 md:grid md:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
@@ -26,10 +23,7 @@ export default function CartDetails() {
           Items in your shopping cart
         </h2>
 
-        <ul
-          role="list"
-          className="border-t border-b border-gray-200 divide-y divide-gray-200"
-        >
+        <ul className="border-t border-b divide-y">
           {lines.map((line) => {
             return (
               <CartLineProvider key={line.id} line={line}>
@@ -43,7 +37,7 @@ export default function CartDetails() {
       {/* Order summary */}
       <section
         aria-labelledby="summary-heading"
-        className="sticky px-4 py-6 rounded-lg md:my-16 md:top-24 bg-gray-50 sm:p-6 lg:p-8 lg:mt-0 md:col-span-5"
+        className="sticky px-4 py-6 rounded-lg md:my-16 md:top-24 bg-primary/[0.02] sm:p-6 lg:p-8 lg:mt-0 md:col-span-5"
       >
         <h2
           id="summary-heading"
