@@ -24,13 +24,21 @@ type ServerRequestProviderProps = {
   children: JSX.Element;
 };
 
+function getInternalReactDispatcher() {
+  // @ts-ignore
+  return React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
+    .ReactCurrentDispatcher.current;
+}
+
+function isRsc() {
+  // This method is only available during RSC
+  return !!getInternalReactDispatcher().getCacheForType;
+}
+
 // Note: use this only during RSC/Flight rendering. The React dispatcher
 // for SSR/Fizz rendering does not implement getCacheForType.
 function getCacheForType(resource: () => Map<any, any>) {
-  const dispatcher =
-    // @ts-ignore
-    React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
-      .ReactCurrentDispatcher.current;
+  const dispatcher = getInternalReactDispatcher();
 
   // @ts-ignore
   if (__HYDROGEN_TEST__ && !dispatcher.getCacheForType) {
@@ -68,20 +76,11 @@ export function ServerRequestProvider({
 }
 
 export function useServerRequest() {
-  let request: HydrogenRequest | null;
-  try {
-    // This cache only works during RSC rendering:
-    // @ts-ignore
-    const cache = getCacheForType(requestCacheRSC);
-    request = cache ? cache.get(requestCacheRSC.key) : null;
-  } catch {
-    // If RSC cache failed it means this is not an RSC request.
-    // Try getting SSR context instead:
-    request = useContext(RequestContextSSR); // eslint-disable-line react-hooks/rules-of-hooks
-  }
+  const request: HydrogenRequest | undefined = isRsc()
+    ? getCacheForType(requestCacheRSC)?.get(requestCacheRSC.key)
+    : useContext(RequestContextSSR); // eslint-disable-line react-hooks/rules-of-hooks
 
   if (!request) {
-    // @ts-ignore
     if (__HYDROGEN_TEST__) {
       // Unit tests are not wrapped in ServerRequestProvider.
       // This mocks it, instead of providing it in every test.
