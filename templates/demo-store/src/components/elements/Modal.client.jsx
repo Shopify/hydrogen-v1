@@ -1,4 +1,9 @@
-export default function Modal({setShowModal, children}) {
+import {useServerProps} from '@shopify/hydrogen';
+
+export default function Modal({children}) {
+  const {serverProps, setServerProps} = useServerProps();
+  const close = () => setServerProps('showModal', null);
+
   return (
     <div
       className="relative z-50"
@@ -6,7 +11,7 @@ export default function Modal({setShowModal, children}) {
       role="dialog"
       aria-modal="true"
       id="modal-bg"
-      onClick={() => setShowModal(false)}
+      onClick={() => close()}
     >
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
       <div className="fixed z-50 inset-0 overflow-y-auto">

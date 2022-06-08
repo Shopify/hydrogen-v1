@@ -2,7 +2,7 @@ import {useServerProps} from '@shopify/hydrogen';
 import {useState} from 'react';
 import {Button, Text} from '../elements';
 
-export default function EditAddress({address, defaultAddress, setShowModal}) {
+export default function EditAddress({address, defaultAddress}) {
   const {setServerProps} = useServerProps();
   // const close = () => setServerProps('editingAddress', null);
   const [saving, setSaving] = useState(false);
@@ -48,9 +48,8 @@ export default function EditAddress({address, defaultAddress, setShowModal}) {
       return;
     }
 
-    setShowModal(false);
-
     setServerProps('editingAddress', null);
+    setServerProps('showModal', null);
   }
 
   return (
@@ -254,8 +253,8 @@ export default function EditAddress({address, defaultAddress, setShowModal}) {
               className="mt-3 focus:shadow-outline rounded w-full"
               variant="secondary"
               onClick={() => {
-                setShowModal(false);
                 setServerProps('editingAddress', null);
+                setServerProps('showModal', null);
               }}
             >
               Cancel

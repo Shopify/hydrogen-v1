@@ -1,8 +1,6 @@
 import {useServerProps} from '@shopify/hydrogen';
 import {useMemo, useState} from 'react';
 import {Text, Button} from '../elements';
-import EditAddress from './EditAddress.client';
-import Modal from '../elements/Modal.client';
 
 export default function AddressBook({addresses, defaultAddress}) {
   const {serverProps, setServerProps} = useServerProps();
@@ -24,6 +22,7 @@ export default function AddressBook({addresses, defaultAddress}) {
     const response = await callDeleteAddressApi(id);
     if (response.error) alert(response.error);
     else setServerProps('rerender', !serverProps.rerender);
+    setServerProps('showModal', null);
   }
 
   return (
@@ -40,7 +39,7 @@ export default function AddressBook({addresses, defaultAddress}) {
             <Button
               className="mt-2 text-sm w-full max-w-xl mb-6"
               onClick={() => {
-                setShowModal(true);
+                setServerProps('showModal', 'true');
                 setShowConfirmRemove(false);
                 setShowEditAddress(true);
                 setServerProps('editingAddress', 'NEW');
@@ -65,7 +64,8 @@ export default function AddressBook({addresses, defaultAddress}) {
               {addressesWithoutDefault.map((address) => (
                 <Address
                   key={address.id}
-                  address={address}
+                  address
+                  defaultAddress
                   deleteAddress={deleteAddress.bind(null, address.originalId)}
                 />
               ))}
@@ -77,31 +77,13 @@ export default function AddressBook({addresses, defaultAddress}) {
   );
 }
 
-function Address({address, defaultAddress, deleteAddress}) {
+function Address({address, defaultAddress}) {
   const {serverProps, setServerProps} = useServerProps();
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
   const [showEditAddress, setShowEditAddress] = useState(false);
-  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
-      {showModal && (
-        <Modal setShowModal={setShowModal}>
-          {showConfirmRemove && (
-            <ConfirmRemove
-              deleteAddress={deleteAddress}
-              setShowModal={setShowModal}
-            />
-          )}
-          {showEditAddress && (
-            <EditAddress
-              address={address}
-              defaultAddress={defaultAddress}
-              setShowModal={setShowModal}
-            />
-          )}
-        </Modal>
-      )}
       {defaultAddress ? (
         <div className="mb-3 flex flex-row">
           <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-200 text-gray-500">
@@ -125,9 +107,8 @@ function Address({address, defaultAddress, deleteAddress}) {
 
       <div className="flex flex-row font-medium mt-6">
         <button
-          // onClick={() => setShowModal(true)}
           onClick={() => {
-            setShowModal(true);
+            setServerProps('showModal', 'true');
             setShowConfirmRemove(false);
             setShowEditAddress(true);
             setServerProps('editingAddress', address.id);
@@ -138,7 +119,7 @@ function Address({address, defaultAddress, deleteAddress}) {
         </button>
         <button
           onClick={() => {
-            setShowModal(true);
+            setServerProps('showModal', 'true');
             setShowConfirmRemove(true);
             setShowEditAddress(false);
           }}
@@ -172,7 +153,7 @@ function callDeleteAddressApi(id) {
     });
 }
 
-function ConfirmRemove({deleteAddress, setShowModal}) {
+function ConfirmRemove({deleteAddress}) {
   return (
     <>
       <Text className="mb-4" as="h3" size="lead">
@@ -184,7 +165,6 @@ function ConfirmRemove({deleteAddress, setShowModal}) {
           className="text-sm"
           onClick={() => {
             deleteAddress();
-            setShowModal(false);
           }}
           variant="primary"
           width="full"
@@ -193,7 +173,7 @@ function ConfirmRemove({deleteAddress, setShowModal}) {
         </Button>
         <Button
           className="text-sm mt-2"
-          onClick={() => setShowModal(false)}
+          onClick={() => setServerProps('showModal', null)}
           variant="secondary"
           width="full"
         >

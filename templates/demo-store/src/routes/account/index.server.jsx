@@ -22,9 +22,16 @@ import {
   PageHeader,
 } from '~/components/sections';
 
+import Modal from '~/components/elements/Modal.client';
+
 import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
-export default function Account({response, editingAccount, editingAddress}) {
+export default function Account({
+  response,
+  editingAccount,
+  editingAddress,
+  showModal,
+}) {
   response.cache(NoStore());
 
   const {customerAccessToken, countryCode = 'US'} = useSession();
@@ -72,24 +79,30 @@ export default function Account({response, editingAccount, editingAddress}) {
       </Layout>
     );
 
-  // if (editingAddress) {
-  //   const addressToEdit = addresses.find(
-  //     (address) => address.id === editingAddress,
-  //   );
+  if (editingAddress && showModal) {
+    const addressToEdit = addresses.find(
+      (address) => address.id === editingAddress,
+    );
 
-  //   return (
-  //     <Layout>
-  //       <Seo
-  //         type="noindex"
-  //         data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
-  //       />
-  //       <EditAddress
-  //         address={addressToEdit}
-  //         defaultAddress={defaultAddress === editingAddress}
-  //       />
-  //     </Layout>
-  //   );
-  // }
+    return (
+      <Layout>
+        <Seo
+          type="noindex"
+          data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
+        />
+        <Modal>
+          <EditAddress
+            address={addressToEdit}
+            defaultAddress={defaultAddress === editingAddress}
+          />
+        </Modal>
+        {/* <EditAddress
+          address={addressToEdit}
+          defaultAddress={defaultAddress === editingAddress}
+        /> */}
+      </Layout>
+    );
+  }
 
   return (
     <AuthenticatedAccount
