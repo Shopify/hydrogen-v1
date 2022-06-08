@@ -4,14 +4,14 @@ title: ShopifyAnalytics
 description: The ShopifyAnalytics component sends commerce-related analytics to Shopify.
 ---
 
-The `ShopifyAnalytics` component sends commerce-related analytics to Shopify. By adding the `ShopifyAnalytics` component to your Hydrogen app, you can view key sales, orders, and online store visitor data from the [Analytics dashboard in your Shopify admin](https://help.shopify.com/en/manual/reports-and-analytics/shopify-reports/overview-dashboard).
+The `ShopifyAnalytics` component sends commerce-related analytics to Shopify. By adding the `ShopifyAnalytics` component to your Hydrogen storefront, you can view key sales, orders, and online store visitor data from the [Analytics dashboard in your Shopify admin](https://help.shopify.com/en/manual/reports-and-analytics/shopify-reports/overview-dashboard).
 
-> Note: 
+> Note:
 > Currently, only Online Store page view and session-related analytic reports can be configured with the `ShopifyAnalytics` component. Additional analytics functionality will be available in the coming weeks.
 
 ## Configuration
 
-To set up the `ShopifyAnalytics` component in your Hydrogen app, add the `ShopifyAnalyticsServerConnector` property to your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config):
+To set up the `ShopifyAnalytics` component in your Hydrogen storefront, add the `ShopifyAnalyticsServerConnector` property to your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config):
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
@@ -75,8 +75,8 @@ You can achieve this by assigning a sub-domain to your online store. For example
 - Attach a new sub-domain to your online store at `https://checkout.my-awesome-hydrogen-store.com`.
 - Set the `cookieDomain` to the same root domain at `<ShopifyAnalytics cookieDomain="my-awesome-hydrogen-store.com" />`.
 
-> Note: 
-> Hydrogen analytics and Shopify checkout can only be connected in production. They can't be connected in development and preview modes. 
+> Note:
+> Hydrogen analytics and Shopify checkout can only be connected in production. They can't be connected in development and preview modes.
 
 ## Shopify Analytics data
 
