@@ -206,14 +206,17 @@ export default async function testCases({
   it('returns headers in response correctly', async () => {
     const response = await fetch(getServerUrl() + '/headers');
 
-    expect(response.status).toEqual(201);
-    // statusText cannot be modified in workers
-    expect(response.statusText).toEqual(isWorker ? 'Created' : 'hey');
     expect(response.headers.get('Accept-Encoding')).toBe('deflate, gzip');
     expect(response.headers.raw()['set-cookie']).toEqual([
       'hello=world',
       'hello2=world2',
     ]);
+  });
+
+  it('handles notFound', async () => {
+    const response = await fetch(getServerUrl() + '/not-found');
+
+    expect(response.status).toBe(404);
   });
 
   it('properly escapes props in the SSR flight script chunks', async () => {

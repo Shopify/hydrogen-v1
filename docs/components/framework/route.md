@@ -33,7 +33,8 @@ function Products({params}) {
 function Home() {
   return <h1>Home</h1>;
 }
-function NotFound() {
+function NotFound({response}) {
+  response.notFound();
   return <h1>Not found</h1>;
 }
 export default renderHydrogen(App);

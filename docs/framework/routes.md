@@ -335,7 +335,7 @@ export default function CustomPage({response}) {
 > Tip:
 > There are [performance benefits](https://shopify.dev/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
 
-You can use `response` to set headers or status codes using the `Response` API:
+You can use `response` to set headers using the `Response` API:
 
 {% codeblock file %}
 
@@ -344,8 +344,6 @@ export default function CustomPage({response}) {
   response.doNotStream();
 
   response.headers.set('custom-header', 'value');
-  response.status = 201;
-
   // ...
 }
 ```
@@ -354,6 +352,25 @@ export default function CustomPage({response}) {
 
 > Caution:
 > You must call `response.doNotStream()` before any calls to `fetchSync`, `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved.
+
+#### `response.notFound()`
+
+By default, Hydrogen uses a 200 status for successful responses and a 500 status for errors. If you want to mark a route with a 404 response, you can call the `response.notFound()` method:
+
+{% codeblock file %}
+
+```js
+export default function NotFound({response}) {
+  response.notFound();
+
+  // ...
+}
+```
+
+{% endcodeblock %}
+
+> Caution:
+> You must call `response.doNotStream()` before `response.notFound()` if you make any calls to `fetchSync`, `useQuery` or `useShopQuery`. This is to prevent streaming while the Suspense data is resolved.
 
 #### `response.redirect()`
 

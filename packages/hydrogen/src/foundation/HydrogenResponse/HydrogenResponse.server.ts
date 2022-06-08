@@ -7,22 +7,8 @@ export class HydrogenResponse extends Response {
   private wait = false;
   private cacheOptions: CachingStrategy = CacheSeconds();
 
-  private customStatus?: number;
-  private customStatusText?: string;
-
-  public get status() {
-    return this.customStatus ?? super.status;
-  }
-  public set status(number: number) {
-    this.customStatus = number;
-  }
-
-  public get statusText() {
-    return this.customStatusText ?? super.statusText;
-  }
-  public set statusText(text: string) {
-    this.customStatusText = text;
-  }
+  #customStatus?: number;
+  #customStatusText?: string;
 
   /**
    * Buffer the current response until all queries have resolved,
@@ -40,15 +26,28 @@ export class HydrogenResponse extends Response {
     this.cacheOptions = options;
   }
 
+  get customStatus() {
+    return this.#customStatus;
+  }
+
+  get customStatusText() {
+    return this.#customStatusText;
+  }
+
   get cacheControlHeader(): string {
     return generateCacheControlHeader(this.cacheOptions);
   }
 
   redirect(location: string, status = 307) {
-    this.status = status;
+    this.#customStatus = status;
+    this.#customStatusText = 'Redirecting';
     this.headers.set('location', location);
 
     // in the case of an RSC request, instead render a client component that will redirect
     return React.createElement(Redirect, {to: location});
+  }
+
+  notFound() {
+    this.#customStatus = 404;
   }
 }
