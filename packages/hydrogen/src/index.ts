@@ -51,3 +51,6 @@ export {CartQuery} from './components/CartProvider/cart-queries';
  * Override the client version of `fetchSync` with the server version.
  */
 export {fetchSync} from './foundation/fetchSync/server/fetchSync';
+
+export {type HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
+export {type HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
