@@ -12,7 +12,7 @@ import {
   ProductSwimlane,
   Section,
 } from '~/components/sections';
-import {Heading, Text, Button, Input, Grid} from '~/components/elements';
+import {Heading, Text, Input, Grid} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';

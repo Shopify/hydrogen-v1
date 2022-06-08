@@ -1,4 +1,4 @@
-import {useShopQuery, useRouteParams, Seo, gql, Image} from '@shopify/hydrogen';
+import {useShopQuery, useRouteParams, gql, Image} from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
