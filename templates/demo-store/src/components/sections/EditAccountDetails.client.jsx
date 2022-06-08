@@ -1,6 +1,8 @@
 import {useCallback, useState} from 'react';
 import {useServerProps} from '@shopify/hydrogen';
 
+import {Text, Button} from '../elements';
+
 function emailValidation(email) {
   if (email.validity.valid) return null;
 
@@ -110,137 +112,142 @@ export default function EditAccountDetails({
   }
 
   return (
-    <div className="flex justify-center mt-8">
-      <div className="max-w-md w-full">
-        <button onClick={close}>{'< Back'}</button>
-        <h1 className="text-5xl mt-4">Edit account details</h1>
-        <form noValidate className="mt-6" onSubmit={onSubmit}>
-          {submitError && (
-            <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-white">{submitError}</p>
-            </div>
-          )}
-          <h2 className="text-xl font-medium">Profile</h2>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
-              id="firstname"
-              name="firstname"
-              type="text"
-              autoComplete="given-name"
-              placeholder="First name"
-              aria-label="First name"
-              value={firstName}
-              onChange={(event) => {
-                setFirstName(event.target.value);
-              }}
-            />
+    <>
+      <Text className="mt-4 mb-6" as="h3" size="lead">
+        Update your profile
+      </Text>
+      <form noValidate onSubmit={onSubmit}>
+        {submitError && (
+          <div className="flex items-center justify-center mb-6 bg-zinc-500">
+            <p className="m-4 text-s text-white">{submitError}</p>
           </div>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
-              id="lastname"
-              name="lastname"
-              type="text"
-              autoComplete="family-name"
-              placeholder="Last name"
-              aria-label="Last name"
-              value={lastName}
-              onChange={(event) => {
-                setLastName(event.target.value);
-              }}
-            />
-          </div>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-900`}
-              id="phone"
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              placeholder="Mobile"
-              aria-label="Mobile"
-              value={phone}
-              onChange={(event) => {
-                setPhone(event.target.value);
-              }}
-            />
-          </div>
-          <div className="mt-3">
-            <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
-                emailError ? ' border-red-500' : 'border-gray-900'
-              }`}
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              placeholder="Email address"
-              aria-label="Email address"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-            />
-            <p
-              className={`text-red-500 text-xs ${
-                !emailError ? 'invisible' : ''
-              }`}
-            >
-              {emailError} &nbsp;
-            </p>
-          </div>
-          <h2 className="text-xl font-medium mt-4">Security</h2>
-          <Password
-            name="currentPassword"
-            label="Current password"
-            passwordError={currentPasswordError}
+        )}
+        <div className="mt-3">
+          <input
+            className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            id="firstname"
+            name="firstname"
+            type="text"
+            autoComplete="given-name"
+            placeholder="First name"
+            aria-label="First name"
+            value={firstName}
+            onChange={(event) => {
+              setFirstName(event.target.value);
+            }}
           />
-          <Password
-            name="newPassword"
-            label="New password"
-            passwordError={newPasswordError}
+        </div>
+        <div className="mt-3">
+          <input
+            className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            id="lastname"
+            name="lastname"
+            type="text"
+            autoComplete="family-name"
+            placeholder="Last name"
+            aria-label="Last name"
+            value={lastName}
+            onChange={(event) => {
+              setLastName(event.target.value);
+            }}
+          />
+        </div>
+        <div className="mt-3">
+          <input
+            className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            id="phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            placeholder="Mobile"
+            aria-label="Mobile"
+            value={phone}
+            onChange={(event) => {
+              setPhone(event.target.value);
+            }}
+          />
+        </div>
+        <div className="mt-3">
+          <input
+            className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline rounded ${
+              emailError ? ' border-red-500' : 'border-gray-500'
+            }`}
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            placeholder="Email address"
+            aria-label="Email address"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+            }}
           />
           <p
-            className={`text-sm font-medium ${
-              currentPasswordError || newPasswordError ? 'text-red-500' : ''
-            }`}
+            className={`text-red-500 text-xs ${!emailError ? 'invisible' : ''}`}
           >
-            Passwords must be at least 6 characters.
+            {emailError} &nbsp;
           </p>
-          <Password
-            name="newPassword2"
-            label="Re-enter new password"
-            passwordError={newPassword2Error}
-          />
-          <p
-            className={`text-red-500 text-xs ${
-              !newPassword2Error ? 'invisible' : ''
-            }`}
+        </div>
+        <Text className="mb-6 mt-6" as="h3" size="lead">
+          Change your password
+        </Text>
+        <Password
+          name="currentPassword"
+          label="Current password"
+          passwordError={currentPasswordError}
+        />
+        <Password
+          name="newPassword"
+          label="New password"
+          passwordError={newPasswordError}
+        />
+        <Password
+          name="newPassword2"
+          label="Re-enter new password"
+          passwordError={newPassword2Error}
+        />
+        <Text
+          size="fine"
+          color="subtle"
+          className={`mt-1 ${
+            currentPasswordError || newPasswordError ? 'text-red-500' : ''
+          }`}
+        >
+          Passwords must be at least 6 characters.
+        </Text>
+        <Text
+          size="fine"
+          className={`mt-1 text-red-500 ${
+            !newPassword2Error ? 'invisible' : ''
+          }`}
+        >
+          {newPassword2Error} &nbsp;
+        </Text>
+        <div className="mt-6">
+          <Button
+            className="text-sm mb-2"
+            variant="primary"
+            width="full"
+            type="submit"
+            disabled={saving}
           >
-            {newPassword2Error} &nbsp;
-          </p>
-          <div className="mt-4">
-            <button
-              className="bg-gray-900 border border-gray-900 text-white uppercase py-3 px-4 focus:shadow-outline block w-full"
-              type="submit"
-              disabled={saving}
-            >
-              Save
-            </button>
-          </div>
-          <div>
-            <button
-              className="mt-3 text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
-              onClick={close}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+            Save
+          </Button>
+        </div>
+        <div className="mb-4">
+          <Button
+            className="text-sm"
+            variant="secondary"
+            width="full"
+            onClick={close}
+          >
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </>
   );
 }
 
@@ -250,8 +257,8 @@ function Password({name, passwordError, label}) {
   return (
     <div className="mt-3">
       <input
-        className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
-          passwordError ? ' border-red-500' : 'border-gray-900'
+        className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline rounded ${
+          passwordError ? ' border-red-500' : 'border-gray-500'
         }`}
         id={name}
         name={name}

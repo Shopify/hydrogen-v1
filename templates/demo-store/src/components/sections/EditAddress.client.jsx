@@ -56,7 +56,7 @@ export default function EditAddress({address, defaultAddress}) {
 
   return (
     <>
-      <Text className="mb-4" as="h3" size="lead">
+      <Text className="mt-4 mb-6" as="h3" size="lead">
         {address ? 'Edit address' : 'Add address'}
       </Text>
       <div className="max-w-lg">
@@ -68,7 +68,7 @@ export default function EditAddress({address, defaultAddress}) {
           )}
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="firstname"
               name="firstname"
               required
@@ -84,7 +84,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="lastname"
               name="lastname"
               required
@@ -100,7 +100,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="company"
               name="company"
               type="text"
@@ -115,7 +115,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="street1"
               name="street1"
               type="text"
@@ -131,7 +131,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="address2"
               name="address2"
               type="text"
@@ -146,7 +146,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="city"
               name="city"
               type="text"
@@ -162,7 +162,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="state"
               name="state"
               type="text"
@@ -178,7 +178,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="zip"
               name="zip"
               type="text"
@@ -194,7 +194,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="country"
               name="country"
               type="text"
@@ -210,7 +210,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div className="mt-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="phone"
               name="phone"
               type="tel"

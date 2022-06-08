@@ -5,6 +5,7 @@ export default function Modal({children, editing}) {
   const {serverProps, setServerProps} = useServerProps();
   const close = useCallback(() => {
     setServerProps('editingAddress', null);
+    setServerProps('editingAccount', null);
   }, [setServerProps]);
 
   return (
