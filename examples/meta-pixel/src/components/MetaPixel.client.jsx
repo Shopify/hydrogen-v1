@@ -1,10 +1,11 @@
 import {useEffect} from 'react';
 import {ClientAnalytics, loadScript} from '@shopify/hydrogen';
 
-const PIXEL_ID = 'xxxxxxxxxxxxxxxx'; // <-- Add your pixel ID here
+const PIXEL_ID = 'XXXXXXXXXXXXXXXX'; // <-- Add your pixel ID here
 let init = false;
 export function MetaPixel() {
   useEffect(() => {
+    console.log('useEffect!');
     if (!init) {
       init = true;
 
@@ -38,11 +39,16 @@ export function MetaPixel() {
       ClientAnalytics.subscribe(
         ClientAnalytics.eventNames.PAGE_VIEW,
         (payload) => {
+          console.log('Page view!');
           fbq('track', 'PageView');
         }
       );
+
+      if (ClientAnalytics.hasSentFirstPageView()) {
+        console.log('Page view has sent');
+      }
     }
-  });
+  }, []);
 
   return null;
 }
