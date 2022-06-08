@@ -4,6 +4,8 @@ import {
   useShop,
   Seo,
   CacheDays,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
@@ -41,6 +43,12 @@ export default function Homepage() {
   // const heroBanners = data?.heroBanners?.nodes;
 
   const {heroBanners, featuredCollections, featuredProducts, locations} = data;
+
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.home,
+    },
+  });
 
   return (
     <Layout>

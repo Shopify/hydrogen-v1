@@ -1,4 +1,11 @@
-import {useShop, useShopQuery, Seo, gql} from '@shopify/hydrogen';
+import {
+  useShop,
+  useShopQuery,
+  Seo,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
+  gql,
+} from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
 
@@ -10,6 +17,21 @@ export default function Page({params}) {
     query: QUERY,
     variables: {language: languageCode, handle},
   });
+
+  useServerAnalytics(
+    data.pageByHandle
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.page,
+            resourceId: data.pageByHandle.id,
+          },
+        }
+      : null,
+  );
+
+  if (!data.pageByHandle) {
+    return <NotFound />;
+  }
 
   const page = data.pageByHandle;
 
@@ -26,6 +48,7 @@ const QUERY = gql`
   query PageDetails($language: LanguageCode, $handle: String!)
   @inContext(language: $language) {
     pageByHandle(handle: $handle) {
+      id
       title
       body
       seo {

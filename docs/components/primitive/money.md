@@ -6,7 +6,7 @@ description: The Money component renders a string of the Storefront API's MoneyV
 
 The `Money` component renders a string of the Storefront API's
 [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the
-`defaultLocale` in the [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
+`defaultLocale` in the [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -91,17 +91,6 @@ export default function Product() {
 ## Component type
 
 The `Money` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2):
-
-```graphql
-{
-  currencyCode
-  amount
-}
-```
 
 ## Related hooks
 

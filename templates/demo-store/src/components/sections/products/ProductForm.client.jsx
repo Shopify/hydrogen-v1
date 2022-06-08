@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {
-  useProduct,
-  isClient,
+  useProductOptions,
+  isBrowser,
   useUrl,
   AddToCartButton,
   ShopPayButton,
@@ -13,7 +13,7 @@ export default function ProductForm() {
   const [params, setParams] = useState(new URLSearchParams(search));
 
   const {options, setSelectedOption, selectedOptions, selectedVariant} =
-    useProduct();
+    useProductOptions();
 
   const isOutOfStock = !selectedVariant?.availableForSale || false;
 
@@ -47,7 +47,7 @@ export default function ProductForm() {
       encodeURIComponent(name.toLowerCase()),
       encodeURIComponent(value.toLowerCase()),
     );
-    if (isClient()) {
+    if (isBrowser()) {
       window.history.replaceState(null, '', `${pathname}?${params.toString()}`);
     }
   }

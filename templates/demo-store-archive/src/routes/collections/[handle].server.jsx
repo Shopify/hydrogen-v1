@@ -4,6 +4,8 @@ import {
   useShopQuery,
   flattenConnection,
   Seo,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
@@ -27,6 +29,17 @@ export default function Collection({collectionProductCount = 24, params}) {
     },
     preload: true,
   });
+
+  useServerAnalytics(
+    data?.collection
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.collection,
+            resourceId: data.collection.id,
+          },
+        }
+      : null,
+  );
 
   if (data?.collection == null) {
     return <NotFound />;
@@ -72,6 +85,7 @@ const QUERY = gql`
     $numProducts: Int!
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
+      id
       title
       descriptionHtml
       description
@@ -89,6 +103,7 @@ const QUERY = gql`
       products(first: $numProducts) {
         edges {
           node {
+            id
             title
             vendor
             handle

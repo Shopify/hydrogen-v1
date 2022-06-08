@@ -5,6 +5,7 @@ import {
   FileRoutes,
   ShopifyProvider,
   CartProvider,
+  ShopifyAnalytics,
   PerformanceMetrics,
   PerformanceMetricsDebug,
 } from '@shopify/hydrogen';
@@ -22,7 +23,8 @@ function App({routes}) {
           </Router>
         </CartProvider>
         <PerformanceMetrics />
-        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
+        {import.meta.env.DEV && <PerformanceMetricsDebug />}
+        <ShopifyAnalytics />
       </ShopifyProvider>
     </Suspense>
   );

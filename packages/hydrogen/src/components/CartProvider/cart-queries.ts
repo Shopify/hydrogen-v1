@@ -113,6 +113,7 @@ export const defaultCartFragment = `
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -133,6 +134,16 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {

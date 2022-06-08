@@ -27,7 +27,7 @@ A new snapshot release will be created with your changes and tagged on NPM with 
 yarn add @shopify/hydrogen@unstable
 
 # or start a new project:
-npx create-hydrogen-app@unstable
+npx @shopify/create-hydrogen@unstable
 ```
 
 ## Releasing experimental versions
