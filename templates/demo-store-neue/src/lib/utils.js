@@ -112,7 +112,7 @@ function resolveToFromType(
   Parse each menu link and adding, isExternal, to and target
 */
 function parseItem(customPrefixes = {}) {
-  return function(item) {
+  return function (item) {
     if (!item?.url || !item?.type) {
       console.warn('Invalid menu item.  Must include a url and type.');
       return;
