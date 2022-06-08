@@ -7,7 +7,7 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import AccountDetails from '~/components/pages';
+import {AccountDetails} from '~/components/pages';
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {getApiErrorMessage} from '~/lib/utils';
 
@@ -46,12 +46,12 @@ export default function Account({response, editingAccount, editingAddress}) {
     return (
       <Layout>
         <Seo type="noindex" data={{title: 'Account details'}} />
-        <EditAccountDetails
+        {/* <EditAccountDetails
           firstName={customer.firstName}
           lastName={customer.lastName}
           phone={customer.phone}
           email={customer.email}
-        />
+        /> */}
       </Layout>
     );
 
@@ -66,10 +66,10 @@ export default function Account({response, editingAccount, editingAddress}) {
           type="noindex"
           data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
         />
-        <EditAddress
+        {/* <EditAddress
           address={addressToEdit}
           defaultAddress={defaultAddress === editingAddress}
-        />
+        /> */}
       </Layout>
     );
   }
@@ -145,14 +145,14 @@ function AuthenticatedAccount({customer, addresses, defaultAddress}) {
             <span className="flex-1"></span>
             <LogoutButton className="font-medium underline" />
           </div>
-          <OrderHistory orders={orders} />
+          {/* <OrderHistory orders={orders} /> */}
           <AccountDetails
             firstName={customer.firstName}
             lastName={customer.lastName}
             phone={customer.phone}
             email={customer.email}
           />
-          <AddressBook defaultAddress={defaultAddress} addresses={addresses} />
+          {/* <AddressBook defaultAddress={defaultAddress} addresses={addresses} /> */}
         </div>
       </div>
     </Layout>
