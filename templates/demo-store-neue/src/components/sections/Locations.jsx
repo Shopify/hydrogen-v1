@@ -8,7 +8,8 @@ export default function Locations({title = 'Locations', data}) {
   return (
     <Section heading={title}>
       <Grid items={data.length}>
-        {data && data.map((location, i) => <Card data={location} key={i} />)}
+        {data &&
+          data.map((location) => <Card data={location} key={location.id} />)}
       </Grid>
     </Section>
   );

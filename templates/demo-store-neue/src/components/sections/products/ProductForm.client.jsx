@@ -41,6 +41,7 @@ export default function ProductForm() {
         }
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleChange(name, value) {

@@ -2,7 +2,6 @@ import {
   useSession,
   useShop,
   useShopQuery,
-  Seo,
   useRouteParams,
   useServerAnalytics,
   ShopifyAnalyticsConstants,

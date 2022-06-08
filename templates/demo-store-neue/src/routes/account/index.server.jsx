@@ -122,11 +122,11 @@ export async function api(request, {session, queryShop}) {
   return new Response(null);
 }
 
-function AuthenticatedAccount({customer, addresses, defaultAddress}) {
-  const orders =
-    customer?.orders?.edges.length > 0
-      ? flattenConnection(customer.orders)
-      : [];
+function AuthenticatedAccount({customer}) {
+  // const orders =
+  //   customer?.orders?.edges.length > 0
+  //     ? flattenConnection(customer.orders)
+  //     : [];
 
   const pageHeader = customer?.firstName
     ? `Hi ${customer.firstName}.`
@@ -143,7 +143,7 @@ function AuthenticatedAccount({customer, addresses, defaultAddress}) {
           ) : null}
           <div className="flex">
             <span className="flex-1"></span>
-            <LogoutButton className="font-medium underline" />
+            {/* <LogoutButton className="font-medium underline" /> */}
           </div>
           {/* <OrderHistory orders={orders} /> */}
           <AccountDetails

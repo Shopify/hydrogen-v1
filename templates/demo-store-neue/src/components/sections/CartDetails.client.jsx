@@ -112,7 +112,7 @@ export default function CartDetails() {
   );
 }
 
-function CartLineItem({line}) {
+function CartLineItem() {
   const {linesRemove} = useCart();
   const {id: lineId, quantity, merchandise} = useCartLine();
 
@@ -134,7 +134,7 @@ function CartLineItem({line}) {
           </Heading>
           <div className="flex gap-2">
             {merchandise.selectedOptions.map((option) => (
-              <Text color="subtle">
+              <Text key={option.name} color="subtle">
                 {option.name}: {option.value}
               </Text>
             ))}

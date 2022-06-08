@@ -69,4 +69,4 @@ jobs:
       # Skip this for now. It takes Oxygen a few seconds to make the deployment live, and this 404s.
       # - name: Run health check
       #   run: |
-      #     yarn ts-node scripts/health-check.ts ${{ steps.deploy.outputs.url }}
+      #     node scripts/health-check ${{ steps.deploy.outputs.url }}
