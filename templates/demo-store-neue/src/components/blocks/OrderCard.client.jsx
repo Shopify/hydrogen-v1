@@ -39,10 +39,7 @@ function fulfillmentStatus(status) {
 
 export default function OrderCard(props) {
   const {order} = props;
-  const lineItems =
-    order?.lineItems?.edges.length > 0
-      ? flattenConnection(order.lineItems)
-      : [];
+  const lineItems = flattenConnection(order?.lineItems);
   return (
     <li className="col-span-1 flex flex-col text-center bg-white rounded border-gray-200 border divide-y divide-gray-200">
       <Link to="#">

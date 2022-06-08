@@ -15,6 +15,7 @@ import {
   SelectedOptions,
   ProductOptionsHookValue,
 } from '../../hooks/useProductOptions/types';
+import {flattenConnection} from '../../utilities/flattenConnection';
 
 type InitialVariantId = ProductVariantType['id'] | null;
 
@@ -41,8 +42,8 @@ export function ProductOptionsProvider({
 }: ProductOptionsProviderProps) {
   // The flattened variants
   const variants = useMemo(
-    () => product.variants?.nodes,
-    [product.variants?.nodes]
+    () => flattenConnection(product.variants ?? {}),
+    [product.variants]
   );
 
   if (!isProductVariantArray(variants)) {

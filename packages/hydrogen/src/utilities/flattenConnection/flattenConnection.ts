@@ -11,10 +11,14 @@ export function flattenConnection<T>(
     return connection.nodes as PartialDeep<T>[];
   }
 
-  return (connection.edges || []).map((edge) => {
-    if (!edge?.node) {
-      throw new Error('Connection edges must contain nodes');
-    }
-    return edge.node;
-  });
+  if (connection.edges) {
+    return connection.edges.map((edge) => {
+      if (!edge?.node) {
+        throw new Error('Connection edges must contain nodes');
+      }
+      return edge.node;
+    });
+  }
+
+  return [];
 }
