@@ -29,6 +29,7 @@ export type RunSsrParams = {
   template: string;
   nonce?: string;
   nodeResponse?: ServerResponse;
+  revalidate?: Boolean;
 };
 
 export type RunRscParams = {

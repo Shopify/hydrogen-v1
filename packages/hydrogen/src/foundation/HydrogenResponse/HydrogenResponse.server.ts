@@ -36,8 +36,12 @@ export class HydrogenResponse extends Response {
     return !this.wait;
   }
 
-  cache(options: CachingStrategy) {
-    this.cacheOptions = options;
+  cache(options?: CachingStrategy) {
+    if (options) {
+      this.cacheOptions = options;
+    }
+
+    return this.cacheOptions;
   }
 
   get cacheControlHeader(): string {

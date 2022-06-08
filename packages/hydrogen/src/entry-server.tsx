@@ -33,7 +33,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {setCache} from './foundation/runtime';
+import {getCache, setCache} from './foundation/runtime';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -50,6 +50,13 @@ import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
 import {htmlEncode} from './utilities';
 import {splitCookiesString} from 'set-cookie-parser';
+import {
+  deleteItemFromCache,
+  getItemFromCache,
+  isStale,
+  setItemInCache,
+} from './foundation/Cache/cache';
+import {CacheSeconds} from './foundation/Cache/strategies';
 
 declare global {
   // This is provided by a Vite plugin
@@ -80,17 +87,13 @@ export interface RequestHandler {
   >;
 }
 
+let runtimeWaitUntil: ((fn: Promise<any>) => void) | undefined;
+
 export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
-    const {
-      dev,
-      nonce,
-      cache,
-      context,
-      buyerIpHeader,
-      indexTemplate,
-      streamableResponse: nodeResponse,
-    } = options;
+    const {cache, context, buyerIpHeader} = options;
+
+    runtimeWaitUntil = context?.waitUntil;
 
     const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
@@ -141,6 +144,80 @@ export const renderHydrogen = (App: any) => {
       );
     }
 
+    // Check if we have cached response
+    if (cache) {
+      console.log(`Cache - ${request.cacheKey().url}`);
+      const cachedResponse = await getItemFromCache(request.cacheKey());
+      if (cachedResponse) {
+        console.log(`Cache: HIT - ${request.url}`);
+        if (isStale(request, cachedResponse)) {
+          console.log(`Cache: STALE - ${request.url}`);
+          const lockCacheKey = request.cacheKey(true);
+          const revalidatingPromise = getItemFromCache(lockCacheKey).then(
+            async (lockExists) => {
+              if (lockExists) return;
+
+              await setItemInCache(
+                lockCacheKey,
+                new Response(null),
+                CacheSeconds({
+                  maxAge: 10,
+                })
+              );
+              try {
+                // Don't stream when creating a response for cache
+                await processRequest(
+                  url,
+                  request,
+                  sessionApi,
+                  options,
+                  response,
+                  hydrogenConfig,
+                  true
+                );
+              } catch (e: any) {
+                log.error('Cache revalidate error', e);
+              } finally {
+                await deleteItemFromCache(lockCacheKey);
+              }
+            }
+          );
+
+          // Asynchronously wait for it in workers
+          request.ctx.runtime?.waitUntil?.(revalidatingPromise);
+        }
+
+        return cachedResponse;
+      }
+    }
+
+    return processRequest(
+      url,
+      request,
+      sessionApi,
+      options,
+      response,
+      hydrogenConfig
+    );
+  };
+
+  async function processRequest(
+    url: URL,
+    request: HydrogenRequest,
+    sessionApi: any,
+    options: RequestHandlerOptions,
+    response: HydrogenResponse,
+    hydrogenConfig: ResolvedHydrogenConfig,
+    revalidate = false
+  ) {
+    const {
+      dev,
+      nonce,
+      indexTemplate,
+      streamableResponse: nodeResponse,
+    } = options;
+
+    const log = getLoggerWithContext(request);
     const isRSCRequest = url.pathname === RSC_PATHNAME;
     const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
 
@@ -169,8 +246,10 @@ export const renderHydrogen = (App: any) => {
     const rsc = runRSC({App, state, log, request, response});
 
     if (isRSCRequest) {
+      console.log('RSC');
       const buffered = await bufferReadableStream(rsc.readable.getReader());
       postRequestTasks('rsc', 200, request, response);
+      cacheResponse(response, request, [buffered], revalidate);
 
       return new Response(buffered, {
         headers: {'cache-control': response.cacheControlHeader},
@@ -191,8 +270,9 @@ export const renderHydrogen = (App: any) => {
       response,
       nodeResponse,
       template: await getTemplate(indexTemplate, url),
+      revalidate,
     });
-  };
+  }
 
   if (__HYDROGEN_WORKER__) return handleRequest;
 
@@ -260,6 +340,7 @@ async function runSSR({
   nonce,
   dev,
   log,
+  revalidate,
 }: RunSsrParams) {
   let ssrDidError: Error | undefined;
   const didError = () => rsc.didError() ?? ssrDidError;
@@ -313,6 +394,8 @@ async function runSSR({
     : rscReadableForFlight;
 
   if (__HYDROGEN_WORKER__) {
+    console.log('SSR - worker');
+
     const encoder = new TextEncoder();
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
@@ -444,6 +527,16 @@ async function runSSR({
 
     return new Response(bufferedBody, responseOptions);
   } else if (nodeResponse) {
+    console.log('SSR - node');
+
+    const savedChunks = tagOnResponseWrite(nodeResponse);
+
+    nodeResponse.on('finish', () => {
+      console.log('SSR - node - finish');
+      console.log(savedChunks.length);
+      cacheResponse(response, request, savedChunks, revalidate);
+    });
+
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -732,5 +825,79 @@ function setNodeHeaders(headers: Headers, nodeResponse: ServerResponse) {
     } else {
       nodeResponse.setHeader(key, value);
     }
+  }
+}
+
+function tagOnResponseWrite(response: ServerResponse) {
+  const originalWrite = response.write;
+  const decoder = new TextDecoder();
+  const savedChunks: string[] = [];
+  response.write = (...args) => {
+    if (args[0] instanceof Uint8Array) {
+      savedChunks.push(decoder.decode(args[0]));
+    } else {
+      savedChunks.push(args[0]);
+    }
+    // @ts-ignore
+    return originalWrite.apply(response, args);
+  };
+
+  return savedChunks;
+}
+
+async function cacheResponse(
+  componentResponse: HydrogenResponse,
+  request: HydrogenRequest,
+  chunks: string[],
+  revalidate?: Boolean
+) {
+  const cache = getCache();
+
+  if (cache && chunks.length > 0) {
+    console.log('cacheResponse');
+    if (revalidate) {
+      console.log('cacheResponse - revalidate');
+      await saveCacheResponse(componentResponse, request, chunks);
+    } else {
+      console.log('cacheResponse - wait');
+      runtimeWaitUntil?.(
+        new Promise(() => {
+          console.log('cacheResponse - waitUntil');
+          saveCacheResponse(componentResponse, request, chunks);
+        })
+      );
+    }
+  }
+}
+
+async function saveCacheResponse(
+  response: HydrogenResponse,
+  request: HydrogenRequest,
+  chunks: string[]
+) {
+  const cache = getCache();
+
+  if (cache && chunks.length > 0) {
+    console.log(`saveCacheResponse - ${request.cacheKey().url}`);
+    const {headers, status, statusText} = getResponseOptions(response);
+    const url = new URL(request.url);
+
+    headers.set('cache-control', response.cacheControlHeader);
+    const currentHeader = headers.get('Content-Type');
+    if (!currentHeader && url.pathname !== RSC_PATHNAME) {
+      headers.set('Content-Type', 'text/html; charset=UTF-8');
+    }
+
+    await setItemInCache(
+      request.cacheKey(),
+      new Response(chunks.join(''), {
+        status,
+        statusText,
+        headers,
+      }),
+      response.cache()
+    );
+
+    console.log(`Cache: PUT - ${request.url}`);
   }
 }
