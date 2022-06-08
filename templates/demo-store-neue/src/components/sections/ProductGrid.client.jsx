@@ -1,4 +1,5 @@
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect, useCallback} from 'react';
+import {flattenConnection} from '@shopify/hydrogen';
 
 import {Grid} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
@@ -30,13 +31,13 @@ export default function ProductGrid({data}) {
     setPending(false);
   };
 
-  const handleIntersect = (entries) => {
+  const handleIntersect = useCallback((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         fetchProducts();
       }
     });
-  };
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
@@ -49,7 +50,7 @@ export default function ProductGrid({data}) {
     return () => {
       if (nextButtonRef.current) observer.unobserve(nextButtonRef.current);
     };
-  }, [nextButtonRef, cursor]);
+  }, [nextButtonRef, cursor, handleIntersect]);
 
   return (
     <>
