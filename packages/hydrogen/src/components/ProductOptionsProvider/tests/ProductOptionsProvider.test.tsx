@@ -194,9 +194,7 @@ describe('<ProductOptionsProvider />', () => {
 
   it('allows setSelectedVariant to be called with null to deselect', async () => {
     function Component() {
-      const {selectedVariant, setSelectedVariant} = useProductOptions({
-        variants: VARIANTS,
-      });
+      const {selectedVariant, setSelectedVariant} = useProductOptions();
 
       return (
         <>
@@ -207,10 +205,14 @@ describe('<ProductOptionsProvider />', () => {
       );
     }
 
-    const wrapper = await mount(<Component />);
+    const wrapper = await mountWithProviders(
+      <ProductOptionsProvider data={getProduct({variants: VARIANTS})}>
+        <Component />
+      </ProductOptionsProvider>
+    );
 
     expect(wrapper).toContainReactComponent('div', {
-      children: JSON.stringify(VARIANTS.edges[0].node),
+      children: JSON.stringify(VARIANTS.nodes?.[0]),
     });
 
     await wrapper.find('button')!.trigger('onClick');
