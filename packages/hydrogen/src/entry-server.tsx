@@ -87,13 +87,9 @@ export interface RequestHandler {
   >;
 }
 
-let runtimeWaitUntil: ((fn: Promise<any>) => void) | undefined;
-
 export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
     const {cache, context, buyerIpHeader} = options;
-
-    runtimeWaitUntil = context?.waitUntil;
 
     const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
@@ -132,6 +128,16 @@ export const renderHydrogen = (App: any) => {
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
      */
     request.ctx.runtime = context;
+    if (!context?.waitUntil) {
+      const runtimeContext: RuntimeContext = {
+        waitUntil: (fn: Promise<any>) => {
+          setTimeout(() => fn, 0);
+        },
+      };
+
+      request.ctx.runtime = runtimeContext;
+    }
+
     setCache(cache);
 
     if (
@@ -184,7 +190,7 @@ export const renderHydrogen = (App: any) => {
           );
 
           // Asynchronously wait for it in workers
-          request.ctx.runtime?.waitUntil?.(revalidatingPromise);
+          request.ctx.runtime?.waitUntil(revalidatingPromise);
         }
 
         return cachedResponse;
@@ -377,21 +383,22 @@ async function runSSR({
 
   log.trace('start ssr');
 
-  const rscReadable = response.canStream()
-    ? new ReadableStream({
-        start(controller) {
-          log.trace('rsc start chunks');
-          const encoder = new TextEncoder();
-          bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
-            const metaTag = flightContainer(chunk);
-            controller.enqueue(encoder.encode(metaTag));
-          }).then(() => {
-            log.trace('rsc finish chunks');
-            return controller.close();
-          });
-        },
-      })
-    : rscReadableForFlight;
+  const rscReadable =
+    response.canStream() || !revalidate
+      ? new ReadableStream({
+          start(controller) {
+            log.trace('rsc start chunks');
+            const encoder = new TextEncoder();
+            bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
+              const metaTag = flightContainer(chunk);
+              controller.enqueue(encoder.encode(metaTag));
+            }).then(() => {
+              log.trace('rsc finish chunks');
+              return controller.close();
+            });
+          },
+        })
+      : rscReadableForFlight;
 
   if (__HYDROGEN_WORKER__) {
     console.log('SSR - worker');
@@ -527,7 +534,7 @@ async function runSSR({
 
     return new Response(bufferedBody, responseOptions);
   } else if (nodeResponse) {
-    console.log('SSR - node');
+    console.log(`SSR - node - revalidate: ${revalidate}`);
 
     const savedChunks = tagOnResponseWrite(nodeResponse);
 
@@ -551,12 +558,18 @@ async function runSSR({
          */
         writeHeadToNodeResponse(nodeResponse, response, log, didError());
 
+        console.log(`SSR - node - 0`);
+
         if (isRedirect(nodeResponse)) {
           // Return redirects early without further rendering/streaming
           return nodeResponse.end();
         }
 
+        console.log(`SSR - node - 1`);
+
         if (!response.canStream()) return;
+
+        console.log(`SSR - node - 2`);
 
         startWritingToNodeResponse(nodeResponse, dev ? didError() : undefined);
 
@@ -573,11 +586,16 @@ async function runSSR({
       async onAllReady() {
         log.trace('node complete ssr');
 
+        console.log(`SSR - node - 3`);
+
         if (response.canStream() || nodeResponse.writableEnded) {
           postRequestTasks('str', nodeResponse.statusCode, request, response);
-
+          cacheResponse(response, request, savedChunks, revalidate);
+          console.log(`SSR - node - 4`);
           return;
         }
+
+        console.log(`SSR - node - 5`);
 
         writeHeadToNodeResponse(nodeResponse, response, log, didError());
 
@@ -585,6 +603,8 @@ async function runSSR({
           // Redirects found after any async code
           return nodeResponse.end();
         }
+
+        console.log(`SSR - node - 6`);
 
         const bufferedResponse = await createNodeWriter();
         const bufferedRscPromise = bufferReadableStream(
@@ -605,6 +625,7 @@ async function runSSR({
           if (!error) {
             html = assembleHtml({ssrHtml, rscPayload, request, template});
             postRequestTasks('ssr', nodeResponse.statusCode, request, response);
+            console.log(`SSR - node - 7`);
           }
 
           nodeResponse.write(html);
@@ -854,16 +875,16 @@ async function cacheResponse(
   const cache = getCache();
 
   if (cache && chunks.length > 0) {
-    console.log('cacheResponse');
     if (revalidate) {
-      console.log('cacheResponse - revalidate');
+      console.log(`cacheResponse - revalidate`);
       await saveCacheResponse(componentResponse, request, chunks);
     } else {
-      console.log('cacheResponse - wait');
-      runtimeWaitUntil?.(
-        new Promise(() => {
-          console.log('cacheResponse - waitUntil');
-          saveCacheResponse(componentResponse, request, chunks);
+      request.ctx.runtime?.waitUntil(
+        Promise.resolve({
+          then: () => {
+            console.log('cacheResponse - waitUntil');
+            saveCacheResponse(componentResponse, request, chunks);
+          },
         })
       );
     }
