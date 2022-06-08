@@ -92,13 +92,13 @@ function resolveToFromType(
     }
 
     case type === 'COLLECTIONS':
-      return routePrefix.COLLECTIONS ? `/${routePrefix.COLLECTIONS}` : `/`;
+      return `/${routePrefix.COLLECTIONS}`;
 
     case type === 'SEARCH':
       return `/${routePrefix.SEARCH}`;
 
     case type === 'CATALOG':
-      return routePrefix.CATALOG ? `/${routePrefix.CATALOG}` : `/`;
+      return `/${routePrefix.CATALOG}`;
 
     // common cases: BLOG, PAGE, COLLECTION, PRODUCT, SHOP_POLICY, HTTP
     default:
