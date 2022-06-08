@@ -4,98 +4,88 @@ import {
   useShopQuery,
   flattenConnection,
   Seo,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
-import {NotFound} from '~/components/pages';
-import {PageHeader, Section} from '~/components/sections';
-import {Text} from '~/components/elements';
-import ProductGrid from '~/components/sections/ProductGrid.client';
+import LoadMoreProducts from '../../components/LoadMoreProducts.client';
+import Layout from '../../components/Layout.server';
+import ProductCard from '../../components/ProductCard';
+import NotFound from '../../components/NotFound.server';
 
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
-
-const pageBy = 12;
-
-export default function Collection({params}) {
+export default function Collection({collectionProductCount = 24, params}) {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
   const {handle} = params;
-
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
       handle,
       country: countryCode,
       language: languageCode,
-      pageBy,
+      numProducts: collectionProductCount,
     },
     preload: true,
   });
 
+  useServerAnalytics(
+    data?.collection
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.collection,
+            resourceId: data.collection.id,
+          },
+        }
+      : null,
+  );
+
   if (data?.collection == null) {
-    return <NotFound type="collection" />;
+    return <NotFound />;
   }
 
   const collection = data.collection;
-  const products = flattenConnection(data.collection.products);
+  const products = flattenConnection(collection.products);
+  const hasNextPage = data.collection.products.pageInfo.hasNextPage;
 
   return (
     <Layout>
+      {/* the seo object will be expose in API version 2022-04 or later */}
       <Seo type="collection" data={collection} />
-      <PageHeader heading={collection.title}>
-        <div className="flex items-baseline justify-between w-full">
-          <div>
-            <Text format width="narrow" as="p" className="inline-block">
-              {collection.description}
-            </Text>
-          </div>
-          <div className="flex items-baseline justify-end gap-4 md:gap-6 lg:gap-8">
-            {/* TODO: This will only get the amount on the page, not the total amount. I don't think you actually can grab the total number of products in a collection today. */}
-            <Text>{products.length}</Text>
-            {/* TODO: Convert to Filter dropdown */}
-            <button className="inline-block pb-px leading-none border-b border-primary">
-              Filters
-            </button>
-          </div>
-        </div>
-      </PageHeader>
-      <Section>
-        <ProductGrid data={data} />
-      </Section>
+      <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
+        {collection.title}
+      </h1>
+      <div
+        dangerouslySetInnerHTML={{__html: collection.descriptionHtml}}
+        className="text-lg"
+      />
+      <p className="text-sm text-gray-500 mt-5 mb-5">
+        {products.length} {products.length > 1 ? 'products' : 'product'}
+      </p>
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {products.map((product) => (
+          <li key={product.id}>
+            <ProductCard product={product} />
+          </li>
+        ))}
+      </ul>
+      {hasNextPage && (
+        <LoadMoreProducts startingCount={collectionProductCount} />
+      )}
     </Layout>
   );
 }
 
-export async function api(request, {params, queryShop}) {
-  if (request.method !== 'POST') {
-    return new Response(405, {Allow: 'POST'});
-  }
-
-  const cursor = new URL(request.url).searchParams.get('cursor');
-  const {handle} = params;
-
-  return await queryShop({
-    query: QUERY,
-    variables: {
-      handle,
-      cursor,
-      pageBy,
-    },
-  });
-}
-
 const QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
   query CollectionDetails(
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
-    $pageBy: Int!
-    $cursor: String
+    $numProducts: Int!
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
+      id
       title
       descriptionHtml
       description
@@ -110,16 +100,52 @@ const QUERY = gql`
         height
         altText
       }
-      products(first: $pageBy, after: $cursor) {
+      products(first: $numProducts) {
         edges {
-          cursor
           node {
-            ...ProductCardFields
+            id
+            title
+            vendor
+            handle
+            descriptionHtml
+            compareAtPriceRange {
+              maxVariantPrice {
+                currencyCode
+                amount
+              }
+              minVariantPrice {
+                currencyCode
+                amount
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  title
+                  availableForSale
+                  image {
+                    id
+                    url
+                    altText
+                    width
+                    height
+                  }
+                  priceV2 {
+                    currencyCode
+                    amount
+                  }
+                  compareAtPriceV2 {
+                    currencyCode
+                    amount
+                  }
+                }
+              }
+            }
           }
         }
         pageInfo {
           hasNextPage
-          endCursor
         }
       }
     }

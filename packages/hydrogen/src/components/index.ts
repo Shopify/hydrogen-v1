@@ -26,7 +26,10 @@ export type {
   CartWithActions,
   CartAction,
 } from './CartProvider';
-export {ProductProvider, useProduct} from './ProductProvider';
+export {
+  ProductOptionsProvider,
+  useProductOptions,
+} from './ProductOptionsProvider';
 export {ProductPrice} from './ProductPrice';
 export {BuyNowButton} from './BuyNowButton';
 export {ShopPayButton} from './ShopPayButton';

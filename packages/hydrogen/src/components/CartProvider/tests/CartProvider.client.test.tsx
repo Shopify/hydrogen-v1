@@ -17,6 +17,10 @@ jest.mock('../hooks.client', () => {
   };
 });
 
+jest.mock('../../../foundation/useServerProps', () => ({
+  userServerProps: jest.fn(),
+}));
+
 describe('<CartProvider />', () => {
   beforeEach(() => {
     fetchCartMock.mockReturnValue({data: {}});
@@ -137,73 +141,6 @@ describe('<CartProvider />', () => {
           status: 'updating',
         })
       );
-    });
-  });
-
-  describe('totalQuantity', () => {
-    it('defaults to 0 when cart is empty', () => {
-      const wrapper = mount(<CartProvider>test</CartProvider>);
-
-      expect(wrapper).toContainReactComponent(CartContext.Provider, {
-        value: expect.objectContaining({
-          totalQuantity: 0,
-        }),
-      });
-    });
-
-    it('starts with the line numbers in the cart', () => {
-      const wrapper = mount(
-        <CartProvider data={CART_WITH_LINES}>test</CartProvider>
-      );
-
-      expect(wrapper).toContainReactComponent(CartContext.Provider, {
-        value: expect.objectContaining({
-          totalQuantity: CART_WITH_LINES.lines.edges.length,
-        }),
-      });
-    });
-
-    it.skip('increase by 1 when a new line is added', () => {
-      const newLine: CartLineInput = {
-        merchandiseId: '123',
-      };
-
-      fetchCartMock.mockReturnValue({
-        data: {
-          cartLinesAdd: {
-            cart: {
-              ...CART_WITH_LINES,
-              lines: {edges: [...CART_WITH_LINES.lines.edges, newLine]},
-            },
-          },
-        },
-      });
-
-      const wrapper = mount(
-        <CartProvider data={CART_WITH_LINES}>
-          <CartContext.Consumer>
-            {(cartContext) => {
-              return (
-                <button
-                  onClick={() => {
-                    cartContext?.linesAdd([newLine]);
-                  }}
-                >
-                  Add
-                </button>
-              );
-            }}
-          </CartContext.Consumer>
-        </CartProvider>
-      );
-
-      wrapper.find('button')?.trigger('onClick');
-
-      expect(wrapper).toContainReactComponent(CartContext.Provider, {
-        value: expect.objectContaining({
-          totalQuantity: CART_WITH_LINES.lines.edges.length + 1,
-        }),
-      });
     });
   });
 

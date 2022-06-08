@@ -4,10 +4,8 @@ import {
   Logger,
   logServerResponse,
   getLoggerWithContext,
-  resetLogger,
 } from '../log';
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
-import {setLoggerOptions} from '..';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
 
 let mockLogger: jest.Mocked<Logger>;
 
@@ -29,7 +27,7 @@ describe('log', () => {
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
   });
 
   it('should return the wrapped mockLogger instance when log is called', () => {
@@ -47,11 +45,10 @@ describe('log', () => {
       warn: jest.fn(),
       error: jest.fn(),
       fatal: jest.fn(),
-      options: jest.fn(() => ({
-        showCacheControlHeader: true,
-      })),
+      options: jest.fn(() => ({})),
     };
-    setLogger(mockLogger2);
+
+    setLogger({...mockLogger2, showCacheControlHeader: true});
 
     log.debug('test');
     expect(mockLogger2.debug).toHaveBeenCalled();
@@ -62,17 +59,15 @@ describe('log', () => {
     expect(mockLogger2.debug.mock.calls[0][1]).toEqual('test');
   });
 
-  it('should set showCacheControlHeader option when setLoggerOptions is called', () => {
-    setLoggerOptions({
-      showCacheControlHeader: true,
-    });
+  it('should set showCacheControlHeader option correctly', () => {
+    setLogger({showCacheControlHeader: true});
     expect(log.options()).toEqual({
       showCacheControlHeader: true,
     });
   });
 
-  it('should set showCacheApiStatus option when setLoggerOptions is called', () => {
-    setLoggerOptions({
+  it('should set showCacheApiStatus option correctly', () => {
+    setLogger({
       showCacheApiStatus: true,
     });
     expect(log.options()).toEqual({
@@ -80,14 +75,14 @@ describe('log', () => {
     });
   });
 
-  it('should return the correct options when setLoggerOptions is set multiple times', () => {
-    setLoggerOptions({
+  it('should set multiple options correctly', () => {
+    setLogger({
       showCacheControlHeader: true,
     });
     expect(log.options()).toEqual({
       showCacheControlHeader: true,
     });
-    setLoggerOptions({
+    setLogger({
       showCacheApiStatus: true,
       showCacheControlHeader: true,
     });
@@ -102,7 +97,7 @@ describe('log', () => {
       method: 'GET',
       url: 'http://localhost:3000/',
       time: 1000,
-    } as ServerComponentRequest;
+    } as HydrogenRequest;
     logServerResponse('str', request, 500);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
@@ -116,7 +111,7 @@ describe('log', () => {
       method: 'GET',
       url: 'http://localhost:3000/',
       time: 1000,
-    } as ServerComponentRequest;
+    } as HydrogenRequest;
     logServerResponse('str', request, 200);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
@@ -130,7 +125,7 @@ describe('log', () => {
       method: 'GET',
       url: 'http://localhost:3000/',
       time: 1000,
-    } as ServerComponentRequest;
+    } as HydrogenRequest;
     logServerResponse('str', request, 301);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
@@ -144,7 +139,7 @@ describe('log', () => {
       method: 'GET',
       url: 'http://localhost:3000/',
       time: 1000,
-    } as ServerComponentRequest;
+    } as HydrogenRequest;
     logServerResponse('str', request, 404);
     expect(mockLogger.debug).toHaveBeenCalled();
     expect(mockLogger.debug.mock.calls[0][0]).toEqual(request);
@@ -164,16 +159,35 @@ describe('log', () => {
     });
 
     it('gets logger for a given context', () => {
-      const clog = getLoggerWithContext({some: 'data'});
+      const clog = getLoggerWithContext({url: 'example.com'});
 
       (clog as any)[method](`hydrogen: ${method}`);
       expect((mockLogger as any)[method]).toHaveBeenCalled();
       expect(((mockLogger as any)[method] as any).mock.calls[0][0]).toEqual({
-        some: 'data',
+        url: 'example.com',
       });
       expect(((mockLogger as any)[method] as any).mock.calls[0][1]).toBe(
         `hydrogen: ${method}`
       );
+    });
+
+    it('marks async calls for waitUntil', () => {
+      const waitUntilPromises = [] as Array<Promise<any>>;
+
+      const clog = getLoggerWithContext({
+        ctx: {
+          runtime: {waitUntil: (p: Promise<any>) => waitUntilPromises.push(p)},
+        } as unknown as HydrogenRequest['ctx'],
+      });
+
+      (clog as any)[method]('no promise 1');
+      (clog as any)[method]('no promise 2');
+      expect(waitUntilPromises).toHaveLength(0);
+
+      setLogger({[method]: async () => null});
+      (clog as any)[method]('promise 1');
+      (clog as any)[method]('promise 2');
+      expect(waitUntilPromises).toHaveLength(2);
     });
   });
 });

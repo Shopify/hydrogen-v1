@@ -2,7 +2,6 @@ import {useShop} from '../../foundation/useShop';
 import {getLoggerWithContext} from '../../utilities/log';
 import type {CachingStrategy, PreloadOptions} from '../../types';
 import {graphqlRequestBody} from '../../utilities';
-import {getConfig} from '../../framework/config';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
@@ -75,16 +74,23 @@ export function useShopQuery<T>({
   const body = query ? graphqlRequestBody(query, variables) : '';
   const {url, requestInit} = useCreateShopRequest(body); // eslint-disable-line react-hooks/rules-of-hooks
 
+  let text: string;
   let data: any;
   let useQueryError: any;
 
   try {
-    data = fetchSync(url, {
+    text = fetchSync(url, {
       ...requestInit,
       cache,
       preload,
       shouldCacheResponse,
-    }).json();
+    }).text();
+
+    try {
+      data = JSON.parse(text);
+    } catch (error: any) {
+      useQueryError = new Error('Unable to parse response:\n' + text);
+    }
   } catch (error: any) {
     // Pass-through thrown promise for Suspense functionality
     if (error?.then) {
@@ -103,7 +109,7 @@ export function useShopQuery<T>({
     log.error(errorMessage);
     log.error(useQueryError);
 
-    if (getConfig().dev) {
+    if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
       throw new Error(errorMessage);
     } else {
       // in non-dev environments, we probably don't want super-detailed error messages for the user
@@ -121,7 +127,7 @@ export function useShopQuery<T>({
     const errors = Array.isArray(data.errors) ? data.errors : [data.errors];
 
     for (const error of errors) {
-      if (getConfig().dev) {
+      if (__HYDROGEN_DEV__ && !__HYDROGEN_TEST__) {
         throw new Error(error.message);
       } else {
         log.error('GraphQL Error', error);
@@ -131,7 +137,7 @@ export function useShopQuery<T>({
   }
 
   if (
-    __DEV__ &&
+    __HYDROGEN_DEV__ &&
     log.options().showUnusedQueryProperties &&
     query &&
     data?.data
