@@ -19,7 +19,6 @@ function requestCacheRSC() {
 requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
 
 type ServerRequestProviderProps = {
-  isRSC: boolean;
   request: HydrogenRequest;
   children: JSX.Element;
 };
@@ -51,11 +50,10 @@ function getCacheForType(resource: () => Map<any, any>) {
 }
 
 export function ServerRequestProvider({
-  isRSC,
   request,
   children,
 }: ServerRequestProviderProps) {
-  if (isRSC) {
+  if (isRsc()) {
     // Save the request object in a React cache that is
     // scoped to this current rendering.
 

@@ -13,7 +13,7 @@ function mountComponent(analyticsData?: any) {
   const request = new HydrogenRequest(new Request('https://examples.com'));
 
   return mountWithProviders(
-    <ServerRequestProvider request={request} isRSC={true}>
+    <ServerRequestProvider request={request}>
       <Suspense fallback={null}>
         <Component />
       </Suspense>
