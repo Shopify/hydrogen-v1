@@ -43,11 +43,8 @@ describe('HydrogenRequest', () => {
 
   it('does not save preload queries when preload key is not present', () => {
     const request = createHydrogenRequest(`https://localhost:3000/`);
-    request.savePreloadQuery(createPreloadQueryEntry('test1'));
-    request.savePreloadQueries();
-
     const preloadQueries = request.getPreloadQueries();
-    expect(preloadQueries?.size).toEqual(0);
+    expect(preloadQueries).toBeUndefined();
   });
 
   it('saves preload queries', () => {
