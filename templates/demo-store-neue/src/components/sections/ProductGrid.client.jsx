@@ -1,5 +1,4 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
-import {flattenConnection} from '@shopify/hydrogen';
 
 import {Grid} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
@@ -14,7 +13,7 @@ export default function ProductGrid({data}) {
   const [nextPage, setNextPage] = useState(hasNextPage);
   const [pending, setPending] = useState(false);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setPending(true);
     // TODO: Update this logic to use Hydrogen hooks (URL, fetchSync) where appropriate.
     const url = new URL(window.location.href);
@@ -22,22 +21,25 @@ export default function ProductGrid({data}) {
 
     const response = await fetch(url, {method: 'POST'});
     const json = await response.json();
-    const newProducts = flattenConnection(json.data.collection.products);
+    const newProducts = json.data.collection.products.nodes;
     const {endCursor, hasNextPage} = json.data.collection.products.pageInfo;
 
     setProducts([...products, ...newProducts]);
     setCursor(endCursor);
     setNextPage(hasNextPage);
     setPending(false);
-  };
+  }, [cursor, products]);
 
-  const handleIntersect = useCallback((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        fetchProducts();
-      }
-    });
-  }, []);
+  const handleIntersect = useCallback(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          fetchProducts();
+        }
+      });
+    },
+    [fetchProducts],
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
@@ -45,10 +47,12 @@ export default function ProductGrid({data}) {
       rootMargin: '100px',
     });
 
-    if (nextButtonRef.current) observer.observe(nextButtonRef.current);
+    const buttonObserver = nextButtonRef.current;
+
+    if (buttonObserver) observer.observe(buttonObserver);
 
     return () => {
-      if (nextButtonRef.current) observer.unobserve(nextButtonRef.current);
+      if (buttonObserver) observer.unobserve(buttonObserver);
     };
   }, [nextButtonRef, cursor, handleIntersect]);
 
