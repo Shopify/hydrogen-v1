@@ -41,20 +41,31 @@ export function collectQueryTimings(
 
 export function logQueryTimings(type: RenderType, request: HydrogenRequest) {
   const log = getLoggerWithContext(request);
-  if (!log.options().showQueryTiming) {
+
+  if (
+    (!__HYDROGEN_DEV__ && !log.options().showQueryTiming) ||
+    !request.previouslyLoadedRequest()
+  ) {
     return;
   }
 
-  log.debug(color(`┌── Query timings for ${parseUrl(type, request.url)}`));
+  let logMessage = color(
+    `┌── Query timings for ${parseUrl(type, request.url)}`
+  );
+
+  let firstSuspenseWaterfallQueryName = '';
 
   const queryList = request.ctx.queryTimings;
   if (queryList.length > 0) {
     const requestStartTime = request.time;
     const detectSuspenseWaterfall: Record<string, boolean> = {};
     const detectMultipleDataLoad: Record<string, number> = {};
+    const preloadedQueries: Set<string> = new Set();
     let suspenseWaterfallDetectedCount = 0;
 
     queryList.forEach((query: QueryTiming, index: number) => {
+      if (query.timingType === 'preload') preloadedQueries.add(query.name);
+
       if (query.timingType === 'requested' || query.timingType === 'preload') {
         detectSuspenseWaterfall[query.name] = true;
       } else if (query.timingType === 'rendered') {
@@ -68,18 +79,16 @@ export function logQueryTimings(type: RenderType, request: HydrogenRequest) {
       const loadColor = query.timingType === 'preload' ? green : color;
       const duration = query.duration;
 
-      log.debug(
-        color(
-          `│ ${`${(query.timestamp - requestStartTime).toFixed(2)}ms`.padEnd(
-            10
-          )} ${loadColor(TIMING_MAPPING[query.timingType].padEnd(10))} ${
-            query.name
-          }${
-            query.timingType === 'resolved'
-              ? ` (Took ${duration?.toFixed(2)}ms)`
-              : ''
-          }`
-        )
+      logMessage += color(
+        `\n│ ${`${(query.timestamp - requestStartTime).toFixed(2)}ms`.padEnd(
+          10
+        )} ${loadColor(TIMING_MAPPING[query.timingType].padEnd(10))} ${
+          query.name
+        }${
+          query.timingType === 'resolved'
+            ? ` (Took ${duration?.toFixed(2)}ms)`
+            : ''
+        }`
       );
 
       // SSR + RSC render path generates 2 `load` and `render` for each query
@@ -96,37 +105,57 @@ export function logQueryTimings(type: RenderType, request: HydrogenRequest) {
       // so the end of list index range is 3 (one less from a set entry) + 1 (zero index)
       if (
         queryList.length >= index + 4 &&
-        Object.keys(detectSuspenseWaterfall).length === 0
+        Object.keys(detectSuspenseWaterfall).length === 0 &&
+        !preloadedQueries.has(query.name)
       ) {
+        // Store the first suspense waterfall query name to display in the summary console output
+        if (!firstSuspenseWaterfallQueryName)
+          firstSuspenseWaterfallQueryName = query.name;
+
         suspenseWaterfallDetectedCount++;
         const warningColor =
           suspenseWaterfallDetectedCount === 1 ? yellow : red;
-        log.debug(
-          `${color(`│ `)}${warningColor(`Suspense waterfall detected`)}`
-        );
+        logMessage += `\n${color(`│ `)}${warningColor(
+          `Suspense waterfall detected`
+        )}`;
       }
     });
 
     const unusedQueries = Object.keys(detectSuspenseWaterfall);
     if (unusedQueries.length > 0) {
       unusedQueries.forEach((queryName: string) => {
-        log.debug(
-          `${color(`│ `)}${yellow(`Unused query detected: ${queryName}`)}`
-        );
+        logMessage += `\n${color(`│ `)}${yellow(
+          `Unused query detected: ${queryName}`
+        )}`;
       });
     }
 
     Object.keys(detectMultipleDataLoad).forEach((queryName: string) => {
       const count = detectMultipleDataLoad[queryName];
       if (count > 1) {
-        log.debug(
-          `${color(`│ `)}${yellow(
-            `Multiple data loads detected: ${queryName}`
-          )}`
-        );
+        logMessage += `\n${color(`│ `)}${yellow(
+          `Multiple data loads detected: ${queryName}`
+        )}`;
       }
     });
   }
 
-  log.debug(color('└──'));
+  logMessage += '\n' + color('└──');
+
+  if (log.options().showQueryTiming) {
+    log.debug(logMessage);
+  } else if (firstSuspenseWaterfallQueryName) {
+    log.debug(
+      yellow(
+        'Suspense waterfall detected on query: ' +
+          firstSuspenseWaterfallQueryName
+      )
+    );
+    log.debug(
+      '  Add the `showQueryTiming` property to your Hydrogen configuration to see more information:'
+    );
+    log.debug(
+      '  https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger'
+    );
+  }
 }
