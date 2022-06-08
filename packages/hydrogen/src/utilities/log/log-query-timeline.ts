@@ -42,12 +42,11 @@ export function collectQueryTimings(
 export function logQueryTimings(type: RenderType, request: HydrogenRequest) {
   const log = getLoggerWithContext(request);
 
-  if (
-    (!__HYDROGEN_DEV__ && !log.options().showQueryTiming) ||
-    !request.previouslyLoadedRequest()
-  ) {
+  if (!__HYDROGEN_DEV__ && !log.options().showQueryTiming) {
     return;
   }
+
+  const previouslyLoadedRequest = request.previouslyLoadedRequest();
 
   let logMessage = color(
     `┌── Query timings for ${parseUrl(type, request.url)}`
@@ -106,7 +105,8 @@ export function logQueryTimings(type: RenderType, request: HydrogenRequest) {
       if (
         queryList.length >= index + 4 &&
         Object.keys(detectSuspenseWaterfall).length === 0 &&
-        !preloadedQueries.has(query.name)
+        !preloadedQueries.has(query.name) &&
+        previouslyLoadedRequest
       ) {
         // Store the first suspense waterfall query name to display in the summary console output
         if (!firstSuspenseWaterfallQueryName)
