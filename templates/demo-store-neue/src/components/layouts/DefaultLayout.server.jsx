@@ -7,7 +7,9 @@ import {
 } from '@shopify/hydrogen';
 
 import {Suspense} from 'react';
-import {Header, Footer} from '~/components/sections';
+// TODO: Change back to import {Header, Footer} from '~/components/sections'
+import Header from '../sections/Header.client';
+import Footer from '../sections/Footer.client';
 
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
