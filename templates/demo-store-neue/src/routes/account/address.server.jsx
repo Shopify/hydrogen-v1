@@ -1,6 +1,6 @@
 import {NoStore, gql} from '@shopify/hydrogen';
 import {setDefaultAddress} from './address/[addressId].server';
-import {getApiErrorMessage} from '../../components/utilities/api.helper';
+import {getApiErrorMessage} from '~/lib/utils';
 
 export async function api(request, {session, queryShop}) {
   if (request.method !== 'POST')

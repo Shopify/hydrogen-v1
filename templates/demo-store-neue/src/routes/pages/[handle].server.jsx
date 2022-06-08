@@ -8,6 +8,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
+import {NotFound} from '~/components/pages';
 
 export default function Page({params}) {
   const {languageCode} = useShop();

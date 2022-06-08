@@ -1,7 +1,7 @@
 import {useRouteParams, Seo} from '@shopify/hydrogen';
 
-import Layout from '../../../../components/layouts/DefaultLayout.server';
-import AccountActivateForm from '../../../../components/sections/AccountActivateForm.client';
+import {DefaultLayout as Layout} from '~/components/layouts';
+import {AccountActivateForm} from '~/components/sections';
 
 /**
  * This page shows a form for the user to activate an account.

@@ -1,7 +1,6 @@
 import {useSession, useShop, useShopQuery, Seo, gql} from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
-import {NotFound} from '~/components/pages';
 import {PageHeader, Section} from '~/components/sections';
 import {Button, Grid, Text} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
@@ -17,7 +16,7 @@ export default function AllProducts({pageBy = 12}) {
     variables: {
       country: countryCode,
       language: languageCode,
-      pageBy: pageBy,
+      pageBy,
     },
     preload: true,
   });

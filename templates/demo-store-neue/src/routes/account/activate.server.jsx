@@ -1,5 +1,5 @@
 import {NoStore, gql} from '@shopify/hydrogen';
-import {getApiErrorMessage} from '../../components/utilities/api.helper';
+import {getApiErrorMessage} from '~/lib/utils';
 
 /**
  * This API route is used by the form on `/account/activate/[id]/[activationToken]`

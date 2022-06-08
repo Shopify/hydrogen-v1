@@ -1,5 +1,5 @@
 import {NoStore, gql} from '@shopify/hydrogen';
-import {getApiErrorMessage} from '../../../components/utilities/api.helper';
+import {getApiErrorMessage} from '~/lib/utils';
 
 export async function api(request, {params, session, queryShop}) {
   const {customerAccessToken} = await session.get();

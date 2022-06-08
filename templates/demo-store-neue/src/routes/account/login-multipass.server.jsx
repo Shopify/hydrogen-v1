@@ -10,7 +10,7 @@ export async function api(request, {session, queryShop}) {
 
   const multipassSecret = shopifyConfig.multipassSecret;
 
-  // Todo: get customer email from session
+  // TODO: get customer email from session
   const customerEmail = 'some@email.com';
 
   const multipassToken = encodeCustomerData(multipassSecret, customerEmail);
@@ -58,7 +58,7 @@ export async function api(request, {session, queryShop}) {
 
 function encodeCustomerData(multipassSecret, customerEmail) {
   return multipassSecret + customerEmail;
-  //Todo: this lib uses cryto that only works in NodeJS
+  //TODO: this lib uses cryto that only works in NodeJS
   // const multipassify = new Multipassify(multipassSecret);
 
   // return multipassify.encode({

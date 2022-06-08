@@ -73,8 +73,8 @@ export default function Location() {
                       Hours
                     </Heading>
                     <ul>
-                      {JSON.parse(hours.value).map((hour, i) => (
-                        <Text as="li" key={i}>
+                      {JSON.parse(hours.value).map((hour) => (
+                        <Text as="li" key={hour.id}>
                           {hour}
                         </Text>
                       ))}
@@ -148,6 +148,7 @@ const QUERY = gql`
         value
       }
       hours: field(key: "hours") {
+        id
         value
       }
       email: field(key: "email") {

@@ -1,7 +1,7 @@
 import {useShopQuery, Image, Link, gql} from '@shopify/hydrogen';
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {PageHeader, Section} from '~/components/sections';
-import {Grid} from '~/components/elements';
+import {Grid} from '~/components/sections';
 import {LOCATION_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Locations() {
@@ -20,8 +20,8 @@ export default function Locations() {
       <PageHeader heading="Locations" />
       <Section>
         <Grid items={locations.length === 3 ? 3 : 2}>
-          {locations.map((location, i) => (
-            <Card data={location} key={i} />
+          {locations.map((location) => (
+            <Card data={location} key={location.id} />
           ))}
         </Grid>
       </Section>

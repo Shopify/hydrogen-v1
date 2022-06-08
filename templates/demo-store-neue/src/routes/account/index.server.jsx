@@ -7,7 +7,9 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import AccountDetails from '../../components/pages/AccountDetails.server';
+import AccountDetails from '~/components/pages';
+import {DefaultLayout as Layout} from '~/components/layouts';
+import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Account({response, editingAccount, editingAddress}) {
   response.cache(NoStore());

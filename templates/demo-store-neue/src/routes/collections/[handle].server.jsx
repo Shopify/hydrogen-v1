@@ -10,9 +10,8 @@ import {
 
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
-import {PageHeader, Section} from '~/components/sections';
+import {ProductGrid, PageHeader, Section} from '~/components/sections';
 import {Text} from '~/components/elements';
-import ProductGrid from '~/components/sections/ProductGrid.client';
 
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
