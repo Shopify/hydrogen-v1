@@ -17,6 +17,7 @@ export default function EditAddress({address, defaultAddress}) {
   const [country, setCountry] = useState(address?.country || '');
   const [province, setProvince] = useState(address?.province || '');
   const [city, setCity] = useState(address?.city || '');
+  const [zip, setZip] = useState(address?.zip || '');
   const [phone, setPhone] = useState(address?.phone || '');
 
   const [isDefaultAddress, setIsDefaultAddress] = useState(defaultAddress);
@@ -36,6 +37,7 @@ export default function EditAddress({address, defaultAddress}) {
       country,
       province,
       city,
+      zip,
       phone,
       isDefaultAddress,
     });
@@ -168,12 +170,28 @@ export default function EditAddress({address, defaultAddress}) {
                 name="state"
                 type="text"
                 autoComplete="address-level1"
-                placeholder="State"
+                placeholder="State / Province"
                 required
                 aria-label="State"
                 value={province}
                 onChange={(event) => {
                   setProvince(event.target.value);
+                }}
+              />
+            </div>
+            <div className="mt-3">
+              <input
+                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+                id="zip"
+                name="zip"
+                type="text"
+                autoComplete="postal-code"
+                placeholder="Zip / Postal Code"
+                required
+                aria-label="Zip"
+                value={zip}
+                onChange={(event) => {
+                  setZip(event.target.value);
                 }}
               />
             </div>
@@ -262,6 +280,7 @@ function callUpdateAddressApi({
   province,
   city,
   phone,
+  zip,
   isDefaultAddress,
 }) {
   return fetch(
@@ -282,6 +301,7 @@ function callUpdateAddressApi({
         province,
         city,
         phone,
+        zip,
         isDefaultAddress,
       }),
     },

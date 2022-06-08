@@ -79,10 +79,12 @@ function Address({address, defaultAddress, deleteAddress}) {
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
       {showModal && (
         <Modal setShowModal={setShowModal}>
-          <ConfirmRemove
-            deleteAddress={deleteAddress}
-            setShowModal={setShowModal}
-          />
+          {showConfirmRemove && (
+            <ConfirmRemove
+              deleteAddress={deleteAddress}
+              setShowModal={setShowModal}
+            />
+          )}
         </Modal>
       )}
       {defaultAddress ? (
@@ -115,7 +117,10 @@ function Address({address, defaultAddress, deleteAddress}) {
           Edit
         </button>
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setShowModal(true);
+            setShowConfirmRemove(true);
+          }}
           className="text-left text-gray-500 ml-6 text-sm"
         >
           Remove

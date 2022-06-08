@@ -24,6 +24,7 @@ export async function api(request, {session, queryShop}) {
     country,
     province,
     city,
+    zip,
     phone,
     isDefaultAddress,
   } = await request.json();
@@ -38,6 +39,7 @@ export async function api(request, {session, queryShop}) {
   if (country) address.country = country;
   if (province) address.province = province;
   if (city) address.city = city;
+  if (zip) address.zip = zip;
   if (phone) address.phone = phone;
 
   const {data, errors} = await queryShop({
