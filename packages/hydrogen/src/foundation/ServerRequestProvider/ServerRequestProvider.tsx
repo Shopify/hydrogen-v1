@@ -32,7 +32,7 @@ function getInternalReactDispatcher() {
 
 function isRsc() {
   // This method is only available during RSC
-  return !!getInternalReactDispatcher().getCacheForType;
+  return __HYDROGEN_TEST__ || !!getInternalReactDispatcher().getCacheForType;
 }
 
 // Note: use this only during RSC/Flight rendering. The React dispatcher
