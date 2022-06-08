@@ -44,7 +44,6 @@ function publish(eventname: string, guardDup = false, payload = {}) {
   if (isInvokedFromServer()) return;
 
   const namedspacedEventname = getNamedspacedEventname(eventname);
-  const subs = subscribers[namedspacedEventname];
 
   // De-dup events due to re-renders
   if (guardDup) {
@@ -55,27 +54,16 @@ function publish(eventname: string, guardDup = false, payload = {}) {
     }
 
     const namespacedTimeout = setTimeout(() => {
-      publishEvent(
-        namedspacedEventname,
-        subs,
-        mergeDeep(pageAnalyticsData, payload)
-      );
+      publishEvent(namedspacedEventname, mergeDeep(pageAnalyticsData, payload));
     }, 100);
     guardDupEvents[namedspacedEventname] = namespacedTimeout;
   } else {
-    publishEvent(
-      namedspacedEventname,
-      subs,
-      mergeDeep(pageAnalyticsData, payload)
-    );
+    publishEvent(namedspacedEventname, mergeDeep(pageAnalyticsData, payload));
   }
 }
 
-function publishEvent(
-  eventname: string,
-  subs: Record<string, SubscriberFunction>,
-  payload: any
-) {
+function publishEvent(eventname: string, payload: any) {
+  const subs = subscribers[eventname];
   if (!isFirstPageViewSent && eventname === eventNames.PAGE_VIEW) {
     isFirstPageViewSent = true;
   }
