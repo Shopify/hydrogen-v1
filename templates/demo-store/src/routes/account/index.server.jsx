@@ -209,8 +209,8 @@ const QUERY = gql`
           node {
             id
             formatted
-            firstName @include(if: $withAddressDetails)
-            lastName @include(if: $withAddressDetails)
+            firstName
+            lastName
             company @include(if: $withAddressDetails)
             address1 @include(if: $withAddressDetails)
             address2 @include(if: $withAddressDetails)

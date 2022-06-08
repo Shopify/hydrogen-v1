@@ -90,6 +90,13 @@ function Address({address, defaultAddress, deleteAddress}) {
         </div>
       ) : null}
       <ul className="flex-1 flex-row">
+        {address.firstName || address.lastName ? (
+          <li>
+            {(address.firstName && address.firstName + ' ') + address.lastName}
+          </li>
+        ) : (
+          <span></span>
+        )}
         {address.formatted.map((line, index) => (
           /* eslint-disable-next-line react/no-array-index-key */
           <li key={line + index}>{line}</li>
