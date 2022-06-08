@@ -80,12 +80,9 @@ function resolveToFromType(
   const routePrefix = {...defaultPrefixes, ...customPrefixes};
 
   switch (true) {
+    // special cases
     case type === 'FRONTPAGE':
       return '/';
-
-    case type === 'BLOG':
-      const blogHandle = pathParts.pop();
-      return routePrefix.BLOG ? `/${routePrefix.BLOG}/${handle}` : `/${handle}`;
 
     case type === 'ARTICLE': {
       const blogHandle = pathParts.pop();
@@ -103,7 +100,7 @@ function resolveToFromType(
     case type === 'CATALOG':
       return routePrefix.CATALOG ? `/${routePrefix.CATALOG}` : `/`;
 
-    // PAGE, COLLECTION, PRODUCT, SHOP_POLICY, HTTP
+    // common cases: BLOG, PAGE, COLLECTION, PRODUCT, SHOP_POLICY, HTTP
     default:
       return routePrefix[type]
         ? `/${routePrefix[type]}/${handle}`
