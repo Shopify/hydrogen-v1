@@ -98,6 +98,7 @@ const QUERY = gql`
       }
       variants(first: 100) {
         nodes {
+          id
           availableForSale
           compareAtPriceV2 {
             amount
@@ -107,7 +108,6 @@ const QUERY = gql`
             name
             value
           }
-          id
           image {
             id
             url
