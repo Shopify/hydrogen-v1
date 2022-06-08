@@ -10,8 +10,8 @@ import {Suspense} from 'react';
 import {Header, Footer} from '~/components/sections';
 import {parseMenu} from '~/lib/utils';
 
-const HEADER_MENU_HANDLE = 'header-hydrogen';
-const FOOTER_MENU_HANDLE = 'footer-hydrogen';
+const HEADER_MENU_HANDLE = 'main-menu';
+const FOOTER_MENU_HANDLE = 'footer';
 
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
@@ -31,10 +31,24 @@ export default function Layout({children}) {
   });
 
   const shopName = data ? data.shop.name : 'Hydrogen Demo Store';
-  const shopDomain = data ? data.shop.primaryDomain.url : null;
 
-  const headerMenu = parseMenu(data ? data.headerMenu : null, shopDomain);
-  const footerMenu = parseMenu(data ? data.footerMenu : null, shopDomain);
+  /*
+    Modify specific links/routes (optional)
+    @see: https://shopify.dev/api/storefront/unstable/enums/MenuItemType
+    e.g here we map:
+      - /blogs/news -> /news
+      - /blog/news/blog-post -> /news/blog-post
+      - /collections/all -> /products
+  */
+  const customPrefixes = {BLOG: '', CATALOG: 'products'};
+
+  const headerMenu = data?.headerMenu
+    ? parseMenu(data.headerMenu, customPrefixes)
+    : null;
+
+  const footerMenu = data?.footerMenu
+    ? parseMenu(data.footerMenu, customPrefixes)
+    : null;
 
   return (
     <LocalizationProvider preload="*">
@@ -76,26 +90,20 @@ const QUERY = gql`
   ) @inContext(language: $language) {
     shop {
       name
-      primaryDomain {
-        url
-      }
     }
 
     headerMenu: menu(handle: $headerMenuHandle) {
       id
-      handle
-      itemsCount
-      title
       items {
         ...MenuItem
+        items {
+          ...MenuItem
+        }
       }
     }
 
     footerMenu: menu(handle: $footerMenuHandle) {
       id
-      handle
-      itemsCount
-      title
       items {
         ...MenuItem
         items {

@@ -1,8 +1,8 @@
 import {Link} from '@shopify/hydrogen';
 import {Disclosure} from '@headlessui/react';
 import {CountrySelector} from '~/components/blocks';
+import {Heading} from '~/components/elements';
 import Section from './Section';
-import {Heading} from '../elements';
 
 /**
  * A server component that specifies the content of the footer on the website
