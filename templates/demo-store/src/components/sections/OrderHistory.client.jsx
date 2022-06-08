@@ -14,14 +14,10 @@ function EmptyOrders() {
     <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
       <h2 className="font-bold text-lead">Order History</h2>
       <div>
-        <Text size="sm" width="narrow" as="p">
-          You haven't made any orders yet.
+        <Text className="mb-1" size="sm" width="narrow" as="p">
+          You haven't placed any orders yet.
         </Text>
-        <Button
-          className="text-sm mt-2 w-full max-w-md"
-          variant="secondary"
-          to={'/'}
-        >
+        <Button className="text-sm mt-2 w-full" variant="secondary" to={'/'}>
           Start shopping
         </Button>
       </div>

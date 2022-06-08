@@ -1,6 +1,7 @@
 import {useServerProps} from '@shopify/hydrogen';
 import {useMemo, useState} from 'react';
 import {Text, Button} from '../elements';
+import EditAddress from './EditAddress.client';
 
 export default function AddressBook({addresses, defaultAddress}) {
   const {serverProps, setServerProps} = useServerProps();
@@ -29,8 +30,8 @@ export default function AddressBook({addresses, defaultAddress}) {
       <h3 className="font-bold text-lead">Address Book</h3>
       <div>
         {!addresses?.length ? (
-          <Text size="copy" color="subtle">
-            No address yet
+          <Text className="mb-1" width="narrow" as="p" size="copy">
+            You haven't saved any addresses yet.
           </Text>
         ) : null}
         <div className="flex items-center justify-between mb-6">
@@ -71,17 +72,18 @@ export default function AddressBook({addresses, defaultAddress}) {
 function Address({address, defaultAddress, deleteAddress}) {
   const {setServerProps} = useServerProps();
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
-
-  console.log('address is', address);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
-      {showConfirmRemove ? (
-        <ConfirmRemove
-          deleteAddress={deleteAddress}
-          close={() => setShowConfirmRemove(false)}
-        />
-      ) : null}
+      {showModal && (
+        <Modal setShowModal={setShowModal}>
+          <ConfirmRemove
+            deleteAddress={deleteAddress}
+            setShowModal={setShowModal}
+          />
+        </Modal>
+      )}
       {defaultAddress ? (
         <div className="mb-3 flex flex-row">
           <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-200 text-gray-500">
@@ -95,7 +97,7 @@ function Address({address, defaultAddress, deleteAddress}) {
             {(address.firstName && address.firstName + ' ') + address.lastName}
           </li>
         ) : (
-          <span></span>
+          <></>
         )}
         {address.formatted.map((line, index) => (
           /* eslint-disable-next-line react/no-array-index-key */
@@ -105,13 +107,14 @@ function Address({address, defaultAddress, deleteAddress}) {
 
       <div className="flex flex-row font-medium mt-6">
         <button
+          // onClick={() => setShowModal(true)}
           onClick={() => setServerProps('editingAddress', address.id)}
           className="text-left underline text-sm"
         >
           Edit
         </button>
         <button
-          onClick={() => setShowConfirmRemove(true)}
+          onClick={() => setShowModal(true)}
           className="text-left text-gray-500 ml-6 text-sm"
         >
           Remove
@@ -142,38 +145,59 @@ function callDeleteAddressApi(id) {
     });
 }
 
-function ConfirmRemove({close, deleteAddress}) {
+function ConfirmRemove({deleteAddress, setShowModal}) {
   return (
-    <>
-      <div className="fixed w-full h-full bg-white opacity-95 z-50 top-0 left-0"></div>
-      <div className="fixed w-full h-full z-50 top-0 left-0">
-        <div className="flex justify-center mt-64 items-center">
-          <div className="bg-gray-50 max-w-md w-full p-4">
-            <div className="text-xl">Confirm removal</div>
-            <div>Are you sure you wish to remove this address?</div>
+    <div>
+      <Text as="h3" size="lead">
+        Confirm removal
+      </Text>
+      <Text as="p">Are you sure you wish to remove this address?</Text>
+      <div className="mt-6">
+        <Button
+          className="text-sm"
+          onClick={() => {
+            deleteAddress();
+            setShowModal(false);
+          }}
+          variant="primary"
+          width="full"
+        >
+          Confirm
+        </Button>
+        <Button
+          className="text-sm mt-2"
+          onClick={() => setShowModal(false)}
+          variant="secondary"
+          width="full"
+        >
+          Cancel
+        </Button>
+      </div>
+    </div>
+  );
+}
 
-            <div className="mt-6">
-              <button
-                onClick={() => {
-                  close();
-                  deleteAddress();
-                }}
-                className="bg-gray-900 border border-gray-900 text-white uppercase py-3 px-4 focus:shadow-outline block w-full"
-              >
-                Confirm
-              </button>
-            </div>
-            <div>
-              <button
-                onClick={close}
-                className="mt-3 text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
-              >
-                Cancel
-              </button>
-            </div>
+function Modal({setShowModal, children}) {
+  return (
+    <div
+      className="relative z-10"
+      aria-labelledby="modal-title"
+      role="dialog"
+      aria-modal="true"
+      id="modal-bg"
+      onClick={() => setShowModal(false)}
+    >
+      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      <div className="fixed z-10 inset-0 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-full p-4 text-center sm:p-0">
+          <div
+            className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-sm sm:w-full sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {children}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
