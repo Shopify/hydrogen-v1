@@ -127,10 +127,10 @@ const QUERY = gql`
         nodes {
           ...ProductCardFields
         }
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
       }
     }
   }

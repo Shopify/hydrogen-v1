@@ -6,7 +6,7 @@ import {PageHeader, Section} from '~/components/sections';
 import {Text, Heading} from '~/components/elements';
 import {formatPhoneNumber} from '~/lib/utils';
 
-export default function Location({params}) {
+export default function Location() {
   const {handle} = useRouteParams();
 
   const {data} = useShopQuery({
