@@ -1,4 +1,4 @@
-import {Image, Link, Money, useMoney, gql} from '@shopify/hydrogen';
+import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 import clsx from 'clsx';
 import {Text} from '~/components/elements';
 import {isDiscounted, isNewArrival} from '~/lib/utils';

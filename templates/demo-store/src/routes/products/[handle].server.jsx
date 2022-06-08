@@ -6,6 +6,7 @@ import {
   useRouteParams,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
+  ProductOptionsProvider,
   gql,
 } from '@shopify/hydrogen';
 

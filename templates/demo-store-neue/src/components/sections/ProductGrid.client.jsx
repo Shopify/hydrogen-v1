@@ -1,4 +1,3 @@
-import {flattenConnection} from '@shopify/hydrogen';
 import {useState, useRef, useEffect} from 'react';
 
 import {Grid} from '~/components/elements';
@@ -6,7 +5,7 @@ import {ProductCard} from '~/components/blocks';
 
 export default function ProductGrid({data}) {
   const nextButtonRef = useRef(null);
-  const initialProducts = flattenConnection(data.collection.products);
+  const initialProducts = data.collection.products.nodes;
   const {hasNextPage, endCursor} = data.collection.products.pageInfo;
 
   const [products, setProducts] = useState(initialProducts);

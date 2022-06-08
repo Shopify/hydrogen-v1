@@ -2,7 +2,6 @@ import {
   useSession,
   useShop,
   useShopQuery,
-  flattenConnection,
   Seo,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
@@ -52,7 +51,7 @@ export default function Collection({params}) {
   }
 
   const collection = data.collection;
-  const products = flattenConnection(data.collection.products);
+  const products = data.collection.products.nodes;
 
   return (
     <Layout>
@@ -125,16 +124,13 @@ const QUERY = gql`
         altText
       }
       products(first: $pageBy, after: $cursor) {
-        edges {
-          cursor
-          node {
-            ...ProductCardFields
-          }
+        nodes {
+          ...ProductCardFields
         }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
