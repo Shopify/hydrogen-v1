@@ -53,7 +53,7 @@ jobs:
 
       - name: Run health check
         run: |
-          yarn ts-node scripts/health-check.ts https://template-default.hydrogen-devs.workers.dev/
+          node scripts/health-check https://template-default.hydrogen-devs.workers.dev/
   deploy_netlify:
     runs-on: ubuntu-latest
     if: ${{ github.repository_owner == 'shopify' }}
@@ -105,4 +105,4 @@ jobs:
 
       - name: Run health check
         run: |
-          yarn ts-node scripts/health-check.ts ${{steps.netlify-deploy.outputs.deploy-url}}
+          node scripts/health-check ${{steps.netlify-deploy.outputs.deploy-url}}

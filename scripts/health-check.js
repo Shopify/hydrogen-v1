@@ -1,11 +1,11 @@
-import * as https from 'https';
-import * as http from 'http';
+const https = require('https');
+const http = require('http');
 
-function checkHealth(url: string) {
+function checkHealth(url) {
   return new Promise((resolve, reject) => {
     const protocol = url.startsWith('https') ? https : http;
     const req = protocol.get(url, (res) => {
-      if (res.statusCode !== 200) {
+      if (res.statusCode >= 400) {
         reject(
           new Error(`${url} responded with status code ${res.statusCode}`)
         );
