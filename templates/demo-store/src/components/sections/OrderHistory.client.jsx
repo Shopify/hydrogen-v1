@@ -17,9 +17,11 @@ function EmptyOrders() {
         <Text className="mb-1" size="sm" width="narrow" as="p">
           You haven't placed any orders yet.
         </Text>
-        <Button className="text-sm mt-2 w-full" variant="secondary" to={'/'}>
-          Start shopping
-        </Button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <Button className="text-sm mt-2 w-full" variant="secondary" to={'/'}>
+            Start Shopping
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -15,7 +15,6 @@ import Layout from '~/components/layouts/DefaultLayout.server';
 import OrderHistory from '~/components/sections/OrderHistory.client';
 import LogoutButton from '~/components/elements/LogoutButton.client';
 import EditAccountDetails from '~/components/sections/EditAccountDetails.client';
-import EditAddress from '~/components/sections/EditAddress.client';
 import {
   FeaturedCollections,
   ProductSwimlane,
@@ -73,24 +72,24 @@ export default function Account({response, editingAccount, editingAddress}) {
       </Layout>
     );
 
-  if (editingAddress) {
-    const addressToEdit = addresses.find(
-      (address) => address.id === editingAddress,
-    );
+  // if (editingAddress) {
+  //   const addressToEdit = addresses.find(
+  //     (address) => address.id === editingAddress,
+  //   );
 
-    return (
-      <Layout>
-        <Seo
-          type="noindex"
-          data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
-        />
-        <EditAddress
-          address={addressToEdit}
-          defaultAddress={defaultAddress === editingAddress}
-        />
-      </Layout>
-    );
-  }
+  //   return (
+  //     <Layout>
+  //       <Seo
+  //         type="noindex"
+  //         data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
+  //       />
+  //       <EditAddress
+  //         address={addressToEdit}
+  //         defaultAddress={defaultAddress === editingAddress}
+  //       />
+  //     </Layout>
+  //   );
+  // }
 
   return (
     <AuthenticatedAccount

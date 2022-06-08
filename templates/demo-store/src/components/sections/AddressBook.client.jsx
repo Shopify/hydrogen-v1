@@ -27,52 +27,60 @@ export default function AddressBook({addresses, defaultAddress}) {
   }
 
   return (
-    <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
-      <h3 className="font-bold text-lead">Address Book</h3>
-      <div>
-        {!addresses?.length ? (
-          <Text className="mb-1" width="narrow" as="p" size="copy">
-            You haven't saved any addresses yet.
-          </Text>
-        ) : null}
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            className="mt-2 text-sm w-full"
-            onClick={() => setServerProps('editingAddress', 'NEW')}
-            variant="secondary"
-          >
-            Add an Address
-          </Button>
-        </div>
-        {addresses?.length ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {fullDefaultAddress ? (
-              <Address
-                address={fullDefaultAddress}
-                defaultAddress
-                deleteAddress={deleteAddress.bind(
-                  null,
-                  fullDefaultAddress.originalId,
-                )}
-              />
-            ) : null}
-            {addressesWithoutDefault.map((address) => (
-              <Address
-                key={address.id}
-                address={address}
-                deleteAddress={deleteAddress.bind(null, address.originalId)}
-              />
-            ))}
+    <>
+      <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
+        <h3 className="font-bold text-lead">Address Book</h3>
+        <div>
+          {!addresses?.length ? (
+            <Text className="mb-1" width="narrow" as="p" size="copy">
+              You haven't saved any addresses yet.
+            </Text>
+          ) : null}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <Button
+              className="mt-2 text-sm w-full max-w-xl mb-6"
+              onClick={() => {
+                setShowModal(true);
+                setShowConfirmRemove(false);
+                setShowEditAddress(true);
+                setServerProps('editingAddress', 'NEW');
+              }}
+              variant="secondary"
+            >
+              Add an Address
+            </Button>
           </div>
-        ) : null}
+          {addresses?.length ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {fullDefaultAddress ? (
+                <Address
+                  address={fullDefaultAddress}
+                  defaultAddress
+                  deleteAddress={deleteAddress.bind(
+                    null,
+                    fullDefaultAddress.originalId,
+                  )}
+                />
+              ) : null}
+              {addressesWithoutDefault.map((address) => (
+                <Address
+                  key={address.id}
+                  address={address}
+                  deleteAddress={deleteAddress.bind(null, address.originalId)}
+                />
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
 function Address({address, defaultAddress, deleteAddress}) {
-  const {setServerProps} = useServerProps();
+  const {serverProps, setServerProps} = useServerProps();
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
+  const [showEditAddress, setShowEditAddress] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -82,6 +90,13 @@ function Address({address, defaultAddress, deleteAddress}) {
           {showConfirmRemove && (
             <ConfirmRemove
               deleteAddress={deleteAddress}
+              setShowModal={setShowModal}
+            />
+          )}
+          {showEditAddress && (
+            <EditAddress
+              address={address}
+              defaultAddress={defaultAddress}
               setShowModal={setShowModal}
             />
           )}
@@ -111,7 +126,12 @@ function Address({address, defaultAddress, deleteAddress}) {
       <div className="flex flex-row font-medium mt-6">
         <button
           // onClick={() => setShowModal(true)}
-          onClick={() => setServerProps('editingAddress', address.id)}
+          onClick={() => {
+            setShowModal(true);
+            setShowConfirmRemove(false);
+            setShowEditAddress(true);
+            setServerProps('editingAddress', address.id);
+          }}
           className="text-left underline text-sm"
         >
           Edit
@@ -120,6 +140,7 @@ function Address({address, defaultAddress, deleteAddress}) {
           onClick={() => {
             setShowModal(true);
             setShowConfirmRemove(true);
+            setShowEditAddress(false);
           }}
           className="text-left text-gray-500 ml-6 text-sm"
         >
@@ -153,8 +174,8 @@ function callDeleteAddressApi(id) {
 
 function ConfirmRemove({deleteAddress, setShowModal}) {
   return (
-    <div>
-      <Text as="h3" size="lead">
+    <>
+      <Text className="mb-4" as="h3" size="lead">
         Confirm removal
       </Text>
       <Text as="p">Are you sure you wish to remove this address?</Text>
@@ -179,6 +200,6 @@ function ConfirmRemove({deleteAddress, setShowModal}) {
           Cancel
         </Button>
       </div>
-    </div>
+    </>
   );
 }

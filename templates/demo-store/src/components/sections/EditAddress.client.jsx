@@ -1,11 +1,10 @@
 import {useServerProps} from '@shopify/hydrogen';
 import {useState} from 'react';
 import {Button, Text} from '../elements';
-import PageHeader from './PageHeader';
 
-export default function EditAddress({address, defaultAddress}) {
+export default function EditAddress({address, defaultAddress, setShowModal}) {
   const {setServerProps} = useServerProps();
-  const close = () => setServerProps('editingAddress', null);
+  // const close = () => setServerProps('editingAddress', null);
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
@@ -49,223 +48,222 @@ export default function EditAddress({address, defaultAddress}) {
       return;
     }
 
-    close();
+    setShowModal(false);
+
+    setServerProps('editingAddress', null);
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="flex-grow justify-center my-12 mx-auto min-w-full md:min-w-[50%]">
-        <PageHeader heading={address ? 'Edit address' : 'Add address'}>
-          <button onClick={close}>
-            <Text className="underline" color="subtle">
-              Return to Account Overview
-            </Text>
-          </button>
-        </PageHeader>
-        <div className="p-4 md:px-8 lg:px-12 max-w-md">
-          <form noValidate onSubmit={onSubmit}>
-            {submitError && (
-              <div className="flex items-center justify-center mb-6 bg-zinc-500">
-                <p className="m-4 text-s text-white">{submitError}</p>
-              </div>
-            )}
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="firstname"
-                name="firstname"
-                required
-                type="text"
-                autoComplete="given-name"
-                placeholder="First name"
-                aria-label="First name"
-                value={firstName}
-                onChange={(event) => {
-                  setFirstName(event.target.value);
-                }}
-              />
+    <>
+      <Text className="mb-4" as="h3" size="lead">
+        {address ? 'Edit address' : 'Add address'}
+      </Text>
+      <div className="max-w-lg">
+        <form noValidate onSubmit={onSubmit}>
+          {submitError && (
+            <div className="flex items-center justify-center mb-6 bg-zinc-500">
+              <p className="m-4 text-s text-white">{submitError}</p>
             </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="lastname"
-                name="lastname"
-                required
-                type="text"
-                autoComplete="family-name"
-                placeholder="Last name"
-                aria-label="Last name"
-                value={lastName}
-                onChange={(event) => {
-                  setLastName(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="company"
-                name="company"
-                type="text"
-                autoComplete="organization"
-                placeholder="Company"
-                aria-label="Company"
-                value={company}
-                onChange={(event) => {
-                  setCompany(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="street1"
-                name="street1"
-                type="text"
-                autoComplete="address-line1"
-                placeholder="Address line 1*"
-                required
-                aria-label="Address line 1"
-                value={address1}
-                onChange={(event) => {
-                  setAddress1(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="address2"
-                name="address2"
-                type="text"
-                autoComplete="address-line2"
-                placeholder="Addresss line 2"
-                aria-label="Address line 2"
-                value={address2}
-                onChange={(event) => {
-                  setAddress2(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="city"
-                name="city"
-                type="text"
-                required
-                autoComplete="address-level2"
-                placeholder="City"
-                aria-label="City"
-                value={city}
-                onChange={(event) => {
-                  setCity(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="state"
-                name="state"
-                type="text"
-                autoComplete="address-level1"
-                placeholder="State / Province"
-                required
-                aria-label="State"
-                value={province}
-                onChange={(event) => {
-                  setProvince(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="zip"
-                name="zip"
-                type="text"
-                autoComplete="postal-code"
-                placeholder="Zip / Postal Code"
-                required
-                aria-label="Zip"
-                value={zip}
-                onChange={(event) => {
-                  setZip(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="country"
-                name="country"
-                type="text"
-                autoComplete="country-name"
-                placeholder="Country"
-                required
-                aria-label="Country"
-                value={country}
-                onChange={(event) => {
-                  setCountry(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-3">
-              <input
-                className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
-                id="phone"
-                name="phone"
-                type="tel"
-                autoComplete="tel"
-                placeholder="Phone"
-                aria-label="Phone"
-                value={phone}
-                onChange={(event) => {
-                  setPhone(event.target.value);
-                }}
-              />
-            </div>
-            <div className="mt-4">
-              <input
-                type="checkbox"
-                value=""
-                name="defaultAddress"
-                id="defaultAddress"
-                checked={isDefaultAddress}
-                className="border-1 border-gray-500 rounded-sm"
-                onChange={() => setIsDefaultAddress(!isDefaultAddress)}
-              />
-              <label
-                className="ml-2 inline-block text-gray-800 text-sm"
-                htmlFor="defaultAddress"
-              >
-                Set as default address
-              </label>
-            </div>
-            <div className="mt-8">
-              <Button
-                className="focus:shadow-outline rounded w-full"
-                type="submit"
-                variant="primary"
-                disabled={saving}
-              >
-                Save
-              </Button>
-            </div>
-            <div>
-              <Button
-                className="mt-3 focus:shadow-outline rounded w-full"
-                variant="secondary"
-                onClick={close}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </div>
+          )}
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="firstname"
+              name="firstname"
+              required
+              type="text"
+              autoComplete="given-name"
+              placeholder="First name"
+              aria-label="First name"
+              value={firstName}
+              onChange={(event) => {
+                setFirstName(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="lastname"
+              name="lastname"
+              required
+              type="text"
+              autoComplete="family-name"
+              placeholder="Last name"
+              aria-label="Last name"
+              value={lastName}
+              onChange={(event) => {
+                setLastName(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="company"
+              name="company"
+              type="text"
+              autoComplete="organization"
+              placeholder="Company"
+              aria-label="Company"
+              value={company}
+              onChange={(event) => {
+                setCompany(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="street1"
+              name="street1"
+              type="text"
+              autoComplete="address-line1"
+              placeholder="Address line 1*"
+              required
+              aria-label="Address line 1"
+              value={address1}
+              onChange={(event) => {
+                setAddress1(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="address2"
+              name="address2"
+              type="text"
+              autoComplete="address-line2"
+              placeholder="Addresss line 2"
+              aria-label="Address line 2"
+              value={address2}
+              onChange={(event) => {
+                setAddress2(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="city"
+              name="city"
+              type="text"
+              required
+              autoComplete="address-level2"
+              placeholder="City"
+              aria-label="City"
+              value={city}
+              onChange={(event) => {
+                setCity(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="state"
+              name="state"
+              type="text"
+              autoComplete="address-level1"
+              placeholder="State / Province"
+              required
+              aria-label="State"
+              value={province}
+              onChange={(event) => {
+                setProvince(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="zip"
+              name="zip"
+              type="text"
+              autoComplete="postal-code"
+              placeholder="Zip / Postal Code"
+              required
+              aria-label="Zip"
+              value={zip}
+              onChange={(event) => {
+                setZip(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="country"
+              name="country"
+              type="text"
+              autoComplete="country-name"
+              placeholder="Country"
+              required
+              aria-label="Country"
+              value={country}
+              onChange={(event) => {
+                setCountry(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-3">
+            <input
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              id="phone"
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              placeholder="Phone"
+              aria-label="Phone"
+              value={phone}
+              onChange={(event) => {
+                setPhone(event.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-4">
+            <input
+              type="checkbox"
+              value=""
+              name="defaultAddress"
+              id="defaultAddress"
+              checked={isDefaultAddress}
+              className="border-1 border-gray-500 rounded-sm"
+              onChange={() => setIsDefaultAddress(!isDefaultAddress)}
+            />
+            <label
+              className="ml-2 inline-block text-gray-800 text-sm"
+              htmlFor="defaultAddress"
+            >
+              Set as default address
+            </label>
+          </div>
+          <div className="mt-8">
+            <Button
+              className="focus:shadow-outline rounded w-full"
+              type="submit"
+              variant="primary"
+              disabled={saving}
+            >
+              Save
+            </Button>
+          </div>
+          <div>
+            <Button
+              className="mt-3 focus:shadow-outline rounded w-full"
+              variant="secondary"
+              onClick={() => {
+                setShowModal(false);
+                setServerProps('editingAddress', null);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
       </div>
-    </div>
+    </>
   );
 }
 
