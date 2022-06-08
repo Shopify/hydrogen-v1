@@ -13,7 +13,9 @@ export type SelectedOptions = {
   [key: string]: string;
 };
 
-export type SelectVariantCallback = (variant: ProductVariantType) => void;
+export type SelectVariantCallback = (
+  variant: ProductVariantType | null
+) => void;
 
 export type SelectOptionCallback = (
   name: SelectedOptionType['name'],
