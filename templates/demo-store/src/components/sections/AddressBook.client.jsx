@@ -72,6 +72,8 @@ function Address({address, defaultAddress, deleteAddress}) {
   const {setServerProps} = useServerProps();
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
 
+  console.log('address is', address);
+
   return (
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
       {showConfirmRemove ? (

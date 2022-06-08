@@ -55,7 +55,7 @@ export default function OrderCard(props) {
           alt={lineItems[0].variant?.image?.altText}
           data={lineItems[0].variant?.image}
         />
-        <div className="flex-col text-left justify-center">
+        <div className="flex-col text-left justify-center ml-4">
           <Text as="h3" className="mb-1" size="copy" color="primary">
             {lineItems[0].title}{' '}
             {lineItems.length > 1 && `+ ${lineItems.length - 1} more`}
