@@ -1,6 +1,14 @@
 import {IncomingMessage} from 'http';
 import {RSC_PATHNAME} from '../../../constants';
 import {PreloadOptions} from '../../../types';
+import {
+  CacheDays,
+  CacheHours,
+  CacheMonths,
+  CacheSeconds,
+  NoStore,
+} from '../../Cache/strategies';
+import {shouldPreloadQuery} from '../../useQuery/hooks';
 import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server';
 
 describe('HydrogenRequest', () => {
@@ -41,10 +49,45 @@ describe('HydrogenRequest', () => {
     });
   });
 
-  it('does not save preload queries when preload key is not present', () => {
-    const request = createHydrogenRequest(`https://localhost:3000/`);
-    const preloadQueries = request.getPreloadQueries();
-    expect(preloadQueries).toBeUndefined();
+  it('Preloads queries with default cache', () => {
+    expect(shouldPreloadQuery()).toBe(true);
+    expect(shouldPreloadQuery({})).toBe(true);
+    expect(shouldPreloadQuery({cache: {}})).toBe(true);
+  });
+
+  it('Preloads queries with manual cache', () => {
+    expect(shouldPreloadQuery({cache: CacheDays()})).toBe(true);
+    expect(shouldPreloadQuery({cache: CacheSeconds()})).toBe(true);
+    expect(shouldPreloadQuery({cache: CacheHours()})).toBe(true);
+    expect(shouldPreloadQuery({cache: CacheMonths()})).toBe(true);
+  });
+
+  it('Does not preload with no cache', () => {
+    expect(shouldPreloadQuery({cache: NoStore()})).toBe(false);
+  });
+
+  it('Does not preload with default cache and preloading explicitly turned off', () => {
+    expect(shouldPreloadQuery({preload: false})).toBe(false);
+    expect(shouldPreloadQuery({cache: {}, preload: false})).toBe(false);
+  });
+
+  it('Does not preload with manual cache and preloading explicitly turned off', () => {
+    expect(shouldPreloadQuery({cache: CacheDays(), preload: false})).toBe(
+      false
+    );
+    expect(shouldPreloadQuery({cache: CacheSeconds(), preload: false})).toBe(
+      false
+    );
+    expect(shouldPreloadQuery({cache: CacheHours(), preload: false})).toBe(
+      false
+    );
+    expect(shouldPreloadQuery({cache: CacheMonths(), preload: false})).toBe(
+      false
+    );
+  });
+
+  it('Preloads queries with caching disabled and preloading explicitly turned on', () => {
+    expect(shouldPreloadQuery({cache: NoStore(), preload: true})).toBe(true);
   });
 
   it('saves preload queries', () => {

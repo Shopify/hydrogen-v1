@@ -58,13 +58,7 @@ export function useQuery<T>(
 
   collectQueryTimings(request, withCacheIdKey, 'requested');
 
-  if (
-    // If preload isn't explicitly defined, and caching isn't
-    // explicitly set to `NO_STORE` then turn preload on
-    (typeof queryOptions?.preload === 'undefined' &&
-      queryOptions?.cache?.mode !== NO_STORE) ||
-    queryOptions?.preload
-  ) {
+  if (shouldPreloadQuery(queryOptions)) {
     request.savePreloadQuery({
       preload: queryOptions?.preload,
       key: withCacheIdKey,
@@ -73,6 +67,24 @@ export function useQuery<T>(
   }
 
   return useRequestCacheData<T>(withCacheIdKey, fetcher);
+}
+
+export function shouldPreloadQuery(
+  queryOptions?: HydrogenUseQueryOptions
+): boolean {
+  if (!queryOptions) return true;
+
+  const hasCacheOverride = typeof queryOptions?.cache?.mode !== 'undefined';
+  const hasPreloadOverride = typeof queryOptions?.preload !== 'undefined';
+  const cacheValue = queryOptions?.cache?.mode;
+  const preloadValue = queryOptions?.preload;
+
+  // If preload is explicitly defined, then it takes precedence
+  if (hasPreloadOverride) {
+    return !!preloadValue;
+  }
+
+  return hasCacheOverride ? cacheValue !== NO_STORE : true;
 }
 
 function cachedQueryFnBuilder<T>(
