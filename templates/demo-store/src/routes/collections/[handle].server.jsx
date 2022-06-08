@@ -2,7 +2,6 @@ import {
   useSession,
   useShop,
   useShopQuery,
-  flattenConnection,
   Seo,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
@@ -46,7 +45,7 @@ export default function Collection({collectionProductCount = 24, params}) {
   }
 
   const collection = data.collection;
-  const products = flattenConnection(collection.products);
+  const products = collection.products.nodes;
   const hasNextPage = data.collection.products.pageInfo.hasNextPage;
 
   return (
@@ -101,45 +100,41 @@ const QUERY = gql`
         altText
       }
       products(first: $numProducts) {
-        edges {
-          node {
-            id
-            title
-            vendor
-            handle
-            descriptionHtml
-            compareAtPriceRange {
-              maxVariantPrice {
-                currencyCode
-                amount
-              }
-              minVariantPrice {
-                currencyCode
-                amount
-              }
+        nodes {
+          id
+          title
+          vendor
+          handle
+          descriptionHtml
+          compareAtPriceRange {
+            maxVariantPrice {
+              currencyCode
+              amount
             }
-            variants(first: 1) {
-              edges {
-                node {
-                  id
-                  title
-                  availableForSale
-                  image {
-                    id
-                    url
-                    altText
-                    width
-                    height
-                  }
-                  priceV2 {
-                    currencyCode
-                    amount
-                  }
-                  compareAtPriceV2 {
-                    currencyCode
-                    amount
-                  }
-                }
+            minVariantPrice {
+              currencyCode
+              amount
+            }
+          }
+          variants(first: 1) {
+            nodes {
+              id
+              title
+              availableForSale
+              image {
+                id
+                url
+                altText
+                width
+                height
+              }
+              priceV2 {
+                currencyCode
+                amount
+              }
+              compareAtPriceV2 {
+                currencyCode
+                amount
               }
             }
           }

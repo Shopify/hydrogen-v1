@@ -1,7 +1,6 @@
 import {
   useShop,
   useShopQuery,
-  flattenConnection,
   Link,
   Seo,
   CacheDays,
@@ -82,10 +81,10 @@ function FeaturedProductsBox({country}) {
     preload: true,
   });
 
-  const collections = data ? flattenConnection(data.collections) : [];
+  const collections = data ? data.collections.nodes : [];
   const featuredProductsCollection = collections[0];
   const featuredProducts = featuredProductsCollection
-    ? flattenConnection(featuredProductsCollection.products)
+    ? featuredProductsCollection.products.nodes
     : null;
 
   return (
@@ -138,7 +137,7 @@ function FeaturedCollectionBox({country}) {
     preload: true,
   });
 
-  const collections = data ? flattenConnection(data.collections) : [];
+  const collections = data ? data.collections.nodes : [];
   const featuredCollection =
     collections && collections.length > 1 ? collections[1] : collections[0];
 
