@@ -132,3 +132,5 @@ artifacts
 
 yarn.lock
 !/yarn.lock
+
+__unconfig_vite.config.js
