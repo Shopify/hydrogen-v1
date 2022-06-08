@@ -344,6 +344,7 @@ export default function CustomPage({response}) {
   response.doNotStream();
 
   response.headers.set('custom-header', 'value');
+  response.status = 201;
 
   // ...
 }

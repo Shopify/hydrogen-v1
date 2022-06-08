@@ -2,8 +2,9 @@ import {
   useSession,
   useShop,
   useShopQuery,
-  flattenConnection,
   Seo,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
@@ -28,12 +29,23 @@ export default function Collection({collectionProductCount = 24, params}) {
     preload: true,
   });
 
+  useServerAnalytics(
+    data?.collection
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.collection,
+            resourceId: data.collection.id,
+          },
+        }
+      : null,
+  );
+
   if (data?.collection == null) {
     return <NotFound />;
   }
 
   const collection = data.collection;
-  const products = flattenConnection(collection.products);
+  const products = collection.products.nodes;
   const hasNextPage = data.collection.products.pageInfo.hasNextPage;
 
   return (
@@ -72,6 +84,7 @@ const QUERY = gql`
     $numProducts: Int!
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
+      id
       title
       descriptionHtml
       description
@@ -87,45 +100,41 @@ const QUERY = gql`
         altText
       }
       products(first: $numProducts) {
-        edges {
-          node {
-            id
-            title
-            vendor
-            handle
-            descriptionHtml
-            compareAtPriceRange {
-              maxVariantPrice {
-                currencyCode
-                amount
-              }
-              minVariantPrice {
-                currencyCode
-                amount
-              }
+        nodes {
+          id
+          title
+          vendor
+          handle
+          descriptionHtml
+          compareAtPriceRange {
+            maxVariantPrice {
+              currencyCode
+              amount
             }
-            variants(first: 1) {
-              edges {
-                node {
-                  id
-                  title
-                  availableForSale
-                  image {
-                    id
-                    url
-                    altText
-                    width
-                    height
-                  }
-                  priceV2 {
-                    currencyCode
-                    amount
-                  }
-                  compareAtPriceV2 {
-                    currencyCode
-                    amount
-                  }
-                }
+            minVariantPrice {
+              currencyCode
+              amount
+            }
+          }
+          variants(first: 1) {
+            nodes {
+              id
+              title
+              availableForSale
+              image {
+                id
+                url
+                altText
+                width
+                height
+              }
+              priceV2 {
+                currencyCode
+                amount
+              }
+              compareAtPriceV2 {
+                currencyCode
+                amount
               }
             }
           }

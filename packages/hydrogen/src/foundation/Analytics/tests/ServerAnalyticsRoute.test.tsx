@@ -25,7 +25,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
 
     expect(response.status).toEqual(200);
     expect(mockServerAnalyticsConnector).toHaveBeenCalled();
-    expect(mockServerAnalyticsConnector.mock.calls[0][0]).toEqual(request);
+    expect(mockServerAnalyticsConnector.mock.calls[0][0]).toEqual(request.url);
   });
 
   it('should delegate request to multiple server analytics connectors', () => {
@@ -43,9 +43,9 @@ describe('Analytics - ServerAnalyticsRoute', () => {
 
     expect(response.status).toEqual(200);
     expect(mockServerAnalyticsConnector1).toHaveBeenCalled();
-    expect(mockServerAnalyticsConnector1.mock.calls[0][0]).toEqual(request);
+    expect(mockServerAnalyticsConnector1.mock.calls[0][0]).toEqual(request.url);
     expect(mockServerAnalyticsConnector2).toHaveBeenCalled();
-    expect(mockServerAnalyticsConnector2.mock.calls[0][0]).toEqual(request);
+    expect(mockServerAnalyticsConnector2.mock.calls[0][0]).toEqual(request.url);
   });
 
   it('should delegate json request', async () => {
@@ -60,11 +60,13 @@ describe('Analytics - ServerAnalyticsRoute', () => {
         }),
       });
       const mockServerAnalyticsConnector = (
-        request: Request,
+        requestUrl: string,
+        requestHeader: Headers,
         data?: any,
         type?: string
       ): void => {
-        expect(request).toEqual(testRequest);
+        expect(requestUrl).toEqual(testRequest.url);
+        expect(requestHeader).toEqual(testRequest.headers);
         expect(data).toEqual({
           test: '123',
         });
@@ -88,11 +90,13 @@ describe('Analytics - ServerAnalyticsRoute', () => {
         body: 'test123',
       });
       const mockServerAnalyticsConnector = (
-        request: Request,
+        requestUrl: string,
+        requestHeader: Headers,
         data?: any,
         type?: string
       ): void => {
-        expect(request).toEqual(testRequest);
+        expect(requestUrl).toEqual(testRequest.url);
+        expect(requestHeader).toEqual(testRequest.headers);
         expect(data).toEqual('test123');
         expect(type).toEqual('text');
         resolve();

@@ -1,0 +1,12 @@
+on:
+  pull_request:
+
+name: Changelog Linter
+jobs:
+  lint:
+    name: Lint Changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint changesets
+        run: node scripts/lint-changesets.mjs

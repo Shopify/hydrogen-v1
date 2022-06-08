@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.23.0
+
+### Patch Changes
+
+- [#1462](https://github.com/Shopify/hydrogen/pull/1462) [`effc509c`](https://github.com/Shopify/hydrogen/commit/effc509cbfc9ddf4bf8df9f8dff17daa47362dbb) Thanks [@frehner](https://github.com/frehner)! - Small styling fix to country selector in demo store template
+
 ## 0.22.1
 
 ## 0.22.0
@@ -251,7 +257,7 @@
   And update the `preview` script in your `package.json`:
 
   ```diff
-  -    "preview": "npx @shopify/hydrogen-cli@latest preview",
+  -    "preview": "npx @shopify/create-hydrogen-cli@latest preview",
   +    "preview": "shopify hydrogen preview",
   ```
 

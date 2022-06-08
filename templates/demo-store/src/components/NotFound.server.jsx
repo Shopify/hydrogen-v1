@@ -3,6 +3,8 @@ import {
   useShopQuery,
   flattenConnection,
   useSession,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
@@ -37,11 +39,18 @@ function NotFoundHero() {
 export default function NotFound({response}) {
   if (response) {
     response.doNotStream();
-    response.writeHead({status: 404, statusText: 'Not found'});
+    response.status = 404;
+    response.statusText = 'Not found';
   }
 
   const {countryCode = 'US'} = useSession();
   const {languageCode} = useShop();
+
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.notFound,
+    },
+  });
 
   const {data} = useShopQuery({
     query: QUERY,

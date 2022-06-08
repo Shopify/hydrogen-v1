@@ -53,6 +53,7 @@ If you don't provide a `cartFragment` argument, then the following default value
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -73,6 +74,16 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {

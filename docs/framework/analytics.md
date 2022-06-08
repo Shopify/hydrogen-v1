@@ -256,7 +256,7 @@ To send analytics data from the server-side, complete the following steps:
     {% codeblock file, filename: 'MyServerAnalyticsConnector.jsx' %}
 
     ```jsx
-    export function request(request, data, contentType) {
+    export function request(requestUrl, requestHeader, data, contentType) {
      // Send your analytics request to third-party analytics
     }
     ```
@@ -283,11 +283,12 @@ To send analytics data from the server-side, complete the following steps:
 
 The following table describes the request function parameters for `ServerAnalyticsConnector`:
 
-| Parameter     | Type           | Description                                       |
-| ------------- | -------------- | ------------------------------------------------- |
-| `request`     | request        | The analytics request object.                      |
-| `data`        | object or text | The result from `.json()` or `.text()`.           |
-| `contentType` | string         | The content type. Valid values: `json` or `text`. |
+| Parameter       | Type           | Description                                       |
+| --------------- | -------------- | ------------------------------------------------- |
+| `requestUrl`    | string         | The analytics request url.                        |
+| `requestHeader` | Headers        | The analytics request headers object.             |
+| `data`          | object or text | The result from `.json()` or `.text()`.           |
+| `contentType`   | string         | The content type. Valid values: `json` or `text`. |
 
 ## Unsubscribe from an event
 
@@ -485,6 +486,10 @@ describe('Google Analytics 4', () => {
 ```
 
 {% endcodeblock %}
+
+## Related components
+
+- [`ShopifyAnalytics`](https://shopify.dev/api/hydrogen/components/framework/shopifyanalytics)
 
 ## Next steps
 

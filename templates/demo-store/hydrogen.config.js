@@ -2,6 +2,7 @@ import {defineConfig} from '@shopify/hydrogen/config';
 import {
   CookieSessionStorage,
   PerformanceMetricsServerAnalyticsConnector,
+  ShopifyServerAnalyticsConnector,
 } from '@shopify/hydrogen';
 
 export default defineConfig({
@@ -17,5 +18,8 @@ export default defineConfig({
     sameSite: 'strict',
     maxAge: 60 * 60 * 24 * 30,
   }),
-  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
+  serverAnalyticsConnectors: [
+    PerformanceMetricsServerAnalyticsConnector,
+    ShopifyServerAnalyticsConnector,
+  ],
 });

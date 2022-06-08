@@ -32,7 +32,10 @@ export {
   CacheCustom,
 } from './foundation/Cache/strategies';
 export {useServerAnalytics} from './foundation/Analytics/hook';
-export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
+export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server';
+export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const';
+export * as ShopifyServerAnalyticsConnector from './foundation/Analytics/connectors/Shopify/ServerAnalyticsConnector.server';
+export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/ServerAnalyticsConnector.server';
 export {useSession} from './foundation/useSession/useSession';
 export {CookieSessionStorage} from './foundation/CookieSessionStorage/CookieSessionStorage';
 export {MemorySessionStorage} from './foundation/MemorySessionStorage/MemorySessionStorage';
