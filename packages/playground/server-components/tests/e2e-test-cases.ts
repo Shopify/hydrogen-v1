@@ -77,6 +77,16 @@ export default async function testCases({
     expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
+  it('has access to request context', async () => {
+    await page.goto(getServerUrl() + '/request-context');
+    expect(await page.textContent('h1')).toContain('Request Context');
+
+    const defaultContext = await page.textContent('#default-context');
+    expect(defaultContext).toContain('{"test1":true}');
+    const scopedContext = await page.textContent('#scoped-context');
+    expect(scopedContext).toContain('{"test2":true}');
+  });
+
   it.skip('should render server props in client component', async () => {
     await page.goto(getServerUrl() + '/test-server-props');
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
