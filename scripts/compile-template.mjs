@@ -1,16 +1,9 @@
-import {execa} from 'execa';
 import rimraf from 'rimraf';
-import {ESLint} from 'eslint';
-import {resolve} from 'path';
-import {readFile, writeFile, copyFile, mkdir} from 'fs/promises';
-
-const OTHER_FILES = [
-  `index.html`,
-  `README.md`,
-  '.stackblitzrc',
-  'public/favicon.ico',
-  'src/index.css',
-];
+import {resolve, basename, sep, extname} from 'path';
+import fs from 'fs-extra';
+import glob from 'glob';
+import ts from 'typescript';
+import prettier from 'prettier';
 
 (async () => {
   const [template] = process.argv.slice(2);
@@ -19,87 +12,112 @@ const OTHER_FILES = [
     throw new Error('No template specified');
   }
 
+  const JSTemplateDirectory = resolve(process.cwd(), 'templates', template);
   const TSTemplateDirectory = resolve(
     process.cwd(),
     'templates',
-    `${template}-typescript`
+    `${template}-ts`
   );
-  const JSTemplateDirectory = resolve(
-    process.cwd(),
-    'templates',
-    `${template}-javascript`
-  );
+  const globPath = [TSTemplateDirectory, '**', '/!(*.d)'].join(sep);
+  const files = glob.sync(globPath, {
+    nosort: true,
+    nodir: true,
+    dot: true,
+    ignore: ['**/dist/**', '**/node_modules/**'],
+  });
 
   rimraf.sync(JSTemplateDirectory);
 
-  const tsconfigFile = await createTSConfig(template);
-
-  await execa('yarn', ['tsc', '--project', tsconfigFile]);
-  await movePackageJSON(TSTemplateDirectory, JSTemplateDirectory);
-  await mkdir(`${JSTemplateDirectory}/public`);
-  await Promise.all(
-    OTHER_FILES.map((file) =>
-      copyFile(
-        `${TSTemplateDirectory}/${file}`,
-        `${JSTemplateDirectory}/${file}`
-      )
-    )
+  const processor = await createProcessor(
+    TSTemplateDirectory,
+    JSTemplateDirectory
   );
-
-  const eslint = new ESLint({fix: true});
-
-  const results = await eslint.lintFiles([
-    `${JSTemplateDirectory}/**/*.{js,ts,jsx,tsx}`,
-  ]);
-
-  await ESLint.outputFixes(results);
-
-  rimraf.sync(tsconfigFile);
+  await Promise.all(files.map(processor));
 })();
 
-async function movePackageJSON(from, to) {
-  const packageJSONContent = await readFile(`${from}/package.json`, 'utf8');
-  const packageJSON = JSON.parse(packageJSONContent);
-  const newPackageJSON = Object.assign(packageJSON, {
-    name: 'hello-world-javascript',
-    scripts: {
-      ...packageJSON.scripts,
-      dev: 'shopify hydrogen dev',
-    },
-  });
-  const newPackageJSONContent = JSON.stringify(newPackageJSON, null, 2);
-  await writeFile(`${to}/package.json`, newPackageJSONContent);
+async function createProcessor(from, to) {
+  const tsConfig = await fs.readFile(resolve(from, 'tsconfig.json'), 'utf8');
+  const {compilerOptions} = JSON.parse(tsConfig);
+
+  return async function processFile(filepath) {
+    const filename = basename(filepath);
+    const ext = extname(filepath);
+    let destination = filepath.replace(from, to);
+    let content = await fs.readFile(filepath, 'utf8');
+
+    switch (ext) {
+      case '.ts':
+      case '.tsx':
+        const withArtificialNewLines = escapeNewLines(content);
+        const compiled = compile(withArtificialNewLines, compilerOptions);
+        const withRestoredNewLines = restoreNewLines(compiled.outputText);
+
+        content = await format(withRestoredNewLines, filename);
+        destination = destination.replace('.ts', '.js');
+        break;
+    }
+
+    switch (filename) {
+      case 'tsconfig.json':
+      case 'yarn.lock':
+        return;
+      case 'README.md':
+        content = content.replace('TypeScript', 'JavaScript');
+        break;
+      case 'package.json':
+        const packageJSON = JSON.parse(content);
+        const newPackageJSON = Object.assign(packageJSON, {
+          name: 'hello-world-javascript',
+          description: 'A simple example of a JavaScript project',
+          scripts: {
+            ...packageJSON.scripts,
+            dev: 'shopify hydrogen dev',
+          },
+        });
+
+        delete packageJSON.devDependencies.typescript;
+        delete packageJSON.devDependencies['@types/react'];
+
+        content = JSON.stringify(newPackageJSON, null, 2);
+    }
+
+    await fs.mkdirp(resolve(destination, '..'));
+    await fs.writeFile(destination, content);
+  };
 }
 
-async function createTSConfig(template) {
-  const tsconfigFilename = './scripts/compile-template.tsconfig.json';
-  const config = {
+const escapeNewLines = (code) => code.replace(/\n\n/g, '\n/* :newline: */');
+const restoreNewLines = (code) => code.replace(/\/\* :newline: \*\//g, '\n');
+
+function compile(code, options) {
+  return ts.transpileModule(code, {
+    reportDiagnostics: false,
     compilerOptions: {
-      outDir: `../templates/${template}-javascript`,
-      target: 'es2020',
-      module: 'esnext',
-      moduleResolution: 'node',
-      strict: true,
-      noUnusedLocals: true,
-      noUnusedParameters: true,
-      experimentalDecorators: true,
-      lib: ['dom', 'dom.iterable', 'scripthost', 'es2020'],
-      allowJs: true,
-      checkJs: true,
+      ...options,
       jsx: 'preserve',
-      types: ['vite/client'],
-      esModuleInterop: true,
-      isolatedModules: true,
-      resolveJsonModule: true,
-      skipLibCheck: true,
+      removeComments: false,
     },
-    exclude: [
-      `../templates/${template}-typescript/node_modules`,
-      `../templates/${template}-typescript/dist`,
-    ],
-    include: [`../templates/${template}-typescript/**/*`],
+  });
+}
+
+async function format(content, path) {
+  const ext = extname(path);
+  const prettierConfig = {
+    arrowParens: 'always',
+    singleQuote: true,
+    bracketSpacing: false,
+    trailingComma: 'all',
+    parser: 'babel',
   };
-  const TSConfigContent = JSON.stringify(config, null, 2);
-  await writeFile(tsconfigFilename, TSConfigContent);
-  return tsconfigFilename;
+
+  switch (ext) {
+    case '.html':
+    case '.css':
+      prettierConfig.parser = ext.slice(1);
+      break;
+  }
+
+  const formattedContent = await prettier.format(content, prettierConfig);
+
+  return formattedContent;
 }
