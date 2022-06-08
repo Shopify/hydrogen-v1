@@ -39,9 +39,6 @@ export default function AddressBook({addresses, defaultAddress}) {
             <Button
               className="mt-2 text-sm w-full max-w-xl mb-6"
               onClick={() => {
-                setServerProps('showModal', 'true');
-                setShowConfirmRemove(false);
-                setShowEditAddress(true);
                 setServerProps('editingAddress', 'NEW');
               }}
               variant="secondary"
@@ -80,7 +77,6 @@ export default function AddressBook({addresses, defaultAddress}) {
 function Address({address, defaultAddress}) {
   const {serverProps, setServerProps} = useServerProps();
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
-  const [showEditAddress, setShowEditAddress] = useState(false);
 
   return (
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
@@ -108,9 +104,7 @@ function Address({address, defaultAddress}) {
       <div className="flex flex-row font-medium mt-6">
         <button
           onClick={() => {
-            setServerProps('showModal', 'true');
             setShowConfirmRemove(false);
-            setShowEditAddress(true);
             setServerProps('editingAddress', address.id);
           }}
           className="text-left underline text-sm"
@@ -121,7 +115,6 @@ function Address({address, defaultAddress}) {
           onClick={() => {
             setServerProps('showModal', 'true');
             setShowConfirmRemove(true);
-            setShowEditAddress(false);
           }}
           className="text-left text-gray-500 ml-6 text-sm"
         >

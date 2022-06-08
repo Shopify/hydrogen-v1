@@ -1,8 +1,11 @@
 import {useServerProps} from '@shopify/hydrogen';
+import {useCallback} from 'react';
 
-export default function Modal({children}) {
+export default function Modal({children, editing}) {
   const {serverProps, setServerProps} = useServerProps();
-  const close = () => setServerProps('showModal', null);
+  const close = useCallback(() => {
+    setServerProps('editingAddress', null);
+  }, [setServerProps]);
 
   return (
     <div

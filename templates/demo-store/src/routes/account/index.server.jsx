@@ -15,6 +15,9 @@ import Layout from '~/components/layouts/DefaultLayout.server';
 import OrderHistory from '~/components/sections/OrderHistory.client';
 import LogoutButton from '~/components/elements/LogoutButton.client';
 import EditAccountDetails from '~/components/sections/EditAccountDetails.client';
+import EditAddress from '~/components/sections/EditAddress.client';
+import Modal from '~/components/elements/Modal.client';
+
 import {
   FeaturedCollections,
   ProductSwimlane,
@@ -22,16 +25,9 @@ import {
   PageHeader,
 } from '~/components/sections';
 
-import Modal from '~/components/elements/Modal.client';
-
 import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
-export default function Account({
-  response,
-  editingAccount,
-  editingAddress,
-  showModal,
-}) {
+export default function Account({response, editingAccount, editingAddress}) {
   response.cache(NoStore());
 
   const {customerAccessToken, countryCode = 'US'} = useSession();
@@ -66,44 +62,61 @@ export default function Account({
     customer.defaultAddress.id.lastIndexOf('?'),
   );
 
-  if (editingAccount)
+  if (editingAccount) {
     return (
-      <Layout>
-        <Seo type="noindex" data={{title: 'Account details'}} />
-        <EditAccountDetails
-          firstName={customer.firstName}
-          lastName={customer.lastName}
-          phone={customer.phone}
-          email={customer.email}
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
+          locations={locations}
         />
-      </Layout>
-    );
-
-  if (editingAddress && showModal) {
-    const addressToEdit = addresses.find(
-      (address) => address.id === editingAddress,
-    );
-
-    return (
-      <Layout>
-        <Seo
-          type="noindex"
-          data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
-        />
-        <Modal>
-          <EditAddress
-            address={addressToEdit}
-            defaultAddress={defaultAddress === editingAddress}
-          />
-        </Modal>
-        {/* <EditAddress
-          address={addressToEdit}
-          defaultAddress={defaultAddress === editingAddress}
-        /> */}
-      </Layout>
+        {editingAccount && (
+          <Modal>
+            <Seo type="noindex" data={{title: 'Account details'}} />
+            <EditAccountDetails
+              firstName={customer.firstName}
+              lastName={customer.lastName}
+              phone={customer.phone}
+              email={customer.email}
+            />
+          </Modal>
+        )}
+      </>
     );
   }
 
+  if (editingAddress) {
+    const addressToEdit = addresses.find(
+      (address) => address.id === editingAddress,
+    );
+    return (
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
+          locations={locations}
+        />
+        {editingAddress && (
+          <Modal>
+            <Seo
+              type="noindex"
+              data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
+            />
+            <EditAddress
+              address={addressToEdit}
+              defaultAddress={defaultAddress === editingAddress}
+            />
+          </Modal>
+        )}
+      </>
+    );
+  }
   return (
     <AuthenticatedAccount
       customer={customer}
@@ -229,6 +242,7 @@ const QUERY = gql`
             country @include(if: $withAddressDetails)
             province @include(if: $withAddressDetails)
             city @include(if: $withAddressDetails)
+            zip @include(if: $withAddressDetails)
             phone @include(if: $withAddressDetails)
           }
         }

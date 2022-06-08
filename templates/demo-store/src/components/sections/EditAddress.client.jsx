@@ -1,9 +1,12 @@
 import {useServerProps} from '@shopify/hydrogen';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {Button, Text} from '../elements';
 
 export default function EditAddress({address, defaultAddress}) {
   const {setServerProps} = useServerProps();
+  const close = useCallback(() => {
+    setServerProps('editingAddress', null);
+  }, [setServerProps]);
   // const close = () => setServerProps('editingAddress', null);
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState(null);
@@ -48,8 +51,7 @@ export default function EditAddress({address, defaultAddress}) {
       return;
     }
 
-    setServerProps('editingAddress', null);
-    setServerProps('showModal', null);
+    close();
   }
 
   return (
@@ -252,10 +254,7 @@ export default function EditAddress({address, defaultAddress}) {
             <Button
               className="mt-3 focus:shadow-outline rounded w-full"
               variant="secondary"
-              onClick={() => {
-                setServerProps('editingAddress', null);
-                setServerProps('showModal', null);
-              }}
+              onClick={close}
             >
               Cancel
             </Button>
