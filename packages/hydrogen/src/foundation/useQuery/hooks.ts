@@ -12,7 +12,7 @@ import {
   setItemInCache,
 } from '../Cache/cache-sub-request';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {CacheSeconds} from '../Cache/strategies';
+import {CacheSeconds, NO_STORE} from '../Cache/strategies';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -58,7 +58,13 @@ export function useQuery<T>(
 
   collectQueryTimings(request, withCacheIdKey, 'requested');
 
-  if (queryOptions?.preload) {
+  if (
+    // If preload isn't explicitly defined, and caching isn't
+    // explicitly set to `NO_STORE` then turn preload on
+    (typeof queryOptions?.preload === 'undefined' &&
+      queryOptions?.cache?.mode !== NO_STORE) ||
+    queryOptions?.preload
+  ) {
     request.savePreloadQuery({
       preload: queryOptions?.preload,
       key: withCacheIdKey,
