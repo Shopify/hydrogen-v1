@@ -143,6 +143,9 @@ function DesktopHeader({title, home}) {
 }
 
 function CartBadge({dark, quantity}) {
+  if (quantity < 1) {
+    return null;
+  }
   return (
     <div
       className={`${
