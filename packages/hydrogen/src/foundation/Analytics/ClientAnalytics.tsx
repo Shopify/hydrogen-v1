@@ -1,4 +1,4 @@
-import {getNamedspacedEventname} from './utils';
+import {getNamedspacedEventname, mergeDeep} from './utils';
 import type {Subscriber, Subscribers, SubscriberFunction} from './types';
 import {eventNames} from './const';
 import {EVENT_PATHNAME} from '../../constants';
@@ -8,6 +8,7 @@ type EventGuard = Record<string, NodeJS.Timeout>;
 
 const subscribers: Subscribers = {};
 let pageAnalyticsData: any = {};
+let isFirstPageViewSent: Boolean = false;
 const guardDupEvents: EventGuard = {};
 
 const USAGE_ERROR =
@@ -21,18 +22,10 @@ function isInvokedFromServer(): boolean {
   return false;
 }
 
-function pushToPageAnalyticsData(data: any, namespace?: string): void {
+function pushToPageAnalyticsData(data: any): void {
   if (isInvokedFromServer()) return;
 
-  if (namespace) {
-    pageAnalyticsData[namespace] = Object.assign(
-      {},
-      pageAnalyticsData[namespace] || {},
-      data
-    );
-  } else {
-    pageAnalyticsData = Object.assign({}, pageAnalyticsData, data);
-  }
+  pageAnalyticsData = mergeDeep(pageAnalyticsData, data);
 }
 
 function getPageAnalyticsData(): any {
@@ -47,12 +40,10 @@ function resetPageAnalyticsData(): void {
   pageAnalyticsData = {};
 }
 
-function publish(eventname: string, guardDup = false, payload?: any) {
+function publish(eventname: string, guardDup = false, payload = {}) {
   if (isInvokedFromServer()) return;
 
   const namedspacedEventname = getNamedspacedEventname(eventname);
-  const subs = subscribers[namedspacedEventname];
-  const combinedPayload = Object.assign({}, pageAnalyticsData, payload);
 
   // De-dup events due to re-renders
   if (guardDup) {
@@ -63,15 +54,20 @@ function publish(eventname: string, guardDup = false, payload?: any) {
     }
 
     const namespacedTimeout = setTimeout(() => {
-      publishEvent(subs, combinedPayload);
+      publishEvent(namedspacedEventname, mergeDeep(pageAnalyticsData, payload));
     }, 100);
     guardDupEvents[namedspacedEventname] = namespacedTimeout;
   } else {
-    publishEvent(subs, combinedPayload);
+    publishEvent(namedspacedEventname, mergeDeep(pageAnalyticsData, payload));
   }
 }
 
-function publishEvent(subs: Record<string, SubscriberFunction>, payload: any) {
+function publishEvent(eventname: string, payload: any) {
+  const subs = subscribers[eventname];
+  if (!isFirstPageViewSent && eventname === eventNames.PAGE_VIEW) {
+    isFirstPageViewSent = true;
+  }
+
   if (subs) {
     Object.keys(subs).forEach((key) => {
       subs[key](payload);
@@ -118,6 +114,10 @@ function pushToServer(init?: RequestInit, searchParam?: string) {
   );
 }
 
+function hasSentFirstPageView() {
+  return isFirstPageViewSent;
+}
+
 export const ClientAnalytics = {
   pushToPageAnalyticsData,
   getPageAnalyticsData,
@@ -126,4 +126,5 @@ export const ClientAnalytics = {
   subscribe,
   pushToServer,
   eventNames,
+  hasSentFirstPageView,
 };

@@ -3,6 +3,8 @@ import {
   useShopQuery,
   flattenConnection,
   useSession,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
@@ -43,6 +45,12 @@ export default function NotFound({response}) {
 
   const {countryCode = 'US'} = useSession();
   const {languageCode} = useShop();
+
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.notFound,
+    },
+  });
 
   const {data} = useShopQuery({
     query: QUERY,
