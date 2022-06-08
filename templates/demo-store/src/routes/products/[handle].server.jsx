@@ -28,7 +28,7 @@ export default function Product() {
       language: languageCode,
       handle,
     },
-    preload: false,
+    preload: true,
   });
 
   useServerAnalytics(
