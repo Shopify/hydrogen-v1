@@ -13,7 +13,7 @@ export default function ProductCard({product, label, className}) {
     image,
     priceV2: price,
     compareAtPriceV2: compareAtPrice,
-  } = cardData?.variants?.nodes[0];
+  } = cardData?.variants?.nodes[0] || {};
 
   if (label) {
     cardLabel = label;

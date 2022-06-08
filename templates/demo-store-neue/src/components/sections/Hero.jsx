@@ -3,7 +3,7 @@ import {Heading, Text} from '../elements';
 import {hero as mockData} from '~/lib/placeholders';
 
 export default function Hero({data = mockData, height, top}) {
-  const {title, byline, cta, url, spread, spread_secondary, text_color} = data;
+  const {title, byline, cta, url, spread, spread_secondary} = data;
 
   return (
     <Link to={url.value}>
