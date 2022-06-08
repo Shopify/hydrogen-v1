@@ -1,5 +1,4 @@
 import {Link, useUrl, useCart} from '@shopify/hydrogen';
-import {useMedia} from 'react-use';
 
 import {
   IconSearch,
@@ -18,12 +17,12 @@ export default function Header({title}) {
   const {pathname} = useUrl();
 
   const home = pathname === '/';
-  const isDesktop = useMedia('(min-width: 60em)', false);
 
-  return isDesktop ? (
-    <DesktopHeader home={home} title={title} />
-  ) : (
-    <MobileHeader home={home} title={title} />
+  return (
+    <>
+      <DesktopHeader home={home} title={title} />
+      <MobileHeader home={home} title={title} />
+    </>
   );
 }
 
@@ -36,7 +35,7 @@ function MobileHeader({title, home}) {
       home
         ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
-    } flex items-center h-12 md:h-16 sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`,
+    } lg:hidden flex items-center h-12 md:h-16 sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`,
   };
 
   return (
@@ -94,7 +93,7 @@ function DesktopHeader({title, home}) {
       home
         ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
-    } flex items-center sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`,
+    } hidden lg:flex items-center sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`,
   };
 
   return (
