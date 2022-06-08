@@ -4,7 +4,7 @@ title: Routes
 description: Get familiar with the file-based routing system that Hydrogen uses.
 ---
 
-The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen app.
+The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen storefront.
 
 ## How routes work
 
@@ -120,7 +120,7 @@ export default function({request}) {
 
 By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx` using the following components:
 
-- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen app
+- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen storefront
 - [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
 - [`Route`](https://shopify.dev/api/hydrogen/components/framework/route): Used to set up a route in Hydrogen that's independent of the file system
 
@@ -242,20 +242,20 @@ Server components placed in the `src/routes` directory receive the following spe
 
 | Prop       | Type                      |
 | ---------- | ------------------------- |
-| `request`  | `ServerComponentRequest`  |
-| `response` | `ServerComponentResponse` |
+| `request`  | `HydrogenRequest`  |
+| `response` | `HydrogenResponse` |
 
 Each server component receives props, which includes custom versions of `request` and `response` and any `serverProps` that you have passed from the client.
 
 ![Shows a diagram that illustrates how server components receive props](/assets/custom-storefronts/hydrogen/hydrogen-pages.png)
 
-### `request`: `ServerComponentRequest`
+### `request`: `HydrogenRequest`
 
 You might want to inspect incoming requests for cookies, headers or other signals that might require a unique response.
 
 All server components receive a `request` prop containing a Hydrogen-specific version of [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request).
 
-In addition to the standard methods, `ServerComponentRequest` exposes a `cookies` helper, which is a simple `Map` of cookie values:
+In addition to the standard methods, `HydrogenRequest` exposes a `cookies` helper, which is a simple `Map` of cookie values:
 
 {% codeblock file %}
 
@@ -273,7 +273,7 @@ function MyPage({request}) {
 
 {% endcodeblock %}
 
-In some cases, you might want to use `ServerComponentRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components):
+In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components):
 
 {% codeblock file %}
 
@@ -291,7 +291,7 @@ function MyPage({request}) {
 
 {% endcodeblock %}
 
-### `response`: `ServerComponentResponse`
+### `response`: `HydrogenResponse`
 
 You might want to customize the response returned from the Hydrogen server. For example, set a different status code or define custom headers.
 
@@ -318,7 +318,7 @@ export default function MyProducts({response}) {
 
 #### `response.doNotStream()`
 
-By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). To customize a response, you need to tell Hydrogen that your server component plans to modify it in some way by calling `response.doNotStream()`:
+By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). However, you can also disable streaming for each route and return a fully buffered response. This is helpful in scenarios like [handling custom SEO bots](https://shopify.dev/custom-storefronts/hydrogen/framework/seo#checking-for-custom-robots). To disable streaming, call `response.doNotStream()`:
 
 {% codeblock file %}
 
@@ -332,6 +332,9 @@ export default function CustomPage({response}) {
 
 {% endcodeblock %}
 
+> Tip:
+> There are [performance benefits](https://shopify.dev/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
+
 You can use `response` to set headers or status codes using the `Response` API:
 
 {% codeblock file %}
@@ -341,6 +344,7 @@ export default function CustomPage({response}) {
   response.doNotStream();
 
   response.headers.set('custom-header', 'value');
+  response.status = 201;
 
   // ...
 }
@@ -409,6 +413,6 @@ function MyPage({custom, props, here}) {
 
 - Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.
 - Learn about how Hydrogen consumes data from different [sources](https://shopify.dev/custom-storefronts/hydrogen/data-sources).
-- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen apps.
+- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen storefronts.
 - Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
 - Learn how to [manage your server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) during your development process.

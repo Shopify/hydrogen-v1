@@ -1,7 +1,6 @@
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {PageHeader, Section} from '~/components/sections';
-import {Heading, Text, Button} from '~/components/elements';
-
+// TODO: Delete this before we launch — it's just to help the build process
 export default function TemplateName() {
   return (
     <Layout>

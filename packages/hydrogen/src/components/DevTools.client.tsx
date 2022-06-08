@@ -102,6 +102,7 @@ export default function DevTools() {
   if (import.meta.env.DEV && hasMounted) {
     return (
       <div
+        id="hydrogen-dev-tools"
         style={{
           position: 'fixed',
           right: open ? 0 : '2em',

@@ -6,6 +6,7 @@ import {
   createFromReadableStream,
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
+import {ClientAnalytics} from '../../client';
 import {RSC_PATHNAME} from '../../constants';
 
 let rscReader: ReadableStream | null;
@@ -108,6 +109,8 @@ export function useServerResponse(state: any) {
       /* @ts-ignore */
       window.BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
     }
+
+    ClientAnalytics.resetPageAnalyticsData();
 
     // Request a new flight response.
     response = createFromFetch(

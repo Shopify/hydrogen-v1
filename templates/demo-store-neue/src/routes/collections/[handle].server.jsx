@@ -2,16 +2,16 @@ import {
   useSession,
   useShop,
   useShopQuery,
-  flattenConnection,
   Seo,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
-import {PageHeader, Section} from '~/components/sections';
+import {ProductGrid, PageHeader, Section} from '~/components/sections';
 import {Text} from '~/components/elements';
-import ProductGrid from '~/components/sections/ProductGrid.client';
 
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
@@ -24,7 +24,7 @@ export default function Collection({params}) {
   const {handle} = params;
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: COLLECTION_QUERY,
     variables: {
       handle,
       country: countryCode,
@@ -34,12 +34,23 @@ export default function Collection({params}) {
     preload: true,
   });
 
+  useServerAnalytics(
+    data?.collection
+      ? {
+          shopify: {
+            pageType: ShopifyAnalyticsConstants.pageType.collection,
+            resourceId: data.collection.id,
+          },
+        }
+      : null,
+  );
+
   if (data?.collection == null) {
     return <NotFound type="collection" />;
   }
 
   const collection = data.collection;
-  const products = flattenConnection(data.collection.products);
+  const products = data.collection.products.nodes;
 
   return (
     <Layout>
@@ -76,8 +87,9 @@ export async function api(request, {params, queryShop}) {
   const cursor = new URL(request.url).searchParams.get('cursor');
   const {handle} = params;
 
+  // TODO: Pass country/locale params for multi-currency
   return await queryShop({
-    query: QUERY,
+    query: PAGINATE_QUERY,
     variables: {
       handle,
       cursor,
@@ -86,7 +98,24 @@ export async function api(request, {params, queryShop}) {
   });
 }
 
-const QUERY = gql`
+const PAGINATE_QUERY = gql`
+  ${PRODUCT_CARD_FIELDS}
+  query CollectionPage($handle: String!, $pageBy: Int!, $cursor: String) {
+    collection(handle: $handle) {
+      products(first: $pageBy, after: $cursor) {
+        nodes {
+          ...ProductCardFields
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+const COLLECTION_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query CollectionDetails(
     $handle: String!
@@ -96,8 +125,8 @@ const QUERY = gql`
     $cursor: String
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
+      id
       title
-      descriptionHtml
       description
       seo {
         description
@@ -111,11 +140,8 @@ const QUERY = gql`
         altText
       }
       products(first: $pageBy, after: $cursor) {
-        edges {
-          cursor
-          node {
-            ...ProductCardFields
-          }
+        nodes {
+          ...ProductCardFields
         }
         pageInfo {
           hasNextPage

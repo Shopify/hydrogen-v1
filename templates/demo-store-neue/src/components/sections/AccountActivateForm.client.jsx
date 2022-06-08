@@ -38,7 +38,7 @@ export default function AccountActivateForm({id, activationToken}) {
 
     if (password !== passwordConfirm) {
       hasError = true;
-      setPasswordConfirmError('The two password entered did not match.');
+      setPasswordConfirmError('The two passwords entered did not match.');
     }
 
     return hasError;
@@ -67,13 +67,13 @@ export default function AccountActivateForm({id, activationToken}) {
 
   return (
     <div className="flex justify-center">
-      <div className="max-w-md w-full">
+      <div className="w-full max-w-md">
         <h1 className="text-4xl">Activate Account.</h1>
         <p className="mt-4">Create your password to activate your account.</p>
         <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
           {submitError && (
             <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-white">{submitError}</p>
+              <p className="m-4 text-white text-s">{submitError}</p>
             </div>
           )}
           <div className="mb-4">
@@ -130,7 +130,7 @@ export default function AccountActivateForm({id, activationToken}) {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-gray-900 text-white uppercase py-2 px-4 focus:shadow-outline block w-full"
+              className="block w-full px-4 py-2 text-white uppercase bg-gray-900 focus:shadow-outline"
               type="submit"
             >
               Save

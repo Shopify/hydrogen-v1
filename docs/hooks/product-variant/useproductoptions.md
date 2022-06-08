@@ -5,7 +5,7 @@ description: The useProductOptions hook returns an object that enables you to ke
 ---
 
 The `useProductOptions` hook returns an object that enables you to keep track of the
-selected variant and/or selling plan state, as well as callbacks for modifying the state.
+selected variant and/or selling plan state, as well as callbacks for modifying the state. The `useProductOptions` hook must be a child of the [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider) component.
 
 ## Example code
 
@@ -16,9 +16,7 @@ selected variant and/or selling plan state, as well as callbacks for modifying t
 import {useProductOptions} from '@shopify/hydrogen';
 
 export function MyComponent() {
-  const {variants, selectedVariant, setSelectedVariant} = useProductOptions({
-    variants: product.variants,
-  });
+  const {variants, selectedVariant, setSelectedVariant} = useProductOptions();
 
   return (
     <>
@@ -122,10 +120,12 @@ export function MyComponent() {
 }
 ```
 
-#### Considerations
+### Considerations
 
+- To make sure you have all the data necessary for the `useProductOptions` hook, refer to the Storefront API's [ProductVariant object](https://shopify.dev/api/storefront/latest/objects/ProductVariant).
 - If your product requires a selling plan, then make sure to display that as required in your user interface. If it doesn't require a selling plan, then you might want to offer a "one-time purchase" option which triggers `setSelectedSellingPlan(null)`.
 - You can use `selectedSellingPlanAllocation` to display the price adjustments for the selected variant when a given selling plan is active.
+- You can manually deselect a variant by calling `setSelectedVariant(null)`.
 
 ## Arguments
 
@@ -156,130 +156,6 @@ This hook returns a single object with the following keys:
 | `selectedSellingPlanAllocation` | The selected selling plan allocation.                                         |
 | `sellingPlanGroups`             | The selling plan groups.                                                      |
 
-## Storefront API data
-
-The following GraphQL query corresponds to the Storefront API's [ProductVariant object](https://shopify.dev/api/storefront/latest/objects/ProductVariant). Using the query ensures that you have all the data necessary for the `useProductOptions` hook:
-
-```graphql
-{
-  id
-  title
-  availableForSale
-  image {
-    id
-    url
-    altText
-    width
-    height
-  }
-  unitPriceMeasurement {
-    measuredType
-    quantityUnit
-    quantityValue
-    referenceUnit
-    referenceValue
-  }
-  unitPrice {
-    currencyCode
-    amount
-  }
-  priceV2 {
-    currencyCode
-    amount
-  }
-  compareAtPriceV2 {
-    currencyCode
-    amount
-  }
-  selectedOptions {
-    name
-    value
-  }
-  metafields(first: $numProductVariantMetafields) {
-    edges {
-      node {
-        id
-        type
-        namespace
-        key
-        value
-        createdAt
-        updatedAt
-        description
-        reference @include(if: $includeReferenceMetafieldDetails) {
-          __typename
-          ... on MediaImage {
-            id
-            mediaContentType
-            image {
-              id
-              url
-              altText
-              width
-              height
-            }
-          }
-        }
-      }
-    }
-  }
-  sellingPlanAllocations(first: $numProductVariantSellingPlanAllocations) {
-    edges {
-      node {
-        priceAdjustments {
-          compareAtPrice {
-            currencyCode
-            amount
-          }
-          perDeliveryPrice {
-            currencyCode
-            amount
-          }
-          price {
-            currencyCode
-            amount
-          }
-          unitPrice {
-            currencyCode
-            amount
-          }
-        }
-        sellingPlan {
-          id
-          description
-          name
-          options {
-            name
-            value
-          }
-          priceAdjustments {
-            orderCount
-            adjustmentValue {
-              ... on SellingPlanFixedAmountPriceAdjustment {
-                adjustmentAmount {
-                  currencyCode
-                  amount
-                }
-              }
-              ... on SellingPlanFixedPriceAdjustment {
-                price {
-                  currencyCode
-                  amount
-                }
-              }
-              ... on SellingPlanPercentagePriceAdjustment {
-                adjustmentPercentage
-              }
-            }
-          }
-          recurringDeliveries
-        }
-      }
-    }
-  }
-}
-```
-
 ### Variables
 
 The [Product object](https://shopify.dev/api/storefront/reference/products/product) includes variables that you will need to provide values for when performing your query.
@@ -291,6 +167,6 @@ The [Product object](https://shopify.dev/api/storefront/reference/products/produ
 | `$numProductSellingPlanGroups`             | The number of `SellingPlanGroups` objects to query for in a `SellingPlanGroupConnection`.             |
 | `$$numProductSellingPlans`                 | The number of `SellingPlan` objects to query for in a `SellingPlanConnection`.                        |
 
-## Related hooks
+## Related components
 
-- [`useProduct`](https://shopify.dev/api/hydrogen/hooks/product-variant/useproduct)
+- [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)

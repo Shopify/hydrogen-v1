@@ -8,7 +8,7 @@ import {
 } from '@shopify/hydrogen';
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {PageHeader, Section} from '~/components/sections';
-import {Heading, Text, Button, Grid} from '~/components/elements';
+import {Heading, Grid} from '~/components/elements';
 
 export default function Collections() {
   const {languageCode} = useShop();
@@ -31,8 +31,8 @@ export default function Collections() {
       <PageHeader heading="Collections" />
       <Section>
         <Grid items={collections.length === 3 ? 3 : 2}>
-          {collections.map((collection, i) => (
-            <Card data={collection} key={i} />
+          {collections.map((collection) => (
+            <Card data={collection} key={collection.id} />
           ))}
         </Grid>
       </Section>
@@ -66,6 +66,7 @@ const QUERY = gql`
   ) @inContext(country: $country, language: $language) {
     collections(first: $pageBy) {
       nodes {
+        id
         title
         description
         handle

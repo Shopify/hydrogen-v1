@@ -11,12 +11,12 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src"
   },
   "devDependencies": {
-    "@shopify/cli": "1.0.9",
-    "@shopify/cli-hydrogen": "2.0.0",
+    "@shopify/cli": "^3.0.11",
+    "@shopify/cli-hydrogen": "^3.0.11",
     "@shopify/prettier-config": "^1.1.2",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.2",
-    "eslint": "^7.23.0",
+    "eslint": "^8.16.0",
     "eslint-plugin-hydrogen": "^0.12.2",
     "postcss": "^8.4.14",
     "postcss-import": "^14.1.0",
@@ -29,8 +29,10 @@
   "dependencies": {
     "@headlessui/react": "^1.6.3",
     "@heroicons/react": "^1.0.6",
-    "@shopify/hydrogen": "^0.22.1",
+    "@shopify/hydrogen": "^0.23.0",
     "clsx": "^1.1.1",
+    "eslint-plugin-react": "^7.29.3",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "graphql-tag": "^2.12.6",
     "install": "^0.13.0",
     "npm": "^8.12.1",
@@ -38,6 +40,8 @@
     "react-dom": "^18.1.0",
     "react-use": "^17.4.0",
     "title": "^3.4.4",
-    "typographic-base": "^1.0.4"
+    "ts-node": "^10.8.0",
+    "typographic-base": "^1.0.4",
+    "vite": "^2.9.0"
   }
 }

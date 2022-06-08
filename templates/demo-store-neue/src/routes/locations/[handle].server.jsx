@@ -1,4 +1,4 @@
-import {useShopQuery, useRouteParams, Seo, gql, Image} from '@shopify/hydrogen';
+import {useShopQuery, useRouteParams, gql, Image} from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
@@ -6,7 +6,7 @@ import {PageHeader, Section} from '~/components/sections';
 import {Text, Heading} from '~/components/elements';
 import {formatPhoneNumber} from '~/lib/utils';
 
-export default function Location({params}) {
+export default function Location() {
   const {handle} = useRouteParams();
 
   const {data} = useShopQuery({
@@ -73,8 +73,8 @@ export default function Location({params}) {
                       Hours
                     </Heading>
                     <ul>
-                      {JSON.parse(hours.value).map((hour, i) => (
-                        <Text as="li" key={i}>
+                      {JSON.parse(hours.value).map((hour) => (
+                        <Text as="li" key={hour.id}>
                           {hour}
                         </Text>
                       ))}
@@ -148,6 +148,7 @@ const QUERY = gql`
         value
       }
       hours: field(key: "hours") {
+        id
         value
       }
       email: field(key: "email") {

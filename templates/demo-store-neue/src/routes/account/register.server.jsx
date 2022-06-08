@@ -1,7 +1,8 @@
 import {NoStore, Seo, gql} from '@shopify/hydrogen';
 
-import Layout from '../../components/layouts/DefaultLayout.server';
-import AccountCreateForm from '../../components/sections/AccountCreateForm.client';
+import {DefaultLayout as Layout} from '~/components/layouts';
+import {AccountCreateForm} from '~/components/sections';
+import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Register({response}) {
   response.cache(NoStore());
@@ -42,7 +43,7 @@ export async function api(request, {queryShop}) {
     cache: NoStore(),
   });
 
-  const errorMessage = getErrorMessage(data, errors);
+  const errorMessage = getApiErrorMessage('customerCreate', data, errors);
 
   if (
     !errorMessage &&
@@ -78,10 +79,3 @@ const MUTATION = gql`
     }
   }
 `;
-
-function getErrorMessage(data, errors) {
-  if (errors?.length) return errors[0].message ?? errors[0];
-  if (data?.customerCreate?.customerUserErrors?.length)
-    return data.customerCreate.customerUserErrors[0].message;
-  return null;
-}

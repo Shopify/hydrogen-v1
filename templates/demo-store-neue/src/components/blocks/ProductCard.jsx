@@ -1,4 +1,4 @@
-import {Image, Link, Money, useMoney, gql} from '@shopify/hydrogen';
+import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 import clsx from 'clsx';
 import {Text} from '~/components/elements';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
@@ -13,7 +13,7 @@ export default function ProductCard({product, label, className}) {
     image,
     priceV2: price,
     compareAtPriceV2: compareAtPrice,
-  } = cardData?.variants?.nodes[0];
+  } = cardData?.variants?.nodes[0] || {};
 
   if (label) {
     cardLabel = label;

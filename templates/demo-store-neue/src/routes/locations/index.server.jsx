@@ -20,8 +20,8 @@ export default function Locations() {
       <PageHeader heading="Locations" />
       <Section>
         <Grid items={locations.length === 3 ? 3 : 2}>
-          {locations.map((location, i) => (
-            <Card data={location} key={i} />
+          {locations.map((location) => (
+            <Card data={location} key={location.id} />
           ))}
         </Grid>
       </Section>

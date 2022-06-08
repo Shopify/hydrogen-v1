@@ -80,23 +80,6 @@ export default renderHydrogen(ClientWrapper);
 
 {% endcodeblock %}
 
-#### Strict mode
-
-[Strict mode](https://reactjs.org/docs/strict-mode.html) is enabled by default for all Hydrogen apps in development. It includes [strict effects](https://github.com/reactwg/react-18/discussions/19), which mounts and unmounts components multiple times to catch potential issues with user or third-party code.
-
-If strict effects cause problems for your app, then you can turn off strict mode. Create a `src/entry-client.jsx` file in your project and set `strictMode` to `false`:
-
-{% codeblock file, filename: 'src/entry-client.jsx' %}
-
-```jsx
-renderHydrogen(ClientWrapper, {strictMode: false});
-```
-
-{% endcodeblock %}
-
-> Caution:
-> If you turn off strict mode, then we recommended that you still include the `StrictMode` component at as high of a level as possible in your React tree to catch errors.
-
 ### Change the server entry point
 
 If you need to change the server entry point, then make the following updates in the `package.json` file:
@@ -121,4 +104,4 @@ If you need to change the server entry point, then make the following updates in
 
 - Get familiar with the different [templates](https://shopify.dev/custom-storefronts/hydrogen/templates) that help you get started with Hydrogen.
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [deploy your Hydrogen app](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.
+- Learn how to [deploy your Hydrogen storefront](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.

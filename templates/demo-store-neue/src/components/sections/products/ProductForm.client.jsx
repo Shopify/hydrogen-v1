@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {
-  useProduct,
-  isClient,
+  useProductOptions,
+  isBrowser,
   useUrl,
   AddToCartButton,
   ShopPayButton,
@@ -13,32 +13,35 @@ export default function ProductForm() {
   const [params, setParams] = useState(new URLSearchParams(search));
 
   const {options, setSelectedOption, selectedOptions, selectedVariant} =
-    useProduct();
+    useProductOptions();
 
   const isOutOfStock = !selectedVariant?.availableForSale || false;
 
   useEffect(() => {
     options.map(({name, values}) => {
-      const currentValue = params.get(name.toLowerCase());
-      if (currentValue) {
-        const matchedValue = values.filter(
-          (value) => encodeURIComponent(value.toLowerCase()) === currentValue,
-        );
-        setSelectedOption(name, matchedValue[0]);
-      } else {
-        setParams(
-          params.set(
-            encodeURIComponent(name.toLowerCase()),
-            encodeURIComponent(selectedOptions[name].toLowerCase()),
-          ),
-        );
-        window.history.replaceState(
-          null,
-          '',
-          `${pathname}?${params.toString()}`,
-        );
+      if (params) {
+        const currentValue = params.get(name.toLowerCase()) || null;
+        if (currentValue) {
+          const matchedValue = values.filter(
+            (value) => encodeURIComponent(value.toLowerCase()) === currentValue,
+          );
+          setSelectedOption(name, matchedValue[0]);
+        } else {
+          setParams(
+            params.set(
+              encodeURIComponent(name.toLowerCase()),
+              encodeURIComponent(selectedOptions[name].toLowerCase()),
+            ),
+          );
+          window.history.replaceState(
+            null,
+            '',
+            `${pathname}?${params.toString()}`,
+          );
+        }
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleChange(name, value) {
@@ -47,7 +50,7 @@ export default function ProductForm() {
       encodeURIComponent(name.toLowerCase()),
       encodeURIComponent(value.toLowerCase()),
     );
-    if (isClient()) {
+    if (isBrowser()) {
       window.history.replaceState(null, '', `${pathname}?${params.toString()}`);
     }
   }
@@ -83,7 +86,9 @@ export default function ProductForm() {
                         />
                         <div
                           className={`p-2 border cursor-pointer rounded text-sm md:text-md ${
-                            checked ? 'bg-gray-900 text-white' : 'text-gray-900'
+                            checked
+                              ? 'bg-primary text-contrast'
+                              : 'text-primary'
                           }`}
                         >
                           {value}

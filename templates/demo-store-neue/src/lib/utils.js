@@ -5,7 +5,7 @@ export function missingClass(string, prefix) {
     return true;
   }
 
-  let regex = new RegExp(` ?${prefix}`, 'g');
+  const regex = new RegExp(` ?${prefix}`, 'g');
   return string.match(regex) === null;
 }
 
@@ -171,4 +171,11 @@ export function parseMenu(menu, customPrefixes = {}) {
     ...menu,
     items: menu.items.map(parseItem(customPrefixes)),
   };
+}
+
+export function getApiErrorMessage(field, data, errors) {
+  if (errors?.length) return errors[0].message ?? errors[0];
+  if (data?.[field]?.customerUserErrors?.length)
+    return data[field].customerUserErrors[0].message;
+  return null;
 }

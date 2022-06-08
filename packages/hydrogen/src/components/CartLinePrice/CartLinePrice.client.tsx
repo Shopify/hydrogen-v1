@@ -17,22 +17,14 @@ export function CartLinePrice(
   const cartLine = useCartLine();
   const {priceType = 'regular', ...passthroughProps} = props;
 
-  const price =
+  const moneyV2 =
     priceType === 'regular'
-      ? cartLine.merchandise.priceV2
-      : cartLine.merchandise.compareAtPriceV2;
+      ? cartLine.estimatedCost.totalAmount
+      : cartLine.estimatedCost.compareAtAmount;
 
-  if (price == null) {
+  if (moneyV2 == null) {
     return null;
   }
 
-  return (
-    <Money
-      {...passthroughProps}
-      data={{
-        amount: `${parseFloat(price.amount) * cartLine.quantity}`,
-        currencyCode: price.currencyCode,
-      }}
-    />
-  );
+  return <Money {...passthroughProps} data={moneyV2} />;
 }

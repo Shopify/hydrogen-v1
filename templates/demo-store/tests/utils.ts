@@ -2,6 +2,8 @@ import {chromium} from 'playwright';
 import type {Server} from 'http';
 import {createServer as createViteDevServer} from 'vite';
 
+export const DEFAULT_DELAY = 60000;
+
 export async function startHydrogenServer() {
   // @ts-ignore
   const app = import.meta.env.WATCH
@@ -29,6 +31,7 @@ export async function startHydrogenServer() {
 
 async function createNodeServer() {
   // @ts-ignore
+  // eslint-disable-next-line node/no-missing-import
   const {createServer} = await import('../dist/node');
   const app = (await createServer()).app;
   const server = app.listen(0) as Server;

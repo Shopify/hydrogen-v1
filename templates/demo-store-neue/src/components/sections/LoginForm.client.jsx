@@ -67,12 +67,12 @@ export default function LoginForm({shopName}) {
 
   return (
     <div className="flex justify-center">
-      <div className="max-w-md w-full">
+      <div className="w-full max-w-md">
         <h1 className="text-4xl">Sign in.</h1>
         <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
           {hasSubmitError && (
             <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-white">
+              <p className="m-4 text-white text-s">
                 Sorry we did not recognize either your email or password. Please
                 try to sign in again or create a new account.
               </p>
@@ -141,7 +141,6 @@ function EmailField({email, setEmail, emailError, shopName}) {
           placeholder="Email address"
           aria-label="Email address"
           value={email}
-          autoFocus
           onChange={(event) => {
             setEmail(event.target.value);
           }}
@@ -154,14 +153,14 @@ function EmailField({email, setEmail, emailError, shopName}) {
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 rounded text-white py-2 px-4 focus:shadow-outline block w-full"
+          className="block w-full px-4 py-2 text-white bg-gray-900 rounded focus:shadow-outline"
           type="submit"
         >
           Next
         </button>
       </div>
-      <div className="flex items-center mt-8 border-t  border-gray-300">
-        <p className="align-baseline text-sm mt-6">
+      <div className="flex items-center mt-8 border-t border-gray-300">
+        <p className="mt-6 text-sm align-baseline">
           New to {shopName}? &nbsp;
           <Link className="inline underline" to="/account/register">
             Create an account
@@ -174,7 +173,7 @@ function EmailField({email, setEmail, emailError, shopName}) {
 
 function ValidEmail({email, resetForm}) {
   return (
-    <div className="mb-3 flex items-center justify-between">
+    <div className="flex items-center justify-between mb-3">
       <div>
         <p>{email}</p>
         <input
@@ -187,7 +186,7 @@ function ValidEmail({email, resetForm}) {
       </div>
       <div>
         <button
-          className="inline-block align-baseline text-sm underline"
+          className="inline-block text-sm underline align-baseline"
           type="button"
           onClick={resetForm}
         >
@@ -215,7 +214,6 @@ function PasswordField({password, setPassword, passwordError}) {
           value={password}
           minLength={8}
           required
-          autoFocus
           onChange={(event) => {
             setPassword(event.target.value);
           }}
@@ -228,7 +226,7 @@ function PasswordField({password, setPassword, passwordError}) {
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 text-white rounded py-2 px-4 focus:shadow-outline block w-full"
+          className="block w-full px-4 py-2 text-white bg-gray-900 rounded focus:shadow-outline"
           type="submit"
         >
           Sign in
@@ -237,7 +235,7 @@ function PasswordField({password, setPassword, passwordError}) {
       <div className="flex items-center justify-between mt-4">
         <div className="flex-1"></div>
         <Link
-          className="inline-block align-baseline text-sm text-gray-500"
+          className="inline-block text-sm text-gray-500 align-baseline"
           to="/account/recover"
         >
           Forgot password

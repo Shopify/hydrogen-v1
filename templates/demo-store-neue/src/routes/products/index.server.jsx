@@ -1,14 +1,6 @@
-import {
-  useSession,
-  useShop,
-  useShopQuery,
-  flattenConnection,
-  Seo,
-  gql,
-} from '@shopify/hydrogen';
+import {useSession, useShop, useShopQuery, gql} from '@shopify/hydrogen';
 
 import {DefaultLayout as Layout} from '~/components/layouts';
-import {NotFound} from '~/components/pages';
 import {PageHeader, Section} from '~/components/sections';
 import {Button, Grid, Text} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
@@ -24,12 +16,12 @@ export default function AllProducts({pageBy = 12}) {
     variables: {
       country: countryCode,
       language: languageCode,
-      pageBy: pageBy,
+      pageBy,
     },
     preload: true,
   });
 
-  const products = flattenConnection(data.products);
+  const products = data.products.nodes;
   const hasNextPage = data.products.pageInfo.hasNextPage;
 
   return (
@@ -69,11 +61,8 @@ const QUERY = gql`
     $cursor: String
   ) @inContext(country: $country, language: $language) {
     products(first: $pageBy, after: $cursor) {
-      edges {
-        cursor
-        node {
-          ...ProductCardFields
-        }
+      nodes {
+        ...ProductCardFields
       }
       pageInfo {
         hasNextPage

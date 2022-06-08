@@ -51,10 +51,8 @@ export default function MobileCountrySelector() {
                       selectedCountry={selectedCountry}
                       getClassName={(active) => {
                         return (
-                          `py-2 px-4 rounded flex justify-between items-center text-left ` +
-                          `w-full cursor-pointer ${
-                            active ? 'bg-gray-100' : null
-                          }`
+                          `py-2 px-4 rounded flex justify-between items-center text-left w-full cursor-pointer` +
+                          `${active ? ' bg-gray-100' : ''}`
                         );
                       }}
                     />
