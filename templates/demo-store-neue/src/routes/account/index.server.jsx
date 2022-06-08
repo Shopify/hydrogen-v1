@@ -18,8 +18,6 @@ export default function Account({response, editingAccount, editingAddress}) {
 
   if (!customerAccessToken) return response.redirect('/account/login');
 
-  // TODO: let's remove this conditional once we work on this
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const {data} = useShopQuery({
     query: QUERY,
     variables: {
