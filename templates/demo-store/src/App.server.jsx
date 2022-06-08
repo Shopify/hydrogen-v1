@@ -22,7 +22,7 @@ function App({routes}) {
           </Router>
         </CartProvider>
         <PerformanceMetrics />
-        {import.meta.env.DEV && <PerformanceMetricsDebug />}
+        {process.env.LOCAL_DEV && <PerformanceMetricsDebug />}
       </ShopifyProvider>
     </Suspense>
   );
