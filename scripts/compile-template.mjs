@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import rimraf from 'rimraf';
 import {resolve, basename, sep, extname} from 'path';
 import fs from 'fs-extra';
@@ -50,14 +51,20 @@ async function createProcessor(from, to) {
       case '.tsx':
         const withArtificialNewLines = escapeNewLines(content);
         const compiled = compile(withArtificialNewLines, compilerOptions);
-        const withRestoredNewLines = restoreNewLines(compiled.outputText);
 
-        content = await format(withRestoredNewLines, filename);
+        content = restoreNewLines(compiled.outputText);
         destination = destination.replace('.ts', '.js');
+
         break;
     }
 
     switch (filename) {
+      case 'favicon.ico':
+      case '.stackblitzrc':
+      case '.gitignore':
+        await fs.mkdirp(resolve(destination, '..'));
+        await fs.writeFile(destination, content);
+        return;
       case 'tsconfig.json':
       case 'yarn.lock':
         return;
@@ -80,6 +87,8 @@ async function createProcessor(from, to) {
 
         content = JSON.stringify(newPackageJSON, null, 2);
     }
+
+    content = await format(content, filename);
 
     await fs.mkdirp(resolve(destination, '..'));
     await fs.writeFile(destination, content);
@@ -111,6 +120,10 @@ async function format(content, path) {
   };
 
   switch (ext) {
+    case '.md':
+      prettierConfig.parser = 'markdown';
+      break;
+    case '.json':
     case '.html':
     case '.css':
       prettierConfig.parser = ext.slice(1);
