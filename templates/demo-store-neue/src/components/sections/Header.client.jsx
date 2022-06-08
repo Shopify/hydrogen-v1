@@ -20,12 +20,12 @@ export default function Header({title, menu}) {
   return (
     <>
       <DesktopHeader isHome={isHome} title={title} menu={menu} />
-      <MobileHeader isHome={isHome} title={title} menu={menu} />
+      <MobileHeader isHome={isHome} title={title} />
     </>
   );
 }
 
-function MobileHeader({title, isHome, menu}) {
+function MobileHeader({title, isHome}) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
@@ -34,6 +34,8 @@ function MobileHeader({title, isHome, menu}) {
         : 'bg-contrast/80 text-primary'
     } flex lg:hidden items-center h-12 md:h-16 sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`,
   };
+
+  // TODO: Add menu to Mobile Nav
 
   return (
     <header role="banner" className={styles.container}>
