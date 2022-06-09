@@ -14,7 +14,7 @@ export function ProductGrid({data}) {
   const [nextPage, setNextPage] = useState(hasNextPage);
   const [pending, setPending] = useState(false);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setPending(true);
     // TODO: Update this logic to use Hydrogen hooks (URL, fetchSync) where appropriate.
     const url = new URL(window.location.href);
@@ -29,15 +29,18 @@ export function ProductGrid({data}) {
     setCursor(endCursor);
     setNextPage(hasNextPage);
     setPending(false);
-  };
+  }, [cursor, products]);
 
-  const handleIntersect = useCallback((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        fetchProducts();
-      }
-    });
-  }, []);
+  const handleIntersect = useCallback(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          fetchProducts();
+        }
+      });
+    },
+    [fetchProducts],
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
@@ -45,10 +48,12 @@ export function ProductGrid({data}) {
       rootMargin: '100px',
     });
 
-    if (nextButtonRef.current) observer.observe(nextButtonRef.current);
+    const nextButton = nextButtonRef.current;
+
+    if (nextButton) observer.observe(nextButton);
 
     return () => {
-      if (nextButtonRef.current) observer.unobserve(nextButtonRef.current);
+      if (nextButton) observer.unobserve(nextButton);
     };
   }, [nextButtonRef, cursor, handleIntersect]);
 

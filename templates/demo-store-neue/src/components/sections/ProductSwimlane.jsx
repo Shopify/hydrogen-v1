@@ -1,4 +1,3 @@
-import {useCallback} from 'react';
 import {gql, useShopQuery, useSession, useShop} from '@shopify/hydrogen';
 import {Section} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
@@ -12,15 +11,15 @@ export function ProductSwimlane({
   title = 'Featured Products',
   ...props
 }) {
+  const {languageCode} = useShop();
+  const {countryCode = 'US'} = useSession();
+
   // get products swimlane products depending on input
-  const products = useCallback((data, count) => {
+  function useProducts(data, count) {
     // If the data is already provided, there's no need to query it, so we'll just return the data
     if (data && Array.isArray(data)) {
       return data;
     }
-
-    const {languageCode} = useShop();
-    const {countryCode = 'US'} = useSession();
 
     // If the data provided is a productId, we will query the productRecommendations API.
     // To make sure we have enough products for the swimlane, we'll combine the results with our top selling products.
@@ -28,7 +27,7 @@ export function ProductSwimlane({
       const {data: products} = useShopQuery({
         query: RECOMMENDED_PRODUCTS_QUERY,
         variables: {
-          count: count,
+          count,
           productId: data,
           languageCode,
           countryCode,
@@ -57,19 +56,21 @@ export function ProductSwimlane({
     } = useShopQuery({
       query: TOP_PRODUCTS_QUERY,
       variables: {
-        count: count,
+        count,
         languageCode,
         countryCode,
       },
     });
 
     return products.nodes;
-  }, []);
+  }
+
+  const products = useProducts(data, count);
 
   return (
     <Section heading={title} padding="y" {...props}>
       <div className="grid grid-flow-col gap-6 px-4 pb-4 overflow-x-scroll md:pb-8 snap-x scroll-px-4 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
-        {products(data, count).map((product) => (
+        {products.map((product) => (
           <ProductCard
             product={product}
             key={product.id}

@@ -12,7 +12,7 @@ import {Header, Footer} from '~/components/sections';
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
-export function Layout({children, ...props}) {
+export function Layout({children}) {
   const {languageCode} = useShop();
 
   const {data} = useShopQuery({

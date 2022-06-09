@@ -4,7 +4,6 @@ import {
   useShop,
   useSession,
   NoStore,
-  flattenConnection,
   gql,
 } from '@shopify/hydrogen';
 
@@ -38,9 +37,7 @@ export function AccountDetails({customerAccessToken}) {
   const customer = data && data.customer;
 
   const orders =
-    customer?.orders?.edges.length > 0
-      ? flattenConnection(customer.orders)
-      : [];
+    customer?.orders?.nodes.length > 0 ? customer.orders.nodes : [];
 
   const heading = customer
     ? `Welcome${customer.firstName ? `, ${customer.firstName}` : ``}`
@@ -67,6 +64,7 @@ export function AccountDetails({customerAccessToken}) {
 }
 AccountDetails.displayName = 'AccountDetails';
 
+/* TODO: We should import any hardcoded langauge from a central JSON file to make i18n and customization easier. */
 function EmptyOrders({heading}) {
   return (
     <PageHeader heading={heading}>
@@ -74,7 +72,7 @@ function EmptyOrders({heading}) {
         Logout
       </LogoutButton>
       <Text width="narrow" as="p">
-        You haven't made any orders yet.
+        You haven&rsquo;t made any orders yet.
       </Text>
       <Button width="auto" variant="secondary" to={'/'}>
         Start shopping
@@ -94,12 +92,9 @@ function OrderHistory({orders, heading}) {
       </PageHeader>
       <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
         <h2 className="font-bold text-lead">Order History</h2>
-        <ul
-          role="list"
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-        >
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {orders.map((order) => (
-            <OrderCard order={order} />
+            <OrderCard order={order} key={order.id} />
           ))}
         </ul>
       </div>
@@ -120,30 +115,28 @@ const CUSTOMER_QUERY = gql`
       firstName
       email
       orders(first: 25, sortKey: PROCESSED_AT, reverse: true) {
-        edges {
-          node {
-            id
-            orderNumber
-            processedAt
-            financialStatus
-            fulfillmentStatus
-            currentTotalPrice {
-              amount
-              currencyCode
-            }
-            lineItems(first: 30) {
-              edges {
-                node {
-                  variant {
-                    image {
-                      url
-                      height
-                      width
-                      altText
-                    }
+        nodes {
+          id
+          orderNumber
+          processedAt
+          financialStatus
+          fulfillmentStatus
+          currentTotalPrice {
+            amount
+            currencyCode
+          }
+          lineItems(first: 30) {
+            edges {
+              node {
+                variant {
+                  image {
+                    url
+                    height
+                    width
+                    altText
                   }
-                  title
                 }
+                title
               }
             }
           }

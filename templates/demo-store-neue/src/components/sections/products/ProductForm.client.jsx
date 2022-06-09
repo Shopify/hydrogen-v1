@@ -42,7 +42,7 @@ export function ProductForm() {
         }
       }
     });
-  }, []);
+  }, [pathname, options, selectedOptions, setSelectedOption, params]);
 
   const handleChange = useCallback(
     (name, value) => {
@@ -59,7 +59,7 @@ export function ProductForm() {
         );
       }
     },
-    [params, isBrowser, pathname],
+    [setSelectedOption, params, pathname],
   );
 
   return (

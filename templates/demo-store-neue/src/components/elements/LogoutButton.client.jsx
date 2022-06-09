@@ -1,7 +1,5 @@
-import {useCallback} from 'react';
-
 export function LogoutButton(props) {
-  const logout = useCallback(() => {
+  const logout = () => {
     fetch('/account/logout', {method: 'POST'}).then(() => {
       console.log('Here-----');
       if (typeof props?.onClick === 'function') {
@@ -9,7 +7,7 @@ export function LogoutButton(props) {
       }
       window.location.href = '/';
     });
-  }, []);
+  };
 
   return (
     <button {...props} onClick={logout}>

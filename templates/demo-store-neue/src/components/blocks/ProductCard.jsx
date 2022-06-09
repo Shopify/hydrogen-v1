@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import {useMemo} from 'react';
 import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 
 import {Text} from '~/components/elements';
@@ -11,7 +10,7 @@ export function ProductCard({product, label, className}) {
   const firstVariant = product.variants.nodes[0];
   const {image, priceV2, compareAtPriceV2} = firstVariant;
 
-  const cardLabel = useMemo(() => {
+  const cardLabel = () => {
     switch (true) {
       case label:
         return label;
@@ -26,7 +25,7 @@ export function ProductCard({product, label, className}) {
       default:
         return null;
     }
-  }, [label, product?.publishedAt, priceV2.amount, compareAtPriceV2?.amount]);
+  };
 
   const styles = clsx('grid gap-6', className);
 

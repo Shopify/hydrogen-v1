@@ -140,7 +140,6 @@ function EmailField({email, setEmail, emailError, shopName}) {
           placeholder="Email address"
           aria-label="Email address"
           value={email}
-          autoFocus
           onChange={(event) => {
             setEmail(event.target.value);
           }}
@@ -216,7 +215,6 @@ function PasswordField({password, setPassword, passwordError}) {
           value={password}
           minLength={8}
           required
-          autoFocus
           onChange={(event) => {
             setPassword(event.target.value);
           }}

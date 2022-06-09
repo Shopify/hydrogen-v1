@@ -126,11 +126,12 @@ export async function api(request, {session, queryShop}) {
   return new Response(null);
 }
 
-function AuthenticatedAccount({customer, addresses, defaultAddress}) {
-  const orders =
-    customer?.orders?.edges.length > 0
-      ? flattenConnection(customer.orders)
-      : [];
+function AuthenticatedAccount({customer}) {
+  // TODO: add addresses, defaultAddress to props
+  // const orders =
+  //   customer?.orders?.edges.length > 0
+  //     ? flattenConnection(customer.orders)
+  //     : [];
 
   const pageHeader = customer?.firstName
     ? `Hi ${customer.firstName}.`

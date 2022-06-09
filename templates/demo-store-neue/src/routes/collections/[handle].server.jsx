@@ -88,7 +88,7 @@ export async function api(request, {params, queryShop}) {
   const {handle} = params;
 
   return await queryShop({
-    query: QUERY,
+    query: PAGINATE_QUERY,
     variables: {
       handle,
       cursor,
@@ -97,19 +97,35 @@ export async function api(request, {params, queryShop}) {
   });
 }
 
+const PAGINATE_QUERY = gql`
+  ${PRODUCT_CARD_FIELDS}
+  query CollectionPage($handle: String!, $pageBy: Int!, $cursor: String) {
+    collection(handle: $handle) {
+      products(first: $pageBy, after: $cursor) {
+        nodes {
+          ...ProductCardFields
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
 const COLLECTION_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query CollectionDetails(
     $handle: String!
-    $countryCode: CountryCode
-    $languageCode: LanguageCode
+    $country: CountryCode
+    $language: LanguageCode
     $pageBy: Int!
     $cursor: String
-  ) @inContext(country: $countryCode, language: $languageCode) {
+  ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       id
       title
-      descriptionHtml
       description
       seo {
         description
