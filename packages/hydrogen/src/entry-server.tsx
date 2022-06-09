@@ -172,6 +172,7 @@ export const renderHydrogen = (App: any) => {
               );
               try {
                 // Don't stream when creating a response for cache
+                response.doNotStream();
                 await processRequest(
                   url,
                   request,
@@ -383,22 +384,21 @@ async function runSSR({
 
   log.trace('start ssr');
 
-  const rscReadable =
-    response.canStream() || !revalidate
-      ? new ReadableStream({
-          start(controller) {
-            log.trace('rsc start chunks');
-            const encoder = new TextEncoder();
-            bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
-              const metaTag = flightContainer(chunk);
-              controller.enqueue(encoder.encode(metaTag));
-            }).then(() => {
-              log.trace('rsc finish chunks');
-              return controller.close();
-            });
-          },
-        })
-      : rscReadableForFlight;
+  const rscReadable = response.canStream()
+    ? new ReadableStream({
+        start(controller) {
+          log.trace('rsc start chunks');
+          const encoder = new TextEncoder();
+          bufferReadableStream(rscReadableForFlight.getReader(), (chunk) => {
+            const metaTag = flightContainer(chunk);
+            controller.enqueue(encoder.encode(metaTag));
+          }).then(() => {
+            log.trace('rsc finish chunks');
+            return controller.close();
+          });
+        },
+      })
+    : rscReadableForFlight;
 
   if (__HYDROGEN_WORKER__) {
     console.log('SSR - worker');
@@ -538,12 +538,6 @@ async function runSSR({
 
     const savedChunks = tagOnResponseWrite(nodeResponse);
 
-    nodeResponse.on('finish', () => {
-      console.log('SSR - node - finish');
-      console.log(savedChunks.length);
-      cacheResponse(response, request, savedChunks, revalidate);
-    });
-
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -558,18 +552,12 @@ async function runSSR({
          */
         writeHeadToNodeResponse(nodeResponse, response, log, didError());
 
-        console.log(`SSR - node - 0`);
-
         if (isRedirect(nodeResponse)) {
           // Return redirects early without further rendering/streaming
           return nodeResponse.end();
         }
 
-        console.log(`SSR - node - 1`);
-
         if (!response.canStream()) return;
-
-        console.log(`SSR - node - 2`);
 
         startWritingToNodeResponse(nodeResponse, dev ? didError() : undefined);
 
@@ -580,22 +568,21 @@ async function runSSR({
 
         bufferReadableStream(rscReadable.getReader(), (chunk) => {
           log.trace('rsc chunk');
+          savedChunks.push(chunk);
           return nodeResponse.write(chunk);
         });
       },
       async onAllReady() {
         log.trace('node complete ssr');
 
-        console.log(`SSR - node - 3`);
-
-        if (response.canStream() || nodeResponse.writableEnded) {
+        if (
+          !revalidate &&
+          (response.canStream() || nodeResponse.writableEnded)
+        ) {
           postRequestTasks('str', nodeResponse.statusCode, request, response);
           cacheResponse(response, request, savedChunks, revalidate);
-          console.log(`SSR - node - 4`);
           return;
         }
-
-        console.log(`SSR - node - 5`);
 
         writeHeadToNodeResponse(nodeResponse, response, log, didError());
 
@@ -603,8 +590,6 @@ async function runSSR({
           // Redirects found after any async code
           return nodeResponse.end();
         }
-
-        console.log(`SSR - node - 6`);
 
         const bufferedResponse = await createNodeWriter();
         const bufferedRscPromise = bufferReadableStream(
@@ -625,7 +610,7 @@ async function runSSR({
           if (!error) {
             html = assembleHtml({ssrHtml, rscPayload, request, template});
             postRequestTasks('ssr', nodeResponse.statusCode, request, response);
-            console.log(`SSR - node - 7`);
+            cacheResponse(response, request, [html], revalidate);
           }
 
           nodeResponse.write(html);
@@ -873,6 +858,8 @@ async function cacheResponse(
   revalidate?: Boolean
 ) {
   const cache = getCache();
+
+  console.log(chunks.length);
 
   if (cache && chunks.length > 0) {
     if (revalidate) {
