@@ -1,7 +1,7 @@
 ---
 gid: 044c475e-f28g-444b-a984-26e7ebb8bec4
 title: Analytics
-description: Learn about the analytics support built into Hydrogen apps.
+description: Learn about the analytics support built into Hydrogen.
 ---
 
 Hydrogen includes support for analytics that give you insight into how customers are interacting with a custom storefront.
@@ -35,7 +35,7 @@ By default, Hydrogen publishes the following events to subscribers (`ClientAnaly
 | `REMOVE_FROM_CART`      | A customer removes an item from their cart                   |
 | `DISCOUNT_CODE_UPDATED` | A discount code that a customer applies to a cart is updated |
 | `VIEWED_PRODUCT`        | A customer views a product details page. This is set with `publishEventsOnNavigate` on product pages.                      |
-| `PERFORMANCE`           | The performance metrics for page loads in a Hydrogen app. This is available when you opt in to `<PerformanceMetrics />`.   |
+| `PERFORMANCE`           | The performance metrics for page loads in a Hydrogen storefront. This is available when you opt in to `<PerformanceMetrics />`.   |
 
 > Note:
 > The event name constants are available in `ClientAnalytics.eventNames`.
@@ -114,7 +114,7 @@ Aside from the [default events](#default-events) that Hydrogen supports, you can
 
 {% endcodeblock %}
 
-### Retrieving data from other parts of your Hydrogen app
+### Retrieving data from other parts of your Hydrogen storefront
 
 You can collect analytics data wherever you make queries. For example, to gather information about the collection that a customer has interacted with, you can make `collectionName` and `collectionId` available when you receive the `PAGE_VIEW` event:
 
@@ -162,7 +162,7 @@ useEffect(() => {
 > Note:
 > All `ClientAnalytics.*` function calls must be wrapped in a [`useEffect`](https://reactjs.org/docs/hooks-reference.html#useeffect) hook.
 
-To retrieve the data that's available elsewhere in your Hydrogen app, you can add the following code to your server components:
+To retrieve the data that's available elsewhere in your Hydrogen storefront, you can add the following code to your server components:
 
 {% codeblock file, filename: '*.server.js' %}
 
@@ -315,14 +315,14 @@ useEffect(() => {
 
 ## Performance metrics
 
-Performance metrics provide insight into how fast pages are loading in your Hydrogen app. For example, you might want to gather the following metrics for full and sub page loads:
+Performance metrics provide insight into how fast pages are loading in your Hydrogen storefront. For example, you might want to gather the following metrics for full and sub page loads:
 
 - **Time to First Byte (TTFB)**: The time between a browser requesting a page and receiving the first byte of information from the server
 - **First Contentful Paint (FCP)**: The time it takes for a browser to render content on a page
 - **Largest Contentful Paint (LCP)**: The time it takes to render and interact with the largest content element on the page
 - **Duration**: The total amount of time it takes for a page to finish streaming
 
-You can opt in to receive performance metrics for page loads in your Hydrogen app by including `<PerformanceMetrics />` and `PerformanceMetricsServerAnalyticsConnector` in `App.server.js`.
+You can opt in to receive performance metrics for page loads in your Hydrogen storefront by including `<PerformanceMetrics />` and `PerformanceMetricsServerAnalyticsConnector` in `App.server.js`.
 
 If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in your client component:
 

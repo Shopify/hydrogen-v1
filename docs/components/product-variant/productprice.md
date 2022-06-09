@@ -4,19 +4,17 @@ title: ProductPrice
 description: The ProductPrice component renders a Money component with the product priceRange's maxVariantPrice or minVariantPrice, for either the regular price or compare at price range.
 ---
 
-The `ProductPrice` component renders a `Money` component with the product
-[`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range. It must be a descendent of the `ProductProvider` component.
+The `ProductPrice` component renders a [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money) component with the product
+[`priceRange`](https://shopify.dev/api/storefront/reference/products/productpricerange)'s `maxVariantPrice` or `minVariantPrice`, for either the regular price or compare at price range.
 
 ## Example code
 
 ```tsx
-import {ProductPrice, ProductProvider} from '@shopify/hydrogen';
+import {ProductPrice} from '@shopify/hydrogen';
 
 export function Product({product}) {
   return (
-    <ProductProvider data={product}>
-      <ProductPrice priceType="compareAt" valueType="max" />
-    </ProductProvider>
+    <ProductPrice product={product} priceType="compareAt" valueType="max" />
   );
 }
 ```
@@ -35,5 +33,5 @@ The `ProductPrice` component is a client component, which means that it renders 
 
 ## Related components
 
-- [`ProductProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productprovider)
+- [`ProductOptionsProvider`](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
 - [`Money`](https://shopify.dev/api/hydrogen/components/primitive/money)

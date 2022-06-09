@@ -80,7 +80,7 @@ The `preload` property takes a Boolean value or a string:
 - `preload: '*'`: Preloads a query for every request. This option can be helpful for menu links in your navigation, allowing you to preload a query on button click or while you animate a transition to another page.
 
 > Note:
-> By default, preloaded queries are turned off because not all queries should be preloaded. For example, any queries that are specific to cart or customer functionality shouldn't be preloaded.
+> By default, preloading is turned on for all cached queries. Any queries that are specific to cart or customer functionality shouldn't be preloaded.
 
 {% codeblock %}
 
@@ -134,4 +134,4 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ## Next steps
 
-- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen apps.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen.

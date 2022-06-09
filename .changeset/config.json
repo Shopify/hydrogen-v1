@@ -9,6 +9,7 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "demo-store",
+    "demo-store-neue",
     "hello-world",
     "test-server-components",
     "test-async-config",

@@ -113,6 +113,7 @@ function ReactFlightVitePlugin() {
   var server;
   var invalidateTimeout;
   var globImporterPath;
+  var resolveAlias;
 
   function invalidateGlobImporter() {
     clearTimeout(invalidateTimeout);
@@ -129,8 +130,27 @@ function ReactFlightVitePlugin() {
     },
     configResolved: async function (_config) {
       await esModuleLexer.init;
-      config = _config; // By pushing this plugin at the end of the existing array,
+      config = _config;
+      var aliasPlugin = config.plugins.find(function (plugin) {
+        return plugin.name === 'alias';
+      });
+
+      if (aliasPlugin) {
+        resolveAlias = aliasPlugin.resolveId.bind({
+          // Mock Rollup instance
+          resolve: function (id) {
+            return {
+              then: function () {
+                return id ? {
+                  id: id
+                } : null;
+              }
+            };
+          }
+        });
+      } // By pushing this plugin at the end of the existing array,
       // we enforce running it *after* Vite resolves import.meta.glob.
+
 
       config.plugins.push(hashImportsPlugin);
     },
@@ -196,7 +216,7 @@ function ReactFlightVitePlugin() {
       // Add more information for this module in the graph.
       // It will be used later to discover client boundaries.
       if (server && options.ssr && /\.[jt]sx?($|\?)/.test(id)) {
-        augmentModuleGraph(server.moduleGraph, id, code);
+        augmentModuleGraph(server.moduleGraph, id, code, config.root, resolveAlias);
       }
       /**
        * In order to allow dynamic component imports from RSC, we use Vite's import.meta.glob.
@@ -445,7 +465,7 @@ function resolveModPath(modPath, dirname, retryExtension) {
   }
 }
 
-function augmentModuleGraph(moduleGraph, id, code) {
+function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
   var currentModule = moduleGraph.getModuleById(id);
   if (!currentModule) return;
 
@@ -470,8 +490,18 @@ function augmentModuleGraph(moduleGraph, id, code) {
         endStatement = _ref3.se;
     if (dynamicImportIndex !== -1) return; // Skip dynamic imports for now
 
-    var modPath = code.slice(startMod, endMod);
-    var resolvedPath = resolveModPath(modPath.split('?')[0], dirname);
+    var rawModPath = code.slice(startMod, endMod);
+    var modPath = rawModPath.split('?')[0];
+
+    if (resolveAlias) {
+      var resolvedAliasPath = resolveAlias(modPath, 'rsc_importer', {});
+
+      if (resolvedAliasPath && resolvedAliasPath.id) {
+        modPath = vite.normalizePath(path.join(root, resolvedAliasPath.id));
+      }
+    }
+
+    var resolvedPath = resolveModPath(modPath, dirname);
     if (!resolvedPath) return; // Virtual modules or other exceptions
 
     var _code$slice$split$0$s = code.slice(startStatement, endStatement).split(/\s+(from\s+)?['"]/m)[0].split(/\s+(.+)/m),
@@ -488,7 +518,7 @@ function augmentModuleGraph(moduleGraph, id, code) {
       }),
       from: resolvedPath,
       // '/absolute/path'
-      originalFrom: modPath // './path' or '3plib/subpath'
+      originalFrom: rawModPath // './path' or '3plib/subpath'
 
     });
   });
