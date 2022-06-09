@@ -89,7 +89,7 @@ export function Product({handle}) {
 
 ## Return type
 
-A flat array whose elements correspond to the `node` value in each element of the original `edges` array, or the `node` itself.
+A flat array that contains elements that correspond to the `node` value in each element of the original `edges` array, or the `node` itself.
 
 ## Related components
 
