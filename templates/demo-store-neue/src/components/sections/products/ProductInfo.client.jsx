@@ -8,7 +8,7 @@ export function ProductInfo({data = productInfo}) {
     <section className="grid gap-4 py-4">
       {data.map((section) => (
         <Disclosure
-          key={section.id}
+          key={section.title}
           as="div"
           id={section.id}
           className="grid w-full gap-2"
@@ -27,5 +27,3 @@ export function ProductInfo({data = productInfo}) {
     </section>
   );
 }
-
-ProductInfo.displayName = 'ProductInfo';
