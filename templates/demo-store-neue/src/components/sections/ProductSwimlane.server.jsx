@@ -72,8 +72,8 @@ export function ProductSwimlane({
       <div className="grid grid-flow-col gap-6 px-4 pb-4 overflow-x-scroll md:pb-8 snap-x scroll-px-4 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
         {products.map((product) => (
           <ProductCard
-            product={product}
             key={product.id}
+            product={product}
             className={'snap-start w-80'}
           />
         ))}

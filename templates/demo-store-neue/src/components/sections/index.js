@@ -12,4 +12,4 @@ export {LoginForm} from './LoginForm.client'; //TODO: rename to AccountLoginForm
 export {PageHeader} from '../elements/PageHeader';
 export {PasswordResetForm} from './PasswordResetForm.client'; // TODO: rename to AccountPasswordResetForm for consistency
 export {ProductGrid} from './ProductGrid.client';
-export {ProductSwimlane} from './ProductSwimlane';
+export {ProductSwimlane} from './ProductSwimlane.server';
