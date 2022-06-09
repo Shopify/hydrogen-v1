@@ -27,8 +27,10 @@ import {
 } from '~/lib/fragments';
 
 export default function Homepage() {
-  const {languageCode} = useShop();
+  const {languageCode, storefrontApiVersion} = useShop();
   const {countryCode = 'US'} = useSession();
+
+  console.log({storefrontApiVersion});
 
   const {data} = useShopQuery({
     query: QUERY,
