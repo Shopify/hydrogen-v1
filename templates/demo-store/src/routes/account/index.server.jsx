@@ -79,7 +79,7 @@ export default function Account({
           featuredProducts={featuredProducts}
           locations={locations}
         />
-        <Modal modalServerProp="editingAccount">
+        <Modal closeModalProp="editingAccount">
           <Seo type="noindex" data={{title: 'Account details'}} />
           <EditAccountDetails
             firstName={customer.firstName}
@@ -106,7 +106,7 @@ export default function Account({
           featuredProducts={featuredProducts}
           locations={locations}
         />
-        <Modal modalServerProp="editingAddress">
+        <Modal closeModalProp="editingAddress">
           <Seo
             type="noindex"
             data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
@@ -134,7 +134,7 @@ export default function Account({
           featuredProducts={featuredProducts}
           locations={locations}
         />
-        <Modal modalServerProp="deletingAddress">
+        <Modal closeModalProp="deletingAddress">
           <Seo type="noindex" data={{title: 'Delete address'}} />
           <DeleteAddress addressId={addressToDelete.originalId} />
         </Modal>
