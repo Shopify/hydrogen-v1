@@ -30,7 +30,7 @@ You can customize the `<head>` tags at the route level:
 
 ### `DefaultSeo` server component
 
-The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) server component fetches your shop name (`shop.name`) and description (`shop.description`). This component provides the default SEO values for every page on your website.
+The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) server component is part of the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates#demo-store-template). This component provides the default SEO values for every page on your website.
 
 You can override the default SEO values by passing in custom props:
 
