@@ -137,9 +137,9 @@ function ReactFlightVitePlugin() {
           resolve: function (id) {
             return {
               then: function () {
-                return {
+                return id ? {
                   id: id
-                };
+                } : null;
               }
             };
           }
