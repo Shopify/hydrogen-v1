@@ -1,11 +1,10 @@
-import React from 'react';
+import {useState} from 'react';
 
-export default function AccountRecoverForm() {
-  const [submitSuccess, setSubmitSuccess] = React.useState(false);
-  const [submitError, setSubmitError] = React.useState(null);
-
-  const [email, setEmail] = React.useState('');
-  const [emailError, setEmailError] = React.useState(null);
+export function AccountRecoverForm() {
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(null);
 
   function emailValidation(email) {
     if (email.validity.valid) return null;
@@ -99,6 +98,8 @@ export default function AccountRecoverForm() {
     </div>
   );
 }
+
+AccountRecoverForm.displayName = 'AccountRecoverForm';
 
 function callAccountRecoverApi({email, password, firstName, lastName}) {
   return fetch(`/account/recover`, {

@@ -11,9 +11,9 @@ import {
   Money,
 } from '@shopify/hydrogen';
 
-import {Button, Heading, IconClose, Text} from '../elements';
+import {Button, Heading, IconClose, Text} from '~/components/elements';
 
-export default function CartDetails() {
+export function CartDetails() {
   const {lines, checkoutUrl, estimatedCost} = useCart();
 
   return (
@@ -112,7 +112,7 @@ export default function CartDetails() {
   );
 }
 
-function CartLineItem() {
+function CartLineItem({line}) {
   const {linesRemove} = useCart();
   const {id: lineId, quantity, merchandise} = useCartLine();
 
@@ -134,7 +134,7 @@ function CartLineItem() {
           </Heading>
           <div className="flex gap-2">
             {merchandise.selectedOptions.map((option) => (
-              <Text key={option.name} color="subtle">
+              <Text color="subtle">
                 {option.name}: {option.value}
               </Text>
             ))}
@@ -187,3 +187,4 @@ function CartLineItem() {
     </li>
   );
 }
+CartDetails.displayName = 'CartDetails';

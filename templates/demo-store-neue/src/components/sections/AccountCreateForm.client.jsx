@@ -1,17 +1,16 @@
-import React from 'react';
+import {useState} from 'react';
 import {useNavigate, Link} from '@shopify/hydrogen/client';
+
 import {callLoginApi} from './LoginForm.client';
 
-export default function AccountCreateForm() {
+export function AccountCreateForm() {
   const navigate = useNavigate();
 
-  const [submitError, setSubmitError] = React.useState(null);
-
-  const [email, setEmail] = React.useState('');
-  const [emailError, setEmailError] = React.useState(null);
-
-  const [password, setPassword] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(null);
+  const [submitError, setSubmitError] = useState(null);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(null);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(null);
 
   function emailValidation(email) {
     if (email.validity.valid) return null;
@@ -149,6 +148,8 @@ export default function AccountCreateForm() {
     </div>
   );
 }
+
+AccountCreateForm.displayName = 'AccountCreateForm';
 
 function callAccountCreateApi({email, password, firstName, lastName}) {
   return fetch(`/account/register`, {

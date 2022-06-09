@@ -1,19 +1,18 @@
 import {Link, Image} from '@shopify/hydrogen';
-import {Grid} from '~/components/elements';
-import Section from './Section';
+import {Grid, Section} from '~/components/elements';
 
 // TODO: This should be consolidated with FeaturedCollections into a more generic presentational component
-
-export default function Locations({title = 'Locations', data}) {
+export function Locations({title = 'Locations', data}) {
   return (
     <Section heading={title}>
       <Grid items={data.length}>
-        {data &&
-          data.map((location) => <Card data={location} key={location.id} />)}
+        {data && data.map((location, i) => <Card data={location} key={i} />)}
       </Grid>
     </Section>
   );
 }
+
+Locations.displayName = 'Locations';
 
 // TODO: Abstract this duplicate (also found in /routes/locations/index.server.jsx)
 function Card({to, data}) {
@@ -33,3 +32,5 @@ function Card({to, data}) {
     </Link>
   );
 }
+
+Card.displayName = 'Card';

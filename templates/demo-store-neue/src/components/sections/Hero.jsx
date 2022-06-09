@@ -1,16 +1,16 @@
 import {Image, Video, Link} from '@shopify/hydrogen';
-import {Heading, Text} from '../elements';
+
+import {Heading, Text} from '~/components/elements';
 import {hero as mockData} from '~/lib/placeholders';
 
-export default function Hero({data = mockData, height, top}) {
+export function Hero({data = mockData, height, top}) {
   const {title, byline, cta, url, spread, spread_secondary} = data;
 
   return (
     <Link to={url.value}>
       <section
-        className={`relative justify-end flex flex-col w-full ${
-          top && '-mt-nav'
-        } ${
+        className={`relative justify-end flex flex-col w-full ${top &&
+          '-mt-nav'} ${
           height === 'full'
             ? 'h-screen'
             : 'aspect-[4/5] sm:aspect-square md:aspect-[5/4] lg:aspect-[3/2] xl:aspect-[2/1]'
@@ -43,6 +43,7 @@ export default function Hero({data = mockData, height, top}) {
     </Link>
   );
 }
+Hero.displayName = 'Hero';
 
 function SpreadMedia({data}) {
   if (data.mediaContentType === 'VIDEO') {
@@ -76,3 +77,4 @@ function SpreadMedia({data}) {
 
   return null;
 }
+SpreadMedia.displayName = 'SpreadMedia';

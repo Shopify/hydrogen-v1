@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useCallback, useState} from 'react';
 import {
   useProductOptions,
   isBrowser,
@@ -6,14 +6,19 @@ import {
   AddToCartButton,
   ShopPayButton,
 } from '@shopify/hydrogen';
+
 import {Heading, Text, Button} from '~/components/elements';
 
-export default function ProductForm() {
+export function ProductForm() {
   const {pathname, search} = useUrl();
   const [params, setParams] = useState(new URLSearchParams(search));
 
-  const {options, setSelectedOption, selectedOptions, selectedVariant} =
-    useProductOptions();
+  const {
+    options,
+    setSelectedOption,
+    selectedOptions,
+    selectedVariant,
+  } = useProductOptions();
 
   const isOutOfStock = !selectedVariant?.availableForSale || false;
 
@@ -41,19 +46,25 @@ export default function ProductForm() {
         }
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleChange(name, value) {
-    setSelectedOption(name, value);
-    params.set(
-      encodeURIComponent(name.toLowerCase()),
-      encodeURIComponent(value.toLowerCase()),
-    );
-    if (isBrowser()) {
-      window.history.replaceState(null, '', `${pathname}?${params.toString()}`);
-    }
-  }
+  const handleChange = useCallback(
+    (name, value) => {
+      setSelectedOption(name, value);
+      params.set(
+        encodeURIComponent(name.toLowerCase()),
+        encodeURIComponent(value.toLowerCase()),
+      );
+      if (isBrowser()) {
+        window.history.replaceState(
+          null,
+          '',
+          `${pathname}?${params.toString()}`,
+        );
+      }
+    },
+    [params, isBrowser, pathname],
+  );
 
   return (
     <form>
@@ -127,3 +138,5 @@ export default function ProductForm() {
     </form>
   );
 }
+
+ProductForm.displayName = 'ProductForm';

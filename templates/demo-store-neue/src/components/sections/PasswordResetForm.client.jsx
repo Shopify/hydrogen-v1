@@ -1,16 +1,14 @@
-import React from 'react';
+import {useState} from 'react';
 import {useNavigate} from '@shopify/hydrogen/client';
 
-export default function PasswordResetForm({id, resetToken}) {
+export function PasswordResetForm({id, resetToken}) {
   const navigate = useNavigate();
 
-  const [submitError, setSubmitError] = React.useState(null);
-
-  const [password, setPassword] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(null);
-
-  const [passwordConfirm, setPasswordConfirm] = React.useState('');
-  const [passwordConfirmError, setPasswordConfirmError] = React.useState(null);
+  const [submitError, setSubmitError] = useState(null);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(null);
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [passwordConfirmError, setPasswordConfirmError] = useState(null);
 
   function passwordValidation(form) {
     setPasswordError(null);
@@ -141,6 +139,8 @@ export default function PasswordResetForm({id, resetToken}) {
     </div>
   );
 }
+
+PasswordResetForm.displayName = 'PasswordResetForm';
 
 function callPasswordResetApi({id, resetToken, password}) {
   return fetch(`/account/reset`, {

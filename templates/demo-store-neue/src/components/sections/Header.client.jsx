@@ -13,7 +13,7 @@ import {
 /**
  * A client component that specifies the content of the header on the website
  */
-export default function Header({title}) {
+export function Header({title}) {
   const {pathname} = useUrl();
 
   const home = pathname === '/';
@@ -25,6 +25,8 @@ export default function Header({title}) {
     </>
   );
 }
+
+Header.displayName = 'Header';
 
 function MobileHeader({title, home}) {
   const {totalQuantity} = useCart();
@@ -84,6 +86,8 @@ function MobileHeader({title, home}) {
   );
 }
 
+MobileHeader.displayName = 'MobileHeader';
+
 function DesktopHeader({title, home}) {
   const {totalQuantity} = useCart();
 
@@ -142,6 +146,8 @@ function DesktopHeader({title, home}) {
   );
 }
 
+DesktopHeader.displayName = 'DesktopHeader';
+
 function CartBadge({dark, quantity}) {
   if (quantity < 1) {
     return null;
@@ -158,3 +164,5 @@ function CartBadge({dark, quantity}) {
     </div>
   );
 }
+
+CartBadge.displayName = 'CartBadge';
