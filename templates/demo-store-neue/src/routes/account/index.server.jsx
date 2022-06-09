@@ -7,8 +7,9 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {AccountDetails} from '~/components/pages';
 import {Layout} from '~/components/layouts';
+import {LogoutButton} from '~/components/elements';
+import {AccountDetails} from '~/components/pages';
 import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Account({response, editingAccount, editingAddress}) {
@@ -17,9 +18,10 @@ export default function Account({response, editingAccount, editingAddress}) {
   const {customerAccessToken} = useSession();
 
   if (!customerAccessToken) return response.redirect('/account/login');
+  console.log('customerAccessToken', customerAccessToken);
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: CUSTOMER_QUERY,
     variables: {
       customerAccessToken,
       withAddressDetails: !!editingAddress,
@@ -109,7 +111,7 @@ export async function api(request, {session, queryShop}) {
   if (newPassword) customer.password = newPassword;
 
   const {data, errors} = await queryShop({
-    query: CUSTOMER_QUERY,
+    query: CUSTOMER_UPDATE_MUTATION,
     variables: {
       customer,
       customerAccessToken,
@@ -230,7 +232,7 @@ const CUSTOMER_QUERY = gql`
   }
 `;
 
-const MUTATION = gql`
+const CUSTOMER_UPDATE_MUTATION = gql`
   mutation customerUpdate(
     $customer: CustomerUpdateInput!
     $customerAccessToken: String!

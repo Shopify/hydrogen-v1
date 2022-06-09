@@ -3,7 +3,10 @@ import {useCallback} from 'react';
 export function LogoutButton(props) {
   const logout = useCallback(() => {
     fetch('/account/logout', {method: 'POST'}).then(() => {
-      props?.onClick();
+      console.log('Here-----');
+      if (typeof props?.onClick === 'function') {
+        props.onClick();
+      }
       window.location.href = '/';
     });
   }, []);
