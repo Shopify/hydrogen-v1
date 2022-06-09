@@ -1,9 +1,9 @@
 import {useServerProps} from '@shopify/hydrogen';
-import {useMemo, useState} from 'react';
+import {useMemo} from 'react';
 import {Text, Button} from '../elements';
 
 export default function AddressBook({addresses, defaultAddress}) {
-  const {serverProps, setServerProps} = useServerProps();
+  const {setServerProps} = useServerProps();
 
   const {fullDefaultAddress, addressesWithoutDefault} = useMemo(() => {
     const defaultAddressIndex = addresses.findIndex(
@@ -74,8 +74,6 @@ export default function AddressBook({addresses, defaultAddress}) {
 
 function Address({address, defaultAddress}) {
   const {serverProps, setServerProps} = useServerProps();
-  const [showConfirmRemove, setShowConfirmRemove] = useState(false);
-  console.log('address is', address);
 
   return (
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
@@ -106,7 +104,6 @@ function Address({address, defaultAddress}) {
       <div className="flex flex-row font-medium mt-6">
         <button
           onClick={() => {
-            setShowConfirmRemove(false);
             setServerProps('editingAddress', address.id);
           }}
           className="text-left underline text-sm"
@@ -115,8 +112,7 @@ function Address({address, defaultAddress}) {
         </button>
         <button
           onClick={() => {
-            setServerProps('showModal', 'true');
-            setShowConfirmRemove(true);
+            setServerProps('deletingAddress', address.id);
           }}
           className="text-left text-gray-500 ml-6 text-sm"
         >
@@ -124,57 +120,5 @@ function Address({address, defaultAddress}) {
         </button>
       </div>
     </div>
-  );
-}
-
-function callDeleteAddressApi(id) {
-  return fetch(`/account/address/${encodeURIComponent(id)}`, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-    },
-  })
-    .then((res) => {
-      if (res.ok) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch(() => {
-      return {
-        error: 'Error removing address. Please try again.',
-      };
-    });
-}
-
-function ConfirmRemove({deleteAddress}) {
-  return (
-    <>
-      <Text className="mb-4" as="h3" size="lead">
-        Confirm removal
-      </Text>
-      <Text as="p">Are you sure you wish to remove this address?</Text>
-      <div className="mt-6">
-        <Button
-          className="text-sm"
-          onClick={() => {
-            deleteAddress();
-          }}
-          variant="primary"
-          width="full"
-        >
-          Confirm
-        </Button>
-        <Button
-          className="text-sm mt-2"
-          onClick={() => setServerProps('showModal', null)}
-          variant="secondary"
-          width="full"
-        >
-          Cancel
-        </Button>
-      </div>
-    </>
   );
 }

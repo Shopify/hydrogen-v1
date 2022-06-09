@@ -17,6 +17,7 @@ import LogoutButton from '~/components/elements/LogoutButton.client';
 import EditAccountDetails from '~/components/sections/EditAccountDetails.client';
 import EditAddress from '~/components/sections/EditAddress.client';
 import Modal from '~/components/elements/Modal.client';
+import DeleteAddress from '~/components/sections/DeleteAddress.client';
 
 import {
   FeaturedCollections,
@@ -31,6 +32,7 @@ export default function Account({
   response,
   editingAccount,
   editingAddress,
+  deletingAddress,
   showModal,
 }) {
   response.cache(NoStore());
@@ -67,7 +69,7 @@ export default function Account({
     customer.defaultAddress.id.lastIndexOf('?'),
   );
 
-  if (editingAccount || editingAddress) {
+  if (editingAccount || editingAddress || deletingAddress) {
     showModal = true;
   }
 
@@ -126,6 +128,30 @@ export default function Account({
       </>
     );
   }
+
+  if (deletingAddress) {
+    const addressToDelete = addresses.find(
+      (address) => address.id === deletingAddress,
+    );
+    return (
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
+          locations={locations}
+        />
+        {showModal && (
+          <Modal>
+            <Seo type="noindex" data={{title: 'Delete address'}} />
+            <DeleteAddress address={addressToDelete} />
+          </Modal>
+        )}
+      </>
+    );
+  }
   return (
     <AuthenticatedAccount
       customer={customer}
@@ -144,6 +170,14 @@ export async function api(request, {session, queryShop}) {
       status: 405,
       headers: {
         Allow: 'PATCH',
+      },
+    });
+
+  if (request.method !== 'DELETE')
+    return new Response(null, {
+      status: 405,
+      headers: {
+        Allow: 'DELETE',
       },
     });
 

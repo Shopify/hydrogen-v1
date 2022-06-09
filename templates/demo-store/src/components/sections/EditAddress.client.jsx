@@ -3,7 +3,7 @@ import {useCallback, useState} from 'react';
 import {Button, Text} from '../elements';
 
 export default function EditAddress({address, defaultAddress}) {
-  const {setServerProps} = useServerProps();
+  const {serverProps, setServerProps} = useServerProps();
   const close = useCallback(() => {
     setServerProps('editingAddress', null);
   }, [setServerProps]);
