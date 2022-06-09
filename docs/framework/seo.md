@@ -4,7 +4,7 @@ title: SEO
 description: Learn how to customize the output of SEO-related tags in your Hydrogen client and server components.
 ---
 
-Hydrogen detects when a search engine crawls your shop and defaults to server-side rendering (SSR). This guide describes how to customize the output of SEO-related tags in your client and server components.
+This guide describes how to customize the output of SEO-related tags in your client and server components.
 
 ## How SEO works in Hydrogen
 
@@ -67,8 +67,6 @@ If you want to add more custom `head` tags, then you can import `Head` from Hydr
 {% codeblock file, filename: '/products/[handle].server.jsx' %}
 
 ```jsx
-// Import only client components.
-
 import {Head} from '@shopify/hydrogen';
 
 return (
