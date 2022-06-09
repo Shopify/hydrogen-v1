@@ -26,7 +26,10 @@ export function ProductGallery({media, className}) {
 
         const data = {
           ...med,
-          alt: med.alt || 'Product image',
+          image: {
+            ...med.image,
+            altText: med.alt || 'Product image',
+          },
         };
 
         return (
@@ -51,5 +54,3 @@ export function ProductGallery({media, className}) {
     </div>
   );
 }
-
-ProductGallery.displayName = 'ProductGallery';

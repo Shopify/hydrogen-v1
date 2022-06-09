@@ -77,8 +77,6 @@ export default function Collection({params}) {
   );
 }
 
-Collection.displayName = 'Collection';
-
 export async function api(request, {params, queryShop}) {
   if (request.method !== 'POST') {
     return new Response(405, {Allow: 'POST'});

@@ -18,7 +18,6 @@ export default function Account({response, editingAccount, editingAddress}) {
   const {customerAccessToken} = useSession();
 
   if (!customerAccessToken) return response.redirect('/account/login');
-  console.log('customerAccessToken', customerAccessToken);
 
   const {data} = useShopQuery({
     query: CUSTOMER_QUERY,
@@ -84,8 +83,6 @@ export default function Account({response, editingAccount, editingAddress}) {
     />
   );
 }
-
-Account.displayName = 'Account';
 
 export async function api(request, {session, queryShop}) {
   if (request.method !== 'PATCH')
@@ -163,8 +160,6 @@ function AuthenticatedAccount({customer}) {
     </Layout>
   );
 }
-
-AuthenticatedAccount.displayName = 'AuthenticatedAccount';
 
 const CUSTOMER_QUERY = gql`
   query CustomerDetails(

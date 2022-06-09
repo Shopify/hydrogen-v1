@@ -73,8 +73,6 @@ export function OrderCard({order}) {
   );
 }
 
-OrderCard.displayName = 'OrderCard';
-
 function fulfillmentStatus(status) {
   let text = status;
   switch (status) {

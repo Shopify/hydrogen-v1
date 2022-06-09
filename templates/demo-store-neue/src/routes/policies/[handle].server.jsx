@@ -2,5 +2,3 @@
 export default function Policy() {
   return <div>Policy</div>;
 }
-
-Policy.displayName = 'Policy';

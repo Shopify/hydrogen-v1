@@ -6,7 +6,7 @@ import {isDiscounted, isNewArrival} from '~/lib/utils';
 
 import {product as mockProduct} from '~/lib/placeholders';
 
-export default function ProductCard({product, label, className}) {
+export function ProductCard({product, label, className}) {
   let cardLabel;
 
   const cardData = product?.variants ? product : mockProduct;

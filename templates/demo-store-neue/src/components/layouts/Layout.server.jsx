@@ -74,8 +74,6 @@ export function Layout({children}) {
   );
 }
 
-Layout.displayName = 'Layout';
-
 const SHOP_QUERY = gql`
   fragment MenuItem on MenuItem {
     id

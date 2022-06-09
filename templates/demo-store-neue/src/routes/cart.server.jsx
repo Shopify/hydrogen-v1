@@ -12,5 +12,3 @@ export default function Cart() {
     </Layout>
   );
 }
-
-Cart.displayName = 'Cart';

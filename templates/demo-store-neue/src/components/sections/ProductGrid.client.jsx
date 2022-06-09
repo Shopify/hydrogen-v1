@@ -78,5 +78,3 @@ export function ProductGrid({data}) {
     </>
   );
 }
-
-ProductGrid.displayName = 'ProductGrid';

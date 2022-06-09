@@ -31,6 +31,4 @@ function App({routes}) {
   );
 }
 
-App.displayName = 'App';
-
 export default renderHydrogen(App);

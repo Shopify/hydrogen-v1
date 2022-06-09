@@ -1,12 +1,12 @@
 import {useMemo} from 'react';
 import {gql, useShopQuery, useSession, useShop} from '@shopify/hydrogen';
-import Section from './Section';
+import {Section} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 const mockProducts = new Array(12).fill('');
 
-export default function ProductSwimlane({
+export function ProductSwimlane({
   title = 'Featured Products',
   data = mockProducts,
   count = 12,
@@ -36,7 +36,6 @@ export default function ProductSwimlane({
     </Section>
   );
 }
-ProductSwimlane.displayName = 'ProductSwimlane';
 
 function ProductCards({products}) {
   return (
@@ -51,7 +50,6 @@ function ProductCards({products}) {
     </>
   );
 }
-ProductCards.displayName = 'ProductCards';
 
 function RecommendedProducts({productId, count}) {
   const {languageCode} = useShop();
@@ -82,7 +80,6 @@ function RecommendedProducts({productId, count}) {
 
   return <ProductCards products={mergedProducts} />;
 }
-RecommendedProducts.displayName = 'RecommendedProducts';
 
 function TopProducts({count}) {
   const {
@@ -96,7 +93,6 @@ function TopProducts({count}) {
 
   return <ProductCards products={products.nodes} />;
 }
-TopProducts.displayName = 'TopProducts';
 
 const RECOMMENDED_PRODUCTS_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}

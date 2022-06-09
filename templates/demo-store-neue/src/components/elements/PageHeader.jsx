@@ -28,5 +28,3 @@ export function PageHeader({
     </header>
   );
 }
-
-PageHeader.displayName = 'PageHeader';

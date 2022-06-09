@@ -32,5 +32,3 @@ export function Grid({
 
   return <Component {...props} className={styles} />;
 }
-
-Grid.displayName = 'Grid';

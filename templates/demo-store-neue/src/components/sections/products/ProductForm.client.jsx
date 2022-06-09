@@ -134,5 +134,3 @@ export function ProductForm() {
     </form>
   );
 }
-
-ProductForm.displayName = 'ProductForm';

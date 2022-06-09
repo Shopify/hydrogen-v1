@@ -18,5 +18,3 @@ export default function Reset() {
     </Layout>
   );
 }
-
-Reset.displayName = 'Reset';

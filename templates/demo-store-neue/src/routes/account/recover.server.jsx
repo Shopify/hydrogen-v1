@@ -20,8 +20,6 @@ export default function Recover({response}) {
   );
 }
 
-Recover.displayName = 'Recover';
-
 export async function api(request, {queryShop}) {
   const jsonBody = await request.json();
 

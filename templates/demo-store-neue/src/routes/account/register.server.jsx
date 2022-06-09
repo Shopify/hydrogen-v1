@@ -15,8 +15,6 @@ export default function Register({response}) {
   );
 }
 
-Register.displayName = 'Register';
-
 export async function api(request, {queryShop}) {
   const jsonBody = await request.json();
 

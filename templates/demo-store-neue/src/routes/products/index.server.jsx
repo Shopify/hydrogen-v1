@@ -50,8 +50,6 @@ export default function AllProducts({pageBy = 12}) {
   );
 }
 
-AllProducts.displayName = 'AllProducts';
-
 const ALL_PRODUCTS_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query CollectionDetails(

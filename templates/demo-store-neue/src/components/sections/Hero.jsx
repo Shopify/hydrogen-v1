@@ -44,7 +44,6 @@ export function Hero({data = mockData, height, top}) {
     </Link>
   );
 }
-Hero.displayName = 'Hero';
 
 function SpreadMedia({data}) {
   if (data.mediaContentType === 'VIDEO') {
@@ -78,4 +77,3 @@ function SpreadMedia({data}) {
 
   return null;
 }
-SpreadMedia.displayName = 'SpreadMedia';

@@ -12,5 +12,3 @@ export function Input({className = '', type, variant, ...props}) {
 
   return <input type={type} {...props} className={styles} />;
 }
-
-Input.displayName = 'Input';

@@ -122,8 +122,6 @@ export default function Location() {
   );
 }
 
-Location.displayName = 'Location';
-
 const LOCATION_CONTENT_QUERY = gql`
   query store($handle: String!) {
     contentEntry(byHandle: {type: "stores", handle: $handle}) {

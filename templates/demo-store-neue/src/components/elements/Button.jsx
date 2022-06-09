@@ -32,5 +32,3 @@ export function Button({
 
   return <Component className={styles} {...props} />;
 }
-
-Button.displayName = 'Button';

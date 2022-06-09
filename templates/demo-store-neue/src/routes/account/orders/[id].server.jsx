@@ -127,8 +127,6 @@ export default function OrderDetails({response}) {
   );
 }
 
-OrderDetails.displayName = 'OrderDetails';
-
 const ORDER_DETAIL_QUERY = gql`
   query OrderDetails($orderId: ID!) {
     node(id: $orderId) {

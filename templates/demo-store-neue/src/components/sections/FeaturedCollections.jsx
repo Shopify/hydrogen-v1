@@ -27,5 +27,3 @@ export function FeaturedCollections({data, title = 'Collections', ...props}) {
     </Section>
   );
 }
-
-FeaturedCollections.displayName = 'FeaturedCollections';

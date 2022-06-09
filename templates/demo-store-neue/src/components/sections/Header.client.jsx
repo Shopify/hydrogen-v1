@@ -25,8 +25,6 @@ export function Header({title, menu}) {
   );
 }
 
-Header.displayName = 'Header';
-
 function MobileHeader({title, isHome}) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
@@ -84,8 +82,6 @@ function MobileHeader({title, isHome}) {
     </header>
   );
 }
-
-MobileHeader.displayName = 'MobileHeader';
 
 function DesktopHeader({title, isHome, menu}) {
   const styles = {
@@ -145,8 +141,6 @@ function DesktopHeader({title, isHome, menu}) {
   );
 }
 
-DesktopHeader.displayName = 'DesktopHeader';
-
 function CartBadge({dark}) {
   const {totalQuantity} = useCart();
 
@@ -165,5 +159,3 @@ function CartBadge({dark}) {
     </div>
   );
 }
-
-CartBadge.displayName = 'CartBadge';

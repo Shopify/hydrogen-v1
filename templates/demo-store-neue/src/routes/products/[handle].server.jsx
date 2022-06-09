@@ -75,8 +75,6 @@ export default function Product() {
   );
 }
 
-Product.displayName = 'Product';
-
 const PRODUCT_QUERY = gql`
   ${MEDIA_FIELDS}
   query Product(

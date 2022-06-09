@@ -1,12 +1,12 @@
-import {useShopQuery, useShop, useSession, gql} from '@shopify/hydrogen';
+import {gql, useSession, useShop, useShopQuery} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FIELDS, LOCATION_CARD_FIELDS} from '~/lib/fragments';
 import {Layout} from '~/components/layouts';
 import {PageHeader, Text, Button} from '~/components/elements';
 import {
   FeaturedCollections,
+  LocationsGrid,
   ProductSwimlane,
-  Locations,
 } from '~/components/sections';
 
 export function NotFound({type = 'page'}) {
@@ -40,12 +40,10 @@ export function NotFound({type = 'page'}) {
         data={featuredCollections.nodes}
       />
       <ProductSwimlane data={featuredProducts.nodes} />
-      <Locations data={locations.nodes} />
+      <LocationsGrid data={locations.nodes} />
     </Layout>
   );
 }
-
-NotFound.displayName = 'NotFound';
 
 const NOT_FOUND_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}

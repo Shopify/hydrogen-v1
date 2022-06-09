@@ -16,5 +16,3 @@ export function Skeleton({
     <Component {...props} width={width} height={height} className={styles} />
   );
 }
-
-Skeleton.displayName = 'Skeleton';

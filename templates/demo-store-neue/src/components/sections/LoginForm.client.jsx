@@ -99,7 +99,6 @@ export function LoginForm({shopName}) {
     </div>
   );
 }
-LoginForm.displayName = 'LoginForm';
 
 export function callLoginApi({email, password}) {
   return fetch(`/account/login`, {
@@ -169,7 +168,6 @@ function EmailField({email, setEmail, emailError, shopName}) {
     </>
   );
 }
-EmailField.displayName = 'EmailField';
 
 function ValidEmail({email, resetForm}) {
   return (
@@ -196,7 +194,6 @@ function ValidEmail({email, resetForm}) {
     </div>
   );
 }
-ValidEmail.displayName = 'ValidEmail';
 
 function PasswordField({password, setPassword, passwordError}) {
   return (
@@ -245,4 +242,3 @@ function PasswordField({password, setPassword, passwordError}) {
     </>
   );
 }
-PasswordField.displayName = 'PasswordField';

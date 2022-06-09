@@ -15,7 +15,7 @@ import {Layout} from '~/components/layouts';
 import {
   FeaturedCollections,
   ProductSwimlane,
-  Locations,
+  LocationsGrid,
 } from '~/components/sections';
 
 export function AccountDetails({customerAccessToken}) {
@@ -57,11 +57,10 @@ export function AccountDetails({customerAccessToken}) {
         data={featuredCollections.nodes}
       />
       <ProductSwimlane data={featuredProducts.nodes} />
-      <Locations data={locations.nodes} />
+      <LocationsGrid data={locations.nodes} />
     </Layout>
   );
 }
-AccountDetails.displayName = 'AccountDetails';
 
 /* TODO: We should import any hardcoded langauge from a central JSON file to make i18n and customization easier. */
 function EmptyOrders({heading}) {
@@ -79,7 +78,6 @@ function EmptyOrders({heading}) {
     </PageHeader>
   );
 }
-EmptyOrders.displayName = 'EmptyOrders';
 
 function OrderHistory({orders, heading}) {
   return (
@@ -100,7 +98,6 @@ function OrderHistory({orders, heading}) {
     </div>
   );
 }
-OrderHistory.displayName = 'OrderHistory';
 
 const CUSTOMER_QUERY = gql`
   ${LOCATION_CARD_FIELDS}

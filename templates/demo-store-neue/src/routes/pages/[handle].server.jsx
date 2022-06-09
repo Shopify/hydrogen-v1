@@ -45,8 +45,6 @@ export default function Page({params}) {
   );
 }
 
-Page.displayName = 'Page';
-
 const PAGE_QUERY = gql`
   query PageDetails($languageCode: LanguageCode, $handle: String!)
   @inContext(language: $languageCode) {

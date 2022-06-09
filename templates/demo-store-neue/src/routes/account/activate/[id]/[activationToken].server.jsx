@@ -17,5 +17,3 @@ export default function ActivateAccount() {
     </Layout>
   );
 }
-
-ActivateAccount.displayName = 'ActivateAccount';

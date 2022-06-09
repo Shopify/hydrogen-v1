@@ -139,7 +139,6 @@ export function AccountActivateForm({id, activationToken}) {
     </div>
   );
 }
-AccountActivateForm.displayName = 'AccountActivateForm';
 
 function callActivateApi({id, activationToken, password}) {
   return fetch(`/account/activate`, {

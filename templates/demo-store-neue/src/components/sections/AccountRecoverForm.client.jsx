@@ -99,8 +99,6 @@ export function AccountRecoverForm() {
   );
 }
 
-AccountRecoverForm.displayName = 'AccountRecoverForm';
-
 function callAccountRecoverApi({email, password, firstName, lastName}) {
   return fetch(`/account/recover`, {
     method: 'POST',

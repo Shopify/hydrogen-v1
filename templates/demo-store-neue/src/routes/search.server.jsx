@@ -100,8 +100,6 @@ function SearchPage({query, children}) {
   );
 }
 
-Search.displayName = 'Search';
-
 const SEARCH_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query search(

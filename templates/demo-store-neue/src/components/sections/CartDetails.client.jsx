@@ -187,4 +187,3 @@ function CartLineItem() {
     </li>
   );
 }
-CartDetails.displayName = 'CartDetails';

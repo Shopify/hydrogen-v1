@@ -1,21 +1,21 @@
 import {Suspense} from 'react';
 import {
-  useSession,
-  useShopQuery,
-  useShop,
-  Seo,
   CacheDays,
-  useServerAnalytics,
-  ShopifyAnalyticsConstants,
   gql,
+  Seo,
+  ShopifyAnalyticsConstants,
+  useServerAnalytics,
+  useSession,
+  useShop,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
 import {
-  Hero,
   FeaturedCollections,
+  Hero,
+  LocationsGrid,
   ProductSwimlane,
-  Locations,
 } from '~/components/sections';
 
 import {
@@ -66,12 +66,10 @@ export default function Homepage() {
         title="Featured Products"
         divider="bottom"
       />
-      <Locations data={locations.nodes} />
+      <LocationsGrid data={locations.nodes} />
     </Layout>
   );
 }
-
-Homepage.displayName = 'Homepage';
 
 function SeoForHomepage() {
   const {
@@ -95,8 +93,6 @@ function SeoForHomepage() {
     />
   );
 }
-
-SeoForHomepage.displayName = 'SeoForHomepage';
 
 const HOMEPAGE_SEO_QUERY = gql`
   query homeShopInfo {

@@ -1,7 +1,6 @@
 export function LogoutButton(props) {
   const logout = () => {
     fetch('/account/logout', {method: 'POST'}).then(() => {
-      console.log('Here-----');
       if (typeof props?.onClick === 'function') {
         props.onClick();
       }
@@ -15,5 +14,3 @@ export function LogoutButton(props) {
     </button>
   );
 }
-
-LogoutButton.displayName = 'LogoutButton';

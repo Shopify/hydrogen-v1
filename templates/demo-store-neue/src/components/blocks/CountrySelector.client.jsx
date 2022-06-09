@@ -61,8 +61,6 @@ export function CountrySelector() {
   );
 }
 
-CountrySelector.displayName = 'CountrySelector';
-
 export function Countries({selectedCountry, getClassName}) {
   const countries = fetchSync('/api/countries').json();
 
@@ -85,7 +83,6 @@ export function Countries({selectedCountry, getClassName}) {
     );
   });
 }
-Countries.displayName = 'Countries';
 
 export function CheckIcon() {
   return (
@@ -107,4 +104,3 @@ export function CheckIcon() {
     </svg>
   );
 }
-CheckIcon.displayName = 'CheckIcon';

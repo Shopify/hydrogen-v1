@@ -66,5 +66,3 @@ export function Footer({menu = mockData}) {
     </Section>
   );
 }
-
-Footer.displayName = 'Footer';

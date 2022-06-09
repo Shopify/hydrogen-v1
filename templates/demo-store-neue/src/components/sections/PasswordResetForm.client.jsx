@@ -140,8 +140,6 @@ export function PasswordResetForm({id, resetToken}) {
   );
 }
 
-PasswordResetForm.displayName = 'PasswordResetForm';
-
 function callPasswordResetApi({id, resetToken, password}) {
   return fetch(`/account/reset`, {
     method: 'POST',

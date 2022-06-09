@@ -43,5 +43,3 @@ export function Section({
     </Component>
   );
 }
-
-Section.displayName = 'Section';

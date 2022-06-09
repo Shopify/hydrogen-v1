@@ -13,5 +13,3 @@ export function MoneyPrice({money}) {
     </span>
   );
 }
-
-MoneyPrice.displayName = 'MoneyPrice';

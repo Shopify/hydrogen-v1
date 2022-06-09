@@ -149,8 +149,6 @@ export function AccountCreateForm() {
   );
 }
 
-AccountCreateForm.displayName = 'AccountCreateForm';
-
 function callAccountCreateApi({email, password, firstName, lastName}) {
   return fetch(`/account/register`, {
     method: 'POST',
