@@ -56,7 +56,7 @@ import {
   isStale,
   setItemInCache,
 } from './foundation/Cache/cache';
-import {CacheSeconds} from './foundation/Cache/strategies';
+import {CacheSeconds, NO_STORE} from './foundation/Cache/strategies';
 
 declare global {
   // This is provided by a Vite plugin
@@ -849,21 +849,21 @@ function tagOnWrite(
 }
 
 async function cacheResponse(
-  componentResponse: HydrogenResponse,
+  response: HydrogenResponse,
   request: HydrogenRequest,
   chunks: string[],
   revalidate?: Boolean
 ) {
   const cache = getCache();
 
-  if (cache && chunks.length > 0) {
+  if (response.cache().mode !== NO_STORE && cache && chunks.length > 0) {
     if (revalidate) {
-      await saveCacheResponse(componentResponse, request, chunks);
+      await saveCacheResponse(response, request, chunks);
     } else {
       request.ctx.runtime?.waitUntil(
         Promise.resolve({
           then: () => {
-            saveCacheResponse(componentResponse, request, chunks);
+            saveCacheResponse(response, request, chunks);
           },
         })
       );
