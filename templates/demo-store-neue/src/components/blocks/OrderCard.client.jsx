@@ -1,48 +1,13 @@
 import {Image, Link, flattenConnection} from '@shopify/hydrogen';
+
 import {Text} from '~/components/elements';
 
-function fulfillmentStatus(status) {
-  let text = status;
-  switch (status) {
-    case 'FULFILLED':
-      text = 'Fulfilled';
-      break;
-    case 'IN_PROGRESS':
-      text = 'In Progress';
-      break;
-    case 'ON_HOLD':
-      text = 'On Hold';
-      break;
-    case 'OPEN':
-      text = 'Open';
-      break;
-    case 'PARTIALLY_FULFILLED':
-      text = 'Partially Fulfilled';
-      break;
-    case 'PENDING_FULFILLMENT':
-      text = 'Pending';
-      break;
-    case 'RESTOCKED':
-      text = 'Restocked';
-      break;
-    case 'SCHEDULED':
-      text = 'Scheduled';
-      break;
-    case 'UNFULFILLED':
-      text = 'Unfulfilled';
-      break;
-    default:
-      text = status;
-  }
-  return text;
-}
-
-export default function OrderCard(props) {
-  const {order} = props;
+export function OrderCard({order}) {
   const lineItems =
     order?.lineItems?.edges.length > 0
       ? flattenConnection(order.lineItems)
       : [];
+
   return (
     <li className="col-span-1 flex flex-col text-center bg-white rounded border-gray-200 border divide-y divide-gray-200">
       <Link to="#">
@@ -106,4 +71,42 @@ export default function OrderCard(props) {
       </div>
     </li>
   );
+}
+
+OrderCard.displayName = 'OrderCard';
+
+function fulfillmentStatus(status) {
+  let text = status;
+  switch (status) {
+    case 'FULFILLED':
+      text = 'Fulfilled';
+      break;
+    case 'IN_PROGRESS':
+      text = 'In Progress';
+      break;
+    case 'ON_HOLD':
+      text = 'On Hold';
+      break;
+    case 'OPEN':
+      text = 'Open';
+      break;
+    case 'PARTIALLY_FULFILLED':
+      text = 'Partially Fulfilled';
+      break;
+    case 'PENDING_FULFILLMENT':
+      text = 'Pending';
+      break;
+    case 'RESTOCKED':
+      text = 'Restocked';
+      break;
+    case 'SCHEDULED':
+      text = 'Scheduled';
+      break;
+    case 'UNFULFILLED':
+      text = 'Unfulfilled';
+      break;
+    default:
+      text = status;
+  }
+  return text;
 }

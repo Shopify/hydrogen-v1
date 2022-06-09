@@ -1,12 +1,13 @@
 import {useCallback, useState, Suspense} from 'react';
 import {useCountry, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
+
 import {IconChevronDown} from '~/components/elements';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
  */
-export default function CountrySelector() {
+export function CountrySelector() {
   const [listboxOpen, setListboxOpen] = useState(false);
   const [selectedCountry] = useCountry();
 
@@ -60,12 +61,14 @@ export default function CountrySelector() {
   );
 }
 
+CountrySelector.displayName = 'CountrySelector';
+
 export function Countries({selectedCountry, getClassName}) {
-  // TODO: We should have this handled inside this component, no?
   const countries = fetchSync('/api/countries').json();
 
-  return countries.map((country) => {
+  return (countries || []).map((country) => {
     const isSelected = country.isoCode === selectedCountry.isoCode;
+
     return (
       <Listbox.Option key={country.isoCode} value={country}>
         {({active}) => (
@@ -82,6 +85,7 @@ export function Countries({selectedCountry, getClassName}) {
     );
   });
 }
+Countries.displayName = 'Countries';
 
 export function CheckIcon() {
   return (
@@ -103,3 +107,4 @@ export function CheckIcon() {
     </svg>
   );
 }
+CheckIcon.displayName = 'CheckIcon';
