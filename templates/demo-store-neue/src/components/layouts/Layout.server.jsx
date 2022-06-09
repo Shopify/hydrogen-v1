@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   useShop,
   useShopQuery,
@@ -6,19 +7,16 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {Suspense} from 'react';
-// TODO: Change back to import {Header, Footer} from '~/components/sections'
-import Header from '../sections/Header.client';
-import Footer from '../sections/Footer.client';
+import {Header, Footer} from '~/components/sections';
 
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
-export default function Layout({children}) {
+export function Layout({children, ...props}) {
   const {languageCode} = useShop();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: SHOP_QUERY,
     variables: {
       language: languageCode,
     },
@@ -46,7 +44,9 @@ export default function Layout({children}) {
   );
 }
 
-const QUERY = gql`
+Layout.displayName = 'Layout';
+
+const SHOP_QUERY = gql`
   query layoutContent($language: LanguageCode) @inContext(language: $language) {
     shop {
       name
