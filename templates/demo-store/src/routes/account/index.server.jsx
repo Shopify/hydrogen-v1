@@ -33,7 +33,6 @@ export default function Account({
   editingAccount,
   editingAddress,
   deletingAddress,
-  showModal,
 }) {
   response.cache(NoStore());
 
@@ -69,10 +68,6 @@ export default function Account({
     customer.defaultAddress.id.lastIndexOf('?'),
   );
 
-  if (editingAccount || editingAddress || deletingAddress) {
-    showModal = true;
-  }
-
   if (editingAccount) {
     return (
       <>
@@ -84,17 +79,15 @@ export default function Account({
           featuredProducts={featuredProducts}
           locations={locations}
         />
-        {showModal && (
-          <Modal>
-            <Seo type="noindex" data={{title: 'Account details'}} />
-            <EditAccountDetails
-              firstName={customer.firstName}
-              lastName={customer.lastName}
-              phone={customer.phone}
-              email={customer.email}
-            />
-          </Modal>
-        )}
+        <Modal>
+          <Seo type="noindex" data={{title: 'Account details'}} />
+          <EditAccountDetails
+            firstName={customer.firstName}
+            lastName={customer.lastName}
+            phone={customer.phone}
+            email={customer.email}
+          />
+        </Modal>
       </>
     );
   }
@@ -113,18 +106,16 @@ export default function Account({
           featuredProducts={featuredProducts}
           locations={locations}
         />
-        {showModal && (
-          <Modal>
-            <Seo
-              type="noindex"
-              data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
-            />
-            <EditAddress
-              address={addressToEdit}
-              defaultAddress={defaultAddress === editingAddress}
-            />
-          </Modal>
-        )}
+        <Modal>
+          <Seo
+            type="noindex"
+            data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
+          />
+          <EditAddress
+            address={addressToEdit}
+            defaultAddress={defaultAddress === editingAddress}
+          />
+        </Modal>
       </>
     );
   }
@@ -143,24 +134,25 @@ export default function Account({
           featuredProducts={featuredProducts}
           locations={locations}
         />
-        {showModal && (
-          <Modal>
-            <Seo type="noindex" data={{title: 'Delete address'}} />
-            <DeleteAddress addressId={addressToDelete.originalId} />
-          </Modal>
-        )}
+        <Modal>
+          <Seo type="noindex" data={{title: 'Delete address'}} />
+          <DeleteAddress addressId={addressToDelete.originalId} />
+        </Modal>
       </>
     );
   }
+
   return (
-    <AuthenticatedAccount
-      customer={customer}
-      addresses={addresses}
-      defaultAddress={defaultAddress}
-      featuredCollections={featuredCollections}
-      featuredProducts={featuredProducts}
-      locations={locations}
-    />
+    <>
+      <AuthenticatedAccount
+        customer={customer}
+        addresses={addresses}
+        defaultAddress={defaultAddress}
+        featuredCollections={featuredCollections}
+        featuredProducts={featuredProducts}
+        locations={locations}
+      />
+    </>
   );
 }
 

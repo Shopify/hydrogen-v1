@@ -4,7 +4,7 @@ import {useCallback} from 'react';
 export default function Modal({children}) {
   const {setServerProps} = useServerProps();
   const close = useCallback(() => {
-    setServerProps('showModal', null);
+    setServerProps('close', true);
   }, [setServerProps]);
 
   return (

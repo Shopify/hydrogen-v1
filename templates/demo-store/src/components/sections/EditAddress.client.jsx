@@ -61,8 +61,8 @@ export default function EditAddress({address, defaultAddress}) {
       <div className="max-w-lg">
         <form noValidate onSubmit={onSubmit}>
           {submitError && (
-            <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-white">{submitError}</p>
+            <div className="flex items-center justify-center mb-6 bg-red-100 rounded">
+              <p className="m-4 text-sm text-red-900">{submitError}</p>
             </div>
           )}
           <div className="mt-3">
