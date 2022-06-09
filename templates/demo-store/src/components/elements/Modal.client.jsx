@@ -1,11 +1,10 @@
 import {useServerProps} from '@shopify/hydrogen';
 import {useCallback} from 'react';
 
-export default function Modal({children, editing}) {
-  const {serverProps, setServerProps} = useServerProps();
+export default function Modal({children}) {
+  const {setServerProps} = useServerProps();
   const close = useCallback(() => {
-    setServerProps('editingAddress', null);
-    setServerProps('editingAccount', null);
+    setServerProps('showModal', null);
   }, [setServerProps]);
 
   return (
@@ -15,7 +14,7 @@ export default function Modal({children, editing}) {
       role="dialog"
       aria-modal="true"
       id="modal-bg"
-      onClick={() => close()}
+      onClick={close}
     >
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
       <div className="fixed z-50 inset-0 overflow-y-auto">

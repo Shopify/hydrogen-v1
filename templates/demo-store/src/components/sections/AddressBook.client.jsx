@@ -22,7 +22,6 @@ export default function AddressBook({addresses, defaultAddress}) {
     const response = await callDeleteAddressApi(id);
     if (response.error) alert(response.error);
     else setServerProps('rerender', !serverProps.rerender);
-    setServerProps('showModal', null);
   }
 
   return (
@@ -61,8 +60,7 @@ export default function AddressBook({addresses, defaultAddress}) {
               {addressesWithoutDefault.map((address) => (
                 <Address
                   key={address.id}
-                  address
-                  defaultAddress
+                  address={address}
                   deleteAddress={deleteAddress.bind(null, address.originalId)}
                 />
               ))}
@@ -77,6 +75,7 @@ export default function AddressBook({addresses, defaultAddress}) {
 function Address({address, defaultAddress}) {
   const {serverProps, setServerProps} = useServerProps();
   const [showConfirmRemove, setShowConfirmRemove] = useState(false);
+  console.log('address is', address);
 
   return (
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
@@ -95,10 +94,13 @@ function Address({address, defaultAddress}) {
         ) : (
           <></>
         )}
-        {address.formatted.map((line, index) => (
-          /* eslint-disable-next-line react/no-array-index-key */
-          <li key={line + index}>{line}</li>
-        ))}
+        {address.formatted ? (
+          address.formatted.map((line, index) => (
+            <li key={line + index}>{line}</li>
+          ))
+        ) : (
+          <></>
+        )}
       </ul>
 
       <div className="flex flex-row font-medium mt-6">

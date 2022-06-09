@@ -27,7 +27,12 @@ import {
 
 import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
-export default function Account({response, editingAccount, editingAddress}) {
+export default function Account({
+  response,
+  editingAccount,
+  editingAddress,
+  showModal,
+}) {
   response.cache(NoStore());
 
   const {customerAccessToken, countryCode = 'US'} = useSession();
@@ -62,6 +67,10 @@ export default function Account({response, editingAccount, editingAddress}) {
     customer.defaultAddress.id.lastIndexOf('?'),
   );
 
+  if (editingAccount || editingAddress) {
+    showModal = true;
+  }
+
   if (editingAccount) {
     return (
       <>
@@ -73,7 +82,7 @@ export default function Account({response, editingAccount, editingAddress}) {
           featuredProducts={featuredProducts}
           locations={locations}
         />
-        {editingAccount && (
+        {showModal && (
           <Modal>
             <Seo type="noindex" data={{title: 'Account details'}} />
             <EditAccountDetails
@@ -102,7 +111,7 @@ export default function Account({response, editingAccount, editingAddress}) {
           featuredProducts={featuredProducts}
           locations={locations}
         />
-        {editingAddress && (
+        {showModal && (
           <Modal>
             <Seo
               type="noindex"

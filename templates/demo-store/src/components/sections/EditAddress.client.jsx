@@ -7,7 +7,6 @@ export default function EditAddress({address, defaultAddress}) {
   const close = useCallback(() => {
     setServerProps('editingAddress', null);
   }, [setServerProps]);
-  // const close = () => setServerProps('editingAddress', null);
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
@@ -252,7 +251,7 @@ export default function EditAddress({address, defaultAddress}) {
           </div>
           <div>
             <Button
-              className="mt-3 focus:shadow-outline rounded w-full"
+              className="mt-2 focus:shadow-outline rounded w-full"
               variant="secondary"
               onClick={close}
             >
