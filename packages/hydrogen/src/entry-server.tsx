@@ -856,8 +856,6 @@ async function cacheResponse(
 ) {
   const cache = getCache();
 
-  console.log(chunks.length);
-
   if (cache && chunks.length > 0) {
     if (revalidate) {
       await saveCacheResponse(componentResponse, request, chunks);
