@@ -9,6 +9,11 @@ import {
 
 import {Header, Footer} from '~/components/sections';
 
+import {parseMenu} from '~/lib/utils';
+
+const HEADER_MENU_HANDLE = 'main-menu';
+const FOOTER_MENU_HANDLE = 'footer';
+
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
@@ -19,10 +24,32 @@ export function Layout({children}) {
     query: SHOP_QUERY,
     variables: {
       language: languageCode,
+      headerMenuHandle: HEADER_MENU_HANDLE,
+      footerMenuHandle: FOOTER_MENU_HANDLE,
     },
     cache: CacheHours(),
     preload: '*',
   });
+
+  const shopName = data ? data.shop.name : 'Hydrogen Demo Store';
+
+  /*
+    Modify specific links/routes (optional)
+    @see: https://shopify.dev/api/storefront/unstable/enums/MenuItemType
+    e.g here we map:
+      - /blogs/news -> /news
+      - /blog/news/blog-post -> /news/blog-post
+      - /collections/all -> /products
+  */
+  const customPrefixes = {BLOG: '', CATALOG: 'products'};
+
+  const headerMenu = data?.headerMenu
+    ? parseMenu(data.headerMenu, customPrefixes)
+    : null;
+
+  const footerMenu = data?.footerMenu
+    ? parseMenu(data.footerMenu, customPrefixes)
+    : null;
 
   return (
     <LocalizationProvider preload="*">
@@ -32,13 +59,16 @@ export function Layout({children}) {
             Skip to content
           </a>
         </div>
+        {/* <div className="px-4 py-2 bg-primary text-contrast md:py-4 md:px-8 lg:px-16">
+          <Text>Wrong Country Banner</Text>
+        </div> */}
         <Suspense fallback={null}>
-          <Header title={data ? data.shop.name : 'Hydrogen Demo Store'} />
+          <Header title={shopName} menu={headerMenu} />
         </Suspense>
         <main role="main" id="mainContent" className="flex-grow">
           <Suspense fallback={null}>{children}</Suspense>
         </main>
-        <Footer />
+        <Footer menu={footerMenu} />
       </div>
     </LocalizationProvider>
   );
@@ -47,9 +77,39 @@ export function Layout({children}) {
 Layout.displayName = 'Layout';
 
 const SHOP_QUERY = gql`
-  query layoutContent($language: LanguageCode) @inContext(language: $language) {
+  fragment MenuItem on MenuItem {
+    id
+    resourceId
+    tags
+    title
+    type
+    url
+  }
+  query layout(
+    $language: LanguageCode
+    $headerMenuHandle: String!
+    $footerMenuHandle: String!
+  ) @inContext(language: $language) {
     shop {
       name
+    }
+    headerMenu: menu(handle: $headerMenuHandle) {
+      id
+      items {
+        ...MenuItem
+        items {
+          ...MenuItem
+        }
+      }
+    }
+    footerMenu: menu(handle: $footerMenuHandle) {
+      id
+      items {
+        ...MenuItem
+        items {
+          ...MenuItem
+        }
+      }
     }
   }
 `;

@@ -20,7 +20,6 @@ import {
 
 export function AccountDetails({customerAccessToken}) {
   if (!customerAccessToken) return null;
-
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
   const {data} = useShopQuery({

@@ -8,7 +8,7 @@ import {footer as mockData} from '~/lib/placeholders';
 /**
  * A server component that specifies the content of the footer on the website
  */
-export function Footer({menus = mockData}) {
+export function Footer({menu = mockData}) {
   const styles = {
     footer:
       'grid items-start w-full grid-flow-row grid-cols-1 gap-6 py-8 px-4 md:px-8 lg:px-12 border-b md:gap-8 lg:gap-12 md:grid-cols-2 lg:grid-cols-4 bg-primary dark:bg-contrast dark:text-primary text-contrast',
@@ -23,22 +23,26 @@ export function Footer({menus = mockData}) {
       divider="top"
       className={styles.footer}
     >
-      {menus.map((menu) => (
-        <section key={menu.id} className={styles.section}>
+      {(menu?.items || []).map((item) => (
+        <section key={item.id} className={styles.section}>
           <Disclosure>
             {({open}) => (
               <>
                 <Disclosure.Button className="text-left md:cursor-default">
                   <Heading size="lead" as="h4">
-                    {menu.title}
+                    {item.title}
                   </Heading>
                 </Disclosure.Button>
                 <div className={open ? `block` : `hidden md:block`}>
                   <Disclosure.Panel static>
                     <nav className={styles.nav}>
-                      {menu.links.map((link) => (
-                        <Link key={link.id} to={link.url}>
-                          {link.title}
+                      {item.items.map((subItem) => (
+                        <Link
+                          key={subItem.id}
+                          to={subItem.to}
+                          target={subItem.target}
+                        >
+                          {subItem.title}
                         </Link>
                       ))}
                     </nav>

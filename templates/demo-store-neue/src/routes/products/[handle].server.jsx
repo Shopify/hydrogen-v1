@@ -96,6 +96,7 @@ const PRODUCT_QUERY = gql`
       }
       variants(first: 100) {
         nodes {
+          id
           availableForSale
           compareAtPriceV2 {
             amount
@@ -105,7 +106,6 @@ const PRODUCT_QUERY = gql`
             name
             value
           }
-          id
           image {
             id
             url

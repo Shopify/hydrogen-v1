@@ -276,7 +276,7 @@ async function runSSR({
       template={response.canStream() ? noScriptTemplate : template}
       hydrogenConfig={request.ctx.hydrogenConfig!}
     >
-      <ServerRequestProvider request={request} isRSC={false}>
+      <ServerRequestProvider request={request}>
         <ServerPropsProvider
           initialServerProps={state as any}
           setServerPropsForRsc={() => {}}
@@ -554,7 +554,7 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
   request.ctx.router.serverProps = serverProps;
 
   const AppRSC = (
-    <ServerRequestProvider request={request} isRSC={true}>
+    <ServerRequestProvider request={request}>
       <PreloadQueries request={request}>
         <App {...serverProps} />
         <Suspense fallback={null}>
