@@ -59,5 +59,5 @@ The `useRequestContext` hook returns an object that can be mutated to store data
 
 ## Considerations
 
-- Consider using the `useRequestContext` hook only where appropriate. Generally, you should pass props down to the components instead.
+- Consider using the `useRequestContext` hook only where appropriate. Generally, you should pass props down to the components instead. Use it to cache data across multiple React rendering cycles, or to share data across components that are located in different tree branches.
 - The `useRequestContext` hook is only available when running on the server in server components or client components during server-side rendering (SSR). The hook is never shared in the browser.
