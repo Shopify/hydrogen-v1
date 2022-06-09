@@ -40,7 +40,7 @@ response.cache(CacheSeconds());
 
 ### Disabling caching
 
-Use the `NoStore()` caching strategy to disable caching. It is important to disable caching on authenticated pages.
+Use the `NoStore()` caching strategy to disable caching. You should consider disabling caching on authenticated pages to prevent leaking personal identifying information.
 
 ### Build your own caching strategies
 
