@@ -407,6 +407,7 @@ async function runSSR({
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
+    const savedChunks = tagOnWritableWrite(writable);
 
     let ssrReadable: Awaited<ReturnType<typeof ssrRenderToReadableStream>>;
 
@@ -437,8 +438,12 @@ async function runSSR({
       );
     }
 
+    console.log('SSR - worker - 1');
+
     if (response.canStream()) log.trace('worker ready to stream');
     ssrReadable.allReady.then(() => log.trace('worker complete ssr'));
+
+    console.log('SSR - worker - 2');
 
     const prepareForStreaming = () => {
       Object.assign(responseOptions, getResponseOptions(response, didError()));
@@ -454,9 +459,13 @@ async function runSSR({
        */
       responseOptions.headers.set('cache-control', response.cacheControlHeader);
 
+      console.log('SSR - worker - 3');
+
       if (isRedirect(responseOptions)) {
         return false;
       }
+
+      console.log('SSR - worker - 4');
 
       responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
       writable.write(encoder.encode(DOCTYPE));
@@ -469,6 +478,8 @@ async function runSSR({
 
       return true;
     };
+
+    console.log('SSR - worker - 5');
 
     const shouldFlushBody = response.canStream()
       ? prepareForStreaming()
@@ -501,6 +512,8 @@ async function runSSR({
           : undefined
       );
 
+      console.log('SSR - worker - 6');
+
       const writingRSC = bufferReadableStream(
         rscReadable.getReader(),
         response.canStream()
@@ -514,9 +527,12 @@ async function runSSR({
           writable.write(encoder.encode(html));
         }
 
+        console.log('SSR - worker - 7');
+
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => writable.close(), 0);
         postRequestTasks('str', responseOptions.status, request, response);
+        cacheResponse(response, request, savedChunks, revalidate);
       });
     } else {
       // Redirects do not write body
@@ -525,12 +541,15 @@ async function runSSR({
     }
 
     if (response.canStream()) {
+      console.log('SSR - worker - 8');
       return new Response(transform.readable, responseOptions);
     }
 
     const bufferedBody = await bufferReadableStream(
       transform.readable.getReader()
     );
+
+    console.log('SSR - worker - 9');
 
     return new Response(bufferedBody, responseOptions);
   } else if (nodeResponse) {
@@ -838,6 +857,7 @@ function tagOnResponseWrite(response: ServerResponse) {
   const originalWrite = response.write;
   const decoder = new TextDecoder();
   const savedChunks: string[] = [];
+
   response.write = (...args) => {
     if (args[0] instanceof Uint8Array) {
       savedChunks.push(decoder.decode(args[0]));
@@ -846,6 +866,24 @@ function tagOnResponseWrite(response: ServerResponse) {
     }
     // @ts-ignore
     return originalWrite.apply(response, args);
+  };
+
+  return savedChunks;
+}
+
+function tagOnWritableWrite(writer: WritableStreamDefaultWriter<any>) {
+  const originalWrite = writer.write;
+  const decoder = new TextDecoder();
+  const savedChunks: string[] = [];
+
+  writer.write = (...args) => {
+    if (args[0] instanceof Uint8Array) {
+      savedChunks.push(decoder.decode(args[0]));
+    } else {
+      savedChunks.push(args[0]);
+    }
+    // @ts-ignore
+    return originalWrite.apply(writer, args);
   };
 
   return savedChunks;
@@ -896,6 +934,7 @@ async function saveCacheResponse(
       headers.set('Content-Type', 'text/html; charset=UTF-8');
     }
 
+    console.log(`Cache: PUT - ${request.url}`);
     await setItemInCache(
       request.cacheKey(),
       new Response(chunks.join(''), {
@@ -905,7 +944,5 @@ async function saveCacheResponse(
       }),
       response.cache()
     );
-
-    console.log(`Cache: PUT - ${request.url}`);
   }
 }
