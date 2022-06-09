@@ -1,4 +1,4 @@
-import {useShopQuery, Image, Link, gql} from '@shopify/hydrogen';
+import {useShopQuery, gql} from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
 import {PageHeader, Grid, Section} from '~/components/elements';
