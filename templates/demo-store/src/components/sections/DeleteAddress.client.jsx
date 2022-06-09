@@ -2,7 +2,7 @@ import {Text, Button} from '../elements';
 import {useServerProps} from '@shopify/hydrogen';
 import {useCallback} from 'react';
 
-export default function DeleteAddress({address}) {
+export default function DeleteAddress({addressId}) {
   const {serverProps, setServerProps} = useServerProps();
   const close = useCallback(() => {
     setServerProps('deletingAddress', null);
@@ -24,7 +24,7 @@ export default function DeleteAddress({address}) {
         <Button
           className="text-sm"
           onClick={() => {
-            deleteAddress(address.originalId);
+            deleteAddress(addressId);
           }}
           variant="primary"
           width="full"

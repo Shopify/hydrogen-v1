@@ -146,7 +146,7 @@ export default function Account({
         {showModal && (
           <Modal>
             <Seo type="noindex" data={{title: 'Delete address'}} />
-            <DeleteAddress address={addressToDelete} />
+            <DeleteAddress addressId={addressToDelete.originalId} />
           </Modal>
         )}
       </>
