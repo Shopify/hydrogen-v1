@@ -137,7 +137,9 @@ function ReactFlightVitePlugin() {
           resolve: function (id) {
             return {
               then: function () {
-                return id;
+                return {
+                  id: id
+                };
               }
             };
           }
@@ -488,10 +490,10 @@ function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
     var modPath = rawModPath.split('?')[0];
 
     if (resolveAlias) {
-      var resolvedAliasPath = resolveAlias(modPath, true);
+      var resolvedAliasPath = resolveAlias(modPath, 'rsc_importer', {});
 
-      if (resolvedAliasPath) {
-        modPath = normalizePath(path.join(root, resolvedAliasPath));
+      if (resolvedAliasPath && resolvedAliasPath.id) {
+        modPath = normalizePath(path.join(root, resolvedAliasPath.id));
       }
     }
 
