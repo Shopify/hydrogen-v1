@@ -2,3 +2,5 @@
 export default function Posts() {
   return <div>Posts</div>;
 }
+
+Posts.displayName = 'Posts';

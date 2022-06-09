@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   useSession,
   useShopQuery,
@@ -9,10 +10,7 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {Suspense} from 'react';
-
-import {DefaultLayout as Layout} from '~/components/layouts';
-
+import {Layout} from '~/components/layouts';
 import {
   Hero,
   FeaturedCollections,
@@ -31,7 +29,7 @@ export default function Homepage() {
   const {countryCode = 'US'} = useSession();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: HOMEPAGE_CONTENT_QUERY,
     variables: {
       language: languageCode,
       country: countryCode,
@@ -73,13 +71,15 @@ export default function Homepage() {
   );
 }
 
+Homepage.displayName = 'Homepage';
+
 function SeoForHomepage() {
   const {
     data: {
       shop: {title, description},
     },
   } = useShopQuery({
-    query: SEO_QUERY,
+    query: HOMEPAGE_SEO_QUERY,
     cache: CacheDays(),
     preload: true,
   });
@@ -96,7 +96,9 @@ function SeoForHomepage() {
   );
 }
 
-const SEO_QUERY = gql`
+SeoForHomepage.displayName = 'SeoForHomepage';
+
+const HOMEPAGE_SEO_QUERY = gql`
   query homeShopInfo {
     shop {
       description
@@ -104,12 +106,12 @@ const SEO_QUERY = gql`
   }
 `;
 
-const QUERY = gql`
+const HOMEPAGE_CONTENT_QUERY = gql`
   ${MEDIA_FIELDS}
   ${PRODUCT_CARD_FIELDS}
   ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
-  @inContext(country: $country, language: $language) {
+    @inContext(country: $country, language: $language) {
     heroBanners: contentEntries(type: "hero_banners", first: 2) {
       nodes {
         title: field(key: "title") {

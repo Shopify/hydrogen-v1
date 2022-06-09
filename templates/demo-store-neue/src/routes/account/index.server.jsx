@@ -8,7 +8,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {AccountDetails} from '~/components/pages';
-import {DefaultLayout as Layout} from '~/components/layouts';
+import {Layout} from '~/components/layouts';
 import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Account({response, editingAccount, editingAddress}) {
@@ -83,6 +83,8 @@ export default function Account({response, editingAccount, editingAddress}) {
   );
 }
 
+Account.displayName = 'Account';
+
 export async function api(request, {session, queryShop}) {
   if (request.method !== 'PATCH')
     return new Response(null, {
@@ -107,7 +109,7 @@ export async function api(request, {session, queryShop}) {
   if (newPassword) customer.password = newPassword;
 
   const {data, errors} = await queryShop({
-    query: MUTATION,
+    query: CUSTOMER_QUERY,
     variables: {
       customer,
       customerAccessToken,
@@ -122,11 +124,11 @@ export async function api(request, {session, queryShop}) {
   return new Response(null);
 }
 
-function AuthenticatedAccount({customer}) {
-  // const orders =
-  //   customer?.orders?.edges.length > 0
-  //     ? flattenConnection(customer.orders)
-  //     : [];
+function AuthenticatedAccount({customer, addresses, defaultAddress}) {
+  const orders =
+    customer?.orders?.edges.length > 0
+      ? flattenConnection(customer.orders)
+      : [];
 
   const pageHeader = customer?.firstName
     ? `Hi ${customer.firstName}.`
@@ -143,7 +145,7 @@ function AuthenticatedAccount({customer}) {
           ) : null}
           <div className="flex">
             <span className="flex-1"></span>
-            {/* <LogoutButton className="font-medium underline" /> */}
+            <LogoutButton className="font-medium underline" />
           </div>
           {/* <OrderHistory orders={orders} /> */}
           <AccountDetails
@@ -159,7 +161,9 @@ function AuthenticatedAccount({customer}) {
   );
 }
 
-const QUERY = gql`
+AuthenticatedAccount.displayName = 'AuthenticatedAccount';
+
+const CUSTOMER_QUERY = gql`
   query CustomerDetails(
     $customerAccessToken: String!
     $withAddressDetails: Boolean!

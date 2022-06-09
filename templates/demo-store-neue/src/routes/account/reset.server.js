@@ -25,7 +25,7 @@ export async function api(request, {session, queryShop}) {
   }
 
   const {data, errors} = await queryShop({
-    query: MUTATION,
+    query: CUSTOMER_RESET_MUTATION,
     variables: {
       id: `gid://shopify/Customer/${jsonBody.id}`,
       input: {
@@ -55,7 +55,7 @@ export async function api(request, {session, queryShop}) {
   }
 }
 
-const MUTATION = gql`
+const CUSTOMER_RESET_MUTATION = gql`
   mutation customerReset($id: ID!, $input: CustomerResetInput!) {
     customerReset(id: $id, input: $input) {
       customerAccessToken {

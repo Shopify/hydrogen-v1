@@ -1,5 +1,7 @@
 import {NoStore, gql} from '@shopify/hydrogen';
+
 import {getApiErrorMessage} from '~/lib/utils';
+
 
 export async function api(request, {params, session, queryShop}) {
   const {customerAccessToken} = await session.get();
@@ -21,7 +23,7 @@ export async function api(request, {params, session, queryShop}) {
 
 async function deleteAddress(customerAccessToken, params, queryShop) {
   const {data, errors} = await queryShop({
-    query: DELETE_ADDRESS,
+    query: DELETE_ADDRESS_MUTATION,
     variables: {
       customerAccessToken,
       id: decodeURIComponent(params.addressId),
@@ -63,7 +65,7 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
   if (phone) address.phone = phone;
 
   const {data, errors} = await queryShop({
-    query: UPDATE_ADDRESS,
+    query: UPDATE_ADDRESS_MUTATION,
     variables: {
       address,
       customerAccessToken,
@@ -97,7 +99,7 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
 
 export function setDefaultAddress(queryShop, addressId, customerAccessToken) {
   return queryShop({
-    query: UPDATE_DEFAULT_ADDRESS,
+    query: UPDATE_DEFAULT_ADDRESS_MUTATION,
     variables: {
       customerAccessToken,
       addressId,
@@ -106,7 +108,7 @@ export function setDefaultAddress(queryShop, addressId, customerAccessToken) {
   });
 }
 
-const UPDATE_ADDRESS = gql`
+const UPDATE_ADDRESS_MUTATION = gql`
   mutation customerAddressUpdate(
     $address: MailingAddressInput!
     $customerAccessToken: String!
@@ -126,7 +128,7 @@ const UPDATE_ADDRESS = gql`
   }
 `;
 
-const UPDATE_DEFAULT_ADDRESS = gql`
+const UPDATE_DEFAULT_ADDRESS_MUTATION = gql`
   mutation customerDefaultAddressUpdate(
     $addressId: ID!
     $customerAccessToken: String!
@@ -144,7 +146,7 @@ const UPDATE_DEFAULT_ADDRESS = gql`
   }
 `;
 
-const DELETE_ADDRESS = gql`
+const DELETE_ADDRESS_MUTATION = gql`
   mutation customerAddressDelete($customerAccessToken: String!, $id: ID!) {
     customerAddressDelete(customerAccessToken: $customerAccessToken, id: $id) {
       customerUserErrors {

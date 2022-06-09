@@ -13,13 +13,13 @@ export async function api(request, {queryShop, session}) {
       localization: {availableCountries},
     },
   } = await queryShop({
-    query: QUERY,
+    query: COUNTRIES_QUERY,
   });
 
   return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-const QUERY = `
+const COUNTRIES_QUERY = `
   query Localization {
     localization {
       availableCountries {

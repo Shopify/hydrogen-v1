@@ -1,7 +1,7 @@
 import {useShopQuery, Image, Link, gql} from '@shopify/hydrogen';
-import {DefaultLayout as Layout} from '~/components/layouts';
-import {PageHeader, Section} from '~/components/sections';
-import {Grid} from '~/components/elements';
+
+import {Layout} from '~/components/layouts';
+import {PageHeader, Grid, Section} from '~/components/elements';
 import {LOCATION_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Locations() {
@@ -29,6 +29,8 @@ export default function Locations() {
   );
 }
 
+Locations.displayName = 'Locations';
+
 function Card({to, data}) {
   return (
     <Link to={to || `/locations/${data.handle}`} className="grid gap-4">
@@ -42,6 +44,8 @@ function Card({to, data}) {
     </Link>
   );
 }
+
+Card.displayName = 'Card';
 
 const QUERY = gql`
   ${LOCATION_CARD_FIELDS}

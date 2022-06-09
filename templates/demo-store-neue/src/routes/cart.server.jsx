@@ -1,6 +1,6 @@
-import {DefaultLayout as Layout} from '~/components/layouts';
-import {PageHeader, Section} from '~/components/sections';
-import CartDetails from '~/components/sections/CartDetails.client';
+import {Layout} from '~/components/layouts';
+import {CartDetails} from '~/components/sections';
+import {PageHeader, Section} from '~/components/elements';
 
 export default function Cart() {
   return (
@@ -12,3 +12,5 @@ export default function Cart() {
     </Layout>
   );
 }
+
+Cart.displayName = 'Cart';

@@ -10,7 +10,9 @@ import {
   Link,
   gql,
 } from '@shopify/hydrogen';
-import {DefaultLayout as Layout} from '~/components/layouts';
+
+import {Layout} from '~/components/layouts';
+
 
 export default function OrderDetails({response}) {
   const {orderId} = useRouteParams();
@@ -22,7 +24,7 @@ export default function OrderDetails({response}) {
   if (!customerAccessToken) return response.redirect('/account/login');
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: ORDER_DETAIL_QUERY,
     variables: {
       orderId: decodeURIComponent(orderId),
     },
@@ -126,7 +128,10 @@ export default function OrderDetails({response}) {
   );
 }
 
-const QUERY = gql`
+OrderDetails.displayName = 'OrderDetails';
+
+
+const ORDER_DETAIL_QUERY = gql`
   query OrderDetails($orderId: ID!) {
     node(id: $orderId) {
       id

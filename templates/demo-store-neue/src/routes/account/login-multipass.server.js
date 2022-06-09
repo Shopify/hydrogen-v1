@@ -16,7 +16,7 @@ export async function api(request, {session, queryShop}) {
   const multipassToken = encodeCustomerData(multipassSecret, customerEmail);
 
   const {data, error} = await queryShop({
-    query: LOGIN,
+    query: LOGIN_MULTIPASS_MUTATION,
     variables: {
       multipassToken,
     },
@@ -66,7 +66,7 @@ function encodeCustomerData(multipassSecret, customerEmail) {
   // });
 }
 
-const LOGIN = gql`
+const LOGIN_MULTIPASS_MUTATION = gql`
   mutation customerAccessTokenCreateWithMultipass($multipassToken: String!) {
     customerAccessTokenCreateWithMultipass(multipassToken: $multipassToken) {
       customerAccessToken {

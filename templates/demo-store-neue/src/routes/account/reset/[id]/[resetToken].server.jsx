@@ -1,7 +1,8 @@
 import {useRouteParams, Seo} from '@shopify/hydrogen';
 
-import Layout from '../../../../components/layouts/DefaultLayout.server';
-import PasswordResetForm from '../../../../components/sections/PasswordResetForm.client';
+import {Layout} from '~/components/layouts';
+import {PasswordResetForm} from '~/components/sections';
+
 
 /**
  * This page shows a form for the user to enter a new password.
@@ -18,3 +19,5 @@ export default function Reset() {
     </Layout>
   );
 }
+
+Reset.displayName = 'Reset';
