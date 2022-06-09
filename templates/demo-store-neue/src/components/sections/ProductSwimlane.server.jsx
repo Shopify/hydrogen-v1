@@ -1,97 +1,97 @@
-import {gql, useShopQuery, useSession, useShop} from '@shopify/hydrogen';
-import {Section} from '~/components/elements';
+import {useMemo} from 'react';
+import {gql, useShopQuery} from '@shopify/hydrogen';
+import Section from './Section';
 import {ProductCard} from '~/components/blocks';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 const mockProducts = new Array(12).fill('');
 
-export function ProductSwimlane({
-  count = 12,
-  data = mockProducts,
+export default function ProductSwimlane({
   title = 'Featured Products',
-  ...props
+  data = mockProducts,
+  count = 12,
+  ...passthroughProps
 }) {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
-
-  // get products swimlane products depending on input
-  function useProducts(data, count) {
+  const productCardsMarkup = useMemo(() => {
     // If the data is already provided, there's no need to query it, so we'll just return the data
-    if (data && Array.isArray(data)) {
-      return data;
+    if (typeof data === 'object') {
+      return <ProductCards products={data} />;
     }
 
     // If the data provided is a productId, we will query the productRecommendations API.
     // To make sure we have enough products for the swimlane, we'll combine the results with our top selling products.
     if (typeof data === 'string') {
-      const {data: products} = useShopQuery({
-        query: RECOMMENDED_PRODUCTS_QUERY,
-        variables: {
-          count,
-          productId: data,
-          languageCode,
-          countryCode,
-        },
-      });
-
-      const mergedProducts = products.recommended
-        .concat(products.additional.nodes)
-        .filter(
-          (value, index, array) =>
-            array.findIndex((value2) => value2.id === value.id) === index,
-        );
-
-      const originalProduct = mergedProducts
-        .map((item) => item.id)
-        .indexOf(data);
-
-      mergedProducts.splice(originalProduct, 1);
-
-      return mergedProducts;
+      return <RecommendedProducts productId={data} count={count} />;
     }
 
     // If no data is provided, we'll go and query the top products
-    const {
-      data: {products},
-    } = useShopQuery({
-      query: TOP_PRODUCTS_QUERY,
-      variables: {
-        count,
-        languageCode,
-        countryCode,
-      },
-    });
-
-    return products.nodes;
-  }
-
-  const products = useProducts(data, count);
+    return <TopProducts count={count} />;
+  }, [count, data]);
 
   return (
-    <Section heading={title} padding="y" {...props}>
+    <Section heading={title} padding="y" {...passthroughProps}>
       <div className="grid grid-flow-col gap-6 px-4 pb-4 overflow-x-scroll md:pb-8 snap-x scroll-px-4 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            className={'snap-start w-80'}
-          />
-        ))}
+        {productCardsMarkup}
       </div>
     </Section>
   );
 }
 
-ProductSwimlane.displayName = 'ProductSwimlane';
+function ProductCards({products}) {
+  return (
+    <>
+      {products.map((product) => (
+        <ProductCard
+          product={product}
+          key={product.id}
+          className={'snap-start w-80'}
+        />
+      ))}
+    </>
+  );
+}
 
-const RECOMMENDED_PRODUCTS_QUERY = gql`
+function RecommendedProducts({productId, count}) {
+  const {data: products} = useShopQuery({
+    query: RECOMMENDED_PRODUCTS,
+    variables: {
+      count,
+      productId,
+    },
+  });
+
+  const mergedProducts = products.recommended
+    .concat(products.additional.nodes)
+    .filter(
+      (value, index, array) =>
+        array.findIndex((value2) => value2.id === value.id) === index,
+    );
+
+  const originalProduct = mergedProducts
+    .map((item) => item.id)
+    .indexOf(productId);
+
+  mergedProducts.splice(originalProduct, 1);
+
+  return <ProductCards products={mergedProducts} />;
+}
+
+function TopProducts({count}) {
+  const {
+    data: {products},
+  } = useShopQuery({
+    query: TOP_PRODUCTS,
+    variables: {
+      count,
+    },
+  });
+
+  return <ProductCards products={products.nodes} />;
+}
+
+const RECOMMENDED_PRODUCTS = gql`
   ${PRODUCT_CARD_FIELDS}
-  query productRecommendations(
-    $productId: ID!
-    $count: Int
-    $countryCode: CountryCode
-    $languageCode: LanguageCode
-  ) @inContext(country: $countryCode, language: $languageCode) {
+  query productRecommendations($productId: ID!, $count: Int) {
     recommended: productRecommendations(productId: $productId) {
       ...ProductCardFields
     }
@@ -103,13 +103,9 @@ const RECOMMENDED_PRODUCTS_QUERY = gql`
   }
 `;
 
-const TOP_PRODUCTS_QUERY = gql`
+const TOP_PRODUCTS = gql`
   ${PRODUCT_CARD_FIELDS}
-  query topProducts(
-    $count: Int
-    $countryCode: CountryCode
-    $languageCode: LanguageCode
-  ) @inContext(country: $countryCode, language: $languageCode) {
+  query topProducts($count: Int) {
     products(first: $count, sortKey: BEST_SELLING) {
       nodes {
         ...ProductCardFields
