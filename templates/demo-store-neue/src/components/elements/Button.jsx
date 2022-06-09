@@ -1,16 +1,16 @@
-import {Link} from '@shopify/hydrogen';
 import clsx from 'clsx';
+import {Link} from '@shopify/hydrogen';
+
 import {missingClass} from '~/lib/utils';
 
-export default function Button({
+export function Button({
   as = 'button',
+  className = '',
   variant = 'primary',
   width = 'auto',
-  className = '',
-  children,
-  ...passthroughProps
+  ...props
 }) {
-  const Component = passthroughProps.to ? Link : as;
+  const Component = props?.to ? Link : as;
 
   const variants = {
     primary: 'bg-primary text-contrast',
@@ -30,9 +30,7 @@ export default function Button({
     className,
   );
 
-  return (
-    <Component className={styles} {...passthroughProps}>
-      {children}
-    </Component>
-  );
+  return <Component className={styles} {...props} />;
 }
+
+Button.displayName = 'Button';

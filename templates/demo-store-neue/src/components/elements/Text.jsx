@@ -1,17 +1,17 @@
 import clsx from 'clsx';
+
 import {missingClass, formatText} from '~/lib/utils';
 
-export default function Text({
-  as = 'span',
+export function Text({
+  as: Component = 'span',
+  className,
+  color = 'default',
+  format,
   size = 'copy',
   width = 'default',
-  color = 'default',
-  className,
-  format,
   children,
+  ...props
 }) {
-  const Component = as;
-
   const colors = {
     default: 'inherit',
     primary: 'text-primary/90',
@@ -41,8 +41,10 @@ export default function Text({
   );
 
   return (
-    <Component className={styles}>
+    <Component {...props} className={styles}>
       {format ? formatText(children) : children}
     </Component>
   );
 }
+
+Text.displayName = 'Text';

@@ -1,23 +1,19 @@
 import clsx from 'clsx';
 
-export default function Grid({
-  as = 'div',
-  gap = 'default',
-  layout = 'default',
-  items = 4,
-  flow = 'row',
-  children,
+export function Grid({
+  as: Component = 'div',
   className,
+  flow = 'row',
+  gap = 'default',
+  items = 4,
+  layout = 'default',
+  ...props
 }) {
-  const Component = as;
-
   const layouts = {
-    default: `grid-cols-1 md:grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${
-      items >= 4 && 'lg:grid-cols-4'
-    }`,
-    products: `grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${
-      items >= 4 && 'lg:grid-cols-4'
-    }`,
+    default: `grid-cols-1 md:grid-cols-2 ${items >= 3 &&
+      'md:grid-cols-3'} ${items >= 4 && 'lg:grid-cols-4'}`,
+    products: `grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${items >= 4 &&
+      'lg:grid-cols-4'}`,
     auto: 'auto-cols-auto',
   };
 
@@ -30,7 +26,9 @@ export default function Grid({
     col: 'grid-flow-col',
   };
 
-  const styles = clsx(flows[flow], gaps[gap], layouts[layout], className);
+  const styles = clsx(flow[flow], gaps[gap], layouts[layout], className);
 
-  return <Component className={styles}>{children}</Component>;
+  return <Component {...props} className={styles} />;
 }
+
+Grid.displayName = 'Grid';
