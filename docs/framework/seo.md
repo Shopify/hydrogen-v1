@@ -158,7 +158,7 @@ By default, all routes in Hydrogen are stream rendered. However, Hydrogen suppor
 
 ### Imitating robot behavior
 
-To imitate the behaviour of an SEO bot and show the page content fully from server render for an initial render, add the `?_bot` query parameter at the end of the webpage's URL.
+To imitate the behavior of an SEO bot and show the page content fully from server render for an initial render, add the `?_bot` query parameter at the end of the webpage's URL.
 
 ### Checking for custom robots
 
