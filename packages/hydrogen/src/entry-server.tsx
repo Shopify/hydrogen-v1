@@ -152,12 +152,9 @@ export const renderHydrogen = (App: any) => {
 
     // Check if we have cached response
     if (cache) {
-      console.log(`Cache - ${request.cacheKey().url}`);
       const cachedResponse = await getItemFromCache(request.cacheKey());
       if (cachedResponse) {
-        console.log(`Cache: HIT - ${request.url}`);
         if (isStale(request, cachedResponse)) {
-          console.log(`Cache: STALE - ${request.url}`);
           const lockCacheKey = request.cacheKey(true);
           const revalidatingPromise = getItemFromCache(lockCacheKey).then(
             async (lockExists) => {
@@ -253,7 +250,6 @@ export const renderHydrogen = (App: any) => {
     const rsc = runRSC({App, state, log, request, response});
 
     if (isRSCRequest) {
-      console.log('RSC');
       const buffered = await bufferReadableStream(rsc.readable.getReader());
       postRequestTasks('rsc', 200, request, response);
       cacheResponse(response, request, [buffered], revalidate);
@@ -401,13 +397,11 @@ async function runSSR({
     : rscReadableForFlight;
 
   if (__HYDROGEN_WORKER__) {
-    console.log('SSR - worker');
-
     const encoder = new TextEncoder();
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
-    const savedChunks = tagOnWritableWrite(writable);
+    const savedChunks = tagOnWrite(writable);
 
     let ssrReadable: Awaited<ReturnType<typeof ssrRenderToReadableStream>>;
 
@@ -438,12 +432,8 @@ async function runSSR({
       );
     }
 
-    console.log('SSR - worker - 1');
-
     if (response.canStream()) log.trace('worker ready to stream');
     ssrReadable.allReady.then(() => log.trace('worker complete ssr'));
-
-    console.log('SSR - worker - 2');
 
     const prepareForStreaming = () => {
       Object.assign(responseOptions, getResponseOptions(response, didError()));
@@ -459,13 +449,9 @@ async function runSSR({
        */
       responseOptions.headers.set('cache-control', response.cacheControlHeader);
 
-      console.log('SSR - worker - 3');
-
       if (isRedirect(responseOptions)) {
         return false;
       }
-
-      console.log('SSR - worker - 4');
 
       responseOptions.headers.set(CONTENT_TYPE, HTML_CONTENT_TYPE);
       writable.write(encoder.encode(DOCTYPE));
@@ -478,8 +464,6 @@ async function runSSR({
 
       return true;
     };
-
-    console.log('SSR - worker - 5');
 
     const shouldFlushBody = response.canStream()
       ? prepareForStreaming()
@@ -512,8 +496,6 @@ async function runSSR({
           : undefined
       );
 
-      console.log('SSR - worker - 6');
-
       const writingRSC = bufferReadableStream(
         rscReadable.getReader(),
         response.canStream()
@@ -527,8 +509,6 @@ async function runSSR({
           writable.write(encoder.encode(html));
         }
 
-        console.log('SSR - worker - 7');
-
         // Last SSR write might be pending, delay closing the writable one tick
         setTimeout(() => writable.close(), 0);
         postRequestTasks('str', responseOptions.status, request, response);
@@ -541,7 +521,6 @@ async function runSSR({
     }
 
     if (response.canStream()) {
-      console.log('SSR - worker - 8');
       return new Response(transform.readable, responseOptions);
     }
 
@@ -549,13 +528,9 @@ async function runSSR({
       transform.readable.getReader()
     );
 
-    console.log('SSR - worker - 9');
-
     return new Response(bufferedBody, responseOptions);
   } else if (nodeResponse) {
-    console.log(`SSR - node - revalidate: ${revalidate}`);
-
-    const savedChunks = tagOnResponseWrite(nodeResponse);
+    const savedChunks = tagOnWrite(nodeResponse);
 
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
@@ -853,37 +828,21 @@ function setNodeHeaders(headers: Headers, nodeResponse: ServerResponse) {
   }
 }
 
-function tagOnResponseWrite(response: ServerResponse) {
+function tagOnWrite(
+  response: ServerResponse | WritableStreamDefaultWriter<any>
+) {
   const originalWrite = response.write;
   const decoder = new TextDecoder();
   const savedChunks: string[] = [];
 
-  response.write = (...args) => {
-    if (args[0] instanceof Uint8Array) {
-      savedChunks.push(decoder.decode(args[0]));
+  response.write = (arg: any) => {
+    if (arg instanceof Uint8Array) {
+      savedChunks.push(decoder.decode(arg));
     } else {
-      savedChunks.push(args[0]);
+      savedChunks.push(arg);
     }
     // @ts-ignore
-    return originalWrite.apply(response, args);
-  };
-
-  return savedChunks;
-}
-
-function tagOnWritableWrite(writer: WritableStreamDefaultWriter<any>) {
-  const originalWrite = writer.write;
-  const decoder = new TextDecoder();
-  const savedChunks: string[] = [];
-
-  writer.write = (...args) => {
-    if (args[0] instanceof Uint8Array) {
-      savedChunks.push(decoder.decode(args[0]));
-    } else {
-      savedChunks.push(args[0]);
-    }
-    // @ts-ignore
-    return originalWrite.apply(writer, args);
+    return originalWrite.apply(response, [arg]);
   };
 
   return savedChunks;
@@ -901,13 +860,11 @@ async function cacheResponse(
 
   if (cache && chunks.length > 0) {
     if (revalidate) {
-      console.log(`cacheResponse - revalidate`);
       await saveCacheResponse(componentResponse, request, chunks);
     } else {
       request.ctx.runtime?.waitUntil(
         Promise.resolve({
           then: () => {
-            console.log('cacheResponse - waitUntil');
             saveCacheResponse(componentResponse, request, chunks);
           },
         })
@@ -924,7 +881,6 @@ async function saveCacheResponse(
   const cache = getCache();
 
   if (cache && chunks.length > 0) {
-    console.log(`saveCacheResponse - ${request.cacheKey().url}`);
     const {headers, status, statusText} = getResponseOptions(response);
     const url = new URL(request.url);
 
@@ -934,7 +890,6 @@ async function saveCacheResponse(
       headers.set('Content-Type', 'text/html; charset=UTF-8');
     }
 
-    console.log(`Cache: PUT - ${request.url}`);
     await setItemInCache(
       request.cacheKey(),
       new Response(chunks.join(''), {
