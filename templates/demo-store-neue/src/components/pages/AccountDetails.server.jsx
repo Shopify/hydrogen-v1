@@ -30,7 +30,7 @@ function EmptyOrders(props) {
         Logout
       </LogoutButton>
       <Text width="narrow" as="p">
-        You haven&apos;t made any orders yet.
+        You haven&rsquo;t made any orders yet.
       </Text>
       <Button width="auto" variant="secondary" to={'/'}>
         Start shopping

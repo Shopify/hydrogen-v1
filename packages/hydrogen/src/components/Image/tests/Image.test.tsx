@@ -153,6 +153,27 @@ describe('<Image />', () => {
         .join(', ');
       const image = getPreviewImage({
         url: mockUrl,
+        width: 2560,
+        height: 2560,
+      });
+
+      const component = mount(<Image data={image} />);
+
+      expect(component).toContainReactComponent('img', {
+        srcSet: expectedSrcset,
+      });
+    });
+
+    it('generates a default srcset up to the image height and width', () => {
+      const mockUrl = 'https://cdn.shopify.com/someimage.jpg';
+      const sizes = [352, 832];
+      const expectedSrcset = sizes
+        .map((size) => `${mockUrl}?width=${size} ${size}w`)
+        .join(', ');
+      const image = getPreviewImage({
+        url: mockUrl,
+        width: 832,
+        height: 832,
       });
 
       const component = mount(<Image data={image} />);
