@@ -125,6 +125,7 @@ export function MyComponent() {
 - To make sure you have all the data necessary for the `useProductOptions` hook, refer to the Storefront API's [ProductVariant object](https://shopify.dev/api/storefront/latest/objects/ProductVariant).
 - If your product requires a selling plan, then make sure to display that as required in your user interface. If it doesn't require a selling plan, then you might want to offer a "one-time purchase" option which triggers `setSelectedSellingPlan(null)`.
 - You can use `selectedSellingPlanAllocation` to display the price adjustments for the selected variant when a given selling plan is active.
+- You can manually deselect a variant by calling `setSelectedVariant(null)`.
 
 ## Arguments
 

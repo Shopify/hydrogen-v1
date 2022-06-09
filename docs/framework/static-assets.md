@@ -60,4 +60,4 @@ You should only import assets, such as styles or images, from [client components
 ## Next steps
 
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [deploy your Hydrogen app](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.
+- Learn how to [deploy your Hydrogen storefront](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.

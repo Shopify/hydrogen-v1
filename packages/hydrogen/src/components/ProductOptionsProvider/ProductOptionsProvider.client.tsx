@@ -89,12 +89,13 @@ export function ProductOptionsProvider({
    */
   const setSelectedOption = useCallback(
     (name: string, value: string) => {
-      setSelectedOptions((selectedOptions) => ({
-        ...selectedOptions,
-        [name]: value,
-      }));
+      setSelectedOptions((selectedOptions) => {
+        const opts = {...selectedOptions, [name]: value};
+        setSelectedVariant(getSelectedVariant(variants, opts));
+        return opts;
+      });
     },
-    [setSelectedOptions]
+    [setSelectedOptions, variants]
   );
 
   const isOptionInStock = useCallback(
