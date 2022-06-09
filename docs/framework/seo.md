@@ -48,9 +48,11 @@ const customData = {
 
 {% endcodeblock %}
 
-## Client component example
+## Generate SEO tags
 
-The following example shows how to pass a `product` prop to the component to generate standard SEO-related tags for your product page:
+The `Seo` component has two props: `type` and `data`. The `type` prop accepts `defaultSeo`,`homepage`, `product`, `collection`, `page`, or `noindex`.
+
+Each `type` expects a different `data` shape. The following example shows how to use an SEO component of type `product` and pass a `product` object into the `data` prop.  This allows the component to generate standard SEO-related tags for your product page:
 
 {% codeblock file, filename: '/products/[handle].server.jsx' %}
 
@@ -70,10 +72,12 @@ If you want to add more custom `head` tags, then you can import `Head` from Hydr
 import {Head} from '@shopify/hydrogen';
 
 return (
-  <Seo type="product" data={product} />
-  <Head>
-    <meta property="something" content="else" />
-  </Head>
+  <>
+    <Seo type="product" data={product} />
+    <Head>
+      <meta property="something" content="else" />
+    </Head>
+  </>
 );
 ```
 
@@ -93,10 +97,12 @@ import LoadingFallback from './components/LoadingFallback';
 
 export default function App({log, ...serverProps}) {
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <DefaultSeo />
+    <>
+      <Suspense fallback={<LoadingFallback />}>
+        <DefaultSeo />
+      </Suspense>
       {/** ... */}
-    </Suspense>
+    </>
   );
 }
 ```
@@ -105,7 +111,7 @@ export default function App({log, ...serverProps}) {
 
 ## Overwriting title template
 
-The title template defaults to the pattern of `{page title} - {shop name}`. If you want to use a different pattern, then you can overwrite title template for all pages or for a single page.
+By default, for all pages, the titles are `%s - ${data.title}`, where `%s` is the title of children components. If you want to use a different pattern, then you can overwrite the title template for all pages using a `defaultSeo` type `Seo` component, or for a single page by updating the `Head` title.
 
 ### Overwrite for all pages
 
