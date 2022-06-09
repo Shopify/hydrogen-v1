@@ -15,12 +15,7 @@ import {ProductSwimlane} from '~/components/sections';
 import {Section, Heading, Text} from '~/components/elements';
 import {NotFound} from '~/components/pages';
 import {MEDIA_FIELDS} from '~/lib/fragments';
-import {
-  ProductGallery,
-  ProductForm,
-  ProductInfo,
-} from '~/components/sections';
-
+import {ProductGallery, ProductForm, ProductInfo} from '~/components/sections';
 
 export default function Product() {
   const {handle} = useRouteParams();

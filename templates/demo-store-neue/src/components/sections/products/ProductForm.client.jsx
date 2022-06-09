@@ -13,12 +13,8 @@ export function ProductForm() {
   const {pathname, search} = useUrl();
   const [params, setParams] = useState(new URLSearchParams(search));
 
-  const {
-    options,
-    setSelectedOption,
-    selectedOptions,
-    selectedVariant,
-  } = useProductOptions();
+  const {options, setSelectedOption, selectedOptions, selectedVariant} =
+    useProductOptions();
 
   const isOutOfStock = !selectedVariant?.availableForSale || false;
 

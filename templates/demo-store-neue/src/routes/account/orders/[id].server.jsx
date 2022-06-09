@@ -13,7 +13,6 @@ import {
 
 import {Layout} from '~/components/layouts';
 
-
 export default function OrderDetails({response}) {
   const {orderId} = useRouteParams();
 
@@ -129,7 +128,6 @@ export default function OrderDetails({response}) {
 }
 
 OrderDetails.displayName = 'OrderDetails';
-
 
 const ORDER_DETAIL_QUERY = gql`
   query OrderDetails($orderId: ID!) {

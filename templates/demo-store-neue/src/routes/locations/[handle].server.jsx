@@ -5,7 +5,6 @@ import {NotFound} from '~/components/pages';
 import {PageHeader, Text, Heading, Section} from '~/components/elements';
 import {formatPhoneNumber} from '~/lib/utils';
 
-
 export default function Location() {
   const {handle} = useRouteParams();
 

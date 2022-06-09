@@ -111,7 +111,7 @@ const HOMEPAGE_CONTENT_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
+  @inContext(country: $country, language: $language) {
     heroBanners: contentEntries(type: "hero_banners", first: 2) {
       nodes {
         title: field(key: "title") {

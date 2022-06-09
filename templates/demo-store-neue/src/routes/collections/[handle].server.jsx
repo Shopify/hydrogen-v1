@@ -16,7 +16,6 @@ import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 const pageBy = 12;
 
-
 export default function Collection({params}) {
   const {handle} = params;
   const {languageCode} = useShop();

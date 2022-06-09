@@ -10,10 +10,12 @@ export function Grid({
   ...props
 }) {
   const layouts = {
-    default: `grid-cols-1 md:grid-cols-2 ${items >= 3 &&
-      'md:grid-cols-3'} ${items >= 4 && 'lg:grid-cols-4'}`,
-    products: `grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${items >= 4 &&
-      'lg:grid-cols-4'}`,
+    default: `grid-cols-1 md:grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${
+      items >= 4 && 'lg:grid-cols-4'
+    }`,
+    products: `grid-cols-2 ${items >= 3 && 'md:grid-cols-3'} ${
+      items >= 4 && 'lg:grid-cols-4'
+    }`,
     auto: 'auto-cols-auto',
   };
 

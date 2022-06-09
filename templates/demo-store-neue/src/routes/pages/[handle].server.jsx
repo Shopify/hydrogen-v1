@@ -10,7 +10,6 @@ import {
 import {Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
 
-
 export default function Page({params}) {
   const {languageCode} = useShop();
 
