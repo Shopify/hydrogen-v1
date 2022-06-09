@@ -4,28 +4,26 @@ import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 import {Text} from '~/components/elements';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
 
-export function ProductCard({product, label, className}) {
-  if (!product?.variants?.nodes) return null;
+import {product as mockProduct} from '~/lib/placeholders';
 
-  const firstVariant = product.variants.nodes[0];
-  const {image, priceV2, compareAtPriceV2} = firstVariant;
+export default function ProductCard({product, label, className}) {
+  let cardLabel;
 
-  const cardLabel = () => {
-    switch (true) {
-      case label:
-        return label;
+  const cardData = product?.variants ? product : mockProduct;
 
-      case compareAtPriceV2?.amount &&
-        priceV2.amount > compareAtPriceV2?.amount:
-        return 'Sale';
+  const {
+    image,
+    priceV2: price,
+    compareAtPriceV2: compareAtPrice,
+  } = cardData?.variants?.nodes[0] || {};
 
-      case isNewArrival(product.publishedAt):
-        return 'New';
-
-      default:
-        return null;
-    }
-  };
+  if (label) {
+    cardLabel = label;
+  } else if (price.amount > compareAtPrice?.amount) {
+    cardLabel = 'Sale';
+  } else if (isNewArrival(product.publishedAt)) {
+    cardLabel = 'New';
+  }
 
   const styles = clsx('grid gap-6', className);
 
@@ -41,7 +39,7 @@ export function ProductCard({product, label, className}) {
             {cardLabel}
           </Text>
           {image && (
-            <Image className="aspect-[4/5]" data={image} alt={product.title} />
+            <Image className="aspect-[4/5]" data={image} alt="Alt Tag" />
           )}
         </div>
         <div className="grid gap-1">
@@ -53,11 +51,11 @@ export function ProductCard({product, label, className}) {
           </Text>
           <div className="flex gap-4">
             <Text className="flex gap-4">
-              <Money withoutTrailingZeros data={priceV2} />
-              {isDiscounted(priceV2, compareAtPriceV2) && (
+              <Money withoutTrailingZeros data={price} />
+              {isDiscounted(price, compareAtPrice) && (
                 <CompareAtPrice
                   className={'opacity-50'}
-                  data={compareAtPriceV2}
+                  data={compareAtPrice}
                 />
               )}
             </Text>
@@ -81,5 +79,3 @@ function CompareAtPrice({data, className}) {
     </span>
   );
 }
-
-CompareAtPrice.displayName = 'CompareAtPrice';
