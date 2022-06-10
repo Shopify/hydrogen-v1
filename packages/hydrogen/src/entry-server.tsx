@@ -152,17 +152,18 @@ export const renderHydrogen = (App: any) => {
           const revalidatingPromise = getItemFromCache(lockCacheKey).then(
             async (lockExists) => {
               if (lockExists) return;
-
-              await setItemInCache(
-                lockCacheKey,
-                new Response(null),
-                CacheSeconds({
-                  maxAge: 10,
-                })
-              );
               try {
                 // Don't stream when creating a response for cache
                 response.doNotStream();
+
+                await setItemInCache(
+                  lockCacheKey,
+                  new Response(null),
+                  CacheSeconds({
+                    maxAge: 10,
+                  })
+                );
+
                 await processRequest(
                   url,
                   request,
