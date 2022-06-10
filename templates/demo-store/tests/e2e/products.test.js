@@ -24,6 +24,6 @@ describe('products', () => {
     expect(heading).not.toBeNull();
 
     const text = await heading.textContent();
-    expect(text).toBe('The Hydrogen');
+    expect(text).toBe('The Hydrogen Snowboard');
   }, 60000);
 });
