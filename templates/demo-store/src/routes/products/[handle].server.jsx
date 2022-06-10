@@ -125,28 +125,77 @@ const QUERY = gql`
           }
         }
       }
-      metafields(first: 20) {
-        nodes {
-          id
-          type
-          namespace
-          key
-          value
-          createdAt
-          updatedAt
-          description
-          reference {
-            __typename
-            ... on MediaImage {
+      meta_size_chart: metafield(key: "size_chart", namespace: "my_fields") {
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
               id
-              mediaContentType
-              image {
-                id
-                url
-                altText
-                width
-                height
-              }
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
+      }
+      meta_sustainable: metafield(key: "sustainable", namespace: "my_fields") {
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+          }
+        }
+      }
+      meta_lifetime_warranty: metafield(
+        key: "lifetime_warranty"
+        namespace: "my_fields"
+      ) {
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference {
+          __typename
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
             }
           }
         }
@@ -180,32 +229,6 @@ const QUERY = gql`
             altText
             width
             height
-          }
-          metafields(first: 10) {
-            nodes {
-              id
-              type
-              namespace
-              key
-              value
-              createdAt
-              updatedAt
-              description
-              reference {
-                __typename
-                ... on MediaImage {
-                  id
-                  mediaContentType
-                  image {
-                    id
-                    url
-                    altText
-                    width
-                    height
-                  }
-                }
-              }
-            }
           }
           priceV2 {
             amount
