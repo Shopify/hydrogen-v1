@@ -20,12 +20,12 @@ Hydrogen also includes [default values for each mechanism](#default-values).
 
 Hydrogen includes recommended caching strategies to help you determine which cache control header to set. The following table lists the available caching strategies and their associated cache control headers and cache durations:
 
-| Caching strategy | Cache control header                                      | Cache duration |
-| ---------------- | --------------------------------------------------------- | -------------- |
-| `CacheShort()`   | `public, max-age=1, stale-while-revalidate=9`             | 10 seconds     |
-| `CacheLong()`    | `public, max-age=1296000, stale-while-revalidate=1296000` | 1 Month        |
-| `CacheNone()`    | `no-store`                                                | No cache       |
-| `CacheCustom()`  | Define your own cache control header                      | Custom         |
+| Caching strategy | Cache control header                                 | Cache duration |
+| ---------------- | ---------------------------------------------------- | -------------- |
+| `CacheShort()`   | `public, max-age=1, stale-while-revalidate=9`        | 10 seconds     |
+| `CacheLong()`    | `public, max-age=3600, stale-while-revalidate=82800` | 1 Day          |
+| `CacheNone()`    | `no-store`                                           | No cache       |
+| `CacheCustom()`  | Define your own cache control header                 | Custom         |
 
 ### Example
 

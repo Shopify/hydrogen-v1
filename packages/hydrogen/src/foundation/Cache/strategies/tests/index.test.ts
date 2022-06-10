@@ -13,7 +13,7 @@ const expectedResultMapping: any = {
   },
   CacheLong: {
     method: CacheLong,
-    header: 'public, max-age=1296000, stale-while-revalidate=1296000',
+    header: 'public, max-age=3600, stale-while-revalidate=82800',
   },
 };
 

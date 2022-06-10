@@ -53,7 +53,7 @@ export function CacheShort(overrideOptions?: CachingStrategy): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
     mode: PUBLIC,
-    maxAge: 1, // 10 seconds
+    maxAge: 1,
     staleWhileRevalidate: 9,
     ...overrideOptions,
   };
@@ -63,8 +63,8 @@ export function CacheLong(overrideOptions?: CachingStrategy): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
     mode: PUBLIC,
-    maxAge: 1296000, // 1 month
-    staleWhileRevalidate: 1296000,
+    maxAge: 3600, // 1 hour
+    staleWhileRevalidate: 82800, // 23 Hours
     ...overrideOptions,
   };
 }
