@@ -4,8 +4,8 @@ export const defineConfig = (params: InlineHydrogenConfig) => params;
 
 export type {InlineHydrogenConfig as HydrogenConfig};
 
-export * as ShopifyServerAnalyticsConnector from './foundation/Analytics/connectors/Shopify/ServerAnalyticsConnector.server';
-export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/ServerAnalyticsConnector.server';
+export {ShopifyServerAnalyticsConnector} from './foundation/Analytics/connectors/Shopify/ServerAnalyticsConnector';
+export {PerformanceMetricsServerAnalyticsConnector} from './foundation/Analytics/connectors/PerformanceMetrics/ServerAnalyticsConnector';
 
 export {CookieSessionStorage} from './foundation/CookieSessionStorage/CookieSessionStorage';
 export {MemorySessionStorage} from './foundation/MemorySessionStorage/MemorySessionStorage';
