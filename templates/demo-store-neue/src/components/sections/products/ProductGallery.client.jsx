@@ -3,7 +3,7 @@ import {MediaFile} from '@shopify/hydrogen/client';
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products
  */
-export default function Gallery({media, className}) {
+export function ProductGallery({media, className}) {
   if (!media.length) {
     return null;
   }
@@ -26,7 +26,10 @@ export default function Gallery({media, className}) {
 
         const data = {
           ...med,
-          alt: med.alt || 'Product image',
+          image: {
+            ...med.image,
+            altText: med.alt || 'Product image',
+          },
         };
 
         return (

@@ -2,7 +2,6 @@ import {
   useSession,
   useShop,
   useShopQuery,
-  Seo,
   useRouteParams,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
@@ -10,16 +9,12 @@ import {
   ProductOptionsProvider,
 } from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
-import {Section, ProductSwimlane} from '~/components/sections';
-import {Heading, Text} from '~/components/elements';
-import {
-  ProductGallery,
-  ProductForm,
-  ProductInfo,
-} from '~/components/sections/products';
+import {Layout} from '~/components/layouts';
+import {ProductSwimlane} from '~/components/sections';
+import {Section, Heading, Text} from '~/components/elements';
 import {NotFound} from '~/components/pages';
 import {MEDIA_FIELDS} from '~/lib/fragments';
+import {ProductGallery, ProductForm, ProductInfo} from '~/components/sections';
 
 export default function Product() {
   const {handle} = useRouteParams();
@@ -29,7 +24,7 @@ export default function Product() {
   const {
     data: {product},
   } = useShopQuery({
-    query: QUERY,
+    query: PRODUCT_QUERY,
     variables: {
       country: countryCode,
       language: languageCode,
@@ -80,7 +75,7 @@ export default function Product() {
   );
 }
 
-const QUERY = gql`
+const PRODUCT_QUERY = gql`
   ${MEDIA_FIELDS}
   query Product(
     $country: CountryCode
@@ -99,6 +94,7 @@ const QUERY = gql`
       }
       variants(first: 100) {
         nodes {
+          id
           availableForSale
           compareAtPriceV2 {
             amount
@@ -108,7 +104,6 @@ const QUERY = gql`
             name
             value
           }
-          id
           image {
             id
             url

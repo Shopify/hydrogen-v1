@@ -1,8 +1,7 @@
-import type {RequestHandler} from '../entry-server';
+import type {RequestHandler, ShopifyConfig} from '../shared-types';
 import type {IncomingMessage, NextFunction} from 'connect';
 import type {ServerResponse} from 'http';
 import type {ViteDevServer} from 'vite';
-import type {ShopifyConfig} from '../types';
 import {graphiqlHtml} from './graphiql';
 
 type HydrogenMiddlewareArgs = {

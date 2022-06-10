@@ -51,12 +51,12 @@ const QUERY = gql`
 
 The `useShopQuery` takes an object as its only argument, with the following keys:
 
-| Key         | Required | Description                                                                                                                                                                                                                       |
-| ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `query`     | Yes      | A string of the GraphQL query.                                                                                                                                                                                                    |
-| `variables` | No       | An object of the variables for the GraphQL query.                                                                                                                                                                                 |
-| `cache`     | No       | The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you determine which cache control header to set.                                                               |
-| `preload`   | No       | Whether to [preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries). Defaults to `false`. Specify `true` to preload the query for the URL or `'*'` to preload the query for all requests. |
+| Key         | Required | Description                                                                                                                                                                                                                                                         |
+| ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `query`     | Yes      | A string of the GraphQL query.                                                                                                                                                                                                                                      |
+| `variables` | No       | An object of the variables for the GraphQL query.                                                                                                                                                                                                                   |
+| `cache`     | No       | The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you determine which cache control header to set.                                                                                                 |
+| `preload`   | No       | Whether to [preload the request](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries). It defaults to true only when the `CachingStrategy` is not `NoStore`. Specify `false` to disable or use `'*'` to preload the query for all requests. |
 
 ## Return value
 

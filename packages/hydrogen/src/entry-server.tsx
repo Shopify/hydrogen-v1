@@ -13,18 +13,16 @@ import type {
   RunRscParams,
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
+  RequestHandler,
 } from './types';
 import {Html, applyHtmlHead} from './foundation/Html/Html';
 import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
-import {
-  HydrogenRequest,
-  RuntimeContext,
-} from './foundation/HydrogenRequest/HydrogenRequest.server';
+import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider';
-import type {ServerResponse, IncomingMessage} from 'http';
+import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
@@ -61,24 +59,6 @@ declare global {
 const DOCTYPE = '<!DOCTYPE html>';
 const CONTENT_TYPE = 'Content-Type';
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
-
-interface RequestHandlerOptions {
-  indexTemplate:
-    | string
-    | ((url: string) => Promise<string | {default: string}>);
-  cache?: Cache;
-  streamableResponse?: ServerResponse;
-  dev?: boolean;
-  context?: RuntimeContext;
-  nonce?: string;
-  buyerIpHeader?: string;
-}
-
-export interface RequestHandler {
-  (request: Request | IncomingMessage, options: RequestHandlerOptions): Promise<
-    Response | undefined
-  >;
-}
 
 export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
@@ -276,7 +256,7 @@ async function runSSR({
       template={response.canStream() ? noScriptTemplate : template}
       hydrogenConfig={request.ctx.hydrogenConfig!}
     >
-      <ServerRequestProvider request={request} isRSC={false}>
+      <ServerRequestProvider request={request}>
         <ServerPropsProvider
           initialServerProps={state as any}
           setServerPropsForRsc={() => {}}
@@ -554,7 +534,7 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
   request.ctx.router.serverProps = serverProps;
 
   const AppRSC = (
-    <ServerRequestProvider request={request} isRSC={true}>
+    <ServerRequestProvider request={request}>
       <PreloadQueries request={request}>
         <App {...serverProps} />
         <Suspense fallback={null}>

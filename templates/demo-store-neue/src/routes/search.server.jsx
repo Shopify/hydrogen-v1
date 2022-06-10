@@ -5,16 +5,18 @@ import {
   useShopQuery,
   gql,
 } from '@shopify/hydrogen';
-import {DefaultLayout as Layout} from '~/components/layouts';
-import {
-  FeaturedCollections,
-  PageHeader,
-  ProductSwimlane,
-  Section,
-} from '~/components/sections';
-import {Heading, Text, Button, Input, Grid} from '~/components/elements';
-import {ProductCard} from '~/components/blocks';
 
+import {Layout} from '~/components/layouts';
+import {
+  PageHeader,
+  Section,
+  Heading,
+  Text,
+  Input,
+  Grid,
+} from '~/components/elements';
+import {ProductCard} from '~/components/blocks';
+import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Search({pageBy = 12, params}) {
@@ -27,7 +29,7 @@ export default function Search({pageBy = 12, params}) {
   const query = searchParams.get('q');
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: SEARCH_QUERY,
     variables: {
       handle,
       country: countryCode,
@@ -98,7 +100,7 @@ function SearchPage({query, children}) {
   );
 }
 
-const QUERY = gql`
+const SEARCH_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query search(
     $query: String

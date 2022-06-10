@@ -1,23 +1,21 @@
+import {Suspense} from 'react';
 import {
-  useSession,
-  useShopQuery,
-  useShop,
-  Seo,
   CacheDays,
-  useServerAnalytics,
-  ShopifyAnalyticsConstants,
   gql,
+  Seo,
+  ShopifyAnalyticsConstants,
+  useServerAnalytics,
+  useSession,
+  useShop,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Suspense} from 'react';
-
-import {DefaultLayout as Layout} from '~/components/layouts';
-
+import {Layout} from '~/components/layouts';
 import {
-  Hero,
   FeaturedCollections,
+  Hero,
+  LocationsGrid,
   ProductSwimlane,
-  Locations,
 } from '~/components/sections';
 
 import {
@@ -31,7 +29,7 @@ export default function Homepage() {
   const {countryCode = 'US'} = useSession();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: HOMEPAGE_CONTENT_QUERY,
     variables: {
       language: languageCode,
       country: countryCode,
@@ -68,7 +66,7 @@ export default function Homepage() {
         title="Featured Products"
         divider="bottom"
       />
-      <Locations data={locations.nodes} />
+      <LocationsGrid data={locations.nodes} />
     </Layout>
   );
 }
@@ -79,7 +77,7 @@ function SeoForHomepage() {
       shop: {title, description},
     },
   } = useShopQuery({
-    query: SEO_QUERY,
+    query: HOMEPAGE_SEO_QUERY,
     cache: CacheDays(),
     preload: true,
   });
@@ -96,7 +94,7 @@ function SeoForHomepage() {
   );
 }
 
-const SEO_QUERY = gql`
+const HOMEPAGE_SEO_QUERY = gql`
   query homeShopInfo {
     shop {
       description
@@ -104,7 +102,7 @@ const SEO_QUERY = gql`
   }
 `;
 
-const QUERY = gql`
+const HOMEPAGE_CONTENT_QUERY = gql`
   ${MEDIA_FIELDS}
   ${PRODUCT_CARD_FIELDS}
   ${LOCATION_CARD_FIELDS}

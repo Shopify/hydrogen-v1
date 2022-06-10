@@ -1,9 +1,10 @@
 import {Image, Video, Link} from '@shopify/hydrogen';
-import {Heading, Text} from '../elements';
+
+import {Heading, Text} from '~/components/elements';
 import {hero as mockData} from '~/lib/placeholders';
 
-export default function Hero({data = mockData, height, top}) {
-  const {title, byline, cta, url, spread, spread_secondary, text_color} = data;
+export function Hero({data = mockData, height, top}) {
+  const {title, byline, cta, url, spread, spread_secondary} = data;
 
   return (
     <Link to={url.value}>

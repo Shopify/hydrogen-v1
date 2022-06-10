@@ -1,16 +1,11 @@
-import Section from './Section';
 import {Link, Image} from '@shopify/hydrogen';
-import {Heading, Grid} from '~/components/elements';
+
+import {Heading, Section, Grid} from '~/components/elements';
 
 // TODO: This should be consolidated with Locations into a more generic presentational component
-
-export default function FeaturedCollections({
-  data,
-  title = 'Collections',
-  passthroughProps,
-}) {
+export function FeaturedCollections({data, title = 'Collections', ...props}) {
   return (
-    <Section heading={title} {...passthroughProps}>
+    <Section heading={title} {...props}>
       <Grid items={data.length}>
         {data.map((collection) => (
           <Link key={collection.id} to={`/collections/${collection.handle}`}>

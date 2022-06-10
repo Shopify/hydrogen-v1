@@ -1,11 +1,13 @@
-import {useCallback} from 'react';
+export function LogoutButton(props) {
+  const logout = () => {
+    fetch('/account/logout', {method: 'POST'}).then(() => {
+      if (typeof props?.onClick === 'function') {
+        props.onClick();
+      }
+      window.location.href = '/';
+    });
+  };
 
-export default function LogoutButton(props) {
-  const logout = useCallback(() => {
-    fetch('/account/logout', {method: 'POST'}).then(
-      () => (window.location.href = '/'),
-    );
-  }, []);
   return (
     <button {...props} onClick={logout}>
       Logout

@@ -1,5 +1,11 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Route, Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import {
+  Route,
+  Router,
+  FileRoutes,
+  ShopifyProvider,
+  useRequestContext,
+} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import Custom1 from './customRoutes/custom1.server';
 import Custom2 from './customRoutes/custom2.server';
@@ -10,6 +16,9 @@ export default renderHydrogen(({request, response}) => {
   if (request.headers.get('user-agent') === 'custom bot') {
     response.doNotStream();
   }
+
+  useRequestContext().test1 = true;
+  useRequestContext('scope').test2 = true;
 
   return (
     <Suspense fallback={'Loading...'}>

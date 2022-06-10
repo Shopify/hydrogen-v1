@@ -1,10 +1,8 @@
-import {useSession, useShop, useShopQuery, Seo, gql} from '@shopify/hydrogen';
+import {useSession, useShop, useShopQuery, gql} from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
-import {PageHeader, Section} from '~/components/sections';
-import {Button, Grid, Text} from '~/components/elements';
+import {Layout} from '~/components/layouts';
+import {PageHeader, Button, Grid, Text, Section} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
-
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 export default function AllProducts({pageBy = 12}) {
@@ -12,7 +10,7 @@ export default function AllProducts({pageBy = 12}) {
   const {countryCode = 'US'} = useSession();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: ALL_PRODUCTS_QUERY,
     variables: {
       country: countryCode,
       language: languageCode,
@@ -52,7 +50,7 @@ export default function AllProducts({pageBy = 12}) {
   );
 }
 
-const QUERY = gql`
+const ALL_PRODUCTS_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query CollectionDetails(
     $country: CountryCode

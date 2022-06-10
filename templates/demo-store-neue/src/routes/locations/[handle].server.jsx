@@ -1,16 +1,15 @@
-import {useShopQuery, useRouteParams, Seo, gql, Image} from '@shopify/hydrogen';
+import {useShopQuery, useRouteParams, gql, Image} from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
+import {Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
-import {PageHeader, Section} from '~/components/sections';
-import {Text, Heading} from '~/components/elements';
+import {PageHeader, Text, Heading, Section} from '~/components/elements';
 import {formatPhoneNumber} from '~/lib/utils';
 
 export default function Location() {
   const {handle} = useRouteParams();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: LOCATION_CONTENT_QUERY,
     variables: {
       handle,
     },
@@ -123,7 +122,7 @@ export default function Location() {
   );
 }
 
-const QUERY = gql`
+const LOCATION_CONTENT_QUERY = gql`
   query store($handle: String!) {
     contentEntry(byHandle: {type: "stores", handle: $handle}) {
       id

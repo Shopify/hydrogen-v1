@@ -1,6 +1,5 @@
 {
-  "include": ["./src"],
-  "exclude": ["./framework", "**/*.example.*"],
+  "exclude": ["**/__tests__", "**/tests", "**/*.example.*"],
   "compilerOptions": {
     "declaration": true,
     "jsx": "react",
