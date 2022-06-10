@@ -86,36 +86,6 @@ export const product = {
   },
 };
 
-export const location = {
-  contentEntry: {
-    id: 'gid://shopify/contentEntry/7176248',
-    featured_image: {
-      reference: {
-        image: {
-          url: 'https://cdn.shopify.com/s/files/1/0551/4566/0472/files/kotn-toronto.jpg?v=1653965858',
-          width: 4400,
-          height: 2927,
-        },
-      },
-    },
-    title: {
-      value: 'Toronto',
-    },
-    address: {
-      value: '754 Queen St W\nToronto, ON\nM4M 3N8',
-    },
-    hours: {
-      value: '["Monday-Saturday: 11am-6pm","Sunday: 12pm-6pm"]',
-    },
-    email: {
-      value: 'toronto@snowdevil.com',
-    },
-    phone: {
-      value: '416-363-5656',
-    },
-  },
-};
-
 export const productInfo = [
   {
     title: 'Description',

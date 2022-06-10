@@ -8,16 +8,12 @@ import {
   flattenConnection,
 } from '@shopify/hydrogen';
 
-import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 import {PageHeader, Text, Button, LogoutButton} from '~/components/elements';
 import {OrderCard} from '~/components/blocks';
 import {Layout} from '~/components/layouts';
 
-import {
-  FeaturedCollections,
-  ProductSwimlane,
-  LocationsGrid,
-} from '~/components/sections';
+import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
 
 export function AccountDetails({customerAccessToken}) {
   if (!customerAccessToken) return null;
@@ -42,7 +38,7 @@ export function AccountDetails({customerAccessToken}) {
     ? `Welcome${customer.firstName ? `, ${customer.firstName}` : ``}`
     : 'Account Details';
 
-  const {featuredCollections, featuredProducts, locations} = data;
+  const {featuredCollections, featuredProducts} = data;
 
   return (
     <Layout>
@@ -57,7 +53,6 @@ export function AccountDetails({customerAccessToken}) {
         data={featuredCollections.nodes}
       />
       <ProductSwimlane data={featuredProducts.nodes} />
-      <LocationsGrid data={locations.nodes} />
     </Layout>
   );
 }
@@ -100,7 +95,6 @@ function OrderHistory({orders, heading}) {
 }
 
 const CUSTOMER_QUERY = gql`
-  ${LOCATION_CARD_FIELDS}
   ${PRODUCT_CARD_FIELDS}
   query CustomerDetails(
     $customerAccessToken: String!
@@ -137,11 +131,6 @@ const CUSTOMER_QUERY = gql`
             }
           }
         }
-      }
-    }
-    locations: contentEntries(first: 3, type: "stores") {
-      nodes {
-        ...LocationCardFields
       }
     }
     featuredProducts: products(first: 12) {
