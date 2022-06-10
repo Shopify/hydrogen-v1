@@ -47,7 +47,6 @@ export function getProduct(
         getVariant(),
       ],
     },
-    // @ts-expect-error complaints about null and undefined with the partialdeep.
     metafields: product.metafields ?? [
       getRawMetafield(),
       getRawMetafield(),
@@ -77,7 +76,6 @@ export function getVariant(
     ],
     // @ts-expect-error until we mock out a selling plan, TS will complain here
     sellingPlanAllocations: [],
-    // @ts-expect-error complaints about null and undefined with the partialdeep.
     metafields: variant.metafields ?? [
       getRawMetafield(),
       getRawMetafield(),
