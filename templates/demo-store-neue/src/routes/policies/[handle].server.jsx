@@ -65,10 +65,10 @@ export default function Policy({params}) {
   return (
     <Layout>
       <Seo type="page" data={page} />
-      <PageHeader heading={page.title}>
+      <PageHeader heading={page.title} variant="page">
         <div
           dangerouslySetInnerHTML={{__html: page.body}}
-          className="prose dark:prose-invert"
+          className="prose dark:prose-invert w-full md:w-4/5"
         />
       </PageHeader>
     </Layout>
