@@ -7,10 +7,18 @@ import type {PartialDeep} from 'type-fest';
 export function flattenConnection<T>(
   connection: PartialDeep<GraphQLConnection<T>>
 ): PartialDeep<T>[] {
-  return (connection.edges || []).map((edge) => {
-    if (!edge?.node) {
-      throw new Error('Connection edges must contain nodes');
-    }
-    return edge.node;
-  });
+  if (connection.nodes) {
+    return connection.nodes as PartialDeep<T>[];
+  }
+
+  if (connection.edges) {
+    return connection.edges.map((edge) => {
+      if (!edge?.node) {
+        throw new Error('Connection edges must contain nodes');
+      }
+      return edge.node;
+    });
+  }
+
+  return [];
 }

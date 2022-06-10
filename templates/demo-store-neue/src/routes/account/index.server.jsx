@@ -7,8 +7,9 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
+import {Layout} from '~/components/layouts';
+import {LogoutButton} from '~/components/elements';
 import {AccountDetails} from '~/components/pages';
-import {DefaultLayout as Layout} from '~/components/layouts';
 import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Account({response, editingAccount, editingAddress}) {
@@ -18,10 +19,8 @@ export default function Account({response, editingAccount, editingAddress}) {
 
   if (!customerAccessToken) return response.redirect('/account/login');
 
-  // TODO: let's remove this conditional once we work on this
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const {data} = useShopQuery({
-    query: QUERY,
+    query: CUSTOMER_QUERY,
     variables: {
       customerAccessToken,
       withAddressDetails: !!editingAddress,
@@ -109,7 +108,7 @@ export async function api(request, {session, queryShop}) {
   if (newPassword) customer.password = newPassword;
 
   const {data, errors} = await queryShop({
-    query: MUTATION,
+    query: CUSTOMER_UPDATE_MUTATION,
     variables: {
       customer,
       customerAccessToken,
@@ -125,10 +124,8 @@ export async function api(request, {session, queryShop}) {
 }
 
 function AuthenticatedAccount({customer}) {
-  // const orders =
-  //   customer?.orders?.edges.length > 0
-  //     ? flattenConnection(customer.orders)
-  //     : [];
+  // TODO: add addresses, defaultAddress to props
+  // const orders = flattenConnection(customer.orders);
 
   const pageHeader = customer?.firstName
     ? `Hi ${customer.firstName}.`
@@ -145,7 +142,7 @@ function AuthenticatedAccount({customer}) {
           ) : null}
           <div className="flex">
             <span className="flex-1"></span>
-            {/* <LogoutButton className="font-medium underline" /> */}
+            <LogoutButton className="font-medium underline" />
           </div>
           {/* <OrderHistory orders={orders} /> */}
           <AccountDetails
@@ -161,7 +158,7 @@ function AuthenticatedAccount({customer}) {
   );
 }
 
-const QUERY = gql`
+const CUSTOMER_QUERY = gql`
   query CustomerDetails(
     $customerAccessToken: String!
     $withAddressDetails: Boolean!
@@ -228,7 +225,7 @@ const QUERY = gql`
   }
 `;
 
-const MUTATION = gql`
+const CUSTOMER_UPDATE_MUTATION = gql`
   mutation customerUpdate(
     $customer: CustomerUpdateInput!
     $customerAccessToken: String!

@@ -1,7 +1,7 @@
 ---
 gid: 1c9b880d-65d4-47bf-b797-0f675de00265
 title: User authentication
-description: Learn how to build user authentication in your Hydrogen app, including account creation, login, password reset, and logout.
+description: Learn how to build user authentication in your Hydrogen storefront, including account creation, login, password reset, and logout.
 ---
 
 Hydrogen includes built-in support for managing user authentication, including account creation, login, password reset, and logout. This guide describes the routes, hooks, and components that you can use to implement an end-to-end user authentication experience.

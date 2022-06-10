@@ -7,7 +7,7 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
+import {Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
 
 export default function Page({params}) {
@@ -15,26 +15,26 @@ export default function Page({params}) {
 
   const {handle} = params;
   const {data} = useShopQuery({
-    query: QUERY,
-    variables: {language: languageCode, handle},
+    query: PAGE_QUERY,
+    variables: {languageCode, handle},
   });
 
   useServerAnalytics(
-    data.pageByHandle
+    data.page
       ? {
           shopify: {
             pageType: ShopifyAnalyticsConstants.pageType.page,
-            resourceId: data.pageByHandle.id,
+            resourceId: data.page.id,
           },
         }
       : null,
   );
 
-  if (!data.pageByHandle) {
+  if (!data.page) {
     return <NotFound />;
   }
 
-  const page = data.pageByHandle;
+  const page = data.page;
 
   return (
     <Layout>
@@ -45,10 +45,10 @@ export default function Page({params}) {
   );
 }
 
-const QUERY = gql`
-  query PageDetails($language: LanguageCode, $handle: String!)
-  @inContext(language: $language) {
-    pageByHandle(handle: $handle) {
+const PAGE_QUERY = gql`
+  query PageDetails($languageCode: LanguageCode, $handle: String!)
+  @inContext(language: $languageCode) {
+    page(handle: $handle) {
       id
       title
       body

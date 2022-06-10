@@ -4,7 +4,7 @@ title: Routes
 description: Get familiar with the file-based routing system that Hydrogen uses.
 ---
 
-The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen app.
+The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen storefront.
 
 ## How routes work
 
@@ -102,6 +102,14 @@ By default, when a user hovers or focuses on the link for more than 100ms, a pre
 
 You can extend dynamic routes to catch all paths by adding an ellipsis (...) inside the brackets. For example, `/routes/example/[...handle].server.jsx` will match `/example/a` and `/example/a/b`.
 
+### Built-in routes
+
+Hydrogen provides the following built-in routes:
+
+- `/__health` - A health check route that responds with a 200 status and no body. You can use this route within your infrastructure to verify that your app is healthy and able to respond to requests.
+- `/__rsc` - An internal route used to re-render server components. It's called by the Hydrogen frontend when the route changes, or when server props change. You should never need to manually request this route.
+- `/__event` - An internal route used to save client observability events. You should never need to manually request this route.
+
 ### Example
 
 The following example shows how to obtain catch all routes data using `location.pathname`:
@@ -120,7 +128,7 @@ export default function({request}) {
 
 By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx` using the following components:
 
-- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen app
+- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen storefront
 - [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
 - [`Route`](https://shopify.dev/api/hydrogen/components/framework/route): Used to set up a route in Hydrogen that's independent of the file system
 
@@ -240,8 +248,8 @@ export default function Page() {
 
 Server components placed in the `src/routes` directory receive the following special props that you can use to create custom experiences:
 
-| Prop       | Type                      |
-| ---------- | ------------------------- |
+| Prop       | Type               |
+| ---------- | ------------------ |
 | `request`  | `HydrogenRequest`  |
 | `response` | `HydrogenResponse` |
 
@@ -413,6 +421,6 @@ function MyPage({custom, props, here}) {
 
 - Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.
 - Learn about how Hydrogen consumes data from different [sources](https://shopify.dev/custom-storefronts/hydrogen/data-sources).
-- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen apps.
+- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen storefronts.
 - Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
 - Learn how to [manage your server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) during your development process.

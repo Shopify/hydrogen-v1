@@ -1,7 +1,7 @@
 import {NoStore, Seo, gql} from '@shopify/hydrogen';
 
-import Layout from '../../components/layouts/DefaultLayout.server';
-import AccountRecoverForm from '../../components/sections/AccountRecoverForm.client';
+import {Layout} from '~/components/layouts';
+import {AccountRecoverForm} from '~/components/sections';
 
 /**
  * A form for the user to fill out to _initiate_ a password reset.
@@ -30,7 +30,7 @@ export async function api(request, {queryShop}) {
   }
 
   await queryShop({
-    query: MUTATION,
+    query: CUSTOMER_RECOVER_MUTATION,
     variables: {
       email: jsonBody.email,
     },
@@ -44,7 +44,7 @@ export async function api(request, {queryShop}) {
   });
 }
 
-const MUTATION = gql`
+const CUSTOMER_RECOVER_MUTATION = gql`
   mutation customerRecover($email: String!) {
     customerRecover(email: $email) {
       customerUserErrors {

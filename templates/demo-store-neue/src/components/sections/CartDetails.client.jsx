@@ -11,9 +11,9 @@ import {
   Money,
 } from '@shopify/hydrogen';
 
-import {Button, Heading, IconClose, Text} from '../elements';
+import {Button, Heading, IconClose, Text} from '~/components/elements';
 
-export default function CartDetails() {
+export function CartDetails() {
   const {lines, checkoutUrl, estimatedCost} = useCart();
 
   return (
@@ -134,7 +134,7 @@ function CartLineItem() {
           </Heading>
           <div className="flex gap-2">
             {merchandise.selectedOptions.map((option) => (
-              <Text key={option.name} color="subtle">
+              <Text key={`${option.name}-${option.value}`} color="subtle">
                 {option.name}: {option.value}
               </Text>
             ))}

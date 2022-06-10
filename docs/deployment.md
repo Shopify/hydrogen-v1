@@ -1,12 +1,12 @@
 ---
 gid: 61164af3-9b44-4302-b45d-b820c0b64534
-title: Deploy a Hydrogen app
-description: Learn how to deploy your Hydrogen app to Oxygen and other runtimes.
+title: Deploy a Hydrogen storefront
+description: Learn how to deploy your Hydrogen storefront to Oxygen and other runtimes.
 ---
 
 {% include hydrogen/developer-preview.md %}
 
-You can deploy a Hydrogen app to most [Worker and Node.js runtimes](https://shopify.dev/custom-storefronts/hydrogen/framework#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen app to [Oxygen](#deploy-to-oxygen), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), [Cloudflare Workers](#deploy-to-cloudflare-workers), and [Netlify](#deploy-to-netlify).
+You can deploy a Hydrogen storefront to most [Worker and Node.js runtimes](https://shopify.dev/custom-storefronts/hydrogen/framework#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen storefront to [Oxygen](#deploy-to-oxygen), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), [Cloudflare Workers](#deploy-to-cloudflare-workers), and [Netlify](#deploy-to-netlify).
 
 ## Requirements
 
@@ -14,16 +14,16 @@ You're using the [most recent version of Hydrogen](https://github.com/Shopify/hy
 
 ## Deploy to Oxygen
 
-Oxygen is Shopify's recommended deployment platform for Hydrogen apps.
+Oxygen is Shopify's recommended deployment platform for Hydrogen storefronts.
 
 > Note:
 > Shopify is currently working on Oxygen, but it's not available yet.
 
 ## Deploy to Node.js
 
-By default, Hydrogen targets a Workers runtime like Oxygen. However, you can also deploy your Hydrogen app to [Node.js](https://nodejs.org/en/), an open-source JavaScript runtime environment.
+By default, Hydrogen targets a Workers runtime like Oxygen. However, you can also deploy your Hydrogen storefront to [Node.js](https://nodejs.org/en/), an open-source JavaScript runtime environment.
 
-Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) which suits basic production use cases. You can run and preview your Hydrogen app in Node.js by completing the following steps.
+Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) which suits basic production use cases. You can run and preview your Hydrogen storefront in Node.js by completing the following steps.
 
 
 1. Install the peer dependencies required to run the built-in Node.js entrypoint:
@@ -40,7 +40,7 @@ Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrog
 
     {% endcodeblock %}
 
-2. Build your Hydrogen app for production and preview the app locally:
+2. Build your Hydrogen storefront for production and preview the app locally:
 
     {% codeblock terminal %}
 
@@ -53,7 +53,7 @@ Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrog
 
     {% endcodeblock %}
 
-    The production version of your app will be running at http://localhost:3000. You can inspect and deploy the compiled version of your Node.js Hydrogen app from `dist/node`.
+    The production version of your app will be running at http://localhost:3000. You can inspect and deploy the compiled version of your Node.js Hydrogen storefront from `dist/node`.
 
 ### Apply extra middleware
 
@@ -232,7 +232,7 @@ You can deploy your project to any platform that supports Docker-based hosting, 
 
 ## Deploy to Cloudflare Workers
 
-You can deploy your Hydrogen app to Cloudflare Workers, a serverless application platform. For the Cloudflare Workers' Cache API to work, you need to meet the following requirements:
+You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless application platform. For the Cloudflare Workers' Cache API to work, you need to meet the following requirements:
 
 - You have a Cloudflare domain. The domain can't be `worker.dev`, because Cloudflare owns this domain.
 - You have a DNS record for the Cloudflare domain. For example, `A example.dev 192.0.2.1 Proxied`.
@@ -241,7 +241,7 @@ You can deploy your Hydrogen app to Cloudflare Workers, a serverless application
 > Note:
 > Requirements might be different for Cloudflare enterprise accounts.
 
-1. [Create a Hydrogen app locally](https://shopify.dev/custom-storefronts/hydrogen/getting-started/create).
+1. [Create a Hydrogen storefront locally](https://shopify.dev/custom-storefronts/hydrogen/getting-started/create).
 
 2. Create a `wrangler.toml` file in the root of your project.
 
@@ -360,4 +360,4 @@ You can deploy your Hydrogen app to Cloudflare Workers, a serverless application
 
 ## Deploy to Netlify
 
-To learn how to deploy your Hydrogen app to Netlify, refer to the [Hydrogen on Netlify](https://docs.netlify.com/integrations/frameworks/hydrogen/) documentation.
+To learn how to deploy your Hydrogen storefront to Netlify, refer to the [Hydrogen on Netlify](https://docs.netlify.com/integrations/frameworks/hydrogen/) documentation.

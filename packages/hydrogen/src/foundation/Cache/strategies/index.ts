@@ -6,7 +6,7 @@ import type {
 
 const PUBLIC = 'public';
 const PRIVATE = 'private';
-const NO_STORE = 'no-store';
+export const NO_STORE = 'no-store';
 
 const optionMapping: {
   [key: string]: string;

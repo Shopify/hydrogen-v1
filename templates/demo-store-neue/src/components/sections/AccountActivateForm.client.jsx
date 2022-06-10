@@ -1,16 +1,14 @@
-import React from 'react';
+import {useState} from 'react';
 import {useNavigate} from '@shopify/hydrogen/client';
 
-export default function AccountActivateForm({id, activationToken}) {
+export function AccountActivateForm({id, activationToken}) {
   const navigate = useNavigate();
 
-  const [submitError, setSubmitError] = React.useState(null);
-
-  const [password, setPassword] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(null);
-
-  const [passwordConfirm, setPasswordConfirm] = React.useState('');
-  const [passwordConfirmError, setPasswordConfirmError] = React.useState(null);
+  const [submitError, setSubmitError] = useState(null);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(null);
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [passwordConfirmError, setPasswordConfirmError] = useState(null);
 
   function passwordValidation(form) {
     setPasswordError(null);

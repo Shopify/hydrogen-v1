@@ -1,4 +1,4 @@
-import type {HydrogenVitePluginOptions} from '../types';
+import type {HydrogenVitePluginOptions} from './types';
 import hydrogenConfig from './plugins/vite-plugin-hydrogen-config';
 import type {Plugin} from 'vite';
 import hydrogenMiddleware from './plugins/vite-plugin-hydrogen-middleware';
@@ -15,7 +15,7 @@ import cssModulesRsc from './plugins/vite-plugin-css-modules-rsc';
 import clientImports from './plugins/vite-plugin-client-imports';
 import suppressWarnings from './plugins/vite-plugin-hydrogen-suppress-warnings';
 
-export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
+const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
   return [
     process.env.VITE_INSPECT && inspect(),
     hydrogenConfig(),
@@ -33,3 +33,7 @@ export default (pluginOptions: HydrogenVitePluginOptions = {}) => {
     pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),
   ] as Plugin[];
 };
+
+// @ts-ignore
+export = hydrogenPlugin; // TS syntax to support CJS interop
+export default hydrogenPlugin; // For ESM

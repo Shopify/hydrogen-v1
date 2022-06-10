@@ -2,13 +2,12 @@ import React, {useState} from 'react';
 import {useShop} from '../../foundation';
 import {flattenConnection} from '../../utilities';
 import {CartInput} from '../../storefront-api-types';
-import {CartCreate} from './cart-queries';
+import {CartCreate, defaultCartFragment} from './cart-queries';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation';
 import {Cart} from './types';
-import {useCart} from '../../hooks/useCart';
 
 export function useCartFetch() {
   const {storeDomain, storefrontApiVersion, storefrontToken} = useShop();
@@ -50,7 +49,6 @@ export function useCartFetch() {
 }
 
 export function useInstantCheckout() {
-  const {cartFragment} = useCart();
   const [cart, updateCart] = useState<Cart | undefined>();
   const [checkoutUrl, updateCheckoutUrl] = useState<Cart['checkoutUrl']>();
   const [error, updateError] = useState<string | undefined>();
@@ -63,7 +61,7 @@ export function useInstantCheckout() {
         CartCreateMutationVariables,
         CartCreateMutation
       >({
-        query: CartCreate(cartFragment),
+        query: CartCreate(defaultCartFragment),
         variables: {
           input: cartInput,
         },
@@ -86,7 +84,7 @@ export function useInstantCheckout() {
         updateCheckoutUrl(dataCart.checkoutUrl);
       }
     },
-    [cartFragment, fetch]
+    [fetch]
   );
 
   return {cart, checkoutUrl, error, createInstantCheckout};
