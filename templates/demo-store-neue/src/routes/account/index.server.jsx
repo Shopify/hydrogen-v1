@@ -1,7 +1,7 @@
 import {
   Seo,
   useSession,
-  NoStore,
+  CacheNone,
   useShopQuery,
   flattenConnection,
   gql,
@@ -13,7 +13,7 @@ import {AccountDetails} from '~/components/pages';
 import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Account({response, editingAccount, editingAddress}) {
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   const {customerAccessToken} = useSession();
 
@@ -25,7 +25,7 @@ export default function Account({response, editingAccount, editingAddress}) {
       customerAccessToken,
       withAddressDetails: !!editingAddress,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const customer = data.customer;
@@ -113,7 +113,7 @@ export async function api(request, {session, queryShop}) {
       customer,
       customerAccessToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const error = getApiErrorMessage('customerUpdate', data, errors);

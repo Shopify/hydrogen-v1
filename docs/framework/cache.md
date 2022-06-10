@@ -22,25 +22,21 @@ Hydrogen includes recommended caching strategies to help you determine which cac
 
 | Caching strategy | Cache control header                                      | Cache duration |
 | ---------------- | --------------------------------------------------------- | -------------- |
-| `CacheSeconds()` | `public, max-age=1, stale-while-revalidate=9`             | 10 seconds     |
-| `CacheMinutes()` | `public, max-age=900, stale-while-revalidate=900`         | 30 minutes     |
-| `CacheHours()`   | `public, max-age=1800, stale-while-revalidate=1800`       | 1 hour         |
-| `CacheDays()`    | `public, max-age=3600, stale-while-revalidate=82800`      | 1 Day          |
-| `CacheWeeks()`   | `public, max-age=604800, stale-while-revalidate=604800`   | 2 Weeks        |
-| `CacheMonths()`  | `public, max-age=1296000, stale-while-revalidate=1296000` | 1 Month        |
-| `NoStore()`      | `no-store`                                                | No cache       |
+| `CacheShort()`   | `public, max-age=1, stale-while-revalidate=9`             | 10 seconds     |
+| `CacheLong()`    | `public, max-age=1296000, stale-while-revalidate=1296000` | 1 Month        |
+| `CacheNone()`    | `no-store`                                                | No cache       |
 | `CacheCustom()`  | Define your own cache control header                      | Custom         |
 
 ### Example
 
 ```jsx
-import {CacheSeconds} from '@shopify/hydrogen';
-response.cache(CacheSeconds());
+import {CacheShort} from '@shopify/hydrogen';
+response.cache(CacheShort());
 ```
 
 ### Disabling caching
 
-Use the `NoStore()` caching strategy to disable caching. You should consider disabling caching on authenticated pages to prevent leaking personal identifying information.
+Use the `CacheNone()` caching strategy to disable caching. You should consider disabling caching on authenticated pages to prevent leaking personal identifying information.
 
 ### Build your own caching strategies
 
@@ -84,7 +80,7 @@ export interface AllCacheOptions {
 
 ## Sub-request caching
 
-While rendering a page in your Hydrogen storefront, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheSeconds` strategy.
+While rendering a page in your Hydrogen storefront, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheShort` strategy.
 
 The following example shows how to implement [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery) for Shopify Storefront API queries:
 
@@ -94,7 +90,7 @@ The following example shows how to implement [`useShopQuery`](https://shopify.de
 // Use a caching strategy provided by Hydrogen
 const {data} = useShopQuery({
   query: QUERY,
-  cache: CacheHours(),
+  cache: CacheLong(),
 });
 ```
 
@@ -107,7 +103,7 @@ The following example shows how to implement [`fetchSync`](https://shopify.dev/a
 ```jsx
 // Use a caching strategy provided by Hydrogen
 const data = fetchSync('https://my.3p.com/data.json', {
-  cache: CacheHours(),
+  cache: CacheLong(),
 }).json();
 ```
 
@@ -117,7 +113,7 @@ When the cached entry becomes stale, if the age of the entry is still within the
 
 ## Full-page caching
 
-In addition to sub-request caching, it’s helpful to cache the entire page response at the network edge and in the browser. This is the most useful for pages without dynamic or personalized data, like marketing pages or blog content. All sub-requests implement a default `CacheSeconds()` strategy.
+In addition to sub-request caching, it’s helpful to cache the entire page response at the network edge and in the browser. This is the most useful for pages without dynamic or personalized data, like marketing pages or blog content. All sub-requests implement a default `CacheShort` strategy.
 
 To modify full-page caching options, use the `response` property passed to the page server component:
 
@@ -125,7 +121,7 @@ To modify full-page caching options, use the `response` property passed to the p
 
 ```jsx
 export default function MyProducts({response}) {
-  response.cache(CacheDays());
+  response.cache(CacheLong());
 }
 ```
 
