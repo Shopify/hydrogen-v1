@@ -64,37 +64,3 @@ export const PRODUCT_CARD_FIELDS = gql`
     }
   }
 `;
-
-export const LOCATION_CARD_FIELDS = gql`
-  fragment LocationCardFields on ContentEntry {
-    id
-    handle
-    featured_image: field(key: "featured_image") {
-      reference {
-        ... on MediaImage {
-          image {
-            url
-            width
-            height
-            altText
-          }
-        }
-      }
-    }
-    title: field(key: "title") {
-      value
-    }
-    address: field(key: "address") {
-      value
-    }
-    hours: field(key: "hours") {
-      value
-    }
-    email: field(key: "email") {
-      value
-    }
-    phone: field(key: "phone") {
-      value
-    }
-  }
-`;
