@@ -2508,6 +2508,31 @@
     "@shopify/cli-kit" "2.0.14"
     "@shopify/plugin-ngrok" "^0.2.4"
 
+"@shopify/hydrogen@latest":
+  version "0.22.1"
+  resolved "https://registry.yarnpkg.com/@shopify/hydrogen/-/hydrogen-0.22.1.tgz#9d395fdec652b98f739aefa3af4aed3102e5fb23"
+  integrity sha512-MmUbC4reRX2grCDabXea4DgBsk8p5lGR5Y7nUyzW+CYYzJgm30gHiE6RLMqFjWX1IEllOMTBBfI0sm7Mea80tg==
+  dependencies:
+    "@vitejs/plugin-react" "^1.3.0"
+    abort-controller "^3.0.0"
+    body-parser "^1.20.0"
+    connect "^3.7.0"
+    es-module-lexer "^0.10.0"
+    fast-glob "^3.2.11"
+    graphql "^16.3.0"
+    graphql-tag "^2.12.6"
+    history "^5.3.0"
+    kolorist "^1.5.1"
+    magic-string "^0.26.1"
+    node-fetch "^2.6.7"
+    path-to-regexp "^6.2.0"
+    react-error-boundary "^3.1.3"
+    react-helmet-async "^1.2.3"
+    uuid "^8.3.2"
+    vite-plugin-inspect "^0.3.6"
+    web-streams-polyfill "^3.2.0"
+    worktop "^0.7.3"
+
 "@shopify/mini-oxygen@^0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@shopify/mini-oxygen/-/mini-oxygen-0.0.5.tgz#bb34f07c6aeaf0c346c41e79ac97e811eb2630fc"
@@ -4988,7 +5013,7 @@ cp-file@^9.1.0:
     nested-error-stacks "^2.0.0"
     p-event "^4.1.0"
 
-cpy-cli@3.1.1:
+cpy-cli@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/cpy-cli/-/cpy-cli-3.1.1.tgz#2adb06544102c948ce098e522d5b8ddcf4f7c0b4"
   integrity sha512-HCpNdBkQy3rw+uARLuIf0YurqsMXYzBa9ihhSAuxYJcNIrqrSq3BstPfr0cQN38AdMrQiO9Dp4hYy7GtGJsLPg==
@@ -12072,7 +12097,7 @@ rc@^1.2.7, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^18.1.0:
+react-dom@18.1.0, react-dom@^18.1.0:
   version "18.1.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.1.0.tgz#7f6dd84b706408adde05e1df575b3a024d7e8a2f"
   integrity sha512-fU1Txz7Budmvamp7bshe4Zi32d0ll7ect+ccxNu9FlObT605GOEB8BfO4tmRJ39R5Zj831VCpvQ05QPBW5yb+w==
@@ -12152,7 +12177,7 @@ react-use@^17.4.0:
     ts-easing "^0.2.0"
     tslib "^2.1.0"
 
-react@^18.1.0:
+react@18.1.0, react@^18.1.0:
   version "18.1.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.1.0.tgz#6f8620382decb17fdc5cc223a115e2adbf104890"
   integrity sha512-4oL8ivCz5ZEPyclFQXaNksK3adutVS8l2xzZU0cqEFrE9Sb7fC0EFK5uEk74wIreL1DERyjvsU915j1pcT2uEQ==
@@ -14347,6 +14372,11 @@ typescript@^4.3.4, typescript@^4.6.3, typescript@^4.7.2:
   version "4.7.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.2.tgz#1f9aa2ceb9af87cca227813b4310fff0b51593c4"
   integrity sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==
+
+typescript@^4.6.4:
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.3.tgz#8364b502d5257b540f9de4c40be84c98e23a129d"
+  integrity sha512-WOkT3XYvrpXx4vMMqlD+8R8R37fZkjyLGlxavMc4iB8lrl8L0DeTcHbYgw/v0N/z9wAFsgBhcsF0ruoySS22mA==
 
 typeson-registry@^1.0.0-alpha.39:
   version "1.0.0-alpha.39"

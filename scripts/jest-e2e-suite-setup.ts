@@ -1,6 +1,6 @@
-import {copy, existsSync} from 'fs-extra';
+import {existsSync} from 'fs-extra';
 import * as http from 'http';
-import {resolve, dirname, basename, sep} from 'path';
+import {resolve, dirname, basename} from 'path';
 import sirv from 'sirv';
 import {
   createServer,
@@ -57,7 +57,6 @@ beforeAll(async () => {
 
     if (existsSync(testCustomServe)) {
       // test has custom server configuration.
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const {serve} = await import(testCustomServe);
       server = await serve(rootDir, isBuildTest);
       return;
@@ -140,7 +139,9 @@ function startStaticServer(): Promise<string> {
   let config: UserConfig;
   try {
     config = require(configFile);
-  } catch (e) {}
+  } catch {
+    /**/
+  }
   const base = (config?.base || '/') === '/' ? '' : config.base;
 
   // @ts-ignore

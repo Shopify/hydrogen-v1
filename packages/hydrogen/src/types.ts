@@ -1,3 +1,6 @@
+export * from './shared-types';
+import {ShopifyConfig} from './shared-types';
+
 import type {ServerResponse} from 'http';
 import type {Logger, LoggerConfig} from './utilities/log/log';
 import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
@@ -37,14 +40,6 @@ export type RunRscParams = {
   log: Logger;
   request: HydrogenRequest;
   response: HydrogenResponse;
-};
-
-export type ShopifyConfig = {
-  defaultLocale?: string;
-  storeDomain: string;
-  storefrontToken: string;
-  storefrontApiVersion: string;
-  multipassSecret?: string;
 };
 
 export type Hook = (
@@ -107,6 +102,7 @@ export type ClientHandler = (
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
+  nodes?: T[];
 }
 
 export type ParsedMetafield = Omit<
@@ -150,11 +146,5 @@ export interface AllCacheOptions {
 }
 
 export type CachingStrategy = AllCacheOptions;
-
-export interface HydrogenVitePluginOptions {
-  devCache?: boolean;
-  purgeQueryCacheOnBuild?: boolean;
-  configPath?: string;
-}
 
 export type PreloadOptions = boolean | string;

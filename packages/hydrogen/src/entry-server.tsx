@@ -13,18 +13,16 @@ import type {
   RunRscParams,
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
+  RequestHandler,
 } from './types';
 import {Html, applyHtmlHead} from './foundation/Html/Html';
 import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
-import {
-  HydrogenRequest,
-  RuntimeContext,
-} from './foundation/HydrogenRequest/HydrogenRequest.server';
+import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
 } from './foundation/ServerRequestProvider';
-import type {ServerResponse, IncomingMessage} from 'http';
+import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
@@ -41,15 +39,15 @@ import {
   createFromReadableStream,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
+import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {setLogger, RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
-import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
 import {htmlEncode} from './utilities';
 import {splitCookiesString} from 'set-cookie-parser';
+import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes';
 
 declare global {
   // This is provided by a Vite plugin
@@ -61,24 +59,6 @@ declare global {
 const DOCTYPE = '<!DOCTYPE html>';
 const CONTENT_TYPE = 'Content-Type';
 const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
-
-interface RequestHandlerOptions {
-  indexTemplate:
-    | string
-    | ((url: string) => Promise<string | {default: string}>);
-  cache?: Cache;
-  streamableResponse?: ServerResponse;
-  dev?: boolean;
-  context?: RuntimeContext;
-  nonce?: string;
-  buyerIpHeader?: string;
-}
-
-export interface RequestHandler {
-  (request: Request | IncomingMessage, options: RequestHandlerOptions): Promise<
-    Response | undefined
-  >;
-}
 
 export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
@@ -131,14 +111,26 @@ export const renderHydrogen = (App: any) => {
     request.ctx.runtime = context;
     setCache(cache);
 
-    if (
-      url.pathname === EVENT_PATHNAME ||
-      EVENT_PATHNAME_REGEX.test(url.pathname)
-    ) {
-      return ServerAnalyticsRoute(
+    const builtInRouteResource = getBuiltInRoute(url);
+
+    if (builtInRouteResource) {
+      const apiResponse = await renderApiRoute(
         request,
-        hydrogenConfig.serverAnalyticsConnectors
+        {
+          resource: builtInRouteResource,
+          params: {},
+          hasServerComponent: false,
+        },
+        hydrogenConfig,
+        {
+          session: sessionApi,
+          suppressLog: true,
+        }
       );
+
+      return apiResponse instanceof Request
+        ? handleRequest(apiResponse, options)
+        : apiResponse;
     }
 
     const isRSCRequest = url.pathname === RSC_PATHNAME;
@@ -153,8 +145,10 @@ export const renderHydrogen = (App: any) => {
       const apiResponse = await renderApiRoute(
         request,
         apiRoute,
-        hydrogenConfig.shopify,
-        sessionApi
+        hydrogenConfig,
+        {
+          session: sessionApi,
+        }
       );
 
       return apiResponse instanceof Request

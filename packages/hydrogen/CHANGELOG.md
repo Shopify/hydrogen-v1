@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.24.0
+
+### Minor Changes
+
+- [#1489](https://github.com/Shopify/hydrogen/pull/1489) [`e2ee2d45`](https://github.com/Shopify/hydrogen/commit/e2ee2d4575613ae34727de9c1a6280904bb2e3ff) Thanks [@blittle](https://github.com/blittle)! - In an effort to be performant by default, the [preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries) are turned on by default when caching is also enabled. By default, each query has caching enabled too, so `preload` will on universally by default.
+
+* [#1237](https://github.com/Shopify/hydrogen/pull/1237) [`356e75f3`](https://github.com/Shopify/hydrogen/commit/356e75f351c04ff393e996c34632005331ec0872) Thanks [@frehner](https://github.com/frehner)! - Updated Cart queries in two ways, one of which requires you to be using Storefront API `2022-07`:
+
+  1. [`CartLine`](https://shopify.dev/api/storefront/2022-04/objects/CartLine#fields) now uses [`CartLineEstimatedCost`'s `totalAmount`](https://shopify.dev/api/storefront/2022-04/objects/CartLineEstimatedCost) field for calculating the Line's total, instead of doing it manually.
+  2. Cart now uses [`totalQuantity`](https://shopify.dev/api/storefront/2022-07/objects/Cart#field-cart-totalquantity) for calculating how many items are in the cart, instead of doing this manually. **Note that this feature is only available in Storefront API `2022-07` and newer.**
+
+### Patch Changes
+
+- [#1473](https://github.com/Shopify/hydrogen/pull/1473) [`a7f3b4bf`](https://github.com/Shopify/hydrogen/commit/a7f3b4bfe0d66fb0440dff3d641a181372de313a) Thanks [@frandiox](https://github.com/frandiox)! - Reduce CPU consumption when rendering React Server Components.
+
+* [#1453](https://github.com/Shopify/hydrogen/pull/1453) [`84b9e6d3`](https://github.com/Shopify/hydrogen/commit/84b9e6d3516a74f94fab691d6ff7605623351f1e) Thanks [@jplhomer](https://github.com/jplhomer)! - Update `setSelectedVariant` types to allow `null` to be passed.
+
+- [#1484](https://github.com/Shopify/hydrogen/pull/1484) [`990bfd8b`](https://github.com/Shopify/hydrogen/commit/990bfd8b928425f2685901c1a02b686354d18d4d) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fix ClientAnalytics losing subscriber object when passed as a param
+
+* [#1509](https://github.com/Shopify/hydrogen/pull/1509) [`05081b01`](https://github.com/Shopify/hydrogen/commit/05081b01283c023e9c751c04ed496003daf47091) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix `<BuyNowButton>` so it can be rendered without being nested in a `<CartProvider>`
+
+- [#1469](https://github.com/Shopify/hydrogen/pull/1469) [`07d45290`](https://github.com/Shopify/hydrogen/commit/07d452905492bfa1bd58c681b8d56407fdc4716b) Thanks [@frandiox](https://github.com/frandiox)! - Fix path resolution when using aliases in server components.
+
+* [#1471](https://github.com/Shopify/hydrogen/pull/1471) [`5b4e08df`](https://github.com/Shopify/hydrogen/commit/5b4e08df97dd2343452b0d1f7ff59ac5bbf98d32) Thanks [@frandiox](https://github.com/frandiox)! - Added an experimental hook `useRequestContext` that provides server-only context for third party integrations.
+
+- [#1486](https://github.com/Shopify/hydrogen/pull/1486) [`a31e007d`](https://github.com/Shopify/hydrogen/commit/a31e007dbc2a1a6ce12e39ffc3f63f45e90abfa7) Thanks [@frehner](https://github.com/frehner)! - Fix `<ProductOptionsProvider/>`'s `setSelectedOptions()` function to update the `selectedVariant` as well
+
 ## 0.23.0
 
 ### Minor Changes

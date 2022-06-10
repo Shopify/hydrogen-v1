@@ -6,9 +6,9 @@ import {
   Link,
   gql,
 } from '@shopify/hydrogen';
-import {DefaultLayout as Layout} from '~/components/layouts';
-import {PageHeader, Section} from '~/components/sections';
-import {Heading, Grid} from '~/components/elements';
+
+import {Layout} from '~/components/layouts';
+import {PageHeader, Section, Heading, Grid} from '~/components/elements';
 
 export default function Collections() {
   const {languageCode} = useShop();

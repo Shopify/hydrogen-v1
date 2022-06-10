@@ -6,6 +6,7 @@ import type {
 } from '../../storefront-api-types';
 import {Money} from '../Money';
 import type {PartialDeep} from 'type-fest';
+import {flattenConnection} from '../../utilities/flattenConnection';
 
 export interface ProductPriceProps {
   data: PartialDeep<Product>;
@@ -41,8 +42,9 @@ export function ProductPrice(
   let measurement: Partial<UnitPriceMeasurement> | undefined | null;
 
   const variant = variantId
-    ? product?.variants?.nodes?.find((variant) => variant?.id === variantId) ??
-      null
+    ? flattenConnection(product?.variants ?? {}).find(
+        (variant) => variant?.id === variantId
+      ) ?? null
     : null;
 
   if (priceType === 'compareAt') {
