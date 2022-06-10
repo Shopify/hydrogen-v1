@@ -853,11 +853,20 @@ async function cacheResponse(
 ) {
   const cache = getCache();
 
+  /**
+   * Only cache on cachable responses. Response
+   *
+   * - have content to cache
+   * - does not have no-store on cache-control header
+   * - must have status 200
+   * - is not a html form
+   */
   if (
+    cache &&
+    chunks.length > 0 &&
     response.cache().mode !== NO_STORE &&
     response.status === 200 &&
-    cache &&
-    chunks.length > 0
+    response.headers.get('Content-Type') != 'application/x-www-form-urlencoded'
   ) {
     if (revalidate) {
       await saveCacheResponse(response, request, chunks);
