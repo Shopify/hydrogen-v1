@@ -4,7 +4,7 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 
 [Check out the docs](https://shopify.dev/custom-storefronts/hydrogen)
 
-[Run this example on StackBlitz](https://stackblitz.com/fork/github/shopify/hydrogen/tree/stackblitz/examples/typescript)
+[Run this template on StackBlitz](https://stackblitz.com/github/Shopify/hydrogen/tree/stackblitz/templates/hello-world-ts)
 
 ## Getting started
 
@@ -14,10 +14,7 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 - Yarn
 
 ```bash
-npx degit Shopify/hydrogen/examples/typescript hydrogen-app
-cd hydrogen-app
-yarn
-yarn dev
+npm init @shopify/hydrogen@latest --template hello-world-ts
 ```
 
 Remember to update `hydrogen.config.ts` with your shop's domain and Storefront API token!

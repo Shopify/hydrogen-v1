@@ -77,7 +77,12 @@ async function createProcessor(from, to) {
           process.cwd(),
           from
         )}\`. Edits to all files in this directory will be overwritten.`;
-        content = content.replace('TypeScript', 'JavaScript');
+
+        content = content
+          .replace('TypeScript', 'JavaScript')
+          .replace('typescript', 'javascript')
+          .replace('.ts', '.js')
+          .replace('-ts', '-js');
         content = `${banner}\n\n${content}`;
         break;
       case 'package.json':
