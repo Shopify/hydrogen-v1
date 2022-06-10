@@ -1,3 +1,5 @@
+**Note:** This is a generated template. The TypeScript source code for this is in `templates/hello-world-ts`. Edits to all files in this directory will be overwritten.
+
 # JavaScript Example
 
 Hydrogen is a React framework and SDK that you can use to build fast and dynamic Shopify custom storefronts.

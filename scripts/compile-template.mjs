@@ -1,8 +1,8 @@
 /* eslint-disable no-case-declarations */
 import rimraf from 'rimraf';
-import {resolve, basename, sep, extname} from 'path';
+import {resolve, basename, sep, extname, relative} from 'path';
 import fs from 'fs-extra';
-import glob from 'glob';
+import glob from 'fast-glob';
 import ts from 'typescript';
 import prettier from 'prettier';
 
@@ -13,7 +13,11 @@ import prettier from 'prettier';
     throw new Error('No template specified');
   }
 
-  const JSTemplateDirectory = resolve(process.cwd(), 'templates', template);
+  const JSTemplateDirectory = resolve(
+    process.cwd(),
+    'templates',
+    `${template}-js`
+  );
   const TSTemplateDirectory = resolve(
     process.cwd(),
     'templates',
@@ -69,17 +73,18 @@ async function createProcessor(from, to) {
       case 'yarn.lock':
         return;
       case 'README.md':
+        const banner = `**Note:** This is a generated template. The TypeScript source code for this is in \`${relative(
+          process.cwd(),
+          from
+        )}\`. Edits to all files in this directory will be overwritten.`;
         content = content.replace('TypeScript', 'JavaScript');
+        content = `${banner}\n\n${content}`;
         break;
       case 'package.json':
         const packageJSON = JSON.parse(content);
         const newPackageJSON = Object.assign(packageJSON, {
-          name: 'hello-world-javascript',
+          name: 'hello-world-js',
           description: 'A simple example of a JavaScript project',
-          scripts: {
-            ...packageJSON.scripts,
-            dev: 'shopify hydrogen dev',
-          },
         });
 
         delete packageJSON.devDependencies.typescript;
@@ -123,8 +128,11 @@ async function format(content, path) {
     case '.md':
       prettierConfig.parser = 'markdown';
       break;
-    case '.json':
     case '.html':
+    case '.svg':
+      prettierConfig.parser = 'html';
+      break;
+    case '.json':
     case '.css':
       prettierConfig.parser = ext.slice(1);
       break;
