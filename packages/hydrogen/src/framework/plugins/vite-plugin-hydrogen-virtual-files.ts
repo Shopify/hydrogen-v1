@@ -136,8 +136,8 @@ async function findHydrogenConfigPath(root: string, userProvidedPath?: string) {
   return (
     configPath ||
     require.resolve(
-      // @ts-ignore
-      '@shopify/hydrogen/dist/esnext/utilities/empty-hydrogen-config.js'
+      // eslint-disable-next-line node/no-missing-require
+      '@shopify/hydrogen/utilities/empty-hydrogen-config'
     )
   );
 }
