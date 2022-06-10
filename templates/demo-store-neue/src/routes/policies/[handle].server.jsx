@@ -46,6 +46,7 @@ export default function Policy({params}) {
 
   const page = data?.shop?.[activePolicy];
 
+  // If the policy page is empty, return not found
   if (!page) {
     return <NotFound />;
   }
