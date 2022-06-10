@@ -4,8 +4,7 @@ title: Metafield
 description: The Metafield component renders the value of a Storefront API's Metafield object.
 ---
 
-The `Metafield` component renders the value of a Storefront
-API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+The `Metafield` component renders the value of a Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -23,7 +22,7 @@ export function Product({product}) {
 
 | Name | Type                         | Description                                                                                                                                                  |
 | ---- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| data | <code>ParsedMetafield</code> | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).     |
+| data | <code>ParsedMetafield</code> | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). To use the `Metafield` component, you pass an unparsed object to the `data` prop to get a default output. If you want a different output, then you can use the [useParsedMetafields](https://shopify.dev/api/hydrogen/hooks/metafield/useparsedmetafields) hook.   |
 | as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](https://shopify.dev/apps/metafields/types). |
 
 ## Default output
@@ -51,14 +50,18 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 | `variant_reference`      | A `span` containing the variant reference GID.                                                                                                                                                            |
 | `url`                    | An `a` tag with the `href` corresponding to the URL and the label corresponding to the URL.                                                                                                               |
 
-## Component type
-
-The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-### Variables
+## Variables
 
 The [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield) includes variables that you will need to provide values for when performing your query.
 
 | Variable                            | Description                                                                                                                                                                        |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `$includeReferenceMetafieldDetails` | A boolean indicating if the reference type should be queried. Only applicable to `file_reference`, `product_reference`, `variant_reference`, and `page_reference` metafield types. |
+
+## Component type
+
+The `Metafield` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+
+## Related hooks
+
+- [`useParsedMetafields`](https://shopify.dev/api/hydrogen/hooks/metafield/useparsedmetafields)
