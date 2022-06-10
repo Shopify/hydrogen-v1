@@ -23,7 +23,7 @@ export function Component() {
 | Name     | Type                        | Description                                                                                                                                                                                                                       |
 | -------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | children | <code>ReactNode</code>      | A `ReactNode` element.                                                                                                                                                                                                            |
-| preload? | <code>PreloadOptions</code> | Whether to [preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries). Defaults to `false`. Specify `true` to preload the query for the URL or `'*'` to preload the query for all requests. |
+| preload? | <code>PreloadOptions</code> | Whether to [preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries). Defaults to `true`. Specify `false` to not preload the query for the URL or `'*'` to preload the query for all requests. |
 
 ## Component type
 

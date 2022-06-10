@@ -93,6 +93,11 @@ yarn changeset add
 
 Follow the prompts to select which package(s) are affected by your change, and whether the change is a major, minor or patch change. This will create a file in the `.changesets` directory of the repo. This change should be committed and included with your PR.
 
+Considerations:
+
+- You can use markdown in your changeset to include code examples, headings, and more. However, **please use plain text for the first line of your changeset**. The formatting of the GitHub release notes does not support headings as the first line of the changeset.
+- When selecting packages for the changesets, only select packages which are published. Do not include private packages, as it will cause the build to fail. _Hopefully these are removed from the list of options in a [future Changesets release](https://github.com/changesets/changesets/issues/436)_.
+
 > **Important**: Until our official release, we will only release `minor` and `patch` updates. This means that breaking changes will be included in minor releases. Once we officially launch Hydrogen, we'll switch to `1.0.0` and follow a normal semantic release pattern.
 
 ## Contributing Examples

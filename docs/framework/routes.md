@@ -4,7 +4,7 @@ title: Routes
 description: Get familiar with the file-based routing system that Hydrogen uses.
 ---
 
-The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen app.
+The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen storefront.
 
 ## How routes work
 
@@ -120,7 +120,7 @@ export default function({request}) {
 
 By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx` using the following components:
 
-- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen app
+- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen storefront
 - [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
 - [`Route`](https://shopify.dev/api/hydrogen/components/framework/route): Used to set up a route in Hydrogen that's independent of the file system
 
@@ -344,6 +344,7 @@ export default function CustomPage({response}) {
   response.doNotStream();
 
   response.headers.set('custom-header', 'value');
+  response.status = 201;
 
   // ...
 }
@@ -412,6 +413,6 @@ function MyPage({custom, props, here}) {
 
 - Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.
 - Learn about how Hydrogen consumes data from different [sources](https://shopify.dev/custom-storefronts/hydrogen/data-sources).
-- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen apps.
+- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen storefronts.
 - Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
 - Learn how to [manage your server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) during your development process.

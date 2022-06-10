@@ -31,8 +31,12 @@ export {
   CacheMonths,
   CacheCustom,
 } from './foundation/Cache/strategies';
+export {useRequestContext} from './foundation/useRequestContext';
 export {useServerAnalytics} from './foundation/Analytics/hook';
-export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.server';
+export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server';
+export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const';
+export * as ShopifyServerAnalyticsConnector from './foundation/Analytics/connectors/Shopify/ServerAnalyticsConnector.server';
+export * as PerformanceMetricsServerAnalyticsConnector from './foundation/Analytics/connectors/PerformanceMetrics/ServerAnalyticsConnector.server';
 export {useSession} from './foundation/useSession/useSession';
 export {CookieSessionStorage} from './foundation/CookieSessionStorage/CookieSessionStorage';
 export {MemorySessionStorage} from './foundation/MemorySessionStorage/MemorySessionStorage';
@@ -48,3 +52,6 @@ export {CartQuery} from './components/CartProvider/cart-queries';
  * Override the client version of `fetchSync` with the server version.
  */
 export {fetchSync} from './foundation/fetchSync/server/fetchSync';
+
+export {type HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
+export {type HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';

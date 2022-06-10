@@ -70,7 +70,8 @@ export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
 
 export type ServerAnalyticsConnector = {
   request: (
-    request: Request,
+    requestUrl: string,
+    requestHeader: Headers,
     data?: any,
     contentType?: 'json' | 'text'
   ) => void;

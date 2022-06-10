@@ -2,6 +2,8 @@ import {chromium} from 'playwright';
 import type {Server} from 'http';
 import {createServer as createViteDevServer} from 'vite';
 
+export const DEFAULT_DELAY = 60000;
+
 export async function startHydrogenServer() {
   // @ts-ignore
   const app = import.meta.env.WATCH

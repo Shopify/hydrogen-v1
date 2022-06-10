@@ -1,4 +1,10 @@
-import {useShopQuery, Seo, CacheDays, gql} from '@shopify/hydrogen';
+import {
+  useShopQuery,
+  Seo,
+  CacheDays,
+  useServerAnalytics,
+  gql,
+} from '@shopify/hydrogen';
 
 /**
  * A server component that fetches a `shop.name` and sets default values and templates for every page on a website
@@ -6,12 +12,24 @@ import {useShopQuery, Seo, CacheDays, gql} from '@shopify/hydrogen';
 export default function DefaultSeo() {
   const {
     data: {
-      shop: {name, description},
+      shop: {
+        name,
+        description,
+        id,
+        paymentSettings: {currencyCode},
+      },
     },
   } = useShopQuery({
     query: QUERY,
     cache: CacheDays(),
     preload: '*',
+  });
+
+  useServerAnalytics({
+    shopify: {
+      shopId: id,
+      currency: currencyCode,
+    },
   });
 
   return (
@@ -28,8 +46,12 @@ export default function DefaultSeo() {
 const QUERY = gql`
   query shopInfo {
     shop {
+      id
       name
       description
+      paymentSettings {
+        currencyCode
+      }
     }
   }
 `;

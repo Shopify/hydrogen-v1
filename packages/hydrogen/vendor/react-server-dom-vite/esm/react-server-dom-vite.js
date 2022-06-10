@@ -559,13 +559,13 @@ function startReadingFromStream(response, stream) {
 }
 
 function createFromReadableStream(stream) {
-  var response = createResponse$1();
+  var response = createResponse$1({});
   startReadingFromStream(response, stream);
   return response;
 }
 
 function createFromFetch(promiseForResponse) {
-  var response = createResponse$1();
+  var response = createResponse$1({});
   promiseForResponse.then(function (r) {
     startReadingFromStream(response, r.body);
   }, function (e) {
@@ -575,7 +575,7 @@ function createFromFetch(promiseForResponse) {
 }
 
 function createFromXHR(request) {
-  var response = createResponse$1();
+  var response = createResponse$1({});
   var processedLength = 0;
 
   function progress(e) {

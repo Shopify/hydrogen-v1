@@ -46,7 +46,7 @@ function SomeApiDelayServerComponent({
 
 function mountComponent(request: HydrogenRequest, children: React.ReactChild) {
   return mountWithProviders(
-    <ServerRequestProvider request={request} isRSC={true}>
+    <ServerRequestProvider request={request}>
       <Suspense fallback={null}>
         {children}
         <Suspense fallback={null}>
@@ -74,7 +74,6 @@ describe('Analytics.server', () => {
 
     const cache = request.ctx.cache;
     expect(cache.size).toEqual(1);
-    expect(cache.has('analytics-delay')).toEqual(true);
     expect(request.ctx.analyticsData).toEqual({
       url: 'https://examples.com/',
       normalizedRscUrl: 'https://examples.com/',
@@ -98,7 +97,6 @@ describe('Analytics.server', () => {
 
     const cache = request.ctx.cache;
     expect(cache.size).toEqual(2);
-    expect(cache.has('analytics-delay')).toEqual(false);
     expect(request.ctx.analyticsData).toEqual({
       url: 'https://examples.com/',
       normalizedRscUrl: 'https://examples.com/',

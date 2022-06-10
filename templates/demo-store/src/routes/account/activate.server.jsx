@@ -1,4 +1,5 @@
 import {NoStore, gql} from '@shopify/hydrogen';
+import {getApiErrorMessage} from '../../components/utilities/api.helper';
 
 /**
  * This API route is used by the form on `/account/activate/[id]/[activationToken]`
@@ -40,7 +41,7 @@ export async function api(request, {session, queryShop}) {
   } else {
     return new Response(
       JSON.stringify({
-        error: getErrorMessage(data, errors),
+        error: getApiErrorMessage('customerActivate', data, errors),
       }),
       {status: 401},
     );
@@ -62,10 +63,3 @@ const ACTIVATE = gql`
     }
   }
 `;
-
-function getErrorMessage(data, errors) {
-  if (errors?.length) return errors[0].message ?? errors[0];
-  if (data?.customerActivate?.customerUserErrors?.length)
-    return data.customerActivate.customerUserErrors[0].message;
-  return null;
-}

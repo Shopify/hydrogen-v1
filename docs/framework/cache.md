@@ -1,7 +1,7 @@
 ---
 gid: 038c475e-f28f-471b-a981-26e7ebb8bec9
 title: Caching
-description: Learn how to manage cache options for Hydrogen apps.
+description: Learn how to manage cache options for Hydrogen storefronts.
 ---
 
 Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr), caching ensures that buyers get the quickest response possible while also displaying the latest data.
@@ -28,6 +28,7 @@ Hydrogen includes recommended caching strategies to help you determine which cac
 | `CacheDays()`    | `public, max-age=3600, stale-while-revalidate=82800`      | 1 Day          |
 | `CacheWeeks()`   | `public, max-age=604800, stale-while-revalidate=604800`   | 2 Weeks        |
 | `CacheMonths()`  | `public, max-age=1296000, stale-while-revalidate=1296000` | 1 Month        |
+| `NoStore()`      | `no-store`                                                | No cache       |
 | `CacheCustom()`  | Define your own cache control header                      | Custom         |
 
 ### Example
@@ -36,6 +37,10 @@ Hydrogen includes recommended caching strategies to help you determine which cac
 import {CacheSeconds} from '@shopify/hydrogen';
 response.cache(CacheSeconds());
 ```
+
+### Disabling caching
+
+Use the `NoStore()` caching strategy to disable caching. You should consider disabling caching on authenticated pages to prevent leaking personal identifying information.
 
 ### Build your own caching strategies
 
@@ -79,7 +84,7 @@ export interface AllCacheOptions {
 
 ## Sub-request caching
 
-While rendering a page in your Hydrogen app, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheSeconds` strategy.
+While rendering a page in your Hydrogen storefront, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheSeconds` strategy.
 
 The following example shows how to implement [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery) for Shopify Storefront API queries:
 
@@ -235,7 +240,7 @@ app.use(
 Full-page caching is powered completely by [`cache-control` headers on the Hydrogen response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control). This means the network edge as well as the user’s browser is responsible managing full-page cache.
 
 > Note:
-> Oxygen caches HTML responses from Hydrogen at the network edge. However, your hosting provider or CDN might not cache HTML responses by default. Make sure to consult with your individual provider to enable HTML caching for your Hydrogen app.
+> Oxygen caches HTML responses from Hydrogen at the network edge. However, your hosting provider or CDN might not cache HTML responses by default. Make sure to consult with your individual provider to enable HTML caching for your Hydrogen storefront.
 
 ## Related hooks
 

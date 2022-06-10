@@ -150,7 +150,7 @@ The function is called inside the [`ShopifyProvider`](https://shopify.dev/api/hy
 
 ### `session`
 
-The `session` property allows you to configure sessions support in your Hydrogen app. For more information about configuring sessions support in Hydrogen apps, refer to [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
+The `session` property allows you to configure sessions support in your Hydrogen storefront. For more information about configuring sessions support in Hydrogen storefronts, refer to [Session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
 
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
@@ -207,7 +207,7 @@ export default defineConfig({
     error: async (request, error) => {
       console.error(error);
       // Methods can return promises. Hydrogen won't block the current
-      // request but it will await for them before the runtime instance ends.
+      // request but it will wait for the promises to be returned before the runtime instance ends.
       await myErrorTrackingService.send(request, error);
     },
     /* ... */
@@ -216,9 +216,15 @@ export default defineConfig({
     showCacheApiStatus: true,
     /* Logs the cache control headers of the main document and its sub queries. */
     showCacheControlHeader: true,
-    /* Logs the timeline of when queries are being requested, resolved, and rendered. */
+    /* Logs the timeline of when queries are being requested, resolved, and rendered.
+    * This is an experimental feature. As a result, functionality is subject to change.
+    * You can provide feedback on this feature by submitting an issue in GitHub:
+    * https://github.com/Shopify/hydrogen/issues.*/
     showQueryTiming: true,
-    /* Logs warnings in your app if you're over-fetching data from the Storefront API. */
+    /* Logs warnings in your app if you're over-fetching data from the Storefront API.
+     * This is an experimental feature. As a result, functionality is subject to change.
+     * You can provide feedback on this feature by submitting an issue in GitHub:
+     * https://github.com/Shopify/hydrogen/issues. */
     showUnusedQueryProperties: true,
   }
 });
@@ -228,7 +234,7 @@ export default defineConfig({
 
 ### `strictMode`
 
-[Strict mode](https://reactjs.org/docs/strict-mode.html) is enabled by default for all Hydrogen apps in development. It includes [strict effects](https://github.com/reactwg/react-18/discussions/19), which mounts and unmounts components multiple times to catch potential issues with user or third-party code.
+[Strict mode](https://reactjs.org/docs/strict-mode.html) is enabled by default for all Hydrogen storefronts in development. It includes [strict effects](https://github.com/reactwg/react-18/discussions/19), which mounts and unmounts components multiple times to catch potential issues with user or third-party code.
 
 If strict effects cause problems for your app, then you can turn off strict mode.
 
@@ -236,7 +242,7 @@ If strict effects cause problems for your app, then you can turn off strict mode
 
 ```tsx
 export default defineConfig({
-  strictMode: false, 
+  strictMode: false,
 });
 ```
 
@@ -274,4 +280,4 @@ export default defineConfig({
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
 - Get familiar with the [file-based routing system](https://shopify.dev/custom-storefronts/hydrogen/framework/routes) that Hydrogen uses.
 - Learn about the Hydrogen framework's built-in support for [session management](https://shopify.dev/custom-storefronts/hydrogen/framework/sessions).
-- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen apps.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen.

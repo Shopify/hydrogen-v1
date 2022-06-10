@@ -66,6 +66,7 @@ export class HydrogenRequest extends Request {
     buyerIpHeader?: string;
     session?: SessionSyncApi;
     runtime?: RuntimeContext;
+    scopes: Map<string, Record<string, any>>;
     [key: string]: any;
   };
 
@@ -99,6 +100,7 @@ export class HydrogenRequest extends Request {
         normalizedRscUrl: this.normalizedUrl,
       },
       preloadQueries: new Map(),
+      scopes: new Map(),
     };
     this.cookies = this.parseCookies();
   }
@@ -123,7 +125,7 @@ export class HydrogenRequest extends Request {
   public savePreloadQuery(query: PreloadQueryEntry) {
     if (typeof query.preload === 'string' && query.preload === PRELOAD_ALL) {
       saveToPreloadAllPreload(query);
-    } else if (query.preload) {
+    } else {
       this.ctx.preloadQueries.set(hashKey(query.key), query);
     }
   }

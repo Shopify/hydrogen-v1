@@ -4,6 +4,13 @@ title: Preloaded queries
 description: Learn how to configure queries to preload in your Hydrogen app.
 ---
 
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>Preloaded queries is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
+
+</aside>
+
 This guide provides information on how preloaded queries work and how to configure them in your Hydrogen app.
 
 ## How preloaded queries work
@@ -73,7 +80,7 @@ The `preload` property takes a Boolean value or a string:
 - `preload: '*'`: Preloads a query for every request. This option can be helpful for menu links in your navigation, allowing you to preload a query on button click or while you animate a transition to another page.
 
 > Note:
-> By default, preloaded queries are turned off because not all queries should be preloaded. For example, any queries that are specific to cart or customer functionality shouldn't be preloaded.
+> By default, preloading is turned on for all cached queries. Any queries that are specific to cart or customer functionality shouldn't be preloaded.
 
 {% codeblock %}
 
@@ -101,6 +108,13 @@ const data = fetchSync('https://my.api.com/data.json', {
 
 ## Test a preloaded query
 
+<aside class="note beta">
+<h4>Experimental feature</h4>
+
+<p>The `showQueryTiming` property is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
+
+</aside>
+
 To test a preloaded query, enable the `logger.showQueryTiming` property in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger).
 
 The [`showQueryTiming`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
@@ -120,4 +134,4 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ## Next steps
 
-- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen apps.
+- Learn about the [analytics support](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics) built into Hydrogen.

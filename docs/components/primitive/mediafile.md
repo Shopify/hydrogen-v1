@@ -7,7 +7,7 @@ description: The MediaFile component renders the media for the Storefront API's 
 The `MediaFile` component renders the media for the Storefront API's
 [Media object](https://shopify.dev/api/storefront/reference/products/media). It renders an `Image`, a
 `Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the
-`media` provided as a prop.
+`media` provided as a prop. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 

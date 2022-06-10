@@ -1,4 +1,5 @@
 import {NoStore, gql} from '@shopify/hydrogen';
+import {getApiErrorMessage} from '../../components/utilities/api.helper';
 
 /**
  * This API route is used by the form on `/account/reset/[id]/[resetToken]`
@@ -47,7 +48,7 @@ export async function api(request, {session, queryShop}) {
   } else {
     return new Response(
       JSON.stringify({
-        error: getErrorMessage(data, errors),
+        error: getApiErrorMessage('customerReset', data, errors),
       }),
       {status: 401},
     );
@@ -69,10 +70,3 @@ const MUTATION = gql`
     }
   }
 `;
-
-function getErrorMessage(data, errors) {
-  if (errors?.length) return errors[0].message ?? errors[0];
-  if (data?.customerReset?.customerUserErrors?.length)
-    return data.customerReset.customerUserErrors[0].message;
-  return null;
-}
