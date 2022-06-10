@@ -59,7 +59,7 @@ export function ProductGrid({data}) {
 
   return (
     <>
-      <Grid>
+      <Grid layout="products">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
