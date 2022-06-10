@@ -6,16 +6,13 @@ import type {
   ResolvedHydrogenConfig,
   PreloadOptions,
   QueryKey,
+  RuntimeContext,
 } from '../../types';
 import {hashKey} from '../../utilities/hash';
 import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
 import {SessionSyncApi} from '../session/session';
 import {parseJSON} from '../../utilities/parse';
-
-export interface RuntimeContext {
-  waitUntil: (fn: Promise<any>) => void;
-}
 
 export type PreloadQueryEntry = {
   key: QueryKey;

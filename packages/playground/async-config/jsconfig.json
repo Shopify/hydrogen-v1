@@ -5,10 +5,7 @@
     "moduleResolution": "node16",
     "lib": ["dom", "dom.iterable", "scripthost", "es2020"],
     "jsx": "react",
-    "types": ["vite/client"],
-    "paths": {
-      "~/*": ["./src/*"]
-    }
+    "types": ["vite/client"]
   },
   "exclude": ["node_modules", "dist"],
   "include": ["**/*.js", "**/*.jsx"]

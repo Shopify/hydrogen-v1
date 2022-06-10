@@ -1,5 +1,5 @@
 import '../utilities/web-api-polyfill';
-import type {RequestHandler} from '../entry-server';
+import type {RequestHandler} from '../types';
 import path from 'path';
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
