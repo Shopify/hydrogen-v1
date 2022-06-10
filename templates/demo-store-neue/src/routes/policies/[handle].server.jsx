@@ -66,7 +66,10 @@ export default function Policy({params}) {
     <Layout>
       <Seo type="page" data={page} />
       <PageHeader heading={page.title}>
-        <div dangerouslySetInnerHTML={{__html: page.body}} className="prose" />
+        <div
+          dangerouslySetInnerHTML={{__html: page.body}}
+          className="prose dark:prose-invert"
+        />
       </PageHeader>
     </Layout>
   );
