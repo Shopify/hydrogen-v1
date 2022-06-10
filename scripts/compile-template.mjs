@@ -42,7 +42,7 @@ import prettier from 'prettier';
 
 async function createProcessor(from, to) {
   const tsConfig = await fs.readFile(resolve(from, 'tsconfig.json'), 'utf8');
-  const {compilerOptions} = JSON.parse(tsConfig);
+  const config = JSON.parse(tsConfig);
 
   return async function processFile(filepath) {
     const filename = basename(filepath);
@@ -54,7 +54,10 @@ async function createProcessor(from, to) {
       case '.ts':
       case '.tsx':
         const withArtificialNewLines = escapeNewLines(content);
-        const compiled = compile(withArtificialNewLines, compilerOptions);
+        const compiled = compile(
+          withArtificialNewLines,
+          config.compilerOptions
+        );
 
         content = restoreNewLines(compiled.outputText);
         destination = destination.replace('.ts', '.js');
@@ -70,6 +73,29 @@ async function createProcessor(from, to) {
         await fs.writeFile(destination, content);
         return;
       case 'tsconfig.json':
+        destination = destination.replace('ts', 'js');
+
+        const compilerOptions = [
+          'target',
+          'module',
+          'moduleResolution',
+          'lib',
+          'jsx',
+          'types',
+        ].reduce((acc, key) => {
+          acc[key] = config.compilerOptions[key];
+          return acc;
+        }, {});
+
+        content = JSON.stringify(
+          Object.assign(config, {
+            compilerOptions,
+          }),
+          null,
+          2
+        );
+
+        break;
       case 'yarn.lock':
         return;
       case 'README.md':
