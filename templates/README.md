@@ -36,11 +36,11 @@ $ npx @shopify/create-hydrogen --template hello-world-ts
 ```sh
 ## Create a Hydrogen app with the Hello World template
 # yarn
-$ yarn create @shopify/hydrogen --template hello-world-ts
+$ yarn create @shopify/hydrogen --template hello-world
 # npm
-$ npm init @shopify/hydrogen --template hello-world-ts
+$ npm init @shopify/hydrogen --template hello-world
 # npx
-$ npx @shopify/create-hydrogen --template hello-world-ts
+$ npx @shopify/create-hydrogen --template hello-world
 ```
 
 **Hello World in JavaScript** is a generated JavaScript implementation of the Hello WOrld in TypeScript template.
