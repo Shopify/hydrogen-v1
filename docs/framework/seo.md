@@ -109,7 +109,10 @@ export default function App({log, ...serverProps}) {
 
 ## Overwriting title template
 
-By default, for all pages, the titles are `%s - ${data.title}`, where `%s` is the title of children components. If you want to use a different pattern, then you can overwrite the title template for all pages using a `defaultSeo` type `Seo` component, or for a single page by updating the `Head` title.
+In the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates#demo-store-template), the titles for all pages are `%s - ${data.title}`, where `%s` is the title of children components. If you want to use a different pattern, then you can overwrite the title template for all pages using a `defaultSeo` type `Seo` component, or for a single page by updating the `Head` title.
+
+> Note:
+> **Hydrogen** is the default label that displays on the browser tab. You can edit the label by updating the text in the `<title>` tag in `index.html`.
 
 ### Overwrite for all pages
 
