@@ -1,23 +1,13 @@
-import { gql, Seo, useRouteParams, useShopQuery } from '@shopify/hydrogen';
+import { gql,useRouteParams, useShopQuery } from '@shopify/hydrogen';
+import { Product } from '@shopify/hydrogen/dist/esnext/storefront-api-types';
 import groq from 'groq'
 import { useSanityQuery } from '../../../hooks/useSanityQuery';
-import { Product } from '@shopify/hydrogen/dist/esnext/storefront-api-types';
 
 type ProductPage = {
   store: {
     _id: string;
     gid: string;
     vendor?: string;
-  }
-  body: any;
-  sanitySeo: {
-    title: string;
-    description: string;
-    image: {
-      asset: {
-        url: string;
-      }
-    }
   }
 }
 
@@ -34,7 +24,6 @@ export default function ProductRoute() {
     query: QUERY_SANITY,
     params: {slug: handle}
   })
-  const {sanitySeo} = sanityProduct
   /**
    * Conditionally fetch Shopify data if the product is found in Sanity
    */
@@ -52,27 +41,13 @@ export default function ProductRoute() {
   if (!sanityProduct || !storefrontProduct) {
     return <main><h1>Sorry, we couldn't find the product you were looking for.</h1></main>
   }
+  console.log({sanityProduct, storefrontProduct})
 
   return (<main>
     <a href="/">⬅ Home</a>
     <h1>{storefrontProduct?.title} — {sanityProduct?.store?.vendor}</h1>
     <p>{storefrontProduct?.description}</p>
-    <Seo
-      data={{
-        ...(sanitySeo.image ? {
-          featuredImage: {
-            height: sanitySeo.image.height,
-            url: sanitySeo.image.url,
-            width: sanitySeo.image.width,
-          },
-        } : {}),
-        seo: {
-          description: sanitySeo.description,
-          title: sanitySeo.title,
-        },
-      }}
-      type="product"
-    />
+
   </main>);
 }
 
