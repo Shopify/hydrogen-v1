@@ -51,16 +51,12 @@ export default function Policy({params}) {
     return <NotFound />;
   }
 
-  useServerAnalytics(
-    page
-      ? {
-          shopify: {
-            pageType: ShopifyAnalyticsConstants.pageType.page,
-            resourceId: page.id,
-          },
-        }
-      : null,
-  );
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.page,
+      resourceId: page.id,
+    },
+  });
 
   return (
     <Layout>
