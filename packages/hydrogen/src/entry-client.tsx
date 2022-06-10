@@ -234,9 +234,10 @@ function useServerResponse(state: any) {
     const [streamForRsc, streamForMetrics] = rscReader.tee();
     response = createFromReadableStream(streamForRsc);
 
-    const metricsReader = streamForMetrics.getReader();
-    metricsReader.read().then(({done}) => {
+    const rscReaderForMetrics = streamForMetrics.getReader();
+    rscReaderForMetrics.read().then(function read({done}) {
       if (done) performance.mark('--hydrogen-hydration-done');
+      else rscReaderForMetrics.read().then(read);
     });
 
     rscReader = null;
