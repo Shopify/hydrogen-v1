@@ -7,7 +7,7 @@ export function FeaturedCollections({data, title = 'Collections', ...props}) {
   const items = data.filter((item) => item.image).length;
 
   return (
-    <Section heading={title} {...props}>
+    <Section {...props} heading={title}>
       <Grid items={items}>
         {data.map((collection) => {
           if (!collection?.image) {
