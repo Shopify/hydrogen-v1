@@ -28,6 +28,7 @@ Hydrogen includes recommended caching strategies to help you determine which cac
 | `CacheDays()`    | `public, max-age=3600, stale-while-revalidate=82800`      | 1 Day          |
 | `CacheWeeks()`   | `public, max-age=604800, stale-while-revalidate=604800`   | 2 Weeks        |
 | `CacheMonths()`  | `public, max-age=1296000, stale-while-revalidate=1296000` | 1 Month        |
+| `NoStore()`      | `no-store`                                                | No cache       |
 | `CacheCustom()`  | Define your own cache control header                      | Custom         |
 
 ### Example
@@ -36,6 +37,10 @@ Hydrogen includes recommended caching strategies to help you determine which cac
 import {CacheSeconds} from '@shopify/hydrogen';
 response.cache(CacheSeconds());
 ```
+
+### Disabling caching
+
+Use the `NoStore()` caching strategy to disable caching. You should consider disabling caching on authenticated pages to prevent leaking personal identifying information.
 
 ### Build your own caching strategies
 
