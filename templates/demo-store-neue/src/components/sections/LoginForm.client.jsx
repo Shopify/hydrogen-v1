@@ -1,16 +1,14 @@
-import React from 'react';
+import {useState} from 'react';
 import {useNavigate, Link} from '@shopify/hydrogen/client';
 
-export default function LoginForm({shopName}) {
+export function LoginForm({shopName}) {
   const navigate = useNavigate();
-  const [hasSubmitError, setHasSubmitError] = React.useState(false);
-  const [showEmailField, setShowEmailField] = React.useState(true);
-
-  const [email, setEmail] = React.useState('');
-  const [emailError, setEmailError] = React.useState(null);
-
-  const [password, setPassword] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(null);
+  const [hasSubmitError, setHasSubmitError] = useState(false);
+  const [showEmailField, setShowEmailField] = useState(true);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(null);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(null);
 
   function onSubmit(event) {
     event.preventDefault();

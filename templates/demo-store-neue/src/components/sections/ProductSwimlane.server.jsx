@@ -1,16 +1,16 @@
 import {useMemo} from 'react';
-import {gql, useShopQuery} from '@shopify/hydrogen';
-import Section from './Section';
+import {gql, useShopQuery, useSession, useShop} from '@shopify/hydrogen';
+import {Section} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 const mockProducts = new Array(12).fill('');
 
-export default function ProductSwimlane({
+export function ProductSwimlane({
   title = 'Featured Products',
   data = mockProducts,
   count = 12,
-  ...passthroughProps
+  ...props
 }) {
   const productCardsMarkup = useMemo(() => {
     // If the data is already provided, there's no need to query it, so we'll just return the data
@@ -29,7 +29,7 @@ export default function ProductSwimlane({
   }, [count, data]);
 
   return (
-    <Section heading={title} padding="y" {...passthroughProps}>
+    <Section heading={title} padding="y" {...props}>
       <div className="grid grid-flow-col gap-6 px-4 pb-4 overflow-x-scroll md:pb-8 snap-x scroll-px-4 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
         {productCardsMarkup}
       </div>
@@ -52,11 +52,16 @@ function ProductCards({products}) {
 }
 
 function RecommendedProducts({productId, count}) {
+  const {languageCode} = useShop();
+  const {countryCode = 'US'} = useSession();
+
   const {data: products} = useShopQuery({
-    query: RECOMMENDED_PRODUCTS,
+    query: RECOMMENDED_PRODUCTS_QUERY,
     variables: {
       count,
       productId,
+      languageCode,
+      countryCode,
     },
   });
 
@@ -80,7 +85,7 @@ function TopProducts({count}) {
   const {
     data: {products},
   } = useShopQuery({
-    query: TOP_PRODUCTS,
+    query: TOP_PRODUCTS_QUERY,
     variables: {
       count,
     },
@@ -89,9 +94,14 @@ function TopProducts({count}) {
   return <ProductCards products={products.nodes} />;
 }
 
-const RECOMMENDED_PRODUCTS = gql`
+const RECOMMENDED_PRODUCTS_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
-  query productRecommendations($productId: ID!, $count: Int) {
+  query productRecommendations(
+    $productId: ID!
+    $count: Int
+    $countryCode: CountryCode
+    $languageCode: LanguageCode
+  ) @inContext(country: $countryCode, language: $languageCode) {
     recommended: productRecommendations(productId: $productId) {
       ...ProductCardFields
     }
@@ -103,9 +113,13 @@ const RECOMMENDED_PRODUCTS = gql`
   }
 `;
 
-const TOP_PRODUCTS = gql`
+const TOP_PRODUCTS_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
-  query topProducts($count: Int) {
+  query topProducts(
+    $count: Int
+    $countryCode: CountryCode
+    $languageCode: LanguageCode
+  ) @inContext(country: $countryCode, language: $languageCode) {
     products(first: $count, sortKey: BEST_SELLING) {
       nodes {
         ...ProductCardFields

@@ -13,7 +13,7 @@ import {
 /**
  * A client component that specifies the content of the header on the website
  */
-export default function Header({title, menu}) {
+export function Header({title, menu}) {
   const {pathname} = useUrl();
   const isHome = pathname === '/';
 
@@ -144,6 +144,9 @@ function DesktopHeader({title, isHome, menu}) {
 function CartBadge({dark}) {
   const {totalQuantity} = useCart();
 
+  if (totalQuantity < 1) {
+    return null;
+  }
   return (
     <div
       className={`${

@@ -1,17 +1,17 @@
 import clsx from 'clsx';
+
 import {Heading} from '~/components/elements';
 import {missingClass} from '~/lib/utils';
 
-export default function Section({
-  as = 'section',
-  heading,
+export function Section({
+  as: Component = 'section',
   children,
   className,
   divider,
+  heading,
   padding = 'all',
+  ...props
 }) {
-  const Component = as;
-
   const paddings = {
     x: 'px-4 md:px-8 lg:px-12',
     y: 'py-6 md:py-8 lg:py-12',
@@ -33,7 +33,7 @@ export default function Section({
   );
 
   return (
-    <Component className={styles}>
+    <Component {...props} className={styles}>
       {heading && (
         <Heading size="lead" className={padding === 'y' && paddings['x']}>
           {heading}

@@ -1,4 +1,5 @@
 import {NoStore, gql} from '@shopify/hydrogen';
+
 import {getApiErrorMessage} from '~/lib/utils';
 
 /**
@@ -18,7 +19,7 @@ export async function api(request, {session, queryShop}) {
   }
 
   const {data, errors} = await queryShop({
-    query: ACTIVATE,
+    query: CUSTOMER_ACTIVATE_MUTATION,
     variables: {
       id: `gid://shopify/Customer/${jsonBody.id}`,
       input: {
@@ -48,7 +49,7 @@ export async function api(request, {session, queryShop}) {
   }
 }
 
-const ACTIVATE = gql`
+const CUSTOMER_ACTIVATE_MUTATION = gql`
   mutation customerActivate($id: ID!, $input: CustomerActivateInput!) {
     customerActivate(id: $id, input: $input) {
       customerAccessToken {

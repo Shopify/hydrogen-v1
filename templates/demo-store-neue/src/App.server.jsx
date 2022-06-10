@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
   Route,
@@ -9,8 +10,8 @@ import {
   PerformanceMetrics,
   PerformanceMetricsDebug,
 } from '@shopify/hydrogen';
-import {Suspense} from 'react';
-import {NotFound} from './components/pages';
+
+import {NotFound} from '~/components/pages';
 
 function App({routes}) {
   return (

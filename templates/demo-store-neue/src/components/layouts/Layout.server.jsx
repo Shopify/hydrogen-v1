@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   useShop,
   useShopQuery,
@@ -6,10 +7,7 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {Suspense} from 'react';
-
-import Header from '../sections/Header.client';
-import Footer from '../sections/Footer.client';
+import {Header, Footer} from '~/components/sections';
 
 import {parseMenu} from '~/lib/utils';
 
@@ -19,11 +17,11 @@ const FOOTER_MENU_HANDLE = 'footer';
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
-export default function Layout({children}) {
+export function Layout({children}) {
   const {languageCode} = useShop();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: SHOP_QUERY,
     variables: {
       language: languageCode,
       headerMenuHandle: HEADER_MENU_HANDLE,
@@ -76,7 +74,7 @@ export default function Layout({children}) {
   );
 }
 
-const QUERY = gql`
+const SHOP_QUERY = gql`
   fragment MenuItem on MenuItem {
     id
     resourceId
@@ -85,7 +83,6 @@ const QUERY = gql`
     type
     url
   }
-
   query layout(
     $language: LanguageCode
     $headerMenuHandle: String!
@@ -94,7 +91,6 @@ const QUERY = gql`
     shop {
       name
     }
-
     headerMenu: menu(handle: $headerMenuHandle) {
       id
       items {
@@ -104,7 +100,6 @@ const QUERY = gql`
         }
       }
     }
-
     footerMenu: menu(handle: $footerMenuHandle) {
       id
       items {

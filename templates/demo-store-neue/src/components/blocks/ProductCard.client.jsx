@@ -1,10 +1,12 @@
-import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 import clsx from 'clsx';
+import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
+
 import {Text} from '~/components/elements';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
+
 import {product as mockProduct} from '~/lib/placeholders';
 
-export default function ProductCard({product, label, className}) {
+export function ProductCard({product, label, className}) {
   let cardLabel;
 
   const cardData = product?.variants ? product : mockProduct;
@@ -64,7 +66,6 @@ export default function ProductCard({product, label, className}) {
   );
 }
 
-// <Money className="opacity-50 strike" data={compareAtPrice} />
 function CompareAtPrice({data, className}) {
   const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} =
     useMoney(data);

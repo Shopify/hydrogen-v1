@@ -1,16 +1,16 @@
 import clsx from 'clsx';
+
 import {missingClass, formatText} from '~/lib/utils';
 
-export default function Heading({
-  as = 'h2',
+export function Heading({
+  as: Component = 'h2',
+  children,
+  className = '',
+  format,
   size = 'heading',
   width = 'default',
-  format,
-  className = '',
-  children,
+  ...props
 }) {
-  const Component = as;
-
   const sizes = {
     display: 'font-bold text-display',
     heading: 'font-bold text-heading',
@@ -32,7 +32,7 @@ export default function Heading({
   );
 
   return (
-    <Component className={styles}>
+    <Component {...props} className={styles}>
       {format ? formatText(children) : children}
     </Component>
   );
