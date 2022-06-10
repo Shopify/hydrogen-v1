@@ -231,7 +231,14 @@ function useServerResponse(state: any) {
 
   if (rscReader) {
     // The flight response was inlined during SSR, use it directly.
-    response = createFromReadableStream(rscReader);
+    const [streamForRsc, streamForMetrics] = rscReader.tee();
+    response = createFromReadableStream(streamForRsc);
+
+    const metricsReader = streamForMetrics.getReader();
+    metricsReader.read().then(({done}) => {
+      if (done) performance.mark('--hydrogen-hydration-done');
+    });
+
     rscReader = null;
   } else {
     if (
@@ -246,9 +253,17 @@ function useServerResponse(state: any) {
       window.BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
     }
 
+    performance.mark('--hydrogen-rsc-start');
+
     // Request a new flight response.
     response = createFromFetch(
       fetch(`${RSC_PATHNAME}?state=` + encodeURIComponent(key))
+    );
+    performance.mark('--hydrogen-rsc-end');
+    performance.measure(
+      '--hydrogen-rsc-time',
+      '--hydrogen-rsc-start',
+      '--hydrogen-rsc-end'
     );
   }
 
