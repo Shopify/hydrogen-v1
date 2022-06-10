@@ -10,7 +10,8 @@
   "ignore": [
     "demo-store",
     "demo-store-neue",
-    "hello-world",
+    "hello-world-js",
+    "hello-world-ts",
     "test-server-components",
     "test-async-config",
     "hydrogen-playground",
