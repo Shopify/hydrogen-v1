@@ -242,7 +242,7 @@ export default function AccountOrder({response, params}) {
                 </tr>
               </tfoot>
             </table>
-            <div>
+            <div className="border-none">
               <Text as="h3" size="lead">
                 Shipping Address
               </Text>
