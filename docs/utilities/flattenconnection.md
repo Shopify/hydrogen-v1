@@ -83,9 +83,9 @@ export function Product({handle}) {
 
 ## Arguments
 
-| Argument                                                                                                                                                                                                   | Required |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| A connection object with the field `nodes` whose value is an array of objects corresponding to `Value`, or `edges` whose value is an array of objects corresponding to `{node: Value}`. For example, any of the [Product connections](/api/storefront/reference/products/product). | Yes      |
+| Argument                                                                                                                                          | Required |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| A connection object with the field `nodes` or `edges`. For example, any of the [Product connections](/api/storefront/reference/products/product). | Yes      |
 
 ## Return type
 
