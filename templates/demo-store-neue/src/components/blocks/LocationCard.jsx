@@ -5,10 +5,12 @@ export function LocationCard({to, data}) {
   return (
     <Link to={to || `/locations/${data.handle}`} className="grid gap-4">
       <div className="card-image">
-        <Image
-          className="object-cover aspect-[3/2]"
-          data={data.featured_image.reference.image}
-        />
+        {data?.featured_image?.reference?.image && (
+          <Image
+            className="object-cover aspect-[3/2]"
+            data={data.featured_image.reference.image}
+          />
+        )}
       </div>
       <div>{data.title.value}</div>
     </Link>
