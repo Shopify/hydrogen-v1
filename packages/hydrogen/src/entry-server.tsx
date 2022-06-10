@@ -856,7 +856,12 @@ async function cacheResponse(
 ) {
   const cache = getCache();
 
-  if (response.cache().mode !== NO_STORE && cache && chunks.length > 0) {
+  if (
+    response.cache().mode !== NO_STORE &&
+    response.status === 200 &&
+    cache &&
+    chunks.length > 0
+  ) {
     if (revalidate) {
       await saveCacheResponse(response, request, chunks);
     } else {
