@@ -1,17 +1,19 @@
 {
-  "name": "hello-world",
-  "description": "Hello world template for @shopify/hydrogen",
+  "name": "example-typescript",
+  "description": "An example using typescript in Hydrogen",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "cross-env LOCAL_DEV=true shopify hydrogen dev",
+    "dev": "shopify hydrogen dev",
     "build": "shopify hydrogen build",
     "preview": "shopify hydrogen preview"
   },
   "devDependencies": {
-    "@shopify/cli": "2.0.10",
-    "@shopify/cli-hydrogen": "2.0.10",
+    "@shopify/cli": "latest",
+    "@shopify/cli-hydrogen": "latest",
+    "@types/react": "^18.0.9",
+    "typescript": "^4.6.4",
     "vite": "^2.9.0"
   },
   "dependencies": {

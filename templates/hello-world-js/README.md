@@ -1,10 +1,12 @@
-# Minimal Hydrogen App
+**Note:** This is a generated template. The TypeScript source code for this is in `templates/hello-world-ts`. Edits to all files in this directory will be overwritten.
+
+# JavaScript Example
 
 Hydrogen is a React framework and SDK that you can use to build fast and dynamic Shopify custom storefronts.
 
 [Check out the docs](https://shopify.dev/custom-storefronts/hydrogen)
 
-[Run this template on StackBlitz](https://stackblitz.com/github/Shopify/hydrogen/tree/stackblitz/templates/hello-world)
+[Run this template on StackBlitz](https://stackblitz.com/github/Shopify/hydrogen/tree/stackblitz/templates/hello-world-js)
 
 ## Getting started
 
@@ -14,8 +16,7 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 - Yarn
 
 ```bash
-yarn
-yarn dev
+npm init @shopify/hydrogen@latest --template hello-world-ts
 ```
 
 Remember to update `hydrogen.config.js` with your shop's domain and Storefront API token!
