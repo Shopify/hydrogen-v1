@@ -1,4 +1,4 @@
-import {useEffect, useCallback, useState} from 'react';
+import {useEffect, useCallback, useRef, useState} from 'react';
 import {
   useProductOptions,
   isBrowser,
@@ -12,6 +12,7 @@ import {Heading, Text, Button} from '~/components/elements';
 export function ProductForm() {
   const {pathname, search} = useUrl();
   const [params, setParams] = useState(new URLSearchParams(search));
+  const buttonRef = useRef();
 
   const {options, setSelectedOption, selectedOptions, selectedVariant} =
     useProductOptions();
@@ -117,6 +118,12 @@ export function ProductForm() {
           attributes={[{key: 'Engraving', value: 'Hello world'}]}
           accessibleAddingToCartLabel="Adding item to your cart"
           disabled={isOutOfStock}
+          onClick={(event) => {
+            event.preventDefault();
+            console.log('this is happening');
+            console.log(buttonRef.current);
+          }}
+          buttonRef={buttonRef}
         >
           <Button as="span">
             {isOutOfStock ? 'Out of stock' : 'Add to bag'}
