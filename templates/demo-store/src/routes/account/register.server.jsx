@@ -1,8 +1,9 @@
 import {NoStore, Seo, gql} from '@shopify/hydrogen';
 
+import Layout from '../../components/layouts/DefaultLayout.server';
+import AccountCreateForm from '../../components/sections/AccountCreateForm.client';
+
 import {getApiErrorMessage} from '../../components/utilities/api.helper';
-import Layout from '../../components/Layout.server';
-import AccountCreateForm from '../../components/account/AccountCreateForm.client';
 
 export default function Register({response}) {
   response.cache(NoStore());

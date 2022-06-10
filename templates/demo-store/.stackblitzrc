@@ -1,5 +1,0 @@
-{
-  "installDependencies": true,
-  "startCommand": "yarn vite",
-  "compileTrigger": "save"
-}
