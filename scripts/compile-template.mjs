@@ -90,6 +90,7 @@ async function createProcessor(from, to) {
         content = JSON.stringify(
           Object.assign(config, {
             compilerOptions,
+            include: config.include.map((path) => path.replace('.ts', '.js')),
           }),
           null,
           2
