@@ -15,6 +15,7 @@ import {
   SelectedOptions,
   ProductOptionsHookValue,
 } from '../../hooks/useProductOptions/types';
+import {flattenConnection} from '../../utilities/flattenConnection';
 
 type InitialVariantId = ProductVariantType['id'] | null;
 
@@ -41,13 +42,13 @@ export function ProductOptionsProvider({
 }: ProductOptionsProviderProps) {
   // The flattened variants
   const variants = useMemo(
-    () => product.variants?.nodes,
-    [product.variants?.nodes]
+    () => flattenConnection(product.variants ?? {}),
+    [product.variants]
   );
 
   if (!isProductVariantArray(variants)) {
     throw new Error(
-      `<ProductOptionsProvider/> requires product.variants.nodes`
+      `<ProductOptionsProvider/> requires 'product.variants.nodes' or 'product.variants.edges'`
     );
   }
 
@@ -112,11 +113,13 @@ export function ProductOptionsProvider({
 
   const sellingPlanGroups = useMemo(
     () =>
-      product.sellingPlanGroups?.nodes?.map((sellingPlanGroup) => ({
-        ...sellingPlanGroup,
-        sellingPlans: sellingPlanGroup?.sellingPlans?.nodes ?? [],
-      })),
-    [product.sellingPlanGroups?.nodes]
+      flattenConnection(product.sellingPlanGroups ?? {}).map(
+        (sellingPlanGroup) => ({
+          ...sellingPlanGroup,
+          sellingPlans: flattenConnection(sellingPlanGroup?.sellingPlans ?? {}),
+        })
+      ),
+    [product.sellingPlanGroups]
   );
 
   /**
@@ -135,13 +138,16 @@ export function ProductOptionsProvider({
       return;
     }
 
-    if (!selectedVariant.sellingPlanAllocations?.nodes) {
+    if (
+      !selectedVariant.sellingPlanAllocations?.nodes &&
+      !selectedVariant.sellingPlanAllocations?.edges
+    ) {
       throw new Error(
-        `<ProductOptionsProvider/>: You must include 'sellingPlanAllocations.nodes' in your variants in order to calculate selectedSellingPlanAllocation`
+        `<ProductOptionsProvider/>: You must include 'sellingPlanAllocations.nodes' or 'sellingPlanAllocations.edges' in your variants in order to calculate selectedSellingPlanAllocation`
       );
     }
 
-    return selectedVariant.sellingPlanAllocations.nodes?.find(
+    return flattenConnection(selectedVariant.sellingPlanAllocations).find(
       (allocation) => allocation?.sellingPlan?.id === selectedSellingPlan.id
     );
   }, [selectedVariant, selectedSellingPlan]);

@@ -5,6 +5,7 @@ import {
   useSession,
   NoStore,
   gql,
+  flattenConnection,
 } from '@shopify/hydrogen';
 
 import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
@@ -35,8 +36,7 @@ export function AccountDetails({customerAccessToken}) {
 
   const customer = data && data.customer;
 
-  const orders =
-    customer?.orders?.nodes.length > 0 ? customer.orders.nodes : [];
+  const orders = flattenConnection(customer?.orders);
 
   const heading = customer
     ? `Welcome${customer.firstName ? `, ${customer.firstName}` : ``}`
