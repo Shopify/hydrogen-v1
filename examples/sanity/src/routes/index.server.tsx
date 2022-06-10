@@ -1,18 +1,7 @@
 import { useSanityQuery } from '../../hooks/useSanityQuery';
 
-type IndexPage = {
-  store: {
-    id: string;
-    gid: string;
-    title?: string;
-    slug?: {
-      current: string;
-    }
-  }
-}
-
 export default function Home() {
-  const { data = [] } = useSanityQuery<IndexPage[]>({
+  const { data = [] } = useSanityQuery({
     hydrogenQueryOptions: { preload: true},
     query: `*[_type == "product"]`
   })

@@ -1,35 +1,20 @@
 import { gql,useRouteParams, useShopQuery } from '@shopify/hydrogen';
-import { Product } from '@shopify/hydrogen/dist/esnext/storefront-api-types';
 import groq from 'groq'
 import { useSanityQuery } from '../../../hooks/useSanityQuery';
 
-type ProductPage = {
-  store: {
-    _id: string;
-    gid: string;
-    vendor?: string;
-  }
-}
-
-type ShopifyPayload = {
-  product: Pick<
-    Product,
-    'handle' | 'id' | 'media' | 'seo' | 'title' | 'variants' | 'vendor' | 'description'
-  >;
-};
 
 export default function ProductRoute() {
-  const {handle} = useRouteParams();
-  const {data: sanityProduct} = useSanityQuery<ProductPage>({
+  const { handle } = useRouteParams();
+  const { data: sanityProduct } = useSanityQuery({
     query: QUERY_SANITY,
-    params: {slug: handle}
+    params: { slug: handle }
   })
   /**
    * Conditionally fetch Shopify data if the product is found in Sanity
    */
   let storefrontProduct
   if (sanityProduct?.store?.gid) {
-    const {data: shopifyProduct} = useShopQuery<ShopifyPayload>({
+    const {data: shopifyProduct} = useShopQuery({
       query: QUERY_SHOPIFY,
       variables: {
         id: sanityProduct?.store?.gid
@@ -41,7 +26,6 @@ export default function ProductRoute() {
   if (!sanityProduct || !storefrontProduct) {
     return <main><h1>Sorry, we couldn't find the product you were looking for.</h1></main>
   }
-  console.log({sanityProduct, storefrontProduct})
 
   return (<main>
     <a href="/">⬅ Home</a>
