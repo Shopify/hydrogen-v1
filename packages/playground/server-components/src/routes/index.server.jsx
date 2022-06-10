@@ -1,4 +1,5 @@
 import {Link} from '@shopify/hydrogen';
+import {Hello} from '../components/NonFunctionJsx';
 
 export function api() {
   return new Response('some api response');
@@ -18,6 +19,9 @@ export default function Index() {
       <Link className="redirect-btn" to="/redirected">
         Redirect
       </Link>
+
+      {/* This should not result in a build error */}
+      <Hello />
     </>
   );
 }
