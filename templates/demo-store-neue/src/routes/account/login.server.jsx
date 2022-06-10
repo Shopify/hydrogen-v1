@@ -1,6 +1,6 @@
 import {useShopQuery, CacheDays, NoStore, Seo, gql} from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
+import {Layout} from '~/components/layouts';
 import {LoginForm} from '~/components/sections';
 
 export default function Login({response}) {

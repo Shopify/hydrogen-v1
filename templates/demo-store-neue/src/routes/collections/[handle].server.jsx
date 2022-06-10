@@ -8,27 +8,25 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
+import {Layout} from '~/components/layouts';
 import {NotFound} from '~/components/pages';
-import {ProductGrid, PageHeader, Section} from '~/components/sections';
-import {Text} from '~/components/elements';
-
+import {PageHeader, Text, Section} from '~/components/elements';
+import {ProductGrid} from '~/components/sections';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 const pageBy = 12;
 
 export default function Collection({params}) {
+  const {handle} = params;
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
-
-  const {handle} = params;
 
   const {data} = useShopQuery({
     query: COLLECTION_QUERY,
     variables: {
       handle,
-      country: countryCode,
-      language: languageCode,
+      countryCode,
+      languageCode,
       pageBy,
     },
     preload: true,
@@ -87,7 +85,6 @@ export async function api(request, {params, queryShop}) {
   const cursor = new URL(request.url).searchParams.get('cursor');
   const {handle} = params;
 
-  // TODO: Pass country/locale params for multi-currency
   return await queryShop({
     query: PAGINATE_QUERY,
     variables: {

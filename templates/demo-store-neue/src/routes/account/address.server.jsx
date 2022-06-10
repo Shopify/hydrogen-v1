@@ -1,6 +1,8 @@
 import {NoStore, gql} from '@shopify/hydrogen';
-import {setDefaultAddress} from './address/[addressId].server';
+
 import {getApiErrorMessage} from '~/lib/utils';
+
+import {setDefaultAddress} from './address/[addressId].server';
 
 export async function api(request, {session, queryShop}) {
   if (request.method !== 'POST')
@@ -41,7 +43,7 @@ export async function api(request, {session, queryShop}) {
   if (phone) address.phone = phone;
 
   const {data, errors} = await queryShop({
-    query: CREATE_ADDRESS,
+    query: CREATE_ADDRESS_MUTATION,
     variables: {
       address,
       customerAccessToken,
@@ -72,7 +74,7 @@ export async function api(request, {session, queryShop}) {
   return new Response(null);
 }
 
-const CREATE_ADDRESS = gql`
+const CREATE_ADDRESS_MUTATION = gql`
   mutation customerAddressCreate(
     $address: MailingAddressInput!
     $customerAccessToken: String!
