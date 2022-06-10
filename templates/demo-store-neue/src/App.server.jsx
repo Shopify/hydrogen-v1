@@ -11,6 +11,7 @@ import {
   PerformanceMetricsDebug,
 } from '@shopify/hydrogen';
 
+import DefaultSeo from './components/DefaultSeo.server';
 import {NotFound} from '~/components/pages';
 
 function App({routes}) {
@@ -18,6 +19,7 @@ function App({routes}) {
     <Suspense fallback={null}>
       <ShopifyProvider>
         <CartProvider>
+          <DefaultSeo />
           <Router>
             <FileRoutes routes={routes} />
             <Route path="*" page={<NotFound />} />
