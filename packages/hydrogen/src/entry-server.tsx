@@ -505,9 +505,11 @@ async function runSSR({
         }
 
         // Last SSR write might be pending, delay closing the writable one tick
-        setTimeout(() => writable.close(), 0);
-        postRequestTasks('str', responseOptions.status, request, response);
-        cacheResponse(response, request, savedChunks, revalidate);
+        setTimeout(() => {
+          writable.close();
+          postRequestTasks('str', responseOptions.status, request, response);
+          cacheResponse(response, request, savedChunks, revalidate);
+        }, 0);
       });
     } else {
       // Redirects do not write body
