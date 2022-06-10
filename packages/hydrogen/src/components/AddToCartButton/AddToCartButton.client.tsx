@@ -42,6 +42,7 @@ export function AddToCartButton(
     quantity = 1,
     attributes,
     onClick,
+    buttonRef,
     children,
     accessibleAddingToCartLabel,
     ...passthroughProps
@@ -62,9 +63,12 @@ export function AddToCartButton(
     }
   }, [status, addingItem]);
 
+  // checa if click
+  // if prevented
+
   const handleAddItem = useCallback(
     (event?: MouseEvent) => {
-      if (onClick) {
+      if (onClick && event) {
         const clickShouldContinue = onClick(event);
         if (clickShouldContinue === false || event?.defaultPrevented) return;
       }
@@ -82,7 +86,12 @@ export function AddToCartButton(
 
   return (
     <>
-      <button {...passthroughProps} disabled={disabled} onClick={handleAddItem}>
+      <button
+        {...passthroughProps}
+        disabled={disabled}
+        onClick={handleAddItem}
+        ref={buttonRef}
+      >
         {children}
       </button>
       {accessibleAddingToCartLabel ? (

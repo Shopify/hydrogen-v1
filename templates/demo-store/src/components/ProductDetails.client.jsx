@@ -12,9 +12,12 @@ import {
   BUTTON_PRIMARY_CLASSES,
   BUTTON_SECONDARY_CLASSES,
 } from './Button.client';
+import {useRef} from 'react';
 
 function AddToCartMarkup() {
   const {selectedVariant} = useProductOptions();
+  const buttonRef = useRef();
+
   const isOutOfStock = !selectedVariant.availableForSale;
 
   return (
@@ -22,6 +25,14 @@ function AddToCartMarkup() {
       <AddToCartButton
         className={BUTTON_PRIMARY_CLASSES}
         disabled={isOutOfStock}
+        onClick={(event) => {
+          event.preventDefault();
+
+          console.log('before');
+          buttonRef.current.click();
+          console.log('after');
+        }}
+        buttonRef={buttonRef}
       >
         {isOutOfStock ? 'Out of stock' : 'Add to bag'}
       </AddToCartButton>

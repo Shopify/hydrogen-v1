@@ -46,7 +46,10 @@ export function BuyNowButton(
   const handleBuyNow = useCallback(
     (event?: MouseEvent) => {
       if (onClick) {
+        console.log('before it happens');
         const clickShouldContinue = onClick(event);
+        console.log('here');
+        console.log({clickShouldContinue, default: event?.defaultPrevented});
         if (clickShouldContinue === false || event?.defaultPrevented) return;
       }
       setLoading(true);

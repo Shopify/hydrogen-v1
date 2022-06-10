@@ -109,6 +109,11 @@ export default function ProductForm() {
           attributes={[{key: 'Engraving', value: 'Hello world'}]}
           accessibleAddingToCartLabel="Adding item to your cart"
           disabled={isOutOfStock}
+          onClick={(event) => {
+            console.log('before');
+            eventPrevent.default();
+            console.log('here');
+          }}
         >
           <Button as="span">
             {isOutOfStock ? 'Out of stock' : 'Add to bag'}
