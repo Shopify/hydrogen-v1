@@ -1,3 +1,3 @@
 // This file is only used for e2e test "node-dev"
-// because Jest 26 does nto follow package.json#exports.
+// because Jest 26 does not follow package.json#exports.
 module.exports = require('./dist/node/framework/plugin');
