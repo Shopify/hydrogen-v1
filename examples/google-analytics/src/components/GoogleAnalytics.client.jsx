@@ -4,6 +4,7 @@ import {ClientAnalytics, loadScript} from '@shopify/hydrogen';
 const TRACKING_ID = 'UA-XXXXXXXXX-X'; // <-- Add your tracking ID here
 const URL = `https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`;
 let init = false;
+
 export function GoogleAnalytics() {
   useEffect(() => {
     if (!init) {

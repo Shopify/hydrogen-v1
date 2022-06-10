@@ -3,35 +3,29 @@ import {ClientAnalytics, loadScript} from '@shopify/hydrogen';
 
 const PIXEL_ID = 'XXXXXXXXXXXXXXXX'; // <-- Add your pixel ID here
 let init = false;
+
 export function MetaPixel() {
   useEffect(() => {
-    console.log('useEffect!');
     if (!init) {
       init = true;
 
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod
-            ? n.callMethod.apply(n, arguments)
-            : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = '2.0';
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(
-        window,
-        document,
-        'script',
-        'https://connect.facebook.net/en_US/fbevents.js'
+      if (window.fbq) return;
+
+      const fbq = (window.fbq = () => {
+        fbq.callMethod
+          ? fbq.callMethod.apply(fbq, arguments)
+          : fbq.queue.push(arguments);
+      });
+      if (!window._fbq) window._fbq = fbq;
+      fbq.push = fbq;
+      fbq.loaded = !0;
+      fbq.version = '2.0';
+      fbq.queue = [];
+
+      loadScript('https://connect.facebook.net/en_US/fbevents.js').catch(
+        () => {}
       );
+
       fbq('init', PIXEL_ID);
 
       // Listen for events from Hydrogen
@@ -39,16 +33,11 @@ export function MetaPixel() {
       ClientAnalytics.subscribe(
         ClientAnalytics.eventNames.PAGE_VIEW,
         (payload) => {
-          console.log('Page view!');
           fbq('track', 'PageView');
         }
       );
-
-      if (ClientAnalytics.hasSentFirstPageView()) {
-        console.log('Page view has sent');
-      }
     }
-  }, []);
+  });
 
   return null;
 }
