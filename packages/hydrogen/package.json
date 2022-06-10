@@ -40,7 +40,7 @@
     "dev-esnext": "tsc -w --incremental --p tsconfig.esm.json",
     "dev-node": "tsc -w --incremental --p tsconfig.cjs.json",
     "dev-graphql": "graphql-codegen --config codegen.yml --watch",
-    "hoist-files": "cpy *.{c,}{j,t}s *.json vendor ../../node_modules/@shopify/hydrogen && ls ../../node_modules/@shopify/hydrogen",
+    "hoist-files": "cpy *.cjs *.json vendor ../../node_modules/@shopify/hydrogen && ls ../../node_modules/@shopify/hydrogen",
     "hoist-dist": "cpy dist ../../node_modules/@shopify/hydrogen",
     "prebuild": "rimraf dist ../../node_modules/@shopify/hydrogen && mkdirp ../../node_modules/@shopify/hydrogen",
     "build": "run-p build-esnext build-node && yarn hoist-files && yarn hoist-dist",
