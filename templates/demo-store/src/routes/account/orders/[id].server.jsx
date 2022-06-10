@@ -12,14 +12,14 @@ export default function AccountOrder({response, params}) {
   const {languageCode} = useShop();
   const {customerAccessToken, countryCode = 'US'} = useSession();
 
-  if (!customerAccessToken || !params?.number)
-    return response.redirect('/account/login');
+  if (!customerAccessToken) return response.redirect('/account/login');
+  if (!params?.id) return response.redirect('/account/');
 
   const {data} = useShopQuery({
     query: ORDER_QUERY,
     variables: {
       customerAccessToken,
-      orderNumber: `number:${params.number}`,
+      orderId: `id:${params.id}`,
       language: languageCode,
       country: countryCode,
     },
@@ -27,7 +27,7 @@ export default function AccountOrder({response, params}) {
   });
   return (
     <div>
-      Order {params.number}
+      Order {params.id}
       <br />
       <pre>{JSON.stringify(data, null, 1)}</pre>
     </div>
@@ -169,14 +169,14 @@ const ORDER_QUERY = gql`
     }
   }
 
-  query order(
+  query orderById(
     $customerAccessToken: String!
-    $orderNumber: String!
+    $orderId: String!
     $country: CountryCode
     $language: LanguageCode
   ) @inContext(country: $country, language: $language) {
     customer(customerAccessToken: $customerAccessToken) {
-      orders(first: 1, query: $orderNumber) {
+      orders(first: 1, query: $orderId) {
         edges {
           node {
             id
