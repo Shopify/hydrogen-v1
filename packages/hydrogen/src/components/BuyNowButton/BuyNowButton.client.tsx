@@ -1,6 +1,6 @@
-import React, {useEffect, useState, useCallback} from 'react';
-import type {ReactNode} from 'react';
+import React, {useEffect, useState, useCallback, MouseEvent} from 'react';
 import {useInstantCheckout} from '../CartProvider';
+import {BaseButton, BaseButtonProps} from '../BaseButton';
 
 interface BuyNowButtonProps {
   /** The item quantity. Defaults to 1. */
@@ -12,22 +12,21 @@ interface BuyNowButtonProps {
     key: string;
     value: string;
   }[];
-  /** Any `ReactNode` elements. */
-  children: ReactNode;
 }
 
-type PropsWeControl = 'onClick';
-
 /** The `BuyNowButton` component renders a button that adds an item to the cart and redirects the customer to checkout. */
-export function BuyNowButton(
-  props: Omit<JSX.IntrinsicElements['button'], PropsWeControl> &
-    BuyNowButtonProps
-) {
+export function BuyNowButton(props: BuyNowButtonProps & BaseButtonProps) {
   const {createInstantCheckout, checkoutUrl} = useInstantCheckout();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const {quantity, variantId, attributes, children, ...passthroughProps} =
-    props;
+  const {
+    quantity,
+    variantId,
+    onClick,
+    attributes,
+    children,
+    ...passthroughProps
+  } = props;
 
   useEffect(() => {
     if (checkoutUrl) {
@@ -35,26 +34,34 @@ export function BuyNowButton(
     }
   }, [checkoutUrl]);
 
-  const handleBuyNow = useCallback(() => {
-    setLoading(true);
-    createInstantCheckout({
-      lines: [
-        {
-          quantity: quantity ?? 1,
-          merchandiseId: variantId,
-          attributes,
-        },
-      ],
-    });
-  }, [setLoading, createInstantCheckout, quantity, variantId, attributes]);
+  const handleBuyNow = useCallback(
+    (event?: MouseEvent) => {
+      if (onClick) {
+        const clickShouldContinue = onClick(event);
+        if (clickShouldContinue === false || event?.defaultPrevented) return;
+      }
+      setLoading(true);
+      createInstantCheckout({
+        lines: [
+          {
+            quantity: quantity ?? 1,
+            merchandiseId: variantId,
+            attributes,
+          },
+        ],
+      });
+    },
+    [onClick, createInstantCheckout, quantity, variantId, attributes]
+  );
 
   return (
-    <button
+    <BaseButton
       disabled={loading ?? passthroughProps.disabled}
       {...passthroughProps}
-      onClick={handleBuyNow}
+      onClick={onClick}
+      defaultOnClick={handleBuyNow}
     >
       {children}
-    </button>
+    </BaseButton>
   );
 }

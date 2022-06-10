@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {BaseButton} from '../../BaseButton';
 
 const mockCreateInstantCheckout = jest.fn();
 const mockUseInstantCheckout = jest.fn();
@@ -28,17 +29,17 @@ describe('BuyNowButton', () => {
 
   it('renders a button', () => {
     const component = mountWithProviders(
-      <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
+      <BuyNowButton variantId="1">Buy now</BuyNowButton>
     );
     expect(component).toContainReactComponent('button', {
-      children: 'Add to Cart',
+      children: 'Buy now',
     });
   });
 
   it('can optionally disable the button', () => {
     const component = mountWithProviders(
       <BuyNowButton disabled={true} variantId="1">
-        Add to Cart
+        Buy now
       </BuyNowButton>
     );
 
@@ -50,7 +51,7 @@ describe('BuyNowButton', () => {
   it('allows pass-through props', () => {
     const component = mountWithProviders(
       <BuyNowButton className="fancy-button" variantId="1">
-        Add to Cart
+        Buy now
       </BuyNowButton>
     );
 
@@ -70,7 +71,7 @@ describe('BuyNowButton', () => {
           quantity={4}
           variantId="SKU123"
         >
-          Add to Cart
+          Buy now
         </BuyNowButton>
       );
 
@@ -95,7 +96,7 @@ describe('BuyNowButton', () => {
 
     it('disables the button', () => {
       const component = mountWithProviders(
-        <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
+        <BuyNowButton variantId="1">Buy now</BuyNowButton>
       );
 
       expect(component).toContainReactComponent('button', {
@@ -133,12 +134,40 @@ describe('BuyNowButton', () => {
     });
 
     it('redirects to checkout', () => {
-      mountWithProviders(
-        <BuyNowButton variantId="1">Add to Cart</BuyNowButton>
-      );
+      mountWithProviders(<BuyNowButton variantId="1">Buy now</BuyNowButton>);
 
       expect(mockSetHref).toHaveBeenCalledTimes(1);
       expect(mockSetHref).toHaveBeenCalledWith('/checkout?id=123');
+    });
+  });
+
+  describe('BaseButton', () => {
+    it('passes the onClick handler', () => {
+      const mockOnClick = jest.fn();
+
+      const component = mountWithProviders(
+        <BuyNowButton variantId="1" onClick={mockOnClick}>
+          Buy now
+        </BuyNowButton>
+      );
+
+      expect(component).toContainReactComponent(BaseButton, {
+        onClick: mockOnClick,
+      });
+    });
+
+    it('passes the buttonRef', () => {
+      const mockRef = React.createRef<HTMLButtonElement>();
+
+      const component = mountWithProviders(
+        <BuyNowButton variantId="1" buttonRef={mockRef}>
+          Buy now
+        </BuyNowButton>
+      );
+
+      expect(component).toContainReactComponent(BaseButton, {
+        buttonRef: mockRef,
+      });
     });
   });
 });
