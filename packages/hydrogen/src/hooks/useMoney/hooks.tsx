@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {useMemo, useCallback} from 'react';
 import {useShop} from '../../foundation/useShop';
 import {CurrencyCode, MoneyV2} from '../../storefront-api-types';
 
@@ -56,6 +56,31 @@ export type UseMoneyValue = {
  * [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
  */
 export function useMoney(money: MoneyV2): UseMoneyValue {
+  const memoizedFormats = useMemoizedFormats(money);
+
+  return useMemo<UseMoneyValue>(() => {
+    const memoizedKeys = Object.keys(memoizedFormats).reduce((acc, key) => {
+      acc[key] = undefined;
+      return acc;
+    }, Object.create(null) as Record<string, any>);
+
+    return new Proxy(
+      {
+        ...memoizedKeys,
+        currencyCode: money.currencyCode,
+        original: money,
+      } as UseMoneyValue,
+      {
+        get: (target, key) =>
+          key in memoizedKeys
+            ? Reflect.get(memoizedFormats, key).call(null)
+            : Reflect.get(target, key),
+      }
+    );
+  }, [money, memoizedFormats]);
+}
+
+function useMemoizedFormats(money: MoneyV2) {
   const {locale} = useShop();
 
   const options = useMemo(
@@ -68,83 +93,114 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
 
   const amount = parseFloat(money.amount);
 
-  const value = useMemo(
+  const value = useCallback(
     () => new Intl.NumberFormat(locale, options).format(amount),
     [amount, locale, options]
   );
 
-  const baseParts = new Intl.NumberFormat(locale, options).formatToParts(
-    amount
-  );
-  const nameParts = new Intl.NumberFormat(locale, {
-    ...options,
-    currencyDisplay: 'name',
-  }).formatToParts(amount);
-  const narrowParts = new Intl.NumberFormat(locale, {
-    ...options,
-    currencyDisplay: 'narrowSymbol',
-  }).formatToParts(amount);
-
-  const withoutTrailingZerosFormatter = new Intl.NumberFormat(locale, {
-    ...options,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
-
-  const withoutCurrencyFormatter = new Intl.NumberFormat(locale);
-
-  const withoutTrailingZerosOrCurrencyFormatter = new Intl.NumberFormat(
-    locale,
-    {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }
+  const baseParts = useCallback(
+    () => new Intl.NumberFormat(locale, options).formatToParts(amount),
+    [locale, options, amount]
   );
 
-  const withoutTrailingZeros =
-    amount % 1 === 0 ? withoutTrailingZerosFormatter.format(amount) : value;
+  const nameParts = useCallback(
+    () =>
+      new Intl.NumberFormat(locale, {
+        ...options,
+        currencyDisplay: 'name',
+      }).formatToParts(amount),
+    [locale, options, amount]
+  );
 
-  const withoutTrailingZerosAndCurrency =
-    amount % 1 === 0
-      ? withoutTrailingZerosOrCurrencyFormatter.format(amount)
-      : withoutCurrencyFormatter.format(amount);
+  const narrowParts = useCallback(
+    () =>
+      new Intl.NumberFormat(locale, {
+        ...options,
+        currencyDisplay: 'narrowSymbol',
+      }).formatToParts(amount),
+    [locale, options, amount]
+  );
 
-  const moneyValue = useMemo<UseMoneyValue>(
-    () => ({
-      currencyCode: money.currencyCode,
-      currencyName:
-        nameParts.find((part) => part.type === 'currency')?.value ?? // e.g. "US dollars"
+  const withoutTrailingZerosFormatter = useCallback(
+    () =>
+      new Intl.NumberFormat(locale, {
+        ...options,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }),
+    [locale, options]
+  );
+
+  const withoutCurrencyFormatter = useCallback(
+    () => new Intl.NumberFormat(locale),
+    [locale]
+  );
+
+  const withoutTrailingZerosOrCurrencyFormatter = useCallback(
+    () =>
+      new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }),
+    [locale]
+  );
+
+  return {
+    localizedString: value,
+    parts: baseParts,
+
+    withoutTrailingZeros: useCallback(
+      () =>
+        amount % 1 === 0
+          ? withoutTrailingZerosFormatter().format(amount)
+          : value(),
+      [amount, value, withoutTrailingZerosFormatter]
+    ),
+
+    withoutTrailingZerosAndCurrency: useCallback(
+      () =>
+        amount % 1 === 0
+          ? withoutTrailingZerosOrCurrencyFormatter().format(amount)
+          : withoutCurrencyFormatter().format(amount),
+      [
+        amount,
+        withoutTrailingZerosOrCurrencyFormatter,
+        withoutCurrencyFormatter,
+      ]
+    ),
+
+    currencyName: useCallback(
+      () =>
+        nameParts().find((part) => part.type === 'currency')?.value ?? // e.g. "US dollars"
         money.currencyCode,
-      currencySymbol:
-        baseParts.find((part) => part.type === 'currency')?.value ?? // e.g. "USD"
+      [nameParts, money]
+    ),
+
+    currencySymbol: useCallback(
+      () =>
+        baseParts().find((part) => part.type === 'currency')?.value ?? // e.g. "USD"
         money.currencyCode,
-      currencyNarrowSymbol:
-        narrowParts.find((part) => part.type === 'currency')?.value ?? // e.g. "$"
+      [baseParts, money]
+    ),
+
+    currencyNarrowSymbol: useCallback(
+      () =>
+        narrowParts().find((part) => part.type === 'currency')?.value ?? // e.g. "$"
         '',
-      parts: baseParts,
-      localizedString: value,
-      amount: baseParts
-        .filter((part) =>
-          ['decimal', 'fraction', 'group', 'integer', 'literal'].includes(
-            part.type
-          )
-        )
-        .map((part) => part.value)
-        .join(''),
-      original: money,
-      withoutTrailingZeros,
-      withoutTrailingZerosAndCurrency,
-    }),
-    [
-      baseParts,
-      money,
-      nameParts,
-      narrowParts,
-      value,
-      withoutTrailingZeros,
-      withoutTrailingZerosAndCurrency,
-    ]
-  );
+      [narrowParts]
+    ),
 
-  return moneyValue;
+    amount: useCallback(
+      () =>
+        baseParts()
+          .filter((part) =>
+            ['decimal', 'fraction', 'group', 'integer', 'literal'].includes(
+              part.type
+            )
+          )
+          .map((part) => part.value)
+          .join(''),
+      [baseParts]
+    ),
+  };
 }
