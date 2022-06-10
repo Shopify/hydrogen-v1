@@ -24,7 +24,7 @@ export function Drawer({open, onClose, title, children}) {
           <div className="fixed inset-0 bg-black bg-opacity-25" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-hidden">
+        <div className="fixed inset-0">
           <div className="absolute inset-0 overflow-hidden">
             <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child
@@ -36,11 +36,11 @@ export function Drawer({open, onClose, title, children}) {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-[35rem] transform bg-contrast p-6 text-left align-middle shadow-xl transition-all overflow-auto">
                   {title && (
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
+                      className="text-lg font-medium leading-6 text-primary/90"
                     >
                       {title}
                     </Dialog.Title>
