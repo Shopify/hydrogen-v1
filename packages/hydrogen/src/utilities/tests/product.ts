@@ -47,9 +47,12 @@ export function getProduct(
         getVariant(),
       ],
     },
-    metafields: product.metafields ?? {
-      nodes: [getRawMetafield(), getRawMetafield(), getRawMetafield()],
-    },
+    // @ts-expect-error complaints about null and undefined with the partialdeep.
+    metafields: product.metafields ?? [
+      getRawMetafield(),
+      getRawMetafield(),
+      getRawMetafield(),
+    ],
     sellingPlanGroups: product.sellingPlanGroups ?? {nodes: []},
   };
 }
@@ -74,12 +77,11 @@ export function getVariant(
     ],
     // @ts-expect-error until we mock out a selling plan, TS will complain here
     sellingPlanAllocations: [],
-    metafields: variant.metafields ?? {
-      edges: [
-        {node: getRawMetafield()},
-        {node: getRawMetafield()},
-        {node: getRawMetafield()},
-      ],
-    },
+    // @ts-expect-error complaints about null and undefined with the partialdeep.
+    metafields: variant.metafields ?? [
+      getRawMetafield(),
+      getRawMetafield(),
+      getRawMetafield(),
+    ],
   };
 }

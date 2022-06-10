@@ -1,1 +1,0 @@
-export {useParsedMetafields} from './useParsedMetafields';

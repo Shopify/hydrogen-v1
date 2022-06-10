@@ -31,7 +31,7 @@ export const VARIANTS: PartialDeep<ProductVariantConnection> = {
       unitPrice: priceV2,
       unitPriceMeasurement: getUnitPriceMeasurement(),
       priceV2,
-      metafields: {edges: []},
+      metafields: [],
     },
     {
       id: '2',
@@ -50,7 +50,7 @@ export const VARIANTS: PartialDeep<ProductVariantConnection> = {
       unitPrice: priceV2,
       unitPriceMeasurement: getUnitPriceMeasurement(),
       priceV2,
-      metafields: {edges: []},
+      metafields: [],
     },
     {
       id: '3',
@@ -69,7 +69,7 @@ export const VARIANTS: PartialDeep<ProductVariantConnection> = {
       unitPrice: priceV2,
       unitPriceMeasurement: getUnitPriceMeasurement(),
       priceV2,
-      metafields: {edges: []},
+      metafields: [],
     },
     {
       id: '4',
@@ -88,7 +88,7 @@ export const VARIANTS: PartialDeep<ProductVariantConnection> = {
       unitPrice: priceV2,
       unitPriceMeasurement: getUnitPriceMeasurement(),
       priceV2,
-      metafields: {edges: []},
+      metafields: [],
     },
   ],
 };

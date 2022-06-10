@@ -1,9 +1,7 @@
 // eslint-disable-next-line node/no-extraneous-import
 import faker from 'faker';
 import type {Metafield} from '../../storefront-api-types';
-import {ParsedMetafield, Rating} from '../../types';
 import type {PartialDeep} from 'type-fest';
-import {parseJSON} from '../parse';
 
 export type MetafieldType =
   | 'single_line_text_field'
@@ -47,7 +45,9 @@ export const METAFIELDS: MetafieldType[] = [
 ];
 
 export function getRawMetafield(
-  metafield: PartialDeep<Metafield> & {type?: MetafieldType} = {}
+  metafield: PartialDeep<Metafield> & {
+    type?: MetafieldType;
+  } = {}
 ): PartialDeep<Metafield> {
   const type: MetafieldType =
     metafield.type == null
@@ -134,52 +134,4 @@ export function getMetafieldValue(type: MetafieldType) {
     default:
       return JSON.stringify(faker.datatype.json());
   }
-}
-
-export function getParsedMetafield(
-  metafield: Partial<Metafield> & {type?: MetafieldType} = {}
-) {
-  const rawField = getRawMetafield(metafield);
-  // @ts-expect-error some type error here needs to be fixed
-  const field: PartialDeep<ParsedMetafield> = {...rawField, value: undefined};
-
-  if (rawField.value == null) {
-    return field;
-  }
-
-  switch (field.type) {
-    case 'boolean':
-      field.value = rawField.value == 'true';
-      break;
-    case 'number_integer':
-      field.value = parseInt(rawField.value);
-      break;
-    case 'number_decimal':
-      field.value = parseFloat(rawField.value);
-      break;
-    case 'date':
-    case 'date_time':
-      field.value = new Date(rawField.value);
-      break;
-    case 'json':
-    case 'weight':
-    case 'dimension':
-    case 'volume':
-    case 'rating':
-      field.value = parseJSON(rawField.value) as Rating;
-      break;
-    case 'color':
-    case 'single_line_text_field':
-    case 'multi_line_text_field':
-    case 'product_reference':
-    case 'page_reference':
-    case 'variant_reference':
-    case 'file_reference':
-    case 'url':
-    default:
-      field.value = rawField.value;
-      break;
-  }
-
-  return field;
 }
