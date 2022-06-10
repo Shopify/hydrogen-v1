@@ -42,7 +42,8 @@ export function ProductForm() {
         }
       }
     });
-  }, [pathname, options, selectedOptions, setSelectedOption, params]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = useCallback(
     (name, value) => {
