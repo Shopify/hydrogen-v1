@@ -559,7 +559,6 @@ async function runSSR({
 
         bufferReadableStream(rscReadable.getReader(), (chunk) => {
           log.trace('rsc chunk');
-          savedChunks.push(chunk);
           return nodeResponse.write(chunk);
         });
       },
@@ -852,21 +851,27 @@ async function cacheResponse(
   revalidate?: Boolean
 ) {
   const cache = getCache();
+  const session = request.ctx.session?.get();
 
   /**
-   * Only cache on cachable responses. Response
+   * Only cache on cachable responses where response
    *
    * - have content to cache
+   * - have status 200
    * - does not have no-store on cache-control header
-   * - must have status 200
+   * - does not have set-cookie header
    * - is not a html form
+   * - does not have a session or does not have an active customer access token
    */
   if (
     cache &&
     chunks.length > 0 &&
-    response.cache().mode !== NO_STORE &&
     response.status === 200 &&
-    response.headers.get('Content-Type') != 'application/x-www-form-urlencoded'
+    response.cache().mode !== NO_STORE &&
+    !response.headers.get('Set-Cookie') &&
+    response.headers.get('Content-Type') !=
+      'application/x-www-form-urlencoded' &&
+    (!session || session['customerAccessToken'] === null)
   ) {
     if (revalidate) {
       await saveCacheResponse(response, request, chunks);
