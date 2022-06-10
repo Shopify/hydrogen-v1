@@ -102,6 +102,14 @@ By default, when a user hovers or focuses on the link for more than 100ms, a pre
 
 You can extend dynamic routes to catch all paths by adding an ellipsis (...) inside the brackets. For example, `/routes/example/[...handle].server.jsx` will match `/example/a` and `/example/a/b`.
 
+### Built-in routes
+
+Hydrogen provides the following built-in routes:
+
+- `/__health` - A health check route that responds with a 200 status and no body. You can use this route within your infrastructure to verify that your app is healthy and able to respond to requests.
+- `/__rsc` - An internal route used to re-render server components. It's called by the Hydrogen frontend when the route changes, or when server props change. You should never need to manually request this route.
+- `/__event` - An internal route used to save client observability events. You should never need to manually request this route.
+
 ### Example
 
 The following example shows how to obtain catch all routes data using `location.pathname`:
@@ -240,8 +248,8 @@ export default function Page() {
 
 Server components placed in the `src/routes` directory receive the following special props that you can use to create custom experiences:
 
-| Prop       | Type                      |
-| ---------- | ------------------------- |
+| Prop       | Type               |
+| ---------- | ------------------ |
 | `request`  | `HydrogenRequest`  |
 | `response` | `HydrogenResponse` |
 
@@ -396,14 +404,6 @@ function MyPage({custom, props, here}) {
 ```
 
 {% endcodeblock %}
-
-### Built-in routes
-
-Hydrogen provides a few built-in routes
-
-1. `/__health` - A health check route that responds witha 200 status and no body. You can use this route within your infrastructure to verify your app is healthy and able to respond to requests.
-2. `/__rsc` - An internal route used to re-render server components. It's called by the hydrogen front-end when the route changes, or server props change. You should never need to manually request this route.
-3. `/__event` - An internal route used to save client observability events. You should never need to manually request this route.
 
 ## Related components and hooks
 
