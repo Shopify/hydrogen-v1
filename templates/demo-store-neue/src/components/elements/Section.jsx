@@ -8,6 +8,7 @@ export function Section({
   children,
   className,
   divider,
+  display = 'grid',
   heading,
   padding = 'all',
   ...props
@@ -25,9 +26,15 @@ export function Section({
     both: 'border-y border-light',
   };
 
+  const displays = {
+    flex: 'flex',
+    grid: 'grid',
+  };
+
   const styles = clsx(
-    'w-full grid gap-4 md:gap-8',
-    missingClass(className, 'p[xy]?-') && paddings[padding],
+    'w-full gap-4 md:gap-8',
+    displays[display],
+    missingClass(className, '\\mp[xy]?-') && paddings[padding],
     dividers[divider],
     className,
   );

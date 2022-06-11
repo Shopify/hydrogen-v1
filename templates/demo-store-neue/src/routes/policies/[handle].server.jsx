@@ -61,13 +61,21 @@ export default function Policy({params}) {
   return (
     <Layout>
       <Seo type="page" data={page} />
-      <Section className="flex flex-col items-baseline w-full gap-8 md:flex-row">
+      <Section
+        padding="all"
+        display="flex"
+        className="flex-col items-start w-full gap-8 md:flex-row"
+      >
         <PageHeader
           heading={page.title}
           variant="none"
-          className={'sticky top-28 md:w-5/12 flex-grow'}
+          className={'sticky grid gap-4 items-start top-36 md:w-5/12 flex-grow'}
         >
-          <Button variant="inline" to={'/policies'}>
+          <Button
+            className="justify-self-start"
+            variant="inline"
+            to={'/policies'}
+          >
             &larr; Back to Policies
           </Button>
         </PageHeader>
