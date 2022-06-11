@@ -55,7 +55,9 @@ export function getShopifyImageDimensions(
     PartialDeep<ImageType>,
     'altText' | 'url' | 'id' | 'width' | 'height'
   >,
-  options?: ShopifyLoaderOptions
+  options?: ShopifyLoaderOptions,
+  inputWidth?: string | number,
+  inputHeight?: string | number
 ) {
   // Storefront API could return null dimension values for images that are not hosted on Shopify CDN
   // The API dimensions references the image's intrinstic/natural dimensions and provides image aspect ratio information
@@ -88,6 +90,35 @@ export function getShopifyImageDimensions(
       return {
         width: optionWidth,
         height: Math.round((apiHeight / apiWidth) * optionWidth),
+      };
+    }
+  }
+  if (apiWidth && apiHeight && (inputWidth || inputHeight)) {
+    const inputtedWidth = inputWidth
+      ? parseInt(inputWidth.toString(), 10)
+      : undefined;
+    const inputtedHeight = inputHeight
+      ? parseInt(inputHeight.toString(), 10)
+      : undefined;
+
+    // Use input width & height
+    if (inputtedWidth && inputtedHeight) {
+      return {width: inputtedWidth, height: inputtedHeight};
+    }
+
+    // Calculate inputted width from aspect ratio
+    if (!inputtedWidth && inputtedHeight) {
+      return {
+        width: Math.round((apiWidth / apiHeight) * inputtedHeight),
+        height: inputtedHeight,
+      };
+    }
+
+    // Calculate inputted height from aspect ratio
+    if (inputtedWidth && !inputtedHeight) {
+      return {
+        width: inputtedWidth,
+        height: Math.round((apiHeight / apiWidth) * inputtedWidth),
       };
     }
   }

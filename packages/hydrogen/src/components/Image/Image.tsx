@@ -87,7 +87,9 @@ function ShopifyImage({
 
   const {width: finalWidth, height: finalHeight} = getShopifyImageDimensions(
     data,
-    loaderOptions
+    loaderOptions,
+    width,
+    height
   );
 
   if ((__DEV__ && !finalWidth) || !finalHeight) {
