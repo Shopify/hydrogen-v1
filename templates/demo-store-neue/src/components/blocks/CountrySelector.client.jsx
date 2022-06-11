@@ -74,7 +74,7 @@ export function Countries({selectedCountry, getClassName}) {
             {country.name}
             {isSelected ? (
               <span className="ml-2">
-                <IconCheck fill="transparent" />
+                <IconCheck />
               </span>
             ) : null}
           </div>
