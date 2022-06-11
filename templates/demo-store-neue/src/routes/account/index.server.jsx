@@ -23,7 +23,7 @@ import {
   ProductSwimlane,
 } from '~/components/sections';
 
-import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Account({
   response,
@@ -50,7 +50,7 @@ export default function Account({
     cache: NoStore(),
   });
 
-  const {customer, featuredCollections, featuredProducts, locations} = data;
+  const {customer, featuredCollections, featuredProducts} = data;
 
   if (!customer) return response.redirect('/account/login');
 
@@ -74,7 +74,6 @@ export default function Account({
           defaultAddress={defaultAddress}
           featuredCollections={featuredCollections}
           featuredProducts={featuredProducts}
-          locations={locations}
         />
         <Modal closeModalProp="editingAccount">
           <Seo type="noindex" data={{title: 'Account details'}} />
@@ -101,7 +100,6 @@ export default function Account({
           defaultAddress={defaultAddress}
           featuredCollections={featuredCollections}
           featuredProducts={featuredProducts}
-          locations={locations}
         />
         <Modal closeModalProp="editingAddress">
           <Seo
@@ -129,7 +127,6 @@ export default function Account({
           defaultAddress={defaultAddress}
           featuredCollections={featuredCollections}
           featuredProducts={featuredProducts}
-          locations={locations}
         />
         <Modal closeModalProp="deletingAddress">
           <Seo type="noindex" data={{title: 'Delete address'}} />
@@ -147,7 +144,6 @@ export default function Account({
         defaultAddress={defaultAddress}
         featuredCollections={featuredCollections}
         featuredProducts={featuredProducts}
-        locations={locations}
       />
     </>
   );
@@ -194,8 +190,54 @@ function AuthenticatedAccount({
   );
 }
 
+export async function api(request, {session, queryShop}) {
+  if (request.method !== 'PATCH')
+    return new Response(null, {
+      status: 405,
+      headers: {
+        Allow: 'PATCH',
+      },
+    });
+
+  if (request.method !== 'DELETE')
+    return new Response(null, {
+      status: 405,
+      headers: {
+        Allow: 'DELETE',
+      },
+    });
+
+  const {customerAccessToken} = await session.get();
+
+  if (!customerAccessToken) return new Response(null, {status: 401});
+
+  const {email, phone, firstName, lastName, newPassword} = await request.json();
+
+  const customer = {};
+
+  if (email) customer.email = email;
+  if (phone) customer.phone = phone;
+  if (firstName) customer.firstName = firstName;
+  if (lastName) customer.lastName = lastName;
+  if (newPassword) customer.password = newPassword;
+
+  const {data, errors} = await queryShop({
+    query: CUSTOMER_UPDATE_MUTATION,
+    variables: {
+      customer,
+      customerAccessToken,
+    },
+    cache: NoStore(),
+  });
+
+  const error = getApiErrorMessage('customerUpdate', data, errors);
+
+  if (error) return new Response(JSON.stringify({error}), {status: 400});
+
+  return new Response(null);
+}
+
 const CUSTOMER_QUERY = gql`
-  ${LOCATION_CARD_FIELDS}
   ${PRODUCT_CARD_FIELDS}
   query CustomerDetails(
     $customerAccessToken: String!
@@ -261,11 +303,6 @@ const CUSTOMER_QUERY = gql`
         }
       }
     }
-    locations: contentEntries(first: 3, type: "stores") {
-      nodes {
-        ...LocationCardFields
-      }
-    }
     featuredProducts: products(first: 12) {
       nodes {
         ...ProductCardFields
@@ -304,50 +341,3 @@ const CUSTOMER_UPDATE_MUTATION = gql`
     }
   }
 `;
-
-export async function api(request, {session, queryShop}) {
-  if (request.method !== 'PATCH')
-    return new Response(null, {
-      status: 405,
-      headers: {
-        Allow: 'PATCH',
-      },
-    });
-
-  if (request.method !== 'DELETE')
-    return new Response(null, {
-      status: 405,
-      headers: {
-        Allow: 'DELETE',
-      },
-    });
-
-  const {customerAccessToken} = await session.get();
-
-  if (!customerAccessToken) return new Response(null, {status: 401});
-
-  const {email, phone, firstName, lastName, newPassword} = await request.json();
-
-  const customer = {};
-
-  if (email) customer.email = email;
-  if (phone) customer.phone = phone;
-  if (firstName) customer.firstName = firstName;
-  if (lastName) customer.lastName = lastName;
-  if (newPassword) customer.password = newPassword;
-
-  const {data, errors} = await queryShop({
-    query: CUSTOMER_UPDATE_MUTATION,
-    variables: {
-      customer,
-      customerAccessToken,
-    },
-    cache: NoStore(),
-  });
-
-  const error = getApiErrorMessage('customerUpdate', data, errors);
-
-  if (error) return new Response(JSON.stringify({error}), {status: 400});
-
-  return new Response(null);
-}
