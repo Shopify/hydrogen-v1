@@ -9,7 +9,7 @@ import {
 /**
  * A server component that fetches a `shop.name` and sets default values and templates for every page on a website
  */
-export default function DefaultSeo() {
+export function DefaultSeo() {
   const {
     data: {
       shop: {
@@ -20,7 +20,7 @@ export default function DefaultSeo() {
       },
     },
   } = useShopQuery({
-    query: QUERY,
+    query: SHOP_QUERY,
     cache: CacheDays(),
     preload: '*',
   });
@@ -43,7 +43,7 @@ export default function DefaultSeo() {
   );
 }
 
-const QUERY = gql`
+const SHOP_QUERY = gql`
   query shopInfo {
     shop {
       id
