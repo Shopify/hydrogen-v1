@@ -14,18 +14,7 @@ import {
 import DefaultSeo from './components/DefaultSeo.server';
 import {NotFound} from '~/components/pages';
 
-function App({routes, request}) {
-  const country = request.headers.get('oxygen-buyer-country');
-
-  if (country) {
-    fetch(`/api/countries`, {
-      body: JSON.stringify({country, name}),
-      method: 'POST',
-    }).then(() => {
-      window.location.reload();
-    });
-  }
-
+function App({routes}) {
   return (
     <Suspense fallback={null}>
       <ShopifyProvider>
