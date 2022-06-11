@@ -10,7 +10,6 @@ import {
   Money,
   Seo,
 } from '@shopify/hydrogen';
-import util from 'util';
 
 import {Layout} from '~/components/layouts';
 import {Text, PageHeader} from '~/components/elements';
