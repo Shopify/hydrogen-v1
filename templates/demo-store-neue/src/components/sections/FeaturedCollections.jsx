@@ -2,7 +2,6 @@ import {Link, Image} from '@shopify/hydrogen';
 
 import {Heading, Section, Grid} from '~/components/elements';
 
-// TODO: This should be consolidated with Locations into a more generic presentational component
 export function FeaturedCollections({data, title = 'Collections', ...props}) {
   const items = data.filter((item) => item.image).length;
 
