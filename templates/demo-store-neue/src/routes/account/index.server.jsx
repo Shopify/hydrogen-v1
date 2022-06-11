@@ -1,34 +1,57 @@
 import {
-  Seo,
-  useSession,
-  NoStore,
-  useShopQuery,
   flattenConnection,
   gql,
+  NoStore,
+  Seo,
+  useSession,
+  useShop,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
-import {LogoutButton} from '~/components/elements';
-import {AccountDetails} from '~/components/pages';
+import {Modal} from '~/components/blocks';
+import {PageHeader, LogoutButton} from '~/components/elements';
 import {getApiErrorMessage} from '~/lib/utils';
+import {
+  AccountDetails,
+  AddressBook,
+  DeleteAddress,
+  EditAccountDetails,
+  EditAddress,
+  FeaturedCollections,
+  LocationsGrid,
+  OrderHistory,
+  ProductSwimlane,
+} from '~/components/sections';
 
-export default function Account({response, editingAccount, editingAddress}) {
+import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+
+export default function Account({
+  response,
+  editingAccount,
+  editingAddress,
+  deletingAddress,
+}) {
   response.cache(NoStore());
 
-  const {customerAccessToken} = useSession();
+  const {customerAccessToken, countryCode = 'US'} = useSession();
 
   if (!customerAccessToken) return response.redirect('/account/login');
+
+  const {languageCode} = useShop();
 
   const {data} = useShopQuery({
     query: CUSTOMER_QUERY,
     variables: {
       customerAccessToken,
+      language: languageCode,
+      country: countryCode,
       withAddressDetails: !!editingAddress,
     },
     cache: NoStore(),
   });
 
-  const customer = data.customer;
+  const {customer, featuredCollections, featuredProducts, locations} = data;
 
   if (!customer) return response.redirect('/account/login');
 
@@ -43,46 +66,247 @@ export default function Account({response, editingAccount, editingAddress}) {
     customer.defaultAddress.id.lastIndexOf('?'),
   );
 
-  if (editingAccount)
+  if (editingAccount) {
     return (
-      <Layout>
-        <Seo type="noindex" data={{title: 'Account details'}} />
-        {/* <EditAccountDetails
-          firstName={customer.firstName}
-          lastName={customer.lastName}
-          phone={customer.phone}
-          email={customer.email}
-        /> */}
-      </Layout>
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
+          locations={locations}
+        />
+        <Modal closeModalProp="editingAccount">
+          <Seo type="noindex" data={{title: 'Account details'}} />
+          <EditAccountDetails
+            firstName={customer.firstName}
+            lastName={customer.lastName}
+            phone={customer.phone}
+            email={customer.email}
+          />
+        </Modal>
+      </>
     );
+  }
 
   if (editingAddress) {
     const addressToEdit = addresses.find(
       (address) => address.id === editingAddress,
     );
-
     return (
-      <Layout>
-        <Seo
-          type="noindex"
-          data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
+          locations={locations}
         />
-        {/* <EditAddress
-          address={addressToEdit}
-          defaultAddress={defaultAddress === editingAddress}
-        /> */}
-      </Layout>
+        <Modal closeModalProp="editingAddress">
+          <Seo
+            type="noindex"
+            data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
+          />
+          <EditAddress
+            address={addressToEdit}
+            defaultAddress={defaultAddress === editingAddress}
+          />
+        </Modal>
+      </>
+    );
+  }
+
+  if (deletingAddress) {
+    const addressToDelete = addresses.find(
+      (address) => address.id === deletingAddress,
+    );
+    return (
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
+          locations={locations}
+        />
+        <Modal closeModalProp="deletingAddress">
+          <Seo type="noindex" data={{title: 'Delete address'}} />
+          <DeleteAddress addressId={addressToDelete.originalId} />
+        </Modal>
+      </>
     );
   }
 
   return (
-    <AuthenticatedAccount
-      customer={customer}
-      addresses={addresses}
-      defaultAddress={defaultAddress}
-    />
+    <>
+      <AuthenticatedAccount
+        customer={customer}
+        addresses={addresses}
+        defaultAddress={defaultAddress}
+        featuredCollections={featuredCollections}
+        featuredProducts={featuredProducts}
+        locations={locations}
+      />
+    </>
   );
 }
+
+function AuthenticatedAccount({
+  customer,
+  addresses,
+  defaultAddress,
+  featuredCollections,
+  featuredProducts,
+  locations,
+}) {
+  const orders =
+    customer?.orders?.edges.length > 0
+      ? flattenConnection(customer.orders)
+      : [];
+
+  const heading = customer
+    ? customer.firstName
+      ? `Welcome, ${customer.firstName}.`
+      : `Welcome to your account.`
+    : 'Account Details';
+
+  return (
+    <Layout>
+      <Seo type="noindex" data={{title: 'Account details'}} />
+      <PageHeader heading={heading}>
+        <LogoutButton>Sign out</LogoutButton>
+      </PageHeader>
+      {orders && <OrderHistory orders={orders} />}
+      <AccountDetails
+        firstName={customer.firstName}
+        lastName={customer.lastName}
+        phone={customer.phone}
+        email={customer.email}
+      />
+      <AddressBook defaultAddress={defaultAddress} addresses={addresses} />
+      <FeaturedCollections
+        title="Popular Collections"
+        data={featuredCollections.nodes}
+      />
+      <ProductSwimlane data={featuredProducts.nodes} />
+      <LocationsGrid data={locations.nodes} />
+    </Layout>
+  );
+}
+
+const CUSTOMER_QUERY = gql`
+  ${LOCATION_CARD_FIELDS}
+  ${PRODUCT_CARD_FIELDS}
+  query CustomerDetails(
+    $customerAccessToken: String!
+    $withAddressDetails: Boolean!
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    customer(customerAccessToken: $customerAccessToken) {
+      firstName
+      lastName
+      phone
+      email
+      defaultAddress {
+        id
+        formatted
+      }
+      addresses(first: 6) {
+        edges {
+          node {
+            id
+            formatted
+            firstName
+            lastName
+            company @include(if: $withAddressDetails)
+            address1 @include(if: $withAddressDetails)
+            address2 @include(if: $withAddressDetails)
+            country @include(if: $withAddressDetails)
+            province @include(if: $withAddressDetails)
+            city @include(if: $withAddressDetails)
+            zip @include(if: $withAddressDetails)
+            phone @include(if: $withAddressDetails)
+          }
+        }
+      }
+      orders(first: 250, sortKey: PROCESSED_AT, reverse: true) {
+        edges {
+          node {
+            id
+            orderNumber
+            processedAt
+            financialStatus
+            fulfillmentStatus
+            currentTotalPrice {
+              amount
+              currencyCode
+            }
+            lineItems(first: 2) {
+              edges {
+                node {
+                  variant {
+                    image {
+                      url
+                      altText
+                      height
+                      width
+                    }
+                  }
+                  title
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    locations: contentEntries(first: 3, type: "stores") {
+      nodes {
+        ...LocationCardFields
+      }
+    }
+    featuredProducts: products(first: 12) {
+      nodes {
+        ...ProductCardFields
+      }
+    }
+    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
+      nodes {
+        id
+        title
+        handle
+        image {
+          altText
+          width
+          height
+          url
+        }
+      }
+    }
+  }
+`;
+
+const CUSTOMER_UPDATE_MUTATION = gql`
+  mutation customerUpdate(
+    $customer: CustomerUpdateInput!
+    $customerAccessToken: String!
+  ) {
+    customerUpdate(
+      customer: $customer
+      customerAccessToken: $customerAccessToken
+    ) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
 
 export async function api(request, {session, queryShop}) {
   if (request.method !== 'PATCH')
@@ -90,6 +314,14 @@ export async function api(request, {session, queryShop}) {
       status: 405,
       headers: {
         Allow: 'PATCH',
+      },
+    });
+
+  if (request.method !== 'DELETE')
+    return new Response(null, {
+      status: 405,
+      headers: {
+        Allow: 'DELETE',
       },
     });
 
@@ -122,123 +354,3 @@ export async function api(request, {session, queryShop}) {
 
   return new Response(null);
 }
-
-function AuthenticatedAccount({customer}) {
-  // TODO: add addresses, defaultAddress to props
-  // const orders = flattenConnection(customer.orders);
-
-  const pageHeader = customer?.firstName
-    ? `Hi ${customer.firstName}.`
-    : 'Welcome to your account.';
-
-  return (
-    <Layout>
-      <Seo type="noindex" data={{title: 'Account details'}} />
-      <div className="flex justify-center mt-10">
-        <div className="w-full max-w-md">
-          <h1 className="text-5xl">{pageHeader}</h1>
-          {customer?.firstName ? (
-            <div className="mt-2">Welcome to your account.</div>
-          ) : null}
-          <div className="flex">
-            <span className="flex-1"></span>
-            <LogoutButton className="font-medium underline" />
-          </div>
-          {/* <OrderHistory orders={orders} /> */}
-          <AccountDetails
-            firstName={customer.firstName}
-            lastName={customer.lastName}
-            phone={customer.phone}
-            email={customer.email}
-          />
-          {/* <AddressBook defaultAddress={defaultAddress} addresses={addresses} /> */}
-        </div>
-      </div>
-    </Layout>
-  );
-}
-
-const CUSTOMER_QUERY = gql`
-  query CustomerDetails(
-    $customerAccessToken: String!
-    $withAddressDetails: Boolean!
-  ) {
-    customer(customerAccessToken: $customerAccessToken) {
-      firstName
-      lastName
-      phone
-      email
-
-      defaultAddress {
-        id
-        formatted
-      }
-
-      addresses(first: 6) {
-        edges {
-          node {
-            id
-            formatted
-            firstName @include(if: $withAddressDetails)
-            lastName @include(if: $withAddressDetails)
-            company @include(if: $withAddressDetails)
-            address1 @include(if: $withAddressDetails)
-            address2 @include(if: $withAddressDetails)
-            country @include(if: $withAddressDetails)
-            province @include(if: $withAddressDetails)
-            city @include(if: $withAddressDetails)
-            phone @include(if: $withAddressDetails)
-          }
-        }
-      }
-
-      orders(first: 250) {
-        edges {
-          node {
-            id
-            orderNumber
-            processedAt
-            financialStatus
-            fulfillmentStatus
-            currentTotalPrice {
-              amount
-              currencyCode
-            }
-            lineItems(first: 2) {
-              edges {
-                node {
-                  variant {
-                    image {
-                      url
-                      altText
-                      height
-                      width
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-const CUSTOMER_UPDATE_MUTATION = gql`
-  mutation customerUpdate(
-    $customer: CustomerUpdateInput!
-    $customerAccessToken: String!
-  ) {
-    customerUpdate(
-      customer: $customer
-      customerAccessToken: $customerAccessToken
-    ) {
-      customerUserErrors {
-        code
-        field
-        message
-      }
-    }
-  }
-`;

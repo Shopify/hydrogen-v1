@@ -1,7 +1,10 @@
 import {NoStore, gql} from '@shopify/hydrogen';
 
+import {getApiErrorMessage} from '~/lib/utils';
+
+// TODO: Is this a duplicate of /reset/index.server.js?
 /**
- * This API route is used by the form on `/account/reset/[resetToken]`
+ * This API route is used by the form on `/account/reset/[id]/[resetToken]`
  * complete the reset of the user's password.
  */
 export async function api(request, {session, queryShop}) {
@@ -23,8 +26,8 @@ export async function api(request, {session, queryShop}) {
     );
   }
 
-  const {data, error} = await queryShop({
-    query: LOGIN,
+  const {data, errors} = await queryShop({
+    query: CUSTOMER_RESET_MUTATION,
     variables: {
       id: `gid://shopify/Customer/${jsonBody.id}`,
       input: {
@@ -35,14 +38,10 @@ export async function api(request, {session, queryShop}) {
     cache: NoStore(),
   });
 
-  if (
-    data &&
-    data.customerReset &&
-    data.customerReset.customerAccessToken !== null
-  ) {
+  if (data?.customerReset?.customerAccessToken?.accessToken !== null) {
     await session.set(
       'customerAccessToken',
-      data.customerReset.customerAccessToken,
+      data.customerReset.customerAccessToken.accessToken,
     );
 
     return new Response(null, {
@@ -51,14 +50,14 @@ export async function api(request, {session, queryShop}) {
   } else {
     return new Response(
       JSON.stringify({
-        error: data ? data.customerReset.customerUserErrors : error,
+        error: getApiErrorMessage('customerReset', data, errors),
       }),
       {status: 401},
     );
   }
 }
 
-const LOGIN = gql`
+const CUSTOMER_RESET_MUTATION = gql`
   mutation customerReset($id: ID!, $input: CustomerResetInput!) {
     customerReset(id: $id, input: $input) {
       customerAccessToken {

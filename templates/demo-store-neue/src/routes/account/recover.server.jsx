@@ -9,7 +9,7 @@ import {AccountRecoverForm} from '~/components/sections';
  * to reset their password. Clicking the link leads the user to the
  * page `/account/reset/[resetToken]`.
  */
-export default function Recover({response}) {
+export default function AccountRecover({response}) {
   response.cache(NoStore());
 
   return (
