@@ -115,7 +115,7 @@ export function IconArrow({direction = 'right'}) {
   );
 }
 
-export function IconCaret({direction = 'down'}) {
+export function IconCaret({direction = 'down', ...props}) {
   let rotate;
 
   switch (direction) {
@@ -136,7 +136,11 @@ export function IconCaret({direction = 'down'}) {
   }
 
   return (
-    <Icon className={`w-5 h-5 ${rotate}`}>
+    <Icon
+      {...props}
+      className={`w-5 h-5 transition ${rotate}`}
+      fill="transparent"
+    >
       <title>Caret</title>
       <path d="M14 8L10 12L6 8" stroke="currentColor" strokeWidth="1.25" />
     </Icon>
@@ -202,18 +206,9 @@ export function IconSearch(props) {
   );
 }
 
-export function IconChevronDown(props) {
-  return (
-    <Icon {...props}>
-      <title>Chevron Down</title>
-      <path d="M10 13.82c.2 0 .4-.08.53-.23l6.04-6.2a.7.7 0 0 0 .22-.5.7.7 0 0 0-.72-.71c-.2 0-.37.08-.5.2L10 12.07 4.43 6.38a.71.71 0 0 0-.5-.2.7.7 0 0 0-.72.72c0 .2.08.37.22.5l6.04 6.2c.15.14.33.22.53.22Z" />
-    </Icon>
-  );
-}
-
 export function IconCheck(props) {
   return (
-    <Icon {...props}>
+    <Icon {...props} fill="transparent">
       <title>Check</title>
       <circle
         cx="10"

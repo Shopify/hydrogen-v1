@@ -2,7 +2,7 @@ import {useCallback, useState, Suspense} from 'react';
 import {useCountry, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 
-import {IconChevronDown, IconCheck} from '~/components/elements';
+import {IconCheck, IconCaret} from '~/components/elements';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
@@ -33,28 +33,25 @@ export function CountrySelector() {
                 } border-contrast/30`}
               >
                 <span className="">{selectedCountry.name}</span>
-                <IconChevronDown
-                  className={`w-5 h-5 transition-transform duration-300 ${
-                    open ? 'rotate-180' : null
-                  }`}
-                />
+                <IconCaret direction={open ? 'up' : 'down'} />
               </Listbox.Button>
 
-              <Listbox.Options className="absolute z-10 w-full border rounded-t md:rounded-b md:rounded-t-none bottom-12 sm:bottom-auto bg-primary border-t-contrast/30 md:border-t-0 md:border-b border-contrast/30">
-                <div className="grid px-2 py-2 overflow-y-auto max-h-48">
-                  {listboxOpen && (
-                    <Suspense fallback={<div className="p-2">Loading…</div>}>
-                      <Countries
-                        selectedCountry={selectedCountry}
-                        getClassName={(active) => {
-                          return `w-full p-2 transition rounded cursor-pointer flex justify-start items-center text-left cursor-pointer ${
-                            active ? 'bg-contrast/10' : null
-                          }`;
-                        }}
-                      />
-                    </Suspense>
-                  )}
-                </div>
+              <Listbox.Options
+                className={`bg-primary border-t-contrast/30 border-contrast/30 absolute bottom-12 z-10 grid h-48 w-full overflow-y-scroll rounded-t border px-2 py-2 transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none md:border-t-0 md:border-b
+              ${listboxOpen ? 'max-h-48' : 'max-h-0'}`}
+              >
+                {listboxOpen && (
+                  <Suspense fallback={<div className="p-2">Loading…</div>}>
+                    <Countries
+                      selectedCountry={selectedCountry}
+                      getClassName={(active) => {
+                        return `w-full p-2 transition rounded cursor-pointer flex justify-start items-center text-left cursor-pointer ${
+                          active ? 'bg-contrast/10' : null
+                        }`;
+                      }}
+                    />
+                  </Suspense>
+                )}
               </Listbox.Options>
             </>
           );
