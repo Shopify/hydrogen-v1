@@ -64,7 +64,7 @@ export default function Policy({params}) {
       <Section
         padding="all"
         display="flex"
-        className="flex-col items-start w-full gap-8 md:flex-row"
+        className="flex-col items-baseline w-full gap-8 md:flex-row"
       >
         <PageHeader
           heading={page.title}
