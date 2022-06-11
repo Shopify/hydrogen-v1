@@ -5,10 +5,11 @@ import {
   useServerAnalytics,
   ShopifyAnalyticsConstants,
   gql,
+  Link,
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
-import {PageHeader} from '~/components/elements';
+import {Button, PageHeader, Section} from '~/components/elements';
 import {NotFound} from '~/components/pages';
 
 export default function Policy({params}) {
@@ -61,12 +62,23 @@ export default function Policy({params}) {
   return (
     <Layout>
       <Seo type="page" data={page} />
-      <PageHeader heading={page.title} variant="page">
-        <div
-          dangerouslySetInnerHTML={{__html: page.body}}
-          className="prose dark:prose-invert w-full md:w-4/5"
-        />
-      </PageHeader>
+      <Section className="flex flex-col items-baseline w-full gap-8 md:flex-row">
+        <PageHeader
+          heading={page.title}
+          variant="none"
+          className={'sticky top-28 md:w-5/12 flex-grow'}
+        >
+          <Button variant="inline" to={'/policies'}>
+            &larr; Back to Policies
+          </Button>
+        </PageHeader>
+        <div className="flex-grow w-full md:w-7/12">
+          <div
+            dangerouslySetInnerHTML={{__html: page.body}}
+            className="prose dark:prose-invert"
+          />
+        </div>
+      </Section>
     </Layout>
   );
 }

@@ -2,14 +2,13 @@ import {Link, useUrl, useCart} from '@shopify/hydrogen';
 
 import {
   IconSearch,
-  IconHelp,
   IconAccount,
   IconBag,
   IconMenu,
   Input,
   Heading,
 } from '~/components/elements';
-import {Drawer, useDrawer} from '../blocks/Drawer.client';
+import {Drawer, useDrawer} from '~/components/blocks';
 
 /**
  * A client component that specifies the content of the header on the website
@@ -34,7 +33,7 @@ export function Header({title, menu}) {
         <div className="mt-4">
           <button
             type="button"
-            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             onClick={closeDrawer}
           >
             Got it, thanks!
@@ -153,9 +152,6 @@ function DesktopHeader({title, isHome, menu, openDrawer}) {
             <IconSearch />
           </button>
         </form>
-        <Link className={styles.button} to={'help'}>
-          <IconHelp />
-        </Link>
         <Link to={'/account'} className={styles.button}>
           <IconAccount />
         </Link>

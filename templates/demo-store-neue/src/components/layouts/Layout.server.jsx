@@ -68,8 +68,8 @@ export function Layout({children}) {
         <main role="main" id="mainContent" className="flex-grow">
           <Suspense fallback={null}>{children}</Suspense>
         </main>
-        <Footer menu={footerMenu} />
       </div>
+      <Footer menu={footerMenu} />
     </LocalizationProvider>
   );
 }
