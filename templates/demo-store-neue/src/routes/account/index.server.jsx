@@ -156,10 +156,7 @@ function AuthenticatedAccount({
   featuredCollections,
   featuredProducts,
 }) {
-  const orders =
-    customer?.orders?.edges.length > 0
-      ? flattenConnection(customer.orders)
-      : [];
+  const orders = flattenConnection(customer?.orders) || [];
 
   const heading = customer
     ? customer.firstName

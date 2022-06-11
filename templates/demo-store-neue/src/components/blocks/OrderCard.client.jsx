@@ -1,17 +1,12 @@
 import {Image, Link, flattenConnection} from '@shopify/hydrogen';
+
 import {Text} from '~/components/elements';
 import {statusMessage} from '~/lib/utils';
 
-export function OrderCard(props) {
-  const {order} = props;
-  if (!order) return null;
+export function OrderCard({order}) {
+  if (!order?.id) return null;
   const legacyOrderId = order.id.split('/').pop().split('?')[0];
-
-  // TODO: flatten now supports edges
-  const lineItems =
-    order?.lineItems?.edges.length > 0
-      ? flattenConnection(order.lineItems)
-      : [];
+  const lineItems = flattenConnection(order?.lineItems);
 
   return (
     <li className="col-span-1 flex flex-col text-center rounded border-gray-200 border divide-y divide-gray-200 justify-around">
