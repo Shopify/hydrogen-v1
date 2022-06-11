@@ -19,7 +19,6 @@ import {
   EditAccountDetails,
   EditAddress,
   FeaturedCollections,
-  LocationsGrid,
   OrderHistory,
   ProductSwimlane,
 } from '~/components/sections';
@@ -192,7 +191,6 @@ function AuthenticatedAccount({
         data={featuredCollections.nodes}
       />
       <ProductSwimlane data={featuredProducts.nodes} />
-      <LocationsGrid data={locations.nodes} />
     </Layout>
   );
 }
