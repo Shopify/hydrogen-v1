@@ -104,8 +104,8 @@ export default function AccountOrder({response, params}) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {lineItems.map((lineItem, idx) => (
-                  <tr key={idx}>
+                {lineItems.map((lineItem) => (
+                  <tr key={lineItem.variant.id}>
                     <td className="w-full max-w-0 py-4 pl-0 pr-3 text-sm font-medium sm:w-auto sm:max-w-none">
                       <div className="flex">
                         <Link
@@ -248,7 +248,7 @@ export default function AccountOrder({response, params}) {
               <Text as="h3" size="lead">
                 Shipping Address
               </Text>
-              <ul className="mt-6" role="list">
+              <ul className="mt-6">
                 <li>
                   <Text>
                     {order.shippingAddress.firstName &&
@@ -257,8 +257,8 @@ export default function AccountOrder({response, params}) {
                   </Text>
                 </li>
                 {order?.shippingAddress?.formatted ? (
-                  order.shippingAddress.formatted.map((line, index) => (
-                    <li key={line + index}>
+                  order.shippingAddress.formatted.map((line) => (
+                    <li key={line}>
                       <Text>{line}</Text>
                     </li>
                   ))

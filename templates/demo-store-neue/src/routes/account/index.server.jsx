@@ -159,7 +159,6 @@ function AuthenticatedAccount({
   defaultAddress,
   featuredCollections,
   featuredProducts,
-  locations,
 }) {
   const orders =
     customer?.orders?.edges.length > 0

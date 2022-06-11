@@ -34,7 +34,7 @@ export function AddressBook({addresses, defaultAddress}) {
         <div>
           {!addresses?.length ? (
             <Text className="mb-1" width="narrow" as="p" size="copy">
-              You haven't saved any addresses yet.
+              You haven&apos;t saved any addresses yet.
             </Text>
           ) : null}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
