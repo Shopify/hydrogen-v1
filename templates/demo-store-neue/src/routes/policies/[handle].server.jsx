@@ -5,7 +5,6 @@ import {
   useServerAnalytics,
   ShopifyAnalyticsConstants,
   gql,
-  Link,
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';

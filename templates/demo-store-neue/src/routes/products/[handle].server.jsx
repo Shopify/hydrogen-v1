@@ -51,7 +51,7 @@ export default function Product() {
   return (
     <Layout>
       <ProductOptionsProvider data={product}>
-        <Section className="pb-6 md:p-8 lg:p-12">
+        <Section padding="x">
           <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
             <ProductGallery
               media={product.media.nodes}
@@ -87,7 +87,7 @@ const PRODUCT_QUERY = gql`
       title
       vendor
       description
-      media(first: 14) {
+      media(first: 7) {
         nodes {
           ...MediaFields
         }
