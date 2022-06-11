@@ -10,6 +10,7 @@ import {
   Money,
   Seo,
 } from '@shopify/hydrogen';
+import util from 'util';
 
 import {Layout} from '~/components/layouts';
 import {Text, PageHeader} from '~/components/elements';
@@ -35,23 +36,15 @@ export default function AccountOrder({response, params}) {
     cache: NoStore(),
   });
 
-  const order = data?.customer?.orders?.edges[0].node;
+  const [order] = flattenConnection(data?.customer?.orders) || [null];
 
-  // TODO: flatten now supports edges
-  const lineItems =
-    order?.lineItems?.edges.length > 0
-      ? flattenConnection(order.lineItems)
-      : [];
+  if (!order) return null;
+
+  const lineItems = flattenConnection(order.lineItems);
+  const discountApplications = order.discountApplications;
 
   let discountPercentage, discountValue, discountAmount;
-
-  // TODO: flatten now supports edges
-  const discountApplications =
-    order?.discountApplications?.edges.length > 0
-      ? flattenConnection(order.discountApplications)
-      : [];
-
-  if (discountApplications.length > 0) {
+  if (discountApplications?.length) {
     discountPercentage = discountApplications[0].value.percentage;
     discountValue = discountApplications[0].value;
     discountAmount = discountValue.amount;
@@ -248,24 +241,31 @@ export default function AccountOrder({response, params}) {
               <Text as="h3" size="lead">
                 Shipping Address
               </Text>
-              <ul className="mt-6">
-                <li>
-                  <Text>
-                    {order.shippingAddress.firstName &&
-                      order.shippingAddress.firstName + ' '}
-                    {order.shippingAddress.lastName}
-                  </Text>
-                </li>
-                {order?.shippingAddress?.formatted ? (
-                  order.shippingAddress.formatted.map((line) => (
-                    <li key={line}>
-                      <Text>{line}</Text>
-                    </li>
-                  ))
-                ) : (
-                  <></>
-                )}
-              </ul>
+              {order?.shippingAddress ? (
+                <ul className="mt-6">
+                  <li>
+                    <Text>
+                      {order.shippingAddress.firstName &&
+                        order.shippingAddress.firstName + ' '}
+                      {order.shippingAddress.lastName}
+                    </Text>
+                  </li>
+                  {order?.shippingAddress?.formatted ? (
+                    order.shippingAddress.formatted.map((line) => (
+                      <li key={line}>
+                        <Text>{line}</Text>
+                      </li>
+                    ))
+                  ) : (
+                    <></>
+                  )}
+                </ul>
+              ) : (
+                <p className="mt-3">No shipping address defined</p>
+              )}
+              <Text as="h3" size="lead" className="mt-8">
+                Status
+              </Text>
               <div
                 className={`mt-3 px-3 py-1 text-xs font-medium rounded-full inline-block w-auto ${
                   order.statusMessage === 'FULFILLED'
@@ -273,7 +273,9 @@ export default function AccountOrder({response, params}) {
                     : 'bg-gray-200 text-gray-500'
                 }`}
               >
-                <Text size="fine">{statusMessage(order.statusMessage)}</Text>
+                <Text size="fine">
+                  {statusMessage(order.fulfillmentStatus)}
+                </Text>
               </div>
             </div>
           </div>
