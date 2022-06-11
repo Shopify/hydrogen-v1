@@ -1,18 +1,25 @@
-function Icon({className = 'w-5 h-5', ...props}) {
+function Icon({
+  children,
+  className = 'w-5 h-5',
+  fill = 'currentColor',
+  ...props
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
-      fill="currentColor"
       {...props}
+      fill={fill}
       className={className}
-    />
+    >
+      {children}
+    </svg>
   );
 }
 
-export function AccountIcon() {
+export function AccountIcon(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Accounts</title>
       <circle cx="20" cy="10.5" r="4.5" stroke="currentColor" strokeWidth="2" />
       <path
@@ -24,9 +31,9 @@ export function AccountIcon() {
   );
 }
 
-export function IconMenu() {
+export function IconMenu(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Menu</title>
       <line
         x1="3"
@@ -55,9 +62,10 @@ export function IconMenu() {
     </Icon>
   );
 }
-export function IconClose() {
+
+export function IconClose(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Close</title>
       <line
         x1="4.44194"
@@ -78,6 +86,7 @@ export function IconClose() {
     </Icon>
   );
 }
+
 export function IconArrow({direction = 'right'}) {
   let rotate;
 
@@ -134,9 +143,9 @@ export function IconCaret({direction = 'down'}) {
   );
 }
 
-export function IconSelect() {
+export function IconSelect(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Select</title>
       <path d="M7 8.5L10 6.5L13 8.5" stroke="currentColor" strokeWidth="1.25" />
       <path
@@ -148,9 +157,9 @@ export function IconSelect() {
   );
 }
 
-export function IconBag() {
+export function IconBag(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Bag</title>
       <path
         fillRule="evenodd"
@@ -160,9 +169,9 @@ export function IconBag() {
   );
 }
 
-export function IconAccount() {
+export function IconAccount(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Account</title>
       <path
         fillRule="evenodd"
@@ -172,18 +181,18 @@ export function IconAccount() {
   );
 }
 
-export function IconHelp() {
+export function IconHelp(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Help</title>
       <path d="M3.375 10a6.625 6.625 0 1 1 13.25 0 6.625 6.625 0 0 1-13.25 0ZM10 2.125a7.875 7.875 0 1 0 0 15.75 7.875 7.875 0 0 0 0-15.75Zm.699 10.507H9.236V14h1.463v-1.368ZM7.675 7.576A3.256 3.256 0 0 0 7.5 8.67h1.245c0-.496.105-.89.316-1.182.218-.299.553-.448 1.005-.448a1 1 0 0 1 .327.065c.124.044.24.113.35.208.108.095.2.223.272.383.08.154.12.34.12.558a1.3 1.3 0 0 1-.076.471c-.044.131-.11.252-.197.361-.08.102-.174.197-.283.285-.102.087-.212.182-.328.284a3.157 3.157 0 0 0-.382.383c-.102.124-.19.27-.262.438a2.476 2.476 0 0 0-.164.591 6.333 6.333 0 0 0-.043.81h1.179c0-.263.021-.485.065-.668a1.65 1.65 0 0 1 .207-.47c.088-.139.19-.263.306-.372.117-.11.244-.223.382-.34l.35-.306c.116-.11.218-.23.305-.361.095-.139.168-.3.219-.482.058-.19.087-.412.087-.667 0-.35-.062-.664-.186-.942a1.881 1.881 0 0 0-.513-.689 2.07 2.07 0 0 0-.753-.427A2.721 2.721 0 0 0 10.12 6c-.4 0-.764.066-1.092.197a2.36 2.36 0 0 0-.83.536c-.225.234-.4.515-.523.843Z" />
     </Icon>
   );
 }
 
-export function IconSearch() {
+export function IconSearch(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Search</title>
       <path
         fillRule="evenodd"
@@ -193,11 +202,33 @@ export function IconSearch() {
   );
 }
 
-export function IconChevronDown() {
+export function IconChevronDown(props) {
   return (
-    <Icon>
+    <Icon {...props}>
       <title>Chevron Down</title>
       <path d="M10 13.82c.2 0 .4-.08.53-.23l6.04-6.2a.7.7 0 0 0 .22-.5.7.7 0 0 0-.72-.71c-.2 0-.37.08-.5.2L10 12.07 4.43 6.38a.71.71 0 0 0-.5-.2.7.7 0 0 0-.72.72c0 .2.08.37.22.5l6.04 6.2c.15.14.33.22.53.22Z" />
+    </Icon>
+  );
+}
+
+export function IconCheck(props) {
+  return (
+    <Icon {...props}>
+      <title>Check</title>
+      <circle
+        cx="10"
+        cy="10"
+        r="7.25"
+        stroke="currentColor"
+        strokeWidth="1.25"
+      />
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="m7.04 10.37 2.42 2.41 3.5-5.56"
+      />
     </Icon>
   );
 }

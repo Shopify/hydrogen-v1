@@ -61,7 +61,7 @@ export function Footer({menu = mockData}) {
       </section>
       <div className="pt-8 opacity-50 md:col-span-2 lg:col-span-4">
         &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
-        Licensed Open Source project. This website is carbon neutral.
+        Licensed Open Source project. This website is carbon&nbsp;neutral.
       </div>
     </Section>
   );
