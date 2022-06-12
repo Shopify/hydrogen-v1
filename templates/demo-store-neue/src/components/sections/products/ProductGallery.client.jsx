@@ -10,7 +10,7 @@ export function ProductGallery({media, className}) {
 
   return (
     <div
-      className={`grid grid-flow-col md:grid-flow-row gap-4 px-4 pb-4 md:p-0 overflow-x-scroll snap-x snap-center w-full  md:grid-cols-2 ${className}`}
+      className={`swimlane md:grid-flow-row  md:p-0 md:overflow-x-auto md:grid-cols-2 ${className}`}
     >
       {media.map((med, i) => {
         let extraProps = {};
@@ -36,7 +36,7 @@ export function ProductGallery({media, className}) {
           <div
             className={`${
               i % 3 === 0 ? 'md:col-span-2' : 'md:col-span-1'
-            } card-image aspect-square md:w-full w-[80vw]`}
+            } snap-center card-image bg-white dark:bg-contrast/10 aspect-square md:w-full w-[80vw]`}
             key={med.id || med.image.id}
           >
             <MediaFile
