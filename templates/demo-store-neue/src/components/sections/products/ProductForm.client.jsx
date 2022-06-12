@@ -80,31 +80,11 @@ export function ProductForm() {
                   {name}
                 </Heading>
                 <div className="flex flex-wrap items-baseline gap-4">
-                  {values.map((value) => {
-                    const checked = selectedOptions[name] === value;
-                    const id = `option-${name}-${value}`;
-
-                    return (
-                      <Text as="label" key={id} htmlFor={id}>
-                        <input
-                          className="sr-only"
-                          type="radio"
-                          id={id}
-                          name={`option[${name}]`}
-                          value={value}
-                          checked={checked}
-                          onChange={() => handleChange(name, value)}
-                        />
-                        <div
-                          className={`leading-none py-1 border-b-[1.5px] cursor-pointer transition-all duration-200 ${
-                            checked ? 'border-primary/50' : 'border-primary/0'
-                          }`}
-                        >
-                          {value}
-                        </div>
-                      </Text>
-                    );
-                  })}
+                  <OptionRadio
+                    name={name}
+                    handleChange={handleChange}
+                    values={values}
+                  />
                 </div>
               </div>
             );
@@ -135,5 +115,39 @@ export function ProductForm() {
         )}
       </div>
     </form>
+  );
+}
+
+function OptionRadio({values, name, handleChange}) {
+  const {selectedOptions} = useProductOptions();
+
+  return (
+    <>
+      {values.map((value) => {
+        const checked = selectedOptions[name] === value;
+        const id = `option-${name}-${value}`;
+
+        return (
+          <Text as="label" key={id} htmlFor={id}>
+            <input
+              className="sr-only"
+              type="radio"
+              id={id}
+              name={`option[${name}]`}
+              value={value}
+              checked={checked}
+              onChange={() => handleChange(name, value)}
+            />
+            <div
+              className={`leading-none py-1 border-b-[1.5px] cursor-pointer transition-all duration-200 ${
+                checked ? 'border-primary/50' : 'border-primary/0'
+              }`}
+            >
+              {value}
+            </div>
+          </Text>
+        );
+      })}
+    </>
   );
 }

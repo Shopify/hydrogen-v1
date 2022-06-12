@@ -45,7 +45,7 @@ export function CountrySelector() {
                     <Countries
                       selectedCountry={selectedCountry}
                       getClassName={(active) => {
-                        return `w-full p-2 transition rounded cursor-pointer flex justify-start items-center text-left cursor-pointer ${
+                        return `w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${
                           active ? 'bg-contrast/10' : null
                         }`;
                       }}
