@@ -55,15 +55,19 @@ export default function Product() {
           <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
             <ProductGallery
               media={product.media.nodes}
-              className="w-full lg:col-span-2"
+              className="w-screen md:w-full lg:col-span-2"
             />
-            <section className="sticky py-4 px-4 md:px-0 top-[6rem] lg:top-[8rem] xl:top-[10rem]">
-              <Heading as="h1">{product.title}</Heading>
-              {product.vendor && (
-                <Text className={'opacity-50 font-medium'}>
-                  {product.vendor}
-                </Text>
-              )}
+            <section className="sticky md:mx-auto max-w-xl md:max-w-[24rem] grid gap-8 p-6 md:px-0 top-[6rem] lg:top-[8rem] xl:top-[10rem]">
+              <div className="grid gap-2">
+                <Heading as="h1" className="whitespace-normal">
+                  {product.title}
+                </Heading>
+                {product.vendor && (
+                  <Text className={'opacity-50 font-medium'}>
+                    {product.vendor}
+                  </Text>
+                )}
+              </div>
               <ProductForm />
               <ProductInfo />
             </section>
