@@ -2,7 +2,7 @@ import {Disclosure} from '@headlessui/react';
 import {Link} from '@shopify/hydrogen';
 
 import {CountrySelector} from '~/components/blocks';
-import {Section, Heading} from '~/components/elements';
+import {Section, Heading, IconCaret} from '~/components/elements';
 import {footer as mockData} from '~/lib/placeholders';
 
 /**
@@ -29,11 +29,18 @@ export function Footer({menu = mockData}) {
             {({open}) => (
               <>
                 <Disclosure.Button className="text-left md:cursor-default">
-                  <Heading size="lead" as="h4">
+                  <Heading className="flex justify-between" size="lead" as="h4">
                     {item.title}
+                    <span className="md:hidden">
+                      <IconCaret direction={open ? 'up' : 'down'} />
+                    </span>
                   </Heading>
                 </Disclosure.Button>
-                <div className={open ? `block` : `hidden md:block`}>
+                <div
+                  className={`${
+                    open ? `max-h-48 h-fit` : `max-h-0 md:max-h-fit`
+                  } overflow-hidden transition-all duration-300`}
+                >
                   <Disclosure.Panel static>
                     <nav className={styles.nav}>
                       {item.items.map((subItem) => (
