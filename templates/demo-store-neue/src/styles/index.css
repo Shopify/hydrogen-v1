@@ -82,6 +82,12 @@
   }
 }
 
+@layer components {
+  .swimlane {
+    @apply grid snap-mandatory grid-flow-col snap-x w-full gap-4 scroll-px-4 px-4 pb-4 overflow-x-scroll
+  }
+}
+
 @layer utilities {
   .absolute-center {
     @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
