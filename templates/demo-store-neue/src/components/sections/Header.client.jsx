@@ -1,7 +1,6 @@
 import {Link, useUrl, useCart} from '@shopify/hydrogen';
 import {useWindowScroll} from 'react-use';
 
-import {Drawer, useDrawer} from '~/components/blocks';
 import {
   IconSearch,
   IconAccount,
@@ -10,6 +9,8 @@ import {
   Input,
   Heading,
 } from '~/components/elements';
+import {Drawer, useDrawer} from '~/components/blocks';
+import {CartDetails} from './CartDetails.client';
 
 /**
  * A client component that specifies the content of the header on the website
@@ -23,22 +24,12 @@ export function Header({title, menu}) {
   return (
     <>
       {/* TODO: Drawer will be removed and added into a Cart component. left it here for reviewing purposes */}
-      <Drawer open={isOpen} onClose={closeDrawer} title="Cart">
-        <div className="mt-2">
-          <p className="text-sm text-gray-500">
-            Your payment has been successfully submitted. We’ve sent you an
-            email with all of the details of your order.
-          </p>
-        </div>
-
-        <div className="mt-4">
-          <button
-            type="button"
-            className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-            onClick={closeDrawer}
-          >
-            Got it, thanks!
-          </button>
+      <Drawer open={isOpen} onClose={closeDrawer}>
+        <div className="grid">
+          <Drawer.Title>
+            <h2 className="sr-only">Cart Drawer</h2>
+          </Drawer.Title>
+          <CartDetails />
         </div>
       </Drawer>
       <DesktopHeader
