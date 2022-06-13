@@ -17,9 +17,15 @@ export function CartDetails() {
   const {lines} = useCart();
 
   return (
-    <form className="flex flex-col">
-      <section aria-labelledby="cart-heading" className="md:col-span-7">
-        <ul>
+    <form className="grid grid-cols-1 h-screen grid-rows-[1fr_auto]">
+      <section
+        aria-labelledby="cart-contents"
+        className="overflow-auto md:p-8 px-4 py-6"
+      >
+        <Heading as="h2" size="lead" id="cart-contents">
+          Cart
+        </Heading>
+        <ul className="mt-3">
           {lines.map((line) => {
             return (
               <CartLineProvider key={line.id} line={line}>
@@ -31,7 +37,7 @@ export function CartDetails() {
       </section>
       <section
         aria-labelledby="summary-heading"
-        className="sticky px-4 py-6 md:col-span-5"
+        className="md:py-8 md:px-12 py-6 px-4 border-t"
       >
         <h2 id="summary-heading" className="sr-only">
           Order summary
@@ -47,11 +53,12 @@ function CartCheckoutActions() {
   const {checkoutUrl} = useCart();
   return (
     <>
-      <div className="grid items-center justify-center gap-4 mt-6 xl:grid-cols-2">
+      <div className="md:mt-8 mt-6 flex flex-col">
         <Button to={checkoutUrl} width="auto">
           Continue to Checkout
         </Button>
-        <CartShopPayButton className="flex items-center justify-center w-full h-12 rounded" />
+        {/* TODO: We need to fix the shop pay button here */}
+        <CartShopPayButton className="flex items-center justify-center w-full rounded-sm mt-2 bg-[#5a31f4]" />
       </div>
     </>
   );
@@ -61,22 +68,24 @@ function OrderSummary() {
   const {estimatedCost} = useCart();
   return (
     <>
-      <dl className="mt-6 space-y-4">
+      <dl className="space-y-2">
         <div className="flex items-center justify-between">
-          <dt className="text-sm">Subtotal</dt>
-          <dd className="text-sm font-medium">
+          <Text as="dt">Subtotal</Text>
+          <Text as="dd">
             {estimatedCost?.subtotalAmount?.amount ? (
               <Money data={estimatedCost?.subtotalAmount} />
             ) : (
               '-'
             )}
-          </dd>
+          </Text>
         </div>
-        <div className="flex items-center justify-between pt-4">
-          <dt className="flex items-center text-primary/60">
+        <div className="flex items-center justify-between">
+          <Text as="dt" className="flex items-center">
             <span>Shipping estimate</span>
-          </dt>
-          <dd className="text-sm font-medium text-primary/90">-</dd>
+          </Text>
+          <Text as="dd" className="text-green-600">
+            Free and carbon neutral
+          </Text>
         </div>
       </dl>
     </>
@@ -88,11 +97,11 @@ function CartLineItem() {
   const {id: lineId, quantity, merchandise} = useCartLine();
 
   return (
-    <li key={lineId} className="flex py-5">
+    <li key={lineId} className="flex md:py-5 py-3">
       <div className="flex-shrink-0">
         <Image
           data={merchandise.image}
-          className="object-cover object-center w-28 h-28 rounded border"
+          className="object-cover object-center md:w-28 md:h-28 w-24 h-24 rounded border"
         />
       </div>
 
