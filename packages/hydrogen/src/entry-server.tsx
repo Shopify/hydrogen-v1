@@ -39,15 +39,15 @@ import {
   createFromReadableStream,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
+import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {setLogger, RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
-import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
 import {htmlEncode} from './utilities';
 import {splitCookiesString} from 'set-cookie-parser';
+import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes';
 
 declare global {
   // This is provided by a Vite plugin
@@ -111,14 +111,26 @@ export const renderHydrogen = (App: any) => {
     request.ctx.runtime = context;
     setCache(cache);
 
-    if (
-      url.pathname === EVENT_PATHNAME ||
-      EVENT_PATHNAME_REGEX.test(url.pathname)
-    ) {
-      return ServerAnalyticsRoute(
+    const builtInRouteResource = getBuiltInRoute(url);
+
+    if (builtInRouteResource) {
+      const apiResponse = await renderApiRoute(
         request,
-        hydrogenConfig.serverAnalyticsConnectors
+        {
+          resource: builtInRouteResource,
+          params: {},
+          hasServerComponent: false,
+        },
+        hydrogenConfig,
+        {
+          session: sessionApi,
+          suppressLog: true,
+        }
       );
+
+      return apiResponse instanceof Request
+        ? handleRequest(apiResponse, options)
+        : apiResponse;
     }
 
     const isRSCRequest = url.pathname === RSC_PATHNAME;
@@ -133,8 +145,10 @@ export const renderHydrogen = (App: any) => {
       const apiResponse = await renderApiRoute(
         request,
         apiRoute,
-        hydrogenConfig.shopify,
-        sessionApi
+        hydrogenConfig,
+        {
+          session: sessionApi,
+        }
       );
 
       return apiResponse instanceof Request

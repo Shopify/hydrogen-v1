@@ -38,6 +38,7 @@ const generateId =
 
 // Stores queries by url or '*'
 const preloadCache: AllPreloadQueries = new Map();
+const previouslyLoadedUrls: Record<string, number> = {};
 const PRELOAD_ALL = '*';
 
 /**
@@ -103,6 +104,16 @@ export class HydrogenRequest extends Request {
       scopes: new Map(),
     };
     this.cookies = this.parseCookies();
+  }
+
+  public previouslyLoadedRequest() {
+    if (previouslyLoadedUrls[this.normalizedUrl] > 1) return true;
+    previouslyLoadedUrls[this.normalizedUrl] = previouslyLoadedUrls[
+      this.normalizedUrl
+    ]
+      ? 2
+      : 1;
+    return false;
   }
 
   private parseCookies() {

@@ -4,26 +4,61 @@ import {
   useShop,
   useSession,
   NoStore,
-  flattenConnection,
   gql,
+  flattenConnection,
 } from '@shopify/hydrogen';
 
-import {
-  FeaturedCollections,
-  PageHeader,
-  ProductSwimlane,
-  Locations,
-} from '~/components/sections';
-import {Text, Button} from '~/components/elements';
+import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {PageHeader, Text, Button, LogoutButton} from '~/components/elements';
+import {OrderCard} from '~/components/blocks';
+import {Layout} from '~/components/layouts';
 
-import Layout from '../layouts/DefaultLayout.server';
-import LogoutButton from '../elements/LogoutButton.client';
-import OrderCard from '../blocks/OrderCard.client';
+import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
 
-import {LOCATION_CARD_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+export function AccountDetails({customerAccessToken}) {
+  if (!customerAccessToken) return null;
+  const {languageCode} = useShop();
+  const {countryCode = 'US'} = useSession();
+  const {data} = useShopQuery({
+    query: CUSTOMER_QUERY,
+    variables: {
+      customerAccessToken,
+      language: languageCode,
+      country: countryCode,
+    },
+    preload: true,
+    cache: NoStore(),
+  });
 
-function EmptyOrders(props) {
-  const {heading} = props;
+  const customer = data && data.customer;
+
+  const orders = flattenConnection(customer?.orders);
+
+  const heading = customer
+    ? `Welcome${customer.firstName ? `, ${customer.firstName}` : ``}`
+    : 'Account Details';
+
+  const {featuredCollections, featuredProducts} = data;
+
+  return (
+    <Layout>
+      <Seo type="noindex" data={{title: 'Account details'}} />
+      {orders.length ? (
+        <OrderHistory orders={orders} heading={heading} />
+      ) : (
+        <EmptyOrders heading={heading} />
+      )}
+      <FeaturedCollections
+        title="Popular Collections"
+        data={featuredCollections.nodes}
+      />
+      <ProductSwimlane data={featuredProducts.nodes} />
+    </Layout>
+  );
+}
+
+/* TODO: We should import any hardcoded langauge from a central JSON file to make i18n and customization easier. */
+function EmptyOrders({heading}) {
   return (
     <PageHeader heading={heading}>
       <LogoutButton className="inline-block text-sm font-bold text-blue-500 align-baseline hover:text-blue-800">
@@ -39,8 +74,7 @@ function EmptyOrders(props) {
   );
 }
 
-function OrderHistory(props) {
-  const {orders, heading} = props;
+function OrderHistory({orders, heading}) {
   return (
     <div>
       <PageHeader heading={heading}>
@@ -52,7 +86,7 @@ function OrderHistory(props) {
         <h2 className="font-bold text-lead">Order History</h2>
         <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {orders.map((order) => (
-            <OrderCard key={order.id} order={order} />
+            <OrderCard order={order} key={order.id} />
           ))}
         </ul>
       </div>
@@ -60,53 +94,7 @@ function OrderHistory(props) {
   );
 }
 
-export default function AccountDetails({customerAccessToken}) {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
-  const {data} = useShopQuery({
-    query: QUERY,
-    variables: {
-      customerAccessToken,
-      language: languageCode,
-      country: countryCode,
-    },
-    preload: true,
-    cache: NoStore(),
-  });
-
-  const customer = data && data.customer;
-
-  const orders =
-    customer?.orders?.edges.length > 0
-      ? flattenConnection(customer.orders)
-      : [];
-
-  const heading = customer
-    ? `Welcome${customer.firstName ? `, ${customer.firstName}` : ``}`
-    : 'Account Details';
-
-  const {featuredCollections, featuredProducts, locations} = data;
-
-  return (
-    <Layout>
-      <Seo type="noindex" data={{title: 'Account details'}} />
-      {orders.length ? (
-        <OrderHistory orders={orders} heading={heading} />
-      ) : (
-        <EmptyOrders heading={heading} />
-      )}
-      <FeaturedCollections
-        title="Popular Collections"
-        data={featuredCollections.nodes}
-      />
-      <ProductSwimlane data={featuredProducts.nodes} />
-      <Locations data={locations.nodes} />
-    </Layout>
-  );
-}
-
-const QUERY = gql`
-  ${LOCATION_CARD_FIELDS}
+const CUSTOMER_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
   query CustomerDetails(
     $customerAccessToken: String!
@@ -117,39 +105,32 @@ const QUERY = gql`
       firstName
       email
       orders(first: 25, sortKey: PROCESSED_AT, reverse: true) {
-        edges {
-          node {
-            id
-            orderNumber
-            processedAt
-            financialStatus
-            fulfillmentStatus
-            currentTotalPrice {
-              amount
-              currencyCode
-            }
-            lineItems(first: 30) {
-              edges {
-                node {
-                  variant {
-                    image {
-                      url
-                      height
-                      width
-                      altText
-                    }
+        nodes {
+          id
+          orderNumber
+          processedAt
+          financialStatus
+          fulfillmentStatus
+          currentTotalPrice {
+            amount
+            currencyCode
+          }
+          lineItems(first: 30) {
+            edges {
+              node {
+                variant {
+                  image {
+                    url
+                    height
+                    width
+                    altText
                   }
-                  title
                 }
+                title
               }
             }
           }
         }
-      }
-    }
-    locations: contentEntries(first: 3, type: "stores") {
-      nodes {
-        ...LocationCardFields
       }
     }
     featuredProducts: products(first: 12) {

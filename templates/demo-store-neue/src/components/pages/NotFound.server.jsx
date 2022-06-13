@@ -1,21 +1,16 @@
-import {useShopQuery, useShop, useSession, gql} from '@shopify/hydrogen';
-import {DefaultLayout as Layout} from '~/components/layouts';
-import {
-  PageHeader,
-  FeaturedCollections,
-  ProductSwimlane,
-  Locations,
-} from '~/components/sections';
-import {Text, Button} from '~/components/elements';
+import {gql, useSession, useShop, useShopQuery} from '@shopify/hydrogen';
 
-import {PRODUCT_CARD_FIELDS, LOCATION_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {Layout} from '~/components/layouts';
+import {PageHeader, Text, Button} from '~/components/elements';
+import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
 
-export default function NotFound({type = 'page'}) {
+export function NotFound({type = 'page'}) {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: NOT_FOUND_QUERY,
     variables: {
       language: languageCode,
       country: countryCode,
@@ -25,7 +20,7 @@ export default function NotFound({type = 'page'}) {
 
   const heading = `We’ve lost this ${type}`;
   const description = `We couldn’t find the ${type} you’re looking for. Try checking the URL or heading back to the home page.`;
-  const {featuredCollections, featuredProducts, locations} = data;
+  const {featuredCollections, featuredProducts} = data;
   return (
     <Layout>
       <PageHeader heading={heading}>
@@ -41,14 +36,12 @@ export default function NotFound({type = 'page'}) {
         data={featuredCollections.nodes}
       />
       <ProductSwimlane data={featuredProducts.nodes} />
-      <Locations data={locations.nodes} />
     </Layout>
   );
 }
 
-const QUERY = gql`
+const NOT_FOUND_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
-  ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
@@ -67,11 +60,6 @@ const QUERY = gql`
     featuredProducts: products(first: 12) {
       nodes {
         ...ProductCardFields
-      }
-    }
-    locations: contentEntries(first: 3, type: "stores") {
-      nodes {
-        ...LocationCardFields
       }
     }
   }

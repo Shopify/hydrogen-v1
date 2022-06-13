@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import {Image, Link} from '@shopify/hydrogen';
+import {Image, Link, flattenConnection} from '@shopify/hydrogen';
 
 import MoneyCompareAtPrice from './MoneyCompareAtPrice.client';
 import MoneyPrice from './MoneyPrice.client';
@@ -8,7 +8,7 @@ import MoneyPrice from './MoneyPrice.client';
  * A shared component that displays a single product to allow buyers to quickly identify a particular item of interest
  */
 export default function ProductCard({product}) {
-  const selectedVariant = product.variants.nodes[0];
+  const selectedVariant = flattenConnection(product.variants)[0];
 
   if (selectedVariant == null) {
     return null;

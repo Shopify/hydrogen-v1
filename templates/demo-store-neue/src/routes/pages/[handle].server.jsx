@@ -7,7 +7,8 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
+import {Layout} from '~/components/layouts';
+import {PageHeader} from '~/components/elements';
 import {NotFound} from '~/components/pages';
 
 export default function Page({params}) {
@@ -15,8 +16,8 @@ export default function Page({params}) {
 
   const {handle} = params;
   const {data} = useShopQuery({
-    query: QUERY,
-    variables: {language: languageCode, handle},
+    query: PAGE_QUERY,
+    variables: {languageCode, handle},
   });
 
   useServerAnalytics(
@@ -39,15 +40,19 @@ export default function Page({params}) {
   return (
     <Layout>
       <Seo type="page" data={page} />
-      <h1 className="text-2xl font-bold">{page.title}</h1>
-      <div dangerouslySetInnerHTML={{__html: page.body}} className="prose" />
+      <PageHeader heading={page.title} variant="page">
+        <div
+          dangerouslySetInnerHTML={{__html: page.body}}
+          className="prose dark:prose-invert"
+        />
+      </PageHeader>
     </Layout>
   );
 }
 
-const QUERY = gql`
-  query PageDetails($language: LanguageCode, $handle: String!)
-  @inContext(language: $language) {
+const PAGE_QUERY = gql`
+  query PageDetails($languageCode: LanguageCode, $handle: String!)
+  @inContext(language: $languageCode) {
     page(handle: $handle) {
       id
       title

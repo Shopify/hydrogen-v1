@@ -1,37 +1,30 @@
+import {Suspense} from 'react';
 import {
-  useSession,
-  useShopQuery,
-  useShop,
-  Seo,
   CacheDays,
-  useServerAnalytics,
-  ShopifyAnalyticsConstants,
   gql,
+  Seo,
+  ShopifyAnalyticsConstants,
+  useServerAnalytics,
+  useSession,
+  useShop,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Suspense} from 'react';
-
-import {DefaultLayout as Layout} from '~/components/layouts';
-
+import {Layout} from '~/components/layouts';
 import {
-  Hero,
   FeaturedCollections,
+  Hero,
   ProductSwimlane,
-  Locations,
 } from '~/components/sections';
 
-import {
-  LOCATION_CARD_FIELDS,
-  MEDIA_FIELDS,
-  PRODUCT_CARD_FIELDS,
-} from '~/lib/fragments';
+import {MEDIA_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Homepage() {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: HOMEPAGE_CONTENT_QUERY,
     variables: {
       language: languageCode,
       country: countryCode,
@@ -42,7 +35,7 @@ export default function Homepage() {
   // TODO: Make Hero Banners match to collections if these don't
   // const heroBanners = data?.heroBanners?.nodes;
 
-  const {heroBanners, featuredCollections, featuredProducts, locations} = data;
+  const {heroBanners, featuredCollections, featuredProducts} = data;
 
   useServerAnalytics({
     shopify: {
@@ -68,7 +61,6 @@ export default function Homepage() {
         title="Featured Products"
         divider="bottom"
       />
-      <Locations data={locations.nodes} />
     </Layout>
   );
 }
@@ -79,7 +71,7 @@ function SeoForHomepage() {
       shop: {title, description},
     },
   } = useShopQuery({
-    query: SEO_QUERY,
+    query: HOMEPAGE_SEO_QUERY,
     cache: CacheDays(),
     preload: true,
   });
@@ -96,7 +88,7 @@ function SeoForHomepage() {
   );
 }
 
-const SEO_QUERY = gql`
+const HOMEPAGE_SEO_QUERY = gql`
   query homeShopInfo {
     shop {
       description
@@ -104,42 +96,51 @@ const SEO_QUERY = gql`
   }
 `;
 
-const QUERY = gql`
+const HOMEPAGE_CONTENT_QUERY = gql`
   ${MEDIA_FIELDS}
   ${PRODUCT_CARD_FIELDS}
-  ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
-    heroBanners: contentEntries(type: "hero_banners", first: 2) {
+    heroBanners: collections(
+      first: 10
+      query: "collection_type:custom"
+      sortKey: UPDATED_AT
+    ) {
       nodes {
-        title: field(key: "title") {
+        id
+        handle
+        title: metafield(namespace: "hero", key: "title") {
           value
         }
-        byline: field(key: "byline") {
+        byline: metafield(namespace: "hero", key: "byline") {
           value
         }
-        cta: field(key: "cta") {
+        cta: metafield(namespace: "hero", key: "cta") {
           value
         }
-        url: field(key: "url") {
-          value
-        }
-        spread: field(key: "spread") {
+        spread: metafield(namespace: "hero", key: "spread") {
           reference {
             ...MediaFields
           }
         }
-        spread_secondary: field(key: "spread_secondary") {
+        spread_secondary: metafield(
+          namespace: "hero"
+          key: "spread_secondary"
+        ) {
           reference {
             ...MediaFields
           }
         }
-        text_color: field(key: "text_color") {
+        text_color: metafield(namespace: "hero", key: "text_color") {
           value
         }
       }
     }
-    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
+    featuredCollections: collections(
+      first: 3
+      query: "collection_type:smart"
+      sortKey: UPDATED_AT
+    ) {
       nodes {
         id
         title
@@ -155,11 +156,6 @@ const QUERY = gql`
     featuredProducts: products(first: 12) {
       nodes {
         ...ProductCardFields
-      }
-    }
-    locations: contentEntries(first: 3, type: "stores") {
-      nodes {
-        ...LocationCardFields
       }
     }
   }

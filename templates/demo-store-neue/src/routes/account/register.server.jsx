@@ -1,6 +1,6 @@
 import {NoStore, Seo, gql} from '@shopify/hydrogen';
 
-import {DefaultLayout as Layout} from '~/components/layouts';
+import {Layout} from '~/components/layouts';
 import {AccountCreateForm} from '~/components/sections';
 import {getApiErrorMessage} from '~/lib/utils';
 
@@ -31,7 +31,7 @@ export async function api(request, {queryShop}) {
   }
 
   const {data, errors} = await queryShop({
-    query: MUTATION,
+    query: CUSTOMER_CREATE_MUTATION,
     variables: {
       input: {
         email: jsonBody.email,
@@ -65,7 +65,7 @@ export async function api(request, {queryShop}) {
   }
 }
 
-const MUTATION = gql`
+const CUSTOMER_CREATE_MUTATION = gql`
   mutation customerCreate($input: CustomerCreateInput!) {
     customerCreate(input: $input) {
       customer {

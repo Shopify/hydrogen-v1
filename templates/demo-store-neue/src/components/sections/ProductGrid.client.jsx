@@ -1,9 +1,10 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
+import {flattenConnection} from '@shopify/hydrogen';
 
 import {Grid} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 
-export default function ProductGrid({data}) {
+export function ProductGrid({data}) {
   const nextButtonRef = useRef(null);
   const initialProducts = data.collection.products.nodes;
   const {hasNextPage, endCursor} = data.collection.products.pageInfo;
@@ -21,7 +22,7 @@ export default function ProductGrid({data}) {
 
     const response = await fetch(url, {method: 'POST'});
     const json = await response.json();
-    const newProducts = json.data.collection.products.nodes;
+    const newProducts = flattenConnection(json.data.collection.products);
     const {endCursor, hasNextPage} = json.data.collection.products.pageInfo;
 
     setProducts([...products, ...newProducts]);
@@ -47,18 +48,18 @@ export default function ProductGrid({data}) {
       rootMargin: '100px',
     });
 
-    const buttonObserver = nextButtonRef.current;
+    const nextButton = nextButtonRef.current;
 
-    if (buttonObserver) observer.observe(buttonObserver);
+    if (nextButton) observer.observe(nextButton);
 
     return () => {
-      if (buttonObserver) observer.unobserve(buttonObserver);
+      if (nextButton) observer.unobserve(nextButton);
     };
   }, [nextButtonRef, cursor, handleIntersect]);
 
   return (
     <>
-      <Grid>
+      <Grid layout="products">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

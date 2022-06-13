@@ -9,23 +9,50 @@ import {
   Input,
   Heading,
 } from '~/components/elements';
+import {Drawer, useDrawer} from '../blocks/Drawer.client';
 
 /**
  * A client component that specifies the content of the header on the website
  */
-export default function Header({title, menu}) {
+export function Header({title, menu}) {
   const {pathname} = useUrl();
+  const {isOpen, openDrawer, closeDrawer} = useDrawer();
+
   const isHome = pathname === '/';
 
   return (
     <>
-      <DesktopHeader isHome={isHome} title={title} menu={menu} />
-      <MobileHeader isHome={isHome} title={title} />
+      {/* TODO: Drawer will be removed and added into a Cart component. left it here for reviewing purposes */}
+      <Drawer open={isOpen} onClose={closeDrawer} title="Cart">
+        <div className="mt-2">
+          <p className="text-sm text-gray-500">
+            Your payment has been successfully submitted. We’ve sent you an
+            email with all of the details of your order.
+          </p>
+        </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            onClick={closeDrawer}
+          >
+            Got it, thanks!
+          </button>
+        </div>
+      </Drawer>
+      <DesktopHeader
+        isHome={isHome}
+        title={title}
+        menu={menu}
+        openDrawer={openDrawer}
+      />
+      <MobileHeader isHome={isHome} title={title} openDrawer={openDrawer} />
     </>
   );
 }
 
-function MobileHeader({title, isHome}) {
+function MobileHeader({title, isHome, openDrawer}) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
@@ -74,16 +101,16 @@ function MobileHeader({title, isHome}) {
         <button className={styles.button}>
           <IconAccount />
         </button>
-        <Link to={'/cart'} className={styles.button}>
+        <button onClick={openDrawer} className={styles.button}>
           <IconBag />
           <CartBadge dark={isHome} />
-        </Link>
+        </button>
       </div>
     </header>
   );
 }
 
-function DesktopHeader({title, isHome, menu}) {
+function DesktopHeader({title, isHome, menu, openDrawer}) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
@@ -132,10 +159,10 @@ function DesktopHeader({title, isHome, menu}) {
         <Link to={'/account'} className={styles.button}>
           <IconAccount />
         </Link>
-        <Link to={'/cart'} className={styles.button}>
+        <button onClick={openDrawer} className={styles.button}>
           <IconBag />
           <CartBadge dark={isHome} />
-        </Link>
+        </button>
       </div>
     </header>
   );
@@ -144,6 +171,9 @@ function DesktopHeader({title, isHome, menu}) {
 function CartBadge({dark}) {
   const {totalQuantity} = useCart();
 
+  if (totalQuantity < 1) {
+    return null;
+  }
   return (
     <div
       className={`${
