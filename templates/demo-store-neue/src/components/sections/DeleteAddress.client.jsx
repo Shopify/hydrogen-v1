@@ -12,8 +12,12 @@ export function DeleteAddress({addressId}) {
 
   async function deleteAddress(id) {
     const response = await callDeleteAddressApi(id);
-    if (response.error) alert(response.error);
-    else setServerProps('rerender', !serverProps.rerender);
+    if (response.error) {
+      // TODO: improve error handling UI
+      alert(response.error);
+      return;
+    }
+    setServerProps('rerender', !serverProps.rerender);
     close();
   }
 

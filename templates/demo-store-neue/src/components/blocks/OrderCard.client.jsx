@@ -7,6 +7,7 @@ export function OrderCard({order}) {
   if (!order?.id) return null;
   const legacyOrderId = order.id.split('/').pop().split('?')[0];
   const lineItems = flattenConnection(order?.lineItems);
+  console.log('order', order);
 
   return (
     <li className="col-span-1 flex flex-col text-center rounded border-gray-200 border divide-y divide-gray-200 justify-around">
@@ -42,12 +43,14 @@ export function OrderCard({order}) {
             <dd className="mt-2">
               <span
                 className={`px-3 py-1 text-xs font-medium rounded-full ${
-                  order.statusMessage === 'FULFILLED'
+                  order.fulfillmentStatus === 'FULFILLED'
                     ? 'bg-green-100 text-green-800'
                     : 'bg-gray-200 text-gray-500'
                 }`}
               >
-                <Text size="fine">{statusMessage(order.statusMessage)}</Text>
+                <Text size="fine">
+                  {statusMessage(order.fulfillmentStatus)}
+                </Text>
               </span>
             </dd>
           </dl>

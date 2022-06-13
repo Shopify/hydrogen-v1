@@ -203,7 +203,7 @@ export function EditAccountDetails({
         <Text
           size="fine"
           className={`mt-1 text-red-500 ${
-            !newPassword2Error ? 'invisible' : ''
+            newPassword2Error ? '' : 'invisible'
           }`}
         >
           {newPassword2Error} &nbsp;

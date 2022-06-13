@@ -1,3 +1,4 @@
+// TODO: Split this into multiple files
 import typographicBase from 'typographic-base';
 
 export function missingClass(string, prefix) {
@@ -180,7 +181,6 @@ export function getApiErrorMessage(field, data, errors) {
   return null;
 }
 
-// TODO: rename to translateStatus
 export function statusMessage(status) {
   const translations = {
     ATTEMPTED_DELIVERY: 'Attempted delivery',

@@ -267,7 +267,7 @@ export default function AccountOrder({response, params}) {
               </Text>
               <div
                 className={`mt-3 px-3 py-1 text-xs font-medium rounded-full inline-block w-auto ${
-                  order.statusMessage === 'FULFILLED'
+                  order.fulfillmentStatus === 'FULFILLED'
                     ? 'bg-green-100 text-green-800'
                     : 'bg-gray-200 text-gray-500'
                 }`}
