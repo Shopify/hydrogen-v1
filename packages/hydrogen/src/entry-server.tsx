@@ -870,9 +870,9 @@ async function cacheResponse(
     response.status === 200 &&
     response.cache().mode !== NO_STORE &&
     !response.headers.has('Set-Cookie') &&
-    response.headers.get('Content-Type') !=
+    request.headers.get('Content-Type') !=
       'application/x-www-form-urlencoded' &&
-    (!session || session['customerAccessToken'] === null)
+    !sessionHasCustomerAccessToken(request)
   ) {
     if (revalidate) {
       await saveCacheResponse(response, request, chunks);
@@ -886,6 +886,11 @@ async function cacheResponse(
       );
     }
   }
+}
+
+function sessionHasCustomerAccessToken(request: HydrogenRequest) {
+  const session = request.ctx.session?.get();
+  return session && session['customerAccessToken'];
 }
 
 async function saveCacheResponse(
@@ -902,7 +907,7 @@ async function saveCacheResponse(
     headers.set('cache-control', response.cacheControlHeader);
     const currentHeader = headers.get('Content-Type');
     if (!currentHeader && url.pathname !== RSC_PATHNAME) {
-      headers.set('Content-Type', 'text/html; charset=UTF-8');
+      headers.set('Content-Type', HTML_CONTENT_TYPE);
     }
 
     await setItemInCache(
