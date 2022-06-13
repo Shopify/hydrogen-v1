@@ -9,11 +9,12 @@ describe('In-Memory Cache', () => {
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
     response.headers.set('cache-control', 'max-age=60');
-    cache.put(request, response);
+    await cache.put(request, response);
 
     clock.timestamp += 59 * 1000;
 
     const cachedResponse = await cache.match(request);
+    expect(cachedResponse).toBeDefined();
     expect(cachedResponse!.headers.get('cache-control')).toBe(
       response.headers.get('cache-control')
     );
@@ -32,18 +33,20 @@ describe('In-Memory Cache', () => {
       'cache-control',
       'max-age=10, stale-while-revalidate=60'
     );
-    cache.put(request, response);
+    await cache.put(request, response);
 
     clock.timestamp += 9 * 1000;
 
     let cachedResponse;
 
     cachedResponse = await cache.match(request);
+    expect(cachedResponse).toBeDefined();
     expect(cachedResponse!.headers.get('cache')).toBe('HIT');
 
     clock.timestamp += 2 * 1000;
 
     cachedResponse = await cache.match(request);
+    expect(cachedResponse).toBeDefined();
     expect(cachedResponse!.headers.get('cache')).toBe('STALE');
 
     clock.timestamp += 60 * 1000;
@@ -55,11 +58,12 @@ describe('In-Memory Cache', () => {
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
     response.headers.set('cache-control', 'max-age=10');
-    cache.put(request, response);
+    await cache.put(request, response);
 
     clock.timestamp += 9 * 1000;
 
     const cachedResponse = await cache.match(request);
+    expect(cachedResponse).toBeDefined();
     expect(cachedResponse!.headers.get('cache')).toBe('HIT');
 
     expect(await cache.delete(request)).toBeTruthy();
@@ -80,5 +84,15 @@ describe('In-Memory Cache', () => {
 
     // Falsy indicates there was nothing to be deleted
     expect(await cache.delete(request)).toBeFalsy();
+  });
+
+  it('reads the body', async () => {
+    const cache = new InMemoryCache(clockFunction);
+    const request = new Request('https://shopify.dev/');
+    const response = new Response('Hello World');
+    await cache.put(request, response);
+
+    const cachedResponse = await cache.match(request);
+    expect(await cachedResponse!.text()).toBe('Hello World');
   });
 });

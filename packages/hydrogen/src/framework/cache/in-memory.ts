@@ -1,5 +1,6 @@
 type CacheMatch = {
-  value: Response;
+  body: Uint8Array;
+  response: Response;
   timestamp: number;
 };
 
@@ -55,7 +56,8 @@ export class InMemoryCache implements Cache {
     }
 
     this.#store.set(request.url, {
-      value: response,
+      body: new Uint8Array(await response.arrayBuffer()),
+      response,
       timestamp: this.#clock().timestamp,
     });
   }
@@ -67,9 +69,9 @@ export class InMemoryCache implements Cache {
       return;
     }
 
-    const {value, timestamp} = match;
+    const {body, response, timestamp} = match;
 
-    const cacheControl = value.headers.get('cache-control') || '';
+    const cacheControl = response.headers.get('cache-control') || '';
     const maxAge = parseInt(
       cacheControl.match(/max-age=(\d+)/)?.[1] || '0',
       10
@@ -88,15 +90,13 @@ export class InMemoryCache implements Cache {
 
     const isStale = age > maxAge;
 
-    const headers = new Headers(value.headers);
+    const headers = new Headers(response.headers);
     headers.set('cache', isStale ? 'STALE' : 'HIT');
     headers.set('date', new Date(timestamp).toUTCString());
 
-    const response = new Response(value.body, {
+    return new Response(body, {
       headers,
     });
-
-    return response;
   }
 
   async delete(request: Request) {
