@@ -7,7 +7,6 @@ export function OrderCard({order}) {
   if (!order?.id) return null;
   const legacyOrderId = order.id.split('/').pop().split('?')[0];
   const lineItems = flattenConnection(order?.lineItems);
-  console.log('order', order);
 
   return (
     <li className="col-span-1 flex flex-col text-center rounded border-gray-200 border divide-y divide-gray-200 justify-around">
