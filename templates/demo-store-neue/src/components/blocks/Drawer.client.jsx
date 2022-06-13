@@ -7,7 +7,7 @@ import {Fragment, useState} from 'react';
  * @param onClose - function should set the open state.
  * @param children - react children node.
  */
-export function Drawer({open, onClose, children}) {
+function Drawer({open, onClose, children}) {
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -48,7 +48,9 @@ export function Drawer({open, onClose, children}) {
 }
 
 /* Use for associating arialabelledby with the title*/
-export const DrawerTitle = Dialog.Title;
+Drawer.Title = Dialog.Title;
+
+export {Drawer};
 
 export function useDrawer(openDefault = false) {
   const [isOpen, setIsOpen] = useState(openDefault);

@@ -9,7 +9,7 @@ import {
   Input,
   Heading,
 } from '~/components/elements';
-import {Drawer, DrawerTitle, useDrawer} from '~/components/blocks';
+import {Drawer, useDrawer} from '~/components/blocks';
 import {CartDetails} from './CartDetails.client';
 
 /**
@@ -26,9 +26,9 @@ export function Header({title, menu}) {
       {/* TODO: Drawer will be removed and added into a Cart component. left it here for reviewing purposes */}
       <Drawer open={isOpen} onClose={closeDrawer}>
         <div className="grid">
-          <DrawerTitle>
+          <Drawer.Title>
             <h2 className="sr-only">Cart Drawer</h2>
-          </DrawerTitle>
+          </Drawer.Title>
           <CartDetails />
         </div>
       </Drawer>
