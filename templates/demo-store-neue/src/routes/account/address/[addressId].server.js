@@ -47,6 +47,7 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
     country,
     province,
     city,
+    zip,
     phone,
     isDefaultAddress,
   } = await request.json();
@@ -61,6 +62,7 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
   if (country) address.country = country;
   if (province) address.province = province;
   if (city) address.city = city;
+  if (zip) address.zip = zip;
   if (phone) address.phone = phone;
 
   const {data, errors} = await queryShop({

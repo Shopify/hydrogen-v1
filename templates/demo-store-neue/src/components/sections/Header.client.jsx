@@ -1,6 +1,7 @@
 import {Link, useUrl, useCart} from '@shopify/hydrogen';
 import {useWindowScroll} from 'react-use';
 
+import {Drawer, useDrawer} from '~/components/blocks';
 import {
   IconSearch,
   IconAccount,
@@ -9,7 +10,6 @@ import {
   Input,
   Heading,
 } from '~/components/elements';
-import {Drawer, useDrawer} from '~/components/blocks';
 
 /**
  * A client component that specifies the content of the header on the website

@@ -1,18 +1,12 @@
 import {useState} from 'react';
 
+import {emailValidation} from '~/lib/utils';
+
 export function AccountRecoverForm() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(null);
-
-  function emailValidation(email) {
-    if (email.validity.valid) return null;
-
-    return email.validity.valueMissing
-      ? 'Please enter an email'
-      : 'Please enter a valid email';
-  }
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -99,7 +93,7 @@ export function AccountRecoverForm() {
   );
 }
 
-function callAccountRecoverApi({email, password, firstName, lastName}) {
+export function callAccountRecoverApi({email, password, firstName, lastName}) {
   return fetch(`/account/recover`, {
     method: 'POST',
     headers: {

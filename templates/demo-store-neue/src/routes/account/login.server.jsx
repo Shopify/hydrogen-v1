@@ -11,7 +11,7 @@ export default function Login({response}) {
       shop: {name},
     },
   } = useShopQuery({
-    query: QUERY,
+    query: SHOP_QUERY,
     cache: CacheLong(),
     preload: '*',
   });
@@ -24,7 +24,7 @@ export default function Login({response}) {
   );
 }
 
-const QUERY = gql`
+const SHOP_QUERY = gql`
   query shopInfo {
     shop {
       name
@@ -48,7 +48,7 @@ export async function api(request, {session, queryShop}) {
   }
 
   const {data, error} = await queryShop({
-    query: LOGIN,
+    query: LOGIN_MUTATION,
     variables: {
       input: {
         email: jsonBody.email,
@@ -79,7 +79,7 @@ export async function api(request, {session, queryShop}) {
   }
 }
 
-const LOGIN = gql`
+const LOGIN_MUTATION = gql`
   mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
     customerAccessTokenCreate(input: $input) {
       customerUserErrors {
