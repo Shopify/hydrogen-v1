@@ -1,7 +1,6 @@
 import {Link, useUrl, useCart} from '@shopify/hydrogen';
 import {useWindowScroll} from 'react-use';
 
-import {Drawer, useDrawer} from '~/components/blocks';
 import {
   IconSearch,
   IconAccount,
@@ -10,6 +9,7 @@ import {
   Input,
   Heading,
 } from '~/components/elements';
+import {Drawer, DrawerTitle, useDrawer} from '~/components/blocks';
 import {CartDetails} from './CartDetails.client';
 
 /**
@@ -24,8 +24,11 @@ export function Header({title, menu}) {
   return (
     <>
       {/* TODO: Drawer will be removed and added into a Cart component. left it here for reviewing purposes */}
-      <Drawer open={isOpen} onClose={closeDrawer} title="Cart">
-        <div className="mt-2">
+      <Drawer open={isOpen} onClose={closeDrawer}>
+        <div className="grid">
+          <DrawerTitle>
+            <h2 className="sr-only">Cart Drawer</h2>
+          </DrawerTitle>
           <CartDetails />
         </div>
       </Drawer>
