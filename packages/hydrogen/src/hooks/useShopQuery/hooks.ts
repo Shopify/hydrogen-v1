@@ -176,8 +176,12 @@ export function useShopQuery<T>({
           hiddenInfo +
           footer;
 
-        log.warn(warning);
-        sendMessageToClient({type: 'warn', data: warning});
+        if (log.options().showUnusedQueryProperties) {
+          log.warn(warning);
+        }
+        if (serverRequest.ctx.hydrogenConfig?.devTools) {
+          sendMessageToClient({type: 'warn', data: warning});
+        }
       },
     });
   }

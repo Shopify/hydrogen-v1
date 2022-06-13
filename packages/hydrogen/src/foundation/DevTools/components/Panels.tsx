@@ -25,7 +25,14 @@ interface Panels {
 export function Panels({settings}: Props) {
   const [selectedPanel, setSelectedPanel] = useState<number>(0);
   const panels = getPanels({settings});
-  const panelComponents = panels.map(({panel}) => panel);
+  const panelComponents = panels.map((obj, index) => (
+    <div
+      key={obj.content}
+      style={{display: selectedPanel === index ? 'block' : 'none'}}
+    >
+      {obj.panel}
+    </div>
+  ));
 
   return (
     <div style={{display: 'flex', height: '100%'}}>

@@ -369,11 +369,6 @@ async function runSSR({
             <Suspense fallback={null}>
               <Analytics />
             </Suspense>
-            {request.ctx.hydrogenConfig?.devTools && (
-              <Suspense fallback={null}>
-                <DevTools />
-              </Suspense>
-            )}
           </PreloadQueries>
         </ServerPropsProvider>
       </ServerRequestProvider>

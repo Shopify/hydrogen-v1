@@ -16,8 +16,12 @@ export function GraphQL() {
 
   console.log(warnings);
   const warningsMarkup = warnings
-    ? // eslint-disable-next-line react/no-array-index-key
-      warnings.map((war, i) => <li key={war + i}>{war}</li>)
+    ? warnings.map((war, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <li key={war + i}>
+          <pre>{war}</pre>
+        </li>
+      ))
     : null;
   return (
     <div>
