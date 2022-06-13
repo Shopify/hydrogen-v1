@@ -117,6 +117,8 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
   const isPartCurrency = (part: Intl.NumberFormatPart) =>
     part.type === 'currency';
 
+  // By wrapping these properties in functions, we only
+  // create formatters if they are going to be used.
   const lazyFormatters: Record<string, Function> = {
     original: () => money,
     currencyCode: () => money.currencyCode,
@@ -159,6 +161,8 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
         .join(''),
   };
 
+  // Call functions automatically when the properties are accessed
+  // to keep these functions as an implementation detail.
   return new Proxy(lazyFormatters as unknown as UseMoneyValue, {
     get: (target, key) => Reflect.get(target, key).call(null),
   });
