@@ -4,7 +4,7 @@ import {
   Seo,
   gql,
   Image,
-  CacheDays,
+  CacheLong,
   Head,
 } from '@shopify/hydrogen';
 
@@ -13,7 +13,7 @@ import {Layout} from '~/components/layouts';
 const BLOG_HANDLE = 'journal';
 
 export default function Post({params, response}) {
-  response.cache(CacheDays());
+  response.cache(CacheLong());
   const {languageCode, locale} = useShop();
 
   const {handle} = params;
@@ -36,13 +36,7 @@ export default function Post({params, response}) {
   return (
     <Layout>
       <Head>
-        {/* TODO: show custom font implementation, don't use Google fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&display=swap"
-          rel="stylesheet"
-        />
+        <link rel="stylesheet" href="/src/styles/custom-font.css" />
       </Head>
       <Seo type="page" data={data.blog.articleByHandle} />
       <section className="w-[51rem] m-auto mt-12 max-w-full">
@@ -56,7 +50,7 @@ export default function Post({params, response}) {
         />
         <div
           dangerouslySetInnerHTML={{__html: contentHtml}}
-          className="mt-8 md:mt-16 px-6 md:px-24 mb-24 font-['Fraunces'] prose prose-strong:font-sans"
+          className="mt-8 md:mt-16 px-6 md:px-24 mb-24 font-['Fraunces'] prose dark:prose-invert prose-strong:font-sans"
         />
       </section>
     </Layout>
