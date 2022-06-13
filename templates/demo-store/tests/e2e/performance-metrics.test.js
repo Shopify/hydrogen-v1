@@ -36,7 +36,7 @@ describe('Performance metrics', () => {
   }, 60000);
 
   it('should emit performance on sub load', async () => {
-    const collectionPath = '/collections/freestyle-collection';
+    const collectionPath = '/collections/freestyle';
     // Full load
     await Promise.all([
       session.page.waitForRequest(eventsEndpoint),
