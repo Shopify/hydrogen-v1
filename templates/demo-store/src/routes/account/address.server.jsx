@@ -1,6 +1,6 @@
 import {CacheNone, gql} from '@shopify/hydrogen';
 import {setDefaultAddress} from './address/[addressId].server';
-import {getApiErrorMessage} from '~/components/utilities/api.helper';
+import {getApiErrorMessage} from '../../components/utilities/api.helper';
 
 export async function api(request, {session, queryShop}) {
   if (request.method !== 'POST')
@@ -24,7 +24,6 @@ export async function api(request, {session, queryShop}) {
     country,
     province,
     city,
-    zip,
     phone,
     isDefaultAddress,
   } = await request.json();
@@ -39,7 +38,6 @@ export async function api(request, {session, queryShop}) {
   if (country) address.country = country;
   if (province) address.province = province;
   if (city) address.city = city;
-  if (zip) address.zip = zip;
   if (phone) address.phone = phone;
 
   const {data, errors} = await queryShop({

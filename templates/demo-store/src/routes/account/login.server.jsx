@@ -1,7 +1,7 @@
 import {useShopQuery, CacheLong, CacheNone, Seo, gql} from '@shopify/hydrogen';
 
-import Layout from '../../components/layouts/DefaultLayout.server';
-import LoginForm from '../../components/sections/LoginForm.client';
+import Layout from '../../components/Layout.server';
+import LoginForm from '../../components/account/LoginForm.client';
 
 export default function Login({response}) {
   response.cache(CacheNone());
