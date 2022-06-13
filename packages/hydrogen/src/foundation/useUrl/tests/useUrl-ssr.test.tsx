@@ -25,7 +25,7 @@ describe('useUrl() in SSR', () => {
 
   it('returns url object using useServerRequest url', () => {
     const mockUrl =
-      'https://hydrogen-preview.myshopify.com/collections/freestyle-collection';
+      'https://hydrogen-preview.myshopify.com/collections/freestyle';
 
     useEnvContextMock.mockReturnValue(mockUrl);
     const callbackSpy = jest.fn();
@@ -37,7 +37,7 @@ describe('useUrl() in SSR', () => {
 
   it(`returns url object using a parsed url from state param and origin when the pathname is ${RSC_PATHNAME}`, () => {
     const origin = 'https://hydrogen-preview.myshopify.com';
-    const state = {pathname: '/collections/freestyle-collection'};
+    const state = {pathname: '/collections/freestyle'};
 
     const mockUrl = `${origin}${RSC_PATHNAME}?state=${encodeURIComponent(
       JSON.stringify(state)

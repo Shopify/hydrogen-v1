@@ -19,11 +19,11 @@ describe('collections', () => {
   });
 
   it('should have the correct title', async () => {
-    await session.visit('/collections/freestyle-collection');
+    await session.visit('/collections/freestyle');
     const heading = await session.page.locator('h1').first();
     expect(heading).not.toBeNull();
 
     const text = await heading.textContent();
-    expect(text).toBe('Freestyle Collection');
+    expect(text).toBe('Freestyle');
   }, 60000);
 });
