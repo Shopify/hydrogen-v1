@@ -1,4 +1,4 @@
-import {NoStore, gql} from '@shopify/hydrogen';
+import {CacheNone, gql} from '@shopify/hydrogen';
 import {setDefaultAddress} from './address/[addressId].server';
 import {getApiErrorMessage} from '../../components/utilities/api.helper';
 
@@ -46,7 +46,7 @@ export async function api(request, {session, queryShop}) {
       address,
       customerAccessToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const error = getApiErrorMessage('customerAddressCreate', data, errors);

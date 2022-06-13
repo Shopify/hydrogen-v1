@@ -1,7 +1,7 @@
 import {
   useShopQuery,
   useRouteParams,
-  NoStore,
+  CacheNone,
   Seo,
   useSession,
   flattenConnection,
@@ -16,7 +16,7 @@ import {Layout} from '~/components/layouts';
 export default function OrderDetails({response}) {
   const {orderId} = useRouteParams();
 
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   const {customerAccessToken} = useSession();
 
@@ -27,7 +27,7 @@ export default function OrderDetails({response}) {
     variables: {
       orderId: decodeURIComponent(orderId),
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const order = data.node;

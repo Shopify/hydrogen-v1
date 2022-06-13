@@ -3,7 +3,7 @@ import {
   useShopQuery,
   useShop,
   useSession,
-  NoStore,
+  CacheNone,
   gql,
   flattenConnection,
 } from '@shopify/hydrogen';
@@ -27,7 +27,7 @@ export function AccountDetails({customerAccessToken}) {
       country: countryCode,
     },
     preload: true,
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const customer = data && data.customer;
