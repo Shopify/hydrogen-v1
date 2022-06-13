@@ -1,3 +1,6 @@
+/* We  */
+/* Tailwind Configuration Docs: https://tailwindcss.com/docs/configuration */
+
 function withOpacityValue(variable) {
   return ({opacityValue}) => {
     if (opacityValue === undefined) {
@@ -17,21 +20,18 @@ module.exports = {
         notice: withOpacityValue('--color-accent'),
         shopPay: 'var(--color-shop-pay)',
       },
-      borderColor: {
-        lightest: 'rgb(var(--color-primary) / 0.02)',
-        lighter: 'rgb(var(--color-primary) / 0.04)',
-        light: 'rgb(var(--color-primary) / 0.08)',
-        DEFAULT: 'rgb(var(--color-primary) / 0.16)',
-        dark: 'rgb(var(--color-primary) / 0.32)',
-        darker: 'rgb(var(--color-primary) / 0.64)',
-        darkest: 'rgb(var(--color-primary) / 0.98)',
-      },
       screens: {
         sm: '32em',
         md: '48em',
         lg: '64em',
         xl: '80em',
         '2xl': '96em',
+        'sm-max': {max: '48em'},
+        'sm-only': {min: '32em', max: '48em'},
+        'md-only': {min: '48em', max: '64em'},
+        'lg-only': {min: '64em', max: '80em'},
+        'xl-only': {min: '80em', max: '96em'},
+        '2xl-only': {min: '96em'},
       },
       spacing: {
         nav: 'var(--height-nav)',
@@ -53,6 +53,7 @@ module.exports = {
       boxShadow: {
         border: 'inset 0px 0px 0px 1px rgb(var(--color-primary) / 0.08)',
         darkHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.4)',
+        lightHeader: 'inset 0px -1px 0px 0px rgba(21, 21, 21, 0.05)',
       },
     },
   },

@@ -12,10 +12,13 @@ export function Button({
 }) {
   const Component = props?.to ? Link : as;
 
+  const baseButtonClasses =
+    'border inline-block rounded font-medium text-center py-3 px-6 max-w-xl leading-none';
+
   const variants = {
-    primary: 'bg-primary text-contrast',
-    secondary: 'border-primary/10 bg-contrast text-primary',
-    shop: '',
+    primary: `${baseButtonClasses} bg-primary text-contrast`,
+    secondary: `${baseButtonClasses} border-primary/10 bg-contrast text-primary`,
+    inline: 'border-b border-primary/10 leading-none pb-1',
   };
 
   const widths = {
@@ -24,7 +27,6 @@ export function Button({
   };
 
   const styles = clsx(
-    'border inline-block rounded font-medium text-center py-3 px-6 max-w-xl leading-none',
     missingClass(className, 'bg-') && variants[variant],
     missingClass(className, 'w-') && widths[width],
     className,

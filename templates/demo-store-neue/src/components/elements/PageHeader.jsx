@@ -13,7 +13,6 @@ export function PageHeader({
     default: 'grid w-full gap-8 p-4 py-8 md:p-8 lg:p-12 justify-items-start',
     allCollections:
       'flex justify-between items-baseline gap-8 p-4 md:p-8 lg:p-12',
-    page: 'grid w-full p-4 py-8 md:p-8 lg:p-12 gap-8 grid-cols-1 md:grid-cols-2',
   };
 
   const styles = clsx(variants[variant], className);

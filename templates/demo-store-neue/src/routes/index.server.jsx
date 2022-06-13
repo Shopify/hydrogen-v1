@@ -51,15 +51,15 @@ export default function Homepage() {
       {heroBanners?.nodes[0] && (
         <Hero data={heroBanners?.nodes[0]} height="full" top />
       )}
-      <FeaturedCollections
-        data={featuredCollections.nodes}
-        title="Collections"
-      />
-      {heroBanners?.nodes[1] && <Hero data={heroBanners.nodes[1]} />}
       <ProductSwimlane
         data={featuredProducts.nodes}
         title="Featured Products"
         divider="bottom"
+      />
+      {heroBanners?.nodes[1] && <Hero data={heroBanners.nodes[1]} />}
+      <FeaturedCollections
+        data={featuredCollections.nodes}
+        title="Collections"
       />
     </Layout>
   );
