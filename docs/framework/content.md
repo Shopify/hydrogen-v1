@@ -2,7 +2,7 @@
 gid: bf2cb121-f051-4eb2-bb37-aa1738361b23
 title: Integrate content in Hydrogen
 description: Learn how to integrate content on your Hydrogen storefront.
-feature_flag: hydrogen_tutorials
+hidden: true
 ---
 
 > Beta:
