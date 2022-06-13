@@ -1,18 +1,18 @@
-import {useShopQuery, CacheDays, NoStore, Seo, gql} from '@shopify/hydrogen';
+import {useShopQuery, CacheLong, CacheNone, Seo, gql} from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
 import {LoginForm} from '~/components/sections';
 
 export default function Login({response}) {
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   const {
     data: {
       shop: {name},
     },
   } = useShopQuery({
-    query: QUERY,
-    cache: CacheDays(),
+    query: SHOP_QUERY,
+    cache: CacheLong(),
     preload: '*',
   });
 
@@ -24,7 +24,7 @@ export default function Login({response}) {
   );
 }
 
-const QUERY = gql`
+const SHOP_QUERY = gql`
   query shopInfo {
     shop {
       name
@@ -48,14 +48,14 @@ export async function api(request, {session, queryShop}) {
   }
 
   const {data, error} = await queryShop({
-    query: LOGIN,
+    query: LOGIN_MUTATION,
     variables: {
       input: {
         email: jsonBody.email,
         password: jsonBody.password,
       },
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   if (
@@ -79,7 +79,7 @@ export async function api(request, {session, queryShop}) {
   }
 }
 
-const LOGIN = gql`
+const LOGIN_MUTATION = gql`
   mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
     customerAccessTokenCreate(input: $input) {
       customerUserErrors {

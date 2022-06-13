@@ -5,10 +5,9 @@ import {Fragment, useState} from 'react';
  * Drawer component that opens on user click.
  * @param open - boolean state. if true opens the drawer.
  * @param onClose - function should set the open state.
- * @param title - title to set aria-labelledby.
  * @param children - react children node.
  */
-export function Drawer({open, onClose, title, children}) {
+function Drawer({open, onClose, children}) {
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -24,7 +23,7 @@ export function Drawer({open, onClose, title, children}) {
           <div className="fixed inset-0 bg-black bg-opacity-25" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-hidden">
+        <div className="fixed inset-0">
           <div className="absolute inset-0 overflow-hidden">
             <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child
@@ -36,15 +35,7 @@ export function Drawer({open, onClose, title, children}) {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  {title && (
-                    <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      {title}
-                    </Dialog.Title>
-                  )}
+                <Dialog.Panel className="w-[35rem] transform bg-contrast text-left align-middle shadow-xl transition-all">
                   {children}
                 </Dialog.Panel>
               </Transition.Child>
@@ -55,6 +46,11 @@ export function Drawer({open, onClose, title, children}) {
     </Transition>
   );
 }
+
+/* Use for associating arialabelledby with the title*/
+Drawer.Title = Dialog.Title;
+
+export {Drawer};
 
 export function useDrawer(openDefault = false) {
   const [isOpen, setIsOpen] = useState(openDefault);

@@ -4,10 +4,10 @@ import {Heading, Text} from '~/components/elements';
 import {hero as mockData} from '~/lib/placeholders';
 
 export function Hero({data = mockData, height, top}) {
-  const {title, byline, cta, url, spread, spread_secondary} = data;
+  const {title, byline, cta, handle, spread, spread_secondary} = data;
 
   return (
-    <Link to={url.value}>
+    <Link to={`/collections/${handle}`}>
       <section
         className={`relative justify-end flex flex-col w-full ${
           top && '-mt-nav'
@@ -29,7 +29,7 @@ export function Hero({data = mockData, height, top}) {
             </div>
           )}
         </div>
-        <div className="flex flex-col items-baseline justify-between gap-4 px-12 py-8 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
+        <div className="flex flex-col items-baseline justify-between gap-4 px-6 py-8 sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
           <Heading as="h2" size="display" format className="max-w-md">
             {title.value}
           </Heading>

@@ -1,5 +1,5 @@
 // import Multipassify from 'multipassify';
-import {NoStore, gql} from '@shopify/hydrogen';
+import {CacheNone, gql} from '@shopify/hydrogen';
 import shopifyConfig from '../../../hydrogen.config';
 
 export async function api(request, {session, queryShop}) {
@@ -10,17 +10,17 @@ export async function api(request, {session, queryShop}) {
 
   const multipassSecret = shopifyConfig.multipassSecret;
 
-  // TODO: get customer email from session
+  // Todo: get customer email from session
   const customerEmail = 'some@email.com';
 
   const multipassToken = encodeCustomerData(multipassSecret, customerEmail);
 
   const {data, error} = await queryShop({
-    query: LOGIN_MULTIPASS_MUTATION,
+    query: CUSTOMER_MULTIPASS_LOGIN_MUTATION,
     variables: {
       multipassToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   if (
@@ -58,7 +58,7 @@ export async function api(request, {session, queryShop}) {
 
 function encodeCustomerData(multipassSecret, customerEmail) {
   return multipassSecret + customerEmail;
-  //TODO: this lib uses cryto that only works in NodeJS
+  //Todo: this lib uses cryto that only works in NodeJS
   // const multipassify = new Multipassify(multipassSecret);
 
   // return multipassify.encode({
@@ -66,7 +66,7 @@ function encodeCustomerData(multipassSecret, customerEmail) {
   // });
 }
 
-const LOGIN_MULTIPASS_MUTATION = gql`
+const CUSTOMER_MULTIPASS_LOGIN_MUTATION = gql`
   mutation customerAccessTokenCreateWithMultipass($multipassToken: String!) {
     customerAccessTokenCreateWithMultipass(multipassToken: $multipassToken) {
       customerAccessToken {

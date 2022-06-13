@@ -16,7 +16,7 @@ function Orders({orders}) {
       {orders.map((order) => (
         <div
           key={order.id}
-          className="bg-white p-4 w-1/2 mr-4 text-sm last:mr-0"
+          className="w-1/2 p-4 mr-4 text-sm bg-white last:mr-0"
         >
           <div>{ORDER_STATUS[order.fulfillmentStatus]}</div>
           <div>
@@ -25,7 +25,7 @@ function Orders({orders}) {
                 key={variant.image.url}
                 data={variant.image}
                 loaderOptions={{height: 80}}
-                className="border mt-2"
+                className="mt-2 border"
               />
             ))}
           </div>
@@ -33,7 +33,7 @@ function Orders({orders}) {
             Order No. {order.orderNumber}
           </div>
           <Link
-            className="mt-4 bg-gray-900 text-white uppercase py-3 px-4 focus:shadow-outline block w-full text-center"
+            className="block w-full px-4 py-3 mt-4 text-center text-white uppercase bg-gray-900 focus:shadow-outline"
             to={`/account/orders/${encodeURIComponent(order.id)}`}
           >
             Order detail
@@ -50,7 +50,7 @@ function EmptyOrders() {
       <div className="my-4 text-gray-500">No orders yet</div>
       <div className="flex items-center justify-between">
         <Link
-          to="/collections/freestyle-collection"
+          to="/collections/freestyle"
           className="text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
         >
           Start shopping

@@ -70,7 +70,7 @@ To make a third-party HTTP request on the client, use the [`fetchSync`](https://
 {% codeblock file, filename: 'PostDetails.client.jsx' %}
 
 ```js
-import {syncFetch} from '@shopify/hydrogen';
+import {fetchSync} from '@shopify/hydrogen';
 import {Suspense, useState} from 'react';
 export default function PostDetails() {
   const [show, setShow] = useState(false);

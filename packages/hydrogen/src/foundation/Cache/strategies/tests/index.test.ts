@@ -1,45 +1,25 @@
 import {
   generateCacheControlHeader,
-  NoStore,
-  CacheSeconds,
-  CacheMinutes,
-  CacheHours,
-  CacheDays,
-  CacheWeeks,
-  CacheMonths,
+  CacheNone,
+  CacheShort,
+  CacheLong,
   CacheCustom,
 } from '..';
 
 const expectedResultMapping: any = {
-  CacheSeconds: {
-    method: CacheSeconds,
+  CacheShort: {
+    method: CacheShort,
     header: 'public, max-age=1, stale-while-revalidate=9',
   },
-  CacheMinutes: {
-    method: CacheMinutes,
-    header: 'public, max-age=900, stale-while-revalidate=900',
-  },
-  CacheHours: {
-    method: CacheHours,
-    header: 'public, max-age=1800, stale-while-revalidate=1800',
-  },
-  CacheDays: {
-    method: CacheDays,
+  CacheLong: {
+    method: CacheLong,
     header: 'public, max-age=3600, stale-while-revalidate=82800',
-  },
-  CacheWeeks: {
-    method: CacheWeeks,
-    header: 'public, max-age=604800, stale-while-revalidate=604800',
-  },
-  CacheMonths: {
-    method: CacheMonths,
-    header: 'public, max-age=1296000, stale-while-revalidate=1296000',
   },
 };
 
 describe('CachingStrategy', () => {
-  it('should generate the expected cache control header when NoStore is used', () => {
-    expect(generateCacheControlHeader(NoStore())).toEqual('no-store');
+  it('should generate the expected cache control header when CacheNone is used', () => {
+    expect(generateCacheControlHeader(CacheNone())).toEqual('no-store');
   });
 
   Object.keys(expectedResultMapping).forEach((methodName) => {
