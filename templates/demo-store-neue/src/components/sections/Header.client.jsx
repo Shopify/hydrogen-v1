@@ -89,9 +89,9 @@ function MobileHeader({title, isHome, openDrawer}) {
       </Link>
 
       <div className="flex items-center justify-end w-full gap-4">
-        <button className={styles.button}>
+        <Link to={'/account'} className={styles.button}>
           <IconAccount />
-        </button>
+        </Link>
         <button onClick={openDrawer} className={styles.button}>
           <IconBag />
           <CartBadge dark={isHome} />

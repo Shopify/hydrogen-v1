@@ -65,7 +65,7 @@ export function LoginForm({shopName}) {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center my-24 px-4">
       <div className="max-w-md w-full">
         <h1 className="text-4xl">Sign in.</h1>
         <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
