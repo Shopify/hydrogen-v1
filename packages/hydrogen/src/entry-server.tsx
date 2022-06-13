@@ -852,7 +852,6 @@ async function cacheResponse(
   revalidate?: Boolean
 ) {
   const cache = getCache();
-  const session = request.ctx.session?.get();
 
   /**
    * Only cache on cachable responses where response
@@ -861,7 +860,7 @@ async function cacheResponse(
    * - have status 200
    * - does not have no-store on cache-control header
    * - does not have set-cookie header
-   * - is not a html form
+   * - is not a POST request
    * - does not have a session or does not have an active customer access token
    */
   if (
@@ -870,8 +869,7 @@ async function cacheResponse(
     response.status === 200 &&
     response.cache().mode !== NO_STORE &&
     !response.headers.has('Set-Cookie') &&
-    request.headers.get('Content-Type') !=
-      'application/x-www-form-urlencoded' &&
+    !/post/i.test(request.method) &&
     !sessionHasCustomerAccessToken(request)
   ) {
     if (revalidate) {
