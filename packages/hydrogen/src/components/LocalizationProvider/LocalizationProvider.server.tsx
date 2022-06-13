@@ -2,7 +2,7 @@ import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
 import {useShop} from '../../foundation/useShop';
 import {useShopQuery} from '../../hooks/useShopQuery';
-import {CacheDays} from '../../foundation/Cache/strategies';
+import {CacheLong} from '../../foundation/Cache/strategies';
 import {PreloadOptions} from '../../types';
 import {Country, CountryCode} from '../../storefront-api-types';
 import {useSession} from '../../foundation/useSession/useSession';
@@ -35,7 +35,7 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
   } = useShopQuery<LocalizationQuery>({
     query,
     variables: {language: languageCode},
-    cache: CacheDays(),
+    cache: CacheLong(),
     preload: props.preload,
   });
 

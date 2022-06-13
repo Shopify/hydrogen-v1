@@ -1,6 +1,6 @@
 import type {CachingStrategy} from '../../types';
 import {getCache} from '../runtime';
-import {CacheSeconds, generateCacheControlHeader} from './strategies';
+import {CacheShort, generateCacheControlHeader} from './strategies';
 import {logCacheApiStatus} from '../../utilities/log';
 
 function getCacheControlSetting(
@@ -13,7 +13,7 @@ function getCacheControlSetting(
       ...options,
     };
   } else {
-    return userCacheOptions || CacheSeconds();
+    return userCacheOptions || CacheShort();
   }
 }
 

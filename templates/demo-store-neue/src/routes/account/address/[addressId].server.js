@@ -1,4 +1,4 @@
-import {NoStore, gql} from '@shopify/hydrogen';
+import {CacheNone, gql} from '@shopify/hydrogen';
 
 import {getApiErrorMessage} from '~/lib/utils';
 
@@ -27,7 +27,7 @@ async function deleteAddress(customerAccessToken, params, queryShop) {
       customerAccessToken,
       id: decodeURIComponent(params.addressId),
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const error = getApiErrorMessage('customerAddressDelete', data, errors);
@@ -70,7 +70,7 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
       customerAccessToken,
       id: decodeURIComponent(params.addressId),
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const error = getApiErrorMessage('customerAddressUpdate', data, errors);
@@ -103,7 +103,7 @@ export function setDefaultAddress(queryShop, addressId, customerAccessToken) {
       customerAccessToken,
       addressId,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 }
 

@@ -1,6 +1,6 @@
 import {Suspense} from 'react';
 import {
-  CacheDays,
+  CacheLong,
   gql,
   Seo,
   ShopifyAnalyticsConstants,
@@ -72,7 +72,7 @@ function SeoForHomepage() {
     },
   } = useShopQuery({
     query: HOMEPAGE_SEO_QUERY,
-    cache: CacheDays(),
+    cache: CacheLong(),
     preload: true,
   });
 

@@ -90,7 +90,7 @@ const {data} = useShopQuery({
   variables: {
     numCollections: 3,
   },
-  cache: CacheHours(),
+  cache: CacheLong(),
   // Preloads queries for a specific URL
   preload: true,
 });

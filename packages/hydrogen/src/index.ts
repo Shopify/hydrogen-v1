@@ -22,13 +22,9 @@ export {LocalizationProvider} from './components/LocalizationProvider/Localizati
 export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server';
 export {
   generateCacheControlHeader,
-  NoStore,
-  CacheSeconds,
-  CacheMinutes,
-  CacheHours,
-  CacheDays,
-  CacheWeeks,
-  CacheMonths,
+  CacheNone,
+  CacheShort,
+  CacheLong,
   CacheCustom,
 } from './foundation/Cache/strategies';
 export {useRequestContext} from './foundation/useRequestContext';
