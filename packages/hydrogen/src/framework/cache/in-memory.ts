@@ -1,7 +1,8 @@
 type CacheMatch = {
   body: Uint8Array;
-  response: Response;
   timestamp: number;
+  status: number;
+  headers: [string, string][];
 };
 
 const defaultClock = () => ({
@@ -57,7 +58,8 @@ export class InMemoryCache implements Cache {
 
     this.#store.set(request.url, {
       body: new Uint8Array(await response.arrayBuffer()),
-      response,
+      status: response.status,
+      headers: [...response.headers],
       timestamp: this.#clock().timestamp,
     });
   }
@@ -69,9 +71,10 @@ export class InMemoryCache implements Cache {
       return;
     }
 
-    const {body, response, timestamp} = match;
+    const {body, timestamp, ...metadata} = match;
 
-    const cacheControl = response.headers.get('cache-control') || '';
+    const headers = new Headers(metadata.headers);
+    const cacheControl = headers.get('cache-control') || '';
     const maxAge = parseInt(
       cacheControl.match(/max-age=(\d+)/)?.[1] || '0',
       10
@@ -90,11 +93,11 @@ export class InMemoryCache implements Cache {
 
     const isStale = age > maxAge;
 
-    const headers = new Headers(response.headers);
     headers.set('cache', isStale ? 'STALE' : 'HIT');
     headers.set('date', new Date(timestamp).toUTCString());
 
     return new Response(body, {
+      status: metadata.status,
       headers,
     });
   }

@@ -95,4 +95,49 @@ describe('In-Memory Cache', () => {
     const cachedResponse = await cache.match(request);
     expect(await cachedResponse!.text()).toBe('Hello World');
   });
+
+  it('does not cache non-GET requests', async () => {
+    const cache = new InMemoryCache(clockFunction);
+    for (const method of ['POST', 'PUT', 'PATCH', 'DELETE']) {
+      const request = new Request('https://shopify.dev/', {method});
+      const response = new Response('Hello World');
+
+      await expect(cache.put(request, response)).rejects.toThrow(
+        'Cannot cache response to non-GET request'
+      );
+    }
+  });
+
+  it('does not cache responses to a range request (status 206)', async () => {
+    const cache = new InMemoryCache(clockFunction);
+    const request = new Request('https://shopify.dev/', {
+      headers: {Range: 'bytes=0-10'},
+    });
+    const response = new Response('Hello World', {status: 206});
+
+    await expect(cache.put(request, response)).rejects.toThrow(
+      'Cannot cache response to a range request'
+    );
+  });
+
+  it('does not cache responses containing vary=* header', async () => {
+    const cache = new InMemoryCache(clockFunction);
+    const request = new Request('https://shopify.dev/');
+    const response = new Response('Hello World');
+    response.headers.set('vary', '*');
+
+    await expect(cache.put(request, response)).rejects.toThrow(
+      `Cannot cache response with 'Vary: *' header.`
+    );
+  });
+
+  it('stores the response status', async () => {
+    const cache = new InMemoryCache(clockFunction);
+    const request = new Request('https://shopify.dev/');
+    const response = new Response('Hello World', {status: 404});
+    await cache.put(request, response);
+
+    const cachedResponse = await cache.match(request);
+    expect(cachedResponse!.status).toBe(404);
+  });
 });
