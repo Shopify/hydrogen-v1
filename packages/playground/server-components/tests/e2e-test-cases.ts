@@ -1,4 +1,5 @@
 import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
+import {htmlEncode} from '../../../hydrogen/src/utilities';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
 
@@ -76,6 +77,16 @@ export default async function testCases({
     expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
   });
 
+  it('has access to request context', async () => {
+    await page.goto(getServerUrl() + '/request-context');
+    expect(await page.textContent('h1')).toContain('Request Context');
+
+    const defaultContext = await page.textContent('#default-context');
+    expect(defaultContext).toContain('{"test1":true}');
+    const scopedContext = await page.textContent('#scoped-context');
+    expect(scopedContext).toContain('{"test2":true}');
+  });
+
   it.skip('should render server props in client component', async () => {
     await page.goto(getServerUrl() + '/test-server-props');
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
@@ -111,8 +122,9 @@ export default async function testCases({
     expect(streamedChunks.length).toBeGreaterThan(1); // Streamed more than 1 chunk
 
     const body = streamedChunks.join('');
-    expect(body).toContain('var __flight=[];');
-    expect(body).toContain('__flight.push(`S1:"react.suspense"');
+    expect(body).toContain(
+      `<meta data-flight="${htmlEncode('S1:"react.suspense"')}`
+    );
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
@@ -131,13 +143,36 @@ export default async function testCases({
     expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
 
     const body = streamedChunks.join('');
-    expect(body).toContain('var __flight=[];');
-    expect(body).toContain('__flight.push(`S1:"react.suspense"');
+    expect(body).toContain(
+      `<meta data-flight="${htmlEncode('S1:"react.suspense"')}`
+    );
     expect(body).toContain('<div c="5">');
     expect(body).toContain('>footer!<');
   });
 
-  it('streams the RSC response', async () => {
+  it('buffers HTML for custom bot', async () => {
+    const response = await fetch(getServerUrl() + '/stream', {
+      headers: {
+        'user-agent': 'custom bot',
+      },
+    });
+    const streamedChunks = [];
+
+    // This fetch response is not standard but a node-fetch polyfill.
+    // Therefore, the body is not a ReadableStream but a Node Readable.
+    // @ts-ignore
+    for await (const chunk of response.body) {
+      streamedChunks.push(chunk.toString());
+    }
+
+    expect(streamedChunks.length).toEqual(1); // Did not stream because it's a bot
+
+    const body = streamedChunks.join('');
+    expect(body).toContain('<div c="5">');
+    expect(body).toContain('>footer!<');
+  });
+
+  it('buffers the RSC response', async () => {
     const response = await fetch(
       getServerUrl() +
         `${RSC_PATHNAME}?state=` +
@@ -153,7 +188,7 @@ export default async function testCases({
       streamedChunks.push(chunk.toString());
     }
 
-    expect(streamedChunks.length).toBeGreaterThan(1);
+    expect(streamedChunks.length).toBe(1);
 
     const body = streamedChunks.join('');
     expect(body).toContain('S1:"react.suspense"');
@@ -191,12 +226,29 @@ export default async function testCases({
     ]);
   });
 
-  it('uses the provided custom body', async () => {
-    const response = await fetch(getServerUrl() + '/custom-body');
-    const body = await response.text();
+  it('properly escapes props in the SSR flight script chunks', async () => {
+    await page.goto(getServerUrl() + '/escaping');
+    expect(await page.textContent('body')).toContain(
+      "</script><script>alert('hi')</script>"
+    );
+    expect(await page.textContent('body')).toContain(`"fiddle"`);
+  });
 
-    expect(response.headers.get('Content-Type')).toEqual('text/plain');
-    expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
+  it('adds style tags for CSS modules', async () => {
+    await page.goto(getServerUrl() + '/css-modules');
+    expect(await page.textContent('h1')).toContain('CSS Modules');
+
+    // Same class for the same style
+    const className = await page.getAttribute('[data-test=server]', 'class');
+    expect(className).toMatch(/^_red_/);
+    expect(await page.getAttribute('[data-test=client]', 'class')).toEqual(
+      className
+    );
+
+    // Style tag is present in DOM
+    expect(await page.textContent('style')).toEqual(
+      `.${className} {\n  color: red;\n}\n`
+    );
   });
 
   describe('HMR', () => {

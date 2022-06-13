@@ -3,7 +3,7 @@ import {defineConfig} from '@shopify/hydrogen/config';
 const sleep = (ms = 10) => new Promise((r) => setTimeout(r, ms));
 
 export default defineConfig({
-  routes: import.meta.globEager('./src/routes/**/*.server.[jt](s|sx)'),
+  routes: '/src/routes',
   shopify: async (request) => {
     await sleep();
 
@@ -16,4 +16,9 @@ export default defineConfig({
       storefrontApiVersion: '2022-07',
     };
   },
+  logger: {
+    trace() {},
+    debug() {},
+  },
+  showDevTools: true,
 });

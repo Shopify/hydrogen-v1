@@ -54,7 +54,7 @@ export default function MyPage({selectedProductId}) {
 {% codeblock file, filename: 'ProductSelector.client.jsx' %}
 
 ```jsx
-import {useServerProps} from '@shopify/hydrogen/client';
+import {useServerProps} from '@shopify/hydrogen';
 
 export default function ProductSelector({selectedProductId}) {
   const {setServerProps, pending} = useServerProps();

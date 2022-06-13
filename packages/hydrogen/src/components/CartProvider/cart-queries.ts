@@ -1,4 +1,4 @@
-export const CartLineAdd = `
+export const CartLineAdd = (cartFragment: string) => `
 mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesAdd(cartId: $cartId, lines: $lines) {
     cart {
@@ -7,96 +7,10 @@ mutation CartLineAdd($cartId: ID!, $lines: [CartLineInput!]!, $numCartLines: Int
   }
 }
 
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
+${cartFragment}
 `;
 
-export const CartCreate = `
+export const CartCreate = (cartFragment: string) => `
 mutation CartCreate($input: CartInput!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartCreate(input: $input) {
     cart {
@@ -105,96 +19,10 @@ mutation CartCreate($input: CartInput!, $numCartLines: Int = 250, $country: Coun
   }
 }
 
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
+${cartFragment}
 `;
 
-export const CartLineRemove = `
+export const CartLineRemove = (cartFragment: string) => `
 mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesRemove(cartId: $cartId, lineIds: $lines) {
     cart {
@@ -203,96 +31,10 @@ mutation CartLineRemove($cartId: ID!, $lines: [ID!]!, $numCartLines: Int = 250, 
   }
 }
 
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
+${cartFragment}
 `;
 
-export const CartLineUpdate = `
+export const CartLineUpdate = (cartFragment: string) => `
 mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartLinesUpdate(cartId: $cartId, lines: $lines) {
     cart {
@@ -301,96 +43,10 @@ mutation CartLineUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!, $numCartL
   }
 }
 
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
+${cartFragment}
 `;
 
-export const CartNoteUpdate = `
+export const CartNoteUpdate = (cartFragment: string) => `
 mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartNoteUpdate(cartId: $cartId, note: $note) {
     cart {
@@ -399,96 +55,10 @@ mutation CartNoteUpdate($cartId: ID!, $note: String, $numCartLines: Int = 250, $
   }
 }
 
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
+${cartFragment}
 `;
 
-export const CartBuyerIdentityUpdate = `
+export const CartBuyerIdentityUpdate = (cartFragment: string) => `
 mutation CartBuyerIdentityUpdate(
   $cartId: ID!
   $buyerIdentity: CartBuyerIdentityInput!
@@ -502,96 +72,10 @@ mutation CartBuyerIdentityUpdate(
   }
 }
 
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
+${cartFragment}
 `;
 
-export const CartAttributesUpdate = `
+export const CartAttributesUpdate = (cartFragment: string) => `
 mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartAttributesUpdate(attributes: $attributes, cartId: $cartId) {
     cart {
@@ -600,96 +84,10 @@ mutation CartAttributesUpdate($attributes: [AttributeInput!]!, $cartId: ID!, $nu
   }
 }
 
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
+${cartFragment}
 `;
 
-export const CartDiscountCodesUpdate = `
+export const CartDiscountCodesUpdate = (cartFragment: string) => `
 mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
     cart {
@@ -698,105 +96,24 @@ mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!], $numCa
   }
 }
 
-fragment CartFragment on Cart {
-  id
-  checkoutUrl
-  buyerIdentity {
-    countryCode
-    customer {
-      id
-      email
-      firstName
-      lastName
-      displayName
-    }
-    email
-    phone
-  }
-  lines(first: $numCartLines) {
-    edges {
-      node {
-        id
-        quantity
-        attributes {
-          key
-          value
-        }
-        merchandise {
-          ... on ProductVariant {
-            id
-            availableForSale
-            compareAtPriceV2 {
-              ...MoneyFragment
-            }
-            priceV2 {
-              ...MoneyFragment
-            }
-            requiresShipping
-            title
-            image {
-              ...ImageFragment
-            }
-            product {
-              handle
-              title
-            }
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
-      }
-    }
-  }
-  estimatedCost {
-    subtotalAmount {
-      ...MoneyFragment
-    }
-    totalAmount {
-      ...MoneyFragment
-    }
-    totalDutyAmount {
-      ...MoneyFragment
-    }
-    totalTaxAmount {
-      ...MoneyFragment
-    }
-  }
-  note
-  attributes {
-    key
-    value
-  }
-  discountCodes {
-    code
-  }
-}
-
-fragment MoneyFragment on MoneyV2 {
-  currencyCode
-  amount
-}
-fragment ImageFragment on Image {
-  id
-  url
-  altText
-  width
-  height
-}
+${cartFragment}
 `;
 
-export const CartQuery = `
+export const CartQuery = (cartFragment: string) => `
 query CartQuery($id: ID!, $numCartLines: Int = 250, $country: CountryCode = ZZ) @inContext(country: $country) {
   cart(id: $id) {
     ...CartFragment
   }
 }
 
+${cartFragment}
+`;
+
+export const defaultCartFragment = `
 fragment CartFragment on Cart {
   id
   checkoutUrl
+  totalQuantity
   buyerIdentity {
     countryCode
     customer {
@@ -817,6 +134,16 @@ fragment CartFragment on Cart {
         attributes {
           key
           value
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          compareAtAmount {
+            amount
+            currencyCode
+          }
         }
         merchandise {
           ... on ProductVariant {

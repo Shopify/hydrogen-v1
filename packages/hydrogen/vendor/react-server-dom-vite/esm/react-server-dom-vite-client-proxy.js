@@ -8,7 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { useState } from 'react';
+import React from 'react';
 
 // Store of components discovered during RSC to load
 // them later when consuming the response in SSR.
@@ -21,12 +21,8 @@ var STRING_SIZE_LIMIT = 64;
 var FN_RSC_ERROR = 'Functions exported from client components cannot be called or used as constructors from a server component.'; // TODO what's a better way to detect Flight runtime?
 
 function isRsc() {
-  try {
-    useState();
-    return false;
-  } catch (error) {
-    return error.message.endsWith('Server Components.');
-  }
+  // This method is only available during RSC
+  return !!React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher.current.getCacheForType;
 }
 
 function createModuleReference(id, value, name, isDefault) {
@@ -65,6 +61,8 @@ function wrapInClientProxy(_ref) {
   var moduleRef = createModuleReference(id, value, name, isDefault);
 
   var get = function (target, prop, receiver) {
+    if (prop === '$$unwrappedValue') return value;
+    if (prop === '$$moduleReference') return moduleRef;
     return Reflect.get(isRsc() ? moduleRef : target, prop, receiver);
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image} from '../Image';
+import {Image, type ShopifyImageProps} from '../Image';
 import {Video} from '../Video';
 import {ExternalVideo} from '../ExternalVideo';
 import {ModelViewer} from '../ModelViewer';
@@ -17,8 +17,8 @@ export interface MediaFileProps {
   data: PartialDeep<MediaEdgeType['node']>;
   /** The options for the `Image`, `Video`, or `ExternalVideo` components. */
   options?:
-    | React.ComponentProps<typeof Image>['options']
-    | React.ComponentProps<typeof Video>['options']
+    | ShopifyImageProps
+    | React.ComponentProps<typeof Video>['previewImageOptions']
     | React.ComponentProps<typeof ExternalVideo>['options'];
 }
 
@@ -35,8 +35,9 @@ export function MediaFile({
 }: MediaFileProps) {
   switch (data.mediaContentType) {
     case 'IMAGE': {
-      const dataImage = (data as PartialDeep<MediaImageType>).image;
-      if (!dataImage) {
+      const dataImage = (data as PartialDeep<MediaImageType>)
+        .image as ShopifyImageProps['data'];
+      if (!dataImage || !dataImage.url) {
         console.warn(
           `No "image" property was found on the "data" prop for <MediaFile/>, for the "type='image'"`
         );
@@ -46,7 +47,7 @@ export function MediaFile({
         <Image
           {...passthroughProps}
           data={dataImage}
-          options={options as React.ComponentProps<typeof Image>['options']}
+          loaderOptions={options as ShopifyImageProps}
         />
       );
     }
@@ -55,7 +56,9 @@ export function MediaFile({
         <Video
           {...passthroughProps}
           data={data as PartialDeep<VideoType>}
-          options={options as React.ComponentProps<typeof Video>['options']}
+          previewImageOptions={
+            options as React.ComponentProps<typeof Video>['previewImageOptions']
+          }
         />
       );
     case 'EXTERNAL_VIDEO':

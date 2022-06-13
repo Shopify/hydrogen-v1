@@ -3,7 +3,6 @@ import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
   collectQueryTimings,
-  logCacheApiStatus,
 } from '../../utilities/log';
 import {
   deleteItemFromCache,
@@ -11,10 +10,9 @@ import {
   getItemFromCache,
   isStale,
   setItemInCache,
-} from '../../framework/cache';
-import {hashKey} from '../../utilities/hash';
-import {runDelayedFunction} from '../../framework/runtime';
+} from '../Cache/cache-sub-request';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
+import {CacheShort, NO_STORE} from '../Cache/strategies';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -60,7 +58,7 @@ export function useQuery<T>(
 
   collectQueryTimings(request, withCacheIdKey, 'requested');
 
-  if (queryOptions?.preload) {
+  if (shouldPreloadQuery(queryOptions)) {
     request.savePreloadQuery({
       preload: queryOptions?.preload,
       key: withCacheIdKey,
@@ -69,6 +67,24 @@ export function useQuery<T>(
   }
 
   return useRequestCacheData<T>(withCacheIdKey, fetcher);
+}
+
+export function shouldPreloadQuery(
+  queryOptions?: HydrogenUseQueryOptions
+): boolean {
+  if (!queryOptions) return true;
+
+  const hasCacheOverride = typeof queryOptions?.cache?.mode !== 'undefined';
+  const hasPreloadOverride = typeof queryOptions?.preload !== 'undefined';
+  const cacheValue = queryOptions?.cache?.mode;
+  const preloadValue = queryOptions?.preload;
+
+  // If preload is explicitly defined, then it takes precedence
+  if (hasPreloadOverride) {
+    return !!preloadValue;
+  }
+
+  return hasCacheOverride ? cacheValue !== NO_STORE : true;
 }
 
 function cachedQueryFnBuilder<T>(
@@ -90,7 +106,6 @@ function cachedQueryFnBuilder<T>(
     // to prevent losing the current React cycle.
     const request = useServerRequest();
     const log = getLoggerWithContext(request);
-    const hashedKey = hashKey(key);
 
     const cacheResponse = await getItemFromCache(key);
 
@@ -110,28 +125,38 @@ function cachedQueryFnBuilder<T>(
       /**
        * Important: Do this async
        */
-      if (isStale(response, resolvedQueryOptions?.cache)) {
-        logCacheApiStatus('STALE', hashedKey);
-        const lockKey = `lock-${key}`;
+      if (isStale(key, response)) {
+        const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
 
-        runDelayedFunction(async () => {
-          logCacheApiStatus('UPDATING', hashedKey);
-          const lockExists = await getItemFromCache(lockKey);
-          if (lockExists) return;
+        // Run revalidation asynchronously
+        const revalidatingPromise = getItemFromCache(lockKey).then(
+          async (lockExists) => {
+            if (lockExists) return;
 
-          await setItemInCache(lockKey, true);
-          try {
-            const output = await generateNewOutput();
+            await setItemInCache(
+              lockKey,
+              true,
+              CacheShort({
+                maxAge: 10,
+              })
+            );
 
-            if (shouldCacheResponse(output)) {
-              await setItemInCache(key, output, resolvedQueryOptions?.cache);
+            try {
+              const output = await generateNewOutput();
+
+              if (shouldCacheResponse(output)) {
+                await setItemInCache(key, output, resolvedQueryOptions?.cache);
+              }
+            } catch (e: any) {
+              log.error(`Error generating async response: ${e.message}`);
+            } finally {
+              await deleteItemFromCache(lockKey);
             }
-          } catch (e: any) {
-            log.error(`Error generating async response: ${e.message}`);
-          } finally {
-            await deleteItemFromCache(lockKey);
           }
-        });
+        );
+
+        // Asynchronously wait for it in workers
+        request.ctx.runtime?.waitUntil?.(revalidatingPromise);
       }
 
       return output;
@@ -143,9 +168,13 @@ function cachedQueryFnBuilder<T>(
      * Important: Do this async
      */
     if (shouldCacheResponse(newOutput)) {
-      runDelayedFunction(() =>
-        setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+      const setItemInCachePromise = setItemInCache(
+        key,
+        newOutput,
+        resolvedQueryOptions?.cache
       );
+
+      request.ctx.runtime?.waitUntil?.(setItemInCachePromise);
     }
 
     collectQueryCacheControlHeaders(

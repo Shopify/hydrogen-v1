@@ -1,10 +1,10 @@
 ---
 gid: ec1dd90e-87b0-4bd7-88ed-74d71a52cca5
 title: Router
-description: The Router component provides the context for routing in your Hydrogen app.
+description: The Router component provides the context for routing in your Hydrogen storefront.
 ---
 
-The `Router` component provides the context for routing in your Hydrogen app.
+The `Router` component provides the context for routing in your Hydrogen storefront.
 
 ## Example code
 

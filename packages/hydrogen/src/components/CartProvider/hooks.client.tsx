@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useShop} from '../../foundation';
 import {flattenConnection} from '../../utilities';
 import {CartInput} from '../../storefront-api-types';
-import {CartCreate} from './cart-queries';
+import {CartCreate, defaultCartFragment} from './cart-queries';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
@@ -61,7 +61,7 @@ export function useInstantCheckout() {
         CartCreateMutationVariables,
         CartCreateMutation
       >({
-        query: CartCreate,
+        query: CartCreate(defaultCartFragment),
         variables: {
           input: cartInput,
         },

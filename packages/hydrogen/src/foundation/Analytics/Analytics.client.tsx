@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {ClientAnalytics} from './index';
+import {ClientAnalytics} from './ClientAnalytics';
 
 export function Analytics({
   analyticsDataFromServer,
@@ -9,19 +9,12 @@ export function Analytics({
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.has('utm_source')) {
-      ClientAnalytics.pushToPageAnalyticsData(
-        {
-          id: urlParams.get('utm_id'),
-          source: urlParams.get('utm_source'),
-          campaign: urlParams.get('utm_campaign'),
-          medium: urlParams.get('utm_medium'),
-          content: urlParams.get('utm_content'),
-          term: urlParams.get('utm_term'),
-        },
-        'utm'
-      );
-    }
+    addUTMData(urlParams, 'id');
+    addUTMData(urlParams, 'source');
+    addUTMData(urlParams, 'campaign');
+    addUTMData(urlParams, 'medium');
+    addUTMData(urlParams, 'content');
+    addUTMData(urlParams, 'term');
 
     ClientAnalytics.pushToPageAnalyticsData(analyticsDataFromServer);
     ClientAnalytics.publish(ClientAnalytics.eventNames.PAGE_VIEW, true);
@@ -32,11 +25,17 @@ export function Analytics({
         }
       );
     }
-
-    return function cleanup() {
-      ClientAnalytics.resetPageAnalyticsData();
-    };
   }, [analyticsDataFromServer]);
 
   return null;
+}
+
+function addUTMData(urlParams: URLSearchParams, key: string) {
+  if (urlParams.has(`utm_${key}`)) {
+    ClientAnalytics.pushToPageAnalyticsData({
+      utm: {
+        [key]: urlParams.get(`utm_${key}`),
+      },
+    });
+  }
 }

@@ -30,13 +30,13 @@ Spin up a Hydrogen app in your browser with our [playground](https://hydrogen.ne
 
 ```bash
 # Using `yarn`
-yarn create hydrogen-app
+yarn create @shopify/hydrogen
 
 # Using `npm`
-npm init hydrogen-app@latest
+npm init @shopify/hydrogen
 
 # Using `npx`
-npx create-hydrogen-app
+npx @shopify/create-hydrogen
 ```
 
 **Running locally:**
@@ -49,7 +49,7 @@ yarn install
 yarn dev
 
 # Using `npm`
-npm i --legacy-peer-deps
+npm i
 npm run dev
 ```
 
@@ -68,6 +68,7 @@ Learn more about [getting started with Hydrogen](https://shopify.dev/custom-stor
 👷‍♀️ Add `npm` packages to your project:
 
 - [`@shopify/hydrogen`](https://www.npmjs.com/package/@shopify/hydrogen)
-- [`create-hydrogen-app`](https://www.npmjs.com/package/create-hydrogen-app)
+- [`@shopify/create-hydrogen`](https://www.npmjs.com/package/@shopify/create-hydrogen)
+- [`@shopify/cli-hydrogen`](https://www.npmjs.com/package/@shopify/cli-hydrogen)
 - [`eslint-plugin-hydrogen`](https://www.npmjs.com/package/eslint-plugin-hydrogen)
 - [`hydrogen-plugin-sanity`](https://www.npmjs.com/package/hydrogen-plugin-sanity)

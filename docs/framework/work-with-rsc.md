@@ -16,7 +16,7 @@ All data fetching happens on the server and is never exposed to the client, unle
 Hydrogen provides the following ways to fetch data from server components:
 
 - [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery): A hook that makes server-only GraphQL queries to the Storefront API.
-- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync): A hook that makes third-party API requests and is the recommended way to make simple fetch calls on the server.
+- [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync): A hook that makes API requests and is the recommended way to make simple fetch calls on the server and the client.
 - [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery): A hook that executes an asynchronous operation like `fetch` in a way that supports [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html). You can use this function to call any third-party APIs or perform any async tasks.
 
 To learn how to fetch data from third-party sources, refer to [Data sources](https://shopify.dev/custom-storefronts/hydrogen/data-sources).
@@ -70,7 +70,7 @@ To make a third-party HTTP request on the client, use the [`fetchSync`](https://
 {% codeblock file, filename: 'PostDetails.client.jsx' %}
 
 ```js
-import {syncFetch} from '@shopify/hydrogen/client';
+import {fetchSync} from '@shopify/hydrogen';
 import {Suspense, useState} from 'react';
 export default function PostDetails() {
   const [show, setShow] = useState(false);
@@ -100,7 +100,7 @@ Some third-party integrations offer a JavaScript SDK in the form of an `npm` pac
 {% codeblock file, filename: 'PostDetails.client.jsx' %}
 
 ```js
-import {suspendFunction} from '@shopify/hydrogen/client';
+import {suspendFunction} from '@shopify/hydrogen';
 import {Suspense, useState} from 'react';
 import thirdPartyClient from 'third-party';
 export default function PostDetails() {
@@ -127,56 +127,6 @@ function Details() {
   const post = fetchThirdParty('myPost');
   return <h2>{post.title}</h2>;
 }
-```
-
-{% endcodeblock %}
-
-## Importing functionality in Hydrogen components
-
-Hydrogen includes the following import locations:
-
-- `@shopify/hydrogen`: An import path for functionality that's only used in server components. This doesn't include hooks that should only be used in client components.
-- `@shopify/hydrogen/client`: An import path for functionality that's only used in client components. You should use this import path when writing your client components.
-
-> Note:
-> The path for importing functionality doesn't define the type of the component. The separate import paths are used for organizational purposes. The `@shopify/hydrogen/client` import path prevents server functionality from being used in the browser. However, the inverse isn't true for server components as they can import and use client components.
-
-### Examples
-
-The following example shows how to use the `@shopify/hydrogen` import path in a server component:
-
-{% codeblock file, filename: 'NotFound.server.jsx' %}
-
-```jsx
-import {useShopQuery} from '@shopify/hydrogen';
-```
-
-{% endcodeblock %}
-
-The following example shows how to use the `@shopify/hydrogen/client` import path in a client component:
-
-{% codeblock file, filename: 'ProductSelector.client.jsx' %}
-
-```jsx
-import {useServerProps} from '@shopify/hydrogen/client';
-```
-
-{% endcodeblock %}
-
-The following example shows how to import the `Link` component into a client and server component:
-
-{% codeblock file, filename: 'Button.client.jsx' %}
-
-```jsx
-import {Link} from '@shopify/hydrogen/client';
-```
-
-{% endcodeblock %}
-
-{% codeblock file, filename: 'index.server.jsx' %}
-
-```jsx
-import {Link} from '@shopify/hydrogen';
 ```
 
 {% endcodeblock %}
