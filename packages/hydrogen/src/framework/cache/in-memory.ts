@@ -1,13 +1,21 @@
 type CacheMatch = {
   value: Response;
-  date: Date;
+  timestamp: number;
 };
+
+const defaultClock = () => ({
+  timestamp: Date.now(),
+});
+
+export type ClockFunction = () => {timestamp: number};
 
 export class InMemoryCache implements Cache {
   #store: Map<string, CacheMatch>;
+  #clock: ClockFunction;
 
-  constructor() {
+  constructor(clock: ClockFunction = defaultClock) {
     this.#store = new Map();
+    this.#clock = clock;
   }
 
   add(request: RequestInfo): Promise<void> {
@@ -42,7 +50,7 @@ export class InMemoryCache implements Cache {
 
     this.#store.set(request.url, {
       value: response,
-      date: new Date(),
+      timestamp: this.#clock().timestamp,
     });
   }
 
@@ -53,7 +61,7 @@ export class InMemoryCache implements Cache {
       return;
     }
 
-    const {value, date} = match;
+    const {value, timestamp} = match;
 
     const cacheControl = value.headers.get('cache-control') || '';
     const maxAge = parseInt(
@@ -64,7 +72,7 @@ export class InMemoryCache implements Cache {
       cacheControl.match(/stale-while-revalidate=(\d+)/)?.[1] || '0',
       10
     );
-    const age = (new Date().valueOf() - date.valueOf()) / 1000;
+    const age = (this.#clock().timestamp - timestamp) / 1000;
 
     const isMiss = age > maxAge + swr;
     if (isMiss) {
@@ -76,7 +84,7 @@ export class InMemoryCache implements Cache {
 
     const headers = new Headers(value.headers);
     headers.set('cache', isStale ? 'STALE' : 'HIT');
-    headers.set('date', date.toUTCString());
+    headers.set('date', new Date(timestamp).toUTCString());
 
     const response = new Response(value.body, {
       headers,
