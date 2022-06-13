@@ -233,10 +233,7 @@ app.use(
 
 {% endcodeblock %}
 
-Full-page caching is powered completely by [`cache-control` headers on the Hydrogen response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control). This means the network edge as well as the user’s browser is responsible managing full-page cache.
-
-> Note:
-> Oxygen caches HTML responses from Hydrogen at the network edge. However, your hosting provider or CDN might not cache HTML responses by default. Make sure to consult with your individual provider to enable HTML caching for your Hydrogen storefront.
+Full-page caching is powered completely by [`cache-control` headers on the Hydrogen response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control). By default, full-page caching is turn on as long as there is a `cache` available.
 
 ## Related hooks
 

@@ -54,7 +54,7 @@ import {
   isStale,
   setItemInCache,
 } from './foundation/Cache/cache';
-import {CacheSeconds, NO_STORE} from './foundation/Cache/strategies';
+import {CacheShort, NO_STORE} from './foundation/Cache/strategies';
 import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes';
 
 declare global {
@@ -149,37 +149,41 @@ export const renderHydrogen = (App: any) => {
       if (cachedResponse) {
         if (isStale(request, cachedResponse)) {
           const lockCacheKey = request.cacheKey(true);
-          const revalidatingPromise = getItemFromCache(lockCacheKey).then(
-            async (lockExists) => {
-              if (lockExists) return;
-              try {
-                // Don't stream when creating a response for cache
-                response.doNotStream();
+          const staleWhileRevalidate = async (
+            lockExists: Response | undefined
+          ) => {
+            if (lockExists) return;
+            try {
+              // Don't stream when creating a response for cache
+              response.doNotStream();
 
-                await setItemInCache(
-                  lockCacheKey,
-                  new Response(null),
-                  CacheSeconds({
-                    maxAge: 10,
-                  })
-                );
+              await setItemInCache(
+                lockCacheKey,
+                new Response(null),
+                CacheShort({
+                  maxAge: 10,
+                })
+              );
 
-                await processRequest(
-                  url,
-                  request,
-                  sessionApi,
-                  options,
-                  response,
-                  hydrogenConfig,
-                  true
-                );
-              } catch (e: any) {
-                log.error('Cache revalidate error', e);
-              } finally {
-                await deleteItemFromCache(lockCacheKey);
-              }
+              await processRequest(
+                handleRequest,
+                App,
+                url,
+                request,
+                sessionApi,
+                options,
+                response,
+                hydrogenConfig,
+                true
+              );
+            } catch (e: any) {
+              log.error('Cache revalidate error', e);
+            } finally {
+              await deleteItemFromCache(lockCacheKey);
             }
-          );
+          };
+          const revalidatingPromise =
+            getItemFromCache(lockCacheKey).then(staleWhileRevalidate);
 
           // Asynchronously wait for it in workers
           request.ctx.runtime?.waitUntil(revalidatingPromise);
@@ -190,6 +194,8 @@ export const renderHydrogen = (App: any) => {
     }
 
     return processRequest(
+      handleRequest,
+      App,
       url,
       request,
       sessionApi,
@@ -199,80 +205,6 @@ export const renderHydrogen = (App: any) => {
     );
   };
 
-  async function processRequest(
-    url: URL,
-    request: HydrogenRequest,
-    sessionApi: any,
-    options: RequestHandlerOptions,
-    response: HydrogenResponse,
-    hydrogenConfig: ResolvedHydrogenConfig,
-    revalidate = false
-  ) {
-    const {
-      dev,
-      nonce,
-      indexTemplate,
-      streamableResponse: nodeResponse,
-    } = options;
-
-    const log = getLoggerWithContext(request);
-    const isRSCRequest = url.pathname === RSC_PATHNAME;
-    const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
-
-    // The API Route might have a default export, making it also a server component
-    // If it does, only render the API route if the request method is GET
-    if (
-      apiRoute &&
-      (!apiRoute.hasServerComponent || request.method !== 'GET')
-    ) {
-      const apiResponse = await renderApiRoute(
-        request,
-        apiRoute,
-        hydrogenConfig,
-        {
-          session: sessionApi,
-        }
-      );
-
-      return apiResponse instanceof Request
-        ? handleRequest(apiResponse, options)
-        : apiResponse;
-    }
-
-    const state: Record<string, any> = isRSCRequest
-      ? parseJSON(url.searchParams.get('state') || '{}')
-      : {pathname: url.pathname, search: url.search};
-
-    const rsc = runRSC({App, state, log, request, response});
-
-    if (isRSCRequest) {
-      const buffered = await bufferReadableStream(rsc.readable.getReader());
-      postRequestTasks('rsc', 200, request, response);
-      cacheResponse(response, request, [buffered], revalidate);
-
-      return new Response(buffered, {
-        headers: {'cache-control': response.cacheControlHeader},
-      });
-    }
-
-    if (isBotUA(url, request.headers.get('user-agent'))) {
-      response.doNotStream();
-    }
-
-    return runSSR({
-      log,
-      dev,
-      rsc,
-      nonce,
-      state,
-      request,
-      response,
-      nodeResponse,
-      template: await getTemplate(indexTemplate, url),
-      revalidate,
-    });
-  }
-
   if (__HYDROGEN_WORKER__) return handleRequest;
 
   return ((rawRequest, options) =>
@@ -281,6 +213,74 @@ export const renderHydrogen = (App: any) => {
       options.streamableResponse
     )) as RequestHandler;
 };
+
+async function processRequest(
+  handleRequest: RequestHandler,
+  App: any,
+  url: URL,
+  request: HydrogenRequest,
+  sessionApi: any,
+  options: RequestHandlerOptions,
+  response: HydrogenResponse,
+  hydrogenConfig: ResolvedHydrogenConfig,
+  revalidate = false
+) {
+  const {dev, nonce, indexTemplate, streamableResponse: nodeResponse} = options;
+
+  const log = getLoggerWithContext(request);
+  const isRSCRequest = url.pathname === RSC_PATHNAME;
+  const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
+
+  // The API Route might have a default export, making it also a server component
+  // If it does, only render the API route if the request method is GET
+  if (apiRoute && (!apiRoute.hasServerComponent || request.method !== 'GET')) {
+    const apiResponse = await renderApiRoute(
+      request,
+      apiRoute,
+      hydrogenConfig,
+      {
+        session: sessionApi,
+      }
+    );
+
+    return apiResponse instanceof Request
+      ? handleRequest(apiResponse, options)
+      : apiResponse;
+  }
+
+  const state: Record<string, any> = isRSCRequest
+    ? parseJSON(url.searchParams.get('state') || '{}')
+    : {pathname: url.pathname, search: url.search};
+
+  const rsc = runRSC({App, state, log, request, response});
+
+  if (isRSCRequest) {
+    const buffered = await bufferReadableStream(rsc.readable.getReader());
+    postRequestTasks('rsc', 200, request, response);
+    cacheResponse(response, request, [buffered], revalidate);
+
+    return new Response(buffered, {
+      headers: {'cache-control': response.cacheControlHeader},
+    });
+  }
+
+  if (isBotUA(url, request.headers.get('user-agent'))) {
+    response.doNotStream();
+  }
+
+  return runSSR({
+    log,
+    dev,
+    rsc,
+    nonce,
+    state,
+    request,
+    response,
+    nodeResponse,
+    template: await getTemplate(indexTemplate, url),
+    revalidate,
+  });
+}
 
 async function getTemplate(
   indexTemplate:
