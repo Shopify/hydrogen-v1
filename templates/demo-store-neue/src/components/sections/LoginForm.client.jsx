@@ -3,6 +3,7 @@ import {useNavigate, Link} from '@shopify/hydrogen/client';
 
 export function LoginForm({shopName}) {
   const navigate = useNavigate();
+
   const [hasSubmitError, setHasSubmitError] = useState(false);
   const [showEmailField, setShowEmailField] = useState(true);
   const [email, setEmail] = useState('');
