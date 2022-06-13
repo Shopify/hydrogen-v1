@@ -3,6 +3,7 @@ import React, {
   useState,
   StrictMode,
   Fragment,
+  useEffect,
   type ElementType,
 } from 'react';
 import {hydrateRoot} from 'react-dom/client';
@@ -155,12 +156,19 @@ function Content({
     pathname: window.location.pathname,
     search: window.location.search,
   });
-  const response = useServerResponse(serverProps);
+  const [rscResponseFromApiRoute, setRscResponseFromApiRoute] =
+    useState<any>(null);
+  const response = useServerResponse(serverProps, rscResponseFromApiRoute);
+
+  useEffect(() => {
+    setRscResponseFromApiRoute(null);
+  }, [response]);
 
   return (
     <ServerPropsProvider
       initialServerProps={serverProps}
       setServerPropsForRsc={setServerProps}
+      setRscResponseFromApiRoute={setRscResponseFromApiRoute}
     >
       <ClientWrapper>{response.readRoot()}</ClientWrapper>
     </ServerPropsProvider>
@@ -205,8 +213,14 @@ function Error({error}: {error: Error}) {
   );
 }
 
-function useServerResponse(state: any) {
+function useServerResponse(state: any, rscResponseFromApiRoute?: any) {
   const key = JSON.stringify(state);
+
+  if (rscResponseFromApiRoute) {
+    cache.clear();
+    cache.set(key, rscResponseFromApiRoute);
+    return rscResponseFromApiRoute;
+  }
 
   let response = cache.get(key);
   if (response) {

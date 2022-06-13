@@ -19,3 +19,4 @@ export {fetchSync} from './foundation/fetchSync/client/fetchSync';
 export {suspendFunction, preloadFunction} from './utilities/suspense';
 export {PerformanceMetrics} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.client';
 export {PerformanceMetricsDebug} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetricsDebug.client';
+export {Form} from './foundation/Form/Form.client';

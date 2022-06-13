@@ -14,6 +14,7 @@ import {
   SessionStorageAdapter,
 } from '../foundation/session/session';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks';
+import {RSC_PATHNAME} from '../constants';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -202,7 +203,7 @@ export async function renderApiRoute(
     suppressLog?: boolean;
   }
 ): Promise<Response | Request> {
-  let response;
+  let response: any;
   const log = getLoggerWithContext(request);
   let cookieToSet = '';
 
@@ -248,8 +249,14 @@ export async function renderApiRoute(
       response.headers.set('Set-Cookie', cookieToSet);
     }
   } catch (e) {
-    log.error(e);
-    response = new Response('Error processing: ' + request.url, {status: 500});
+    if (!(e instanceof Request) && !(e instanceof Response)) {
+      log.error(e);
+      response = new Response('Error processing: ' + request.url, {
+        status: 500,
+      });
+    } else {
+      response = e;
+    }
   }
 
   if (!suppressLog) {
@@ -260,5 +267,58 @@ export async function renderApiRoute(
     );
   }
 
+  if (response instanceof RequestServerComponents) {
+    let state = {};
+    const url = new URL(request.url);
+    let customPath: string | null = null;
+
+    state = response.state;
+    customPath = response.newUrl;
+
+    if (!Array.from(response.headers.keys()).length) {
+      request.headers.forEach((value, key) => {
+        response.headers.set(key, value);
+      });
+    }
+
+    if (request.headers.get('Hydrogen-Client') === 'Form-Action') {
+      return new Request(
+        url.origin +
+          RSC_PATHNAME +
+          `?state=${encodeURIComponent(
+            JSON.stringify({
+              pathname: customPath ?? url.pathname,
+              search: '',
+              ...state,
+            })
+          )}`,
+        {
+          headers: response.headers,
+        }
+      );
+    } else {
+      // JavaScript is disabled on the client, redirect instead of just rendering the response
+      // this will prevent odd refresh / bookmark behavior
+      return new Response(null, {
+        status: 303,
+        headers: {
+          ...response.headers,
+          Location: customPath ? url.origin + customPath : request.url,
+        },
+      });
+    }
+  }
+
   return response;
+}
+
+export class RequestServerComponents extends Request {
+  public state: Record<string, any>;
+  public newUrl: string;
+
+  constructor(url: string, state: Record<string, any> = {}) {
+    super('http://localhost');
+    this.state = state;
+    this.newUrl = url;
+  }
 }
