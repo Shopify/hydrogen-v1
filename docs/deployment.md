@@ -112,7 +112,7 @@ If you want to use a different Node.js framework like [Express](https://expressj
       hydrogenMiddleware({
         getServerEntrypoint: () => import('./src/App.server'),
         indexTemplate: () => import('./dist/client/index.html?raw'),
-        // Optional: Provide a strategy for caching in production
+        // Optional: Provide a custom strategy for caching in production. Defaults to in-memory.
         cache: customCacheImplementation,
       })
     );
