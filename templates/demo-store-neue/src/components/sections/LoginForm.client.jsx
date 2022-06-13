@@ -139,6 +139,8 @@ function EmailField({email, setEmail, emailError, shopName}) {
           required
           placeholder="Email address"
           aria-label="Email address"
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
           value={email}
           onChange={(event) => {
             setEmail(event.target.value);
@@ -213,6 +215,8 @@ function PasswordField({password, setPassword, passwordError}) {
           value={password}
           minLength={8}
           required
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
           onChange={(event) => {
             setPassword(event.target.value);
           }}
