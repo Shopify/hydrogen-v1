@@ -94,12 +94,10 @@ export function getShopifyImageDimensions(
     }
   }
   if (apiWidth && apiHeight && (inputWidth || inputHeight)) {
-    const inputtedWidth = inputWidth
-      ? parseInt(inputWidth.toString(), 10)
-      : undefined;
-    const inputtedHeight = inputHeight
-      ? parseInt(inputHeight.toString(), 10)
-      : undefined;
+    const inputtedWidth =
+      typeof inputWidth === 'number' ? inputWidth : undefined;
+    const inputtedHeight =
+      typeof inputHeight === 'number' ? inputHeight : undefined;
 
     // Use input width & height
     if (inputtedWidth && inputtedHeight) {
