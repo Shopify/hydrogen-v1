@@ -876,19 +876,24 @@ async function cacheResponse(
       await saveCacheResponse(response, request, chunks);
     } else {
       request.ctx.runtime?.waitUntil(
-        Promise.resolve({
-          then: () => {
-            saveCacheResponse(response, request, chunks);
-          },
-        })
+        Promise.resolve(true).then(() =>
+          saveCacheResponse(response, request, chunks)
+        )
       );
     }
   }
 }
 
 function sessionHasCustomerAccessToken(request: HydrogenRequest) {
-  const session = request.ctx.session?.get();
-  return session && session['customerAccessToken'];
+  const session = request.ctx.session;
+  // Need to wrap this in a try catch because session.get can
+  // throw a promise if it is not ready
+  try {
+    const sessionData = session?.get();
+    return sessionData && sessionData['customerAccessToken'];
+  } catch (error) {
+    return false;
+  }
 }
 
 async function saveCacheResponse(
