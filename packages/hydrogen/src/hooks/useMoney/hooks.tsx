@@ -164,6 +164,6 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
   // Call functions automatically when the properties are accessed
   // to keep these functions as an implementation detail.
   return new Proxy(lazyFormatters as unknown as UseMoneyValue, {
-    get: (target, key) => Reflect.get(target, key).call(null),
+    get: (target, key) => Reflect.get(target, key)?.call(null),
   });
 }
