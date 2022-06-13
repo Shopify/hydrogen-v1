@@ -4,7 +4,7 @@ import {
   isBrowser,
   useUrl,
   AddToCartButton,
-  ShopPayButton,
+  BuyNowButton,
 } from '@shopify/hydrogen';
 
 import {Heading, Text, Button} from '~/components/elements';
@@ -64,74 +64,90 @@ export function ProductForm() {
   );
 
   return (
-    <form>
+    <form className="grid gap-10">
       {
-        <>
+        <div className="grid gap-4">
           {options.map(({name, values}) => {
             if (values.length === 1) {
               return null;
             }
             return (
-              <fieldset key={name} className="mt-8">
-                <Heading as="legend" size="lead">
+              <div
+                key={name}
+                className="flex flex-wrap items-baseline justify-start gap-6"
+              >
+                <Heading as="legend" size="lead" className="min-w-[4rem]">
                   {name}
                 </Heading>
-                <div className="flex flex-wrap items-center gap-4">
-                  {values.map((value) => {
-                    const checked = selectedOptions[name] === value;
-                    const id = `option-${name}-${value}`;
-
-                    return (
-                      <Text as="label" key={id} htmlFor={id}>
-                        <input
-                          className="sr-only"
-                          type="radio"
-                          id={id}
-                          name={`option[${name}]`}
-                          value={value}
-                          checked={checked}
-                          onChange={() => handleChange(name, value)}
-                        />
-                        <div
-                          className={`p-2 border cursor-pointer rounded text-sm md:text-md ${
-                            checked
-                              ? 'bg-primary text-contrast'
-                              : 'text-primary'
-                          }`}
-                        >
-                          {value}
-                        </div>
-                      </Text>
-                    );
-                  })}
+                <div className="flex flex-wrap items-baseline gap-4">
+                  <OptionRadio
+                    name={name}
+                    handleChange={handleChange}
+                    values={values}
+                  />
                 </div>
-              </fieldset>
+              </div>
             );
           })}
-        </>
+        </div>
       }
-      <div>
+      <div className="grid items-stretch gap-4">
         <AddToCartButton
           variantId={selectedVariant.id}
           quantity={1}
-          attributes={[{key: 'Engraving', value: 'Hello world'}]}
           accessibleAddingToCartLabel="Adding item to your cart"
           disabled={isOutOfStock}
         >
-          <Button as="span">
-            {isOutOfStock ? 'Out of stock' : 'Add to bag'}
+          <Button
+            width="full"
+            variant={isOutOfStock ? 'secondary' : 'primary'}
+            as="span"
+          >
+            {isOutOfStock ? 'Sold out' : 'Add to bag'}
           </Button>
         </AddToCartButton>
-        {isOutOfStock ? (
-          <p className="text-center text-black">Available in 2-3 weeks</p>
-        ) : (
-          <ShopPayButton
-            variantIdsAndQuantities={[{id: selectedVariant.id, quantity: 1}]}
-          >
-            Buy it now
-          </ShopPayButton>
+        {!isOutOfStock && (
+          <BuyNowButton quantity={1} variantId={selectedVariant.id}>
+            <Button width="full" variant="secondary" as="span">
+              Buy it now
+            </Button>
+          </BuyNowButton>
         )}
       </div>
     </form>
+  );
+}
+
+function OptionRadio({values, name, handleChange}) {
+  const {selectedOptions} = useProductOptions();
+
+  return (
+    <>
+      {values.map((value) => {
+        const checked = selectedOptions[name] === value;
+        const id = `option-${name}-${value}`;
+
+        return (
+          <Text as="label" key={id} htmlFor={id}>
+            <input
+              className="sr-only"
+              type="radio"
+              id={id}
+              name={`option[${name}]`}
+              value={value}
+              checked={checked}
+              onChange={() => handleChange(name, value)}
+            />
+            <div
+              className={`leading-none py-1 border-b-[1.5px] cursor-pointer transition-all duration-200 ${
+                checked ? 'border-primary/50' : 'border-primary/0'
+              }`}
+            >
+              {value}
+            </div>
+          </Text>
+        );
+      })}
+    </>
   );
 }

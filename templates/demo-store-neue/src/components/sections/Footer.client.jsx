@@ -2,7 +2,7 @@ import {Disclosure} from '@headlessui/react';
 import {Link} from '@shopify/hydrogen';
 
 import {CountrySelector} from '~/components/blocks';
-import {Section, Heading} from '~/components/elements';
+import {Section, Heading, IconCaret} from '~/components/elements';
 import {footer as mockData} from '~/lib/placeholders';
 
 /**
@@ -11,7 +11,7 @@ import {footer as mockData} from '~/lib/placeholders';
 export function Footer({menu = mockData}) {
   const styles = {
     footer:
-      'grid items-start w-full grid-flow-row grid-cols-1 gap-6 py-8 px-4 md:px-8 lg:px-12 border-b md:gap-8 lg:gap-12 md:grid-cols-2 lg:grid-cols-4 bg-primary dark:bg-contrast dark:text-primary text-contrast',
+      'grid items-start w-full grid-flow-row grid-cols-1 gap-6 py-8 px-6 md:px-8 lg:px-12 border-b md:gap-8 lg:gap-12 md:grid-cols-2 lg:grid-cols-4 bg-primary dark:bg-contrast dark:text-primary text-contrast',
     section: 'grid gap-4',
     nav: 'grid gap-2 pb-6',
   };
@@ -29,11 +29,18 @@ export function Footer({menu = mockData}) {
             {({open}) => (
               <>
                 <Disclosure.Button className="text-left md:cursor-default">
-                  <Heading size="lead" as="h4">
+                  <Heading className="flex justify-between" size="lead" as="h4">
                     {item.title}
+                    <span className="md:hidden">
+                      <IconCaret direction={open ? 'up' : 'down'} />
+                    </span>
                   </Heading>
                 </Disclosure.Button>
-                <div className={open ? `block` : `hidden md:block`}>
+                <div
+                  className={`${
+                    open ? `max-h-48 h-fit` : `max-h-0 md:max-h-fit`
+                  } overflow-hidden transition-all duration-300`}
+                >
                   <Disclosure.Panel static>
                     <nav className={styles.nav}>
                       {item.items.map((subItem) => (
@@ -61,7 +68,7 @@ export function Footer({menu = mockData}) {
       </section>
       <div className="pt-8 opacity-50 md:col-span-2 lg:col-span-4">
         &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
-        Licensed Open Source project. This website is carbon neutral.
+        Licensed Open Source project. This website is carbon&nbsp;neutral.
       </div>
     </Section>
   );

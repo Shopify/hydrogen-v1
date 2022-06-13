@@ -19,7 +19,7 @@ export function ProductCard({product, label, className}) {
 
   if (label) {
     cardLabel = label;
-  } else if (price.amount > compareAtPrice?.amount) {
+  } else if (isDiscounted(price, compareAtPrice)) {
     cardLabel = 'Sale';
   } else if (isNewArrival(product.publishedAt)) {
     cardLabel = 'New';
