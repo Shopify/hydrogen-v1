@@ -3,10 +3,7 @@ import {Image, Link, flattenConnection} from '@shopify/hydrogen';
 import {Text} from '~/components/elements';
 
 export function OrderCard({order}) {
-  const lineItems =
-    order?.lineItems?.edges.length > 0
-      ? flattenConnection(order.lineItems)
-      : [];
+  const lineItems = flattenConnection(order?.lineItems);
 
   return (
     <li className="col-span-1 flex flex-col text-center bg-white rounded border-gray-200 border divide-y divide-gray-200">

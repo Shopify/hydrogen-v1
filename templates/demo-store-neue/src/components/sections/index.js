@@ -7,7 +7,6 @@ export {FeaturedCollections} from './FeaturedCollections';
 export {Footer} from './Footer.client';
 export {Header} from './Header.client';
 export {Hero} from './Hero';
-export {LocationsGrid} from './LocationsGrid';
 export {LoginForm} from './LoginForm.client'; //TODO: rename to AccountLoginForm for consistency
 export {PageHeader} from '../elements/PageHeader';
 export {PasswordResetForm} from './PasswordResetForm.client'; // TODO: rename to AccountPasswordResetForm for consistency

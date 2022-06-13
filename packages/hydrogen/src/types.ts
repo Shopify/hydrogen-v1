@@ -102,6 +102,7 @@ export type ClientHandler = (
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
+  nodes?: T[];
 }
 
 export type ParsedMetafield = Omit<

@@ -125,10 +125,7 @@ export async function api(request, {session, queryShop}) {
 
 function AuthenticatedAccount({customer}) {
   // TODO: add addresses, defaultAddress to props
-  // const orders =
-  //   customer?.orders?.edges.length > 0
-  //     ? flattenConnection(customer.orders)
-  //     : [];
+  // const orders = flattenConnection(customer.orders);
 
   const pageHeader = customer?.firstName
     ? `Hi ${customer.firstName}.`
