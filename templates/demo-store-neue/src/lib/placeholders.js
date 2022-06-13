@@ -10,7 +10,7 @@ export const hero = {
     value: 'Shop Now →',
   },
   url: {
-    value: '/collections/freestyle-collection',
+    value: '/collections/freestyle',
   },
   spread: {
     reference: {
