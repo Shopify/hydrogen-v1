@@ -1,10 +1,10 @@
-import {useShopQuery, CacheDays, NoStore, Seo, gql} from '@shopify/hydrogen';
+import {useShopQuery, CacheLong, CacheNone, Seo, gql} from '@shopify/hydrogen';
 
 import Layout from '../../components/Layout.server';
 import LoginForm from '../../components/account/LoginForm.client';
 
 export default function Login({response}) {
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   const {
     data: {
@@ -12,7 +12,7 @@ export default function Login({response}) {
     },
   } = useShopQuery({
     query: QUERY,
-    cache: CacheDays(),
+    cache: CacheLong(),
     preload: '*',
   });
 
@@ -55,7 +55,7 @@ export async function api(request, {session, queryShop}) {
         password: jsonBody.password,
       },
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   if (

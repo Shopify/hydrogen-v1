@@ -2,7 +2,7 @@ import type {QueryKey, CachingStrategy, AllCacheOptions} from '../../types';
 import {getCache} from '../runtime';
 import {hashKey} from '../../utilities/hash';
 import * as CacheApi from './cache';
-import {CacheSeconds} from './strategies';
+import {CacheShort} from './strategies';
 
 /**
  * Wrapper Cache functions for sub queries
@@ -16,7 +16,7 @@ function getKeyUrl(key: string) {
 }
 
 function getCacheOption(userCacheOptions?: CachingStrategy): AllCacheOptions {
-  return userCacheOptions || CacheSeconds();
+  return userCacheOptions || CacheShort();
 }
 
 export function generateSubRequestCacheControlHeader(
