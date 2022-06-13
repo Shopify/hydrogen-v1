@@ -9,7 +9,7 @@ export function LogoutButton(props) {
   };
 
   return (
-    <button {...props} onClick={logout}>
+    <button {...props} className="text-primary/50" onClick={logout}>
       Logout
     </button>
   );
