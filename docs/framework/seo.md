@@ -4,7 +4,7 @@ title: SEO
 description: Learn how to customize the output of SEO-related tags in your Hydrogen client and server components.
 ---
 
-Hydrogen detects when a search engine crawls your shop and defaults to server-side rendering (SSR). This guide describes how to customize the output of SEO-related tags in your client and server components.
+This guide describes how to customize the output of SEO-related tags in your client and server components.
 
 ## How SEO works in Hydrogen
 
@@ -30,7 +30,7 @@ You can customize the `<head>` tags at the route level:
 
 ### `DefaultSeo` server component
 
-The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) server component fetches your shop name (`shop.name`) and description (`shop.description`). This component provides the default SEO values for every page on your website.
+The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) server component is part of the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates#demo-store-template). This component provides the default SEO values for every page on your website.
 
 You can override the default SEO values by passing in custom props:
 
@@ -48,9 +48,11 @@ const customData = {
 
 {% endcodeblock %}
 
-## Client component example
+## Generate SEO tags
 
-The following example shows how to pass a `product` prop to the component to generate standard SEO-related tags for your product page:
+The `Seo` component has two props: `type` and `data`. The `type` prop accepts `defaultSeo`,`homepage`, `product`, `collection`, `page`, or `noindex`.
+
+Each `type` expects a different `data` shape. The following example shows how to use an SEO component of type `product` and pass a `product` object into the `data` prop.  This allows the component to generate standard SEO-related tags for your product page:
 
 {% codeblock file, filename: '/products/[handle].server.jsx' %}
 
@@ -65,15 +67,15 @@ If you want to add more custom `head` tags, then you can import `Head` from Hydr
 {% codeblock file, filename: '/products/[handle].server.jsx' %}
 
 ```jsx
-// Import only client components.
-
 import {Head} from '@shopify/hydrogen';
 
 return (
-  <Seo type="product" data={product} />
-  <Head>
-    <meta property="something" content="else" />
-  </Head>
+  <>
+    <Seo type="product" data={product} />
+    <Head>
+      <meta property="something" content="else" />
+    </Head>
+  </>
 );
 ```
 
@@ -93,10 +95,12 @@ import LoadingFallback from './components/LoadingFallback';
 
 export default function App({log, ...serverProps}) {
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <DefaultSeo />
+    <>
+      <Suspense fallback={<LoadingFallback />}>
+        <DefaultSeo />
+      </Suspense>
       {/** ... */}
-    </Suspense>
+    </>
   );
 }
 ```
@@ -105,7 +109,10 @@ export default function App({log, ...serverProps}) {
 
 ## Overwriting title template
 
-The title template defaults to the pattern of `{page title} - {shop name}`. If you want to use a different pattern, then you can overwrite title template for all pages or for a single page.
+In the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates#demo-store-template), the titles for all pages are `%s - ${data.title}`, where `%s` is the title of children components. If you want to use a different pattern, then you can overwrite the title template for all pages using a `defaultSeo` type `Seo` component, or for a single page by updating the `Head` title.
+
+> Note:
+> **Hydrogen** is the default label that displays on the browser tab. You can edit the label by updating the text in the `<title>` tag in `index.html`.
 
 ### Overwrite for all pages
 
@@ -148,13 +155,13 @@ return (
 
 {% endcodeblock %}
 
-## SEO robot behavior
+## SEO bot behavior
 
-By default, all routes in Hydrogen are stream rendered. However, Hydrogen supports SEO by inspecting the `user-agent` for every request, disabling streaming, and buffering the response to fully render it on the server-side.
+By default, all routes in Hydrogen are stream rendered. However, Hydrogen supports SEO by inspecting the `user-agent` for every request, disabling streaming, and buffering the response to fully render it on the server-side. This enables you to properly inject `head` tags when the page is being served to SEO crawlers and bots.
 
 ### Imitating robot behavior
 
-To imitate the behaviour of an SEO robot and show the page content fully from server render for an initial render, add the `?_bot` query parameter at the end of the webpage's URL.
+To imitate the behavior of an SEO bot and show the page content fully from server render for an initial render, add the `?_bot` query parameter at the end of the webpage's URL.
 
 ### Checking for custom robots
 
