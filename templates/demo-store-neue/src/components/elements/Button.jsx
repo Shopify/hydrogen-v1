@@ -13,11 +13,11 @@ export function Button({
   const Component = props?.to ? Link : as;
 
   const baseButtonClasses =
-    'border inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none';
+    'inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none';
 
   const variants = {
     primary: `${baseButtonClasses} bg-primary text-contrast`,
-    secondary: `${baseButtonClasses} border-primary/10 bg-contrast text-primary`,
+    secondary: `${baseButtonClasses} border border-primary/10 bg-contrast text-primary`,
     inline: 'border-b border-primary/10 leading-none pb-1',
   };
 
