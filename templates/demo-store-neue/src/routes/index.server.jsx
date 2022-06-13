@@ -49,7 +49,7 @@ export default function Homepage() {
         <SeoForHomepage />
       </Suspense>
       {heroBanners?.nodes[0] && (
-        <Hero data={heroBanners?.nodes[0]} height="full" top />
+        <Hero data={heroBanners?.nodes[0]} height="full" top loading="eager" />
       )}
       <ProductSwimlane
         data={featuredProducts.nodes}
