@@ -44,10 +44,7 @@ function propsToAttrs(props: Record<string, string>) {
     .join(' ');
 }
 
-const clientConfigOptions = [
-  'strictMode',
-  'showDevTools',
-] as (keyof ClientConfig)[];
+const clientConfigOptions = ['strictMode'] as (keyof ClientConfig)[];
 
 export function Html({
   children,
