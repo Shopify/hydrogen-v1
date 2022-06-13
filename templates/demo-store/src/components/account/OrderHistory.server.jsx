@@ -51,7 +51,7 @@ function EmptyOrders() {
       <div className="flex items-center justify-between">
         <Link
           to="/collections/freestyle"
-          className="block w-full px-4 py-3 text-center uppercase border border-gray-900 focus:shadow-outline"
+          className="text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
         >
           Start shopping
         </Link>
