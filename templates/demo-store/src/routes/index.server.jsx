@@ -3,7 +3,10 @@ import {
   useShopQuery,
   useShop,
   Seo,
-  CacheDays,
+  CacheLong,
+  useSession,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
   gql,
 } from '@shopify/hydrogen';
 
@@ -72,7 +75,7 @@ function SeoForHomepage() {
     },
   } = useShopQuery({
     query: SEO_QUERY,
-    cache: CacheDays(),
+    cache: CacheLong(),
     preload: true,
   });
 

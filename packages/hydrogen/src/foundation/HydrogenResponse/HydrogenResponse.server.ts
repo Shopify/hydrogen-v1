@@ -1,11 +1,11 @@
-import {CacheSeconds, generateCacheControlHeader} from '../Cache/strategies';
+import {CacheShort, generateCacheControlHeader} from '../Cache/strategies';
 import type {CachingStrategy} from '../../types';
 import Redirect from '../Redirect/Redirect.client';
 import React from 'react';
 
 export class HydrogenResponse extends Response {
   private wait = false;
-  private cacheOptions: CachingStrategy = CacheSeconds();
+  private cacheOptions: CachingStrategy = CacheShort();
 
   private customStatus?: number;
   private customStatusText?: string;

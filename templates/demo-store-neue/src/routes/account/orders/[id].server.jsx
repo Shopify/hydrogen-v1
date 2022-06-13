@@ -1,38 +1,41 @@
 import {
-  flattenConnection,
-  useSession,
-  NoStore,
-  useShop,
   useShopQuery,
+  useRouteParams,
+  CacheNone,
+  Seo,
+  useSession,
+  flattenConnection,
+  useShop,
   gql,
   Image,
   Link,
   Money,
-  Seo,
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
 import {Text, PageHeader} from '~/components/elements';
 import {statusMessage} from '~/lib/utils';
 
-export default function AccountOrder({response, params}) {
-  response.cache(NoStore());
+export default function OrderDetails({response}) {
+  const {id} = useRouteParams();
+
+  response.cache(CacheNone());
 
   const {languageCode} = useShop();
   const {customerAccessToken, countryCode = 'US'} = useSession();
 
   if (!customerAccessToken) return response.redirect('/account/login');
-  if (!params?.id) return response.redirect('/account/');
+  if (!id) return response.redirect('/account/');
 
   const {data} = useShopQuery({
     query: ORDER_QUERY,
     variables: {
       customerAccessToken,
-      orderId: `id:${params.id}`,
+      orderId: `id:${id}`,
       language: languageCode,
       country: countryCode,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const [order] = flattenConnection(data?.customer?.orders) || [null];

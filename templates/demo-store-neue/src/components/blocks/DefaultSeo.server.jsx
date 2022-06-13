@@ -1,7 +1,7 @@
 import {
   useShopQuery,
   Seo,
-  CacheDays,
+  CacheLong,
   useServerAnalytics,
   gql,
 } from '@shopify/hydrogen';
@@ -21,7 +21,7 @@ export function DefaultSeo() {
     },
   } = useShopQuery({
     query: SHOP_QUERY,
-    cache: CacheDays(),
+    cache: CacheLong(),
     preload: '*',
   });
 

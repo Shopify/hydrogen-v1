@@ -1,4 +1,4 @@
-import {NoStore, Seo, gql} from '@shopify/hydrogen';
+import {CacheNone, Seo, gql} from '@shopify/hydrogen';
 
 import Layout from '../../components/layouts/DefaultLayout.server';
 import AccountCreateForm from '../../components/sections/AccountCreateForm.client';
@@ -6,7 +6,7 @@ import AccountCreateForm from '../../components/sections/AccountCreateForm.clien
 import {getApiErrorMessage} from '../../components/utilities/api.helper';
 
 export default function Register({response}) {
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   return (
     <Layout>
@@ -41,7 +41,7 @@ export async function api(request, {queryShop}) {
         lastName: jsonBody.lastName,
       },
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const errorMessage = getApiErrorMessage('customerCreate', data, errors);

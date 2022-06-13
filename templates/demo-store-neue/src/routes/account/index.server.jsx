@@ -1,13 +1,14 @@
 import {
+  CacheNone,
   flattenConnection,
   gql,
-  NoStore,
   Seo,
   useSession,
   useShop,
   useShopQuery,
 } from '@shopify/hydrogen';
 
+import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 import {Layout} from '~/components/layouts';
 import {Modal} from '~/components/blocks';
 import {PageHeader, LogoutButton} from '~/components/elements';
@@ -23,15 +24,13 @@ import {
   ProductSwimlane,
 } from '~/components/sections';
 
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
-
 export default function Account({
   response,
   editingAccount,
   editingAddress,
   deletingAddress,
 }) {
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   const {customerAccessToken, countryCode = 'US'} = useSession();
 
@@ -47,7 +46,7 @@ export default function Account({
       country: countryCode,
       withAddressDetails: !!editingAddress,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const {customer, featuredCollections, featuredProducts} = data;
@@ -224,7 +223,7 @@ export async function api(request, {session, queryShop}) {
       customer,
       customerAccessToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const error = getApiErrorMessage('customerUpdate', data, errors);

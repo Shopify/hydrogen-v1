@@ -1,4 +1,4 @@
-import {NoStore, Seo, gql} from '@shopify/hydrogen';
+import {CacheNone, Seo, gql} from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
 import {AccountRecoverForm} from '~/components/sections';
@@ -10,7 +10,7 @@ import {AccountRecoverForm} from '~/components/sections';
  * page `/account/reset/[resetToken]`.
  */
 export default function AccountRecover({response}) {
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   return (
     <Layout>
@@ -34,7 +34,7 @@ export async function api(request, {queryShop}) {
     variables: {
       email: jsonBody.email,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   // Ignore errors, we don't want to tell the user if the email was

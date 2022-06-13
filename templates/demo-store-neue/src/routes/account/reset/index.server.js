@@ -1,5 +1,4 @@
-import {NoStore, gql} from '@shopify/hydrogen';
-
+import {CacheNone, gql} from '@shopify/hydrogen';
 import {getApiErrorMessage} from '~/lib/utils';
 
 // TODO: Is this a duplicate of /reset/index.server.js?
@@ -35,7 +34,7 @@ export async function api(request, {session, queryShop}) {
         resetToken: jsonBody.resetToken,
       },
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   if (data?.customerReset?.customerAccessToken?.accessToken !== null) {

@@ -1,7 +1,7 @@
 import {
   Seo,
   useSession,
-  NoStore,
+  CacheNone,
   useShop,
   useShopQuery,
   flattenConnection,
@@ -34,7 +34,7 @@ export default function Account({
   editingAddress,
   deletingAddress,
 }) {
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   const {customerAccessToken, countryCode = 'US'} = useSession();
 
@@ -50,7 +50,7 @@ export default function Account({
       country: countryCode,
       withAddressDetails: !!editingAddress,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const {customer, featuredCollections, featuredProducts, locations} = data;
@@ -193,7 +193,7 @@ export async function api(request, {session, queryShop}) {
       customer,
       customerAccessToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const error = getApiErrorMessage('customerUpdate', data, errors);
