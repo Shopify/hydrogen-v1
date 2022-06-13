@@ -51,7 +51,7 @@ export default function Product() {
   return (
     <Layout>
       <ProductOptionsProvider data={product}>
-        <Section padding="x" className={'px-0'}>
+        <Section padding="x" className="px-0">
           <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
             <ProductGallery
               media={product.media.nodes}
