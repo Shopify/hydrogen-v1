@@ -869,7 +869,7 @@ async function cacheResponse(
     chunks.length > 0 &&
     response.status === 200 &&
     response.cache().mode !== NO_STORE &&
-    !response.headers.get('Set-Cookie') &&
+    !response.headers.has('Set-Cookie') &&
     response.headers.get('Content-Type') !=
       'application/x-www-form-urlencoded' &&
     (!session || session['customerAccessToken'] === null)
