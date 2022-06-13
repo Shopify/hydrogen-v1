@@ -10,11 +10,17 @@ Internationalization helps merchants expand their business to a global audience 
 
 You can configure your app's default locale in the Hydrogen configuration file. You can also set up dynamic configurations in your Hydrogen app for multiple stores.
 
-### Configure a default locale
+### Configure a default locale and language
 
 The [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) contains information that's needed at runtime for routing, connecting to the Storefront API, and many other options.
 
-You can set your app's default locale using the `defaultLocale` property in your Hydrogen configuration file. The `defaultLocale` property is a string that corresponds to a valid locale identifier used to make the request. In the following example, the default locale of the app is set to `EN-US`:
+You can set your app's default locale and language using the `defaultLocale` and `languageCode` properties in your Hydrogen configuration file. 
+
+The `defaultLocale` property corresponds to a valid locale identifier used to make the request, using the [IETF language tag nomenclature](https://en.wikipedia.org/wiki/IETF_language_tag). The first letter code represents the language, and the second letter code represents the region. 
+
+The `languageCode` property corresponds to the first two characters of `defaultLocale`, using [ISO 639-1 nomenclature](https://shopify.dev/api/storefront/2022-04/enums/languagecode) for language codes supported by Shopify.
+
+In the following example, the default locale of the app is set to `EN-US` and the language is set to `EN`:
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
 
@@ -23,6 +29,7 @@ export default defineConfig({
   shopify: {
     /* The app's locale */
     defaultLocale: 'EN-US',
+    languageCode: 'EN',
   },
 });
 ```
