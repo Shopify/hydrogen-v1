@@ -56,32 +56,8 @@ export type UseMoneyValue = {
  * [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
  */
 export function useMoney(money: MoneyV2): UseMoneyValue {
-  const memoizedFormats = useMemoizedFormats(money);
-
-  return useMemo<UseMoneyValue>(() => {
-    const memoizedKeys = Object.keys(memoizedFormats).reduce((acc, key) => {
-      acc[key] = undefined;
-      return acc;
-    }, Object.create(null) as Record<string, any>);
-
-    return new Proxy(
-      {
-        ...memoizedKeys,
-        currencyCode: money.currencyCode,
-        original: money,
-      } as UseMoneyValue,
-      {
-        get: (target, key) =>
-          key in memoizedKeys
-            ? Reflect.get(memoizedFormats, key).call(null)
-            : Reflect.get(target, key),
-      }
-    );
-  }, [money, memoizedFormats]);
-}
-
-function useMemoizedFormats(money: MoneyV2) {
   const {locale} = useShop();
+  const amount = parseFloat(money.amount);
 
   const options = useMemo(
     () => ({
@@ -91,34 +67,27 @@ function useMemoizedFormats(money: MoneyV2) {
     [money.currencyCode]
   );
 
-  const amount = parseFloat(money.amount);
-
-  const value = useCallback(
-    () => new Intl.NumberFormat(locale, options).format(amount),
-    [amount, locale, options]
+  const defaultFormatter = useCallback(
+    () => new Intl.NumberFormat(locale, options),
+    [locale, options]
   );
 
-  const baseParts = useCallback(
-    () => new Intl.NumberFormat(locale, options).formatToParts(amount),
-    [locale, options, amount]
-  );
-
-  const nameParts = useCallback(
+  const nameFormatter = useCallback(
     () =>
       new Intl.NumberFormat(locale, {
         ...options,
         currencyDisplay: 'name',
-      }).formatToParts(amount),
-    [locale, options, amount]
+      }),
+    [locale, options]
   );
 
-  const narrowParts = useCallback(
+  const narrowSymbolFormatter = useCallback(
     () =>
       new Intl.NumberFormat(locale, {
         ...options,
         currencyDisplay: 'narrowSymbol',
-      }).formatToParts(amount),
-    [locale, options, amount]
+      }),
+    [locale, options]
   );
 
   const withoutTrailingZerosFormatter = useCallback(
@@ -145,62 +114,52 @@ function useMemoizedFormats(money: MoneyV2) {
     [locale]
   );
 
-  return {
-    localizedString: value,
-    parts: baseParts,
+  const isPartCurrency = (part: Intl.NumberFormatPart) =>
+    part.type === 'currency';
 
-    withoutTrailingZeros: useCallback(
-      () =>
-        amount % 1 === 0
-          ? withoutTrailingZerosFormatter().format(amount)
-          : value(),
-      [amount, value, withoutTrailingZerosFormatter]
-    ),
+  const lazyFormatters: Record<string, Function> = {
+    original: () => money,
+    currencyCode: () => money.currencyCode,
 
-    withoutTrailingZerosAndCurrency: useCallback(
-      () =>
-        amount % 1 === 0
-          ? withoutTrailingZerosOrCurrencyFormatter().format(amount)
-          : withoutCurrencyFormatter().format(amount),
-      [
-        amount,
-        withoutTrailingZerosOrCurrencyFormatter,
-        withoutCurrencyFormatter,
-      ]
-    ),
+    localizedString: () => defaultFormatter().format(amount),
 
-    currencyName: useCallback(
-      () =>
-        nameParts().find((part) => part.type === 'currency')?.value ?? // e.g. "US dollars"
-        money.currencyCode,
-      [nameParts, money]
-    ),
+    parts: () => defaultFormatter().formatToParts(amount),
 
-    currencySymbol: useCallback(
-      () =>
-        baseParts().find((part) => part.type === 'currency')?.value ?? // e.g. "USD"
-        money.currencyCode,
-      [baseParts, money]
-    ),
+    withoutTrailingZeros: () =>
+      amount % 1 === 0
+        ? withoutTrailingZerosFormatter().format(amount)
+        : defaultFormatter().format(amount),
 
-    currencyNarrowSymbol: useCallback(
-      () =>
-        narrowParts().find((part) => part.type === 'currency')?.value ?? // e.g. "$"
-        '',
-      [narrowParts]
-    ),
+    withoutTrailingZerosAndCurrency: () =>
+      amount % 1 === 0
+        ? withoutTrailingZerosOrCurrencyFormatter().format(amount)
+        : withoutCurrencyFormatter().format(amount),
 
-    amount: useCallback(
-      () =>
-        baseParts()
-          .filter((part) =>
-            ['decimal', 'fraction', 'group', 'integer', 'literal'].includes(
-              part.type
-            )
+    currencyName: () =>
+      nameFormatter().formatToParts(amount).find(isPartCurrency)?.value ??
+      money.currencyCode, // e.g. "US dollars"
+
+    currencySymbol: () =>
+      defaultFormatter().formatToParts(amount).find(isPartCurrency)?.value ??
+      money.currencyCode, // e.g. "USD"
+
+    currencyNarrowSymbol: () =>
+      narrowSymbolFormatter().formatToParts(amount).find(isPartCurrency)
+        ?.value ?? '', // e.g. "$"
+
+    amount: () =>
+      defaultFormatter()
+        .formatToParts(amount)
+        .filter((part) =>
+          ['decimal', 'fraction', 'group', 'integer', 'literal'].includes(
+            part.type
           )
-          .map((part) => part.value)
-          .join(''),
-      [baseParts]
-    ),
+        )
+        .map((part) => part.value)
+        .join(''),
   };
+
+  return new Proxy(lazyFormatters as unknown as UseMoneyValue, {
+    get: (target, key) => Reflect.get(target, key).call(null),
+  });
 }
