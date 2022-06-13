@@ -1,4 +1,4 @@
-import {useShopQuery, gql, CacheMonths} from '@shopify/hydrogen';
+import {useShopQuery, gql, CacheLong} from '@shopify/hydrogen';
 
 /*
   This route redirects you to your Shopify Admin
@@ -10,7 +10,7 @@ import {useShopQuery, gql, CacheMonths} from '@shopify/hydrogen';
 export default function AdminRedirect({response}) {
   const {data} = useShopQuery({
     query: SHOP_QUERY,
-    cache: CacheMonths(),
+    cache: CacheLong(),
   });
 
   const {url} = data.shop.primaryDomain;
