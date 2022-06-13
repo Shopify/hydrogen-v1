@@ -11,11 +11,10 @@ export function MetaPixel() {
 
       if (window.fbq) return;
 
-      const fbq = (window.fbq = () => {
-        fbq.callMethod
-          ? fbq.callMethod.apply(fbq, arguments)
-          : fbq.queue.push(arguments);
+      const fbq = (window.fbq = (...args) => {
+        fbq.callMethod ? fbq.callMethod.apply(fbq, args) : fbq.queue.push(args);
       });
+
       if (!window._fbq) window._fbq = fbq;
       fbq.push = fbq;
       fbq.loaded = !0;
