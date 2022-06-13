@@ -45,7 +45,7 @@ describe('analytics', () => {
   it(
     'should emit page-view on sub load',
     async () => {
-      const collectionPath = '/collections/freestyle-collection';
+      const collectionPath = '/collections/freestyle';
       // Full load
       await Promise.all([
         session.page.waitForRequest(eventsEndpoint),

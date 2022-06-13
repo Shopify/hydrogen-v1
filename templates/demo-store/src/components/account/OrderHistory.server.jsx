@@ -50,7 +50,7 @@ function EmptyOrders() {
       <div className="my-4 text-gray-500">No orders yet</div>
       <div className="flex items-center justify-between">
         <Link
-          to="/collections/freestyle-collection"
+          to="/collections/freestyle"
           className="text-center border border-gray-900 uppercase py-3 px-4 focus:shadow-outline block w-full"
         >
           Start shopping
