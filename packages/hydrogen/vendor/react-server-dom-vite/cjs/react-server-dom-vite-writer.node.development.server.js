@@ -17,6 +17,8 @@ if (process.env.NODE_ENV !== "production") {
 var React = require('react');
 var util = require('util');
 
+var assign = Object.assign;
+
 var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
 function error(format) {
@@ -1822,7 +1824,18 @@ function createDrainHandler(destination, request) {
 }
 
 function renderToPipeableStream(model, options, context) {
-  var request = createRequest(model, {}, // Manifest, not used
+  var request = createRequest( // Wrap root in a dummy element that simply adds a flag
+  // to the current dispatcher to check later in the proxies.
+  assign({}, model, {
+    $$typeof: Symbol.for('react.element'),
+    props: {
+      children: model
+    },
+    type: function () {
+      React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher.current.isRsc = true;
+      return model;
+    }
+  }), {}, // Manifest, not used
   options ? options.onError : undefined, context);
   var hasStartedFlowing = false;
   startWork(request);
