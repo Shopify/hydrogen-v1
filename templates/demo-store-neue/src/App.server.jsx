@@ -5,7 +5,6 @@ import {
   Router,
   FileRoutes,
   ShopifyProvider,
-  CartProvider,
   ShopifyAnalytics,
   PerformanceMetrics,
   PerformanceMetricsDebug,
@@ -13,18 +12,19 @@ import {
 
 import {DefaultSeo} from './components/blocks'; // TODO: find a better place for this
 import {NotFound} from '~/components/pages';
+import {CartProviderWithCountryCode} from './components/elements/CartProviderWithCountryCode';
 
 function App({routes}) {
   return (
     <Suspense fallback={null}>
       <ShopifyProvider>
-        <CartProvider>
+        <CartProviderWithCountryCode>
           <DefaultSeo />
           <Router>
             <FileRoutes routes={routes} />
             <Route path="*" page={<NotFound />} />
           </Router>
-        </CartProvider>
+        </CartProviderWithCountryCode>
         <PerformanceMetrics />
         {import.meta.env.DEV && <PerformanceMetricsDebug />}
         <ShopifyAnalytics />
