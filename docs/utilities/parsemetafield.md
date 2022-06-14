@@ -4,7 +4,7 @@ title: parseMetafields
 description: parseMetafields creates a new metafield object with a value that has been parsed according to the metafield type.
 ---
 
-`parseMetafields` creates a new metafield object with a value that has been parsed according to the metafield type.
+The `parseMetafields` utility creates a new metafield object with a value that has been parsed according to the metafield type.
 
 ## Example code
 
