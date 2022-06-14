@@ -5,10 +5,10 @@ import {
   gql,
   Image,
   CacheLong,
-  Head,
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
+import {CustomFontLink} from '~/components/blocks';
 
 const BLOG_HANDLE = 'journal';
 
@@ -35,9 +35,7 @@ export default function Post({params, response}) {
 
   return (
     <Layout>
-      <Head>
-        <link rel="stylesheet" href="/src/styles/custom-font.css" />
-      </Head>
+      <CustomFontLink />
       <Seo type="page" data={data.blog.articleByHandle} />
       <section className="w-[51rem] m-auto mt-12 max-w-full">
         <h1 className="text-4xl font-bold px-6 md:px-24">{title}</h1>
