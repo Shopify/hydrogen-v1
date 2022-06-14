@@ -13,6 +13,19 @@ type ImageProps<GenericLoaderOpts> =
   | ShopifyImageProps
   | ExternalImageProps<GenericLoaderOpts>;
 
+/**
+ * The `Image` component renders an image for the Storefront API's
+ * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image) by using the `data` prop, or a custom location by using the `src` prop. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+ *
+ * Width and height are determined using the followiing priority list:
+ * 1. `loaderOptions`'s width/height
+ * 2.  width/height bare props
+ * 3. `data`'s width/height
+ *
+ * If only one of `width` or `height` are defined, then the other will attempt to be calculated based on the Image's aspect ratio,
+ * provided that both `data.width` and `data.height` are available. If not, then the aspect ratio cannot be determined and the missing
+ * value will reamin as `null`
+ */
 export function Image<GenericLoaderOpts>(props: ImageProps<GenericLoaderOpts>) {
   if (!props.data && !props.src) {
     throw new Error(`<Image/>: requires either a 'data' or 'src' prop.`);
@@ -275,8 +288,10 @@ function ExternalImage<GenericLoaderOpts>({
     <img
       {...rest}
       src={finalSrc}
-      width={width}
-      height={height}
+      // @ts-expect-error TS doesn't understand that it could exist
+      width={loaderOptions?.width ?? width}
+      // @ts-expect-error TS doesn't understand that it could exist
+      height={loaderOptions?.height ?? height}
       alt={alt ?? ''}
       loading={loading ?? 'lazy'}
       srcSet={finalSrcset}
