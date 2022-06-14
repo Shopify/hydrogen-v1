@@ -82,8 +82,8 @@ describe('<Image />', () => {
       });
       const options = {scale: 2 as const};
       const mockDimensions = {
-        width: undefined,
-        height: undefined,
+        width: null,
+        height: null,
       };
 
       jest
@@ -92,8 +92,8 @@ describe('<Image />', () => {
       const component = mount(<Image data={image} loaderOptions={options} />);
 
       const img = component.find('img');
-      expect(img?.prop('width')).toBeUndefined();
-      expect(img?.prop('height')).toBeUndefined();
+      expect(img?.prop('width')).toBeNull();
+      expect(img?.prop('height')).toBeNull();
 
       // @ts-expect-error This was mocked out and needs to be restored
       utilities.getShopifyImageDimensions.mockRestore();

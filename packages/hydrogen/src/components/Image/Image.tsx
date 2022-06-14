@@ -94,12 +94,16 @@ function ShopifyImage({
     );
   }
 
-  const {width: finalWidth, height: finalHeight} = getShopifyImageDimensions(
+  const {width: finalWidth, height: finalHeight} = getShopifyImageDimensions({
     data,
-    loaderOptions
-  );
+    loaderOptions,
+    elementProps: {
+      width,
+      height,
+    },
+  });
 
-  if ((__HYDROGEN_DEV__ && !finalWidth) || !finalHeight) {
+  if (__HYDROGEN_DEV__ && (!finalWidth || !finalHeight)) {
     console.warn(
       `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${
         data.id ?? data.url
@@ -251,7 +255,7 @@ function ExternalImage<GenericLoaderOpts>({
   if (!finalSrcset && loader && widths) {
     // Height is a requirement in the LoaderProps, so  to keep the aspect ratio, we must determine the height based on the default values
     const heightToWidthRatio =
-      parseInt(height as string) / parseInt(width as string);
+      parseInt(height.toString()) / parseInt(width.toString());
     finalSrcset = widths
       ?.map((width) => parseInt(width as string, 10))
       ?.map(
