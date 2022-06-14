@@ -18,9 +18,9 @@ type ImageProps<GenericLoaderOpts> =
  * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image) by using the `data` prop, or a custom location by using the `src` prop. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
  *
  * An image's width and height are determined using the following priority list:
- * 1. `loaderOptions`'s width/height
- * 2.  width/height bare props
- * 3. `data`'s width/height
+ * 1. The width and height values for the `loaderOptions` prop
+ * 2. The width and height values for bare props
+ * 3. The width and height values for the `data` prop
  *
  * If only one of `width` or `height` are defined, then the other will attempt to be calculated based on the Image's aspect ratio,
  * provided that both `data.width` and `data.height` are available. If `data.width` and `data.height` aren't available, then the aspect ratio cannot be determined and the missing
