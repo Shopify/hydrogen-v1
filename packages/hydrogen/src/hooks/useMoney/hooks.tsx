@@ -1,4 +1,4 @@
-import {useMemo, useCallback} from 'react';
+import {useMemo} from 'react';
 import {useShop} from '../../foundation/useShop';
 import {CurrencyCode, MoneyV2} from '../../storefront-api-types';
 
@@ -67,52 +67,30 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
     [money.currencyCode]
   );
 
-  const defaultFormatter = useCallback(
-    () => new Intl.NumberFormat(locale, options),
-    [locale, options]
-  );
+  const defaultFormatter = useLazyFormatter(locale, options);
 
-  const nameFormatter = useCallback(
-    () =>
-      new Intl.NumberFormat(locale, {
-        ...options,
-        currencyDisplay: 'name',
-      }),
-    [locale, options]
-  );
+  const nameFormatter = useLazyFormatter(locale, {
+    ...options,
+    currencyDisplay: 'name',
+  });
 
-  const narrowSymbolFormatter = useCallback(
-    () =>
-      new Intl.NumberFormat(locale, {
-        ...options,
-        currencyDisplay: 'narrowSymbol',
-      }),
-    [locale, options]
-  );
+  const narrowSymbolFormatter = useLazyFormatter(locale, {
+    ...options,
+    currencyDisplay: 'narrowSymbol',
+  });
 
-  const withoutTrailingZerosFormatter = useCallback(
-    () =>
-      new Intl.NumberFormat(locale, {
-        ...options,
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }),
-    [locale, options]
-  );
+  const withoutTrailingZerosFormatter = useLazyFormatter(locale, {
+    ...options,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
 
-  const withoutCurrencyFormatter = useCallback(
-    () => new Intl.NumberFormat(locale),
-    [locale]
-  );
+  const withoutCurrencyFormatter = useLazyFormatter(locale);
 
-  const withoutTrailingZerosOrCurrencyFormatter = useCallback(
-    () =>
-      new Intl.NumberFormat(locale, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }),
-    [locale]
-  );
+  const withoutTrailingZerosOrCurrencyFormatter = useLazyFormatter(locale, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
 
   const isPartCurrency = (part: Intl.NumberFormatPart) =>
     part.type === 'currency';
@@ -182,4 +160,11 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
       }),
     [lazyFormatters]
   );
+}
+
+function useLazyFormatter(locale: string, options?: Intl.NumberFormatOptions) {
+  return useMemo(() => {
+    let memoized: Intl.NumberFormat;
+    return () => (memoized ??= new Intl.NumberFormat(locale, options));
+  }, [locale, options]);
 }
