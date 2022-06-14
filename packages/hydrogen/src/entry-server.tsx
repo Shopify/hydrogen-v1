@@ -96,7 +96,13 @@ export const renderHydrogen = (App: any) => {
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
-    setLogger(hydrogenConfig.logger);
+    setLogger({
+      ...hydrogenConfig.logger,
+      showCacheControlHeader: hydrogenConfig.showCacheControlHeader,
+      showCacheApiStatus: hydrogenConfig.showCacheApiStatus,
+      showQueryTiming: hydrogenConfig.showQueryTiming,
+      showUnusedQueryProperties: hydrogenConfig.showUnusedQueryProperties,
+    });
     const log = getLoggerWithContext(request);
 
     const response = new HydrogenResponse();
@@ -183,11 +189,11 @@ export const renderHydrogen = (App: any) => {
               await deleteItemFromCache(lockCacheKey);
             }
           };
-          const revalidatingPromise =
-            getItemFromCache(lockCacheKey).then(staleWhileRevalidate);
 
           // Asynchronously wait for it in workers
-          request.ctx.runtime?.waitUntil(revalidatingPromise);
+          request.ctx.runtime?.waitUntil(
+            getItemFromCache(lockCacheKey).then(staleWhileRevalidate)
+          );
         }
 
         return cachedResponse;
