@@ -1,15 +1,15 @@
 import {
-  useShopQuery,
-  useRouteParams,
   CacheNone,
-  Seo,
-  useSession,
   flattenConnection,
-  useShop,
   gql,
   Image,
   Link,
   Money,
+  Seo,
+  useRouteParams,
+  useSession,
+  useShop,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';

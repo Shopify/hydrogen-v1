@@ -9,7 +9,7 @@ import {
 
 import {Layout} from '~/components/layouts';
 import {Button, PageHeader, Section} from '~/components/elements';
-import {NotFound} from '~/components/pages';
+import {NotFound} from '~/components/sections';
 
 export default function Policy({params}) {
   const {languageCode} = useShop();
@@ -36,7 +36,9 @@ export default function Policy({params}) {
   // The currently visited policy page key
   const activePolicy = Object.keys(policy).find((key) => policy[key]);
 
-  const {data} = useShopQuery({
+  const {
+    data: {shop},
+  } = useShopQuery({
     query: POLICIES_QUERY,
     variables: {
       languageCode,
@@ -44,7 +46,7 @@ export default function Policy({params}) {
     },
   });
 
-  const page = data?.shop?.[activePolicy];
+  const page = shop?.[activePolicy];
 
   // If the policy page is empty, return not found
   if (!page) {
