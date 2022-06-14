@@ -322,7 +322,7 @@ Performance metrics provide insight into how fast pages are loading in your Hydr
 - **Largest Contentful Paint (LCP)**: The time it takes to render and interact with the largest content element on the page
 - **Duration**: The total amount of time it takes for a page to finish streaming
 
-You can opt in to receive performance metrics for page loads in your Hydrogen storefront by including `<PerformanceMetrics />` and `PerformanceMetricsServerAnalyticsConnector` in `App.server.js`.
+You can opt in to receive performance metrics for page loads in your Hydrogen storefront by including `<PerformanceMetrics />` and `PerformanceMetricsDebug` in `App.server.js`.
 
 If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in your client component:
 
@@ -330,7 +330,6 @@ If you want to see performance debug metrics displayed in your browser console l
 
 ```jsx
 import {
-  PerformanceMetricsServerAnalyticsConnector,
   PerformanceMetrics,
   PerformanceMetricsDebug,
   ...

@@ -8,17 +8,15 @@ The `FileSessionStorage` component persists session data to the file system.
 
 ## Example code
 
-{% codeblock file, filename: 'App.server.jsx' %}
+{% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```jsx
-import {
-  renderHydrogen,
-  FileSessionStorage,
-} from '@shopify/hydrogen/FileSessionStorage';
-export default renderHydrogen(App, {
-  routes,
-  shopifyConfig,
-  session: MemorySessionStorage('__session', '/home/dev/sessions', {
+import {defineConfig} from '@shopify/hydrogen/config';
+import {FileSessionStorage} from '@shopify/hydrogen/FileSessionStorage';
+
+export default defineConfig({
+  shopify: {/*...*/},
+  session: FileSessionStorage('__session', '/home/dev/sessions', {
     path: '/',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

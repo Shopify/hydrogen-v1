@@ -30,8 +30,8 @@ function getInternalReactDispatcher() {
 }
 
 function isRsc() {
-  // This method is only available during RSC
-  return __HYDROGEN_TEST__ || !!getInternalReactDispatcher().getCacheForType;
+  // This flag is added by RSC Vite plugin
+  return __HYDROGEN_TEST__ || !!getInternalReactDispatcher().isRsc;
 }
 
 // Note: use this only during RSC/Flight rendering. The React dispatcher

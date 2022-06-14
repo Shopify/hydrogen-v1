@@ -48,6 +48,11 @@ export default () => {
         rollupOptions: config.build?.rollupOptions
           ? Object.assign(rollupOptions, config.build.rollupOptions)
           : rollupOptions,
+        target: config.build?.ssr
+          ? isWorker
+            ? 'es2022' // CFW (Updates weekly to latest V8)
+            : 'es2020' // Node (Support for v14.19 used in SB)
+          : 'modules', // Browsers (Vite default value)
       },
 
       ssr: {
@@ -96,6 +101,7 @@ export default () => {
           'react/jsx-runtime',
           // https://github.com/nfriedly/set-cookie-parser/issues/50
           'set-cookie-parser',
+          'undici',
         ],
       },
 

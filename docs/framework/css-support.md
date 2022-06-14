@@ -84,6 +84,40 @@ If you don't want to build with Tailwind's library and instead want to write you
 
     {% endcodeblock %}
 
+## Custom fonts
+
+If you want to use a font that's not included in Shopify's font library, then you can use fonts from third-party solutions such as [Typekit](https://fonts.adobe.com/fonts):
+
+1. Add font files inside the `/public` folder. For example, add font files to `/public/fonts`.
+2. Create a `.css` file that loads the local custom font and reference the font with `url()`:
+
+    {% codeblock file, filename: 'custom-font.css' %}
+
+    ```js
+    /* fraunces-regular - latin */
+    @font-face {
+      font-family: 'Fraunces';
+      font-style: normal;
+      font-display: swap;
+      font-weight: 400;
+      src: url('/fonts/fraunces-v22-latin-regular.eot'); /* IE9 Compat Modes */
+      src: local(''),
+        url('/fonts/fraunces-v22-latin-regular.eot?#iefix')
+          format('embedded-opentype'),
+        /* IE6-IE8 */ url('/fonts/fraunces-v22-latin-regular.woff2') format('woff2'),
+        /* Super Modern Browsers */ url('/fonts/fraunces-v22-latin-regular.woff')
+          format('woff'),
+        /* Modern Browsers */ url('/fonts/fraunces-v22-latin-regular.ttf')
+          format('truetype'),
+        /* Safari, Android, iOS */
+          url('/fonts/fraunces-v22-latin-regular.svg#Fraunces') format('svg'); /* Legacy iOS */
+    }
+    ```
+
+    {% endcodeblock %}
+
+3. Import your `.css` file into `index.html` or any desired client component.
+
 ## CSS Modules
 
 Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module in your components. CSS Modules can be imported in both client and server components.
@@ -116,7 +150,7 @@ export default MyComponent() {...}
 export function MyNamedComponent() {
   return (
     <div className={styles.wrapper}>
-      <styles.StyleTag /> 
+      <styles.StyleTag />
       <p>Hello</p>
     </div>
   );

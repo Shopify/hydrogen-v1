@@ -138,7 +138,8 @@ export function useShopQuery<T>({
 
   if (
     __HYDROGEN_DEV__ &&
-    log.options().showUnusedQueryProperties &&
+    (log.options().showUnusedQueryProperties ||
+      serverRequest.ctx.hydrogenConfig?.devTools) &&
     query &&
     data?.data
   ) {
@@ -175,8 +176,12 @@ export function useShopQuery<T>({
           hiddenInfo +
           footer;
 
-        log.warn(warning);
-        sendMessageToClient({type: 'warn', data: warning});
+        if (log.options().showUnusedQueryProperties) {
+          log.warn(warning);
+        }
+        if (serverRequest.ctx.hydrogenConfig?.devTools) {
+          sendMessageToClient({type: 'warn', data: warning});
+        }
       },
     });
   }

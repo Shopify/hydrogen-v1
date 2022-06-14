@@ -41,9 +41,9 @@ export function AddressBook({addresses, defaultAddress}) {
               You haven&apos;t saved any addresses yet.
             </Text>
           ) : null}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="w-48">
             <Button
-              className="mt-2 text-sm w-full max-w-xl mb-6"
+              className="mt-2 text-sm w-full mb-6"
               onClick={() => {
                 setServerProps('editingAddress', 'NEW');
               }}
@@ -53,7 +53,7 @@ export function AddressBook({addresses, defaultAddress}) {
             </Button>
           </div>
           {addresses?.length ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {fullDefaultAddress ? (
                 <Address
                   address={fullDefaultAddress}

@@ -17,8 +17,8 @@ import {RSC_PATHNAME} from './constants';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
-
-const DevTools = React.lazy(() => import('./components/DevTools.client'));
+import {ClientAnalytics} from './foundation/Analytics/';
+import {usePerformanceMark, Stage} from '@shopify/react-performance';
 
 let rscReader: ReadableStream | null;
 
@@ -137,9 +137,6 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
           </Suspense>
         </ErrorBoundary>
       </RootComponent>
-      {typeof DevTools !== 'undefined' && config.showDevTools ? (
-        <DevTools />
-      ) : null}
     </>,
     {
       onRecoverableError(e: any) {
@@ -172,6 +169,7 @@ function Content({
     search: window.location.search,
   });
   const response = useServerResponse(serverProps);
+  usePerformanceMark(Stage.Complete, window.location.pathname);
 
   return (
     <ServerPropsProvider
@@ -245,6 +243,8 @@ function useServerResponse(state: any) {
       /* @ts-ignore */
       window.BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
     }
+
+    ClientAnalytics.resetPageAnalyticsData();
 
     // Request a new flight response.
     response = createFromFetch(
