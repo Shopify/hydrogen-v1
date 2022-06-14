@@ -6,9 +6,13 @@
   font-weight: 400;
   src: url('/fonts/fraunces-v22-latin-regular.eot'); /* IE9 Compat Modes */
   src: local(''),
-       url('/fonts/fraunces-v22-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('/fonts/fraunces-v22-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-       url('/fonts/fraunces-v22-latin-regular.woff') format('woff'), /* Modern Browsers */
-       url('/fonts/fraunces-v22-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-       url('/fonts/fraunces-v22-latin-regular.svg#Fraunces') format('svg'); /* Legacy iOS */
+    url('/fonts/fraunces-v22-latin-regular.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('/fonts/fraunces-v22-latin-regular.woff2') format('woff2'),
+    /* Super Modern Browsers */ url('/fonts/fraunces-v22-latin-regular.woff')
+      format('woff'),
+    /* Modern Browsers */ url('/fonts/fraunces-v22-latin-regular.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('/fonts/fraunces-v22-latin-regular.svg#Fraunces') format('svg'); /* Legacy iOS */
 }
