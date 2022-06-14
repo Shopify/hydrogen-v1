@@ -11,7 +11,7 @@ import {
   PerformanceMetricsDebug,
 } from '@shopify/hydrogen';
 
-import DefaultSeo from './components/DefaultSeo.server';
+import {DefaultSeo} from './components/blocks'; // TODO: find a better place for this
 import {NotFound} from '~/components/pages';
 
 function App({routes}) {

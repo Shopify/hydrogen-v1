@@ -1,7 +1,7 @@
 import {
   Seo,
   useShopQuery,
-  NoStore,
+  CacheNone,
   flattenConnection,
   gql,
 } from '@shopify/hydrogen';
@@ -16,7 +16,7 @@ export default function AccountDetails({customerAccessToken}) {
     variables: {
       customerAccessToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const customer = data && data.customer;

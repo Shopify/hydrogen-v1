@@ -2,7 +2,7 @@ import {useCallback, useState, Suspense} from 'react';
 import {useCountry, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 
-import {IconChevronDown} from '~/components/elements';
+import {IconCheck, IconCaret} from '~/components/elements';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
@@ -27,31 +27,31 @@ export function CountrySelector() {
           setTimeout(() => setListboxOpen(open));
           return (
             <>
-              <Listbox.Button className="flex items-center justify-between w-full border border-gray-500 p-2 rounded-sm">
+              <Listbox.Button
+                className={`flex items-center justify-between w-full py-3 px-4 border ${
+                  open ? 'rounded-b md:rounded-t md:rounded-b-none' : 'rounded'
+                } border-contrast/30`}
+              >
                 <span className="">{selectedCountry.name}</span>
-                <IconChevronDown
-                  className={`w-5 h-5 transition-transform duration-300 ${
-                    open ? 'rotate-180' : null
-                  }`}
-                />
+                <IconCaret direction={open ? 'up' : 'down'} />
               </Listbox.Button>
 
-              <Listbox.Options className="absolute z-10 mt-2 black border border-gray-500 p-2 w-full">
-                <div className="max-h-48 overflow-y-auto">
-                  {listboxOpen && (
-                    <Suspense fallback={<div>Loading…</div>}>
-                      <Countries
-                        selectedCountry={selectedCountry}
-                        getClassName={(active) => {
-                          return (
-                            `w-full cursor-pointer py-2 flex justify-start items-center text-left cursor-pointer` +
-                            `rounded ${active ? '' : null}`
-                          );
-                        }}
-                      />
-                    </Suspense>
-                  )}
-                </div>
+              <Listbox.Options
+                className={`bg-primary border-t-contrast/30 border-contrast/30 absolute bottom-12 z-10 grid h-48 w-full overflow-y-scroll rounded-t border px-2 py-2 transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none md:border-t-0 md:border-b
+              ${listboxOpen ? 'max-h-48' : 'max-h-0'}`}
+              >
+                {listboxOpen && (
+                  <Suspense fallback={<div className="p-2">Loading…</div>}>
+                    <Countries
+                      selectedCountry={selectedCountry}
+                      getClassName={(active) => {
+                        return `w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${
+                          active ? 'bg-contrast/10' : null
+                        }`;
+                      }}
+                    />
+                  </Suspense>
+                )}
               </Listbox.Options>
             </>
           );
@@ -74,7 +74,7 @@ export function Countries({selectedCountry, getClassName}) {
             {country.name}
             {isSelected ? (
               <span className="ml-2">
-                <CheckIcon />
+                <IconCheck />
               </span>
             ) : null}
           </div>
@@ -82,25 +82,4 @@ export function Countries({selectedCountry, getClassName}) {
       </Listbox.Option>
     );
   });
-}
-
-export function CheckIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        d="M7 10L9 12L13 8M19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10Z"
-        stroke="#FFFFFF"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
 }

@@ -3,7 +3,7 @@ import {
   useShop,
   useShopQuery,
   LocalizationProvider,
-  CacheHours,
+  CacheLong,
   gql,
 } from '@shopify/hydrogen';
 
@@ -27,7 +27,7 @@ export function Layout({children}) {
       headerMenuHandle: HEADER_MENU_HANDLE,
       footerMenuHandle: FOOTER_MENU_HANDLE,
     },
-    cache: CacheHours(),
+    cache: CacheLong(),
     preload: '*',
   });
 
@@ -68,8 +68,8 @@ export function Layout({children}) {
         <main role="main" id="mainContent" className="flex-grow">
           <Suspense fallback={null}>{children}</Suspense>
         </main>
-        <Footer menu={footerMenu} />
       </div>
+      <Footer menu={footerMenu} />
     </LocalizationProvider>
   );
 }

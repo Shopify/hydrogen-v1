@@ -8,7 +8,7 @@ export interface RuntimeContext {
   waitUntil: (fn: Promise<any>) => void;
 }
 
-interface RequestHandlerOptions {
+export interface RequestHandlerOptions {
   indexTemplate:
     | string
     | ((url: string) => Promise<string | {default: string}>);

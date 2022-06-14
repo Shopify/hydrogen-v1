@@ -3,7 +3,7 @@ import {
   useShopQuery,
   useShop,
   useSession,
-  NoStore,
+  CacheNone,
   gql,
   flattenConnection,
 } from '@shopify/hydrogen';
@@ -17,6 +17,7 @@ import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
 
 export function AccountDetails({customerAccessToken}) {
   if (!customerAccessToken) return null;
+
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
   const {data} = useShopQuery({
@@ -27,11 +28,10 @@ export function AccountDetails({customerAccessToken}) {
       country: countryCode,
     },
     preload: true,
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
-  const customer = data && data.customer;
-
+  const customer = data?.customer;
   const orders = flattenConnection(customer?.orders);
 
   const heading = customer

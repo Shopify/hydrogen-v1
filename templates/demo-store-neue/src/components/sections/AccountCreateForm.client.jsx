@@ -1,6 +1,8 @@
 import {useState} from 'react';
 import {useNavigate, Link} from '@shopify/hydrogen/client';
 
+import {emailValidation, passwordValidation} from '~/lib/utils';
+
 import {callLoginApi} from './LoginForm.client';
 
 export function AccountCreateForm() {
@@ -11,24 +13,6 @@ export function AccountCreateForm() {
   const [emailError, setEmailError] = useState(null);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(null);
-
-  function emailValidation(email) {
-    if (email.validity.valid) return null;
-
-    return email.validity.valueMissing
-      ? 'Please enter an email'
-      : 'Please enter a valid email';
-  }
-
-  function passwordValidation(password) {
-    if (password.validity.valid) return null;
-
-    if (password.validity.valueMissing) {
-      return 'Please enter a password';
-    }
-
-    return 'Password must be at least 6 characters';
-  }
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -149,7 +133,7 @@ export function AccountCreateForm() {
   );
 }
 
-function callAccountCreateApi({email, password, firstName, lastName}) {
+export function callAccountCreateApi({email, password, firstName, lastName}) {
   return fetch(`/account/register`, {
     method: 'POST',
     headers: {

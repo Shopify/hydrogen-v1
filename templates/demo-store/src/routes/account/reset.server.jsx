@@ -1,4 +1,4 @@
-import {NoStore, gql} from '@shopify/hydrogen';
+import {CacheNone, gql} from '@shopify/hydrogen';
 import {getApiErrorMessage} from '../../components/utilities/api.helper';
 
 /**
@@ -33,7 +33,7 @@ export async function api(request, {session, queryShop}) {
         resetToken: jsonBody.resetToken,
       },
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   if (data?.customerReset?.customerAccessToken?.accessToken !== null) {

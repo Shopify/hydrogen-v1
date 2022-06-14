@@ -167,6 +167,21 @@ export class HydrogenRequest extends Request {
   public getBuyerIp() {
     return this.headers.get(this.ctx.buyerIpHeader ?? 'x-forwarded-for');
   }
+
+  /**
+   * Build a `cacheKey` in the form of a `Request` to be used in full-page
+   * caching.
+   * - lockKey generates a placeholder cache key
+   */
+  public cacheKey(lockKey = false): Request {
+    const url = new URL(this.url);
+
+    if (lockKey) {
+      url.searchParams.set('cache-lock', 'true');
+    }
+
+    return new Request(url.href, this);
+  }
 }
 
 function mergeMapEntries(
