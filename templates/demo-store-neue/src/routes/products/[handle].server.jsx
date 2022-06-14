@@ -12,9 +12,13 @@ import {
 import {Layout} from '~/components/layouts';
 import {ProductSwimlane} from '~/components/sections';
 import {Section, Heading, Text} from '~/components/elements';
-import {NotFound} from '~/components/pages';
-import {MEDIA_FIELDS} from '~/lib/fragments';
-import {ProductGallery, ProductForm, ProductInfo} from '~/components/sections';
+import {MEDIA_FRAGMENT} from '~/lib/fragments';
+import {
+  NotFound,
+  ProductGallery,
+  ProductForm,
+  ProductInfo,
+} from '~/components/sections';
 
 export default function Product() {
   const {handle} = useRouteParams();
@@ -33,20 +37,16 @@ export default function Product() {
     preload: true,
   });
 
-  useServerAnalytics(
-    product
-      ? {
-          shopify: {
-            pageType: ShopifyAnalyticsConstants.pageType.product,
-            resourceId: product.id,
-          },
-        }
-      : null,
-  );
-
   if (!product) {
     return <NotFound type="product" />;
   }
+
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.product,
+      resourceId: product.id,
+    },
+  });
 
   return (
     <Layout>
@@ -80,7 +80,7 @@ export default function Product() {
 }
 
 const PRODUCT_QUERY = gql`
-  ${MEDIA_FIELDS}
+  ${MEDIA_FRAGMENT}
   query Product(
     $country: CountryCode
     $language: LanguageCode
