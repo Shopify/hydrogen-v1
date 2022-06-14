@@ -20,7 +20,7 @@ export function CartDetails() {
     <form className="grid grid-cols-1 h-screen grid-rows-[1fr_auto]">
       <section
         aria-labelledby="cart-contents"
-        className="overflow-auto md:p-8 px-4 py-6"
+        className="overflow-auto md:py-8 md:px-12 px-4 py-6"
       >
         <Heading as="h2" size="lead" id="cart-contents">
           Cart

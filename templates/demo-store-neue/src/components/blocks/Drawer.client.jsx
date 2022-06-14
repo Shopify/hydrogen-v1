@@ -1,5 +1,6 @@
 import {Dialog, Transition} from '@headlessui/react';
 import {Fragment, useState} from 'react';
+import {IconClose} from '../elements/Icon';
 
 /**
  * Drawer component that opens on user click.
@@ -36,6 +37,16 @@ function Drawer({open, onClose, children}) {
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="w-[35rem] transform bg-contrast text-left align-middle shadow-xl transition-all">
+                  <div className="absolute top-0 right-0 -ml-8 flex md:pt-8 md:pr-12 pt-6 pr-4">
+                    <button
+                      type="button"
+                      className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                      onClick={onClose}
+                    >
+                      <span className="sr-only">Close panel</span>
+                      <IconClose className="h-6 w-6" aria-hidden="true" />
+                    </button>
+                  </div>
                   {children}
                 </Dialog.Panel>
               </Transition.Child>
