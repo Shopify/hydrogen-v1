@@ -10,7 +10,8 @@ import {
 import {Cart} from './types';
 
 export function useCartFetch() {
-  const {storeDomain, storefrontApiVersion, storefrontToken} = useShop();
+  const {storeDomain, storefrontApiVersion, storefrontToken, storefrontId} =
+    useShop();
 
   return React.useCallback(
     <T, K>({
@@ -29,6 +30,7 @@ export function useCartFetch() {
             'X-SDK-Variant': 'hydrogen',
             'X-SDK-Version': storefrontApiVersion,
             'X-Shopify-Storefront-Access-Token': storefrontToken,
+            'X-Shopify-Storefront-Id': storefrontId,
           },
           body: JSON.stringify({
             query: query.toString(),

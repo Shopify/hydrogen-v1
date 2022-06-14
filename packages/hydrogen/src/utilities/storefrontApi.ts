@@ -42,6 +42,6 @@ export function getStorefrontApiRequestHeaders({
   return headers;
 }
 
-function getOxygenVariable(key: string): any {
+export function getOxygenVariable(key: string): any {
   return typeof Oxygen !== 'undefined' ? Oxygen?.env?.[key] : null;
 }

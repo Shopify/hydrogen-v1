@@ -7,10 +7,13 @@ import {DEFAULT_LOCALE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
+import {getOxygenVariable} from '../../utilities/storefrontApi';
+import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   const locale = shopifyConfig.defaultLocale ?? DEFAULT_LOCALE;
   const languageCode = locale.split(/[-_]/)[0];
+  const storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
   return {
     locale: locale.toUpperCase() as `${LanguageCode}-${CountryCode}`,
@@ -19,6 +22,7 @@ function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
     storefrontToken: shopifyConfig.storefrontToken,
     storefrontApiVersion: shopifyConfig.storefrontApiVersion,
     multipassSecret: shopifyConfig.multipassSecret,
+    storefrontId,
   };
 }
 
