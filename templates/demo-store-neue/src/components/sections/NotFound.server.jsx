@@ -1,9 +1,9 @@
 import {gql, useSession, useShop, useShopQuery} from '@shopify/hydrogen';
 
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {Layout} from '~/components/layouts';
-import {PageHeader, Text, Button} from '~/components/elements';
 import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
+import {PageHeader, Text, Button} from '~/components/elements';
 
 export function NotFound({type = 'page'}) {
   const {languageCode} = useShop();
@@ -41,7 +41,7 @@ export function NotFound({type = 'page'}) {
 }
 
 const NOT_FOUND_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {

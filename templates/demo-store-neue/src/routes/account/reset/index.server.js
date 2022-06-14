@@ -1,7 +1,6 @@
 import {CacheNone, gql} from '@shopify/hydrogen';
 import {getApiErrorMessage} from '~/lib/utils';
 
-// TODO: Is this a duplicate of /reset/index.server.js?
 /**
  * This API route is used by the form on `/account/reset/[id]/[resetToken]`
  * complete the reset of the user's password.

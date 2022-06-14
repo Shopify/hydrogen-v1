@@ -4,11 +4,10 @@ import {flattenConnection} from '@shopify/hydrogen';
 import {ProductCard} from '~/components/blocks';
 import {Grid} from '~/components/elements';
 
-export function ProductGrid({data}) {
+export function ProductGrid({collection}) {
   const nextButtonRef = useRef(null);
-  const initialProducts = data.collection.products.nodes;
-  const {hasNextPage, endCursor} = data.collection.products.pageInfo;
-
+  const initialProducts = collection?.products?.nodes || [];
+  const {hasNextPage, endCursor} = collection.products.pageInfo;
   const [products, setProducts] = useState(initialProducts);
   const [cursor, setCursor] = useState(endCursor);
   const [nextPage, setNextPage] = useState(hasNextPage);
@@ -16,14 +15,18 @@ export function ProductGrid({data}) {
 
   const fetchProducts = useCallback(async () => {
     setPending(true);
-    // TODO: Update this logic to use Hydrogen hooks (URL, fetchSync) where appropriate.
     const url = new URL(window.location.href);
     url.searchParams.set('cursor', cursor);
 
     const response = await fetch(url, {method: 'POST'});
-    const json = await response.json();
-    const newProducts = flattenConnection(json.data.collection.products);
-    const {endCursor, hasNextPage} = json.data.collection.products.pageInfo;
+    const {data} = await response.json();
+
+    // ProductGrid can paginate collections.products or products all routes
+    const newProducts = flattenConnection(
+      data?.collection?.products || data?.products || [],
+    );
+    const {endCursor, hasNextPage} = data?.collection?.products?.pageInfo ||
+      data?.products?.pageInfo || {endCursor: '', hasNextPage: false};
 
     setProducts([...products, ...newProducts]);
     setCursor(endCursor);
@@ -67,7 +70,7 @@ export function ProductGrid({data}) {
 
       {nextPage && (
         <button
-          className={`bg-white border border-gray-50 font-medium p-2 disabled:bg-gray-50`}
+          className={`bg-white border dark:text-black border-gray-50 font-medium p-2 disabled:bg-gray-50`}
           disabled={pending}
           onClick={fetchProducts}
           ref={nextButtonRef}

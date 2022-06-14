@@ -3,7 +3,7 @@ import {useCallback} from 'react';
 
 import {Text, Button} from '~/components/elements';
 
-export function DeleteAddress({addressId}) {
+export function AccountDeleteAddress({addressId}) {
   const {serverProps, setServerProps} = useServerProps();
 
   const close = useCallback(() => {
@@ -13,7 +13,6 @@ export function DeleteAddress({addressId}) {
   async function deleteAddress(id) {
     const response = await callDeleteAddressApi(id);
     if (response.error) {
-      // TODO: improve error handling UI
       alert(response.error);
       return;
     }

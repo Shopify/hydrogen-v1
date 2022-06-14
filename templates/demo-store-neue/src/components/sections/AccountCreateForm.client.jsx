@@ -3,7 +3,7 @@ import {useNavigate, Link} from '@shopify/hydrogen/client';
 
 import {emailValidation, passwordValidation} from '~/lib/utils';
 
-import {callLoginApi} from './LoginForm.client';
+import {callLoginApi} from './AccountLoginForm.client';
 
 export function AccountCreateForm() {
   const navigate = useNavigate();

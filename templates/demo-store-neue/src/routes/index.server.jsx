@@ -17,7 +17,7 @@ import {
   ProductSwimlane,
 } from '~/components/sections';
 
-import {MEDIA_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 
 export default function Homepage() {
   const {languageCode} = useShop();
@@ -31,9 +31,6 @@ export default function Homepage() {
     },
     preload: true,
   });
-
-  // TODO: Make Hero Banners match to collections if these don't
-  // const heroBanners = data?.heroBanners?.nodes;
 
   const {heroBanners, featuredCollections, featuredProducts} = data;
 
@@ -76,7 +73,8 @@ function SeoForHomepage() {
     preload: true,
   });
 
-  // TODO: SEO for Homepage doesn't have the titleTemplate prop and so it presents poorly. The SEO Component as a whole should get another look at.
+  // TODO: SEO for Homepage doesn't have the titleTemplate prop and so it presents poorly.
+  // The SEO Component as a whole should get another look at.
   return (
     <Seo
       type="homepage"
@@ -97,8 +95,8 @@ const HOMEPAGE_SEO_QUERY = gql`
 `;
 
 const HOMEPAGE_CONTENT_QUERY = gql`
-  ${MEDIA_FIELDS}
-  ${PRODUCT_CARD_FIELDS}
+  ${MEDIA_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
     heroBanners: collections(

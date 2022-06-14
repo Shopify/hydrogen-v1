@@ -17,7 +17,7 @@ import {
 } from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 
 export default function Search({pageBy = 12, params}) {
   const {languageCode} = useShop();
@@ -101,7 +101,7 @@ function SearchPage({query, children}) {
 }
 
 const SEARCH_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query search(
     $query: String
     $country: CountryCode
