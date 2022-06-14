@@ -15,6 +15,7 @@ import type {
   ResolvedHydrogenRoutes,
   RequestHandler,
 } from './types';
+import type {RuntimeContext, RequestHandlerOptions} from './shared-types';
 import {Html, applyHtmlHead} from './foundation/Html/Html';
 import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
 import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
@@ -31,7 +32,7 @@ import {
 } from './utilities/apiRoutes';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import {isBotUA} from './utilities/bot-ua';
-import {setCache} from './foundation/runtime';
+import {getCache, setCache} from './foundation/runtime';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
@@ -39,15 +40,22 @@ import {
   createFromReadableStream,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME, EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from './constants';
+import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {setLogger, RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
-import {ServerAnalyticsRoute} from './foundation/Analytics/ServerAnalyticsRoute.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
 import {htmlEncode} from './utilities';
 import {splitCookiesString} from 'set-cookie-parser';
+import {
+  deleteItemFromCache,
+  getItemFromCache,
+  isStale,
+  setItemInCache,
+} from './foundation/Cache/cache';
+import {CacheShort, NO_STORE} from './foundation/Cache/strategies';
+import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes';
 
 declare global {
   // This is provided by a Vite plugin
@@ -62,15 +70,7 @@ const HTML_CONTENT_TYPE = 'text/html; charset=UTF-8';
 
 export const renderHydrogen = (App: any) => {
   const handleRequest: RequestHandler = async function (rawRequest, options) {
-    const {
-      dev,
-      nonce,
-      cache,
-      context,
-      buyerIpHeader,
-      indexTemplate,
-      streamableResponse: nodeResponse,
-    } = options;
+    const {cache, context, buyerIpHeader} = options;
 
     const request = new HydrogenRequest(rawRequest);
     const url = new URL(request.url);
@@ -109,32 +109,33 @@ export const renderHydrogen = (App: any) => {
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
      */
     request.ctx.runtime = context;
-    setCache(cache);
+    if (!context?.waitUntil) {
+      const runtimeContext: RuntimeContext = {
+        waitUntil: (fn: Promise<any>) => {
+          setTimeout(() => fn, 0);
+        },
+      };
 
-    if (
-      url.pathname === EVENT_PATHNAME ||
-      EVENT_PATHNAME_REGEX.test(url.pathname)
-    ) {
-      return ServerAnalyticsRoute(
-        request,
-        hydrogenConfig.serverAnalyticsConnectors
-      );
+      request.ctx.runtime = runtimeContext;
     }
 
-    const isRSCRequest = url.pathname === RSC_PATHNAME;
-    const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
+    setCache(cache);
 
-    // The API Route might have a default export, making it also a server component
-    // If it does, only render the API route if the request method is GET
-    if (
-      apiRoute &&
-      (!apiRoute.hasServerComponent || request.method !== 'GET')
-    ) {
+    const builtInRouteResource = getBuiltInRoute(url);
+
+    if (builtInRouteResource) {
       const apiResponse = await renderApiRoute(
         request,
-        apiRoute,
-        hydrogenConfig.shopify,
-        sessionApi
+        {
+          resource: builtInRouteResource,
+          params: {},
+          hasServerComponent: false,
+        },
+        hydrogenConfig,
+        {
+          session: sessionApi,
+          suppressLog: true,
+        }
       );
 
       return apiResponse instanceof Request
@@ -142,36 +143,66 @@ export const renderHydrogen = (App: any) => {
         : apiResponse;
     }
 
-    const state: Record<string, any> = isRSCRequest
-      ? parseJSON(url.searchParams.get('state') || '{}')
-      : {pathname: url.pathname, search: url.search};
+    // Check if we have cached response
+    if (cache) {
+      const cachedResponse = await getItemFromCache(request.cacheKey());
+      if (cachedResponse) {
+        if (isStale(request, cachedResponse)) {
+          const lockCacheKey = request.cacheKey(true);
+          const staleWhileRevalidate = async (
+            lockExists: Response | undefined
+          ) => {
+            if (lockExists) return;
+            try {
+              // Don't stream when creating a response for cache
+              response.doNotStream();
 
-    const rsc = runRSC({App, state, log, request, response});
+              await setItemInCache(
+                lockCacheKey,
+                new Response(null),
+                CacheShort({
+                  maxAge: 10,
+                })
+              );
 
-    if (isRSCRequest) {
-      const buffered = await bufferReadableStream(rsc.readable.getReader());
-      postRequestTasks('rsc', 200, request, response);
+              await processRequest(
+                handleRequest,
+                App,
+                url,
+                request,
+                sessionApi,
+                options,
+                response,
+                hydrogenConfig,
+                true
+              );
+            } catch (e: any) {
+              log.error('Cache revalidate error', e);
+            } finally {
+              await deleteItemFromCache(lockCacheKey);
+            }
+          };
+          const revalidatingPromise =
+            getItemFromCache(lockCacheKey).then(staleWhileRevalidate);
 
-      return new Response(buffered, {
-        headers: {'cache-control': response.cacheControlHeader},
-      });
+          // Asynchronously wait for it in workers
+          request.ctx.runtime?.waitUntil(revalidatingPromise);
+        }
+
+        return cachedResponse;
+      }
     }
 
-    if (isBotUA(url, request.headers.get('user-agent'))) {
-      response.doNotStream();
-    }
-
-    return runSSR({
-      log,
-      dev,
-      rsc,
-      nonce,
-      state,
+    return processRequest(
+      handleRequest,
+      App,
+      url,
       request,
+      sessionApi,
+      options,
       response,
-      nodeResponse,
-      template: await getTemplate(indexTemplate, url),
-    });
+      hydrogenConfig
+    );
   };
 
   if (__HYDROGEN_WORKER__) return handleRequest;
@@ -182,6 +213,74 @@ export const renderHydrogen = (App: any) => {
       options.streamableResponse
     )) as RequestHandler;
 };
+
+async function processRequest(
+  handleRequest: RequestHandler,
+  App: any,
+  url: URL,
+  request: HydrogenRequest,
+  sessionApi: any,
+  options: RequestHandlerOptions,
+  response: HydrogenResponse,
+  hydrogenConfig: ResolvedHydrogenConfig,
+  revalidate = false
+) {
+  const {dev, nonce, indexTemplate, streamableResponse: nodeResponse} = options;
+
+  const log = getLoggerWithContext(request);
+  const isRSCRequest = url.pathname === RSC_PATHNAME;
+  const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
+
+  // The API Route might have a default export, making it also a server component
+  // If it does, only render the API route if the request method is GET
+  if (apiRoute && (!apiRoute.hasServerComponent || request.method !== 'GET')) {
+    const apiResponse = await renderApiRoute(
+      request,
+      apiRoute,
+      hydrogenConfig,
+      {
+        session: sessionApi,
+      }
+    );
+
+    return apiResponse instanceof Request
+      ? handleRequest(apiResponse, options)
+      : apiResponse;
+  }
+
+  const state: Record<string, any> = isRSCRequest
+    ? parseJSON(url.searchParams.get('state') || '{}')
+    : {pathname: url.pathname, search: url.search};
+
+  const rsc = runRSC({App, state, log, request, response});
+
+  if (isRSCRequest) {
+    const buffered = await bufferReadableStream(rsc.readable.getReader());
+    postRequestTasks('rsc', 200, request, response);
+    cacheResponse(response, request, [buffered], revalidate);
+
+    return new Response(buffered, {
+      headers: {'cache-control': response.cacheControlHeader},
+    });
+  }
+
+  if (isBotUA(url, request.headers.get('user-agent'))) {
+    response.doNotStream();
+  }
+
+  return runSSR({
+    log,
+    dev,
+    rsc,
+    nonce,
+    state,
+    request,
+    response,
+    nodeResponse,
+    template: await getTemplate(indexTemplate, url),
+    revalidate,
+  });
+}
 
 async function getTemplate(
   indexTemplate:
@@ -240,6 +339,7 @@ async function runSSR({
   nonce,
   dev,
   log,
+  revalidate,
 }: RunSsrParams) {
   let ssrDidError: Error | undefined;
   const didError = () => rsc.didError() ?? ssrDidError;
@@ -297,6 +397,7 @@ async function runSSR({
     const transform = new TransformStream();
     const writable = transform.writable.getWriter();
     const responseOptions = {} as ResponseOptions;
+    const savedChunks = tagOnWrite(writable);
 
     let ssrReadable: Awaited<ReturnType<typeof ssrRenderToReadableStream>>;
 
@@ -405,8 +506,11 @@ async function runSSR({
         }
 
         // Last SSR write might be pending, delay closing the writable one tick
-        setTimeout(() => writable.close(), 0);
-        postRequestTasks('str', responseOptions.status, request, response);
+        setTimeout(() => {
+          writable.close();
+          postRequestTasks('str', responseOptions.status, request, response);
+          cacheResponse(response, request, savedChunks, revalidate);
+        }, 0);
       });
     } else {
       // Redirects do not write body
@@ -424,6 +528,8 @@ async function runSSR({
 
     return new Response(bufferedBody, responseOptions);
   } else if (nodeResponse) {
+    const savedChunks = tagOnWrite(nodeResponse);
+
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -460,9 +566,12 @@ async function runSSR({
       async onAllReady() {
         log.trace('node complete ssr');
 
-        if (response.canStream() || nodeResponse.writableEnded) {
+        if (
+          !revalidate &&
+          (response.canStream() || nodeResponse.writableEnded)
+        ) {
           postRequestTasks('str', nodeResponse.statusCode, request, response);
-
+          cacheResponse(response, request, savedChunks, revalidate);
           return;
         }
 
@@ -492,6 +601,7 @@ async function runSSR({
           if (!error) {
             html = assembleHtml({ssrHtml, rscPayload, request, template});
             postRequestTasks('ssr', nodeResponse.statusCode, request, response);
+            cacheResponse(response, request, [html], revalidate);
           }
 
           nodeResponse.write(html);
@@ -712,5 +822,105 @@ function setNodeHeaders(headers: Headers, nodeResponse: ServerResponse) {
     } else {
       nodeResponse.setHeader(key, value);
     }
+  }
+}
+
+function tagOnWrite(
+  response: ServerResponse | WritableStreamDefaultWriter<any>
+) {
+  const originalWrite = response.write;
+  const decoder = new TextDecoder();
+  const savedChunks: string[] = [];
+
+  response.write = (arg: any) => {
+    if (arg instanceof Uint8Array) {
+      savedChunks.push(decoder.decode(arg));
+    } else {
+      savedChunks.push(arg);
+    }
+    // @ts-ignore
+    return originalWrite.apply(response, [arg]);
+  };
+
+  return savedChunks;
+}
+
+async function cacheResponse(
+  response: HydrogenResponse,
+  request: HydrogenRequest,
+  chunks: string[],
+  revalidate?: Boolean
+) {
+  const cache = getCache();
+
+  /**
+   * Only cache on cachable responses where response
+   *
+   * - have content to cache
+   * - have status 200
+   * - does not have no-store on cache-control header
+   * - does not have set-cookie header
+   * - is not a POST request
+   * - does not have a session or does not have an active customer access token
+   */
+  if (
+    cache &&
+    chunks.length > 0 &&
+    response.status === 200 &&
+    response.cache().mode !== NO_STORE &&
+    !response.headers.has('Set-Cookie') &&
+    !/post/i.test(request.method) &&
+    !sessionHasCustomerAccessToken(request)
+  ) {
+    if (revalidate) {
+      await saveCacheResponse(response, request, chunks);
+    } else {
+      request.ctx.runtime?.waitUntil(
+        Promise.resolve(true).then(() =>
+          saveCacheResponse(response, request, chunks)
+        )
+      );
+    }
+  }
+}
+
+function sessionHasCustomerAccessToken(request: HydrogenRequest) {
+  const session = request.ctx.session;
+  // Need to wrap this in a try catch because session.get can
+  // throw a promise if it is not ready
+  try {
+    const sessionData = session?.get();
+    return sessionData && sessionData['customerAccessToken'];
+  } catch (error) {
+    return false;
+  }
+}
+
+async function saveCacheResponse(
+  response: HydrogenResponse,
+  request: HydrogenRequest,
+  chunks: string[]
+) {
+  const cache = getCache();
+
+  if (cache && chunks.length > 0) {
+    const {headers, status, statusText} = getResponseOptions(response);
+    const url = new URL(request.url);
+
+    headers.set('cache-control', response.cacheControlHeader);
+    const currentHeader = headers.get('Content-Type');
+    if (!currentHeader && url.pathname !== RSC_PATHNAME) {
+      headers.set('Content-Type', HTML_CONTENT_TYPE);
+    }
+
+    await setItemInCache(
+      request.cacheKey(),
+      new Response(chunks.join(''), {
+        status,
+        statusText,
+        headers,
+      }),
+      response.cache()
+    );
   }
 }

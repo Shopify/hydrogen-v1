@@ -1,7 +1,7 @@
 import {
   Seo,
   useShopQuery,
-  NoStore,
+  CacheNone,
   flattenConnection,
   gql,
 } from '@shopify/hydrogen';
@@ -16,15 +16,12 @@ export default function AccountDetails({customerAccessToken}) {
     variables: {
       customerAccessToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const customer = data && data.customer;
 
-  const orders =
-    customer?.orders?.edges.length > 0
-      ? flattenConnection(customer.orders)
-      : [];
+  const orders = flattenConnection(customer?.orders);
 
   const pageHeader = customer
     ? `Welcome ${customer.firstName || customer.email}!`

@@ -1,8 +1,8 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
 import {flattenConnection} from '@shopify/hydrogen';
 
-import {Grid} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
+import {Grid} from '~/components/elements';
 
 export function ProductGrid({data}) {
   const nextButtonRef = useRef(null);
@@ -59,7 +59,7 @@ export function ProductGrid({data}) {
 
   return (
     <>
-      <Grid>
+      <Grid layout="products">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

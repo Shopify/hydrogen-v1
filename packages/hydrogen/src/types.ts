@@ -32,6 +32,7 @@ export type RunSsrParams = {
   template: string;
   nonce?: string;
   nodeResponse?: ServerResponse;
+  revalidate?: Boolean;
 };
 
 export type RunRscParams = {
@@ -102,6 +103,7 @@ export type ClientHandler = (
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
+  nodes?: T[];
 }
 
 export type ParsedMetafield = Omit<

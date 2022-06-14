@@ -38,6 +38,7 @@ const generateId =
 
 // Stores queries by url or '*'
 const preloadCache: AllPreloadQueries = new Map();
+const previouslyLoadedUrls: Record<string, number> = {};
 const PRELOAD_ALL = '*';
 
 /**
@@ -105,6 +106,16 @@ export class HydrogenRequest extends Request {
     this.cookies = this.parseCookies();
   }
 
+  public previouslyLoadedRequest() {
+    if (previouslyLoadedUrls[this.normalizedUrl] > 1) return true;
+    previouslyLoadedUrls[this.normalizedUrl] = previouslyLoadedUrls[
+      this.normalizedUrl
+    ]
+      ? 2
+      : 1;
+    return false;
+  }
+
   private parseCookies() {
     const cookieString = this.headers.get('cookie') || '';
 
@@ -155,6 +166,21 @@ export class HydrogenRequest extends Request {
    */
   public getBuyerIp() {
     return this.headers.get(this.ctx.buyerIpHeader ?? 'x-forwarded-for');
+  }
+
+  /**
+   * Build a `cacheKey` in the form of a `Request` to be used in full-page
+   * caching.
+   * - lockKey generates a placeholder cache key
+   */
+  public cacheKey(lockKey = false): Request {
+    const url = new URL(this.url);
+
+    if (lockKey) {
+      url.searchParams.set('cache-lock', 'true');
+    }
+
+    return new Request(url.href, this);
   }
 }
 

@@ -17,6 +17,7 @@ import {RSC_PATHNAME} from './constants';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
+import {ClientAnalytics} from './foundation/Analytics/';
 
 const DevTools = React.lazy(() => import('./components/DevTools.client'));
 
@@ -245,6 +246,8 @@ function useServerResponse(state: any) {
       /* @ts-ignore */
       window.BOOMR.plugins.Hydrogen.trackSubPageLoadPerformance();
     }
+
+    ClientAnalytics.resetPageAnalyticsData();
 
     // Request a new flight response.
     response = createFromFetch(

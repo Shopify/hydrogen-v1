@@ -12,7 +12,7 @@ import {
   setItemInCache,
 } from '../Cache/cache-sub-request';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {CacheSeconds, NO_STORE} from '../Cache/strategies';
+import {CacheShort, NO_STORE} from '../Cache/strategies';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -136,7 +136,7 @@ function cachedQueryFnBuilder<T>(
             await setItemInCache(
               lockKey,
               true,
-              CacheSeconds({
+              CacheShort({
                 maxAge: 10,
               })
             );

@@ -1,5 +1,5 @@
 // import Multipassify from 'multipassify';
-import {NoStore, gql} from '@shopify/hydrogen';
+import {CacheNone, gql} from '@shopify/hydrogen';
 import shopifyConfig from '../../../hydrogen.config';
 
 export async function api(request, {session, queryShop}) {
@@ -20,7 +20,7 @@ export async function api(request, {session, queryShop}) {
     variables: {
       multipassToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   if (

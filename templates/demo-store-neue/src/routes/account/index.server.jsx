@@ -1,34 +1,55 @@
 import {
-  Seo,
-  useSession,
-  NoStore,
-  useShopQuery,
+  CacheNone,
   flattenConnection,
   gql,
+  Seo,
+  useSession,
+  useShop,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
+import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 import {Layout} from '~/components/layouts';
-import {LogoutButton} from '~/components/elements';
-import {AccountDetails} from '~/components/pages';
+import {Modal} from '~/components/blocks';
+import {PageHeader, LogoutButton} from '~/components/elements';
 import {getApiErrorMessage} from '~/lib/utils';
+import {
+  AccountDetails,
+  AddressBook,
+  DeleteAddress,
+  EditAccountDetails,
+  EditAddress,
+  FeaturedCollections,
+  OrderHistory,
+  ProductSwimlane,
+} from '~/components/sections';
 
-export default function Account({response, editingAccount, editingAddress}) {
-  response.cache(NoStore());
+export default function Account({
+  response,
+  editingAccount,
+  editingAddress,
+  deletingAddress,
+}) {
+  response.cache(CacheNone());
 
-  const {customerAccessToken} = useSession();
+  const {customerAccessToken, countryCode = 'US'} = useSession();
 
   if (!customerAccessToken) return response.redirect('/account/login');
+
+  const {languageCode} = useShop();
 
   const {data} = useShopQuery({
     query: CUSTOMER_QUERY,
     variables: {
       customerAccessToken,
+      language: languageCode,
+      country: countryCode,
       withAddressDetails: !!editingAddress,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
-  const customer = data.customer;
+  const {customer, featuredCollections, featuredProducts} = data;
 
   if (!customer) return response.redirect('/account/login');
 
@@ -43,44 +64,125 @@ export default function Account({response, editingAccount, editingAddress}) {
     customer.defaultAddress.id.lastIndexOf('?'),
   );
 
-  if (editingAccount)
+  if (editingAccount) {
     return (
-      <Layout>
-        <Seo type="noindex" data={{title: 'Account details'}} />
-        {/* <EditAccountDetails
-          firstName={customer.firstName}
-          lastName={customer.lastName}
-          phone={customer.phone}
-          email={customer.email}
-        /> */}
-      </Layout>
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
+        />
+        <Modal closeModalProp="editingAccount">
+          <Seo type="noindex" data={{title: 'Account details'}} />
+          <EditAccountDetails
+            firstName={customer.firstName}
+            lastName={customer.lastName}
+            phone={customer.phone}
+            email={customer.email}
+          />
+        </Modal>
+      </>
     );
+  }
 
   if (editingAddress) {
     const addressToEdit = addresses.find(
       (address) => address.id === editingAddress,
     );
-
     return (
-      <Layout>
-        <Seo
-          type="noindex"
-          data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
         />
-        {/* <EditAddress
-          address={addressToEdit}
-          defaultAddress={defaultAddress === editingAddress}
-        /> */}
-      </Layout>
+        <Modal closeModalProp="editingAddress">
+          <Seo
+            type="noindex"
+            data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
+          />
+          <EditAddress
+            address={addressToEdit}
+            defaultAddress={defaultAddress === editingAddress}
+          />
+        </Modal>
+      </>
+    );
+  }
+
+  if (deletingAddress) {
+    const addressToDelete = addresses.find(
+      (address) => address.id === deletingAddress,
+    );
+    return (
+      <>
+        <AuthenticatedAccount
+          customer={customer}
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+          featuredCollections={featuredCollections}
+          featuredProducts={featuredProducts}
+        />
+        <Modal closeModalProp="deletingAddress">
+          <Seo type="noindex" data={{title: 'Delete address'}} />
+          <DeleteAddress addressId={addressToDelete.originalId} />
+        </Modal>
+      </>
     );
   }
 
   return (
-    <AuthenticatedAccount
-      customer={customer}
-      addresses={addresses}
-      defaultAddress={defaultAddress}
-    />
+    <>
+      <AuthenticatedAccount
+        customer={customer}
+        addresses={addresses}
+        defaultAddress={defaultAddress}
+        featuredCollections={featuredCollections}
+        featuredProducts={featuredProducts}
+      />
+    </>
+  );
+}
+
+function AuthenticatedAccount({
+  customer,
+  addresses,
+  defaultAddress,
+  featuredCollections,
+  featuredProducts,
+}) {
+  const orders = flattenConnection(customer?.orders) || [];
+
+  const heading = customer
+    ? customer.firstName
+      ? `Welcome, ${customer.firstName}.`
+      : `Welcome to your account.`
+    : 'Account Details';
+
+  return (
+    <Layout>
+      <Seo type="noindex" data={{title: 'Account details'}} />
+      <PageHeader heading={heading}>
+        <LogoutButton>Sign out</LogoutButton>
+      </PageHeader>
+      {orders && <OrderHistory orders={orders} />}
+      <AccountDetails
+        firstName={customer.firstName}
+        lastName={customer.lastName}
+        phone={customer.phone}
+        email={customer.email}
+      />
+      <AddressBook defaultAddress={defaultAddress} addresses={addresses} />
+      <FeaturedCollections
+        title="Popular Collections"
+        data={featuredCollections.nodes}
+      />
+      <ProductSwimlane data={featuredProducts.nodes} />
+    </Layout>
   );
 }
 
@@ -90,6 +192,14 @@ export async function api(request, {session, queryShop}) {
       status: 405,
       headers: {
         Allow: 'PATCH',
+      },
+    });
+
+  if (request.method !== 'DELETE')
+    return new Response(null, {
+      status: 405,
+      headers: {
+        Allow: 'DELETE',
       },
     });
 
@@ -113,7 +223,7 @@ export async function api(request, {session, queryShop}) {
       customer,
       customerAccessToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const error = getApiErrorMessage('customerUpdate', data, errors);
@@ -123,79 +233,42 @@ export async function api(request, {session, queryShop}) {
   return new Response(null);
 }
 
-function AuthenticatedAccount({customer}) {
-  // TODO: add addresses, defaultAddress to props
-  // const orders =
-  //   customer?.orders?.edges.length > 0
-  //     ? flattenConnection(customer.orders)
-  //     : [];
-
-  const pageHeader = customer?.firstName
-    ? `Hi ${customer.firstName}.`
-    : 'Welcome to your account.';
-
-  return (
-    <Layout>
-      <Seo type="noindex" data={{title: 'Account details'}} />
-      <div className="flex justify-center mt-10">
-        <div className="w-full max-w-md">
-          <h1 className="text-5xl">{pageHeader}</h1>
-          {customer?.firstName ? (
-            <div className="mt-2">Welcome to your account.</div>
-          ) : null}
-          <div className="flex">
-            <span className="flex-1"></span>
-            <LogoutButton className="font-medium underline" />
-          </div>
-          {/* <OrderHistory orders={orders} /> */}
-          <AccountDetails
-            firstName={customer.firstName}
-            lastName={customer.lastName}
-            phone={customer.phone}
-            email={customer.email}
-          />
-          {/* <AddressBook defaultAddress={defaultAddress} addresses={addresses} /> */}
-        </div>
-      </div>
-    </Layout>
-  );
-}
-
 const CUSTOMER_QUERY = gql`
+  ${PRODUCT_CARD_FIELDS}
   query CustomerDetails(
     $customerAccessToken: String!
     $withAddressDetails: Boolean!
-  ) {
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
     customer(customerAccessToken: $customerAccessToken) {
       firstName
       lastName
       phone
       email
-
       defaultAddress {
         id
         formatted
       }
-
       addresses(first: 6) {
         edges {
           node {
             id
             formatted
-            firstName @include(if: $withAddressDetails)
-            lastName @include(if: $withAddressDetails)
+            firstName
+            lastName
             company @include(if: $withAddressDetails)
             address1 @include(if: $withAddressDetails)
             address2 @include(if: $withAddressDetails)
             country @include(if: $withAddressDetails)
             province @include(if: $withAddressDetails)
             city @include(if: $withAddressDetails)
+            zip @include(if: $withAddressDetails)
             phone @include(if: $withAddressDetails)
           }
         }
       }
-
-      orders(first: 250) {
+      orders(first: 250, sortKey: PROCESSED_AT, reverse: true) {
         edges {
           node {
             id
@@ -218,10 +291,29 @@ const CUSTOMER_QUERY = gql`
                       width
                     }
                   }
+                  title
                 }
               }
             }
           }
+        }
+      }
+    }
+    featuredProducts: products(first: 12) {
+      nodes {
+        ...ProductCardFields
+      }
+    }
+    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
+      nodes {
+        id
+        title
+        handle
+        image {
+          altText
+          width
+          height
+          url
         }
       }
     }

@@ -1,6 +1,6 @@
 import {Suspense} from 'react';
 import {
-  CacheDays,
+  CacheLong,
   gql,
   Seo,
   ShopifyAnalyticsConstants,
@@ -14,15 +14,10 @@ import {Layout} from '~/components/layouts';
 import {
   FeaturedCollections,
   Hero,
-  LocationsGrid,
   ProductSwimlane,
 } from '~/components/sections';
 
-import {
-  LOCATION_CARD_FIELDS,
-  MEDIA_FIELDS,
-  PRODUCT_CARD_FIELDS,
-} from '~/lib/fragments';
+import {MEDIA_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 
 export default function Homepage() {
   const {languageCode} = useShop();
@@ -40,7 +35,7 @@ export default function Homepage() {
   // TODO: Make Hero Banners match to collections if these don't
   // const heroBanners = data?.heroBanners?.nodes;
 
-  const {heroBanners, featuredCollections, featuredProducts, locations} = data;
+  const {heroBanners, featuredCollections, featuredProducts} = data;
 
   useServerAnalytics({
     shopify: {
@@ -56,17 +51,16 @@ export default function Homepage() {
       {heroBanners?.nodes[0] && (
         <Hero data={heroBanners?.nodes[0]} height="full" top />
       )}
-      <FeaturedCollections
-        data={featuredCollections.nodes}
-        title="Collections"
-      />
-      {heroBanners?.nodes[1] && <Hero data={heroBanners.nodes[1]} />}
       <ProductSwimlane
         data={featuredProducts.nodes}
         title="Featured Products"
         divider="bottom"
       />
-      <LocationsGrid data={locations.nodes} />
+      {heroBanners?.nodes[1] && <Hero data={heroBanners.nodes[1]} />}
+      <FeaturedCollections
+        data={featuredCollections.nodes}
+        title="Collections"
+      />
     </Layout>
   );
 }
@@ -78,7 +72,7 @@ function SeoForHomepage() {
     },
   } = useShopQuery({
     query: HOMEPAGE_SEO_QUERY,
-    cache: CacheDays(),
+    cache: CacheLong(),
     preload: true,
   });
 
@@ -105,39 +99,48 @@ const HOMEPAGE_SEO_QUERY = gql`
 const HOMEPAGE_CONTENT_QUERY = gql`
   ${MEDIA_FIELDS}
   ${PRODUCT_CARD_FIELDS}
-  ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
-    heroBanners: contentEntries(type: "hero_banners", first: 2) {
+    heroBanners: collections(
+      first: 10
+      query: "collection_type:custom"
+      sortKey: UPDATED_AT
+    ) {
       nodes {
-        title: field(key: "title") {
+        id
+        handle
+        title: metafield(namespace: "hero", key: "title") {
           value
         }
-        byline: field(key: "byline") {
+        byline: metafield(namespace: "hero", key: "byline") {
           value
         }
-        cta: field(key: "cta") {
+        cta: metafield(namespace: "hero", key: "cta") {
           value
         }
-        url: field(key: "url") {
-          value
-        }
-        spread: field(key: "spread") {
+        spread: metafield(namespace: "hero", key: "spread") {
           reference {
             ...MediaFields
           }
         }
-        spread_secondary: field(key: "spread_secondary") {
+        spread_secondary: metafield(
+          namespace: "hero"
+          key: "spread_secondary"
+        ) {
           reference {
             ...MediaFields
           }
         }
-        text_color: field(key: "text_color") {
+        text_color: metafield(namespace: "hero", key: "text_color") {
           value
         }
       }
     }
-    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
+    featuredCollections: collections(
+      first: 3
+      query: "collection_type:smart"
+      sortKey: UPDATED_AT
+    ) {
       nodes {
         id
         title
@@ -153,11 +156,6 @@ const HOMEPAGE_CONTENT_QUERY = gql`
     featuredProducts: products(first: 12) {
       nodes {
         ...ProductCardFields
-      }
-    }
-    locations: contentEntries(first: 3, type: "stores") {
-      nodes {
-        ...LocationCardFields
       }
     }
   }

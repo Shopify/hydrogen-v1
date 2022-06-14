@@ -8,7 +8,7 @@ import {PasswordResetForm} from '~/components/sections';
  * It should only be accessed by a link emailed to the user after
  * they initiate a password reset from `/account/recover`.
  */
-export default function Reset() {
+export default function ResetPassword() {
   const {id, resetToken} = useRouteParams();
 
   return (

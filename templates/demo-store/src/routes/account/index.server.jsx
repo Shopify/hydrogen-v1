@@ -1,7 +1,7 @@
 import {
   Seo,
   useSession,
-  NoStore,
+  CacheNone,
   useShopQuery,
   flattenConnection,
   gql,
@@ -17,7 +17,7 @@ import EditAccountDetails from '../../components/account/EditAccountDetails.clie
 import EditAddress from '../../components/account/EditAddress.client';
 
 export default function Account({response, editingAccount, editingAddress}) {
-  response.cache(NoStore());
+  response.cache(CacheNone());
 
   const {customerAccessToken} = useSession();
 
@@ -29,7 +29,7 @@ export default function Account({response, editingAccount, editingAddress}) {
       customerAccessToken,
       withAddressDetails: !!editingAddress,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const customer = data.customer;
@@ -117,7 +117,7 @@ export async function api(request, {session, queryShop}) {
       customer,
       customerAccessToken,
     },
-    cache: NoStore(),
+    cache: CacheNone(),
   });
 
   const error = getApiErrorMessage('customerUpdate', data, errors);
@@ -128,10 +128,7 @@ export async function api(request, {session, queryShop}) {
 }
 
 function AuthenticatedAccount({customer, addresses, defaultAddress}) {
-  const orders =
-    customer?.orders?.edges.length > 0
-      ? flattenConnection(customer.orders)
-      : [];
+  const orders = flattenConnection(customer?.orders);
 
   const pageHeader = customer?.firstName
     ? `Hi ${customer.firstName}.`

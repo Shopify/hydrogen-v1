@@ -33,7 +33,7 @@ export function generateCacheControlHeader(
   return cacheControl.join(', ');
 }
 
-export function NoStore(): NoStoreStrategy {
+export function CacheNone(): NoStoreStrategy {
   return {
     mode: NO_STORE,
   };
@@ -49,10 +49,7 @@ function guardExpirableModeType(overrideOptions?: CachingStrategy) {
   }
 }
 
-// 10 seconds
-export function CacheSeconds(
-  overrideOptions?: CachingStrategy
-): AllCacheOptions {
+export function CacheShort(overrideOptions?: CachingStrategy): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
     mode: PUBLIC,
@@ -62,61 +59,12 @@ export function CacheSeconds(
   };
 }
 
-// 30 minutes
-export function CacheMinutes(
-  overrideOptions?: CachingStrategy
-): AllCacheOptions {
+export function CacheLong(overrideOptions?: CachingStrategy): AllCacheOptions {
   guardExpirableModeType(overrideOptions);
   return {
     mode: PUBLIC,
-    maxAge: 900,
-    staleWhileRevalidate: 900,
-    ...overrideOptions,
-  };
-}
-
-// 1 hour
-export function CacheHours(overrideOptions?: CachingStrategy): AllCacheOptions {
-  guardExpirableModeType(overrideOptions);
-  return {
-    mode: PUBLIC,
-    maxAge: 1800,
-    staleWhileRevalidate: 1800,
-    ...overrideOptions,
-  };
-}
-
-// 1 day
-export function CacheDays(overrideOptions?: CachingStrategy): AllCacheOptions {
-  guardExpirableModeType(overrideOptions);
-  return {
-    mode: PUBLIC,
-    maxAge: 3600,
-    staleWhileRevalidate: 82800,
-    ...overrideOptions,
-  };
-}
-
-// 2 weeks
-export function CacheWeeks(overrideOptions?: CachingStrategy): AllCacheOptions {
-  guardExpirableModeType(overrideOptions);
-  return {
-    mode: PUBLIC,
-    maxAge: 604800,
-    staleWhileRevalidate: 604800,
-    ...overrideOptions,
-  };
-}
-
-// 1 month
-export function CacheMonths(
-  overrideOptions?: CachingStrategy
-): AllCacheOptions {
-  guardExpirableModeType(overrideOptions);
-  return {
-    mode: PUBLIC,
-    maxAge: 1296000,
-    staleWhileRevalidate: 1296000,
+    maxAge: 3600, // 1 hour
+    staleWhileRevalidate: 82800, // 23 Hours
     ...overrideOptions,
   };
 }

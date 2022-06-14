@@ -1,31 +1,49 @@
 import {Link, useUrl, useCart} from '@shopify/hydrogen';
+import {useWindowScroll} from 'react-use';
 
 import {
   IconSearch,
-  IconHelp,
   IconAccount,
   IconBag,
   IconMenu,
   Input,
   Heading,
 } from '~/components/elements';
+import {Drawer, useDrawer} from '~/components/blocks';
+import {CartDetails} from './CartDetails.client';
 
 /**
  * A client component that specifies the content of the header on the website
  */
 export function Header({title, menu}) {
   const {pathname} = useUrl();
+  const {isOpen, openDrawer, closeDrawer} = useDrawer();
+
   const isHome = pathname === '/';
 
   return (
     <>
-      <DesktopHeader isHome={isHome} title={title} menu={menu} />
-      <MobileHeader isHome={isHome} title={title} />
+      {/* TODO: Drawer will be removed and added into a Cart component. left it here for reviewing purposes */}
+      <Drawer open={isOpen} onClose={closeDrawer}>
+        <div className="grid">
+          <Drawer.Title>
+            <h2 className="sr-only">Cart Drawer</h2>
+          </Drawer.Title>
+          <CartDetails />
+        </div>
+      </Drawer>
+      <DesktopHeader
+        isHome={isHome}
+        title={title}
+        menu={menu}
+        openDrawer={openDrawer}
+      />
+      <MobileHeader isHome={isHome} title={title} openDrawer={openDrawer} />
     </>
   );
 }
 
-function MobileHeader({title, isHome}) {
+function MobileHeader({title, isHome, openDrawer}) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
@@ -71,26 +89,30 @@ function MobileHeader({title, isHome}) {
       </Link>
 
       <div className="flex items-center justify-end w-full gap-4">
-        <button className={styles.button}>
+        <Link to={'/account'} className={styles.button}>
           <IconAccount />
-        </button>
-        <Link to={'/cart'} className={styles.button}>
+        </Link>
+        <button onClick={openDrawer} className={styles.button}>
           <IconBag />
           <CartBadge dark={isHome} />
-        </Link>
+        </button>
       </div>
     </header>
   );
 }
 
-function DesktopHeader({title, isHome, menu}) {
+function DesktopHeader({title, isHome, menu, openDrawer}) {
+  const {y} = useWindowScroll();
+
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
       isHome
         ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
-    } hidden lg:flex items-center sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`,
+    } ${
+      y > 50 && !isHome && 'shadow-lightHeader'
+    } hidden lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`,
   };
 
   return (
@@ -126,16 +148,13 @@ function DesktopHeader({title, isHome, menu}) {
             <IconSearch />
           </button>
         </form>
-        <Link className={styles.button} to={'help'}>
-          <IconHelp />
-        </Link>
         <Link to={'/account'} className={styles.button}>
           <IconAccount />
         </Link>
-        <Link to={'/cart'} className={styles.button}>
+        <button onClick={openDrawer} className={styles.button}>
           <IconBag />
           <CartBadge dark={isHome} />
-        </Link>
+        </button>
       </div>
     </header>
   );

@@ -2,8 +2,11 @@
 gid: bf2cb121-f051-4eb2-bb37-aa1738361b23
 title: Integrate content in Hydrogen
 description: Learn how to integrate content on your Hydrogen storefront.
-feature_flag: content_platform
+hidden: true
 ---
+
+> Beta:
+> The Content platform is in beta and is only available to [Shopify Plus](https://www.shopify.com/plus) and [Advanced](https://www.shopify.com/pricing) plans.
 
 Hydrogen includes support for integrating content on storefronts. For example, you might have content about product features, specifications, or size charts. You can integrate content into your Hydrogen storefront using the [Storefront API](https://shopify.dev/api/storefront).
 
@@ -11,7 +14,7 @@ Hydrogen includes support for integrating content on storefronts. For example, y
 
 ## Build a content model
 
-Content models are custom object schemas that you can create and associate with Shopify resources, such as products, collections, and orders. You use content models to create and store structured content in your Hydrogen storefront. You can [build a content model](https://help.shopify.com/en/manual/content/content-models) in the **Content** section of your Shopify admin.
+Content models are custom object schemas that you can create and associate with Shopify resources, such as products, collections, and orders. You use content models to create and store structured content in your Hydrogen storefront. You can build a content model in the **Content** section of your Shopify admin.
 
 The following example shows a content model that displays product features content:
 
@@ -141,4 +144,5 @@ const QUERY = gql`
 
 ## Next steps
 
-- Learn more about [the Content platform](https://help.shopify.com/en/manual/content).
+- Learn about the [CSS support](https://shopify.dev/custom-storefronts/hydrogen/framework/css-support) built into Hydrogen.
+- Learn how to reference and serve [static assets](https://shopify.dev/custom-storefronts/hydrogen/framework/static-assets) in Hydrogen.

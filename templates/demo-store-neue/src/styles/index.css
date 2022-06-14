@@ -5,12 +5,12 @@
 /* Tokens */
 :root {
   --color-primary: 20 20 20; /* Text, buttons, etc. */
-  --color-contrast: 255 255 255; /* Backgrounds, borders, etc. */
+  --color-contrast: 250 250 249; /* Backgrounds, borders, etc. */
   --color-accent: 191 72 0; /* Labels like "On sale" */
   --height-nav: 3.25rem;
   --font-size-fine: 0.75rem; /* text-xs */
-  --font-size-copy: 0.875rem; /* text-sm */
-  --font-size-lead: 1rem; /* text-base */
+  --font-size-copy: 1rem; /* text-base */
+  --font-size-lead: 1.125rem; /* text-lg */
   --font-size-heading: 2rem; /* text-2xl */
   --font-size-display: 3rem; /* text-4xl */
   --color-shop-pay: #5a31f4;
@@ -19,8 +19,6 @@
   }
   @media (min-width: 48em) {
     --height-nav: 6rem;
-    --font-size-copy: 1rem; /* text-base */
-    --font-size-lead: 1.125rem; /* text-lg */
     --font-size-heading: 2.25rem; /* text-4xl */
     --font-size-display: 3.75rem; /* text-6xl */
   }
@@ -38,6 +36,10 @@
     --color-contrast: 32 33 36;
     --color-accent: 89 167 37;
   }
+}
+
+.shop-pay-button a {
+  width: 100%;
 }
 
 @layer base {
@@ -66,6 +68,25 @@
   input[type='search']::-webkit-search-results-button,
   input[type='search']::-webkit-search-results-decoration {
     -webkit-appearance: none;
+  }
+
+  .prose {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      &:first-child {
+        @apply mt-0;
+      }
+    }
+  }
+}
+
+@layer components {
+  .swimlane {
+    @apply grid snap-mandatory grid-flow-col snap-x w-full gap-4 scroll-px-6 px-6 pb-4 overflow-x-scroll;
   }
 }
 
