@@ -185,7 +185,7 @@ export class HydrogenRequest extends Request {
 
   public async formData(): Promise<FormData> {
     // @ts-ignore
-    if (super.formData) return super.formData();
+    if (!__HYDROGEN_WORKER__ && super.formData) return super.formData();
 
     const contentType = this.headers.get('Content-Type') || '';
 
@@ -199,10 +199,10 @@ export class HydrogenRequest extends Request {
       let entries;
       try {
         entries = new URLSearchParams(await this.text());
-      } catch (err) {
+      } catch (err: any) {
         // istanbul ignore next: Unclear when new URLSearchParams can fail on a string.
         // 2. If entries is failure, then throw a TypeError.
-        throw Object.assign(new TypeError(), {cause: err});
+        throw new TypeError(undefined, {cause: err as Error});
       }
 
       // 3. Return a new FormData object whose entries are entries.
