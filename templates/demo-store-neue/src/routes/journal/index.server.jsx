@@ -3,14 +3,13 @@ import {
   useShopQuery,
   Seo,
   gql,
-  Image,
   CacheLong,
   flattenConnection,
-  Link,
   Head,
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
+import {ArticleCard} from '~/components/blocks';
 import {Grid, PageHeader} from '~/components/elements';
 
 const BLOG_HANDLE = 'Journal';
@@ -50,11 +49,17 @@ export default function Blog({pageBy = 12, response}) {
         <link rel="stylesheet" href="/src/styles/custom-font.css" />
       </Head>
       <Seo type="page" data={articles} />
-      <PageHeader heading={BLOG_HANDLE}>
+      <PageHeader heading={BLOG_HANDLE} className="gap-0">
         {haveArticles ? (
           <Grid as="ol" layout="blog" gap="blog">
             {articles.map((article) => {
-              return <ArticleCard article={article} key={article.id} />;
+              return (
+                <ArticleCard
+                  blogHandle={BLOG_HANDLE.toLowerCase()}
+                  article={article}
+                  key={article.id}
+                />
+              );
             })}
           </Grid>
         ) : (
@@ -62,20 +67,6 @@ export default function Blog({pageBy = 12, response}) {
         )}
       </PageHeader>
     </Layout>
-  );
-}
-
-function ArticleCard({article}) {
-  return (
-    <li key={article.id} className="">
-      <Link to={`/${BLOG_HANDLE.toLowerCase()}/${article.handle}`}>
-        <Image data={article.image} className="mt-2 md:mt-4" />
-        <h3 className="text-1xl font-bold">{article.title}</h3>
-        <span className="block mt-3">
-          {article.publishedAt} &middot; {article.author.name}
-        </span>
-      </Link>
-    </li>
   );
 }
 
