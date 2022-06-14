@@ -4,7 +4,7 @@ import {useServerProps} from '@shopify/hydrogen';
 import {Text, Button} from '~/components/elements';
 import {emailValidation, passwordValidation} from '~/lib/utils';
 
-export function EditAccountDetails({
+export function AccountDetailsEdit({
   firstName: _firstName = '',
   lastName: _lastName = '',
   phone: _phone = '',

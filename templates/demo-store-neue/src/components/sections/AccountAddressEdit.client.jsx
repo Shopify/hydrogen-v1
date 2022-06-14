@@ -3,7 +3,7 @@ import {useServerProps} from '@shopify/hydrogen';
 
 import {Button, Text} from '~/components/elements';
 
-export function EditAddress({address, defaultAddress}) {
+export function AccountAddressEdit({address, defaultAddress}) {
   const {setServerProps} = useServerProps();
 
   const [saving, setSaving] = useState(false);

@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate, Link} from '@shopify/hydrogen/client';
 
-export function LoginForm({shopName}) {
+export function AccountLoginForm({shopName}) {
   const navigate = useNavigate();
 
   const [hasSubmitError, setHasSubmitError] = useState(false);
