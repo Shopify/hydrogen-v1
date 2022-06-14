@@ -182,6 +182,40 @@ export class HydrogenRequest extends Request {
 
     return new Request(url.href, this);
   }
+
+  public async formData(): Promise<FormData> {
+    // @ts-ignore
+    if (super.formData) return super.formData();
+
+    const contentType = this.headers.get('Content-Type') || '';
+
+    // If mimeType’s essence is "multipart/form-data", then:
+    if (/multipart\/form-data/.test(contentType)) {
+      throw new Error('multipart/form-data not supported');
+    } else if (/application\/x-www-form-urlencoded/.test(contentType)) {
+      // Otherwise, if mimeType’s essence is "application/x-www-form-urlencoded", then:
+
+      // 1. Let entries be the result of parsing bytes.
+      let entries;
+      try {
+        entries = new URLSearchParams(await this.text());
+      } catch (err) {
+        // istanbul ignore next: Unclear when new URLSearchParams can fail on a string.
+        // 2. If entries is failure, then throw a TypeError.
+        throw Object.assign(new TypeError(), {cause: err});
+      }
+
+      // 3. Return a new FormData object whose entries are entries.
+      const formData = new FormData();
+      for (const [name, value] of entries) {
+        formData.append(name, value);
+      }
+      return formData as FormData;
+    } else {
+      // Otherwise, throw a TypeError.
+      throw new TypeError();
+    }
+  }
 }
 
 function mergeMapEntries(
