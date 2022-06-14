@@ -2,4 +2,4 @@
 '@shopify/hydrogen': patch
 ---
 
-Fix waitUntil and logger option
+Fix stale-while-revalidate process with `waitUntil`
