@@ -5,26 +5,25 @@ import {
   Router,
   FileRoutes,
   ShopifyProvider,
-  CartProvider,
   ShopifyAnalytics,
   PerformanceMetrics,
   PerformanceMetricsDebug,
 } from '@shopify/hydrogen';
 
-import {DefaultSeo} from './components/blocks';
+import {DefaultSeo, CartProviderWithSession} from '~/components/blocks';
 import {NotFound} from '~/components/sections';
 
 function App({routes}) {
   return (
     <Suspense fallback={null}>
       <ShopifyProvider>
-        <CartProvider>
+        <CartProviderWithSession>
           <DefaultSeo />
           <Router>
             <FileRoutes routes={routes} />
             <Route path="*" page={<NotFound />} />
           </Router>
-        </CartProvider>
+        </CartProviderWithSession>
         <PerformanceMetrics />
         {import.meta.env.DEV && <PerformanceMetricsDebug />}
         <ShopifyAnalytics />

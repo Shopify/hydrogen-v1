@@ -1,3 +1,4 @@
+import {useMemo} from 'react';
 import {
   useCart,
   useCartLine,
@@ -11,7 +12,7 @@ import {
   Money,
 } from '@shopify/hydrogen';
 
-import {Button, Heading, Text} from '~/components/elements';
+import {Button, Heading, IconRemove, Text} from '~/components/elements';
 
 export function CartDetails() {
   const {lines} = useCart();
@@ -20,7 +21,7 @@ export function CartDetails() {
     <form className="grid grid-cols-1 h-screen grid-rows-[1fr_auto]">
       <section
         aria-labelledby="cart-contents"
-        className="overflow-auto md:p-8 px-4 py-6"
+        className="overflow-auto md:py-8 md:px-12 px-4 py-6"
       >
         <Heading as="h2" size="lead" id="cart-contents">
           Cart
@@ -95,6 +96,14 @@ function CartLineItem() {
   const {linesRemove} = useCart();
   const {id: lineId, quantity, merchandise} = useCartLine();
 
+  const variantOptionsTitle = useMemo(
+    () =>
+      merchandise.selectedOptions
+        .map((option) => `${option.name}: ${option.value}`)
+        .join(', '),
+    [merchandise.selectedOptions],
+  );
+
   return (
     <li key={lineId} className="flex md:py-5 py-3">
       <div className="flex-shrink-0">
@@ -104,7 +113,7 @@ function CartLineItem() {
         />
       </div>
 
-      <div className="flex flex-col justify-between flex-1 ml-4 sm:ml-6">
+      <div className="flex justify-between flex-1 ml-4 sm:ml-6">
         <div className="relative grid gap-1">
           <Heading as="h3" size="copy">
             <Link to={`/products/${merchandise.product.handle}`}>
@@ -112,18 +121,10 @@ function CartLineItem() {
             </Link>
           </Heading>
           <div className="flex gap-2">
-            {merchandise.selectedOptions.map((option) => (
-              <Text key={`${option.name}-${option.value}`} color="subtle">
-                {option.name}: {option.value}
-              </Text>
-            ))}
+            <Text color="subtle">{variantOptionsTitle}</Text>
           </div>
 
           <div className="flex items-baseline gap-2">
-            <Text color="subtle">
-              <CartLinePrice as="span" />
-            </Text>
-
             <div className="flex justify-start text-copy">
               <CartLineQuantityAdjust
                 lineId={lineId}
@@ -131,14 +132,25 @@ function CartLineItem() {
                 linesRemove={linesRemove}
               />
             </div>
+            <button type="button" onClick={() => linesRemove(lineId)}>
+              <span className="sr-only">Remove</span>
+              <IconRemove
+                viewBox="0 0 15 15"
+                className="w-3 h-3"
+                aria-hidden="true"
+              />
+            </button>
           </div>
         </div>
+        <Text>
+          <CartLinePrice as="span" />
+        </Text>
       </div>
     </li>
   );
 }
 
-function CartLineQuantityAdjust({lineId, quantity, linesRemove}) {
+function CartLineQuantityAdjust({lineId, quantity}) {
   return (
     <>
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
@@ -163,16 +175,6 @@ function CartLineQuantityAdjust({lineId, quantity, linesRemove}) {
         >
           &#43;
         </CartLineQuantityAdjustButton>
-      </div>
-
-      <div className="absolute top-0 right-0">
-        <button
-          type="button"
-          className="inline-flex p-2 -m-2 text-primary/40 hover:text-primary/50"
-          onClick={() => linesRemove(lineId)}
-        >
-          Remove
-        </button>
       </div>
     </>
   );
