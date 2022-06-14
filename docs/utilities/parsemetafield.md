@@ -22,7 +22,7 @@ export function Product(product) {
 }
 ```
 
-If necessary, you can wrap `parseMetafield` in `useMemo()` to maintain a stable object identity across renders.
+You can also wrap `parseMetafield` in `useMemo()` to maintain a stable object identity across renders.
 
 ```tsx
 import {useMemo} from 'react'
