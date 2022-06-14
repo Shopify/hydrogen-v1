@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback, MouseEvent} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {useInstantCheckout} from '../CartProvider';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
@@ -34,25 +34,18 @@ export function BuyNowButton(props: BuyNowButtonProps & BaseButtonProps) {
     }
   }, [checkoutUrl]);
 
-  const handleBuyNow = useCallback(
-    (event?: MouseEvent) => {
-      if (onClick) {
-        const clickShouldContinue = onClick(event);
-        if (clickShouldContinue === false || event?.defaultPrevented) return;
-      }
-      setLoading(true);
-      createInstantCheckout({
-        lines: [
-          {
-            quantity: quantity ?? 1,
-            merchandiseId: variantId,
-            attributes,
-          },
-        ],
-      });
-    },
-    [onClick, createInstantCheckout, quantity, variantId, attributes]
-  );
+  const handleBuyNow = useCallback(() => {
+    setLoading(true);
+    createInstantCheckout({
+      lines: [
+        {
+          quantity: quantity ?? 1,
+          merchandiseId: variantId,
+          attributes,
+        },
+      ],
+    });
+  }, [createInstantCheckout, quantity, variantId, attributes]);
 
   return (
     <BaseButton
