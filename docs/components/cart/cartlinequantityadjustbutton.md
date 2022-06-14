@@ -43,8 +43,8 @@ export function App() {
 | -------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | adjust   | <code>"increase" &#124; "decrease" &#124; "remove"</code> | The adjustment for a cart line's quantity. Valid values: `increase` (default), `decrease`, or `remove`. |
 | children | <code>ReactNode</code>                                    | Any `ReactNode` elements.                                                                               |
-| onClick?    | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | Click event handler. Default behaviour triggers unless prevented. |
-| buttonRef?  | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>  | A ref to the underlying button. |
+| onClick?    | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | A click event handler. Default behaviour triggers the click event, unless prevented. |
+| buttonRef?  | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>  | A reference to the underlying button. |
 
 ## Component type
 
@@ -54,9 +54,9 @@ The `CartLineQuantityAdjustButton` component is a shared component, which means 
 
 - [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
 
-## Example code. Override `onClick` default behaviour
 
 ```tsx
+// Override `onClick` default behaviour
 import {
   CartLineProvider,
   useCart,
@@ -83,9 +83,9 @@ export function App() {
 }
 ```
 
-## Example code. Run async action before default `onClick` behaviour
 
 ```tsx
+// Run an async action before the default `onClick` behaviour
 import {
   CartLineProvider,
   useCart,

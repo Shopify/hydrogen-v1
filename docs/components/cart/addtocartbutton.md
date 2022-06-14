@@ -47,16 +47,16 @@ export function MyComponent() {
 | quantity?                    | <code>number</code>                         | The item quantity.                                                                                                                                            |
 | children                     | <code>ReactNode</code>                      | Any ReactNode elements.                                                                                                                                       |
 | accessibleAddingToCartLabel? | <code>string</code>                         | The text that is announced by the screen reader when the item is being added to the cart. Used for accessibility purposes only and not displayed on the page. |
-| onClick?                     | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | Click event handler. Default behaviour triggers unless prevented. |
-| buttonRef?                   | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>                | A ref to the underlying button. |
+| onClick?                     | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | A click event handler. Default behaviour triggers the click event, unless prevented. |
+| buttonRef?                   | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>                | A reference to the underlying button. |
 
 ## Component type
 
 The `AddToCartButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
-## Example code. Override `onClick` default behaviour
 
 ```tsx
+// Override `onClick` default behavior
 import {
   CartProvider,
   CartUIProvider,
@@ -91,9 +91,9 @@ export function MyComponent() {
 }
 ```
 
-## Example code. Run async action before default `onClick` behaviour
 
 ```tsx
+// Run an async action before the default `onClick` behaviour
 import {
   CartProvider,
   CartUIProvider,

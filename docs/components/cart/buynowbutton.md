@@ -28,16 +28,16 @@ export function MyComponent() {
 | variantId   | <code>string</code>                             | The ID of the variant.                                                            |
 | attributes? | <code>Object<<wbr>string, string<wbr>>[]</code> | An array of cart line attributes that belong to the item being added to the cart. |
 | children    | <code>ReactNode<<wbr>Imported<wbr>></code>      | Any `ReactNode` elements.                                                         |
-| onClick?    | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | Click event handler. Default behaviour triggers unless prevented. |
-| buttonRef?  | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>  | A ref to the underlying button. |
+| onClick?    | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | A click event handler. Default behaviour triggers the click event, unless prevented. |
+| buttonRef?  | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>  | A reference to the underlying button. |
 
 ## Component type
 
 The `BuyNowButton` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
-## Example code. Override `onClick` default behaviour
 
 ```tsx
+// Override `onClick` default behavior
 import {BuyNowButton} from '@shopify/hydrogen';
 
 export function MyComponent() {
@@ -55,9 +55,9 @@ export function MyComponent() {
 }
 ```
 
-## Example code. Run async action before default `onClick` behaviour
 
 ```tsx
+// Run an async action before the default `onClick` behaviour
 import {BuyNowButton} from '@shopify/hydrogen';
 
 export function MyComponent() {
