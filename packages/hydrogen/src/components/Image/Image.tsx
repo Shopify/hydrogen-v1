@@ -17,7 +17,7 @@ type ImageProps<GenericLoaderOpts> =
  * The `Image` component renders an image for the Storefront API's
  * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image) by using the `data` prop, or a custom location by using the `src` prop. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
  *
- * Width and height are determined using the followiing priority list:
+ * An image's width and height are determined using the following priority list:
  * 1. `loaderOptions`'s width/height
  * 2.  width/height bare props
  * 3. `data`'s width/height
