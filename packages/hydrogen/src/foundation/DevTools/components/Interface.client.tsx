@@ -14,6 +14,7 @@ export function Interface({children, onClose, onOpen, ...props}: Props) {
   const open = false || props.open;
   return (
     <div
+      id="hydrogen-dev-tools"
       aria-hidden
       style={{
         position: 'fixed',
