@@ -20,7 +20,7 @@ import {parseMetafield} from '../../utilities/parseMetafield/index';
 
 export interface MetafieldProps<TTag> {
   /** An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). */
-  data: PartialDeep<Metafield>;
+  data: PartialDeep<Metafield> | null;
   /** An HTML tag to be rendered as the base element wrapper. The default value varies depending on [metafield.type](https://shopify.dev/apps/metafields/types). */
   as?: TTag;
 }
@@ -38,12 +38,21 @@ export function Metafield<TTag extends ElementType>(
   const {locale} = useShop();
   const parsedMetafield = useMemo(() => parseMetafield(data), [data]);
 
+  if (!parsedMetafield) {
+    if (__HYDROGEN_DEV__) {
+      console.warn(`<Metafield/>: nothing was passed to the data prop 'data'`);
+    }
+    return null;
+  }
+
   if (parsedMetafield.value === null || parsedMetafield.value === undefined) {
-    console.warn(
-      `<Metafield/>: No metafield value for metafield ${
-        parsedMetafield.id ?? parsedMetafield.key
-      }`
-    );
+    if (__HYDROGEN_DEV__) {
+      console.warn(
+        `<Metafield/>: No metafield value for metafield ${
+          parsedMetafield.id ?? parsedMetafield.key
+        }`
+      );
+    }
     return null;
   }
 

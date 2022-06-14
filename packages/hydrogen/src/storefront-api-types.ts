@@ -158,7 +158,7 @@ export type Article = HasMetafields &
      * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: Array<Metafield>;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** The date and time when the article was published. */
@@ -337,7 +337,7 @@ export type Blog = HasMetafields &
      * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: Array<Metafield>;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** The blog's SEO information. */
@@ -1499,7 +1499,7 @@ export type Collection = HasMetafields &
      * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: Array<Metafield>;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** List of products in the collection. */
@@ -2626,7 +2626,7 @@ export type Customer = HasMetafields & {
    * The metafields associated with the resource matching the supplied list of namespaces and keys.
    *
    */
-  metafields: Array<Metafield>;
+  metafields: Array<Maybe<Metafield>>;
   /** The orders associated with the customer. */
   orders: OrderConnection;
   /** The customer’s phone number. */
@@ -3348,7 +3348,7 @@ export type HasMetafields = {
    * The metafields associated with the resource matching the supplied list of namespaces and keys.
    *
    */
-  metafields: Array<Metafield>;
+  metafields: Array<Maybe<Metafield>>;
 };
 
 /** Represents information about the metafields associated to the specified resource. */
@@ -4771,7 +4771,7 @@ export type Order = HasMetafields &
      * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: Array<Metafield>;
+    metafields: Array<Maybe<Metafield>>;
     /**
      * Unique identifier for the order that appears on the order.
      * For example, _#1000_ or _Store1001.
@@ -5041,7 +5041,7 @@ export type Page = HasMetafields &
      * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: Array<Metafield>;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** The page's SEO information. */
@@ -5255,7 +5255,7 @@ export type Product = HasMetafields &
      * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: Array<Metafield>;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** List of product options. */
@@ -5603,7 +5603,7 @@ export type ProductVariant = HasMetafields &
      * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: Array<Metafield>;
+    metafields: Array<Maybe<Metafield>>;
     /**
      * The product variant’s price.
      * @deprecated Use `priceV2` instead
@@ -6309,7 +6309,7 @@ export type Shop = HasMetafields &
      * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: Array<Metafield>;
+    metafields: Array<Maybe<Metafield>>;
     /** A string representing the way currency is formatted when the currency isn’t specified. */
     moneyFormat: Scalars['String'];
     /** The shop’s name. */

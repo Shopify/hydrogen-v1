@@ -6,11 +6,15 @@ import {parseJSON} from '../parse';
 /**
  * The `parseMetafields` hook transforms a [Metafield](https://shopify.dev/api/storefront/reference/common-objects/Metafield)
  * into a new object whose `values` have been parsed according to the metafield `type`.
+ * If the metafield is `null`, then returns `null` back.
  */
 export function parseMetafield(
-  /** A [Metafield](https://shopify.dev/api/storefront/reference/common-objects/Metafield) array or a single Metafield */
-  metafield: PartialDeep<Metafield>
-): PartialDeep<ParsedMetafield> {
+  /** A [Metafield](https://shopify.dev/api/storefront/reference/common-objects/Metafield) or null */
+  metafield: PartialDeep<Metafield> | null
+): PartialDeep<ParsedMetafield> | null {
+  if (!metafield) {
+    return null;
+  }
   if (metafield.value === null || metafield.value === undefined) {
     console.warn(
       `'parseMetafield()' was passed ${metafield.value} for 'metafield.value'`
@@ -27,8 +31,12 @@ export function parseMetafield(
  * The `parseMetafieldValue` function parses a [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield)'s `value` from a string into a sensible type corresponding to the [Metafield](https://shopify.dev/api/storefront/reference/common-objects/metafield)'s `type`.
  */
 export function parseMetafieldValue(
-  metafield: PartialDeep<Metafield>
+  metafield: PartialDeep<Metafield> | null
 ): ParsedMetafield['value'] {
+  if (!metafield) {
+    return null;
+  }
+
   if (metafield.value === null || metafield.value === undefined) {
     console.warn(
       `'parseMetafieldValue()' was passed ${metafield.value} for 'metafield.value'`

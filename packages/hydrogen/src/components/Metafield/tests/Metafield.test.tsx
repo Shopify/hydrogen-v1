@@ -9,6 +9,15 @@ import {Link} from '../../Link/index';
 import {Page, Product, ProductVariant} from '../../../storefront-api-types';
 
 describe('<Metafield />', () => {
+  it('renders nothing when the metafield is null', () => {
+    const consoleWarnSpy = jest.spyOn(console, 'warn');
+    consoleWarnSpy.mockImplementation(() => {});
+    const component = mountWithProviders(<Metafield data={null} />);
+    expect(component.html()).toBeFalsy();
+    expect(consoleWarnSpy).toHaveBeenCalled();
+    consoleWarnSpy.mockRestore();
+  });
+
   it('renders nothing when the metafield value is undefined', () => {
     const consoleWarnSpy = jest.spyOn(console, 'warn');
     consoleWarnSpy.mockImplementation(() => {});

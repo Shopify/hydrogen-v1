@@ -110,10 +110,10 @@ function ProductPrices({product}) {
 export default function ProductDetails({product}) {
   const initialVariant = product.variants.nodes[0];
 
-  const sizeChartMetafield = parseMetafield(product?.meta_size_chart ?? {});
-  const sustainableMetafield = parseMetafield(product?.meta_sustainable ?? {});
+  const sizeChartMetafield = parseMetafield(product.meta_size_chart);
+  const sustainableMetafield = parseMetafield(product.meta_sustainable);
   const lifetimeWarrantyMetafield = parseMetafield(
-    product?.meta_lifetime_warranty ?? {},
+    product.meta_lifetime_warranty,
   );
 
   return (

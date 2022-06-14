@@ -111,4 +111,8 @@ describe(`parseMetafieldValue()`, () => {
       expect(parseMetafieldValue(metafield)).toBe('test');
     });
   });
+
+  it(`handles if null is passed`, () => {
+    expect(parseMetafieldValue(null)).toBeNull();
+  });
 });
