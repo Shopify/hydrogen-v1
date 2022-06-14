@@ -1,4 +1,5 @@
-import {QueryKey} from '../types';
+import {STOREFRONT_API_BUYER_IP_HEADER} from '../constants';
+import type {QueryKey} from '../types';
 
 export function hashKey(queryKey: QueryKey): string {
   const rawKeys = Array.isArray(queryKey) ? queryKey : [queryKey];
@@ -13,7 +14,14 @@ export function hashKey(queryKey: QueryKey): string {
       if (typeof key === 'object') {
         // Queries from useQuery might not have a `body`. In that case,
         // fallback to a safer (but slower) stringify.
-        hash += key.body || JSON.stringify(key);
+        if (!!key.body && typeof key.body === 'string') {
+          hash += key.body;
+          if (!!key.headers && key.headers[STOREFRONT_API_BUYER_IP_HEADER]) {
+            hash += key.headers[STOREFRONT_API_BUYER_IP_HEADER];
+          }
+        } else {
+          hash += JSON.stringify(key);
+        }
       } else {
         hash += key;
       }
