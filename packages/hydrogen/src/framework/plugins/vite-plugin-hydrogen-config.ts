@@ -101,6 +101,7 @@ export default () => {
           'react/jsx-runtime',
           // https://github.com/nfriedly/set-cookie-parser/issues/50
           'set-cookie-parser',
+          'undici',
         ],
       },
 
