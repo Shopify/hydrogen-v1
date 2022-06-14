@@ -44,6 +44,7 @@ import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {setLogger, RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
+import {DevTools} from './foundation/DevTools/DevTools.server';
 import {getSyncSessionApi} from './foundation/session/session';
 import {parseJSON} from './utilities/parse';
 import {htmlEncode} from './utilities';
@@ -650,6 +651,11 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
+        {request.ctx.hydrogenConfig?.devTools && (
+          <Suspense fallback={null}>
+            <DevTools />
+          </Suspense>
+        )}
       </PreloadQueries>
     </ServerRequestProvider>
   );
