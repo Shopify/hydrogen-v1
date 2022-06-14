@@ -3,9 +3,9 @@ import {useServerProps} from '@shopify/hydrogen';
 
 import {Text, Button} from '~/components/elements';
 
-import {callDeleteAddressApi} from './DeleteAddress.client';
+import {callDeleteAddressApi} from './AccountDeleteAddress.client';
 
-export function AddressBook({addresses, defaultAddress}) {
+export function AccountAddressBook({addresses, defaultAddress}) {
   const {serverProps, setServerProps} = useServerProps();
 
   const {fullDefaultAddress, addressesWithoutDefault} = useMemo(() => {
@@ -24,7 +24,6 @@ export function AddressBook({addresses, defaultAddress}) {
   async function deleteAddress(id) {
     const response = await callDeleteAddressApi(id);
     if (response.error) {
-      // TODO: improve error handling UI
       alert(response.error);
       return;
     }

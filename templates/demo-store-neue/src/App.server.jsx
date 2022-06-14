@@ -11,7 +11,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {DefaultSeo, CartProviderWithCountryCode} from '~/components/blocks';
-import {NotFound} from '~/components/pages';
+import {NotFound} from '~/components/sections';
 
 function App({routes}) {
   return (

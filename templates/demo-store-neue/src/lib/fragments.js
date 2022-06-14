@@ -1,6 +1,6 @@
 import {gql} from '@shopify/hydrogen';
 
-export const MEDIA_FIELDS = gql`
+export const MEDIA_FRAGMENT = gql`
   fragment MediaFields on Media {
     mediaContentType
     alt
@@ -37,7 +37,7 @@ export const MEDIA_FIELDS = gql`
   }
 `;
 
-export const PRODUCT_CARD_FIELDS = gql`
+export const PRODUCT_CARD_FRAGMENT = gql`
   fragment ProductCardFields on Product {
     id
     title

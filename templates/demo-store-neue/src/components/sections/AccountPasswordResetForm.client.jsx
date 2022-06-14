@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from '@shopify/hydrogen/client';
 
-export function PasswordResetForm({id, resetToken}) {
+export function AccountPasswordResetForm({id, resetToken}) {
   const navigate = useNavigate();
 
   const [submitError, setSubmitError] = useState(null);

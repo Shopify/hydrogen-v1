@@ -1,19 +1,20 @@
 export {AccountActivateForm} from './AccountActivateForm.client';
+export {AccountAddressBook} from './AccountAddressBook.client';
+export {AccountAddressEdit} from './AccountAddressEdit.client';
 export {AccountCreateForm} from './AccountCreateForm.client';
+export {AccountDeleteAddress} from './AccountDeleteAddress.client';
 export {AccountDetails} from './AccountDetails.client';
+export {AccountDetailsEdit} from './AccountDetailsEdit.client';
+export {AccountLoginForm} from './AccountLoginForm.client';
+export {AccountOrderHistory} from './AccountOrderHistory.client';
+export {AccountPasswordResetForm} from './AccountPasswordResetForm.client';
 export {AccountRecoverForm} from './AccountRecoverForm.client';
-export {AddressBook} from './AddressBook.client';
 export {CartDetails} from './CartDetails.client';
-export {DeleteAddress} from './DeleteAddress.client';
-export {EditAccountDetails} from './EditAccountDetails.client';
-export {EditAddress} from './EditAddress.client';
 export {FeaturedCollections} from './FeaturedCollections';
 export {Footer} from './Footer.client';
 export {Header} from './Header.client';
 export {Hero} from './Hero';
-export {LoginForm} from './LoginForm.client'; //TODO: rename to AccountLoginForm for consistency
-export {OrderHistory} from './OrderHistory.client';
-export {PasswordResetForm} from './PasswordResetForm.client'; // TODO: rename to AccountPasswordResetForm for consistency
+export {NotFound} from './NotFound.server';
 export {ProductForm} from './ProductForm.client';
 export {ProductGallery} from './ProductGallery.client';
 export {ProductGrid} from './ProductGrid.client';

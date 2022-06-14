@@ -58,7 +58,6 @@ function CartCheckoutActions() {
         <Button to={checkoutUrl} width="auto">
           Continue to Checkout
         </Button>
-        {/* TODO: We need to fix the shop pay button here */}
         <CartShopPayButton className="flex items-center justify-center w-full rounded-sm mt-2 bg-[#5a31f4]" />
       </div>
     </>
