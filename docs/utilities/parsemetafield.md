@@ -1,11 +1,10 @@
 ---
 gid: ec647578-6ab7-40ca-87e5-8a559eca548e
-title: useParsedMetafields
-description: The useParsedMetafields hook transforms a MetafieldConnection in an array of metafields whose values have been parsed according to the metafield type.
+title: parseMetafields
+description: parseMetafields creates a new metafield object with a value that has been parsed according to the metafield type.
 ---
 
-The `useParsedMetafields` hook transforms a [MetafieldConnection](https://shopify.dev/api/storefront/reference/common-objects/metafieldconnection)
-in an array of metafields whose `values` have been parsed according to the metafield `type`.
+`parseMetafields` creates a new metafield object with a value that has been parsed according to the metafield type.
 
 ## Example code
 
@@ -13,18 +12,29 @@ in an array of metafields whose `values` have been parsed according to the metaf
 import {useParsedMetafields, Metafield} from '@shopify/hydrogen';
 
 export function Product(product) {
-  const metafields = useParsedMetafields(product.metafields);
+  const metafield = parseMetafield(product.metafield);
 
   return (
-    <ul>
-      {metafields.map((field) => {
-        return (
-          <li>
-            <Metafield data={field} />
-          </li>
-        );
-      })}
-    </ul>
+    <div>
+      {metafield.value}
+    </div>
+  );
+}
+```
+
+If necessary, you can wrap `parseMetafield` in `useMemo()` to maintain a stable object identity across renders.
+
+```tsx
+import {useMemo} from 'react'
+import {useParsedMetafields, Metafield} from '@shopify/hydrogen';
+
+export function Product(product) {
+  const metafield = useMemo(() => parseMetafield(product.metafield), [product.metafield]);
+
+  return (
+    <div>
+      {metafield.value}
+    </div>
   );
 }
 ```

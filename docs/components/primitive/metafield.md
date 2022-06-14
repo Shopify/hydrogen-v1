@@ -13,7 +13,7 @@ API's [Metafield object](https://shopify.dev/api/storefront/reference/common-obj
 import {Metafield} from '@shopify/hydrogen';
 
 export function Product({product}) {
-  const metafield = product.metafields.edges.map(({node}) => node)[0];
+  const metafield = product.metafield;
 
   return <Metafield data={metafield} />;
 }
@@ -23,7 +23,7 @@ export function Product({product}) {
 
 | Name | Type                         | Description                                                                                                                                                  |
 | ---- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| data | <code>ParsedMetafield</code> | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).     |
+| data | <code>PartialDeep<Metafield> | null</code> | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).     |
 | as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](https://shopify.dev/apps/metafields/types). |
 
 ## Default output
