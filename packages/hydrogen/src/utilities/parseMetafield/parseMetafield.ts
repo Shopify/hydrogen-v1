@@ -15,7 +15,10 @@ export function parseMetafield(
   if (!metafield) {
     return null;
   }
-  if (metafield.value === null || metafield.value === undefined) {
+  if (
+    __HYDROGEN_DEV__ &&
+    (metafield.value === null || metafield.value === undefined)
+  ) {
     console.warn(
       `'parseMetafield()' was passed ${metafield.value} for 'metafield.value'`
     );
