@@ -116,6 +116,8 @@ If you want to use a font that's not included in Shopify's font library, then yo
 
     {% endcodeblock %}
 
+3. Import your `.css` file into `index.html` or any desired client component.
+
 ## CSS Modules
 
 Hydrogen includes a [Vite plugin](https://vitejs.dev/guide/features.html#css-modules) that collects styles for each CSS Module in your components. CSS Modules can be imported in both client and server components.
