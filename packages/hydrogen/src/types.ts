@@ -84,7 +84,7 @@ export type InlineHydrogenConfig = ClientConfig & {
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
-  devTools?: boolean;
+  __EXPERIMENTAL__devTools?: boolean;
 };
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {

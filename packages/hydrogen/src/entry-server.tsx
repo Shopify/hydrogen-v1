@@ -651,7 +651,7 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
-        {request.ctx.hydrogenConfig?.devTools && (
+        {request.ctx.hydrogenConfig?.__EXPERIMENTAL__devTools && (
           <Suspense fallback={null}>
             <DevTools />
           </Suspense>

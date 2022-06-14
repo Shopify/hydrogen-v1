@@ -101,11 +101,14 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   }
 
   if (import.meta.hot) {
-    import.meta.hot.on('hydrogen', ({type, data}: DevServerMessage) => {
-      if (type === 'warn') {
-        console.warn(data);
+    import.meta.hot.on(
+      'hydrogen-browser-console',
+      ({type, data}: DevServerMessage) => {
+        if (type === 'warn') {
+          console.warn(data);
+        }
       }
-    });
+    );
   }
 
   let config: ClientConfig;

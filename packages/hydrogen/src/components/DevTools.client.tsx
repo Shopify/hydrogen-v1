@@ -14,11 +14,14 @@ export default function DevTools() {
     setHasMounted(true);
 
     if (import.meta.hot) {
-      import.meta.hot.on('hydrogen', ({type, data}: DevServerMessage) => {
-        if (type === 'warn') {
-          setWarnings((state) => [...(state || []), data]);
+      import.meta.hot.on(
+        'hydrogen-dev-tools',
+        ({type, data}: DevServerMessage) => {
+          if (type === 'warn') {
+            setWarnings((state) => [...(state || []), data]);
+          }
         }
-      });
+      );
     }
   }, []);
 
