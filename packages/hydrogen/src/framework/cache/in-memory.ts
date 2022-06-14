@@ -65,6 +65,8 @@ export class InMemoryCache implements Cache {
   }
 
   async match(request: Request) {
+    if (request.method !== 'GET') return;
+
     const match = this.#store.get(request.url);
 
     if (!match) {
@@ -97,7 +99,7 @@ export class InMemoryCache implements Cache {
     headers.set('date', new Date(timestamp).toUTCString());
 
     return new Response(body, {
-      status: metadata.status,
+      status: metadata.status ?? 200,
       headers,
     });
   }

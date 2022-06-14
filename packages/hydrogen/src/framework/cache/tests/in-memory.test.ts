@@ -108,6 +108,20 @@ describe('In-Memory Cache', () => {
     }
   });
 
+  it('does not match non-GET requests', async () => {
+    const cache = new InMemoryCache(clockFunction);
+    const request = new Request('https://shopify.dev/');
+    const response = new Response('Hello World');
+
+    await cache.put(request, response);
+
+    for (const method of ['POST', 'PUT', 'PATCH', 'DELETE']) {
+      const request = new Request('https://shopify.dev/', {method});
+
+      expect(await cache.match(request)).toBeUndefined();
+    }
+  });
+
   it('does not cache responses to a range request (status 206)', async () => {
     const cache = new InMemoryCache(clockFunction);
     const request = new Request('https://shopify.dev/', {
