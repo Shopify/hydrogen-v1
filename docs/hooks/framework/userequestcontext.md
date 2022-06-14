@@ -7,7 +7,7 @@ description: The useRequestContext hook provides access to a request-scoped cont
 <aside class="note beta">
 <h4>Experimental feature</h4>
 
-<p>Request context is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by [submitting an issue in GitHub](https://github.com/Shopify/hydrogen/issues).</p>
+<p>Request context is an experimental feature. As a result, functionality is subject to change. You can provide feedback on this feature by <a href="https://github.com/Shopify/hydrogen/issues">submitting an issue in GitHub</a>.</p>
 
 </aside>
 
@@ -24,7 +24,7 @@ const pluginName = 'my-plugin';
 
 function installMyPlugin() {
   const context = useRequestContext(pluginName);
-  context.installed = true; 
+  context.installed = true;
 }
 
 function useMyPlugin() {
@@ -33,12 +33,12 @@ function useMyPlugin() {
 
 function App() {
   installMyPlugin();
-  
+
   return /* ... */;
 }
 
 function SomeOtherServerComponent() {
-  const data = useMyPlugin(); 
+  const data = useMyPlugin();
   return <div>{data.installed}</div>
 }
 ```

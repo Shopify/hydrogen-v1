@@ -1,27 +1,31 @@
-import {CacheSeconds, generateCacheControlHeader} from '../Cache/strategies';
+import {CacheShort, generateCacheControlHeader} from '../Cache/strategies';
 import type {CachingStrategy} from '../../types';
 import Redirect from '../Redirect/Redirect.client';
 import React from 'react';
 
 export class HydrogenResponse extends Response {
   private wait = false;
-  private cacheOptions: CachingStrategy = CacheSeconds();
+  private cacheOptions: CachingStrategy = CacheShort();
 
-  private customStatus?: number;
-  private customStatusText?: string;
+  private proxy = Object.defineProperties(Object.create(null), {
+    // Default values:
+    status: {value: 200, writable: true},
+    statusText: {value: '', writable: true},
+  });
 
-  public get status() {
-    return this.customStatus ?? super.status;
-  }
-  public set status(number: number) {
-    this.customStatus = number;
-  }
+  // @ts-ignore
+  public status: number;
+  // @ts-ignore
+  public statusText: string;
 
-  public get statusText() {
-    return this.customStatusText ?? super.statusText;
-  }
-  public set statusText(text: string) {
-    this.customStatusText = text;
+  constructor(...args: ConstructorParameters<typeof Response>) {
+    super(...args);
+
+    return new Proxy(this, {
+      get: (target, key) => target.proxy[key] ?? Reflect.get(target, key),
+      set: (target, key, value) =>
+        Reflect.set(key in target.proxy ? target.proxy : target, key, value),
+    });
   }
 
   /**
@@ -36,8 +40,12 @@ export class HydrogenResponse extends Response {
     return !this.wait;
   }
 
-  cache(options: CachingStrategy) {
-    this.cacheOptions = options;
+  cache(options?: CachingStrategy) {
+    if (options) {
+      this.cacheOptions = options;
+    }
+
+    return this.cacheOptions;
   }
 
   get cacheControlHeader(): string {

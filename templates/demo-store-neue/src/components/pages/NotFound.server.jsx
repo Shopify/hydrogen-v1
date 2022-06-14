@@ -1,13 +1,9 @@
 import {gql, useSession, useShop, useShopQuery} from '@shopify/hydrogen';
 
-import {PRODUCT_CARD_FIELDS, LOCATION_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
 import {Layout} from '~/components/layouts';
 import {PageHeader, Text, Button} from '~/components/elements';
-import {
-  FeaturedCollections,
-  LocationsGrid,
-  ProductSwimlane,
-} from '~/components/sections';
+import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
 
 export function NotFound({type = 'page'}) {
   const {languageCode} = useShop();
@@ -24,7 +20,7 @@ export function NotFound({type = 'page'}) {
 
   const heading = `We’ve lost this ${type}`;
   const description = `We couldn’t find the ${type} you’re looking for. Try checking the URL or heading back to the home page.`;
-  const {featuredCollections, featuredProducts, locations} = data;
+  const {featuredCollections, featuredProducts} = data;
   return (
     <Layout>
       <PageHeader heading={heading}>
@@ -40,14 +36,12 @@ export function NotFound({type = 'page'}) {
         data={featuredCollections.nodes}
       />
       <ProductSwimlane data={featuredProducts.nodes} />
-      <LocationsGrid data={locations.nodes} />
     </Layout>
   );
 }
 
 const NOT_FOUND_QUERY = gql`
   ${PRODUCT_CARD_FIELDS}
-  ${LOCATION_CARD_FIELDS}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
@@ -66,11 +60,6 @@ const NOT_FOUND_QUERY = gql`
     featuredProducts: products(first: 12) {
       nodes {
         ...ProductCardFields
-      }
-    }
-    locations: contentEntries(first: 3, type: "stores") {
-      nodes {
-        ...LocationCardFields
       }
     }
   }

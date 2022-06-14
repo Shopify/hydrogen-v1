@@ -12,7 +12,7 @@ import {
   setItemInCache,
 } from '../Cache/cache-sub-request';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {CacheSeconds, NO_STORE} from '../Cache/strategies';
+import {CacheShort, NO_STORE} from '../Cache/strategies';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -89,7 +89,7 @@ export function shouldPreloadQuery(
 
 function cachedQueryFnBuilder<T>(
   key: QueryKey,
-  queryFn: () => Promise<T>,
+  generateNewOutput: () => Promise<T>,
   queryOptions?: HydrogenUseQueryOptions
 ) {
   const resolvedQueryOptions = {
@@ -108,10 +108,6 @@ function cachedQueryFnBuilder<T>(
     const log = getLoggerWithContext(request);
 
     const cacheResponse = await getItemFromCache(key);
-
-    async function generateNewOutput() {
-      return await queryFn();
-    }
 
     if (cacheResponse) {
       const [output, response] = cacheResponse;
@@ -136,7 +132,7 @@ function cachedQueryFnBuilder<T>(
             await setItemInCache(
               lockKey,
               true,
-              CacheSeconds({
+              CacheShort({
                 maxAge: 10,
               })
             );

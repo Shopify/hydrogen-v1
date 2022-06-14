@@ -1,13 +1,7 @@
 import {IncomingMessage} from 'http';
 import {RSC_PATHNAME} from '../../../constants';
 import {PreloadOptions} from '../../../types';
-import {
-  CacheDays,
-  CacheHours,
-  CacheMonths,
-  CacheSeconds,
-  NoStore,
-} from '../../Cache/strategies';
+import {CacheLong, CacheShort, CacheNone} from '../../Cache/strategies';
 import {shouldPreloadQuery} from '../../useQuery/hooks';
 import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server';
 
@@ -56,14 +50,12 @@ describe('HydrogenRequest', () => {
   });
 
   it('Preloads queries with manual cache', () => {
-    expect(shouldPreloadQuery({cache: CacheDays()})).toBe(true);
-    expect(shouldPreloadQuery({cache: CacheSeconds()})).toBe(true);
-    expect(shouldPreloadQuery({cache: CacheHours()})).toBe(true);
-    expect(shouldPreloadQuery({cache: CacheMonths()})).toBe(true);
+    expect(shouldPreloadQuery({cache: CacheShort()})).toBe(true);
+    expect(shouldPreloadQuery({cache: CacheLong()})).toBe(true);
   });
 
   it('Does not preload with no cache', () => {
-    expect(shouldPreloadQuery({cache: NoStore()})).toBe(false);
+    expect(shouldPreloadQuery({cache: CacheNone()})).toBe(false);
   });
 
   it('Does not preload with default cache and preloading explicitly turned off', () => {
@@ -72,22 +64,16 @@ describe('HydrogenRequest', () => {
   });
 
   it('Does not preload with manual cache and preloading explicitly turned off', () => {
-    expect(shouldPreloadQuery({cache: CacheDays(), preload: false})).toBe(
+    expect(shouldPreloadQuery({cache: CacheShort(), preload: false})).toBe(
       false
     );
-    expect(shouldPreloadQuery({cache: CacheSeconds(), preload: false})).toBe(
-      false
-    );
-    expect(shouldPreloadQuery({cache: CacheHours(), preload: false})).toBe(
-      false
-    );
-    expect(shouldPreloadQuery({cache: CacheMonths(), preload: false})).toBe(
+    expect(shouldPreloadQuery({cache: CacheLong(), preload: false})).toBe(
       false
     );
   });
 
   it('Preloads queries with caching disabled and preloading explicitly turned on', () => {
-    expect(shouldPreloadQuery({cache: NoStore(), preload: true})).toBe(true);
+    expect(shouldPreloadQuery({cache: CacheNone(), preload: true})).toBe(true);
   });
 
   it('saves preload queries', () => {
@@ -97,7 +83,7 @@ describe('HydrogenRequest', () => {
 
     const preloadQueries = request.getPreloadQueries();
     expect(preloadQueries).toBeDefined();
-    expect(preloadQueries && preloadQueries.get('"test1"'))
+    expect(preloadQueries && preloadQueries.get('test1'))
       .toMatchInlineSnapshot(`
       Object {
         "fetcher": [Function],
@@ -118,7 +104,7 @@ describe('HydrogenRequest', () => {
 
     const preloadQueries = request2.getPreloadQueries();
     expect(preloadQueries).toBeDefined();
-    expect(preloadQueries && preloadQueries.get('"test1"'))
+    expect(preloadQueries && preloadQueries.get('test1'))
       .toMatchInlineSnapshot(`
       Object {
         "fetcher": [Function],

@@ -8,6 +8,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {Layout} from '~/components/layouts';
+import {PageHeader} from '~/components/elements';
 import {NotFound} from '~/components/pages';
 
 export default function Page({params}) {
@@ -39,8 +40,12 @@ export default function Page({params}) {
   return (
     <Layout>
       <Seo type="page" data={page} />
-      <h1 className="text-2xl font-bold">{page.title}</h1>
-      <div dangerouslySetInnerHTML={{__html: page.body}} className="prose" />
+      <PageHeader heading={page.title} variant="page">
+        <div
+          dangerouslySetInnerHTML={{__html: page.body}}
+          className="prose dark:prose-invert"
+        />
+      </PageHeader>
     </Layout>
   );
 }

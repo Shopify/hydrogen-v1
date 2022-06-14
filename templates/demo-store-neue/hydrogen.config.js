@@ -1,15 +1,15 @@
-import {defineConfig} from '@shopify/hydrogen/config';
 import {
+  defineConfig,
   CookieSessionStorage,
   PerformanceMetricsServerAnalyticsConnector,
   ShopifyServerAnalyticsConnector,
-} from '@shopify/hydrogen';
+} from '@shopify/hydrogen/config';
 
 export default defineConfig({
   shopify: {
     storeDomain: 'hydrogen-preview.myshopify.com',
     storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
-    storefrontApiVersion: 'unstable',
+    storefrontApiVersion: '2022-07',
   },
   session: CookieSessionStorage('__session', {
     path: '/',
@@ -22,4 +22,5 @@ export default defineConfig({
     PerformanceMetricsServerAnalyticsConnector,
     ShopifyServerAnalyticsConnector,
   ],
+  devTools: true,
 });

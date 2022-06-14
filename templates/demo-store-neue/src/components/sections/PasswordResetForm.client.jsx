@@ -140,7 +140,7 @@ export function PasswordResetForm({id, resetToken}) {
   );
 }
 
-function callPasswordResetApi({id, resetToken, password}) {
+export function callPasswordResetApi({id, resetToken, password}) {
   return fetch(`/account/reset`, {
     method: 'POST',
     headers: {

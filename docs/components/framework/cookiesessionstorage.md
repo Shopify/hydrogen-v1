@@ -8,13 +8,13 @@ The `CookieSessionStorage` component is the default session storage mechanism fo
 
 ## Example code
 
-{% codeblock file, filename: 'App.server.jsx' %}
+{% codeblock file, filename: 'hydrogen.config.js' %}
 
 ```jsx
-import {renderHydrogen, CookieSessionStorage} from '@shopify/hydrogen';
-export default renderHydrogen(App, {
-  routes,
-  shopifyConfig,
+import {defineConfig, CookieSessionStorage} from '@shopify/hydrogen/config';
+
+export default defineConfig({
+  shopify: {/*...*/},
   session: CookieSessionStorage('__session', {
     path: '/',
     httpOnly: true,

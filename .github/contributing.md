@@ -18,7 +18,7 @@ yarn dev
 To develop against a template, open a new terminal window or tab and choose from the available templates:
 
 - templates/demo-store
-- templates/hello-world
+- templates/hello-world-ts
 
 ```bash
 cd templates/demo-store
