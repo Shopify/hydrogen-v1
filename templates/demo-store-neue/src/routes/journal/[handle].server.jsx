@@ -18,7 +18,7 @@ export default function Post({params, response}) {
 
   const {handle} = params;
   const {data} = useShopQuery({
-    query: QUERY,
+    query: ARTICLE_QUERY,
     variables: {
       language: languageCode,
       blogHandle: BLOG_HANDLE,
@@ -57,7 +57,7 @@ export default function Post({params, response}) {
   );
 }
 
-const QUERY = gql`
+const ARTICLE_QUERY = gql`
   query ArticleDetails(
     $language: LanguageCode
     $blogHandle: String!
@@ -68,7 +68,7 @@ const QUERY = gql`
         title
         contentHtml
         publishedAt
-        author {
+        author: authorV2 {
           name
         }
         image {
