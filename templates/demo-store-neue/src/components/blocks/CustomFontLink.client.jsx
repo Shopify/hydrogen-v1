@@ -1,10 +1,6 @@
 import styleSheet from '../../styles/custom-font.css';
-import {Head} from '@shopify/hydrogen';
+// import {Head} from '@shopify/hydrogen';
 
 export function CustomFontLink() {
-  return (
-    <Head>
-      <link rel="stylesheet" href={styleSheet} />
-    </Head>
-  );
+  return <link rel="stylesheet" href={styleSheet} />;
 }
