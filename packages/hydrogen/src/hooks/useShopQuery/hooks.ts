@@ -194,6 +194,7 @@ function useCreateShopRequest(body: string) {
 
   const request = useServerRequest();
   const buyerIp = request.getBuyerIp();
+  const storfrontId = globalThis.Oxygen?.env?.SHOPIFY_STOREFRONT_ID || '0';
 
   const extraHeaders = getStorefrontApiRequestHeaders({
     buyerIp,
@@ -209,6 +210,7 @@ function useCreateShopRequest(body: string) {
       headers: {
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
+        'X-Storefront-Id': storfrontId,
         'content-type': 'application/json',
         ...extraHeaders,
       },
