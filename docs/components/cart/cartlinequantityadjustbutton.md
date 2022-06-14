@@ -37,24 +37,6 @@ export function App() {
 }
 ```
 
-## Props
-
-| Name     | Type                                                      | Description                                                                                             |
-| -------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| adjust   | <code>"increase" &#124; "decrease" &#124; "remove"</code> | The adjustment for a cart line's quantity. Valid values: `increase` (default), `decrease`, or `remove`. |
-| children | <code>ReactNode</code>                                    | Any `ReactNode` elements.                                                                               |
-| onClick?    | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | A click event handler. Default behaviour triggers the click event, unless prevented. |
-| buttonRef?  | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>  | A reference to the underlying button. |
-
-## Component type
-
-The `CartLineQuantityAdjustButton` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Related components
-
-- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)
-
-
 ```tsx
 // Override `onClick` default behaviour
 import {
@@ -83,7 +65,6 @@ export function App() {
 }
 ```
 
-
 ```tsx
 // Run an async action before the default `onClick` behaviour
 import {
@@ -96,7 +77,7 @@ export function App() {
   const {lines} = useCart();
   const performed = useRef();
   const buttonRef = useRef();
-  
+
   const handleCustomOnClick = async (event) => {
     if (performed.current) {
       performed.current = false;
@@ -115,7 +96,7 @@ export function App() {
   return lines.map((line) => {
     return (
       <CartLineProvider key={line.id} line={line}>
-        <CartLineQuantityAdjustButton 
+        <CartLineQuantityAdjustButton
           adjust="increase"
           onClick={handleCustomOnClick}
           buttonRef={buttonRef}>
@@ -126,3 +107,20 @@ export function App() {
   });
 }
 ```
+
+## Props
+
+| Name     | Type                                                      | Description                                                                                             |
+| -------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| adjust   | <code>"increase" &#124; "decrease" &#124; "remove"</code> | The adjustment for a cart line's quantity. Valid values: `increase` (default), `decrease`, or `remove`. |
+| children | <code>ReactNode</code>                                    | Any `ReactNode` elements.                                                                               |
+| onClick?    | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | A click event handler. Default behaviour triggers the click event, unless prevented. |
+| buttonRef?  | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>  | A reference to the underlying button. |
+
+## Component type
+
+The `CartLineQuantityAdjustButton` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
+
+## Related components
+
+- [`CartLineProvider`](https://shopify.dev/api/hydrogen/components/cart/cartlineprovider)

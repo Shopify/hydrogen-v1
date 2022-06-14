@@ -38,23 +38,6 @@ export function MyComponent() {
 }
 ```
 
-## Props
-
-| Name                         | Type                                        | Description                                                                                                                                                   |
-| ---------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| attributes?                  | <code>Object<<wbr>key, value<wbr>>[]</code> | An array of cart line attributes that belong to the item being added to the cart.                                                                             |
-| variantId?                   | <code>string &#124; null</code>             | The ID of the variant.                                                                                                                                        |
-| quantity?                    | <code>number</code>                         | The item quantity.                                                                                                                                            |
-| children                     | <code>ReactNode</code>                      | Any ReactNode elements.                                                                                                                                       |
-| accessibleAddingToCartLabel? | <code>string</code>                         | The text that is announced by the screen reader when the item is being added to the cart. Used for accessibility purposes only and not displayed on the page. |
-| onClick?                     | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | A click event handler. Default behaviour triggers the click event, unless prevented. |
-| buttonRef?                   | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>                | A reference to the underlying button. |
-
-## Component type
-
-The `AddToCartButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-
 ```tsx
 // Override `onClick` default behavior
 import {
@@ -141,5 +124,18 @@ export function MyComponent() {
 }
 ```
 
+## Props
 
+| Name                         | Type                                        | Description                                                                                                                                                   |
+| ---------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| attributes?                  | <code>Object<<wbr>key, value<wbr>>[]</code> | An array of cart line attributes that belong to the item being added to the cart.                                                                             |
+| variantId?                   | <code>string &#124; null</code>             | The ID of the variant.                                                                                                                                        |
+| quantity?                    | <code>number</code>                         | The item quantity.                                                                                                                                            |
+| children                     | <code>ReactNode</code>                      | Any ReactNode elements.                                                                                                                                       |
+| accessibleAddingToCartLabel? | <code>string</code>                         | The text that is announced by the screen reader when the item is being added to the cart. Used for accessibility purposes only and not displayed on the page. |
+| onClick?                     | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | A click event handler. Default behaviour triggers the click event, unless prevented. |
+| buttonRef?                   | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>                | A reference to the underlying button. |
 
+## Component type
+
+The `AddToCartButton` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
