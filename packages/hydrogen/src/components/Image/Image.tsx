@@ -23,7 +23,7 @@ type ImageProps<GenericLoaderOpts> =
  * 3. `data`'s width/height
  *
  * If only one of `width` or `height` are defined, then the other will attempt to be calculated based on the Image's aspect ratio,
- * provided that both `data.width` and `data.height` are available. If not, then the aspect ratio cannot be determined and the missing
+ * provided that both `data.width` and `data.height` are available. If `data.width` and `data.height` aren't available, then the aspect ratio cannot be determined and the missing
  * value will remain as `null`
  */
 export function Image<GenericLoaderOpts>(props: ImageProps<GenericLoaderOpts>) {
