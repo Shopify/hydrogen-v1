@@ -23,11 +23,11 @@ type CreateServerOptions = {
   cache?: Cache;
 };
 
-export async function createServer({cache}: CreateServerOptions = {}) {
+export async function createServer({
+  cache = new InMemoryCache(),
+}: CreateServerOptions = {}) {
   // @ts-ignore
   globalThis.Oxygen = {env: process.env};
-
-  const defaultCache = new InMemoryCache();
 
   const app = connect();
 
@@ -45,7 +45,7 @@ export async function createServer({cache}: CreateServerOptions = {}) {
     hydrogenMiddleware({
       getServerEntrypoint: () => handleRequest,
       indexTemplate,
-      cache: cache ?? defaultCache,
+      cache,
     })
   );
 
