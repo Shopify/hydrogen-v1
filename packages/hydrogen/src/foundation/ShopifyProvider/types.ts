@@ -6,7 +6,7 @@ export interface ShopifyContextValue
   extends Omit<ShopifyConfig, 'defaultLocale'> {
   locale: `${LanguageCode}-${CountryCode}`;
   languageCode: `${LanguageCode}`;
-  storefrontId: string;
+  storefrontId: string | null;
 }
 
 export type ShopifyProviderProps = {

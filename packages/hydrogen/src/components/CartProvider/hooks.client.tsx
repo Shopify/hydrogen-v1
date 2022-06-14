@@ -30,7 +30,7 @@ export function useCartFetch() {
             'X-SDK-Variant': 'hydrogen',
             'X-SDK-Version': storefrontApiVersion,
             'X-Shopify-Storefront-Access-Token': storefrontToken,
-            'X-Shopify-Storefront-Id': storefrontId,
+            'Shopify-Storefront-Id': storefrontId || '',
           },
           body: JSON.stringify({
             query: query.toString(),
