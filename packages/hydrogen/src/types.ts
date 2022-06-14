@@ -2,7 +2,7 @@ export * from './shared-types';
 import {ShopifyConfig} from './shared-types';
 
 import type {ServerResponse} from 'http';
-import type {Logger, LoggerConfig, LoggerOptions} from './utilities/log/log';
+import type {Logger, LoggerConfig} from './utilities/log/log';
 import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
 import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
 import type {
@@ -78,15 +78,14 @@ export type ServerAnalyticsConnector = {
   ) => void;
 };
 
-export type InlineHydrogenConfig = LoggerOptions &
-  ClientConfig & {
-    routes?: InlineHydrogenRoutes;
-    shopify?: ShopifyConfig | ShopifyConfigFetcher;
-    serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
-    logger?: LoggerConfig;
-    session?: (log: Logger) => SessionStorageAdapter;
-    devTools?: boolean;
-  };
+export type InlineHydrogenConfig = ClientConfig & {
+  routes?: InlineHydrogenRoutes;
+  shopify?: ShopifyConfig | ShopifyConfigFetcher;
+  serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  logger?: LoggerConfig;
+  session?: (log: Logger) => SessionStorageAdapter;
+  devTools?: boolean;
+};
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
   routes: ResolvedHydrogenRoutes;

@@ -96,13 +96,7 @@ export const renderHydrogen = (App: any) => {
     request.ctx.hydrogenConfig = hydrogenConfig;
     request.ctx.buyerIpHeader = buyerIpHeader;
 
-    setLogger({
-      ...hydrogenConfig.logger,
-      showCacheControlHeader: hydrogenConfig.showCacheControlHeader,
-      showCacheApiStatus: hydrogenConfig.showCacheApiStatus,
-      showQueryTiming: hydrogenConfig.showQueryTiming,
-      showUnusedQueryProperties: hydrogenConfig.showUnusedQueryProperties,
-    });
+    setLogger(hydrogenConfig.logger);
     const log = getLoggerWithContext(request);
 
     const response = new HydrogenResponse();
