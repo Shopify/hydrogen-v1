@@ -155,7 +155,8 @@ The `session` property allows you to configure sessions support in your Hydrogen
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
 ```tsx
-import {CookieSessionStorage} from '@shopify/hydrogen';
+import {CookieSessionStorage} from '@shopify/hydrogen/config';
+
 export default defineConfig({
   /* The default session storage mechanism for Hydrogen. */
   session: CookieSessionStorage('__session', {
@@ -182,7 +183,8 @@ The `serverAnalyticsConnectors` property allows you to [send analytics data from
 {% codeblock file, filename: 'hydrogen.config.ts' %}
 
 ```tsx
-import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen';
+import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen/config';
+
 export default defineConfig({
   serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
 });
