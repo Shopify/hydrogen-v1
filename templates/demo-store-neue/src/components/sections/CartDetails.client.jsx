@@ -12,8 +12,7 @@ import {
   Money,
 } from '@shopify/hydrogen';
 
-import {Button, Heading, Text} from '~/components/elements';
-import {IconRemove} from '../elements/Icon';
+import {Button, Heading, IconRemove, Text} from '~/components/elements';
 
 export function CartDetails() {
   const {lines} = useCart();
@@ -98,7 +97,7 @@ function CartLineItem() {
   const {linesRemove} = useCart();
   const {id: lineId, quantity, merchandise} = useCartLine();
 
-  const variantsString = useMemo(
+  const variantOptionsTitle = useMemo(
     () =>
       merchandise.selectedOptions
         .map((option) => `${option.name}: ${option.value}`)
@@ -123,7 +122,7 @@ function CartLineItem() {
             </Link>
           </Heading>
           <div className="flex gap-2">
-            <Text color="subtle">{variantsString}</Text>
+            <Text color="subtle">{variantOptionsTitle}</Text>
           </div>
 
           <div className="flex items-baseline gap-2">

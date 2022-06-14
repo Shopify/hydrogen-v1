@@ -10,9 +10,8 @@ import {
   PerformanceMetricsDebug,
 } from '@shopify/hydrogen';
 
-import {DefaultSeo} from './components/blocks'; // TODO: find a better place for this
+import {DefaultSeo, CartProviderWithCountryCode} from '~/components/blocks';
 import {NotFound} from '~/components/pages';
-import {CartProviderWithCountryCode} from './components/elements/CartProviderWithCountryCode';
 
 function App({routes}) {
   return (
