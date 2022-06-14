@@ -119,51 +119,67 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
 
   // By wrapping these properties in functions, we only
   // create formatters if they are going to be used.
-  const lazyFormatters: Record<string, Function> = {
-    original: () => money,
-    currencyCode: () => money.currencyCode,
+  const lazyFormatters = useMemo(
+    () => ({
+      original: () => money,
+      currencyCode: () => money.currencyCode,
 
-    localizedString: () => defaultFormatter().format(amount),
+      localizedString: () => defaultFormatter().format(amount),
 
-    parts: () => defaultFormatter().formatToParts(amount),
+      parts: () => defaultFormatter().formatToParts(amount),
 
-    withoutTrailingZeros: () =>
-      amount % 1 === 0
-        ? withoutTrailingZerosFormatter().format(amount)
-        : defaultFormatter().format(amount),
+      withoutTrailingZeros: () =>
+        amount % 1 === 0
+          ? withoutTrailingZerosFormatter().format(amount)
+          : defaultFormatter().format(amount),
 
-    withoutTrailingZerosAndCurrency: () =>
-      amount % 1 === 0
-        ? withoutTrailingZerosOrCurrencyFormatter().format(amount)
-        : withoutCurrencyFormatter().format(amount),
+      withoutTrailingZerosAndCurrency: () =>
+        amount % 1 === 0
+          ? withoutTrailingZerosOrCurrencyFormatter().format(amount)
+          : withoutCurrencyFormatter().format(amount),
 
-    currencyName: () =>
-      nameFormatter().formatToParts(amount).find(isPartCurrency)?.value ??
-      money.currencyCode, // e.g. "US dollars"
+      currencyName: () =>
+        nameFormatter().formatToParts(amount).find(isPartCurrency)?.value ??
+        money.currencyCode, // e.g. "US dollars"
 
-    currencySymbol: () =>
-      defaultFormatter().formatToParts(amount).find(isPartCurrency)?.value ??
-      money.currencyCode, // e.g. "USD"
+      currencySymbol: () =>
+        defaultFormatter().formatToParts(amount).find(isPartCurrency)?.value ??
+        money.currencyCode, // e.g. "USD"
 
-    currencyNarrowSymbol: () =>
-      narrowSymbolFormatter().formatToParts(amount).find(isPartCurrency)
-        ?.value ?? '', // e.g. "$"
+      currencyNarrowSymbol: () =>
+        narrowSymbolFormatter().formatToParts(amount).find(isPartCurrency)
+          ?.value ?? '', // e.g. "$"
 
-    amount: () =>
-      defaultFormatter()
-        .formatToParts(amount)
-        .filter((part) =>
-          ['decimal', 'fraction', 'group', 'integer', 'literal'].includes(
-            part.type
+      amount: () =>
+        defaultFormatter()
+          .formatToParts(amount)
+          .filter((part) =>
+            ['decimal', 'fraction', 'group', 'integer', 'literal'].includes(
+              part.type
+            )
           )
-        )
-        .map((part) => part.value)
-        .join(''),
-  };
+          .map((part) => part.value)
+          .join(''),
+    }),
+    [
+      money,
+      amount,
+      nameFormatter,
+      defaultFormatter,
+      narrowSymbolFormatter,
+      withoutCurrencyFormatter,
+      withoutTrailingZerosFormatter,
+      withoutTrailingZerosOrCurrencyFormatter,
+    ]
+  );
 
   // Call functions automatically when the properties are accessed
   // to keep these functions as an implementation detail.
-  return new Proxy(lazyFormatters as unknown as UseMoneyValue, {
-    get: (target, key) => Reflect.get(target, key)?.call(null),
-  });
+  return useMemo(
+    () =>
+      new Proxy(lazyFormatters as unknown as UseMoneyValue, {
+        get: (target, key) => Reflect.get(target, key)?.call(null),
+      }),
+    [lazyFormatters]
+  );
 }
