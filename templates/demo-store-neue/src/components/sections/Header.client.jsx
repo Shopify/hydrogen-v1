@@ -23,7 +23,6 @@ export function Header({title, menu}) {
 
   return (
     <>
-      {/* TODO: Drawer will be removed and added into a Cart component. left it here for reviewing purposes */}
       <Drawer open={isOpen} onClose={closeDrawer}>
         <div className="grid">
           <Drawer.Title>
@@ -52,8 +51,6 @@ function MobileHeader({title, isHome, openDrawer}) {
         : 'bg-contrast/80 text-primary'
     } flex lg:hidden items-center h-12 md:h-16 sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`,
   };
-
-  // TODO: Add menu to Mobile Nav
 
   return (
     <header role="banner" className={styles.container}>
@@ -117,7 +114,6 @@ function DesktopHeader({title, isHome, menu, openDrawer}) {
 
   return (
     <header role="banner" className={styles.container}>
-      {/* TODO: Have dynamic component for Mobile vs. Desktop headers */}
       <div className="flex gap-12">
         <Link className={`font-bold`} to="/">
           {title}
