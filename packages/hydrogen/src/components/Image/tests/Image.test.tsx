@@ -82,8 +82,8 @@ describe('<Image />', () => {
       });
       const options = {scale: 2 as const};
       const mockDimensions = {
-        width: undefined,
-        height: undefined,
+        width: null,
+        height: null,
       };
 
       jest

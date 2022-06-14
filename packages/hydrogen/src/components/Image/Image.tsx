@@ -13,6 +13,19 @@ type ImageProps<GenericLoaderOpts> =
   | ShopifyImageProps
   | ExternalImageProps<GenericLoaderOpts>;
 
+/**
+ * The `Image` component renders an image for the Storefront API's
+ * [Image object](https://shopify.dev/api/storefront/reference/common-objects/image) by using the `data` prop, or a custom location by using the `src` prop. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+ *
+ * An image's width and height are determined using the following priority list:
+ * 1. The width and height values for the `loaderOptions` prop
+ * 2. The width and height values for bare props
+ * 3. The width and height values for the `data` prop
+ *
+ * If only one of `width` or `height` are defined, then the other will attempt to be calculated based on the image's aspect ratio,
+ * provided that both `data.width` and `data.height` are available. If `data.width` and `data.height` aren't available, then the aspect ratio cannot be determined and the missing
+ * value will remain as `null`
+ */
 export function Image<GenericLoaderOpts>(props: ImageProps<GenericLoaderOpts>) {
   if (!props.data && !props.src) {
     throw new Error(`<Image/>: requires either a 'data' or 'src' prop.`);
@@ -94,12 +107,16 @@ function ShopifyImage({
     );
   }
 
-  const {width: finalWidth, height: finalHeight} = getShopifyImageDimensions(
+  const {width: finalWidth, height: finalHeight} = getShopifyImageDimensions({
     data,
-    loaderOptions
-  );
+    loaderOptions,
+    elementProps: {
+      width,
+      height,
+    },
+  });
 
-  if ((__HYDROGEN_DEV__ && !finalWidth) || !finalHeight) {
+  if (__HYDROGEN_DEV__ && (!finalWidth || !finalHeight)) {
     console.warn(
       `<Image/>: the 'data' prop requires either 'width' or 'data.width', and 'height' or 'data.height' properties. ${`Image: ${
         data.id ?? data.url
@@ -251,7 +268,7 @@ function ExternalImage<GenericLoaderOpts>({
   if (!finalSrcset && loader && widths) {
     // Height is a requirement in the LoaderProps, so  to keep the aspect ratio, we must determine the height based on the default values
     const heightToWidthRatio =
-      parseInt(height as string) / parseInt(width as string);
+      parseInt(height.toString()) / parseInt(width.toString());
     finalSrcset = widths
       ?.map((width) => parseInt(width as string, 10))
       ?.map(
@@ -271,8 +288,10 @@ function ExternalImage<GenericLoaderOpts>({
     <img
       {...rest}
       src={finalSrc}
-      width={width}
-      height={height}
+      // @ts-expect-error TS doesn't understand that it could exist
+      width={loaderOptions?.width ?? width}
+      // @ts-expect-error TS doesn't understand that it could exist
+      height={loaderOptions?.height ?? height}
       alt={alt ?? ''}
       loading={loading ?? 'lazy'}
       srcSet={finalSrcset}
