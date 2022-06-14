@@ -28,26 +28,30 @@ describe('BaseButton', () => {
   describe('given an on click event handler', () => {
     it('calls the on click event handler', () => {
       const mockOnClick = jest.fn();
+      const mouseEvent = new MouseEvent('click', {cancelable: true});
+
       const component = mountWithProviders(
         <BaseButton onClick={mockOnClick}>Base Button</BaseButton>
       );
 
-      component.find('button')?.trigger('onClick');
+      component.find('button')?.trigger('onClick', mouseEvent);
 
-      expect(mockOnClick).toBeCalled();
+      expect(mockOnClick).toBeCalledWith(mouseEvent);
     });
 
     it('calls the given default on click behaviour', () => {
       const mockDefaultOnClick = jest.fn();
+      const mouseEvent = new MouseEvent('click', {cancelable: true});
+
       const component = mountWithProviders(
         <BaseButton onClick={() => {}} defaultOnClick={mockDefaultOnClick}>
           Base Button
         </BaseButton>
       );
 
-      component.find('button')?.trigger('onClick');
+      component.find('button')?.trigger('onClick', mouseEvent);
 
-      expect(mockDefaultOnClick).toBeCalled();
+      expect(mockDefaultOnClick).toBeCalledWith(mouseEvent);
     });
 
     describe('and event preventDefault is called', () => {
@@ -56,17 +60,17 @@ describe('BaseButton', () => {
           event.preventDefault();
         });
         const mockDefaultOnClick = jest.fn();
+        const mouseEvent = new MouseEvent('click', {cancelable: true});
+
         const component = mountWithProviders(
           <BaseButton onClick={mockOnClick} defaultOnClick={mockDefaultOnClick}>
             Base Button
           </BaseButton>
         );
 
-        component
-          .find('button')
-          ?.trigger('onClick', new MouseEvent('click', {cancelable: true}));
+        component.find('button')?.trigger('onClick', mouseEvent);
 
-        expect(mockOnClick).toBeCalled();
+        expect(mockOnClick).toHaveBeenCalledWith(mouseEvent);
         expect(mockDefaultOnClick).not.toBeCalled();
       });
     });
@@ -75,15 +79,17 @@ describe('BaseButton', () => {
       it('calls the on click event handler without calling the default on click behaviour', () => {
         const mockOnClick = jest.fn(() => false);
         const mockDefaultOnClick = jest.fn();
+        const mouseEvent = new MouseEvent('click', {cancelable: true});
+
         const component = mountWithProviders(
           <BaseButton onClick={mockOnClick} defaultOnClick={mockDefaultOnClick}>
             Base Button
           </BaseButton>
         );
 
-        component.find('button')?.trigger('onClick');
+        component.find('button')?.trigger('onClick', mouseEvent);
 
-        expect(mockOnClick).toBeCalled();
+        expect(mockOnClick).toBeCalledWith(mouseEvent);
         expect(mockDefaultOnClick).not.toBeCalled();
       });
     });

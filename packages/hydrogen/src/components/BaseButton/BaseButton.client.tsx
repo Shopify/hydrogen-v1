@@ -1,19 +1,26 @@
-import React, {MouseEvent, ReactNode, Ref} from 'react';
+import React, {ReactNode, Ref} from 'react';
 import {useCallback} from 'react';
 
 interface Props {
   /** Any ReactNode elements. */
   children: ReactNode;
-  /** A click event handler. Default behaviour triggers unless prevented */
-  onClick?: (event?: MouseEvent) => void | boolean;
+  /** Click event handler. Default behaviour triggers unless prevented */
+  onClick?: (
+    event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void | boolean;
   /** A default onClick behaviour */
-  defaultOnClick?: Function;
+  defaultOnClick?: (
+    event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void | boolean;
   /** A ref to the underlying button */
   buttonRef?: Ref<HTMLButtonElement>;
-  /** Any ReactNode elements. */
 }
 
-export type BaseButtonProps = JSX.IntrinsicElements['button'] & Props;
+export type BaseButtonProps = Omit<
+  JSX.IntrinsicElements['button'],
+  'onClick' | 'children'
+> &
+  Props;
 
 export function BaseButton({
   onClick,
@@ -23,13 +30,18 @@ export function BaseButton({
   ...passthroughProps
 }: BaseButtonProps) {
   const handleOnClick = useCallback(
-    (event: MouseEvent) => {
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (onClick) {
         const clickShouldContinue = onClick(event);
-        if (clickShouldContinue === false || event?.defaultPrevented) return;
+        if (
+          (typeof clickShouldContinue === 'boolean' &&
+            clickShouldContinue === false) ||
+          event?.defaultPrevented
+        )
+          return;
       }
 
-      defaultOnClick?.();
+      defaultOnClick?.(event);
     },
     [defaultOnClick, onClick]
   );
