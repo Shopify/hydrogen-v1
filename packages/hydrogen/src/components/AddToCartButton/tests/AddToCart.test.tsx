@@ -6,6 +6,7 @@ import {mountWithCartProvider} from '../../CartProvider/tests/utilities';
 import {ProductOptionsProvider} from '../../ProductOptionsProvider';
 import {AddToCartButton} from '../AddToCartButton.client';
 import {getProduct, getVariant} from '../../../utilities/tests/product';
+import {BaseButton} from '../../BaseButton';
 
 describe('AddToCartButton', () => {
   beforeEach(() => {
@@ -208,6 +209,42 @@ describe('AddToCartButton', () => {
 
       expect(component).toContainReactComponent('p', {
         children: 'Adding product to your cart',
+      });
+    });
+  });
+
+  describe('BaseButton', () => {
+    it('passes the onClick handler', () => {
+      const product = getProduct();
+      const mockOnClick = jest.fn();
+
+      const component = mountWithProviders(
+        <CartProvider>
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton onClick={mockOnClick}>Add to cart</AddToCartButton>
+          </ProductOptionsProvider>
+        </CartProvider>
+      );
+
+      expect(component).toContainReactComponent(BaseButton, {
+        onClick: mockOnClick,
+      });
+    });
+
+    it('passes the buttonRef', () => {
+      const product = getProduct();
+      const mockRef = React.createRef<HTMLButtonElement>();
+
+      const component = mountWithProviders(
+        <CartProvider>
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton buttonRef={mockRef}>Add to cart</AddToCartButton>
+          </ProductOptionsProvider>
+        </CartProvider>
+      );
+
+      expect(component).toContainReactComponent(BaseButton, {
+        buttonRef: mockRef,
       });
     });
   });

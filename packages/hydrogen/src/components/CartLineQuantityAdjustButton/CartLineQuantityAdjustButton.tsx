@@ -1,9 +1,10 @@
-import React, {ReactNode, ElementType} from 'react';
+import React, {ElementType, useCallback} from 'react';
 import {useCart} from '../CartProvider';
 import {Props} from '../types';
 import {useCartLine} from '../CartLineProvider';
+import {BaseButton, BaseButtonProps} from '../BaseButton';
 
-type PropsWeControl = 'onClick' | 'adjust';
+type PropsWeControl = 'adjust';
 
 /**
  * The `CartLineQuantityAdjustButton` component renders a button that adjusts the cart line's quantity when pressed.
@@ -13,38 +14,39 @@ export function CartLineQuantityAdjustButton<
   TTag extends ElementType = 'button'
 >(
   props: Props<TTag, PropsWeControl> & {
-    /** Any `ReactNode` elements. */
-    children: ReactNode;
     /** The adjustment for a cart line's quantity. Valid values: `increase` (default), `decrease`, or `remove`. */
     adjust?: 'increase' | 'decrease' | 'remove';
-  }
+  } & BaseButtonProps
 ) {
   const {status, linesRemove, linesUpdate} = useCart();
   const cartLine = useCartLine();
-  const {children, adjust, ...passthroughProps} = props;
+  const {children, adjust, onClick, ...passthroughProps} = props;
+
+  const handleAdjust = useCallback(() => {
+    if (adjust === 'remove') {
+      linesRemove([cartLine.id]);
+      return;
+    }
+
+    const quantity =
+      adjust === 'decrease' ? cartLine.quantity - 1 : cartLine.quantity + 1;
+
+    if (quantity <= 0) {
+      linesRemove([cartLine.id]);
+      return;
+    }
+
+    linesUpdate([{id: cartLine.id, quantity}]);
+  }, [adjust, cartLine.id, cartLine.quantity, linesRemove, linesUpdate]);
 
   return (
-    <button
+    <BaseButton
       disabled={status !== 'idle'}
-      onClick={() => {
-        if (adjust === 'remove') {
-          linesRemove([cartLine.id]);
-          return;
-        }
-
-        const quantity =
-          adjust === 'decrease' ? cartLine.quantity - 1 : cartLine.quantity + 1;
-
-        if (quantity <= 0) {
-          linesRemove([cartLine.id]);
-          return;
-        }
-
-        linesUpdate([{id: cartLine.id, quantity}]);
-      }}
+      onClick={onClick}
+      defaultOnClick={handleAdjust}
       {...passthroughProps}
     >
       {children}
-    </button>
+    </BaseButton>
   );
 }
