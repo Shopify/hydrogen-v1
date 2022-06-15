@@ -405,21 +405,61 @@ var hashImportsPlugin = {
     }
   }
 };
+
 /**
  * A client module should behave as a client boundary
  * if it is imported by the server before encountering
  * another boundary in the process.
- * Traverse the module graph upwards to find non client
- * components that import the current module.
+ * This traverses the module graph upwards to find non client
+ * components that import the `originalMod`.
+ *
+ * The `accModInfo` represents the exported members from the
+ * `originalMod` but renamed accordingly to all the intermediate/facade
+ * files in the import chain from the `originalMod` to every parent importer.
  */
-
-function isDirectImportInServer(currentMod, originalMod) {
+function isDirectImportInServer(originalMod, currentMod, accModInfo) {
   // TODO: this should use recursion in any module that exports
   // the original one, not only in full facade files.
-  if (!originalMod || (currentMod.meta || {}).isFacade) {
-    return Array.from(currentMod.importers).some(function (importer) {
+  if (!currentMod || (currentMod.meta || {}).isFacade) {
+    if (!accModInfo && originalMod.meta && originalMod.meta.namedExports) {
+      // First iteration in the recursion, initialize the
+      // acumulator with data from the original module.
+      accModInfo = {
+        file: originalMod.file,
+        exports: originalMod.meta.namedExports
+      };
+    }
+
+    if (currentMod && accModInfo) {
+      // Update accumulator in subsequent iterations with
+      // whatever the current module is re-exporting.
+      var lastModExports = accModInfo.exports;
+      var lastModImports = currentMod.meta.imports.filter(function (importMeta) {
+        return importMeta.action === 'export' && importMeta.from === accModInfo.file;
+      });
+      accModInfo = {
+        file: currentMod.file,
+        exports: []
+      };
+      lastModImports.forEach(function (mod) {
+        mod.variables.forEach(function (_ref2) {
+          var name = _ref2[0],
+              alias = _ref2[1];
+
+          if (name === '*' && !alias) {
+            var _accModInfo$exports;
+
+            (_accModInfo$exports = accModInfo.exports).push.apply(_accModInfo$exports, lastModExports);
+          } else {
+            accModInfo.exports.push(alias || name);
+          }
+        });
+      });
+    }
+
+    return Array.from((currentMod || originalMod).importers).some(function (importer) {
       return (// eslint-disable-next-line no-unused-vars
-        isDirectImportInServer(importer, originalMod || currentMod)
+        isDirectImportInServer(originalMod, importer, accModInfo)
       );
     });
   } // Not enough information: safer to assume it is
@@ -435,14 +475,12 @@ function isDirectImportInServer(currentMod, originalMod) {
   // However, due to the lack of tree-shaking in the dev module graph,
   // we need to manually make sure this module is importing something from
   // the original module before marking it as client boundary.
-  // -- TODO: this only checks namedExports right now. It should
-  // consider default exports and variable renaming in facade modules.
 
   return currentMod.meta.imports.some(function (imp) {
-    return imp.action === 'import' && (imp.from === originalMod.file || (imp.variables || []).some(function (_ref2) {
-      var name = _ref2[0];
-      return originalMod.meta.namedExports.includes(name);
-    }));
+    return imp.action === 'import' && imp.from === accModInfo.file && (imp.variables || []).some(function (_ref3) {
+      var name = _ref3[0];
+      return accModInfo.exports.includes(name);
+    });
   });
 }
 
@@ -478,12 +516,12 @@ function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
 
 
   var imports = [];
-  rawImports.forEach(function (_ref3) {
-    var startMod = _ref3.s,
-        endMod = _ref3.e,
-        dynamicImportIndex = _ref3.d,
-        startStatement = _ref3.ss,
-        endStatement = _ref3.se;
+  rawImports.forEach(function (_ref4) {
+    var startMod = _ref4.s,
+        endMod = _ref4.e,
+        dynamicImportIndex = _ref4.d,
+        startStatement = _ref4.ss,
+        endStatement = _ref4.se;
     if (dynamicImportIndex !== -1) return; // Skip dynamic imports for now
 
     var rawModPath = code.slice(startMod, endMod);
@@ -509,7 +547,7 @@ function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
       action: action,
       // 'import' or 'export'
       variables: variables // [['originalName', 'alias']]
-      .replace(/[{}]/gm, '').trim().split(/\s*,\s*/m).filter(Boolean).map(function (s) {
+      .trim().replace(/^[^{*]/, 'default as $&').replace(/[{}]/gm, '').trim().split(/\s*,\s*/m).filter(Boolean).map(function (s) {
         return s.split(/\s+as\s+/m);
       }),
       from: resolvedPath,
