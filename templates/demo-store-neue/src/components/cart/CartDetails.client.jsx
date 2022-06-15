@@ -14,11 +14,11 @@ import {
 
 import {Button, Heading, IconRemove, Text} from '~/components';
 
-export function CartDetails() {
+export function CartDetails({onClose}) {
   const {lines} = useCart();
 
   if (lines.length === 0) {
-    return <CartEmpty />;
+    return <CartEmpty onClose={onClose} />;
   }
 
   return (
@@ -154,19 +154,27 @@ function CartLineItem() {
   );
 }
 
-function CartEmpty() {
+function CartEmpty({onClose}) {
   return (
     <div className="flex flex-col space-y-7 justify-center items-center md:py-8 md:px-12 px-4 py-6 h-screen">
       <Heading>Your cart is empty</Heading>
-      <Button>Continue shopping</Button>
+      <Button onClick={onClose}>Continue shopping</Button>
       <div className="flex flex-col text-center">
         <Text>Have an account?</Text>
         <Text>
-          <Link className="text-orange-600 underline" to="/account/register">
+          <Link
+            className="text-orange-600 underline"
+            onClick={onClose}
+            to="/account/register"
+          >
             Join
           </Link>{' '}
           or{' '}
-          <Link className="text-orange-600 underline" to="/account/login">
+          <Link
+            className="text-orange-600 underline"
+            onClick={onClose}
+            to="/account/login"
+          >
             login
           </Link>{' '}
           for smoother checkout.
