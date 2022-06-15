@@ -99,4 +99,4 @@ Depending on the `type` specified in the passed [Metafield](https://shopify.dev/
 
 ## Related utilities
 
-- [`parseMetafield`](/https://shopify.dev/api/hydrogen/utilities/parsemetafield)
+- [`parseMetafield`](https://shopify.dev/api/hydrogen/utilities/parsemetafield)

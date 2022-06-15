@@ -41,9 +41,11 @@ export function parseMetafieldValue(
   }
 
   if (metafield.value === null || metafield.value === undefined) {
-    console.warn(
-      `'parseMetafieldValue()' was passed ${metafield.value} for 'metafield.value'`
-    );
+    if (__HYDROGEN_DEV__) {
+      console.warn(
+        `'parseMetafieldValue()' was passed ${metafield.value} for 'metafield.value'`
+      );
+    }
     return metafield.value;
   }
 
