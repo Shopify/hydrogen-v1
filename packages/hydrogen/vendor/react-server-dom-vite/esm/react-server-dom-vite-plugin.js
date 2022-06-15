@@ -107,17 +107,8 @@ function ReactFlightVitePlugin() {
 
   var config;
   var server;
-  var invalidateTimeout;
   var globImporterPath;
   var resolveAlias;
-
-  function invalidateGlobImporter() {
-    clearTimeout(invalidateTimeout);
-    invalidateTimeout = setTimeout(function () {
-      return server.watcher.emit('change', globImporterPath);
-    }, 100);
-  }
-
   return {
     name: 'vite-plugin-react-server-components',
     enforce: 'pre',
@@ -200,7 +191,12 @@ function ReactFlightVitePlugin() {
 
         if (!moduleNode.meta.isClientComponent) {
           moduleNode.meta.isClientComponent = true;
-          if (globImporterPath) invalidateGlobImporter();
+
+          if (globImporterPath) {
+            // Invalidate glob importer file to account for the
+            // newly discovered client component.
+            server.watcher.emit('change', globImporterPath);
+          }
         }
       }
 
