@@ -1,6 +1,4 @@
-import {Layout} from '~/components/layouts';
-import {CartDetails} from '~/components/sections';
-import {PageHeader, Section} from '~/components/elements';
+import {Layout, PageHeader, Section, CartDetails} from '~/components';
 
 export default function Cart() {
   return (

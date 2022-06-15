@@ -7,8 +7,7 @@ import {
   CacheLong,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {CustomFont} from '~/components/blocks';
+import {Layout, CustomFont} from '~/components';
 
 const BLOG_HANDLE = 'journal';
 

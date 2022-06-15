@@ -1,24 +1,26 @@
 import {
+  gql,
+  ProductOptionsProvider,
+  ShopifyAnalyticsConstants,
+  useRouteParams,
+  useServerAnalytics,
   useSession,
   useShop,
   useShopQuery,
-  useRouteParams,
-  useServerAnalytics,
-  ShopifyAnalyticsConstants,
-  gql,
-  ProductOptionsProvider,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {ProductSwimlane} from '~/components/sections';
-import {Section, Heading, Text} from '~/components/elements';
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
 import {
+  Heading,
+  Layout,
   NotFound,
-  ProductGallery,
   ProductForm,
+  ProductGallery,
   ProductInfo,
-} from '~/components/sections';
+  ProductSwimlane,
+  Section,
+  Text,
+} from '~/components';
 
 export default function Product() {
   const {handle} = useRouteParams();

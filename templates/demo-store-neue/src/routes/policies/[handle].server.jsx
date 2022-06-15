@@ -7,9 +7,7 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {Button, PageHeader, Section} from '~/components/elements';
-import {NotFound} from '~/components/sections';
+import {Layout, Button, PageHeader, Section, NotFound} from '~/components';
 
 export default function Policy({params}) {
   const {languageCode} = useShop();

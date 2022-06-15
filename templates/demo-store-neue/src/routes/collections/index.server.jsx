@@ -1,8 +1,6 @@
 import {useShopQuery, useSession, useShop, gql} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {CollectionCard} from '~/components/blocks';
-import {PageHeader, Section, Grid} from '~/components/elements';
+import {Layout, CollectionCard, PageHeader, Section, Grid} from '~/components';
 
 export default function Collections() {
   const {languageCode} = useShop();

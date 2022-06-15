@@ -7,8 +7,7 @@ import {
   Link,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {PageHeader, Section, Heading} from '~/components/elements';
+import {Layout, PageHeader, Section, Heading} from '~/components';
 
 export default function Policies() {
   const {languageCode} = useShop();
