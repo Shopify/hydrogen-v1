@@ -201,6 +201,7 @@ export function AccountDetailsEdit({
         >
           Passwords must be at least 6 characters.
         </Text>
+        {newPassword2Error ? <br /> : null}
         <Text
           size="fine"
           className={`mt-1 text-red-500 ${

@@ -234,7 +234,7 @@ export function AccountAddressEdit({address, defaultAddress, close}) {
               onChange={() => setIsDefaultAddress(!isDefaultAddress)}
             />
             <label
-              className="ml-2 inline-block text-gray-800 text-sm"
+              className="ml-2 inline-block text-sm"
               htmlFor="defaultAddress"
             >
               Set as default address
