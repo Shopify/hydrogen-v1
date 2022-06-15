@@ -64,7 +64,7 @@ export function AccountPasswordResetForm({id, resetToken}) {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center my-24 px-4">
       <div className="max-w-md w-full">
         <h1 className="text-4xl">Reset Password.</h1>
         <p className="mt-4">Enter a new password for your account.</p>
@@ -74,7 +74,7 @@ export function AccountPasswordResetForm({id, resetToken}) {
               <p className="m-4 text-s text-white">{submitError}</p>
             </div>
           )}
-          <div className="mb-4">
+          <div className="mb-3">
             <input
               className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
                 passwordError ? ' border-red-500' : 'border-gray-900'
@@ -85,6 +85,8 @@ export function AccountPasswordResetForm({id, resetToken}) {
               autoComplete="current-password"
               placeholder="Password"
               aria-label="Password"
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
               value={password}
               minLength={8}
               required
@@ -100,7 +102,7 @@ export function AccountPasswordResetForm({id, resetToken}) {
               {passwordError} &nbsp;
             </p>
           </div>
-          <div className="mb-4">
+          <div className="mb-3">
             <input
               className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
                 passwordConfirmError ? ' border-red-500' : 'border-gray-900'
@@ -128,7 +130,7 @@ export function AccountPasswordResetForm({id, resetToken}) {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-gray-900 text-white uppercase py-2 px-4 focus:shadow-outline block w-full"
+              className="bg-gray-900 text-white rounded py-2 px-4 focus:shadow-outline block w-full"
               type="submit"
             >
               Save
