@@ -35,12 +35,9 @@ export function Panels({settings}: Props) {
         largest_contentful_paint,
         response_end,
         page_load_type,
-        type,
         url,
         transfer_size,
-        ...rest
       }) => {
-        console.log(rest);
         setNavigations([
           ...navigations,
           {
