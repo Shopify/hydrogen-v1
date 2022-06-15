@@ -18,6 +18,7 @@ import {
 import {ProductCard} from '~/components/blocks';
 import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {getImageLoadingPriority} from '~/lib/const';
 
 export default function Search({pageBy = 12, params}) {
   const {languageCode} = useShop();
@@ -66,8 +67,12 @@ export default function Search({pageBy = 12, params}) {
     <SearchPage query={decodeURI(query)}>
       <Section>
         <Grid layout="products">
-          {results.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {results.map((product, i) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              loading={getImageLoadingPriority(i)}
+            />
           ))}
         </Grid>
       </Section>

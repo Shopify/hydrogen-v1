@@ -13,6 +13,7 @@ import {NotFound} from '~/components/pages';
 import {PageHeader, Text, Section} from '~/components/elements';
 import {ProductGrid} from '~/components/sections';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {GRID_IMG_LOAD_EAGER_COUNT} from '~/lib/const';
 
 const pageBy = 12;
 
@@ -71,7 +72,7 @@ export default function Collection({params}) {
         </div>
       </PageHeader>
       <Section>
-        <ProductGrid data={data} loadImageEagerCount={2} />
+        <ProductGrid data={data} />
       </Section>
     </Layout>
   );

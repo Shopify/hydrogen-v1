@@ -1,4 +1,5 @@
 import {MediaFile} from '@shopify/hydrogen/client';
+import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products
@@ -19,7 +20,7 @@ export function ProductGallery({media, className}) {
           extraProps = {
             interactionPromptThreshold: '0',
             ar: true,
-            loading: 'eager',
+            loading: ATTR_LOADING_EAGER,
             disableZoom: true,
           };
         }
@@ -31,6 +32,10 @@ export function ProductGallery({media, className}) {
             altText: med.alt || 'Product image',
           },
         };
+
+        if (i === 0 && med.mediaContentType === 'IMAGE') {
+          extraProps['loading'] = ATTR_LOADING_EAGER;
+        }
 
         return (
           <div

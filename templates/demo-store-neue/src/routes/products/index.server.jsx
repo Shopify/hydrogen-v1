@@ -4,6 +4,7 @@ import {Layout} from '~/components/layouts';
 import {PageHeader, Button, Grid, Text, Section} from '~/components/elements';
 import {ProductCard} from '~/components/blocks';
 import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {getImageLoadingPriority} from '~/lib/const';
 
 export default function AllProducts({pageBy = 12}) {
   const {languageCode} = useShop();
@@ -40,8 +41,12 @@ export default function AllProducts({pageBy = 12}) {
       </PageHeader>
       <Section>
         <Grid>
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, i) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              loading={getImageLoadingPriority(i)}
+            />
           ))}
         </Grid>
       </Section>
