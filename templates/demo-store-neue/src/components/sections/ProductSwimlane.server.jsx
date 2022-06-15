@@ -1,8 +1,7 @@
 import {useMemo} from 'react';
 import {gql, useShopQuery, useSession, useShop} from '@shopify/hydrogen';
-import {Section} from '~/components/elements';
-import {ProductCard} from '~/components/blocks';
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {ProductCard, Section} from '~/components';
 
 const mockProducts = new Array(12).fill('');
 
@@ -95,7 +94,7 @@ function TopProducts({count}) {
 }
 
 const RECOMMENDED_PRODUCTS_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query productRecommendations(
     $productId: ID!
     $count: Int
@@ -114,7 +113,7 @@ const RECOMMENDED_PRODUCTS_QUERY = gql`
 `;
 
 const TOP_PRODUCTS_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query topProducts(
     $count: Int
     $countryCode: CountryCode

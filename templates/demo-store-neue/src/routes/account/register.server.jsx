@@ -1,7 +1,6 @@
 import {CacheNone, Seo, gql} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {AccountCreateForm} from '~/components/sections';
+import {Layout, AccountCreateForm} from '~/components';
 import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Register({response}) {

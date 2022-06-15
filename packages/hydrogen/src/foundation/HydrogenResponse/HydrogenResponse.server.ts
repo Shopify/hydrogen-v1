@@ -3,13 +3,16 @@ import type {CachingStrategy} from '../../types';
 import Redirect from '../Redirect/Redirect.client';
 import React from 'react';
 
-const PROXY_KEYS = ['status', 'statusText'] as Array<string | Symbol>;
-
 export class HydrogenResponse extends Response {
   private wait = false;
   private cacheOptions: CachingStrategy = CacheShort();
 
-  private proxy = Object.create(null);
+  private proxy = Object.defineProperties(Object.create(null), {
+    // Default values:
+    status: {value: 200, writable: true},
+    statusText: {value: '', writable: true},
+  });
+
   // @ts-ignore
   public status: number;
   // @ts-ignore
@@ -19,16 +22,9 @@ export class HydrogenResponse extends Response {
     super(...args);
 
     return new Proxy(this, {
-      get(target, key) {
-        return target.proxy[key] ?? Reflect.get(target, key);
-      },
-      set(target, key, value) {
-        return Reflect.set(
-          PROXY_KEYS.includes(key) ? target.proxy : target,
-          key,
-          value
-        );
-      },
+      get: (target, key) => target.proxy[key] ?? Reflect.get(target, key),
+      set: (target, key, value) =>
+        Reflect.set(key in target.proxy ? target.proxy : target, key, value),
     });
   }
 

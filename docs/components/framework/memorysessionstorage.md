@@ -11,10 +11,10 @@ The `MemorySessionStorage` component stores session data within Hydrogen runtime
 {% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
-import {renderHydrogen, MemorySessionStorage} from '@shopify/hydrogen';
-export default renderHydrogen(App, {
-  routes,
-  shopifyConfig,
+import {defineConfig, MemorySessionStorage} from '@shopify/hydrogen/config';
+
+export default defineConfig({
+  shopify: {/*...*/},
   session: MemorySessionStorage('__session', {
     path: '/',
     httpOnly: true,

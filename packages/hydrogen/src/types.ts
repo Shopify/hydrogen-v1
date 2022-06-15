@@ -84,6 +84,7 @@ export type InlineHydrogenConfig = ClientConfig & {
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
+  __EXPERIMENTAL__devTools?: boolean;
 };
 
 export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
@@ -93,7 +94,6 @@ export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
 export type ClientConfig = {
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;
-  showDevTools?: boolean;
 };
 
 export type ClientHandler = (

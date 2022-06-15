@@ -1,14 +1,6 @@
-import {
-  useShopQuery,
-  useSession,
-  useShop,
-  Image,
-  Link,
-  gql,
-} from '@shopify/hydrogen';
+import {useShopQuery, useSession, useShop, gql} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {PageHeader, Section, Heading, Grid} from '~/components/elements';
+import {Layout, CollectionCard, PageHeader, Section, Grid} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 
 export default function Collections() {
@@ -16,7 +8,7 @@ export default function Collections() {
   const {countryCode = 'US'} = useSession();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: COLLECTIONS_QUERY,
     variables: {
       pageBy: 12,
       country: countryCode,
@@ -33,8 +25,8 @@ export default function Collections() {
       <Section>
         <Grid items={collections.length === 3 ? 3 : 2}>
           {collections.map((collection, i) => (
-            <Card
-              data={collection}
+            <CollectionCard
+              collection={collection}
               key={collection.id}
               loading={getImageLoadingPriority(i, 2)}
             />
@@ -45,27 +37,7 @@ export default function Collections() {
   );
 }
 
-function Card({data, loading}) {
-  return (
-    <Link to={`/collections/${data.handle}`} className="grid gap-4">
-      {data?.image && (
-        <div className="card-image">
-          <Image
-            className="object-cover w-full aspect-[3/2]"
-            data={data.image}
-            loading={loading}
-            alt={data.image.altText || data.title}
-          />
-        </div>
-      )}
-      <Heading as="h3" size="copy">
-        {data.title}
-      </Heading>
-    </Link>
-  );
-}
-
-const QUERY = gql`
+const COLLECTIONS_QUERY = gql`
   query Collections(
     $country: CountryCode
     $language: LanguageCode

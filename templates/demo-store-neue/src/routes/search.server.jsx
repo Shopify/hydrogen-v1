@@ -1,24 +1,24 @@
 import {
-  useShop,
-  useUrl,
-  useSession,
-  useShopQuery,
   gql,
+  useSession,
+  useShop,
+  useShopQuery,
+  useUrl,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {
-  PageHeader,
-  Section,
-  Heading,
-  Text,
-  Input,
+  FeaturedCollections,
   Grid,
-} from '~/components/elements';
-import {ProductCard} from '~/components/blocks';
-import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
-import {getImageLoadingPriority} from '~/lib/const';
+  Heading,
+  Input,
+  Layout,
+  PageHeader,
+  ProductCard,
+  ProductSwimlane,
+  Section,
+  Text,
+} from '~/components';
 
 export default function Search({pageBy = 12, params}) {
   const {languageCode} = useShop();
@@ -106,7 +106,7 @@ function SearchPage({query, children}) {
 }
 
 const SEARCH_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query search(
     $query: String
     $country: CountryCode

@@ -1,6 +1,6 @@
 import {Image, Video, Link} from '@shopify/hydrogen';
 
-import {Heading, Text} from '~/components/elements';
+import {Heading, Text} from '~/components';
 import {hero as mockData} from '~/lib/placeholders';
 
 export function Hero({data = mockData, height, top, loading}) {

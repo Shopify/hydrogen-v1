@@ -1,12 +1,11 @@
 import {useSession, useShop, useShopQuery, gql} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {PageHeader, Button, Grid, Text, Section} from '~/components/elements';
-import {ProductCard} from '~/components/blocks';
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
-import {getImageLoadingPriority} from '~/lib/const';
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {Layout, ProductGrid, PageHeader, Section} from '~/components';
 
-export default function AllProducts({pageBy = 12}) {
+const pageBy = 12;
+
+export default function AllProducts() {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
@@ -20,44 +19,40 @@ export default function AllProducts({pageBy = 12}) {
     preload: true,
   });
 
-  const products = data.products.nodes;
-  const hasNextPage = data.products.pageInfo.hasNextPage;
+  const products = data.products;
 
   return (
     <Layout>
-      <PageHeader heading="All Products" variant="allCollections">
-        <div className="inline-block">
-          <div className="flex items-baseline justify-between w-full">
-            <div className="flex items-baseline justify-end gap-4 md:gap-6 lg:gap-8">
-              {/* TODO: This will only get the amount on the page, not the total amount. I don't think you actually can grab the total number of products in a collection today. */}
-              <Text>{products.length}</Text>
-              {/* TODO: Convert to Filter dropdown */}
-              <button className="inline-block pb-px leading-none border-b border-primary">
-                Filters
-              </button>
-            </div>
-          </div>
-        </div>
-      </PageHeader>
+      <PageHeader heading="All Products" variant="allCollections" />
       <Section>
-        <Grid>
-          {products.map((product, i) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              loading={getImageLoadingPriority(i)}
-            />
-          ))}
-        </Grid>
+        <ProductGrid collection={{products}} />
       </Section>
-      <Section>{hasNextPage && <Button>Load More</Button>}</Section>
     </Layout>
   );
 }
 
+// pagination api
+export async function api(request, {params, queryShop}) {
+  if (request.method !== 'POST') {
+    return new Response(405, {Allow: 'POST'});
+  }
+
+  const cursor = new URL(request.url).searchParams.get('cursor');
+  const {handle} = params;
+
+  return await queryShop({
+    query: PAGINATE_QUERY,
+    variables: {
+      handle,
+      cursor,
+      pageBy,
+    },
+  });
+}
+
 const ALL_PRODUCTS_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
-  query CollectionDetails(
+  ${PRODUCT_CARD_FRAGMENT}
+  query AllProducts(
     $country: CountryCode
     $language: LanguageCode
     $pageBy: Int!
@@ -70,6 +65,21 @@ const ALL_PRODUCTS_QUERY = gql`
       pageInfo {
         hasNextPage
         startCursor
+        endCursor
+      }
+    }
+  }
+`;
+
+const PAGINATE_QUERY = gql`
+  ${PRODUCT_CARD_FRAGMENT}
+  query ProductsPage($pageBy: Int!, $cursor: String) {
+    products(first: $pageBy, after: $cursor) {
+      nodes {
+        ...ProductCardFields
+      }
+      pageInfo {
+        hasNextPage
         endCursor
       }
     }

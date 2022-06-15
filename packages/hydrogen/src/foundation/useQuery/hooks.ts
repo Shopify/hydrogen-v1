@@ -89,7 +89,7 @@ export function shouldPreloadQuery(
 
 function cachedQueryFnBuilder<T>(
   key: QueryKey,
-  queryFn: () => Promise<T>,
+  generateNewOutput: () => Promise<T>,
   queryOptions?: HydrogenUseQueryOptions
 ) {
   const resolvedQueryOptions = {
@@ -108,10 +108,6 @@ function cachedQueryFnBuilder<T>(
     const log = getLoggerWithContext(request);
 
     const cacheResponse = await getItemFromCache(key);
-
-    async function generateNewOutput() {
-      return await queryFn();
-    }
 
     if (cacheResponse) {
       const [output, response] = cacheResponse;

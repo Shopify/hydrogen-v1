@@ -4,7 +4,6 @@ export {Grid} from './Grid';
 export {Heading} from './Heading';
 export {Input} from './Input';
 export {LogoutButton} from './LogoutButton.client';
-export {PageHeader} from './PageHeader';
 export {Section} from './Section';
 export {Skeleton} from './Skeleton';
 export {Text} from './Text';
