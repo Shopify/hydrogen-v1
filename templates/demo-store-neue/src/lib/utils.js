@@ -1,5 +1,22 @@
 // TODO: Split this into multiple files
+import {useServerProps} from '@shopify/hydrogen';
+import {useCallback} from 'react';
+
 import typographicBase from 'typographic-base';
+
+/**
+ * This is a hack until we have better built-in primitives for
+ * causing server components to re-render.
+ *
+ * @returns function when called will cause the current page to re-render on the server
+ */
+export function useRenderServerComponents() {
+  const {serverProps, setServerProps} = useServerProps();
+
+  return useCallback(() => {
+    setServerProps('renderRsc', !serverProps.renderRsc);
+  }, [serverProps, setServerProps]);
+}
 
 export function missingClass(string, prefix) {
   if (!string) {
@@ -124,7 +141,7 @@ function parseItem(customPrefixes = {}) {
 
     /*
       Currently the MenuAPI only returns online store urls e.g — xyz.myshopify.com/..
-      TODO: update logic when API is fixed to include the active qualified domain
+      Note: update logic when API is updated to include the active qualified domain
     */
     const isInternalLink = /\.myshopify\.com/g.test(item.url);
     const hasSubItems = item?.items?.length > 0;

@@ -2521,16 +2521,6 @@
     semiver "^1.1.0"
     typescript "^4.6.3"
 
-"@shopify/network@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@shopify/network/-/network-2.0.8.tgz#fc2c7f78f31428130e5facb09135dc7bea0af289"
-  integrity sha512-SLImF7JPACYFepqOAZ7ORlVMmDhp90KlYJY2BWPiUge2+4IjTCU0QvJWEaeV/PdUQ1PurLZNuRIUEkjpEH23dA==
-
-"@shopify/performance@^2.0.14":
-  version "2.0.14"
-  resolved "https://registry.yarnpkg.com/@shopify/performance/-/performance-2.0.14.tgz#a8fda8c9323fd7a4bf5f2c3690276c9aae832ca1"
-  integrity sha512-2XoCjho64qbRWPE/Elzw7ZGQOnz3S61xwl9Mpzb82wf6k7QInyAWB1XjvaeGyZOSSsU9ysw/l7LfLxgLXWYvUw==
-
 "@shopify/plugin-ngrok@^0.2.4", "@shopify/plugin-ngrok@^0.2.6":
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/@shopify/plugin-ngrok/-/plugin-ngrok-0.2.7.tgz#c287357d21232d5917bb8810f2b62b9ae113d453"
@@ -2543,13 +2533,6 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
-
-"@shopify/react-performance@^2.1.14":
-  version "2.1.14"
-  resolved "https://registry.yarnpkg.com/@shopify/react-performance/-/react-performance-2.1.14.tgz#d58111c2940facc4b4864e8618de839710056c6a"
-  integrity sha512-eszwscq3rM829ggUBiS3QdXWc6b1rDGX8ODgUDM3B7dJU1ITr0UX9K4pkXL2rUkL0QzQDfqeHnBU33XR1kn1FA==
-  dependencies:
-    "@shopify/performance" "^2.0.14"
 
 "@shopify/react-testing@^3.3.8":
   version "3.3.10"
@@ -12084,13 +12067,13 @@ rc@^1.2.7, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^18.1.0:
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.1.0.tgz#7f6dd84b706408adde05e1df575b3a024d7e8a2f"
-  integrity sha512-fU1Txz7Budmvamp7bshe4Zi32d0ll7ect+ccxNu9FlObT605GOEB8BfO4tmRJ39R5Zj831VCpvQ05QPBW5yb+w==
+react-dom@^18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
+  integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
   dependencies:
     loose-envify "^1.1.0"
-    scheduler "^0.22.0"
+    scheduler "^0.23.0"
 
 react-error-boundary@^3.1.3:
   version "3.1.4"
@@ -12164,10 +12147,10 @@ react-use@^17.4.0:
     ts-easing "^0.2.0"
     tslib "^2.1.0"
 
-react@^18.1.0:
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.1.0.tgz#6f8620382decb17fdc5cc223a115e2adbf104890"
-  integrity sha512-4oL8ivCz5ZEPyclFQXaNksK3adutVS8l2xzZU0cqEFrE9Sb7fC0EFK5uEk74wIreL1DERyjvsU915j1pcT2uEQ==
+react@^18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
+  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
   dependencies:
     loose-envify "^1.1.0"
 
@@ -12836,10 +12819,10 @@ scheduler@^0.20.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
-scheduler@^0.22.0:
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.22.0.tgz#83a5d63594edf074add9a7198b1bae76c3db01b8"
-  integrity sha512-6QAm1BgQI88NPYymgGQLCZgvep4FyePDWFpXVK+zNSUgHwlqpJy8VEh8Et0KxTACS4VWwMousBElAZOH9nkkoQ==
+scheduler@^0.23.0:
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.23.0.tgz#ba8041afc3d30eb206a487b6b384002e4e61fdfe"
+  integrity sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==
   dependencies:
     loose-envify "^1.1.0"
 

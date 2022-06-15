@@ -1,23 +1,26 @@
 import {
-  useShop,
-  useUrl,
-  useSession,
-  useShopQuery,
   gql,
+  useSession,
+  useShop,
+  useShopQuery,
+  useUrl,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {
-  PageHeader,
-  Section,
-  Heading,
-  Text,
-  Input,
+  FeaturedCollections,
   Grid,
-} from '~/components/elements';
-import {ProductCard} from '~/components/blocks';
-import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+  Heading,
+  Input,
+  Layout,
+  PageHeader,
+  ProductCard,
+  ProductSwimlane,
+  Section,
+  Text,
+} from '~/components';
+import {getImageLoadingPriority} from '~/lib/const';
+import {Suspense} from 'react';
 
 export default function Search({pageBy = 12, params}) {
   const {languageCode} = useShop();
@@ -50,14 +53,7 @@ export default function Search({pageBy = 12, params}) {
             <Text className="opacity-50">No results, try something else.</Text>
           </Section>
         )}
-        <FeaturedCollections
-          title="Trending Collections"
-          data={data.featuredCollections.nodes}
-        />
-        <ProductSwimlane
-          title="Trending Products"
-          data={data.featuredProducts.nodes}
-        />
+        <NoResultRecommendation country={countryCode} language={languageCode} />
       </SearchPage>
     );
   }
@@ -66,8 +62,12 @@ export default function Search({pageBy = 12, params}) {
     <SearchPage query={decodeURI(query)}>
       <Section>
         <Grid layout="products">
-          {results.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {results.map((product, i) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              loading={getImageLoadingPriority(i)}
+            />
           ))}
         </Grid>
       </Section>
@@ -100,8 +100,32 @@ function SearchPage({query, children}) {
   );
 }
 
+function NoResultRecommendation({country, language}) {
+  const {data} = useShopQuery({
+    query: SEARCH_NO_RESULTS_QUERY,
+    variables: {
+      country,
+      language,
+    },
+    preload: false,
+  });
+
+  return (
+    <Suspense>
+      <FeaturedCollections
+        title="Trending Collections"
+        data={data.featuredCollections.nodes}
+      />
+      <ProductSwimlane
+        title="Trending Products"
+        data={data.featuredProducts.nodes}
+      />
+    </Suspense>
+  );
+}
+
 const SEARCH_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query search(
     $query: String
     $country: CountryCode
@@ -120,6 +144,13 @@ const SEARCH_QUERY = gql`
         hasPreviousPage
       }
     }
+  }
+`;
+
+const SEARCH_NO_RESULTS_QUERY = gql`
+  ${PRODUCT_CARD_FRAGMENT}
+  query searchNoResult($country: CountryCode, $language: LanguageCode)
+  @inContext(country: $country, language: $language) {
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
       nodes {
         id

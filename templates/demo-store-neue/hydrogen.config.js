@@ -22,5 +22,4 @@ export default defineConfig({
     PerformanceMetricsServerAnalyticsConnector,
     ShopifyServerAnalyticsConnector,
   ],
-  devTools: true,
 });

@@ -4,6 +4,8 @@ import {Table} from './Table';
 
 interface Props {
   locale: string;
+  storeDomain: string;
+  storefrontApiVersion: string;
 }
 
 const KEY_MAP = {
