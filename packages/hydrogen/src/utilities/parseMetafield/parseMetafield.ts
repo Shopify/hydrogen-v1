@@ -4,7 +4,7 @@ import type {PartialDeep} from 'type-fest';
 import {parseJSON} from '../parse';
 
 /**
- * The `parseMetafields` utility transforms a [Metafield](https://shopify.dev/api/storefront/reference/common-objects/Metafield)
+ * The `parseMetafield` utility transforms a [Metafield](https://shopify.dev/api/storefront/reference/common-objects/Metafield)
  * into a new object whose `values` have been parsed according to the metafield `type`.
  * If the metafield is `null`, then it returns `null` back.
  */
