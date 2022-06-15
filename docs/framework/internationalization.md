@@ -36,9 +36,48 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-### Dynamic configurations for multiple stores
+## Geolocation
 
-PLACEHOLDER CONTENT
+Detecting the geographic location of your visitors helps you localize the experience to their preferred country and language. 
+
+### Oxygen deployments
+
+For Hydrogen shops hosted on Oxygen, a visitor’s geolocation can be accessed through the `request` object and retrieved using `request.headers.get()`.
+
+{% codeblock file, filename: 'index.server.jsx' %}
+
+```tsx
+export default function Homepage({request}) {
+  return (
+    <div>Thanks for visiting from {request.headers.get(‘oxygen-buyer-country’)}!</div>
+  )
+}
+```
+
+{% endcodeblock %}
+
+The geolocation variables available from Oxygen include:
+
+- `'oxygen-buyer-ip'`
+- `'oxygen-buyer-latitude'`
+- `'oxygen-buyer-longitude'`
+- `'oxygen-buyer-continent'`
+- `'oxygen-buyer-country'`
+- `'oxygen-buyer-region'`
+- `'oxygen-buyer-region-code'`
+- `'oxygen-buyer-city'`
+
+
+### Accept-Language
+
+Alternatively, you can access the [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) HTTP header as a hint to the visitor's country and language preference. 
+
+PLACEHOLDER CONTENT & EXAMPLE
+
+### Third-party libraries
+
+PLACEHOLDER CONTENT & LINK TO GEOIP-LITE
+
 
 ## Internationalized routes
 
@@ -86,18 +125,6 @@ For more information about retrieving language translations, refer to [Support m
 Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the `defaultLocale` value provided in your Hydrogen configuration file or `EN-US` when not specified.
 
 For more information about customizing the output of SEO-related tags in your Hydrogen app, refer to [SEO](https://shopify.dev/custom-storefronts/hydrogen/framework/seo).
-
-## Geolocation
-
-PLACEHOLDER INTRODUCTORY CONTENT
-
-### Oxygen deployments
-
-PLACEHOLDER CONTENT
-
-### Third-party libraries
-
-PLACEHOLDER CONTENT
 
 ### `useServerProps` hook
 
