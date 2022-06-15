@@ -59,7 +59,7 @@ export function OrderCard({order}) {
         <div className="w-0 flex-1 flex">
           <Link
             to={`/account/orders/${legacyOrderId}`}
-            className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+            className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 dark:text-gray-200"
           >
             <span className="ml-3">View Details</span>
           </Link>
