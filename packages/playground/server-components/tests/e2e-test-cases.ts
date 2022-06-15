@@ -251,6 +251,21 @@ export default async function testCases({
     );
   });
 
+  it('supports React.useId()', async () => {
+    const response = await page.goto(getServerUrl() + '/useid');
+
+    // Pattern: <div id="id">:Rcm:</div>
+    const serverRenderedId = (await response.text()).match(
+      /<div id="id">(.*?)<\/div>/
+    )[1];
+
+    const clientRenderedId = await page.evaluate(() => {
+      return document.getElementById('id').innerHTML;
+    });
+
+    expect(serverRenderedId).toEqual(clientRenderedId);
+  });
+
   describe('HMR', () => {
     if (isBuild) return;
 
