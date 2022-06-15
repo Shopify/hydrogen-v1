@@ -4,8 +4,17 @@ import {Heading, Text} from '~/components';
 import {hero as mockData} from '~/lib/placeholders';
 
 export function Hero(props = mockData) {
-  const {title, byline, cta, handle, spread, spreadSecondary, height, top} =
-    props;
+  const {
+    title,
+    byline,
+    cta,
+    handle,
+    spread,
+    spreadSecondary,
+    height,
+    top,
+    loading,
+  } = props;
 
   return (
     <Link to={`/collections/${handle}`}>
