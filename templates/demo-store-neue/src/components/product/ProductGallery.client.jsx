@@ -34,7 +34,7 @@ export function ProductGallery({media, className}) {
         };
 
         if (i === 0 && med.mediaContentType === 'IMAGE') {
-          extraProps['loading'] = ATTR_LOADING_EAGER;
+          extraProps.loading = ATTR_LOADING_EAGER;
         }
 
         return (

@@ -41,7 +41,7 @@ export function ProductCard({product, label, className, loading}) {
             <Image
               className="aspect-[4/5]"
               data={image}
-              alt="Alt Tag"
+              alt={image.altText || `Picture of ${product.title}`}
               loading={loading}
             />
           )}
