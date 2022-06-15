@@ -21,13 +21,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   /**
-   * A string containing a hexadecimal representation of a color.
-   *
-   * For example, "#6A8D48".
-   *
-   */
-  Color: unknown;
-  /**
    * Represents an [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)-encoded date and time string.
    * For example, 3:50 pm on September 7, 2019 in the time zone of UTC (Coordinated Universal Time) is
    * represented as `"2019-09-07T15:50:00Z`".
@@ -415,50 +408,6 @@ export enum BlogSortKeys {
   Title = 'TITLE',
 }
 
-/**
- * The store's branding configuration.
- *
- */
-export type Brand = {
-  __typename?: 'Brand';
-  /** The colors of the store's brand. */
-  colors: BrandColors;
-  /** The store's cover image. */
-  coverImage?: Maybe<MediaImage>;
-  /** The store's default logo. */
-  logo?: Maybe<MediaImage>;
-  /** The store's short description. */
-  shortDescription?: Maybe<Scalars['String']>;
-  /** The store's slogan. */
-  slogan?: Maybe<Scalars['String']>;
-  /** The store's preferred logo for square UI elements. */
-  squareLogo?: Maybe<MediaImage>;
-};
-
-/**
- * A group of related colors for the shop's brand.
- *
- */
-export type BrandColorGroup = {
-  __typename?: 'BrandColorGroup';
-  /** The background color. */
-  background?: Maybe<Scalars['Color']>;
-  /** The foreground color. */
-  foreground?: Maybe<Scalars['Color']>;
-};
-
-/**
- * The colors of the shop's brand.
- *
- */
-export type BrandColors = {
-  __typename?: 'BrandColors';
-  /** The shop's primary brand colors. */
-  primary: Array<BrandColorGroup>;
-  /** The shop's secondary brand colors. */
-  secondary: Array<BrandColorGroup>;
-};
-
 /** Card brand, such as Visa or Mastercard, which can be used for payments. */
 export enum CardBrand {
   /** American Express. */
@@ -467,14 +416,10 @@ export enum CardBrand {
   DinersClub = 'DINERS_CLUB',
   /** Discover. */
   Discover = 'DISCOVER',
-  /** Elo. */
-  Elo = 'ELO',
   /** JCB. */
   Jcb = 'JCB',
   /** Mastercard. */
   Mastercard = 'MASTERCARD',
-  /** UnionPay. */
-  Unionpay = 'UNIONPAY',
   /** Visa. */
   Visa = 'VISA',
 }
@@ -1632,60 +1577,6 @@ export type CommentEdge = {
   cursor: Scalars['String'];
   /** The item at the end of CommentEdge. */
   node: Comment;
-};
-
-/** Provides a content entry. These are custom models managed in the Content admin section. */
-export type ContentEntry = Node & {
-  __typename?: 'ContentEntry';
-  /** A metafield associated with the content entry. */
-  field?: Maybe<Metafield>;
-  /** The unique handle of the entry, useful as a custom ID. */
-  handle: Scalars['String'];
-  /** A globally-unique identifier. */
-  id: Scalars['ID'];
-  /** The type of the entry. Defines the namespace of its associated metafields. */
-  type: Scalars['String'];
-  /** When the entry was last updated. */
-  updatedAt: Scalars['DateTime'];
-};
-
-/** Provides a content entry. These are custom models managed in the Content admin section. */
-export type ContentEntryFieldArgs = {
-  key: Scalars['String'];
-};
-
-/**
- * An auto-generated type for paginating through multiple ContentEntries.
- *
- */
-export type ContentEntryConnection = {
-  __typename?: 'ContentEntryConnection';
-  /** A list of edges. */
-  edges: Array<ContentEntryEdge>;
-  /** A list of the nodes contained in ContentEntryEdge. */
-  nodes: Array<ContentEntry>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/**
- * An auto-generated type which holds one ContentEntry and a cursor during pagination.
- *
- */
-export type ContentEntryEdge = {
-  __typename?: 'ContentEntryEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of ContentEntryEdge. */
-  node: ContentEntry;
-};
-
-/** The input fields used to retrieve a content entry using its handle. */
-export type ContentEntryHandleInput = {
-  /** The handle of the content entry. */
-  handle?: InputMaybe<Scalars['String']>;
-  /** The type of the content entry. */
-  type?: InputMaybe<Scalars['String']>;
 };
 
 /** A country. */
@@ -3018,8 +2909,6 @@ export enum DigitalWallet {
   AndroidPay = 'ANDROID_PAY',
   /** Apple Pay. */
   ApplePay = 'APPLE_PAY',
-  /** Facebook Pay. */
-  FacebookPay = 'FACEBOOK_PAY',
   /** Google Pay. */
   GooglePay = 'GOOGLE_PAY',
   /** Shopify Pay. */
@@ -3446,8 +3335,6 @@ export type ImageConnection = {
 
 /** List of supported image content types. */
 export enum ImageContentType {
-  /** A BMP image. */
-  Bmp = 'BMP',
   /** A JPG image. */
   Jpg = 'JPG',
   /** A PNG image. */
@@ -4220,8 +4107,6 @@ export type Metafield = Node & {
   parentResource: MetafieldParentResource;
   /** Returns a reference object if the metafield definition's type is a resource reference. */
   reference?: Maybe<MetafieldReference>;
-  /** A list of reference objects if the metafield's type is a resource reference list. */
-  references?: Maybe<MetafieldReferenceConnection>;
   /**
    * The type name of the metafield.
    * See the list of [supported types](https://shopify.dev/apps/metafields/definitions/types).
@@ -4232,18 +4117,6 @@ export type Metafield = Node & {
   updatedAt: Scalars['DateTime'];
   /** The value of a metafield. */
   value: Scalars['String'];
-};
-
-/**
- * Metafields represent custom metadata attached to a resource. Metafields can be sorted into namespaces and are
- * comprised of keys, values, and value types.
- *
- */
-export type MetafieldReferencesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
 };
 
 /**
@@ -4270,7 +4143,6 @@ export type MetafieldParentResource =
   | Article
   | Blog
   | Collection
-  | ContentEntry
   | Customer
   | Order
   | Page
@@ -4283,39 +4155,12 @@ export type MetafieldParentResource =
  *
  */
 export type MetafieldReference =
-  | ContentEntry
   | GenericFile
   | MediaImage
   | Page
   | Product
   | ProductVariant
   | Video;
-
-/**
- * An auto-generated type for paginating through multiple MetafieldReferences.
- *
- */
-export type MetafieldReferenceConnection = {
-  __typename?: 'MetafieldReferenceConnection';
-  /** A list of edges. */
-  edges: Array<MetafieldReferenceEdge>;
-  /** A list of the nodes contained in MetafieldReferenceEdge. */
-  nodes: Array<MetafieldReference>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/**
- * An auto-generated type which holds one MetafieldReference and a cursor during pagination.
- *
- */
-export type MetafieldReferenceEdge = {
-  __typename?: 'MetafieldReferenceEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of MetafieldReferenceEdge. */
-  node: MetafieldReference;
-};
 
 /** Represents a Shopify hosted 3D model. */
 export type Model3d = Media &
@@ -4919,8 +4764,6 @@ export type OrderEdge = {
 export enum OrderFinancialStatus {
   /** Displayed as **Authorized**. */
   Authorized = 'AUTHORIZED',
-  /** Displayed as **Expired**. */
-  Expired = 'EXPIRED',
   /** Displayed as **Paid**. */
   Paid = 'PAID',
   /** Displayed as **Partially paid**. */
@@ -5283,14 +5126,6 @@ export type Product = HasMetafields &
     /** The total quantity of inventory in stock for this Product. */
     totalInventory?: Maybe<Scalars['Int']>;
     /**
-     * A path that includes all of the standardized and custom product types associated with a product.
-     * The path increases in specificity from top to bottom. It begins with the standardized product type
-     * and terminates with the custom product type. For example,
-     * Clothing & Accessories > Clothing > Shirts & Tops > Polo Shirts.
-     *
-     */
-    typePath: Array<ProductTypePathNode>;
-    /**
      * The date and time when the product was last modified.
      * A product's `updatedAt` value can change for different reasons. For example, if an order
      * is placed for a product that has inventory tracking set up, then the inventory adjustment
@@ -5566,13 +5401,6 @@ export enum ProductSortKeys {
   Vendor = 'VENDOR',
 }
 
-/** A node in the product type path. */
-export type ProductTypePathNode = {
-  __typename?: 'ProductTypePathNode';
-  /** The name of the node. For example, Polo Shirts. */
-  name: Scalars['String'];
-};
-
 /** A product variant represents a different version of a product, such as differing sizes or differing colors. */
 export type ProductVariant = HasMetafields &
   Node & {
@@ -5735,10 +5563,6 @@ export type QueryRoot = {
   collectionByHandle?: Maybe<Collection>;
   /** List of the shop’s collections. */
   collections: CollectionConnection;
-  /** All active content entries for the shop. */
-  contentEntries: ContentEntryConnection;
-  /** Returns a specific content entry. */
-  contentEntry?: Maybe<ContentEntry>;
   /** Find a customer by its access token. */
   customer?: Maybe<Customer>;
   /** Returns the localized experiences configured for the shop. */
@@ -5763,7 +5587,6 @@ export type QueryRoot = {
     | CheckoutLineItem
     | Collection
     | Comment
-    | ContentEntry
     | ExternalVideo
     | GenericFile
     | Location
@@ -5796,7 +5619,6 @@ export type QueryRoot = {
       | CheckoutLineItem
       | Collection
       | Comment
-      | ContentEntry
       | ExternalVideo
       | GenericFile
       | Location
@@ -5917,23 +5739,6 @@ export type QueryRootCollectionsArgs = {
   query?: InputMaybe<Scalars['String']>;
   reverse?: InputMaybe<Scalars['Boolean']>;
   sortKey?: InputMaybe<CollectionSortKeys>;
-};
-
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
-export type QueryRootContentEntriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
-  sortKey?: InputMaybe<Scalars['String']>;
-  type: Scalars['String'];
-};
-
-/** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
-export type QueryRootContentEntryArgs = {
-  byHandle?: InputMaybe<ContentEntryHandleInput>;
-  id?: InputMaybe<Scalars['ID']>;
 };
 
 /** The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start. */
@@ -6297,8 +6102,6 @@ export type ShippingRate = {
 export type Shop = HasMetafields &
   Node & {
     __typename?: 'Shop';
-    /** The shop's branding configuration. */
-    brand?: Maybe<Brand>;
     /** A description of the shop. */
     description?: Maybe<Scalars['String']>;
     /** A globally-unique identifier. */

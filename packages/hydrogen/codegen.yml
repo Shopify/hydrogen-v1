@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - https://hydrogen-preview.myshopify.com/api/unstable/graphql.json:
+  - https://hydrogen-preview.myshopify.com/api/2022-07/graphql.json:
       headers:
         X-Shopify-Storefront-Access-Token: 3b580e70970c4528da70c98e097c2fa0
         content-type: application/json

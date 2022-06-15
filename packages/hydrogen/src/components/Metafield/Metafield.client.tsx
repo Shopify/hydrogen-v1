@@ -141,8 +141,10 @@ export function Metafield<TTag extends ElementType>(
     }
     case 'list.single_line_text_field': {
       const Wrapper = as ?? 'ul';
+      // @ts-expect-error references currently only exists on 'unstable' SFAPI, but as soon as it does exist we can remove this ts-expect-error because I believe 'list.single_line_text_field' will also only be availabe in the same setting and we also handle if it doesn't exist
       const refArray = parsedMetafield.references
-        ? (flattenConnection(parsedMetafield.references) as string[])
+        ? // @ts-expect-error references currently only exists on 'unstable' SFAPI, but as soon as it does exist we can remove this ts-expect-error
+          (flattenConnection(parsedMetafield.references) as string[])
         : [];
       return (
         <Wrapper {...passthroughProps}>
