@@ -128,8 +128,6 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     // Default to StrictMode on, unless explicitly turned off
     config.strictMode !== false ? StrictMode : Fragment;
 
-  let hasCaughtError = false;
-
   hydrateRoot(
     root,
     <>
@@ -140,22 +138,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
           </Suspense>
         </ErrorBoundary>
       </RootComponent>
-    </>,
-    {
-      onRecoverableError(e: any) {
-        if (__HYDROGEN_DEV__ && !hasCaughtError) {
-          hasCaughtError = true;
-          console.log(
-            `React encountered an error while attempting to hydrate the application. ` +
-              `This is likely due to a bug in React's Suspense behavior related to experimental server components, ` +
-              `and it is safe to ignore this error.\n` +
-              `Visit this issue to learn more: https://github.com/Shopify/hydrogen/issues/920.\n\n` +
-              `The original error is printed below:`
-          );
-          console.log(e);
-        }
-      },
-    }
+    </>
   );
 };
 
