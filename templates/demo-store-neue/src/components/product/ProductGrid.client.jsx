@@ -4,7 +4,7 @@ import {flattenConnection} from '@shopify/hydrogen';
 import {Grid, ProductCard} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 
-export function ProductGrid({collection, loadImageEagerCount}) {
+export function ProductGrid({collection}) {
   const nextButtonRef = useRef(null);
   const initialProducts = collection?.products?.nodes || [];
   const {hasNextPage, endCursor} = collection.products.pageInfo;
@@ -67,7 +67,7 @@ export function ProductGrid({collection, loadImageEagerCount}) {
           <ProductCard
             key={product.id}
             product={product}
-            loading={getImageLoadingPriority(i, loadImageEagerCount)}
+            loading={getImageLoadingPriority(i)}
           />
         ))}
       </Grid>
