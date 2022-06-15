@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import {Heading} from '~/components/elements';
+import {Heading} from '~/components';
 import {missingClass} from '~/lib/utils';
 
 export function Section({
