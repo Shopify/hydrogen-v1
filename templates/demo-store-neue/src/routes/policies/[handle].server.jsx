@@ -72,7 +72,7 @@ export default function Policy({params}) {
           heading={page.title}
           variant="none"
           className={
-            'md:sticky lg:sticky xl:sticky grid gap-4 items-start top-36 md:w-5/12 flex-grow'
+            'md:sticky grid gap-4 items-start top-36 md:w-5/12 flex-grow'
           }
         >
           <Button
