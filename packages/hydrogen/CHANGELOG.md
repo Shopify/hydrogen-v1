@@ -1,5 +1,149 @@
 # Changelog
 
+## 0.25.0
+
+### Minor Changes
+
+- [#1570](https://github.com/Shopify/hydrogen/pull/1570) [`36f26e54`](https://github.com/Shopify/hydrogen/commit/36f26e54a0b136fe4b21807756969e592934c9f2) Thanks [@frehner](https://github.com/frehner)! - `<Image/>` now takes into account a specific order for determining the width and height.
+
+  1. `loaderOptions`'s width/height
+  2. width/height bare props
+  3. `data`'s width/height
+
+  `getShopifyImageDimensions()` was also updated to handle this logic.
+
+* [#1506](https://github.com/Shopify/hydrogen/pull/1506) [`58d6ef55`](https://github.com/Shopify/hydrogen/commit/58d6ef55be2929c9a1680a6a372bb2e5fdfb7ee6) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Hydrogen now supports full-page caching out of the box. Previously, Hydrogen relied on the network edge to provide full-page caching for dynamic responses (HTML).
+
+- [#1346](https://github.com/Shopify/hydrogen/pull/1346) [`01814369`](https://github.com/Shopify/hydrogen/commit/018143693f96b7a200258665de570a9369ae8e65) Thanks [@lordofthecactus](https://github.com/lordofthecactus)! - Add `onClick` and `buttonRef` props to `AddToCartButton`, `BuyNowButton` and `CartLineQuantityAdjustButton`
+
+* [#1523](https://github.com/Shopify/hydrogen/pull/1523) [`4ef2e5b9`](https://github.com/Shopify/hydrogen/commit/4ef2e5b93cd537a213334211113c224194d9dd68) Thanks [@blittle](https://github.com/blittle)! - We've simplified the built-in Hydrogen caching strategies. Instead of `CacheSeconds`, `CacheMinutes`, `CacheHours`, `CacheDays`, `CacheMonths`, and `NoStore`, there is no simply `CacheLong`, `CacheShort`, and `CacheNone`. Please remember that you can [build your own caching strategies](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#build-your-own-caching-strategies).
+
+- [#1513](https://github.com/Shopify/hydrogen/pull/1513) [`8d67b559`](https://github.com/Shopify/hydrogen/commit/8d67b559e8d59d02ca353ec43fb5b2b3ff2f5961) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change:** We are starting to use [`exports` property in `package.json`](https://nodejs.org/api/packages.html#package-entry-points) to list all the entry points in this package.
+
+  This might incur breaking changes in some rare cases when importing private properties from Hydrogen `dist` files. Notice that we **discourage** doing so for anything that is not publicly documented but, if your app was relying on some private properties, then this might help:
+
+  ```diff
+  -import {xyz} from '@shopify/hydrogen/dist/esnext/<internal-path>';
+  +import {xyz} from '@shopify/hydrogen/<internal-path>';
+  ```
+
+  Aside from that, it is recommended that TypeScript projects update the `tsconfig.json` file to use `compilerOptions.moduleResolution: "node16"` to make sure Hydrogen types are loaded in your editor.
+  For JavaScript projects, create or edit `<root>/jsconfig.json` file with the following information to improve typings:
+
+  ```json
+  {
+    "compilerOptions": {
+      "target": "es2020",
+      "module": "esnext",
+      "moduleResolution": "node16",
+      "lib": ["dom", "dom.iterable", "scripthost", "es2020"],
+      "jsx": "react",
+      "types": ["vite/client"]
+    },
+    "exclude": ["node_modules", "dist"],
+    "include": ["**/*.js", "**/*.jsx"]
+  }
+  ```
+
+* [#1528](https://github.com/Shopify/hydrogen/pull/1528) [`72d21b87`](https://github.com/Shopify/hydrogen/commit/72d21b87e48a682794889610741f03560bce0be7) Thanks [@frehner](https://github.com/frehner)! - Metafields have changed in Storefront API `2022-07`. We updated our code to work with that update, which means that the following changes will **only work if you're using `2022-07` or newer.**
+
+  ## Metafields changes
+
+  ### Storefront API `2022-07`
+
+  Metafields have changed how you access them in the Storefront API. See [the release notes](https://shopify.dev/api/release-notes/2022-07) for more details. In order to support the new way of querying metafields, Hydrogen has made the following updates:
+
+  ### `<Metafield/>`
+
+  Previously, the `<Metafield/>` component expected you to use `useParseMetafields()` before passing a metafield to it.
+
+  Now, `<Metafield/>` will use `parseMetafield()` itself so that you don't have to. However, this does mean that if you use `parseMetafield()` and then pass it to `<Metafield/>`, it will likely break because it will try to parse your metafield's value a second time.
+
+  ### `useParsedMetafields()` and `parseMetafield()`
+
+  Deprecated `useParsedMetafields()` in favor of `parseMetafield()`. `parseMetafield()` takes in a single metafield and returns a new object, and importantly it can be used on both the client _and_ the server.
+
+  If you need to memoize the value on the client, then you can do so using `React.memo`:
+
+  ```tsx
+  import {useMemo} from 'react';
+  import {parseMetafield} from '@shopify/hydrogen'x
+
+  function MyComponent() {
+    const parsedMetafield = useMemo(() => parseMetafield(metafield), [metafield]);
+  }
+  ```
+
+- [#1517](https://github.com/Shopify/hydrogen/pull/1517) [`68b8185e`](https://github.com/Shopify/hydrogen/commit/68b8185e74805a6453e246f01ce69a38988078ef) Thanks [@frandiox](https://github.com/frandiox)! - **Breaking change:** The utilities used in `hydrogen.config.js` file are now exported from `@shopiy/hydrogen/config` instead of `@shopify/hydrogen`:
+
+  ```diff
+  -import {defineConfig} from '@shopify/hydrogen/config';
+  import {
+  + defineConfig,
+    CookieSessionStorage,
+    PerformanceMetricsServerAnalyticsConnector,
+    ShopifyServerAnalyticsConnector,
+  -} from '@shopify/hydrogen';
+  +} from '@shopify/hydrogen/config'
+
+  export default defineConfig({
+    shopify: {/* ... */},
+    session: CookieSessionStorage('__session', {
+      path: '/',
+      /* ... */
+    }),
+    serverAnalyticsConnectors: [
+      PerformanceMetricsServerAnalyticsConnector,
+      ShopifyServerAnalyticsConnector,
+    ],
+  });
+  ```
+
+### Patch Changes
+
+- [#1494](https://github.com/Shopify/hydrogen/pull/1494) [`3b549439`](https://github.com/Shopify/hydrogen/commit/3b549439bae1ec43ae9171744c576c53d8e8f6f1) Thanks [@jplhomer](https://github.com/jplhomer)! - Update `flattenConnection` to accept `nodes` and `edges` payloads
+
+* [#1579](https://github.com/Shopify/hydrogen/pull/1579) [`2f75247c`](https://github.com/Shopify/hydrogen/commit/2f75247c071253ae27f6070a066897b5758a6a4f) Thanks [@frandiox](https://github.com/frandiox)! - Support renaming client component exports in intermediate/facade files.
+
+- [#1562](https://github.com/Shopify/hydrogen/pull/1562) [`d38f6413`](https://github.com/Shopify/hydrogen/commit/d38f6413361d1ecb49c52d8389547d2b064081f7) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Add storefront id to useShopQuery calls when available
+
+* [#1593](https://github.com/Shopify/hydrogen/pull/1593) [`ae35b70b`](https://github.com/Shopify/hydrogen/commit/ae35b70b0847e1a6270d1c63d2968a3578442e66) Thanks [@juanpprieto](https://github.com/juanpprieto)! - Ensure the effect that updates the `cart.buyerIdenity.countryCode` is run when `countyCode` prop changes
+
+- [#1504](https://github.com/Shopify/hydrogen/pull/1504) [`cc453242`](https://github.com/Shopify/hydrogen/commit/cc4532426509fd216f1bc036d5a095a18812b0cb) Thanks [@jplhomer](https://github.com/jplhomer)! - Fix read-only request.status in worker environments.
+
+* [#1548](https://github.com/Shopify/hydrogen/pull/1548) [`923cb140`](https://github.com/Shopify/hydrogen/commit/923cb140b44fe989388f8754a8ca88bbfc68ab71) Thanks [@cartogram](https://github.com/cartogram)! - Add new devTools interface for performance, settings and graphQL tracking
+
+- [#1375](https://github.com/Shopify/hydrogen/pull/1375) [`217b5f23`](https://github.com/Shopify/hydrogen/commit/217b5f23613da794bb6879ab0c897b66ef6204cf) Thanks [@blittle](https://github.com/blittle)! - Add a built-in healthcheck route available at `/__health`. It responds with a 200 and no body. Also suppresses server logs for built-in routes like healthcheck and analytics.
+
+* [#1541](https://github.com/Shopify/hydrogen/pull/1541) [`4fde81f9`](https://github.com/Shopify/hydrogen/commit/4fde81f9d9ee739a6fbe5a8a903d3e6901144bf0) Thanks [@frandiox](https://github.com/frandiox)! - Fix support for latest React@experimental version.
+
+- [#1497](https://github.com/Shopify/hydrogen/pull/1497) [`3364225f`](https://github.com/Shopify/hydrogen/commit/3364225ff62d283893643ea28c0135ff22af1dff) Thanks [@blittle](https://github.com/blittle)! - Improve waterfall detection
+
+  1. Show a summary in dev mode with instructions on getting details
+  2. Only show the waterfall warning the second time the page is loaded
+  3. Don't show the waterfall warning on preloaded queries
+
+* [#1519](https://github.com/Shopify/hydrogen/pull/1519) [`d54b1072`](https://github.com/Shopify/hydrogen/commit/d54b10725b635f4531e94b9391cfd56f31a1d2e5) Thanks [@frandiox](https://github.com/frandiox)! - Improve CPU performance of the `useMoney` hook.
+
+- [#1518](https://github.com/Shopify/hydrogen/pull/1518) [`f0b69477`](https://github.com/Shopify/hydrogen/commit/f0b6947762acdfd617c9ccd34615a36a64ab36f2) Thanks [@frandiox](https://github.com/frandiox)! - Compile code to latest supported ES version in workers and Node.
+
+* [#1571](https://github.com/Shopify/hydrogen/pull/1571) [`accdc78a`](https://github.com/Shopify/hydrogen/commit/accdc78a13cc1557826509545a322bfa04e6e288) Thanks [@jplhomer](https://github.com/jplhomer)! - Upgrade Hydrogen to React v18.2. To update your app, run `yarn add @shopify/hydrogen@latest react@latest react-dom@latest`.
+
+- [#1578](https://github.com/Shopify/hydrogen/pull/1578) [`f5290393`](https://github.com/Shopify/hydrogen/commit/f5290393264c523045cab4082495e81ec72d576d) Thanks [@frandiox](https://github.com/frandiox)! - Fix an issue where newly imported client components were not found in the browser.
+
+* [#1556](https://github.com/Shopify/hydrogen/pull/1556) [`06f3d174`](https://github.com/Shopify/hydrogen/commit/06f3d174ff286ece0a7175ac7c2ae37e574f73b0) Thanks [@blittle](https://github.com/blittle)! - Add support for `Request.formData()` within API Routes for Node 16-17. Example:
+
+  ```ts
+  export async function api(request) {
+    const formData = await request.formData();
+
+    const username = formData.get('user');
+    const password = formData.get('pass');
+
+    ...
+  }
+  ```
+
 ## 0.24.0
 
 ### Minor Changes

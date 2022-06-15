@@ -1,6 +1,7 @@
 import {useShopQuery, useSession, useShop, gql} from '@shopify/hydrogen';
 
 import {Layout, CollectionCard, PageHeader, Section, Grid} from '~/components';
+import {getImageLoadingPriority} from '~/lib/const';
 
 export default function Collections() {
   const {languageCode} = useShop();
@@ -23,8 +24,12 @@ export default function Collections() {
       <PageHeader heading="Collections" />
       <Section>
         <Grid items={collections.length === 3 ? 3 : 2}>
-          {collections.map((collection) => (
-            <CollectionCard collection={collection} key={collection.id} />
+          {collections.map((collection, i) => (
+            <CollectionCard
+              collection={collection}
+              key={collection.id}
+              loading={getImageLoadingPriority(i, 2)}
+            />
           ))}
         </Grid>
       </Section>

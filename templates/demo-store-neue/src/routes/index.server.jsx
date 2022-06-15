@@ -28,6 +28,11 @@ export default function Homepage() {
   });
 
   const {heroBanners, featuredCollections, featuredProducts} = data;
+  const [primaryHero, secondaryHero, tertiaryHero] = heroBanners.nodes || [
+    null,
+    null,
+    null,
+  ];
 
   useServerAnalytics({
     shopify: {
@@ -40,19 +45,20 @@ export default function Homepage() {
       <Suspense fallback={null}>
         <SeoForHomepage />
       </Suspense>
-      {heroBanners?.nodes[0] && (
-        <Hero data={heroBanners?.nodes[0]} height="full" top />
+      {primaryHero && (
+        <Hero {...primaryHero} height="full" top loading="eager" />
       )}
       <ProductSwimlane
         data={featuredProducts.nodes}
         title="Featured Products"
         divider="bottom"
       />
-      {heroBanners?.nodes[1] && <Hero data={heroBanners.nodes[1]} />}
+      {secondaryHero && <Hero {...secondaryHero} />}
       <FeaturedCollections
         data={featuredCollections.nodes}
         title="Collections"
       />
+      {tertiaryHero && <Hero {...tertiaryHero} />}
     </Layout>
   );
 }
@@ -95,7 +101,7 @@ const HOMEPAGE_CONTENT_QUERY = gql`
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
     heroBanners: collections(
-      first: 10
+      first: 3
       query: "collection_type:custom"
       sortKey: UPDATED_AT
     ) {
@@ -116,16 +122,10 @@ const HOMEPAGE_CONTENT_QUERY = gql`
             ...MediaFields
           }
         }
-        spread_secondary: metafield(
-          namespace: "hero"
-          key: "spread_secondary"
-        ) {
+        spreadSecondary: metafield(namespace: "hero", key: "spread_secondary") {
           reference {
             ...MediaFields
           }
-        }
-        text_color: metafield(namespace: "hero", key: "text_color") {
-          value
         }
       }
     }
