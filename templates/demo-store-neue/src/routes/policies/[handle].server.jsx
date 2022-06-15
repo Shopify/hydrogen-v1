@@ -7,9 +7,7 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {Button, PageHeader, Section} from '~/components/elements';
-import {NotFound} from '~/components/pages';
+import {Layout, Button, PageHeader, Section, NotFound} from '~/components';
 
 export default function Policy({params}) {
   const {languageCode} = useShop();
@@ -36,7 +34,9 @@ export default function Policy({params}) {
   // The currently visited policy page key
   const activePolicy = Object.keys(policy).find((key) => policy[key]);
 
-  const {data} = useShopQuery({
+  const {
+    data: {shop},
+  } = useShopQuery({
     query: POLICIES_QUERY,
     variables: {
       languageCode,
@@ -44,7 +44,7 @@ export default function Policy({params}) {
     },
   });
 
-  const page = data?.shop?.[activePolicy];
+  const page = shop?.[activePolicy];
 
   // If the policy page is empty, return not found
   if (!page) {
@@ -69,7 +69,9 @@ export default function Policy({params}) {
         <PageHeader
           heading={page.title}
           variant="none"
-          className={'sticky grid gap-4 items-start top-36 md:w-5/12 flex-grow'}
+          className={
+            'md:sticky grid gap-4 items-start top-36 md:w-5/12 flex-grow'
+          }
         >
           <Button
             className="justify-self-start"

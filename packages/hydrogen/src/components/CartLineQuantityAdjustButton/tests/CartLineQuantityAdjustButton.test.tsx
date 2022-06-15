@@ -6,6 +6,7 @@ import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
 import {useCart} from '../../CartProvider';
 import {CART_WITH_LINES_FLATTENED} from '../../CartProvider/tests/fixtures';
 import {mountWithCartProvider} from '../../CartProvider/tests/utilities';
+import {BaseButton} from '../../BaseButton';
 
 describe('CartLineQuantityAdjustButton', () => {
   it('increases quantity', () => {
@@ -115,6 +116,45 @@ describe('CartLineQuantityAdjustButton', () => {
     wrapper.find('button')!.trigger('onClick');
 
     expect(linesRemoveMock).toHaveBeenCalledWith([CART_LINE.id]);
+  });
+
+  describe('BaseButton', () => {
+    it('passes the onClick handler', () => {
+      const mockOnClick = jest.fn();
+      const wrapper = mountWithCartProvider(
+        <Cart>
+          <CartLineQuantityAdjustButton onClick={mockOnClick} adjust="increase">
+            Increase
+          </CartLineQuantityAdjustButton>
+        </Cart>,
+        {
+          cart: {lines: [CART_LINE]},
+        }
+      );
+
+      expect(wrapper).toContainReactComponent(BaseButton, {
+        onClick: mockOnClick,
+      });
+    });
+
+    it('passes the buttonRef', () => {
+      const mockRef = React.createRef<HTMLButtonElement>();
+
+      const wrapper = mountWithCartProvider(
+        <Cart>
+          <CartLineQuantityAdjustButton buttonRef={mockRef} adjust="increase">
+            Increase
+          </CartLineQuantityAdjustButton>
+        </Cart>,
+        {
+          cart: {lines: [CART_LINE]},
+        }
+      );
+
+      expect(wrapper).toContainReactComponent(BaseButton, {
+        buttonRef: mockRef,
+      });
+    });
   });
 });
 

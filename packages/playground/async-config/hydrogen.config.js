@@ -1,4 +1,4 @@
-import {defineConfig} from '@shopify/hydrogen/config';
+import {defineConfig, CookieSessionStorage} from '@shopify/hydrogen/config';
 
 const sleep = (ms = 10) => new Promise((r) => setTimeout(r, ms));
 
@@ -16,9 +16,12 @@ export default defineConfig({
       storefrontApiVersion: '2022-07',
     };
   },
+  __EXPERIMENTAL__devTools: true,
   logger: {
     trace() {},
     debug() {},
   },
-  showDevTools: true,
+  session: CookieSessionStorage('__session', {
+    expires: new Date(1749343178614),
+  }),
 });

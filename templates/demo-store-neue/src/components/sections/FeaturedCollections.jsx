@@ -1,6 +1,6 @@
 import {Link, Image} from '@shopify/hydrogen';
 
-import {Heading, Section, Grid} from '~/components/elements';
+import {Heading, Section, Grid} from '~/components';
 
 export function FeaturedCollections({data, title = 'Collections', ...props}) {
   const items = data.filter((item) => item.image).length;

@@ -83,7 +83,7 @@ describe('HydrogenRequest', () => {
 
     const preloadQueries = request.getPreloadQueries();
     expect(preloadQueries).toBeDefined();
-    expect(preloadQueries && preloadQueries.get('"test1"'))
+    expect(preloadQueries && preloadQueries.get('test1'))
       .toMatchInlineSnapshot(`
       Object {
         "fetcher": [Function],
@@ -104,7 +104,7 @@ describe('HydrogenRequest', () => {
 
     const preloadQueries = request2.getPreloadQueries();
     expect(preloadQueries).toBeDefined();
-    expect(preloadQueries && preloadQueries.get('"test1"'))
+    expect(preloadQueries && preloadQueries.get('test1'))
       .toMatchInlineSnapshot(`
       Object {
         "fetcher": [Function],

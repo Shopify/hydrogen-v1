@@ -437,7 +437,7 @@ export default async function testCases({
       expect(data).toEqual({data: {shop: {name: 'Snowdevil'}}});
     });
 
-    it.skip('supports form request on API routes', async () => {
+    it('supports form request on API routes', async () => {
       await page.goto(getServerUrl() + '/form');
       await page.type('#fname', 'sometext');
       await page.click('#fsubmit');

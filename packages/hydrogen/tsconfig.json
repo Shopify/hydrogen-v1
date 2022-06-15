@@ -3,7 +3,7 @@
   "compilerOptions": {
     "declaration": true,
     "jsx": "react",
-    "target": "ES2018",
+    "target": "ES2022",
     "outDir": "./dist/esnext",
     "module": "esnext",
     "moduleResolution": "node",

@@ -5,6 +5,7 @@ import {
   WritableStream,
   TransformStream,
 } from 'web-streams-polyfill/ponyfill';
+import {FormData} from 'undici';
 
 if (!globalThis.fetch) {
   Object.assign(globalThis, {
@@ -13,6 +14,12 @@ if (!globalThis.fetch) {
     Response,
     Headers,
     AbortController,
+  });
+}
+
+if (!globalThis.FormData) {
+  Object.assign(globalThis, {
+    FormData,
   });
 }
 
