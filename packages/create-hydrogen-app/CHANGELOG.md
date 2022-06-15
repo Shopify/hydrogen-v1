@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.25.0
+
+### Patch Changes
+
+- [#1475](https://github.com/Shopify/hydrogen/pull/1475) [`689aa68f`](https://github.com/Shopify/hydrogen/commit/689aa68ff1b4600e75121e0d88e100f4394c9107) Thanks [@cartogram](https://github.com/cartogram)! - Deprecate create-hydrogen-app in favor of @shopify/create-hydrogen
+
 ## 0.24.0
 
 ## 0.23.0
