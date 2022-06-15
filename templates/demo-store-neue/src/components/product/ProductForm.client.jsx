@@ -5,6 +5,7 @@ import {
   useUrl,
   AddToCartButton,
   BuyNowButton,
+  Money,
 } from '@shopify/hydrogen';
 
 import {Heading, Text, Button} from '~/components';
@@ -103,7 +104,13 @@ export function ProductForm() {
             variant={isOutOfStock ? 'secondary' : 'primary'}
             as="span"
           >
-            {isOutOfStock ? 'Sold out' : 'Add to bag'}
+            {isOutOfStock ? (
+              <Text>Sold out</Text>
+            ) : (
+              <Text as="span">
+                Add to bag - <Money data={selectedVariant.priceV2} as="span" />
+              </Text>
+            )}
           </Button>
         </AddToCartButton>
         {!isOutOfStock && (

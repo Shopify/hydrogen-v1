@@ -29,7 +29,7 @@ export function Header({title, menu}) {
           <Drawer.Title>
             <h2 className="sr-only">Cart Drawer</h2>
           </Drawer.Title>
-          <CartDetails />
+          <CartDetails onClose={closeDrawer} />
         </div>
       </Drawer>
       <DesktopHeader
