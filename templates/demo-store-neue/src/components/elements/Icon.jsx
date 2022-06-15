@@ -1,16 +1,13 @@
-function Icon({
-  children,
-  className = 'w-5 h-5',
-  fill = 'currentColor',
-  ...props
-}) {
+import clsx from 'clsx';
+
+function Icon({children, className, fill = 'currentColor', ...props}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       {...props}
       fill={fill}
-      className={className}
+      className={clsx('w-5 h-5', className)}
     >
       {children}
     </svg>
