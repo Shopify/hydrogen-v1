@@ -93,6 +93,10 @@ Depending on the `type` specified in the passed [Metafield](https://shopify.dev/
 | `variant_reference`      | string                                                                                        |
 | `url`                    | string                                                                                        |
 
-## Related utility
+## Related components
 
-- [`parseMetafield`](https://shopify.dev/api/hydrogen/utilities/parsemetafield)
+- [`Metafield`](https://shopify.dev/api/hydrogen/components/primitive/metafield)
+
+## Related utilities
+
+- [`parseMetafield`](/https://shopify.dev/api/hydrogen/utilities/parsemetafield)

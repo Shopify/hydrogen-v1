@@ -51,6 +51,10 @@ This hook takes a single object with the following key:
 
 This hook returns an array of metafields whose `values` have been parsed according to the metafield `type`. For details on the parsed value, refer to the [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue) utility.
 
+## Related components
+
+- [`Metafield`](https://shopify.dev/api/hydrogen/components/primitive/metafield)
+
 ## Related utilities
 
 - [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue)

@@ -62,3 +62,8 @@ The [Metafield object](https://shopify.dev/api/storefront/reference/common-objec
 | Variable                            | Description                                                                                                                                                                        |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `$includeReferenceMetafieldDetails` | A boolean indicating if the reference type should be queried. Only applicable to `file_reference`, `product_reference`, `variant_reference`, and `page_reference` metafield types. |
+
+## Related utilities
+
+- [`parseMetafield`](https://shopify.dev/api/hydrogen/utilities/parsemetafield)
+- [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue)
