@@ -45,7 +45,9 @@ export default function Homepage() {
       <Suspense fallback={null}>
         <SeoForHomepage />
       </Suspense>
-      {primaryHero && <Hero {...primaryHero} height="full" top />}
+      {primaryHero && (
+        <Hero {...primaryHero} height="full" top loading="eager" />
+      )}
       <ProductSwimlane
         data={featuredProducts.nodes}
         title="Featured Products"

@@ -2,7 +2,7 @@ import {Image, Link} from '@shopify/hydrogen';
 
 import {Heading} from '~/components';
 
-export function CollectionCard({collection}) {
+export function CollectionCard({collection, loading}) {
   return (
     <Link to={`/collections/${collection.handle}`} className="grid gap-4">
       {collection?.image && (
@@ -10,6 +10,8 @@ export function CollectionCard({collection}) {
           <Image
             className="object-cover w-full aspect-[3/2]"
             data={collection.image}
+            loading={loading}
+            alt={collection.image.altText || collection.title}
           />
         </div>
       )}

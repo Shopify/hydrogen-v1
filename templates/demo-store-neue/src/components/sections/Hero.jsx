@@ -4,8 +4,17 @@ import {Heading, Text} from '~/components';
 import {hero as mockData} from '~/lib/placeholders';
 
 export function Hero(props = mockData) {
-  const {title, byline, cta, handle, spread, spreadSecondary, height, top} =
-    props;
+  const {
+    title,
+    byline,
+    cta,
+    handle,
+    spread,
+    spreadSecondary,
+    height,
+    top,
+    loading,
+  } = props;
 
   return (
     <Link to={`/collections/${handle}`}>
@@ -21,7 +30,7 @@ export function Hero(props = mockData) {
         <div className="absolute inset-0 grid flex-grow grid-flow-col pointer-events-none auto-cols-fr -z-10 content-stretch overflow-clip">
           {spread?.reference && (
             <div className="">
-              <SpreadMedia data={spread.reference} />
+              <SpreadMedia data={spread.reference} loading={loading} />
             </div>
           )}
           {spreadSecondary?.reference && (
@@ -46,7 +55,7 @@ export function Hero(props = mockData) {
   );
 }
 
-function SpreadMedia({data}) {
+function SpreadMedia({data, loading}) {
   if (data.mediaContentType === 'VIDEO') {
     return (
       <Video
@@ -72,6 +81,7 @@ function SpreadMedia({data}) {
         alt={data.alt || 'Marketing Banner Image'}
         className="block object-cover w-full h-full"
         data={data.image}
+        loading={loading}
       />
     );
   }
