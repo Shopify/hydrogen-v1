@@ -12,7 +12,7 @@ import {
   Money,
 } from '@shopify/hydrogen';
 
-import {Button, Heading, IconRemove, Text} from '~/components/elements';
+import {Button, Heading, IconRemove, Text} from '~/components';
 
 export function CartDetails() {
   const {lines} = useCart();

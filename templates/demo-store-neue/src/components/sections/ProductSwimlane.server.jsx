@@ -1,8 +1,7 @@
 import {useMemo} from 'react';
 import {gql, useShopQuery, useSession, useShop} from '@shopify/hydrogen';
-import {Section} from '~/components/elements';
-import {ProductCard} from '~/components/blocks';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {ProductCard, Section} from '~/components';
 
 const mockProducts = new Array(12).fill('');
 

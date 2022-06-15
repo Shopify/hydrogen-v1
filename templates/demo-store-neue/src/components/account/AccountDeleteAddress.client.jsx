@@ -1,7 +1,7 @@
 import {useServerProps} from '@shopify/hydrogen';
 import {useCallback} from 'react';
 
-import {Text, Button} from '~/components/elements';
+import {Text, Button} from '~/components';
 
 export function AccountDeleteAddress({addressId}) {
   const {serverProps, setServerProps} = useServerProps();

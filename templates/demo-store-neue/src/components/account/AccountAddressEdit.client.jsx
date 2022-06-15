@@ -1,7 +1,7 @@
 import {useCallback, useState} from 'react';
 import {useServerProps} from '@shopify/hydrogen';
 
-import {Button, Text} from '~/components/elements';
+import {Button, Text} from '~/components';
 
 export function AccountAddressEdit({address, defaultAddress}) {
   const {setServerProps} = useServerProps();

@@ -1,17 +1,16 @@
 import {Suspense} from 'react';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
-  Route,
-  Router,
   FileRoutes,
-  ShopifyProvider,
-  ShopifyAnalytics,
   PerformanceMetrics,
   PerformanceMetricsDebug,
+  Route,
+  Router,
+  ShopifyAnalytics,
+  ShopifyProvider,
 } from '@shopify/hydrogen';
 
-import {DefaultSeo, CartProviderWithSession} from '~/components/blocks';
-import {NotFound} from '~/components/sections';
+import {DefaultSeo, CartProviderWithSession, NotFound} from '~/components';
 
 function App({routes}) {
   return (

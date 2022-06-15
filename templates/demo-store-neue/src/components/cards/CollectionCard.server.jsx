@@ -1,6 +1,6 @@
 import {Image, Link} from '@shopify/hydrogen';
 
-import {Heading} from '~/components/elements';
+import {Heading} from '~/components';
 
 export function CollectionCard({collection}) {
   return (

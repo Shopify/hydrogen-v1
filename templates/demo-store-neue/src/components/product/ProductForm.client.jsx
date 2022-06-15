@@ -7,7 +7,7 @@ import {
   BuyNowButton,
 } from '@shopify/hydrogen';
 
-import {Heading, Text, Button} from '~/components/elements';
+import {Heading, Text, Button} from '~/components';
 
 export function ProductForm() {
   const {pathname, search} = useUrl();

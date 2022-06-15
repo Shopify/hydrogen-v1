@@ -1,7 +1,7 @@
 import {useCallback, useState} from 'react';
 import {useServerProps} from '@shopify/hydrogen';
 
-import {Text, Button} from '~/components/elements';
+import {Text, Button} from '~/components';
 import {emailValidation, passwordValidation} from '~/lib/utils';
 
 export function AccountDetailsEdit({

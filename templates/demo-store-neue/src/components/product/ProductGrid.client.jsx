@@ -1,8 +1,7 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
 import {flattenConnection} from '@shopify/hydrogen';
 
-import {ProductCard} from '~/components/blocks';
-import {Grid} from '~/components/elements';
+import {Grid, ProductCard} from '~/components';
 
 export function ProductGrid({collection}) {
   const nextButtonRef = useRef(null);

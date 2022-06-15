@@ -1,7 +1,6 @@
 import {CacheNone, Seo, gql} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {AccountRecoverForm} from '~/components/sections';
+import {Layout, AccountRecoverForm} from '~/components';
 
 /**
  * A form for the user to fill out to _initiate_ a password reset.

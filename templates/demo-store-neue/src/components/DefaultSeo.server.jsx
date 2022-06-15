@@ -1,9 +1,9 @@
 import {
-  useShopQuery,
-  Seo,
   CacheLong,
-  useServerAnalytics,
   gql,
+  Seo,
+  useServerAnalytics,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
 /**

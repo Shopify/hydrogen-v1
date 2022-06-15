@@ -1,8 +1,7 @@
 import {Disclosure} from '@headlessui/react';
 import {Link} from '@shopify/hydrogen';
 
-import {CountrySelector} from '~/components/blocks';
-import {Section, Heading, IconCaret} from '~/components/elements';
+import {Section, Heading, IconCaret, CountrySelector} from '~/components';
 import {footer as mockData} from '~/lib/placeholders';
 
 /**

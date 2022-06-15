@@ -12,8 +12,7 @@ import {
   useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {Text, PageHeader} from '~/components/elements';
+import {Layout, Text, PageHeader} from '~/components';
 import {statusMessage} from '~/lib/utils';
 
 export default function OrderDetails({response}) {

@@ -9,9 +9,6 @@ import {
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
-import {Layout} from '~/components/layouts';
-import {Modal} from '~/components/blocks';
-import {PageHeader, LogoutButton} from '~/components/elements';
 import {getApiErrorMessage} from '~/lib/utils';
 import {
   AccountAddressBook,
@@ -19,10 +16,14 @@ import {
   AccountDeleteAddress,
   AccountDetails,
   AccountDetailsEdit,
-  FeaturedCollections,
   AccountOrderHistory,
+  FeaturedCollections,
+  Layout,
+  LogoutButton,
+  Modal,
+  PageHeader,
   ProductSwimlane,
-} from '~/components/sections';
+} from '~/components';
 
 export default function Account({
   response,

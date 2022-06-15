@@ -1,6 +1,6 @@
 import {Image, Link, flattenConnection} from '@shopify/hydrogen';
 
-import {Text} from '~/components/elements';
+import {Text} from '~/components';
 import {statusMessage} from '~/lib/utils';
 
 export function OrderCard({order}) {

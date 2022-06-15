@@ -1,9 +1,14 @@
 import {gql, useSession, useShop, useShopQuery} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
-import {Layout} from '~/components/layouts';
-import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
-import {PageHeader, Text, Button} from '~/components/elements';
+import {
+  Button,
+  FeaturedCollections,
+  Layout,
+  PageHeader,
+  ProductSwimlane,
+  Text,
+} from '~/components';
 
 export function NotFound({type = 'page'}) {
   const {languageCode} = useShop();

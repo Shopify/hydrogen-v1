@@ -2,7 +2,7 @@ import {useCallback, useState, Suspense} from 'react';
 import {useCountry, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 
-import {IconCheck, IconCaret} from '~/components/elements';
+import {IconCheck, IconCaret} from '~/components';
 
 /**
  * A client component that selects the appropriate country to display for products on a website

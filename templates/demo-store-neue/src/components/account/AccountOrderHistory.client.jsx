@@ -1,5 +1,4 @@
-import {OrderCard} from '~/components/blocks';
-import {Button, Text} from '~/components/elements';
+import {Button, Text, OrderCard} from '~/components';
 
 export function AccountOrderHistory({orders}) {
   return (

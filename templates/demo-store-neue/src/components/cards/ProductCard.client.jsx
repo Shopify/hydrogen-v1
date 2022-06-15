@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 
-import {Text} from '~/components/elements';
+import {Text} from '~/components';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
-
 import {product as mockProduct} from '~/lib/placeholders';
 
 export function ProductCard({product, label, className}) {

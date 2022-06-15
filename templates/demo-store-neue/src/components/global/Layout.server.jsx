@@ -7,8 +7,7 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {Header, Footer} from '~/components/sections';
-
+import {Header, Footer} from '~/components';
 import {parseMenu} from '~/lib/utils';
 
 const HEADER_MENU_HANDLE = 'main-menu';

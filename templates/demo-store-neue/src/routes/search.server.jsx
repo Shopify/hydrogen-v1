@@ -1,23 +1,24 @@
 import {
-  useShop,
-  useUrl,
-  useSession,
-  useShopQuery,
   gql,
+  useSession,
+  useShop,
+  useShopQuery,
+  useUrl,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {
-  PageHeader,
-  Section,
-  Heading,
-  Text,
-  Input,
-  Grid,
-} from '~/components/elements';
-import {ProductCard} from '~/components/blocks';
-import {FeaturedCollections, ProductSwimlane} from '~/components/sections';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {
+  FeaturedCollections,
+  Grid,
+  Heading,
+  Input,
+  Layout,
+  PageHeader,
+  ProductCard,
+  ProductSwimlane,
+  Section,
+  Text,
+} from '~/components';
 
 export default function Search({pageBy = 12, params}) {
   const {languageCode} = useShop();

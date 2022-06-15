@@ -1,6 +1,6 @@
 import {Disclosure} from '@headlessui/react';
 
-import {Text} from '~/components/elements';
+import {Text} from '~/components';
 import {productInfo} from '~/lib/placeholders';
 
 export function ProductInfo({data = productInfo}) {

@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import {useServerProps} from '@shopify/hydrogen';
 
-import {Text, Button} from '~/components/elements';
+import {Text, Button} from '~/components';
 
 import {callDeleteAddressApi} from './AccountDeleteAddress.client';
 
