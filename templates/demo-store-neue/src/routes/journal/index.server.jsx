@@ -1,16 +1,14 @@
 import {
-  useShop,
-  useShopQuery,
-  Seo,
-  gql,
   CacheLong,
   flattenConnection,
+  gql,
   Head,
+  Seo,
+  useShop,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {ArticleCard} from '~/components/blocks';
-import {Grid, PageHeader} from '~/components/elements';
+import {Layout, ArticleCard, Grid, PageHeader} from '~/components';
 
 const BLOG_HANDLE = 'Journal';
 

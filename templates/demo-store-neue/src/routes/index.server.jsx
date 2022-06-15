@@ -10,12 +10,7 @@ import {
   useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {
-  FeaturedCollections,
-  Hero,
-  ProductSwimlane,
-} from '~/components/sections';
+import {Layout, FeaturedCollections, Hero, ProductSwimlane} from '~/components';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 

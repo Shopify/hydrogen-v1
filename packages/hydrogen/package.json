@@ -91,8 +91,8 @@
   "peerDependencies": {
     "body-parser": "^1.20.0",
     "compression": "^1.7.4",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "serve-static": "^1.14.1",
     "vite": "^2.9.0"
   },
