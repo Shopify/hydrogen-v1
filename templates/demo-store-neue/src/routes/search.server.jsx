@@ -19,6 +19,7 @@ import {
   Section,
   Text,
 } from '~/components';
+import {getImageLoadingPriority} from '~/lib/const';
 
 export default function Search({pageBy = 12, params}) {
   const {languageCode} = useShop();

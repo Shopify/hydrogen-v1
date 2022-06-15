@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   gql,
   ProductOptionsProvider,
@@ -75,7 +76,9 @@ export default function Product() {
             </section>
           </div>
         </Section>
-        <ProductSwimlane title="Related Products" data={product.id} />
+        <Suspense>
+          <ProductSwimlane title="Related Products" data={product.id} />
+        </Suspense>
       </ProductOptionsProvider>
     </Layout>
   );
