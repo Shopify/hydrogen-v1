@@ -110,12 +110,11 @@ const changelogFunctions: ChangelogFunctions = {
       : links.user;
 
     const prefix = [
-      links.pull === null ? '' : ` ${links.pull}`,
-      links.commit === null ? '' : ` ${links.commit}`,
-      users === null ? '' : ` Thanks ${users}!`,
+      links.pull === null ? '' : ` (${links.pull})`,
+      users === null ? '' : ` by ${users}`,
     ].join('');
 
-    return `\n\n-${prefix ? `${prefix} -` : ''} ${firstLine}\n${futureLines
+    return `\n\n- ${firstLine}${prefix ? `${prefix} \n` : ''}\n${futureLines
       .map((l) => `  ${l}`)
       .join('\n')}`;
   },
