@@ -10,10 +10,24 @@ import {renderToReadableStream as _rscRenderToReadableStream} from '@shopify/hyd
 import {createFromReadableStream as _createFromReadableStream} from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import type {Writable} from 'stream';
 
+// From Flight flow types
+type ServerContextJSONValue =
+  | string
+  | boolean
+  | number
+  | null
+  | Readonly<ServerContextJSONValueCircular>
+  | {[key: string]: ServerContextJSONValueCircular};
+
+interface ServerContextJSONValueCircular
+  extends Array<ServerContextJSONValue> {}
+
 export const rscRenderToReadableStream = _rscRenderToReadableStream as (
   App: JSX.Element,
   options?: {
     onError?: (error: Error) => void;
+    context?: Array<[string, ServerContextJSONValue]>;
+    identifierPrefix?: string;
   }
 ) => ReadableStream<Uint8Array>;
 
