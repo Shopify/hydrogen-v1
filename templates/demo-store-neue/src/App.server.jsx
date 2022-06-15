@@ -10,14 +10,23 @@ import {
   ShopifyProvider,
 } from '@shopify/hydrogen';
 
-import {DefaultSeo, CartProviderWithSession, NotFound} from '~/components';
+import {
+  DefaultSeo,
+  CartProviderWithSession,
+  NotFound,
+  HeaderFallback,
+} from '~/components';
 
-function App({routes}) {
+function App({routes, request}) {
+  const isHome = new URL(request.normalizedUrl).pathname === '/';
+
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<HeaderFallback isHome={isHome} />}>
       <ShopifyProvider>
         <CartProviderWithSession>
-          <DefaultSeo />
+          <Suspense>
+            <DefaultSeo />
+          </Suspense>
           <Router>
             <FileRoutes routes={routes} />
             <Route path="*" page={<NotFound />} />
