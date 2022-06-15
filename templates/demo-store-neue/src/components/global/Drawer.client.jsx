@@ -41,11 +41,10 @@ function Drawer({open, onClose, children}) {
                   <div className="absolute top-0 right-0 -ml-8 flex md:pt-8 md:pr-12 pt-6 pr-4">
                     <button
                       type="button"
-                      className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                      className="rounded-md text-primary hover:text-primary"
                       onClick={onClose}
                     >
-                      <span className="sr-only">Close panel</span>
-                      <IconClose className="h-6 w-6" aria-hidden="true" />
+                      <IconClose className="h-6 w-6" area-label="Close panel" />
                     </button>
                   </div>
                   {children}
