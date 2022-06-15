@@ -17,6 +17,10 @@ import {Button, Heading, IconRemove, Text} from '~/components';
 export function CartDetails() {
   const {lines} = useCart();
 
+  if (lines.length === 0) {
+    return <CartEmpty />;
+  }
+
   return (
     <form className="grid grid-cols-1 h-screen grid-rows-[1fr_auto]">
       <section
@@ -147,6 +151,28 @@ function CartLineItem() {
         </Text>
       </div>
     </li>
+  );
+}
+
+function CartEmpty() {
+  return (
+    <div className="flex flex-col space-y-7 justify-center items-center md:py-8 md:px-12 px-4 py-6 h-screen">
+      <Heading>Your cart is empty</Heading>
+      <Button>Continue shopping</Button>
+      <div className="flex flex-col text-center">
+        <Text>Have an account?</Text>
+        <Text>
+          <Link className="text-orange-600 underline" to="/account/register">
+            Join
+          </Link>{' '}
+          or{' '}
+          <Link className="text-orange-600 underline" to="/account/login">
+            login
+          </Link>{' '}
+          for smoother checkout.
+        </Text>
+      </div>
+    </div>
   );
 }
 
