@@ -1,4 +1,5 @@
-import {useMemo} from 'react';
+import {useMemo, useRef} from 'react';
+import {useScroll} from 'react-use';
 import {
   useCart,
   useCartLine,
@@ -16,21 +17,23 @@ import {Button, Heading, IconRemove, Text} from '~/components';
 
 export function CartDetails({onClose}) {
   const {lines} = useCart();
+  const scrollRef = useRef(null);
+  const {y} = useScroll(scrollRef);
 
   if (lines.length === 0) {
     return <CartEmpty onClose={onClose} />;
   }
 
   return (
-    <form className="grid grid-cols-1 h-screen grid-rows-[1fr_auto]">
+    <form className="grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto]">
       <section
+        ref={scrollRef}
         aria-labelledby="cart-contents"
-        className="overflow-auto md:py-8 md:px-12 px-4 py-6"
+        className={`px-4 pb-4 overflow-auto transition md:px-12 ${
+          y > 0 && 'border-t'
+        }`}
       >
-        <Heading as="h2" size="lead" id="cart-contents">
-          Cart
-        </Heading>
-        <ul className="mt-3">
+        <ul className="grid gap-6 md:gap-10">
           {lines.map((line) => {
             return (
               <CartLineProvider key={line.id} line={line}>
@@ -42,7 +45,7 @@ export function CartDetails({onClose}) {
       </section>
       <section
         aria-labelledby="summary-heading"
-        className="md:py-8 md:px-12 py-6 px-4 border-t"
+        className="p-4 border-t md:px-12"
       >
         <h2 id="summary-heading" className="sr-only">
           Order summary
@@ -58,11 +61,11 @@ function CartCheckoutActions() {
   const {checkoutUrl} = useCart();
   return (
     <>
-      <div className="md:mt-8 mt-6 flex flex-col">
-        <Button to={checkoutUrl} width="auto">
+      <div className="flex flex-col items-center mt-6 md:mt-8">
+        <Button to={checkoutUrl} width="full">
           Continue to Checkout
         </Button>
-        <CartShopPayButton className="flex items-center justify-center w-full rounded-sm mt-2 bg-[#5a31f4]" />
+        <CartShopPayButton className="flex items-center justify-center rounded-sm mt-2 bg-[#5a31f4]" />
       </div>
     </>
   );
@@ -109,11 +112,11 @@ function CartLineItem() {
   );
 
   return (
-    <li key={lineId} className="flex md:py-5 py-3">
+    <li key={lineId} className="flex">
       <div className="flex-shrink-0">
         <Image
           data={merchandise.image}
-          className="object-cover object-center md:w-28 md:h-28 w-24 h-24 rounded border"
+          className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
         />
       </div>
 
