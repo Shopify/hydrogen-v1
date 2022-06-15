@@ -3,8 +3,9 @@ import {Image, Video, Link} from '@shopify/hydrogen';
 import {Heading, Text} from '~/components';
 import {hero as mockData} from '~/lib/placeholders';
 
-export function Hero({data = mockData, height, top}) {
-  const {title, byline, cta, handle, spread, spread_secondary} = data;
+export function Hero(props = mockData) {
+  const {title, byline, cta, handle, spread, spreadSecondary, height, top} =
+    props;
 
   return (
     <Link to={`/collections/${handle}`}>
@@ -23,9 +24,9 @@ export function Hero({data = mockData, height, top}) {
               <SpreadMedia data={spread.reference} />
             </div>
           )}
-          {spread_secondary?.reference && (
+          {spreadSecondary?.reference && (
             <div className="hidden md:block">
-              <SpreadMedia data={spread_secondary.reference} />
+              <SpreadMedia data={spreadSecondary.reference} />
             </div>
           )}
         </div>
