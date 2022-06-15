@@ -1,6 +1,6 @@
 {
-  "name": "example-typescript",
-  "description": "An example using typescript in Hydrogen",
+  "name": "example-sanity-typescript",
+  "description": "An example using Sanity and TypeScript in Hydrogen",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
