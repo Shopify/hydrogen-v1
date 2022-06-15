@@ -1,14 +1,9 @@
-import {useServerProps} from '@shopify/hydrogen';
-import {useCallback} from 'react';
+import {Text, Button} from '~/components/elements';
+import {useRenderServerComponents} from '~/lib/utils';
 
-import {Text, Button} from '~/components';
-
-export function AccountDeleteAddress({addressId}) {
-  const {serverProps, setServerProps} = useServerProps();
-
-  const close = useCallback(() => {
-    setServerProps('deletingAddress', null);
-  }, [setServerProps]);
+export function AccountDeleteAddress({addressId, close}) {
+  // Necessary for edits to show up on the main page
+  const renderServerComponents = useRenderServerComponents();
 
   async function deleteAddress(id) {
     const response = await callDeleteAddressApi(id);
@@ -16,7 +11,7 @@ export function AccountDeleteAddress({addressId}) {
       alert(response.error);
       return;
     }
-    setServerProps('rerender', !serverProps.rerender);
+    renderServerComponents();
     close();
   }
 
@@ -39,7 +34,7 @@ export function AccountDeleteAddress({addressId}) {
         </Button>
         <Button
           className="text-sm mt-2"
-          onClick={() => setServerProps('deletingAddress', null)}
+          onClick={close}
           variant="secondary"
           width="full"
         >

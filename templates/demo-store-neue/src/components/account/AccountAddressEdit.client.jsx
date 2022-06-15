@@ -1,10 +1,10 @@
-import {useCallback, useState} from 'react';
-import {useServerProps} from '@shopify/hydrogen';
+import {useMemo, useState} from 'react';
+import {useRenderServerComponents} from '~/lib/utils';
 
 import {Button, Text} from '~/components';
 
-export function AccountAddressEdit({address, defaultAddress}) {
-  const {setServerProps} = useServerProps();
+export function AccountAddressEdit({address, defaultAddress, close}) {
+  const isNewAddress = useMemo(() => !Object.keys(address).length, [address]);
 
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState(null);
@@ -20,9 +20,8 @@ export function AccountAddressEdit({address, defaultAddress}) {
   const [phone, setPhone] = useState(address?.phone || '');
   const [isDefaultAddress, setIsDefaultAddress] = useState(defaultAddress);
 
-  const close = useCallback(() => {
-    setServerProps('editingAddress', null);
-  }, [setServerProps]);
+  // Necessary for edits to show up on the main page
+  const renderServerComponents = useRenderServerComponents();
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -51,13 +50,14 @@ export function AccountAddressEdit({address, defaultAddress}) {
       return;
     }
 
+    renderServerComponents();
     close();
   }
 
   return (
     <>
       <Text className="mt-4 mb-6" as="h3" size="lead">
-        {address ? 'Edit address' : 'Add address'}
+        {isNewAddress ? 'Add address' : 'Edit address'}
       </Text>
       <div className="max-w-lg">
         <form noValidate onSubmit={onSubmit}>

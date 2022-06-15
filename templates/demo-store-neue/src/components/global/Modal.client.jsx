@@ -1,13 +1,4 @@
-import {useCallback} from 'react';
-import {useServerProps} from '@shopify/hydrogen';
-
-export function Modal({children, closeModalProp}) {
-  const {setServerProps} = useServerProps();
-
-  const close = useCallback(() => {
-    setServerProps(closeModalProp, null);
-  }, [closeModalProp, setServerProps]);
-
+export function Modal({children, close}) {
   return (
     <div
       className="relative z-50"
