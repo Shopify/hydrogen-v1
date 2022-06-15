@@ -112,9 +112,7 @@ export const renderHydrogen = (App: any) => {
     request.ctx.runtime = context;
     if (!context?.waitUntil) {
       const runtimeContext: RuntimeContext = {
-        waitUntil: (fn: Promise<any>) => {
-          setTimeout(() => fn, 0);
-        },
+        waitUntil: () => {},
       };
 
       request.ctx.runtime = runtimeContext;
