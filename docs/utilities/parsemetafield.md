@@ -1,6 +1,6 @@
 ---
 gid: ec647578-6ab7-40ca-87e5-8a559eca548e
-title: parseMetafields
+title: parseMetafield
 description: parseMetafields creates a new metafield object with a value that has been parsed according to the metafield type.
 ---
 
