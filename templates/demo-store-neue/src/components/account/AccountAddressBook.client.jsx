@@ -1,12 +1,12 @@
-import {useMemo} from 'react';
-import {useServerProps} from '@shopify/hydrogen';
+import {useState, useMemo} from 'react';
 
-import {Text, Button} from '~/components';
-
-import {callDeleteAddressApi} from './AccountDeleteAddress.client';
+import {Text, Button} from '~/components/elements';
+import {Modal} from '../index';
+import {AccountAddressEdit, AccountDeleteAddress} from '../index';
 
 export function AccountAddressBook({addresses, defaultAddress}) {
-  const {serverProps, setServerProps} = useServerProps();
+  const [editingAddress, setEditingAddress] = useState(null);
+  const [deletingAddress, setDeletingAddress] = useState(null);
 
   const {fullDefaultAddress, addressesWithoutDefault} = useMemo(() => {
     const defaultAddressIndex = addresses.findIndex(
@@ -21,17 +21,31 @@ export function AccountAddressBook({addresses, defaultAddress}) {
     };
   }, [addresses, defaultAddress]);
 
-  async function deleteAddress(id) {
-    const response = await callDeleteAddressApi(id);
-    if (response.error) {
-      alert(response.error);
-      return;
-    }
-    setServerProps('rerender', !serverProps.rerender);
+  function close() {
+    setEditingAddress(null);
+    setDeletingAddress(null);
+  }
+
+  function editAddress(address) {
+    setEditingAddress(address);
   }
 
   return (
     <>
+      {deletingAddress ? (
+        <Modal close={close}>
+          <AccountDeleteAddress addressId={deletingAddress} close={close} />
+        </Modal>
+      ) : null}
+      {editingAddress ? (
+        <Modal close={close}>
+          <AccountAddressEdit
+            address={editingAddress}
+            defaultAddress={fullDefaultAddress === editingAddress}
+            close={close}
+          />
+        </Modal>
+      ) : null}
       <div className="grid w-full gap-4 p-4 py-6 md:gap-8 md:p-8 lg:p-12">
         <h3 className="font-bold text-lead">Address Book</h3>
         <div>
@@ -44,7 +58,9 @@ export function AccountAddressBook({addresses, defaultAddress}) {
             <Button
               className="mt-2 text-sm w-full mb-6"
               onClick={() => {
-                setServerProps('editingAddress', 'NEW');
+                editAddress({
+                  /** empty address */
+                });
               }}
               variant="secondary"
             >
@@ -57,17 +73,22 @@ export function AccountAddressBook({addresses, defaultAddress}) {
                 <Address
                   address={fullDefaultAddress}
                   defaultAddress
-                  deleteAddress={deleteAddress.bind(
+                  setDeletingAddress={setDeletingAddress.bind(
                     null,
                     fullDefaultAddress.originalId,
                   )}
+                  editAddress={editAddress}
                 />
               ) : null}
               {addressesWithoutDefault.map((address) => (
                 <Address
                   key={address.id}
                   address={address}
-                  deleteAddress={deleteAddress.bind(null, address.originalId)}
+                  setDeletingAddress={setDeletingAddress.bind(
+                    null,
+                    address.originalId,
+                  )}
+                  editAddress={editAddress}
                 />
               ))}
             </div>
@@ -78,9 +99,7 @@ export function AccountAddressBook({addresses, defaultAddress}) {
   );
 }
 
-function Address({address, defaultAddress}) {
-  const {setServerProps} = useServerProps();
-
+function Address({address, defaultAddress, editAddress, setDeletingAddress}) {
   return (
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
       {defaultAddress ? (
@@ -108,16 +127,14 @@ function Address({address, defaultAddress}) {
       <div className="flex flex-row font-medium mt-6">
         <button
           onClick={() => {
-            setServerProps('editingAddress', address.id);
+            editAddress(address);
           }}
           className="text-left underline text-sm"
         >
           Edit
         </button>
         <button
-          onClick={() => {
-            setServerProps('deletingAddress', address.id);
-          }}
+          onClick={setDeletingAddress}
           className="text-left text-gray-500 ml-6 text-sm"
         >
           Remove

@@ -1,4 +1,22 @@
+// TODO: Split this into multiple files
+import {useServerProps} from '@shopify/hydrogen';
+import {useCallback} from 'react';
+
 import typographicBase from 'typographic-base';
+
+/**
+ * This is a hack until we have better built-in primitives for
+ * causing server components to re-render.
+ *
+ * @returns function when called will cause the current page to re-render on the server
+ */
+export function useRenderServerComponents() {
+  const {serverProps, setServerProps} = useServerProps();
+
+  return useCallback(() => {
+    setServerProps('renderRsc', !serverProps.renderRsc);
+  }, [serverProps, setServerProps]);
+}
 
 export function missingClass(string, prefix) {
   if (!string) {
