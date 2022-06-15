@@ -30,7 +30,7 @@ export function AccountRecoverForm() {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center my-24">
       <div className="max-w-md w-full">
         {submitSuccess ? (
           <>
