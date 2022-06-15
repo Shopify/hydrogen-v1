@@ -148,11 +148,10 @@ export type Article = HasMetafields &
     /** Returns a metafield found by namespace and key. */
     metafield?: Maybe<Metafield>;
     /**
-     * A paginated list of metafields associated with the resource.
-     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+     * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: MetafieldConnection;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** The date and time when the article was published. */
@@ -192,12 +191,7 @@ export type ArticleMetafieldArgs = {
 
 /** An article in an online store blog. */
 export type ArticleMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /** The author of an article. */
@@ -333,11 +327,10 @@ export type Blog = HasMetafields &
     /** Returns a metafield found by namespace and key. */
     metafield?: Maybe<Metafield>;
     /**
-     * A paginated list of metafields associated with the resource.
-     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+     * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: MetafieldConnection;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** The blog's SEO information. */
@@ -370,12 +363,7 @@ export type BlogMetafieldArgs = {
 
 /** An online store blog. */
 export type BlogMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /**
@@ -1453,11 +1441,10 @@ export type Collection = HasMetafields &
     /** Returns a metafield found by namespace and key. */
     metafield?: Maybe<Metafield>;
     /**
-     * A paginated list of metafields associated with the resource.
-     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+     * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: MetafieldConnection;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** List of products in the collection. */
@@ -1483,12 +1470,7 @@ export type CollectionMetafieldArgs = {
 
 /** A collection represents a grouping of products that a shop owner can create to organize them or make their shops easier to browse. */
 export type CollectionMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /** A collection represents a grouping of products that a shop owner can create to organize them or make their shops easier to browse. */
@@ -2532,11 +2514,10 @@ export type Customer = HasMetafields & {
   /** Returns a metafield found by namespace and key. */
   metafield?: Maybe<Metafield>;
   /**
-   * A paginated list of metafields associated with the resource.
-   * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+   * The metafields associated with the resource matching the supplied list of namespaces and keys.
    *
    */
-  metafields: MetafieldConnection;
+  metafields: Array<Maybe<Metafield>>;
   /** The orders associated with the customer. */
   orders: OrderConnection;
   /** The customer’s phone number. */
@@ -2568,12 +2549,7 @@ export type CustomerMetafieldArgs = {
 
 /** A customer represents a customer account with the shop. Customer accounts store contact information for the customer, saving logged-in customers the trouble of having to provide it at every checkout. */
 export type CustomerMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /** A customer represents a customer account with the shop. Customer accounts store contact information for the customer, saving logged-in customers the trouble of having to provide it at every checkout. */
@@ -3258,11 +3234,10 @@ export type HasMetafields = {
   /** Returns a metafield found by namespace and key. */
   metafield?: Maybe<Metafield>;
   /**
-   * A paginated list of metafields associated with the resource.
-   * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+   * The metafields associated with the resource matching the supplied list of namespaces and keys.
    *
    */
-  metafields: MetafieldConnection;
+  metafields: Array<Maybe<Metafield>>;
 };
 
 /** Represents information about the metafields associated to the specified resource. */
@@ -3273,12 +3248,15 @@ export type HasMetafieldsMetafieldArgs = {
 
 /** Represents information about the metafields associated to the specified resource. */
 export type HasMetafieldsMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
+};
+
+/** Identifies a metafield on an owner resource by namespace and key. */
+export type HasMetafieldsIdentifier = {
+  /** The identifier for the metafield. */
+  key: Scalars['String'];
+  /** A container for a set of metafields. */
+  namespace: Scalars['String'];
 };
 
 /** Represents an image resource. */
@@ -4142,32 +4120,6 @@ export type Metafield = Node & {
 };
 
 /**
- * An auto-generated type for paginating through multiple Metafields.
- *
- */
-export type MetafieldConnection = {
-  __typename?: 'MetafieldConnection';
-  /** A list of edges. */
-  edges: Array<MetafieldEdge>;
-  /** A list of the nodes contained in MetafieldEdge. */
-  nodes: Array<Metafield>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/**
- * An auto-generated type which holds one Metafield and a cursor during pagination.
- *
- */
-export type MetafieldEdge = {
-  __typename?: 'MetafieldEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of MetafieldEdge. */
-  node: Metafield;
-};
-
-/**
  * A filter used to view a subset of products in a collection matching a specific metafield value.
  *
  * Only the following metafield types are currently supported:
@@ -4661,11 +4613,10 @@ export type Order = HasMetafields &
     /** Returns a metafield found by namespace and key. */
     metafield?: Maybe<Metafield>;
     /**
-     * A paginated list of metafields associated with the resource.
-     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+     * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: MetafieldConnection;
+    metafields: Array<Maybe<Metafield>>;
     /**
      * Unique identifier for the order that appears on the order.
      * For example, _#1000_ or _Store1001.
@@ -4761,12 +4712,7 @@ export type OrderMetafieldArgs = {
 
 /** An order is a customer’s completed request to purchase one or more products from a shop. An order is created when a customer completes the checkout process, during which time they provides an email address, billing address and payment information. */
 export type OrderMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /** An order is a customer’s completed request to purchase one or more products from a shop. An order is created when a customer completes the checkout process, during which time they provides an email address, billing address and payment information. */
@@ -4935,11 +4881,10 @@ export type Page = HasMetafields &
     /** Returns a metafield found by namespace and key. */
     metafield?: Maybe<Metafield>;
     /**
-     * A paginated list of metafields associated with the resource.
-     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+     * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: MetafieldConnection;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** The page's SEO information. */
@@ -4958,12 +4903,7 @@ export type PageMetafieldArgs = {
 
 /** Shopify merchants can create pages to hold static HTML content. Each Page object represents a custom page on the online store. */
 export type PageMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /**
@@ -5155,11 +5095,10 @@ export type Product = HasMetafields &
     /** Returns a metafield found by namespace and key. */
     metafield?: Maybe<Metafield>;
     /**
-     * A paginated list of metafields associated with the resource.
-     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+     * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: MetafieldConnection;
+    metafields: Array<Maybe<Metafield>>;
     /** The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel. */
     onlineStoreUrl?: Maybe<Scalars['URL']>;
     /** List of product options. */
@@ -5267,12 +5206,7 @@ export type ProductMetafieldArgs = {
  * For example, a digital download (such as a movie, music or ebook file) also qualifies as a product, as do services (such as equipment rental, work for hire, customization of another product or an extended warranty).
  */
 export type ProductMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /**
@@ -5494,11 +5428,10 @@ export type ProductVariant = HasMetafields &
     /** Returns a metafield found by namespace and key. */
     metafield?: Maybe<Metafield>;
     /**
-     * A paginated list of metafields associated with the resource.
-     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+     * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: MetafieldConnection;
+    metafields: Array<Maybe<Metafield>>;
     /**
      * The product variant’s price.
      * @deprecated Use `priceV2` instead
@@ -5540,12 +5473,7 @@ export type ProductVariantMetafieldArgs = {
 
 /** A product variant represents a different version of a product, such as differing sizes or differing colors. */
 export type ProductVariantMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /** A product variant represents a different version of a product, such as differing sizes or differing colors. */
@@ -6181,11 +6109,10 @@ export type Shop = HasMetafields &
     /** Returns a metafield found by namespace and key. */
     metafield?: Maybe<Metafield>;
     /**
-     * A paginated list of metafields associated with the resource.
-     * @deprecated As of 2022-07, the paginated `metafields` field has been repurposed to require a list of metafield identifiers.
+     * The metafields associated with the resource matching the supplied list of namespaces and keys.
      *
      */
-    metafields: MetafieldConnection;
+    metafields: Array<Maybe<Metafield>>;
     /** A string representing the way currency is formatted when the currency isn’t specified. */
     moneyFormat: Scalars['String'];
     /** The shop’s name. */
@@ -6216,12 +6143,7 @@ export type ShopMetafieldArgs = {
 
 /** Shop represents a collection of the general settings and information about the shop. */
 export type ShopMetafieldsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  namespace?: InputMaybe<Scalars['String']>;
-  reverse?: InputMaybe<Scalars['Boolean']>;
+  identifiers: Array<HasMetafieldsIdentifier>;
 };
 
 /** Policy that a merchant has configured for their store, such as their refund or privacy policy. */

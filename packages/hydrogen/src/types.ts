@@ -5,13 +5,9 @@ import type {ServerResponse} from 'http';
 import type {Logger, LoggerConfig} from './utilities/log/log';
 import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
 import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
-import type {
-  Metafield,
-  ProductVariant,
-  Product,
-  MediaImage,
-} from './storefront-api-types';
+import type {Metafield} from './storefront-api-types';
 import type {SessionStorageAdapter} from './foundation/session/session';
+import type {PartialDeep, JsonValue} from 'type-fest';
 
 export type AssembleHtmlParams = {
   ssrHtml: string;
@@ -106,19 +102,8 @@ export interface GraphQLConnection<T> {
   nodes?: T[];
 }
 
-export type ParsedMetafield = Omit<
-  Partial<Metafield>,
-  'value' | 'reference'
-> & {
-  value?:
-    | string
-    | number
-    | boolean
-    | Record<any, string>
-    | Date
-    | Rating
-    | Measurement;
-  reference?: MediaImage | ProductVariant | Product | null;
+export type ParsedMetafield = Omit<PartialDeep<Metafield>, 'value'> & {
+  value?: string | number | boolean | JsonValue | Date | Rating | Measurement;
 };
 
 export interface Rating {
