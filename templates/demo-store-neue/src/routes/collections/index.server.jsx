@@ -1,21 +1,13 @@
-import {
-  useShopQuery,
-  useSession,
-  useShop,
-  Image,
-  Link,
-  gql,
-} from '@shopify/hydrogen';
+import {useShopQuery, useSession, useShop, gql} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {PageHeader, Section, Heading, Grid} from '~/components/elements';
+import {Layout, CollectionCard, PageHeader, Section, Grid} from '~/components';
 
 export default function Collections() {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
   const {data} = useShopQuery({
-    query: QUERY,
+    query: COLLECTIONS_QUERY,
     variables: {
       pageBy: 12,
       country: countryCode,
@@ -32,7 +24,7 @@ export default function Collections() {
       <Section>
         <Grid items={collections.length === 3 ? 3 : 2}>
           {collections.map((collection) => (
-            <Card data={collection} key={collection.id} />
+            <CollectionCard collection={collection} key={collection.id} />
           ))}
         </Grid>
       </Section>
@@ -40,25 +32,7 @@ export default function Collections() {
   );
 }
 
-function Card({data}) {
-  return (
-    <Link to={`/collections/${data.handle}`} className="grid gap-4">
-      {data?.image && (
-        <div className="card-image">
-          <Image
-            className="object-cover w-full aspect-[3/2]"
-            data={data.image}
-          />
-        </div>
-      )}
-      <Heading as="h3" size="copy">
-        {data.title}
-      </Heading>
-    </Link>
-  );
-}
-
-const QUERY = gql`
+const COLLECTIONS_QUERY = gql`
   query Collections(
     $country: CountryCode
     $language: LanguageCode

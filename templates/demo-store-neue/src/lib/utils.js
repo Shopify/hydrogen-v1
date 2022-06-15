@@ -1,4 +1,3 @@
-// TODO: Split this into multiple files
 import typographicBase from 'typographic-base';
 
 export function missingClass(string, prefix) {
@@ -124,7 +123,7 @@ function parseItem(customPrefixes = {}) {
 
     /*
       Currently the MenuAPI only returns online store urls e.g — xyz.myshopify.com/..
-      TODO: update logic when API is fixed to include the active qualified domain
+      Note: update logic when API is updated to include the active qualified domain
     */
     const isInternalLink = /\.myshopify\.com/g.test(item.url);
     const hasSubItems = item?.items?.length > 0;

@@ -8,21 +8,22 @@ import {
   useShopQuery,
 } from '@shopify/hydrogen';
 
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
-import {Layout} from '~/components/layouts';
-import {Modal} from '~/components/blocks';
-import {PageHeader, LogoutButton} from '~/components/elements';
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {getApiErrorMessage} from '~/lib/utils';
 import {
+  AccountAddressBook,
+  AccountAddressEdit,
+  AccountDeleteAddress,
   AccountDetails,
-  AddressBook,
-  DeleteAddress,
-  EditAccountDetails,
-  EditAddress,
+  AccountDetailsEdit,
+  AccountOrderHistory,
   FeaturedCollections,
-  OrderHistory,
+  Layout,
+  LogoutButton,
+  Modal,
+  PageHeader,
   ProductSwimlane,
-} from '~/components/sections';
+} from '~/components';
 
 export default function Account({
   response,
@@ -76,7 +77,7 @@ export default function Account({
         />
         <Modal closeModalProp="editingAccount">
           <Seo type="noindex" data={{title: 'Account details'}} />
-          <EditAccountDetails
+          <AccountDetailsEdit
             firstName={customer.firstName}
             lastName={customer.lastName}
             phone={customer.phone}
@@ -105,7 +106,7 @@ export default function Account({
             type="noindex"
             data={{title: addressToEdit ? 'Edit address' : 'Add address'}}
           />
-          <EditAddress
+          <AccountAddressEdit
             address={addressToEdit}
             defaultAddress={defaultAddress === editingAddress}
           />
@@ -129,7 +130,7 @@ export default function Account({
         />
         <Modal closeModalProp="deletingAddress">
           <Seo type="noindex" data={{title: 'Delete address'}} />
-          <DeleteAddress addressId={addressToDelete.originalId} />
+          <AccountDeleteAddress addressId={addressToDelete.originalId} />
         </Modal>
       </>
     );
@@ -169,14 +170,17 @@ function AuthenticatedAccount({
       <PageHeader heading={heading}>
         <LogoutButton>Sign out</LogoutButton>
       </PageHeader>
-      {orders && <OrderHistory orders={orders} />}
+      {orders && <AccountOrderHistory orders={orders} />}
       <AccountDetails
         firstName={customer.firstName}
         lastName={customer.lastName}
         phone={customer.phone}
         email={customer.email}
       />
-      <AddressBook defaultAddress={defaultAddress} addresses={addresses} />
+      <AccountAddressBook
+        defaultAddress={defaultAddress}
+        addresses={addresses}
+      />
       <FeaturedCollections
         title="Popular Collections"
         data={featuredCollections.nodes}
@@ -234,7 +238,7 @@ export async function api(request, {session, queryShop}) {
 }
 
 const CUSTOMER_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query CustomerDetails(
     $customerAccessToken: String!
     $withAddressDetails: Boolean!
