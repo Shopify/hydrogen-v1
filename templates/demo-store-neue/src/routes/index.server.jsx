@@ -14,7 +14,7 @@ import {Layout, FeaturedCollections, Hero, ProductSwimlane} from '~/components';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 
-export default function Homepage() {
+export default function Homepage({request}) {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
@@ -40,6 +40,21 @@ export default function Homepage() {
       <Suspense fallback={null}>
         <SeoForHomepage />
       </Suspense>
+      <div className="bg-white p-4">
+        <p>Your IP is: {request.headers.get('oxygen-buyer-ip')}</p>
+        <p>
+          Lat/Long: {request.headers.get('oxygen-buyer-latitude')} /{' '}
+          {request.headers.get('oxygen-buyer-longitude')}
+        </p>
+        <p>
+          You live in {request.headers.get('oxygen-buyer-city')},{' '}
+          {request.headers.get('oxygen-buyer-region-code')}
+        </p>
+        <p>
+          Which is a part of {request.headers.get('oxygen-buyer-country')} on
+          the continent {request.headers.get('oxygen-buyer-continent')}
+        </p>
+      </div>
       {heroBanners?.nodes[0] && (
         <Hero data={heroBanners?.nodes[0]} height="full" top />
       )}
