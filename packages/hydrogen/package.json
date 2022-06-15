@@ -108,8 +108,6 @@
     }
   },
   "dependencies": {
-    "@shopify/network": "^2.0.8",
-    "@shopify/react-performance": "^2.1.14",
     "@vitejs/plugin-react": "^1.3.0",
     "abort-controller": "^3.0.0",
     "body-parser": "^1.20.0",
