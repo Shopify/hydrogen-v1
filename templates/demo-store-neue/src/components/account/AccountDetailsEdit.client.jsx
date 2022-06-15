@@ -1,17 +1,19 @@
-import {useCallback, useState} from 'react';
-import {useServerProps} from '@shopify/hydrogen';
+import {useState} from 'react';
 
 import {Text, Button} from '~/components';
-import {emailValidation, passwordValidation} from '~/lib/utils';
+import {
+  emailValidation,
+  passwordValidation,
+  useRenderServerComponents,
+} from '~/lib/utils';
 
 export function AccountDetailsEdit({
   firstName: _firstName = '',
   lastName: _lastName = '',
   phone: _phone = '',
   email: _email = '',
+  close,
 }) {
-  const {setServerProps} = useServerProps();
-
   const [saving, setSaving] = useState(false);
   const [firstName, setFirstName] = useState(_firstName);
   const [lastName, setLastName] = useState(_lastName);
@@ -23,10 +25,8 @@ export function AccountDetailsEdit({
   const [newPassword2Error, setNewPassword2Error] = useState();
   const [submitError, setSubmitError] = useState(null);
 
-  const close = useCallback(
-    () => setServerProps('editingAccount', false),
-    [setServerProps],
-  );
+  // Necessary for edits to show up on the main page
+  const renderServerComponents = useRenderServerComponents();
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -91,6 +91,7 @@ export function AccountDetailsEdit({
       return;
     }
 
+    renderServerComponents();
     close();
   }
 
@@ -200,6 +201,7 @@ export function AccountDetailsEdit({
         >
           Passwords must be at least 6 characters.
         </Text>
+        {newPassword2Error ? <br /> : null}
         <Text
           size="fine"
           className={`mt-1 text-red-500 ${
@@ -221,6 +223,7 @@ export function AccountDetailsEdit({
         </div>
         <div className="mb-4">
           <Button
+            type="button"
             className="text-sm"
             variant="secondary"
             width="full"

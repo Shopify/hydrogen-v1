@@ -18,7 +18,6 @@ import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
 import {ClientAnalytics} from './foundation/Analytics/';
-import {usePerformanceMark, Stage} from '@shopify/react-performance';
 
 let rscReader: ReadableStream | null;
 
@@ -155,7 +154,6 @@ function Content({
     search: window.location.search,
   });
   const response = useServerResponse(serverProps);
-  usePerformanceMark(Stage.Complete, window.location.pathname);
 
   return (
     <ServerPropsProvider

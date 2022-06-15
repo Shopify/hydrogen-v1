@@ -30,7 +30,7 @@ export function CountrySelector() {
               <Listbox.Button
                 className={`flex items-center justify-between w-full py-3 px-4 border ${
                   open ? 'rounded-b md:rounded-t md:rounded-b-none' : 'rounded'
-                } border-contrast/30`}
+                } border-contrast/30 dark:border-white`}
               >
                 <span className="">{selectedCountry.name}</span>
                 <IconCaret direction={open ? 'up' : 'down'} />

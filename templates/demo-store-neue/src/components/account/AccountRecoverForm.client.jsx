@@ -30,7 +30,7 @@ export function AccountRecoverForm() {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center my-24 px-4">
       <div className="max-w-md w-full">
         {submitSuccess ? (
           <>
@@ -68,6 +68,8 @@ export function AccountRecoverForm() {
               required
               placeholder="Email address"
               aria-label="Email address"
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
               value={email}
               onChange={(event) => {
                 setEmail(event.target.value);

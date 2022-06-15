@@ -24,7 +24,7 @@ export function Header({title, menu}) {
 
   return (
     <>
-      <Drawer open={isOpen} onClose={closeDrawer}>
+      <Drawer open={isOpen} onClose={closeDrawer} heading="Cart">
         <div className="grid">
           <Drawer.Title>
             <h2 className="sr-only">Cart Drawer</h2>
@@ -50,7 +50,7 @@ function MobileHeader({title, isHome, openDrawer}) {
       isHome
         ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
-    } flex lg:hidden items-center h-12 md:h-16 sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`,
+    } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`,
   };
 
   return (
@@ -110,7 +110,7 @@ function DesktopHeader({title, isHome, menu, openDrawer}) {
         : 'bg-contrast/80 text-primary'
     } ${
       y > 50 && !isHome && 'shadow-lightHeader'
-    } hidden lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`,
+    } hidden h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`,
   };
 
   return (

@@ -2521,16 +2521,6 @@
     semiver "^1.1.0"
     typescript "^4.6.3"
 
-"@shopify/network@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@shopify/network/-/network-2.0.8.tgz#fc2c7f78f31428130e5facb09135dc7bea0af289"
-  integrity sha512-SLImF7JPACYFepqOAZ7ORlVMmDhp90KlYJY2BWPiUge2+4IjTCU0QvJWEaeV/PdUQ1PurLZNuRIUEkjpEH23dA==
-
-"@shopify/performance@^2.0.14":
-  version "2.0.14"
-  resolved "https://registry.yarnpkg.com/@shopify/performance/-/performance-2.0.14.tgz#a8fda8c9323fd7a4bf5f2c3690276c9aae832ca1"
-  integrity sha512-2XoCjho64qbRWPE/Elzw7ZGQOnz3S61xwl9Mpzb82wf6k7QInyAWB1XjvaeGyZOSSsU9ysw/l7LfLxgLXWYvUw==
-
 "@shopify/plugin-ngrok@^0.2.4", "@shopify/plugin-ngrok@^0.2.6":
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/@shopify/plugin-ngrok/-/plugin-ngrok-0.2.7.tgz#c287357d21232d5917bb8810f2b62b9ae113d453"
@@ -2543,13 +2533,6 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@shopify/prettier-config/-/prettier-config-1.1.2.tgz#612f87c0cd1196e8b43c85425e587d0fa7f1172d"
   integrity sha512-5ugCL9sPGzmOaZjeRGaWUWhHgAbemrS6z+R7v6gwiD+BiqSeoFhIY+imLpfdFCVpuOGalpHeCv6o3gv++EHs0A==
-
-"@shopify/react-performance@^2.1.14":
-  version "2.1.14"
-  resolved "https://registry.yarnpkg.com/@shopify/react-performance/-/react-performance-2.1.14.tgz#d58111c2940facc4b4864e8618de839710056c6a"
-  integrity sha512-eszwscq3rM829ggUBiS3QdXWc6b1rDGX8ODgUDM3B7dJU1ITr0UX9K4pkXL2rUkL0QzQDfqeHnBU33XR1kn1FA==
-  dependencies:
-    "@shopify/performance" "^2.0.14"
 
 "@shopify/react-testing@^3.3.8":
   version "3.3.10"

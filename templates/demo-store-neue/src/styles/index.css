@@ -7,15 +7,17 @@
   --color-primary: 20 20 20; /* Text, buttons, etc. */
   --color-contrast: 250 250 249; /* Backgrounds, borders, etc. */
   --color-accent: 191 72 0; /* Labels like "On sale" */
-  --height-nav: 3.25rem;
   --font-size-fine: 0.75rem; /* text-xs */
   --font-size-copy: 1rem; /* text-base */
   --font-size-lead: 1.125rem; /* text-lg */
   --font-size-heading: 2rem; /* text-2xl */
   --font-size-display: 3rem; /* text-4xl */
   --color-shop-pay: #5a31f4;
+  --shop-pay-button--width: 100%; /* Sets the width for the shop-pay-button web component */
+  --height-nav: 3rem;
 
   @media (min-width: 32em) {
+    --height-nav: 4rem;
   }
   @media (min-width: 48em) {
     --height-nav: 6rem;
@@ -91,6 +93,10 @@
 }
 
 @layer utilities {
+  .h-screen-no-nav {
+    height: calc(100vh - var(--height-nav));
+  }
+
   .absolute-center {
     @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
   }

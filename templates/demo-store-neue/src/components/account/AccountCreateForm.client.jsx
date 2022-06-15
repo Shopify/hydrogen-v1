@@ -55,7 +55,7 @@ export function AccountCreateForm() {
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center my-24 px-4">
       <div className="max-w-md w-full">
         <h1 className="text-4xl">Create an Account.</h1>
         <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
@@ -76,6 +76,8 @@ export function AccountCreateForm() {
               required
               placeholder="Email address"
               aria-label="Email address"
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
               value={email}
               onChange={(event) => {
                 setEmail(event.target.value);
