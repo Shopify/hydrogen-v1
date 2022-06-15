@@ -4,7 +4,7 @@ import {flattenConnection} from '@shopify/hydrogen';
 import {ProductCard} from '~/components/blocks';
 import {Grid} from '~/components/elements';
 
-export function ProductGrid({data}) {
+export function ProductGrid({data, loadImageEagerCount = 0}) {
   const nextButtonRef = useRef(null);
   const initialProducts = data.collection.products.nodes;
   const {hasNextPage, endCursor} = data.collection.products.pageInfo;
@@ -60,8 +60,12 @@ export function ProductGrid({data}) {
   return (
     <>
       <Grid layout="products">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {products.map((product, index) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            loading={index < loadImageEagerCount ? 'eager' : null}
+          />
         ))}
       </Grid>
 

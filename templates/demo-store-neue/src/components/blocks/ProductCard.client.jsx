@@ -6,7 +6,7 @@ import {isDiscounted, isNewArrival} from '~/lib/utils';
 
 import {product as mockProduct} from '~/lib/placeholders';
 
-export function ProductCard({product, label, className}) {
+export function ProductCard({product, label, className, loading}) {
   let cardLabel;
 
   const cardData = product?.variants ? product : mockProduct;
@@ -39,7 +39,12 @@ export function ProductCard({product, label, className}) {
             {cardLabel}
           </Text>
           {image && (
-            <Image className="aspect-[4/5]" data={image} alt="Alt Tag" />
+            <Image
+              className="aspect-[4/5]"
+              data={image}
+              alt="Alt Tag"
+              loading={loading}
+            />
           )}
         </div>
         <div className="grid gap-1">

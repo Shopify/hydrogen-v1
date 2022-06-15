@@ -71,7 +71,7 @@ export default function Collection({params}) {
         </div>
       </PageHeader>
       <Section>
-        <ProductGrid data={data} />
+        <ProductGrid data={data} loadImageEagerCount={2} />
       </Section>
     </Layout>
   );
