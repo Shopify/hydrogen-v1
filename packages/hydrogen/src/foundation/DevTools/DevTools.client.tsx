@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {useLifecycleEventListener} from '@shopify/react-performance';
 import {Interface, Panels} from './components';
 
 export function DevTools({dataFromServer}: {dataFromServer: any}) {
@@ -8,13 +7,6 @@ export function DevTools({dataFromServer}: {dataFromServer: any}) {
     setOpen((state) => !state);
   }, []);
   const [hasMounted, setHasMounted] = useState(false);
-  const [data, setData] = useState(dataFromServer);
-
-  useLifecycleEventListener(({type, start, duration}) => {
-    setData((prevData: any) => {
-      return {...prevData, [type]: {start, duration}};
-    });
-  });
 
   useEffect(() => {
     setHasMounted(true);
@@ -23,7 +15,7 @@ export function DevTools({dataFromServer}: {dataFromServer: any}) {
   if (hasMounted) {
     return (
       <Interface open={open} onClose={toggleOpen} onOpen={toggleOpen}>
-        <Panels {...data} />
+        <Panels {...dataFromServer} />
       </Interface>
     );
   }
