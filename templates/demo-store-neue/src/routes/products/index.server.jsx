@@ -1,9 +1,7 @@
 import {useSession, useShop, useShopQuery, gql} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {PageHeader, Section} from '~/components/elements';
-import {ProductGrid} from '~/components/sections';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {Layout, ProductGrid, PageHeader, Section} from '~/components';
 
 const pageBy = 12;
 

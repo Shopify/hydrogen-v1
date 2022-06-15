@@ -1,17 +1,22 @@
 import {
+  gql,
+  Seo,
+  ShopifyAnalyticsConstants,
+  useServerAnalytics,
   useSession,
   useShop,
   useShopQuery,
-  Seo,
-  useServerAnalytics,
-  ShopifyAnalyticsConstants,
-  gql,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {PageHeader, Text, Section} from '~/components/elements';
-import {NotFound, ProductGrid} from '~/components/sections';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {
+  Layout,
+  NotFound,
+  PageHeader,
+  ProductGrid,
+  Section,
+  Text,
+} from '~/components';
 
 const pageBy = 4;
 
