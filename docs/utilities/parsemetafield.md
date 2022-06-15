@@ -9,7 +9,7 @@ The `parseMetafield` utility creates a new metafield object with a value that ha
 ## Example code
 
 ```tsx
-import {useParsedMetafields, Metafield} from '@shopify/hydrogen';
+import {parseMetafield, Metafield} from '@shopify/hydrogen';
 
 export function Product(product) {
   const metafield = parseMetafield(product.metafield);
