@@ -30,12 +30,19 @@ export function Hero(props = mockData) {
         <div className="absolute inset-0 grid flex-grow grid-flow-col pointer-events-none auto-cols-fr -z-10 content-stretch overflow-clip">
           {spread?.reference && (
             <div className="">
-              <SpreadMedia data={spread.reference} loading={loading} />
+              <SpreadMedia
+                widths={[1200, 1600, 2400]}
+                data={spread.reference}
+                loading={loading}
+              />
             </div>
           )}
           {spreadSecondary?.reference && (
             <div className="hidden md:block">
-              <SpreadMedia data={spreadSecondary.reference} />
+              <SpreadMedia
+                widths={[800, 1000]}
+                data={spreadSecondary.reference}
+              />
             </div>
           )}
         </div>
@@ -55,7 +62,7 @@ export function Hero(props = mockData) {
   );
 }
 
-function SpreadMedia({data, loading}) {
+function SpreadMedia({data, loading, widths}) {
   if (data.mediaContentType === 'VIDEO') {
     return (
       <Video
@@ -76,6 +83,7 @@ function SpreadMedia({data, loading}) {
   if (data.mediaContentType === 'IMAGE') {
     return (
       <Image
+        widths={widths}
         width={1200}
         height={1600}
         alt={data.alt || 'Marketing Banner Image'}
