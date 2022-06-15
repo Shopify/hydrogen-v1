@@ -26,7 +26,7 @@ You can also wrap `parseMetafield` in `useMemo()` to maintain a stable object id
 
 ```tsx
 import {useMemo} from 'react'
-import {useParsedMetafields, Metafield} from '@shopify/hydrogen';
+import {parseMetafield, Metafield} from '@shopify/hydrogen';
 
 export function Product(product) {
   const metafield = useMemo(() => parseMetafield(product.metafield), [product.metafield]);
