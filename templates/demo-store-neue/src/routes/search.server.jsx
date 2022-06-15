@@ -20,6 +20,7 @@ import {
   Text,
 } from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
+import {Suspense} from 'react';
 
 export default function Search({pageBy = 12, params}) {
   const {languageCode} = useShop();
@@ -52,14 +53,7 @@ export default function Search({pageBy = 12, params}) {
             <Text className="opacity-50">No results, try something else.</Text>
           </Section>
         )}
-        <FeaturedCollections
-          title="Trending Collections"
-          data={data.featuredCollections.nodes}
-        />
-        <ProductSwimlane
-          title="Trending Products"
-          data={data.featuredProducts.nodes}
-        />
+        <NoResultRecommendation country={countryCode} language={languageCode} />
       </SearchPage>
     );
   }
@@ -106,6 +100,30 @@ function SearchPage({query, children}) {
   );
 }
 
+function NoResultRecommendation({country, language}) {
+  const {data} = useShopQuery({
+    query: SEARCH_NO_RESULTS_QUERY,
+    variables: {
+      country,
+      language,
+    },
+    preload: false,
+  });
+
+  return (
+    <Suspense>
+      <FeaturedCollections
+        title="Trending Collections"
+        data={data.featuredCollections.nodes}
+      />
+      <ProductSwimlane
+        title="Trending Products"
+        data={data.featuredProducts.nodes}
+      />
+    </Suspense>
+  );
+}
+
 const SEARCH_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
   query search(
@@ -126,6 +144,13 @@ const SEARCH_QUERY = gql`
         hasPreviousPage
       }
     }
+  }
+`;
+
+const SEARCH_NO_RESULTS_QUERY = gql`
+  ${PRODUCT_CARD_FRAGMENT}
+  query searchNoResult($country: CountryCode, $language: LanguageCode)
+  @inContext(country: $country, language: $language) {
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
       nodes {
         id
