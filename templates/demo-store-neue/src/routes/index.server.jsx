@@ -54,6 +54,9 @@ export default function Homepage({request}) {
           Which is a part of {request.headers.get('oxygen-buyer-country')} on
           the continent {request.headers.get('oxygen-buyer-continent')}
         </p>
+         <p>
+          Is this also the pattern for HTTP headers, such as {request.headers.get('accept-language')}?
+        </p>
       </div>
       {heroBanners?.nodes[0] && (
         <Hero data={heroBanners?.nodes[0]} height="full" top />
