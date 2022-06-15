@@ -408,10 +408,10 @@ async function runSSR({
         bootstrapScripts,
         bootstrapModules,
         onError(error) {
-          ssrDidError = error;
+          ssrDidError = error as Error;
 
           if (dev && !writable.closed && !!responseOptions.status) {
-            writable.write(getErrorMarkup(error));
+            writable.write(getErrorMarkup(error as Error));
           }
 
           log.error(error);
