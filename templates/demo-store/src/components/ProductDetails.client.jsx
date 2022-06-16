@@ -1,6 +1,6 @@
 import {
   useProductOptions,
-  useParsedMetafields,
+  parseMetafield,
   ProductPrice,
   AddToCartButton,
   BuyNowButton,
@@ -110,19 +110,10 @@ function ProductPrices({product}) {
 export default function ProductDetails({product}) {
   const initialVariant = product.variants.nodes[0];
 
-  const productMetafields = useParsedMetafields(product.metafields || {});
-  const sizeChartMetafield = productMetafields.find(
-    (metafield) =>
-      metafield.namespace === 'my_fields' && metafield.key === 'size_chart',
-  );
-  const sustainableMetafield = productMetafields.find(
-    (metafield) =>
-      metafield.namespace === 'my_fields' && metafield.key === 'sustainable',
-  );
-  const lifetimeWarrantyMetafield = productMetafields.find(
-    (metafield) =>
-      metafield.namespace === 'my_fields' &&
-      metafield.key === 'lifetime_warranty',
+  const sizeChartMetafield = parseMetafield(product.meta_size_chart);
+  const sustainableMetafield = parseMetafield(product.meta_sustainable);
+  const lifetimeWarrantyMetafield = parseMetafield(
+    product.meta_lifetime_warranty,
   );
 
   return (

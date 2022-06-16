@@ -1,6 +1,6 @@
 {
-  "name": "hello-world-ts",
-  "description": "An example using typescript in Hydrogen",
+  "name": "example-sanity-typescript",
+  "description": "An example using Sanity and TypeScript in Hydrogen",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -17,8 +17,11 @@
     "vite": "^2.9.0"
   },
   "dependencies": {
-    "@shopify/hydrogen": "^0.25.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@portabletext/react": "^1.0.6",
+    "@sanity/client": "^3.3.2",
+    "@shopify/hydrogen": "latest",
+    "groq": "^2.29.3",
+    "react": "18.1.0",
+    "react-dom": "18.1.0"
   }
 }

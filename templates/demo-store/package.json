@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.6.4",
-    "@shopify/hydrogen": "^0.24.0",
+    "@shopify/hydrogen": "^0.25.0",
     "body-parser": "^1.20.0",
     "compression": "^1.7.4",
     "react": "^18.2.0",
