@@ -12,6 +12,7 @@ import {
 
 import {Layout, FeaturedCollections, Hero, ProductSwimlane} from '~/components';
 
+import {withPlaceholder} from '~/lib/placeholders';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 
 export default function Homepage() {
@@ -28,11 +29,10 @@ export default function Homepage() {
   });
 
   const {heroBanners, featuredCollections, featuredProducts} = data;
-  const [primaryHero, secondaryHero, tertiaryHero] = heroBanners.nodes || [
-    null,
-    null,
-    null,
-  ];
+  const [primaryHero, secondaryHero, tertiaryHero] = withPlaceholder(
+    'HEROS',
+    heroBanners.nodes,
+  );
 
   useServerAnalytics({
     shopify: {
@@ -108,7 +108,9 @@ const HOMEPAGE_CONTENT_QUERY = gql`
       nodes {
         id
         handle
-        title: metafield(namespace: "hero", key: "title") {
+        title
+        descriptionHtml
+        heading: metafield(namespace: "hero", key: "title") {
           value
         }
         byline: metafield(namespace: "hero", key: "byline") {
