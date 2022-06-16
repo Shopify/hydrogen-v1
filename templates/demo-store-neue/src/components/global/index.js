@@ -1,5 +1,6 @@
 export {Drawer, useDrawer} from './Drawer.client';
-export {Footer} from './Footer.client';
+export {Footer} from './Footer.server';
+export {FooterMenu} from './FooterMenu.client';
 export {Header} from './Header.client';
 export {Layout} from './Layout.server';
 export {Modal} from './Modal.client';
