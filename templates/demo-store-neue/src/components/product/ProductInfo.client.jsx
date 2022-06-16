@@ -1,9 +1,9 @@
 import {Disclosure} from '@headlessui/react';
 
 import {Text, IconClose} from '~/components';
-import {productInfo} from '~/lib/placeholders';
+import {withPlaceholder} from '~/lib/placeholders';
 
-export function ProductInfo({data = productInfo}) {
+export function ProductInfo({data = withPlaceholder('PRODUCT_INFO')}) {
   return (
     <section className="grid gap-4 py-4">
       {data.map((section) => (
