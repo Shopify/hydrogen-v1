@@ -1,9 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@1.7.0/schema.json",
-  "changelog": [
-    ".changeset/hydrogen-changelog-config.ts",
-    {"repo": "shopify/hydrogen"}
-  ],
+  "changelog": ".changeset/hydrogen-changelog-config.js",
   "commit": false,
   "fixed": [["@shopify/hydrogen", "create-hydrogen-app"]],
   "linked": [],

@@ -1,21 +1,11 @@
-import {ChangelogFunctions} from '@changesets/types';
-// @ts-ignore
 import {config} from 'dotenv';
 import {getInfo, getInfoFromPullRequest} from '@changesets/get-github-info';
 
 config();
 
-const changelogFunctions: ChangelogFunctions = {
-  getDependencyReleaseLine: async (
-    changesets,
-    dependenciesUpdated,
-    options
-  ) => {
-    if (!options.repo) {
-      throw new Error(
-        'Please provide a repo to this changelog generator like this:\n"changelog": ["@changesets/changelog-github", { "repo": "org/repo" }]'
-      );
-    }
+const changelogFunctions = {
+  getDependencyReleaseLine: async (changesets, dependenciesUpdated) => {
+    const repo = 'shopify/hydrogen';
     if (dependenciesUpdated.length === 0) return '';
 
     const changesetLink = `- Updated dependencies [${(
@@ -23,7 +13,7 @@ const changelogFunctions: ChangelogFunctions = {
         changesets.map(async (cs) => {
           if (cs.commit) {
             let {links} = await getInfo({
-              repo: options.repo,
+              repo,
               commit: cs.commit,
             });
             return links.commit;
@@ -41,15 +31,9 @@ const changelogFunctions: ChangelogFunctions = {
     return [changesetLink, ...updatedDepenenciesList].join('\n');
   },
   getReleaseLine: async (changeset, type, options) => {
-    if (!options || !options.repo) {
-      throw new Error(
-        'Please provide a repo to this changelog generator like this:\n"changelog": ["@changesets/changelog-github", { "repo": "org/repo" }]'
-      );
-    }
-
-    let prFromSummary: number | undefined;
-    let commitFromSummary: string | undefined;
-    let usersFromSummary: string[] = [];
+    let prFromSummary;
+    let commitFromSummary;
+    let usersFromSummary = [];
 
     const replacedChangelog = changeset.summary
       .replace(/^\s*(?:pr|pull|pull\s+request):\s*#?(\d+)/im, (_, pr) => {
@@ -74,13 +58,13 @@ const changelogFunctions: ChangelogFunctions = {
     const links = await (async () => {
       if (prFromSummary !== undefined) {
         let {links} = await getInfoFromPullRequest({
-          repo: options.repo,
+          repo,
           pull: prFromSummary,
         });
         if (commitFromSummary) {
           links = {
             ...links,
-            commit: `[\`${commitFromSummary}\`](https://github.com/${options.repo}/commit/${commitFromSummary})`,
+            commit: `[\`${commitFromSummary}\`](https://github.com/${repo}/commit/${commitFromSummary})`,
           };
         }
         return links;
@@ -88,7 +72,7 @@ const changelogFunctions: ChangelogFunctions = {
       const commitToFetchFrom = commitFromSummary || changeset.commit;
       if (commitToFetchFrom) {
         let {links} = await getInfo({
-          repo: options.repo,
+          repo,
           commit: commitToFetchFrom,
         });
         return links;
