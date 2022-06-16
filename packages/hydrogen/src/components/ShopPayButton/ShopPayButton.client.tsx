@@ -6,6 +6,8 @@ import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client';
 type ShopPayButtonProps = {
   /** A string of classes to apply to the `div` that wraps the Shop Pay button. */
   className?: string;
+  /** A string that gets applied to the CSS Custom Property (Variable) `--shop-pay-button-width` for the [Shop Pay Custom Element](https://shopify.dev/custom-storefronts/tools/web-components#buy-with-shop-pay-component) */
+  width?: string;
 } & (
   | {
       /** An array of IDs of the variants to purchase with Shop Pay. This will only ever have a quantity of 1 for each variant. If you want to use other quantities, then use 'variantIdsAndQuantities'. */
@@ -35,7 +37,7 @@ declare global {
   }
 }
 
-const URL = 'https://cdn.shopify.com/shopifycloud/shop-js/v0.8/client.js';
+const URL = 'https://cdn.shopify.com/shopifycloud/shop-js/v1.0/client.js';
 
 /**
  * The `ShopPayButton` component renders a button that redirects to the Shop Pay checkout.
@@ -44,6 +46,7 @@ export function ShopPayButton({
   variantIds,
   className,
   variantIdsAndQuantities,
+  width,
 }: ShopPayButtonProps) {
   const {storeDomain} = useShop();
   const shopPayLoadedStatus = useLoadScript(URL);
@@ -74,9 +77,15 @@ export function ShopPayButton({
     throw new Error(MissingPropsErrorMessage);
   }
 
+  const style = width
+    ? ({
+        '--shop-pay-button-width': width,
+      } as React.CSSProperties)
+    : undefined;
+
   return (
     /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
-    <div className={className} tabIndex={0}>
+    <div className={className} tabIndex={0} style={style}>
       {shopPayLoadedStatus === 'done' && (
         <shop-pay-button
           store-url={`https://${storeDomain}`}
