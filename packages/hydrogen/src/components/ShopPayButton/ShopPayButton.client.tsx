@@ -6,7 +6,7 @@ import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client';
 type ShopPayButtonProps = {
   /** A string of classes to apply to the `div` that wraps the Shop Pay button. */
   className?: string;
-  /** A string that gets applied to the CSS Custom Property (Variable) `--shop-pay-button-width` for the [Shop Pay Custom Element](https://shopify.dev/custom-storefronts/tools/web-components#buy-with-shop-pay-component) */
+  /** A string that's applied to the [CSS custom property (variable)](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) `--shop-pay-button-width` for the [Buy with Shop Pay component](https://shopify.dev/custom-storefronts/tools/web-components#buy-with-shop-pay-component). */
   width?: string;
 } & (
   | {
