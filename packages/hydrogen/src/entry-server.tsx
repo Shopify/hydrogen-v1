@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, {Suspense} from 'react';
 import {
   Logger,
@@ -365,9 +366,6 @@ async function runSSR({
           <PreloadQueries request={request}>
             <Suspense fallback={null}>
               <RscConsumer />
-            </Suspense>
-            <Suspense fallback={null}>
-              <Analytics />
             </Suspense>
           </PreloadQueries>
         </ServerPropsProvider>
