@@ -9,3 +9,4 @@ export {CartProviderWithSession} from './CartProviderWithSession.server';
 export {CountrySelector} from './CountrySelector.client';
 export {CustomFont} from './CustomFont.client';
 export {DefaultSeo} from './DefaultSeo.server';
+export {HeaderFallback} from './HeaderFallback';
