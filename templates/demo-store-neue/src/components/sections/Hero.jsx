@@ -31,7 +31,19 @@ export function Hero(props = mockData) {
           {spread?.reference && (
             <div className="">
               <SpreadMedia
-                widths={[1200, 1600, 2400]}
+                scale={2}
+                sizes={
+                  spreadSecondary?.reference
+                    ? '(max-width: 80em) 700, (min-width: 48em) 450, 500'
+                    : '(max-width: 80em) 1400, (min-width: 48em) 900, 500'
+                }
+                widths={
+                  spreadSecondary?.reference
+                    ? [500, 450, 700]
+                    : [500, 900, 1400]
+                }
+                width={spreadSecondary?.reference ? 375 : 750}
+                height={450}
                 data={spread.reference}
                 loading={loading}
               />
@@ -40,7 +52,11 @@ export function Hero(props = mockData) {
           {spreadSecondary?.reference && (
             <div className="hidden md:block">
               <SpreadMedia
-                widths={[800, 1000]}
+                loaderOptions={{scale: 2}}
+                sizes="(max-width: 80em) 700, (min-width: 48em) 450, 500"
+                widths={[450, 700]}
+                width={375}
+                height={450}
                 data={spreadSecondary.reference}
               />
             </div>
@@ -62,12 +78,12 @@ export function Hero(props = mockData) {
   );
 }
 
-function SpreadMedia({data, loading, widths}) {
+function SpreadMedia({data, loading, scale, sizes, width, widths}) {
   if (data.mediaContentType === 'VIDEO') {
     return (
       <Video
-        width={1200}
-        height={1600}
+        previewImageOptions={{scale}}
+        width={scale * width}
         alt={data.alt || 'Marketing Banner Video'}
         className="block object-cover w-full h-full"
         data={data}
@@ -84,12 +100,13 @@ function SpreadMedia({data, loading, widths}) {
     return (
       <Image
         widths={widths}
-        width={1200}
-        height={1600}
+        sizes={sizes}
         alt={data.alt || 'Marketing Banner Image'}
         className="block object-cover w-full h-full"
         data={data.image}
         loading={loading}
+        width={width}
+        loaderOptions={{scale}}
       />
     );
   }
