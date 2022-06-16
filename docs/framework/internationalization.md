@@ -68,15 +68,20 @@ The geolocation variables available from Oxygen include:
 - `'oxygen-buyer-city'`
 
 
-### Accept-Language
+### Non-Oxygen deployments
 
-Alternatively, you can access the [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) HTTP header as a hint to the visitor's country and language preference. 
+Alternatively, you can access the [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) HTTP header as a hint to the visitor's country and language preference. You may also consider using a third-party geolocation library, such as [`geoip-lite`](https://www.npmjs.com/package/geoip-lite).
 
-PLACEHOLDER CONTENT & EXAMPLE
+{% codeblock file, filename: 'index.server.jsx' %}
 
-### Third-party libraries
+```tsx
+export default function Homepage({request}) {
+  const acceptLanguage = request.headers.get(‘accept-language’);
+}
+```
 
-PLACEHOLDER CONTENT & LINK TO GEOIP-LITE
+{% endcodeblock %}
+
 
 
 ## Internationalized routes
