@@ -25,7 +25,7 @@ The `variantIds` and `variantIdsAndQuantities` props are mutually exclusive. You
 | variantIds              | <pre>{ <br> variantIds: string[]; <br> variantIdsAndQuantities?: never;<br>}</pre>               | An array of IDs of the variants to purchase with Shop Pay. This will only ever have a quantity of 1 for each variant. If you want to use other quantities, then use `variantIdsAndQuantities`. |
 | variantIdsAndQuantities | <pre>{ <br> variantIds: never; <br> variantIdsAndQuantities?: VariantIdAndQuantity[];<br>}</pre> | An array of variant IDs and quantities to purchase with Shop Pay.                                                                                                                              |
 | className?              | <code>string</code>                                                                              | A string of classes to apply to the `div` that wraps the Shop Pay button.                                                                                                                      |
-| width? | <code>string</code> |   A string that gets applied to the CSS Custom Property (Variable) `--shop-pay-button-width` for the [Shop Pay Custom Element](https://shopify.dev/custom-storefronts/tools/web-components#buy-with-shop-pay-component) |
+| width? | <code>string</code> |   A string that's applied to the [CSS custom property (variable)](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) `--shop-pay-button-width` for the [Buy with Shop Pay component](https://shopify.dev/custom-storefronts/tools/web-components#buy-with-shop-pay-component). |
 
 
 ## Component type
