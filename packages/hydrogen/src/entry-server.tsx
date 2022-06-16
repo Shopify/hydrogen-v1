@@ -531,6 +531,10 @@ async function runSSR({
   } else if (nodeResponse) {
     const savedChunks = tagOnWrite(nodeResponse);
 
+    nodeResponse.on('finish', () => {
+      cacheResponse(response, request, savedChunks, revalidate);
+    });
+
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -572,7 +576,6 @@ async function runSSR({
           (response.canStream() || nodeResponse.writableEnded)
         ) {
           postRequestTasks('str', nodeResponse.statusCode, request, response);
-          cacheResponse(response, request, savedChunks, revalidate);
           return;
         }
 
@@ -602,7 +605,6 @@ async function runSSR({
           if (!error) {
             html = assembleHtml({ssrHtml, rscPayload, request, template});
             postRequestTasks('ssr', nodeResponse.statusCode, request, response);
-            cacheResponse(response, request, [html], revalidate);
           }
 
           nodeResponse.write(html);
