@@ -1,12 +1,13 @@
-import {createServer} from 'vite';
+import {createServer, InlineConfig} from 'vite';
 
-export async function viteception(paths: string[]) {
+export async function viteception(paths: string[], options?: InlineConfig) {
   const isWorker = process.env.WORKER;
   delete process.env.WORKER;
 
   const server = await createServer({
     clearScreen: false,
     server: {middlewareMode: 'ssr'},
+    ...options,
   });
 
   if (isWorker) {
