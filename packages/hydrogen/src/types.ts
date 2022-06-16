@@ -134,3 +134,9 @@ export interface AllCacheOptions {
 export type CachingStrategy = AllCacheOptions;
 
 export type PreloadOptions = boolean | string;
+
+export type HydrogenRouteProps = {
+  request: HydrogenRequest;
+  response: HydrogenResponse;
+  [key: string]: any;
+};

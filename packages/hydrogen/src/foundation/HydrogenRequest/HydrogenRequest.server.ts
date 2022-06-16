@@ -49,10 +49,18 @@ const PRELOAD_ALL = '*';
  * - Adds a static constructor to convert a Node.js `IncomingMessage` to a Request.
  */
 export class HydrogenRequest extends Request {
+  /**
+   * A Map of cookies for easy access.
+   */
   public cookies: Map<string, string>;
   public id: string;
   public time: number;
+
+  /**
+   * Get the canonical URL for the current page, across SSR and RSC requests.
+   */
   public normalizedUrl: string;
+
   // CFW Request has a reserved 'context' property, use 'ctx' instead.
   public ctx: {
     cache: Map<string, any>;
