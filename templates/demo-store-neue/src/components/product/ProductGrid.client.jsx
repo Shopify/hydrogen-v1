@@ -1,5 +1,5 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
-import {flattenConnection} from '@shopify/hydrogen';
+import {Link, flattenConnection} from '@shopify/hydrogen';
 
 import {Grid, ProductCard} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
@@ -12,6 +12,7 @@ export function ProductGrid({collection}) {
   const [cursor, setCursor] = useState(endCursor);
   const [nextPage, setNextPage] = useState(hasNextPage);
   const [pending, setPending] = useState(false);
+  const haveProducts = initialProducts.length > 0;
 
   const fetchProducts = useCallback(async () => {
     setPending(true);
@@ -59,6 +60,17 @@ export function ProductGrid({collection}) {
       if (nextButton) observer.unobserve(nextButton);
     };
   }, [nextButtonRef, cursor, handleIntersect]);
+
+  if (!haveProducts) {
+    return (
+      <>
+        <p>No products found on this collection</p>
+        <Link to="/products">
+          <p className="underline">Browse catalog</p>
+        </Link>
+      </>
+    );
+  }
 
   return (
     <>
