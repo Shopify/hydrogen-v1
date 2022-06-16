@@ -15,7 +15,7 @@
     "vite": "^2.9.0"
   },
   "dependencies": {
-    "@shopify/hydrogen": "^0.25.0",
+    "@shopify/hydrogen": "^0.25.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

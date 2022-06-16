@@ -89,7 +89,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
        * startTransition to yield to more important updates
        */
       startTransition(() => {
-        if (prefetch) {
+        if (prefetch && !!to) {
           setMaybePrefetch(true);
         }
       });
