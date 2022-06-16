@@ -169,6 +169,7 @@ function cachedQueryFnBuilder<T>(
         newOutput,
         resolvedQueryOptions?.cache
       );
+
       request.ctx.runtime?.waitUntil?.(setItemInCachePromise);
     }
 
