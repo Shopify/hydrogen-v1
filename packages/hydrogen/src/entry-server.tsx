@@ -15,7 +15,7 @@ import type {
   ResolvedHydrogenRoutes,
   RequestHandler,
 } from './types';
-import type {RuntimeContext, RequestHandlerOptions} from './shared-types';
+import type {RequestHandlerOptions} from './shared-types';
 import {Html, applyHtmlHead} from './foundation/Html/Html';
 import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
 import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
