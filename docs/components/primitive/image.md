@@ -5,7 +5,9 @@ description: The Image component renders an image for the Storefront API's Image
 ---
 
 The `Image` component renders an image for the Storefront API's
-[Image object](https://shopify.dev/api/storefront/reference/common-objects/image). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+[Image object](https://shopify.dev/api/storefront/reference/common-objects/image). 
+
+The component outputs an `<img>` element. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -74,7 +76,21 @@ export default function ExternalImageWithLoader() {
 | height         | <code>height &#124; string</code>                              | The integer or string value for the height of the image. This is a required prop when `src` is present.                                                                                                        |
 | loader?        | <code>(props: ShopifyLoaderParams &#124; LoaderOptions) => string</code> | A custom function that generates the image URL. Parameters passed in are either `ShopifyLoaderParams` if using the `data` prop, or the `LoaderOptions` object that you pass to `loaderOptions`. |
 | loaderOptions? | <code>ShopifyLoaderOptions &#124; LoaderOptions</code>       | An object of `loader` function options. For example, if the `loader` function requires a `scale` option, then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop is used, the object shape will be `ShopifyLoaderOptions`. When the `src` prop is used, the data shape is whatever you define it to be, and this shape will be passed to `loader`. |
-| widths?         | <code>(number &#124; string)[]</code>                              | An array of pixel widths to overwrite the default generated srcset. For example, `[300, 600, 800]`. It only applies to images from Shopify CDN.       
+| widths?         | <code>(number &#124; string)[]</code>                              | An array of pixel widths to overwrite the default generated srcset. For example, `[300, 600, 800]`. It only applies to images from Shopify CDN.   
+
+## Required Fields
+
+The `Image` component requires the following fields from the the Storefront API's
+[Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
+
+```
+{
+  url
+  altText
+  width
+  height
+}
+```
 
 ## Component type
 

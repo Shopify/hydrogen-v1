@@ -5,9 +5,11 @@ description: The MediaFile component renders the media for the Storefront API's 
 ---
 
 The `MediaFile` component renders the media for the Storefront API's
-[Media object](https://shopify.dev/api/storefront/reference/products/media). It renders an `Image`, a
-`Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the
-`media` provided as a prop. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+[Media object](https://shopify.dev/api/storefront/reference/products/media). It renders an [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image), a
+[`Video`](https://shopify.dev/api/hydrogen/components/primitive/video), an [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo), or a [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer) depending on the `mediaContentType` of the
+`media` provided as a prop. 
+
+The component outputs the HTML element corresponding to the rendered Hydrogen component. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -94,6 +96,18 @@ export function MyComponent() {
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | data     | <code>PartialDeep&#60;MediaEdgeType['node']&#62;</code>                                                                                                                                                                        | An object with fields that correspond to the Storefront API's [Media object](https://shopify.dev/api/storefront/reference/products/media). |
 | options? | <code>React.ComponentProps&#60;typeof Video&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof ExternalVideo&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof Image&#62;['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components.                                                                       |
+
+## Required Fields
+
+The `MediaFile` component requires the following fields from the the Storefront API's
+[Media object](https://shopify.dev/api/storefront/reference/products/media), as well as additional fields depending on the type of media. See [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image),
+[`Video`](https://shopify.dev/api/hydrogen/components/primitive/video), [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo), and [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer).
+
+```
+{
+  mediaContentType
+}
+```
 
 ## Component type
 

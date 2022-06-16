@@ -4,7 +4,9 @@ title: Video
 description: The Video component renders a video for the Storefront API's Video object.
 ---
 
-The `Video` component renders a `video` for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+The `Video` component renders a video for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video). 
+
+The component outputs a `video` element. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -58,6 +60,20 @@ export default function MyProductVideo() {
 | -------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | data     | <code>PartialDeep&#60;VideoType&#62;</code> | An object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video). |
 | previewImageOptions? | <code>ShopifyLoaderParams</code>               | An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL.                                                                       |
+
+## Required Fields
+
+The `Video` component requires the following fields from the the Storefront API's
+[Video object](https://shopify.dev/api/storefront/reference/products/video).
+
+```
+{
+  sources {
+    url
+    mimeType
+  }
+}
+```
 
 ## Component type
 

@@ -6,7 +6,9 @@ description: The Money component renders a string of the Storefront API's MoneyV
 
 The `Money` component renders a string of the Storefront API's
 [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the
-`defaultLocale` in the [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+`defaultLocale` in the [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). 
+
+The component outputs a `<div>`. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
@@ -87,6 +89,17 @@ export default function Product() {
 | measurement? | <code>PartialDeep&#60;UnitPriceMeasurement&#62;</code> | A [UnitPriceMeasurement object](https://shopify.dev/api/storefront/latest/objects/unitpricemeasurement). |
 | measurementSeparator? | <code>ReactNode</code> | Customizes the separator between the money output and the measurement output. Used with the `measurement` prop. Defaults to `'/'`. |
 
+## Required Fields
+
+The `Money` component requires the following fields from the the Storefront API's
+[MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2).
+
+```
+{
+  amount
+  currencyCode
+}
+```
 
 ## Component type
 
