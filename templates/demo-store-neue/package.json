@@ -29,7 +29,7 @@
   "dependencies": {
     "@headlessui/react": "^1.6.4",
     "@heroicons/react": "^1.0.6",
-    "@shopify/hydrogen": "^0.25.0",
+    "@shopify/hydrogen": "^0.25.1",
     "clsx": "^1.1.1",
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.2.0",
