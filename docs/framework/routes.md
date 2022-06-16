@@ -412,7 +412,7 @@ Hydrogen supports TypeScript out of the box. When building route components, you
 {% codeblock file %}
 
 ```tsx
-import {
+import type {
   HydrogenApiRoute,
   HydrogenApiRouteOptions,
   HydrogenRequest,
