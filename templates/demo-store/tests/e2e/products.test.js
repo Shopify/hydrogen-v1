@@ -23,7 +23,7 @@ describe('products', () => {
     const heading = await session.page.locator('h1').first();
     expect(heading).not.toBeNull();
 
-    const text = await heading.textContent();
-    expect(text).toBe('The Hydrogen Snowboard');
+    const text = await heading.getAttribute('data-test-id');
+    expect(text).toBe('gid://shopify/Product/6730850828344');
   }, 60000);
 });

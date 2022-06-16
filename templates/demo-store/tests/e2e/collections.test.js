@@ -23,7 +23,7 @@ describe('collections', () => {
     const heading = await session.page.locator('h1').first();
     expect(heading).not.toBeNull();
 
-    const text = await heading.textContent();
-    expect(text).toBe('Freestyle Collection');
+    const text = await heading.getAttribute('data-test-id');
+    expect(text).toBe('gid://shopify/Collection/276668186680');
   }, 60000);
 });
