@@ -24,6 +24,6 @@ describe('collections', () => {
     expect(heading).not.toBeNull();
 
     const text = await heading.textContent();
-    expect(text).toBe('Freestyle');
+    expect(text).toBe('Freestyle Collection');
   }, 60000);
 });

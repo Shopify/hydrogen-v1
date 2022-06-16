@@ -1,4 +1,5 @@
 import {gql, useRouteParams, useShopQuery} from '@shopify/hydrogen';
+import {Product} from '@shopify/hydrogen/dist/esnext/storefront-api-types';
 import groq from 'groq';
 import {useSanityQuery} from '../../../hooks/useSanityQuery';
 
@@ -13,7 +14,7 @@ export default function ProductRoute() {
    */
   let storefrontProduct;
   if (sanityProduct?.store?.gid) {
-    const {data: shopifyProduct} = useShopQuery({
+    const {data: shopifyProduct} = useShopQuery<{product: Product}>({
       query: QUERY_SHOPIFY,
       variables: {
         id: sanityProduct?.store?.gid,
