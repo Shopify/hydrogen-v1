@@ -124,7 +124,10 @@ export default function ProductDetails({product}) {
       >
         <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-x-8 my-16">
           <div className="md:hidden mt-5 mb-8">
-            <h1 className="text-4xl font-bold text-black mb-4">
+            <h1
+              className="text-4xl font-bold text-black mb-4"
+              data-test-id={product.id}
+            >
               {product.title}
             </h1>
             {product.vendor && (
@@ -142,7 +145,10 @@ export default function ProductDetails({product}) {
 
           <div>
             <div className="hidden md:block">
-              <h1 className="text-5xl font-bold text-black mb-4">
+              <h1
+                className="text-5xl font-bold text-black mb-4"
+                data-test-id={product.id}
+              >
                 {product.title}
               </h1>
               {product.vendor && (

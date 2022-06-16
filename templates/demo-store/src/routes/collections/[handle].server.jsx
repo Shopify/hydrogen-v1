@@ -52,7 +52,10 @@ export default function Collection({collectionProductCount = 24, params}) {
     <Layout>
       {/* the seo object will be expose in API version 2022-04 or later */}
       <Seo type="collection" data={collection} />
-      <h1 className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6">
+      <h1
+        className="font-bold text-4xl md:text-5xl text-gray-900 mb-6 mt-6"
+        data-test-id={collection.id}
+      >
         {collection.title}
       </h1>
       <div
