@@ -123,10 +123,8 @@ function cachedQueryFnBuilder<T>(
        */
       if (isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
-
-        // Asynchronously wait for it in workers
-        request.ctx.runtime?.waitUntil?.(
-          getItemFromCache(lockKey).then(async (lockExists) => {
+        const revalidatingPromise = getItemFromCache(lockKey).then(
+          async (lockExists) => {
             if (lockExists) return;
 
             await setItemInCache(
@@ -148,8 +146,11 @@ function cachedQueryFnBuilder<T>(
             } finally {
               await deleteItemFromCache(lockKey);
             }
-          })
+          }
         );
+
+        // Asynchronously wait for it in workers
+        request.ctx.runtime?.waitUntil?.(revalidatingPromise);
       }
 
       return output;
@@ -161,9 +162,12 @@ function cachedQueryFnBuilder<T>(
      * Important: Do this async
      */
     if (shouldCacheResponse(newOutput)) {
-      request.ctx.runtime?.waitUntil?.(
-        setItemInCache(key, newOutput, resolvedQueryOptions?.cache)
+      const cacheSetPromise = setItemInCache(
+        key,
+        newOutput,
+        resolvedQueryOptions?.cache
       );
+      request.ctx.runtime?.waitUntil?.(cacheSetPromise);
     }
 
     collectQueryCacheControlHeaders(

@@ -110,13 +110,6 @@ export const renderHydrogen = (App: any) => {
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
      */
     request.ctx.runtime = context;
-    if (!context?.waitUntil) {
-      const runtimeContext: RuntimeContext = {
-        waitUntil: () => {},
-      };
-
-      request.ctx.runtime = runtimeContext;
-    }
 
     setCache(cache);
 
@@ -148,9 +141,9 @@ export const renderHydrogen = (App: any) => {
       if (cachedResponse) {
         if (isStale(request, cachedResponse)) {
           const lockCacheKey = request.cacheKey(true);
-          const staleWhileRevalidate = async (
-            lockExists: Response | undefined
-          ) => {
+          const staleWhileRevalidatePromise = getItemFromCache(
+            lockCacheKey
+          ).then(async (lockExists: Response | undefined) => {
             if (lockExists) return;
             try {
               // Don't stream when creating a response for cache
@@ -177,15 +170,11 @@ export const renderHydrogen = (App: any) => {
               );
             } catch (e: any) {
               log.error('Cache revalidate error', e);
-            } finally {
-              await deleteItemFromCache(lockCacheKey);
             }
-          };
+          });
 
           // Asynchronously wait for it in workers
-          request.ctx.runtime?.waitUntil(
-            getItemFromCache(lockCacheKey).then(staleWhileRevalidate)
-          );
+          request.ctx.runtime?.waitUntil(staleWhileRevalidatePromise);
         }
 
         return cachedResponse;
@@ -879,11 +868,10 @@ async function cacheResponse(
     if (revalidate) {
       await saveCacheResponse(response, request, chunks);
     } else {
-      request.ctx.runtime?.waitUntil(
-        Promise.resolve(true).then(() =>
-          saveCacheResponse(response, request, chunks)
-        )
+      const cachePutPromise = Promise.resolve(true).then(() =>
+        saveCacheResponse(response, request, chunks)
       );
+      request.ctx.runtime?.waitUntil(cachePutPromise);
     }
   }
 }
@@ -926,5 +914,6 @@ async function saveCacheResponse(
       }),
       response.cache()
     );
+    deleteItemFromCache(request.cacheKey(true));
   }
 }
