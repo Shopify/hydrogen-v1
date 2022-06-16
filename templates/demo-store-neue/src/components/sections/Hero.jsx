@@ -34,8 +34,8 @@ export function Hero(props = mockData) {
                 scale={2}
                 sizes={
                   spreadSecondary?.reference
-                    ? '(max-width: 80em) 700, (min-width: 48em) 450, 500'
-                    : '(max-width: 80em) 1400, (min-width: 48em) 900, 500'
+                    ? '(min-width: 80em) 700, (min-width: 48em) 450, 500'
+                    : '(min-width: 80em) 1400, (min-width: 48em) 900, 500'
                 }
                 widths={
                   spreadSecondary?.reference
@@ -53,7 +53,7 @@ export function Hero(props = mockData) {
             <div className="hidden md:block">
               <SpreadMedia
                 loaderOptions={{scale: 2}}
-                sizes="(max-width: 80em) 700, (min-width: 48em) 450, 500"
+                sizes="(min-width: 80em) 700, (min-width: 48em) 450, 500"
                 widths={[450, 700]}
                 width={375}
                 height={450}
