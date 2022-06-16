@@ -4,6 +4,9 @@ import {Heading, Section, Grid} from '~/components';
 
 export function FeaturedCollections({data, title = 'Collections', ...props}) {
   const items = data.filter((item) => item.image).length;
+  const haveCollections = data.length > 0;
+
+  if (!haveCollections) return null;
 
   return (
     <Section {...props} heading={title}>
