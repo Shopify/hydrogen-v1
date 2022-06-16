@@ -2,4 +2,4 @@
 '@shopify/hydrogen': patch
 ---
 
-Fix stale-while-revalidate process with `waitUntil`
+Clean up full page cache work with `waitUntil`
