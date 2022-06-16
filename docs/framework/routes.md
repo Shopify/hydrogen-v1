@@ -56,7 +56,7 @@ The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` t
 
 {% endcodeblock %}
 
-The `handle` property is passed directly to the root server component `/routes/products/[handle].server.jsx`:
+You can retrieve the `handle` property by using the [`useRouteParams` hook](https://shopify.dev/api/hydrogen/hooks/framework/userouteparams):
 
 {% codeblock file, filename: '[handle].server.jsx' %}
 
@@ -393,18 +393,50 @@ return response.redirect('https://yoursite.com/new-page', 301);
 
 ### Server props
 
-In addition to `request` and `response` props, any props you manage with [`setServerProps`](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) is passed to each of your server components as props:
+In addition to `request` and `response` props, any props you manage with [`setServerProps`](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) are passed to each of your server components as props:
 
 {% codeblock file %}
 
 ```jsx
-function MyPage({custom, props, here}) {
+export default function MyPage({custom, props, here}) {
   // Use custom server props
 }
 ```
 
 {% endcodeblock %}
 
+## TypeScript
+
+Hydrogen supports TypeScript out of the box. When building route components, you can use the provided TypeScript types to improve your developer experience:
+
+{% codeblock file %}
+
+```tsx
+import type {
+  HydrogenApiRoute,
+  HydrogenApiRouteOptions,
+  HydrogenRequest,
+  HydrogenRouteProps,
+} from '@shopify/hydrogen';
+
+export default function MyPage(props: HydrogenRouteProps) {
+  //
+}
+
+export const api: HydrogenApiRoute = async(request, options) => {
+  //
+}
+
+// Alternate version of `api`:
+export async function api(request: HydrogenRequest, options: HydrogenApiRouteOptions) {
+
+}
+```
+
+{% endcodeblock %}
+
+> Tip:
+> The Hello World template is available in [TypeScript](https://shopify.dev/custom-storefronts/hydrogen/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.
 ## Related components and hooks
 
 - [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
