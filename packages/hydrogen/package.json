@@ -22,6 +22,10 @@
       "import": "./dist/esnext/framework/middleware.js",
       "require": "./dist/node/framework/middleware.js"
     },
+    "./load-config": {
+      "import": "./dist/esnext/framework/load-config.js",
+      "require": "./dist/node/framework/load-config.js"
+    },
     "./web-polyfills": {
       "import": "./dist/esnext/utilities/web-api-polyfill",
       "require": "./dist/node/utilities/web-api-polyfill"
