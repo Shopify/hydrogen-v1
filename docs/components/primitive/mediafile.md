@@ -9,7 +9,7 @@ The `MediaFile` component renders the media for the Storefront API's
 [`Video`](https://shopify.dev/api/hydrogen/components/primitive/video), an [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo), or a [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer) depending on the `mediaContentType` of the
 `media` provided as a prop. 
 
-The component outputs the HTML element corresponding to the rendered Hydrogen component. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+The component outputs the HTML element that corresponds to the rendered Hydrogen component. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
