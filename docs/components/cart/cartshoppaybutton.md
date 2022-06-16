@@ -26,7 +26,7 @@ export default function MyComponent() {
 | Name       | Type                                                                                         | Description                                                                               |
 | ---------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | className? | <code>Omit&#60;React.ComponentProps&#60;typeof ShopPayButton&#62;, 'variantIds'&#62;)</code> | A string of classes to apply to the `div` that wraps the `shop-pay-button` web component. |
-| width? | <code>string</code> |   A string that gets applied to the CSS Custom Property (Variable) `--shop-pay-button-width` for the [Shop Pay Custom Element](https://shopify.dev/custom-storefronts/tools/web-components#buy-with-shop-pay-component) |
+| width? | <code>string</code> |   A string that's applied to the [CSS custom property (variable)](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) `--shop-pay-button-width` for the [Buy with Shop Pay component](https://shopify.dev/custom-storefronts/tools/web-components#buy-with-shop-pay-component). |
 
 ## Component type
 
