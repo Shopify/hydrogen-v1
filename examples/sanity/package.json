@@ -21,7 +21,7 @@
     "@sanity/client": "^3.3.2",
     "@shopify/hydrogen": "latest",
     "groq": "^2.29.3",
-    "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
