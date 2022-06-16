@@ -44,12 +44,12 @@ export type CartBuyerIdentityUpdateMutation = {__typename?: 'Mutation'} & {
                           'key' | 'value'
                         >
                       >;
-                      estimatedCost: {__typename?: 'CartLineEstimatedCost'} & {
+                      cost: {__typename?: 'CartLineCost'} & {
                         totalAmount: {__typename?: 'MoneyV2'} & Pick<
                           Types.MoneyV2,
                           'amount' | 'currencyCode'
                         >;
-                        compareAtAmount?: Types.Maybe<
+                        compareAtAmountPerQuantity?: Types.Maybe<
                           {__typename?: 'MoneyV2'} & Pick<
                             Types.MoneyV2,
                             'amount' | 'currencyCode'
@@ -91,7 +91,7 @@ export type CartBuyerIdentityUpdateMutation = {__typename?: 'Mutation'} & {
                 }
               >;
             };
-            estimatedCost: {__typename?: 'CartEstimatedCost'} & {
+            cost: {__typename?: 'CartCost'} & {
               subtotalAmount: {__typename?: 'MoneyV2'} & Pick<
                 Types.MoneyV2,
                 'currencyCode' | 'amount'

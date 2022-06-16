@@ -427,22 +427,35 @@ export enum CardBrand {
 /** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
 export type Cart = Node & {
   __typename?: 'Cart';
+  /** An attribute associated with the cart. */
+  attribute?: Maybe<Attribute>;
   /** The attributes associated with the cart. Attributes are represented as key-value pairs. */
   attributes: Array<Attribute>;
   /** Information about the buyer that is interacting with the cart. */
   buyerIdentity: CartBuyerIdentity;
   /** The URL of the checkout for the cart. */
   checkoutUrl: Scalars['URL'];
+  /** The estimated costs that the buyer will pay at checkout. The costs are subject to change and changes will be reflected at checkout. The `cost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart). */
+  cost: CartCost;
   /** The date and time when the cart was created. */
   createdAt: Scalars['DateTime'];
   /** The delivery groups available for the cart, based on the default address of the logged-in customer. */
   deliveryGroups: CartDeliveryGroupConnection;
+  /** The discounts that have been applied to the entire cart. */
+  discountAllocations: Array<
+    | CartAutomaticDiscountAllocation
+    | CartCodeDiscountAllocation
+    | CartCustomDiscountAllocation
+  >;
   /**
    * The case-insensitive discount codes that the customer added at checkout.
    *
    */
   discountCodes: Array<CartDiscountCode>;
-  /** The estimated costs that the buyer will pay at checkout. The estimated costs are subject to change and changes will be reflected at checkout. The `estimatedCost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart). */
+  /**
+   * The estimated costs that the buyer will pay at checkout. The estimated costs are subject to change and changes will be reflected at checkout. The `estimatedCost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart).
+   * @deprecated Use `cost` instead
+   */
   estimatedCost: CartEstimatedCost;
   /** A globally-unique identifier. */
   id: Scalars['ID'];
@@ -454,6 +467,11 @@ export type Cart = Node & {
   totalQuantity: Scalars['Int'];
   /** The date and time when the cart was updated. */
   updatedAt: Scalars['DateTime'];
+};
+
+/** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
+export type CartAttributeArgs = {
+  key: Scalars['String'];
 };
 
 /** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
@@ -541,6 +559,34 @@ export type CartCodeDiscountAllocation = CartDiscountAllocation & {
   discountedAmount: MoneyV2;
 };
 
+/**
+ * The costs that the buyer will pay at checkout.
+ * It uses [`CartBuyerIdentity`](https://shopify.dev/api/storefront/reference/cart/cartbuyeridentity) to determine
+ * [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart).
+ *
+ */
+export type CartCost = {
+  __typename?: 'CartCost';
+  /** The estimated amount, before taxes and discounts, for the customer to pay at checkout. The checkout charge amount doesn't include any deferred payments that'll be paid at a later date. If the cart has no deferred payments, the checkout charge amount is equivalent to subtotalAmount. */
+  checkoutChargeAmount: MoneyV2;
+  /** The amount, before taxes and cart-level discounts, for the customer to pay. */
+  subtotalAmount: MoneyV2;
+  /** Whether or not the subtotal amount is estimated. */
+  subtotalAmountEstimated: Scalars['Boolean'];
+  /** The total amount for the customer to pay. */
+  totalAmount: MoneyV2;
+  /** Whether or not the total amount is estimated. */
+  totalAmountEstimated: Scalars['Boolean'];
+  /** The duty amount for the customer to pay at checkout. */
+  totalDutyAmount?: Maybe<MoneyV2>;
+  /** Whether or not the total duty amount is estimated. */
+  totalDutyAmountEstimated: Scalars['Boolean'];
+  /** The tax amount for the customer to pay at checkout. */
+  totalTaxAmount?: Maybe<MoneyV2>;
+  /** Whether or not the total tax amount is estimated. */
+  totalTaxAmountEstimated: Scalars['Boolean'];
+};
+
 /** Return type for `cartCreate` mutation. */
 export type CartCreatePayload = {
   __typename?: 'CartCreatePayload';
@@ -548,6 +594,15 @@ export type CartCreatePayload = {
   cart?: Maybe<Cart>;
   /** The list of errors that occurred from executing the mutation. */
   userErrors: Array<CartUserError>;
+};
+
+/** The discounts automatically applied to the cart line based on prerequisites that have been met. */
+export type CartCustomDiscountAllocation = CartDiscountAllocation & {
+  __typename?: 'CartCustomDiscountAllocation';
+  /** The discounted amount that has been applied to the cart line. */
+  discountedAmount: MoneyV2;
+  /** The title of the allocated discount. */
+  title: Scalars['String'];
 };
 
 /** Information about the options available for one or more line items to be delivered to a specific address. */
@@ -659,6 +714,8 @@ export enum CartErrorCode {
  */
 export type CartEstimatedCost = {
   __typename?: 'CartEstimatedCost';
+  /** The estimated amount, before taxes and discounts, for the customer to pay at checkout. The checkout charge amount doesn't include any deferred payments that'll be paid at a later date. If the cart has no deferred payments, the checkout charge amount is equivalent to subtotalAmount. */
+  checkoutChargeAmount: MoneyV2;
   /** The estimated amount, before taxes and discounts, for the customer to pay. */
   subtotalAmount: MoneyV2;
   /** The estimated total amount for the customer to pay. */
@@ -689,13 +746,22 @@ export type CartInput = {
 /** Represents information about the merchandise in the cart. */
 export type CartLine = Node & {
   __typename?: 'CartLine';
+  /** An attribute associated with the cart line. */
+  attribute?: Maybe<Attribute>;
   /** The attributes associated with the cart line. Attributes are represented as key-value pairs. */
   attributes: Array<Attribute>;
+  /** The cost of the merchandise that the buyer will pay for at checkout. The costs are subject to change and changes will be reflected at checkout. */
+  cost: CartLineCost;
   /** The discounts that have been applied to the cart line. */
   discountAllocations: Array<
-    CartAutomaticDiscountAllocation | CartCodeDiscountAllocation
+    | CartAutomaticDiscountAllocation
+    | CartCodeDiscountAllocation
+    | CartCustomDiscountAllocation
   >;
-  /** The estimated cost of the merchandise that the buyer will pay for at checkout. The estimated costs are subject to change and changes will be reflected at checkout. */
+  /**
+   * The estimated cost of the merchandise that the buyer will pay for at checkout. The estimated costs are subject to change and changes will be reflected at checkout.
+   * @deprecated Use `cost` instead
+   */
   estimatedCost: CartLineEstimatedCost;
   /** A globally-unique identifier. */
   id: Scalars['ID'];
@@ -705,6 +771,11 @@ export type CartLine = Node & {
   quantity: Scalars['Int'];
   /** The selling plan associated with the cart line and the effect that each selling plan has on variants when they're purchased. */
   sellingPlanAllocation?: Maybe<SellingPlanAllocation>;
+};
+
+/** Represents information about the merchandise in the cart. */
+export type CartLineAttributeArgs = {
+  key: Scalars['String'];
 };
 
 /**
@@ -719,6 +790,19 @@ export type CartLineConnection = {
   nodes: Array<CartLine>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
+};
+
+/** The cost of the merchandise line that the buyer will pay at checkout. */
+export type CartLineCost = {
+  __typename?: 'CartLineCost';
+  /** The amount of the merchandise line. */
+  amountPerQuantity: MoneyV2;
+  /** The compare at amount of the merchandise line. */
+  compareAtAmountPerQuantity?: Maybe<MoneyV2>;
+  /** The cost of the merchandise line before line-level discounts. */
+  subtotalAmount: MoneyV2;
+  /** The total cost of the merchandise line. */
+  totalAmount: MoneyV2;
 };
 
 /**
@@ -5892,6 +5976,8 @@ export type SelectedOptionInput = {
 /** Represents how products and variants can be sold and purchased. */
 export type SellingPlan = {
   __typename?: 'SellingPlan';
+  /** The initial payment due for the purchase. */
+  checkoutCharge: SellingPlanCheckoutCharge;
   /** The description of the selling plan. */
   description?: Maybe<Scalars['String']>;
   /** A globally-unique identifier. */
@@ -5909,8 +5995,12 @@ export type SellingPlan = {
 /** Represents an association between a variant and a selling plan. Selling plan allocations describe the options offered for each variant, and the price of the variant when purchased with a selling plan. */
 export type SellingPlanAllocation = {
   __typename?: 'SellingPlanAllocation';
+  /** The checkout charge amount due for the purchase. */
+  checkoutChargeAmount: MoneyV2;
   /** A list of price adjustments, with a maximum of two. When there are two, the first price adjustment goes into effect at the time of purchase, while the second one starts after a certain number of orders. A price adjustment represents how a selling plan affects pricing when a variant is purchased with a selling plan. Prices display in the customer's currency if the shop is configured for it. */
   priceAdjustments: Array<SellingPlanAllocationPriceAdjustment>;
+  /** The remaining balance charge amount due for the purchase. */
+  remainingBalanceChargeAmount: MoneyV2;
   /** A representation of how products and variants can be sold and purchased. For example, an individual selling plan could be '6 weeks of prepaid granola, delivered weekly'. */
   sellingPlan: SellingPlan;
 };
@@ -5953,6 +6043,35 @@ export type SellingPlanAllocationPriceAdjustment = {
   /** The resulting price per unit for the variant associated with the selling plan. If the variant isn't sold by quantity or measurement, then this field returns `null`. */
   unitPrice?: Maybe<MoneyV2>;
 };
+
+/** The initial payment due for the purchase. */
+export type SellingPlanCheckoutCharge = {
+  __typename?: 'SellingPlanCheckoutCharge';
+  /** The charge type for the checkout charge. */
+  type: SellingPlanCheckoutChargeType;
+  /** The charge value for the checkout charge. */
+  value: SellingPlanCheckoutChargeValue;
+};
+
+/** The percentage value of the price used for checkout charge. */
+export type SellingPlanCheckoutChargePercentageValue = {
+  __typename?: 'SellingPlanCheckoutChargePercentageValue';
+  /** The percentage value of the price used for checkout charge. */
+  percentage: Scalars['Float'];
+};
+
+/** The checkout charge when the full amount isn't charged at checkout. */
+export enum SellingPlanCheckoutChargeType {
+  /** The checkout charge is a percentage of the product or variant price. */
+  Percentage = 'PERCENTAGE',
+  /** The checkout charge is a fixed price amount. */
+  Price = 'PRICE',
+}
+
+/** The portion of the price to be charged at checkout. */
+export type SellingPlanCheckoutChargeValue =
+  | MoneyV2
+  | SellingPlanCheckoutChargePercentageValue;
 
 /**
  * An auto-generated type for paginating through multiple SellingPlans.

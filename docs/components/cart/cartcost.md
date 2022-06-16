@@ -1,21 +1,21 @@
 ---
 gid: 14b85ca8-3d11-45e4-b260-df0c67c4669c
-title: CartEstimatedCost
-description: The CartEstimatedCost component renders a Money component with the cost associated with the amountType prop.
+title: CartCost
+description: The CartCost component renders a Money component with the cost associated with the amountType prop.
 ---
 
-The `CartEstimatedCost` component renders a `Money` component with the
+The `CartCost` component renders a `Money` component with the
 cost associated with the `amountType` prop. If no `amountType` prop is specified, then it defaults to `totalAmount`.
 
 ## Example code
 
 ```tsx
-import {CartProvider, CartEstimatedCost} from '@shopify/hydrogen';
+import {CartProvider, CartCost} from '@shopify/hydrogen';
 
 export default function MyCart() {
   return (
     <CartProvider>
-      <CartEstimatedCost amountType="total" />
+      <CartCost amountType="total" />
     </CartProvider>
   );
 }
@@ -30,7 +30,7 @@ export default function MyCart() {
 
 ## Component type
 
-The `CartEstimatedCost` component is a client component, which means that it renders on the client.
+The `CartCost` component is a client component, which means that it renders on the client.
 For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
