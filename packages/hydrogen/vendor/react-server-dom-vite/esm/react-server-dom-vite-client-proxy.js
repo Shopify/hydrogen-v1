@@ -8,7 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react';
 
 // Store of components discovered during RSC to load
 // them later when consuming the response in SSR.
@@ -18,11 +18,9 @@ globalThis.__COMPONENT_INDEX = {}; // Store to get module references for long st
 globalThis.__STRING_REFERENCE_INDEX = {};
 var MODULE_TAG = Symbol.for('react.module.reference');
 var STRING_SIZE_LIMIT = 64;
-var FN_RSC_ERROR = 'Functions exported from client components cannot be called or used as constructors from a server component.'; // TODO what's a better way to detect Flight runtime?
-
+var FN_RSC_ERROR = 'Functions exported from client components cannot be called or used as constructors from a server component.';
 function isRsc() {
-  // This method is only available during RSC
-  return !!React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher.current.getCacheForType;
+  return !!__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher.current.isRsc;
 }
 
 function createModuleReference(id, value, name, isDefault) {

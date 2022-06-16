@@ -17,10 +17,12 @@ export function Grid({
       items >= 4 && 'lg:grid-cols-4'
     }`,
     auto: 'auto-cols-auto',
+    blog: `grid-cols-2 pt-24`,
   };
 
   const gaps = {
     default: 'grid gap-2 gap-y-6 md:gap-4 lg:gap-6',
+    blog: 'grid gap-6',
   };
 
   const flows = {

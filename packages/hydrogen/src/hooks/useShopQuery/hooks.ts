@@ -138,7 +138,8 @@ export function useShopQuery<T>({
 
   if (
     __HYDROGEN_DEV__ &&
-    log.options().showUnusedQueryProperties &&
+    (log.options().showUnusedQueryProperties ||
+      serverRequest.ctx.hydrogenConfig?.__EXPERIMENTAL__devTools) &&
     query &&
     data?.data
   ) {
@@ -175,8 +176,13 @@ export function useShopQuery<T>({
           hiddenInfo +
           footer;
 
-        log.warn(warning);
-        sendMessageToClient({type: 'warn', data: warning});
+        if (log.options().showUnusedQueryProperties) {
+          log.warn(warning);
+          sendMessageToClient('browser-console', {type: 'warn', data: warning});
+        }
+        if (serverRequest.ctx.hydrogenConfig?.__EXPERIMENTAL__devTools) {
+          sendMessageToClient('dev-tools', {type: 'warn', data: warning});
+        }
       },
     });
   }

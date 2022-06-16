@@ -106,9 +106,9 @@ You can extend dynamic routes to catch all paths by adding an ellipsis (...) ins
 
 Hydrogen provides the following built-in routes:
 
-- `/__health` - A health check route that responds with a 200 status and no body. You can use this route within your infrastructure to verify that your app is healthy and able to respond to requests.
-- `/__rsc` - An internal route used to re-render server components. It's called by the Hydrogen frontend when the route changes, or when server props change. You should never need to manually request this route.
-- `/__event` - An internal route used to save client observability events. You should never need to manually request this route.
+- **`/__health`**: A health check route that responds with a 200 status and no body. You can use this route within your infrastructure to verify that your app is healthy and able to respond to requests.
+- **`/__rsc`**: An internal route used to re-render server components. It's called by the Hydrogen frontend when the route changes, or when server props change. You should never need to manually request this route.
+- **`/__event`**: An internal route used to save client observability events. You should never need to manually request this route.
 
 ### Example
 

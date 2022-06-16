@@ -273,6 +273,10 @@ export function CartProvider({
   );
   const fetchCart = useCartFetch();
 
+  const countryChanged =
+    state.status === 'idle' &&
+    countryCode !== state?.cart?.buyerIdentity?.countryCode;
+
   const cartFetch = useCallback(
     async (cartId: string) => {
       dispatch({type: 'cartFetch'});
@@ -680,12 +684,15 @@ export function CartProvider({
   }, [cartFetch, state]);
 
   useEffect(() => {
-    if (state.status !== 'idle') {
-      return;
-    }
+    if (!countryChanged) return;
     buyerIdentityUpdate({countryCode, customerAccessToken}, state);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countryCode, customerAccessToken]);
+  }, [
+    state,
+    buyerIdentityUpdate,
+    countryCode,
+    customerAccessToken,
+    countryChanged,
+  ]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
