@@ -16,6 +16,10 @@ export function ProductGallery({media, className}) {
       {media.map((med, i) => {
         let extraProps = {};
 
+        const isFirst = i === 0;
+        const isFourth = i === 3;
+        const isFullWidth = i % 3 === 0;
+
         if (med.mediaContentType === 'MODEL_3D') {
           extraProps = {
             interactionPromptThreshold: '0',
@@ -37,13 +41,14 @@ export function ProductGallery({media, className}) {
           extraProps.loading = ATTR_LOADING_EAGER;
         }
 
+        const style = [
+          isFullWidth ? 'md:col-span-2' : 'md:col-span-1',
+          isFirst || isFourth ? 'aspect-square' : 'aspect-[4/5]',
+          'snap-center card-image bg-white dark:bg-contrast/10  md:w-full w-[80vw]',
+        ].join(' ');
+
         return (
-          <div
-            className={`${
-              i % 3 === 0 ? 'md:col-span-2' : 'md:col-span-1'
-            } snap-center card-image bg-white dark:bg-contrast/10 aspect-square md:w-full w-[80vw]`}
-            key={med.id || med.image.id}
-          >
+          <div className={style} key={med.id || med.image.id}>
             <MediaFile
               tabIndex="0"
               className={`w-full h-full aspect-square object-cover`}
