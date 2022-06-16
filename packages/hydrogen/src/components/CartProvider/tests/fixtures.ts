@@ -11,7 +11,7 @@ export const CART = {
   buyerIdentity: {},
   discountCodes: [],
   totalQuantity: 0,
-  estimatedCost: {
+  cost: {
     subtotalAmount: getPrice(),
     totalAmount: getPrice(),
     totalTaxAmount: getPrice(),

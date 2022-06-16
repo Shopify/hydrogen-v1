@@ -10,8 +10,8 @@ describe('<CartLinePrice />', () => {
   it('renders <Money /> with the regular price by default', () => {
     const line = {
       ...CART_LINE,
-      estimatedCost: {
-        ...CART_LINE.estimatedCost,
+      cost: {
+        ...CART_LINE.cost,
         totalAmount: {
           amount: '50',
           currencyCode: CurrencyCode.Usd,
@@ -33,9 +33,9 @@ describe('<CartLinePrice />', () => {
   it('renders <Money /> with the compareAt price when `priceType` is `compareAt`', () => {
     const line = {
       ...CART_LINE,
-      estimatedCost: {
-        ...CART_LINE.estimatedCost,
-        compareAtAmount: {
+      cost: {
+        ...CART_LINE.cost,
+        compareAtAmountPerQuantity: {
           amount: '60',
           currencyCode: CurrencyCode.Usd,
         },

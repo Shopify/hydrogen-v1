@@ -19,7 +19,7 @@ export const CART_LINE = {
     selectedOptions: [{name: 'size', value: 'large'}],
     title: 'Product Name - Large',
   },
-  estimatedCost: {
+  cost: {
     totalAmount: {
       amount: '123',
       currencyCode: CurrencyCode.Usd,

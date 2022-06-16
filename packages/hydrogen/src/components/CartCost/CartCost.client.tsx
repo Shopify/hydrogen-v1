@@ -2,7 +2,7 @@ import React from 'react';
 import {useCart} from '../CartProvider';
 import {Money} from '../Money';
 
-export interface CartEstimatedCostProps {
+export interface CartCostProps {
   /** A string type that defines the type of cost needed. Valid values: `total`, `subtotal`, `tax`, or `duty`. */
   amountType?: 'total' | 'subtotal' | 'tax' | 'duty';
   /** A function that takes an object return by the `useMoney` hook and returns a `ReactNode`. */
@@ -10,26 +10,25 @@ export interface CartEstimatedCostProps {
 }
 
 /**
- * The `CartEstimatedCost` component renders a `Money` component with the
+ * The `CartCost` component renders a `Money` component with the
  * cost associated with the `amountType` prop. If no `amountType` prop is specified, then it defaults to `totalAmount`.
  * If `children` is a function, then it will pass down the render props provided by the parent component.
  */
-export function CartEstimatedCost(
-  props: Omit<React.ComponentProps<typeof Money>, 'data'> &
-    CartEstimatedCostProps
+export function CartCost(
+  props: Omit<React.ComponentProps<typeof Money>, 'data'> & CartCostProps
 ) {
-  const {estimatedCost} = useCart();
+  const {cost} = useCart();
   const {amountType = 'total', children, ...passthroughProps} = props;
   let amount;
 
   if (amountType == 'total') {
-    amount = estimatedCost?.totalAmount;
+    amount = cost?.totalAmount;
   } else if (amountType == 'subtotal') {
-    amount = estimatedCost?.subtotalAmount;
+    amount = cost?.subtotalAmount;
   } else if (amountType == 'tax') {
-    amount = estimatedCost?.totalTaxAmount;
+    amount = cost?.totalTaxAmount;
   } else if (amountType == 'duty') {
-    amount = estimatedCost?.totalDutyAmount;
+    amount = cost?.totalDutyAmount;
   }
 
   if (amount == null) {
