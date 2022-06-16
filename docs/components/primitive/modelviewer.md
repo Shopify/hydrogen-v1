@@ -114,7 +114,7 @@ export default function MyProductModel() {
 | onSceneGraphReady?          | <code>(event: Event) => void</code>                            | The callback to invoke when the 'scene-graph-ready' event is triggered. Refer to [scene-graph-ready in the &lt;model-viewer&gt; documentation](https://modelviewer.dev/docs/index.html#entrydocs-scenegraph-events-sceneGraphReady).                                                                                                                                                                   |
 ## Required fields
 
-The `ModelViewer` component requires the following fields from the the Storefront API's
+The `ModelViewer` component requires the following fields from the Storefront API's
 [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d).
 
 ```graphql
