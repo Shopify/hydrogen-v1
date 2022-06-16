@@ -99,7 +99,7 @@ export function MyComponent() {
 
 ## Required fields
 
-The `MediaFile` component requires the following fields from the the Storefront API's
+The `MediaFile` component requires the following fields from the Storefront API's
 [Media object](https://shopify.dev/api/storefront/reference/products/media), as well as additional fields depending on the type of media. See [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image),
 [`Video`](https://shopify.dev/api/hydrogen/components/primitive/video), [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo), and [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer) for additional required fields.
 
