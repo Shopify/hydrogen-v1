@@ -4,11 +4,19 @@
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"
   },
-  "version": "0.25.0",
+  "version": "0.25.1",
   "main": "index.js",
   "license": "MIT",
   "bin": {
     "create-hydrogen": "index.js",
     "create-hydrogen-app": "index.js"
+  },
+  "files": [
+    "index.js",
+    "scripts",
+    "template-*"
+  ],
+  "scripts": {
+    "prepack": "node ./scripts/tmp-copy-template-from-dev.js"
   }
 }
