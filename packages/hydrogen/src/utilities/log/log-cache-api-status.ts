@@ -11,6 +11,10 @@ export function logCacheApiStatus(status: string | null, url: string) {
   if (url.includes('shopify.dev')) {
     url = decodeURIComponent(url);
     queryName = findQueryName(url);
+
+    if (url.includes('?lock')) {
+      queryName += '-lock';
+    }
   }
 
   log.debug(
