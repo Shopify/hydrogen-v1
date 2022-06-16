@@ -1,5 +1,5 @@
 import {Disclosure} from '@headlessui/react';
-import {Link} from '@shopify/hydrogen';
+import {Link, useUrl} from '@shopify/hydrogen';
 
 import {Section, Heading, IconCaret, CountrySelector} from '~/components';
 import {footer as mockData} from '~/lib/placeholders';
@@ -8,6 +8,9 @@ import {footer as mockData} from '~/lib/placeholders';
  * A server component that specifies the content of the footer on the website
  */
 export function Footer({menu = mockData}) {
+  const {pathname} = useUrl();
+  const isHome = pathname === '/';
+
   const styles = {
     footer:
       'grid items-start w-full grid-flow-row grid-cols-1 gap-6 py-8 px-6 md:px-8 lg:px-12 border-b md:gap-8 lg:gap-12 md:grid-cols-2 lg:grid-cols-4 bg-primary dark:bg-contrast dark:text-primary text-contrast',
@@ -17,9 +20,9 @@ export function Footer({menu = mockData}) {
 
   return (
     <Section
+      divider={isHome ? 'none' : 'top'}
       as="footer"
       role="contentinfo"
-      divider="top"
       className={styles.footer}
     >
       {(menu?.items || []).map((item) => (

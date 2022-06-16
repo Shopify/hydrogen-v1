@@ -7,7 +7,7 @@ export function Section({
   as: Component = 'section',
   children,
   className,
-  divider,
+  divider = 'none',
   display = 'grid',
   heading,
   padding = 'all',
@@ -21,6 +21,7 @@ export function Section({
   };
 
   const dividers = {
+    none: 'border-none',
     top: 'border-t border-primary/05',
     bottom: 'border-b border-primary/05',
     both: 'border-y border-primary/05',
