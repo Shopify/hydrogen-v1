@@ -55,7 +55,7 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 
 ## Required fields
 
-The `Metafield` component requires the following fields from the the Storefront API's
+The `Metafield` component requires the following fields from the Storefront API's
 [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
 
 ```graphql
