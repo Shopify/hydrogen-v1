@@ -6,11 +6,9 @@ description: Learn how configure support in your Hydrogen app for international 
 
 Internationalization helps merchants expand their business to a global audience by creating shopping experiences in local languages and currencies. This guide provides information on configuring localized experiences for merchants and customers in your Hydrogen app.
 
-## Configuration
+## Default configuration
 
 You can configure your app's default locale in the Hydrogen configuration file. You can also set up dynamic configurations in your Hydrogen app for multiple stores.
-
-### Configure a default locale and language
 
 The [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) contains information that's needed at runtime for routing, connecting to the Storefront API, and many other options.
 
@@ -23,7 +21,6 @@ The `languageCode` property corresponds to the first two characters of `defaultL
 In the following example, the default locale of the app is set to `EN-US` and the language is set to `EN`:
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
-
 ```tsx
 export default defineConfig({
   shopify: {
@@ -33,12 +30,12 @@ export default defineConfig({
   },
 });
 ```
-
 {% endcodeblock %}
 
-## Geolocation
 
-Detecting the geographic location of your visitors helps you localize the experience to their preferred country and language. 
+## Detecting a visitor's geolocation
+
+The geographic location of your visitors helps you localize the experience to their preferred country and language. 
 
 ### Oxygen deployments
 
@@ -83,26 +80,69 @@ export default function Homepage({request}) {
 {% endcodeblock %}
 
 
+## Internationalized routing
 
-## Internationalized routes
+Once you've detected a visitor's geolocation, you can assign custom routes to host and render a localized experience. 
 
-PLACEHOLDER INTRODUCTORY CONTENT
+Hydrogen supports two strategies for internationalized routes: domains and subfolders.
 
-### ccTLDs
+Examples of domain or subdomain routing:
+- `yourshop.com, yourshop.ca, yourshop.co.uk, etc.`
+- `us.yourshop.com, ca.yourshop.com, uk.yourshop.com, etc.`
 
-PLACEHOLDER CONTENT
+Examples of subfolder routing:
+- `yourshop.com/en/products`
+- `yourshop.com/en-CA/products`
+- `yourshop.com/fr/produits`
 
-### Subdomains
+### Domains or Subdomains
 
-PLACEHOLDER CONTENT
+Once you've set up your domains and/or subdomains in Oxygen, or third-party hosting provider, you can assign these domains to a given locale.
+
+{% codeblock file, filename: 'App.server.jsx' %}
+
+```tsx
+function App({routes}) {
+  
+  
+  return (. . .)
+}
+```
+
+{% endcodeblock %}
+
 
 ### Subfolders
+Subfolder routes use the visitor's locale in the URL path. In Hydrogen, the FileRoute component can be used to prefix all file routes with a locale using the `basePath` parameter, and source the corresponding file routes. 
 
-PLACEHOLDER CONTENT
+{% codeblock file, filename: 'App.server.jsx' %}
 
-### Localized paths (warn re: SEO)
+import {Router, FileRoutes, Route} from '@shopify/hydrogen';
+function App() {
+  const esRoutes = import.meta.globEager('./custom-routes/es/**/*.server.jsx');
+  const enRoutes = import.meta.globEager('./custom-routes/en/**/*.server.jsx');
 
-PLACEHOLDER CONTENT
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ShopifyProvider>
+        <CartProvider>
+          <Router>
+            <FileRoutes />
+            <FileRoutes basePath="/es/" routes={esRoutes} />
+            <FileRoutes basePath="/en/" routes={enRoutes} />
+            <Route path="*" page={<NotFound />} />
+          </Router>
+        </CartProvider>
+      </ShopifyProvider>
+    </Suspense>
+  );
+}
+function NotFound() {
+  return <h1>Not found</h1>;
+}
+
+{% endcodeblock %}
+
 
 ## Localization
 
@@ -125,7 +165,7 @@ You can use the Storefront API's `@inContext` directive to support multiple lang
 
 For more information about retrieving language translations, refer to [Support multiple languages on storefronts](https://shopify.dev/api/examples/multiple-languages).
 
-### SEO
+### Search Engine Optimization
 
 Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the `defaultLocale` value provided in your Hydrogen configuration file or `EN-US` when not specified.
 
