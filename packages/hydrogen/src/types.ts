@@ -138,5 +138,9 @@ export type PreloadOptions = boolean | string;
 export type HydrogenRouteProps = {
   request: HydrogenRequest;
   response: HydrogenResponse;
+  log: Logger;
+  params: Record<string, any>;
+  pathname: string;
+  search: string;
   [key: string]: any;
 };
