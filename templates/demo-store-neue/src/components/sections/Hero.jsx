@@ -1,21 +1,18 @@
 import {Image, Video, Link} from '@shopify/hydrogen';
 
 import {Heading, Text} from '~/components';
-import {hero as mockData} from '~/lib/placeholders';
 
-export function Hero(props = mockData) {
-  const {
-    title,
-    byline,
-    cta,
-    handle,
-    spread,
-    spreadSecondary,
-    height,
-    top,
-    loading,
-  } = props;
-
+export function Hero({
+  heading,
+  byline,
+  cta,
+  handle,
+  spread,
+  spreadSecondary,
+  height,
+  top = false,
+  loading,
+}) {
   return (
     <Link to={`/collections/${handle}`}>
       <section
@@ -40,15 +37,17 @@ export function Hero(props = mockData) {
           )}
         </div>
         <div className="flex flex-col items-baseline justify-between gap-4 px-6 py-8 sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
-          <Heading as="h2" size="display" format className="max-w-md">
-            {title.value}
-          </Heading>
-          {byline && (
+          {heading?.value && (
+            <Heading as="h2" size="display" format className="max-w-md">
+              {heading.value}
+            </Heading>
+          )}
+          {byline?.value && (
             <Text format width="narrow" as="p" size="lead">
               {byline.value}
             </Text>
           )}
-          <Text size="lead">{cta.value}</Text>
+          {cta?.value && <Text size="lead">{cta.value}</Text>}
         </div>
       </section>
     </Link>
