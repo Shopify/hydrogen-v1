@@ -68,7 +68,7 @@ async function createProcessor(from, to) {
     switch (filename) {
       case 'favicon.ico':
       case '.stackblitzrc':
-      case '.gitignore':
+      case '_gitignore':
         await fs.mkdirp(resolve(destination, '..'));
         await fs.writeFile(destination, content);
         return;

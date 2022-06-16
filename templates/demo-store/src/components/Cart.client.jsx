@@ -9,7 +9,7 @@ import {
   CartLinePrice,
   CartLineQuantity,
   CartShopPayButton,
-  CartEstimatedCost,
+  CartCost,
   useCartLine,
 } from '@shopify/hydrogen';
 import {Dialog} from '@headlessui/react';
@@ -202,7 +202,7 @@ function CartFooter() {
             <span className="font-semibold" role="rowheader">
               Subtotal
             </span>
-            <CartEstimatedCost
+            <CartCost
               amountType="subtotal"
               role="cell"
               className="text-right "

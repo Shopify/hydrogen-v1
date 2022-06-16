@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.25.1
+
+### Patch Changes
+
+- [#1607](https://github.com/Shopify/hydrogen/pull/1607) [`97dfa170`](https://github.com/Shopify/hydrogen/commit/97dfa170a97a3288075275c98b61295c6166f530) Thanks [@cartogram](https://github.com/cartogram)! - Store copy of demostore files before publishing for use in hydrogen project creation in admin.
+
+## 0.25.0
+
+### Patch Changes
+
+- [#1475](https://github.com/Shopify/hydrogen/pull/1475) [`689aa68f`](https://github.com/Shopify/hydrogen/commit/689aa68ff1b4600e75121e0d88e100f4394c9107) Thanks [@cartogram](https://github.com/cartogram)! - Deprecate create-hydrogen-app in favor of @shopify/create-hydrogen
+
 ## 0.24.0
 
 ## 0.23.0

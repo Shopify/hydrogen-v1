@@ -47,3 +47,8 @@ export {fetchSync} from './foundation/fetchSync/server/fetchSync';
 
 export {type HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
 export {type HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
+export {type HydrogenRouteProps} from './types';
+export {
+  type ResourceGetter as HydrogenApiRoute,
+  RequestOptions as HydrogenApiRouteOptions,
+} from './utilities/apiRoutes';

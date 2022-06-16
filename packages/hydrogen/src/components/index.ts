@@ -17,7 +17,7 @@ export {CartLineQuantityAdjustButton} from './CartLineQuantityAdjustButton';
 export {CartLines} from './CartLines';
 export {CartCheckoutButton} from './CartCheckoutButton';
 export {CartShopPayButton} from './CartShopPayButton';
-export {CartEstimatedCost} from './CartEstimatedCost';
+export {CartCost} from './CartCost';
 export {CartProvider, useCart, useInstantCheckout} from './CartProvider';
 export type {
   State,

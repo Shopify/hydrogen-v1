@@ -19,8 +19,8 @@ export function CartLinePrice(
 
   const moneyV2 =
     priceType === 'regular'
-      ? cartLine.estimatedCost.totalAmount
-      : cartLine.estimatedCost.compareAtAmount;
+      ? cartLine.cost.totalAmount
+      : cartLine.cost.compareAtAmountPerQuantity;
 
   if (moneyV2 == null) {
     return null;

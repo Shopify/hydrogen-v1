@@ -1,6 +1,7 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useCart} from '../CartProvider';
 import {useProductOptions} from '../ProductOptionsProvider';
+import {BaseButton, BaseButtonProps} from '../BaseButton';
 
 interface AddToCartButtonProps {
   /** An array of cart line attributes that belong to the item being added to the cart. */
@@ -12,27 +13,21 @@ interface AddToCartButtonProps {
   variantId?: string | null;
   /** The item quantity. */
   quantity?: number;
-  /** Any ReactNode elements. */
-  children: ReactNode;
   /** The text that is announced by the screen reader when the item is being added to the cart. Used for accessibility purposes only and not displayed on the page. */
   accessibleAddingToCartLabel?: string;
 }
-
-type PropsWeControl = 'onClick';
 
 /**
  * The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
  * It must be a descendent of the `CartProvider` component.
  */
-export function AddToCartButton(
-  props: Omit<JSX.IntrinsicElements['button'], PropsWeControl> &
-    AddToCartButtonProps
-) {
+export function AddToCartButton(props: AddToCartButtonProps & BaseButtonProps) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {
     variantId: explicitVariantId,
     quantity = 1,
     attributes,
+    onClick,
     children,
     accessibleAddingToCartLabel,
     ...passthroughProps
@@ -53,24 +48,27 @@ export function AddToCartButton(
     }
   }, [status, addingItem]);
 
+  const handleAddItem = useCallback(() => {
+    setAddingItem(true);
+    linesAdd([
+      {
+        quantity,
+        merchandiseId: variantId,
+        attributes,
+      },
+    ]);
+  }, [linesAdd, quantity, variantId, attributes]);
+
   return (
     <>
-      <button
+      <BaseButton
         {...passthroughProps}
         disabled={disabled}
-        onClick={() => {
-          setAddingItem(true);
-          linesAdd([
-            {
-              quantity,
-              merchandiseId: variantId,
-              attributes,
-            },
-          ]);
-        }}
+        onClick={onClick}
+        defaultOnClick={handleAddItem}
       >
         {children}
-      </button>
+      </BaseButton>
       {accessibleAddingToCartLabel ? (
         <p
           style={{

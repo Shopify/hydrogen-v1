@@ -25,8 +25,8 @@ export interface Cart {
   attributes: CartFragmentFragment['attributes'];
   /** The discount codes applied to the cart. */
   discountCodes?: CartFragmentFragment['discountCodes'];
-  /** The estimate cost for the cart, including the subtotal, total, taxes, and duties. */
-  estimatedCost?: CartFragmentFragment['estimatedCost'];
+  /** The cost for the cart, including the subtotal, total, taxes, and duties. */
+  cost?: CartFragmentFragment['cost'];
   /** The total number of items in the cart, across all lines. If there are no lines, then the value is 0. */
   totalQuantity: number;
 }

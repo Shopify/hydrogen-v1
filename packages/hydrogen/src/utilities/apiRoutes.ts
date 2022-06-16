@@ -18,14 +18,14 @@ let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
 
 type RouteParams = Record<string, string>;
-type RequestOptions = {
+export type RequestOptions = {
   params: RouteParams;
   queryShop: (args: QueryShopArgs) => Promise<any>;
   session: SessionApi | null;
   hydrogenConfig: ResolvedHydrogenConfig;
 };
 export type ResourceGetter = (
-  request: Request,
+  request: HydrogenRequest,
   requestOptions: RequestOptions
 ) => Promise<Response | Object | String>;
 

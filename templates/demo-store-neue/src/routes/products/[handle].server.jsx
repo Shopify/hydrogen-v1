@@ -1,20 +1,27 @@
+import {Suspense} from 'react';
 import {
+  gql,
+  ProductOptionsProvider,
+  ShopifyAnalyticsConstants,
+  useRouteParams,
+  useServerAnalytics,
   useSession,
   useShop,
   useShopQuery,
-  useRouteParams,
-  useServerAnalytics,
-  ShopifyAnalyticsConstants,
-  gql,
-  ProductOptionsProvider,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {ProductSwimlane} from '~/components/sections';
-import {Section, Heading, Text} from '~/components/elements';
-import {NotFound} from '~/components/pages';
-import {MEDIA_FIELDS} from '~/lib/fragments';
-import {ProductGallery, ProductForm, ProductInfo} from '~/components/sections';
+import {MEDIA_FRAGMENT} from '~/lib/fragments';
+import {
+  Heading,
+  Layout,
+  NotFound,
+  ProductForm,
+  ProductGallery,
+  ProductInfo,
+  ProductSwimlane,
+  Section,
+  Text,
+} from '~/components';
 
 export default function Product() {
   const {handle} = useRouteParams();
@@ -33,20 +40,16 @@ export default function Product() {
     preload: true,
   });
 
-  useServerAnalytics(
-    product
-      ? {
-          shopify: {
-            pageType: ShopifyAnalyticsConstants.pageType.product,
-            resourceId: product.id,
-          },
-        }
-      : null,
-  );
-
   if (!product) {
     return <NotFound type="product" />;
   }
+
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.product,
+      resourceId: product.id,
+    },
+  });
 
   return (
     <Layout>
@@ -73,14 +76,16 @@ export default function Product() {
             </section>
           </div>
         </Section>
-        <ProductSwimlane title="Related Products" data={product.id} />
+        <Suspense>
+          <ProductSwimlane title="Related Products" data={product.id} />
+        </Suspense>
       </ProductOptionsProvider>
     </Layout>
   );
 }
 
 const PRODUCT_QUERY = gql`
-  ${MEDIA_FIELDS}
+  ${MEDIA_FRAGMENT}
   query Product(
     $country: CountryCode
     $language: LanguageCode

@@ -14,12 +14,12 @@ Shopify hasn't optimized integrating with other frameworks for the developer pre
 
     {% codeblock terminal %}
 
-    ```bash?filename: 'Terminal', title: 'yarn'
-    yarn add @shopify/hydrogen next-transpile-modules
-    ```
-
     ```bash?filename: 'Terminal', title: 'npm'
     npm install @shopify/hydrogen next-transpile-modules --save
+    ```
+
+    ```bash?filename: 'Terminal', title: 'Yarn'
+    yarn add @shopify/hydrogen next-transpile-modules
     ```
 
     {% endcodeblock %}

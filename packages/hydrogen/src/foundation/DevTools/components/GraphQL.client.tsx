@@ -6,15 +6,17 @@ export function GraphQL() {
 
   useEffect(() => {
     if (import.meta.hot) {
-      import.meta.hot.on('hydrogen', ({type, data}: DevServerMessage) => {
-        if (type === 'warn') {
-          setWarnings((state) => [...(state || []), data]);
+      import.meta.hot.on(
+        'hydrogen-dev-tools',
+        ({type, data}: DevServerMessage) => {
+          if (type === 'warn') {
+            setWarnings((state) => [...(state || []), data]);
+          }
         }
-      });
+      );
     }
   }, []);
 
-  console.log(warnings);
   const warningsMarkup = warnings
     ? warnings.map((war, i) => (
         // eslint-disable-next-line react/no-array-index-key

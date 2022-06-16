@@ -18,7 +18,6 @@ import {ServerPropsProvider} from './foundation/ServerPropsProvider';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
 import {ClientAnalytics} from './foundation/Analytics/';
-import {usePerformanceMark, Stage} from '@shopify/react-performance';
 
 let rscReader: ReadableStream | null;
 
@@ -101,11 +100,14 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
   }
 
   if (import.meta.hot) {
-    import.meta.hot.on('hydrogen', ({type, data}: DevServerMessage) => {
-      if (type === 'warn') {
-        console.warn(data);
+    import.meta.hot.on(
+      'hydrogen-browser-console',
+      ({type, data}: DevServerMessage) => {
+        if (type === 'warn') {
+          console.warn(data);
+        }
       }
-    });
+    );
   }
 
   let config: ClientConfig;
@@ -125,8 +127,6 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     // Default to StrictMode on, unless explicitly turned off
     config.strictMode !== false ? StrictMode : Fragment;
 
-  let hasCaughtError = false;
-
   hydrateRoot(
     root,
     <>
@@ -137,22 +137,7 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
           </Suspense>
         </ErrorBoundary>
       </RootComponent>
-    </>,
-    {
-      onRecoverableError(e: any) {
-        if (__HYDROGEN_DEV__ && !hasCaughtError) {
-          hasCaughtError = true;
-          console.log(
-            `React encountered an error while attempting to hydrate the application. ` +
-              `This is likely due to a bug in React's Suspense behavior related to experimental server components, ` +
-              `and it is safe to ignore this error.\n` +
-              `Visit this issue to learn more: https://github.com/Shopify/hydrogen/issues/920.\n\n` +
-              `The original error is printed below:`
-          );
-          console.log(e);
-        }
-      },
-    }
+    </>
   );
 };
 
@@ -169,7 +154,6 @@ function Content({
     search: window.location.search,
   });
   const response = useServerResponse(serverProps);
-  usePerformanceMark(Stage.Complete, window.location.pathname);
 
   return (
     <ServerPropsProvider

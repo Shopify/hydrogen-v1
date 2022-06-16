@@ -1,6 +1,6 @@
 import {
   useProductOptions,
-  useParsedMetafields,
+  parseMetafield,
   ProductPrice,
   AddToCartButton,
   BuyNowButton,
@@ -110,19 +110,10 @@ function ProductPrices({product}) {
 export default function ProductDetails({product}) {
   const initialVariant = product.variants.nodes[0];
 
-  const productMetafields = useParsedMetafields(product.metafields || {});
-  const sizeChartMetafield = productMetafields.find(
-    (metafield) =>
-      metafield.namespace === 'my_fields' && metafield.key === 'size_chart',
-  );
-  const sustainableMetafield = productMetafields.find(
-    (metafield) =>
-      metafield.namespace === 'my_fields' && metafield.key === 'sustainable',
-  );
-  const lifetimeWarrantyMetafield = productMetafields.find(
-    (metafield) =>
-      metafield.namespace === 'my_fields' &&
-      metafield.key === 'lifetime_warranty',
+  const sizeChartMetafield = parseMetafield(product.meta_size_chart);
+  const sustainableMetafield = parseMetafield(product.meta_sustainable);
+  const lifetimeWarrantyMetafield = parseMetafield(
+    product.meta_lifetime_warranty,
   );
 
   return (
@@ -133,7 +124,10 @@ export default function ProductDetails({product}) {
       >
         <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-x-8 my-16">
           <div className="md:hidden mt-5 mb-8">
-            <h1 className="text-4xl font-bold text-black mb-4">
+            <h1
+              className="text-4xl font-bold text-black mb-4"
+              data-test-id={product.id}
+            >
               {product.title}
             </h1>
             {product.vendor && (
@@ -151,7 +145,10 @@ export default function ProductDetails({product}) {
 
           <div>
             <div className="hidden md:block">
-              <h1 className="text-5xl font-bold text-black mb-4">
+              <h1
+                className="text-5xl font-bold text-black mb-4"
+                data-test-id={product.id}
+              >
                 {product.title}
               </h1>
               {product.vendor && (

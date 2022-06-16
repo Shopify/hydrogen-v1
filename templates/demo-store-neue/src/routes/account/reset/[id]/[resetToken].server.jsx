@@ -1,7 +1,6 @@
 import {useRouteParams, Seo} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {PasswordResetForm} from '~/components/sections';
+import {Layout, AccountPasswordResetForm} from '~/components';
 
 /**
  * This page shows a form for the user to enter a new password.
@@ -14,7 +13,7 @@ export default function ResetPassword() {
   return (
     <Layout>
       <Seo type="noindex" data={{title: 'Reset password'}} />
-      <PasswordResetForm id={id} resetToken={resetToken} />
+      <AccountPasswordResetForm id={id} resetToken={resetToken} />
     </Layout>
   );
 }
