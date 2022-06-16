@@ -123,6 +123,8 @@ function cachedQueryFnBuilder<T>(
        */
       if (isStale(key, response)) {
         const lockKey = ['lock', ...(typeof key === 'string' ? [key] : key)];
+
+        // Run revalidation asynchronously
         const revalidatingPromise = getItemFromCache(lockKey).then(
           async (lockExists) => {
             if (lockExists) return;
@@ -162,12 +164,12 @@ function cachedQueryFnBuilder<T>(
      * Important: Do this async
      */
     if (shouldCacheResponse(newOutput)) {
-      const cacheSetPromise = setItemInCache(
+      const setItemInCachePromise = setItemInCache(
         key,
         newOutput,
         resolvedQueryOptions?.cache
       );
-      request.ctx.runtime?.waitUntil?.(cacheSetPromise);
+      request.ctx.runtime?.waitUntil?.(setItemInCachePromise);
     }
 
     collectQueryCacheControlHeaders(
