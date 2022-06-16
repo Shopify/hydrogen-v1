@@ -60,17 +60,6 @@ If you don't want to build with Tailwind's library and instead want to write you
 
     {% codeblock terminal %}
 
-    ```bash?filename: 'Terminal', title: 'yarn'
-    // Switch to your app's directory
-    cd <directory>
-
-    // Install dependencies
-    yarn
-
-    // Start the development server
-    yarn dev
-    ```
-
     ```bash?filename: 'Terminal', title: 'npm'
     // Switch to your app's directory
     cd <directory>
@@ -80,6 +69,17 @@ If you don't want to build with Tailwind's library and instead want to write you
 
     // Start the development server
     npm run dev
+    ```
+
+    ```bash?filename: 'Terminal', title: 'Yarn'
+    // Switch to your app's directory
+    cd <directory>
+
+    // Install dependencies
+    yarn
+
+    // Start the development server
+    yarn dev
     ```
 
     {% endcodeblock %}

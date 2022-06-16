@@ -12,12 +12,12 @@ To install third party dependencies, run the following command:
 
 {% codeblock terminal %}
 
-```bash?title: 'yarn'
-yarn add <dependency>
-```
-
 ```bash?title: 'npm'
 npm install <dependency>
+```
+
+```bash?title: 'Yarn'
+yarn add <dependency>
 ```
 
 {% endcodeblock %}
