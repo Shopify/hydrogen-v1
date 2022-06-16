@@ -97,13 +97,13 @@ export function MyComponent() {
 | data     | <code>PartialDeep&#60;MediaEdgeType['node']&#62;</code>                                                                                                                                                                        | An object with fields that correspond to the Storefront API's [Media object](https://shopify.dev/api/storefront/reference/products/media). |
 | options? | <code>React.ComponentProps&#60;typeof Video&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof ExternalVideo&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof Image&#62;['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components.                                                                       |
 
-## Required Fields
+## Required fields
 
 The `MediaFile` component requires the following fields from the the Storefront API's
 [Media object](https://shopify.dev/api/storefront/reference/products/media), as well as additional fields depending on the type of media. See [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image),
-[`Video`](https://shopify.dev/api/hydrogen/components/primitive/video), [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo), and [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer).
+[`Video`](https://shopify.dev/api/hydrogen/components/primitive/video), [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo), and [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer) for additional required fields.
 
-```
+```graphql
 {
   mediaContentType
 }

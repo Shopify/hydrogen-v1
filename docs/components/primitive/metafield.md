@@ -53,12 +53,12 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 | `variant_reference`      | A `span` containing the variant reference GID.                                                                                                                                                            |
 | `url`                    | An `a` tag with the `href` corresponding to the URL and the label corresponding to the URL.                                                                                                               |
 
-## Required Fields
+## Required fields
 
 The `Metafield` component requires the following fields from the the Storefront API's
 [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
 
-```
+```graphql
 {
   type
   value

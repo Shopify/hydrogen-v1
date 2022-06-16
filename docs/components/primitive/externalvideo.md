@@ -55,11 +55,11 @@ export default function MyProductVideo() {
 | data     | <code>PartialDeep&#60;ExternalVideoType&#62;</code> | An object with fields that correspond to the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).                                                                        |
 | options? | <code>YouTube &#124; Vimeo</code>                   | An object containing the options available for either [YouTube](https://developers.google.com/youtube/player_parameters#Parameters) or [Vimeo](https://vimeo.zendesk.com/hc/en-us/articles/360001494447-Using-Player-Parameters). |
 
-## Required Fields
+## Required fields
 
 The `ExternalVideo` component requires the following fields from the the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
 
-```
+```graphql
 {
   embedUrl
 }

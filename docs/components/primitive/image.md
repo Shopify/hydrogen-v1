@@ -78,12 +78,12 @@ export default function ExternalImageWithLoader() {
 | loaderOptions? | <code>ShopifyLoaderOptions &#124; LoaderOptions</code>       | An object of `loader` function options. For example, if the `loader` function requires a `scale` option, then the value can be a property of the `loaderOptions` object (for example, `{scale: 2}`). When the `data` prop is used, the object shape will be `ShopifyLoaderOptions`. When the `src` prop is used, the data shape is whatever you define it to be, and this shape will be passed to `loader`. |
 | widths?         | <code>(number &#124; string)[]</code>                              | An array of pixel widths to overwrite the default generated srcset. For example, `[300, 600, 800]`. It only applies to images from Shopify CDN.   
 
-## Required Fields
+## Required fields
 
 The `Image` component requires the following fields from the the Storefront API's
 [Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
 
-```
+```graphql
 {
   url
   altText

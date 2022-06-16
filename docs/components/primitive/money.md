@@ -89,12 +89,12 @@ export default function Product() {
 | measurement? | <code>PartialDeep&#60;UnitPriceMeasurement&#62;</code> | A [UnitPriceMeasurement object](https://shopify.dev/api/storefront/latest/objects/unitpricemeasurement). |
 | measurementSeparator? | <code>ReactNode</code> | Customizes the separator between the money output and the measurement output. Used with the `measurement` prop. Defaults to `'/'`. |
 
-## Required Fields
+## Required fields
 
 The `Money` component requires the following fields from the the Storefront API's
 [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2).
 
-```
+```graphql
 {
   amount
   currencyCode
