@@ -3,12 +3,12 @@ import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
 
 import {Text} from '~/components';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
-import {product as mockProduct} from '~/lib/placeholders';
+import {withPlaceholder} from '~/lib/placeholders';
 
 export function ProductCard({product, label, className, loading}) {
   let cardLabel;
 
-  const cardData = product?.variants ? product : mockProduct;
+  const cardData = product?.variants ? product : withPlaceholder('PRODUCT');
 
   const {
     image,
