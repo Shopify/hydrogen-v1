@@ -57,9 +57,6 @@ export function Layout({children}) {
             Skip to content
           </a>
         </div>
-        {/* <div className="px-4 py-2 bg-primary text-contrast md:py-4 md:px-8 lg:px-16">
-          <Text>Wrong Country Banner</Text>
-        </div> */}
         <Header title={shopName} menu={headerMenu} />
         <main role="main" id="mainContent" className="flex-grow">
           {children}
