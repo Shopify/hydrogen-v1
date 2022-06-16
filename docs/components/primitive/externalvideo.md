@@ -57,7 +57,7 @@ export default function MyProductVideo() {
 
 ## Required fields
 
-The `ExternalVideo` component requires the following fields from the the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
+The `ExternalVideo` component requires the following fields from the Storefront API's [ExternalVideo object](https://shopify.dev/api/storefront/reference/products/externalvideo).
 
 ```graphql
 {
