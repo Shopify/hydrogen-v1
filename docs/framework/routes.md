@@ -56,7 +56,7 @@ The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` t
 
 {% endcodeblock %}
 
-The `handle` property is available from the hook `useRouteParams()`:
+You can retrieve the `handle` property by using the [`useRouteParams` hook](https://shopify.dev/api/hydrogen/hooks/framework/userouteparams):
 
 {% codeblock file, filename: '[handle].server.jsx' %}
 
@@ -435,6 +435,8 @@ export async function api(request: HydrogenRequest, options: HydrogenApiRouteOpt
 
 {% endcodeblock %}
 
+> Tip:
+> The Hello World template is available in [TypeScript](https://shopify.dev/custom-storefronts/hydrogen/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.
 ## Related components and hooks
 
 - [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
