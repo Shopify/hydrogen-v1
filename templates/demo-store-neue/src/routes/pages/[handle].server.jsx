@@ -34,7 +34,7 @@ export default function Page({params}) {
   return (
     <Layout>
       <Seo type="page" data={page} />
-      <PageHeader heading={page.title} variant="page">
+      <PageHeader heading={page.title}>
         <div
           dangerouslySetInnerHTML={{__html: page.body}}
           className="prose dark:prose-invert"
