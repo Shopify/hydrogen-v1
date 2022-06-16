@@ -1,4 +1,5 @@
 import {useEffect, useCallback, useState} from 'react';
+
 import {
   useProductOptions,
   isBrowser,
@@ -8,7 +9,7 @@ import {
   Money,
 } from '@shopify/hydrogen';
 
-import {Heading, Text, Button} from '~/components';
+import {Heading, Text, Button, ProductOptions} from '~/components';
 
 export function ProductForm() {
   const {pathname, search} = useUrl();
@@ -20,27 +21,31 @@ export function ProductForm() {
   const isOutOfStock = !selectedVariant?.availableForSale || false;
 
   useEffect(() => {
+    if (params || !search) return;
+    setParams(new URLSearchParams(search));
+  }, [params, search]);
+
+  useEffect(() => {
     options.map(({name, values}) => {
-      if (params) {
-        const currentValue = params.get(name.toLowerCase()) || null;
-        if (currentValue) {
-          const matchedValue = values.filter(
-            (value) => encodeURIComponent(value.toLowerCase()) === currentValue,
-          );
-          setSelectedOption(name, matchedValue[0]);
-        } else {
-          setParams(
-            params.set(
-              encodeURIComponent(name.toLowerCase()),
-              encodeURIComponent(selectedOptions[name].toLowerCase()),
-            ),
-          );
-          window.history.replaceState(
-            null,
-            '',
-            `${pathname}?${params.toString()}`,
-          );
-        }
+      if (!params) return;
+      const currentValue = params.get(name.toLowerCase()) || null;
+      if (currentValue) {
+        const matchedValue = values.filter(
+          (value) => encodeURIComponent(value.toLowerCase()) === currentValue,
+        );
+        setSelectedOption(name, matchedValue[0]);
+      } else {
+        setParams(
+          params.set(
+            encodeURIComponent(name.toLowerCase()),
+            encodeURIComponent(selectedOptions[name].toLowerCase()),
+          ),
+        );
+        window.history.replaceState(
+          null,
+          '',
+          `${pathname}?${params.toString()}`,
+        );
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,6 +54,7 @@ export function ProductForm() {
   const handleChange = useCallback(
     (name, value) => {
       setSelectedOption(name, value);
+      if (!params) return;
       params.set(
         encodeURIComponent(name.toLowerCase()),
         encodeURIComponent(value.toLowerCase()),
@@ -75,13 +81,13 @@ export function ProductForm() {
             return (
               <div
                 key={name}
-                className="flex flex-wrap items-baseline justify-start gap-6"
+                className="flex flex-wrap flex-col gap-y-2 mb-4 last:mb-0"
               >
                 <Heading as="legend" size="lead" className="min-w-[4rem]">
                   {name}
                 </Heading>
                 <div className="flex flex-wrap items-baseline gap-4">
-                  <OptionRadio
+                  <ProductOptions
                     name={name}
                     handleChange={handleChange}
                     values={values}
@@ -122,39 +128,5 @@ export function ProductForm() {
         )}
       </div>
     </form>
-  );
-}
-
-function OptionRadio({values, name, handleChange}) {
-  const {selectedOptions} = useProductOptions();
-
-  return (
-    <>
-      {values.map((value) => {
-        const checked = selectedOptions[name] === value;
-        const id = `option-${name}-${value}`;
-
-        return (
-          <Text as="label" key={id} htmlFor={id}>
-            <input
-              className="sr-only"
-              type="radio"
-              id={id}
-              name={`option[${name}]`}
-              value={value}
-              checked={checked}
-              onChange={() => handleChange(name, value)}
-            />
-            <div
-              className={`leading-none py-1 border-b-[1.5px] cursor-pointer transition-all duration-200 ${
-                checked ? 'border-primary/50' : 'border-primary/0'
-              }`}
-            >
-              {value}
-            </div>
-          </Text>
-        );
-      })}
-    </>
   );
 }
