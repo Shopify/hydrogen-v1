@@ -25,6 +25,7 @@ export function Footer({menu = mockData}) {
       role="contentinfo"
       className={styles.footer}
     >
+      {/* TODO: Fix mock data */}
       {(menu?.items || []).map((item) => (
         <section key={item.id} className={styles.section}>
           <Disclosure>
