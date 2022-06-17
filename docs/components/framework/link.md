@@ -47,7 +47,7 @@ export default function Index({request}) {
 
 ## Base path
 
-The `<Link>` component automatically prepends a `basePath` to the destination URL. That `basePath` is inherrited from the [`<FileRoutes>` component](https://shopify.dev/api/hydrogen/components/framework/fileroutes) it is rendered within. You can override this default behavior by passing a custom `basePath` prop to the `<Link>` component.
+The `<Link>` component automatically prepends a `basePath` to the destination URL. That `basePath` is inherited from the [`<FileRoutes>` component](https://shopify.dev/api/hydrogen/components/framework/fileroutes) it is rendered within. You can override this default behavior by passing a custom `basePath` prop to the `<Link>` component.
 
 ## Props
 
