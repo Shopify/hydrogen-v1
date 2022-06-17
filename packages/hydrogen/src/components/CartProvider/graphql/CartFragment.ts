@@ -33,12 +33,12 @@ export type CartFragmentFragment = {__typename?: 'Cart'} & Pick<
                   'key' | 'value'
                 >
               >;
-              estimatedCost: {__typename?: 'CartLineEstimatedCost'} & {
+              cost: {__typename?: 'CartLineCost'} & {
                 totalAmount: {__typename?: 'MoneyV2'} & Pick<
                   Types.MoneyV2,
                   'amount' | 'currencyCode'
                 >;
-                compareAtAmount?: Types.Maybe<
+                compareAtAmountPerQuantity?: Types.Maybe<
                   {__typename?: 'MoneyV2'} & Pick<
                     Types.MoneyV2,
                     'amount' | 'currencyCode'
@@ -80,7 +80,7 @@ export type CartFragmentFragment = {__typename?: 'Cart'} & Pick<
         }
       >;
     };
-    estimatedCost: {__typename?: 'CartEstimatedCost'} & {
+    cost: {__typename?: 'CartCost'} & {
       subtotalAmount: {__typename?: 'MoneyV2'} & Pick<
         Types.MoneyV2,
         'currencyCode' | 'amount'

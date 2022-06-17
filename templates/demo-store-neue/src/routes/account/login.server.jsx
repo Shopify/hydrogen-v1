@@ -1,7 +1,6 @@
 import {useShopQuery, CacheLong, CacheNone, Seo, gql} from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {LoginForm} from '~/components/sections';
+import {Layout, AccountLoginForm} from '~/components';
 
 export default function Login({response}) {
   response.cache(CacheNone());
@@ -19,7 +18,7 @@ export default function Login({response}) {
   return (
     <Layout>
       <Seo type="noindex" data={{title: 'Login'}} />
-      <LoginForm shopName={name} />
+      <AccountLoginForm shopName={name} />
     </Layout>
   );
 }

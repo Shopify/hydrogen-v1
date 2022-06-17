@@ -7,35 +7,29 @@ import {
   gql,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {PageHeader} from '~/components/elements';
-import {NotFound} from '~/components/pages';
+import {Layout, NotFound, PageHeader} from '~/components';
 
 export default function Page({params}) {
   const {languageCode} = useShop();
 
   const {handle} = params;
-  const {data} = useShopQuery({
+  const {
+    data: {page},
+  } = useShopQuery({
     query: PAGE_QUERY,
     variables: {languageCode, handle},
   });
 
-  useServerAnalytics(
-    data.page
-      ? {
-          shopify: {
-            pageType: ShopifyAnalyticsConstants.pageType.page,
-            resourceId: data.page.id,
-          },
-        }
-      : null,
-  );
-
-  if (!data.page) {
+  if (!page) {
     return <NotFound />;
   }
 
-  const page = data.page;
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.page,
+      resourceId: page.id,
+    },
+  });
 
   return (
     <Layout>

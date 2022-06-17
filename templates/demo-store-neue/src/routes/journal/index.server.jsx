@@ -1,16 +1,15 @@
 import {
-  useShop,
-  useShopQuery,
-  Seo,
-  gql,
   CacheLong,
   flattenConnection,
+  gql,
   Head,
+  Seo,
+  useShop,
+  useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {ArticleCard} from '~/components/blocks';
-import {Grid, PageHeader} from '~/components/elements';
+import {Layout, ArticleCard, Grid, PageHeader} from '~/components';
+import {getImageLoadingPriority} from '~/lib/const';
 
 const BLOG_HANDLE = 'Journal';
 
@@ -52,12 +51,13 @@ export default function Blog({pageBy = 12, response}) {
       <PageHeader heading={BLOG_HANDLE} className="gap-0">
         {haveArticles ? (
           <Grid as="ol" layout="blog" gap="blog">
-            {articles.map((article) => {
+            {articles.map((article, i) => {
               return (
                 <ArticleCard
                   blogHandle={BLOG_HANDLE.toLowerCase()}
                   article={article}
                   key={article.id}
+                  loading={getImageLoadingPriority(i, 2)}
                 />
               );
             })}

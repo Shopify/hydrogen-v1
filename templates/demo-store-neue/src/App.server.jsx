@@ -1,30 +1,37 @@
 import {Suspense} from 'react';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
-  Route,
-  Router,
   FileRoutes,
-  ShopifyProvider,
-  CartProvider,
-  ShopifyAnalytics,
   PerformanceMetrics,
   PerformanceMetricsDebug,
+  Route,
+  Router,
+  ShopifyAnalytics,
+  ShopifyProvider,
 } from '@shopify/hydrogen';
 
-import {DefaultSeo} from './components/blocks'; // TODO: find a better place for this
-import {NotFound} from '~/components/pages';
+import {
+  DefaultSeo,
+  CartProviderWithSession,
+  NotFound,
+  HeaderFallback,
+} from '~/components';
 
-function App({routes}) {
+function App({routes, request}) {
+  const isHome = new URL(request.normalizedUrl).pathname === '/';
+
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<HeaderFallback isHome={isHome} />}>
       <ShopifyProvider>
-        <CartProvider>
-          <DefaultSeo />
+        <CartProviderWithSession>
+          <Suspense>
+            <DefaultSeo />
+          </Suspense>
           <Router>
             <FileRoutes routes={routes} />
             <Route path="*" page={<NotFound />} />
           </Router>
-        </CartProvider>
+        </CartProviderWithSession>
         <PerformanceMetrics />
         {import.meta.env.DEV && <PerformanceMetricsDebug />}
         <ShopifyAnalytics />

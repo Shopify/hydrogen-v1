@@ -30,12 +30,12 @@ Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrog
 
     {% codeblock terminal %}
 
-    ```bash?title: 'yarn'
-    yarn add body-parser compression serve-static
-    ```
-
     ```bash?title: 'npm'
     npm install body-parser compression serve-static
+    ```
+
+    ```bash?title: 'Yarn'
+    yarn add body-parser compression serve-static
     ```
 
     {% endcodeblock %}
@@ -112,7 +112,7 @@ If you want to use a different Node.js framework like [Express](https://expressj
       hydrogenMiddleware({
         getServerEntrypoint: () => import('./src/App.server'),
         indexTemplate: () => import('./dist/client/index.html?raw'),
-        // Optional: Provide a strategy for caching in production
+        // Optional: Provide a custom strategy for caching in production. Defaults to in-memory.
         cache: customCacheImplementation,
       })
     );
@@ -139,7 +139,7 @@ If you want to use a different Node.js framework like [Express](https://expressj
 
     {% codeblock terminal %}
 
-    ```bash?title: 'yarn'
+    ```bash?title: 'Yarn'
     yarn preview --target node
     ```
 

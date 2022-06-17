@@ -15,7 +15,7 @@ The component provides a [default output](https://shopify.dev/api/hydrogen/compo
 import {Metafield} from '@shopify/hydrogen';
 
 export function Product({product}) {
-  const metafield = product.metafields.edges.map(({node}) => node)[0];
+  const metafield = product.metafield;
 
   return <Metafield data={metafield} />;
 }
@@ -25,7 +25,7 @@ export function Product({product}) {
 
 | Name | Type                         | Description                                                                                                                                                  |
 | ---- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| data | <code>ParsedMetafield</code> | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).     |
+| data | <code>PartialDeep<<wbr>Metafield<wbr>> &#124; null</code> | An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).     |
 | as?  | <code>TTag</code>            | An HTML tag to be rendered as the base element wrapper. The default value varies depending on [`metafield.type`](https://shopify.dev/apps/metafields/types). |
 
 ## Default output
@@ -34,8 +34,8 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 
 | Metafield `type`         | Output                                                                                                                                                                                                    |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `date`                   | A `span` containing the date from [`toLocaleDateString`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString) with the shop's locale.                |
-| `date_time`              | A `span` containing the date from [`toLocaleString`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) with the shop's locale.                        |
+| `date`                   | A `time` containing the date from [`toLocaleDateString`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString) with the shop's locale.                |
+| `date_time`              | A `time` containing the date from [`toLocaleString`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) with the shop's locale.                        |
 | `boolean`                | A `span` containing "true" or "false" as a string.                                                                                                                                                        |
 | `number_integer`         | A `span` containing the integer.                                                                                                                                                                          |
 | `number_decimal`         | A `span` containing the number.                                                                                                                                                                           |
@@ -46,11 +46,11 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 | `rating`                 | A `span` containing a string of the rating value.                                                                                                                                                         |
 | `color`                  | A `span` containing the color value as a string.                                                                                                                                                          |
 | `single_line_text_field` | A `span` component with the text.                                                                                                                                                                         |
-| `multi_line_text_field`  | A `div` component with the text, and `as="span"`.                                                                                                                                                         |
-| `product_reference`      | A `span` containing the product reference GID.                                                                                                                                                            |
-| `file_reference`         | An `Image` component when the file reference is of type `MediaImage`, a `Video` component when the file reference is of type `Video`, or a `span` containing the file reference GID for other file types. |
-| `page_reference`         | A `span` containing the page reference GID.                                                                                                                                                               |
-| `variant_reference`      | A `span` containing the variant reference GID.                                                                                                                                                            |
+| `multi_line_text_field`  | A `div` component with the lines of text separated by a `<br/>`.                                                                                                                                                         |
+| `product_reference`      | A `span` containing the product reference title. If the title doesn't exist, then the GID is displayed.                                                                                                                                                           |
+| `file_reference`         | An `Image` component when the file reference is of type `MediaImage`, a `Video` component when the file reference is of type `Video`, an `<a>` linking to the file with a preview image when the file reference is of type `GenericFile`, or a `span` containing the file reference GID when the file is of another type. |
+| `page_reference`         | A `span` containing the product reference title. If the title doesn't exist, then the GID is displayed.                                                                                                                                                               |
+| `variant_reference`      | A `span` containing the product reference title. If the title doesn't exist, then the GID is displayed.                                                                                                                                                            |
 | `url`                    | An `a` tag with the `href` corresponding to the URL and the label corresponding to the URL.                                                                                                               |
 
 ## Required fields
@@ -88,3 +88,8 @@ The [Metafield object](https://shopify.dev/api/storefront/reference/common-objec
 | Variable                            | Description                                                                                                                                                                        |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `$includeReferenceMetafieldDetails` | A boolean indicating if the reference type should be queried. Only applicable to `file_reference`, `product_reference`, `variant_reference`, and `page_reference` metafield types. |
+
+## Related utilities
+
+- [`parseMetafield`](https://shopify.dev/api/hydrogen/utilities/parsemetafield)
+- [`parseMetafieldValue`](https://shopify.dev/api/hydrogen/utilities/parsemetafieldvalue)

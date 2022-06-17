@@ -4,10 +4,17 @@ title: Image
 description: The Image component renders an image for the Storefront API's Image object.
 ---
 
-The `Image` component renders an image for the Storefront API's
-[Image object](https://shopify.dev/api/storefront/reference/common-objects/image). 
+The `Image` component renders an image for the Storefront API's [Image object](https://shopify.dev/api/storefront/reference/common-objects/image) by using the `data` prop, or a custom location by using the `src` prop.
 
 The component outputs an `<img>` element. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
+
+An image's width and height are determined using the following priority list:
+
+1. The width and height values for the `loaderOptions` prop
+2. The width and height values for bare props
+3. The width and height values for the `data` prop
+
+If only one of `width` or `height` are defined, then the other will attempt to be calculated based on the image's aspect ratio, provided that both `data.width` and `data.height` are available. If `data.width` and `data.height` aren't available, then the aspect ratio can't be determined and the missing value will be `null`.
 
 ## Example code
 

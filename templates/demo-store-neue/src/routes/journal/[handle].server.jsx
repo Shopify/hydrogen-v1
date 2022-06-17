@@ -7,8 +7,8 @@ import {
   CacheLong,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {CustomFont} from '~/components/blocks';
+import {Layout, CustomFont} from '~/components';
+import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 const BLOG_HANDLE = 'journal';
 
@@ -46,6 +46,7 @@ export default function Post({params, response}) {
         <Image
           data={data.blog.articleByHandle.image}
           className="mt-8 md:mt-16"
+          loading={ATTR_LOADING_EAGER}
         />
         <div
           dangerouslySetInnerHTML={{__html: contentHtml}}

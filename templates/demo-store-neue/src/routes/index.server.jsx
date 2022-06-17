@@ -10,14 +10,9 @@ import {
   useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {
-  FeaturedCollections,
-  Hero,
-  ProductSwimlane,
-} from '~/components/sections';
+import {Layout, FeaturedCollections, Hero, ProductSwimlane} from '~/components';
 
-import {MEDIA_FIELDS, PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 
 export default function Homepage() {
   const {languageCode} = useShop();
@@ -32,10 +27,12 @@ export default function Homepage() {
     preload: true,
   });
 
-  // TODO: Make Hero Banners match to collections if these don't
-  // const heroBanners = data?.heroBanners?.nodes;
-
   const {heroBanners, featuredCollections, featuredProducts} = data;
+  const [primaryHero, secondaryHero, tertiaryHero] = heroBanners.nodes || [
+    null,
+    null,
+    null,
+  ];
 
   useServerAnalytics({
     shopify: {
@@ -48,19 +45,20 @@ export default function Homepage() {
       <Suspense fallback={null}>
         <SeoForHomepage />
       </Suspense>
-      {heroBanners?.nodes[0] && (
-        <Hero data={heroBanners?.nodes[0]} height="full" top />
+      {primaryHero && (
+        <Hero {...primaryHero} height="full" top loading="eager" />
       )}
       <ProductSwimlane
         data={featuredProducts.nodes}
         title="Featured Products"
         divider="bottom"
       />
-      {heroBanners?.nodes[1] && <Hero data={heroBanners.nodes[1]} />}
+      {secondaryHero && <Hero {...secondaryHero} />}
       <FeaturedCollections
         data={featuredCollections.nodes}
         title="Collections"
       />
+      {tertiaryHero && <Hero {...tertiaryHero} />}
     </Layout>
   );
 }
@@ -76,7 +74,8 @@ function SeoForHomepage() {
     preload: true,
   });
 
-  // TODO: SEO for Homepage doesn't have the titleTemplate prop and so it presents poorly. The SEO Component as a whole should get another look at.
+  // TODO: SEO for Homepage doesn't have the titleTemplate prop and so it presents poorly.
+  // The SEO Component as a whole should get another look at.
   return (
     <Seo
       type="homepage"
@@ -97,12 +96,12 @@ const HOMEPAGE_SEO_QUERY = gql`
 `;
 
 const HOMEPAGE_CONTENT_QUERY = gql`
-  ${MEDIA_FIELDS}
-  ${PRODUCT_CARD_FIELDS}
+  ${MEDIA_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
   query homepage($country: CountryCode, $language: LanguageCode)
   @inContext(country: $country, language: $language) {
     heroBanners: collections(
-      first: 10
+      first: 3
       query: "collection_type:custom"
       sortKey: UPDATED_AT
     ) {
@@ -123,16 +122,10 @@ const HOMEPAGE_CONTENT_QUERY = gql`
             ...MediaFields
           }
         }
-        spread_secondary: metafield(
-          namespace: "hero"
-          key: "spread_secondary"
-        ) {
+        spreadSecondary: metafield(namespace: "hero", key: "spread_secondary") {
           reference {
             ...MediaFields
           }
-        }
-        text_color: metafield(namespace: "hero", key: "text_color") {
-          value
         }
       }
     }

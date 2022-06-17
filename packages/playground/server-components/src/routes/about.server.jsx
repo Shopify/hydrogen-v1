@@ -1,4 +1,4 @@
-import Counter from '../components/Counter.client';
+import {ClientCounter as Counter} from '../components/index3';
 
 export default function About() {
   return (

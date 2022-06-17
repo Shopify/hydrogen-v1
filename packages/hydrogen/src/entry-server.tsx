@@ -15,7 +15,7 @@ import type {
   ResolvedHydrogenRoutes,
   RequestHandler,
 } from './types';
-import type {RuntimeContext, RequestHandlerOptions} from './shared-types';
+import type {RequestHandlerOptions} from './shared-types';
 import {Html, applyHtmlHead} from './foundation/Html/Html';
 import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
 import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
@@ -110,15 +110,6 @@ export const renderHydrogen = (App: any) => {
      * Inject the cache & context into the module loader so we can pull it out for subrequests.
      */
     request.ctx.runtime = context;
-    if (!context?.waitUntil) {
-      const runtimeContext: RuntimeContext = {
-        waitUntil: (fn: Promise<any>) => {
-          setTimeout(() => fn, 0);
-        },
-      };
-
-      request.ctx.runtime = runtimeContext;
-    }
 
     setCache(cache);
 
@@ -150,9 +141,9 @@ export const renderHydrogen = (App: any) => {
       if (cachedResponse) {
         if (isStale(request, cachedResponse)) {
           const lockCacheKey = request.cacheKey(true);
-          const staleWhileRevalidate = async (
-            lockExists: Response | undefined
-          ) => {
+          const staleWhileRevalidatePromise = getItemFromCache(
+            lockCacheKey
+          ).then(async (lockExists: Response | undefined) => {
             if (lockExists) return;
             try {
               // Don't stream when creating a response for cache
@@ -179,15 +170,11 @@ export const renderHydrogen = (App: any) => {
               );
             } catch (e: any) {
               log.error('Cache revalidate error', e);
-            } finally {
-              await deleteItemFromCache(lockCacheKey);
             }
-          };
-          const revalidatingPromise =
-            getItemFromCache(lockCacheKey).then(staleWhileRevalidate);
+          });
 
           // Asynchronously wait for it in workers
-          request.ctx.runtime?.waitUntil(revalidatingPromise);
+          request.ctx.runtime?.waitUntil(staleWhileRevalidatePromise);
         }
 
         return cachedResponse;
@@ -408,10 +395,10 @@ async function runSSR({
         bootstrapScripts,
         bootstrapModules,
         onError(error) {
-          ssrDidError = error;
+          ssrDidError = error as Error;
 
           if (dev && !writable.closed && !!responseOptions.status) {
-            writable.write(getErrorMarkup(error));
+            writable.write(getErrorMarkup(error as Error));
           }
 
           log.error(error);
@@ -531,6 +518,10 @@ async function runSSR({
   } else if (nodeResponse) {
     const savedChunks = tagOnWrite(nodeResponse);
 
+    nodeResponse.on('finish', () => {
+      cacheResponse(response, request, savedChunks, revalidate);
+    });
+
     const {pipe} = ssrRenderToPipeableStream(AppSSR, {
       nonce,
       bootstrapScripts,
@@ -572,7 +563,6 @@ async function runSSR({
           (response.canStream() || nodeResponse.writableEnded)
         ) {
           postRequestTasks('str', nodeResponse.statusCode, request, response);
-          cacheResponse(response, request, savedChunks, revalidate);
           return;
         }
 
@@ -602,7 +592,6 @@ async function runSSR({
           if (!error) {
             html = assembleHtml({ssrHtml, rscPayload, request, template});
             postRequestTasks('ssr', nodeResponse.statusCode, request, response);
-            cacheResponse(response, request, [html], revalidate);
           }
 
           nodeResponse.write(html);
@@ -651,7 +640,7 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
-        {request.ctx.hydrogenConfig?.devTools && (
+        {request.ctx.hydrogenConfig?.__EXPERIMENTAL__devTools && (
           <Suspense fallback={null}>
             <DevTools />
           </Suspense>
@@ -881,11 +870,10 @@ async function cacheResponse(
     if (revalidate) {
       await saveCacheResponse(response, request, chunks);
     } else {
-      request.ctx.runtime?.waitUntil(
-        Promise.resolve(true).then(() =>
-          saveCacheResponse(response, request, chunks)
-        )
+      const cachePutPromise = Promise.resolve(true).then(() =>
+        saveCacheResponse(response, request, chunks)
       );
+      request.ctx.runtime?.waitUntil(cachePutPromise);
     }
   }
 }
@@ -928,5 +916,6 @@ async function saveCacheResponse(
       }),
       response.cache()
     );
+    deleteItemFromCache(request.cacheKey(true));
   }
 }

@@ -1,27 +1,33 @@
 import {
+  gql,
+  Seo,
+  ShopifyAnalyticsConstants,
+  useServerAnalytics,
   useSession,
   useShop,
   useShopQuery,
-  Seo,
-  useServerAnalytics,
-  ShopifyAnalyticsConstants,
-  gql,
 } from '@shopify/hydrogen';
 
-import {Layout} from '~/components/layouts';
-import {NotFound} from '~/components/pages';
-import {PageHeader, Text, Section} from '~/components/elements';
-import {ProductGrid} from '~/components/sections';
-import {PRODUCT_CARD_FIELDS} from '~/lib/fragments';
+import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {
+  Layout,
+  NotFound,
+  PageHeader,
+  ProductGrid,
+  Section,
+  Text,
+} from '~/components';
 
-const pageBy = 12;
+const pageBy = 4;
 
 export default function Collection({params}) {
   const {handle} = params;
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
-  const {data} = useShopQuery({
+  const {
+    data: {collection},
+  } = useShopQuery({
     query: COLLECTION_QUERY,
     variables: {
       handle,
@@ -32,23 +38,16 @@ export default function Collection({params}) {
     preload: true,
   });
 
-  useServerAnalytics(
-    data?.collection
-      ? {
-          shopify: {
-            pageType: ShopifyAnalyticsConstants.pageType.collection,
-            resourceId: data.collection.id,
-          },
-        }
-      : null,
-  );
-
-  if (data?.collection == null) {
+  if (!collection) {
     return <NotFound type="collection" />;
   }
 
-  const collection = data.collection;
-  const products = data.collection.products.nodes;
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.collection,
+      resourceId: collection.id,
+    },
+  });
 
   return (
     <Layout>
@@ -60,23 +59,16 @@ export default function Collection({params}) {
               {collection.description}
             </Text>
           </div>
-          <div className="flex items-baseline justify-end gap-4 md:gap-6 lg:gap-8">
-            {/* TODO: This will only get the amount on the page, not the total amount. I don't think you actually can grab the total number of products in a collection today. */}
-            <Text>{products.length}</Text>
-            {/* TODO: Convert to Filter dropdown */}
-            <button className="inline-block pb-px leading-none border-b border-primary">
-              Filters
-            </button>
-          </div>
         </div>
       </PageHeader>
       <Section>
-        <ProductGrid data={data} />
+        <ProductGrid collection={collection} />
       </Section>
     </Layout>
   );
 }
 
+// pagination api
 export async function api(request, {params, queryShop}) {
   if (request.method !== 'POST') {
     return new Response(405, {Allow: 'POST'});
@@ -96,7 +88,7 @@ export async function api(request, {params, queryShop}) {
 }
 
 const PAGINATE_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query CollectionPage($handle: String!, $pageBy: Int!, $cursor: String) {
     collection(handle: $handle) {
       products(first: $pageBy, after: $cursor) {
@@ -113,7 +105,7 @@ const PAGINATE_QUERY = gql`
 `;
 
 const COLLECTION_QUERY = gql`
-  ${PRODUCT_CARD_FIELDS}
+  ${PRODUCT_CARD_FRAGMENT}
   query CollectionDetails(
     $handle: String!
     $country: CountryCode

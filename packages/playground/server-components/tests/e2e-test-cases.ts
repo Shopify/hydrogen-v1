@@ -16,10 +16,10 @@ export default async function testCases({
   isBuild,
   isWorker,
 }: TestOptions) {
+  let page;
   beforeEach(async () => {
-    await page.close();
-    //@ts-ignore
-    global.page = await global.browser.newPage();
+    page && (await page.close());
+    page = await global.browser.newPage();
   });
 
   it('shows the homepage, navigates to about, and increases the count', async () => {
@@ -434,7 +434,9 @@ export default async function testCases({
       const data = await response.json();
 
       expect(response.status()).toBe(200);
-      expect(data).toEqual({data: {shop: {name: 'Snowdevil'}}});
+      expect(data).toEqual({
+        data: {shop: {id: 'gid://shopify/Shop/55145660472'}},
+      });
     });
 
     it('supports form request on API routes', async () => {
