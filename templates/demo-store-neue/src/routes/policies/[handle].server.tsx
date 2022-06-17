@@ -5,16 +5,17 @@ import {
   useServerAnalytics,
   ShopifyAnalyticsConstants,
   gql,
+  HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
 import {Layout, Button, PageHeader, Section, NotFound} from '~/components';
 
-export default function Policy({params}) {
+export default function Policy({params}: HydrogenRouteProps) {
   const {languageCode} = useShop();
   const {handle} = params;
 
   // standard policy pages
-  const policy = {
+  const policy: Record<string, boolean> = {
     privacyPolicy: handle === 'privacy-policy',
     shippingPolicy: handle === 'shipping-policy',
     termsOfService: handle === 'terms-of-service',
@@ -32,7 +33,7 @@ export default function Policy({params}) {
   }
 
   // The currently visited policy page key
-  const activePolicy = Object.keys(policy).find((key) => policy[key]);
+  const activePolicy = Object.keys(policy).find((key) => policy[key])!;
 
   const {
     data: {shop},
