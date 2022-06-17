@@ -9,7 +9,9 @@ Hydrogen is modelled after [React Server Components](https://reactjs.org/blog/20
 This guide provides information about how React Server Components work in the context of Hydrogen.
 
 > Note:
-> Hydrogen's implementation of server components is a modified version of React Server Components, which are currently in Alpha. Hydrogen provides a layer of abstractions to make server components stable for use in Hydrogen apps. Hydrogen is working with Vercel and the React team to align on enhancements to server components, including [replacing filename suffixes for annotated boundaries](https://github.com/reactjs/rfcs/pull/189#issuecomment-1116482278) and using async/await for data fetching. Hydrogen will release a future version with these enhancements when they are available, along with tools for migrating existing Hydrogen applications. Learn more about the current state of React Server Components [on the React blog](https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html#server-components).
+> Hydrogen's [implementation](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc) of server components is a modified version of React Server Components, which are currently in [Alpha](https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html#server-components). Shopify provides a layer of abstractions to make server components stable for use in Hydrogen apps.
+> 
+> Shopify is currently working with Vercel and the React team to align on enhancements to server components, and will release a future version of Hydrogen with tools for migrating existing Hydrogen apps.
 
 ## How React Server Components work
 
@@ -145,23 +147,23 @@ Although shared components have the most constraints, many components already ob
 
 ### Client components and server-side rendering
 
-Client components ending in `.client.jsx` are rendered in the browser. However, they are also rendered on the server during server-side rendering (SSR). This is because SSR produces an HTML "preview" of the what will eventually be rendered in the browser.
+Client components ending in `.client.jsx` are rendered in the browser. However, they are also rendered on the server during server-side rendering (SSR). This is because SSR produces an HTML "preview" of what will eventually be rendered in the browser.
 
-This behavior tends to catch developers off-guard, because the word "client" indicates a client-only behavior. Hydrogen is working with the React team to [refine these naming conventions](https://github.com/reactjs/rfcs/pull/189#issuecomment-1116482278) to make it less confusing.
+This behavior might be confusing, because the word "client" indicates a client-only behavior. Shopify is working with the React team to [refine these naming conventions](https://github.com/reactjs/rfcs/pull/189#issuecomment-1116482278) to make it less confusing.
 
-In the meantime, it's important to avoid including browser-only logic in client components in a way that will cause problems during SSR:
+In the meantime, avoid including browser-only logic in client components in a way that will cause problems during SSR:
 
 {% codeblock file, filename: 'Button.client.jsx' %}
 
 ```tsx
-// ❌ Don't do this, because `window` is not available during SSR
+// ❌ Don't do this because `window` isn't available during SSR
 function Button() {
   const innerWidth = window.innerWidth;
 
   return <button>...</button>
 }
 
-// ✅ Do this, because `useEffect` does not run during SSR
+// ✅ Do this because `useEffect` doesn't run during SSR
 function Button() {
   const [innerWidth, setInnerWidth] = useState();
 
@@ -177,14 +179,14 @@ function Button() {
 
 ### Component organization and index files
 
-Developers might be familiar with a "facade file" pattern, where similar files are re-exported from a shared `index.js` file in a folder. This pattern is not supported in React Server Components when mixing client components with server components.
+You might be familiar with a "facade file" pattern, where similar files are re-exported from a shared `index.js` file in a folder. This pattern isn't supported in React Server Components when mixing client components with server components.
 
-Instead, developers wishing to use the facade pattern should create separate files for client components and server components:
+If you want to use the facade pattern, then you need to create separate files for client components and server components:
 
 {% codeblock file, filename: 'components/index.js' %}
 
 ```tsx
-// ❌ Don't do this, because it mixes client components and server components:
+// ❌ Don't do this because it mixes client components and server components:
 
 export {Button} from './Button.client.jsx'
 export {Dropdown} from './Dropdown.client.jsx'
@@ -196,7 +198,7 @@ export {Widget} from './Widget.server.jsx'
 {% codeblock file, filename: 'components/index.js' %}
 
 ```tsx
-// ✅ Do this, because only client components are exported
+// ✅ Do this because only client components are exported
 
 export {Button} from './Button.client.jsx'
 export {Dropdown} from './Dropdown.client.jsx'
@@ -207,7 +209,7 @@ export {Dropdown} from './Dropdown.client.jsx'
 {% codeblock file, filename: 'components/server.js' %}
 
 ```tsx
-// ✅ Do this, because only server components are exported
+// ✅ Do this because only server components are exported
 
 export {Widget} from './Widget.server.jsx'
 ```
