@@ -14,7 +14,6 @@ import {
 } from '@shopify/hydrogen';
 import {
   Customer,
-  DiscountApplication,
   DiscountApplicationConnection,
   MoneyV2,
   OrderLineItemConnection,
