@@ -9,7 +9,7 @@ Hydrogen is modelled after [React Server Components](https://reactjs.org/blog/20
 This guide provides information about how React Server Components work in the context of Hydrogen.
 
 > Note:
-> Hydrogen's implementation of server components is a stable modified version of React Server Components, which are currently in Alpha. Hydrogen is working with Vercel and the React team to align on enhancements to server components, including dropping the filename suffix and using async/await for data fetching. Hydrogen will release a future version with these enhancements when they are available, along with tools for migrating existing Hydrogen applications. Learn more about the current state of React Server Components [on the React blog](https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html#server-components).
+> Hydrogen's implementation of server components is a stable modified version of React Server Components, which are currently in Alpha. Hydrogen is working with Vercel and the React team to align on enhancements to server components, including [replacing filename suffixes for annotated boundaries](https://github.com/reactjs/rfcs/pull/189#issuecomment-1116482278) and using async/await for data fetching. Hydrogen will release a future version with these enhancements when they are available, along with tools for migrating existing Hydrogen applications. Learn more about the current state of React Server Components [on the React blog](https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html#server-components).
 
 ## How React Server Components work
 
