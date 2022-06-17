@@ -1,7 +1,7 @@
 import React, {type ElementType, useMemo} from 'react';
 import type {Props} from '../types';
-import {useLocalization} from '../../client';
-import {getMeasurementAsString} from '../../utilities';
+import {useLocalization} from '../../hooks/useLocalization/useLocalization';
+import {getMeasurementAsString} from '../../utilities/measurement';
 import type {Measurement, Rating} from '../../types';
 import {Image} from '../Image';
 import type {

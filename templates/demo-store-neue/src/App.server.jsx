@@ -20,7 +20,7 @@ import {
 
 function App({routes, request}) {
   const pathname = new URL(request.normalizedUrl).pathname;
-  const localeMatch = /\/([a-z]{2})\/.*/g.exec(pathname);
+  const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
   const countryCode = localeMatch ? localeMatch[1] : null;
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;

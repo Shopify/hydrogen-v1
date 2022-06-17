@@ -30,7 +30,7 @@ export interface LocalizationProviderProps {
  */
 export function LocalizationProvider(props: LocalizationProviderProps) {
   const {languageCode: defaultLanguageCode, locale} = useShop();
-  const defaultCountryCode = locale.split('-')[1];
+  const defaultCountryCode = locale.split(/[-_]/)[1] || '';
 
   const languageCode = (
     props.languageCode ?? defaultLanguageCode

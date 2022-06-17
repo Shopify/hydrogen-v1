@@ -4,6 +4,7 @@ import {createPath} from 'history';
 import {useNavigate} from '../../foundation/useNavigate/useNavigate';
 import {RSC_PATHNAME} from '../../constants';
 import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props';
+import {useBasePath} from '../../foundation/useRouteParams/RouteParamsProvider.client';
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -19,6 +20,8 @@ export interface LinkProps
   prefetch?: boolean;
   /** Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to `true`. */
   scroll?: boolean;
+  /** Override the `basePath` inherited from the Route */
+  basePath?: string;
 }
 
 /**
@@ -31,6 +34,8 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     const navigate = useNavigate();
     const {location} = useRouter();
     const [_, startTransition] = (React as any).useTransition();
+    const routeBasePath = useBasePath();
+    const basePath = props.basePath ?? routeBasePath;
 
     /**
      * Inspired by Remix's Link component
@@ -42,12 +47,20 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       reloadDocument,
       target,
       replace: _replace,
-      to,
       onClick,
       clientState,
       prefetch = true,
       scroll = true,
     } = props;
+
+    let to = props.to;
+
+    if (basePath !== '/') {
+      to =
+        to.charAt(0) === '/' && basePath.charAt(0) === '/'
+          ? basePath + to.substring(1)
+          : basePath + to;
+    }
 
     const internalClick = useCallback(
       (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -155,7 +168,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           onFocus={onFocus}
           onBlur={onBlur}
           onTouchStart={onTouchStart}
-          href={props.to}
+          href={to}
         >
           {props.children}
         </a>
