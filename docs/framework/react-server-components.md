@@ -143,6 +143,38 @@ In addition to server-specific and client-specific components, you can create co
 
 Although shared components have the most constraints, many components already obey these rules and can be used across the server and client without modification. For example, many components transform some props based on certain conditions, without using state or loading additional data. This is why shared components are the default and [don’t have a dedicated file extension](#component-types).
 
+### Client components and server-side rendering
+
+Client components ending in `.client.jsx` are rendered in the browser. However, they are also rendered on the server during server-side rendering (SSR). This is because SSR produces an HTML "preview" of the what will eventually be rendered in the browser.
+
+This behavior tends to catch developers off-guard, because the word "client" indicates a client-only behavior. Hydrogen is working with the React team to [refine these naming conventions](https://github.com/reactjs/rfcs/pull/189#issuecomment-1116482278) to make it less confusing.
+
+In the meantime, it's important to avoid including browser-only logic in client components in a way that will cause problems during SSR:
+
+{% codeblock file, filename: 'Button.client.jsx' %}
+
+```tsx
+// ❌ Don't do this, because `window` is not available during SSR
+function Button() {
+  const innerWidth = window.innerWidth;
+
+  return <button>...</button>
+}
+
+// ✅ Do this, because `useEffect` does not run during SSR
+function Button() {
+  const [innerWidth, setInnerWidth] = useState();
+
+  useEffect(() => {
+    setInnerWidth(window.innerWidth);
+  }, []);
+
+  return <button>...</button>
+}
+```
+
+{% endcodeblock %}
+
 ### Component organization and index files
 
 Developers might be familiar with a "facade file" pattern, where similar files are re-exported from a shared `index.js` file in a folder. This pattern is not supported in React Server Components when mixing client components with server components.
