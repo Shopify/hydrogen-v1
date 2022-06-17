@@ -4,7 +4,7 @@
     "module": "esnext",
     "moduleResolution": "node16",
     "lib": ["dom", "dom.iterable", "scripthost", "es2020"],
-    "jsx": "react",
+    "jsx": "react-jsx",
     "types": ["vite/client"],
     "strict": true,
     "esModuleInterop": true,
