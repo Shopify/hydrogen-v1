@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useRouter} from '../../foundation/Router/BrowserRouter.client';
 import {createPath} from 'history';
-import {useNavigate} from '../../foundation/useNavigate/useNavigate';
+import {buildPath, useNavigate} from '../../foundation/useNavigate/useNavigate';
 import {RSC_PATHNAME} from '../../constants';
 import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props';
 import {useBasePath} from '../../foundation/useRouteParams/RouteParamsProvider.client';
@@ -35,7 +35,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     const {location} = useRouter();
     const [_, startTransition] = (React as any).useTransition();
     const routeBasePath = useBasePath();
-    const basePath = props.basePath ?? routeBasePath;
 
     /**
      * Inspired by Remix's Link component
@@ -53,14 +52,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       scroll = true,
     } = props;
 
-    let to = props.to;
-
-    if (basePath !== '/') {
-      to =
-        to.charAt(0) === '/' && basePath.charAt(0) === '/'
-          ? basePath + to.substring(1)
-          : basePath + to;
-    }
+    const to = buildPath(props.basePath ?? routeBasePath, props.to);
 
     const internalClick = useCallback(
       (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -81,6 +73,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             replace,
             scroll,
             clientState,
+            basePath: '/', // path was already resolved with the base
           });
         }
       },

@@ -7,7 +7,7 @@ import {footer as mockData} from '~/lib/placeholders';
 /**
  * A server component that specifies the content of the footer on the website
  */
-export function Footer({menu = mockData, countryName}) {
+export function Footer({menu = mockData}) {
   const {pathname} = useUrl();
   const isHome = pathname === '/';
 
@@ -66,7 +66,7 @@ export function Footer({menu = mockData, countryName}) {
         <Heading size="lead" className="cursor-default" as="h4">
           Country
         </Heading>
-        <CountrySelector countryName={countryName} />
+        <CountrySelector />
       </section>
       <div className="pt-8 opacity-50 md:col-span-2 lg:col-span-4">
         &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT

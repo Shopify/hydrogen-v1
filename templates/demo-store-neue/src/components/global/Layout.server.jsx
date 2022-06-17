@@ -2,7 +2,6 @@ import {useLocalization, useShopQuery, CacheLong, gql} from '@shopify/hydrogen';
 
 import {Header, Footer} from '~/components';
 import {parseMenu} from '~/lib/utils';
-import countryLookup from 'country-code-lookup';
 
 const HEADER_MENU_HANDLE = 'main-menu';
 const FOOTER_MENU_HANDLE = 'footer';
@@ -13,7 +12,6 @@ const FOOTER_MENU_HANDLE = 'footer';
 export function Layout({children}) {
   const {
     language: {isoCode: languageCode},
-    country: {isoCode: countryCode},
   } = useLocalization();
 
   const {data} = useShopQuery({
@@ -27,7 +25,6 @@ export function Layout({children}) {
     preload: '*',
   });
 
-  const countryName = countryLookup.byIso(countryCode)?.country;
   const shopName = data ? data.shop.name : 'Hydrogen Demo Store';
 
   /*
@@ -64,7 +61,7 @@ export function Layout({children}) {
           {children}
         </main>
       </div>
-      <Footer menu={footerMenu} countryName={countryName} />
+      <Footer menu={footerMenu} />
     </>
   );
 }

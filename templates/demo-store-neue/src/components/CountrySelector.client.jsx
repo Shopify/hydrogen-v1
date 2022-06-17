@@ -8,18 +8,21 @@ import {useMemo} from 'react';
 /**
  * A client component that selects the appropriate country to display for products on a website
  */
-export function CountrySelector({countryName}) {
+export function CountrySelector() {
   const [listboxOpen, setListboxOpen] = useState(false);
   const {
     country: {isoCode},
   } = useLocalization();
-  const currentCountry = useMemo(
-    () => ({
-      name: countryName,
+  const currentCountry = useMemo(() => {
+    const regionNamesInEnglish = new Intl.DisplayNames(['en'], {
+      type: 'region',
+    });
+
+    return {
+      name: regionNamesInEnglish.of(isoCode),
       isoCode,
-    }),
-    [countryName, isoCode],
-  );
+    };
+  }, [isoCode]);
 
   const setCountry = useCallback(
     ({isoCode: newIsoCode}) => {
