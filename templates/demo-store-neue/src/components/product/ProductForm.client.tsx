@@ -7,6 +7,7 @@ import {
   AddToCartButton,
   BuyNowButton,
   Money,
+  OptionWithValues,
 } from '@shopify/hydrogen';
 
 import {Heading, Text, Button, ProductOptions} from '~/components';
@@ -26,7 +27,7 @@ export function ProductForm() {
   }, [params, search]);
 
   useEffect(() => {
-    options.map(({name, values}) => {
+    (options as OptionWithValues[]).map(({name, values}) => {
       if (!params) return;
       const currentValue = params.get(name.toLowerCase()) || null;
       if (currentValue) {
@@ -35,6 +36,7 @@ export function ProductForm() {
         );
         setSelectedOption(name, matchedValue[0]);
       } else {
+        // TODO: This doesn't set anything
         setParams(
           params.set(
             encodeURIComponent(name.toLowerCase()),
@@ -52,7 +54,7 @@ export function ProductForm() {
   }, []);
 
   const handleChange = useCallback(
-    (name, value) => {
+    (name: string, value: string) => {
       setSelectedOption(name, value);
       if (!params) return;
       params.set(
@@ -74,7 +76,7 @@ export function ProductForm() {
     <form className="grid gap-10">
       {
         <div className="grid gap-4">
-          {options.map(({name, values}) => {
+          {(options as OptionWithValues[]).map(({name, values}) => {
             if (values.length === 1) {
               return null;
             }
@@ -100,7 +102,7 @@ export function ProductForm() {
       }
       <div className="grid items-stretch gap-4">
         <AddToCartButton
-          variantId={selectedVariant.id}
+          variantId={selectedVariant?.id}
           quantity={1}
           accessibleAddingToCartLabel="Adding item to your cart"
           disabled={isOutOfStock}
@@ -114,13 +116,13 @@ export function ProductForm() {
               <Text>Sold out</Text>
             ) : (
               <Text as="span">
-                Add to bag - <Money data={selectedVariant.priceV2} as="span" />
+                Add to bag - <Money data={selectedVariant.priceV2!} as="span" />
               </Text>
             )}
           </Button>
         </AddToCartButton>
         {!isOutOfStock && (
-          <BuyNowButton quantity={1} variantId={selectedVariant.id}>
+          <BuyNowButton quantity={1} variantId={selectedVariant.id!}>
             <Button width="full" variant="secondary" as="span">
               Buy it now
             </Button>

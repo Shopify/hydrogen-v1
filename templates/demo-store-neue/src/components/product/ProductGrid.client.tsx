@@ -3,13 +3,14 @@ import {flattenConnection} from '@shopify/hydrogen';
 
 import {Grid, ProductCard} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
+import type {Collection, Product} from '@shopify/hydrogen/storefront-api-types';
 
-export function ProductGrid({collection}) {
+export function ProductGrid({collection}: {collection: Collection}) {
   const nextButtonRef = useRef(null);
   const initialProducts = collection?.products?.nodes || [];
-  const {hasNextPage, endCursor} = collection.products.pageInfo;
-  const [products, setProducts] = useState(initialProducts);
-  const [cursor, setCursor] = useState(endCursor);
+  const {hasNextPage, endCursor} = collection?.products?.pageInfo ?? {};
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [cursor, setCursor] = useState(endCursor ?? '');
   const [nextPage, setNextPage] = useState(hasNextPage);
   const [pending, setPending] = useState(false);
 
@@ -22,7 +23,8 @@ export function ProductGrid({collection}) {
     const {data} = await response.json();
 
     // ProductGrid can paginate collections.products or products all routes
-    const newProducts = flattenConnection(
+    // TODO: Fix types
+    const newProducts: Product[] = flattenConnection(
       data?.collection?.products || data?.products || [],
     );
     const {endCursor, hasNextPage} = data?.collection?.products?.pageInfo ||
@@ -35,7 +37,7 @@ export function ProductGrid({collection}) {
   }, [cursor, products]);
 
   const handleIntersect = useCallback(
-    (entries) => {
+    (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           fetchProducts();

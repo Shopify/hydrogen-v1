@@ -4,7 +4,14 @@ import {ATTR_LOADING_EAGER} from '~/lib/const';
 /**
  * A client component that defines a media gallery for hosting images, 3D models, and videos of products
  */
-export function ProductGallery({media, className}) {
+export function ProductGallery({
+  media,
+  className,
+}: {
+  // TODO: Better type
+  media: any[];
+  className?: string;
+}) {
   if (!media.length) {
     return null;
   }
@@ -14,7 +21,7 @@ export function ProductGallery({media, className}) {
       className={`swimlane md:grid-flow-row  md:p-0 md:overflow-x-auto md:grid-cols-2 ${className}`}
     >
       {media.map((med, i) => {
-        let extraProps = {};
+        let extraProps: Record<string, any> = {};
 
         if (med.mediaContentType === 'MODEL_3D') {
           extraProps = {
@@ -44,6 +51,7 @@ export function ProductGallery({media, className}) {
             } snap-center card-image bg-white dark:bg-contrast/10 aspect-square md:w-full w-[80vw]`}
             key={med.id || med.image.id}
           >
+            {/* TODO: Fix type */}
             <MediaFile
               tabIndex="0"
               className={`w-full h-full aspect-square object-cover`}
