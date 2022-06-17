@@ -4,7 +4,7 @@ import {useCountry, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 
 import {IconCheck, IconCaret} from '~/components';
-import {Country} from '@shopify/hydrogen/storefront-api-types';
+import type {Country} from '@shopify/hydrogen/storefront-api-types';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
