@@ -17,6 +17,7 @@ export function CartLineItem() {
   return (
     <li key={lineId} className="flex">
       <div className="flex-shrink-0">
+        {/* TODO: Fix type */}
         <Image
           data={merchandise.image}
           className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
@@ -69,7 +70,13 @@ export function CartLineItem() {
   );
 }
 
-function CartLineQuantityAdjust({lineId, quantity}) {
+function CartLineQuantityAdjust({
+  lineId,
+  quantity,
+}: {
+  lineId: string;
+  quantity: number;
+}) {
   return (
     <>
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
