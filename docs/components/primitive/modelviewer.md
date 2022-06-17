@@ -115,7 +115,7 @@ export default function MyProductModel() {
 ## Required fields
 
 The `ModelViewer` component requires the following fields from the Storefront API's
-[Model3d object](https://shopify.dev/api/storefront/reference/products/model3d).
+[Model3d object](https://shopify.dev/api/storefront/reference/products/model3d):
 
 ```graphql
 {
