@@ -119,8 +119,10 @@ The `ModelViewer` component requires the following fields from the Storefront AP
 
 ```graphql
 {
-  url
   alt
+  sources {
+    url
+  }
 }
 ```
 
