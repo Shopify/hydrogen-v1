@@ -1,12 +1,14 @@
-import {useShopQuery, useSession, useShop, gql} from '@shopify/hydrogen';
+import {useShopQuery, useLocalization, gql} from '@shopify/hydrogen';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, CollectionCard, PageHeader, Section, Grid} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 
 export default function Collections() {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {data} = useShopQuery<any>({
     query: COLLECTIONS_QUERY,

@@ -35,7 +35,7 @@ export function Route({path, page}: RouteProps): ReactElement | null {
     request.ctx.router.routeParams = match.params;
 
     return (
-      <RouteParamsProvider routeParams={match.params}>
+      <RouteParamsProvider routeParams={match.params} basePath={'/'}>
         {cloneElement(page, {params: match.params || {}, ...serverProps})}
       </RouteParamsProvider>
     );

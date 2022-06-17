@@ -5,7 +5,7 @@ import {
   Head,
   type HydrogenRouteProps,
   Seo,
-  useShop,
+  useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
 import type {Article} from '@shopify/hydrogen/storefront-api-types';
@@ -17,7 +17,10 @@ const BLOG_HANDLE = 'Journal';
 
 export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
   response.cache(CacheLong());
-  const {languageCode, locale} = useShop();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {data} = useShopQuery<any>({
     query: BLOG_QUERY,
@@ -35,7 +38,7 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
     const {publishedAt} = article;
     return {
       ...article,
-      publishedAt: new Intl.DateTimeFormat(locale, {
+      publishedAt: new Intl.DateTimeFormat(`${languageCode}-${countryCode}`, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

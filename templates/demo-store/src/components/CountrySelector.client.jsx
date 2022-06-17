@@ -1,5 +1,5 @@
 import {useCallback, useState, Suspense} from 'react';
-import {useCountry, fetchSync} from '@shopify/hydrogen';
+import {fetchSync, useLocalization} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 import SpinnerIcon from './SpinnerIcon.client';
 
@@ -8,7 +8,7 @@ import SpinnerIcon from './SpinnerIcon.client';
  */
 export default function CountrySelector() {
   const [listboxOpen, setListboxOpen] = useState(false);
-  const [selectedCountry] = useCountry();
+  const {country: selectedCountry} = useLocalization();
 
   const setCountry = useCallback(({isoCode, name}) => {
     fetch(`/countries`, {

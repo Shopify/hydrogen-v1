@@ -1,5 +1,5 @@
 import {
-  useShop,
+  useLocalization,
   useShopQuery,
   Seo,
   gql,
@@ -16,7 +16,10 @@ const BLOG_HANDLE = 'journal';
 
 export default function Post({params, response}: HydrogenRouteProps) {
   response.cache(CacheLong());
-  const {languageCode, locale} = useShop();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {handle} = params;
   const {data} = useShopQuery<any>({
@@ -30,11 +33,14 @@ export default function Post({params, response}: HydrogenRouteProps) {
 
   const {title, publishedAt, contentHtml, author} = data.blog
     .articleByHandle as Article;
-  const formattedDate = new Intl.DateTimeFormat(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(publishedAt));
+  const formattedDate = new Intl.DateTimeFormat(
+    `${languageCode}-${countryCode}`,
+    {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    },
+  ).format(new Date(publishedAt));
 
   return (
     <Layout>

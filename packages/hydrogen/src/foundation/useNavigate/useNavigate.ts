@@ -1,4 +1,5 @@
 import {useRouter} from '../Router/BrowserRouter.client';
+import {useBasePath} from '../useRouteParams/RouteParamsProvider.client';
 
 type NavigationOptions = {
   /** Whether to update the state object or URL of the current history entry. Defaults to false. */
@@ -12,6 +13,8 @@ type NavigationOptions = {
 
   /** Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to true. */
   scroll?: any;
+
+  basePath?: string;
 };
 
 /**
@@ -19,11 +22,14 @@ type NavigationOptions = {
  */
 export function useNavigate() {
   const router = useRouter();
+  const routeBasePath = useBasePath();
 
   return (
     path: string,
     options: NavigationOptions = {replace: false, reloadDocument: false}
   ) => {
+    path = buildPath(options.basePath ?? routeBasePath, path);
+
     const state = {
       ...options?.clientState,
       scroll: options?.scroll ?? true,
@@ -36,4 +42,15 @@ export function useNavigate() {
       router.history.push(path, state);
     }
   };
+}
+
+export function buildPath(basePath: string, path: string) {
+  let builtPath = path;
+  if (basePath !== '/') {
+    builtPath =
+      path.charAt(0) === '/' && basePath.charAt(0) === '/'
+        ? basePath + path.substring(1)
+        : basePath + path;
+  }
+  return builtPath;
 }
