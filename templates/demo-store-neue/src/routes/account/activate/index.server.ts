@@ -1,4 +1,9 @@
-import {CacheNone, gql} from '@shopify/hydrogen';
+import {
+  CacheNone,
+  gql,
+  type HydrogenApiRouteOptions,
+  type HydrogenRequest,
+} from '@shopify/hydrogen';
 
 import {getApiErrorMessage} from '~/lib/utils';
 
@@ -6,7 +11,16 @@ import {getApiErrorMessage} from '~/lib/utils';
  * This API route is used by the form on `/account/activate/[id]/[activationToken]`
  * complete the reset of the user's password.
  */
-export async function api(request, {session, queryShop}) {
+export async function api(
+  request: HydrogenRequest,
+  {session, queryShop}: HydrogenApiRouteOptions,
+) {
+  if (!session) {
+    return new Response('Session storage not available.', {
+      status: 400,
+    });
+  }
+
   const jsonBody = await request.json();
 
   if (!jsonBody?.id || !jsonBody?.password || !jsonBody?.activationToken) {
@@ -27,6 +41,7 @@ export async function api(request, {session, queryShop}) {
         activationToken: jsonBody.activationToken,
       },
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 
