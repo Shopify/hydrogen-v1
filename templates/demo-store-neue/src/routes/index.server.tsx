@@ -18,7 +18,7 @@ export default function Homepage() {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<any>({
     query: HOMEPAGE_CONTENT_QUERY,
     variables: {
       language: languageCode,
