@@ -1,9 +1,16 @@
-import {CacheNone, Seo, gql} from '@shopify/hydrogen';
+import {
+  CacheNone,
+  Seo,
+  gql,
+  type HydrogenRequest,
+  type HydrogenApiRouteOptions,
+  type HydrogenRouteProps,
+} from '@shopify/hydrogen';
 
 import {Layout, AccountCreateForm} from '~/components';
 import {getApiErrorMessage} from '~/lib/utils';
 
-export default function Register({response}) {
+export default function Register({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
 
   return (
@@ -14,7 +21,10 @@ export default function Register({response}) {
   );
 }
 
-export async function api(request, {queryShop}) {
+export async function api(
+  request: HydrogenRequest,
+  {queryShop}: HydrogenApiRouteOptions,
+) {
   const jsonBody = await request.json();
 
   if (
@@ -39,6 +49,7 @@ export async function api(request, {queryShop}) {
         lastName: jsonBody.lastName,
       },
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 
