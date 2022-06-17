@@ -8,7 +8,10 @@ import {
   useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
-import type {Article, Blog} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Article,
+  Blog as BlogType,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, ArticleCard, Grid, PageHeader} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
@@ -23,7 +26,7 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
   } = useLocalization();
 
   const {data} = useShopQuery<{
-    blog: Blog;
+    blog: BlogType;
   }>({
     query: BLOG_QUERY,
     variables: {
