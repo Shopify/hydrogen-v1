@@ -12,7 +12,7 @@ import {Layout, PageHeader, Section, Heading} from '~/components';
 export default function Policies() {
   const {languageCode} = useShop();
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<any>({
     query: POLICIES_QUERY,
     variables: {
       languageCode,
