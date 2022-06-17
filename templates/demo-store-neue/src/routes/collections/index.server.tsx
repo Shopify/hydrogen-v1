@@ -1,4 +1,5 @@
 import {useShopQuery, useSession, useShop, gql} from '@shopify/hydrogen';
+import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, CollectionCard, PageHeader, Section, Grid} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
@@ -7,7 +8,7 @@ export default function Collections() {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<any>({
     query: COLLECTIONS_QUERY,
     variables: {
       pageBy: 12,
@@ -17,7 +18,7 @@ export default function Collections() {
     preload: true,
   });
 
-  const collections = data.collections.nodes;
+  const collections: Collection[] = data.collections.nodes;
 
   return (
     <Layout>
