@@ -1,5 +1,16 @@
-export async function api(request, {queryShop, session}) {
+import type {HydrogenApiRouteOptions, HydrogenRequest} from '@shopify/hydrogen';
+
+export async function api(
+  request: HydrogenRequest,
+  {queryShop, session}: HydrogenApiRouteOptions,
+) {
   if (request.method === 'POST') {
+    if (!session) {
+      return new Response('Session storage not available.', {
+        status: 400,
+      });
+    }
+
     const {isoCode, name} = await request.json();
 
     await session.set('countryCode', isoCode);
