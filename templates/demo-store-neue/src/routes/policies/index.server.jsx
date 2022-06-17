@@ -1,5 +1,5 @@
 import {
-  useShop,
+  useLocalization,
   useShopQuery,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
@@ -10,7 +10,9 @@ import {
 import {Layout, PageHeader, Section, Heading} from '~/components';
 
 export default function Policies() {
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: POLICIES_QUERY,

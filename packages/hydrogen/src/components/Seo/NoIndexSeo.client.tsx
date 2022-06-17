@@ -1,7 +1,6 @@
 import React from 'react';
-import {useShop} from '../../foundation/useShop';
-import {Head} from '../../foundation/Head';
-
+import {useLocalization} from '../../hooks/useLocalization/useLocalization';
+import {Head} from '../../foundation/Head/Head.client';
 import type {DefaultPage} from './seo-types';
 import type {PartialDeep} from 'type-fest';
 
@@ -10,8 +9,9 @@ export function NoIndexPageSeo({
   titleTemplate,
   lang,
 }: PartialDeep<DefaultPage>) {
-  const {languageCode: fallBacklang} = useShop();
-
+  const {
+    language: {isoCode: fallBacklang},
+  } = useLocalization();
   return (
     <>
       <Head

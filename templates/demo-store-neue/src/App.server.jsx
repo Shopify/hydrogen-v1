@@ -8,6 +8,7 @@ import {
   Router,
   ShopifyAnalytics,
   ShopifyProvider,
+  LocalizationProvider,
 } from '@shopify/hydrogen';
 
 import {
@@ -18,23 +19,32 @@ import {
 } from '~/components';
 
 function App({routes, request}) {
-  const isHome = new URL(request.normalizedUrl).pathname === '/';
+  const pathname = new URL(request.normalizedUrl).pathname;
+  const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
+  const countryCode = localeMatch ? localeMatch[1] : null;
+
+  const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
   return (
     <Suspense fallback={<HeaderFallback isHome={isHome} />}>
       <ShopifyProvider>
-        <CartProviderWithSession>
-          <Suspense>
-            <DefaultSeo />
-          </Suspense>
-          <Router>
-            <FileRoutes routes={routes} />
-            <Route path="*" page={<NotFound />} />
-          </Router>
-        </CartProviderWithSession>
-        <PerformanceMetrics />
-        {import.meta.env.DEV && <PerformanceMetricsDebug />}
-        <ShopifyAnalytics />
+        <LocalizationProvider countryCode={countryCode}>
+          <CartProviderWithSession>
+            <Suspense>
+              <DefaultSeo />
+            </Suspense>
+            <Router>
+              <FileRoutes
+                basePath={countryCode ? `/${countryCode}/` : null}
+                routes={routes}
+              />
+              <Route path="*" page={<NotFound />} />
+            </Router>
+          </CartProviderWithSession>
+          <PerformanceMetrics />
+          {import.meta.env.DEV && <PerformanceMetricsDebug />}
+          <ShopifyAnalytics />
+        </LocalizationProvider>
       </ShopifyProvider>
     </Suspense>
   );

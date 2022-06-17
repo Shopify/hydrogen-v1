@@ -1,6 +1,8 @@
-import {CartProvider, useSession} from '@shopify/hydrogen';
+import {CartProvider, useLocalization} from '@shopify/hydrogen';
 
 export function CartProviderWithSession({children}) {
-  const {countryCode = 'US'} = useSession();
+  const {
+    country: {isoCode: countryCode},
+  } = useLocalization();
   return <CartProvider countryCode={countryCode}>{children}</CartProvider>;
 }

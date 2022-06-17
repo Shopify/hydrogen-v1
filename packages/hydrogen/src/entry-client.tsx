@@ -127,17 +127,19 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
     // Default to StrictMode on, unless explicitly turned off
     config.strictMode !== false ? StrictMode : Fragment;
 
+  // Fixes hydration in `useId`: https://github.com/Shopify/hydrogen/issues/1589
+  const ServerRequestProviderMock = () => null;
+
   hydrateRoot(
     root,
-    <>
-      <RootComponent>
-        <ErrorBoundary FallbackComponent={Error}>
-          <Suspense fallback={null}>
-            <Content clientWrapper={ClientWrapper} />
-          </Suspense>
-        </ErrorBoundary>
-      </RootComponent>
-    </>
+    <RootComponent>
+      <ServerRequestProviderMock />
+      <ErrorBoundary FallbackComponent={Error}>
+        <Suspense fallback={null}>
+          <Content clientWrapper={ClientWrapper} />
+        </Suspense>
+      </ErrorBoundary>
+    </RootComponent>
   );
 };
 

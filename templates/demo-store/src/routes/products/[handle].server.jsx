@@ -1,6 +1,5 @@
 import {
-  useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
   Seo,
   useRouteParams,
@@ -15,9 +14,10 @@ import Layout from '../../components/Layout.server';
 
 export default function Product() {
   const {handle} = useRouteParams();
-  const {countryCode = 'US'} = useSession();
-
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {
     data: {product},

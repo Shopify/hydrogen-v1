@@ -4,7 +4,7 @@ import {
   gql,
   Seo,
   useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
 
@@ -24,11 +24,13 @@ import {
 export default function Account({response}) {
   response.cache(CacheNone());
 
-  const {customerAccessToken, countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
+  const {customerAccessToken} = useSession();
 
   if (!customerAccessToken) return response.redirect('/account/login');
-
-  const {languageCode} = useShop();
 
   const {data} = useShopQuery({
     query: CUSTOMER_QUERY,

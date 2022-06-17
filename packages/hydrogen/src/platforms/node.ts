@@ -15,6 +15,7 @@ import serveStatic from 'serve-static';
 import compression from 'compression';
 import bodyParser from 'body-parser';
 import connect, {NextHandleFunction} from 'connect';
+import {InMemoryCache} from '../framework/cache/in-memory';
 
 const handleRequest = entrypoint as RequestHandler;
 
@@ -22,7 +23,9 @@ type CreateServerOptions = {
   cache?: Cache;
 };
 
-export async function createServer({cache}: CreateServerOptions = {}) {
+export async function createServer({
+  cache = new InMemoryCache(),
+}: CreateServerOptions = {}) {
   // @ts-ignore
   globalThis.Oxygen = {env: process.env};
 
