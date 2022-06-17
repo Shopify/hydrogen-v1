@@ -32,6 +32,7 @@ export function DefaultSeo() {
     },
   });
 
+  // TODO: Fix types
   return (
     <Seo
       type="defaultSeo"
