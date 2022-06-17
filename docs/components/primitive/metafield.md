@@ -67,7 +67,7 @@ If the metafield `type` is `product_reference`, `variant_reference`, or `page_re
 }
 ```
 
-For all other metafield `type`s, the following fields are required.
+For all other metafield `type`s, the following fields are required:
 
 ```graphql
 {
