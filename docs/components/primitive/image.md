@@ -88,7 +88,7 @@ export default function ExternalImageWithLoader() {
 ## Required fields
 
 When using the `data` prop, the `Image` component requires the following fields from the Storefront API's
-[Image object](https://shopify.dev/api/storefront/reference/common-objects/image).
+[Image object](https://shopify.dev/api/storefront/reference/common-objects/image):
 
 ```graphql
 {
