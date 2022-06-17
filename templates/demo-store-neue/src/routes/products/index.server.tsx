@@ -1,4 +1,11 @@
-import {useSession, useShop, useShopQuery, gql} from '@shopify/hydrogen';
+import {
+  useSession,
+  useShop,
+  useShopQuery,
+  gql,
+  type HydrogenRequest,
+  type HydrogenApiRouteOptions,
+} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {Layout, ProductGrid, PageHeader, Section} from '~/components';
@@ -9,7 +16,7 @@ export default function AllProducts() {
   const {languageCode} = useShop();
   const {countryCode = 'US'} = useSession();
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<any>({
     query: ALL_PRODUCTS_QUERY,
     variables: {
       country: countryCode,
@@ -32,9 +39,15 @@ export default function AllProducts() {
 }
 
 // pagination api
-export async function api(request, {params, queryShop}) {
+export async function api(
+  request: HydrogenRequest,
+  {params, queryShop}: HydrogenApiRouteOptions,
+) {
   if (request.method !== 'POST') {
-    return new Response(405, {Allow: 'POST'});
+    return new Response('Method not allowed', {
+      status: 405,
+      headers: {Allow: 'POST'},
+    });
   }
 
   const cursor = new URL(request.url).searchParams.get('cursor');
