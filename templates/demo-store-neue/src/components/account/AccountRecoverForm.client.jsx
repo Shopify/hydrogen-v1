@@ -45,7 +45,7 @@ export function AccountRecoverForm() {
           <>
             <h1 className="text-4xl">Forgot Password.</h1>
             <p className="mt-4">
-              Enter the email address associated with your account to recieve a
+              Enter the email address associated with your account to receive a
               link to reset your password.
             </p>
           </>
