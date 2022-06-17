@@ -58,7 +58,7 @@ When no `children` prop is provided, the `Metafield` component renders the follo
 The `Metafield` component requires fields from the Storefront API's
 [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield) based on the metafield `type`.
 
-If the metafield `type` is `product_reference`, `variant_reference`, or `page_reference`, the following fields are required.
+If the metafield `type` is `product_reference`, `variant_reference`, or `page_reference`, then the following fields are required:
 
 ```graphql
 {
