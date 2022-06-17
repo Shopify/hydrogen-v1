@@ -1,8 +1,15 @@
 import {Image, Link} from '@shopify/hydrogen';
+import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
 import {Heading} from '~/components';
 
-export function CollectionCard({collection, loading}) {
+export function CollectionCard({
+  collection,
+  loading,
+}: {
+  collection: Collection;
+  loading?: HTMLImageElement['loading'];
+}) {
   return (
     <Link to={`/collections/${collection.handle}`} className="grid gap-4">
       {collection?.image && (

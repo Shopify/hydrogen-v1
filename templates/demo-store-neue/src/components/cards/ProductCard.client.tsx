@@ -1,24 +1,42 @@
 import clsx from 'clsx';
-import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
+import {
+  flattenConnection,
+  Image,
+  Link,
+  Money,
+  useMoney,
+} from '@shopify/hydrogen';
 
 import {Text} from '~/components';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
 import {product as mockProduct} from '~/lib/placeholders';
+import type {MoneyV2, Product} from '@shopify/hydrogen/storefront-api-types';
 
-export function ProductCard({product, label, className, loading}) {
+export function ProductCard({
+  product,
+  label,
+  className,
+  loading,
+}: {
+  product: Product;
+  label?: string;
+  className?: string;
+  loading?: boolean;
+}) {
   let cardLabel;
 
   const cardData = product?.variants ? product : mockProduct;
 
+  // TODO: Fix types
   const {
     image,
     priceV2: price,
     compareAtPriceV2: compareAtPrice,
-  } = cardData?.variants?.nodes[0] || {};
+  } = flattenConnection(cardData?.variants)[0] || {};
 
   if (label) {
     cardLabel = label;
-  } else if (isDiscounted(price, compareAtPrice)) {
+  } else if (isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2)) {
     cardLabel = 'Sale';
   } else if (isNewArrival(product.publishedAt)) {
     cardLabel = 'New';
@@ -37,6 +55,7 @@ export function ProductCard({product, label, className, loading}) {
           >
             {cardLabel}
           </Text>
+          {/* TODO: Fix types */}
           {image && (
             <Image
               className="aspect-[4/5]"
@@ -55,6 +74,7 @@ export function ProductCard({product, label, className, loading}) {
           </Text>
           <div className="flex gap-4">
             <Text className="flex gap-4">
+              {/* TODO: Fix types */}
               <Money withoutTrailingZeros data={price} />
               {isDiscounted(price, compareAtPrice) && (
                 <CompareAtPrice
@@ -70,7 +90,13 @@ export function ProductCard({product, label, className, loading}) {
   );
 }
 
-function CompareAtPrice({data, className}) {
+function CompareAtPrice({
+  data,
+  className,
+}: {
+  data: MoneyV2;
+  className?: string;
+}) {
   const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} =
     useMoney(data);
 
