@@ -6,10 +6,15 @@
     "lib": ["dom", "dom.iterable", "scripthost", "es2020"],
     "jsx": "react",
     "types": ["vite/client"],
+    "strict": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "paths": {
       "~/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["**/*.js", "**/*.jsx"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
