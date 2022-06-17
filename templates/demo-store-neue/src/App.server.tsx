@@ -2,6 +2,7 @@ import {Suspense} from 'react';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
   FileRoutes,
+  type HydrogenRouteProps,
   PerformanceMetrics,
   PerformanceMetricsDebug,
   Route,
@@ -17,7 +18,7 @@ import {
   HeaderFallback,
 } from '~/components';
 
-function App({routes, request}) {
+function App({routes, request}: HydrogenRouteProps) {
   const isHome = new URL(request.normalizedUrl).pathname === '/';
 
   return (
