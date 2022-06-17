@@ -234,6 +234,13 @@ export default async function testCases({
     expect(await page.textContent('body')).toContain(`"fiddle"`);
   });
 
+  it('imports components using aliases', async () => {
+    await page.goto(getServerUrl() + '/alias');
+    expect(await page.textContent('h1')).toContain('Aliases');
+
+    expect(await page.$$('[data-test=alias]')).toHaveLength(3);
+  });
+
   it('adds style tags for CSS modules', async () => {
     await page.goto(getServerUrl() + '/css-modules');
     expect(await page.textContent('h1')).toContain('CSS Modules');
