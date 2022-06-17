@@ -1,8 +1,23 @@
-import {CacheNone, gql} from '@shopify/hydrogen';
+import {
+  CacheNone,
+  gql,
+  type HydrogenApiRouteOptions,
+  type HydrogenRequest,
+} from '@shopify/hydrogen';
 
 import {getApiErrorMessage} from '~/lib/utils';
+import type {Address} from './index.server';
 
-export async function api(request, {params, session, queryShop}) {
+export async function api(
+  request: HydrogenRequest,
+  {params, session, queryShop}: HydrogenApiRouteOptions,
+) {
+  if (!session) {
+    return new Response('Session storage not available.', {
+      status: 400,
+    });
+  }
+
   const {customerAccessToken} = await session.get();
 
   if (!customerAccessToken) return new Response(null, {status: 401});
@@ -20,13 +35,18 @@ export async function api(request, {params, session, queryShop}) {
   });
 }
 
-async function deleteAddress(customerAccessToken, params, queryShop) {
+async function deleteAddress(
+  customerAccessToken: string,
+  params: HydrogenApiRouteOptions['params'],
+  queryShop: HydrogenApiRouteOptions['queryShop'],
+) {
   const {data, errors} = await queryShop({
     query: DELETE_ADDRESS_MUTATION,
     variables: {
       customerAccessToken,
       id: decodeURIComponent(params.addressId),
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 
@@ -37,7 +57,12 @@ async function deleteAddress(customerAccessToken, params, queryShop) {
   return new Response(null);
 }
 
-async function updateAddress(customerAccessToken, request, params, queryShop) {
+async function updateAddress(
+  customerAccessToken: string,
+  request: HydrogenRequest,
+  params: HydrogenApiRouteOptions['params'],
+  queryShop: HydrogenApiRouteOptions['queryShop'],
+) {
   const {
     firstName,
     lastName,
@@ -52,7 +77,7 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
     isDefaultAddress,
   } = await request.json();
 
-  const address = {};
+  const address: Address = {};
 
   if (firstName) address.firstName = firstName;
   if (lastName) address.lastName = lastName;
@@ -72,6 +97,7 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
       customerAccessToken,
       id: decodeURIComponent(params.addressId),
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 
@@ -98,13 +124,18 @@ async function updateAddress(customerAccessToken, request, params, queryShop) {
   return new Response(null);
 }
 
-export function setDefaultAddress(queryShop, addressId, customerAccessToken) {
+export function setDefaultAddress(
+  queryShop: HydrogenApiRouteOptions['queryShop'],
+  addressId: string,
+  customerAccessToken: string,
+) {
   return queryShop({
     query: UPDATE_DEFAULT_ADDRESS_MUTATION,
     variables: {
       customerAccessToken,
       addressId,
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 }

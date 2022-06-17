@@ -8,6 +8,19 @@ import {
 
 import {getApiErrorMessage} from '~/lib/utils';
 
+export interface Address {
+  firstName?: string;
+  lastName?: string;
+  company?: string;
+  address1?: string;
+  address2?: string;
+  country?: string;
+  province?: string;
+  city?: string;
+  zip?: string;
+  phone?: string;
+}
+
 export async function api(
   request: HydrogenRequest,
   {session, queryShop}: HydrogenApiRouteOptions,
@@ -44,19 +57,6 @@ export async function api(
     phone,
     isDefaultAddress,
   } = await request.json();
-
-  interface Address {
-    firstName?: string;
-    lastName?: string;
-    company?: string;
-    address1?: string;
-    address2?: string;
-    country?: string;
-    province?: string;
-    city?: string;
-    zip?: string;
-    phone?: string;
-  }
 
   const address: Address = {};
 
