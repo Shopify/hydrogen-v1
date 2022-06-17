@@ -1,17 +1,21 @@
-import {ClockFunction, InMemoryCache} from '../in-memory';
+import {InMemoryCache} from '../in-memory';
 
 describe('In-Memory Cache', () => {
-  const clock = {timestamp: 1000};
-  const clockFunction: ClockFunction = () => clock;
+  const clock = {timestamp: 0};
+  Date.now = jest.fn(() => clock.timestamp);
+
+  const advanceTimeBy = (ms: number) => {
+    clock.timestamp += ms;
+  };
 
   it('uses cache control header to persist', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
     response.headers.set('cache-control', 'max-age=60');
     await cache.put(request, response);
 
-    clock.timestamp += 59 * 1000;
+    advanceTimeBy(59 * 1000);
 
     const cachedResponse = await cache.match(request);
     expect(cachedResponse).toBeDefined();
@@ -20,13 +24,13 @@ describe('In-Memory Cache', () => {
     );
     expect(cachedResponse!.headers.get('cache')).toBe('HIT');
 
-    clock.timestamp += 2 * 1000;
+    advanceTimeBy(2 * 1000);
 
     expect(await cache.match(request)).toBeUndefined();
   });
 
   it('supports stale-while-revalidate', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
     response.headers.set(
@@ -35,7 +39,7 @@ describe('In-Memory Cache', () => {
     );
     await cache.put(request, response);
 
-    clock.timestamp += 9 * 1000;
+    advanceTimeBy(9 * 1000);
 
     let cachedResponse;
 
@@ -43,24 +47,24 @@ describe('In-Memory Cache', () => {
     expect(cachedResponse).toBeDefined();
     expect(cachedResponse!.headers.get('cache')).toBe('HIT');
 
-    clock.timestamp += 2 * 1000;
+    advanceTimeBy(2 * 1000);
 
     cachedResponse = await cache.match(request);
     expect(cachedResponse).toBeDefined();
     expect(cachedResponse!.headers.get('cache')).toBe('STALE');
 
-    clock.timestamp += 60 * 1000;
+    advanceTimeBy(60 * 1000);
     expect(await cache.match(request)).toBeUndefined();
   });
 
   it('supports deleting cache entries', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
     response.headers.set('cache-control', 'max-age=10');
     await cache.put(request, response);
 
-    clock.timestamp += 9 * 1000;
+    advanceTimeBy(9 * 1000);
 
     const cachedResponse = await cache.match(request);
     expect(cachedResponse).toBeDefined();
@@ -72,13 +76,13 @@ describe('In-Memory Cache', () => {
   });
 
   it('deletes entry when encountering cache MISS', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
     response.headers.set('cache-control', 'max-age=10');
     cache.put(request, response);
 
-    clock.timestamp += 11 * 1000;
+    advanceTimeBy(11 * 1000);
 
     expect(await cache.match(request)).toBeUndefined();
 
@@ -87,7 +91,7 @@ describe('In-Memory Cache', () => {
   });
 
   it('reads the body', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
     await cache.put(request, response);
@@ -97,7 +101,7 @@ describe('In-Memory Cache', () => {
   });
 
   it('does not cache non-GET requests', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     for (const method of ['POST', 'PUT', 'PATCH', 'DELETE']) {
       const request = new Request('https://shopify.dev/', {method});
       const response = new Response('Hello World');
@@ -109,7 +113,7 @@ describe('In-Memory Cache', () => {
   });
 
   it('does not match non-GET requests', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
 
@@ -123,7 +127,7 @@ describe('In-Memory Cache', () => {
   });
 
   it('does not cache responses to a range request (status 206)', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/', {
       headers: {Range: 'bytes=0-10'},
     });
@@ -135,7 +139,7 @@ describe('In-Memory Cache', () => {
   });
 
   it('does not cache responses containing vary=* header', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World');
     response.headers.set('vary', '*');
@@ -146,7 +150,7 @@ describe('In-Memory Cache', () => {
   });
 
   it('stores the response status', async () => {
-    const cache = new InMemoryCache(clockFunction);
+    const cache = new InMemoryCache();
     const request = new Request('https://shopify.dev/');
     const response = new Response('Hello World', {status: 404});
     await cache.put(request, response);

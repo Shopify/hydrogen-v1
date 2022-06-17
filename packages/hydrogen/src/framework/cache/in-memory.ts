@@ -5,12 +5,6 @@ type CacheMatch = {
   headers: [string, string][];
 };
 
-const defaultClock = () => ({
-  timestamp: Date.now(),
-});
-
-export type ClockFunction = () => {timestamp: number};
-
 /**
  * This is a limited implementation of an in-memory cache.
  * It only supports the `cache-control` header.
@@ -19,11 +13,9 @@ export type ClockFunction = () => {timestamp: number};
  */
 export class InMemoryCache implements Cache {
   #store: Map<string, CacheMatch>;
-  #clock: ClockFunction;
 
-  constructor(clock: ClockFunction = defaultClock) {
+  constructor() {
     this.#store = new Map();
-    this.#clock = clock;
   }
 
   add(request: RequestInfo): Promise<void> {
@@ -60,7 +52,7 @@ export class InMemoryCache implements Cache {
       body: new Uint8Array(await response.arrayBuffer()),
       status: response.status,
       headers: [...response.headers],
-      timestamp: this.#clock().timestamp,
+      timestamp: Date.now(),
     });
   }
 
@@ -85,7 +77,7 @@ export class InMemoryCache implements Cache {
       cacheControl.match(/stale-while-revalidate=(\d+)/)?.[1] || '0',
       10
     );
-    const age = (this.#clock().timestamp - timestamp) / 1000;
+    const age = (Date.now() - timestamp) / 1000;
 
     const isMiss = age > maxAge + swr;
     if (isMiss) {
