@@ -1,4 +1,9 @@
-import {useShopQuery, gql, CacheLong} from '@shopify/hydrogen';
+import {
+  useShopQuery,
+  gql,
+  CacheLong,
+  type HydrogenRouteProps,
+} from '@shopify/hydrogen';
 
 /*
   This route redirects you to your Shopify Admin
@@ -7,8 +12,8 @@ import {useShopQuery, gql, CacheLong} from '@shopify/hydrogen';
   https://developer.mozilla.org/en-US/docs/Web/API/Response/redirect
 */
 
-export default function AdminRedirect({response}) {
-  const {data} = useShopQuery({
+export default function AdminRedirect({response}: HydrogenRouteProps) {
+  const {data} = useShopQuery<any>({
     query: SHOP_QUERY,
     cache: CacheLong(),
   });
