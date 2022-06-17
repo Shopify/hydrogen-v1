@@ -3,7 +3,7 @@ import {
   flattenConnection,
   gql,
   Head,
-  HydrogenRouteProps,
+  type HydrogenRouteProps,
   Seo,
   useShop,
   useShopQuery,

@@ -5,7 +5,7 @@ import {
   gql,
   Image,
   CacheLong,
-  HydrogenRouteProps,
+  type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 import type {Article} from '@shopify/hydrogen/storefront-api-types';
 

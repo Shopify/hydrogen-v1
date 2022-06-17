@@ -5,7 +5,7 @@ import {
   useServerAnalytics,
   ShopifyAnalyticsConstants,
   gql,
-  HydrogenRouteProps,
+  type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
 import {Layout, NotFound, PageHeader} from '~/components';
