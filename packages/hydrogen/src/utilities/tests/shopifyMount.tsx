@@ -47,7 +47,7 @@ export const mountWithProviders = createMount<
         <LocalizationClientProvider
           localization={{
             language: {isoCode: 'en'},
-            country: {isoCode: 'US', name: 'United States'},
+            country: {isoCode: 'US'},
           }}
         >
           <BrowserRouter history={history}>{element}</BrowserRouter>
