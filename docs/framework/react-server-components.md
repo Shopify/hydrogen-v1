@@ -179,7 +179,7 @@ function Button() {
 
 Developers might be familiar with a "facade file" pattern, where similar files are re-exported from a shared `index.js` file in a folder. This pattern is not supported in React Server Components when mixing client components with server components.
 
-Instead, developers wishing to use the facade pattern should create separate files for client and server components:
+Instead, developers wishing to use the facade pattern should create separate files for client components and server components:
 
 {% codeblock file, filename: 'components/index.js' %}
 
