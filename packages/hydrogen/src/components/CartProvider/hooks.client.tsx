@@ -55,7 +55,7 @@ export function useCartFetch() {
           };
         });
     },
-    [storeDomain, storefrontApiVersion, storefrontToken]
+    [storeDomain, storefrontApiVersion, storefrontToken, storefrontId]
   );
 }
 
