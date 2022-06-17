@@ -9,7 +9,9 @@ Hydrogen is modelled after [React Server Components](https://reactjs.org/blog/20
 This guide provides information about how React Server Components work in the context of Hydrogen.
 
 > Note:
-> React Server Components are currently in Alpha. However, Hydrogen includes a built-in layer of abstraction that provides stability, regardless of the state of React Server Components.
+> Hydrogen's [implementation](https://shopify.dev/custom-storefronts/hydrogen/framework/work-with-rsc) of server components is a modified version of React Server Components, which are currently in [Alpha](https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html#server-components). Shopify provides a layer of abstractions to make server components stable for use in Hydrogen apps.
+> 
+> Shopify is currently working with Vercel and the React team to align on enhancements to server components, and will release a future version of Hydrogen with tools for migrating existing Hydrogen apps.
 
 ## How React Server Components work
 
@@ -142,6 +144,77 @@ In addition to server-specific and client-specific components, you can create co
 ![A diagram that illustrates server-specific and client-specific components, and shared components between the client and server](/assets/custom-storefronts/hydrogen/hydrogen-shared-components.png)
 
 Although shared components have the most constraints, many components already obey these rules and can be used across the server and client without modification. For example, many components transform some props based on certain conditions, without using state or loading additional data. This is why shared components are the default and [don’t have a dedicated file extension](#component-types).
+
+### Client components and server-side rendering
+
+Client components ending in `.client.jsx` are rendered in the browser. However, they are also rendered on the server during server-side rendering (SSR). This is because SSR produces an HTML "preview" of what will eventually be rendered in the browser.
+
+This behavior might be confusing, because the word "client" indicates a client-only behavior. Shopify is working with the React team to [refine these naming conventions](https://github.com/reactjs/rfcs/pull/189#issuecomment-1116482278) to make it less confusing.
+
+In the meantime, avoid including browser-only logic in client components in a way that will cause problems during SSR:
+
+{% codeblock file, filename: 'Button.client.jsx' %}
+
+```tsx
+// ❌ Don't do this because `window` isn't available during SSR
+function Button() {
+  const innerWidth = window.innerWidth;
+
+  return <button>...</button>
+}
+
+// ✅ Do this because `useEffect` doesn't run during SSR
+function Button() {
+  const [innerWidth, setInnerWidth] = useState();
+
+  useEffect(() => {
+    setInnerWidth(window.innerWidth);
+  }, []);
+
+  return <button>...</button>
+}
+```
+
+{% endcodeblock %}
+
+### Component organization and index files
+
+You might be familiar with a "facade file" pattern, where similar files are re-exported from a shared `index.js` file in a folder. This pattern isn't supported in React Server Components when mixing client components with server components.
+
+If you want to use the facade pattern, then you need to create separate files for client components and server components:
+
+{% codeblock file, filename: 'components/index.js' %}
+
+```tsx
+// ❌ Don't do this because it mixes client components and server components:
+
+export {Button} from './Button.client.jsx'
+export {Dropdown} from './Dropdown.client.jsx'
+export {Widget} from './Widget.server.jsx'
+```
+
+{% endcodeblock %}
+
+{% codeblock file, filename: 'components/index.js' %}
+
+```tsx
+// ✅ Do this because only client components are exported
+
+export {Button} from './Button.client.jsx'
+export {Dropdown} from './Dropdown.client.jsx'
+```
+
+{% endcodeblock %}
+
+{% codeblock file, filename: 'components/server.js' %}
+
+```tsx
+// ✅ Do this because only server components are exported
+
+export {Widget} from './Widget.server.jsx'
+```
+
+{% endcodeblock %}
 
 ## Next steps
 
