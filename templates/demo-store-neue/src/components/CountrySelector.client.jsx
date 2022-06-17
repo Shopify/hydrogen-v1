@@ -3,13 +3,23 @@ import {useLocalization, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 
 import {IconCheck, IconCaret} from '~/components';
+import {useMemo} from 'react';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
  */
-export function CountrySelector() {
+export function CountrySelector({countryName}) {
   const [listboxOpen, setListboxOpen] = useState(false);
-  const {country: currentCountry} = useLocalization();
+  const {
+    country: {isoCode},
+  } = useLocalization();
+  const currentCountry = useMemo(
+    () => ({
+      name: countryName,
+      isoCode,
+    }),
+    [countryName, isoCode],
+  );
 
   const setCountry = useCallback(
     ({isoCode: newIsoCode}) => {

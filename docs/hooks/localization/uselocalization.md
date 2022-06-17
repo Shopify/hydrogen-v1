@@ -46,7 +46,7 @@ This hook returns an object with the following properties:
 
 | Property   | Description                                                                              |
 | ---------- | ---------------------------------------------------------------------------------------- |
-| `country`  | An object with the country's `isoCode` and `name`.                                       |
+| `country`  | An object with the country's `isoCode`.                                       |
 | `language` | An object with the language's `isoCode`.                                                 |
 | `locale`   | A locale string, which includes the `isoCode` of both the `language` and `country`. For example, `en-US`. |
 

@@ -1,9 +1,6 @@
 import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
 import {useShop} from '../../foundation/useShop';
-import {useShopQuery} from '../../hooks/useShopQuery';
-import {Localization} from '../../storefront-api-types';
-import {CacheLong} from '../../foundation/Cache/strategies';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
 
 export interface LocalizationProviderProps {
@@ -37,27 +34,10 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
   ).toUpperCase();
   const countryCode = (props.countryCode ?? defaultCountryCode).toUpperCase();
 
-  const {
-    data: {
-      localization: {availableCountries},
-    },
-  } = useShopQuery<{localization: Localization}>({
-    query: COUNTRIES_QUERY,
-    cache: CacheLong(),
-    preload: true,
-  });
-
-  const country = availableCountries.find(
-    (country) => country.isoCode === countryCode
-  );
-
-  if (!country) throw new Error(`No country available for: ${countryCode}`);
-
   const request = useServerRequest();
   const localization = {
     country: {
-      isoCode: country.isoCode,
-      name: country.name,
+      isoCode: countryCode,
     },
     language: {
       isoCode: languageCode,
@@ -71,14 +51,3 @@ export function LocalizationProvider(props: LocalizationProviderProps) {
     </LocalizationClientProvider>
   );
 }
-
-const COUNTRIES_QUERY = `
-  query Localization {
-    localization {
-      availableCountries {
-        isoCode
-        name
-      }
-    }
-  }
-`;
