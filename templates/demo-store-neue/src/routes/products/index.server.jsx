@@ -1,4 +1,4 @@
-import {useSession, useShop, useShopQuery, gql} from '@shopify/hydrogen';
+import {useShopQuery, gql, useLocalization} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {Layout, ProductGrid, PageHeader, Section} from '~/components';
@@ -6,8 +6,10 @@ import {Layout, ProductGrid, PageHeader, Section} from '~/components';
 const pageBy = 12;
 
 export default function AllProducts() {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: ALL_PRODUCTS_QUERY,

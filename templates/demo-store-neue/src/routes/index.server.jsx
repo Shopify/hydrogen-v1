@@ -5,8 +5,7 @@ import {
   Seo,
   ShopifyAnalyticsConstants,
   useServerAnalytics,
-  useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
 
@@ -15,8 +14,10 @@ import {Layout, FeaturedCollections, Hero, ProductSwimlane} from '~/components';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 
 export default function Homepage() {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: HOMEPAGE_CONTENT_QUERY,

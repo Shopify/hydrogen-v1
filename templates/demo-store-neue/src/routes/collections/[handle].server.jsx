@@ -3,8 +3,7 @@ import {
   Seo,
   ShopifyAnalyticsConstants,
   useServerAnalytics,
-  useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
 
@@ -22,8 +21,10 @@ const pageBy = 4;
 
 export default function Collection({params}) {
   const {handle} = params;
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {
     data: {collection},
@@ -52,7 +53,7 @@ export default function Collection({params}) {
   return (
     <Layout>
       <Seo type="collection" data={collection} />
-      <PageHeader heading={collection.title}>
+      <PageHeader heading={collection.title + '-' + countryCode}>
         <div className="flex items-baseline justify-between w-full">
           <div>
             <Text format width="narrow" as="p" className="inline-block">

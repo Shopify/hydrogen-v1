@@ -1,5 +1,5 @@
 import {useCallback, useState, Suspense} from 'react';
-import {useCountry, fetchSync} from '@shopify/hydrogen';
+import {useLocalization, fetchSync} from '@shopify/hydrogen';
 import {Listbox} from '@headlessui/react';
 
 import {IconCheck, IconCaret} from '~/components';
@@ -9,16 +9,29 @@ import {IconCheck, IconCaret} from '~/components';
  */
 export function CountrySelector() {
   const [listboxOpen, setListboxOpen] = useState(false);
-  const [selectedCountry] = useCountry();
+  const {country: currentCountry} = useLocalization();
 
-  const setCountry = useCallback(({isoCode, name}) => {
-    fetch(`/api/countries`, {
-      body: JSON.stringify({isoCode, name}),
-      method: 'POST',
-    }).then(() => {
-      window.location.reload();
-    });
-  }, []);
+  const setCountry = useCallback(
+    ({isoCode: newIsoCode}) => {
+      const currentPath = window.location.pathname;
+      let redirectPath;
+
+      if (newIsoCode !== 'US') {
+        if (currentCountry.isoCode === 'US') {
+          redirectPath = `/${newIsoCode.toLowerCase()}${currentPath}`;
+        } else {
+          redirectPath = `/${newIsoCode.toLowerCase()}${currentPath.substring(
+            currentPath.indexOf('/', 1),
+          )}`;
+        }
+      } else {
+        redirectPath = `${currentPath.substring(currentPath.indexOf('/', 1))}`;
+      }
+
+      window.location.href = redirectPath;
+    },
+    [currentCountry],
+  );
 
   return (
     <div className="relative">
@@ -32,7 +45,7 @@ export function CountrySelector() {
                   open ? 'rounded-b md:rounded-t md:rounded-b-none' : 'rounded'
                 } border-contrast/30 dark:border-white`}
               >
-                <span className="">{selectedCountry.name}</span>
+                <span className="">{currentCountry.name}</span>
                 <IconCaret direction={open ? 'up' : 'down'} />
               </Listbox.Button>
 
@@ -43,7 +56,7 @@ export function CountrySelector() {
                 {listboxOpen && (
                   <Suspense fallback={<div className="p-2">Loading…</div>}>
                     <Countries
-                      selectedCountry={selectedCountry}
+                      selectedCountry={currentCountry}
                       getClassName={(active) => {
                         return `text-white w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${
                           active ? 'bg-contrast/10' : null

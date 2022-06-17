@@ -1,8 +1,7 @@
 import {
-  useShop,
   useShopQuery,
   flattenConnection,
-  useSession,
+  useLocalization,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
   gql,
@@ -43,8 +42,10 @@ export default function NotFound({response}) {
     response.statusText = 'Not found';
   }
 
-  const {countryCode = 'US'} = useSession();
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   useServerAnalytics({
     shopify: {

@@ -4,7 +4,7 @@ import {
   gql,
   Head,
   Seo,
-  useShop,
+  useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
 
@@ -15,7 +15,10 @@ const BLOG_HANDLE = 'Journal';
 
 export default function Blog({pageBy = 12, response}) {
   response.cache(CacheLong());
-  const {languageCode, locale} = useShop();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: BLOG_QUERY,
@@ -32,7 +35,7 @@ export default function Blog({pageBy = 12, response}) {
     const {publishedAt} = article;
     return {
       ...article,
-      publishedAt: new Intl.DateTimeFormat(locale, {
+      publishedAt: new Intl.DateTimeFormat(`${languageCode}-${countryCode}`, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

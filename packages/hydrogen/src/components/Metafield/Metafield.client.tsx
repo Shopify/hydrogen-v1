@@ -1,6 +1,6 @@
 import React, {type ElementType, useMemo} from 'react';
 import type {Props} from '../types';
-import {useShop} from '../../foundation';
+import {useLocalization} from '../../client';
 import {getMeasurementAsString} from '../../utilities';
 import type {Measurement, Rating} from '../../types';
 import {Image} from '../Image';
@@ -35,7 +35,8 @@ export function Metafield<TTag extends ElementType>(
   props: Props<TTag> & MetafieldProps<TTag>
 ) {
   const {data, children, as, ...passthroughProps} = props;
-  const {locale} = useShop();
+  const {locale} = useLocalization();
+
   const parsedMetafield = useMemo(() => parseMetafield(data), [data]);
 
   if (!parsedMetafield) {

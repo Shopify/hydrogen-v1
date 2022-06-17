@@ -1,0 +1,22 @@
+---
+'@shopify/hydrogen': minor
+---
+
+We have reworked how localization works in Hydrogen. By default the `useLocalization()` hook returns the default locale defined within your `hydrogen.config.js` file. The `<LocalizationProvider>` component now takes `countryCode` and `languageCode` as optional props. Any props given to `<LocalizationProvider>` will also be used by the `useLocalization` hook.
+
+**Breaking Change**
+
+The `useCountry` hook has been removed. Instead use the [`useLocalization` hook](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization).
+
+```diff
+- import {useCountry, gql} from '@shopify/hydrogen';
++ import {useLocalization, gql} from '@shopify/hydrogen';
+
+export function MyComponent() {
+
+-  const [country] = useCountry();
++  const {country} = useLocalization();
+
+  return ( /* Your JSX */ );
+}
+```
