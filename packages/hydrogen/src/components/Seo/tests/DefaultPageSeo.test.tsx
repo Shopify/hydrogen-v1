@@ -1,19 +1,19 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {Head} from '../../../client';
+import {Head} from '../../../foundation/Head';
 
 import {DefaultPageSeo} from '../DefaultPageSeo.client';
 import {TitleSeo} from '../TitleSeo.client';
 import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 
-jest.mock('../../../client', () => ({
+jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {
     return children;
   },
 }));
 
-jest.mock('../../../foundation', () => ({
+jest.mock('../../../foundation/useShop/use-shop', () => ({
   useShop() {
     return {languageCode: 'FR'};
   },

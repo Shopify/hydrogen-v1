@@ -1,9 +1,6 @@
-import {
-  Logger,
-  setLogger,
-  logCacheControlHeaders,
-  collectQueryCacheControlHeaders,
-} from '../index';
+import {Logger, setLogger} from '../log';
+import {logCacheControlHeaders} from '../log-cache-header';
+import {collectQueryCacheControlHeaders} from '../log-cache-header';
 import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
 import {HydrogenResponse} from '../../../foundation/HydrogenResponse/HydrogenResponse.server';
 

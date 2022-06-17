@@ -1,4 +1,4 @@
-import {parseMetafieldValue} from '../index';
+import {parseMetafieldValue} from '../parseMetafield';
 import {getRawMetafield} from '../../tests/metafields';
 
 describe(`parseMetafieldValue()`, () => {
