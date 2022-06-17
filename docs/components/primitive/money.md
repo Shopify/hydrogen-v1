@@ -92,7 +92,7 @@ export default function Product() {
 ## Required fields
 
 The `Money` component requires the following fields from the Storefront API's
-[MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2).
+[MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2):
 
 ```graphql
 {
