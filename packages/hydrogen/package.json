@@ -27,6 +27,10 @@
       "require": "./dist/node/utilities/web-api-polyfill"
     },
     "./vendor/*": "./vendor/*",
+    "./cache/*": {
+      "import": "./dist/esnext/framework/cache/*.js",
+      "require": "./dist/node/framework/cache/*.js"
+    },
     "./package.json": "./package.json",
     "./*": "./dist/esnext/*.js"
   },
