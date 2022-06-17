@@ -8,6 +8,7 @@ import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenRespo
 import type {Metafield} from './storefront-api-types';
 import type {SessionStorageAdapter} from './foundation/session/session';
 import type {PartialDeep, JsonValue} from 'type-fest';
+import {NextFunction} from 'connect';
 
 export type AssembleHtmlParams = {
   ssrHtml: string;
@@ -80,6 +81,7 @@ export type InlineHydrogenConfig = ClientConfig & {
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
+  middleware?: NextFunction[];
   __EXPERIMENTAL__devTools?: boolean;
 };
 

@@ -1,0 +1,1 @@
+{"version":3,"file":"c5a81895.js","sources":["../../../../../node_modules/@shopify/hydrogen/dist/esnext/components/LocalizationProvider/LocalizationContext.client.js"],"sourcesContent":["import { createContext } from 'react';\nexport const LocalizationContext = createContext(null);\n"],"names":["createContext"],"mappings":"wCACY,KAAC,GAAsBA,EAAa,QAAA,cAAC,IAAI"}

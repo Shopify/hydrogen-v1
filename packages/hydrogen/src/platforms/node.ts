@@ -1,5 +1,5 @@
 import '../utilities/web-api-polyfill';
-import type {RequestHandler} from '../types';
+import type {InlineHydrogenConfig, RequestHandler} from '../types';
 import path from 'path';
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
@@ -23,6 +23,11 @@ type CreateServerOptions = {
 };
 
 export async function createServer({cache}: CreateServerOptions = {}) {
+  const {default: inlineHydrogenConfig} = (await import(
+    // @ts-ignore
+    // eslint-disable-next-line node/no-missing-import
+    'virtual__hydrogen.config.ts'
+  )) as {default: InlineHydrogenConfig};
   // @ts-ignore
   globalThis.Oxygen = {env: process.env};
 
@@ -45,6 +50,12 @@ export async function createServer({cache}: CreateServerOptions = {}) {
       cache,
     })
   );
+
+  if (inlineHydrogenConfig.middleware?.length ?? -1 > 0) {
+    for (const middleware of inlineHydrogenConfig.middleware!) {
+      app.use(middleware);
+    }
+  }
 
   return {app};
 }

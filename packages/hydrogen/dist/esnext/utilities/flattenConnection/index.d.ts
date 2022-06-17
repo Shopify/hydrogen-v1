@@ -1,0 +1,1 @@
+export { flattenConnection } from './flattenConnection';
