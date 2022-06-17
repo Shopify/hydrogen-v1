@@ -12,6 +12,10 @@ import {
 import {Layout, FeaturedCollections, Hero, ProductSwimlane} from '~/components';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {
+  CollectionConnection,
+  ProductConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
 export default function Homepage() {
   const {
@@ -19,7 +23,11 @@ export default function Homepage() {
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data} = useShopQuery<any>({
+  const {data} = useShopQuery<{
+    heroBanners: CollectionConnection;
+    featuredCollections: CollectionConnection;
+    featuredProducts: ProductConnection;
+  }>({
     query: HOMEPAGE_CONTENT_QUERY,
     variables: {
       language: languageCode,

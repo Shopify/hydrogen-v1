@@ -6,6 +6,7 @@ import {
   gql,
   Link,
 } from '@shopify/hydrogen';
+import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, PageHeader, Section, Heading} from '~/components';
 
@@ -14,7 +15,9 @@ export default function Policies() {
     language: {isoCode: languageCode},
   } = useLocalization();
 
-  const {data} = useShopQuery<any>({
+  const {data} = useShopQuery<{
+    shop: Shop;
+  }>({
     query: POLICIES_QUERY,
     variables: {
       languageCode,
@@ -42,7 +45,7 @@ export default function Policies() {
       <PageHeader heading="Policies" />
       <Section padding="x" className="mb-24">
         {policies.map((policy) => {
-          if (policy === null) {
+          if (!policy) {
             return;
           }
           return (

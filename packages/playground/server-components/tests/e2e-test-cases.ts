@@ -234,6 +234,13 @@ export default async function testCases({
     expect(await page.textContent('body')).toContain(`"fiddle"`);
   });
 
+  it('imports components using aliases', async () => {
+    await page.goto(getServerUrl() + '/alias');
+    expect(await page.textContent('h1')).toContain('Aliases');
+
+    expect(await page.$$('[data-test=alias]')).toHaveLength(3);
+  });
+
   it('adds style tags for CSS modules', async () => {
     await page.goto(getServerUrl() + '/css-modules');
     expect(await page.textContent('h1')).toContain('CSS Modules');
@@ -249,6 +256,21 @@ export default async function testCases({
     expect(await page.textContent('style')).toEqual(
       `.${className} {\n  color: red;\n}\n`
     );
+  });
+
+  it('supports React.useId()', async () => {
+    const response = await page.goto(getServerUrl() + '/useid');
+
+    // Pattern: <div id="id">:Rcm:</div>
+    const serverRenderedId = (await response.text()).match(
+      /<div id="id">(.*?)<\/div>/
+    )[1];
+
+    const clientRenderedId = await page.evaluate(() => {
+      return document.getElementById('id').innerHTML;
+    });
+
+    expect(serverRenderedId).toEqual(clientRenderedId);
   });
 
   describe('HMR', () => {

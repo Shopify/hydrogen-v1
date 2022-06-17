@@ -7,7 +7,7 @@ import {
   CacheLong,
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
-import type {Article} from '@shopify/hydrogen/storefront-api-types';
+import type {Blog} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, CustomFont} from '~/components';
 import {ATTR_LOADING_EAGER} from '~/lib/const';
@@ -22,7 +22,9 @@ export default function Post({params, response}: HydrogenRouteProps) {
   } = useLocalization();
 
   const {handle} = params;
-  const {data} = useShopQuery<any>({
+  const {data} = useShopQuery<{
+    blog: Blog;
+  }>({
     query: ARTICLE_QUERY,
     variables: {
       language: languageCode,
@@ -31,8 +33,11 @@ export default function Post({params, response}: HydrogenRouteProps) {
     },
   });
 
-  const {title, publishedAt, contentHtml, author} = data.blog
-    .articleByHandle as Article;
+  if (!data?.blog?.articleByHandle) {
+    return <div>Article not found</div>;
+  }
+
+  const {title, publishedAt, contentHtml, author} = data.blog.articleByHandle;
   const formattedDate = new Intl.DateTimeFormat(
     `${languageCode}-${countryCode}`,
     {
@@ -46,17 +51,20 @@ export default function Post({params, response}: HydrogenRouteProps) {
     <Layout>
       {/* Loads Fraunces custom font only on articles */}
       <CustomFont />
+      {/* @ts-expect-error Blog article types are not supported in TS */}
       <Seo type="page" data={data.blog.articleByHandle} />
       <section className="w-[51rem] m-auto mt-12 max-w-full">
         <h1 className="text-4xl font-bold px-6 md:px-24">{title}</h1>
         <span className="block mt-6 px-6 md:px-24">
           {formattedDate} &middot; {author.name}
         </span>
-        <Image
-          data={data.blog.articleByHandle.image}
-          className="mt-8 md:mt-16"
-          loading={ATTR_LOADING_EAGER}
-        />
+        {data.blog.articleByHandle.image && (
+          <Image
+            data={data.blog.articleByHandle.image}
+            className="mt-8 md:mt-16"
+            loading={ATTR_LOADING_EAGER}
+          />
+        )}
         <div
           dangerouslySetInnerHTML={{__html: contentHtml}}
           className="mt-8 md:mt-16 px-6 md:px-24 mb-24 font-['Fraunces'] prose dark:prose-invert prose-strong:font-sans"
