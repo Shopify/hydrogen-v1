@@ -4,7 +4,7 @@ title: useLocalization
 description: The useLocalization hook returns the locale, country, and language of the current page.
 ---
 
-The useLocalization hook returns the locale, country, and language of the current page. It can be used within server or client components and it must be a descendent of a `LocalizationProvider` component.
+The `useLocalization` hook returns the locale, country, and language of the current page. It can be used within server or client components and it must be a descendent of a [`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component.
 
 ## Example code
 
@@ -48,7 +48,7 @@ This hook returns an object with the following properties:
 | ---------- | ---------------------------------------------------------------------------------------- |
 | `country`  | An object with the country's `isoCode` and `name`.                                       |
 | `language` | An object with the language's `isoCode`.                                                 |
-| `locale`   | A locale string, the `isoCode` of both the `language` and `country`. For example `en-US` |
+| `locale`   | A locale string, which includes the `isoCode` of both the `language` and `country`. For example, `en-US`. |
 
 ## Related components
 
