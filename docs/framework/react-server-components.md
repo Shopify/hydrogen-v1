@@ -9,7 +9,7 @@ Hydrogen is modelled after [React Server Components](https://reactjs.org/blog/20
 This guide provides information about how React Server Components work in the context of Hydrogen.
 
 > Note:
-> React Server Components are currently in Alpha. However, Hydrogen includes a built-in layer of abstraction that provides stability, regardless of the state of React Server Components.
+> Hydrogen's implementation of server components is a stable modified version of React Server Components, which are currently in Alpha. Hydrogen is working with Vercel and the React team to align on enhancements to server components, including dropping the filename suffix and using async/await for data fetching. Hydrogen will release a future version with these enhancements when they are available, along with tools for migrating existing Hydrogen applications. Learn more about the current state of React Server Components [on the React blog](https://reactjs.org/blog/2022/06/15/react-labs-what-we-have-been-working-on-june-2022.html#server-components).
 
 ## How React Server Components work
 
@@ -142,6 +142,45 @@ In addition to server-specific and client-specific components, you can create co
 ![A diagram that illustrates server-specific and client-specific components, and shared components between the client and server](/assets/custom-storefronts/hydrogen/hydrogen-shared-components.png)
 
 Although shared components have the most constraints, many components already obey these rules and can be used across the server and client without modification. For example, many components transform some props based on certain conditions, without using state or loading additional data. This is why shared components are the default and [don’t have a dedicated file extension](#component-types).
+
+### Component organization and index files
+
+Developers might be familiar with a "facade file" pattern, where similar files are re-exported from a shared `index.js` file in a folder. This pattern is not supported in React Server Components when mixing client components with server components.
+
+Instead, developers wishing to use the facade pattern should create separate files for client and server components:
+
+{% codeblock file, filename: 'components/index.js' %}
+
+```tsx
+// ❌ Don't do this, because it mixes client components and server components:
+
+export {Button} from './Button.client.jsx'
+export {Dropdown} from './Dropdown.client.jsx'
+export {Widget} from './Widget.server.jsx'
+```
+
+{% endcodeblock %}
+
+{% codeblock file, filename: 'components/index.js' %}
+
+```tsx
+// ✅ Do this, because only client components are exported
+
+export {Button} from './Button.client.jsx'
+export {Dropdown} from './Dropdown.client.jsx'
+```
+
+{% endcodeblock %}
+
+{% codeblock file, filename: 'components/server.js' %}
+
+```tsx
+// ✅ Do this, because only server components are exported
+
+export {Widget} from './Widget.server.jsx'
+```
+
+{% endcodeblock %}
 
 ## Next steps
 
