@@ -353,9 +353,6 @@ async function runSSR({
             <Suspense fallback={null}>
               <RscConsumer />
             </Suspense>
-            <Suspense fallback={null}>
-              <Analytics />
-            </Suspense>
           </PreloadQueries>
         </ServerPropsProvider>
       </ServerRequestProvider>
