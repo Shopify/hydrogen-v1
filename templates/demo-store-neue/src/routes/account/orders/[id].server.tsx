@@ -12,11 +12,12 @@ import {
   useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
-import {
+import type {
   Customer,
+  DiscountApplication,
   DiscountApplicationConnection,
-  MoneyV2,
-  OrderLineItemConnection,
+  Order,
+  OrderLineItem,
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, Text, PageHeader} from '~/components';
@@ -49,27 +50,23 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
     cache: CacheNone(),
   });
 
-  const [order] = flattenConnection(data?.customer?.orders ?? {}) || [null];
+  const [order] = flattenConnection<Order>(data?.customer?.orders ?? {}) || [
+    null,
+  ];
 
   if (!order) return null;
 
-  const lineItems = flattenConnection(
-    order.lineItems as OrderLineItemConnection,
-  );
-  const discountApplications = flattenConnection(
-    // TODO: Fix types
+  const lineItems = flattenConnection<OrderLineItem>(order.lineItems!);
+  const discountApplications = flattenConnection<DiscountApplication>(
     order.discountApplications as DiscountApplicationConnection,
   );
 
-  let discountPercentage: any;
-  let discountValue: any;
-  let discountAmount: MoneyV2;
-  if (discountApplications?.length) {
-    // TODO: Fix types
-    discountPercentage = discountApplications[0].value!.percentage;
-    discountValue = discountApplications[0].value;
-    discountAmount = discountValue.amount;
-  }
+  const firstDiscount = discountApplications[0]?.value;
+  const discountValue =
+    firstDiscount?.__typename === 'MoneyV2' && firstDiscount;
+  const discountPercentage =
+    firstDiscount?.__typename === 'PricingPercentageValue' &&
+    firstDiscount?.percentage;
 
   return (
     <Layout>
@@ -125,13 +122,13 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
                         <Link
                           to={`/products/${lineItem.variant!.product!.handle}`}
                         >
-                          {/* TODO: Fix type */}
                           {lineItem?.variant?.image && (
                             <Image
                               className="flex-none w-24 h-24 bg-gray-100 rounded-md object-center object-cover"
-                              src={lineItem.variant.image.src}
+                              src={lineItem.variant.image.src!}
                               width={lineItem.variant.image.width!}
                               height={lineItem.variant.image.height!}
+                              alt={lineItem.variant.image.altText!}
                             />
                           )}
                         </Link>
@@ -179,8 +176,8 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
                 ))}
               </tbody>
               <tfoot>
-                {/* TODO: Fix type */}
-                {(discountAmount || discountPercentage > 0) && (
+                {((discountValue && discountValue.amount) ||
+                  discountPercentage) && (
                   <tr>
                     <th
                       scope="row"
@@ -196,12 +193,12 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
                       <Text>Discounts</Text>
                     </th>
                     <td className="pl-3 pr-4 pt-6 text-right md:pr-3 text-green-700 font-medium">
-                      {discountPercentage > 0 ? (
+                      {discountPercentage ? (
                         <span className="text-sm">
                           -{discountPercentage}% OFF
                         </span>
                       ) : (
-                        <Money data={discountValue!} />
+                        discountValue && <Money data={discountValue!} />
                       )}
                     </td>
                   </tr>

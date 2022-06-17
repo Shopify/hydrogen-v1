@@ -8,7 +8,7 @@ import {
   useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
-import type {Article} from '@shopify/hydrogen/storefront-api-types';
+import type {Article, Blog} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, ArticleCard, Grid, PageHeader} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
@@ -22,7 +22,9 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data} = useShopQuery<any>({
+  const {data} = useShopQuery<{
+    blog: Blog;
+  }>({
     query: BLOG_QUERY,
     variables: {
       language: languageCode,
@@ -32,7 +34,7 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
   });
 
   // TODO: How to fix this type?
-  const rawArticles: Article[] = flattenConnection(data.blog.articles);
+  const rawArticles = flattenConnection<Article>(data.blog.articles);
 
   const articles = rawArticles.map((article) => {
     const {publishedAt} = article;
@@ -42,7 +44,7 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-      }).format(new Date(publishedAt)),
+      }).format(new Date(publishedAt!)),
     };
   });
 
@@ -53,7 +55,7 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
       <Head>
         <link rel="stylesheet" href="/src/styles/custom-font.css" />
       </Head>
-      {/* TODO: Fix this type */}
+      {/* @ts-expect-error Blog article types are not yet supported by TS */}
       <Seo type="page" data={articles} />
       <PageHeader heading={BLOG_HANDLE} className="gap-0">
         {haveArticles ? (
