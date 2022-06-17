@@ -1,6 +1,5 @@
 import {
-  useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
   Seo,
   useServerAnalytics,
@@ -14,8 +13,10 @@ import ProductCard from '../../components/ProductCard';
 import NotFound from '../../components/NotFound.server';
 
 export default function Collection({collectionProductCount = 24, params}) {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {handle} = params;
   const {data} = useShopQuery({

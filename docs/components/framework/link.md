@@ -45,6 +45,10 @@ export default function Index({request}) {
 
 {% endcodeblock %}
 
+## Base path
+
+The `<Link>` component automatically prepends a `basePath` to the destination URL. That `basePath` is inherited from the [`<FileRoutes>` component](https://shopify.dev/api/hydrogen/components/framework/fileroutes) it is rendered within. You can override this default behavior by passing a custom `basePath` prop to the `<Link>` component.
+
 ## Props
 
 | Name            | Type                 | Description                                                                                                                                                                                                                                   |
@@ -55,6 +59,7 @@ export default function Index({request}) {
 | reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                                                                           |
 | prefetch?       | <code>boolean</code> | Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). |
 | scroll?         | <code>boolean</code> | Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to `true`.                                                                                                                                    |
+| basePath? | <code>string</code> | Override the `basePath` inherited from the `<Route>`.
 
 ## Component type
 

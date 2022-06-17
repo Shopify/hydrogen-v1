@@ -1,21 +1,15 @@
 import React from 'react';
-import {mount} from '@shopify/react-testing';
 import {Head} from '../../../client';
 
 import {DefaultPageSeo} from '../DefaultPageSeo.client';
 import {TitleSeo} from '../TitleSeo.client';
 import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 jest.mock('../../../client', () => ({
   Head({children}: {children: React.ReactNode}) {
     return children;
-  },
-}));
-
-jest.mock('../../../foundation', () => ({
-  useShop() {
-    return {languageCode: 'FR'};
   },
 }));
 
@@ -76,7 +70,7 @@ describe('<DefaultPageSeo />', () => {
 
   describe('default', () => {
     it("renders <meta /> with property='og:type'", () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent('meta', {
         property: 'og:type',
@@ -85,15 +79,15 @@ describe('<DefaultPageSeo />', () => {
     });
 
     it('renders <html /> with lang using parsed locale from shopify provider by default', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent('html', {
-        lang: 'FR',
+        lang: 'en',
       });
     });
 
     it('renders <meta /> with url prop', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent('meta', {
         property: 'og:url',
@@ -104,7 +98,7 @@ describe('<DefaultPageSeo />', () => {
 
   describe('title prop', () => {
     it('renders <Head /> with defaultTitle using title prop', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent(Head, {
         defaultTitle: defaultProps.title,
@@ -112,7 +106,7 @@ describe('<DefaultPageSeo />', () => {
     });
 
     it('renders <Head /> with titleTemplate using default value and title prop', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent(Head, {
         titleTemplate: `%s - ${defaultProps.title}`,
@@ -120,7 +114,7 @@ describe('<DefaultPageSeo />', () => {
     });
 
     it("renders <meta /> with property='og:site_name' title prop", () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent('meta', {
         property: 'og:site_name',
@@ -129,7 +123,7 @@ describe('<DefaultPageSeo />', () => {
     });
 
     it('renders <TitleSeo /> with title prop', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent(TitleSeo, {
         title: defaultProps.title,
@@ -137,7 +131,7 @@ describe('<DefaultPageSeo />', () => {
     });
 
     it('renders <TwitterSeo /> with title prop', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent(TwitterSeo, {
         title: defaultProps.title,
@@ -147,7 +141,7 @@ describe('<DefaultPageSeo />', () => {
 
   describe('description prop', () => {
     it('renders <DescriptionSeo /> with description prop', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent(DescriptionSeo, {
         description: defaultProps.description,
@@ -155,7 +149,7 @@ describe('<DefaultPageSeo />', () => {
     });
 
     it('renders <TwitterSeo /> with description prop', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} />);
+      const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent(TwitterSeo, {
         description: defaultProps.description,
@@ -167,7 +161,9 @@ describe('<DefaultPageSeo />', () => {
     it("renders <meta /> with property='og:url' and url prop", () => {
       const url = 'https://test-new.com/';
 
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} url={url} />);
+      const wrapper = mountWithProviders(
+        <DefaultPageSeo {...defaultProps} url={url} />
+      );
 
       expect(wrapper).toContainReactComponent('meta', {
         property: 'og:url',
@@ -179,7 +175,7 @@ describe('<DefaultPageSeo />', () => {
   describe('titleTemplate prop', () => {
     it('renders <Head /> with titleTemplate using titleTemplate prop', () => {
       const titleTemplate = '%s - default_title';
-      const wrapper = mount(
+      const wrapper = mountWithProviders(
         <DefaultPageSeo {...defaultProps} titleTemplate={titleTemplate} />
       );
 
@@ -191,7 +187,9 @@ describe('<DefaultPageSeo />', () => {
 
   describe('lang prop', () => {
     it('renders <html /> with lang using lang prop', () => {
-      const wrapper = mount(<DefaultPageSeo {...defaultProps} lang="zh" />);
+      const wrapper = mountWithProviders(
+        <DefaultPageSeo {...defaultProps} lang="zh" />
+      );
 
       expect(wrapper).toContainReactComponent('html', {
         lang: 'zh',

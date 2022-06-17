@@ -1,18 +1,28 @@
-import React, {createContext, FC, ReactNode} from 'react';
+import React, {useContext, createContext, FC, ReactNode} from 'react';
 
-type RouteParamsContextValue = {routeParams: Record<string, string>};
+type RouteParamsContextValue = {
+  routeParams: Record<string, string>;
+  basePath: string;
+};
 
 export const RouteParamsContext = createContext<RouteParamsContextValue>({
   routeParams: {},
+  basePath: '/',
 });
 
 export const RouteParamsProvider: FC<{
   routeParams: Record<string, string>;
+  basePath: string;
   children: ReactNode;
-}> = ({children, routeParams}) => {
+}> = ({children, routeParams, basePath}) => {
   return (
-    <RouteParamsContext.Provider value={{routeParams}}>
+    <RouteParamsContext.Provider value={{routeParams, basePath}}>
       {children}
     </RouteParamsContext.Provider>
   );
 };
+
+export function useBasePath() {
+  const router = useContext(RouteParamsContext);
+  return router.basePath;
+}

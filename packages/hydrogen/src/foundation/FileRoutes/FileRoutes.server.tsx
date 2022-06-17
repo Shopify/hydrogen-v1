@@ -56,7 +56,10 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
     request.ctx.router.routeRendered = true;
     request.ctx.router.routeParams = foundRouteDetails.params;
     return (
-      <RouteParamsProvider routeParams={foundRouteDetails.params}>
+      <RouteParamsProvider
+        routeParams={foundRouteDetails.params}
+        basePath={basePath}
+      >
         <foundRoute.component
           params={foundRouteDetails.params}
           {...serverProps}

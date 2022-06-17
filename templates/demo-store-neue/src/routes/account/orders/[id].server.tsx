@@ -9,7 +9,7 @@ import {
   Seo,
   useRouteParams,
   useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
 import {
@@ -27,8 +27,11 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
 
   response.cache(CacheNone());
 
-  const {languageCode} = useShop();
-  const {customerAccessToken, countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
+  const {customerAccessToken} = useSession();
 
   if (!customerAccessToken) return response.redirect('/account/login');
   if (!id) return response.redirect('/account/');
