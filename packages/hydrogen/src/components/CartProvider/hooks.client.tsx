@@ -21,17 +21,22 @@ export function useCartFetch() {
       query: string;
       variables: T;
     }): Promise<{data: K | undefined; error: any}> => {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'X-SDK-Variant': 'hydrogen',
+        'X-SDK-Version': storefrontApiVersion,
+        'X-Shopify-Storefront-Access-Token': storefrontToken,
+      };
+
+      if (storefrontId) {
+        headers['Shopify-Storefront-Id'] = storefrontId;
+      }
+
       return fetch(
         `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-SDK-Variant': 'hydrogen',
-            'X-SDK-Version': storefrontApiVersion,
-            'X-Shopify-Storefront-Access-Token': storefrontToken,
-            'Shopify-Storefront-Id': storefrontId || '',
-          },
+          headers,
           body: JSON.stringify({
             query: query.toString(),
             variables,
