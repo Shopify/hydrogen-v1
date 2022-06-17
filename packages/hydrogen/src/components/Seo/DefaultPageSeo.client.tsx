@@ -1,6 +1,6 @@
 import React from 'react';
-import {useShop} from '../../foundation';
-import {Head} from '../../client';
+import {useShop} from '../../foundation/useShop';
+import {Head} from '../../foundation/Head';
 
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
