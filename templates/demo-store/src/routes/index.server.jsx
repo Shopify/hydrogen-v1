@@ -1,10 +1,9 @@
 import {
-  useShop,
+  useLocalization,
   useShopQuery,
   Link,
   Seo,
   CacheLong,
-  useSession,
   useServerAnalytics,
   ShopifyAnalyticsConstants,
   gql,
@@ -17,7 +16,9 @@ import Welcome from '../components/Welcome.server';
 import {Suspense} from 'react';
 
 export default function Index() {
-  const {countryCode = 'US'} = useSession();
+  const {
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   useServerAnalytics({
     shopify: {
@@ -70,7 +71,9 @@ function BoxFallback() {
 }
 
 function FeaturedProductsBox({country}) {
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: QUERY,
@@ -126,7 +129,9 @@ function FeaturedProductsBox({country}) {
 }
 
 function FeaturedCollectionBox({country}) {
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: QUERY,

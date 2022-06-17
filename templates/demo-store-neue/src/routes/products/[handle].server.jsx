@@ -3,10 +3,9 @@ import {
   gql,
   ProductOptionsProvider,
   ShopifyAnalyticsConstants,
+  useLocalization,
   useRouteParams,
   useServerAnalytics,
-  useSession,
-  useShop,
   useShopQuery,
 } from '@shopify/hydrogen';
 
@@ -25,8 +24,10 @@ import {
 
 export default function Product() {
   const {handle} = useRouteParams();
-  const {countryCode = 'US'} = useSession();
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {
     data: {product},

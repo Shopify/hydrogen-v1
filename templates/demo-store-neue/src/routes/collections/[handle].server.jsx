@@ -3,8 +3,7 @@ import {
   Seo,
   ShopifyAnalyticsConstants,
   useServerAnalytics,
-  useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
 
@@ -22,8 +21,10 @@ const pageBy = 4;
 
 export default function Collection({params}) {
   const {handle} = params;
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: language},
+    country: {isoCode: country},
+  } = useLocalization();
 
   const {
     data: {collection},
@@ -31,8 +32,8 @@ export default function Collection({params}) {
     query: COLLECTION_QUERY,
     variables: {
       handle,
-      countryCode,
-      languageCode,
+      language,
+      country,
       pageBy,
     },
     preload: true,
@@ -62,7 +63,10 @@ export default function Collection({params}) {
         </div>
       </PageHeader>
       <Section>
-        <ProductGrid collection={collection} />
+        <ProductGrid
+          collection={collection}
+          url={`/collections/${handle}?country=${country}`}
+        />
       </Section>
     </Layout>
   );
@@ -73,8 +77,10 @@ export async function api(request, {params, queryShop}) {
   if (request.method !== 'POST') {
     return new Response(405, {Allow: 'POST'});
   }
+  const url = new URL(request.url);
 
-  const cursor = new URL(request.url).searchParams.get('cursor');
+  const cursor = url.searchParams.get('cursor');
+  const country = url.searchParams.get('country');
   const {handle} = params;
 
   return await queryShop({
@@ -83,13 +89,20 @@ export async function api(request, {params, queryShop}) {
       handle,
       cursor,
       pageBy,
+      country,
     },
   });
 }
 
 const PAGINATE_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
-  query CollectionPage($handle: String!, $pageBy: Int!, $cursor: String) {
+  query CollectionPage(
+    $handle: String!
+    $pageBy: Int!
+    $cursor: String
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       products(first: $pageBy, after: $cursor) {
         nodes {

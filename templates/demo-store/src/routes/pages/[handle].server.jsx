@@ -1,5 +1,5 @@
 import {
-  useShop,
+  useLocalization,
   useShopQuery,
   Seo,
   useServerAnalytics,
@@ -11,7 +11,9 @@ import Layout from '../../components/Layout.server';
 import NotFound from '../../components/NotFound.server';
 
 export default function Page({params}) {
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
 
   const {handle} = params;
   const {data} = useShopQuery({

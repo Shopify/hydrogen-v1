@@ -1,10 +1,4 @@
-import {
-  gql,
-  useSession,
-  useShop,
-  useShopQuery,
-  useUrl,
-} from '@shopify/hydrogen';
+import {gql, useLocalization, useShopQuery, useUrl} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {
@@ -23,8 +17,10 @@ import {getImageLoadingPriority} from '~/lib/const';
 import {Suspense} from 'react';
 
 export default function Search({pageBy = 12, params}) {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {handle} = params;
   const {searchParams} = useUrl();

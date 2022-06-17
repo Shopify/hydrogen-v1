@@ -1,12 +1,15 @@
 import React, {ReactNode} from 'react';
-import {LocalizationContext, Localization} from './LocalizationContext.client';
+import {
+  LocalizationContext,
+  LocalizationContextValue,
+} from './LocalizationContext.client';
 
 export default function LocalizationClientProvider({
   localization,
   children,
 }: {
   children: ReactNode;
-  localization: Localization;
+  localization: LocalizationContextValue;
 }) {
   return (
     <LocalizationContext.Provider value={localization}>

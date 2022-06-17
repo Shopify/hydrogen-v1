@@ -4,9 +4,9 @@ title: LocalizationProvider
 description: The LocalizationProvider component automatically queries the Storefront API's localization field for the isoCode and name of the country and keeps this information in a context.
 ---
 
-The `LocalizationProvider` component automatically queries the Storefront API's [localization](https://shopify.dev/api/storefront/latest/objects/queryroot) field for the `isoCode` and `name` of the `country` and keeps this information in a context.
+The `LocalizationProvider` component provides localization data in a context that can be used both within server and client components by the [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook. The default localization data is defined in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). You can change the active country and language at runtime by passing `countryCode` and `languageCode` props to the `LocalizationProvider`.
 
-Any descendents of this provider can use the `useCountry` hook. The `isoCode` of the `country` can be used in the Storefront API's `@inContext` directive as the `country` value.
+Any descendents of this provider can use the `useLocalization` hook. The `isoCode` of the `country` can be used in the Storefront API's `@inContext` directive as the `country` value.
 
 ## Example code
 
@@ -23,7 +23,8 @@ export function Component() {
 | Name     | Type                        | Description                                                                                                                                                                                                                       |
 | -------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | children | <code>ReactNode</code>      | A `ReactNode` element.                                                                                                                                                                                                            |
-| preload? | <code>PreloadOptions</code> | Whether to [preload the query](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries). Defaults to `true`. Specify `false` to not preload the query for the URL or `'*'` to preload the query for all requests. |
+| countryCode? | <code>string</code> | The [code](https://shopify.dev/api/storefront/latest/enums/CountryCode) designating a country or region, which generally follows ISO 3166-1 alpha-2 guidelines. |
+| languageCode? | <code>string</code> | The ISO 639-1 [language codes](https://shopify.dev/api/storefront/latest/enums/LanguageCode) supported by Shopify.  |
 
 ## Component type
 
@@ -31,8 +32,4 @@ The `LocalizationProvider` component is a server component, which means that it 
 
 ## Related hooks
 
-- [`useCountry`](https://shopify.dev/api/hydrogen/hooks/localization/usecountry)
-
-## Related framework topics
-
-- [Preloaded queries](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries)
+- [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization)
