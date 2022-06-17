@@ -1,8 +1,17 @@
 import {Link, Image} from '@shopify/hydrogen';
+import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
 import {Heading, Section, Grid} from '~/components';
 
-export function FeaturedCollections({data, title = 'Collections', ...props}) {
+export function FeaturedCollections({
+  data,
+  title = 'Collections',
+  ...props
+}: {
+  data: Collection[];
+  title?: string;
+  [key: string]: any;
+}) {
   const items = data.filter((item) => item.image).length;
 
   return (
