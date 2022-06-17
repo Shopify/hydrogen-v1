@@ -8,6 +8,13 @@ export function Grid({
   items = 4,
   layout = 'default',
   ...props
+}: {
+  as?: React.ElementType;
+  className?: string;
+  flow?: 'row' | 'col';
+  gap?: 'default' | 'blog';
+  items?: number;
+  layout?: 'default' | 'products' | 'auto' | 'blog';
 }) {
   const layouts = {
     default: `grid-cols-1 ${items === 2 && 'md:grid-cols-2'}  ${

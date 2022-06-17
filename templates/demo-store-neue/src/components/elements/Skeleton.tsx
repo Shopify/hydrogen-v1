@@ -9,6 +9,12 @@ export function Skeleton({
   height,
   className,
   ...props
+}: {
+  as?: React.ElementType;
+  width?: string;
+  height?: string;
+  className?: string;
+  [key: string]: any;
 }) {
   const styles = clsx('rounded-lg bg-primary/10', className);
 

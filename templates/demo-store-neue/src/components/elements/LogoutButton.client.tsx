@@ -1,4 +1,4 @@
-export function LogoutButton(props) {
+export function LogoutButton(props: any) {
   const logout = () => {
     fetch('/account/logout', {method: 'POST'}).then(() => {
       if (typeof props?.onClick === 'function') {
