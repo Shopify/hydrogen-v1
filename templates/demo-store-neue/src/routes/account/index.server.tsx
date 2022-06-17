@@ -6,6 +6,9 @@ import {
   useSession,
   useShop,
   useShopQuery,
+  type HydrogenRouteProps,
+  type HydrogenRequest,
+  type HydrogenApiRouteOptions,
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
@@ -20,8 +23,15 @@ import {
   PageHeader,
   ProductSwimlane,
 } from '~/components';
+import type {
+  Collection,
+  CollectionConnection,
+  Customer,
+  Product,
+  ProductConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
-export default function Account({response}) {
+export default function Account({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
 
   const {customerAccessToken, countryCode = 'US'} = useSession();
@@ -30,7 +40,11 @@ export default function Account({response}) {
 
   const {languageCode} = useShop();
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<{
+    customer: Customer;
+    featuredCollections: CollectionConnection;
+    featuredProducts: ProductConnection;
+  }>({
     query: CUSTOMER_QUERY,
     variables: {
       customerAccessToken,
@@ -46,7 +60,7 @@ export default function Account({response}) {
 
   const addresses = flattenConnection(customer.addresses).map((address) => ({
     ...address,
-    id: address.id.substring(0, address.id.lastIndexOf('?')),
+    id: address.id!.substring(0, address.id!.lastIndexOf('?')),
     originalId: address.id,
   }));
 
@@ -61,8 +75,12 @@ export default function Account({response}) {
         customer={customer}
         addresses={addresses}
         defaultAddress={defaultAddress}
-        featuredCollections={featuredCollections}
-        featuredProducts={featuredProducts}
+        featuredCollections={
+          flattenConnection<Collection>(featuredCollections) as Collection[]
+        }
+        featuredProducts={
+          flattenConnection<Product>(featuredProducts) as Product[]
+        }
       />
     </>
   );
@@ -74,6 +92,12 @@ function AuthenticatedAccount({
   defaultAddress,
   featuredCollections,
   featuredProducts,
+}: {
+  customer: Customer;
+  addresses: any[];
+  defaultAddress?: string;
+  featuredCollections: Collection[];
+  featuredProducts: Product[];
 }) {
   const orders = flattenConnection(customer?.orders) || [];
 
@@ -102,21 +126,31 @@ function AuthenticatedAccount({
       />
       <FeaturedCollections
         title="Popular Collections"
-        data={featuredCollections.nodes}
+        data={featuredCollections}
       />
-      <ProductSwimlane data={featuredProducts.nodes} />
+      <ProductSwimlane data={featuredProducts} />
     </Layout>
   );
 }
 
-export async function api(request, {session, queryShop}) {
-  if (request.method !== 'PATCH' && request.method !== 'DELETE')
+export async function api(
+  request: HydrogenRequest,
+  {session, queryShop}: HydrogenApiRouteOptions,
+) {
+  if (request.method !== 'PATCH' && request.method !== 'DELETE') {
     return new Response(null, {
       status: 405,
       headers: {
         Allow: 'PATCH,DELETE',
       },
     });
+  }
+
+  if (!session) {
+    return new Response('Session storage not available.', {
+      status: 400,
+    });
+  }
 
   const {customerAccessToken} = await session.get();
 
@@ -124,7 +158,15 @@ export async function api(request, {session, queryShop}) {
 
   const {email, phone, firstName, lastName, newPassword} = await request.json();
 
-  const customer = {};
+  interface Customer {
+    email?: string;
+    phone?: string;
+    firstName?: string;
+    lastName?: string;
+    password?: string;
+  }
+
+  const customer: Customer = {};
 
   if (email) customer.email = email;
   if (phone) customer.phone = phone;
@@ -138,6 +180,7 @@ export async function api(request, {session, queryShop}) {
       customer,
       customerAccessToken,
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 
