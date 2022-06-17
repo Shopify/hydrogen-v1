@@ -2,6 +2,7 @@ import {
   CacheNone,
   flattenConnection,
   gql,
+  type HydrogenRouteProps,
   Image,
   Link,
   Money,
@@ -11,11 +12,18 @@ import {
   useShop,
   useShopQuery,
 } from '@shopify/hydrogen';
+import {
+  Customer,
+  DiscountApplication,
+  DiscountApplicationConnection,
+  MoneyV2,
+  OrderLineItemConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, Text, PageHeader} from '~/components';
 import {statusMessage} from '~/lib/utils';
 
-export default function OrderDetails({response}) {
+export default function OrderDetails({response}: HydrogenRouteProps) {
   const {id} = useRouteParams();
 
   response.cache(CacheNone());
@@ -26,7 +34,9 @@ export default function OrderDetails({response}) {
   if (!customerAccessToken) return response.redirect('/account/login');
   if (!id) return response.redirect('/account/');
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<{
+    customer?: Customer;
+  }>({
     query: ORDER_QUERY,
     variables: {
       customerAccessToken,
@@ -37,16 +47,24 @@ export default function OrderDetails({response}) {
     cache: CacheNone(),
   });
 
-  const [order] = flattenConnection(data?.customer?.orders) || [null];
+  const [order] = flattenConnection(data?.customer?.orders ?? {}) || [null];
 
   if (!order) return null;
 
-  const lineItems = flattenConnection(order.lineItems);
-  const discountApplications = order.discountApplications;
+  const lineItems = flattenConnection(
+    order.lineItems as OrderLineItemConnection,
+  );
+  const discountApplications = flattenConnection(
+    // TODO: Fix types
+    order.discountApplications as DiscountApplicationConnection,
+  );
 
-  let discountPercentage, discountValue, discountAmount;
+  let discountPercentage: any;
+  let discountValue: any;
+  let discountAmount: MoneyV2;
   if (discountApplications?.length) {
-    discountPercentage = discountApplications[0].value.percentage;
+    // TODO: Fix types
+    discountPercentage = discountApplications[0].value!.percentage;
     discountValue = discountApplications[0].value;
     discountAmount = discountValue.amount;
   }
@@ -65,7 +83,7 @@ export default function OrderDetails({response}) {
             Order No. {order.name}
           </Text>
           <Text className="mt-2" as="p">
-            Placed on {new Date(order.processedAt).toDateString()}
+            Placed on {new Date(order.processedAt!).toDateString()}
           </Text>
           <div className="grid sm:grid-cols-1 md:grid-cols-4 gap-12 md:gap-16 sm:divide-y sm:divide-gray-200">
             <table className="min-w-full divide-y divide-gray-300 my-8 md:col-span-3">
@@ -99,23 +117,26 @@ export default function OrderDetails({response}) {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {lineItems.map((lineItem) => (
-                  <tr key={lineItem.variant.id}>
+                  <tr key={lineItem.variant!.id}>
                     <td className="w-full max-w-0 py-4 pl-0 pr-3 text-sm font-medium sm:w-auto sm:max-w-none">
                       <div className="flex">
                         <Link
-                          to={`/products/${lineItem.variant.product.handle}`}
+                          to={`/products/${lineItem.variant!.product!.handle}`}
                         >
-                          <Image
-                            className="flex-none w-24 h-24 bg-gray-100 rounded-md object-center object-cover"
-                            src={lineItem?.variant?.image.src}
-                            width={lineItem?.variant?.image.width}
-                            height={lineItem?.variant?.image.height}
-                          />
+                          {/* TODO: Fix type */}
+                          {lineItem?.variant?.image && (
+                            <Image
+                              className="flex-none w-24 h-24 bg-gray-100 rounded-md object-center object-cover"
+                              src={lineItem.variant.image.src}
+                              width={lineItem.variant.image.width!}
+                              height={lineItem.variant.image.height!}
+                            />
+                          )}
                         </Link>
                         <div className="flex-col ml-6 hidden lg:flex">
                           <Text as="p">{lineItem.title}</Text>
                           <Text size="fine" className="mt-1" as="p">
-                            {lineItem.variant.title}
+                            {lineItem.variant!.title}
                           </Text>
                         </div>
                         <dl className="ml-4 flex-col">
@@ -123,13 +144,13 @@ export default function OrderDetails({response}) {
                           <dd className="truncate lg:hidden">
                             <Text as="h3">{lineItem.title}</Text>
                             <Text size="fine" className="mt-1" as="p">
-                              {lineItem.variant.title}
+                              {lineItem.variant!.title}
                             </Text>
                           </dd>
                           <dt className="sr-only">Price</dt>
                           <dd className="truncate sm:hidden md:hidden lg:hidden">
                             <Text size="fine" className="mt-4">
-                              <Money data={lineItem.variant.priceV2} />
+                              <Money data={lineItem.variant!.priceV2!} />
                             </Text>
                           </dd>
                           <dt className="sr-only">Quantity</dt>
@@ -142,25 +163,26 @@ export default function OrderDetails({response}) {
                       </div>
                     </td>
                     <td className="hidden px-3 py-4 text-sm sm:table-cell text-right">
-                      <Money data={lineItem.variant.priceV2} />
+                      <Money data={lineItem.variant!.priceV2!} />
                     </td>
                     <td className="hidden px-3 py-4 text-sm sm:table-cell text-right">
                       {lineItem.quantity}
                     </td>
                     <td className="px-3 py-4 text-sm sm:table-cell text-right">
                       <Text>
-                        <Money data={lineItem.discountedTotalPrice} />
+                        <Money data={lineItem.discountedTotalPrice!} />
                       </Text>
                     </td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
+                {/* TODO: Fix type */}
                 {(discountAmount || discountPercentage > 0) && (
                   <tr>
                     <th
                       scope="row"
-                      colSpan="3"
+                      colSpan={3}
                       className="hidden pl-6 pr-3 pt-6 font-normal text-right sm:table-cell md:pl-0"
                     >
                       <Text>Discounts</Text>
@@ -177,7 +199,7 @@ export default function OrderDetails({response}) {
                           -{discountPercentage}% OFF
                         </span>
                       ) : (
-                        <Money data={discountValue} />
+                        <Money data={discountValue!} />
                       )}
                     </td>
                   </tr>
@@ -185,7 +207,7 @@ export default function OrderDetails({response}) {
                 <tr>
                   <th
                     scope="row"
-                    colSpan="3"
+                    colSpan={3}
                     className="hidden pl-6 pr-3 pt-6 font-normal text-right sm:table-cell md:pl-0"
                   >
                     <Text>Subtotal</Text>
@@ -197,13 +219,13 @@ export default function OrderDetails({response}) {
                     <Text>Subtotal</Text>
                   </th>
                   <td className="pl-3 pr-4 pt-6 text-right md:pr-3">
-                    <Money data={order.subtotalPriceV2} />
+                    <Money data={order.subtotalPriceV2!} />
                   </td>
                 </tr>
                 <tr>
                   <th
                     scope="row"
-                    colSpan="3"
+                    colSpan={3}
                     className="hidden pl-6 pr-3 pt-4 text-right font-normal sm:table-cell md:pl-0"
                   >
                     Tax
@@ -215,13 +237,13 @@ export default function OrderDetails({response}) {
                     <Text>Tax</Text>
                   </th>
                   <td className="pl-3 pr-4 pt-4 text-right md:pr-3">
-                    <Money data={order.totalTaxV2} />
+                    <Money data={order.totalTaxV2!} />
                   </td>
                 </tr>
                 <tr>
                   <th
                     scope="row"
-                    colSpan="3"
+                    colSpan={3}
                     className="hidden pl-6 pr-3 pt-4 text-right font-semibold sm:table-cell md:pl-0"
                   >
                     Total
@@ -233,7 +255,7 @@ export default function OrderDetails({response}) {
                     <Text>Total</Text>
                   </th>
                   <td className="pl-3 pr-4 pt-4 text-right font-semibold md:pr-3">
-                    <Money data={order.totalPriceV2} />
+                    <Money data={order.totalPriceV2!} />
                   </td>
                 </tr>
               </tfoot>
