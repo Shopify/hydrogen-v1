@@ -1,4 +1,4 @@
-import {gql, useSession, useShop, useShopQuery} from '@shopify/hydrogen';
+import {gql, useLocalization, useShopQuery} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {
@@ -11,8 +11,10 @@ import {
 } from '~/components';
 
 export function NotFound({type = 'page'}) {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: NOT_FOUND_QUERY,

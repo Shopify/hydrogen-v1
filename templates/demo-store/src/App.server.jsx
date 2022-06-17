@@ -7,6 +7,7 @@ import {
   ShopifyAnalytics,
   PerformanceMetrics,
   PerformanceMetricsDebug,
+  LocalizationProvider,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import DefaultSeo from './components/DefaultSeo.server';
@@ -18,13 +19,15 @@ function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
-        <ServerCartProvider>
-          <DefaultSeo />
-          <Router>
-            <FileRoutes />
-            <Route path="*" page={<NotFound />} />
-          </Router>
-        </ServerCartProvider>
+        <LocalizationProvider>
+          <ServerCartProvider>
+            <DefaultSeo />
+            <Router>
+              <FileRoutes />
+              <Route path="*" page={<NotFound />} />
+            </Router>
+          </ServerCartProvider>
+        </LocalizationProvider>
         <PerformanceMetrics />
         {import.meta.env.DEV && <PerformanceMetricsDebug />}
         <ShopifyAnalytics />

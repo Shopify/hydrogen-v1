@@ -1,5 +1,5 @@
 import {
-  useShop,
+  useLocalization,
   useShopQuery,
   Seo,
   useServerAnalytics,
@@ -11,7 +11,9 @@ import {
 import {Layout, Button, PageHeader, Section, NotFound} from '~/components';
 
 export default function Policy({params}: HydrogenRouteProps) {
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
   const {handle} = params;
 
   // standard policy pages

@@ -1,8 +1,7 @@
 import {
   gql,
   HydrogenRouteProps,
-  useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
   useUrl,
 } from '@shopify/hydrogen';
@@ -24,9 +23,17 @@ import {getImageLoadingPriority} from '~/lib/const';
 import {Suspense} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-export default function Search({pageBy = 12, params}: HydrogenRouteProps) {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+export default function Search({
+  pageBy = 12,
+  params,
+}: {
+  pageBy?: number;
+  params: HydrogenRouteProps['params'];
+}) {
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {handle} = params;
   const {searchParams} = useUrl();

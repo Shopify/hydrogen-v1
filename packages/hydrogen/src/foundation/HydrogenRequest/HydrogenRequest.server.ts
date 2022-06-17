@@ -13,6 +13,7 @@ import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
 import {SessionSyncApi} from '../session/session';
 import {parseJSON} from '../../utilities/parse';
+import {LocalizationContextValue} from '../../components/LocalizationProvider/LocalizationContext.client';
 
 export type PreloadQueryEntry = {
   key: QueryKey;
@@ -76,6 +77,7 @@ export class HydrogenRequest extends Request {
     session?: SessionSyncApi;
     runtime?: RuntimeContext;
     scopes: Map<string, Record<string, any>>;
+    localization?: LocalizationContextValue;
     [key: string]: any;
   };
 
