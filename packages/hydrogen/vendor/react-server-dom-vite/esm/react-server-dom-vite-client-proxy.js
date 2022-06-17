@@ -20,7 +20,8 @@ var MODULE_TAG = Symbol.for('react.module.reference');
 var STRING_SIZE_LIMIT = 64;
 var FN_RSC_ERROR = 'Functions exported from client components cannot be called or used as constructors from a server component.';
 function isRsc() {
-  return !!__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher.current.isRsc;
+  var currentDispatcher = __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher.current;
+  return !!(currentDispatcher && currentDispatcher.isRsc);
 }
 
 function createModuleReference(id, value, name, isDefault) {

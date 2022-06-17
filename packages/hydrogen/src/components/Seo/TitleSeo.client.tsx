@@ -1,5 +1,5 @@
 import React from 'react';
-import {Head} from '../../client';
+import {Head} from '../../foundation/Head';
 import type {Seo as SeoType} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 

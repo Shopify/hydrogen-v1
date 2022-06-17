@@ -1,13 +1,12 @@
 import React from 'react';
-import {Head} from '../../../client';
-
+import {Head} from '../../../foundation/Head/Head.client';
 import {DefaultPageSeo} from '../DefaultPageSeo.client';
 import {TitleSeo} from '../TitleSeo.client';
 import {DescriptionSeo} from '../DescriptionSeo.client';
 import {TwitterSeo} from '../TwitterSeo.client';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
-jest.mock('../../../client', () => ({
+jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {
     return children;
   },
