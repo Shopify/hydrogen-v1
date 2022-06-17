@@ -8,6 +8,10 @@ import {
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation';
 import {Cart} from './types';
+import {
+  SHOPIFY_STOREFRONT_ID_HEADER,
+  STOREFRONT_API_PUBLIC_TOKEN_HEADER,
+} from '../../constants';
 
 export function useCartFetch() {
   const {storeDomain, storefrontApiVersion, storefrontToken, storefrontId} =
@@ -25,11 +29,11 @@ export function useCartFetch() {
         'Content-Type': 'application/json',
         'X-SDK-Variant': 'hydrogen',
         'X-SDK-Version': storefrontApiVersion,
-        'X-Shopify-Storefront-Access-Token': storefrontToken,
+        [STOREFRONT_API_PUBLIC_TOKEN_HEADER]: storefrontToken,
       };
 
       if (storefrontId) {
-        headers['Shopify-Storefront-Id'] = storefrontId;
+        headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
       }
 
       return fetch(
