@@ -1,4 +1,11 @@
-import {CacheNone, Seo, gql} from '@shopify/hydrogen';
+import {
+  CacheNone,
+  Seo,
+  gql,
+  type HydrogenRequest,
+  type HydrogenApiRouteOptions,
+  type HydrogenRouteProps,
+} from '@shopify/hydrogen';
 
 import {Layout, AccountRecoverForm} from '~/components';
 
@@ -8,7 +15,7 @@ import {Layout, AccountRecoverForm} from '~/components';
  * to reset their password. Clicking the link leads the user to the
  * page `/account/reset/[resetToken]`.
  */
-export default function AccountRecover({response}) {
+export default function AccountRecover({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
 
   return (
@@ -19,7 +26,10 @@ export default function AccountRecover({response}) {
   );
 }
 
-export async function api(request, {queryShop}) {
+export async function api(
+  request: HydrogenRequest,
+  {queryShop}: HydrogenApiRouteOptions,
+) {
   const jsonBody = await request.json();
 
   if (!jsonBody.email || jsonBody.email === '') {
@@ -33,6 +43,7 @@ export async function api(request, {queryShop}) {
     variables: {
       email: jsonBody.email,
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 
