@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useShop} from '../../foundation';
+import {useLocalization} from '../useLocalization/useLocalization';
 import {getMeasurementAsParts, getMeasurementAsString} from '../../utilities';
 import {Measurement} from '../../types';
 
@@ -15,7 +15,7 @@ export function useMeasurement(
   measurement: Measurement,
   options: Omit<Intl.NumberFormatOptions, 'unit'> = {}
 ): UseMeasurementValue {
-  const {locale} = useShop();
+  const {locale} = useLocalization();
 
   return useMemo(() => {
     return {

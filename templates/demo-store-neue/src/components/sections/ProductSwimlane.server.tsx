@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {gql, useShopQuery, useSession, useShop} from '@shopify/hydrogen';
+import {gql, useShopQuery, useLocalization} from '@shopify/hydrogen';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {ProductCard, Section} from '~/components';
 import type {
@@ -61,8 +61,10 @@ function RecommendedProducts({
   productId: string;
   count: number;
 }) {
-  const {languageCode} = useShop();
-  const {countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
 
   const {data: products} = useShopQuery<{
     recommended: Product[];

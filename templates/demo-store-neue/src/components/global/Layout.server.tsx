@@ -1,10 +1,4 @@
-import {
-  useShop,
-  useShopQuery,
-  LocalizationProvider,
-  CacheLong,
-  gql,
-} from '@shopify/hydrogen';
+import {useLocalization, useShopQuery, CacheLong, gql} from '@shopify/hydrogen';
 import type {Menu, Shop} from '@shopify/hydrogen/storefront-api-types';
 
 import {Header, Footer} from '~/components';
@@ -17,7 +11,9 @@ const FOOTER_MENU_HANDLE = 'footer';
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
 export function Layout({children}: {children: React.ReactNode}) {
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
 
   const {data} = useShopQuery<{
     shop: Shop;
@@ -55,7 +51,7 @@ export function Layout({children}: {children: React.ReactNode}) {
     : null;
 
   return (
-    <LocalizationProvider preload="*">
+    <>
       <div className="flex flex-col min-h-screen">
         <div className="">
           <a href="#mainContent" className="sr-only">
@@ -71,7 +67,7 @@ export function Layout({children}: {children: React.ReactNode}) {
         </main>
       </div>
       <Footer menu={footerMenu} />
-    </LocalizationProvider>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useShop} from '../../foundation/useShop';
+import {useLocalization} from '../useLocalization/useLocalization';
 import {CurrencyCode, MoneyV2} from '../../storefront-api-types';
 
 export type UseMoneyValue = {
@@ -56,7 +56,8 @@ export type UseMoneyValue = {
  * [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
  */
 export function useMoney(money: MoneyV2): UseMoneyValue {
-  const {locale} = useShop();
+  const {locale} = useLocalization();
+
   const amount = parseFloat(money.amount);
 
   const options = useMemo(

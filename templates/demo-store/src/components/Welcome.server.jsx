@@ -1,5 +1,5 @@
 import {
-  useShop,
+  useLocalization,
   useShopQuery,
   flattenConnection,
   Link,
@@ -44,7 +44,9 @@ function BoxFallback() {
 }
 
 function StorefrontInfo() {
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: QUERY,
@@ -97,7 +99,9 @@ function StorefrontInfo() {
 }
 
 function TemplateLinks() {
-  const {languageCode} = useShop();
+  const {
+    language: {isoCode: languageCode},
+  } = useLocalization();
 
   const {data} = useShopQuery({
     query: QUERY,

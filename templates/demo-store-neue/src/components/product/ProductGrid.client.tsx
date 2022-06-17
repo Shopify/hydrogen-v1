@@ -5,7 +5,13 @@ import {Grid, ProductCard} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 import type {Collection, Product} from '@shopify/hydrogen/storefront-api-types';
 
-export function ProductGrid({collection}: {collection: Collection}) {
+export function ProductGrid({
+  url,
+  collection,
+}: {
+  url: string;
+  collection: Collection;
+}) {
   const nextButtonRef = useRef(null);
   const initialProducts = collection?.products?.nodes || [];
   const {hasNextPage, endCursor} = collection?.products?.pageInfo ?? {};
@@ -16,10 +22,12 @@ export function ProductGrid({collection}: {collection: Collection}) {
 
   const fetchProducts = useCallback(async () => {
     setPending(true);
-    const url = new URL(window.location.href);
-    url.searchParams.set('cursor', cursor);
+    const postUrl = new URL(window.location.origin + url);
+    postUrl.searchParams.set('cursor', cursor);
 
-    const response = await fetch(url, {method: 'POST'});
+    const response = await fetch(postUrl, {
+      method: 'POST',
+    });
     const {data} = await response.json();
 
     // ProductGrid can paginate collections.products or products all routes
@@ -34,7 +42,7 @@ export function ProductGrid({collection}: {collection: Collection}) {
     setCursor(endCursor);
     setNextPage(hasNextPage);
     setPending(false);
-  }, [cursor, products]);
+  }, [cursor, url, products]);
 
   const handleIntersect = useCallback(
     (entries: IntersectionObserverEntry[]) => {

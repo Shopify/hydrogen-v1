@@ -32,6 +32,7 @@ export {useServerAnalytics} from './foundation/Analytics/hook';
 export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server';
 export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const';
 export {useSession} from './foundation/useSession/useSession';
+export {useLocalization} from './hooks/useLocalization/useLocalization';
 export {Cookie} from './foundation/Cookie/Cookie';
 
 /**

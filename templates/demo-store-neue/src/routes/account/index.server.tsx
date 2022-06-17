@@ -4,7 +4,7 @@ import {
   gql,
   Seo,
   useSession,
-  useShop,
+  useLocalization,
   useShopQuery,
   type HydrogenRouteProps,
   type HydrogenRequest,
@@ -34,11 +34,13 @@ import type {
 export default function Account({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
 
-  const {customerAccessToken, countryCode = 'US'} = useSession();
+  const {
+    language: {isoCode: languageCode},
+    country: {isoCode: countryCode},
+  } = useLocalization();
+  const {customerAccessToken} = useSession();
 
   if (!customerAccessToken) return response.redirect('/account/login');
-
-  const {languageCode} = useShop();
 
   const {data} = useShopQuery<{
     customer: Customer;
