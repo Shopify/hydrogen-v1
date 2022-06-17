@@ -5,19 +5,21 @@ import {
   gql,
   Image,
   CacheLong,
+  HydrogenRouteProps,
 } from '@shopify/hydrogen';
+import type {Article} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, CustomFont} from '~/components';
 import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 const BLOG_HANDLE = 'journal';
 
-export default function Post({params, response}) {
+export default function Post({params, response}: HydrogenRouteProps) {
   response.cache(CacheLong());
   const {languageCode, locale} = useShop();
 
   const {handle} = params;
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<any>({
     query: ARTICLE_QUERY,
     variables: {
       language: languageCode,
@@ -26,7 +28,8 @@ export default function Post({params, response}) {
     },
   });
 
-  const {title, publishedAt, contentHtml, author} = data.blog.articleByHandle;
+  const {title, publishedAt, contentHtml, author} = data.blog
+    .articleByHandle as Article;
   const formattedDate = new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: 'long',
