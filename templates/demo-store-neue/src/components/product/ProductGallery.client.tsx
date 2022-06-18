@@ -1,4 +1,5 @@
 import {MediaFile} from '@shopify/hydrogen/client';
+import type {MediaEdge} from '@shopify/hydrogen/storefront-api-types';
 import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 /**
@@ -8,8 +9,7 @@ export function ProductGallery({
   media,
   className,
 }: {
-  // TODO: Better type
-  media: any[];
+  media: MediaEdge['node'][];
   className?: string;
 }) {
   if (!media.length) {
@@ -35,6 +35,7 @@ export function ProductGallery({
         const data = {
           ...med,
           image: {
+            // @ts-ignore
             ...med.image,
             altText: med.alt || 'Product image',
           },
@@ -49,13 +50,14 @@ export function ProductGallery({
             className={`${
               i % 3 === 0 ? 'md:col-span-2' : 'md:col-span-1'
             } snap-center card-image bg-white dark:bg-contrast/10 aspect-square md:w-full w-[80vw]`}
+            // @ts-ignore
             key={med.id || med.image.id}
           >
-            {/* TODO: Fix type */}
             <MediaFile
               tabIndex="0"
               className={`w-full h-full aspect-square object-cover`}
               data={data}
+              // @ts-ignore
               options={{
                 crop: 'center',
               }}

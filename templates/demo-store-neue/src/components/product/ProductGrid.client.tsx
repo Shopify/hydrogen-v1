@@ -31,8 +31,8 @@ export function ProductGrid({
     const {data} = await response.json();
 
     // ProductGrid can paginate collections.products or products all routes
-    // TODO: Fix types
-    const newProducts: Product[] = flattenConnection(
+    // @ts-ignore TODO: Fix types
+    const newProducts: Product[] = flattenConnection<Product>(
       data?.collection?.products || data?.products || [],
     );
     const {endCursor, hasNextPage} = data?.collection?.products?.pageInfo ||
