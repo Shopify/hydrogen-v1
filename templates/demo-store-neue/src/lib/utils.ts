@@ -150,9 +150,10 @@ function resolveToFromType(
   Parse each menu link and adding, isExternal, to and target
 */
 function parseItem(customPrefixes = {}) {
-  return function (item: MenuItem): any {
+  return function (item: MenuItem): EnhancedMenuItem {
     if (!item?.url || !item?.type) {
       console.warn('Invalid menu item.  Must include a url and type.');
+      // @ts-ignore
       return;
     }
 
@@ -182,16 +183,22 @@ function parseItem(customPrefixes = {}) {
           to: item.url,
         };
 
-    // recurse into sub-items if applicable
-    if (hasSubItems) {
-      return {
-        ...parsedItem,
-        items: item.items.map(parseItem(customPrefixes)),
-      };
-    }
-
-    return parsedItem;
+    return {
+      ...parsedItem,
+      items: item.items?.map(parseItem(customPrefixes)),
+    };
   };
+}
+
+export interface EnhancedMenuItem extends MenuItem {
+  to: string;
+  target: string;
+  isExternal?: boolean;
+  items: EnhancedMenuItem[];
+}
+
+export interface EnhancedMenu extends Menu {
+  items: EnhancedMenuItem[];
 }
 
 /*
@@ -199,9 +206,10 @@ function parseItem(customPrefixes = {}) {
   and resource type.
   It optionally overwrites url paths based on item.type
 */
-export function parseMenu(menu: Menu, customPrefixes = {}) {
+export function parseMenu(menu: Menu, customPrefixes = {}): EnhancedMenu {
   if (!menu?.items) {
     console.warn('Invalid menu passed to parseMenu');
+    // @ts-ignore
     return menu;
   }
 
@@ -256,7 +264,7 @@ export function statusMessage(status: string) {
   }
 }
 
-export function emailValidation(email: any) {
+export function emailValidation(email: HTMLInputElement) {
   if (email.validity.valid) return null;
 
   return email.validity.valueMissing
@@ -264,7 +272,7 @@ export function emailValidation(email: any) {
     : 'Please enter a valid email';
 }
 
-export function passwordValidation(password: any) {
+export function passwordValidation(password: HTMLInputElement) {
   if (password.validity.valid) return null;
 
   if (password.validity.valueMissing) {

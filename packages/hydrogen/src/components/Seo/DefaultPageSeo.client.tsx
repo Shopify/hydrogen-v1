@@ -1,5 +1,5 @@
 import React from 'react';
-import {Head} from '../../client';
+import {Head} from '../../foundation/Head';
 import {useLocalization} from '../../hooks/useLocalization/useLocalization';
 
 import {TitleSeo} from './TitleSeo.client';

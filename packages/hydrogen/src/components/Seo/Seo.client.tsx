@@ -1,5 +1,5 @@
 import React, {type ComponentProps} from 'react';
-import {useUrl} from '../../foundation';
+import {useUrl} from '../../foundation/useUrl';
 import {DefaultPageSeo} from './DefaultPageSeo.client';
 import {HomePageSeo} from './HomePageSeo.client';
 import {ProductSeo} from './ProductSeo.client';

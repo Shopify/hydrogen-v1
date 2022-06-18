@@ -3,11 +3,12 @@ import {Link, useUrl} from '@shopify/hydrogen';
 
 import {Section, Heading, IconCaret, CountrySelector} from '~/components';
 import {footer as mockData} from '~/lib/placeholders';
+import type {EnhancedMenu} from '~/lib/utils';
 
 /**
  * A server component that specifies the content of the footer on the website
  */
-export function Footer({menu = mockData}) {
+export function Footer({menu = mockData}: {menu?: EnhancedMenu}) {
   const {pathname} = useUrl();
   const isHome = pathname === '/';
 

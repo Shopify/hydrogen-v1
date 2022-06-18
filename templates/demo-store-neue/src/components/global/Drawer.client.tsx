@@ -19,7 +19,7 @@ function Drawer({
   heading: string;
   open: boolean;
   onClose: () => void;
-  children: any;
+  children: React.ReactNode;
 }) {
   return (
     <Transition appear show={open} as={Fragment}>
