@@ -1,16 +1,44 @@
 import {setDefaultAddress} from './[addressId].server';
-import {CacheNone, gql} from '@shopify/hydrogen';
+import {
+  CacheNone,
+  gql,
+  type HydrogenApiRouteOptions,
+  type HydrogenRequest,
+} from '@shopify/hydrogen';
 
 import {getApiErrorMessage} from '~/lib/utils';
 
-export async function api(request, {session, queryShop}) {
-  if (request.method !== 'POST')
+export interface Address {
+  firstName?: string;
+  lastName?: string;
+  company?: string;
+  address1?: string;
+  address2?: string;
+  country?: string;
+  province?: string;
+  city?: string;
+  zip?: string;
+  phone?: string;
+}
+
+export async function api(
+  request: HydrogenRequest,
+  {session, queryShop}: HydrogenApiRouteOptions,
+) {
+  if (request.method !== 'POST') {
     return new Response(null, {
       status: 405,
       headers: {
         Allow: 'POST',
       },
     });
+  }
+
+  if (!session) {
+    return new Response('Session storage not available.', {
+      status: 400,
+    });
+  }
 
   const {customerAccessToken} = await session.get();
 
@@ -30,7 +58,7 @@ export async function api(request, {session, queryShop}) {
     isDefaultAddress,
   } = await request.json();
 
-  const address = {};
+  const address: Address = {};
 
   if (firstName) address.firstName = firstName;
   if (lastName) address.lastName = lastName;
@@ -49,6 +77,7 @@ export async function api(request, {session, queryShop}) {
       address,
       customerAccessToken,
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 

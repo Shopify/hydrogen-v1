@@ -1,10 +1,13 @@
 import {
   gql,
+  type HydrogenRouteProps,
   Seo,
   ShopifyAnalyticsConstants,
   useServerAnalytics,
   useLocalization,
   useShopQuery,
+  type HydrogenRequest,
+  type HydrogenApiRouteOptions,
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
@@ -19,7 +22,7 @@ import {
 
 const pageBy = 4;
 
-export default function Collection({params}) {
+export default function Collection({params}: HydrogenRouteProps) {
   const {handle} = params;
   const {
     language: {isoCode: language},
@@ -73,9 +76,15 @@ export default function Collection({params}) {
 }
 
 // pagination api
-export async function api(request, {params, queryShop}) {
+export async function api(
+  request: HydrogenRequest,
+  {params, queryShop}: HydrogenApiRouteOptions,
+) {
   if (request.method !== 'POST') {
-    return new Response(405, {Allow: 'POST'});
+    return new Response('Method not allowed', {
+      status: 405,
+      headers: {Allow: 'POST'},
+    });
   }
   const url = new URL(request.url);
 

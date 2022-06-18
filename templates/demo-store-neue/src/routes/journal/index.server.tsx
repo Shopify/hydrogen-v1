@@ -3,24 +3,31 @@ import {
   flattenConnection,
   gql,
   Head,
+  type HydrogenRouteProps,
   Seo,
   useLocalization,
   useShopQuery,
 } from '@shopify/hydrogen';
+import type {
+  Article,
+  Blog as BlogType,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {Layout, ArticleCard, Grid, PageHeader} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 
 const BLOG_HANDLE = 'Journal';
 
-export default function Blog({pageBy = 12, response}) {
+export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
   response.cache(CacheLong());
   const {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<{
+    blog: BlogType;
+  }>({
     query: BLOG_QUERY,
     variables: {
       language: languageCode,
@@ -29,7 +36,8 @@ export default function Blog({pageBy = 12, response}) {
     },
   });
 
-  const rawArticles = flattenConnection(data.blog.articles);
+  // TODO: How to fix this type?
+  const rawArticles = flattenConnection<Article>(data.blog.articles);
 
   const articles = rawArticles.map((article) => {
     const {publishedAt} = article;
@@ -39,7 +47,7 @@ export default function Blog({pageBy = 12, response}) {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-      }).format(new Date(publishedAt)),
+      }).format(new Date(publishedAt!)),
     };
   });
 
@@ -50,6 +58,7 @@ export default function Blog({pageBy = 12, response}) {
       <Head>
         <link rel="stylesheet" href="/src/styles/custom-font.css" />
       </Head>
+      {/* @ts-expect-error Blog article types are not yet supported by TS */}
       <Seo type="page" data={articles} />
       <PageHeader heading={BLOG_HANDLE} className="gap-0">
         {haveArticles ? (

@@ -5,11 +5,12 @@ import {
   useServerAnalytics,
   ShopifyAnalyticsConstants,
   gql,
+  type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
 import {Layout, NotFound, PageHeader} from '~/components';
 
-export default function Page({params}) {
+export default function Page({params}: HydrogenRouteProps) {
   const {
     language: {isoCode: languageCode},
   } = useLocalization();

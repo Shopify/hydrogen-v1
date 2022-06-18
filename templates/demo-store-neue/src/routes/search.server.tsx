@@ -1,4 +1,10 @@
-import {gql, useLocalization, useShopQuery, useUrl} from '@shopify/hydrogen';
+import {
+  gql,
+  HydrogenRouteProps,
+  useLocalization,
+  useShopQuery,
+  useUrl,
+} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {
@@ -15,8 +21,15 @@ import {
 } from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 import {Suspense} from 'react';
+import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-export default function Search({pageBy = 12, params}) {
+export default function Search({
+  pageBy = 12,
+  params,
+}: {
+  pageBy?: number;
+  params: HydrogenRouteProps['params'];
+}) {
   const {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
@@ -27,7 +40,7 @@ export default function Search({pageBy = 12, params}) {
 
   const query = searchParams.get('q');
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<any>({
     query: SEARCH_QUERY,
     variables: {
       handle,
@@ -39,7 +52,7 @@ export default function Search({pageBy = 12, params}) {
     preload: true,
   });
 
-  const results = data?.products?.nodes;
+  const results = data?.products?.nodes as Product[];
 
   if (!query || results.length === 0) {
     return (
@@ -71,7 +84,13 @@ export default function Search({pageBy = 12, params}) {
   );
 }
 
-function SearchPage({query, children}) {
+function SearchPage({
+  query,
+  children,
+}: {
+  query?: string | null;
+  children: React.ReactNode;
+}) {
   return (
     <Layout>
       <PageHeader>
@@ -96,8 +115,14 @@ function SearchPage({query, children}) {
   );
 }
 
-function NoResultRecommendation({country, language}) {
-  const {data} = useShopQuery({
+function NoResultRecommendation({
+  country,
+  language,
+}: {
+  country: string;
+  language: string;
+}) {
+  const {data} = useShopQuery<any>({
     query: SEARCH_NO_RESULTS_QUERY,
     variables: {
       country,

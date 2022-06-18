@@ -1,8 +1,17 @@
-import {useShopQuery, CacheLong, CacheNone, Seo, gql} from '@shopify/hydrogen';
+import {
+  useShopQuery,
+  CacheLong,
+  CacheNone,
+  Seo,
+  gql,
+  type HydrogenRouteProps,
+  HydrogenRequest,
+  HydrogenApiRouteOptions,
+} from '@shopify/hydrogen';
 
 import {Layout, AccountLoginForm} from '~/components';
 
-export default function Login({response}) {
+export default function Login({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
 
   const {
@@ -31,7 +40,14 @@ const SHOP_QUERY = gql`
   }
 `;
 
-export async function api(request, {session, queryShop}) {
+export async function api(
+  request: HydrogenRequest,
+  {session, queryShop}: HydrogenApiRouteOptions,
+) {
+  if (!session) {
+    return new Response('Session storage not available.', {status: 400});
+  }
+
   const jsonBody = await request.json();
 
   if (
@@ -54,6 +70,7 @@ export async function api(request, {session, queryShop}) {
         password: jsonBody.password,
       },
     },
+    // @ts-expect-error `queryShop.cache` is not yet supported but soon will be.
     cache: CacheNone(),
   });
 

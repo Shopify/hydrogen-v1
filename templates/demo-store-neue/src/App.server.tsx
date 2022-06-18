@@ -2,6 +2,7 @@ import {Suspense} from 'react';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
 import {
   FileRoutes,
+  type HydrogenRouteProps,
   PerformanceMetrics,
   PerformanceMetricsDebug,
   Route,
@@ -18,7 +19,7 @@ import {
   HeaderFallback,
 } from '~/components';
 
-function App({routes, request}) {
+function App({routes, request}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;
   const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
   const countryCode = localeMatch ? localeMatch[1] : null;

@@ -13,6 +13,7 @@ import {
   SessionApi,
   SessionStorageAdapter,
 } from '../foundation/session/session';
+import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
@@ -20,7 +21,7 @@ let memoizedRawRoutes: ImportGlobEagerOutput = {};
 type RouteParams = Record<string, string>;
 export type RequestOptions = {
   params: RouteParams;
-  queryShop: (args: QueryShopArgs) => Promise<any>;
+  queryShop: <T>(args: QueryShopArgs) => Promise<UseShopQueryResponse<T>>;
   session: SessionApi | null;
   hydrogenConfig: ResolvedHydrogenConfig;
 };
