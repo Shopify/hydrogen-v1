@@ -10,7 +10,17 @@ import {Heading, IconClose} from '~/components';
  * @param onClose - function should set the open state.
  * @param children - react children node.
  */
-function Drawer({heading, open, onClose, children}) {
+function Drawer({
+  heading,
+  open,
+  onClose,
+  children,
+}: {
+  heading: string;
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>

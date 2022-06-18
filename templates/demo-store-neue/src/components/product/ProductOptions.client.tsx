@@ -1,10 +1,17 @@
 import {useCallback} from 'react';
+// TODO: Fix import
 import {Listbox} from '@headlessui/react';
 import {useProductOptions} from '@shopify/hydrogen';
 
 import {Text, IconCheck, IconCaret} from '~/components';
 
-export function ProductOptions({values, ...props}) {
+export function ProductOptions({
+  values,
+  ...props
+}: {
+  values: any[];
+  [key: string]: any;
+}) {
   const asDropdown = values.length > 4;
 
   return asDropdown ? (
@@ -14,13 +21,21 @@ export function ProductOptions({values, ...props}) {
   );
 }
 
-function OptionsGrid({values, name, handleChange}) {
+function OptionsGrid({
+  values,
+  name,
+  handleChange,
+}: {
+  values: string[];
+  name: string;
+  handleChange: (name: string, value: string) => void;
+}) {
   const {selectedOptions} = useProductOptions();
 
   return (
     <>
       {values.map((value) => {
-        const checked = selectedOptions[name] === value;
+        const checked = selectedOptions![name] === value;
         const id = `option-${name}-${value}`;
 
         return (
@@ -48,11 +63,19 @@ function OptionsGrid({values, name, handleChange}) {
   );
 }
 
-function OptionsDropdown({values, name, handleChange}) {
+function OptionsDropdown({
+  values,
+  name,
+  handleChange,
+}: {
+  values: string[];
+  name: string;
+  handleChange: (name: string, value: string) => void;
+}) {
   const {selectedOptions} = useProductOptions();
 
   const updateSelectedOption = useCallback(
-    (value) => {
+    (value: string) => {
       handleChange(name, value);
       return value;
     },
@@ -69,7 +92,7 @@ function OptionsDropdown({values, name, handleChange}) {
                 open ? 'rounded-b md:rounded-t md:rounded-b-none' : 'rounded'
               }`}
             >
-              <span>{selectedOptions[name]}</span>
+              <span>{selectedOptions![name]}</span>
               <IconCaret direction={open ? 'up' : 'down'} />
             </Listbox.Button>
 
@@ -82,7 +105,7 @@ function OptionsDropdown({values, name, handleChange}) {
               `}
             >
               {values.map((value) => {
-                const isSelected = selectedOptions[name] === value;
+                const isSelected = selectedOptions![name] === value;
                 const id = `option-${name}-${value}`;
 
                 return (

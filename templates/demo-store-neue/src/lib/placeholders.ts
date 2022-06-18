@@ -88,16 +88,19 @@ export const product = {
 
 export const productInfo = [
   {
+    id: '123',
     title: 'Description',
     content:
       'We threw snow tires on our core classics... Good for all year round! Named after my favorite football match of the year. Just like any of our joints, dress them up or down...',
   },
   {
+    id: '456',
     title: 'Size and Fit',
     content:
       'We threw snow tires on our core classics... Good for all year round! Named after my favorite football match of the year. Just like any of our joints, dress them up or down...',
   },
   {
+    id: '789',
     title: 'Delivery and Returns',
     content:
       'We threw snow tires on our core classics... Good for all year round! Named after my favorite football match of the year. Just like any of our joints, dress them up or down...',

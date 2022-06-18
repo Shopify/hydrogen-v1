@@ -8,8 +8,14 @@ export function PageHeader({
   heading,
   variant = 'default',
   ...props
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  heading?: string;
+  variant?: string;
+  [key: string]: any;
 }) {
-  const variants = {
+  const variants: Record<string, string> = {
     default: 'grid w-full gap-8 p-4 py-8 md:p-8 lg:p-12 justify-items-start',
     allCollections:
       'flex justify-between items-baseline gap-8 p-4 md:p-8 lg:p-12',

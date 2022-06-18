@@ -9,6 +9,7 @@ import {
   ProductSwimlane,
   Text,
 } from '~/components';
+import type {Collection, Product} from '@shopify/hydrogen/storefront-api-types';
 
 export function NotFound({type = 'page'}) {
   const {
@@ -16,7 +17,10 @@ export function NotFound({type = 'page'}) {
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data} = useShopQuery({
+  const {data} = useShopQuery<{
+    featuredCollections: Collection[];
+    featuredProducts: Product[];
+  }>({
     query: NOT_FOUND_QUERY,
     variables: {
       language: languageCode,

@@ -12,11 +12,12 @@ import {
   Input,
   useDrawer,
 } from '~/components';
+import type {EnhancedMenu} from '~/lib/utils';
 
 /**
  * A client component that specifies the content of the header on the website
  */
-export function Header({title, menu}) {
+export function Header({title, menu}: {title: string; menu: EnhancedMenu}) {
   const {pathname} = useUrl();
   const {isOpen, openDrawer, closeDrawer} = useDrawer();
 
@@ -43,7 +44,15 @@ export function Header({title, menu}) {
   );
 }
 
-function MobileHeader({title, isHome, openDrawer}) {
+function MobileHeader({
+  title,
+  isHome,
+  openDrawer,
+}: {
+  title: string;
+  isHome: boolean;
+  openDrawer: () => void;
+}) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
@@ -99,7 +108,17 @@ function MobileHeader({title, isHome, openDrawer}) {
   );
 }
 
-function DesktopHeader({title, isHome, menu, openDrawer}) {
+function DesktopHeader({
+  title,
+  isHome,
+  menu,
+  openDrawer,
+}: {
+  title: string;
+  isHome: boolean;
+  menu: EnhancedMenu;
+  openDrawer: () => void;
+}) {
   const {y} = useWindowScroll();
 
   const styles = {
@@ -157,7 +176,7 @@ function DesktopHeader({title, isHome, menu, openDrawer}) {
   );
 }
 
-function CartBadge({dark}) {
+function CartBadge({dark}: {dark: boolean}) {
   const {totalQuantity} = useCart();
 
   if (totalQuantity < 1) {

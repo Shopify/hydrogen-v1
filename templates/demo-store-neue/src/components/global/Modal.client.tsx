@@ -1,4 +1,10 @@
-export function Modal({children, close}) {
+export function Modal({
+  children,
+  close,
+}: {
+  children: React.ReactNode;
+  close: () => void;
+}) {
   return (
     <div
       className="relative z-50"

@@ -2,6 +2,10 @@ import {useMemo} from 'react';
 import {gql, useShopQuery, useLocalization} from '@shopify/hydrogen';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {ProductCard, Section} from '~/components';
+import type {
+  Product,
+  ProductConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
 const mockProducts = new Array(12).fill('');
 
@@ -36,7 +40,7 @@ export function ProductSwimlane({
   );
 }
 
-function ProductCards({products}) {
+function ProductCards({products}: {products: Product[]}) {
   return (
     <>
       {products.map((product) => (
@@ -50,13 +54,22 @@ function ProductCards({products}) {
   );
 }
 
-function RecommendedProducts({productId, count}) {
+function RecommendedProducts({
+  productId,
+  count,
+}: {
+  productId: string;
+  count: number;
+}) {
   const {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
   } = useLocalization();
 
-  const {data: products} = useShopQuery({
+  const {data: products} = useShopQuery<{
+    recommended: Product[];
+    additional: ProductConnection;
+  }>({
     query: RECOMMENDED_PRODUCTS_QUERY,
     variables: {
       count,
@@ -82,7 +95,7 @@ function RecommendedProducts({productId, count}) {
   return <ProductCards products={mergedProducts} />;
 }
 
-function TopProducts({count}) {
+function TopProducts({count}: {count: number}) {
   const {
     data: {products},
   } = useShopQuery({
