@@ -1,12 +1,12 @@
 import React from 'react';
-import {Head} from '../../client';
+import {Head} from '../../foundation/Head';
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
 import {TwitterSeo} from './TwitterSeo.client';
 import {ImageSeo} from './ImageSeo.client';
 import type {Scalars, Product as ProductType} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
-import {flattenConnection} from '../../utilities';
+import {flattenConnection} from '../../utilities/flattenConnection';
 
 export function ProductSeo({
   url,

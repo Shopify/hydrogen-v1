@@ -32,7 +32,7 @@ jest.mock('../ImageSeo.client', () => ({
   },
 }));
 
-jest.mock('../../../client', () => ({
+jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {
     return children;
   },

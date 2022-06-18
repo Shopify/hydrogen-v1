@@ -9,7 +9,7 @@ import {TwitterSeo} from '../TwitterSeo.client';
 import {ImageSeo} from '../ImageSeo.client';
 import {CurrencyCode} from '../../../storefront-api-types';
 
-jest.mock('../../../client', () => ({
+jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {
     return children;
   },
