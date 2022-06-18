@@ -107,8 +107,9 @@ function ReactFlightVitePlugin() {
 
   var config;
   var server;
-  var globImporterPath;
   var resolveAlias;
+  var globImporterPath;
+  var allClientBoundaries = new Set();
   return {
     name: 'vite-plugin-react-server-components',
     enforce: 'pre',
@@ -246,7 +247,7 @@ function ReactFlightVitePlugin() {
           });
           var injectedGlobs = "Object.assign(Object.create(null), " + importers.map(function (glob) {
             return (// Mark the globs to modify the result after Vite resolves them.
-              "/* HASH_BEGIN */ " + ("import.meta.glob('" + normalizePath(glob) + "') /* HASH_END */")
+              "\n/* HASH_BEGIN */ " + ("import.meta.glob('" + normalizePath(glob) + "') /* HASH_END */")
             );
           }).join(', ') + ");";
           s.replace(INJECTING_RE, injectedGlobs);
@@ -260,8 +261,17 @@ function ReactFlightVitePlugin() {
         };
 
         if (config.command === 'serve') {
-          globImporterPath = id;
-          return injectGlobs(findClientBoundaries(server.moduleGraph));
+          globImporterPath = id; // When mixing client and server components from the same
+          // facade file, the module graph can break and miss certain
+          // import connections (bug in Vite?) due to HMR. Instead of
+          // creating a new list of discovered components from scratch,
+          // reuse the already discovered ones and simply add new ones
+          // to the list without removing anything.
+
+          findClientBoundaries(server.moduleGraph).forEach(function (boundary) {
+            return allClientBoundaries.add(boundary);
+          });
+          return injectGlobs(Array.from(allClientBoundaries));
         }
 
         if (!serverBuildEntries) {
@@ -453,7 +463,7 @@ function isDirectImportInServer(originalMod, currentMod, accModInfo) {
       });
     }
 
-    return Array.from((currentMod || originalMod).importers).some(function (importer) {
+    return Array.from((currentMod || originalMod).importers || []).some(function (importer) {
       return (// eslint-disable-next-line no-unused-vars
         isDirectImportInServer(originalMod, importer, accModInfo)
       );
@@ -527,8 +537,13 @@ function augmentModuleGraph(moduleGraph, id, code, root, resolveAlias) {
       var resolvedAliasPath = resolveAlias(modPath, 'rsc_importer', {});
 
       if (resolvedAliasPath && resolvedAliasPath.id) {
-        modPath = normalizePath(path.join(root, resolvedAliasPath.id));
+        modPath = resolvedAliasPath.id;
       }
+    }
+
+    if (modPath && modPath.startsWith('/src/')) {
+      // Vite default alias
+      modPath = normalizePath(path.join(root, modPath));
     }
 
     var resolvedPath = resolveModPath(modPath, dirname);

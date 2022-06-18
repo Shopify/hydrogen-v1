@@ -63,6 +63,13 @@ async function createProcessor(from, to) {
         destination = destination.replace('.ts', '.js');
 
         break;
+      case '.eot':
+      case '.woff':
+      case '.woff2':
+      case '.ttf':
+        await fs.mkdirp(resolve(destination, '..'));
+        await fs.writeFile(destination, content);
+        return;
     }
 
     switch (filename) {
@@ -98,6 +105,8 @@ async function createProcessor(from, to) {
 
         break;
       case 'yarn.lock':
+      case '.gitignore':
+      case 'yarn-error.log':
         return;
       case 'README.md':
         const banner = `**Note:** This is a generated template. The TypeScript source code for this is in \`${relative(

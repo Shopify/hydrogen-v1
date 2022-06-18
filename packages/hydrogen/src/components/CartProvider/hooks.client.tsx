@@ -8,9 +8,14 @@ import {
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation';
 import {Cart} from './types';
+import {
+  SHOPIFY_STOREFRONT_ID_HEADER,
+  STOREFRONT_API_PUBLIC_TOKEN_HEADER,
+} from '../../constants';
 
 export function useCartFetch() {
-  const {storeDomain, storefrontApiVersion, storefrontToken} = useShop();
+  const {storeDomain, storefrontApiVersion, storefrontToken, storefrontId} =
+    useShop();
 
   return React.useCallback(
     <T, K>({
@@ -20,16 +25,22 @@ export function useCartFetch() {
       query: string;
       variables: T;
     }): Promise<{data: K | undefined; error: any}> => {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'X-SDK-Variant': 'hydrogen',
+        'X-SDK-Version': storefrontApiVersion,
+        [STOREFRONT_API_PUBLIC_TOKEN_HEADER]: storefrontToken,
+      };
+
+      if (storefrontId) {
+        headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
+      }
+
       return fetch(
         `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-SDK-Variant': 'hydrogen',
-            'X-SDK-Version': storefrontApiVersion,
-            'X-Shopify-Storefront-Access-Token': storefrontToken,
-          },
+          headers,
           body: JSON.stringify({
             query: query.toString(),
             variables,
@@ -44,7 +55,7 @@ export function useCartFetch() {
           };
         });
     },
-    [storeDomain, storefrontApiVersion, storefrontToken]
+    [storeDomain, storefrontApiVersion, storefrontToken, storefrontId]
   );
 }
 

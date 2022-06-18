@@ -256,7 +256,7 @@ export function statusMessage(status: string) {
   }
 }
 
-export function emailValidation(email: any) {
+export function emailValidation(email: HTMLInputElement) {
   if (email.validity.valid) return null;
 
   return email.validity.valueMissing
@@ -264,7 +264,7 @@ export function emailValidation(email: any) {
     : 'Please enter a valid email';
 }
 
-export function passwordValidation(password: any) {
+export function passwordValidation(password: HTMLInputElement) {
   if (password.validity.valid) return null;
 
   if (password.validity.valueMissing) {

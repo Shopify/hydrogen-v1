@@ -4,6 +4,7 @@ import {
   CacheLong,
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
+import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 
 /*
   This route redirects you to your Shopify Admin
@@ -13,7 +14,9 @@ import {
 */
 
 export default function AdminRedirect({response}: HydrogenRouteProps) {
-  const {data} = useShopQuery<any>({
+  const {data} = useShopQuery<{
+    shop: Shop;
+  }>({
     query: SHOP_QUERY,
     cache: CacheLong(),
   });
