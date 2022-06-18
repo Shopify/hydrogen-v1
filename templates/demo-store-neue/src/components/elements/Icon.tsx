@@ -1,5 +1,7 @@
 import clsx from 'clsx';
 
+type IconProps = any;
+
 function Icon({
   children,
   className,
@@ -23,7 +25,7 @@ function Icon({
   );
 }
 
-export function AccountIcon(props: any) {
+export function AccountIcon(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Accounts</title>
@@ -37,7 +39,7 @@ export function AccountIcon(props: any) {
   );
 }
 
-export function IconMenu(props: any) {
+export function IconMenu(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Menu</title>
@@ -69,7 +71,7 @@ export function IconMenu(props: any) {
   );
 }
 
-export function IconClose(props: any) {
+export function IconClose(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Close</title>
@@ -93,7 +95,7 @@ export function IconClose(props: any) {
   );
 }
 
-export function IconArrow({direction = 'right'}) {
+export function IconArrow({direction = 'right'}: IconProps) {
   let rotate;
 
   switch (direction) {
@@ -121,7 +123,7 @@ export function IconArrow({direction = 'right'}) {
   );
 }
 
-export function IconCaret({direction = 'down', ...props}) {
+export function IconCaret({direction = 'down', ...props}: IconProps) {
   let rotate;
 
   switch (direction) {
@@ -153,7 +155,7 @@ export function IconCaret({direction = 'down', ...props}) {
   );
 }
 
-export function IconSelect(props: any) {
+export function IconSelect(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Select</title>
@@ -167,7 +169,7 @@ export function IconSelect(props: any) {
   );
 }
 
-export function IconBag(props: any) {
+export function IconBag(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Bag</title>
@@ -179,7 +181,7 @@ export function IconBag(props: any) {
   );
 }
 
-export function IconAccount(props: any) {
+export function IconAccount(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Account</title>
@@ -191,7 +193,7 @@ export function IconAccount(props: any) {
   );
 }
 
-export function IconHelp(props: any) {
+export function IconHelp(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Help</title>
@@ -200,7 +202,7 @@ export function IconHelp(props: any) {
   );
 }
 
-export function IconSearch(props: any) {
+export function IconSearch(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Search</title>
@@ -212,7 +214,7 @@ export function IconSearch(props: any) {
   );
 }
 
-export function IconCheck(props: any) {
+export function IconCheck(props: IconProps) {
   return (
     <Icon {...props} fill="transparent">
       <title>Check</title>
@@ -234,7 +236,7 @@ export function IconCheck(props: any) {
   );
 }
 
-export function IconRemove(props: any) {
+export function IconRemove(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Remove</title>
