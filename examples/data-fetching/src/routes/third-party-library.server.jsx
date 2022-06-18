@@ -6,6 +6,7 @@ export default function UseQueryExample() {
   Use useQuery when:
   - Calling 3P APIs using an SDK e.g. await cms.get('resource')
   - Making multile requests to 3P resources in parallel e.g. await Promise.all([Fetch(...), Fetch(...), etc])
+  - Preloading 3P queries, e.g. product recommendations based on geo locations
   - Generally, when you need more flexibility to read 3p responses, or to implement something like retry-logic.
   */
 

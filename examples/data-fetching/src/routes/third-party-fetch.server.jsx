@@ -1,7 +1,10 @@
 import {fetchSync, CacheHours} from '@shopify/hydrogen';
 
 export default function FetchSyncExample() {
-  /* Use fetchSync when making a simple fetch call */
+  /* 
+  Use fetchSync when making a simple fetch call
+  fetchSync can be used in both server and client components
+  */
 
   const {results} = fetchSync('https://randomuser.me/api/', {
     cache: CacheHours(), // https://shopify.dev/custom-storefronts/hydrogen/framework/cache
