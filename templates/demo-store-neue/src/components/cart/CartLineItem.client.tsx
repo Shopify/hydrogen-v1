@@ -7,6 +7,7 @@ import {
   Image,
   Link,
 } from '@shopify/hydrogen';
+import type {Image as ImageType} from '@shopify/hydrogen/storefront-api-types';
 
 import {Heading, IconRemove, Text} from '~/components';
 
@@ -17,9 +18,8 @@ export function CartLineItem() {
   return (
     <li key={lineId} className="flex">
       <div className="flex-shrink-0">
-        {/* TODO: Fix type */}
         <Image
-          data={merchandise.image}
+          data={merchandise.image as ImageType}
           className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
         />
       </div>
@@ -42,15 +42,11 @@ export function CartLineItem() {
 
           <div className="flex items-center gap-2 mt-auto">
             <div className="flex justify-start text-copy mr-4">
-              <CartLineQuantityAdjust
-                lineId={lineId}
-                quantity={quantity}
-                linesRemove={linesRemove}
-              />
+              <CartLineQuantityAdjust lineId={lineId} quantity={quantity} />
             </div>
             <button
               type="button"
-              onClick={() => linesRemove(lineId)}
+              onClick={() => linesRemove([lineId])}
               className="h-[40px] w-[40px] border rounded flex justify-center items-center"
             >
               <span className="sr-only">Remove</span>
