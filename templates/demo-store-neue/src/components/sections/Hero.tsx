@@ -1,10 +1,10 @@
 import {Image, Link, Video} from '@shopify/hydrogen';
+import type {Media} from '@shopify/hydrogen/storefront-api-types';
 
 import {Heading, Text} from '~/components';
 import {hero as mockData} from '~/lib/placeholders';
 
 export function Hero(props = mockData) {
-  // TODO: Fix types
   const {
     title,
     byline,
@@ -84,7 +84,7 @@ function SpreadMedia({
   width,
   widths,
 }: {
-  data: any;
+  data: Media;
   loading?: HTMLImageElement['loading'];
   scale?: 2 | 3;
   sizes: string;
@@ -92,12 +92,10 @@ function SpreadMedia({
   widths: number[];
 }) {
   if (data.mediaContentType === 'VIDEO') {
-    // TODO: Fix type
     return (
       <Video
-        previewImageOptions={{scale}}
+        previewImageOptions={{scale, src: data.previewImage!.url}}
         width={scale! * width}
-        alt={data.alt || 'Marketing Banner Video'}
         className="block object-cover w-full h-full"
         data={data}
         controls={false}
@@ -116,6 +114,7 @@ function SpreadMedia({
         sizes={sizes}
         alt={data.alt || 'Marketing Banner Image'}
         className="block object-cover w-full h-full"
+        // @ts-ignore
         data={data.image}
         loading={loading}
         width={width}

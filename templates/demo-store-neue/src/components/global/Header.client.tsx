@@ -1,5 +1,4 @@
 import {Link, useUrl, useCart} from '@shopify/hydrogen';
-import {Menu} from '@shopify/hydrogen/storefront-api-types';
 import {useWindowScroll} from 'react-use';
 
 import {
@@ -13,11 +12,12 @@ import {
   Input,
   useDrawer,
 } from '~/components';
+import type {EnhancedMenu} from '~/lib/utils';
 
 /**
  * A client component that specifies the content of the header on the website
  */
-export function Header({title, menu}: {title: string; menu: any}) {
+export function Header({title, menu}: {title: string; menu: EnhancedMenu}) {
   const {pathname} = useUrl();
   const {isOpen, openDrawer, closeDrawer} = useDrawer();
 
@@ -116,7 +116,7 @@ function DesktopHeader({
 }: {
   title: string;
   isHome: boolean;
-  menu: any;
+  menu: EnhancedMenu;
   openDrawer: () => void;
 }) {
   const {y} = useWindowScroll();
@@ -140,7 +140,7 @@ function DesktopHeader({
         </Link>
         <nav className="flex gap-8">
           {/* Top level menu items */}
-          {(menu?.items || []).map((item: any) => (
+          {(menu?.items || []).map((item) => (
             <Link key={item.id} to={item.to} target={item.target}>
               {item.title}
             </Link>
