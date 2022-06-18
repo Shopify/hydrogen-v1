@@ -1,7 +1,15 @@
 // TODO: Split this into multiple files
 import {useServerProps} from '@shopify/hydrogen';
+import {
+  Menu,
+  MenuItem,
+  MoneyV2,
+  ProductPriceRange,
+  UserError,
+} from '@shopify/hydrogen/storefront-api-types';
 import {useCallback} from 'react';
 
+// @ts-expect-error types not available
 import typographicBase from 'typographic-base';
 
 /**
@@ -18,7 +26,7 @@ export function useRenderServerComponents() {
   }, [serverProps, setServerProps]);
 }
 
-export function missingClass(string, prefix) {
+export function missingClass(string?: string, prefix?: string) {
   if (!string) {
     return true;
   }
@@ -27,7 +35,7 @@ export function missingClass(string, prefix) {
   return string.match(regex) === null;
 }
 
-export function formatText(input) {
+export function formatText(input?: string) {
   if (!input) {
     return;
   }
@@ -42,25 +50,28 @@ export function formatText(input) {
   );
 }
 
-export function formatPhoneNumber(phoneNumberString) {
-  var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
-  var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+export function formatPhoneNumber(phoneNumberString: string) {
+  const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+  const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
   if (match) {
-    var intlCode = match[1] ? '+1 ' : '';
+    const intlCode = match[1] ? '+1 ' : '';
     return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
   }
   return null;
 }
 
-export function isRangedPricing(priceRange) {
+export function isRangedPricing(priceRange: ProductPriceRange) {
   return priceRange.minVariantPrice.amount < priceRange.maxVariantPrice.amount;
 }
 
-export function isNewArrival(date, daysOld = 30) {
-  return new Date(date) > new Date().setDate(new Date().getDate() - daysOld);
+export function isNewArrival(date: string, daysOld = 30) {
+  return (
+    new Date(date).valueOf() >
+    new Date().setDate(new Date().getDate() - daysOld).valueOf()
+  );
 }
 
-export function isDiscounted(price, compareAtPrice) {
+export function isDiscounted(price: MoneyV2, compareAtPrice: MoneyV2) {
   if (compareAtPrice?.amount > price?.amount) {
     return true;
   }
@@ -68,10 +79,16 @@ export function isDiscounted(price, compareAtPrice) {
 }
 
 function resolveToFromType(
-  {customPrefixes, pathname, type} = {
+  {
+    customPrefixes,
+    pathname,
+    type,
+  }: {
+    customPrefixes: Record<string, string>;
+    pathname?: string;
+    type?: string;
+  } = {
     customPrefixes: {},
-    pathname: null,
-    type: null,
   },
 ) {
   if (!pathname || !type) return '';
@@ -95,7 +112,10 @@ function resolveToFromType(
 
   const pathParts = pathname.split('/');
   const handle = pathParts.pop() || '';
-  const routePrefix = {...defaultPrefixes, ...customPrefixes};
+  const routePrefix: Record<string, string> = {
+    ...defaultPrefixes,
+    ...customPrefixes,
+  };
 
   switch (true) {
     // special cases
@@ -130,7 +150,7 @@ function resolveToFromType(
   Parse each menu link and adding, isExternal, to and target
 */
 function parseItem(customPrefixes = {}) {
-  return function (item) {
+  return function (item: MenuItem): any {
     if (!item?.url || !item?.type) {
       console.warn('Invalid menu item.  Must include a url and type.');
       return;
@@ -179,7 +199,7 @@ function parseItem(customPrefixes = {}) {
   and resource type.
   It optionally overwrites url paths based on item.type
 */
-export function parseMenu(menu, customPrefixes = {}) {
+export function parseMenu(menu: Menu, customPrefixes = {}) {
   if (!menu?.items) {
     console.warn('Invalid menu passed to parseMenu');
     return menu;
@@ -191,15 +211,19 @@ export function parseMenu(menu, customPrefixes = {}) {
   };
 }
 
-export function getApiErrorMessage(field, data, errors) {
+export function getApiErrorMessage(
+  field: string,
+  data: Record<string, any>,
+  errors: UserError[],
+) {
   if (errors?.length) return errors[0].message ?? errors[0];
   if (data?.[field]?.customerUserErrors?.length)
     return data[field].customerUserErrors[0].message;
   return null;
 }
 
-export function statusMessage(status) {
-  const translations = {
+export function statusMessage(status: string) {
+  const translations: Record<string, string> = {
     ATTEMPTED_DELIVERY: 'Attempted delivery',
     CANCELED: 'Canceled',
     CONFIRMED: 'Confirmed',
@@ -232,7 +256,7 @@ export function statusMessage(status) {
   }
 }
 
-export function emailValidation(email) {
+export function emailValidation(email: HTMLInputElement) {
   if (email.validity.valid) return null;
 
   return email.validity.valueMissing
@@ -240,7 +264,7 @@ export function emailValidation(email) {
     : 'Please enter a valid email';
 }
 
-export function passwordValidation(password) {
+export function passwordValidation(password: HTMLInputElement) {
   if (password.validity.valid) return null;
 
   if (password.validity.valueMissing) {

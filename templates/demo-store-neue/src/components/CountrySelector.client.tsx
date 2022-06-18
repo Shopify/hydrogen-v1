@@ -4,6 +4,7 @@ import {Listbox} from '@headlessui/react';
 
 import {IconCheck, IconCaret} from '~/components';
 import {useMemo} from 'react';
+import type {Country} from '@shopify/hydrogen/storefront-api-types';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
@@ -87,8 +88,14 @@ export function CountrySelector() {
   );
 }
 
-export function Countries({selectedCountry, getClassName}) {
-  const countries = fetchSync('/api/countries').json();
+export function Countries({
+  selectedCountry,
+  getClassName,
+}: {
+  selectedCountry: Pick<Country, 'isoCode' | 'name'>;
+  getClassName: (active: boolean) => string;
+}) {
+  const countries: Country[] = fetchSync('/api/countries').json();
 
   return (countries || []).map((country) => {
     const isSelected = country.isoCode === selectedCountry.isoCode;

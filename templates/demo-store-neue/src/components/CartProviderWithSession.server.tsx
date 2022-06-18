@@ -1,6 +1,10 @@
 import {CartProvider, useLocalization} from '@shopify/hydrogen';
 
-export function CartProviderWithSession({children}) {
+export function CartProviderWithSession({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const {
     country: {isoCode: countryCode},
   } = useLocalization();
