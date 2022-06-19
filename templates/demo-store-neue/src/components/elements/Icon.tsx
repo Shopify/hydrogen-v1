@@ -4,7 +4,6 @@ interface IconProps extends React.ComponentProps<typeof Icon> {
   direction: 'up' | 'right' | 'down' | 'left';
 }
 
-
 function Icon({
   children,
   className,
