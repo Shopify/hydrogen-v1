@@ -1,5 +1,4 @@
 import {useCallback} from 'react';
-// TODO: Fix import
 import {Listbox} from '@headlessui/react';
 import {useProductOptions} from '@shopify/hydrogen';
 
@@ -11,7 +10,7 @@ export function ProductOptions({
 }: {
   values: any[];
   [key: string]: any;
-}) {
+} & React.ComponentProps<typeof OptionsGrid>) {
   const asDropdown = values.length > 4;
 
   return asDropdown ? (
@@ -77,13 +76,12 @@ function OptionsDropdown({
   const updateSelectedOption = useCallback(
     (value: string) => {
       handleChange(name, value);
-      return value;
     },
     [name, handleChange],
   );
 
   return (
-    <Listbox onChange={updateSelectedOption}>
+    <Listbox onChange={updateSelectedOption} value="">
       {({open}) => {
         return (
           <>

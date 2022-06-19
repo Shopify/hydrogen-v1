@@ -15,6 +15,7 @@ export function Grid({
   gap?: 'default' | 'blog';
   items?: number;
   layout?: 'default' | 'products' | 'auto' | 'blog';
+  [key: string]: any;
 }) {
   const layouts = {
     default: `grid-cols-1 ${items === 2 && 'md:grid-cols-2'}  ${
