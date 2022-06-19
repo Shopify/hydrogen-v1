@@ -7,7 +7,7 @@ import {
   ProductPriceRange,
   UserError,
 } from '@shopify/hydrogen/storefront-api-types';
-import {useCallback} from 'react';
+import React, {useCallback} from 'react';
 
 // @ts-expect-error types not available
 import typographicBase from 'typographic-base';
@@ -35,7 +35,7 @@ export function missingClass(string?: string, prefix?: string) {
   return string.match(regex) === null;
 }
 
-export function formatText(input?: string) {
+export function formatText(input?: string | React.ReactNode) {
   if (!input) {
     return;
   }

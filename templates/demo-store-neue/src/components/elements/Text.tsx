@@ -11,8 +11,17 @@ export function Text({
   width = 'default',
   children,
   ...props
+}: {
+  as?: React.ElementType;
+  className?: string;
+  color?: string;
+  format?: string;
+  size?: string;
+  width?: string;
+  children: React.ReactNode;
+  [key: string]: any;
 }) {
-  const colors = {
+  const colors: Record<string, string> = {
     default: 'inherit',
     primary: 'text-primary/90',
     subtle: 'text-primary/50',
@@ -20,13 +29,13 @@ export function Text({
     contrast: 'text-contrast/90',
   };
 
-  const sizes = {
+  const sizes: Record<string, string> = {
     lead: 'text-lead font-medium',
     copy: 'text-copy',
     fine: 'text-fine subpixel-antialiased',
   };
 
-  const widths = {
+  const widths: Record<string, string> = {
     default: 'max-w-prose',
     narrow: 'max-w-prose-narrow',
     wide: 'max-w-prose-wide',

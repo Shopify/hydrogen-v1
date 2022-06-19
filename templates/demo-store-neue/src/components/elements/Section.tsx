@@ -12,6 +12,15 @@ export function Section({
   heading,
   padding = 'all',
   ...props
+}: {
+  as?: React.ElementType;
+  children?: React.ReactNode;
+  className?: string;
+  divider?: 'none' | 'top' | 'bottom' | 'both';
+  display?: 'grid' | 'flex';
+  heading?: string;
+  padding?: 'x' | 'y' | 'swimlane' | 'all';
+  [key: string]: any;
 }) {
   const paddings = {
     x: 'px-6 md:px-8 lg:px-12',
@@ -43,7 +52,7 @@ export function Section({
   return (
     <Component {...props} className={styles}>
       {heading && (
-        <Heading size="lead" className={padding === 'y' && paddings['x']}>
+        <Heading size="lead" className={padding === 'y' ? paddings['x'] : ''}>
           {heading}
         </Heading>
       )}

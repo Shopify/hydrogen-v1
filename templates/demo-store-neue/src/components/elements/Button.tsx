@@ -9,6 +9,12 @@ export function Button({
   variant = 'primary',
   width = 'auto',
   ...props
+}: {
+  as?: React.ElementType;
+  className?: string;
+  variant?: 'primary' | 'secondary' | 'inline';
+  width?: 'auto' | 'full';
+  [key: string]: any;
 }) {
   const Component = props?.to ? Link : as;
 

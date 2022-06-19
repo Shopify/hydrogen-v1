@@ -1,6 +1,19 @@
 import clsx from 'clsx';
 
-function Icon({children, className, fill = 'currentColor', ...props}) {
+interface IconProps extends React.ComponentProps<typeof Icon> {
+  direction: 'up' | 'right' | 'down' | 'left';
+}
+
+function Icon({
+  children,
+  className,
+  fill = 'currentColor',
+  ...props
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  fill?: any;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +27,7 @@ function Icon({children, className, fill = 'currentColor', ...props}) {
   );
 }
 
-export function AccountIcon(props) {
+export function AccountIcon(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Accounts</title>
@@ -28,7 +41,7 @@ export function AccountIcon(props) {
   );
 }
 
-export function IconMenu(props) {
+export function IconMenu(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Menu</title>
@@ -60,7 +73,7 @@ export function IconMenu(props) {
   );
 }
 
-export function IconClose(props) {
+export function IconClose(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Close</title>
@@ -84,7 +97,7 @@ export function IconClose(props) {
   );
 }
 
-export function IconArrow({direction = 'right'}) {
+export function IconArrow({direction = 'right'}: IconProps) {
   let rotate;
 
   switch (direction) {
@@ -112,7 +125,7 @@ export function IconArrow({direction = 'right'}) {
   );
 }
 
-export function IconCaret({direction = 'down', ...props}) {
+export function IconCaret({direction = 'down', ...props}: IconProps) {
   let rotate;
 
   switch (direction) {
@@ -144,7 +157,7 @@ export function IconCaret({direction = 'down', ...props}) {
   );
 }
 
-export function IconSelect(props) {
+export function IconSelect(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Select</title>
@@ -158,7 +171,7 @@ export function IconSelect(props) {
   );
 }
 
-export function IconBag(props) {
+export function IconBag(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Bag</title>
@@ -170,7 +183,7 @@ export function IconBag(props) {
   );
 }
 
-export function IconAccount(props) {
+export function IconAccount(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Account</title>
@@ -182,7 +195,7 @@ export function IconAccount(props) {
   );
 }
 
-export function IconHelp(props) {
+export function IconHelp(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Help</title>
@@ -191,7 +204,7 @@ export function IconHelp(props) {
   );
 }
 
-export function IconSearch(props) {
+export function IconSearch(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Search</title>
@@ -203,7 +216,7 @@ export function IconSearch(props) {
   );
 }
 
-export function IconCheck(props) {
+export function IconCheck(props: IconProps) {
   return (
     <Icon {...props} fill="transparent">
       <title>Check</title>
@@ -225,7 +238,7 @@ export function IconCheck(props) {
   );
 }
 
-export function IconRemove(props) {
+export function IconRemove(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Remove</title>

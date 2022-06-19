@@ -5,5 +5,5 @@ export function getImageLoadingPriority(
   index: number,
   maxEagerLoadCount = DEFAULT_GRID_IMG_LOAD_EAGER_COUNT,
 ) {
-  return index < maxEagerLoadCount ? ATTR_LOADING_EAGER : null;
+  return index < maxEagerLoadCount ? ATTR_LOADING_EAGER : undefined;
 }

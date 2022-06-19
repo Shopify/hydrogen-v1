@@ -10,6 +10,13 @@ export function Heading({
   size = 'heading',
   width = 'default',
   ...props
+}: {
+  as?: React.ElementType;
+  children: React.ReactNode;
+  className?: string;
+  format?: string;
+  size?: 'display' | 'heading' | 'lead' | 'copy';
+  width?: 'default' | 'narrow' | 'wide';
 }) {
   const sizes = {
     display: 'font-bold text-display',

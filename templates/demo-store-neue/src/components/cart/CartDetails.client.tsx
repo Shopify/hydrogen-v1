@@ -9,7 +9,7 @@ import {
 
 import {Button, Text, CartLineItem, CartEmpty} from '~/components';
 
-export function CartDetails({onClose}) {
+export function CartDetails({onClose}: {onClose: () => void}) {
   const {lines} = useCart();
   const scrollRef = useRef(null);
   const {y} = useScroll(scrollRef);
@@ -66,15 +66,15 @@ function CartCheckoutActions() {
 }
 
 function OrderSummary() {
-  const {estimatedCost} = useCart();
+  const {cost} = useCart();
   return (
     <>
       <dl className="space-y-2">
         <div className="flex items-center justify-between">
           <Text as="dt">Subtotal</Text>
           <Text as="dd">
-            {estimatedCost?.subtotalAmount?.amount ? (
-              <Money data={estimatedCost?.subtotalAmount} />
+            {cost?.subtotalAmount?.amount ? (
+              <Money data={cost?.subtotalAmount} />
             ) : (
               '-'
             )}

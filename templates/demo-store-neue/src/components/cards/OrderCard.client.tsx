@@ -1,11 +1,12 @@
 import {Image, Link, flattenConnection} from '@shopify/hydrogen';
+import type {Order} from '@shopify/hydrogen/storefront-api-types';
 
 import {Text} from '~/components';
 import {statusMessage} from '~/lib/utils';
 
-export function OrderCard({order}) {
+export function OrderCard({order}: {order: Order}) {
   if (!order?.id) return null;
-  const legacyOrderId = order.id.split('/').pop().split('?')[0];
+  const legacyOrderId = order!.id!.split('/').pop()!.split('?')[0];
   const lineItems = flattenConnection(order?.lineItems);
 
   return (
@@ -14,12 +15,15 @@ export function OrderCard({order}) {
         className="flex-1 flex flex-row lg:p-8 p-6 items-center gap-4"
         to={`/account/orders/${legacyOrderId}`}
       >
-        <Image
-          key={lineItems[0].variant?.image?.url}
-          className="xl:w-64 xl:h-64 lg:w-42 lg:h-42 md:w-36 md:h-36 w-32 h-32 flex"
-          alt={lineItems[0].variant?.image?.altText}
-          data={lineItems[0].variant?.image}
-        />
+        {lineItems[0].variant?.image && (
+          <Image
+            key={lineItems[0].variant?.image?.url}
+            className="xl:w-64 xl:h-64 lg:w-42 lg:h-42 md:w-36 md:h-36 w-32 h-32 flex"
+            alt={lineItems[0].variant?.image?.altText ?? 'Order image'}
+            // @ts-expect-error Stock line item variant image type has `url` as optional
+            data={lineItems[0].variant?.image}
+          />
+        )}
         <div className="flex-col text-left justify-center">
           <Text as="h3" className="mb-1 font-bold" size="copy" color="primary">
             {lineItems[0].title}{' '}

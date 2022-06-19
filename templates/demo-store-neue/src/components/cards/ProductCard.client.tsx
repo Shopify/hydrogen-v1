@@ -1,11 +1,33 @@
 import clsx from 'clsx';
-import {Image, Link, Money, useMoney} from '@shopify/hydrogen';
+import {
+  flattenConnection,
+  Image,
+  Link,
+  Money,
+  useMoney,
+} from '@shopify/hydrogen';
 
 import {Text} from '~/components';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
 import {product as mockProduct} from '~/lib/placeholders';
+import type {
+  MoneyV2,
+  Product,
+  ProductVariant,
+  ProductVariantConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
-export function ProductCard({product, label, className, loading}) {
+export function ProductCard({
+  product,
+  label,
+  className,
+  loading,
+}: {
+  product: Product;
+  label?: string;
+  className?: string;
+  loading?: HTMLImageElement['loading'];
+}) {
   let cardLabel;
 
   const cardData = product?.variants ? product : mockProduct;
@@ -14,11 +36,13 @@ export function ProductCard({product, label, className, loading}) {
     image,
     priceV2: price,
     compareAtPriceV2: compareAtPrice,
-  } = cardData?.variants?.nodes[0] || {};
+  } = flattenConnection<ProductVariant>(
+    cardData?.variants as ProductVariantConnection,
+  )[0] || {};
 
   if (label) {
     cardLabel = label;
-  } else if (isDiscounted(price, compareAtPrice)) {
+  } else if (isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2)) {
     cardLabel = 'Sale';
   } else if (isNewArrival(product.publishedAt)) {
     cardLabel = 'New';
@@ -37,9 +61,11 @@ export function ProductCard({product, label, className, loading}) {
           >
             {cardLabel}
           </Text>
+          {/* TODO: Fix types */}
           {image && (
             <Image
               className="aspect-[4/5]"
+              // @ts-ignore Stock type has `src` as optional
               data={image}
               alt={image.altText || `Picture of ${product.title}`}
               loading={loading}
@@ -55,11 +81,11 @@ export function ProductCard({product, label, className, loading}) {
           </Text>
           <div className="flex gap-4">
             <Text className="flex gap-4">
-              <Money withoutTrailingZeros data={price} />
-              {isDiscounted(price, compareAtPrice) && (
+              <Money withoutTrailingZeros data={price!} />
+              {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                 <CompareAtPrice
                   className={'opacity-50'}
-                  data={compareAtPrice}
+                  data={compareAtPrice as MoneyV2}
                 />
               )}
             </Text>
@@ -70,7 +96,13 @@ export function ProductCard({product, label, className, loading}) {
   );
 }
 
-function CompareAtPrice({data, className}) {
+function CompareAtPrice({
+  data,
+  className,
+}: {
+  data: MoneyV2;
+  className?: string;
+}) {
   const {currencyNarrowSymbol, withoutTrailingZerosAndCurrency} =
     useMoney(data);
 
