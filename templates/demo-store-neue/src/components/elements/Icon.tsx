@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 interface IconProps extends React.ComponentProps<typeof Icon> {
-  direction: 'up' | 'right' | 'down' | 'left';
+  direction?: 'up' | 'right' | 'down' | 'left';
 }
 
 function Icon({
@@ -9,11 +9,7 @@ function Icon({
   className,
   fill = 'currentColor',
   ...props
-}: {
-  children?: React.ReactNode;
-  className?: string;
-  fill?: any;
-}) {
+}: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

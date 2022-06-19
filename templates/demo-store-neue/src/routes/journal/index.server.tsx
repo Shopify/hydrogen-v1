@@ -67,7 +67,7 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
               return (
                 <ArticleCard
                   blogHandle={BLOG_HANDLE.toLowerCase()}
-                  article={article}
+                  article={article as Article}
                   key={article.id}
                   loading={getImageLoadingPriority(i, 2)}
                 />

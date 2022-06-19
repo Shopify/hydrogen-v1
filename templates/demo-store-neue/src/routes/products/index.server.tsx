@@ -8,6 +8,7 @@ import {
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {Layout, ProductGrid, PageHeader, Section} from '~/components';
+import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
 const pageBy = 12;
 
@@ -35,7 +36,7 @@ export default function AllProducts() {
       <Section>
         <ProductGrid
           url={`/products?country=${countryCode}`}
-          collection={{products}}
+          collection={{products} as Collection}
         />
       </Section>
     </Layout>
