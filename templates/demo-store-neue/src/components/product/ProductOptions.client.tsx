@@ -1,4 +1,5 @@
 import {useCallback} from 'react';
+// TODO: Fix import
 import {Listbox} from '@headlessui/react';
 import {useProductOptions} from '@shopify/hydrogen';
 
