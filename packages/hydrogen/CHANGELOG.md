@@ -1,5 +1,77 @@
 # Changelog
 
+## 0.26.0
+
+### Minor Changes
+
+- [#1615](https://github.com/Shopify/hydrogen/pull/1615) [`20bfc438`](https://github.com/Shopify/hydrogen/commit/20bfc4388ed400dc215a41cca44fe8cd4a11022a) Thanks [@frehner](https://github.com/frehner)! - `<CartEstimatedCost/>` has been renamed to `<CartCost/>` to match a recent update to the Storefront API, in which `cart.estimatedCost` is being deprecated in favor of `cart.cost`.
+
+  Additionally, `cart.cost.compareAtAmount` was renamed to `cart.cost.compareAtAmountPerQuantity`.
+
+* [#1619](https://github.com/Shopify/hydrogen/pull/1619) [`b0c13696`](https://github.com/Shopify/hydrogen/commit/b0c13696b6030ab8697147fdbe3ccdf2522a3913) Thanks [@blittle](https://github.com/blittle)! - We have reworked how localization works in Hydrogen. By default the `useLocalization()` hook returns the default locale defined within your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). The `<LocalizationProvider>` component now takes `countryCode` and `languageCode` as optional props. Any props given to `<LocalizationProvider>` will also be used by the `useLocalization` hook.
+
+  **Breaking Change**
+
+  The `useCountry` hook has been removed. Instead use the [`useLocalization` hook](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization).
+
+  ```diff
+  - import {useCountry, gql} from '@shopify/hydrogen';
+  + import {useLocalization, gql} from '@shopify/hydrogen';
+
+  export function MyComponent() {
+
+  -  const [country] = useCountry();
+  +  const {country} = useLocalization();
+
+    return ( /* Your JSX */ );
+  }
+  ```
+
+  The `Link` component now respects the `basePath` property defined within it's parent `FileRoutes` component. For example, given `<FileRoutes basePath="/cn">`, a route within that renders `<Link to="/products">` will actually produce an anchor tag prefixed with `/cn`: `<a href="/cn/products">`. You can override the `basePath` with a `basePath` prop on the `Link` component.
+
+- [#1646](https://github.com/Shopify/hydrogen/pull/1646) [`1103fb57`](https://github.com/Shopify/hydrogen/commit/1103fb575e51d5948c6bd4885bcd911be1f8bf7e) Thanks [@benjaminsehl](https://github.com/benjaminsehl)! - Updates default SEO titleTemplate for the Homepage
+
+### Patch Changes
+
+- [#1569](https://github.com/Shopify/hydrogen/pull/1569) [`e5896a3e`](https://github.com/Shopify/hydrogen/commit/e5896a3e20b0bf2760b238e713a7bc04f7e95e2d) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Clean up full page cache work with `waitUntil`
+
+* [#1643](https://github.com/Shopify/hydrogen/pull/1643) [`3b849606`](https://github.com/Shopify/hydrogen/commit/3b849606c4999d19920330f86c535a6f892dcc65) Thanks [@frandiox](https://github.com/frandiox)! - Do not cache client components in browser when using TypeScript.
+
+- [#1605](https://github.com/Shopify/hydrogen/pull/1605) [`2eb2c461`](https://github.com/Shopify/hydrogen/commit/2eb2c4615210cafadab8ed154909f3516c72db3e) Thanks [@frandiox](https://github.com/frandiox)! - Fix hydration issues with `useId`.
+
+* [#1613](https://github.com/Shopify/hydrogen/pull/1613) [`c45ebd3c`](https://github.com/Shopify/hydrogen/commit/c45ebd3cf468c9f596ef399712506bd766dea54d) Thanks [@frehner](https://github.com/frehner)! - The `<ShopPayButton/>` and `<CartShopPayButton/>` now take in a `width` prop to help customize how wide the `<shop-pay-button>` custom element is, by using the newly added CSS custom property (variable) `--shop-pay-button-width`.
+
+- [#1651](https://github.com/Shopify/hydrogen/pull/1651) [`a19be2b2`](https://github.com/Shopify/hydrogen/commit/a19be2b22cee63bf95ade3a4f5803c460651a473) Thanks [@blittle](https://github.com/blittle)! - Fixes to the cart:
+
+  1. Fix bug when providing a lower-case country code to the `LocalizationProvider`
+  2. Make sure that the Cart always logs API errors
+
+* [#1649](https://github.com/Shopify/hydrogen/pull/1649) [`df0e01ff`](https://github.com/Shopify/hydrogen/commit/df0e01fff6afae22a30be8c0bb750aed016326a4) Thanks [@blittle](https://github.com/blittle)! - Add a `x-powered-by: Shopify-Hydrogen` header which can be disabled with the Hydrogen config property: `poweredByHeader: false`
+
+- [#1566](https://github.com/Shopify/hydrogen/pull/1566) [`cfe7385e`](https://github.com/Shopify/hydrogen/commit/cfe7385e0c64c3dc465d1bcd34ad9c7040db9969) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Add storefont id to cart provider query
+
+* [#1551](https://github.com/Shopify/hydrogen/pull/1551) [`3d20e92d`](https://github.com/Shopify/hydrogen/commit/3d20e92db3402e356c16d0bc5fc4450f9d8c0df5) Thanks [@jplhomer](https://github.com/jplhomer)! - In-Memory caching is now enabled by default in production for Node.js runtimes.
+
+- [#1604](https://github.com/Shopify/hydrogen/pull/1604) [`f3827d31`](https://github.com/Shopify/hydrogen/commit/f3827d31263352689c5149a5509b51d1fdb572d4) Thanks [@cartogram](https://github.com/cartogram)! - Adds new `load-config` entry point that exposes a `loadConfig()` function that will return the configuration object and the path to the found configuration file for a given Hydrogen project root.
+
+  Example:
+
+  ```ts
+  import {loadConfig} from '@shopify/hydrogen/load-config';
+
+  const {configuration, configurationPath} = await loadConfig({
+    root: 'path/to/hydrogen-app',
+  });
+  ```
+
+* [#1626](https://github.com/Shopify/hydrogen/pull/1626) [`29218452`](https://github.com/Shopify/hydrogen/commit/29218452a1679be629616993d8cc23ad7077667b) Thanks [@frandiox](https://github.com/frandiox)! - Fix import aliases.
+
+- [#1622](https://github.com/Shopify/hydrogen/pull/1622) [`d339239d`](https://github.com/Shopify/hydrogen/commit/d339239d23b074cba3ee637166f8120512a6afee) Thanks [@frandiox](https://github.com/frandiox)! - Fix module resolution after HMR in some scenarios.
+
+* [#1608](https://github.com/Shopify/hydrogen/pull/1608) [`b834dfdc`](https://github.com/Shopify/hydrogen/commit/b834dfdcddc56c78bb6fbb7e0a681cc3c977b62d) Thanks [@jplhomer](https://github.com/jplhomer)! - Add type exports for `HydrogenRouteProps`, `HydrogenApiRoute`, and `HydrogenApiRouteOptions`.
+
+- [#1603](https://github.com/Shopify/hydrogen/pull/1603) [`e1bb5810`](https://github.com/Shopify/hydrogen/commit/e1bb5810f218acc5b7debb60bcdebc6c9594f86c) Thanks [@frandiox](https://github.com/frandiox)! - Do not trigger prefetch when `to` prop is missing in the `Link` component.
+
 ## 0.25.1
 
 ## 0.25.0
