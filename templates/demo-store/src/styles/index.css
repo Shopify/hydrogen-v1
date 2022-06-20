@@ -96,7 +96,7 @@ shop-pay-button {
     h4,
     h5,
     h6 {
-      @apply font-sans;
+      @apply font-sans text-primary;
     }
     @apply mb-12 font-serif prose mx-auto grid justify-center text-primary;
     p,
