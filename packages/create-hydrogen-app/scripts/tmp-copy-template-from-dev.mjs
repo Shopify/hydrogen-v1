@@ -11,8 +11,8 @@ import {compileTemplate} from '../../../scripts/compile-template.mjs';
 
 (async () => {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const root = path.resolve(__dirname, '..', '..', '..', 'templates');
+  const source = path.resolve(__dirname, '..', '..', '..', 'templates');
   const destination = path.resolve(__dirname, '..', './template-hydrogen');
 
-  await compileTemplate('demo-store', {root, destination});
+  await compileTemplate('demo-store', {source, destination});
 })();

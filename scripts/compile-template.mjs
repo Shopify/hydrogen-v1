@@ -8,7 +8,7 @@ import prettier from 'prettier';
 
 export async function compileTemplate(
   template = 'demo-store',
-  {root, destination} = {}
+  {source, destination} = {}
 ) {
   if (!template) {
     throw new Error('No template specified');
@@ -18,8 +18,8 @@ export async function compileTemplate(
     ? resolve(destination)
     : resolve(process.cwd(), 'templates', `${template}-js`);
 
-  const TSTemplateDirectory = root
-    ? resolve(root, template)
+  const TSTemplateDirectory = source
+    ? resolve(source, template)
     : resolve(process.cwd(), 'templates', template);
 
   const globPath = [TSTemplateDirectory, '**', '/!(*.d)'].join(sep);
