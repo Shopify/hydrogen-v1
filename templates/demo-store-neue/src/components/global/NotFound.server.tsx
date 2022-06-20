@@ -2,11 +2,11 @@ import {gql, useLocalization, useShopQuery} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {Button, FeaturedCollections, PageHeader, Text} from '~/components';
+import {ProductSwimlane, Layout} from '~/components/index.server';
 import type {
   CollectionConnection,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
-import {ProductSwimlane, Layout} from '~/components/index.server';
 
 export function NotFound({type = 'page'}) {
   const {
