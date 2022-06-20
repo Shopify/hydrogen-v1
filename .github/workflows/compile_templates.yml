@@ -1,4 +1,4 @@
-name: Update templates
+name: Compile templates
 
 on:
   push:
@@ -17,12 +17,12 @@ jobs:
       - name: Install the packages
         run: yarn install --frozen-lockfile --ignore-engines --network-timeout 36000
 
-      - name: Compile hello-world
+      - name: Compile templates from JS to TS
         run: |
           node scripts/compile-template-for-dist.mjs hello-world
           node scripts/compile-template-for-dist.mjs demo-store
 
-      - name: Push to main branch
+      - name: Update templates in the dist branch
         run: |
           git show-ref
           git config user.email "hydrogen@shopify.com"
