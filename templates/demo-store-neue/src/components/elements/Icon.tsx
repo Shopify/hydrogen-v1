@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 
-interface IconProps extends React.ComponentProps<typeof Icon> {
+type IconProps = JSX.IntrinsicElements['svg'] & {
   direction?: 'up' | 'right' | 'down' | 'left';
-}
+};
 
 function Icon({
   children,
@@ -10,7 +10,7 @@ function Icon({
   fill = 'currentColor',
   stroke,
   ...props
-}: React.SVGProps<SVGSVGElement>) {
+}: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

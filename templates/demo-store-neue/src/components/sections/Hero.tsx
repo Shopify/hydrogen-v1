@@ -43,7 +43,6 @@ export function Hero({
                     : [500, 900, 1400]
                 }
                 width={spreadSecondary?.reference ? 375 : 750}
-                // @ts-ignore TODO: Fix MockData
                 data={spread.reference as Media}
                 loading={loading}
               />
@@ -76,6 +75,15 @@ export function Hero({
   );
 }
 
+interface SpreadMediaProps {
+  data: Media;
+  loading?: HTMLImageElement['loading'];
+  scale?: 2 | 3;
+  sizes: string;
+  width: number;
+  widths: number[];
+}
+
 function SpreadMedia({
   data,
   loading,
@@ -83,14 +91,7 @@ function SpreadMedia({
   sizes,
   width,
   widths,
-}: {
-  data: Media;
-  loading?: HTMLImageElement['loading'];
-  scale?: 2 | 3;
-  sizes: string;
-  width: number;
-  widths: number[];
-}) {
+}: SpreadMediaProps) {
   if (data.mediaContentType === 'VIDEO') {
     return (
       <Video
