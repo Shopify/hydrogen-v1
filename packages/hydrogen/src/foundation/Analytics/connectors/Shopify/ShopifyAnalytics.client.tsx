@@ -135,12 +135,12 @@ function buildStorefrontPageViewPayload(payload: any): any {
     contentLanguage: shopify.acceptedLanguage,
   };
 
-  formattedData = addDataIf(
-    {
-      isMerchantRequest: false, //isMerchantRequest(),
-    },
-    formattedData
-  );
+  // formattedData = addDataIf(
+  //   {
+  //     isMerchantRequest: false, //isMerchantRequest(),
+  //   },
+  //   formattedData
+  // );
 
   formattedData = addDataIf(
     {
@@ -173,13 +173,13 @@ function buildStorefrontPageViewPayload(payload: any): any {
   return formattedData;
 }
 
-function isMerchantRequest(): Boolean {
-  const hostname = location.hostname;
-  if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
-    return true;
-  }
-  return false;
-}
+// function isMerchantRequest(): Boolean {
+//   const hostname = location.hostname;
+//   if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
+//     return true;
+//   }
+//   return false;
+// }
 
 function stripGId(text: string): number {
   return parseInt(text.substring(text.lastIndexOf('/') + 1));
