@@ -12,7 +12,7 @@ The `ProductOptionsProvider` component sets up a context with state that tracks 
 import {ProductOptionsProvider, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
-  query product($handle: String!) {
+  query product($handle: String!, $includeReferenceMetafieldDetails: Boolean!) {
     product: product(handle: $handle) {
       compareAtPriceRange {
         maxVariantPrice {
@@ -27,7 +27,7 @@ const QUERY = gql`
       descriptionHtml
       handle
       id
-      media(first: $numProductMedia) {
+      media(first: 10) {
         nodes {
           ... on MediaImage {
             mediaContentType
@@ -70,7 +70,7 @@ const QUERY = gql`
           }
         }
       }
-      metafields(first: $numProductMetafields) {
+      metafields(first: 10) {
         nodes {
           id
           type
@@ -107,7 +107,7 @@ const QUERY = gql`
         }
       }
       title
-      variants(first: $numProductVariants) {
+      variants(first: 250) {
         nodes {
           id
           title
@@ -142,7 +142,7 @@ const QUERY = gql`
             name
             value
           }
-          metafields(first: $numProductVariantMetafields) {
+          metafields(first: 10) {
             nodes {
               id
               type
@@ -169,7 +169,7 @@ const QUERY = gql`
             }
           }
           sellingPlanAllocations(
-            first: $numProductVariantSellingPlanAllocations
+            first: 10
           ) {
             nodes {
               priceAdjustments {
@@ -224,9 +224,9 @@ const QUERY = gql`
           }
         }
       }
-      sellingPlanGroups(first: $numProductSellingPlanGroups) {
+      sellingPlanGroups(first: 10) {
         nodes {
-          sellingPlans(first: $numProductSellingPlans) {
+          sellingPlans(first: 10) {
             nodes {
               id
               description
@@ -271,7 +271,7 @@ const QUERY = gql`
 `;
 
 export function Product() {
-  const {data} = useShopQuery({query: QUERY});
+  const {data} = useShopQuery({query: QUERY, variables: { handle, includeReferenceMetafieldDetails }});
 
   return (
     <ProductOptionsProvider data={data.product} initialVariantId="some-id">{/* Your JSX */}</ProductOptionsProvider>

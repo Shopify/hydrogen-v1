@@ -13,21 +13,24 @@ export function OrderCard({order}: {order: Order}) {
   const lineItems = flattenConnection<OrderLineItem>(order?.lineItems);
 
   return (
-    <li className="col-span-1 flex flex-col text-center rounded border-gray-200 border divide-y divide-gray-200 justify-around">
+    <li className="flex flex-col justify-around col-span-1 text-center border border-gray-200 divide-y divide-gray-200 rounded">
       <Link
-        className="flex-1 flex flex-row lg:p-8 p-6 items-center gap-4"
+        className="flex flex-row items-center flex-1 gap-4 p-6 lg:p-8"
         to={`/account/orders/${legacyOrderId}`}
       >
         {lineItems[0].variant?.image && (
           <Image
+            width={168}
+            height={168}
+            widths={[336]}
             key={lineItems[0].variant?.image?.url}
-            className="xl:w-64 xl:h-64 lg:w-42 lg:h-42 md:w-36 md:h-36 w-32 h-32 flex"
+            className="flex w-32 h-32 xl:w-64 xl:h-64 lg:w-42 lg:h-42 md:w-36 md:h-36"
             alt={lineItems[0].variant?.image?.altText ?? 'Order image'}
             // @ts-expect-error Stock line item variant image type has `url` as optional
             data={lineItems[0].variant?.image}
           />
         )}
-        <div className="flex-col text-left justify-center">
+        <div className="flex-col justify-center text-left">
           <Text as="h3" className="mb-1 font-bold" size="copy" color="primary">
             {lineItems[0].title}{' '}
             {lineItems.length > 1 && `+ ${lineItems.length - 1} more`}
@@ -62,11 +65,11 @@ export function OrderCard({order}: {order: Order}) {
           </dl>
         </div>
       </Link>
-      <div className="-mt-px flex divide-x divide-gray-200">
-        <div className="w-0 flex-1 flex">
+      <div className="flex -mt-px divide-x divide-gray-200">
+        <div className="flex flex-1 w-0">
           <Link
             to={`/account/orders/${legacyOrderId}`}
-            className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500 dark:text-gray-200"
+            className="relative inline-flex items-center justify-center flex-1 w-0 py-4 -mr-px text-sm font-medium text-gray-700 border border-transparent rounded-bl-lg hover:text-gray-500 dark:text-gray-200"
           >
             <span className="ml-3">View Details</span>
           </Link>

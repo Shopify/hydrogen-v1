@@ -2,25 +2,19 @@ import {Image, Link, Video} from '@shopify/hydrogen';
 import type {Media} from '@shopify/hydrogen/storefront-api-types';
 
 import {Heading, Text} from '~/components';
-import {hero as mockData} from '~/lib/placeholders';
 
-export function Hero(props = mockData) {
-  const {
-    title,
-    byline,
-    cta,
-    // @ts-ignore TODO: Fix MockData
-    handle,
-    spread,
-    // @ts-ignore TODO: Fix MockData
-    spreadSecondary,
-    // @ts-ignore TODO: Fix MockData
-    height,
-    // @ts-ignore TODO: Fix MockData
-    top,
-    // @ts-ignore TODO: Fix MockData
-    loading,
-  } = props;
+export function Hero({
+  data,
+  height,
+  top,
+  loading,
+}: {
+  data: any;
+  height?: 'full';
+  top?: boolean;
+  loading?: 'eager' | 'lazy';
+}) {
+  const {title, byline, cta, handle, spread, spreadSecondary} = data;
 
   return (
     <Link to={`/collections/${handle}`}>
@@ -40,8 +34,8 @@ export function Hero(props = mockData) {
                 scale={2}
                 sizes={
                   spreadSecondary?.reference
-                    ? '(min-width: 80em) 700, (min-width: 48em) 450, 500'
-                    : '(min-width: 80em) 1400, (min-width: 48em) 900, 500'
+                    ? '(min-width: 80em) 700px, (min-width: 48em) 450px, 500px'
+                    : '(min-width: 80em) 1400px, (min-width: 48em) 900px, 500px'
                 }
                 widths={
                   spreadSecondary?.reference
@@ -75,7 +69,7 @@ export function Hero(props = mockData) {
               {byline.value}
             </Text>
           )}
-          <Text size="lead">{cta.value}</Text>
+          <Text size="lead">{cta ? cta?.value : 'Shop Now'}</Text>
         </div>
       </section>
     </Link>

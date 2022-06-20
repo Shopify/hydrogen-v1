@@ -1,18 +1,13 @@
-/* fraunces-regular - latin */
 @font-face {
-  font-family: 'Fraunces';
-  font-style: normal;
+  font-family: 'IBMPlexSerif';
   font-display: swap;
   font-weight: 400;
-  src: url('/fonts/fraunces-v22-latin-regular.eot'); /* IE9 Compat Modes */
-  src: local(''),
-    url('/fonts/fraunces-v22-latin-regular.eot?#iefix')
-      format('embedded-opentype'),
-    /* IE6-IE8 */ url('/fonts/fraunces-v22-latin-regular.woff2') format('woff2'),
-    /* Super Modern Browsers */ url('/fonts/fraunces-v22-latin-regular.woff')
-      format('woff'),
-    /* Modern Browsers */ url('/fonts/fraunces-v22-latin-regular.ttf')
-      format('truetype'),
-    /* Safari, Android, iOS */
-      url('/fonts/fraunces-v22-latin-regular.svg#Fraunces') format('svg'); /* Legacy iOS */
+  src: url('/fonts/IBMPlexSerif-Text.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBMPlexSerif';
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+  src: url('/fonts/IBMPlexSerif-TextItalic') format('woff2');
 }
