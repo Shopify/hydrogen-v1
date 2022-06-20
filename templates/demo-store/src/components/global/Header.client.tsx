@@ -74,12 +74,16 @@ function MobileHeader({
   openCart: () => void;
   openMenu: () => void;
 }) {
+  const {y} = useWindowScroll();
+
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
     container: `${
       isHome
         ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
         : 'bg-contrast/80 text-primary'
+    } ${
+      y > 50 && !isHome && 'shadow-lightHeader'
     } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`,
   };
 
@@ -148,7 +152,8 @@ function DesktopHeader({
   const {y} = useWindowScroll();
 
   const styles = {
-    button: 'relative flex items-center justify-center w-8 h-8',
+    button:
+      'relative flex items-center justify-center w-8 h-8 focus:ring-primary/5',
     container: `${
       isHome
         ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'

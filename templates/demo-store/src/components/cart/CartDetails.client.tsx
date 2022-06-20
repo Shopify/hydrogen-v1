@@ -9,7 +9,13 @@ import {
 
 import {Button, Text, CartLineItem, CartEmpty} from '~/components';
 
-export function CartDetails({onClose}: {onClose?: () => void}) {
+export function CartDetails({
+  layout,
+  onClose,
+}: {
+  layout: 'drawer' | 'page';
+  onClose?: () => void;
+}) {
   const {lines} = useCart();
   const scrollRef = useRef(null);
   const {y} = useScroll(scrollRef);
@@ -18,14 +24,27 @@ export function CartDetails({onClose}: {onClose?: () => void}) {
     return <CartEmpty onClose={onClose} />;
   }
 
+  const container = {
+    drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto]',
+    page: 'pb-12 max-w-7xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4 md:gap-8 lg:gap-12',
+  };
+
+  const content = {
+    drawer: 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12',
+    page: 'flex-grow md:translate-y-4',
+  };
+
+  const summary = {
+    drawer: 'grid gap-6 p-6 border-t md:px-12',
+    page: 'sticky top-nav grid gap-6 p-4 md:px-6 md:translate-y-4 bg-primary/5 rounded',
+  };
+
   return (
-    <form className="grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto]">
+    <form className={container[layout]}>
       <section
         ref={scrollRef}
         aria-labelledby="cart-contents"
-        className={`px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 ${
-          y > 0 && 'border-t'
-        }`}
+        className={`${content[layout]} ${y > 0 && 'border-t'}`}
       >
         <ul className="grid gap-6 md:gap-10">
           {lines.map((line) => {
@@ -37,10 +56,7 @@ export function CartDetails({onClose}: {onClose?: () => void}) {
           })}
         </ul>
       </section>
-      <section
-        aria-labelledby="summary-heading"
-        className="grid gap-6 p-6 border-t md:px-12"
-      >
+      <section aria-labelledby="summary-heading" className={summary[layout]}>
         <h2 id="summary-heading" className="sr-only">
           Order summary
         </h2>
@@ -78,14 +94,6 @@ function OrderSummary() {
             ) : (
               '-'
             )}
-          </Text>
-        </div>
-        <div className="flex items-center justify-between">
-          <Text as="dt" className="flex items-center">
-            <span>Shipping estimate</span>
-          </Text>
-          <Text as="dd" className="text-green-600">
-            Free and carbon neutral
           </Text>
         </div>
       </dl>

@@ -15,6 +15,7 @@
   --color-shop-pay: #5a31f4;
   --shop-pay-button--width: 100%; /* Sets the width for the shop-pay-button web component */
   --height-nav: 3rem;
+  --screen-height: 100vh;
 
   @media (min-width: 32em) {
     --height-nav: 4rem;
@@ -24,11 +25,8 @@
     --font-size-heading: 2.25rem; /* text-4xl */
     --font-size-display: 3.75rem; /* text-6xl */
   }
-  @media (min-width: 64em) {
-  }
-  @media (min-width: 80em) {
-  }
-  @media (min-width: 96em) {
+  @supports (height: 100lvh) {
+    --screen-height: 100lvh;
   }
 }
 
