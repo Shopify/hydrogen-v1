@@ -1,4 +1,5 @@
-import {Layout, PageHeader, Section, CartDetails} from '~/components';
+import {PageHeader, Section, CartDetails} from '~/components';
+import {Layout} from '~/components/index.server';
 
 export default function Cart() {
   return (

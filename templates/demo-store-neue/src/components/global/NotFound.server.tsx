@@ -1,18 +1,12 @@
 import {gql, useLocalization, useShopQuery} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
-import {
-  Button,
-  FeaturedCollections,
-  Layout,
-  PageHeader,
-  ProductSwimlane,
-  Text,
-} from '~/components';
+import {Button, FeaturedCollections, PageHeader, Text} from '~/components';
 import type {
   CollectionConnection,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
+import {ProductSwimlane, Layout} from '../index.server';
 
 export function NotFound({type = 'page'}) {
   const {

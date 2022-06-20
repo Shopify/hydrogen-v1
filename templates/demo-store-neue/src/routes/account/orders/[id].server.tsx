@@ -20,7 +20,8 @@ import type {
   OrderLineItem,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {Layout, Text, PageHeader} from '~/components';
+import {Text, PageHeader} from '~/components';
+import {Layout} from '~/components/index.server';
 import {statusMessage} from '~/lib/utils';
 
 export default function OrderDetails({response}: HydrogenRouteProps) {

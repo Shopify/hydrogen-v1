@@ -7,8 +7,9 @@ import {
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
-import {Layout, ProductGrid, PageHeader, Section} from '~/components';
+import {ProductGrid, PageHeader, Section} from '~/components';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
+import {Layout} from '~/components/index.server';
 
 const pageBy = 12;
 

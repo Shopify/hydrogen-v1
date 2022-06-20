@@ -12,12 +12,12 @@ import {
   LocalizationProvider,
 } from '@shopify/hydrogen';
 
+import {HeaderFallback} from '~/components';
 import {
-  DefaultSeo,
   CartProviderWithSession,
+  DefaultSeo,
   NotFound,
-  HeaderFallback,
-} from '~/components';
+} from '~/components/index.server';
 
 function App({routes, request}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;

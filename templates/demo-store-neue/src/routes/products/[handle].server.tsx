@@ -12,15 +12,13 @@ import {
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
 import {
   Heading,
-  Layout,
-  NotFound,
   ProductForm,
   ProductGallery,
   ProductInfo,
-  ProductSwimlane,
   Section,
   Text,
 } from '~/components';
+import {NotFound, Layout, ProductSwimlane} from '~/components/index.server';
 
 export default function Product() {
   const {handle} = useRouteParams();

@@ -11,14 +11,8 @@ import {
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
-import {
-  Layout,
-  NotFound,
-  PageHeader,
-  ProductGrid,
-  Section,
-  Text,
-} from '~/components';
+import {PageHeader, ProductGrid, Section, Text} from '~/components';
+import {NotFound, Layout} from '~/components/index.server';
 
 const pageBy = 4;
 

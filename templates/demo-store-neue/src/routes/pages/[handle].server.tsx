@@ -8,7 +8,8 @@ import {
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
-import {Layout, NotFound, PageHeader} from '~/components';
+import {PageHeader} from '~/components';
+import {NotFound, Layout} from '~/components/index.server';
 
 export default function Page({params}: HydrogenRouteProps) {
   const {
