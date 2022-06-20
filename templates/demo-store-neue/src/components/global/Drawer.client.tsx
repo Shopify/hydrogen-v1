@@ -8,17 +8,20 @@ import {Heading, IconClose} from '~/components';
  * @param heading - string. Shown at the top of the drawer.
  * @param open - boolean state. if true opens the drawer.
  * @param onClose - function should set the open state.
+ * @param openFrom - right, left
  * @param children - react children node.
  */
 function Drawer({
   heading,
   open,
   onClose,
+  openFrom = 'right',
   children,
 }: {
   heading: string;
   open: boolean;
   onClose: () => void;
+  openFrom: 'right' | 'left';
   children: React.ReactNode;
 }) {
   return (
@@ -38,15 +41,31 @@ function Drawer({
 
         <div className="fixed inset-0">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="fixed inset-y-0 right-0 flex max-w-full">
+            <div
+              className={`fixed inset-y-0 flex max-w-full ${
+                openFrom === 'right' ? 'right-0' : ''
+              }`}
+            >
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-300"
-                enterFrom="translate-x-full"
-                enterTo="translate-x-0"
+                enterFrom={`
+                  ${openFrom === 'right' ? 'translate-x-full' : ''} 
+                  ${openFrom === 'left' ? '-translate-x-full' : ''} 
+                }`}
+                enterTo={`
+                  ${openFrom === 'right' ? 'translate-x-0' : ''} 
+                  ${openFrom === 'left' ? 'translate-x-0' : ''} 
+                }`}
                 leave="transform transition ease-in-out duration-300"
-                leaveFrom="translate-x-0"
-                leaveTo="translate-x-full"
+                leaveFrom={`
+                  ${openFrom === 'right' ? 'translate-x-0' : ''} 
+                  ${openFrom === 'left' ? 'translate-x-0' : ''} 
+                }`}
+                leaveTo={`
+                  ${openFrom === 'right' ? 'translate-x-full' : ''} 
+                  ${openFrom === 'left' ? '-translate-x-full' : ''} 
+                }`}
               >
                 <Dialog.Panel className="w-screen h-screen max-w-lg text-left align-middle transition-all transform shadow-xl bg-contrast">
                   <header className="sticky top-0 flex items-center justify-between px-4 h-nav sm:px-8 md:px-12">
