@@ -14,7 +14,7 @@ export function CartDrawer({
         <Drawer.Title>
           <h2 className="sr-only">Cart Drawer</h2>
         </Drawer.Title>
-        <CartDetails onClose={onClose} />
+        <CartDetails layout="drawer" onClose={onClose} />
       </div>
     </Drawer>
   );
