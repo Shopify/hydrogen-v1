@@ -58,21 +58,21 @@ function shopSitemap(data: SitemapQueryData, baseUrl: string) {
 
     const finalObject: ProductEntry = {
       url,
-      lastMod: product.updatedAt,
+      lastMod: product.updatedAt!,
       changeFreq: 'daily',
     };
 
-    if (product.featuredImage.url) {
+    if (product.featuredImage!.url) {
       finalObject.image = {
-        url: product.featuredImage.url,
+        url: product.featuredImage!.url,
       };
 
       if (product.title) {
         finalObject.image.title = product.title;
       }
 
-      if (product.featuredImage.altText) {
-        finalObject.image.caption = product.featuredImage.altText;
+      if (product.featuredImage!.altText) {
+        finalObject.image.caption = product.featuredImage!.altText;
       }
 
       return finalObject;
@@ -123,8 +123,8 @@ function renderUrlTag({
   image,
 }: {
   url: string;
-  lastMod: string;
-  changeFreq: string;
+  lastMod?: string;
+  changeFreq?: string;
   image?: {
     url: string;
     title?: string;
