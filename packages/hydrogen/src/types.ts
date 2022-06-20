@@ -80,6 +80,7 @@ export type InlineHydrogenConfig = ClientConfig & {
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
   logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
+  poweredByHeader?: boolean;
   __EXPERIMENTAL__devTools?: boolean;
 };
 
