@@ -1,9 +1,28 @@
-import {flattenConnection, gql} from '@shopify/hydrogen';
+import {
+  flattenConnection,
+  gql,
+  type HydrogenApiRouteOptions,
+  type HydrogenRequest,
+} from '@shopify/hydrogen';
+import type {
+  CollectionConnection,
+  PageConnection,
+  ProductConnection,
+} from '@shopify/hydrogen/storefront-api-types';
 
 const MAX_URLS = 250; // the google limit is 50K, however, SF API only allow querying for 250 resources each time
 
-export async function api(request, {queryShop}) {
-  const {data} = await queryShop({
+interface SitemapQueryData {
+  products: ProductConnection;
+  collections: CollectionConnection;
+  pages: PageConnection;
+}
+
+export async function api(
+  request: HydrogenRequest,
+  {queryShop}: HydrogenApiRouteOptions,
+) {
+  const {data} = await queryShop<SitemapQueryData>({
     query: QUERY,
     variables: {
       language: 'EN',
@@ -20,29 +39,40 @@ export async function api(request, {queryShop}) {
   });
 }
 
-function shopSitemap(data, baseUrl) {
+function shopSitemap(data: SitemapQueryData, baseUrl: string) {
   const productsData = flattenConnection(data.products).map((product) => {
     const url = product.onlineStoreUrl
       ? product.onlineStoreUrl
       : `${baseUrl}/products/${product.handle}`;
 
-    const finalObject = {
+    interface ProductEntry {
+      url: string;
+      lastMod: string;
+      changeFreq: string;
+      image?: {
+        url: string;
+        title?: string;
+        caption?: string;
+      };
+    }
+
+    const finalObject: ProductEntry = {
       url,
-      lastMod: product.updatedAt,
+      lastMod: product.updatedAt!,
       changeFreq: 'daily',
     };
 
-    if (product.featuredImage.url) {
+    if (product.featuredImage!.url) {
       finalObject.image = {
-        url: product.featuredImage.url,
+        url: product.featuredImage!.url,
       };
 
       if (product.title) {
         finalObject.image.title = product.title;
       }
 
-      if (product.featuredImage.altText) {
-        finalObject.image.caption = product.featuredImage.altText;
+      if (product.featuredImage!.altText) {
+        finalObject.image.caption = product.featuredImage!.altText;
       }
 
       return finalObject;
@@ -82,11 +112,25 @@ function shopSitemap(data, baseUrl) {
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
     >
-      ${urlsDatas.map((url) => renderUrlTag(url)).join('')}
+      ${urlsDatas.map((url) => renderUrlTag(url!)).join('')}
     </urlset>`;
 }
 
-function renderUrlTag({url, lastMod, changeFreq, image}) {
+function renderUrlTag({
+  url,
+  lastMod,
+  changeFreq,
+  image,
+}: {
+  url: string;
+  lastMod?: string;
+  changeFreq?: string;
+  image?: {
+    url: string;
+    title?: string;
+    caption?: string;
+  };
+}) {
   return `
     <url>
       <loc>${url}</loc>

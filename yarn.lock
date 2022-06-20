@@ -2208,17 +2208,6 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@shopify/cli-hydrogen@2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@shopify/cli-hydrogen/-/cli-hydrogen-2.0.10.tgz#a00f3e97e3f363676191f53325b0e1c6fa6c02e7"
-  integrity sha512-o0a4UsdupvrGCwPQi9ygZ/yaahmrfwy1BbwMeBZW1dzIKmrupFc+aK/fnfMKGm4sohAjoafivy+WNbf1hZreIg==
-  dependencies:
-    "@oclif/core" "1.7.0"
-    "@shopify/mini-oxygen" "^0.0.5"
-    "@types/prettier" "^2.4.4"
-    prettier "^2.6.1"
-    vite "^2.9.6"
-
 "@shopify/cli-hydrogen@^3.0.11":
   version "3.0.11"
   resolved "https://registry.yarnpkg.com/@shopify/cli-hydrogen/-/cli-hydrogen-3.0.11.tgz#9a9a758dc38ecc1769a5a01e67276e94c7d0ff6b"
@@ -2240,18 +2229,6 @@
     "@types/prettier" "^2.4.4"
     prettier "^2.6.1"
     vite "^2.9.6"
-
-"@shopify/cli-kit@2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@shopify/cli-kit/-/cli-kit-2.0.10.tgz#584ca98002b4613216b7b144cf7ac454cdb30941"
-  integrity sha512-k8Ub4w4j7FN7ziveCEqSnNd8pcbEh8vMCAR9gznwS53a3TJLHxUtzz7Xk2V7v1fG+LSuQhx2Ie5QZvxehRrWLg==
-  dependencies:
-    "@oclif/core" "1.7.0"
-    envfile "^6.17.0"
-    keytar "^7.9.0"
-    open "^8.4.0"
-    source-map-support "^0.5.21"
-    stacktracey "^2.1.8"
 
 "@shopify/cli-kit@2.0.14":
   version "2.0.14"
@@ -2276,18 +2253,6 @@
     open "^8.4.0"
     source-map-support "^0.5.21"
     stacktracey "^2.1.8"
-
-"@shopify/cli@2.0.10":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@shopify/cli/-/cli-2.0.10.tgz#554f36764abcae40f1dc3344e37594669ba7605c"
-  integrity sha512-YhoMSdPqczQljkSPletWSGyfDTdoQBtUyszPfG91PyDywPYKiTDaDFXkO9mwGr2VuW8ZNFXe51KbRgsLyg+3jg==
-  dependencies:
-    "@bugsnag/js" "^7.16.2"
-    "@oclif/core" "1.7.0"
-    "@oclif/plugin-help" "^5.1.12"
-    "@oclif/plugin-plugins" "^2.1.0"
-    "@shopify/cli-kit" "2.0.10"
-    "@shopify/plugin-ngrok" "^0.2.4"
 
 "@shopify/cli@^3.0.11":
   version "3.0.11"
@@ -3493,7 +3458,7 @@ auto-bind@~4.0.0:
   resolved "https://registry.yarnpkg.com/auto-bind/-/auto-bind-4.0.0.tgz#e3589fc6c2da8f7ca43ba9f84fa52a744fc997fb"
   integrity sha512-Hdw8qdNiqdJ8LqT0iK0sVzkFbzg6fhnQqqfWhBDxcHZvU75+B+ayzTy8x+k5Ix0Y92XOhOUlx74ps+bA6BeYMQ==
 
-autoprefixer@^10.4.2, autoprefixer@^10.4.7:
+autoprefixer@^10.4.7:
   version "10.4.7"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.7.tgz#1db8d195f41a52ca5069b7593be167618edbbedf"
   integrity sha512-ypHju4Y2Oav95SipEcCcI5J7CGPuvz8oat7sUtYj3ClK44bldfvtvcxK6IEK++7rqB7YchDGzweZIBG+SD0ZAA==
@@ -10502,13 +10467,6 @@ playwright-core@1.22.2:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.22.2.tgz#ed2963d79d71c2a18d5a6fd25b60b9f0a344661a"
   integrity sha512-w/hc/Ld0RM4pmsNeE6aL/fPNWw8BWit2tg+TfqJ3+p59c6s3B6C8mXvXrIPmfQEobkcFDc+4KirNzOQ+uBSP1Q==
 
-playwright@^1.19.2:
-  version "1.22.2"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.22.2.tgz#353a7c29f89ca9600edc7a9a30aed790823c797d"
-  integrity sha512-hUTpg7LytIl3/O4t0AQJS1V6hWsaSY5uZ7w1oCC8r3a1AQN5d6otIdCkiB3cbzgQkcMaRxisinjMFMVqZkybdQ==
-  dependencies:
-    playwright-core "1.22.2"
-
 please-upgrade-node@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/please-upgrade-node/-/please-upgrade-node-3.2.0.tgz#aeddd3f994c933e4ad98b99d9a556efa0e2fe942"
@@ -10804,7 +10762,7 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.2.0:
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@^8, postcss@^8.4.12, postcss@^8.4.13, postcss@^8.4.14, postcss@^8.4.5:
+postcss@^8, postcss@^8.4.12, postcss@^8.4.13, postcss@^8.4.14:
   version "8.4.14"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.14.tgz#ee9274d5622b4858c1007a74d76e42e56fd21caf"
   integrity sha512-E398TUmfAYFPBSdzgeieK2Y1+1cpdxJx8yXbK/m57nRhKSmk1GB2tO4lbLBtlkfPQTDKfe4Xqv1ASWPpayPEig==
@@ -11883,7 +11841,7 @@ sentence-case@^3.0.4:
     tslib "^2.0.3"
     upper-case-first "^2.0.2"
 
-serve-static@^1.14.1:
+serve-static@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/serve-static/-/serve-static-1.15.0.tgz#faaef08cffe0a1a62f60cad0c4e513cff0ac9540"
   integrity sha512-XGuRDNjXUijsUL0vl6nSD7cwURuzEgglbOaFuZM9g3kwDXOWVTck0jLzjPzGD+TazWbboZYu52/9/XPdUgne9g==
@@ -12656,7 +12614,7 @@ sync-rpc@^1.2.1:
   dependencies:
     get-port "^3.1.0"
 
-tailwindcss@^3.0.0, tailwindcss@^3.0.24:
+tailwindcss@^3.0.24:
   version "3.0.24"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.0.24.tgz#22e31e801a44a78a1d9a81ecc52e13b69d85704d"
   integrity sha512-H3uMmZNWzG6aqmg9q07ZIRNIawoiEcNFKDfL+YzOPuPsXuDXxJxB9icqzLgdzKNwjG3SAro2h9SYav8ewXNgig==
@@ -12789,7 +12747,7 @@ through@2, through@^2.3.6, through@^2.3.8, through@~2.3, through@~2.3.1:
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
 
-tinypool@^0.1.2, tinypool@^0.1.3:
+tinypool@^0.1.2:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/tinypool/-/tinypool-0.1.3.tgz#b5570b364a1775fd403de5e7660b325308fee26b"
   integrity sha512-2IfcQh7CP46XGWGGbdyO4pjcKqsmVqFAPcXfPxcPXmOWt9cYkTP9HcDmGgsfijYoAEc4z9qcpM/BaBz46Y9/CQ==
@@ -13705,7 +13663,7 @@ value-or-promise@1.0.11, value-or-promise@^1.0.11:
 vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
-  integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
+  integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
 vfile-find-up@^5.0.0:
   version "5.0.1"
@@ -13793,20 +13751,6 @@ vite@^2.9.9:
     rollup "^2.59.0"
   optionalDependencies:
     fsevents "~2.3.2"
-
-vitest@^0.12.9:
-  version "0.12.10"
-  resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.12.10.tgz#c40204dce19eb713af6dfa2b75301940cb1259f0"
-  integrity sha512-TVoI6fM7rZ1zIMDjcviY8Dg5XIaPqBwDweaI3oUwvWqUz68cbM49CIHNMkF+UVoSjl94wXiBRdNhsT4ekgWuGA==
-  dependencies:
-    "@types/chai" "^4.3.1"
-    "@types/chai-subset" "^1.3.3"
-    chai "^4.3.6"
-    debug "^4.3.4"
-    local-pkg "^0.4.1"
-    tinypool "^0.1.3"
-    tinyspy "^0.3.2"
-    vite "^2.9.9"
 
 vitest@^0.9.4:
   version "0.9.4"
