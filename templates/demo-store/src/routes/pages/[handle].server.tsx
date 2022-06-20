@@ -7,6 +7,7 @@ import {
   gql,
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
+import {Suspense} from 'react';
 
 import {PageHeader} from '~/components';
 import {NotFound, Layout} from '~/components/index.server';
@@ -37,7 +38,9 @@ export default function Page({params}: HydrogenRouteProps) {
 
   return (
     <Layout>
-      <Seo type="page" data={page} />
+      <Suspense>
+        <Seo type="page" data={page} />
+      </Suspense>
       <PageHeader heading={page.title}>
         <div
           dangerouslySetInnerHTML={{__html: page.body}}

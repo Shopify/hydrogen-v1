@@ -7,6 +7,7 @@ import {
   gql,
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
+import {Suspense} from 'react';
 
 import {Button, PageHeader, Section} from '~/components';
 import {NotFound, Layout} from '~/components/index.server';
@@ -64,7 +65,9 @@ export default function Policy({params}: HydrogenRouteProps) {
 
   return (
     <Layout>
-      <Seo type="page" data={page} />
+      <Suspense>
+        <Seo type="page" data={page} />
+      </Suspense>
       <Section
         padding="all"
         display="flex"
@@ -72,7 +75,7 @@ export default function Policy({params}: HydrogenRouteProps) {
       >
         <PageHeader
           heading={page.title}
-          className="md:sticky grid gap-4 items-start top-36 md:w-5/12 flex-grow"
+          className="grid items-start flex-grow gap-4 md:sticky top-36 md:w-5/12"
         >
           <Button
             className="justify-self-start"

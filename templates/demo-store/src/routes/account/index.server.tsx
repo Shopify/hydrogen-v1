@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   CacheNone,
   flattenConnection,
@@ -114,7 +115,9 @@ function AuthenticatedAccount({
 
   return (
     <Layout>
-      <Seo type="noindex" data={{title: 'Account details'}} />
+      <Suspense>
+        <Seo type="noindex" data={{title: 'Account details'}} />
+      </Suspense>
       <PageHeader heading={heading}>
         <LogoutButton>Sign out</LogoutButton>
       </PageHeader>

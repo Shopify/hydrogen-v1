@@ -44,12 +44,14 @@ export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
       <MenuDrawer isOpen={isMenuOpen} onClose={closeMenu} menu={menu!} />
       <DesktopHeader
+        countryCode={countryCode}
         isHome={isHome}
         title={title}
         menu={menu}
         openCart={openCart}
       />
       <MobileHeader
+        countryCode={countryCode}
         isHome={isHome}
         title={title}
         openCart={openCart}

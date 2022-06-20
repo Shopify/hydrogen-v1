@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   CacheNone,
   Seo,
@@ -16,7 +17,9 @@ export default function Register({response}: HydrogenRouteProps) {
 
   return (
     <Layout>
-      <Seo type="noindex" data={{title: 'Register'}} />
+      <Suspense>
+        <Seo type="noindex" data={{title: 'Register'}} />
+      </Suspense>
       <AccountCreateForm />
     </Layout>
   );

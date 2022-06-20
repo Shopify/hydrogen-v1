@@ -52,7 +52,7 @@ export default function Homepage() {
 
   return (
     <Layout>
-      <Suspense fallback={null}>
+      <Suspense>
         <SeoForHomepage />
       </Suspense>
       {primaryHero && (
@@ -92,6 +92,7 @@ function SeoForHomepage() {
       data={{
         title,
         description,
+        titleTemplate: '%s · Powered by Hydrogen',
       }}
     />
   );

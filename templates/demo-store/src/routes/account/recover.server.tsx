@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   CacheNone,
   Seo,
@@ -21,7 +22,9 @@ export default function AccountRecover({response}: HydrogenRouteProps) {
 
   return (
     <Layout>
-      <Seo type="noindex" data={{title: 'Recover password'}} />
+      <Suspense>
+        <Seo type="noindex" data={{title: 'Recover password'}} />
+      </Suspense>
       <AccountRecoverForm />
     </Layout>
   );

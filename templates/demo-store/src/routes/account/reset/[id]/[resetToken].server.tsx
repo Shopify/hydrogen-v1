@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {useRouteParams, Seo} from '@shopify/hydrogen';
 
 import {AccountPasswordResetForm} from '~/components';
@@ -13,7 +14,9 @@ export default function ResetPassword() {
 
   return (
     <Layout>
-      <Seo type="noindex" data={{title: 'Reset password'}} />
+      <Suspense>
+        <Seo type="noindex" data={{title: 'Reset password'}} />
+      </Suspense>
       <AccountPasswordResetForm id={id} resetToken={resetToken} />
     </Layout>
   );
