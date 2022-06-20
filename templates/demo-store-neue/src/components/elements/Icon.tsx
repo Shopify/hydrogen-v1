@@ -196,9 +196,12 @@ export function IconSearch({...props}: React.ComponentProps<typeof Icon>) {
   );
 }
 
-export function IconCheck({...props}: React.ComponentProps<typeof Icon>) {
+export function IconCheck({
+  stroke = 'currentColor',
+  ...props
+}: React.ComponentProps<typeof Icon>) {
   return (
-    <Icon {...props} fill="transparent">
+    <Icon {...props} fill="transparent" stroke={stroke}>
       <title>Check</title>
       <circle cx="10" cy="10" r="7.25" strokeWidth="1.25" />
       <path
