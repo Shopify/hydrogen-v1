@@ -1,3 +1,4 @@
+// This comment was started but not finished...
 /* We  */
 /* Tailwind Configuration Docs: https://tailwindcss.com/docs/configuration */
 
@@ -15,6 +16,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Could be helpful to identify where these css variables are actually declared.
         primary: withOpacityValue('--color-primary'),
         contrast: withOpacityValue('--color-contrast'),
         notice: withOpacityValue('--color-accent'),

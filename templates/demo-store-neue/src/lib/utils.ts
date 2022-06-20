@@ -1,3 +1,5 @@
+// This file is kind of all over the place, some functions commented, some not; consistency would be helpful!
+
 // TODO: Split this into multiple files
 import {useServerProps} from '@shopify/hydrogen';
 import {
@@ -78,6 +80,7 @@ export function isDiscounted(price: MoneyV2, compareAtPrice: MoneyV2) {
   return false;
 }
 
+// There's a lot going on in this function, kinda hard to grok
 function resolveToFromType(
   {
     customPrefixes,
@@ -149,6 +152,7 @@ function resolveToFromType(
 /*
   Parse each menu link and adding, isExternal, to and target
 */
+// Extremely generic name for a pretty specific function:
 function parseItem(customPrefixes = {}) {
   return function (item: MenuItem): EnhancedMenuItem {
     if (!item?.url || !item?.type) {

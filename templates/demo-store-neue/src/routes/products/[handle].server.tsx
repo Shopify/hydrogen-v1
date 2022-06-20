@@ -9,6 +9,9 @@ import {
   useShopQuery,
 } from '@shopify/hydrogen';
 
+// I understand now how the vite plugin is using `~` to alias the project root.
+// It might be good to formalize and document this at the framework level.
+// We should implement a sensible default and make it customizable, IMO
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
 import {
   Heading,

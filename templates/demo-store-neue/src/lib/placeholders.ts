@@ -1,3 +1,6 @@
+// Are we going to hardcode these things for the foreseeable future?
+// Might just want to explain at the top here why we need this file
+
 export const hero = {
   title: {
     value: 'The Freestyle Collection',

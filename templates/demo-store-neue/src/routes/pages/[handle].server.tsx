@@ -1,3 +1,9 @@
+/**
+ * There's no index file in the /pages directory.
+ * In online store, /pages returns a 404.
+ * We made an opinionated choice with /collections/all --> /products, perhaps there's a good equivalent here?
+ */
+
 import {
   useLocalization,
   useShopQuery,

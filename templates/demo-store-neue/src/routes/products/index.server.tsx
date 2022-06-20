@@ -11,6 +11,7 @@ import {ProductGrid, PageHeader, Section} from '~/components';
 import {Layout} from '~/components/index.server';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
+// Feels like a magic number that I've seen several times, perhaps pagination size should be exported once from src/lib/const.ts?
 const pageBy = 12;
 
 export default function AllProducts() {
@@ -45,6 +46,8 @@ export default function AllProducts() {
 }
 
 // pagination api
+// I see very similar pagination logic in routes/collections/[handle].server.tsx
+// Feels like there's some repetition there that could be abstracted into a more central pagination utility?
 export async function api(
   request: HydrogenRequest,
   {params, queryShop}: HydrogenApiRouteOptions,

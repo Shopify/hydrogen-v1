@@ -19,6 +19,10 @@ In a production environment, you will likely want to include the below
 markup right in your index.html and index.css files.
 */
 
+// Above it references IBM Plex, but below we're importing Fraunces.
+// This might be the rare case of too much commenting, so the comment and the code get out of sync.
+// Might be better to link out to some best-practices font-loading docs, either our own or a third party.
+
 import {Head} from '@shopify/hydrogen';
 
 export function CustomFont() {

@@ -19,10 +19,22 @@ import {
 } from '~/components';
 import {Layout, ProductSwimlane} from '~/components/index.server';
 import {getImageLoadingPriority} from '~/lib/const';
+/**
+ * In other files I see Suspense and other core React concepts imported at the top of the file.
+ * Perhaps we could use some heuristics in ordering our imports generally:
+ * - Core react functions
+ * - Hydrogen framework components and utilities
+ * - UI components
+ * - Query fragments
+ * - Types
+ * 
+ * Just spitballing on the order, but _some_ sort of consistency would help people scan their codebase more easily
+ */
 import {Suspense} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 export default function Search({
+  // feels like we're hardcoding a magic number here
   pageBy = 12,
   params,
 }: {
@@ -145,6 +157,7 @@ function NoResultRecommendation({
 }
 
 const SEARCH_QUERY = gql`
+  # Do we have a clear heuristic for deciding what to import as a fragment vs what to handle in this file?
   ${PRODUCT_CARD_FRAGMENT}
   query search(
     $query: String

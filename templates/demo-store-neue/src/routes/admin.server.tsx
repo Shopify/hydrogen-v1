@@ -12,6 +12,7 @@ import type {Shop} from '@shopify/hydrogen/storefront-api-types';
   Learn more about the redirect method here:
   https://developer.mozilla.org/en-US/docs/Web/API/Response/redirect
 */
+// Don't we have their myshopify.com domain in the hydrogen config? Why query for it?
 
 export default function AdminRedirect({response}: HydrogenRouteProps) {
   const {data} = useShopQuery<{

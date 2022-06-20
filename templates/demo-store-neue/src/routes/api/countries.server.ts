@@ -5,6 +5,7 @@ export async function api(
   _request: HydrogenRequest,
   {queryShop}: HydrogenApiRouteOptions,
 ) {
+  // I have zero clue what's happening with this const declaration, it's wild
   const {
     data: {
       localization: {availableCountries},
@@ -18,6 +19,7 @@ export async function api(
   return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+// I feel like we're consistent elsewhere with using gql. Any reason not to here?
 const COUNTRIES_QUERY = `
   query Localization {
     localization {

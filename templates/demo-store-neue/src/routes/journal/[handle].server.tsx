@@ -38,6 +38,8 @@ export default function Post({params, response}: HydrogenRouteProps) {
     return <div>Article not found</div>;
   }
 
+  // VS Code intellisense is telling me that `author` is deprecated:
+  // https://screenshot.click/Screen_Shot_2022-06-20_at_12.59.49.png
   const {title, publishedAt, contentHtml, author} = data.blog.articleByHandle;
   const formattedDate = new Intl.DateTimeFormat(
     `${languageCode}-${countryCode}`,
@@ -51,6 +53,7 @@ export default function Post({params, response}: HydrogenRouteProps) {
   return (
     <Layout>
       {/* Loads Fraunces custom font only on articles */}
+      {/* Why load a different font here? Is it intended to demonstrate custom font loading, or just cosmetic? */}
       <CustomFont />
       {/* @ts-expect-error Blog article types are not supported in TS */}
       <Seo type="page" data={data.blog.articleByHandle} />
@@ -66,11 +69,14 @@ export default function Post({params, response}: HydrogenRouteProps) {
             className="w-full mx-auto mt-8 md:mt-16 max-w-7xl"
             sizes="90vw"
             widths={[800, 1600, 2400]}
+            // Is the "100" here for 100% width? In vanilla HTML this would be pixels, no?
             width="100"
             loading={ATTR_LOADING_EAGER}
           />
         )}
         <div
+          // Maybe worth explaining why we're OK with a dangerouslySet prop in this case.
+          // Under what circumstances should you _not_ do this?
           dangerouslySetInnerHTML={{__html: contentHtml}}
           className="article"
         />

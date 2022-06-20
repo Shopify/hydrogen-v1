@@ -70,6 +70,8 @@ export default function Collection({params}: HydrogenRouteProps) {
 }
 
 // pagination api
+// What does "pagination api" mean?
+// Very generic function name for a pretty specific task
 export async function api(
   request: HydrogenRequest,
   {params, queryShop}: HydrogenApiRouteOptions,

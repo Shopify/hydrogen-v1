@@ -10,6 +10,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {FeaturedCollections, Hero} from '~/components';
+// Why export Layout and ProductSwimLane from the index file? Two lines, two different import strategies.
 import {Layout, ProductSwimlane} from '~/components/index.server';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
@@ -39,6 +40,7 @@ export default function Homepage() {
 
   const {heroBanners, featuredCollections, featuredProducts} = data;
   const [primaryHero, secondaryHero, tertiaryHero] = heroBanners.nodes || [
+    // I get we need to destructure this way but an array of three nulls looks kinda...hmm wut:
     null,
     null,
     null,
@@ -96,6 +98,16 @@ function SeoForHomepage() {
     />
   );
 }
+
+/**
+ * Wondering if we need some heuristics for grouping queries with the functions they're used by.
+ * In this case, HOMEPAGE_SEO_QUERY comes first, and HOMEPAGE_CONTENT_QUERY comes second.
+ * However, above, the Homepage content function comes first and the SEO function comes second; the order is reversed.
+ * Additionally, would it be helpful to group the query and its associated function together
+ * closer in the file?
+ * Finally, should these be split out and then imported as components to keep this file from sprawling?
+ */
+
 
 const HOMEPAGE_SEO_QUERY = gql`
   query homeShopInfo {
