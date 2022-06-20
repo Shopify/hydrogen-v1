@@ -52,7 +52,7 @@ export default function Homepage() {
 
   return (
     <Layout>
-      <Suspense fallback={null}>
+      <Suspense>
         <SeoForHomepage />
       </Suspense>
       {primaryHero && (

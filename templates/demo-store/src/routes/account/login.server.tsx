@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   useShopQuery,
   CacheLong,
@@ -27,7 +28,9 @@ export default function Login({response}: HydrogenRouteProps) {
 
   return (
     <Layout>
-      <Seo type="noindex" data={{title: 'Login'}} />
+      <Suspense>
+        <Seo type="noindex" data={{title: 'Login'}} />
+      </Suspense>
       <AccountLoginForm shopName={name} />
     </Layout>
   );

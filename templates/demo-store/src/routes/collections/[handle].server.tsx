@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {
   gql,
   type HydrogenRouteProps,
@@ -49,7 +50,9 @@ export default function Collection({params}: HydrogenRouteProps) {
 
   return (
     <Layout>
-      <Seo type="collection" data={collection} />
+      <Suspense>
+        <Seo type="collection" data={collection} />
+      </Suspense>
       <PageHeader heading={collection.title}>
         <div className="flex items-baseline justify-between w-full">
           <div>

@@ -12,6 +12,7 @@ import type {
   Article,
   Blog as BlogType,
 } from '@shopify/hydrogen/storefront-api-types';
+import {Suspense} from 'react';
 
 import {ArticleCard, Grid, PageHeader} from '~/components';
 import {Layout} from '~/components/index.server';
@@ -59,8 +60,10 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
       <Head>
         <link rel="stylesheet" href="/src/styles/custom-font.css" />
       </Head>
-      {/* @ts-expect-error Blog article types are not yet supported by TS */}
-      <Seo type="page" data={articles} />
+      <Suspense>
+        {/* @ts-expect-error Blog article types are not yet supported by TS */}
+        <Seo type="page" data={articles} />
+      </Suspense>
       <PageHeader heading={BLOG_HANDLE} className="gap-0">
         {haveArticles ? (
           <Grid as="ol" layout="blog" gap="blog">
