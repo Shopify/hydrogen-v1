@@ -1,17 +1,22 @@
 import {useState} from 'react';
 import {useNavigate, Link} from '@shopify/hydrogen/client';
 
-export function AccountLoginForm({shopName}) {
+interface FormElements {
+  email: HTMLInputElement;
+  password: HTMLInputElement;
+}
+
+export function AccountLoginForm({shopName}: {shopName: string}) {
   const navigate = useNavigate();
 
   const [hasSubmitError, setHasSubmitError] = useState(false);
   const [showEmailField, setShowEmailField] = useState(true);
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(null);
+  const [emailError, setEmailError] = useState<null | string>(null);
   const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(null);
+  const [passwordError, setPasswordError] = useState<null | string>(null);
 
-  function onSubmit(event) {
+  function onSubmit(event: React.FormEvent<HTMLFormElement & FormElements>) {
     event.preventDefault();
 
     setEmailError(null);
@@ -25,16 +30,18 @@ export function AccountLoginForm({shopName}) {
     }
   }
 
-  function checkEmail(event) {
-    if (event.target.email.validity.valid) {
+  function checkEmail(event: React.FormEvent<HTMLFormElement & FormElements>) {
+    if (event.currentTarget.email.validity.valid) {
       setShowEmailField(false);
     } else {
       setEmailError('Please enter a valid email');
     }
   }
 
-  async function checkPassword(event) {
-    const validity = event.target.password.validity;
+  async function checkPassword(
+    event: React.FormEvent<HTMLFormElement & FormElements>,
+  ) {
+    const validity = event.currentTarget.password.validity;
     if (validity.valid) {
       const response = await callLoginApi({
         email,
@@ -101,30 +108,45 @@ export function AccountLoginForm({shopName}) {
   );
 }
 
-export function callLoginApi({email, password}) {
-  return fetch(`/account/login`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({email, password}),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch((error) => {
-      return {
-        error: error.toString(),
-      };
+export async function callLoginApi({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
+  try {
+    const res = await fetch(`/account/login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({email, password}),
     });
+    if (res.ok) {
+      return {};
+    } else {
+      return res.json();
+    }
+  } catch (error: any) {
+    return {
+      error: error.toString(),
+    };
+  }
 }
 
-function EmailField({email, setEmail, emailError, shopName}) {
+function EmailField({
+  email,
+  setEmail,
+  emailError,
+  shopName,
+}: {
+  email: string;
+  setEmail: (email: string) => void;
+  emailError: null | string;
+  shopName: string;
+}) {
   return (
     <>
       <div className="mb-3">
@@ -172,7 +194,13 @@ function EmailField({email, setEmail, emailError, shopName}) {
   );
 }
 
-function ValidEmail({email, resetForm}) {
+function ValidEmail({
+  email,
+  resetForm,
+}: {
+  email: string;
+  resetForm: () => void;
+}) {
   return (
     <div className="mb-3 flex items-center justify-between">
       <div>
@@ -198,7 +226,15 @@ function ValidEmail({email, resetForm}) {
   );
 }
 
-function PasswordField({password, setPassword, passwordError}) {
+function PasswordField({
+  password,
+  setPassword,
+  passwordError,
+}: {
+  password: string;
+  setPassword: (password: string) => void;
+  passwordError: null | string;
+}) {
   return (
     <>
       <div className="mb-3">

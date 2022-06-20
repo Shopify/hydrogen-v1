@@ -1,4 +1,4 @@
-// TODO: Fix import
+// @ts-expect-error @headlessui/react incompatibility with node16 resolution
 import {Disclosure} from '@headlessui/react';
 
 import {Text, IconClose} from '~/components';
@@ -14,6 +14,7 @@ export function ProductInfo({data = productInfo}) {
           id={section.id}
           className="grid w-full gap-2"
         >
+          {/* @ts-expect-error @headlessui/react incompatibility with node16 resolution */}
           {({open}) => (
             <>
               <Disclosure.Button className="text-left">

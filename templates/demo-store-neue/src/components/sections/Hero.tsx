@@ -2,20 +2,19 @@ import {Image, Link, Video} from '@shopify/hydrogen';
 import type {Media} from '@shopify/hydrogen/storefront-api-types';
 
 import {Heading, Text} from '~/components';
-import {hero as mockData} from '~/lib/placeholders';
 
-export function Hero(props = mockData) {
-  const {
-    title,
-    byline,
-    cta,
-    handle,
-    spread,
-    spreadSecondary,
-    height,
-    top,
-    loading,
-  } = props;
+export function Hero({
+  data,
+  height,
+  top,
+  loading,
+}: {
+  data: any;
+  height?: 'full';
+  top?: boolean;
+  loading?: 'eager' | 'lazy';
+}) {
+  const {title, byline, cta, handle, spread, spreadSecondary} = data;
 
   return (
     <Link to={`/collections/${handle}`}>
@@ -35,8 +34,8 @@ export function Hero(props = mockData) {
                 scale={2}
                 sizes={
                   spreadSecondary?.reference
-                    ? '(min-width: 80em) 700, (min-width: 48em) 450, 500'
-                    : '(min-width: 80em) 1400, (min-width: 48em) 900, 500'
+                    ? '(min-width: 80em) 700px, (min-width: 48em) 450px, 500px'
+                    : '(min-width: 80em) 1400px, (min-width: 48em) 900px, 500px'
                 }
                 widths={
                   spreadSecondary?.reference
@@ -44,7 +43,7 @@ export function Hero(props = mockData) {
                     : [500, 900, 1400]
                 }
                 width={spreadSecondary?.reference ? 375 : 750}
-                data={spread.reference}
+                data={spread.reference as Media}
                 loading={loading}
               />
             </div>
@@ -61,7 +60,7 @@ export function Hero(props = mockData) {
           )}
         </div>
         <div className="flex flex-col items-baseline justify-between gap-4 px-6 py-8 sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
-          <Heading as="h2" size="display" format className="max-w-md">
+          <Heading format as="h2" size="display" className="max-w-md">
             {title.value}
           </Heading>
           {byline && (
@@ -69,11 +68,20 @@ export function Hero(props = mockData) {
               {byline.value}
             </Text>
           )}
-          <Text size="lead">{cta.value}</Text>
+          <Text size="lead">{cta ? cta?.value : 'Shop Now'}</Text>
         </div>
       </section>
     </Link>
   );
+}
+
+interface SpreadMediaProps {
+  data: Media;
+  loading?: HTMLImageElement['loading'];
+  scale?: 2 | 3;
+  sizes: string;
+  width: number;
+  widths: number[];
 }
 
 function SpreadMedia({
@@ -83,14 +91,7 @@ function SpreadMedia({
   sizes,
   width,
   widths,
-}: {
-  data: Media;
-  loading?: HTMLImageElement['loading'];
-  scale?: 2 | 3;
-  sizes: string;
-  width: number;
-  widths: number[];
-}) {
+}: SpreadMediaProps) {
   if (data.mediaContentType === 'VIDEO') {
     return (
       <Video

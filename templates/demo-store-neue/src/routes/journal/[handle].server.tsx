@@ -9,7 +9,8 @@ import {
 } from '@shopify/hydrogen';
 import type {Blog} from '@shopify/hydrogen/storefront-api-types';
 
-import {Layout, CustomFont} from '~/components';
+import {CustomFont, PageHeader, Section} from '~/components';
+import {Layout} from '~/components/index.server';
 import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 const BLOG_HANDLE = 'journal';
@@ -53,23 +54,27 @@ export default function Post({params, response}: HydrogenRouteProps) {
       <CustomFont />
       {/* @ts-expect-error Blog article types are not supported in TS */}
       <Seo type="page" data={data.blog.articleByHandle} />
-      <section className="w-[51rem] m-auto mt-12 max-w-full">
-        <h1 className="text-4xl font-bold px-6 md:px-24">{title}</h1>
-        <span className="block mt-6 px-6 md:px-24">
+      <PageHeader heading={title} variant="blogPost">
+        <span>
           {formattedDate} &middot; {author.name}
         </span>
+      </PageHeader>
+      <Section as="article" padding="x">
         {data.blog.articleByHandle.image && (
           <Image
             data={data.blog.articleByHandle.image}
-            className="mt-8 md:mt-16"
+            className="w-full mx-auto mt-8 md:mt-16 max-w-7xl"
+            sizes="90vw"
+            widths={[800, 1600, 2400]}
+            width="100"
             loading={ATTR_LOADING_EAGER}
           />
         )}
         <div
           dangerouslySetInnerHTML={{__html: contentHtml}}
-          className="mt-8 md:mt-16 px-6 md:px-24 mb-24 font-['Fraunces'] prose dark:prose-invert prose-strong:font-sans"
+          className="article"
         />
-      </section>
+      </Section>
     </Layout>
   );
 }

@@ -1,16 +1,26 @@
 import {useState} from 'react';
 import {useNavigate} from '@shopify/hydrogen/client';
 
-export function AccountActivateForm({id, activationToken}) {
+export function AccountActivateForm({
+  id,
+  activationToken,
+}: {
+  id: string;
+  activationToken: string;
+}) {
   const navigate = useNavigate();
 
-  const [submitError, setSubmitError] = useState(null);
+  const [submitError, setSubmitError] = useState<null | string>(null);
   const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(null);
+  const [passwordError, setPasswordError] = useState<null | string>(null);
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [passwordConfirmError, setPasswordConfirmError] = useState(null);
+  const [passwordConfirmError, setPasswordConfirmError] = useState<
+    null | string
+  >(null);
 
-  function passwordValidation(form) {
+  function passwordValidation(
+    form: HTMLFormElement & {password: HTMLInputElement},
+  ) {
     setPasswordError(null);
     setPasswordConfirmError(null);
 
@@ -42,10 +52,12 @@ export function AccountActivateForm({id, activationToken}) {
     return hasError;
   }
 
-  async function onSubmit(event) {
+  async function onSubmit(
+    event: React.FormEvent<HTMLFormElement & {password: HTMLInputElement}>,
+  ) {
     event.preventDefault();
 
-    if (passwordValidation(event.target)) {
+    if (passwordValidation(event.currentTarget)) {
       return;
     }
 
@@ -140,25 +152,32 @@ export function AccountActivateForm({id, activationToken}) {
   );
 }
 
-function callActivateApi({id, activationToken, password}) {
-  return fetch(`/account/activate`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({id, activationToken, password}),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch((error) => {
-      return {
-        error: error.toString(),
-      };
+async function callActivateApi({
+  id,
+  activationToken,
+  password,
+}: {
+  id: string;
+  activationToken: string;
+  password: string;
+}) {
+  try {
+    const res = await fetch(`/account/activate`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({id, activationToken, password}),
     });
+    if (res.ok) {
+      return {};
+    } else {
+      return res.json();
+    }
+  } catch (error: any) {
+    return {
+      error: error.toString(),
+    };
+  }
 }

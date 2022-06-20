@@ -3,11 +3,19 @@ import {useRenderServerComponents} from '~/lib/utils';
 
 import {Button, Text} from '~/components';
 
-export function AccountAddressEdit({address, defaultAddress, close}) {
+export function AccountAddressEdit({
+  address,
+  defaultAddress,
+  close,
+}: {
+  address: any;
+  defaultAddress: boolean;
+  close: () => void;
+}) {
   const isNewAddress = useMemo(() => !Object.keys(address).length, [address]);
 
   const [saving, setSaving] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
+  const [submitError, setSubmitError] = useState<null | string>(null);
   const [address1, setAddress1] = useState(address?.address1 || '');
   const [address2, setAddress2] = useState(address?.address2 || '');
   const [firstName, setFirstName] = useState(address?.firstName || '');
@@ -23,7 +31,7 @@ export function AccountAddressEdit({address, defaultAddress, close}) {
   // Necessary for edits to show up on the main page
   const renderServerComponents = useRenderServerComponents();
 
-  async function onSubmit(event) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setSaving(true);
@@ -265,7 +273,7 @@ export function AccountAddressEdit({address, defaultAddress, close}) {
   );
 }
 
-export function callUpdateAddressApi({
+export async function callUpdateAddressApi({
   id,
   firstName,
   lastName,
@@ -278,40 +286,52 @@ export function callUpdateAddressApi({
   phone,
   zip,
   isDefaultAddress,
+}: {
+  id: string;
+  firstName: string;
+  lastName: string;
+  company: string;
+  address1: string;
+  address2: string;
+  country: string;
+  province: string;
+  city: string;
+  phone: string;
+  zip: string;
+  isDefaultAddress: boolean;
 }) {
-  return fetch(
-    id ? `/account/address/${encodeURIComponent(id)}` : '/account/address',
-    {
-      method: id ? 'PATCH' : 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+  try {
+    const res = await fetch(
+      id ? `/account/address/${encodeURIComponent(id)}` : '/account/address',
+      {
+        method: id ? 'PATCH' : 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          company,
+          address1,
+          address2,
+          country,
+          province,
+          city,
+          phone,
+          zip,
+          isDefaultAddress,
+        }),
       },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        company,
-        address1,
-        address2,
-        country,
-        province,
-        city,
-        phone,
-        zip,
-        isDefaultAddress,
-      }),
-    },
-  )
-    .then((res) => {
-      if (res.ok) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch(() => {
-      return {
-        error: 'Error saving address. Please try again.',
-      };
-    });
+    );
+    if (res.ok) {
+      return {};
+    } else {
+      return res.json();
+    }
+  } catch (_e) {
+    return {
+      error: 'Error saving address. Please try again.',
+    };
+  }
 }

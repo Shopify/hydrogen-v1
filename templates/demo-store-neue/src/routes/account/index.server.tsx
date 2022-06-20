@@ -18,15 +18,16 @@ import {
   AccountDetails,
   AccountOrderHistory,
   FeaturedCollections,
-  Layout,
   LogoutButton,
   PageHeader,
-  ProductSwimlane,
 } from '~/components';
+import {Layout, ProductSwimlane} from '~/components/index.server';
 import type {
   Collection,
   CollectionConnection,
   Customer,
+  MailingAddress,
+  Order,
   Product,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
@@ -60,11 +61,13 @@ export default function Account({response}: HydrogenRouteProps) {
 
   if (!customer) return response.redirect('/account/login');
 
-  const addresses = flattenConnection(customer.addresses).map((address) => ({
-    ...address,
-    id: address.id!.substring(0, address.id!.lastIndexOf('?')),
-    originalId: address.id,
-  }));
+  const addresses = flattenConnection<MailingAddress>(customer.addresses).map(
+    (address) => ({
+      ...address,
+      id: address.id!.substring(0, address.id!.lastIndexOf('?')),
+      originalId: address.id,
+    }),
+  );
 
   const defaultAddress = customer?.defaultAddress?.id?.substring(
     0,
@@ -115,12 +118,12 @@ function AuthenticatedAccount({
       <PageHeader heading={heading}>
         <LogoutButton>Sign out</LogoutButton>
       </PageHeader>
-      {orders && <AccountOrderHistory orders={orders} />}
+      {orders && <AccountOrderHistory orders={orders as Order[]} />}
       <AccountDetails
-        firstName={customer.firstName}
-        lastName={customer.lastName}
-        phone={customer.phone}
-        email={customer.email}
+        firstName={customer.firstName as string}
+        lastName={customer.lastName as string}
+        phone={customer.phone as string}
+        email={customer.email as string}
       />
       <AccountAddressBook
         defaultAddress={defaultAddress}
@@ -176,7 +179,7 @@ export async function api(
   if (lastName) customer.lastName = lastName;
   if (newPassword) customer.password = newPassword;
 
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{customerUpdate: any}>({
     query: CUSTOMER_UPDATE_MUTATION,
     variables: {
       customer,

@@ -8,7 +8,8 @@ import {
 } from '@shopify/hydrogen';
 import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 
-import {Layout, PageHeader, Section, Heading} from '~/components';
+import {PageHeader, Section, Heading} from '~/components';
+import {Layout} from '~/components/index.server';
 
 export default function Policies() {
   const {

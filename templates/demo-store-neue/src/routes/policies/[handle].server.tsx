@@ -8,7 +8,8 @@ import {
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
-import {Layout, Button, PageHeader, Section, NotFound} from '~/components';
+import {Button, PageHeader, Section} from '~/components';
+import {NotFound, Layout} from '~/components/index.server';
 
 export default function Policy({params}: HydrogenRouteProps) {
   const {
@@ -71,10 +72,7 @@ export default function Policy({params}: HydrogenRouteProps) {
       >
         <PageHeader
           heading={page.title}
-          variant="none"
-          className={
-            'md:sticky grid gap-4 items-start top-36 md:w-5/12 flex-grow'
-          }
+          className="md:sticky grid gap-4 items-start top-36 md:w-5/12 flex-grow"
         >
           <Button
             className="justify-self-start"

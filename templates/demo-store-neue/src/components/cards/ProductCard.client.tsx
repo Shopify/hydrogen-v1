@@ -64,7 +64,11 @@ export function ProductCard({
           {/* TODO: Fix types */}
           {image && (
             <Image
-              className="aspect-[4/5]"
+              className="aspect-[4/5] w-full"
+              width={320}
+              height={400}
+              widths={[640]}
+              sizes="320px"
               // @ts-ignore Stock type has `src` as optional
               data={image}
               alt={image.altText || `Picture of ${product.title}`}

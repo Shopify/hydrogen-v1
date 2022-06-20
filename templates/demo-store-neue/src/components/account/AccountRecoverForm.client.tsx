@@ -2,19 +2,25 @@ import {useState} from 'react';
 
 import {emailValidation} from '~/lib/utils';
 
+interface FormElements {
+  email: HTMLInputElement;
+}
+
 export function AccountRecoverForm() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
-  async function onSubmit(event) {
+  async function onSubmit(
+    event: React.FormEvent<HTMLFormElement & FormElements>,
+  ) {
     event.preventDefault();
 
     setEmailError(null);
     setSubmitError(null);
 
-    const newEmailError = emailValidation(event.target.email);
+    const newEmailError = emailValidation(event.currentTarget.email);
 
     if (newEmailError) {
       setEmailError(newEmailError);
@@ -95,25 +101,34 @@ export function AccountRecoverForm() {
   );
 }
 
-export function callAccountRecoverApi({email, password, firstName, lastName}) {
-  return fetch(`/account/recover`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({email, password, firstName, lastName}),
-  })
-    .then((res) => {
-      if (res.status === 200) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch((error) => {
-      return {
-        error: error.toString(),
-      };
+export async function callAccountRecoverApi({
+  email,
+  password,
+  firstName,
+  lastName,
+}: {
+  email: string;
+  password?: string;
+  firstName?: string;
+  lastName?: string;
+}) {
+  try {
+    const res = await fetch(`/account/recover`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({email, password, firstName, lastName}),
     });
+    if (res.status === 200) {
+      return {};
+    } else {
+      return res.json();
+    }
+  } catch (error: any) {
+    return {
+      error: error.toString(),
+    };
+  }
 }

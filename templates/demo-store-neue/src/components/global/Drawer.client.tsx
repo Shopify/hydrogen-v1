@@ -1,4 +1,5 @@
 import {Fragment, useState} from 'react';
+// @ts-expect-error @headlessui/react incompatibility with node16 resolution
 import {Dialog, Transition} from '@headlessui/react';
 
 import {Heading, IconClose} from '~/components';
@@ -50,21 +51,21 @@ function Drawer({
                 as={Fragment}
                 enter="transform transition ease-in-out duration-300"
                 enterFrom={`
-                  ${openFrom === 'right' ? 'translate-x-full' : ''} 
-                  ${openFrom === 'left' ? '-translate-x-full' : ''} 
+                  ${openFrom === 'right' ? 'translate-x-full' : ''}
+                  ${openFrom === 'left' ? '-translate-x-full' : ''}
                 }`}
                 enterTo={`
-                  ${openFrom === 'right' ? 'translate-x-0' : ''} 
-                  ${openFrom === 'left' ? 'translate-x-0' : ''} 
+                  ${openFrom === 'right' ? 'translate-x-0' : ''}
+                  ${openFrom === 'left' ? 'translate-x-0' : ''}
                 }`}
                 leave="transform transition ease-in-out duration-300"
                 leaveFrom={`
-                  ${openFrom === 'right' ? 'translate-x-0' : ''} 
-                  ${openFrom === 'left' ? 'translate-x-0' : ''} 
+                  ${openFrom === 'right' ? 'translate-x-0' : ''}
+                  ${openFrom === 'left' ? 'translate-x-0' : ''}
                 }`}
                 leaveTo={`
-                  ${openFrom === 'right' ? 'translate-x-full' : ''} 
-                  ${openFrom === 'left' ? '-translate-x-full' : ''} 
+                  ${openFrom === 'right' ? 'translate-x-full' : ''}
+                  ${openFrom === 'left' ? '-translate-x-full' : ''}
                 }`}
               >
                 <Dialog.Panel className="w-screen h-screen max-w-lg text-left align-middle transition-all transform shadow-xl bg-contrast">

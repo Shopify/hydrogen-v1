@@ -13,7 +13,8 @@ import type {
   Blog as BlogType,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {Layout, ArticleCard, Grid, PageHeader} from '~/components';
+import {ArticleCard, Grid, PageHeader} from '~/components';
+import {Layout} from '~/components/index.server';
 import {getImageLoadingPriority} from '~/lib/const';
 
 const BLOG_HANDLE = 'Journal';
@@ -67,7 +68,7 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
               return (
                 <ArticleCard
                   blogHandle={BLOG_HANDLE.toLowerCase()}
-                  article={article}
+                  article={article as Article}
                   key={article.id}
                   loading={getImageLoadingPriority(i, 2)}
                 />

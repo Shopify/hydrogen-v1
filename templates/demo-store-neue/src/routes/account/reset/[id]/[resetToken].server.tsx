@@ -1,6 +1,7 @@
 import {useRouteParams, Seo} from '@shopify/hydrogen';
 
-import {Layout, AccountPasswordResetForm} from '~/components';
+import {AccountPasswordResetForm} from '~/components';
+import {Layout} from '~/components/index.server';
 
 /**
  * This page shows a form for the user to enter a new password.

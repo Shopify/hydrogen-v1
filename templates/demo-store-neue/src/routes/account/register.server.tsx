@@ -7,7 +7,8 @@ import {
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
-import {Layout, AccountCreateForm} from '~/components';
+import {AccountCreateForm} from '~/components';
+import {Layout} from '~/components/index.server';
 import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Register({response}: HydrogenRouteProps) {
@@ -39,7 +40,7 @@ export async function api(
     );
   }
 
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{customerCreate: any}>({
     query: CUSTOMER_CREATE_MUTATION,
     variables: {
       input: {
