@@ -62,7 +62,7 @@ export async function api(
     );
   }
 
-  const {data, error} = await queryShop({
+  const {data, error} = await queryShop<any>({
     query: LOGIN_MUTATION,
     variables: {
       input: {

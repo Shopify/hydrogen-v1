@@ -22,7 +22,7 @@ import {
 function App({routes, request}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;
   const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
-  const countryCode = localeMatch ? localeMatch[1] : null;
+  const countryCode = localeMatch ? localeMatch[1] : undefined;
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
@@ -36,7 +36,7 @@ function App({routes, request}: HydrogenRouteProps) {
             </Suspense>
             <Router>
               <FileRoutes
-                basePath={countryCode ? `/${countryCode}/` : null}
+                basePath={countryCode ? `/${countryCode}/` : undefined}
                 routes={routes}
               />
               <Route path="*" page={<NotFound />} />

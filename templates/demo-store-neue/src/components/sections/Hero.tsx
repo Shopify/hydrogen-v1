@@ -1,10 +1,21 @@
+import React from 'react';
 import {Image, Link, Video} from '@shopify/hydrogen';
 import type {Media} from '@shopify/hydrogen/storefront-api-types';
 
 import {Heading, Text} from '~/components';
 import {hero as mockData} from '~/lib/placeholders';
 
-export function Hero(props = mockData) {
+type HeroProps = typeof mockData &
+  Partial<{
+    handle: string;
+    spread: any;
+    spreadSecondary: any;
+    height: 'full';
+    top: number;
+    loading: SpreadMediaProps['loading'];
+  }>;
+
+export function Hero(props: HeroProps = mockData) {
   const {
     title,
     byline,
@@ -76,6 +87,15 @@ export function Hero(props = mockData) {
   );
 }
 
+interface SpreadMediaProps {
+  data: Media;
+  loading?: HTMLImageElement['loading'];
+  scale?: 2 | 3;
+  sizes: string;
+  width: number;
+  widths: number[];
+}
+
 function SpreadMedia({
   data,
   loading,
@@ -83,14 +103,7 @@ function SpreadMedia({
   sizes,
   width,
   widths,
-}: {
-  data: Media;
-  loading?: HTMLImageElement['loading'];
-  scale?: 2 | 3;
-  sizes: string;
-  width: number;
-  widths: number[];
-}) {
+}: SpreadMediaProps) {
   if (data.mediaContentType === 'VIDEO') {
     return (
       <Video
