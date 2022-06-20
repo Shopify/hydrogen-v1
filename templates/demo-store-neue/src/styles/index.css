@@ -43,6 +43,7 @@
 /* TODO: Remove this when the upstream PR merges */
 shop-pay-button {
   width: 100%;
+  height: 3rem;
   display: table;
 }
 

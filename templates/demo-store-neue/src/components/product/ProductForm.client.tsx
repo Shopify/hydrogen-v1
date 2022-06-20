@@ -8,6 +8,7 @@ import {
   BuyNowButton,
   Money,
   OptionWithValues,
+  ShopPayButton,
 } from '@shopify/hydrogen';
 
 import {Heading, Text, Button, ProductOptions} from '~/components';
@@ -83,7 +84,7 @@ export function ProductForm() {
             return (
               <div
                 key={name}
-                className="flex flex-wrap flex-col gap-y-2 mb-4 last:mb-0"
+                className="flex flex-col flex-wrap mb-4 gap-y-2 last:mb-0"
               >
                 <Heading as="legend" size="lead" className="min-w-[4rem]">
                   {name}
@@ -121,13 +122,7 @@ export function ProductForm() {
             )}
           </Button>
         </AddToCartButton>
-        {!isOutOfStock && (
-          <BuyNowButton quantity={1} variantId={selectedVariant.id!}>
-            <Button width="full" variant="secondary" as="span">
-              Buy it now
-            </Button>
-          </BuyNowButton>
-        )}
+        {!isOutOfStock && <ShopPayButton variantIds={[selectedVariant?.id]} />}
       </div>
     </form>
   );

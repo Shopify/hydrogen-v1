@@ -55,14 +55,11 @@ function CartCheckoutActions() {
   const {checkoutUrl} = useCart();
   return (
     <>
-      <div className="grid">
+      <div className="grid gap-4">
         <Button to={checkoutUrl} width="full">
           Continue to Checkout
         </Button>
-        <CartShopPayButton
-          width="100%"
-          className="w-full shop-pay flex items-center justify-center rounded-sm mt-2 bg-[#5a31f4]"
-        />
+        <CartShopPayButton />
       </div>
     </>
   );
