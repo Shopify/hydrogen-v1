@@ -1,3 +1,46 @@
-import '../styles/custom-font.css';
+/* 
+When making building your custom storefront, you will most likely want to
+use custom fonts as well. These are often implemented without critical
+performance optimizations.
 
-export function CustomFont() {}
+Below, you'll find the markup needed to optimally render a pair of web fonts 
+that we will use on our journal articles. This typeface, Faustina, 
+can be found at: https://fraunces.undercase.xyz/, as well as on 
+Google Fonts: https://fonts.google.com/specimen/Fraunces. We included these
+locally since you’ll most likely be using commercially licensed fonts.
+
+To learn more about variable fonts, see: https://web.dev/variable-fonts/
+
+When implementing a custom font, specifying the Unicode range you need,
+and using `font-display: swap` will help you improve your performance.
+
+For fonts that appear in the critical rendering path, you can speed up
+performance even more by including a <link> tag in your HTML.
+
+In a production environment, you will likely want to include the below
+markup right in your index.html and index.css files.
+*/
+
+import {Head} from '@shopify/hydrogen';
+
+export function CustomFont() {
+  return (
+    <Head>
+      <link rel="stylesheet" href="/src/styles/custom-font.css" />
+      <link
+        rel="preload"
+        as="font"
+        href="/src/assets/fonts/Fraunces--latin_basic.woff2"
+        type="font/woff2"
+        crossOrigin="anonymous"
+      />
+      <link
+        rel="preload"
+        as="font"
+        href="/src/assets/fonts/Fraunces-Italic--latin_basic.woff2"
+        type="font/woff2"
+        crossOrigin="anonymous"
+      />
+    </Head>
+  );
+}
