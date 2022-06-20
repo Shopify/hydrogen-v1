@@ -218,7 +218,7 @@ export async function api(request, {params}) {
 {% endcodeblock %}
 
 > Tip:
-> Explore an [example implementation in GitHub](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/countries.server.jsx) that lazy loads [available countries](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/CountrySelector.client.jsx) by an API route (`/api/countries`).
+> Explore an [example implementation in GitHub](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/api/countries.server.ts) that lazy loads [available countries](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/CountrySelector.client.tsx) by an API route (`/api/countries`).
 
 ### Concatenating requests
 
