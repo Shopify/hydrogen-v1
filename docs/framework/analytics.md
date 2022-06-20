@@ -46,7 +46,7 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
 1. Create a new client component in the `/components` directory of your Hydrogen app. For example, `components/AnalyticsListener.client.jsx`.
 
-2. In your client component, add the following code to subscribe to the event:
+2. In your client component, add the following code to initialize the subscription to the `PAGE_VIEW` event:
 
     {% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
 
@@ -96,9 +96,16 @@ Subscribe to an event to enable your Hydrogen app to listen for the event. The f
 
     {% endcodeblock %}
 
+
+4.  Test the event by refreshing the root page of your app. The `PAGE_VIEW` payload object details display in the browser’s console log.
+
+
 ## Configure a custom event
 
-Aside from the [default events](#default-events) that Hydrogen supports, you can also configure custom events. For example, you might want to configure a custom event that tracks the pages where a promotional banner is being clicked the most:
+Aside from the [default events](#default-events) that Hydrogen supports, you can also configure custom events. For example, you might want to configure a custom event that tracks the pages where a promotional banner is being clicked the most.
+
+
+1. Emit a custom event by using the publish method and specifying a custom event name:
 
 {% codeblock file, filename: 'components/Banner.client.jsx' %}
 
@@ -114,9 +121,43 @@ Aside from the [default events](#default-events) that Hydrogen supports, you can
 
 {% endcodeblock %}
 
+2. In `AnalyticsListener`, use the `ClientAnalytics` component to subscribe to your custom event by name:
+
+{% codeblock file, filename: 'components/AnalyticsListener.client.jsx' %}
+```jsx
+ import {ClientAnalytics} from '@shopify/hydrogen';
+
+ let init = false;
+ export default function AnalyticsListener() {
+   useEffect(() => {
+     // Set up common page-specific data
+     ClientAnalytics.pushToPageAnalyticsData({
+       userLocale: navigator.language,
+     });
+
+     if (!init) {
+       // One-time initialization
+       init = true;
+       ClientAnalytics.subscribe(
+       'select_promotion',
+         (payload) => {
+           console.log('select_promotion payload', payload);
+         }
+       );
+     }
+   });
+
+   return null;
+ }
+```
+{% endcodeblock %}
+
+> Note: 
+> You can test the custom event subscription by clicking the button with the analytics event attached. The  custom fields `creative_name` and `creative_slot` are added to the payload.
+
 ### Retrieving data from other parts of your Hydrogen storefront
 
-You can collect analytics data wherever you make queries. For example, to gather information about the collection that a customer has interacted with, you can make `collectionName` and `collectionId` available when you receive the `PAGE_VIEW` event:
+You can gather analytics data wherever you make queries. For example, to capture information about the Shopify product collection that a customer has interacted with, you can add the `collectionName` and `collectionId` fields to the `PAGE_VIEW` event object.
 
 {% codeblock file, filename: 'collections/[handle].server.js' %}
 
@@ -143,6 +184,9 @@ useServerAnalytics({
 ```
 
 {% endcodeblock %}
+
+When you reload  the collection page you, a `PAGE_VIEW` event displays in the console that includes the new `collectionName` and `collectionId` fields.
+
 
 You can also capture events in client components. For example, when a customer makes a query, such as adding an item to their cart, or clicking on a promotional banner, you can capture the event in your client component:
 
@@ -203,7 +247,7 @@ ClientAnalytics.getPageAnalyticsData();
 
 ## Send analytics data from the server-side
 
-Some data is only available on the server. For example, detailed information about how many API calls a single page render makes and how long each API call took is only available on the server. This is information that users don't need to see and helps development teams gain insights about performance. If this is your use case, then sending analytics data from the server-side a good option.
+Some information that isn't relevant to storefront customers, but might be helpful for the development team, is only available on the server. For example, server-side information includes detailed information about how many API calls a single page render makes, or how long each API call took.
 
 To send analytics data from the server-side, complete the following steps:
 
