@@ -21,9 +21,12 @@ import type {EnhancedMenu} from '~/lib/utils';
  */
 export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
   const {pathname} = useUrl();
+
   const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
-  const countryCode = localeMatch ? localeMatch[1] : null;
+  const countryCode = localeMatch ? localeMatch[1] : undefined;
+
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
+
   const {
     isOpen: isCartOpen,
     openDrawer: openCart,
