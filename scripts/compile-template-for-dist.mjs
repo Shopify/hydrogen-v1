@@ -20,11 +20,11 @@ function copyDir(srcDir, destDir) {
   }
 }
 
-function copy(src, dest, skipFiles = []) {
+function copy(src, dest) {
   const stat = fs.statSync(src);
 
   if (stat.isDirectory()) {
-    copyDir(src, dest, skipFiles);
+    copyDir(src, dest);
   } else {
     fs.copyFileSync(src, dest);
   }
