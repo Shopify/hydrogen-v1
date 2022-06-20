@@ -104,7 +104,11 @@ export function IconArrow({direction = 'right'}: IconDirectionProps) {
   );
 }
 
-export function IconCaret({direction = 'down', ...props}: IconDirectionProps) {
+export function IconCaret({
+  direction = 'down',
+  stroke = 'currentColor',
+  ...props
+}: IconDirectionProps) {
   let rotate;
 
   switch (direction) {
@@ -129,6 +133,7 @@ export function IconCaret({direction = 'down', ...props}: IconDirectionProps) {
       {...props}
       className={`w-5 h-5 transition ${rotate}`}
       fill="transparent"
+      stroke={stroke}
     >
       <title>Caret</title>
       <path d="M14 8L10 12L6 8" strokeWidth="1.25" />
