@@ -27,6 +27,7 @@ jobs:
 
       - name: Update templates in the dist branch
         run: |
+          git add .
           git status
           git show-ref
           git config user.email "hydrogen@shopify.com"
