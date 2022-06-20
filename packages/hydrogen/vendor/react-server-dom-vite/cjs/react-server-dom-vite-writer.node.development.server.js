@@ -1871,4 +1871,12 @@ function renderToPipeableStream(model, options) {
 
       hasStartedFlowing = true;
       startFlowing(request, destination);
-      destination.on('drain', createDrainHandler(destination, requ
+      destination.on('drain', createDrainHandler(destination, request));
+      return destination;
+    }
+  };
+}
+
+exports.renderToPipeableStream = renderToPipeableStream;
+  })();
+}

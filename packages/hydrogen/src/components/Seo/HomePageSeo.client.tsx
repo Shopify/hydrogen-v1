@@ -10,12 +10,7 @@ export function HomePageSeo({
   description,
   url,
   titleTemplate,
-  lang,
 }: HomePage) {
-  const {
-    language: {isoCode: fallBacklang},
-  } = useLocalization();
-
   const organizationSchema = {
     '@context': 'http://schema.org',
     '@type': 'Organization',
@@ -36,8 +31,6 @@ export function HomePageSeo({
         defaultTitle={title ?? ''}
         titleTemplate={titleTemplate ?? `%s - ${title}`}
       >
-        <html lang={lang ?? fallBacklang} />
-
         <meta property="og:url" content={url} />
 
         <script type="application/ld+json">

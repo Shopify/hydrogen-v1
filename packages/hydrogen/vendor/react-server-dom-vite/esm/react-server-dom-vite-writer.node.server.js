@@ -1871,4 +1871,4 @@ function renderToPipeableStream(model, options) {
   };
 }
 
-expor
+export { renderToPipeableStream };
