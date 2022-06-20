@@ -114,7 +114,7 @@ export function Countries({
       <Listbox.Option key={country.isoCode} value={country}>
         {/* @ts-expect-error @headlessui/react incompatibility with node16 resolution */}
         {({active}) => (
-          <div className={`text-primary ${getClassName(active)}`}>
+          <div className={`text-contrast ${getClassName(active)}`}>
             {country.name}
             {isSelected ? (
               <span className="ml-2">
