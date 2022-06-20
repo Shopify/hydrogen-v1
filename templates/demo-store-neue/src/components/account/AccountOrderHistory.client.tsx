@@ -15,7 +15,7 @@ export function AccountOrderHistory({orders}: {orders: Order[]}) {
 function EmptyOrders() {
   return (
     <div>
-      <Text className="mb-1" size="sm" width="narrow" as="p">
+      <Text className="mb-1" size="fine" width="narrow" as="p">
         You haven&apos;t placed any orders yet.
       </Text>
       <div className="w-48">
