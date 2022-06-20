@@ -1,9 +1,19 @@
 import {Seo} from '@shopify/hydrogen';
 import {useState} from 'react';
 import {Modal} from '../index';
-import {AccountDetailsEdit} from '../index';
+import {AccountDetailsEdit} from './AccountDetailsEdit.client';
 
-export function AccountDetails({firstName, lastName, phone, email}) {
+export function AccountDetails({
+  firstName,
+  lastName,
+  phone,
+  email,
+}: {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  email?: string;
+}) {
   const [isEditing, setIsEditing] = useState(false);
 
   const close = () => setIsEditing(false);
@@ -11,7 +21,7 @@ export function AccountDetails({firstName, lastName, phone, email}) {
   return (
     <>
       {isEditing ? (
-        <Modal closeModalProp="editingAccount" close={close}>
+        <Modal close={close}>
           <Seo type="noindex" data={{title: 'Account details'}} />
           <AccountDetailsEdit
             firstName={firstName}
@@ -37,7 +47,7 @@ export function AccountDetails({firstName, lastName, phone, email}) {
           <div className="mt-4 text-sm text-gray-500">Name</div>
           <p className="mt-1">
             {firstName || lastName
-              ? (firstName && firstName + ' ') + lastName
+              ? (firstName ? firstName + ' ' : '') + lastName
               : 'Add name'}{' '}
           </p>
 

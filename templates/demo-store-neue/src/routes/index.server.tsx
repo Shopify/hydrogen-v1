@@ -9,7 +9,8 @@ import {
   useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Layout, FeaturedCollections, Hero, ProductSwimlane} from '~/components';
+import {FeaturedCollections, Hero} from '~/components';
+import {Layout, ProductSwimlane} from '~/components/index.server';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {
@@ -55,19 +56,19 @@ export default function Homepage() {
         <SeoForHomepage />
       </Suspense>
       {primaryHero && (
-        <Hero {...primaryHero} height="full" top loading="eager" />
+        <Hero data={primaryHero} height="full" top loading="eager" />
       )}
       <ProductSwimlane
         data={featuredProducts.nodes}
         title="Featured Products"
         divider="bottom"
       />
-      {secondaryHero && <Hero {...secondaryHero} />}
+      {secondaryHero && <Hero data={secondaryHero} />}
       <FeaturedCollections
         data={featuredCollections.nodes}
         title="Collections"
       />
-      {tertiaryHero && <Hero {...tertiaryHero} />}
+      {tertiaryHero && <Hero data={tertiaryHero} />}
     </Layout>
   );
 }

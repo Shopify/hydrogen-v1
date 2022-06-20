@@ -1,7 +1,8 @@
 import {useShopQuery, useLocalization, gql} from '@shopify/hydrogen';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
-import {Layout, CollectionCard, PageHeader, Section, Grid} from '~/components';
+import {PageHeader, Section, Grid} from '~/components';
+import {Layout, CollectionCard} from '~/components/index.server';
 import {getImageLoadingPriority} from '~/lib/const';
 
 export default function Collections() {

@@ -7,28 +7,50 @@ import {
   useRenderServerComponents,
 } from '~/lib/utils';
 
+interface FormElements {
+  firstName: HTMLInputElement;
+  lastName: HTMLInputElement;
+  phone: HTMLInputElement;
+  email: HTMLInputElement;
+  currentPassword: HTMLInputElement;
+  newPassword: HTMLInputElement;
+  newPassword2: HTMLInputElement;
+}
+
 export function AccountDetailsEdit({
   firstName: _firstName = '',
   lastName: _lastName = '',
   phone: _phone = '',
   email: _email = '',
   close,
+}: {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  email?: string;
+  close: () => void;
 }) {
   const [saving, setSaving] = useState(false);
   const [firstName, setFirstName] = useState(_firstName);
   const [lastName, setLastName] = useState(_lastName);
   const [phone, setPhone] = useState(_phone);
   const [email, setEmail] = useState(_email);
-  const [emailError, setEmailError] = useState(null);
-  const [currentPasswordError, setCurrentPasswordError] = useState();
-  const [newPasswordError, setNewPasswordError] = useState();
-  const [newPassword2Error, setNewPassword2Error] = useState();
-  const [submitError, setSubmitError] = useState(null);
+  const [emailError, setEmailError] = useState<null | string>(null);
+  const [currentPasswordError, setCurrentPasswordError] = useState<
+    null | string
+  >(null);
+  const [newPasswordError, setNewPasswordError] = useState<null | string>(null);
+  const [newPassword2Error, setNewPassword2Error] = useState<null | string>(
+    null,
+  );
+  const [submitError, setSubmitError] = useState<null | string>(null);
 
   // Necessary for edits to show up on the main page
   const renderServerComponents = useRenderServerComponents();
 
-  async function onSubmit(event) {
+  async function onSubmit(
+    event: React.FormEvent<HTMLFormElement & FormElements>,
+  ) {
     event.preventDefault();
 
     setEmailError(null);
@@ -36,7 +58,7 @@ export function AccountDetailsEdit({
     setNewPasswordError(null);
     setNewPassword2Error(null);
 
-    const emailError = emailValidation(event.target.email);
+    const emailError = emailValidation(event.currentTarget.email);
     if (emailError) {
       setEmailError(emailError);
     }
@@ -44,19 +66,22 @@ export function AccountDetailsEdit({
     let currentPasswordError, newPasswordError, newPassword2Error;
 
     // Only validate the password fields if the current password has a value
-    if (event.target.currentPassword.value) {
-      currentPasswordError = passwordValidation(event.target.currentPassword);
+    if (event.currentTarget.currentPassword.value) {
+      currentPasswordError = passwordValidation(
+        event.currentTarget.currentPassword,
+      );
       if (currentPasswordError) {
         setCurrentPasswordError(currentPasswordError);
       }
 
-      newPasswordError = passwordValidation(event.target.newPassword);
+      newPasswordError = passwordValidation(event.currentTarget.newPassword);
       if (newPasswordError) {
         setNewPasswordError(newPasswordError);
       }
 
       newPassword2Error =
-        event.target.newPassword.value !== event.target.newPassword2.value
+        event.currentTarget.newPassword.value !==
+        event.currentTarget.newPassword2.value
           ? 'The two passwords entered did not match'
           : null;
       if (newPassword2Error) {
@@ -77,8 +102,8 @@ export function AccountDetailsEdit({
 
     const accountUpdateResponse = await callAccountUpdateApi({
       email,
-      newPassword: event.target.newPassword.value,
-      currentPassword: event.target.currentPassword.value,
+      newPassword: event.currentTarget.newPassword.value,
+      currentPassword: event.currentTarget.currentPassword.value,
       phone,
       firstName,
       lastName,
@@ -237,7 +262,15 @@ export function AccountDetailsEdit({
   );
 }
 
-function Password({name, passwordError, label}) {
+function Password({
+  name,
+  passwordError,
+  label,
+}: {
+  name: string;
+  passwordError: string | null;
+  label: string;
+}) {
   const [password, setPassword] = useState('');
 
   return (
@@ -249,7 +282,9 @@ function Password({name, passwordError, label}) {
         id={name}
         name={name}
         type="password"
-        autoComplete={name === 'currentPassword' ? 'current-password' : null}
+        autoComplete={
+          name === 'currentPassword' ? 'current-password' : undefined
+        }
         placeholder={label}
         aria-label={label}
         value={password}
@@ -263,39 +298,45 @@ function Password({name, passwordError, label}) {
   );
 }
 
-export function callAccountUpdateApi({
+export async function callAccountUpdateApi({
   email,
   phone,
   firstName,
   lastName,
   currentPassword,
   newPassword,
+}: {
+  email: string;
+  phone: string;
+  firstName: string;
+  lastName: string;
+  currentPassword: string;
+  newPassword: string;
 }) {
-  return fetch(`/account`, {
-    method: 'PATCH',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-      phone,
-      firstName,
-      lastName,
-      currentPassword,
-      newPassword,
-    }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch(() => {
-      return {
-        error: 'Error saving account. Please try again.',
-      };
+  try {
+    const res = await fetch(`/account`, {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        phone,
+        firstName,
+        lastName,
+        currentPassword,
+        newPassword,
+      }),
     });
+    if (res.ok) {
+      return {};
+    } else {
+      return res.json();
+    }
+  } catch (_e) {
+    return {
+      error: 'Error saving account. Please try again.',
+    };
+  }
 }

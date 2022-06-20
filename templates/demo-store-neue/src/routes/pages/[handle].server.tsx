@@ -8,7 +8,8 @@ import {
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
-import {Layout, NotFound, PageHeader} from '~/components';
+import {PageHeader} from '~/components';
+import {NotFound, Layout} from '~/components/index.server';
 
 export default function Page({params}: HydrogenRouteProps) {
   const {
@@ -37,7 +38,7 @@ export default function Page({params}: HydrogenRouteProps) {
   return (
     <Layout>
       <Seo type="page" data={page} />
-      <PageHeader heading={page.title} variant="page">
+      <PageHeader heading={page.title}>
         <div
           dangerouslySetInnerHTML={{__html: page.body}}
           className="prose dark:prose-invert"

@@ -12,13 +12,12 @@ import {
   Grid,
   Heading,
   Input,
-  Layout,
   PageHeader,
   ProductCard,
-  ProductSwimlane,
   Section,
   Text,
 } from '~/components';
+import {Layout, ProductSwimlane} from '~/components/index.server';
 import {getImageLoadingPriority} from '~/lib/const';
 import {Suspense} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';

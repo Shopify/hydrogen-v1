@@ -9,7 +9,8 @@ import {
   HydrogenApiRouteOptions,
 } from '@shopify/hydrogen';
 
-import {Layout, AccountLoginForm} from '~/components';
+import {AccountLoginForm} from '~/components';
+import {Layout} from '~/components/index.server';
 
 export default function Login({response}: HydrogenRouteProps) {
   response.cache(CacheNone());
@@ -62,7 +63,7 @@ export async function api(
     );
   }
 
-  const {data, error} = await queryShop<any>({
+  const {data, errors} = await queryShop<{customerAccessTokenCreate: any}>({
     query: LOGIN_MUTATION,
     variables: {
       input: {
@@ -88,7 +89,7 @@ export async function api(
   } else {
     return new Response(
       JSON.stringify({
-        error: data?.customerAccessTokenCreate?.customerUserErrors ?? error,
+        error: data?.customerAccessTokenCreate?.customerUserErrors ?? errors,
       }),
       {status: 401},
     );
