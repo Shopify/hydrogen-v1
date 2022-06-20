@@ -9,19 +9,27 @@ import {Heading, IconClose} from '~/components';
  * @param heading - string. Shown at the top of the drawer.
  * @param open - boolean state. if true opens the drawer.
  * @param onClose - function should set the open state.
+ * @param openFrom - right, left
  * @param children - react children node.
  */
 function Drawer({
   heading,
   open,
   onClose,
+  openFrom = 'right',
   children,
 }: {
-  heading: string;
+  heading?: string;
   open: boolean;
   onClose: () => void;
+  openFrom: 'right' | 'left';
   children: React.ReactNode;
 }) {
+  const offScreen = {
+    right: 'translate-x-full',
+    left: '-translate-x-full',
+  };
+
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -39,21 +47,31 @@ function Drawer({
 
         <div className="fixed inset-0">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="fixed inset-y-0 right-0 flex max-w-full">
+            <div
+              className={`fixed inset-y-0 flex max-w-full ${
+                openFrom === 'right' ? 'right-0' : ''
+              }`}
+            >
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-300"
-                enterFrom="translate-x-full"
+                enterFrom={offScreen[openFrom]}
                 enterTo="translate-x-0"
                 leave="transform transition ease-in-out duration-300"
                 leaveFrom="translate-x-0"
-                leaveTo="translate-x-full"
+                leaveTo={offScreen[openFrom]}
               >
                 <Dialog.Panel className="w-screen h-screen max-w-lg text-left align-middle transition-all transform shadow-xl bg-contrast">
-                  <header className="sticky top-0 flex items-center justify-between px-6 h-nav sm:px-8 md:px-12">
-                    <Heading as="h2" size="lead" id="cart-contents">
-                      {heading}
-                    </Heading>
+                  <header
+                    className={`sticky top-0 flex items-center px-6 h-nav sm:px-8 md:px-12 ${
+                      heading ? 'justify-between' : 'justify-end'
+                    }`}
+                  >
+                    {heading && (
+                      <Heading as="h2" size="lead" id="cart-contents">
+                        {heading}
+                      </Heading>
+                    )}
                     <button
                       type="button"
                       className="p-4 -m-4 transition text-primary hover:text-primary/50"
