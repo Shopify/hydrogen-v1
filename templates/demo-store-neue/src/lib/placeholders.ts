@@ -21,7 +21,6 @@ export const hero = {
       },
     },
   },
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   spread_secondary: {
     reference: {
       image: {
@@ -31,7 +30,6 @@ export const hero = {
       },
     },
   },
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   text_color: {
     value: 'Contrast',
   },

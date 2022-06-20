@@ -3,5 +3,6 @@ module.exports = {
   rules: {
     'node/no-missing-import': 'off',
     '@typescript-eslint/ban-ts-comment': 'warn',
+    '@typescript-eslint/naming-convention': 'off',
   },
 };
