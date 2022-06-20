@@ -1,16 +1,29 @@
 import {useState} from 'react';
 import {useNavigate} from '@shopify/hydrogen/client';
 
-export function AccountPasswordResetForm({id, resetToken}) {
+interface FormElements {
+  password: HTMLInputElement;
+  passwordConfirm: HTMLInputElement;
+}
+
+export function AccountPasswordResetForm({
+  id,
+  resetToken,
+}: {
+  id: string;
+  resetToken: string;
+}) {
   const navigate = useNavigate();
 
-  const [submitError, setSubmitError] = useState(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [passwordConfirmError, setPasswordConfirmError] = useState(null);
+  const [passwordConfirmError, setPasswordConfirmError] = useState<
+    string | null
+  >(null);
 
-  function passwordValidation(form) {
+  function passwordValidation(form: HTMLFormElement & FormElements) {
     setPasswordError(null);
     setPasswordConfirmError(null);
 
@@ -42,10 +55,12 @@ export function AccountPasswordResetForm({id, resetToken}) {
     return hasError;
   }
 
-  async function onSubmit(event) {
+  async function onSubmit(
+    event: React.FormEvent<HTMLFormElement & FormElements>,
+  ) {
     event.preventDefault();
 
-    if (passwordValidation(event.target)) {
+    if (passwordValidation(event.currentTarget)) {
       return;
     }
 
@@ -142,25 +157,33 @@ export function AccountPasswordResetForm({id, resetToken}) {
   );
 }
 
-export function callPasswordResetApi({id, resetToken, password}) {
-  return fetch(`/account/reset`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({id, resetToken, password}),
-  })
-    .then((res) => {
-      if (res.ok) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch((error) => {
-      return {
-        error: error.toString(),
-      };
+export async function callPasswordResetApi({
+  id,
+  resetToken,
+  password,
+}: {
+  id: string;
+  resetToken: string;
+  password: string;
+}) {
+  try {
+    const res = await fetch(`/account/reset`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({id, resetToken, password}),
     });
+
+    if (res.ok) {
+      return {};
+    } else {
+      return res.json();
+    }
+  } catch (error: any) {
+    return {
+      error: error.toString(),
+    };
+  }
 }

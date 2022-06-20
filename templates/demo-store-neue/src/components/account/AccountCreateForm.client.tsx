@@ -5,28 +5,35 @@ import {emailValidation, passwordValidation} from '~/lib/utils';
 
 import {callLoginApi} from './AccountLoginForm.client';
 
+interface FormElements {
+  email: HTMLInputElement;
+  password: HTMLInputElement;
+}
+
 export function AccountCreateForm() {
   const navigate = useNavigate();
 
-  const [submitError, setSubmitError] = useState(null);
+  const [submitError, setSubmitError] = useState<null | string>(null);
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(null);
+  const [emailError, setEmailError] = useState<null | string>(null);
   const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState(null);
+  const [passwordError, setPasswordError] = useState<null | string>(null);
 
-  async function onSubmit(event) {
+  async function onSubmit(
+    event: React.FormEvent<HTMLFormElement & FormElements>,
+  ) {
     event.preventDefault();
 
     setEmailError(null);
     setPasswordError(null);
     setSubmitError(null);
 
-    const newEmailError = emailValidation(event.target.email);
+    const newEmailError = emailValidation(event.currentTarget.email);
     if (newEmailError) {
       setEmailError(newEmailError);
     }
 
-    const newPasswordError = passwordValidation(event.target.password);
+    const newPasswordError = passwordValidation(event.currentTarget.password);
     if (newPasswordError) {
       setPasswordError(newPasswordError);
     }
@@ -135,25 +142,34 @@ export function AccountCreateForm() {
   );
 }
 
-export function callAccountCreateApi({email, password, firstName, lastName}) {
-  return fetch(`/account/register`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({email, password, firstName, lastName}),
-  })
-    .then((res) => {
-      if (res.status === 200) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch((error) => {
-      return {
-        error: error.toString(),
-      };
+export async function callAccountCreateApi({
+  email,
+  password,
+  firstName,
+  lastName,
+}: {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}) {
+  try {
+    const res = await fetch(`/account/register`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({email, password, firstName, lastName}),
     });
+    if (res.status === 200) {
+      return {};
+    } else {
+      return res.json();
+    }
+  } catch (error: any) {
+    return {
+      error: error.toString(),
+    };
+  }
 }
