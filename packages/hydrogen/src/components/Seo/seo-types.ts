@@ -14,6 +14,8 @@ export interface HomePage {
   description: ShopType['description'];
   title: ShopType['name'];
   url: Scalars['URL'];
+  titleTemplate?: string;
+  lang?: string;
 }
 
 export interface DefaultPage extends ShopType {
