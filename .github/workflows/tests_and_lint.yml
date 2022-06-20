@@ -50,7 +50,7 @@ jobs:
 
       - name: Lint the template code
         run: yarn lint
-        working-directory: ./templates/demo-store-neue
+        working-directory: ./templates/demo-store
 
       - name: Type check hydrogen-ui
         run: yarn typecheck
@@ -63,7 +63,3 @@ jobs:
         run: yarn test-e2e
         env:
           CI: true
-
-      - name: Run the template code tests
-        run: yarn test:ci
-        working-directory: ./templates/demo-store

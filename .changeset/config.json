@@ -9,7 +9,6 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "demo-store",
-    "demo-store-neue",
     "hello-world-js",
     "hello-world-ts",
     "test-server-components",
