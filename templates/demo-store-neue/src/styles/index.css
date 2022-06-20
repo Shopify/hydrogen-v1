@@ -40,8 +40,10 @@
   }
 }
 
-.shop-pay-button a {
+/* TODO: Remove this when the upstream PR merges */
+shop-pay-button {
   width: 100%;
+  display: table;
 }
 
 @layer base {
@@ -50,7 +52,7 @@
   }
 
   body {
-    @apply text-base antialiased font-sans text-primary/90 bg-contrast border-primary/10;
+    @apply antialiased text-primary/90 bg-contrast border-primary/10;
   }
 
   html {
@@ -87,6 +89,33 @@
 }
 
 @layer components {
+  .article {
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      @apply font-sans;
+    }
+    @apply mb-12 font-serif prose mx-auto grid justify-center text-primary;
+    p,
+    ul,
+    li {
+      @apply mb-4 text-lg;
+    }
+    img {
+      @apply md:-mx-8 lg:-mx-16;
+
+      @media (min-width: 48em) {
+        width: calc(100% + 4rem);
+        max-width: 100vw;
+      }
+      @media (min-width: 64em) {
+        width: calc(100% + 8rem);
+      }
+    }
+  }
+
   .swimlane {
     @apply grid snap-mandatory grid-flow-col snap-x w-full gap-4 scroll-px-6 px-6 pb-4 overflow-x-scroll;
   }
