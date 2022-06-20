@@ -59,7 +59,7 @@ export default function Product() {
               media={product.media.nodes}
               className="w-screen md:w-full lg:col-span-2"
             />
-            <section className="sticky md:mx-auto max-w-xl md:max-w-[24rem] grid gap-8 p-6 md:px-0 top-[6rem] lg:top-[8rem] xl:top-[10rem]">
+            <section className="sticky md:mx-auto max-w-xl md:max-w-[24rem] grid gap-8 p-6 md:px-0 top-nav">
               <div className="grid gap-2">
                 <Heading as="h1" className="whitespace-normal">
                   {product.title}
@@ -83,6 +83,7 @@ export default function Product() {
   );
 }
 
+// TODO: Add query for Metafields for ProductInfo
 const PRODUCT_QUERY = gql`
   ${MEDIA_FRAGMENT}
   query Product(

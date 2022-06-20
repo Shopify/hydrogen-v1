@@ -27,8 +27,10 @@ export function FeaturedCollections({
                 {collection?.image && (
                   <Image
                     className="rounded shadow-border overflow-clip inline-block aspect-[5/4] md:aspect-[3/2] object-cover"
-                    width={'100%'}
-                    height={336}
+                    width={500}
+                    height={400}
+                    widths={[400, 500, 600, 700, 800, 900]}
+                    sizes="(max-width: 32em) 100vw, 33vw"
                     alt={`Image of ${collection.title}`}
                     data={collection.image}
                   />

@@ -14,10 +14,10 @@ export function Text({
 }: {
   as?: React.ElementType;
   className?: string;
-  color?: string;
+  color?: 'default' | 'primary' | 'subtle' | 'notice' | 'contrast';
   format?: boolean;
-  size?: string;
-  width?: string;
+  size?: 'lead' | 'copy' | 'fine';
+  width?: 'default' | 'narrow' | 'wide';
   children: React.ReactNode;
   [key: string]: any;
 }) {
