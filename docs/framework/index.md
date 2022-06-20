@@ -4,13 +4,6 @@ title: Hydrogen framework overview
 description: Learn about the architecture and framework of Hydrogen.
 ---
 
-<aside class="note beta">
-<h4>Developer preview</h4>
-
-<p>This is a developer preview of Hydrogen. The documentation will be updated as Shopify introduces <a href="https://github.com/Shopify/hydrogen/releases">new features and refines existing functionality</a>.</p>
-
-</aside>
-
 Hydrogen includes a framework that offers a set of best practices and scaffolding for building a website. This guide provides an overview of Hydrogen's architecture and framework.
 
 ## What's the Hydrogen framework?
