@@ -1,6 +1,5 @@
 import React from 'react';
 import {Head} from '../../foundation/Head';
-import {useLocalization} from '../../hooks/useLocalization/useLocalization';
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
 import type {HomePage} from './seo-types';
