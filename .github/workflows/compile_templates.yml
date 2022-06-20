@@ -20,15 +20,17 @@ jobs:
       - name: Compile hello-world
         run: |
           node scripts/compile-template-for-dist.mjs hello-world
-      
+
       - name: Compile demo-store
         run: |
           node scripts/compile-template-for-dist.mjs demo-store
 
       - name: Update templates in the dist branch
         run: |
+          git add .
           git status
-          git show-ref
           git config user.email "hydrogen@shopify.com"
           git config user.name "Hydrogen Bot"
+          git show-ref
+          git commit -m "Update templates for dist"
           git push origin HEAD:dist --force

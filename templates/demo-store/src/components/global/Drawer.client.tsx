@@ -19,7 +19,7 @@ function Drawer({
   openFrom = 'right',
   children,
 }: {
-  heading?: string;
+  heading: string;
   open: boolean;
   onClose: () => void;
   openFrom: 'right' | 'left';
