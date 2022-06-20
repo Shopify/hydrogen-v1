@@ -99,13 +99,20 @@ function cartReducer(state: State, action: CartAction): State {
       break;
     }
     case 'reject': {
+      if (action.errors) {
+        console.group('%cCart Error:', 'color:red');
+        for (const [i, error] of action.errors.entries()) {
+          console.log(`%c${i + 1}. ` + error.message, 'color:red');
+        }
+        console.groupEnd();
+      }
       if (state.status === 'fetching' || state.status === 'creating') {
-        return {status: 'uninitialized', error: action.error};
+        return {status: 'uninitialized', error: action.errors};
       } else if (state.status === 'updating') {
         return {
           status: 'idle',
           cart: state.lastValidCart,
-          error: action.error,
+          error: action.errors,
         };
       }
       break;
@@ -264,6 +271,8 @@ export function CartProvider({
   /** The ISO country code for i18n. */
   countryCode?: CountryCode;
 }) {
+  if (countryCode) countryCode = countryCode.toUpperCase() as CountryCode;
+
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
     : {status: 'uninitialized'};
@@ -275,7 +284,8 @@ export function CartProvider({
 
   const countryChanged =
     state.status === 'idle' &&
-    countryCode !== state?.cart?.buyerIdentity?.countryCode;
+    countryCode !== state?.cart?.buyerIdentity?.countryCode &&
+    !state.error;
 
   const cartFetch = useCallback(
     async (cartId: string) => {
@@ -321,7 +331,7 @@ export function CartProvider({
         cart.buyerIdentity.customerAccessToken = customerAccessToken;
       }
 
-      const {data, error} = await fetchCart<
+      const {data, errors} = await fetchCart<
         CartCreateMutationVariables,
         CartCreateMutation
       >({
@@ -333,10 +343,10 @@ export function CartProvider({
         },
       });
 
-      if (error) {
+      if (errors) {
         dispatch({
           type: 'reject',
-          error,
+          errors,
         });
       }
 
@@ -377,7 +387,7 @@ export function CartProvider({
       if (state.status === 'idle') {
         dispatch({type: 'addLineItem'});
         onLineAdd?.();
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartLineAddMutationVariables,
           CartLineAddMutation
         >({
@@ -390,10 +400,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -423,7 +433,7 @@ export function CartProvider({
 
         onLineRemove?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartLineRemoveMutationVariables,
           CartLineRemoveMutation
         >({
@@ -436,10 +446,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -469,7 +479,7 @@ export function CartProvider({
 
         onLineUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartLineUpdateMutationVariables,
           CartLineUpdateMutation
         >({
@@ -481,10 +491,10 @@ export function CartProvider({
             country: countryCode,
           },
         });
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -514,7 +524,7 @@ export function CartProvider({
 
         onNoteUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartNoteUpdateMutationVariables,
           CartNoteUpdateMutation
         >({
@@ -527,10 +537,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -552,7 +562,7 @@ export function CartProvider({
 
         onBuyerIdentityUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartBuyerIdentityUpdateMutationVariables,
           CartBuyerIdentityUpdateMutation
         >({
@@ -565,10 +575,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -590,7 +600,7 @@ export function CartProvider({
 
         onAttributesUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartAttributesUpdateMutationVariables,
           CartAttributesUpdateMutation
         >({
@@ -603,10 +613,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -631,7 +641,7 @@ export function CartProvider({
 
         onDiscountCodesUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartDiscountCodesUpdateMutationVariables,
           CartDiscountCodesUpdateMutation
         >({
@@ -644,10 +654,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 

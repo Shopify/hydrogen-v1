@@ -24,7 +24,7 @@ export function useCartFetch() {
     }: {
       query: string;
       variables: T;
-    }): Promise<{data: K | undefined; error: any}> => {
+    }): Promise<{data: K | undefined; errors: any}> => {
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
         'X-SDK-Variant': 'hydrogen',
@@ -68,7 +68,7 @@ export function useInstantCheckout() {
 
   const createInstantCheckout = React.useCallback(
     async (cartInput: CartInput) => {
-      const {data, error} = await fetch<
+      const {data, errors} = await fetch<
         CartCreateMutationVariables,
         CartCreateMutation
       >({
@@ -78,8 +78,8 @@ export function useInstantCheckout() {
         },
       });
 
-      if (error) {
-        updateError(error);
+      if (errors) {
+        updateError(errors);
         updateCart(undefined);
         updateCheckoutUrl(undefined);
       }
