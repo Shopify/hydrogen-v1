@@ -16,11 +16,13 @@ jobs:
         with:
           ref: 'v1.x-2022-07'
       - run: |
-          mv templates/demo-store/_gitignore templates/demo-store/.gitignore
+          mv templates/demo-store-ts/_gitignore templates/demo-store-ts/.gitignore
+          mv templates/demo-store-js/_gitignore templates/demo-store-js/.gitignore
           mv templates/hello-world-ts/_gitignore templates/hello-world-ts/.gitignore
           mv templates/hello-world-js/_gitignore templates/hello-world-js/.gitignore
       - run: |
-          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/demo-store/package.json
+          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/demo-store-ts/package.json
+          sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/demo-store-js/package.json
           sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/hello-world-ts/package.json
           sed -i.bak 's/cross-env LOCAL_DEV=true //' templates/hello-world-js/package.json
       - run: |
