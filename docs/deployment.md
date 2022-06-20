@@ -25,22 +25,7 @@ By default, Hydrogen targets a Workers runtime like Oxygen. However, you can als
 
 Hydrogen provides a [built-in Node entrypoint](https://github.com/Shopify/hydrogen/blob/main/packages/hydrogen/src/platforms/node.ts) which suits basic production use cases. You can run and preview your Hydrogen storefront in Node.js by completing the following steps.
 
-
-1. Install the peer dependencies required to run the built-in Node.js entrypoint:
-
-    {% codeblock terminal %}
-
-    ```bash?title: 'npm'
-    npm install body-parser compression serve-static
-    ```
-
-    ```bash?title: 'Yarn'
-    yarn add body-parser compression serve-static
-    ```
-
-    {% endcodeblock %}
-
-2. Build your Hydrogen storefront for production and preview the app locally:
+1. Build your Hydrogen storefront for production and preview the app locally:
 
     {% codeblock terminal %}
 
