@@ -13,8 +13,9 @@ import {
   CartProvider,
 } from '@shopify/hydrogen';
 
-import {DefaultSeo, NotFound, HeaderFallback} from '~/components';
+import {HeaderFallback} from '~/components';
 import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
+import {DefaultSeo, NotFound} from '~/components/index.server';
 
 function App({routes, request}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;

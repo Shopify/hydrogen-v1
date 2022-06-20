@@ -1,14 +1,8 @@
 import {gql, useLocalization, useShopQuery} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
-import {
-  Button,
-  FeaturedCollections,
-  Layout,
-  PageHeader,
-  ProductSwimlane,
-  Text,
-} from '~/components';
+import {Button, FeaturedCollections, PageHeader, Text} from '~/components';
+import {ProductSwimlane, Layout} from '~/components/index.server';
 import type {
   CollectionConnection,
   ProductConnection,

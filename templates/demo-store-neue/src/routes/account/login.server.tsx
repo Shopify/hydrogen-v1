@@ -9,7 +9,8 @@ import {
   HydrogenApiRouteOptions,
 } from '@shopify/hydrogen';
 
-import {Layout, AccountLoginForm} from '~/components';
+import {AccountLoginForm} from '~/components';
+import {Layout} from '~/components/index.server';
 
 export default function Login({response}: HydrogenRouteProps) {
   response.cache(CacheNone());

@@ -9,7 +9,8 @@ import {
 } from '@shopify/hydrogen';
 import type {Blog} from '@shopify/hydrogen/storefront-api-types';
 
-import {Layout, CustomFont, Section, PageHeader} from '~/components';
+import {CustomFont, PageHeader, Section} from '~/components';
+import {Layout} from '~/components/index.server';
 import {ATTR_LOADING_EAGER} from '~/lib/const';
 
 const BLOG_HANDLE = 'journal';

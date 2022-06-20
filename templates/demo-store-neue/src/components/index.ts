@@ -7,5 +7,4 @@ export * from './product/index';
 export * from './sections/index';
 export {CountrySelector} from './CountrySelector.client';
 export {CustomFont} from './CustomFont.client';
-export {DefaultSeo} from './DefaultSeo.server';
 export {HeaderFallback} from './HeaderFallback';

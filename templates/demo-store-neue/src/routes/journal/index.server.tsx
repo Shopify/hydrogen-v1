@@ -13,7 +13,8 @@ import type {
   Blog as BlogType,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {Layout, ArticleCard, Grid, PageHeader} from '~/components';
+import {ArticleCard, Grid, PageHeader} from '~/components';
+import {Layout} from '~/components/index.server';
 import {getImageLoadingPriority} from '~/lib/const';
 
 const BLOG_HANDLE = 'Journal';

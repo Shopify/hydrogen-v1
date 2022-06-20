@@ -9,7 +9,8 @@ import {
   useShopQuery,
 } from '@shopify/hydrogen';
 
-import {Layout, FeaturedCollections, Hero, ProductSwimlane} from '~/components';
+import {FeaturedCollections, Hero} from '~/components';
+import {Layout, ProductSwimlane} from '~/components/index.server';
 
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {

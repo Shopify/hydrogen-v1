@@ -7,7 +7,8 @@ import {
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
-import {Layout, AccountCreateForm} from '~/components';
+import {AccountCreateForm} from '~/components';
+import {Layout} from '~/components/index.server';
 import {getApiErrorMessage} from '~/lib/utils';
 
 export default function Register({response}: HydrogenRouteProps) {

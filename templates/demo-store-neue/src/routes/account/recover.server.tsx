@@ -7,7 +7,8 @@ import {
   type HydrogenRouteProps,
 } from '@shopify/hydrogen';
 
-import {Layout, AccountRecoverForm} from '~/components';
+import {AccountRecoverForm} from '~/components';
+import {Layout} from '~/components/index.server';
 
 /**
  * A form for the user to fill out to _initiate_ a password reset.

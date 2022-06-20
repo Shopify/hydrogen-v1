@@ -18,11 +18,10 @@ import {
   AccountDetails,
   AccountOrderHistory,
   FeaturedCollections,
-  Layout,
   LogoutButton,
   PageHeader,
-  ProductSwimlane,
 } from '~/components';
+import {Layout, ProductSwimlane} from '~/components/index.server';
 import type {
   Collection,
   CollectionConnection,
