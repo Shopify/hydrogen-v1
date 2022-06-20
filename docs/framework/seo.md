@@ -10,11 +10,11 @@ This guide describes how to customize the output of SEO-related tags in your cli
 
 Hydrogen includes an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) client component that renders SEO information on a webpage. It also provides the following example SEO-related files in the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates):
 
-- [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
+- [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.tsx): A server component that fetches the shop name and description and sets default values and templates for every page on a website
 
-- [`Sitemap.xml.server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.js): A file that generates all products, collections, and pages URLs using the Storefront API
+- [`Sitemap.xml.server.ts`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.ts): A file that generates all products, collections, and pages URLs using the Storefront API
 
-- [`Robots.txt.server.js`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/robots.txt.server.js): A file that sets default rules for which URLs can be crawled by search engines
+- [`Robots.txt.server.ts`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/robots.txt.server.ts): A file that sets default rules for which URLs can be crawled by search engines
 
 ### `Seo` client component
 
@@ -22,15 +22,15 @@ The [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) client co
 
 You can customize the `<head>` tags at the route level:
 
-- [Default page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx)
-- [Home page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/index.server.jsx)
-- [Pages page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/pages/[handle].server.jsx)
-- [Product page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/products/[handle].server.jsx)
-- [Collection page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/collections/[handle].server.jsx)
+- [Default page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.tsx)
+- [Home page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/index.server.tsx)
+- [Pages page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/pages/%5Bhandle%5D.server.tsx)
+- [Product page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/products/%5Bhandle%5D.server.tsx)
+- [Collection page](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/collections/%5Bhandle%5D.server.tsx)
 
 ### `DefaultSeo` server component
 
-The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) server component is part of the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates#demo-store-template). This component provides the default SEO values for every page on your website.
+The [`DefaultSeo`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.tsx) server component is part of the [Demo Store template](https://shopify.dev/custom-storefronts/hydrogen/templates#demo-store-template). This component provides the default SEO values for every page on your website.
 
 You can override the default SEO values by passing in custom props:
 
@@ -197,7 +197,7 @@ Pages that require authentication shouldn't be indexed by bots. For example, bot
 
 ## Limitations and considerations
 
-The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.js) that's included in the Demo Store template:
+The following limitations and considerations apply to the [XML sitemap](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/sitemap.xml.server.ts) that's included in the Demo Store template:
 
 - The sitemap has a limit of 250 products, 250 collections, and 250 pages. You need to [paginate results](https://shopify.dev/api/usage/pagination-graphql) if your store has more than 250 resources.
 
