@@ -47,9 +47,9 @@ export default async function testCases({
     expect(await page.url()).toContain('/es/productos');
   });
 
-  it('does not x-powered-by header when disabled', async () => {
+  it('does not powered-by header when disabled', async () => {
     const response = await fetch(getServerUrl() + '/');
-    expect(response.headers.has('x-powered-by')).toBe(false);
+    expect(response.headers.has('powered-by')).toBe(false);
   });
 
   if (!isBuild) {

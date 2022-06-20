@@ -226,9 +226,9 @@ export default async function testCases({
     ]);
   });
 
-  it('returns x-powered-by header', async () => {
+  it('returns powered-by header', async () => {
     const response = await fetch(getServerUrl() + '/');
-    expect(response.headers.get('x-powered-by')).toBe('Shopify-Hydrogen');
+    expect(response.headers.get('powered-by')).toBe('Shopify-Hydrogen');
   });
 
   it('properly escapes props in the SSR flight script chunks', async () => {
