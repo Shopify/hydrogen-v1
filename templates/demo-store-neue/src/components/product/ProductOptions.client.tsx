@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useCallback, useState} from 'react';
 // TODO: Fix import
 import {Listbox} from '@headlessui/react';
 import {useProductOptions} from '@shopify/hydrogen';
@@ -63,6 +63,7 @@ function OptionsGrid({
   );
 }
 
+// TODO: De-dupe UI with CountrySelector
 function OptionsDropdown({
   values,
   name,
@@ -72,6 +73,7 @@ function OptionsDropdown({
   name: string;
   handleChange: (name: string, value: string) => void;
 }) {
+  const [listboxOpen, setListboxOpen] = useState(false);
   const {selectedOptions} = useProductOptions();
 
   const updateSelectedOption = useCallback(
@@ -82,54 +84,56 @@ function OptionsDropdown({
   );
 
   return (
-    <Listbox onChange={updateSelectedOption} value="">
-      {({open}) => {
-        return (
-          <>
-            <Listbox.Button
-              className={`flex items-center justify-between w-full py-3 px-4 border border-black dark:border-white dark:bg-contrast ${
-                open ? 'rounded-b md:rounded-t md:rounded-b-none' : 'rounded'
-              }`}
-            >
-              <span>{selectedOptions![name]}</span>
-              <IconCaret direction={open ? 'up' : 'down'} />
-            </Listbox.Button>
+    <div className="relative w-full">
+      <Listbox onChange={updateSelectedOption} value="">
+        {({open}) => {
+          setTimeout(() => setListboxOpen(open));
+          return (
+            <>
+              <Listbox.Button
+                className={`flex items-center justify-between w-full py-3 px-4 border border-primary ${
+                  open ? 'rounded-b md:rounded-t md:rounded-b-none' : 'rounded'
+                }`}
+              >
+                <span>{selectedOptions![name]}</span>
+                <IconCaret direction={open ? 'up' : 'down'} />
+              </Listbox.Button>
 
-            <Listbox.Options
-              className={`
-                bg-contrast border-black absolute bottom-12 z-10
-                grid mt-[48px] h-48 w-full overflow-y-scroll rounded-t border dark:border-white
-                px-2 py-2 transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none md:border-t-0 md:border-b
-                ${open ? 'max-h-48' : 'max-h-0'}
-              `}
-            >
-              {values.map((value) => {
-                const isSelected = selectedOptions![name] === value;
-                const id = `option-${name}-${value}`;
+              <Listbox.Options
+                className={`border-primary bg-contrast absolute bottom-12 z-30 grid 
+                h-48 w-full overflow-y-scroll rounded-t border px-2 py-2 transition-[max-height] 
+                duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none md:border-t-0 md:border-b ${
+                  listboxOpen ? 'max-h-48' : 'max-h-0'
+                }`}
+              >
+                {values.map((value) => {
+                  const isSelected = selectedOptions![name] === value;
+                  const id = `option-${name}-${value}`;
 
-                return (
-                  <Listbox.Option key={id} value={value}>
-                    {({active}) => (
-                      <div
-                        className={`text-primary w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${
-                          active ? 'bg-contrast/20 dark:bg-black/5' : ''
-                        }`}
-                      >
-                        {value}
-                        {isSelected ? (
-                          <span className="ml-2">
-                            <IconCheck />
-                          </span>
-                        ) : null}
-                      </div>
-                    )}
-                  </Listbox.Option>
-                );
-              })}
-            </Listbox.Options>
-          </>
-        );
-      }}
-    </Listbox>
+                  return (
+                    <Listbox.Option key={id} value={value}>
+                      {({active}) => (
+                        <div
+                          className={`text-primary w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${
+                            active ? 'bg-primary/10' : null
+                          }`}
+                        >
+                          {value}
+                          {isSelected ? (
+                            <span className="ml-2">
+                              <IconCheck />
+                            </span>
+                          ) : null}
+                        </div>
+                      )}
+                    </Listbox.Option>
+                  );
+                })}
+              </Listbox.Options>
+            </>
+          );
+        }}
+      </Listbox>
+    </div>
   );
 }

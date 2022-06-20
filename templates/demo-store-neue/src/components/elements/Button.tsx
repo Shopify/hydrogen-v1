@@ -19,7 +19,7 @@ export function Button({
   const Component = props?.to ? Link : as;
 
   const baseButtonClasses =
-    'inline-block rounded-sm font-medium text-center py-3 px-6 max-w-xl leading-none';
+    'inline-block rounded font-medium text-center py-3 px-6 max-w-xl';
 
   const variants = {
     primary: `${baseButtonClasses} bg-primary text-contrast`,

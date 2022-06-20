@@ -21,7 +21,10 @@ export function Header({title, menu}: {title: string; menu: EnhancedMenu}) {
   const {pathname} = useUrl();
   const {isOpen, openDrawer, closeDrawer} = useDrawer();
 
-  const isHome = pathname === '/';
+  const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
+  const countryCode = localeMatch ? localeMatch[1] : null;
+
+  const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
   return (
     <>
@@ -34,21 +37,29 @@ export function Header({title, menu}: {title: string; menu: EnhancedMenu}) {
         </div>
       </Drawer>
       <DesktopHeader
+        countryCode={countryCode}
         isHome={isHome}
-        title={title}
         menu={menu}
         openDrawer={openDrawer}
+        title={title}
       />
-      <MobileHeader isHome={isHome} title={title} openDrawer={openDrawer} />
+      <MobileHeader
+        countryCode={countryCode}
+        isHome={isHome}
+        openDrawer={openDrawer}
+        title={title}
+      />
     </>
   );
 }
 
 function MobileHeader({
+  countryCode,
   title,
   isHome,
   openDrawer,
 }: {
+  countryCode?: string | null;
   title: string;
   isHome: boolean;
   openDrawer: () => void;
@@ -68,7 +79,10 @@ function MobileHeader({
         <button className={styles.button}>
           <IconMenu />
         </button>
-        <form action={'/search'} className="items-center gap-2 sm:flex">
+        <form
+          action={`/${countryCode ? countryCode + '/' : ''}search`}
+          className="items-center gap-2 sm:flex"
+        >
           <button type="submit" className={styles.button}>
             <IconSearch />
           </button>
@@ -109,14 +123,16 @@ function MobileHeader({
 }
 
 function DesktopHeader({
-  title,
+  countryCode,
   isHome,
   menu,
+  title,
   openDrawer,
 }: {
-  title: string;
+  countryCode?: string | null;
   isHome: boolean;
   menu: EnhancedMenu;
+  title: string;
   openDrawer: () => void;
 }) {
   const {y} = useWindowScroll();
@@ -148,7 +164,10 @@ function DesktopHeader({
         </nav>
       </div>
       <div className="flex items-center gap-1">
-        <form action={'/search'} className="flex items-center gap-2">
+        <form
+          action={`/${countryCode ? countryCode + '/' : ''}search`}
+          className="flex items-center gap-2"
+        >
           <Input
             className={
               isHome

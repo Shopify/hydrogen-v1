@@ -23,7 +23,7 @@ export function CartDetails({onClose}: {onClose: () => void}) {
       <section
         ref={scrollRef}
         aria-labelledby="cart-contents"
-        className={`px-4 pb-4 overflow-auto transition md:px-12 ${
+        className={`px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12 ${
           y > 0 && 'border-t'
         }`}
       >
@@ -39,7 +39,7 @@ export function CartDetails({onClose}: {onClose: () => void}) {
       </section>
       <section
         aria-labelledby="summary-heading"
-        className="p-4 border-t md:px-12"
+        className="grid gap-6 p-6 border-t md:px-12"
       >
         <h2 id="summary-heading" className="sr-only">
           Order summary
@@ -55,11 +55,11 @@ function CartCheckoutActions() {
   const {checkoutUrl} = useCart();
   return (
     <>
-      <div className="flex flex-col items-center mt-6 md:mt-8">
+      <div className="grid gap-4">
         <Button to={checkoutUrl} width="full">
           Continue to Checkout
         </Button>
-        <CartShopPayButton className="flex items-center justify-center rounded-sm mt-2 bg-[#5a31f4]" />
+        <CartShopPayButton />
       </div>
     </>
   );
@@ -69,7 +69,7 @@ function OrderSummary() {
   const {cost} = useCart();
   return (
     <>
-      <dl className="space-y-2">
+      <dl className="grid">
         <div className="flex items-center justify-between">
           <Text as="dt">Subtotal</Text>
           <Text as="dd">
