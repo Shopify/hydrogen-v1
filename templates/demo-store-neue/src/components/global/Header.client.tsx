@@ -21,7 +21,10 @@ export function Header({title, menu}: {title: string; menu: EnhancedMenu}) {
   const {pathname} = useUrl();
   const {isOpen, openDrawer, closeDrawer} = useDrawer();
 
-  const isHome = pathname === '/';
+  const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
+  const countryCode = localeMatch ? localeMatch[1] : null;
+
+  const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
   return (
     <>
