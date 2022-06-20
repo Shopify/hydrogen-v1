@@ -9,8 +9,7 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "demo-store",
-    "hello-world-js",
-    "hello-world-ts",
+    "hello-world",
     "test-server-components",
     "test-async-config",
     "hydrogen-playground",
