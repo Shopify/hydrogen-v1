@@ -16,9 +16,8 @@ export default () => {
 
         try {
           if (
-            url.includes('.client.js') &&
-            url.includes('?v=') &&
-            !url.includes('node_modules')
+            /\.client\.[jt]sx?\?v=/.test(url) &&
+            !/\/node_modules\//.test(url)
           ) {
             const result = await server.transformRequest(url, {html: false});
             if (result) {
