@@ -296,7 +296,7 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
                 }`}
               >
                 <Text size="fine">
-                  {statusMessage(order.fulfillmentStatus)}
+                  {statusMessage(order.fulfillmentStatus!)}
                 </Text>
               </div>
             </div>

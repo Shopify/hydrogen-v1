@@ -40,7 +40,9 @@ async function deleteAddress(
   params: HydrogenApiRouteOptions['params'],
   queryShop: HydrogenApiRouteOptions['queryShop'],
 ) {
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{
+    customerAddressDelete: any;
+  }>({
     query: DELETE_ADDRESS_MUTATION,
     variables: {
       customerAccessToken,
@@ -90,7 +92,9 @@ async function updateAddress(
   if (zip) address.zip = zip;
   if (phone) address.phone = phone;
 
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{
+    customerAddressUpdate: any;
+  }>({
     query: UPDATE_ADDRESS_MUTATION,
     variables: {
       address,
@@ -129,7 +133,9 @@ export function setDefaultAddress(
   addressId: string,
   customerAccessToken: string,
 ) {
-  return queryShop({
+  return queryShop<{
+    customerDefaultAddressUpdate: any;
+  }>({
     query: UPDATE_DEFAULT_ADDRESS_MUTATION,
     variables: {
       customerAccessToken,

@@ -9,11 +9,16 @@ export function Hero(props = mockData) {
     title,
     byline,
     cta,
+    // @ts-ignore TODO: Fix MockData
     handle,
     spread,
+    // @ts-ignore TODO: Fix MockData
     spreadSecondary,
+    // @ts-ignore TODO: Fix MockData
     height,
+    // @ts-ignore TODO: Fix MockData
     top,
+    // @ts-ignore TODO: Fix MockData
     loading,
   } = props;
 
@@ -44,7 +49,8 @@ export function Hero(props = mockData) {
                     : [500, 900, 1400]
                 }
                 width={spreadSecondary?.reference ? 375 : 750}
-                data={spread.reference}
+                // @ts-ignore TODO: Fix MockData
+                data={spread.reference as Media}
                 loading={loading}
               />
             </div>
@@ -61,7 +67,7 @@ export function Hero(props = mockData) {
           )}
         </div>
         <div className="flex flex-col items-baseline justify-between gap-4 px-6 py-8 sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
-          <Heading as="h2" size="display" format className="max-w-md">
+          <Heading format as="h2" size="display" className="max-w-md">
             {title.value}
           </Heading>
           {byline && (

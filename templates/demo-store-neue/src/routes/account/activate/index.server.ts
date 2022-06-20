@@ -32,7 +32,9 @@ export async function api(
     );
   }
 
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{
+    customerActivate: any;
+  }>({
     query: CUSTOMER_ACTIVATE_MUTATION,
     variables: {
       id: `gid://shopify/Customer/${jsonBody.id}`,

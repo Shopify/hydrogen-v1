@@ -55,6 +55,7 @@ export default function Homepage() {
         <SeoForHomepage />
       </Suspense>
       {primaryHero && (
+        // @ts-ignore TODO: Fix MockData
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}
       <ProductSwimlane
@@ -62,11 +63,13 @@ export default function Homepage() {
         title="Featured Products"
         divider="bottom"
       />
+      {/* @ts-ignore TODO: Fix MockData */}
       {secondaryHero && <Hero {...secondaryHero} />}
       <FeaturedCollections
         data={featuredCollections.nodes}
         title="Collections"
       />
+      {/* @ts-ignore TODO: Fix MockData */}
       {tertiaryHero && <Hero {...tertiaryHero} />}
     </Layout>
   );

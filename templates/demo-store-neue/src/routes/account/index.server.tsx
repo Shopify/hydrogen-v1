@@ -27,6 +27,7 @@ import type {
   Collection,
   CollectionConnection,
   Customer,
+  Order,
   Product,
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
@@ -115,12 +116,12 @@ function AuthenticatedAccount({
       <PageHeader heading={heading}>
         <LogoutButton>Sign out</LogoutButton>
       </PageHeader>
-      {orders && <AccountOrderHistory orders={orders} />}
+      {orders && <AccountOrderHistory orders={orders as Order[]} />}
       <AccountDetails
-        firstName={customer.firstName}
-        lastName={customer.lastName}
-        phone={customer.phone}
-        email={customer.email}
+        firstName={customer.firstName as string}
+        lastName={customer.lastName as string}
+        phone={customer.phone as string}
+        email={customer.email as string}
       />
       <AccountAddressBook
         defaultAddress={defaultAddress}
@@ -176,7 +177,7 @@ export async function api(
   if (lastName) customer.lastName = lastName;
   if (newPassword) customer.password = newPassword;
 
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{customerUpdate: any}>({
     query: CUSTOMER_UPDATE_MUTATION,
     variables: {
       customer,

@@ -9,7 +9,7 @@ export function AccountAddressBook({
   defaultAddress,
 }: {
   addresses: any[];
-  defaultAddress: boolean;
+  defaultAddress: any;
 }) {
   const [editingAddress, setEditingAddress] = useState(null);
   const [deletingAddress, setDeletingAddress] = useState(null);

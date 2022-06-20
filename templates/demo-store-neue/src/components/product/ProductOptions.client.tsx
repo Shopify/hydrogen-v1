@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-// TODO: Fix import
+// @ts-expect-error @headlessui/react incompatibility with node16 resolution
 import {Listbox} from '@headlessui/react';
 import {useProductOptions} from '@shopify/hydrogen';
 
@@ -83,6 +83,7 @@ function OptionsDropdown({
 
   return (
     <Listbox onChange={updateSelectedOption} value="">
+      {/* @ts-expect-error @headlessui/react incompatibility with node16 resolution */}
       {({open}) => {
         return (
           <>
@@ -109,6 +110,7 @@ function OptionsDropdown({
 
                 return (
                   <Listbox.Option key={id} value={value}>
+                    {/* @ts-expect-error @headlessui/react incompatibility with node16 resolution */}
                     {({active}) => (
                       <div
                         className={`text-primary w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${

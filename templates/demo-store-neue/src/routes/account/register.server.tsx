@@ -39,7 +39,7 @@ export async function api(
     );
   }
 
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{customerCreate: any}>({
     query: CUSTOMER_CREATE_MUTATION,
     variables: {
       input: {

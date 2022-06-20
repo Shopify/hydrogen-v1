@@ -1,4 +1,5 @@
 import {CartProvider, useLocalization} from '@shopify/hydrogen';
+import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
 
 export function CartProviderWithSession({
   children,
@@ -8,5 +9,9 @@ export function CartProviderWithSession({
   const {
     country: {isoCode: countryCode},
   } = useLocalization();
-  return <CartProvider countryCode={countryCode}>{children}</CartProvider>;
+  return (
+    <CartProvider countryCode={countryCode as CountryCode}>
+      {children}
+    </CartProvider>
+  );
 }

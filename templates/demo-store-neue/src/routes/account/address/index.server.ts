@@ -71,7 +71,9 @@ export async function api(
   if (zip) address.zip = zip;
   if (phone) address.phone = phone;
 
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{
+    customerAddressCreate: any;
+  }>({
     query: CREATE_ADDRESS_MUTATION,
     variables: {
       address,

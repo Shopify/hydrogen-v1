@@ -15,7 +15,7 @@ export function Text({
   as?: React.ElementType;
   className?: string;
   color?: string;
-  format?: string;
+  format?: boolean;
   size?: string;
   width?: string;
   children: React.ReactNode;

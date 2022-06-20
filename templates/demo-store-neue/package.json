@@ -6,9 +6,10 @@
   "private": true,
   "scripts": {
     "dev": "shopify hydrogen dev",
-    "build": "shopify hydrogen build",
+    "build": "lint-ts && shopify hydrogen build",
     "preview": "shopify hydrogen preview",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint-ts": "tsc --noEmit"
   },
   "devDependencies": {
     "@shopify/cli": "^3.0.11",
