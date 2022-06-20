@@ -349,11 +349,9 @@ async function runSSR({
           initialServerProps={state as any}
           setServerPropsForRsc={() => {}}
         >
-          <PreloadQueries request={request}>
-            <Suspense fallback={null}>
-              <RscConsumer />
-            </Suspense>
-          </PreloadQueries>
+          <Suspense fallback={null}>
+            <RscConsumer />
+          </Suspense>
         </ServerPropsProvider>
       </ServerRequestProvider>
     </Html>
@@ -629,20 +627,19 @@ async function runSSR({
 function runRSC({App, state, log, request, response}: RunRscParams) {
   const serverProps = {...state, request, response, log};
   request.ctx.router.serverProps = serverProps;
+  preloadRequestCacheData(request);
 
   const AppRSC = (
     <ServerRequestProvider request={request}>
-      <PreloadQueries request={request}>
-        <App {...serverProps} />
+      <App {...serverProps} />
+      <Suspense fallback={null}>
+        <Analytics />
+      </Suspense>
+      {request.ctx.hydrogenConfig?.__EXPERIMENTAL__devTools && (
         <Suspense fallback={null}>
-          <Analytics />
+          <DevTools />
         </Suspense>
-        {request.ctx.hydrogenConfig?.__EXPERIMENTAL__devTools && (
-          <Suspense fallback={null}>
-            <DevTools />
-          </Suspense>
-        )}
-      </PreloadQueries>
+      )}
     </ServerRequestProvider>
   );
 
@@ -655,19 +652,6 @@ function runRSC({App, state, log, request, response}: RunRscParams) {
   });
 
   return {readable: rscReadable, didError: () => rscDidError};
-}
-
-function PreloadQueries({
-  request,
-  children,
-}: {
-  request: HydrogenRequest;
-  children: React.ReactNode;
-}) {
-  const preloadQueries = request.getPreloadQueries();
-  preloadRequestCacheData(request, preloadQueries);
-
-  return <>{children}</>;
 }
 
 export default renderHydrogen;
