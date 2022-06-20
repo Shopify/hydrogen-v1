@@ -20,7 +20,7 @@ jobs:
       - name: Compile hello-world
         run: |
           node scripts/compile-template-for-dist.mjs hello-world
-      
+
       - name: Compile demo-store
         run: |
           node scripts/compile-template-for-dist.mjs demo-store
