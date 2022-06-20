@@ -13,11 +13,10 @@ export function Heading({
 }: {
   as?: React.ElementType;
   children: React.ReactNode;
-  className?: string;
   format?: boolean;
   size?: 'display' | 'heading' | 'lead' | 'copy';
   width?: 'default' | 'narrow' | 'wide';
-}) {
+} & React.HTMLAttributes<HTMLHeadingElement>) {
   const sizes = {
     display: 'font-bold text-display',
     heading: 'font-bold text-heading',

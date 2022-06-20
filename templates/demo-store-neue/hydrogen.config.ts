@@ -15,7 +15,7 @@ export default defineConfig({
     path: '/',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'Strict',
     maxAge: 60 * 60 * 24 * 30,
   }),
   serverAnalyticsConnectors: [

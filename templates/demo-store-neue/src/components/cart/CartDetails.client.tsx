@@ -9,7 +9,7 @@ import {
 
 import {Button, Text, CartLineItem, CartEmpty} from '~/components';
 
-export function CartDetails({onClose}: {onClose: () => void}) {
+export function CartDetails({onClose}: {onClose?: () => void}) {
   const {lines} = useCart();
   const scrollRef = useRef(null);
   const {y} = useScroll(scrollRef);

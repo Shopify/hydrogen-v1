@@ -1,10 +1,16 @@
-import {useState, useMemo} from 'react';
+import {useState, useMemo, MouseEventHandler} from 'react';
 
 import {Text, Button} from '~/components/elements';
 import {Modal} from '../index';
 import {AccountAddressEdit, AccountDeleteAddress} from '../index';
 
-export function AccountAddressBook({addresses, defaultAddress}) {
+export function AccountAddressBook({
+  addresses,
+  defaultAddress,
+}: {
+  addresses: any[];
+  defaultAddress: any;
+}) {
   const [editingAddress, setEditingAddress] = useState(null);
   const [deletingAddress, setDeletingAddress] = useState(null);
 
@@ -26,7 +32,7 @@ export function AccountAddressBook({addresses, defaultAddress}) {
     setDeletingAddress(null);
   }
 
-  function editAddress(address) {
+  function editAddress(address: any) {
     setEditingAddress(address);
   }
 
@@ -99,7 +105,17 @@ export function AccountAddressBook({addresses, defaultAddress}) {
   );
 }
 
-function Address({address, defaultAddress, editAddress, setDeletingAddress}) {
+function Address({
+  address,
+  defaultAddress,
+  editAddress,
+  setDeletingAddress,
+}: {
+  address: any;
+  defaultAddress?: boolean;
+  editAddress: (address: any) => void;
+  setDeletingAddress: MouseEventHandler<HTMLButtonElement>;
+}) {
   return (
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
       {defaultAddress ? (
@@ -118,7 +134,7 @@ function Address({address, defaultAddress, editAddress, setDeletingAddress}) {
           <></>
         )}
         {address.formatted ? (
-          address.formatted.map((line) => <li key={line}>{line}</li>)
+          address.formatted.map((line: string) => <li key={line}>{line}</li>)
         ) : (
           <></>
         )}

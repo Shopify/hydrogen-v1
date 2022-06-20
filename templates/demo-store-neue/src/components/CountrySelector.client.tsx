@@ -1,11 +1,14 @@
 import {useCallback, useState, Suspense} from 'react';
 import {useLocalization, fetchSync} from '@shopify/hydrogen';
-// TODO: Fix import
+// @ts-expect-error @headlessui/react incompatibility with node16 resolution
 import {Listbox} from '@headlessui/react';
 
 import {IconCheck, IconCaret} from '~/components';
 import {useMemo} from 'react';
-import type {Country} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Country,
+  CountryCode,
+} from '@shopify/hydrogen/storefront-api-types';
 
 /**
  * A client component that selects the appropriate country to display for products on a website
@@ -15,18 +18,18 @@ export function CountrySelector() {
   const {
     country: {isoCode},
   } = useLocalization();
-  const currentCountry = useMemo(() => {
+  const currentCountry = useMemo<{name: string; isoCode: CountryCode}>(() => {
     const regionNamesInEnglish = new Intl.DisplayNames(['en'], {
       type: 'region',
     });
 
     return {
-      name: regionNamesInEnglish.of(isoCode),
-      isoCode,
+      name: regionNamesInEnglish.of(isoCode)!,
+      isoCode: isoCode as CountryCode,
     };
   }, [isoCode]);
 
-  const setCountry = useCallback(
+  const setCountry = useCallback<(country: Country) => void>(
     ({isoCode: newIsoCode}) => {
       const currentPath = window.location.pathname;
       let redirectPath;
@@ -51,6 +54,7 @@ export function CountrySelector() {
   return (
     <div className="relative">
       <Listbox onChange={setCountry}>
+        {/* @ts-expect-error @headlessui/react incompatibility with node16 resolution */}
         {({open}) => {
           setTimeout(() => setListboxOpen(open));
           return (
@@ -65,15 +69,16 @@ export function CountrySelector() {
               </Listbox.Button>
 
               <Listbox.Options
-                className={`border-t-contrast/30 border-contrast/30 absolute bottom-12 z-10 grid 
-                h-48 w-full overflow-y-scroll rounded-t border dark:border-white px-2 py-2 
-                transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none 
+                className={`border-t-contrast/30 border-contrast/30 absolute bottom-12 z-10 grid
+                h-48 w-full overflow-y-scroll rounded-t border dark:border-white px-2 py-2
+                transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none
                 md:border-t-0 md:border-b ${
                   listboxOpen ? 'max-h-48' : 'max-h-0'
                 }`}
               >
                 {listboxOpen && (
                   <Suspense fallback={<div className="p-2">Loading…</div>}>
+                    {/* @ts-expect-error @headlessui/react incompatibility with node16 resolution */}
                     <Countries
                       selectedCountry={currentCountry}
                       getClassName={(active) => {
@@ -107,6 +112,7 @@ export function Countries({
 
     return (
       <Listbox.Option key={country.isoCode} value={country}>
+        {/* @ts-expect-error @headlessui/react incompatibility with node16 resolution */}
         {({active}) => (
           <div className={`text-primary ${getClassName(active)}`}>
             {country.name}

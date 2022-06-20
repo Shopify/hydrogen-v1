@@ -17,7 +17,7 @@ import type {EnhancedMenu} from '~/lib/utils';
 /**
  * A client component that specifies the content of the header on the website
  */
-export function Header({title, menu}: {title: string; menu: EnhancedMenu}) {
+export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
   const {pathname} = useUrl();
   const {isOpen, openDrawer, closeDrawer} = useDrawer();
 
@@ -131,7 +131,7 @@ function DesktopHeader({
 }: {
   countryCode?: string | null;
   isHome: boolean;
-  menu: EnhancedMenu;
+  menu?: EnhancedMenu;
   title: string;
   openDrawer: () => void;
 }) {

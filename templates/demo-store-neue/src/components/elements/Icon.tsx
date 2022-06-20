@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
-interface IconDirectionProps extends React.ComponentProps<typeof Icon> {
-  direction: 'up' | 'right' | 'down' | 'left';
+interface IconProps extends React.ComponentProps<typeof Icon> {
+  direction?: 'up' | 'right' | 'down' | 'left';
 }
 
 function Icon({
@@ -10,12 +10,7 @@ function Icon({
   fill = 'currentColor',
   stroke,
   ...props
-}: {
-  children?: React.ReactNode;
-  className?: string;
-  fill?: string;
-  stroke?: string;
-}) {
+}: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +25,7 @@ function Icon({
   );
 }
 
-export function AccountIcon({...props}: React.ComponentProps<typeof Icon>) {
+export function AccountIcon(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Accounts</title>
@@ -43,7 +38,7 @@ export function AccountIcon({...props}: React.ComponentProps<typeof Icon>) {
   );
 }
 
-export function IconMenu({...props}: React.ComponentProps<typeof Icon>) {
+export function IconMenu(props: IconProps) {
   return (
     <Icon {...props} stroke={props.stroke || 'currentColor'}>
       <title>Menu</title>
@@ -54,7 +49,7 @@ export function IconMenu({...props}: React.ComponentProps<typeof Icon>) {
   );
 }
 
-export function IconClose({...props}: React.ComponentProps<typeof Icon>) {
+export function IconClose(props: IconProps) {
   return (
     <Icon {...props} stroke={props.stroke || 'currentColor'}>
       <title>Close</title>
@@ -76,7 +71,7 @@ export function IconClose({...props}: React.ComponentProps<typeof Icon>) {
   );
 }
 
-export function IconArrow({direction = 'right'}: IconDirectionProps) {
+export function IconArrow({direction = 'right'}: IconProps) {
   let rotate;
 
   switch (direction) {
@@ -108,7 +103,7 @@ export function IconCaret({
   direction = 'down',
   stroke = 'currentColor',
   ...props
-}: IconDirectionProps) {
+}: IconProps) {
   let rotate;
 
   switch (direction) {
@@ -141,7 +136,7 @@ export function IconCaret({
   );
 }
 
-export function IconSelect({...props}: React.ComponentProps<typeof Icon>) {
+export function IconSelect(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Select</title>
@@ -151,7 +146,7 @@ export function IconSelect({...props}: React.ComponentProps<typeof Icon>) {
   );
 }
 
-export function IconBag({...props}: React.ComponentProps<typeof Icon>) {
+export function IconBag(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Bag</title>
@@ -163,7 +158,7 @@ export function IconBag({...props}: React.ComponentProps<typeof Icon>) {
   );
 }
 
-export function IconAccount({...props}: React.ComponentProps<typeof Icon>) {
+export function IconAccount(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Account</title>
@@ -175,7 +170,7 @@ export function IconAccount({...props}: React.ComponentProps<typeof Icon>) {
   );
 }
 
-export function IconHelp({...props}: React.ComponentProps<typeof Icon>) {
+export function IconHelp(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Help</title>
@@ -184,7 +179,7 @@ export function IconHelp({...props}: React.ComponentProps<typeof Icon>) {
   );
 }
 
-export function IconSearch({...props}: React.ComponentProps<typeof Icon>) {
+export function IconSearch(props: IconProps) {
   return (
     <Icon {...props}>
       <title>Search</title>
@@ -214,7 +209,7 @@ export function IconCheck({
   );
 }
 
-export function IconRemove({...props}: React.ComponentProps<typeof Icon>) {
+export function IconRemove(props: IconProps) {
   return (
     <Icon {...props} fill="transparent" stroke={props.stroke || 'currentColor'}>
       <title>Remove</title>

@@ -44,11 +44,11 @@ export function Layout({children}: {children: React.ReactNode}) {
 
   const headerMenu = data?.headerMenu
     ? parseMenu(data.headerMenu, customPrefixes)
-    : null;
+    : undefined;
 
   const footerMenu = data?.footerMenu
     ? parseMenu(data.footerMenu, customPrefixes)
-    : null;
+    : undefined;
 
   return (
     <>

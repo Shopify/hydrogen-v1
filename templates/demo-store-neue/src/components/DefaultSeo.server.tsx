@@ -32,8 +32,8 @@ export function DefaultSeo() {
     },
   });
 
-  // TODO: Fix types
   return (
+    // @ts-ignore TODO: Fix types
     <Seo
       type="defaultSeo"
       data={{

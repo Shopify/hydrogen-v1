@@ -10,19 +10,16 @@ import {
   ShopifyAnalytics,
   ShopifyProvider,
   LocalizationProvider,
+  CartProvider,
 } from '@shopify/hydrogen';
 
-import {
-  DefaultSeo,
-  CartProviderWithSession,
-  NotFound,
-  HeaderFallback,
-} from '~/components';
+import {DefaultSeo, NotFound, HeaderFallback} from '~/components';
+import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
 
 function App({routes, request}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;
   const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
-  const countryCode = localeMatch ? localeMatch[1] : null;
+  const countryCode = localeMatch ? localeMatch[1] : undefined;
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
@@ -30,18 +27,18 @@ function App({routes, request}: HydrogenRouteProps) {
     <Suspense fallback={<HeaderFallback isHome={isHome} />}>
       <ShopifyProvider>
         <LocalizationProvider countryCode={countryCode}>
-          <CartProviderWithSession>
+          <CartProvider countryCode={countryCode as CountryCode}>
             <Suspense>
               <DefaultSeo />
             </Suspense>
             <Router>
               <FileRoutes
-                basePath={countryCode ? `/${countryCode}/` : null}
+                basePath={countryCode ? `/${countryCode}/` : undefined}
                 routes={routes}
               />
               <Route path="*" page={<NotFound />} />
             </Router>
-          </CartProviderWithSession>
+          </CartProvider>
           <PerformanceMetrics />
           {import.meta.env.DEV && <PerformanceMetricsDebug />}
           <ShopifyAnalytics />

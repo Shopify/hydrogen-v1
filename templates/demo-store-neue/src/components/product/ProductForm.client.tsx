@@ -37,18 +37,15 @@ export function ProductForm() {
         );
         setSelectedOption(name, matchedValue[0]);
       } else {
-        // TODO: This doesn't set anything
-        setParams(
-          params.set(
-            encodeURIComponent(name.toLowerCase()),
-            encodeURIComponent(selectedOptions[name].toLowerCase()),
-          ),
-        );
-        window.history.replaceState(
-          null,
-          '',
-          `${pathname}?${params.toString()}`,
-        );
+        params.set(
+          encodeURIComponent(name.toLowerCase()),
+          encodeURIComponent(selectedOptions![name]!.toLowerCase()),
+        ),
+          window.history.replaceState(
+            null,
+            '',
+            `${pathname}?${params.toString()}`,
+          );
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,7 +119,7 @@ export function ProductForm() {
             )}
           </Button>
         </AddToCartButton>
-        {!isOutOfStock && <ShopPayButton variantIds={[selectedVariant?.id]} />}
+        {!isOutOfStock && <ShopPayButton variantIds={[selectedVariant.id!]} />}
       </div>
     </form>
   );

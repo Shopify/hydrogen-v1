@@ -38,7 +38,7 @@ export async function api(
     );
   }
 
-  const {data, errors} = await queryShop({
+  const {data, errors} = await queryShop<{customerReset: any}>({
     query: CUSTOMER_RESET_MUTATION,
     variables: {
       id: `gid://shopify/Customer/${jsonBody.id}`,

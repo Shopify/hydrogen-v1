@@ -1,11 +1,17 @@
 import {Text, Button} from '~/components/elements';
 import {useRenderServerComponents} from '~/lib/utils';
 
-export function AccountDeleteAddress({addressId, close}) {
+export function AccountDeleteAddress({
+  addressId,
+  close,
+}: {
+  addressId: string;
+  close: () => void;
+}) {
   // Necessary for edits to show up on the main page
   const renderServerComponents = useRenderServerComponents();
 
-  async function deleteAddress(id) {
+  async function deleteAddress(id: string) {
     const response = await callDeleteAddressApi(id);
     if (response.error) {
       alert(response.error);
@@ -45,23 +51,22 @@ export function AccountDeleteAddress({addressId, close}) {
   );
 }
 
-export function callDeleteAddressApi(id) {
-  return fetch(`/account/address/${encodeURIComponent(id)}`, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-    },
-  })
-    .then((res) => {
-      if (res.ok) {
-        return {};
-      } else {
-        return res.json();
-      }
-    })
-    .catch(() => {
-      return {
-        error: 'Error removing address. Please try again.',
-      };
+export async function callDeleteAddressApi(id: string) {
+  try {
+    const res = await fetch(`/account/address/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
     });
+    if (res.ok) {
+      return {};
+    } else {
+      return res.json();
+    }
+  } catch (_e) {
+    return {
+      error: 'Error removing address. Please try again.',
+    };
+  }
 }

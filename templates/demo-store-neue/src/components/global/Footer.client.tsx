@@ -1,3 +1,4 @@
+// @ts-expect-error @headlessui/react incompatibility with node16 resolution
 import {Disclosure} from '@headlessui/react';
 import {Link, useUrl} from '@shopify/hydrogen';
 
@@ -8,6 +9,7 @@ import type {EnhancedMenu} from '~/lib/utils';
 /**
  * A server component that specifies the content of the footer on the website
  */
+// @ts-expect-error MockData will be fixed soon
 export function Footer({menu = mockData}: {menu?: EnhancedMenu}) {
   const {pathname} = useUrl();
 
@@ -34,6 +36,7 @@ export function Footer({menu = mockData}: {menu?: EnhancedMenu}) {
       {(menu?.items || []).map((item) => (
         <section key={item.id} className={styles.section}>
           <Disclosure>
+            {/* @ts-expect-error @headlessui/react incompat */}
             {({open}) => (
               <>
                 <Disclosure.Button className="text-left md:cursor-default">

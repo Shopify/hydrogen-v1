@@ -1,5 +1,5 @@
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export function LogoutButton(props: ButtonProps) {

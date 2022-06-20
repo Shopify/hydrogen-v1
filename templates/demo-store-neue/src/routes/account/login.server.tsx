@@ -62,7 +62,7 @@ export async function api(
     );
   }
 
-  const {data, error} = await queryShop({
+  const {data, errors} = await queryShop<{customerAccessTokenCreate: any}>({
     query: LOGIN_MUTATION,
     variables: {
       input: {
@@ -88,7 +88,7 @@ export async function api(
   } else {
     return new Response(
       JSON.stringify({
-        error: data?.customerAccessTokenCreate?.customerUserErrors ?? error,
+        error: data?.customerAccessTokenCreate?.customerUserErrors ?? errors,
       }),
       {status: 401},
     );

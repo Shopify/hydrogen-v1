@@ -1,5 +1,8 @@
 import {Image, Link, flattenConnection} from '@shopify/hydrogen';
-import type {Order} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Order,
+  OrderLineItem,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {Text} from '~/components';
 import {statusMessage} from '~/lib/utils';
@@ -7,7 +10,7 @@ import {statusMessage} from '~/lib/utils';
 export function OrderCard({order}: {order: Order}) {
   if (!order?.id) return null;
   const legacyOrderId = order!.id!.split('/').pop()!.split('?')[0];
-  const lineItems = flattenConnection(order?.lineItems);
+  const lineItems = flattenConnection<OrderLineItem>(order?.lineItems);
 
   return (
     <li className="flex flex-col justify-around col-span-1 text-center border border-gray-200 divide-y divide-gray-200 rounded">
