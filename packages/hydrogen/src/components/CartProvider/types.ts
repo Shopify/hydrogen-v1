@@ -83,5 +83,5 @@ export type CartAction =
   | {type: 'cartAttributesUpdate'}
   | {type: 'discountCodesUpdate'}
   | {type: 'resolve'; cart: Cart}
-  | {type: 'reject'; error: string}
+  | {type: 'reject'; errors: any}
   | {type: 'resetCart'};
