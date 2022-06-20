@@ -17,13 +17,17 @@ jobs:
       - name: Install the packages
         run: yarn install --frozen-lockfile --ignore-engines --network-timeout 36000
 
-      - name: Compile templates from JS to TS
+      - name: Compile hello-world
         run: |
           node scripts/compile-template-for-dist.mjs hello-world
+      
+      - name: Compile demo-store
+        run: |
           node scripts/compile-template-for-dist.mjs demo-store
 
       - name: Update templates in the dist branch
         run: |
+          git status
           git show-ref
           git config user.email "hydrogen@shopify.com"
           git config user.name "Hydrogen Bot"
