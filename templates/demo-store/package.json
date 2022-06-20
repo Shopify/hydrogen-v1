@@ -1,6 +1,6 @@
 {
-  "name": "demo-store-neue",
-  "description": "Hello world template for @shopify/hydrogen",
+  "name": "demo-store",
+  "description": "Demo store template for @shopify/hydrogen",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
