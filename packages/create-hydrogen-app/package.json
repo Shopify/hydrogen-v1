@@ -17,6 +17,6 @@
     "template-*"
   ],
   "scripts": {
-    "prepack": "node ./scripts/tmp-copy-template-from-dev.js"
+    "prepack": "node ./scripts/tmp-copy-template-from-dev.mjs"
   }
 }

@@ -1,28 +1,27 @@
 /* eslint-disable no-case-declarations */
 import rimraf from 'rimraf';
-import {resolve, basename, sep, extname, relative} from 'path';
+import {resolve, basename, sep, extname} from 'path';
 import fs from 'fs-extra';
 import glob from 'fast-glob';
 import ts from 'typescript';
 import prettier from 'prettier';
 
-(async () => {
-  const [template] = process.argv.slice(2);
-
+export async function compileTemplate(
+  template = 'demo-store',
+  {root, destination} = {}
+) {
   if (!template) {
     throw new Error('No template specified');
   }
 
-  const JSTemplateDirectory = resolve(
-    process.cwd(),
-    'templates',
-    `${template}-js`
-  );
-  const TSTemplateDirectory = resolve(
-    process.cwd(),
-    'templates',
-    `${template}-ts`
-  );
+  const JSTemplateDirectory = destination
+    ? resolve(destination)
+    : resolve(process.cwd(), 'templates', `${template}-js`);
+
+  const TSTemplateDirectory = root
+    ? resolve(root, template)
+    : resolve(process.cwd(), 'templates', template);
+
   const globPath = [TSTemplateDirectory, '**', '/!(*.d)'].join(sep);
   const files = glob.sync(globPath, {
     nosort: true,
@@ -37,8 +36,9 @@ import prettier from 'prettier';
     TSTemplateDirectory,
     JSTemplateDirectory
   );
+
   await Promise.all(files.map(processor));
-})();
+}
 
 async function createProcessor(from, to) {
   const tsConfig = await fs.readFile(resolve(from, 'tsconfig.json'), 'utf8');
@@ -109,17 +109,11 @@ async function createProcessor(from, to) {
       case 'yarn-error.log':
         return;
       case 'README.md':
-        const banner = `**Note:** This is a generated template. The TypeScript source code for this is in \`${relative(
-          process.cwd(),
-          from
-        )}\`. Edits to all files in this directory will be overwritten.`;
-
         content = content
           .replace('TypeScript', 'JavaScript')
           .replace('typescript', 'javascript')
           .replace('.ts', '.js')
           .replace('-ts', '-js');
-        content = `${banner}\n\n${content}`;
         break;
       case 'package.json':
         const packageJSON = JSON.parse(content);
@@ -183,3 +177,4 @@ async function format(content, path) {
 
   return formattedContent;
 }
+/* eslint-enable no-case-declarations */
