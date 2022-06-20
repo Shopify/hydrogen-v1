@@ -2,16 +2,18 @@ import {Link, useUrl, useCart} from '@shopify/hydrogen';
 import {useWindowScroll} from 'react-use';
 
 import {
-  CartDetails,
-  Drawer,
   Heading,
   IconAccount,
   IconBag,
   IconMenu,
   IconSearch,
   Input,
-  useDrawer,
 } from '~/components';
+
+import {CartDrawer} from './CartDrawer.client';
+import {MenuDrawer} from './MenuDrawer.client';
+import {useDrawer} from './Drawer.client';
+
 import type {EnhancedMenu} from '~/lib/utils';
 
 /**
@@ -19,35 +21,39 @@ import type {EnhancedMenu} from '~/lib/utils';
  */
 export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
   const {pathname} = useUrl();
-  const {isOpen, openDrawer, closeDrawer} = useDrawer();
 
   const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
-  const countryCode = localeMatch ? localeMatch[1] : null;
+  const countryCode = localeMatch ? localeMatch[1] : undefined;
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 
+  const {
+    isOpen: isCartOpen,
+    openDrawer: openCart,
+    closeDrawer: closeCart,
+  } = useDrawer();
+
+  const {
+    isOpen: isMenuOpen,
+    openDrawer: openMenu,
+    closeDrawer: closeMenu,
+  } = useDrawer();
+
   return (
     <>
-      <Drawer open={isOpen} onClose={closeDrawer} heading="Cart">
-        <div className="grid">
-          <Drawer.Title>
-            <h2 className="sr-only">Cart Drawer</h2>
-          </Drawer.Title>
-          <CartDetails onClose={closeDrawer} />
-        </div>
-      </Drawer>
+      <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
+      <MenuDrawer isOpen={isMenuOpen} onClose={closeMenu} menu={menu!} />
       <DesktopHeader
-        countryCode={countryCode}
         isHome={isHome}
-        menu={menu}
-        openDrawer={openDrawer}
         title={title}
+        menu={menu}
+        openCart={openCart}
       />
       <MobileHeader
-        countryCode={countryCode}
         isHome={isHome}
-        openDrawer={openDrawer}
         title={title}
+        openCart={openCart}
+        openMenu={openMenu}
       />
     </>
   );
@@ -57,12 +63,14 @@ function MobileHeader({
   countryCode,
   title,
   isHome,
-  openDrawer,
+  openCart,
+  openMenu,
 }: {
   countryCode?: string | null;
   title: string;
   isHome: boolean;
-  openDrawer: () => void;
+  openCart: () => void;
+  openMenu: () => void;
 }) {
   const styles = {
     button: 'relative flex items-center justify-center w-8 h-8',
@@ -76,7 +84,7 @@ function MobileHeader({
   return (
     <header role="banner" className={styles.container}>
       <div className="flex items-center justify-start w-full gap-4">
-        <button className={styles.button}>
+        <button onClick={openMenu} className={styles.button}>
           <IconMenu />
         </button>
         <form
@@ -113,7 +121,7 @@ function MobileHeader({
         <Link to={'/account'} className={styles.button}>
           <IconAccount />
         </Link>
-        <button onClick={openDrawer} className={styles.button}>
+        <button onClick={openCart} className={styles.button}>
           <IconBag />
           <CartBadge dark={isHome} />
         </button>
@@ -126,14 +134,14 @@ function DesktopHeader({
   countryCode,
   isHome,
   menu,
+  openCart,
   title,
-  openDrawer,
 }: {
   countryCode?: string | null;
   isHome: boolean;
+  openCart: () => void;
   menu?: EnhancedMenu;
   title: string;
-  openDrawer: () => void;
 }) {
   const {y} = useWindowScroll();
 
@@ -186,7 +194,7 @@ function DesktopHeader({
         <Link to={'/account'} className={styles.button}>
           <IconAccount />
         </Link>
-        <button onClick={openDrawer} className={styles.button}>
+        <button onClick={openCart} className={styles.button}>
           <IconBag />
           <CartBadge dark={isHome} />
         </button>
