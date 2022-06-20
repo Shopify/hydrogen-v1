@@ -7,7 +7,7 @@ import {SHOPIFY_S, SHOPIFY_Y} from './const';
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
 const myShopifyDomain = 'myshopify.com';
-const oxygenDomain = 'myshopify.dev';
+// const oxygenDomain = 'myshopify.dev';
 
 let isInit = false;
 let microSessionCount = 0;
