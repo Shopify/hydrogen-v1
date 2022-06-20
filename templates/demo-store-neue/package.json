@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "shopify hydrogen dev",
-    "build": "lint-ts && shopify hydrogen build",
+    "build": "yarn lint-ts && shopify hydrogen build",
     "preview": "shopify hydrogen preview",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "lint-ts": "tsc --noEmit"
@@ -45,7 +45,6 @@
     "title": "^3.4.4",
     "ts-node": "^10.8.0",
     "turbo": "^1.2.8",
-    "typescript": "^4.7.2",
     "typographic-base": "^1.0.4",
     "vite": "^2.9.0"
   }
