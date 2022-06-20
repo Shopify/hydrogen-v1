@@ -14,7 +14,7 @@ export function Heading({
   as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
-  format?: string;
+  format?: boolean;
   size?: 'display' | 'heading' | 'lead' | 'copy';
   width?: 'default' | 'narrow' | 'wide';
 }) {
