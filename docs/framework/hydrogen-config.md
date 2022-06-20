@@ -45,6 +45,7 @@ The following groupings of configuration properties can exist in Hydrogen:
 - [`serverAnalyticsConnectors`](#serveranalyticsconnectors)
 - [`logger`](#logger)
 - [`strictMode`](#strictmode)
+- [`poweredByHeader`](#poweredbyheader)
 
 ### `routes`
 
@@ -252,6 +253,20 @@ export default defineConfig({
 
 > Caution:
 > If you turn off strict mode, then we recommended that you still include the `StrictMode` component at as high of a level as possible in your React tree to catch errors.
+
+### `poweredByHeader`
+
+By default, hydrogen responds with the `x-powered-by: Shopify-Hydrogen` header. Disable this by adding `poweredByHeader: false` to your config:
+
+{% codeblock file, filename: 'hydrogen.config.ts' %}
+
+```tsx
+export default defineConfig({
+  poweredByHeader: false,
+});
+```
+
+{% endcodeblock %}
 
 ## Changing the configuration file location
 

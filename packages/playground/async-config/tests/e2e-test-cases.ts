@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 type TestOptions = {
   getServerUrl: () => string;
   isWorker?: boolean;
@@ -43,6 +45,11 @@ export default async function testCases({
 
     await page.goto(getServerUrl() + '/es/products');
     expect(await page.url()).toContain('/es/productos');
+  });
+
+  it('does not x-powered-by header when disabled', async () => {
+    const response = await fetch(getServerUrl() + '/');
+    expect(response.headers.has('x-powered-by')).toBe(false);
   });
 
   if (!isBuild) {

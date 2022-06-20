@@ -226,6 +226,11 @@ export default async function testCases({
     ]);
   });
 
+  it('returns x-powered-by header', async () => {
+    const response = await fetch(getServerUrl() + '/');
+    expect(response.headers.get('x-powered-by')).toBe('Shopify-Hydrogen');
+  });
+
   it('properly escapes props in the SSR flight script chunks', async () => {
     await page.goto(getServerUrl() + '/escaping');
     expect(await page.textContent('body')).toContain(
