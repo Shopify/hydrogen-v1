@@ -57,9 +57,6 @@ export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
 
   return (
     <Layout>
-      <Head>
-        <link rel="stylesheet" href="/src/styles/custom-font.css" />
-      </Head>
       <Suspense>
         {/* @ts-expect-error Blog article types are not yet supported by TS */}
         <Seo type="page" data={articles} />
