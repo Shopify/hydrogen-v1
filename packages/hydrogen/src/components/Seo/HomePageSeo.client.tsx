@@ -26,10 +26,7 @@ export function HomePageSeo({
 
   return (
     <>
-      <Head
-        defaultTitle={title ?? ''}
-        titleTemplate={titleTemplate ?? `%s - ${title}`}
-      >
+      <Head defaultTitle={title ?? ''} titleTemplate={titleTemplate ?? `%s`}>
         <meta property="og:url" content={url} />
 
         <script type="application/ld+json">
