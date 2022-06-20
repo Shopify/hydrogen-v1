@@ -4,12 +4,10 @@ use custom fonts as well. These are often implemented without critical
 performance optimizations.
 
 Below, you'll find the markup needed to optimally render a pair of web fonts 
-that we will use on our journal articles. This typeface, Faustina, 
-can be found at: https://fraunces.undercase.xyz/, as well as on 
-Google Fonts: https://fonts.google.com/specimen/Fraunces. We included these
-locally since you’ll most likely be using commercially licensed fonts.
-
-To learn more about variable fonts, see: https://web.dev/variable-fonts/
+that we will use on our journal articles. This typeface, IBM Plex, 
+can be found at: https://www.ibm.com/plex/, as well as on 
+Google Fonts: https://fonts.google.com/specimen/IBM+Plex+Serif. We included 
+these locally since you’ll most likely be using commercially licensed fonts.
 
 When implementing a custom font, specifying the Unicode range you need,
 and using `font-display: swap` will help you improve your performance.
