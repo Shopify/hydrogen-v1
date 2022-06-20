@@ -25,6 +25,11 @@ function Drawer({
   openFrom: 'right' | 'left';
   children: React.ReactNode;
 }) {
+  const offScreen = {
+    right: 'translate-x-full',
+    left: '-translate-x-full',
+  };
+
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -50,23 +55,11 @@ function Drawer({
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-300"
-                enterFrom={`
-                  ${openFrom === 'right' ? 'translate-x-full' : ''}
-                  ${openFrom === 'left' ? '-translate-x-full' : ''}
-                }`}
-                enterTo={`
-                  ${openFrom === 'right' ? 'translate-x-0' : ''}
-                  ${openFrom === 'left' ? 'translate-x-0' : ''}
-                }`}
+                enterFrom={offScreen[openFrom]}
+                enterTo="translate-x-0"
                 leave="transform transition ease-in-out duration-300"
-                leaveFrom={`
-                  ${openFrom === 'right' ? 'translate-x-0' : ''}
-                  ${openFrom === 'left' ? 'translate-x-0' : ''}
-                }`}
-                leaveTo={`
-                  ${openFrom === 'right' ? 'translate-x-full' : ''}
-                  ${openFrom === 'left' ? '-translate-x-full' : ''}
-                }`}
+                leaveFrom="translate-x-0"
+                leaveTo={offScreen[openFrom]}
               >
                 <Dialog.Panel className="w-screen h-screen max-w-lg text-left align-middle transition-all transform shadow-xl bg-contrast">
                   <header
