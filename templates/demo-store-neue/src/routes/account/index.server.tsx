@@ -27,6 +27,7 @@ import type {
   Collection,
   CollectionConnection,
   Customer,
+  MailingAddress,
   Order,
   Product,
   ProductConnection,
@@ -61,11 +62,13 @@ export default function Account({response}: HydrogenRouteProps) {
 
   if (!customer) return response.redirect('/account/login');
 
-  const addresses = flattenConnection(customer.addresses).map((address) => ({
-    ...address,
-    id: address.id!.substring(0, address.id!.lastIndexOf('?')),
-    originalId: address.id,
-  }));
+  const addresses = flattenConnection<MailingAddress>(customer.addresses).map(
+    (address) => ({
+      ...address,
+      id: address.id!.substring(0, address.id!.lastIndexOf('?')),
+      originalId: address.id,
+    }),
+  );
 
   const defaultAddress = customer?.defaultAddress?.id?.substring(
     0,
