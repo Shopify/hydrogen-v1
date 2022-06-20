@@ -29,8 +29,8 @@ jobs:
         run: |
           git add .
           git status
-          git commit -m "Update templates for dist"
-          git show-ref
           git config user.email "hydrogen@shopify.com"
           git config user.name "Hydrogen Bot"
+          git show-ref
+          git commit -m "Update templates for dist"
           git push origin HEAD:dist --force
