@@ -1,5 +1,6 @@
-import {useShopQuery, useLocalization, gql} from '@shopify/hydrogen';
+import {useShopQuery, useLocalization, gql, Seo} from '@shopify/hydrogen';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
+import {Suspense} from 'react';
 
 import {PageHeader, Section, Grid} from '~/components';
 import {Layout, CollectionCard} from '~/components/index.server';
@@ -25,6 +26,14 @@ export default function Collections() {
 
   return (
     <Layout>
+      <Suspense>
+        <Seo
+          type="page"
+          data={{
+            title: 'All Collections',
+          }}
+        />
+      </Suspense>
       <PageHeader heading="Collections" />
       <Section>
         <Grid items={collections.length === 3 ? 3 : 2}>

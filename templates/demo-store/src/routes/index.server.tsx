@@ -92,6 +92,7 @@ function SeoForHomepage() {
       data={{
         title,
         description,
+        titleTemplate: '%s · Powered by Hydrogen',
       }}
     />
   );

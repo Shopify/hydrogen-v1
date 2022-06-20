@@ -4,12 +4,14 @@ import {
   useLocalization,
   type HydrogenRequest,
   type HydrogenApiRouteOptions,
+  Seo,
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {ProductGrid, PageHeader, Section} from '~/components';
 import {Layout} from '~/components/index.server';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
+import {Suspense} from 'react';
 
 const pageBy = 12;
 
@@ -33,6 +35,14 @@ export default function AllProducts() {
 
   return (
     <Layout>
+      <Suspense>
+        <Seo
+          type="page"
+          data={{
+            title: 'All Products',
+          }}
+        />
+      </Suspense>
       <PageHeader heading="All Products" variant="allCollections" />
       <Section>
         <ProductGrid
