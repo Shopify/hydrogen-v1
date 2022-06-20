@@ -16,45 +16,41 @@ export function CartLineItem() {
   const {id: lineId, quantity, merchandise} = useCartLine();
 
   return (
-    <li key={lineId} className="flex">
-      <div className="flex-shrink-0">
+    <li key={lineId} className="flex gap-4">
+      <div className="flex-shrink">
         <Image
           data={merchandise.image as ImageType}
           className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
         />
       </div>
 
-      <div className="flex justify-between flex-1 ml-4 sm:ml-6">
-        <div className="relative grid gap-1">
+      <div className="flex justify-between flex-grow">
+        <div className="grid gap-2">
           <Heading as="h3" size="copy">
             <Link to={`/products/${merchandise.product.handle}`}>
               {merchandise.product.title}
             </Link>
           </Heading>
 
-          <div className="flex flex-col justify-start mt-2">
+          <div className="grid pb-2">
             {(merchandise?.selectedOptions || []).map((option) => (
-              <Text color="subtle" key={option.name} className="last:mb-4">
+              <Text color="subtle" key={option.name}>
                 {option.name}: {option.value}
               </Text>
             ))}
           </div>
 
-          <div className="flex items-center gap-2 mt-auto">
-            <div className="flex justify-start text-copy mr-4">
+          <div className="flex items-center gap-2">
+            <div className="flex justify-start text-copy">
               <CartLineQuantityAdjust lineId={lineId} quantity={quantity} />
             </div>
             <button
               type="button"
               onClick={() => linesRemove([lineId])}
-              className="h-[40px] w-[40px] border rounded flex justify-center items-center"
+              className="flex items-center justify-center w-10 h-10 border rounded"
             >
               <span className="sr-only">Remove</span>
-              <IconRemove
-                viewBox="0 0 13 14"
-                className="w-[13px] h-[14px]"
-                aria-hidden="true"
-              />
+              <IconRemove aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -78,22 +74,19 @@ function CartLineQuantityAdjust({
       <label htmlFor={`quantity-${lineId}`} className="sr-only">
         Quantity, {quantity}
       </label>
-      <div className="flex items-center overflow-auto border rounded">
+      <div className="flex items-center border rounded">
         <CartLineQuantityAdjustButton
           adjust="decrease"
           aria-label="Decrease quantity"
-          className="h-[40px] flex justify-center items-center px-3 py-[0.125rem] transition text-primary/40 hover:text-primary disabled:pointer-events-all disabled:cursor-wait"
+          className="w-10 h-10 transition text-primary/40 hover:text-primary disabled:cursor-wait"
         >
           &#8722;
         </CartLineQuantityAdjustButton>
-        <CartLineQuantity
-          as="div"
-          className="h-[40px] flex justify-center items-center text-center py-[0.125rem] px-2 text-primary/90"
-        />
+        <CartLineQuantity as="div" className="px-2 text-center" />
         <CartLineQuantityAdjustButton
           adjust="increase"
           aria-label="Increase quantity"
-          className="h-[40px] flex justify-center items-center px-3 py-[0.125rem] transition text-primary/40 hover:text-primary disabled:pointer-events-all disabled:cursor-wait"
+          className="w-10 h-10 transition text-primary/40 hover:text-primary disabled:cursor-wait"
         >
           &#43;
         </CartLineQuantityAdjustButton>
