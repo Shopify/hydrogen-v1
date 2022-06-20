@@ -137,7 +137,7 @@ function buildStorefrontPageViewPayload(payload: any): any {
 
   formattedData = addDataIf(
     {
-      isMerchantRequest: isMerchantRequest(),
+      isMerchantRequest: false, //isMerchantRequest(),
     },
     formattedData
   );
