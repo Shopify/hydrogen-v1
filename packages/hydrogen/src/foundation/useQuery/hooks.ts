@@ -13,6 +13,7 @@ import {
 } from '../Cache/cache-sub-request';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 import {CacheShort, NO_STORE} from '../Cache/strategies';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
 
 export interface HydrogenUseQueryOptions {
   /** The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you
@@ -101,10 +102,7 @@ function cachedQueryFnBuilder<T>(
   /**
    * Attempt to read the query from cache. If it doesn't exist or if it's stale, regenerate it.
    */
-  async function useCachedQueryFn() {
-    // Call this hook before running any async stuff
-    // to prevent losing the current React cycle.
-    const request = useServerRequest();
+  async function useCachedQueryFn(request: HydrogenRequest) {
     const log = getLoggerWithContext(request);
 
     const cacheResponse = await getItemFromCache(key);

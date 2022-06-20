@@ -17,7 +17,7 @@ import {LocalizationContextValue} from '../../components/LocalizationProvider/Lo
 
 export type PreloadQueryEntry = {
   key: QueryKey;
-  fetcher: () => Promise<unknown>;
+  fetcher: (request: HydrogenRequest) => Promise<unknown>;
   preload?: PreloadOptions;
 };
 export type PreloadQueriesByURL = Map<string, PreloadQueryEntry>;

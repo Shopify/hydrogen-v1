@@ -1,10 +1,7 @@
 import React, {createContext, useContext} from 'react';
 import {getTime} from '../../utilities/timing';
 import {hashKey} from '../../utilities/hash';
-import type {
-  PreloadQueriesByURL,
-  HydrogenRequest,
-} from '../HydrogenRequest/HydrogenRequest.server';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
 import type {QueryKey} from '../../types';
 import {collectQueryTimings} from '../../utilities/log';
 
@@ -20,7 +17,7 @@ requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
 
 type ServerRequestProviderProps = {
   request: HydrogenRequest;
-  children: JSX.Element;
+  children: React.ReactNode;
 };
 
 function getInternalReactDispatcher() {
@@ -63,7 +60,7 @@ export function ServerRequestProvider({
 
     requestCache.set(requestCacheRSC.key, request);
 
-    return children;
+    return <>{children}</>;
   }
 
   // Use a normal provider in SSR to make the request object
@@ -103,7 +100,7 @@ type RequestCacheResult<T> =
  */
 export function useRequestCacheData<T>(
   key: QueryKey,
-  fetcher: () => T | Promise<T>
+  fetcher: (request: HydrogenRequest) => T | Promise<T>
 ): RequestCacheResult<T> {
   const request = useServerRequest();
   const cache = request.ctx.cache;
@@ -121,7 +118,7 @@ export function useRequestCacheData<T>(
 
       if (!promise) {
         const startApiTime = getTime();
-        const maybePromise = fetcher();
+        const maybePromise = fetcher(request);
 
         if (!(maybePromise instanceof Promise)) {
           result = {data: maybePromise};
@@ -154,11 +151,9 @@ export function useRequestCacheData<T>(
   return result as RequestCacheResult<T>;
 }
 
-export function preloadRequestCacheData(
-  request: HydrogenRequest,
-  preloadQueries?: PreloadQueriesByURL
-): void {
-  const cache = request.ctx.cache;
+export function preloadRequestCacheData(request: HydrogenRequest): void {
+  const preloadQueries = request.getPreloadQueries();
+  const {cache} = request.ctx;
 
   preloadQueries?.forEach((preloadQuery, cacheKey) => {
     collectQueryTimings(request, preloadQuery.key, 'preload');
@@ -174,7 +169,7 @@ export function preloadRequestCacheData(
         }
         if (!promise) {
           const startApiTime = getTime();
-          promise = preloadQuery.fetcher().then(
+          promise = preloadQuery.fetcher(request).then(
             (data) => {
               result = {data};
               collectQueryTimings(
