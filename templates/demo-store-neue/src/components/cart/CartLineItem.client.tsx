@@ -19,6 +19,9 @@ export function CartLineItem() {
     <li key={lineId} className="flex gap-4">
       <div className="flex-shrink">
         <Image
+          width={112}
+          height={112}
+          widths={[224]}
           data={merchandise.image as ImageType}
           className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
         />
