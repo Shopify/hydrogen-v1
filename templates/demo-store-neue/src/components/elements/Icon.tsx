@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-interface IconProps extends React.ComponentProps<typeof Icon> {
+interface IconDirectionProps extends React.ComponentProps<typeof Icon> {
   direction: 'up' | 'right' | 'down' | 'left';
 }
 
@@ -8,11 +8,13 @@ function Icon({
   children,
   className,
   fill = 'currentColor',
+  stroke,
   ...props
 }: {
   children?: React.ReactNode;
   className?: string;
-  fill?: any;
+  fill?: string;
+  stroke?: string;
 }) {
   return (
     <svg
@@ -20,6 +22,7 @@ function Icon({
       viewBox="0 0 20 20"
       {...props}
       fill={fill}
+      stroke={stroke}
       className={clsx('w-5 h-5', className)}
     >
       {children}
@@ -27,62 +30,39 @@ function Icon({
   );
 }
 
-export function AccountIcon(props: IconProps) {
+export function AccountIcon({...props}: React.ComponentProps<typeof Icon>) {
   return (
     <Icon {...props}>
       <title>Accounts</title>
-      <circle cx="20" cy="10.5" r="4.5" stroke="currentColor" strokeWidth="2" />
+      <circle cx="20" cy="10.5" r="4.5" strokeWidth="2" />
       <path
         d="M20 19C13.4375 19 9.5 20.2857 9.5 28H30.5C30.5 20.2857 26.5625 19 20 19Z"
-        stroke="currentColor"
         strokeWidth="2"
       />
     </Icon>
   );
 }
 
-export function IconMenu(props: IconProps) {
+export function IconMenu({...props}: React.ComponentProps<typeof Icon>) {
   return (
-    <Icon {...props}>
+    <Icon {...props} stroke={props.stroke || 'currentColor'}>
       <title>Menu</title>
-      <line
-        x1="3"
-        y1="6.375"
-        x2="17"
-        y2="6.375"
-        stroke="currentColor"
-        strokeWidth="1.25"
-      />
-      <line
-        x1="3"
-        y1="10.375"
-        x2="17"
-        y2="10.375"
-        stroke="currentColor"
-        strokeWidth="1.25"
-      />
-      <line
-        x1="3"
-        y1="14.375"
-        x2="17"
-        y2="14.375"
-        stroke="currentColor"
-        strokeWidth="1.25"
-      />
+      <line x1="3" y1="6.375" x2="17" y2="6.375" strokeWidth="1.25" />
+      <line x1="3" y1="10.375" x2="17" y2="10.375" strokeWidth="1.25" />
+      <line x1="3" y1="14.375" x2="17" y2="14.375" strokeWidth="1.25" />
     </Icon>
   );
 }
 
-export function IconClose(props: IconProps) {
+export function IconClose({...props}: React.ComponentProps<typeof Icon>) {
   return (
-    <Icon {...props}>
+    <Icon {...props} stroke={props.stroke || 'currentColor'}>
       <title>Close</title>
       <line
         x1="4.44194"
         y1="4.30806"
         x2="15.7556"
         y2="15.6218"
-        stroke="currentColor"
         strokeWidth="1.25"
       />
       <line
@@ -90,14 +70,13 @@ export function IconClose(props: IconProps) {
         x2="16"
         y2="-0.625"
         transform="matrix(-0.707107 0.707107 0.707107 0.707107 16 4.75)"
-        stroke="currentColor"
         strokeWidth="1.25"
       />
     </Icon>
   );
 }
 
-export function IconArrow({direction = 'right'}: IconProps) {
+export function IconArrow({direction = 'right'}: IconDirectionProps) {
   let rotate;
 
   switch (direction) {
@@ -120,12 +99,12 @@ export function IconArrow({direction = 'right'}: IconProps) {
   return (
     <Icon className={`w-5 h-5 ${rotate}`}>
       <title>Arrow</title>
-      <path d="M7 3L14 10L7 17" stroke="currentColor" strokeWidth="1.25" />
+      <path d="M7 3L14 10L7 17" strokeWidth="1.25" />
     </Icon>
   );
 }
 
-export function IconCaret({direction = 'down', ...props}: IconProps) {
+export function IconCaret({direction = 'down', ...props}: IconDirectionProps) {
   let rotate;
 
   switch (direction) {
@@ -152,26 +131,22 @@ export function IconCaret({direction = 'down', ...props}: IconProps) {
       fill="transparent"
     >
       <title>Caret</title>
-      <path d="M14 8L10 12L6 8" stroke="currentColor" strokeWidth="1.25" />
+      <path d="M14 8L10 12L6 8" strokeWidth="1.25" />
     </Icon>
   );
 }
 
-export function IconSelect(props: IconProps) {
+export function IconSelect({...props}: React.ComponentProps<typeof Icon>) {
   return (
     <Icon {...props}>
       <title>Select</title>
-      <path d="M7 8.5L10 6.5L13 8.5" stroke="currentColor" strokeWidth="1.25" />
-      <path
-        d="M13 11.5L10 13.5L7 11.5"
-        stroke="currentColor"
-        strokeWidth="1.25"
-      />
+      <path d="M7 8.5L10 6.5L13 8.5" strokeWidth="1.25" />
+      <path d="M13 11.5L10 13.5L7 11.5" strokeWidth="1.25" />
     </Icon>
   );
 }
 
-export function IconBag(props: IconProps) {
+export function IconBag({...props}: React.ComponentProps<typeof Icon>) {
   return (
     <Icon {...props}>
       <title>Bag</title>
@@ -183,7 +158,7 @@ export function IconBag(props: IconProps) {
   );
 }
 
-export function IconAccount(props: IconProps) {
+export function IconAccount({...props}: React.ComponentProps<typeof Icon>) {
   return (
     <Icon {...props}>
       <title>Account</title>
@@ -195,7 +170,7 @@ export function IconAccount(props: IconProps) {
   );
 }
 
-export function IconHelp(props: IconProps) {
+export function IconHelp({...props}: React.ComponentProps<typeof Icon>) {
   return (
     <Icon {...props}>
       <title>Help</title>
@@ -204,7 +179,7 @@ export function IconHelp(props: IconProps) {
   );
 }
 
-export function IconSearch(props: IconProps) {
+export function IconSearch({...props}: React.ComponentProps<typeof Icon>) {
   return (
     <Icon {...props}>
       <title>Search</title>
@@ -216,19 +191,12 @@ export function IconSearch(props: IconProps) {
   );
 }
 
-export function IconCheck(props: IconProps) {
+export function IconCheck({...props}: React.ComponentProps<typeof Icon>) {
   return (
     <Icon {...props} fill="transparent">
       <title>Check</title>
-      <circle
-        cx="10"
-        cy="10"
-        r="7.25"
-        stroke="currentColor"
-        strokeWidth="1.25"
-      />
+      <circle cx="10" cy="10" r="7.25" strokeWidth="1.25" />
       <path
-        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.5"
@@ -238,15 +206,28 @@ export function IconCheck(props: IconProps) {
   );
 }
 
-export function IconRemove(props: IconProps) {
+export function IconRemove({...props}: React.ComponentProps<typeof Icon>) {
   return (
-    <Icon {...props}>
+    <Icon {...props} fill="transparent" stroke={props.stroke || 'currentColor'}>
       <title>Remove</title>
       <path
-        transform="translate(4 4)"
-        d="M1.0498 0.75C0.917196 0.75 0.790019 0.802679 0.696251 0.896447C0.602483 0.990215 0.549805 1.11739 0.549805 1.25V7.25C0.549805 7.38261 0.602483 7.50979 0.696251 7.60355C0.790019 7.69732 0.917196 7.75 1.0498 7.75C1.18241 7.75 1.30959 7.69732 1.40336 7.60355C1.49713 7.50979 1.5498 7.38261 1.5498 7.25V1.25C1.5498 1.11739 1.49713 0.990215 1.40336 0.896447C1.30959 0.802679 1.18241 0.75 1.0498 0.75ZM3.9498 0.75C3.8172 0.75 3.69002 0.802679 3.59625 0.896447C3.50248 0.990215 3.4498 1.11739 3.4498 1.25V7.25C3.4498 7.38261 3.50248 7.50979 3.59625 7.60355C3.69002 7.69732 3.8172 7.75 3.9498 7.75C4.08241 7.75 4.20959 7.69732 4.30336 7.60355C4.39713 7.50979 4.4498 7.38261 4.4498 7.25V1.25C4.4498 1.11739 4.39713 0.990215 4.30336 0.896447C4.20959 0.802679 4.08241 0.75 3.9498 0.75Z"
+        d="M4 6H16"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      <path d="M12.5 2.5H8.97C8.93489 1.90332 8.72636 1.32986 8.37 0.85C7.94 0.32 7.3 0 6.5 0C5.7 0 5.06 0.32 4.63 0.85C4.27312 1.32958 4.06454 1.9032 4.03 2.5H0.5C0.367392 2.5 0.240215 2.55268 0.146447 2.64645C0.0526784 2.74021 0 2.86739 0 3C0 3.13261 0.0526784 3.25979 0.146447 3.35355C0.240215 3.44732 0.367392 3.5 0.5 3.5H1.75V13.5C1.75 13.78 1.97 14 2.25 14H10.75C10.8826 14 11.0098 13.9473 11.1036 13.8536C11.1973 13.7598 11.25 13.6326 11.25 13.5V3.5H12.5C12.6326 3.5 12.7598 3.44732 12.8536 3.35355C12.9473 3.25979 13 3.13261 13 3C13 2.86739 12.9473 2.74021 12.8536 2.64645C12.7598 2.55268 12.6326 2.5 12.5 2.5ZM5.41 1.48C5.64 1.19 5.99 1 6.5 1C7.01 1 7.35 1.19 7.59 1.48C7.79 1.72 7.89 2.08 7.95 2.5H5.05C5.1 2.08 5.22 1.72 5.41 1.48ZM10.25 13H2.75V3.5H10.25V13Z" />
+      <path d="M8.5 9V14" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M11.5 9V14" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M5.5 6L6 17H14L14.5 6"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8 6L8 5C8 4 8.75 3 10 3C11.25 3 12 4 12 5V6"
+        strokeWidth="1.25"
+      />
     </Icon>
   );
 }
