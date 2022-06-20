@@ -59,7 +59,7 @@ function MobileHeader({
   isHome,
   openDrawer,
 }: {
-  countryCode?: string;
+  countryCode?: string | null;
   title: string;
   isHome: boolean;
   openDrawer: () => void;
@@ -129,7 +129,7 @@ function DesktopHeader({
   title,
   openDrawer,
 }: {
-  countryCode?: string;
+  countryCode?: string | null;
   isHome: boolean;
   menu: EnhancedMenu;
   title: string;
