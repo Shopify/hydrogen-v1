@@ -35,6 +35,7 @@ module.exports = {
       },
       spacing: {
         nav: 'var(--height-nav)',
+        screen: 'var(--screen-height, 100vh)',
       },
       fontFamily: {
         sans: ['Helvetica Neue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
