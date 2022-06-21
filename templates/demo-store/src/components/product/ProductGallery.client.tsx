@@ -21,19 +21,10 @@ export function ProductGallery({
       className={`swimlane md:grid-flow-row hiddenScroll md:p-0 md:overflow-x-auto md:grid-cols-2 ${className}`}
     >
       {media.map((med, i) => {
-        let extraProps: Record<string, any> = {};
+        let mediaProps: Record<string, any> = {};
         const isFirst = i === 0;
         const isFourth = i === 3;
         const isFullWidth = i % 3 === 0;
-
-        if (med.mediaContentType === 'MODEL_3D') {
-          extraProps = {
-            interactionPromptThreshold: '0',
-            ar: true,
-            loading: ATTR_LOADING_EAGER,
-            disableZoom: true,
-          };
-        }
 
         const data = {
           ...med,
@@ -44,8 +35,39 @@ export function ProductGallery({
           },
         };
 
+        switch (med.mediaContentType) {
+          case 'IMAGE':
+            mediaProps = {
+              width: 800,
+              widths: [400, 800, 1200, 1600, 2000, 2400],
+            };
+            break;
+          case 'VIDEO':
+            mediaProps = {
+              width: '100%',
+              autoPlay: true,
+              controls: false,
+              muted: true,
+              loop: true,
+              preload: 'auto',
+            };
+            break;
+          case 'EXTERNAL_VIDEO':
+            mediaProps = {width: '100%'};
+            break;
+          case 'MODEL_3D':
+            mediaProps = {
+              width: '100%',
+              interactionPromptThreshold: '0',
+              ar: true,
+              loading: ATTR_LOADING_EAGER,
+              disableZoom: true,
+            };
+            break;
+        }
+
         if (i === 0 && med.mediaContentType === 'IMAGE') {
-          extraProps.loading = ATTR_LOADING_EAGER;
+          mediaProps.loading = ATTR_LOADING_EAGER;
         }
 
         const style = [
@@ -64,8 +86,6 @@ export function ProductGallery({
               tabIndex="0"
               className={`w-full h-full aspect-square fadeIn object-cover`}
               data={data}
-              width={med.mediaContentType === 'IMAGE' && 800}
-              widths={[400, 800, 1200, 1600, 2000, 2400]}
               sizes={
                 isFullWidth
                   ? '(min-width: 64em) 60vw, (min-width: 48em) 50vw, 90vw'
@@ -75,7 +95,7 @@ export function ProductGallery({
               options={{
                 crop: 'center',
               }}
-              {...extraProps}
+              {...mediaProps}
             />
           </div>
         );
