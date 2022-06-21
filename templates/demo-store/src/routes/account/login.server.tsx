@@ -78,9 +78,7 @@ export async function api(
     cache: CacheNone(),
   });
 
-  if (
-    data?.customerAccessTokenCreate?.customerAccessToken?.accessToken !== null
-  ) {
+  if (data?.customerAccessTokenCreate?.customerAccessToken?.accessToken) {
     await session.set(
       'customerAccessToken',
       data.customerAccessTokenCreate.customerAccessToken.accessToken,
