@@ -39,6 +39,8 @@ module.exports = {
       },
       height: {
         screen: 'var(--screen-height, 100vh)',
+        'screen-no-nav':
+          'calc(var(--screen-height, 100vh) - var(--height-nav))',
       },
       width: {
         mobileGallery: 'calc(100vw - 3rem)',
