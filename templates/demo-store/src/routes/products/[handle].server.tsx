@@ -3,7 +3,6 @@ import {
   gql,
   ProductOptionsProvider,
   Seo,
-  type Product as ProductType,
   ShopifyAnalyticsConstants,
   useLocalization,
   useRouteParams,
@@ -12,13 +11,12 @@ import {
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
-import {parseProductInfo} from '~/lib/utils';
 import {NotFound, Layout, ProductSwimlane} from '~/components/index.server';
 import {
   Heading,
+  ProductDetail,
   ProductForm,
   ProductGallery,
-  ProductInfo,
   Section,
   Text,
 } from '~/components';
@@ -31,7 +29,7 @@ export default function Product() {
   } = useLocalization();
 
   const {
-    data: {product},
+    data: {product, shop},
   } = useShopQuery({
     query: PRODUCT_QUERY,
     variables: {
@@ -46,14 +44,21 @@ export default function Product() {
     return <NotFound type="product" />;
   }
 
-  const productInfo = parseProductInfo(product);
-
   useServerAnalytics({
     shopify: {
       pageType: ShopifyAnalyticsConstants.pageType.product,
       resourceId: product.id,
     },
   });
+
+  const {media, title, vendor, description, id} = product;
+  const {shippingPolicy, refundPolicy} = shop;
+
+  function getExcerpt(text: string) {
+    const regex = /<p.*>(.*?)<\/p>/;
+    const correspondingText = regex.exec(text);
+    return correspondingText ? correspondingText[1] : '';
+  }
 
   return (
     <Layout>
@@ -62,29 +67,50 @@ export default function Product() {
       </Suspense>
       <ProductOptionsProvider data={product}>
         <Section padding="x" className="px-0">
-          <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
             <ProductGallery
-              media={product.media.nodes}
+              media={media.nodes}
               className="w-screen md:w-full lg:col-span-2"
             />
-            <section className="sticky w-full md:mx-auto max-w-xl md:max-w-[24rem] grid gap-8 p-6 md:px-0 top-nav">
-              <div className="grid gap-2">
-                <Heading as="h1" className="whitespace-normal">
-                  {product.title}
-                </Heading>
-                {product.vendor && (
-                  <Text className={'opacity-50 font-medium'}>
-                    {product.vendor}
-                  </Text>
-                )}
-              </div>
-              <ProductForm />
-              <ProductInfo data={productInfo} />
-            </section>
+            <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:h-screen md:pt-nav hiddenScroll md:overflow-y-scroll">
+              <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
+                <div className="grid gap-2">
+                  <Heading as="h1" className="whitespace-normal">
+                    {title}
+                  </Heading>
+                  {vendor && (
+                    <Text className={'opacity-50 font-medium'}>{vendor}</Text>
+                  )}
+                </div>
+                <ProductForm />
+                <div className="grid gap-4 py-4">
+                  {description && (
+                    <ProductDetail
+                      title="Product Details"
+                      content={description}
+                    />
+                  )}
+                  {shippingPolicy?.body && (
+                    <ProductDetail
+                      title="Shipping"
+                      content={getExcerpt(shippingPolicy.body)}
+                      learnMore={`/policies/${shippingPolicy.handle}`}
+                    />
+                  )}
+                  {refundPolicy?.body && (
+                    <ProductDetail
+                      title="Returns"
+                      content={getExcerpt(refundPolicy.body)}
+                      learnMore={`/policies/${refundPolicy.handle}`}
+                    />
+                  )}
+                </div>
+              </section>
+            </div>
           </div>
         </Section>
         <Suspense>
-          <ProductSwimlane title="Related Products" data={product.id} />
+          <ProductSwimlane title="Related Products" data={id} />
         </Suspense>
       </ProductOptionsProvider>
     </Layout>
@@ -126,10 +152,6 @@ const PRODUCT_QUERY = gql`
         nodes {
           id
           availableForSale
-          compareAtPriceV2 {
-            amount
-            currencyCode
-          }
           selectedOptions {
             name
             value
@@ -145,6 +167,10 @@ const PRODUCT_QUERY = gql`
             amount
             currencyCode
           }
+          compareAtPriceV2 {
+            amount
+            currencyCode
+          }
           sku
           title
           unitPrice {
@@ -156,6 +182,16 @@ const PRODUCT_QUERY = gql`
       seo {
         description
         title
+      }
+    }
+    shop {
+      shippingPolicy {
+        body
+        handle
+      }
+      refundPolicy {
+        body
+        handle
       }
     }
   }

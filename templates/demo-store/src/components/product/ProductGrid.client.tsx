@@ -1,7 +1,7 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
 import {Link, flattenConnection} from '@shopify/hydrogen';
 
-import {Grid, ProductCard} from '~/components';
+import {Button, Grid, ProductCard} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 import type {Collection, Product} from '@shopify/hydrogen/storefront-api-types';
 
@@ -58,8 +58,7 @@ export function ProductGrid({
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
-      threshold: 0.1,
-      rootMargin: '100px',
+      rootMargin: '100%',
     });
 
     const nextButton = nextButtonRef.current;
@@ -95,14 +94,19 @@ export function ProductGrid({
       </Grid>
 
       {nextPage && (
-        <button
-          className={`bg-white border dark:text-black border-gray-50 font-medium p-2 disabled:bg-gray-50`}
-          disabled={pending}
-          onClick={fetchProducts}
+        <div
+          className="flex items-center justify-center mt-6"
           ref={nextButtonRef}
         >
-          {pending ? 'Loading...' : 'Load more products'}
-        </button>
+          <Button
+            variant="secondary"
+            disabled={pending}
+            onClick={fetchProducts}
+            width="full"
+          >
+            {pending ? 'Loading...' : 'Load more products'}
+          </Button>
+        </div>
       )}
     </>
   );

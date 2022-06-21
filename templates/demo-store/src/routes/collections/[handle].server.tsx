@@ -15,7 +15,7 @@ import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {PageHeader, ProductGrid, Section, Text} from '~/components';
 import {NotFound, Layout} from '~/components/index.server';
 
-const pageBy = 4;
+const pageBy = 48;
 
 export default function Collection({params}: HydrogenRouteProps) {
   const {handle} = params;
@@ -54,13 +54,15 @@ export default function Collection({params}: HydrogenRouteProps) {
         <Seo type="collection" data={collection} />
       </Suspense>
       <PageHeader heading={collection.title}>
-        <div className="flex items-baseline justify-between w-full">
-          <div>
-            <Text format width="narrow" as="p" className="inline-block">
-              {collection.description}
-            </Text>
+        {collection?.description && (
+          <div className="flex items-baseline justify-between w-full">
+            <div>
+              <Text format width="narrow" as="p" className="inline-block">
+                {collection.description}
+              </Text>
+            </div>
           </div>
-        </div>
+        )}
       </PageHeader>
       <Section>
         <ProductGrid

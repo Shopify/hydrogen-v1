@@ -4,7 +4,7 @@ import type {
   OrderLineItem,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {Text} from '~/components';
+import {Heading, Text} from '~/components';
 import {statusMessage} from '~/lib/utils';
 
 export function OrderCard({order}: {order: Order}) {
@@ -13,28 +13,35 @@ export function OrderCard({order}: {order: Order}) {
   const lineItems = flattenConnection<OrderLineItem>(order?.lineItems);
 
   return (
-    <li className="flex flex-col justify-around col-span-1 text-center border border-gray-200 divide-y divide-gray-200 rounded">
+    <li className="grid text-center border rounded">
       <Link
-        className="flex flex-row items-center flex-1 gap-4 p-6 lg:p-8"
+        className="grid items-center gap-4 p-4 md:gap-6 md:p-6 md:grid-cols-2"
         to={`/account/orders/${legacyOrderId}`}
       >
         {lineItems[0].variant?.image && (
-          <Image
-            width={168}
-            height={168}
-            widths={[336]}
-            key={lineItems[0].variant?.image?.url}
-            className="flex w-32 h-32 xl:w-64 xl:h-64 lg:w-42 lg:h-42 md:w-36 md:h-36"
-            alt={lineItems[0].variant?.image?.altText ?? 'Order image'}
-            // @ts-expect-error Stock line item variant image type has `url` as optional
-            data={lineItems[0].variant?.image}
-          />
+          <div className="card-image aspect-square bg-primary/5">
+            <Image
+              width={168}
+              height={168}
+              widths={[336]}
+              className="w-full fadeIn cover"
+              alt={lineItems[0].variant?.image?.altText ?? 'Order image'}
+              // @ts-expect-error Stock line item variant image type has `url` as optional
+              data={lineItems[0].variant?.image}
+              loaderOptions={{scale: 2, crop: 'center'}}
+            />
+          </div>
         )}
-        <div className="flex-col justify-center text-left">
-          <Text as="h3" className="mb-1 font-bold" size="copy" color="primary">
-            {lineItems[0].title}{' '}
-            {lineItems.length > 1 && `+ ${lineItems.length - 1} more`}
-          </Text>
+        <div
+          className={`flex-col justify-center text-left ${
+            !lineItems[0].variant?.image && 'md:col-span-2'
+          }`}
+        >
+          <Heading as="h3" format size="copy">
+            {lineItems.length > 1
+              ? `${lineItems[0].title} +${lineItems.length - 1} more`
+              : lineItems[0].title}
+          </Heading>
           <dl className="grid grid-gap-1">
             <dt className="sr-only">Order ID</dt>
             <dd>
@@ -54,7 +61,7 @@ export function OrderCard({order}: {order: Order}) {
                 className={`px-3 py-1 text-xs font-medium rounded-full ${
                   order.fulfillmentStatus === 'FULFILLED'
                     ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-200 text-gray-500'
+                    : 'bg-primary/5 text-primary/50'
                 }`}
               >
                 <Text size="fine">
@@ -65,15 +72,15 @@ export function OrderCard({order}: {order: Order}) {
           </dl>
         </div>
       </Link>
-      <div className="flex -mt-px divide-x divide-gray-200">
-        <div className="flex flex-1 w-0">
-          <Link
-            to={`/account/orders/${legacyOrderId}`}
-            className="relative inline-flex items-center justify-center flex-1 w-0 py-4 -mr-px text-sm font-medium text-gray-700 border border-transparent rounded-bl-lg hover:text-gray-500 dark:text-gray-200"
-          >
-            <span className="ml-3">View Details</span>
-          </Link>
-        </div>
+      <div className="self-end border-t">
+        <Link
+          className="block w-full p-2 text-center"
+          to={`/account/orders/${legacyOrderId}`}
+        >
+          <Text color="subtle" className="ml-3">
+            View Details
+          </Text>
+        </Link>
       </div>
     </li>
   );

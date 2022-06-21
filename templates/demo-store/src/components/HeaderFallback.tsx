@@ -22,8 +22,8 @@ export function HeaderFallback({isHome}: {isHome?: boolean}) {
 function Box({wide, isHome}: {wide?: boolean; isHome?: boolean}) {
   return (
     <div
-      className={`h-6 ${wide ? 'w-32' : 'w-16'} ${
-        isHome ? 'bg-gray-600' : 'bg-gray-200'
+      className={`h-6 rounded-sm ${wide ? 'w-32' : 'w-16'} ${
+        isHome ? 'bg-primary/60' : 'bg-primary/20'
       }`}
     />
   );
