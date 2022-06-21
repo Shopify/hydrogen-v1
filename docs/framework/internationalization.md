@@ -37,25 +37,13 @@ If you're hosting your Hydrogen storefront on Oxygen, then you can access a visi
 {% codeblock file, filename: 'index.server.jsx' %}
 
 ```tsx
-export default function Homepage({request}) {
-  return (
-    <div>Thanks for visiting from {request.headers.get(‘oxygen-buyer-country’)}!</div>
-  )
-}
+const userCountry = request.headers.get('oxygen-buyer-country');
 ```
 
 {% endcodeblock %}
 
-The following geolocation variables are available from Oxygen:
+[View a full list](https://shopify.dev/custom-storefronts/oxygen/worker-runtime-apis#custom-headers) of custom HTTP headers available from Oxygen. 
 
-- `'oxygen-buyer-ip'`
-- `'oxygen-buyer-latitude'`
-- `'oxygen-buyer-longitude'`
-- `'oxygen-buyer-continent'`
-- `'oxygen-buyer-country'`
-- `'oxygen-buyer-region'`
-- `'oxygen-buyer-region-code'`
-- `'oxygen-buyer-city'`
 
 
 ### Non-Oxygen deployments
@@ -74,6 +62,7 @@ export default function Homepage({request}) {
 
 > Note: 
 > You can also consider using a third-party geolocation library, such as [`geoip-lite`](https://www.npmjs.com/package/geoip-lite).
+
 
 ## Internationalized routing
 
