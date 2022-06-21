@@ -24,14 +24,11 @@ export const VIRTUAL_PROXY_HYDROGEN_ROUTES_ID =
 export default (pluginOptions: HydrogenVitePluginOptions) => {
   let config: ResolvedConfig;
   let server: ViteDevServer;
-  let resolvedConfigPath: string;
 
   return {
     name: 'hydrogen:virtual-files',
     configResolved(_config) {
       config = _config;
-      // @ts-ignore
-      config.plugins.push(addPathToConfigProxy());
     },
     configureServer(_server) {
       server = _server;
@@ -41,12 +38,11 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
         return findHydrogenConfigPath(
           config.root,
           pluginOptions.configPath
-        ).then((hcPath: string) => {
-          resolvedConfigPath = hcPath;
+        ).then((hcPath: string) =>
           // This direct dependency on a real file
           // makes HMR work for the virtual module.
-          return this.resolve(hcPath, importer, {skipSelf: true});
-        });
+          this.resolve(hcPath, importer, {skipSelf: true})
+        );
       }
 
       if (
@@ -118,21 +114,6 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
 
     const {loaded} = await viteception([VIRTUAL_PROXY_HYDROGEN_CONFIG_ID]);
     return loaded[0].default;
-  }
-
-  function addPathToConfigProxy() {
-    return {
-      name: 'hydrogen:virtual-files-post',
-      enforce: 'post',
-      transform(code: string, id: string) {
-        if (id === '\0' + VIRTUAL_PROXY_HYDROGEN_CONFIG_ID) {
-          // The CLI needs to import the Hydrogen config path
-          return (
-            code + ` export const configPath = '${resolvedConfigPath || ''}';`
-          );
-        }
-      },
-    };
   }
 };
 
