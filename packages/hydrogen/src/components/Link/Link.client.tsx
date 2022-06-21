@@ -155,6 +155,12 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             'scroll',
           ])}
           ref={ref}
+          rel={
+            props.rel ??
+            (to.startsWith('http') || to.startsWith('//')
+              ? 'noreferrer noopener'
+              : undefined)
+          }
           onClick={internalClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
