@@ -28,7 +28,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
     >
       <FooterMenu menu={menu} />
       <section className="grid gap-4 w-full md:max-w-[335px] md:ml-auto">
-        <Heading size="lead" className="cursor-default" as="h4">
+        <Heading size="lead" className="cursor-default" as="h3">
           Country
         </Heading>
         <CountrySelector />
