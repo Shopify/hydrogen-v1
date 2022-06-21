@@ -1,4 +1,4 @@
-import {Link, useUrl, useCart} from '@shopify/hydrogen';
+import {Link, useUrl, useCart, useLocalization} from '@shopify/hydrogen';
 import {useWindowScroll} from 'react-use';
 
 import {
@@ -21,9 +21,8 @@ import type {EnhancedMenu} from '~/lib/utils';
  */
 export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
   const {pathname} = useUrl();
-
-  const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
-  const countryCode = localeMatch ? localeMatch[1] : undefined;
+  const {country} = useLocalization();
+  const countryCode = country?.isoCode ?? null;
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
 

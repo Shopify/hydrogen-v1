@@ -1,4 +1,4 @@
-import {useUrl} from '@shopify/hydrogen';
+import {useUrl, useLocalization} from '@shopify/hydrogen';
 
 import {Section, Heading, FooterMenu, CountrySelector} from '~/components';
 import type {EnhancedMenu} from '~/lib/utils';
@@ -9,8 +9,8 @@ import type {EnhancedMenu} from '~/lib/utils';
 export function Footer({menu}: {menu?: EnhancedMenu}) {
   const {pathname} = useUrl();
 
-  const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
-  const countryCode = localeMatch ? localeMatch[1] : null;
+  const {country} = useLocalization();
+  const countryCode = country?.isoCode ?? null;
 
   const isHome = pathname === `/${countryCode ? countryCode + '/' : ''}`;
   const itemsCount = menu
@@ -24,7 +24,7 @@ export function Footer({menu}: {menu?: EnhancedMenu}) {
       divider={isHome ? 'none' : 'top'}
       as="footer"
       role="contentinfo"
-      className={`grid min-h-[25rem] items-start grid-flow-row w-full gap-6 py-8 px-6 md:px-8 lg:px-12 
+      className={`grid min-h-[25rem] items-start grid-flow-row w-full gap-6 py-8 px-6 md:px-8 lg:px-12
         border-b md:gap-8 lg:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-${itemsCount}
         bg-primary dark:bg-contrast dark:text-primary text-contrast overflow-hidden`}
     >
