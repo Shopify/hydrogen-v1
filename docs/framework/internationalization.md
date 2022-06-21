@@ -1,4 +1,4 @@
-[---
+---
 gid: 16335d29-3334-49d5-bdcc-d9ec832fbffd
 title: Internationalization
 description: Learn how configure support in your Hydrogen storefront for international merchants and customers.
