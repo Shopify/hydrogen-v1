@@ -104,6 +104,8 @@ var isClientComponent = function (id) {
 function ReactFlightVitePlugin() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       serverBuildEntries = _ref.serverBuildEntries,
+      _ref$optimizeBoundari = _ref.optimizeBoundaries,
+      optimizeBoundaries = _ref$optimizeBoundari === void 0 ? 'build' : _ref$optimizeBoundari,
       _ref$isServerComponen = _ref.isServerComponentImporterAllowed,
       isServerComponentImporterAllowed = _ref$isServerComponen === void 0 ? function (importer) {
     return false;
@@ -114,11 +116,25 @@ function ReactFlightVitePlugin() {
   var resolveAlias;
   var globImporterPath;
   var allClientBoundaries = new Set();
+
+  function invalidateGlobImporter() {
+    if (globImporterPath && server) {
+      server.watcher.emit('change', globImporterPath);
+    }
+  }
+
   return {
     name: 'vite-plugin-react-server-components',
     enforce: 'pre',
     configureServer: function (_server) {
       server = _server;
+      var seenModules = {};
+      server.ws.on('rsc:cc404', function (data) {
+        if (!seenModules[data.id]) {
+          seenModules[data.id] = true;
+          invalidateGlobImporter();
+        }
+      });
     },
     configResolved: async function (_config) {
       await esModuleLexer.init;
@@ -195,13 +211,10 @@ function ReactFlightVitePlugin() {
         if (!moduleNode.meta) moduleNode.meta = {};
 
         if (!moduleNode.meta.isClientComponent) {
-          moduleNode.meta.isClientComponent = true;
+          moduleNode.meta.isClientComponent = true; // Invalidate glob importer file to account for the
+          // newly discovered client component.
 
-          if (globImporterPath) {
-            // Invalidate glob importer file to account for the
-            // newly discovered client component.
-            server.watcher.emit('change', globImporterPath);
-          }
+          invalidateGlobImporter();
         }
       }
 
@@ -272,7 +285,7 @@ function ReactFlightVitePlugin() {
           // reuse the already discovered ones and simply add new ones
           // to the list without removing anything.
 
-          findClientBoundaries(server.moduleGraph).forEach(function (boundary) {
+          findClientBoundaries(server.moduleGraph, optimizeBoundaries === true).forEach(function (boundary) {
             return allClientBoundaries.add(boundary);
           });
           return injectGlobs(Array.from(allClientBoundaries));
@@ -282,7 +295,7 @@ function ReactFlightVitePlugin() {
           throw new Error('[react-server-dom-vite] Parameter serverBuildEntries is required for client build');
         }
 
-        return findClientBoundariesForClientBuild(serverBuildEntries).then(injectGlobs);
+        return findClientBoundariesForClientBuild(serverBuildEntries, optimizeBoundaries !== false).then(injectGlobs);
       }
     }
   };
@@ -346,6 +359,7 @@ async function proxyClientComponent(filepath, src) {
 }
 
 function findClientBoundaries(moduleGraph) {
+  var optimizeBoundaries = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   var clientBoundaries = []; // eslint-disable-next-line no-for-of-loops/no-for-of-loops
 
   var _iterator = _createForOfIteratorHelper(moduleGraph.fileToModulesMap.values()),
@@ -358,7 +372,7 @@ function findClientBoundaries(moduleGraph) {
         return moduleNode.meta && moduleNode.meta.isClientComponent;
       });
 
-      if (clientModule && isDirectImportInServer(clientModule)) {
+      if (clientModule && (!optimizeBoundaries || isDirectImportInServer(clientModule))) {
         clientBoundaries.push(clientModule.file);
       }
     }
@@ -371,7 +385,7 @@ function findClientBoundaries(moduleGraph) {
   return clientBoundaries;
 }
 
-async function findClientBoundariesForClientBuild(serverEntries) {
+async function findClientBoundariesForClientBuild(serverEntries, optimizeBoundaries) {
   // Viteception
   var server = await vite.createServer({
     clearScreen: false,
@@ -389,7 +403,7 @@ async function findClientBoundariesForClientBuild(serverEntries) {
   }
 
   await server.close();
-  return findClientBoundaries(server.moduleGraph);
+  return findClientBoundaries(server.moduleGraph, optimizeBoundaries);
 }
 
 var hashImportsPlugin = {

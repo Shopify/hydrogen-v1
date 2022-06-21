@@ -27,7 +27,7 @@ const hydrogenPlugin = (pluginOptions: HydrogenVitePluginOptions = {}) => {
     hydrationAutoImport(),
     ssrInterop(),
     cssModulesRsc(),
-    rsc(),
+    rsc(pluginOptions),
     platformEntry(),
     suppressWarnings(),
     pluginOptions.purgeQueryCacheOnBuild && purgeQueryCache(),

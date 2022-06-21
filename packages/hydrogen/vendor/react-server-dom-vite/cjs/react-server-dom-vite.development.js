@@ -33,7 +33,8 @@ function parseModel(response, json) {
   return JSON.parse(json, response._fromJSON);
 }
 
-// eslint-disable-next-line no-unused-vars
+var META_HOT = undefined;
+
 function resolveModuleReference(bundlerConfig, moduleData) {
   return moduleData;
 } // Vite import globs will be injected here.
@@ -50,7 +51,20 @@ function importClientComponent(moduleId) {
   var modImport = allClientComponents[moduleId];
 
   if (!modImport) {
-    return Promise.reject(new Error("Could not find client component " + moduleId));
+    var error = new Error("Could not find client component " + moduleId);
+
+    if (META_HOT) {
+      META_HOT.send('rsc:cc404', {
+        id: moduleId
+      });
+      return new Promise(function (_, reject) {
+        return setTimeout(function () {
+          return reject(error);
+        }, 200);
+      });
+    }
+
+    return Promise.reject(error);
   }
 
   return typeof modImport === 'function' ? modImport() : Promise.resolve(modImport);
