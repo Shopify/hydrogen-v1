@@ -9,7 +9,7 @@ import {
 
 import {Text} from '~/components';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
-import {product as mockProduct} from '~/lib/placeholders';
+import {getProductPlaceholder} from '~/lib/placeholders';
 import type {
   MoneyV2,
   Product,
@@ -30,7 +30,7 @@ export function ProductCard({
 }) {
   let cardLabel;
 
-  const cardData = product?.variants ? product : mockProduct;
+  const cardData = product?.variants ? product : getProductPlaceholder();
 
   const {
     image,
