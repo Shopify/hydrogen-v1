@@ -157,7 +157,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           ref={ref}
           rel={
             props.rel ??
-            (to.startsWith('http') ? 'noreferrer noopener' : undefined)
+            (to.startsWith('http') || to.startsWith('//')
+              ? 'noreferrer noopener'
+              : undefined)
           }
           onClick={internalClick}
           onMouseEnter={onMouseEnter}
