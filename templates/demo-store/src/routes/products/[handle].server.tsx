@@ -11,6 +11,7 @@ import {
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
+import {getExcerpt} from '~/lib/utils';
 import {NotFound, Layout, ProductSwimlane} from '~/components/index.server';
 import {
   Heading,
@@ -53,12 +54,6 @@ export default function Product() {
 
   const {media, title, vendor, description, id} = product;
   const {shippingPolicy, refundPolicy} = shop;
-
-  function getExcerpt(text: string) {
-    const regex = /<p.*>(.*?)<\/p>/;
-    const correspondingText = regex.exec(text);
-    return correspondingText ? correspondingText[1] : '';
-  }
 
   return (
     <Layout>
@@ -119,11 +114,6 @@ export default function Product() {
 
 const PRODUCT_QUERY = gql`
   ${MEDIA_FRAGMENT}
-  fragment Metafield on Metafield {
-    value
-    namespace
-    id
-  }
   query Product(
     $country: CountryCode
     $language: LanguageCode
@@ -134,15 +124,6 @@ const PRODUCT_QUERY = gql`
       title
       vendor
       description
-      details: metafield(namespace: "demo", key: "details") {
-        ...Metafield
-      }
-      sizeFit: metafield(namespace: "demo", key: "sizeFit") {
-        ...Metafield
-      }
-      delivery: metafield(namespace: "demo", key: "delivery") {
-        ...Metafield
-      }
       media(first: 7) {
         nodes {
           ...MediaFields
