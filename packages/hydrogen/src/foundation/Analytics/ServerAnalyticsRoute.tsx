@@ -1,6 +1,6 @@
-import {HydrogenRequest} from '../../../dist/esnext';
 import type {ResolvedHydrogenConfig} from '../../types';
 import {log} from '../../utilities/log';
+import {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
 
 export async function ServerAnalyticsRoute(
   request: HydrogenRequest,
