@@ -54,9 +54,11 @@ export async function ServerAnalyticsRoute(
         log.warn('Fail to resolve server analytics (text): ', error);
       });
   }
-  request.ctx.runtime?.waitUntil(analyticsPromise);
+  // request.ctx.runtime?.waitUntil(analyticsPromise);
 
-  return new Response(null, {
-    status: 200,
+  analyticsPromise.finally(() => {
+    return new Response(null, {
+      status: 200,
+    });
   });
 }
