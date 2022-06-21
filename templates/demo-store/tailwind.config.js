@@ -37,6 +37,9 @@ module.exports = {
         nav: 'var(--height-nav)',
         screen: 'var(--screen-height, 100vh)',
       },
+      height: {
+        screen: 'var(--screen-height, 100vh)',
+      },
       fontFamily: {
         sans: ['Helvetica Neue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         serif: ['"IBMPlexSerif"', 'Palatino', 'ui-serif'],
