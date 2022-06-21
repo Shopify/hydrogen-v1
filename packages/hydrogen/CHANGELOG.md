@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+### Major Changes
+
+- [#1700](https://github.com/Shopify/hydrogen/pull/1700) [`9b6c564e`](https://github.com/Shopify/hydrogen/commit/9b6c564eb20ca75d9995e3eed581339960e222c1) Thanks [@jplhomer](https://github.com/jplhomer)! - Hydrogen is now out of developer preview. Thank you for all of your feedback and contributions the past eight months!
+
 ## 0.27.0
 
 ### Minor Changes
