@@ -19,7 +19,7 @@ export default () => {
     };
   }
 
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== 'development' && !process.env.LOCAL_DEV) {
     /**
      * Ofuscate production asset name - To prevent ad blocker logics that blocks
      * certain files due to how it is named.
@@ -43,7 +43,8 @@ export default () => {
       },
 
       build: {
-        minify: config.build?.minify ?? 'esbuild',
+        minify:
+          config.build?.minify ?? (process.env.LOCAL_DEV ? false : 'esbuild'),
         sourcemap: true,
         rollupOptions: config.build?.rollupOptions
           ? Object.assign(rollupOptions, config.build.rollupOptions)
