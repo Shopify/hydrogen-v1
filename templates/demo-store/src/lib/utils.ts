@@ -1,14 +1,11 @@
-// TODO: Split this into multiple files
+import React, {useCallback} from 'react';
 import {useServerProps} from '@shopify/hydrogen';
 import {
   Menu,
   MenuItem,
   MoneyV2,
-  Product,
-  ProductPriceRange,
   UserError,
 } from '@shopify/hydrogen/storefront-api-types';
-import React, {useCallback} from 'react';
 
 // @ts-expect-error types not available
 import typographicBase from 'typographic-base';
@@ -49,20 +46,6 @@ export function formatText(input?: string | React.ReactNode) {
     /\s([^\s<]+)\s*$/g,
     '\u00A0$1',
   );
-}
-
-export function formatPhoneNumber(phoneNumberString: string) {
-  const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
-  const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-  if (match) {
-    const intlCode = match[1] ? '+1 ' : '';
-    return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
-  }
-  return null;
-}
-
-export function isRangedPricing(priceRange: ProductPriceRange) {
-  return priceRange.minVariantPrice.amount < priceRange.maxVariantPrice.amount;
 }
 
 export function isNewArrival(date: string, daysOld = 30) {
@@ -167,7 +150,6 @@ function parseItem(customPrefixes = {}) {
       Note: update logic when API is updated to include the active qualified domain
     */
     const isInternalLink = /\.myshopify\.com/g.test(item.url);
-    const hasSubItems = item?.items?.length > 0;
 
     const parsedItem = isInternalLink
       ? // internal links
@@ -190,21 +172,6 @@ function parseItem(customPrefixes = {}) {
       items: item.items?.map(parseItem(customPrefixes)),
     };
   };
-}
-
-// Parse product metadata into a format that can be used by the ProductInfo component
-export function parseProductInfo(product: Product) {
-  return [
-    product?.details
-      ? {title: 'Details', content: product.details.value}
-      : null,
-    product?.sizeFit
-      ? {title: 'Size and Fit', content: product.sizeFit.value}
-      : null,
-    product?.delivery
-      ? {title: 'Delivery and Returns', content: product.delivery.value}
-      : null,
-  ].filter(Boolean);
 }
 
 export interface EnhancedMenuItem extends MenuItem {
