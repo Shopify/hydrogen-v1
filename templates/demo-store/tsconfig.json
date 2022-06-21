@@ -5,7 +5,7 @@
     "moduleResolution": "node16",
     "lib": ["dom", "dom.iterable", "scripthost", "es2020"],
     "jsx": "react-jsx",
-    "types": ["vite/client"],
+    "types": ["vite/client", "vitest/globals"],
     "strict": true,
     "esModuleInterop": true,
     "isolatedModules": true,
