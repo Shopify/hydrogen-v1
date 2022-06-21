@@ -25,6 +25,19 @@ export function addImageSizeParametersToUrl({
   crop,
   scale,
 }: ShopifyLoaderParams) {
+  if (scale) {
+    // Have to do this specifically for 'scale' because it doesn't currently work otherwise.
+    // I'm also intentionally leaving 'scale' as a searchParam because that way it'll "just work" in the future and we can just delete this whole section of code
+
+    // We assume here that the last `.` is the delimiter between the file name and the file type
+    const baseUrl = new URL(src);
+    const fileDelimiterIndex = baseUrl.pathname.lastIndexOf('.');
+    const fileName = baseUrl.pathname.slice(0, fileDelimiterIndex);
+    const fileType = baseUrl.pathname.slice(fileDelimiterIndex);
+    baseUrl.pathname = `${fileName}${`@${scale.toString()}x`}${fileType}`;
+    src = baseUrl.toString();
+  }
+
   const newUrl = new URL(src);
   width && newUrl.searchParams.append('width', width.toString());
   height && newUrl.searchParams.append('height', height.toString());
