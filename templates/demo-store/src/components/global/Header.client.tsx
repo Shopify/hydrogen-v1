@@ -1,5 +1,9 @@
+import React, {lazy, Suspense} from 'react';
 import {Link, useUrl, useCart, useLocalization} from '@shopify/hydrogen';
 import {useWindowScroll} from 'react-use';
+
+const Artists = lazy(() => import('./Artists.client'));
+const Performers = lazy(() => import('./Performers.client'));
 
 import {
   Heading,
@@ -40,6 +44,10 @@ export function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
 
   return (
     <>
+      <Suspense>
+        {isCartOpen && <Artists />}
+        {isMenuOpen && <Performers />}
+      </Suspense>
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
       <MenuDrawer isOpen={isMenuOpen} onClose={closeMenu} menu={menu!} />
       <DesktopHeader
