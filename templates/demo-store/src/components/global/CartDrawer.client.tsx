@@ -11,9 +11,6 @@ export function CartDrawer({
   return (
     <Drawer open={isOpen} onClose={onClose} heading="Cart" openFrom="right">
       <div className="grid">
-        <Drawer.Title>
-          <h2 className="sr-only">Cart Drawer</h2>
-        </Drawer.Title>
         <CartDetails layout="drawer" onClose={onClose} />
       </div>
     </Drawer>

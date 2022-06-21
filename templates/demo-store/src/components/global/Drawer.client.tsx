@@ -68,9 +68,11 @@ function Drawer({
                     }`}
                   >
                     {heading && (
-                      <Heading as="h2" size="lead" id="cart-contents">
-                        {heading}
-                      </Heading>
+                      <Dialog.Title>
+                        <Heading as="span" size="lead" id="cart-contents">
+                          {heading}
+                        </Heading>
+                      </Dialog.Title>
                     )}
                     <button
                       type="button"
