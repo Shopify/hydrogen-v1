@@ -92,7 +92,7 @@ const ALL_PRODUCTS_QUERY = gql`
   ) @inContext(country: $country, language: $language) {
     products(first: $pageBy, after: $cursor) {
       nodes {
-        ...ProductCardFields
+        ...ProductCardFragment
       }
       pageInfo {
         hasNextPage
@@ -113,7 +113,7 @@ const PAGINATE_QUERY = gql`
   ) @inContext(country: $country, language: $language) {
     products(first: $pageBy, after: $cursor) {
       nodes {
-        ...ProductCardFields
+        ...ProductCardFragment
       }
       pageInfo {
         hasNextPage

@@ -67,7 +67,7 @@ const NOT_FOUND_QUERY = gql`
     }
     featuredProducts: products(first: 12) {
       nodes {
-        ...ProductCardFields
+        ...ProductCardFragment
       }
     }
   }

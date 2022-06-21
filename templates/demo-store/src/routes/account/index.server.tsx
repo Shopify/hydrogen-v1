@@ -270,7 +270,7 @@ const CUSTOMER_QUERY = gql`
     }
     featuredProducts: products(first: 12) {
       nodes {
-        ...ProductCardFields
+        ...ProductCardFragment
       }
     }
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
