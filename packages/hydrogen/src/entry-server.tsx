@@ -548,12 +548,12 @@ async function runSSR({
 
         setTimeout(() => {
           log.trace('node pipe response');
-          pipe(nodeResponse);
+          if (!nodeResponse.writableEnded) pipe(nodeResponse);
         }, 0);
 
         bufferReadableStream(rscReadable.getReader(), (chunk) => {
           log.trace('rsc chunk');
-          return nodeResponse.write(chunk);
+          if (!nodeResponse.writableEnded) nodeResponse.write(chunk);
         });
       },
       async onAllReady() {
@@ -595,8 +595,10 @@ async function runSSR({
             postRequestTasks('ssr', nodeResponse.statusCode, request, response);
           }
 
-          nodeResponse.write(html);
-          nodeResponse.end();
+          if (!nodeResponse.writableEnded) {
+            nodeResponse.write(html);
+            nodeResponse.end();
+          }
         });
 
         pipe(bufferedResponse);
@@ -613,9 +615,17 @@ async function runSSR({
         }
       },
       onError(error: any) {
+        if (error.message?.includes('stream closed early')) {
+          // This seems to happen when Fizz is still streaming
+          // but nodeResponse has been closed by the browser.
+          // This is common in tests and during development
+          // due to frequent page refresh.
+          return;
+        }
+
         ssrDidError = error;
 
-        if (dev && nodeResponse.headersSent) {
+        if (dev && nodeResponse.headersSent && !nodeResponse.writableEnded) {
           // Calling write would flush headers automatically.
           // Delay this error until headers are properly sent.
           nodeResponse.write(getErrorMarkup(error));
@@ -666,6 +676,8 @@ function startWritingToNodeResponse(
   nodeResponse: ServerResponse,
   error?: Error
 ) {
+  if (nodeResponse.writableEnded) return;
+
   if (!nodeResponse.headersSent) {
     nodeResponse.setHeader(CONTENT_TYPE, HTML_CONTENT_TYPE);
     nodeResponse.write(DOCTYPE);
@@ -768,7 +780,7 @@ function handleFetchResponseInNode(
 ) {
   if (nodeResponse) {
     fetchResponsePromise.then((response) => {
-      if (!response) return;
+      if (!response || nodeResponse.writableEnded) return;
 
       setNodeHeaders(response.headers, nodeResponse);
 
