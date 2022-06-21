@@ -14,8 +14,8 @@ export async function ServerAnalyticsRoute(
   if (requestHeader.get('Content-Length') === '0') {
     analyticsPromise = Promise.resolve(true)
       .then(() => {
-        serverAnalyticsConnectors?.forEach((connector) => {
-          connector.request(requestUrl, request.headers);
+        serverAnalyticsConnectors?.forEach(async (connector) => {
+          await connector.request(requestUrl, request.headers);
         });
       })
       .catch((error) => {
@@ -24,8 +24,8 @@ export async function ServerAnalyticsRoute(
   } else if (requestHeader.get('Content-Type') === 'application/json') {
     analyticsPromise = Promise.resolve(request.json())
       .then((data) => {
-        serverAnalyticsConnectors?.forEach((connector) => {
-          connector.request(requestUrl, requestHeader, data, 'json');
+        serverAnalyticsConnectors?.forEach(async (connector) => {
+          await connector.request(requestUrl, requestHeader, data, 'json');
         });
       })
       .catch((error) => {
@@ -34,8 +34,8 @@ export async function ServerAnalyticsRoute(
   } else {
     analyticsPromise = Promise.resolve(request.text())
       .then((data) => {
-        serverAnalyticsConnectors?.forEach((connector) => {
-          connector.request(requestUrl, requestHeader, data, 'text');
+        serverAnalyticsConnectors?.forEach(async (connector) => {
+          await connector.request(requestUrl, requestHeader, data, 'text');
         });
       })
       .catch((error) => {

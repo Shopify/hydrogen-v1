@@ -6,12 +6,12 @@ export const PerformanceMetricsServerAnalyticsConnector = {
     requestHeader: Headers,
     data?: any,
     contentType?: string
-  ): void {
+  ): Promise<any> {
     const url = new URL(requestUrl);
     if (url.search === '?performance' && contentType === 'json') {
       const initTime = new Date().getTime();
 
-      fetch('https://monorail-edge.shopifysvc.com/v1/produce', {
+      return fetch('https://monorail-edge.shopifysvc.com/v1/produce', {
         method: 'post',
         headers: {
           'content-type': 'text/plain',
@@ -30,5 +30,6 @@ export const PerformanceMetricsServerAnalyticsConnector = {
         log.error(err);
       });
     }
+    return Promise.resolve(true);
   },
 };

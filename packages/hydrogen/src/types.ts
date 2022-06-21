@@ -71,7 +71,7 @@ export type ServerAnalyticsConnector = {
     requestHeader: Headers,
     data?: any,
     contentType?: 'json' | 'text'
-  ) => void;
+  ) => Promise<any>;
 };
 
 export type InlineHydrogenConfig = ClientConfig & {
