@@ -26,10 +26,8 @@ export async function ServerAnalyticsRoute(
   } else if (requestHeader.get('Content-Type') === 'application/json') {
     analyticsPromise = Promise.resolve(request.json())
       .then((data) => {
-        log.warn('1', requestUrl);
         return Promise.all(
           serverAnalyticsConnectors?.forEach(async (connector) => {
-            log.warn('2');
             return await connector.request(
               requestUrl,
               requestHeader,
@@ -53,10 +51,10 @@ export async function ServerAnalyticsRoute(
         log.warn('Fail to resolve server analytics (text): ', error);
       });
   }
+  // @ts-ignore
+  request.ctx.runtime?.waitUntil(analyticsPromise);
 
-  return analyticsPromise.finally(() => {
-    return new Response(null, {
-      status: 200,
-    });
+  return new Response(null, {
+    status: 200,
   });
 }
