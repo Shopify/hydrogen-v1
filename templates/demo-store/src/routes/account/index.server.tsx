@@ -132,11 +132,15 @@ function AuthenticatedAccount({
         defaultAddress={defaultAddress}
         addresses={addresses}
       />
-      <FeaturedCollections
-        title="Popular Collections"
-        data={featuredCollections}
-      />
-      <ProductSwimlane data={featuredProducts} />
+      {!orders && (
+        <>
+          <FeaturedCollections
+            title="Popular Collections"
+            data={featuredCollections}
+          />
+          <ProductSwimlane data={featuredProducts} />
+        </>
+      )}
     </Layout>
   );
 }

@@ -128,7 +128,7 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
                         >
                           {lineItem?.variant?.image && (
                             <Image
-                              className="flex-none object-cover object-center w-24 h-24 bg-gray-100 rounded-md"
+                              className="flex-none object-cover object-center w-24 h-24 bg-primary/10 rounded-md"
                               src={lineItem.variant.image.src!}
                               width={lineItem.variant.image.width!}
                               height={lineItem.variant.image.height!}
@@ -296,7 +296,7 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
                 className={`mt-3 px-3 py-1 text-xs font-medium rounded-full inline-block w-auto ${
                   order.fulfillmentStatus === 'FULFILLED'
                     ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-200 text-gray-500'
+                    : 'bg-primary/20 text-primary/50'
                 }`}
               >
                 <Text size="fine">
