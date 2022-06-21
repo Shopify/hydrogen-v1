@@ -1,24 +1,19 @@
 ---
 gid: 16335d29-3334-49d5-bdcc-d9ec832fbffd
 title: Internationalization
-description: Learn how configure support in your Hydrogen app for international merchants and customers.
+description: Learn how configure support in your Hydrogen storefront for international merchants and customers.
 ---
 
-Internationalization helps merchants expand their business to a global audience by creating shopping experiences in local languages and currencies. This guide provides information on configuring localized experiences for merchants and customers in your Hydrogen app.
+Internationalization helps merchants expand their business to a global audience by creating shopping experiences in local languages and currencies. This guide provides information on configuring localized experiences for merchants and customers in your Hydrogen storefront.
 
 ## Default configuration
 
-You can configure your app's default locale in the Hydrogen configuration file. You can also set up dynamic configurations in your Hydrogen app for multiple stores.
+You can configure your Hydrogen storefront's default locale and language by setting the `defaultLocale` and `languageCode` properties in the [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config):
 
-The [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) contains information that's needed at runtime for routing, connecting to the Storefront API, and many other options.
+- `defaultLocale`: Corresponds to a valid locale identifier used to make the request, using the [IETF language tag nomenclature](https://en.wikipedia.org/wiki/IETF_language_tag). The first letter code represents the language, and the second letter code represents the region. 
+- `languageCode`: Corresponds to the first two characters of `defaultLocale`, using [ISO 639-1 nomenclature](https://shopify.dev/api/storefront/2022-04/enums/languagecode) for language codes supported by Shopify.
 
-You can set your app's default locale and language using the `defaultLocale` and `languageCode` properties in your Hydrogen configuration file. 
-
-The `defaultLocale` property corresponds to a valid locale identifier used to make the request, using the [IETF language tag nomenclature](https://en.wikipedia.org/wiki/IETF_language_tag). The first letter code represents the language, and the second letter code represents the region. 
-
-The `languageCode` property corresponds to the first two characters of `defaultLocale`, using [ISO 639-1 nomenclature](https://shopify.dev/api/storefront/2022-04/enums/languagecode) for language codes supported by Shopify.
-
-In the following example, the default locale of the app is set to `EN-US` and the language is set to `EN`:
+In the following example, the default locale of the Hydrogen storefront is set to `EN-US` and the language is set to `EN`:
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
 ```tsx
@@ -39,7 +34,7 @@ The geographic location of your visitors helps you localize the experience to th
 
 ### Oxygen deployments
 
-For Hydrogen shops hosted on Oxygen, a visitor’s geolocation can be accessed through the `request` object and retrieved using `request.headers.get()`.
+If you're hosting your Hydrogen storefront on Oxygen, then you can access a visitor’s geolocation by using the `request` object and retrieving it using `request.headers.get()`:
 
 {% codeblock file, filename: 'index.server.jsx' %}
 
@@ -53,7 +48,7 @@ export default function Homepage({request}) {
 
 {% endcodeblock %}
 
-The geolocation variables available from Oxygen include:
+The following geolocation variables are available from Oxygen:
 
 - `'oxygen-buyer-ip'`
 - `'oxygen-buyer-latitude'`
@@ -67,7 +62,7 @@ The geolocation variables available from Oxygen include:
 
 ### Non-Oxygen deployments
 
-Alternatively, you can access the [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) HTTP header as a hint to the visitor's country and language preference. You may also consider using a third-party geolocation library, such as [`geoip-lite`](https://www.npmjs.com/package/geoip-lite).
+If you're hosting your Hydrogen storefront on a platform that isn't Oxygen, then you can access the [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) HTTP header as a hint to the visitor's country and language preference: 
 
 {% codeblock file, filename: 'index.server.jsx' %}
 
@@ -79,25 +74,23 @@ export default function Homepage({request}) {
 
 {% endcodeblock %}
 
+> Note: 
+> You can also consider using a third-party geolocation library, such as [`geoip-lite`](https://www.npmjs.com/package/geoip-lite).
 
 ## Internationalized routing
 
-Once you've detected a visitor's geolocation, you can assign custom routes to host and render a localized experience. 
+After you've detected a visitor's geolocation, you can assign custom routes to host and render a localized experience. Hydrogen supports two strategies for internationalized routes: domains and subfolders.
 
-Hydrogen supports two strategies for internationalized routes: domains and subfolders.
 
-Examples of domain or subdomain routing:
-- `yourshop.com, yourshop.ca, yourshop.co.uk, etc.`
-- `us.yourshop.com, ca.yourshop.com, uk.yourshop.com, etc.`
+### Examples
 
-Examples of subfolder routing:
-- `yourshop.com/en/products`
-- `yourshop.com/en-CA/products`
-- `yourshop.com/fr/produits`
+- **Domain routes**: `yourshop.com`, `yourshop.ca`, `yourshop.co.uk`
+- **Subdomain routes**: `us.yourshop.com`, `ca.yourshop.com`, `uk.yourshop.com`
+- **Subfolder routes**: `yourshop.com/en/products`, `yourshop.com/en-CA/products`, `yourshop.com/fr/produits`
 
-### Domains or Subdomains
+### Domains and subdomains
 
-Once you've set up your domains and/or subdomains in Oxygen, or third-party hosting provider, you can assign these domains to a given locale.
+After you've set up your domains and subdomains in Oxygen, or third-party hosting provider, you can assign the domains to a given locale:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
@@ -113,7 +106,8 @@ function App({routes}) {
 
 
 ### Subfolders
-Subfolder routes use the visitor's locale in the URL path. In Hydrogen, the FileRoute component can be used to prefix all file routes with a locale using the `basePath` parameter, and source the corresponding file routes. 
+
+Subfolder routes use the visitor's locale in the URL path. In Hydrogen, you can use the [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes) component to prefix all file routes with a locale using the `basePath` parameter, and source the corresponding file routes:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
@@ -152,12 +146,12 @@ Shopify helps merchants, all over the world, sell to customers, all over the wor
 
 Hydrogen includes the following localization components and hooks:
 
-- **[`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider)**: A component that automatically queries the Storefront API's [localization](https://shopify.dev/api/storefront/latest/objects/queryroot) field for the `isoCode` and `name` of the `country` and keeps this information in a context.
+- **[`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider)**: A component that provides localization data in a context that can be used both within server and client components by the [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
 
-- **[`useCountry`](https://shopify.dev/api/hydrogen/hooks/localization/usecountry)**: A hook that returns a tuple of the current localization country and a function for updating it.
+- **[`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization)**: A hook that returns the locale, country, and language of the current page.
 
 > Note:
-> Any descendents of `LocalizationProvider` can use the `useCountry` hook. The `isoCode` of the `country` can be used in the Storefront API's [`@inContext` directive](https://shopify.dev/api/examples/international-pricing) as the `country` value.
+> Any descendents of `LocalizationProvider` can use the `useLocalization` hook. The `isoCode` of the `country` can be used in the Storefront API's [`@inContext` directive](https://shopify.dev/api/examples/international-pricing) as the `country` value.
 
 ### Language translations
 
@@ -165,7 +159,7 @@ You can use the Storefront API's `@inContext` directive to support multiple lang
 
 For more information about retrieving language translations, refer to [Support multiple languages on storefronts](https://shopify.dev/api/examples/multiple-languages).
 
-### Search Engine Optimization
+### Search engine optimization (SEO)
 
 Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the `defaultLocale` value provided in your Hydrogen configuration file or `EN-US` when not specified.
 
@@ -190,5 +184,5 @@ navigator.geolocation.getCurrentPosition((data) => {
 ## Next steps
 
 - Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.
-- Consult the references for the [`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component and [`useCountry`](https://shopify.dev/api/hydrogen/hooks/localization/usecountry) hook.
+- Consult the references for the [`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component and [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
 - Learn how to customize the output of [SEO-related tags](https://shopify.dev/custom-storefronts/hydrogen/framework/seo) in your Hydrogen client and server components.
