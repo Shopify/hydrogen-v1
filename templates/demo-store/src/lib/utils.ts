@@ -4,6 +4,7 @@ import {
   Menu,
   MenuItem,
   MoneyV2,
+  Product,
   ProductPriceRange,
   UserError,
 } from '@shopify/hydrogen/storefront-api-types';
@@ -189,6 +190,21 @@ function parseItem(customPrefixes = {}) {
       items: item.items?.map(parseItem(customPrefixes)),
     };
   };
+}
+
+// Parse product metadata into a format that can be used by the ProductInfo component
+export function parseProductInfo(product: Product) {
+  return [
+    product?.details
+      ? {title: 'Details', content: product.details.value}
+      : null,
+    product?.sizeFit
+      ? {title: 'Size and Fit', content: product.sizeFit.value}
+      : null,
+    product?.delivery
+      ? {title: 'Delivery and Returns', content: product.delivery.value}
+      : null,
+  ].filter(Boolean);
 }
 
 export interface EnhancedMenuItem extends MenuItem {
