@@ -51,7 +51,7 @@ export function ProductGallery({
         const style = [
           isFullWidth ? 'md:col-span-2' : 'md:col-span-1',
           isFirst || isFourth ? '' : 'md:aspect-[4/5]',
-          'aspect-square snap-center card-image bg-white dark:bg-contrast/10  md:w-full w-[80vw]',
+          'aspect-square snap-center card-image bg-white dark:bg-contrast/10 w-mobileGallery md:w-full',
         ].join(' ');
 
         return (
@@ -62,8 +62,15 @@ export function ProductGallery({
           >
             <MediaFile
               tabIndex="0"
-              className={`w-full h-full aspect-square object-cover`}
+              className={`w-full h-full aspect-square fadeIn object-cover`}
               data={data}
+              width={med.mediaContentType === 'IMAGE' && 800}
+              widths={[400, 800, 1200, 1600, 2000, 2400]}
+              sizes={
+                isFullWidth
+                  ? '(min-width: 64em) 60vw, (min-width: 48em) 50vw, 90vw'
+                  : '(min-width: 64em) 30vw, (min-width: 48em) 25vw, 90vw'
+              }
               // @ts-ignore
               options={{
                 crop: 'center',

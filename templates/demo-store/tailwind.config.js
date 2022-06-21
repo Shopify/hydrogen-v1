@@ -40,6 +40,9 @@ module.exports = {
       height: {
         screen: 'var(--screen-height, 100vh)',
       },
+      width: {
+        mobileGallery: 'calc(100vw - 3rem)',
+      },
       fontFamily: {
         sans: ['Helvetica Neue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         serif: ['"IBMPlexSerif"', 'Palatino', 'ui-serif'],
