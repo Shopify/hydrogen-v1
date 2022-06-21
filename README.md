@@ -17,8 +17,6 @@ Hydrogen is a **React-based framework** for building dynamic, **Shopify-powered*
 
 Spin up a Hydrogen app in your browser with our [playground](https://hydrogen.new/) or set up your local environment with the instructions below ⬇️
 
-**This is a developer preview of Hydrogen**. The documentation will be updated as Shopify [introduces new features and refines existing functionality](https://github.com/Shopify/hydrogen/releases).
-
 ## Getting Started
 
 **Requirements:**
