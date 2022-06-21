@@ -61,4 +61,4 @@ This happens when changesets does not properly clear out all the changesets in t
 
 ## Things to consider and improve upon
 
-- Oxygen reads the hydrogen `demo-store` template from the `create-hydrogen-app` package in this repo. Until the Oxygen teams updates their workflow, we need to continue to publish this package whenever the `demo-store` template changes. 
+- Oxygen reads the hydrogen `demo-store` template from the `create-hydrogen-app` package in this repo. Until the Oxygen teams updates their workflow, we need to continue to publish this package whenever the `demo-store` template changes.
