@@ -69,7 +69,7 @@ export function CountrySelector() {
               </Listbox.Button>
 
               <Listbox.Options
-                className={`border-t-contrast/30 border-contrast/30 absolute bottom-12 z-10 grid
+                className={`border-t-contrast/30 border-contrast/30 bg-primary dark:bg-contrast absolute bottom-12 z-10 grid
                 h-48 w-full overflow-y-scroll rounded-t border dark:border-white px-2 py-2
                 transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none
                 md:border-t-0 md:border-b ${
@@ -82,7 +82,9 @@ export function CountrySelector() {
                     <Countries
                       selectedCountry={currentCountry}
                       getClassName={(active) => {
-                        return `text-contrast dark:text-primary w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${
+                        return `text-contrast dark:text-primary bg-primary 
+                        dark:bg-contrast w-full p-2 transition rounded 
+                        flex justify-start items-center text-left cursor-pointer ${
                           active ? 'bg-primary/10' : null
                         }`;
                       }}
