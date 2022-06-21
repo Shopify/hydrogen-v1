@@ -1,6 +1,7 @@
 import {
   getShopifyImageDimensions,
   type GetShopifyImageDimensionsProps,
+  addImageSizeParametersToUrl,
 } from '../image_size';
 
 describe(`getShopifyImageDimensions`, () => {
@@ -114,6 +115,30 @@ describe(`getShopifyImageDimensions`, () => {
       height: 5,
       width: null,
     });
+  });
+});
+
+describe(`'addImageSizeParametersToUrl'`, () => {
+  it(`adds scale before the file extension`, () => {
+    expect(
+      addImageSizeParametersToUrl({
+        src: 'https://cdn.example.com/filename.jpg',
+        scale: 2,
+      })
+    ).toBe('https://cdn.example.com/filename@2x.jpg?scale=2');
+  });
+
+  it(`creates a url when scale isn't involved`, () => {
+    expect(
+      addImageSizeParametersToUrl({
+        src: 'https://cdn.example.com/filename.jpg',
+        width: 100,
+        height: 101,
+        crop: 'bottom',
+      })
+    ).toBe(
+      'https://cdn.example.com/filename.jpg?width=100&height=101&crop=bottom'
+    );
   });
 });
 
