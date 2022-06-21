@@ -4,7 +4,7 @@ import {CurrencyCode} from '../../../storefront-api-types';
 import {getPrice} from '../../../utilities/tests/price';
 import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement';
 import {Money} from '../Money.client';
-import {Link} from '../../Link/index';
+import {Link} from '../../Link/Link.client';
 
 describe('<Money />', () => {
   it('renders a formatted money string', () => {

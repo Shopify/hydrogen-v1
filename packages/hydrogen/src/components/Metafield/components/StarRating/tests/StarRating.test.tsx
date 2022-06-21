@@ -3,7 +3,8 @@ import {getRawMetafield} from '../../../../../utilities/tests/metafields';
 import {mount} from '@shopify/react-testing';
 import {StarRating, Star} from '../StarRating';
 import {Rating} from '../../../../../types';
-import {Link} from '../../../../Link/index';
+import {Link} from '../../../../Link/Link.client';
+import {mountWithProviders} from '../../../../../utilities/tests/shopifyMount';
 
 describe('<StarRating />', () => {
   it('renders the number of stars in the rating scale', () => {
@@ -42,7 +43,7 @@ describe('<StarRating />', () => {
     const rating = getRawMetafield({type: 'rating'});
     const parsedRating = JSON.parse(rating.value ?? '') as Rating;
 
-    const component = mount(
+    const component = mountWithProviders(
       <StarRating rating={parsedRating} as={Link} to="/test" />
     );
 
