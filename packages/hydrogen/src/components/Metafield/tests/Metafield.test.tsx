@@ -5,7 +5,7 @@ import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {Image} from '../../Image';
 import {getMediaImage} from '../../../utilities/tests/media';
 import type {Rating} from '../../../types';
-import {Link} from '../../Link/index';
+import {Link} from '../../Link/Link.client';
 import {Page, Product, ProductVariant} from '../../../storefront-api-types';
 
 describe('<Metafield />', () => {
