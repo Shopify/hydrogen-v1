@@ -40,7 +40,7 @@ export function Footer({menu = mockData}: {menu?: EnhancedMenu}) {
             {({open}) => (
               <>
                 <Disclosure.Button className="text-left md:cursor-default">
-                  <Heading className="flex justify-between" size="lead" as="h4">
+                  <Heading className="flex justify-between" size="lead" as="h3">
                     {item.title}
                     <span className="md:hidden">
                       <IconCaret direction={open ? 'up' : 'down'} />
@@ -72,7 +72,7 @@ export function Footer({menu = mockData}: {menu?: EnhancedMenu}) {
         </section>
       ))}
       <section className={styles.section}>
-        <Heading size="lead" className="cursor-default" as="h4">
+        <Heading size="lead" className="cursor-default" as="h3">
           Country
         </Heading>
         <CountrySelector />
