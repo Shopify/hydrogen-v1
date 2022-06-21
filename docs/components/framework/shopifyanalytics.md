@@ -11,7 +11,7 @@ The `ShopifyAnalytics` component sends commerce-related analytics to Shopify. By
 
 ## Configuration
 
-Add the `ShopifyAnalytics` component in `App.server.jsx`.
+Add the `ShopifyAnalytics` component in `App.server.jsx`:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
