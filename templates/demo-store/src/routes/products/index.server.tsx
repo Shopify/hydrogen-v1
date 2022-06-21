@@ -8,12 +8,11 @@ import {
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
+import {PAGINATION_SIZE} from '~/lib/const';
 import {ProductGrid, PageHeader, Section} from '~/components';
 import {Layout} from '~/components/index.server';
 import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 import {Suspense} from 'react';
-
-const pageBy = 12;
 
 export default function AllProducts() {
   const {
@@ -26,7 +25,7 @@ export default function AllProducts() {
     variables: {
       country: countryCode,
       language: languageCode,
-      pageBy,
+      pageBy: PAGINATION_SIZE,
     },
     preload: true,
   });
@@ -46,6 +45,7 @@ export default function AllProducts() {
       <PageHeader heading="All Products" variant="allCollections" />
       <Section>
         <ProductGrid
+          key="products"
           url={`/products?country=${countryCode}`}
           collection={{products} as Collection}
         />
@@ -54,7 +54,8 @@ export default function AllProducts() {
   );
 }
 
-// pagination api
+// API to paginate products
+// @see templates/demo-store/src/components/product/ProductGrid.client.tsx
 export async function api(
   request: HydrogenRequest,
   {params, queryShop}: HydrogenApiRouteOptions,
@@ -72,11 +73,11 @@ export async function api(
   const {handle} = params;
 
   return await queryShop({
-    query: PAGINATE_QUERY,
+    query: PAGINATE_ALL_PRODUCTS_QUERY,
     variables: {
       handle,
       cursor,
-      pageBy,
+      pageBy: PAGINATION_SIZE,
       country,
     },
   });
@@ -103,7 +104,7 @@ const ALL_PRODUCTS_QUERY = gql`
   }
 `;
 
-const PAGINATE_QUERY = gql`
+const PAGINATE_ALL_PRODUCTS_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
   query ProductsPage(
     $pageBy: Int!
