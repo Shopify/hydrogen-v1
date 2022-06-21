@@ -67,7 +67,7 @@ function Drawer({
                       heading ? 'justify-between' : 'justify-end'
                     }`}
                   >
-                    {heading && (
+                    {heading !== null && (
                       <Dialog.Title>
                         <Heading as="span" size="lead" id="cart-contents">
                           {heading}

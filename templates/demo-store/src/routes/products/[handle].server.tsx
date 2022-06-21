@@ -70,7 +70,7 @@ export default function Product() {
             <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:h-screen md:pt-nav hiddenScroll md:overflow-y-scroll">
               <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
                 <div className="grid gap-2">
-                  <Heading as="h1" className="whitespace-normal">
+                  <Heading as="h1" format className="whitespace-normal">
                     {title}
                   </Heading>
                   {vendor && (

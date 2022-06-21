@@ -84,8 +84,6 @@ function SeoForHomepage() {
     preload: true,
   });
 
-  // TODO: SEO for Homepage doesn't have the titleTemplate prop and so it presents poorly.
-  // The SEO Component as a whole should get another look at.
   return (
     <Seo
       type="homepage"

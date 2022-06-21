@@ -21,6 +21,10 @@ export function CollectionCard({
             sizes="(max-width: 32em) 100vw, 33vw"
             width={600}
             widths={[400, 500, 600, 700, 800, 900]}
+            loaderOptions={{
+              scale: 2,
+              crop: 'center',
+            }}
           />
         )}
       </div>
