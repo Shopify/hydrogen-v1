@@ -305,7 +305,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 
         return await handleRequest(event.request, {
           indexTemplate,
-          cache: await caches.open('oxygen'),
+          cache: caches.default,
           context: event,
           // Buyer IP varies by hosting provider and runtime. You should provide this
           // as an argument to the `handleRequest` function for your runtime.
