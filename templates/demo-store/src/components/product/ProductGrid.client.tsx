@@ -58,8 +58,7 @@ export function ProductGrid({
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
-      threshold: 0.1,
-      rootMargin: '100px',
+      rootMargin: '100%',
     });
 
     const nextButton = nextButtonRef.current;
