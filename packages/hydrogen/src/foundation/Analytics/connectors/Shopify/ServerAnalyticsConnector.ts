@@ -9,10 +9,11 @@ export const ShopifyServerAnalyticsConnector = {
   ): Promise<any> {
     const url = new URL(requestUrl);
     if (url.search === '?shopify' && contentType === 'json') {
+      console.log('Shopify analytics');
       const buyerIp = requestHeader.get('x-forwarded-for');
       const userAgent = requestHeader.get('user-agent');
 
-      console.log(buyerIp, userAgent);
+      console.log('ip / ua:', buyerIp, userAgent);
 
       data.events.forEach((event: any) => {
         event.payload.client_ip_address = buyerIp;

@@ -26,10 +26,19 @@ export async function ServerAnalyticsRoute(
       });
   } else if (requestHeader.get('Content-Type') === 'application/json') {
     analyticsPromise = Promise.resolve(request.json())
-      .then(async (data) => {
-        await serverAnalyticsConnectors?.forEach(async (connector) => {
-          await connector.request(requestUrl, requestHeader, data, 'json');
-        });
+      .then((data) => {
+        console.log('1', requestUrl);
+        return Promise.all(
+          serverAnalyticsConnectors?.forEach(async (connector) => {
+            console.log('2');
+            return await connector.request(
+              requestUrl,
+              requestHeader,
+              data,
+              'json'
+            );
+          }) || []
+        );
       })
       .catch((error) => {
         log.warn('Fail to resolve server analytics (json): ', error);
