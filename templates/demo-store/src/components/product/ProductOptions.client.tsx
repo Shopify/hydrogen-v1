@@ -12,7 +12,7 @@ export function ProductOptions({
   values: any[];
   [key: string]: any;
 } & React.ComponentProps<typeof OptionsGrid>) {
-  const asDropdown = values.length > 4;
+  const asDropdown = values.length > 7;
 
   return asDropdown ? (
     <OptionsDropdown values={values} {...props} />

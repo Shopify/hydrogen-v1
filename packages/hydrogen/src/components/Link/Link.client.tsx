@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {useRouter} from '../../foundation/Router/BrowserRouter.client';
+import {useLocation} from '../../foundation/Router/BrowserRouter.client';
 import {createPath} from 'history';
 import {buildPath, useNavigate} from '../../foundation/useNavigate/useNavigate';
 import {RSC_PATHNAME} from '../../constants';
@@ -32,7 +32,7 @@ export interface LinkProps
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   function Link(props, ref) {
     const navigate = useNavigate();
-    const {location} = useRouter();
+    const location = useLocation();
     const [_, startTransition] = (React as any).useTransition();
     const routeBasePath = useBasePath();
 
@@ -155,6 +155,12 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             'scroll',
           ])}
           ref={ref}
+          rel={
+            props.rel ??
+            (to.startsWith('http') || to.startsWith('//')
+              ? 'noreferrer noopener'
+              : undefined)
+          }
           onClick={internalClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
@@ -173,7 +179,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
 function Prefetch({pathname}: {pathname: string}) {
   const {getProposedLocationServerProps} = useInternalServerProps();
-  const {location} = useRouter();
+  const location = useLocation();
 
   const newPath = createPath({pathname});
 

@@ -45,11 +45,18 @@ export function useNavigate() {
 }
 
 export function buildPath(basePath: string, path: string) {
+  if (path.startsWith('http') || path.startsWith('//')) return path;
+
   let builtPath = path;
   if (basePath !== '/') {
+    const pathFirstChar = path.charAt(0);
+    const basePathLastChar = basePath.charAt(basePath.length - 1);
+
     builtPath =
-      path.charAt(0) === '/' && basePath.charAt(0) === '/'
+      pathFirstChar === '/' && basePathLastChar === '/'
         ? basePath + path.substring(1)
+        : basePathLastChar !== '/' && pathFirstChar !== '/'
+        ? basePath + '/' + path
         : basePath + path;
   }
   return builtPath;

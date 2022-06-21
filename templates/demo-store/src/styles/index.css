@@ -38,7 +38,15 @@
   }
 }
 
-/* TODO: Remove this when the upstream PR merges */
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 shop-pay-button {
   width: 100%;
   height: 3rem;
@@ -116,13 +124,21 @@ shop-pay-button {
   }
 
   .swimlane {
-    @apply grid snap-mandatory grid-flow-col snap-x w-full gap-4 scroll-px-6 px-6 pb-4 overflow-x-scroll;
+    @apply grid snap-mandatory grid-flow-col snap-x w-full gap-4 scroll-px-6 px-6 pb-4 overflow-x-scroll justify-start;
   }
 }
 
 @layer utilities {
-  .h-screen-no-nav {
-    height: calc(100vh - var(--height-nav));
+  .fadeIn {
+    opacity: 0;
+    animation: fadeInAnimation ease 500ms forwards;
+  }
+
+  .hiddenScroll {
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .absolute-center {
@@ -146,10 +162,13 @@ shop-pay-button {
   }
 
   .card-image {
-    @apply relative rounded overflow-clip;
+    @apply relative rounded overflow-clip flex justify-center items-center;
     &::before {
       content: ' ';
-      @apply absolute block top-0 left-0 w-full h-full shadow-border rounded;
+      @apply z-10 absolute block top-0 left-0 w-full h-full shadow-border rounded;
+    }
+    img {
+      @apply object-cover w-full aspect-[inherit];
     }
   }
 }

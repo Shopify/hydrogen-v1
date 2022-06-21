@@ -33,7 +33,9 @@ function parseModel(response, json) {
   return JSON.parse(json, response._fromJSON);
 }
 
-// eslint-disable-next-line no-unused-vars
+var META_HOT = undefined;
+var META_ENV_DEV = undefined.DEV;
+
 function resolveModuleReference(bundlerConfig, moduleData) {
   return moduleData;
 } // Vite import globs will be injected here.
@@ -42,7 +44,7 @@ var allClientComponents = {
   __INJECTED_CLIENT_IMPORTERS__: null
 }; // Mock client component imports during testing
 
-if (typeof jest !== 'undefined') {
+if (META_ENV_DEV && typeof jest !== 'undefined') {
   global.allClientComponents = allClientComponents;
 }
 
@@ -50,7 +52,20 @@ function importClientComponent(moduleId) {
   var modImport = allClientComponents[moduleId];
 
   if (!modImport) {
-    return Promise.reject(new Error("Could not find client component " + moduleId));
+    var error = new Error("Could not find client component " + moduleId);
+
+    if (META_HOT) {
+      META_HOT.send('rsc:cc404', {
+        id: moduleId
+      });
+      return new Promise(function (_, reject) {
+        return setTimeout(function () {
+          return reject(error);
+        }, 200);
+      });
+    }
+
+    return Promise.reject(error);
   }
 
   return typeof modImport === 'function' ? modImport() : Promise.resolve(modImport);

@@ -1,7 +1,8 @@
 import {useLocalization, useShopQuery, CacheLong, gql} from '@shopify/hydrogen';
 import type {Menu, Shop} from '@shopify/hydrogen/storefront-api-types';
 
-import {Header, Footer} from '~/components';
+import {Header} from '~/components';
+import {Footer} from '~/components/index.server';
 import {parseMenu} from '~/lib/utils';
 
 const HEADER_MENU_HANDLE = 'main-menu';
@@ -58,9 +59,6 @@ export function Layout({children}: {children: React.ReactNode}) {
             Skip to content
           </a>
         </div>
-        {/* <div className="px-4 py-2 bg-primary text-contrast md:py-4 md:px-8 lg:px-16">
-          <Text>Wrong Country Banner</Text>
-        </div> */}
         <Header title={shopName} menu={headerMenu} />
         <main role="main" id="mainContent" className="flex-grow">
           {children}

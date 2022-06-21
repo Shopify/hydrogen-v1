@@ -59,12 +59,12 @@ export function AccountRecoverForm() {
         <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
           {submitError && (
             <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-white">{submitError}</p>
+              <p className="m-4 text-s text-contrast">{submitError}</p>
             </div>
           )}
           <div className="mb-3">
             <input
-              className={`mb-1 rounded appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+              className={`mb-1 rounded appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline ${
                 emailError ? ' border-red-500' : 'border-gray-900'
               }`}
               id="email"
@@ -89,7 +89,7 @@ export function AccountRecoverForm() {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-gray-900 text-white rounded py-2 px-4 focus:shadow-outline block w-full"
+              className="bg-gray-900 text-contrast rounded py-2 px-4 focus:shadow-outline block w-full"
               type="submit"
             >
               Request Reset Link

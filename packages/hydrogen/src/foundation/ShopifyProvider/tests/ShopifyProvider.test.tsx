@@ -2,8 +2,8 @@ import React from 'react';
 import {mount} from '@shopify/react-testing';
 import {ShopifyContext} from '../ShopifyProvider.client';
 import {ShopifyProvider} from '../ShopifyProvider.server';
-import {DEFAULT_LOCALE} from '../../constants';
 import {SHOPIFY_CONFIG} from './fixtures';
+import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../constants';
 
 describe('<ShopifyProvider />', () => {
   it('renders its children', () => {
@@ -21,7 +21,8 @@ describe('<ShopifyProvider />', () => {
       const provider = mount(
         <ShopifyProvider
           shopifyConfig={{
-            defaultLocale: 'zh-tw',
+            defaultLanguageCode: 'zh',
+            defaultCountryCode: 'tw',
             storeDomain: 'hydrogen-preview.myshopify.com',
             storefrontToken: '1234',
             storefrontApiVersion: 'unstable',
@@ -32,7 +33,10 @@ describe('<ShopifyProvider />', () => {
       );
 
       expect(provider).toContainReactComponent(ShopifyContext.Provider, {
-        value: expect.objectContaining({locale: 'ZH-TW'}),
+        value: expect.objectContaining({
+          defaultCountryCode: 'TW',
+          defaultLanguageCode: 'ZH',
+        }),
       });
     });
 
@@ -50,7 +54,10 @@ describe('<ShopifyProvider />', () => {
       );
 
       expect(provider).toContainReactComponent(ShopifyContext.Provider, {
-        value: expect.objectContaining({locale: DEFAULT_LOCALE}),
+        value: expect.objectContaining({
+          defaultLanguageCode: DEFAULT_LANGUAGE.toUpperCase(),
+          defaultCountryCode: DEFAULT_COUNTRY.toUpperCase(),
+        }),
       });
     });
 

@@ -77,19 +77,19 @@ export function AccountActivateForm({
 
   return (
     <div className="flex justify-center">
-      <div className="max-w-md w-full">
+      <div className="w-full max-w-md">
         <h1 className="text-4xl">Activate Account.</h1>
         <p className="mt-4">Create your password to activate your account.</p>
         <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
           {submitError && (
-            <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-white">{submitError}</p>
+            <div className="flex items-center justify-center mb-6 bg-primary/30">
+              <p className="m-4 text-s text-contrast">{submitError}</p>
             </div>
           )}
           <div className="mb-4">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
-                passwordError ? ' border-red-500' : 'border-gray-900'
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-primary placeholder:text-primary/30 leading-tight focus:shadow-outline ${
+                passwordError ? ' border-notice' : 'border-primary'
               }`}
               id="password"
               name="password"
@@ -114,7 +114,7 @@ export function AccountActivateForm({
           </div>
           <div className="mb-4">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline ${
                 passwordConfirmError ? ' border-red-500' : 'border-gray-900'
               }`}
               id="passwordConfirm"
@@ -140,7 +140,7 @@ export function AccountActivateForm({
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-gray-900 text-white uppercase py-2 px-4 focus:shadow-outline block w-full"
+              className="block w-full px-4 py-2 text-contrast uppercase bg-gray-900 focus:shadow-outline"
               type="submit"
             >
               Save

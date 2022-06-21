@@ -5,7 +5,6 @@ import {
   isBrowser,
   useUrl,
   AddToCartButton,
-  BuyNowButton,
   Money,
   OptionWithValues,
   ShopPayButton,
@@ -21,6 +20,9 @@ export function ProductForm() {
     useProductOptions();
 
   const isOutOfStock = !selectedVariant?.availableForSale || false;
+  const isOnSale =
+    selectedVariant?.priceV2?.amount <
+      selectedVariant?.compareAtPriceV2?.amount || false;
 
   useEffect(() => {
     if (params || !search) return;
@@ -113,8 +115,24 @@ export function ProductForm() {
             {isOutOfStock ? (
               <Text>Sold out</Text>
             ) : (
-              <Text as="span">
-                Add to bag - <Money data={selectedVariant.priceV2!} as="span" />
+              <Text
+                as="span"
+                className="flex items-center justify-center gap-2"
+              >
+                <span>Add to bag</span> <span>·</span>{' '}
+                <Money
+                  withoutTrailingZeros
+                  data={selectedVariant.priceV2!}
+                  as="span"
+                />
+                {isOnSale && (
+                  <Money
+                    withoutTrailingZeros
+                    data={selectedVariant.compareAtPriceV2!}
+                    as="span"
+                    className="opacity-50 strike"
+                  />
+                )}
               </Text>
             )}
           </Button>

@@ -33,7 +33,7 @@ export function ProductSwimlane({
 
   return (
     <Section heading={title} padding="y" {...props}>
-      <div className="swimlane md:pb-8 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
+      <div className="swimlane hiddenScroll md:pb-8 md:scroll-px-8 lg:scroll-px-12 md:px-8 lg:px-12">
         {productCardsMarkup}
       </div>
     </Section>
@@ -117,11 +117,11 @@ const RECOMMENDED_PRODUCTS_QUERY = gql`
     $languageCode: LanguageCode
   ) @inContext(country: $countryCode, language: $languageCode) {
     recommended: productRecommendations(productId: $productId) {
-      ...ProductCardFields
+      ...ProductCard
     }
     additional: products(first: $count, sortKey: BEST_SELLING) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
     }
   }
@@ -136,7 +136,7 @@ const TOP_PRODUCTS_QUERY = gql`
   ) @inContext(country: $countryCode, language: $languageCode) {
     products(first: $count, sortKey: BEST_SELLING) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
     }
   }

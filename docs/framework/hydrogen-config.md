@@ -90,10 +90,10 @@ The `shopify` property contains all the information that your app needs to conne
 ```tsx
 export default defineConfig({
   shopify: {
-    /* The app's locale */
-    defaultLocale: 'EN-US',
-    /* The first two characters of the `locale` key */
-    languageCode: 'EN',
+    /* The app's default language */
+    defaultLanguage: 'EN',
+    /* The app's default country */
+    defaultCountry: 'US',
     /* The domain of your Shopify store */
     storeDomain: '{shop_domain}.myshopify.com',
     /* Your app's Storefront API access token */

@@ -12,19 +12,22 @@ export function CollectionCard({
 }) {
   return (
     <Link to={`/collections/${collection.handle}`} className="grid gap-4">
-      {collection?.image && (
-        <div className="card-image">
+      <div className="card-image bg-primary/5 aspect-[3/2]">
+        {collection?.image && (
           <Image
-            alt={collection.image.altText || collection.title}
-            className="object-cover w-full aspect-[3/2]"
+            alt={`Image of ${collection.title}`}
             data={collection.image}
-            height={600}
-            loading={loading}
-            sizes="(min-width: 768px) 50vw, 100vw"
-            width={900}
+            height={400}
+            sizes="(max-width: 32em) 100vw, 33vw"
+            width={600}
+            widths={[400, 500, 600, 700, 800, 900]}
+            loaderOptions={{
+              scale: 2,
+              crop: 'center',
+            }}
           />
-        </div>
-      )}
+        )}
+      </div>
       <Heading as="h3" size="copy">
         {collection.title}
       </Heading>

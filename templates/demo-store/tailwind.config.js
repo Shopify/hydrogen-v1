@@ -37,6 +37,14 @@ module.exports = {
         nav: 'var(--height-nav)',
         screen: 'var(--screen-height, 100vh)',
       },
+      height: {
+        screen: 'var(--screen-height, 100vh)',
+        'screen-no-nav':
+          'calc(var(--screen-height, 100vh) - var(--height-nav))',
+      },
+      width: {
+        mobileGallery: 'calc(100vw - 3rem)',
+      },
       fontFamily: {
         sans: ['Helvetica Neue', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         serif: ['"IBMPlexSerif"', 'Palatino', 'ui-serif'],

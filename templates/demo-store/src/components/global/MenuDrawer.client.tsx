@@ -15,9 +15,6 @@ export function MenuDrawer({
   return (
     <Drawer open={isOpen} onClose={onClose} openFrom="left" heading="Menu">
       <div className="grid">
-        <Drawer.Title>
-          <h2 className="sr-only">Menu Drawer</h2>
-        </Drawer.Title>
         <MenuMobileNav menu={menu} onClose={onClose} />
       </div>
     </Drawer>

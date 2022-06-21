@@ -15,7 +15,7 @@ import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {PageHeader, ProductGrid, Section, Text} from '~/components';
 import {NotFound, Layout} from '~/components/index.server';
 
-const pageBy = 4;
+const pageBy = 48;
 
 export default function Collection({params}: HydrogenRouteProps) {
   const {handle} = params;
@@ -54,16 +54,19 @@ export default function Collection({params}: HydrogenRouteProps) {
         <Seo type="collection" data={collection} />
       </Suspense>
       <PageHeader heading={collection.title}>
-        <div className="flex items-baseline justify-between w-full">
-          <div>
-            <Text format width="narrow" as="p" className="inline-block">
-              {collection.description}
-            </Text>
+        {collection?.description && (
+          <div className="flex items-baseline justify-between w-full">
+            <div>
+              <Text format width="narrow" as="p" className="inline-block">
+                {collection.description}
+              </Text>
+            </div>
           </div>
-        </div>
+        )}
       </PageHeader>
       <Section>
         <ProductGrid
+          key="collections"
           collection={collection}
           url={`/collections/${handle}?country=${country}`}
         />
@@ -72,7 +75,8 @@ export default function Collection({params}: HydrogenRouteProps) {
   );
 }
 
-// pagination api
+// API endpoint that returns paginated products for this collection
+// @see templates/demo-store/src/components/product/ProductGrid.client.tsx
 export async function api(
   request: HydrogenRequest,
   {params, queryShop}: HydrogenApiRouteOptions,
@@ -90,7 +94,7 @@ export async function api(
   const {handle} = params;
 
   return await queryShop({
-    query: PAGINATE_QUERY,
+    query: PAGINATE_COLLECTION_QUERY,
     variables: {
       handle,
       cursor,
@@ -99,29 +103,6 @@ export async function api(
     },
   });
 }
-
-const PAGINATE_QUERY = gql`
-  ${PRODUCT_CARD_FRAGMENT}
-  query CollectionPage(
-    $handle: String!
-    $pageBy: Int!
-    $cursor: String
-    $country: CountryCode
-    $language: LanguageCode
-  ) @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
-      products(first: $pageBy, after: $cursor) {
-        nodes {
-          ...ProductCardFields
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-      }
-    }
-  }
-`;
 
 const COLLECTION_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
@@ -149,7 +130,30 @@ const COLLECTION_QUERY = gql`
       }
       products(first: $pageBy, after: $cursor) {
         nodes {
-          ...ProductCardFields
+          ...ProductCard
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+const PAGINATE_COLLECTION_QUERY = gql`
+  ${PRODUCT_CARD_FRAGMENT}
+  query CollectionPage(
+    $handle: String!
+    $pageBy: Int!
+    $cursor: String
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
+      products(first: $pageBy, after: $cursor) {
+        nodes {
+          ...ProductCard
         }
         pageInfo {
           hasNextPage

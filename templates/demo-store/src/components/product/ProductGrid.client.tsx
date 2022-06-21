@@ -1,7 +1,7 @@
 import {useState, useRef, useEffect, useCallback} from 'react';
-import {flattenConnection} from '@shopify/hydrogen';
+import {Link, flattenConnection} from '@shopify/hydrogen';
 
-import {Grid, ProductCard} from '~/components';
+import {Button, Grid, ProductCard} from '~/components';
 import {getImageLoadingPriority} from '~/lib/const';
 import type {Collection, Product} from '@shopify/hydrogen/storefront-api-types';
 
@@ -19,6 +19,7 @@ export function ProductGrid({
   const [cursor, setCursor] = useState(endCursor ?? '');
   const [nextPage, setNextPage] = useState(hasNextPage);
   const [pending, setPending] = useState(false);
+  const haveProducts = initialProducts.length > 0;
 
   const fetchProducts = useCallback(async () => {
     setPending(true);
@@ -30,7 +31,7 @@ export function ProductGrid({
     });
     const {data} = await response.json();
 
-    // ProductGrid can paginate collections.products or products all routes
+    // ProductGrid can paginate collection, products and search routes
     // @ts-ignore TODO: Fix types
     const newProducts: Product[] = flattenConnection<Product>(
       data?.collection?.products || data?.products || [],
@@ -57,8 +58,7 @@ export function ProductGrid({
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
-      threshold: 0.1,
-      rootMargin: '100px',
+      rootMargin: '100%',
     });
 
     const nextButton = nextButtonRef.current;
@@ -69,6 +69,17 @@ export function ProductGrid({
       if (nextButton) observer.unobserve(nextButton);
     };
   }, [nextButtonRef, cursor, handleIntersect]);
+
+  if (!haveProducts) {
+    return (
+      <>
+        <p>No products found on this collection</p>
+        <Link to="/products">
+          <p className="underline">Browse catalog</p>
+        </Link>
+      </>
+    );
+  }
 
   return (
     <>
@@ -83,14 +94,19 @@ export function ProductGrid({
       </Grid>
 
       {nextPage && (
-        <button
-          className={`bg-white border dark:text-black border-gray-50 font-medium p-2 disabled:bg-gray-50`}
-          disabled={pending}
-          onClick={fetchProducts}
+        <div
+          className="flex items-center justify-center mt-6"
           ref={nextButtonRef}
         >
-          {pending ? 'Loading...' : 'Load more products'}
-        </button>
+          <Button
+            variant="secondary"
+            disabled={pending}
+            onClick={fetchProducts}
+            width="full"
+          >
+            {pending ? 'Loading...' : 'Load more products'}
+          </Button>
+        </div>
       )}
     </>
   );

@@ -26,8 +26,7 @@ export interface LocalizationProviderProps {
  * Any descendents of this provider can use the `useLocalization` hook.
  */
 export function LocalizationProvider(props: LocalizationProviderProps) {
-  const {languageCode: defaultLanguageCode, locale} = useShop();
-  const defaultCountryCode = locale.split(/[-_]/)[1] || '';
+  const {defaultLanguageCode, defaultCountryCode} = useShop();
 
   const languageCode = (
     props.languageCode ?? defaultLanguageCode

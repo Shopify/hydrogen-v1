@@ -17,6 +17,28 @@ describe('<Link />', () => {
     );
   });
 
+  it('renders default rel for external destinations', () => {
+    const component = mountWithProviders(
+      <Link to="https://something.com/products/hydrogen">Link</Link>
+    );
+
+    expect(component).toContainReactHtml(
+      '<a rel="noreferrer noopener" href="https://something.com/products/hydrogen">Link</a>'
+    );
+  });
+
+  it('overrides default rel for external destinations', () => {
+    const component = mountWithProviders(
+      <Link rel="bookmark" to="https://something.com/products/hydrogen">
+        Link
+      </Link>
+    );
+
+    expect(component).toContainReactHtml(
+      '<a rel="bookmark" href="https://something.com/products/hydrogen">Link</a>'
+    );
+  });
+
   it('forwards the ref', (done) => {
     mountWithProviders(
       <Link

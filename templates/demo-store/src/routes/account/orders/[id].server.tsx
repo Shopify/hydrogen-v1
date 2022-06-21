@@ -21,7 +21,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 import {Suspense} from 'react';
 
-import {Text, PageHeader} from '~/components';
+import {Text, PageHeader, Heading} from '~/components';
 import {Layout} from '~/components/index.server';
 import {statusMessage} from '~/lib/utils';
 
@@ -80,7 +80,7 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
           <Text color="subtle">Return to Account Overview</Text>
         </Link>
       </PageHeader>
-      <div className="w-full p-4 py-6 sm:grid-cols-1 md:p-8 lg:p-12 lg:py-6">
+      <div className="w-full p-6 sm:grid-cols-1 md:p-8 lg:p-12 lg:py-6">
         <div>
           <Text as="h3" size="lead">
             Order No. {order.name}
@@ -88,31 +88,31 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
           <Text className="mt-2" as="p">
             Placed on {new Date(order.processedAt!).toDateString()}
           </Text>
-          <div className="grid gap-12 sm:grid-cols-1 md:grid-cols-4 md:gap-16 sm:divide-y sm:divide-gray-200">
+          <div className="grid items-start gap-12 sm:grid-cols-1 md:grid-cols-4 md:gap-16 sm:divide-y sm:divide-gray-200">
             <table className="min-w-full my-8 divide-y divide-gray-300 md:col-span-3">
               <thead>
-                <tr>
+                <tr className="align-baseline ">
                   <th
                     scope="col"
-                    className="py-3.5 pl-0 pr-3 text-left text-sm font-semibold"
+                    className="pb-4 pl-0 pr-3 font-semibold text-left"
                   >
                     Product
                   </th>
                   <th
                     scope="col"
-                    className="hidden px-3 py-3.5 text-sm font-semibold sm:table-cell md:table-cell text-right"
+                    className="hidden px-4 pb-4 font-semibold text-right sm:table-cell md:table-cell"
                   >
                     Price
                   </th>
                   <th
                     scope="col"
-                    className="hidden px-3 py-3.5 text-sm font-semibold sm:table-cell md:table-cell text-right"
+                    className="hidden px-4 pb-4 font-semibold text-right sm:table-cell md:table-cell"
                   >
                     Quantity
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-sm font-semibold text-right"
+                    className="px-4 pb-4 font-semibold text-right"
                   >
                     Total
                   </th>
@@ -121,57 +121,64 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
               <tbody className="divide-y divide-gray-200">
                 {lineItems.map((lineItem) => (
                   <tr key={lineItem.variant!.id}>
-                    <td className="w-full py-4 pl-0 pr-3 text-sm font-medium max-w-0 sm:w-auto sm:max-w-none">
-                      <div className="flex">
+                    <td className="w-full py-4 pl-0 pr-3 align-top sm:align-middle max-w-0 sm:w-auto sm:max-w-none">
+                      <div className="flex gap-6">
                         <Link
                           to={`/products/${lineItem.variant!.product!.handle}`}
                         >
                           {lineItem?.variant?.image && (
-                            <Image
-                              className="flex-none object-cover object-center w-24 h-24 bg-gray-100 rounded-md"
-                              src={lineItem.variant.image.src!}
-                              width={lineItem.variant.image.width!}
-                              height={lineItem.variant.image.height!}
-                              alt={lineItem.variant.image.altText!}
-                            />
+                            <div className="w-24 card-image aspect-square">
+                              <Image
+                                src={lineItem.variant.image.src!}
+                                width={lineItem.variant.image.width!}
+                                height={lineItem.variant.image.height!}
+                                alt={lineItem.variant.image.altText!}
+                                loaderOptions={{
+                                  scale: 2,
+                                  crop: 'center',
+                                }}
+                              />
+                            </div>
                           )}
                         </Link>
-                        <div className="flex-col hidden ml-6 lg:flex">
+                        <div className="flex-col justify-center hidden lg:flex">
                           <Text as="p">{lineItem.title}</Text>
                           <Text size="fine" className="mt-1" as="p">
                             {lineItem.variant!.title}
                           </Text>
                         </div>
-                        <dl className="flex-col ml-4">
+                        <dl className="grid">
                           <dt className="sr-only">Product</dt>
                           <dd className="truncate lg:hidden">
-                            <Text as="h3">{lineItem.title}</Text>
-                            <Text size="fine" className="mt-1" as="p">
+                            <Heading size="copy" format as="h3">
+                              {lineItem.title}
+                            </Heading>
+                            <Text size="fine" className="mt-1">
                               {lineItem.variant!.title}
                             </Text>
                           </dd>
                           <dt className="sr-only">Price</dt>
-                          <dd className="truncate sm:hidden md:hidden lg:hidden">
+                          <dd className="truncate sm:hidden">
                             <Text size="fine" className="mt-4">
                               <Money data={lineItem.variant!.priceV2!} />
                             </Text>
                           </dd>
                           <dt className="sr-only">Quantity</dt>
-                          <dd className="truncate sm:hidden md:hidden lg:hidden">
-                            <Text className="mt-1" size="fine" as="p">
+                          <dd className="truncate sm:hidden">
+                            <Text className="mt-1" size="fine">
                               Qty: {lineItem.quantity}
                             </Text>
                           </dd>
                         </dl>
                       </div>
                     </td>
-                    <td className="hidden px-3 py-4 text-sm text-right sm:table-cell">
+                    <td className="hidden px-3 py-4 text-right align-top sm:align-middle sm:table-cell">
                       <Money data={lineItem.variant!.priceV2!} />
                     </td>
-                    <td className="hidden px-3 py-4 text-sm text-right sm:table-cell">
+                    <td className="hidden px-3 py-4 text-right align-top sm:align-middle sm:table-cell">
                       {lineItem.quantity}
                     </td>
-                    <td className="px-3 py-4 text-sm text-right sm:table-cell">
+                    <td className="px-3 py-4 text-right align-top sm:align-middle sm:table-cell">
                       <Text>
                         <Money data={lineItem.discountedTotalPrice!} />
                       </Text>
@@ -263,10 +270,10 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
                 </tr>
               </tfoot>
             </table>
-            <div className="border-none">
-              <Text as="h3" size="lead">
+            <div className="sticky border-none top-nav md:my-8">
+              <Heading size="copy" className="font-semibold" as="h3">
                 Shipping Address
-              </Text>
+              </Heading>
               {order?.shippingAddress ? (
                 <ul className="mt-6">
                   <li>
@@ -289,14 +296,14 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
               ) : (
                 <p className="mt-3">No shipping address defined</p>
               )}
-              <Text as="h3" size="lead" className="mt-8">
+              <Heading size="copy" className="mt-8 font-semibold" as="h3">
                 Status
-              </Text>
+              </Heading>
               <div
                 className={`mt-3 px-3 py-1 text-xs font-medium rounded-full inline-block w-auto ${
                   order.fulfillmentStatus === 'FULFILLED'
                     ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-200 text-gray-500'
+                    : 'bg-primary/20 text-primary/50'
                 }`}
               >
                 <Text size="fine">
@@ -313,7 +320,7 @@ export default function OrderDetails({response}: HydrogenRouteProps) {
 
 // @see: https://shopify.dev/api/storefront/2022-07/objects/Order#fields
 const ORDER_QUERY = gql`
-  fragment MoneyV2 on MoneyV2 {
+  fragment Money on MoneyV2 {
     amount
     currencyCode
   }
@@ -351,7 +358,7 @@ const ORDER_QUERY = gql`
   fragment Image on Image {
     altText
     height
-    src: transformedSrc(maxHeight: 160)
+    src: url(transform: {crop: CENTER, maxHeight: 96, maxWidth: 96, scale: 2})
     id
     width
   }
@@ -361,7 +368,7 @@ const ORDER_QUERY = gql`
       ...Image
     }
     priceV2 {
-      ...MoneyV2
+      ...Money
     }
     product {
       handle
@@ -375,17 +382,17 @@ const ORDER_QUERY = gql`
     quantity
     discountAllocations {
       allocatedAmount {
-        ...MoneyV2
+        ...Money
       }
       discountApplication {
         ...DiscountApplication
       }
     }
     originalTotalPrice {
-      ...MoneyV2
+      ...Money
     }
     discountedTotalPrice {
-      ...MoneyV2
+      ...Money
     }
     variant {
       ...ProductVariant
@@ -400,38 +407,32 @@ const ORDER_QUERY = gql`
   ) @inContext(country: $country, language: $language) {
     customer(customerAccessToken: $customerAccessToken) {
       orders(first: 1, query: $orderId) {
-        edges {
-          node {
-            id
-            name
-            orderNumber
-            processedAt
-            fulfillmentStatus
-            totalTaxV2 {
-              ...MoneyV2
+        nodes {
+          id
+          name
+          orderNumber
+          processedAt
+          fulfillmentStatus
+          totalTaxV2 {
+            ...Money
+          }
+          totalPriceV2 {
+            ...Money
+          }
+          subtotalPriceV2 {
+            ...Money
+          }
+          shippingAddress {
+            ...AddressFull
+          }
+          discountApplications(first: 100) {
+            nodes {
+              ...DiscountApplication
             }
-            totalPriceV2 {
-              ...MoneyV2
-            }
-            subtotalPriceV2 {
-              ...MoneyV2
-            }
-            shippingAddress {
-              ...AddressFull
-            }
-            discountApplications(first: 100) {
-              edges {
-                node {
-                  ...DiscountApplication
-                }
-              }
-            }
-            lineItems(first: 100) {
-              edges {
-                node {
-                  ...LineItemFull
-                }
-              }
+          }
+          lineItems(first: 100) {
+            nodes {
+              ...LineItemFull
             }
           }
         }

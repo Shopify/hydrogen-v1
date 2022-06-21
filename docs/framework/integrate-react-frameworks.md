@@ -6,7 +6,7 @@ description: Learn how to integrate Hydrogen with an existing React framework th
 
 The majority of [Hydrogen components](https://shopify.dev/api/hydrogen/components) accept data from the Storefront API and render just like regular React components. This means you can use Hydrogen components in other React frameworks like [Next.js](https://nextjs.org/) or [Gatsby](https://www.gatsbyjs.com/).
 
-Shopify hasn't optimized integrating with other frameworks for the developer preview, so you need to follow some special instructions to make it work. While the instructions in this guide are specific Next.js, you can follow a similar pattern to support other frameworks.
+Shopify hasn't optimized integrating with other frameworks, so you need to follow some special instructions to make it work. While the instructions in this guide are specific Next.js, you can follow a similar pattern to support other frameworks.
 
 ## Get started with Next.js
 

@@ -11,15 +11,16 @@ import {
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
+import {getExcerpt} from '~/lib/utils';
+import {NotFound, Layout, ProductSwimlane} from '~/components/index.server';
 import {
   Heading,
+  ProductDetail,
   ProductForm,
   ProductGallery,
-  ProductInfo,
   Section,
   Text,
 } from '~/components';
-import {NotFound, Layout, ProductSwimlane} from '~/components/index.server';
 
 export default function Product() {
   const {handle} = useRouteParams();
@@ -29,7 +30,7 @@ export default function Product() {
   } = useLocalization();
 
   const {
-    data: {product},
+    data: {product, shop},
   } = useShopQuery({
     query: PRODUCT_QUERY,
     variables: {
@@ -51,6 +52,9 @@ export default function Product() {
     },
   });
 
+  const {media, title, vendor, description, id} = product;
+  const {shippingPolicy, refundPolicy} = shop;
+
   return (
     <Layout>
       <Suspense>
@@ -58,36 +62,56 @@ export default function Product() {
       </Suspense>
       <ProductOptionsProvider data={product}>
         <Section padding="x" className="px-0">
-          <div className="grid items-start gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
             <ProductGallery
-              media={product.media.nodes}
+              media={media.nodes}
               className="w-screen md:w-full lg:col-span-2"
             />
-            <section className="sticky md:mx-auto max-w-xl md:max-w-[24rem] grid gap-8 p-6 md:px-0 top-nav">
-              <div className="grid gap-2">
-                <Heading as="h1" className="whitespace-normal">
-                  {product.title}
-                </Heading>
-                {product.vendor && (
-                  <Text className={'opacity-50 font-medium'}>
-                    {product.vendor}
-                  </Text>
-                )}
-              </div>
-              <ProductForm />
-              <ProductInfo />
-            </section>
+            <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:h-screen md:pt-nav hiddenScroll md:overflow-y-scroll">
+              <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
+                <div className="grid gap-2">
+                  <Heading as="h1" format className="whitespace-normal">
+                    {title}
+                  </Heading>
+                  {vendor && (
+                    <Text className={'opacity-50 font-medium'}>{vendor}</Text>
+                  )}
+                </div>
+                <ProductForm />
+                <div className="grid gap-4 py-4">
+                  {description && (
+                    <ProductDetail
+                      title="Product Details"
+                      content={description}
+                    />
+                  )}
+                  {shippingPolicy?.body && (
+                    <ProductDetail
+                      title="Shipping"
+                      content={getExcerpt(shippingPolicy.body)}
+                      learnMore={`/policies/${shippingPolicy.handle}`}
+                    />
+                  )}
+                  {refundPolicy?.body && (
+                    <ProductDetail
+                      title="Returns"
+                      content={getExcerpt(refundPolicy.body)}
+                      learnMore={`/policies/${refundPolicy.handle}`}
+                    />
+                  )}
+                </div>
+              </section>
+            </div>
           </div>
         </Section>
         <Suspense>
-          <ProductSwimlane title="Related Products" data={product.id} />
+          <ProductSwimlane title="Related Products" data={id} />
         </Suspense>
       </ProductOptionsProvider>
     </Layout>
   );
 }
 
-// TODO: Add query for Metafields for ProductInfo
 const PRODUCT_QUERY = gql`
   ${MEDIA_FRAGMENT}
   query Product(
@@ -102,17 +126,13 @@ const PRODUCT_QUERY = gql`
       description
       media(first: 7) {
         nodes {
-          ...MediaFields
+          ...Media
         }
       }
       variants(first: 100) {
         nodes {
           id
           availableForSale
-          compareAtPriceV2 {
-            amount
-            currencyCode
-          }
           selectedOptions {
             name
             value
@@ -128,6 +148,10 @@ const PRODUCT_QUERY = gql`
             amount
             currencyCode
           }
+          compareAtPriceV2 {
+            amount
+            currencyCode
+          }
           sku
           title
           unitPrice {
@@ -139,6 +163,16 @@ const PRODUCT_QUERY = gql`
       seo {
         description
         title
+      }
+    }
+    shop {
+      shippingPolicy {
+        body
+        handle
+      }
+      refundPolicy {
+        body
+        handle
       }
     }
   }

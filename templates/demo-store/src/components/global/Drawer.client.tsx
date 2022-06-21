@@ -19,7 +19,7 @@ function Drawer({
   openFrom = 'right',
   children,
 }: {
-  heading: string;
+  heading?: string;
   open: boolean;
   onClose: () => void;
   openFrom: 'right' | 'left';
@@ -67,10 +67,12 @@ function Drawer({
                       heading ? 'justify-between' : 'justify-end'
                     }`}
                   >
-                    {heading && (
-                      <Heading as="h2" size="lead" id="cart-contents">
-                        {heading}
-                      </Heading>
+                    {heading !== null && (
+                      <Dialog.Title>
+                        <Heading as="span" size="lead" id="cart-contents">
+                          {heading}
+                        </Heading>
+                      </Dialog.Title>
                     )}
                     <button
                       type="button"

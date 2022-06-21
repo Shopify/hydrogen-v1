@@ -27,7 +27,8 @@ export interface RequestHandler {
 }
 
 export type ShopifyConfig = {
-  defaultLocale?: string;
+  defaultLanguageCode?: string;
+  defaultCountryCode?: string;
   storeDomain: string;
   storefrontToken: string;
   storefrontApiVersion: string;

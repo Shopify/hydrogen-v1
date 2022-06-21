@@ -4,8 +4,6 @@ title: Deploy a Hydrogen storefront
 description: Learn how to deploy your Hydrogen storefront to Oxygen and other runtimes.
 ---
 
-{% include hydrogen/developer-preview.md %}
-
 You can deploy a Hydrogen storefront to most [Worker and Node.js runtimes](https://shopify.dev/custom-storefronts/hydrogen/framework#request-workflow-for-hydrogen-apps). This guide describes how to deploy a Hydrogen storefront to [Oxygen](#deploy-to-oxygen), [Node.js](#deploy-to-node-js), [Docker](#deploy-to-docker), [Cloudflare Workers](#deploy-to-cloudflare-workers), and [Netlify](#deploy-to-netlify).
 
 ## Requirements
@@ -14,10 +12,7 @@ You're using the [most recent version of Hydrogen](https://github.com/Shopify/hy
 
 ## Deploy to Oxygen
 
-Oxygen is Shopify's recommended deployment platform for Hydrogen storefronts.
-
-> Note:
-> Shopify is currently working on Oxygen, but it's not available yet.
+Oxygen is Shopify's recommended deployment platform for Hydrogen storefronts. To learn how to deploy a Hydrogen storefront to Oxygen, refer to [Getting started with Oxygen](https://shopify.dev/custom-storefronts/oxygen/getting-started).
 
 ## Deploy to Node.js
 
@@ -224,7 +219,7 @@ You can deploy your Hydrogen storefront to Cloudflare Workers, a serverless appl
 > Note:
 > Requirements might be different for Cloudflare enterprise accounts.
 
-1. [Create a Hydrogen storefront locally](https://shopify.dev/custom-storefronts/hydrogen/getting-started/create).
+1. [Create a Hydrogen storefront locally](https://shopify.dev/custom-storefronts/hydrogen/getting-started/quickstart).
 
 2. Create a `wrangler.toml` file in the root of your project.
 

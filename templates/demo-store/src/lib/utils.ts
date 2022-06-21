@@ -1,13 +1,11 @@
-// TODO: Split this into multiple files
+import React, {useCallback} from 'react';
 import {useServerProps} from '@shopify/hydrogen';
 import {
   Menu,
   MenuItem,
   MoneyV2,
-  ProductPriceRange,
   UserError,
 } from '@shopify/hydrogen/storefront-api-types';
-import React, {useCallback} from 'react';
 
 // @ts-expect-error types not available
 import typographicBase from 'typographic-base';
@@ -50,20 +48,6 @@ export function formatText(input?: string | React.ReactNode) {
   );
 }
 
-export function formatPhoneNumber(phoneNumberString: string) {
-  const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
-  const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-  if (match) {
-    const intlCode = match[1] ? '+1 ' : '';
-    return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
-  }
-  return null;
-}
-
-export function isRangedPricing(priceRange: ProductPriceRange) {
-  return priceRange.minVariantPrice.amount < priceRange.maxVariantPrice.amount;
-}
-
 export function isNewArrival(date: string, daysOld = 30) {
   return (
     new Date(date).valueOf() >
@@ -76,6 +60,12 @@ export function isDiscounted(price: MoneyV2, compareAtPrice: MoneyV2) {
     return true;
   }
   return false;
+}
+
+export function getExcerpt(text: string) {
+  const regex = /<p.*>(.*?)<\/p>/;
+  const correspondingText = regex.exec(text);
+  return correspondingText ? correspondingText[1] : '';
 }
 
 function resolveToFromType(
@@ -166,7 +156,6 @@ function parseItem(customPrefixes = {}) {
       Note: update logic when API is updated to include the active qualified domain
     */
     const isInternalLink = /\.myshopify\.com/g.test(item.url);
-    const hasSubItems = item?.items?.length > 0;
 
     const parsedItem = isInternalLink
       ? // internal links

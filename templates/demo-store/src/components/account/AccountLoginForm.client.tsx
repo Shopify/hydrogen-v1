@@ -78,7 +78,7 @@ export function AccountLoginForm({shopName}: {shopName: string}) {
         <form noValidate className="pt-6 pb-8 mt-4 mb-4" onSubmit={onSubmit}>
           {hasSubmitError && (
             <div className="flex items-center justify-center mb-6 bg-zinc-500">
-              <p className="m-4 text-s text-white">
+              <p className="m-4 text-s text-contrast">
                 Sorry we did not recognize either your email or password. Please
                 try to sign in again or create a new account.
               </p>
@@ -151,7 +151,7 @@ function EmailField({
     <>
       <div className="mb-3">
         <input
-          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline ${
             emailError ? ' border-red-500' : 'border-gray-900'
           }`}
           id="email"
@@ -176,7 +176,7 @@ function EmailField({
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 rounded text-white py-2 px-4 focus:shadow-outline block w-full"
+          className="bg-gray-900 rounded text-contrast py-2 px-4 focus:shadow-outline block w-full"
           type="submit"
         >
           Next
@@ -239,7 +239,7 @@ function PasswordField({
     <>
       <div className="mb-3">
         <input
-          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-gray-800 placeholder:text-gray-500 leading-tight focus:shadow-outline ${
+          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline ${
             passwordError ? ' border-red-500' : 'border-gray-900'
           }`}
           id="password"
@@ -265,7 +265,7 @@ function PasswordField({
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 text-white rounded py-2 px-4 focus:shadow-outline block w-full"
+          className="bg-gray-900 text-contrast rounded py-2 px-4 focus:shadow-outline block w-full"
           type="submit"
         >
           Sign in
@@ -274,7 +274,7 @@ function PasswordField({
       <div className="flex items-center justify-between mt-4">
         <div className="flex-1"></div>
         <Link
-          className="inline-block align-baseline text-sm text-gray-500"
+          className="inline-block align-baseline text-sm text-primary/50"
           to="/account/recover"
         >
           Forgot password

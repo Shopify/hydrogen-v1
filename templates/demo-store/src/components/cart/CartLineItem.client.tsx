@@ -21,8 +21,12 @@ export function CartLineItem() {
         <Image
           width={112}
           height={112}
-          widths={[224]}
+          widths={[112]}
           data={merchandise.image as ImageType}
+          loaderOptions={{
+            scale: 2,
+            crop: 'center',
+          }}
           className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
         />
       </div>
@@ -81,7 +85,7 @@ function CartLineQuantityAdjust({
         <CartLineQuantityAdjustButton
           adjust="decrease"
           aria-label="Decrease quantity"
-          className="w-10 h-10 transition text-primary/40 hover:text-primary disabled:cursor-wait"
+          className="w-10 h-10 transition text-primary/50 hover:text-primary disabled:cursor-wait"
         >
           &#8722;
         </CartLineQuantityAdjustButton>
@@ -89,7 +93,7 @@ function CartLineQuantityAdjust({
         <CartLineQuantityAdjustButton
           adjust="increase"
           aria-label="Increase quantity"
-          className="w-10 h-10 transition text-primary/40 hover:text-primary disabled:cursor-wait"
+          className="w-10 h-10 transition text-primary/50 hover:text-primary disabled:cursor-wait"
         >
           &#43;
         </CartLineQuantityAdjustButton>

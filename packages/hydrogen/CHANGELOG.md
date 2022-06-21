@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.26.1
+
+### Patch Changes
+
+- [#1663](https://github.com/Shopify/hydrogen/pull/1663) [`66200d6b`](https://github.com/Shopify/hydrogen/commit/66200d6b7d8e54b0746a048e950f067d4b8e0609) Thanks [@jplhomer](https://github.com/jplhomer)! - Default to 'US' CountryCode if locale cannot be parsed correctly
+
+* [#1690](https://github.com/Shopify/hydrogen/pull/1690) [`afde8989`](https://github.com/Shopify/hydrogen/commit/afde8989ae03e842de65ac698ab86033e56e7ee2) Thanks [@frehner](https://github.com/frehner)! - Add scale to the filename part of the url in `shopifyImageLoader()`
+
+- [#1676](https://github.com/Shopify/hydrogen/pull/1676) [`0149cbf6`](https://github.com/Shopify/hydrogen/commit/0149cbf60b331461ae0c97bb3e18d3f27e143d0a) Thanks [@frandiox](https://github.com/frandiox)! - Avoid writing to Node response if it has been closed early.
+
+* [#1674](https://github.com/Shopify/hydrogen/pull/1674) [`8068d3ce`](https://github.com/Shopify/hydrogen/commit/8068d3ce14f44ea83bde8f3729ae2a8cbbf8a52e) Thanks [@frandiox](https://github.com/frandiox)! - Throw error when `<Link>` component is used outside of `<Router>` component.
+
+- [#1680](https://github.com/Shopify/hydrogen/pull/1680) [`acf5223f`](https://github.com/Shopify/hydrogen/commit/acf5223fe34cfdd483ae9b0e714445c8cbf11a9d) Thanks [@blittle](https://github.com/blittle)! - Fix basepath to not apply to external URLs in the `<Link` component. Also default the attribute `rel="noreferrer noopener` for external URLs.
+
+* [#1670](https://github.com/Shopify/hydrogen/pull/1670) [`8b26f7a6`](https://github.com/Shopify/hydrogen/commit/8b26f7a6f034eaa36bb11974ff3dc5d992e2e97b) Thanks [@frandiox](https://github.com/frandiox)! - Optimize client boundaries only during build by default.
+
 ## 0.26.0
 
 ### Minor Changes
@@ -1525,11 +1541,11 @@
 
   `queryShop` accepts a single argument object with the following properties:
 
-  | Property    | Type                                   | Required |
-  | ----------- | -------------------------------------- | -------- |
-  | `query`     | `string \| ASTNode`                    | Yes      |
-  | `variables` | `Record<string, any>`                  | No       |
-  | `locale`    | `string` (defaults to `defaultLocale`) | No       |
+  | Property    | Type                                                                                                                                                             | Required |
+  | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+  | `query`     | `string \| ASTNode`                                                                                                                                              | Yes      |
+  | `variables` | `Record<string, any>`                                                                                                                                            | No       |
+  | `locale`    | `string`. Defaults to the locale value from the [LocalizationProvider](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component. | No       |
 
   **Important**: In order to use `queryShop`, you should pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`:
 

@@ -1,4 +1,9 @@
-import {gql, useLocalization, useShopQuery} from '@shopify/hydrogen';
+import {
+  gql,
+  HydrogenResponse,
+  useLocalization,
+  useShopQuery,
+} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {Button, FeaturedCollections, PageHeader, Text} from '~/components';
@@ -8,7 +13,19 @@ import type {
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
 
-export function NotFound({type = 'page'}) {
+export function NotFound({
+  response,
+  type = 'page',
+}: {
+  response?: HydrogenResponse;
+  type?: string;
+}) {
+  if (response) {
+    response.doNotStream();
+    response.status = 404;
+    response.statusText = 'Not found';
+  }
+
   const {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
@@ -39,10 +56,12 @@ export function NotFound({type = 'page'}) {
           Take me to the home page
         </Button>
       </PageHeader>
-      <FeaturedCollections
-        title="Popular Collections"
-        data={featuredCollections.nodes}
-      />
+      {featuredCollections.nodes.length < 2 && (
+        <FeaturedCollections
+          title="Popular Collections"
+          data={featuredCollections.nodes}
+        />
+      )}
       <ProductSwimlane data={featuredProducts.nodes} />
     </Layout>
   );
@@ -67,7 +86,7 @@ const NOT_FOUND_QUERY = gql`
     }
     featuredProducts: products(first: 12) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
     }
   }

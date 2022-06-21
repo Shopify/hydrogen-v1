@@ -9,8 +9,5 @@ export async function loadConfig(options = {root: process.cwd()}) {
     options
   );
 
-  return {
-    configuration: loaded[0].default,
-    configurationPath: loaded[0].configPath,
-  };
+  return {configuration: loaded[0].default};
 }

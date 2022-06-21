@@ -19,7 +19,9 @@ type RouterContextValue = {
   location: Location;
 };
 
-export const RouterContext = createContext<RouterContextValue | {}>({});
+export const RouterContext = createContext<RouterContextValue | undefined>(
+  undefined
+);
 
 let isFirstLoad = true;
 const positions: Record<string, number> = {};
@@ -92,13 +94,15 @@ export const BrowserRouter: FC<{
 };
 
 export function useRouter() {
-  const router = useContext<RouterContextValue | {}>(RouterContext);
+  if (META_ENV_SSR) return {location: {}, history: {}} as RouterContextValue;
 
-  if (!router && META_ENV_SSR) {
-    throw new Error('useRouter must be used within a <Router> component');
-  }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const router = useContext(RouterContext);
+  if (router) return router;
 
-  return router as RouterContextValue;
+  throw new Error(
+    'Router hooks and <Link> component must be used within a <Router> component'
+  );
 }
 
 export function useLocation() {

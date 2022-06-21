@@ -132,11 +132,15 @@ function AuthenticatedAccount({
         defaultAddress={defaultAddress}
         addresses={addresses}
       />
-      <FeaturedCollections
-        title="Popular Collections"
-        data={featuredCollections}
-      />
-      <ProductSwimlane data={featuredProducts} />
+      {!orders && (
+        <>
+          <FeaturedCollections
+            title="Popular Collections"
+            data={featuredCollections}
+          />
+          <ProductSwimlane data={featuredProducts} />
+        </>
+      )}
     </Layout>
   );
 }
@@ -266,7 +270,7 @@ const CUSTOMER_QUERY = gql`
     }
     featuredProducts: products(first: 12) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
     }
     featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {

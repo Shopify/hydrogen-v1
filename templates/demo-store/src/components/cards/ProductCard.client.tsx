@@ -9,7 +9,7 @@ import {
 
 import {Text} from '~/components';
 import {isDiscounted, isNewArrival} from '~/lib/utils';
-import {product as mockProduct} from '~/lib/placeholders';
+import {getProductPlaceholder} from '~/lib/placeholders';
 import type {
   MoneyV2,
   Product,
@@ -30,7 +30,7 @@ export function ProductCard({
 }) {
   let cardLabel;
 
-  const cardData = product?.variants ? product : mockProduct;
+  const cardData = product?.variants ? product : getProductPlaceholder();
 
   const {
     image,
@@ -53,7 +53,7 @@ export function ProductCard({
   return (
     <Link to={`/products/${product.handle}`}>
       <div className={styles}>
-        <div className="card-image">
+        <div className="card-image aspect-[4/5] bg-primary/5">
           <Text
             as="label"
             size="fine"
@@ -61,14 +61,17 @@ export function ProductCard({
           >
             {cardLabel}
           </Text>
-          {/* TODO: Fix types */}
           {image && (
             <Image
-              className="aspect-[4/5] w-full"
-              width={320}
-              height={400}
-              widths={[640]}
+              className="aspect-[4/5] w-full object-cover fadeIn"
+              widths={[320]}
               sizes="320px"
+              loaderOptions={{
+                crop: 'center',
+                scale: 2,
+                width: 320,
+                height: 400,
+              }}
               // @ts-ignore Stock type has `src` as optional
               data={image}
               alt={image.altText || `Picture of ${product.title}`}

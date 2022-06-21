@@ -3,9 +3,9 @@ import type {ReactNode} from 'react';
 import type {ShopifyConfigFetcher, ShopifyConfig} from '../../types';
 
 export interface ShopifyContextValue
-  extends Omit<ShopifyConfig, 'defaultLocale'> {
-  locale: `${LanguageCode}-${CountryCode}`;
-  languageCode: `${LanguageCode}`;
+  extends Omit<ShopifyConfig, 'defaultLanguageCode' | 'defaultCountryCode'> {
+  defaultLanguageCode: `${LanguageCode}`;
+  defaultCountryCode: `${CountryCode}`;
   storefrontId: string | null;
 }
 

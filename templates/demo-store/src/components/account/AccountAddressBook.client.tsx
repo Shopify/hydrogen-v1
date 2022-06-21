@@ -120,7 +120,7 @@ function Address({
     <div className="lg:p-8 p-6 border border-gray-200 rounded flex flex-col">
       {defaultAddress ? (
         <div className="mb-3 flex flex-row">
-          <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-200 text-gray-500">
+          <span className="px-3 py-1 text-xs font-medium rounded-full bg-primary/20 text-primary/50">
             Default
           </span>
         </div>
@@ -151,7 +151,7 @@ function Address({
         </button>
         <button
           onClick={setDeletingAddress}
-          className="text-left text-gray-500 ml-6 text-sm"
+          className="text-left text-primary/50 ml-6 text-sm"
         >
           Remove
         </button>
