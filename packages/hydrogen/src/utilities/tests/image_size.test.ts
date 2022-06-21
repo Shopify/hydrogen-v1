@@ -140,6 +140,20 @@ describe(`'addImageSizeParametersToUrl'`, () => {
       'https://cdn.example.com/filename.jpg?width=100&height=101&crop=bottom'
     );
   });
+
+  it(`creates a url`, () => {
+    expect(
+      addImageSizeParametersToUrl({
+        src: 'https://cdn.example.com/filename.jpg',
+        width: 100,
+        height: 101,
+        crop: 'bottom',
+        scale: 3,
+      })
+    ).toBe(
+      'https://cdn.example.com/filename@3x.jpg?width=100&height=101&crop=bottom&scale=3'
+    );
+  });
 });
 
 function sampleProps(): GetShopifyImageDimensionsProps {
