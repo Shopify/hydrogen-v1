@@ -65,6 +65,8 @@ export function ProductCard({
           {image && (
             <Image
               className="aspect-[4/5] w-full object-cover fadeIn"
+              width={320}
+              height={400}
               // TODO: Scale needs to return @2x, and then change this to 320
               widths={[640]}
               sizes="320px"
