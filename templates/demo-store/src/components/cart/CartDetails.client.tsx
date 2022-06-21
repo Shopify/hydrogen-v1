@@ -86,7 +86,7 @@ function OrderSummary() {
   return (
     <>
       <dl className="grid">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between font-medium">
           <Text as="dt">Subtotal</Text>
           <Text as="dd">
             {cost?.subtotalAmount?.amount ? (
