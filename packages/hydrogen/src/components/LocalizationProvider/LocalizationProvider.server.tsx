@@ -2,7 +2,6 @@ import React, {ReactNode} from 'react';
 import LocalizationClientProvider from './LocalizationClientProvider.client';
 import {useShop} from '../../foundation/useShop';
 import {useServerRequest} from '../../foundation/ServerRequestProvider';
-import {CountryCode} from '../../storefront-api-types';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */
@@ -27,8 +26,7 @@ export interface LocalizationProviderProps {
  * Any descendents of this provider can use the `useLocalization` hook.
  */
 export function LocalizationProvider(props: LocalizationProviderProps) {
-  const {languageCode: defaultLanguageCode, locale} = useShop();
-  const defaultCountryCode = locale.split(/[-_]/)[1] || CountryCode.Us;
+  const {defaultLanguageCode, defaultCountryCode} = useShop();
 
   const languageCode = (
     props.languageCode ?? defaultLanguageCode
