@@ -501,7 +501,7 @@ function isDirectImportInServer(originalMod, currentMod, accModInfo) {
   // the original module before marking it as client boundary.
 
   return currentMod.meta.imports.some(function (imp) {
-    return imp.action === 'import' && imp.from === accModInfo.file && (imp.variables || []).some(function (_ref3) {
+    return imp.from === accModInfo.file && (imp.variables || []).some(function (_ref3) {
       var name = _ref3[0];
       return accModInfo.exports.includes(name);
     });
