@@ -13,33 +13,36 @@ export async function ServerAnalyticsRoute(
 
   if (requestHeader.get('Content-Length') === '0') {
     analyticsPromise = Promise.resolve(true)
-      .then(() => {
-        serverAnalyticsConnectors?.forEach(async (connector) => {
+      .then(async () => {
+        await serverAnalyticsConnectors?.forEach(async (connector) => {
           await connector.request(requestUrl, request.headers);
         });
       })
       .catch((error) => {
-        log.warn('Fail to resolve server analytics: ', error);
+        log.warn(
+          'Fail to resolve server analytics (no content length): ',
+          error
+        );
       });
   } else if (requestHeader.get('Content-Type') === 'application/json') {
     analyticsPromise = Promise.resolve(request.json())
-      .then((data) => {
-        serverAnalyticsConnectors?.forEach(async (connector) => {
+      .then(async (data) => {
+        await serverAnalyticsConnectors?.forEach(async (connector) => {
           await connector.request(requestUrl, requestHeader, data, 'json');
         });
       })
       .catch((error) => {
-        log.warn('Fail to resolve server analytics: ', error);
+        log.warn('Fail to resolve server analytics (json): ', error);
       });
   } else {
     analyticsPromise = Promise.resolve(request.text())
-      .then((data) => {
-        serverAnalyticsConnectors?.forEach(async (connector) => {
+      .then(async (data) => {
+        await serverAnalyticsConnectors?.forEach(async (connector) => {
           await connector.request(requestUrl, requestHeader, data, 'text');
         });
       })
       .catch((error) => {
-        log.warn('Fail to resolve server analytics: ', error);
+        log.warn('Fail to resolve server analytics (text): ', error);
       });
   }
   request.ctx.runtime?.waitUntil(analyticsPromise);
