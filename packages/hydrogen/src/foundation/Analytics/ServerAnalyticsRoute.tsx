@@ -27,10 +27,10 @@ export async function ServerAnalyticsRoute(
   } else if (requestHeader.get('Content-Type') === 'application/json') {
     analyticsPromise = Promise.resolve(request.json())
       .then((data) => {
-        console.log('1', requestUrl);
+        log.warn('1', requestUrl);
         return Promise.all(
           serverAnalyticsConnectors?.forEach(async (connector) => {
-            console.log('2');
+            log.warn('2');
             return await connector.request(
               requestUrl,
               requestHeader,
