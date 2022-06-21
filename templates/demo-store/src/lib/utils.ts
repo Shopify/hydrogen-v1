@@ -62,6 +62,12 @@ export function isDiscounted(price: MoneyV2, compareAtPrice: MoneyV2) {
   return false;
 }
 
+export function getExcerpt(text: string) {
+  const regex = /<p.*>(.*?)<\/p>/;
+  const correspondingText = regex.exec(text);
+  return correspondingText ? correspondingText[1] : '';
+}
+
 function resolveToFromType(
   {
     customPrefixes,

@@ -155,7 +155,7 @@ const SEARCH_QUERY = gql`
   ) @inContext(country: $country, language: $language) {
     products(first: $pageBy, sortKey: RELEVANCE, query: $query, after: $after) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
       pageInfo {
         startCursor
@@ -186,7 +186,7 @@ const SEARCH_NO_RESULTS_QUERY = gql`
     }
     featuredProducts: products(first: 12) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
     }
   }

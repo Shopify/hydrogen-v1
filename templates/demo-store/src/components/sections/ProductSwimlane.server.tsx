@@ -117,11 +117,11 @@ const RECOMMENDED_PRODUCTS_QUERY = gql`
     $languageCode: LanguageCode
   ) @inContext(country: $countryCode, language: $languageCode) {
     recommended: productRecommendations(productId: $productId) {
-      ...ProductCardFields
+      ...ProductCard
     }
     additional: products(first: $count, sortKey: BEST_SELLING) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
     }
   }
@@ -136,7 +136,7 @@ const TOP_PRODUCTS_QUERY = gql`
   ) @inContext(country: $countryCode, language: $languageCode) {
     products(first: $count, sortKey: BEST_SELLING) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
     }
   }

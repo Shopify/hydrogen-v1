@@ -114,7 +114,7 @@ const PAGINATE_QUERY = gql`
     collection(handle: $handle) {
       products(first: $pageBy, after: $cursor) {
         nodes {
-          ...ProductCardFields
+          ...ProductCard
         }
         pageInfo {
           hasNextPage
@@ -151,7 +151,7 @@ const COLLECTION_QUERY = gql`
       }
       products(first: $pageBy, after: $cursor) {
         nodes {
-          ...ProductCardFields
+          ...ProductCard
         }
         pageInfo {
           hasNextPage
