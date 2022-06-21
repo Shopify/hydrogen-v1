@@ -29,17 +29,26 @@ export function PerformanceMetrics() {
         // Executes only on first mount
         window.BOOMR = window.BOOMR || {};
         window.BOOMR.hydrogenPerformanceEvent = (data: any) => {
+          const initTime = new Date().getTime();
           ClientAnalytics.publish(
             ClientAnalytics.eventNames.PERFORMANCE,
             true,
             data
           );
-          ClientAnalytics.pushToServer(
-            {
-              body: JSON.stringify(data),
+          fetch('https://monorail-edge.shopifysvc.com/v1/produce', {
+            method: 'post',
+            headers: {
+              'content-type': 'text/plain',
             },
-            ClientAnalytics.eventNames.PERFORMANCE
-          );
+            body: JSON.stringify({
+              schema_id: 'hydrogen_buyer_performance/2.0',
+              payload: data,
+              metadata: {
+                event_created_at_ms: initTime,
+                event_sent_at_ms: new Date().getTime(),
+              },
+            }),
+          });
         };
         window.BOOMR.storeDomain = storeDomain;
 
