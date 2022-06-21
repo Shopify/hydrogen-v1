@@ -23,7 +23,7 @@ In the following diagram, none of the queries (`shopInfo`, `CollectionDetails`, 
 
 The `shopInfo` and `CollectionDetails` queries must finish loading before `layoutContent` can start. Subsequently, `layoutContent` must finish loading before `localization` can start. This behavior is called a request waterfall, and it can severely reduce your app performance. 
 
-Because none of these queries have dependencies, it would be ideal if they all started to load in parallel up front. You can tell Hydrogen to do this by setting the `layoutContent` and `Localization` queries to preload:
+Because none of these queries have dependencies, it would be ideal if they all started to load in parallel up front. This process is called preloading queries, and Hydrogen does it by default:
 
 ![Shows a diagram of queries that have been preloaded](/assets/custom-storefronts/hydrogen/preload-queries-set.png)
 
