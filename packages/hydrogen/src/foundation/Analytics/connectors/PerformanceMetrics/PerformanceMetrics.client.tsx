@@ -35,6 +35,9 @@ export function PerformanceMetrics() {
             true,
             data
           );
+          const pageData = ClientAnalytics.getPageAnalyticsData();
+          const shopId = pageData.shopify.shopId || '';
+
           fetch('https://monorail-edge.shopifysvc.com/v1/produce', {
             method: 'post',
             headers: {
@@ -42,7 +45,10 @@ export function PerformanceMetrics() {
             },
             body: JSON.stringify({
               schema_id: 'hydrogen_buyer_performance/2.0',
-              payload: data,
+              payload: {
+                ...data,
+                shop_id: shopId.substring(shopId.lastIndexOf('/') + 1) || '',
+              },
               metadata: {
                 event_created_at_ms: initTime,
                 event_sent_at_ms: new Date().getTime(),
