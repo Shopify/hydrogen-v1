@@ -8,9 +8,7 @@ import {SHOPIFY_S, SHOPIFY_Y} from './const';
 import {ShopifyAnalyticsClient} from './ShopifyAnalytics.client';
 import {useShopQuery} from '../../../../hooks/useShopQuery';
 import {CacheLong} from '../../../Cache/strategies';
-
-// eslint-disable-next-line hydrogen/prefer-gql
-import {gql} from '../../../../utilities/graphql-tag'; // tslint-disable-line hydrogen/prefer-gql
+import {gql} from '../../../../utilities/graphql-tag';
 
 export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   const {storeDomain} = useShop();
