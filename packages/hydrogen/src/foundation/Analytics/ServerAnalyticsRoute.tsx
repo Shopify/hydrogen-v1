@@ -73,7 +73,7 @@ export async function ServerAnalyticsRoute(
       });
   }
 
-  return analyticsPromise.finally(() => {
+  return await analyticsPromise.then(() => {
     return analyticsDefaultResponse;
   });
 }
