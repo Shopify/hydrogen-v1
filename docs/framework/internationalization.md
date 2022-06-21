@@ -39,6 +39,10 @@ export default defineConfig({
 ```
 {% endcodeblock %}
 
+### Overriding the default locale
+
+You can change the active country and language at runtime by passing `countryCode` and `languageCode` props to the `LocalizationProvider`. 
+
 ### Retrieving translated content from the Storefront API
 
 You can use the `useLocalization` hook to pass the visitor's active `country` and `language` into your Storefront API query. For example, you might need to create a product page in a customer's language.
@@ -86,6 +90,12 @@ const QUERY = gql`
 
 For more information about retrieving language translations and the `@inContext` directive, refer to the [Storefront API documentation](https://shopify.dev/api/examples/multiple-languages).
 
+### Search engine optimization (SEO)
+
+Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the `defaultLocale` value provided in your Hydrogen configuration file or `EN-US` when not specified.
+
+For more information about customizing the output of SEO-related tags in your Hydrogen app, refer to [SEO](https://shopify.dev/custom-storefronts/hydrogen/framework/seo).
+
 ## International routing
 
 Hydrogen supports two strategies for internationalized routes: domains and subfolders.
@@ -94,11 +104,15 @@ Hydrogen supports two strategies for internationalized routes: domains and subfo
 - **Subdomain routes**: `us.yourshop.com`, `ca.yourshop.com`, `uk.yourshop.com`
 - **Subfolder routes**: `yourshop.com/en/products`, `yourshop.com/en-CA/products`, `yourshop.com/fr/produits`
 
-### Domains and subdomains
+### Set up domains and subdomains
 
-First, [add all your domains/subdomains in Shopify](https://help.shopify.com/en/manual/domains/add-a-domain). Then from your Shopify Admin, under **Settings > Domains**, update your domains/subdomains to target your custom storefront. Your primary domain will be used for the default URL when customers visit your store (e.g. `yourshop.com`). Additional domains/subdomains that you want to host a localized experience should have the Domain Type set to Routing. 
+First, [add all your domains/subdomains in Shopify](https://help.shopify.com/en/manual/domains/add-a-domain). 
 
-### Subfolders
+Then from your Shopify Admin, under **Settings > Domains**, update your domains/subdomains to target your custom storefront. Your primary domain will be used for the default URL when customers visit your store. 
+
+For non-primary domains/subdomains that you want to host a localized experience, set the domain type to Routing. 
+
+### Set up subfolders
 
 Subfolder routes use the visitor's locale in the URL path. In Hydrogen, you can use the [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes) component to prefix all file routes with a locale using the `basePath` parameter, and source the corresponding file routes:
 
@@ -141,19 +155,11 @@ function NotFound() {
 ```
 {% endcodeblock %}
 
-### Redirects and updating a visitor's locale
+### Redirects
 
-To provide a localized experience, visitors may either be manually or automatically redirected based on their geolocation. Shopify recommends implementing a country/language selector for manual redirects in compliance with international privacy policies and SEO best practices.
+After you've set up your routing strategies, you can create redirects based on your visitor's locale. Redirects may be triggered either manually (e.g. a visitor changes their country using a dropdown menu), or automatically (e.g. based on a visitor's geolocation). 
 
-There are two methods for updating a visitor's locale: 
-- Manual red
-
-
-### Detecting a visitor's geolocation
-
-The geographic location of your visitors helps you localize the experience to their preferred country and language. 
-
-### Oxygen deployments
+Shopify recommends manual redirects for customer privacy and SEO best practices. As an example, reference the [`CountrySelector.client`](https://github.com/Shopify/hydrogen/blob/76f919487485682ad0918260274f8af3ab0165fb/templates/demo-store/src/components/CountrySelector.client.tsx) file in the Hydrogen demo store. 
 
 If you're hosting your Hydrogen storefront on Oxygen, then you can access a visitor’s geolocation by using the `request` object and retrieving it using `request.headers.get()`:
 
@@ -167,9 +173,6 @@ const userCountry = request.headers.get('oxygen-buyer-country');
 
 [View a full list](https://shopify.dev/custom-storefronts/oxygen/worker-runtime-apis#custom-headers) of custom HTTP headers available from Oxygen. 
 
-
-
-### Non-Oxygen deployments
 
 If you're hosting your Hydrogen storefront on a platform that isn't Oxygen, then you can access the [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) HTTP header as a hint to the visitor's country and language preference: 
 
@@ -187,16 +190,6 @@ export default function Homepage({request}) {
 > You can also consider using a third-party geolocation library, such as [`geoip-lite`](https://www.npmjs.com/package/geoip-lite).
 
 
-
-
-After you've detected a visitor's geolocation, you can assign custom routes to host and render a localized experience. 
-
-
-### Search engine optimization (SEO)
-
-Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the `defaultLocale` value provided in your Hydrogen configuration file or `EN-US` when not specified.
-
-For more information about customizing the output of SEO-related tags in your Hydrogen app, refer to [SEO](https://shopify.dev/custom-storefronts/hydrogen/framework/seo).
 
 ## Next steps
 
