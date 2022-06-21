@@ -2,7 +2,6 @@ import {
   CacheLong,
   flattenConnection,
   gql,
-  Head,
   type HydrogenRouteProps,
   Seo,
   useLocalization,

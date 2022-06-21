@@ -23,7 +23,7 @@ export function OrderCard({order}: {order: Order}) {
             <Image
               width={168}
               height={168}
-              widths={[336]}
+              widths={[168]}
               className="w-full fadeIn cover"
               alt={lineItems[0].variant?.image?.altText ?? 'Order image'}
               // @ts-expect-error Stock line item variant image type has `url` as optional

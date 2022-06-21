@@ -61,12 +61,10 @@ export function ProductCard({
           >
             {cardLabel}
           </Text>
-          {/* TODO: Fix types */}
           {image && (
             <Image
               className="aspect-[4/5] w-full object-cover fadeIn"
-              // TODO: Scale needs to return @2x, and then change this to 320
-              widths={[640]}
+              widths={[320]}
               sizes="320px"
               loaderOptions={{
                 crop: 'center',

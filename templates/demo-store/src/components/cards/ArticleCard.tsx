@@ -14,15 +14,19 @@ export function ArticleCard({
     <li key={article.id}>
       <Link to={`/${blogHandle}/${article.handle}`}>
         {article.image && (
-          <div className="card-image">
+          <div className="card-image aspect-[3/2]">
             <Image
               alt={article.image.altText || article.title}
-              className="object-cover w-full aspect-[3/2]"
+              className="object-cover w-full"
               data={article.image}
-              height={600}
+              height={400}
               loading={loading}
               sizes="(min-width: 768px) 50vw, 100vw"
-              width={900}
+              width={600}
+              loaderOptions={{
+                scale: 2,
+                crop: 'center',
+              }}
             />
           </div>
         )}
