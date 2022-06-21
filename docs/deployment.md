@@ -12,7 +12,7 @@ You're using the [most recent version of Hydrogen](https://github.com/Shopify/hy
 
 ## Deploy to Oxygen
 
-Oxygen is Shopify's recommended deployment platform for Hydrogen storefronts. To learn how to deploy a Hydrogen storefront to Oxygen, refer to [Getting started with Oxygen](/custom-storefronts/oxygen/getting-started).
+Oxygen is Shopify's recommended deployment platform for Hydrogen storefronts. To learn how to deploy a Hydrogen storefront to Oxygen, refer to [Getting started with Oxygen](https://shopify.dev/custom-storefronts/oxygen/getting-started).
 
 ## Deploy to Node.js
 
