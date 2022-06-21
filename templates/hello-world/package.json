@@ -1,6 +1,6 @@
 {
   "name": "hello-world",
-  "description": "An example using typescript in Hydrogen",
+  "description": "An example using TypeScript in Hydrogen",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,

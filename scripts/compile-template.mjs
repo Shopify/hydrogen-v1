@@ -34,13 +34,14 @@ export async function compileTemplate(
 
   const processor = await createProcessor(
     TSTemplateDirectory,
-    JSTemplateDirectory
+    JSTemplateDirectory,
+    template
   );
 
   await Promise.all(files.map(processor));
 }
 
-async function createProcessor(from, to) {
+async function createProcessor(from, to, template) {
   const tsConfig = await fs.readFile(resolve(from, 'tsconfig.json'), 'utf8');
   const config = JSON.parse(tsConfig);
 
@@ -118,8 +119,11 @@ async function createProcessor(from, to) {
       case 'package.json':
         const packageJSON = JSON.parse(content);
         const newPackageJSON = Object.assign(packageJSON, {
-          name: 'hello-world-js',
-          description: 'A simple example of a JavaScript project',
+          name: `${template}-js`,
+          description:
+            template === 'hello-world'
+              ? 'An example using JavaScript in Hydrogen'
+              : packageJSON.description,
         });
 
         delete packageJSON.devDependencies.typescript;
