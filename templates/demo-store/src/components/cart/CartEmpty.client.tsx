@@ -5,18 +5,24 @@ import {Suspense} from 'react';
 
 export function CartEmpty({onClose}: {onClose?: () => void}) {
   return (
-    <div className="grid gap-1 justify-center items-center md:py-8 md:px-12 px-4 py-6 h-screen">
-      <Text>
-        Looks like you haven&apos;t added anything yet, let&apos;s get you
-        started!
-      </Text>
-      <Button onClick={onClose}>Continue shopping</Button>
-      <Heading size="copy">Best sellers</Heading>
-      <div className="grid gap-2 grid-cols-2">
-        <Suspense>
-          <TopProducts />
-        </Suspense>
-      </div>
+    <div className="flex flex-col md:py-8 md:px-12 px-4 py-6 h-screen overflow-auto">
+      <section className="h-1/4">
+        <Text>
+          Looks like you haven&apos;t added anything yet, let&apos;s get you
+          started!
+        </Text>
+        <div>
+          <Button onClick={onClose}>Continue shopping</Button>
+        </div>
+      </section>
+      <section className="flex flex-col h-3/4">
+        <Heading size="copy">Best sellers</Heading>
+        <div className="grid gap-6 grid-cols-2">
+          <Suspense>
+            <TopProducts />
+          </Suspense>
+        </div>
+      </section>
     </div>
   );
 }
