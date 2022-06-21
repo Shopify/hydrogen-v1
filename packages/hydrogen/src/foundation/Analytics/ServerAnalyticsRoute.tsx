@@ -30,7 +30,7 @@ export async function ServerAnalyticsRoute(
       })
       .catch((error) => {
         log.warn(
-          'Fail to resolve server analytics (no content length): ',
+          'Failed to resolve server analytics (no content length): ',
           error
         );
       });
