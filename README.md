@@ -9,7 +9,7 @@
 
 <div align="center">
 
-📚 [Docs](https://shopify.dev/custom-storefronts/hydrogen) | 🗣 [Discord](https://discord.gg/Hefq6w5c5d) | 💬 [Discussions](https://github.com/Shopify/hydrogen/discussions) | 📝 [Changelog](./packages/hydrogen/CHANGELOG.md)
+📚 [Docs](https://shopify.dev/custom-storefronts/hydrogen) | 🗣 [Discord](https://discord.gg/Hefq6w5c5d) | 💬 [Discussions](https://github.com/Shopify/hydrogen/discussions) | 📝 [Changelog](./packages/hydrogen/CHANGELOG.md) | 😎 [Awesome Hydrogen](https://github.com/Shopify/awesome-hydrogen)
 
 </div>
 
@@ -61,7 +61,9 @@ Learn more about [getting started with Hydrogen](https://shopify.dev/custom-stor
 
 ## Other handy links
 
-🤩 [Learn more about Hydrogen](https://shopify.dev/hydrogen).
+[Learn more about Hydrogen](https://shopify.dev/hydrogen).
+
+[Awesome Hydrogen](https://github.com/Shopify/awesome-hydrogen) - A curated list of awesome Hydrogen things.
 
 👷‍♀️ Add `npm` packages to your project:
 
