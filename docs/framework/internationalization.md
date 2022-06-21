@@ -163,7 +163,7 @@ Shopify recommends manual redirects for customer privacy and SEO best practices.
 
 If you're hosting your Hydrogen storefront on Oxygen, then you can access a visitor’s geolocation by using the `request` object and retrieving it using `request.headers.get()`:
 
-{% codeblock file, filename: 'index.server.jsx' %}
+{% codeblock %}
 
 ```tsx
 const userCountry = request.headers.get('oxygen-buyer-country');
@@ -176,12 +176,12 @@ const userCountry = request.headers.get('oxygen-buyer-country');
 
 If you're hosting your Hydrogen storefront on a platform that isn't Oxygen, then you can access the [Accept-Language](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language) HTTP header as a hint to the visitor's country and language preference: 
 
-{% codeblock file, filename: 'index.server.jsx' %}
+{% codeblock %}
 
 ```tsx
-export default function Homepage({request}) {
-  const acceptLanguage = request.headers.get(‘accept-language’);
-}
+const acceptLanguage = request.headers.get(‘accept-language’);
+const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(acceptLanguage);
+const countryCode = localeMatch ? localeMatch[1] : undefined;
 ```
 
 {% endcodeblock %}
