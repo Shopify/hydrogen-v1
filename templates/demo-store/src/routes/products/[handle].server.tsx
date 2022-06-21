@@ -126,7 +126,7 @@ const PRODUCT_QUERY = gql`
       description
       media(first: 7) {
         nodes {
-          ...MediaFragment
+          ...Media
         }
       }
       variants(first: 100) {

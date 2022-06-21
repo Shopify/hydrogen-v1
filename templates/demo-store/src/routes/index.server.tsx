@@ -124,12 +124,12 @@ const HOMEPAGE_CONTENT_QUERY = gql`
         }
         spread: metafield(namespace: "hero", key: "spread") {
           reference {
-            ...MediaFragment
+            ...Media
           }
         }
         spreadSecondary: metafield(namespace: "hero", key: "spread_secondary") {
           reference {
-            ...MediaFragment
+            ...Media
           }
         }
       }
@@ -153,7 +153,7 @@ const HOMEPAGE_CONTENT_QUERY = gql`
     }
     featuredProducts: products(first: 12) {
       nodes {
-        ...ProductCardFragment
+        ...ProductCard
       }
     }
   }
