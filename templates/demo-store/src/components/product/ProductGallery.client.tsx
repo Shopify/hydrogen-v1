@@ -22,6 +22,9 @@ export function ProductGallery({
     >
       {media.map((med, i) => {
         let extraProps: Record<string, any> = {};
+        const isFirst = i === 0;
+        const isFourth = i === 3;
+        const isFullWidth = i % 3 === 0;
 
         if (med.mediaContentType === 'MODEL_3D') {
           extraProps = {
@@ -45,11 +48,15 @@ export function ProductGallery({
           extraProps.loading = ATTR_LOADING_EAGER;
         }
 
+        const style = [
+          isFullWidth ? 'md:col-span-2' : 'md:col-span-1',
+          isFirst || isFourth ? '' : 'md:aspect-[4/5]',
+          'aspect-square snap-center card-image bg-white dark:bg-contrast/10  md:w-full w-[80vw]',
+        ].join(' ');
+
         return (
           <div
-            className={`${
-              i % 3 === 0 ? 'md:col-span-2' : 'md:col-span-1'
-            } snap-center card-image bg-white aspect-square md:w-full w-[80vw]`}
+            className={style}
             // @ts-ignore
             key={med.id || med.image.id}
           >
