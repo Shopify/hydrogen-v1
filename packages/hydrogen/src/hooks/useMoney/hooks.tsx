@@ -29,7 +29,7 @@ export type UseMoneyValue = {
   parts: Intl.NumberFormatPart[];
   /**
    * A string returned by `new Intl.NumberFormat` for the amount and currency code,
-   * using the `locale` value in [`LocalizationProvider` component](https://shopify.dev/api/hydrogen/components/localization/localizationprovider).
+   * using the `locale` value in the [`LocalizationProvider` component](https://shopify.dev/api/hydrogen/components/localization/localizationprovider).
    */
   localizedString: string;
   /**

@@ -2,7 +2,7 @@
 '@shopify/hydrogen': minor
 ---
 
-Remove `defaultLocale` from the Hydrogen Config and instead add `defaultCountryCode` and `defaultLangugeCode`. Both of which are also now available by the `useShop()` hook:
+Remove `defaultLocale` from the Hydrogen Config and instead add `defaultCountryCode` and `defaultLanguageCode`. Both of which are also now available by the `useShop()` hook:
 
 ```diff
 export default defineConfig({
