@@ -17,7 +17,7 @@ export function NotFound({
   response,
   type = 'page',
 }: {
-  response: HydrogenResponse;
+  response?: HydrogenResponse;
   type?: string;
 }) {
   if (response) {
