@@ -48,7 +48,7 @@ To enable the Hydrogen configuration, add the `extends` property in your `.eslin
 
 ### TypeScript configuration
 
-This packages provides a configuration override for use in TypeScript projects. You can add this configuration after the either the above 2 configuration.
+The ESlint plugin provides a configuration override that you can use in TypeScript projects. You can add the following configuration after either the recommended or Hydrogen configuration:
 
 ```js
 {
