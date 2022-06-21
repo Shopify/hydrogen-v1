@@ -205,8 +205,8 @@ For Worker-based runtimes, you can provide a `cache` option to `handleRequest`:
 addEventListener('fetch', (event) => {
   event.respondWith(
     handleEvent(event, {
-      // Your implementation of `Cache`. Defaults to `caches.default` for Oxygen support.
-      cache: caches.default,
+      // Your implementation of `Cache`. Defaults to `await caches.open` for Oxygen support.
+      cache: await caches.open('oxygen'),
 
       // ...
     })
