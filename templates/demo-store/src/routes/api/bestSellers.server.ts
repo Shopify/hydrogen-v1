@@ -33,7 +33,7 @@ const TOP_PRODUCTS_QUERY = gql`
   ) @inContext(country: $countryCode, language: $languageCode) {
     products(first: $count, sortKey: BEST_SELLING) {
       nodes {
-        ...ProductCardFields
+        ...ProductCard
       }
     }
   }
