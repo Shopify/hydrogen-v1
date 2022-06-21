@@ -129,13 +129,16 @@ shop-pay-button {
 }
 
 @layer utilities {
-  .h-screen-no-nav {
-    height: calc(var(--screen-height, 100vh) - var(--height-nav));
-  }
-
   .fadeIn {
     opacity: 0;
     animation: fadeInAnimation ease 500ms forwards;
+  }
+
+  .hiddenScroll {
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .absolute-center {
@@ -165,7 +168,7 @@ shop-pay-button {
       @apply z-10 absolute block top-0 left-0 w-full h-full shadow-border rounded;
     }
     img {
-      @apply object-cover w-full;
+      @apply object-cover w-full aspect-[inherit];
     }
   }
 }
