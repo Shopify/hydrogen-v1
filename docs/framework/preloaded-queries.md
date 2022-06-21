@@ -21,66 +21,17 @@ In the following diagram, none of the queries (`shopInfo`, `CollectionDetails`, 
 
 ![Shows a diagram of queries that haven't been preloaded](/assets/custom-storefronts/hydrogen/preload-queries-none-set.png)
 
-However, if you set the `layoutContent` and `Localization` queries to preload, then the Hydrogen app discovers these queries and loads them faster:
+The `shopInfo` and `CollectionDetails` queries must finish loading before `layoutContent` can start. Subsequently, `layoutContent` must finish loading before `localization` can start. This behavior is called a request waterfall, and it can severely reduce your app performance. 
+
+Because none of these queries have dependencies, it would be ideal if they all started to load in parallel up front. This process is called preloading queries, and Hydrogen does it by default:
 
 ![Shows a diagram of queries that have been preloaded](/assets/custom-storefronts/hydrogen/preload-queries-set.png)
 
-### No preloaded queries
+Preloaded queries work by storing the query fetcher for the next time the same URL is requested. The first time a route is loaded, no queries are preloaded. The second time a route is loaded, Hydrogen remembers which queries were necessary to render the same route.
 
-Preloaded queries work by storing the query fetcher for the next time the same URL is requested. For example, on the `/` URL, Shopify fetches queries for the following:
+### Disabling preloaded queries
 
-- `shopInfo`
-- `layoutContent`
-- `localization`
-- `homeShopInfo`
-- `welcomeContent`
-- `indexContent`
-
-If you don't set any of these queries with `preload: true`, then no queries will be preloaded:
-
-![Shows a screenshot of no preloaded queries](/assets/custom-storefronts/hydrogen/no-preloaded-queries.png)
-
-### Some preloaded queries
-
-If you set a some queries to preload, then on the first time `/` is requested, no queries will be preloaded. However, all requests to `/` afterwards will preload `homeShopInfo`, `welcomeContent` and `indexContent` queries:
-
-- `shopInfo`
-- `layoutContent`
-- `localization`
-- `homeShopInfo` - `preload: true`
-- `welcomeContent` - `preload: true`
-- `indexContent` - `preload: true`
-
-![Shows a screenshot of some preloaded queries](/assets/custom-storefronts/hydrogen/some-preloaded-queries.png)
-
-### Wildcard routes
-
-Preloaded queries work similarly for wildcard routes like `Product` and `Collection`, except that each URL has its own preload queries.
-
-#### Example
-
-You've set `CollectionDetails` to preload queries:
-
-- `shopInfo`
-- `layoutContent`
-- `localization`
-- `CollectionDetails` - `preload: true`
-
-The first time a user visits `/collections/freestyle-collection`, no queries will be preloaded. Similarly, the first time a user visits `/collections/backcountry-collection`, no queries will be preloaded. However, the second time that a user visits `/collections/freestyle-collection`, `CollectionDetails` will be preloaded.
-
-![Shows a screenshot of preloaded queries in wildcard routes](/assets/custom-storefronts/hydrogen/wild-card-preloaded-queries.png)
-
-## Preload a query
-
-You can add an option to preload a query anywhere in your Hydrogen app.
-
-The `preload` property takes a Boolean value or a string:
-
-- `preload: true`: Preloads a query for a specific URL.
-- `preload: '*'`: Preloads a query for every request. This option can be helpful for menu links in your navigation, allowing you to preload a query on button click or while you animate a transition to another page.
-
-> Note:
-> By default, preloading is turned on for all cached queries. Any queries that are specific to cart or customer functionality shouldn't be preloaded.
+By default, all cached queries are preloaded. However, not all queries should be preloaded. For example, any query that returns personalized results shouldn't be preloaded. Just like caching personalized queries, preloading personalized queries can disperse data across requests. You can disable preloaded queries by setting cache to `CacheNone` or explicitly opting out with `preload: false`:
 
 {% codeblock %}
 
@@ -90,11 +41,30 @@ const {data} = useShopQuery({
   variables: {
     numCollections: 3,
   },
-  cache: CacheLong(),
-  // Preloads queries for a specific URL
-  preload: true,
+  cache: CacheNone(), // `CacheNone()` automatically disables preloaded queries
+  preload: false,     // or you can explicitly tell the query not to preload
 });
+```
 
+{% endcodeblock %}
+
+In development mode, Hydrogen detects request waterfalls, and warns you that the query isn't preloaded:
+
+![Shows a screenshot of request waterfall warning](/assets/custom-storefronts/hydrogen/suspense-waterfall.png)
+
+### Routes with parameters
+
+Preloaded queries work similarly for routes with parameters, like `Product` and `Collection`, except that each route with a different parameter has its own preloaded queries. 
+
+For example, the first time a user visits `/collections/freestyle-collection`, no queries will be preloaded. Similarly, the first time a user visits `/collections/backcountry-collection`, no queries will be preloaded. However, the second time that a user visits either route, queries will be preloaded. It's important that each route has separate preloaded queries, otherwise the results of one might show up for the results of the other.
+
+## Preload everywhere
+
+You can tell Hydrogen to preload a query everywhere. The `preload` property takes a Boolean value or a string. When the value is `*`, Hydrogen will preload the query for every request. This option can be helpful for menu links in your navigation, allowing you to preload a query on button click or while you animate a transition to another page:
+
+{% codeblock %}
+
+```js
 const data = fetchSync('https://my.api.com/data.json', {
   headers: {
     accept: 'application/json',
@@ -106,7 +76,7 @@ const data = fetchSync('https://my.api.com/data.json', {
 
 {% endcodeblock %}
 
-## Test a preloaded query
+## Debug query timings
 
 <aside class="note beta">
 <h4>Experimental feature</h4>
@@ -115,7 +85,7 @@ const data = fetchSync('https://my.api.com/data.json', {
 
 </aside>
 
-To test a preloaded query, enable the `logger.showQueryTiming` property in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger).
+If you have a suspense waterfall detected, then you can log request timing information by enabling the `logger.showQueryTiming` property in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger).
 
 The [`showQueryTiming`](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger) property logs the timeline of when queries are being requested, resolved, and rendered. If a query is preloaded, but isn't being used, then a warning displays in the server log:
 
