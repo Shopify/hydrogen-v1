@@ -4,6 +4,7 @@ export const ShopifyServerAnalyticsConnector = {
   request(
     requestUrl: string,
     requestHeader: Headers,
+    waitUntil?: ((fn: Promise<any>) => void) | undefined,
     data?: any,
     contentType?: string
   ): void {
@@ -14,15 +15,20 @@ export const ShopifyServerAnalyticsConnector = {
         event.payload.client_user_agent = requestHeader.get('user-agent');
       });
 
-      fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
-        method: 'post',
-        headers: {
-          'content-type': 'text/plain',
-        },
-        body: JSON.stringify(data),
-      }).catch((err) => {
+      const monorailPromise = fetch(
+        'https://monorail-edge.shopifysvc.com/unstable/produce_batch',
+        {
+          method: 'post',
+          headers: {
+            'content-type': 'text/plain',
+          },
+          body: JSON.stringify(data),
+        }
+      ).catch((err) => {
         log.error(err);
       });
+
+      waitUntil && waitUntil(monorailPromise);
     }
   },
 };

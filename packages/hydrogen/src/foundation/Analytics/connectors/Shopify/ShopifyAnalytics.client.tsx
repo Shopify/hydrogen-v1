@@ -7,7 +7,7 @@ import {SHOPIFY_S, SHOPIFY_Y} from './const';
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins
 const myShopifyDomain = 'myshopify.com';
-// const oxygenDomain = 'myshopify.dev';
+const oxygenDomain = 'myshopify.dev';
 
 let isInit = false;
 let microSessionCount = 0;
@@ -135,12 +135,12 @@ function buildStorefrontPageViewPayload(payload: any): any {
     contentLanguage: shopify.acceptedLanguage,
   };
 
-  // formattedData = addDataIf(
-  //   {
-  //     isMerchantRequest: false, //isMerchantRequest(),
-  //   },
-  //   formattedData
-  // );
+  formattedData = addDataIf(
+    {
+      isMerchantRequest: isMerchantRequest(),
+    },
+    formattedData
+  );
 
   formattedData = addDataIf(
     {
@@ -173,13 +173,13 @@ function buildStorefrontPageViewPayload(payload: any): any {
   return formattedData;
 }
 
-// function isMerchantRequest(): Boolean {
-//   const hostname = location.hostname;
-//   if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
-//     return true;
-//   }
-//   return false;
-// }
+function isMerchantRequest(): Boolean {
+  const hostname = location.hostname;
+  if (hostname.indexOf(oxygenDomain) !== -1 || hostname === 'localhost') {
+    return true;
+  }
+  return false;
+}
 
 function stripGId(text: string): number {
   return parseInt(text.substring(text.lastIndexOf('/') + 1));
@@ -217,6 +217,15 @@ function sendToServer(data: any) {
 
     // Send to server
     try {
+      fetch('/__event?shopify', {
+        method: 'post',
+        headers: {
+          'cache-control': 'no-cache',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(batchedDataToBeSent),
+      });
+    } catch (error) {
       fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
         method: 'post',
         headers: {
@@ -224,8 +233,6 @@ function sendToServer(data: any) {
         },
         body: JSON.stringify(batchedDataToBeSent),
       });
-    } catch (error) {
-      // Do nothing
     }
   }, BATCH_SENT_TIMEOUT);
 }
