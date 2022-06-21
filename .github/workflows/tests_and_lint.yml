@@ -63,3 +63,9 @@ jobs:
         run: yarn test-e2e
         env:
           CI: true
+
+      - name: Run template E2E tests
+        run: yarn test:ci
+        working-directory: ./templates/demo-store
+        env:
+          CI: true
