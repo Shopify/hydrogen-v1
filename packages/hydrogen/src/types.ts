@@ -69,7 +69,6 @@ export type ServerAnalyticsConnector = {
   request: (
     requestUrl: string,
     requestHeader: Headers,
-    waitUntil?: ((fn: Promise<any>) => void) | undefined,
     data?: any,
     contentType?: 'json' | 'text'
   ) => void;

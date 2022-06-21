@@ -9,33 +9,40 @@ export async function ServerAnalyticsRoute(
   const requestHeader = request.headers;
   const requestUrl = request.url;
   const serverAnalyticsConnectors = hydrogenConfig.serverAnalyticsConnectors;
-  const waitUntil = request.ctx.runtime?.waitUntil;
+  let analyticsPromise;
 
   if (requestHeader.get('Content-Length') === '0') {
-    serverAnalyticsConnectors?.forEach((connector) => {
-      connector.request(requestUrl, request.headers, waitUntil);
-    });
+    analyticsPromise = Promise.resolve(true)
+      .then(() => {
+        serverAnalyticsConnectors?.forEach((connector) => {
+          connector.request(requestUrl, request.headers);
+        });
+      })
+      .catch((error) => {
+        log.warn('Fail to resolve server analytics: ', error);
+      });
   } else if (requestHeader.get('Content-Type') === 'application/json') {
-    Promise.resolve(request.json())
+    analyticsPromise = Promise.resolve(request.json())
       .then((data) => {
         serverAnalyticsConnectors?.forEach((connector) => {
-          connector.request(requestUrl, requestHeader, waitUntil, data, 'json');
+          connector.request(requestUrl, requestHeader, data, 'json');
         });
       })
       .catch((error) => {
         log.warn('Fail to resolve server analytics: ', error);
       });
   } else {
-    Promise.resolve(request.text())
+    analyticsPromise = Promise.resolve(request.text())
       .then((data) => {
         serverAnalyticsConnectors?.forEach((connector) => {
-          connector.request(requestUrl, requestHeader, waitUntil, data, 'text');
+          connector.request(requestUrl, requestHeader, data, 'text');
         });
       })
       .catch((error) => {
         log.warn('Fail to resolve server analytics: ', error);
       });
   }
+  request.ctx.runtime?.waitUntil(analyticsPromise);
 
   return new Response(null, {
     status: 200,
