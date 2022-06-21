@@ -5,6 +5,6 @@ export const ShopifyServerAnalyticsConnector = {
     log.warn(
       'ShopifyServerAnalyticsConnector has been removed - please remove its reference from hydrogen.config.js'
     );
-    return Promise.resolve(true);
+    return Promise.resolve();
   },
 };

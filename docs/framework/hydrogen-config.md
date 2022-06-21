@@ -181,18 +181,6 @@ export default defineConfig({
 
 The `serverAnalyticsConnectors` property allows you to [send analytics data from the server](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#send-analytics-data-from-the-server-side) in your Hydrogen app. For more information about analytics support in Hydrogen, refer to [Analytics](https://shopify.dev/custom-storefronts/hydrogen/framework/analytics).
 
-{% codeblock file, filename: 'hydrogen.config.ts' %}
-
-```tsx
-import {PerformanceMetricsServerAnalyticsConnector} from '@shopify/hydrogen/config';
-
-export default defineConfig({
-  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
-});
-```
-
-{% endcodeblock %}
-
 ### `logger`
 
 The default behavior of the [`log` utility](https://shopify.dev/api/hydrogen/utilities/log) maps to the global `console` object. However, you can also customize this behavior in the configuration object.

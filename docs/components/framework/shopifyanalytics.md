@@ -11,29 +11,7 @@ The `ShopifyAnalytics` component sends commerce-related analytics to Shopify. By
 
 ## Configuration
 
-To set up the `ShopifyAnalytics` component in your Hydrogen storefront, add the `ShopifyAnalyticsServerConnector` property to your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config):
-
-{% codeblock file, filename: 'hydrogen.config.js' %}
-
-```jsx
-import {
-  ...
-  ShopifyAnalyticsServerConnector,
-} from '@shopify/hydrogen/config';
-...
-export default defineConfig({
-  ...
-  serverAnalyticsConnectors: [
-    PerformanceMetricsServerAnalyticsConnector,
-    // The `serverAnalyticsConnectors` property allows you to send analytics data from the server in your Hydrogen app.
-    ShopifyAnalyticsServerConnector,
-  ],
-});
-```
-
-{% endcodeblock %}
-
-After you've updated your Hydrogen configuration file, add the `ShopifyAnalytics` component in `App.server.jsx`.
+Add the `ShopifyAnalytics` component in `App.server.jsx`.
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
@@ -84,8 +62,6 @@ Provide the following data to `useServerAnalytics` to view information from the 
 
 | Prop     |  Description         | Example code       |
 | -------- | ------------------- | ------------------- |
-| shopId | The ID of your Shopify store. | [DefaultSeo.server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) |
-| currency | The currency being presented to the buyer on the webpage. | [DefaultSeo.server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/DefaultSeo.server.jsx) |
 | pageType? | The page template type for your routes. For a list of valid values, refer to [ShopifyAnalytics constants](#shopifyanalytics-constants). | [collections/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/collections/%5Bhandle%5D.server.jsx) |
 | resourceId? | The ID of the page template type for the routes that use Shopify resources. <br></br>This only applies to the following routes: `article`, `blog`, `collection`, `page`, `product`. | [products/[handle].server.jsx](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/products/%5Bhandle%5D.server.jsx) |
 
