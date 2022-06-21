@@ -10,9 +10,14 @@ export const ShopifyServerAnalyticsConnector = {
   ): void {
     const url = new URL(requestUrl);
     if (url.search === '?shopify' && contentType === 'json') {
+      const buyerIp = requestHeader.get('x-forwarded-for');
+      const userAgent = requestHeader.get('user-agent');
+
+      console.log(buyerIp, userAgent);
+
       data.events.forEach((event: any) => {
-        event.payload.client_ip_address = requestHeader.get('x-forwarded-for');
-        event.payload.client_user_agent = requestHeader.get('user-agent');
+        event.payload.client_ip_address = buyerIp;
+        event.payload.client_user_agent = userAgent;
       });
 
       const monorailPromise = fetch(
