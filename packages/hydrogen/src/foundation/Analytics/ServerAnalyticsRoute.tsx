@@ -1,15 +1,14 @@
 import type {ResolvedHydrogenConfig} from '../../types';
 import {log} from '../../utilities/log';
-import {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
 
 export async function ServerAnalyticsRoute(
-  request: HydrogenRequest,
+  request: Request,
   {hydrogenConfig}: {hydrogenConfig: ResolvedHydrogenConfig}
-) {
+): Promise<Response> {
   const requestHeader = request.headers;
   const requestUrl = request.url;
   const serverAnalyticsConnectors = hydrogenConfig.serverAnalyticsConnectors;
-  let analyticsPromise;
+  let analyticsPromise: Promise<any>;
 
   if (requestHeader.get('Content-Length') === '0') {
     analyticsPromise = Promise.resolve(true)
@@ -54,9 +53,8 @@ export async function ServerAnalyticsRoute(
         log.warn('Fail to resolve server analytics (text): ', error);
       });
   }
-  // request.ctx.runtime?.waitUntil(analyticsPromise);
 
-  analyticsPromise.finally(() => {
+  return analyticsPromise.finally(() => {
     return new Response(null, {
       status: 200,
     });
