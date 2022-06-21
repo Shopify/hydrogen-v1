@@ -45,7 +45,7 @@ export function useNavigate() {
 }
 
 export function buildPath(basePath: string, path: string) {
-  if (path.startsWith('http')) return path;
+  if (path.startsWith('http') || path.startsWith('//')) return path;
 
   let builtPath = path;
   if (basePath !== '/') {

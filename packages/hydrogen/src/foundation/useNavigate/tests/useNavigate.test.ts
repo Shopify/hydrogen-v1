@@ -18,7 +18,9 @@ describe('buildPath', () => {
     expect(buildPath('/base', 'https://website.com')).toBe(
       'https://website.com'
     );
+    expect(buildPath('/base', '//website.com')).toBe('//website.com');
     expect(buildPath('/', 'http://website.com')).toBe('http://website.com');
     expect(buildPath('/', 'https://website.com')).toBe('https://website.com');
+    expect(buildPath('/', '//website.com')).toBe('//website.com');
   });
 });
