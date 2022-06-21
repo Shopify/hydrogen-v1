@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.27.0
+
+### Minor Changes
+
+- [#1697](https://github.com/Shopify/hydrogen/pull/1697) [`85aab092`](https://github.com/Shopify/hydrogen/commit/85aab092b2f47d77bb917659918a011783cd8c34) Thanks [@blittle](https://github.com/blittle)! - Remove `defaultLocale` from the Hydrogen Config and instead add `defaultCountryCode` and `defaultLanguageCode`. Both of which are also now available by the `useShop()` hook:
+
+  ```diff
+  export default defineConfig({
+    shopify: {
+  -    defaultLocale: 'EN-US',
+  +    defaultCountryCode: 'US',
+  +    defaultLanguageCode: 'EN',
+      storeDomain: 'hydrogen-preview.myshopify.com',
+      storefrontToken: '3b580e70970c4528da70c98e097c2fa0',
+      storefrontApiVersion: '2022-07',
+    },
+  }
+  ```
+
+* [#1662](https://github.com/Shopify/hydrogen/pull/1662) [`4262b319`](https://github.com/Shopify/hydrogen/commit/4262b3196afb96415d3b0f8f874f351030e6a734) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fix server analytics route
+
+  - Fix ServerAnalyticsRoute so that it does complete all async work
+  - Move Performance and Shopify analytic reporting to client side
+  - Make sure `ShopifyAnalytics` make its own query for shop id and currency
+  - Remove query for shop id and currency from `DefaultSeo` component
+  - Make Performance and Shopify server analytics connector do nothing
+
+  ### Deprecated components
+
+  Remove the following components from `hydrogen.config.js`
+
+  - `PerformanceMetricsServerAnalyticsConnector`
+  - `ShopifyServerAnalyticsConnector`
+
 ## 0.26.1
 
 ### Patch Changes
