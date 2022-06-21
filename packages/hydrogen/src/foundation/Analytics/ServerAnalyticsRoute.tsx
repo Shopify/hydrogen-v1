@@ -1,21 +1,32 @@
 import type {ResolvedHydrogenConfig} from '../../types';
 import {log} from '../../utilities/log';
 
+const analyticsDefaultResponse = new Response(null, {
+  status: 200,
+});
+
 export async function ServerAnalyticsRoute(
   request: Request,
   {hydrogenConfig}: {hydrogenConfig: ResolvedHydrogenConfig}
 ): Promise<Response> {
+  const serverAnalyticsConnectors = hydrogenConfig.serverAnalyticsConnectors;
+
+  if (!serverAnalyticsConnectors) {
+    return analyticsDefaultResponse;
+  }
+
   const requestHeader = request.headers;
   const requestUrl = request.url;
-  const serverAnalyticsConnectors = hydrogenConfig.serverAnalyticsConnectors;
   let analyticsPromise: Promise<any>;
 
   if (requestHeader.get('Content-Length') === '0') {
     analyticsPromise = Promise.resolve(true)
       .then(async () => {
-        await serverAnalyticsConnectors?.forEach(async (connector) => {
-          await connector.request(requestUrl, request.headers);
-        });
+        return Promise.all(
+          serverAnalyticsConnectors.map(async (connector) => {
+            return await connector.request(requestUrl, requestHeader);
+          })
+        );
       })
       .catch((error) => {
         log.warn(
@@ -27,14 +38,14 @@ export async function ServerAnalyticsRoute(
     analyticsPromise = Promise.resolve(request.json())
       .then((data) => {
         return Promise.all(
-          serverAnalyticsConnectors?.forEach(async (connector) => {
+          serverAnalyticsConnectors.map(async (connector) => {
             return await connector.request(
               requestUrl,
               requestHeader,
               data,
               'json'
             );
-          }) || []
+          })
         );
       })
       .catch((error) => {
@@ -43,23 +54,26 @@ export async function ServerAnalyticsRoute(
   } else {
     analyticsPromise = Promise.resolve(request.text())
       .then(async (data) => {
-        await serverAnalyticsConnectors?.forEach(async (connector) => {
+        await serverAnalyticsConnectors.forEach(async (connector) => {
           await connector.request(requestUrl, requestHeader, data, 'text');
         });
+        return Promise.all(
+          serverAnalyticsConnectors.map(async (connector) => {
+            return await connector.request(
+              requestUrl,
+              requestHeader,
+              data,
+              'text'
+            );
+          })
+        );
       })
       .catch((error) => {
         log.warn('Fail to resolve server analytics (text): ', error);
       });
   }
 
-  return Promise.resolve(true)
-    .then(() => {
-      // @ts-ignore
-      request.ctx.runtime?.waitUntil(analyticsPromise);
-    })
-    .then(() => {
-      return new Response(null, {
-        status: 200,
-      });
-    });
+  return analyticsPromise.finally(() => {
+    return analyticsDefaultResponse;
+  });
 }
