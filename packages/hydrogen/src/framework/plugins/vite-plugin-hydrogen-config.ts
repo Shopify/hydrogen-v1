@@ -1,6 +1,12 @@
 import {Plugin} from 'vite';
 import type {BuildOptions} from 'vite';
 
+// About LOCAL_DEV environment variable:
+// It enables hydrogen/* file watching for local development and
+// disables hashing and minification for local builds. Usage in terminal:
+// $ export LOCAL_DEV=true
+// $ yarn [dev|build]
+
 export default () => {
   const rollupOptions: BuildOptions['rollupOptions'] = {
     output: {},
@@ -19,7 +25,7 @@ export default () => {
     };
   }
 
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== 'development' && !process.env.LOCAL_DEV) {
     /**
      * Ofuscate production asset name - To prevent ad blocker logics that blocks
      * certain files due to how it is named.
@@ -43,7 +49,8 @@ export default () => {
       },
 
       build: {
-        minify: config.build?.minify ?? 'esbuild',
+        minify:
+          config.build?.minify ?? (process.env.LOCAL_DEV ? false : 'esbuild'),
         sourcemap: true,
         rollupOptions: config.build?.rollupOptions
           ? Object.assign(rollupOptions, config.build.rollupOptions)
