@@ -53,7 +53,7 @@ export function ProductCard({
   return (
     <Link to={`/products/${product.handle}`}>
       <div className={styles}>
-        <div className="card-image">
+        <div className="card-image aspect-[4/5] bg-primary/5">
           <Text
             as="label"
             size="fine"
@@ -64,11 +64,18 @@ export function ProductCard({
           {/* TODO: Fix types */}
           {image && (
             <Image
-              className="aspect-[4/5] w-full"
+              className="aspect-[4/5] w-full object-cover fadeIn"
               width={320}
               height={400}
+              // TODO: Scale needs to return @2x, and then change this to 320
               widths={[640]}
               sizes="320px"
+              loaderOptions={{
+                crop: 'center',
+                scale: 2,
+                width: 320,
+                height: 400,
+              }}
               // @ts-ignore Stock type has `src` as optional
               data={image}
               alt={image.altText || `Picture of ${product.title}`}
