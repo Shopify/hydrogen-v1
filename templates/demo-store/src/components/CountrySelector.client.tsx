@@ -82,7 +82,7 @@ export function CountrySelector() {
                     <Countries
                       selectedCountry={currentCountry}
                       getClassName={(active) => {
-                        return `text-white w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${
+                        return `text-contrast dark:text-primary w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer ${
                           active ? 'bg-primary/10' : null
                         }`;
                       }}
