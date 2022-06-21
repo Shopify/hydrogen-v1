@@ -300,9 +300,15 @@ To send analytics data from the server-side, complete the following steps:
     {% codeblock file, filename: 'MyServerAnalyticsConnector.jsx' %}
 
     ```jsx
-    export function request(requestUrl, requestHeader, data, contentType) {
-     // Send your analytics request to third-party analytics
-    }
+    export const MyServerAnalyticsConnector = {
+      request(requestUrl, requestHeader, data, contentType) {
+        // Send your analytics request to third-party analytics
+        // Make sure to return a promise, for example
+        //
+        // return fetch('your_analytic_endpoint')
+        return Promise.resolve();
+      },
+    };
     ```
 
     {% endcodeblock %}
@@ -370,7 +376,7 @@ You can opt in to receive performance metrics for page loads in your Hydrogen st
 
 If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in your client component:
 
-{% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
+{% codeblock file, filename: 'App.server.jsx' %}
 
 ```jsx
 import {
@@ -390,13 +396,6 @@ function App({routes}) {
     </Suspense>
   );
 }
-
-...
-
-export default renderHydrogen(App, {
-  ...
-  serverAnalyticsConnectors: [PerformanceMetricsServerAnalyticsConnector],
-});
 ```
 
 {% endcodeblock %}

@@ -215,18 +215,8 @@ function sendToServer(data: any) {
     batchedData = [];
     batchedTimeout = null;
 
-    // Send to server
+    // Send to Shopify
     try {
-      fetch('/__event?shopify', {
-        method: 'post',
-        headers: {
-          'cache-control': 'no-cache',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(batchedDataToBeSent),
-      });
-    } catch (error) {
-      // Fallback to client-side
       fetch('https://monorail-edge.shopifysvc.com/unstable/produce_batch', {
         method: 'post',
         headers: {
@@ -234,6 +224,8 @@ function sendToServer(data: any) {
         },
         body: JSON.stringify(batchedDataToBeSent),
       });
+    } catch (error) {
+      // Do nothing
     }
   }, BATCH_SENT_TIMEOUT);
 }

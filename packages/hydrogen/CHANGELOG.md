@@ -1541,10 +1541,10 @@
 
   `queryShop` accepts a single argument object with the following properties:
 
-  | Property    | Type                                                                                                                                                                | Required |
-  | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-  | `query`     | `string \| ASTNode`                                                                                                                                                 | Yes      |
-  | `variables` | `Record<string, any>`                                                                                                                                               | No       |
+  | Property    | Type                                                                                                                                                             | Required |
+  | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+  | `query`     | `string \| ASTNode`                                                                                                                                              | Yes      |
+  | `variables` | `Record<string, any>`                                                                                                                                            | No       |
   | `locale`    | `string`. Defaults to the locale value from the [LocalizationProvider](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component. | No       |
 
   **Important**: In order to use `queryShop`, you should pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`:
