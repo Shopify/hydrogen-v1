@@ -12,7 +12,7 @@ yarn add --dev eslint eslint-plugin-hydrogen
 
 ### Using Shopify CLI
 
-You can automatically set up `eslint` using the Shopify CLI by running the following command within your Hydrogen app:
+You can automatically set up `eslint` using Shopify CLI by running the following command within your Hydrogen app:
 
 ```bash
 yarn shopify hydrogen add eslint
