@@ -56,10 +56,12 @@ export function NotFound({
           Take me to the home page
         </Button>
       </PageHeader>
-      <FeaturedCollections
-        title="Popular Collections"
-        data={featuredCollections.nodes}
-      />
+      {featuredCollections.nodes.length < 2 && (
+        <FeaturedCollections
+          title="Popular Collections"
+          data={featuredCollections.nodes}
+        />
+      )}
       <ProductSwimlane data={featuredProducts.nodes} />
     </Layout>
   );
