@@ -1,9 +1,8 @@
 import {ResolvedHydrogenConfig} from '../../../types';
-import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server';
 import {ServerAnalyticsRoute} from '../ServerAnalyticsRoute';
 
 const createRequest = () => {
-  return new HydrogenRequest('__event', {
+  return new Request('__event', {
     headers: {
       'Content-Length': '0',
     },
@@ -61,7 +60,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
   });
 
   it('should delegate json request', async (done) => {
-    const testRequest = new HydrogenRequest('__event', {
+    const testRequest = new Request('__event', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -98,7 +97,7 @@ describe('Analytics - ServerAnalyticsRoute', () => {
   });
 
   it('should delegate text request', async (done) => {
-    const testRequest = new HydrogenRequest('__event', {
+    const testRequest = new Request('__event', {
       method: 'POST',
       body: 'test123',
     });
