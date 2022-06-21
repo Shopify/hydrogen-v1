@@ -1,11 +1,11 @@
 import {useShop} from '@shopify/hydrogen';
 
 export default function Index() {
-  const {locale} = useShop();
+  const {defaultLanguageCode, defaultCountryCode} = useShop();
   return (
     <>
       <h1>ES Home</h1>
-      <div id="locale">{locale}</div>
+      <div id="locale">{`${defaultLanguageCode}-${defaultCountryCode}`}</div>
     </>
   );
 }

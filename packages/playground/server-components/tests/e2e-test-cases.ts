@@ -47,7 +47,7 @@ export default async function testCases({
     await page.goto(getServerUrl() + '/config/someDynamicValue');
 
     expect(await page.textContent('#root > div')).toContain(
-      '{"locale":"EN-US","languageCode":"EN","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
+      '{"defaultCountryCode":"US","defaultLanguageCode":"EN","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
     );
   });
 

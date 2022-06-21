@@ -90,7 +90,7 @@ module.exports = {
       },
     },
     {
-      files: ['packages/hydrogen/src/utilities/tests/*'],
+      files: ['packages/hydrogen/**'],
       rules: {
         'hydrogen/prefer-gql': 'off',
       },

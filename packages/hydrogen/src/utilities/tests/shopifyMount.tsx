@@ -1,7 +1,7 @@
 import React from 'react';
 import {createMount} from '@shopify/react-testing';
 import {BrowserHistory} from 'history';
-import {DEFAULT_LOCALE} from '../../foundation/constants';
+import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../foundation/constants';
 
 import {ShopifyConfig} from '../../types';
 import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server';
@@ -58,11 +58,11 @@ export const mountWithProviders = createMount<
 });
 
 export function getShopifyConfig(config: Partial<ShopifyConfig> = {}) {
-  const locale = config.defaultLocale ?? DEFAULT_LOCALE;
-  const languageCode = locale.split(/[-_]/)[0];
+  const languageCode = config.defaultLanguageCode ?? DEFAULT_LANGUAGE;
+  const countryCode = config.defaultCountryCode ?? DEFAULT_COUNTRY;
 
   return {
-    locale: locale.toUpperCase(),
+    countryCode: countryCode.toUpperCase(),
     languageCode: languageCode.toUpperCase(),
     storeDomain: config.storeDomain ?? 'notashop.myshopify.io',
     storefrontToken: config.storefrontToken ?? 'abc123',

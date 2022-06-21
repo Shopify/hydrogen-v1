@@ -57,7 +57,8 @@ describe('<Metafield />', () => {
       const metafield = getRawMetafield({type: 'date'});
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
-          defaultLocale: 'en-us',
+          defaultLanguageCode: 'en',
+          defaultCountryCode: 'us',
         },
       });
 
@@ -72,7 +73,8 @@ describe('<Metafield />', () => {
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
-            defaultLocale: 'en-us',
+            defaultLanguageCode: 'en',
+            defaultCountryCode: 'us',
           },
         }
       );
@@ -100,7 +102,8 @@ describe('<Metafield />', () => {
       const metafield = getRawMetafield({type: 'date_time'});
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
-          defaultLocale: 'en-us',
+          defaultLanguageCode: 'en',
+          defaultCountryCode: 'us',
         },
       });
 
@@ -115,7 +118,8 @@ describe('<Metafield />', () => {
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
-            defaultLocale: 'en-us',
+            defaultLanguageCode: 'en',
+            defaultCountryCode: 'us',
           },
         }
       );
@@ -146,7 +150,8 @@ describe('<Metafield />', () => {
       });
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
-          defaultLocale: 'en-us',
+          defaultLanguageCode: 'en',
+          defaultCountryCode: 'us',
         },
       });
 
@@ -164,7 +169,8 @@ describe('<Metafield />', () => {
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
-            defaultLocale: 'en-us',
+            defaultLanguageCode: 'en',
+            defaultCountryCode: 'us',
           },
         }
       );
@@ -195,7 +201,8 @@ describe('<Metafield />', () => {
       });
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
-          defaultLocale: 'en-us',
+          defaultLanguageCode: 'en',
+          defaultCountryCode: 'us',
         },
       });
 
@@ -213,7 +220,8 @@ describe('<Metafield />', () => {
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
-            defaultLocale: 'en-us',
+            defaultLanguageCode: 'en',
+            defaultCountryCode: 'us',
           },
         }
       );
@@ -244,7 +252,8 @@ describe('<Metafield />', () => {
       });
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
-          defaultLocale: 'en-us',
+          defaultLanguageCode: 'en',
+          defaultCountryCode: 'us',
         },
       });
 
@@ -262,7 +271,8 @@ describe('<Metafield />', () => {
         <Metafield data={metafield} as="p" />,
         {
           shopifyConfig: {
-            defaultLocale: 'en-us',
+            defaultLanguageCode: 'en',
+            defaultCountryCode: 'us',
           },
         }
       );
@@ -293,7 +303,8 @@ describe('<Metafield />', () => {
       });
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
-          defaultLocale: 'en-us',
+          defaultLanguageCode: 'en',
+          defaultCountryCode: 'us',
         },
       });
 
@@ -331,7 +342,8 @@ describe('<Metafield />', () => {
       });
       const component = mountWithProviders(<Metafield data={metafield} />, {
         shopifyConfig: {
-          defaultLocale: 'en-us',
+          defaultLanguageCode: 'en',
+          defaultCountryCode: 'us',
         },
       });
 
