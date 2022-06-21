@@ -34,6 +34,7 @@ function parseModel(response, json) {
 }
 
 var META_HOT = undefined;
+var META_ENV_DEV = undefined.DEV;
 
 function resolveModuleReference(bundlerConfig, moduleData) {
   return moduleData;
@@ -43,7 +44,7 @@ var allClientComponents = {
   __INJECTED_CLIENT_IMPORTERS__: null
 }; // Mock client component imports during testing
 
-if (typeof jest !== 'undefined') {
+if (META_ENV_DEV && typeof jest !== 'undefined') {
   global.allClientComponents = allClientComponents;
 }
 

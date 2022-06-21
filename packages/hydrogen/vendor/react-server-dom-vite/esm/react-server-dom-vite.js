@@ -28,6 +28,7 @@ function parseModel(response, json) {
 }
 
 var META_HOT = import.meta.hot;
+var META_ENV_DEV = import.meta.env.DEV;
 
 function resolveModuleReference(bundlerConfig, moduleData) {
   return moduleData;
@@ -37,7 +38,7 @@ var allClientComponents = {
   __INJECTED_CLIENT_IMPORTERS__: null
 }; // Mock client component imports during testing
 
-if (typeof jest !== 'undefined') {
+if (META_ENV_DEV && typeof jest !== 'undefined') {
   global.allClientComponents = allClientComponents;
 }
 
