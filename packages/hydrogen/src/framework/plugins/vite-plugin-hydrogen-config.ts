@@ -1,12 +1,6 @@
 import {Plugin} from 'vite';
 import type {BuildOptions} from 'vite';
 
-// About LOCAL_DEV environment variable:
-// It enables hydrogen/* file watching for local development and
-// disables hashing and minification for local builds. Usage in terminal:
-// $ export LOCAL_DEV=true
-// $ yarn [dev|build]
-
 export default () => {
   const rollupOptions: BuildOptions['rollupOptions'] = {
     output: {},

@@ -1,8 +1,7 @@
 # Contributing to Hydrogen
 
-## Releasing
-
-See [Releasing](releasing.md).
+> Tip:
+> Looking for [releasing instructions](releasing.md)?
 
 **Requirements:**
 
@@ -32,6 +31,14 @@ To make changes to the Demo Store template, edit the files in `templates/demo-st
 To modify Hydrogen framework, components, and hooks, edit the files in `packages/hydrogen`.
 
 You can [inspect Vite plugin](https://github.com/antfu/vite-plugin-inspect) transformations by visiting `http://localhost:3000/__inspect`.
+
+During local development, you can use `LOCAL_DEV` environment variable to enable
+Hydrogen file watching when running templates or examples. This variable also disables file hashing and minification when building locally.
+
+```bash
+$ export LOCAL_DEV=true
+$ yarn [dev|build]
+```
 
 ## Context
 
