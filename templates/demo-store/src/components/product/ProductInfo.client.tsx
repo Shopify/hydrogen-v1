@@ -2,12 +2,20 @@
 import {Disclosure} from '@headlessui/react';
 
 import {Text, IconClose} from '~/components';
-import {productInfo} from '~/lib/placeholders';
+import {getProductInfoPlaceholder} from '~/lib/placeholders';
 
-export function ProductInfo({data = productInfo}) {
+interface ProductInfo {
+  title: string;
+  content: string;
+  id: string;
+}
+
+export function ProductInfo({data}: {data: ProductInfo[]}) {
+  const infos = data?.length ? data : getProductInfoPlaceholder();
+  if (!Array.isArray(infos)) return null;
   return (
     <section className="grid gap-4 py-4">
-      {data.map((section) => (
+      {infos.map((section: ProductInfo) => (
         <Disclosure
           key={section.title}
           as="div"

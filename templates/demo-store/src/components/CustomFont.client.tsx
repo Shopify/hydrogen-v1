@@ -17,26 +17,6 @@
 // In a production environment, you will likely want to include the below
 // markup right in your index.html and index.css files.
 
-import {Head} from '@shopify/hydrogen';
+import '../styles/custom-font.css';
 
-export function CustomFont() {
-  return (
-    <Head>
-      <link rel="stylesheet" href="/src/styles/custom-font.css" />
-      <link
-        rel="preload"
-        as="font"
-        href="/src/assets/fonts/Fraunces--latin_basic.woff2"
-        type="font/woff2"
-        crossOrigin="anonymous"
-      />
-      <link
-        rel="preload"
-        as="font"
-        href="/src/assets/fonts/Fraunces-Italic--latin_basic.woff2"
-        type="font/woff2"
-        crossOrigin="anonymous"
-      />
-    </Head>
-  );
-}
+export function CustomFont() {}

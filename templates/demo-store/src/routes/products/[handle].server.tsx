@@ -3,6 +3,7 @@ import {
   gql,
   ProductOptionsProvider,
   Seo,
+  type Product as ProductType,
   ShopifyAnalyticsConstants,
   useLocalization,
   useRouteParams,
@@ -11,6 +12,8 @@ import {
 } from '@shopify/hydrogen';
 
 import {MEDIA_FRAGMENT} from '~/lib/fragments';
+import {parseProductInfo} from '~/lib/utils';
+import {NotFound, Layout, ProductSwimlane} from '~/components/index.server';
 import {
   Heading,
   ProductForm,
@@ -19,7 +22,6 @@ import {
   Section,
   Text,
 } from '~/components';
-import {NotFound, Layout, ProductSwimlane} from '~/components/index.server';
 
 export default function Product() {
   const {handle} = useRouteParams();
@@ -44,6 +46,8 @@ export default function Product() {
     return <NotFound type="product" />;
   }
 
+  const productInfo = parseProductInfo(product);
+
   useServerAnalytics({
     shopify: {
       pageType: ShopifyAnalyticsConstants.pageType.product,
@@ -63,7 +67,7 @@ export default function Product() {
               media={product.media.nodes}
               className="w-screen md:w-full lg:col-span-2"
             />
-            <section className="sticky md:mx-auto max-w-xl md:max-w-[24rem] grid gap-8 p-6 md:px-0 top-nav">
+            <section className="sticky w-full md:mx-auto max-w-xl md:max-w-[24rem] grid gap-8 p-6 md:px-0 top-nav">
               <div className="grid gap-2">
                 <Heading as="h1" className="whitespace-normal">
                   {product.title}
@@ -75,7 +79,7 @@ export default function Product() {
                 )}
               </div>
               <ProductForm />
-              <ProductInfo />
+              <ProductInfo data={productInfo} />
             </section>
           </div>
         </Section>
@@ -87,9 +91,13 @@ export default function Product() {
   );
 }
 
-// TODO: Add query for Metafields for ProductInfo
 const PRODUCT_QUERY = gql`
   ${MEDIA_FRAGMENT}
+  fragment Metafield on Metafield {
+    value
+    namespace
+    id
+  }
   query Product(
     $country: CountryCode
     $language: LanguageCode
@@ -100,6 +108,15 @@ const PRODUCT_QUERY = gql`
       title
       vendor
       description
+      details: metafield(namespace: "demo", key: "details") {
+        ...Metafield
+      }
+      sizeFit: metafield(namespace: "demo", key: "sizeFit") {
+        ...Metafield
+      }
+      delivery: metafield(namespace: "demo", key: "delivery") {
+        ...Metafield
+      }
       media(first: 7) {
         nodes {
           ...MediaFields

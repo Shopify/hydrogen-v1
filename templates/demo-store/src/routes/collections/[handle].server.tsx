@@ -72,7 +72,7 @@ export default function Collection({params}: HydrogenRouteProps) {
   );
 }
 
-// pagination api
+// API endpoint that returns paginated products for this collection
 export async function api(
   request: HydrogenRequest,
   {params, queryShop}: HydrogenApiRouteOptions,
