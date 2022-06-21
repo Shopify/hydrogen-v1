@@ -69,7 +69,7 @@ export async function ServerAnalyticsRoute(
         );
       })
       .catch((error) => {
-        log.warn('Fail to resolve server analytics (text): ', error);
+        log.warn('Failed to resolve server analytics (text): ', error);
       });
   }
 
