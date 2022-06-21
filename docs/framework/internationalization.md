@@ -23,7 +23,7 @@ Hydrogen includes the following components and hooks for localization:
 
 You can configure your Hydrogen storefront's default language and country by setting the `defaultLanguageCode` and `defaultCountryCode` in the [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). 
 
-`LocalizationProvider` uses these default values unless it is passed an override from the `languageCode` and/or `countryCode` props.
+`LocalizationProvider` uses these default values, unless it is passed an override from the `languageCode` and/or `countryCode` props.
 
 In the following example, the default language is set to English and the default country is set to United States. 
 
@@ -96,7 +96,7 @@ Hydrogen supports two strategies for internationalized routes: domains and subfo
 
 ### Domains and subdomains
 
-First, [add your domain/subdomain in Shopify](https://help.shopify.com/en/manual/domains/add-a-domain). Then from your Shopify Admin, under **Settings > Domains**, update your domain to target your custom storefront and set its domain type to **Routing**.
+First, [add all your domains/subdomains in Shopify](https://help.shopify.com/en/manual/domains/add-a-domain). Then from your Shopify Admin, under **Settings > Domains**, update your domains/subdomains to target your custom storefront. Your primary domain will be used for the default URL when customers visit your store (e.g. `yourshop.com`). Additional domains/subdomains that you want to host a localized experience should have the Domain Type set to Routing. 
 
 ### Subfolders
 
