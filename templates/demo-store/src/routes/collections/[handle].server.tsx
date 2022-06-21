@@ -66,6 +66,7 @@ export default function Collection({params}: HydrogenRouteProps) {
       </PageHeader>
       <Section>
         <ProductGrid
+          key="collections"
           collection={collection}
           url={`/collections/${handle}?country=${country}`}
         />
@@ -75,6 +76,7 @@ export default function Collection({params}: HydrogenRouteProps) {
 }
 
 // API endpoint that returns paginated products for this collection
+// @see templates/demo-store/src/components/product/ProductGrid.client.tsx
 export async function api(
   request: HydrogenRequest,
   {params, queryShop}: HydrogenApiRouteOptions,
@@ -92,7 +94,7 @@ export async function api(
   const {handle} = params;
 
   return await queryShop({
-    query: PAGINATE_QUERY,
+    query: PAGINATE_COLLECTION_QUERY,
     variables: {
       handle,
       cursor,
@@ -101,29 +103,6 @@ export async function api(
     },
   });
 }
-
-const PAGINATE_QUERY = gql`
-  ${PRODUCT_CARD_FRAGMENT}
-  query CollectionPage(
-    $handle: String!
-    $pageBy: Int!
-    $cursor: String
-    $country: CountryCode
-    $language: LanguageCode
-  ) @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
-      products(first: $pageBy, after: $cursor) {
-        nodes {
-          ...ProductCard
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-      }
-    }
-  }
-`;
 
 const COLLECTION_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
@@ -149,6 +128,29 @@ const COLLECTION_QUERY = gql`
         height
         altText
       }
+      products(first: $pageBy, after: $cursor) {
+        nodes {
+          ...ProductCard
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+const PAGINATE_COLLECTION_QUERY = gql`
+  ${PRODUCT_CARD_FRAGMENT}
+  query CollectionPage(
+    $handle: String!
+    $pageBy: Int!
+    $cursor: String
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
       products(first: $pageBy, after: $cursor) {
         nodes {
           ...ProductCard

@@ -4,7 +4,7 @@ import {Suspense} from 'react';
 
 import {PageHeader, Section, Grid} from '~/components';
 import {Layout, CollectionCard} from '~/components/index.server';
-import {getImageLoadingPriority} from '~/lib/const';
+import {getImageLoadingPriority, PAGINATION_SIZE} from '~/lib/const';
 
 export default function Collections() {
   const {
@@ -15,7 +15,7 @@ export default function Collections() {
   const {data} = useShopQuery<any>({
     query: COLLECTIONS_QUERY,
     variables: {
-      pageBy: 12,
+      pageBy: PAGINATION_SIZE,
       country: countryCode,
       language: languageCode,
     },

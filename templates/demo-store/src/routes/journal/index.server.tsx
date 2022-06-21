@@ -15,11 +15,14 @@ import {Suspense} from 'react';
 
 import {ArticleCard, Grid, PageHeader} from '~/components';
 import {Layout} from '~/components/index.server';
-import {getImageLoadingPriority} from '~/lib/const';
+import {getImageLoadingPriority, PAGINATION_SIZE} from '~/lib/const';
 
 const BLOG_HANDLE = 'Journal';
 
-export default function Blog({pageBy = 12, response}: HydrogenRouteProps) {
+export default function Blog({
+  pageBy = PAGINATION_SIZE,
+  response,
+}: HydrogenRouteProps) {
   response.cache(CacheLong());
   const {
     language: {isoCode: languageCode},

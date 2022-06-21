@@ -1,29 +1,21 @@
 import {
   gql,
   HydrogenRouteProps,
+  type HydrogenApiRouteOptions,
+  type HydrogenRequest,
   useLocalization,
   useShopQuery,
   useUrl,
 } from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
-import {
-  FeaturedCollections,
-  Grid,
-  Heading,
-  Input,
-  PageHeader,
-  ProductCard,
-  Section,
-  Text,
-} from '~/components';
-import {Layout, ProductSwimlane} from '~/components/index.server';
-import {getImageLoadingPriority} from '~/lib/const';
-import {Suspense} from 'react';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import {ProductGrid, Section, Text} from '~/components';
+import {NoResultRecommendations, SearchPage} from '~/components/index.server';
+import {PAGINATION_SIZE} from '~/lib/const';
+import type {Collection} from '@shopify/hydrogen/storefront-api-types';
 
 export default function Search({
-  pageBy = 12,
+  pageBy = PAGINATION_SIZE,
   params,
 }: {
   pageBy?: number;
@@ -37,7 +29,7 @@ export default function Search({
   const {handle} = params;
   const {searchParams} = useUrl();
 
-  const query = searchParams.get('q');
+  const searchTerm = searchParams.get('q');
 
   const {data} = useShopQuery<any>({
     query: SEARCH_QUERY,
@@ -46,114 +38,89 @@ export default function Search({
       country: countryCode,
       language: languageCode,
       pageBy,
-      query,
+      searchTerm,
     },
     preload: true,
   });
 
-  const results = data?.products?.nodes as Product[];
+  const products = data?.products;
+  const noResults = products?.nodes?.length === 0;
 
-  if (!query || results.length === 0) {
+  if (!searchTerm || noResults) {
     return (
-      <SearchPage query={query ? decodeURI(query) : null}>
-        {results.length === 0 && (
+      <SearchPage searchTerm={searchTerm ? decodeURI(searchTerm) : null}>
+        {noResults && (
           <Section padding="x">
             <Text className="opacity-50">No results, try something else.</Text>
           </Section>
         )}
-        <NoResultRecommendation country={countryCode} language={languageCode} />
+        <NoResultRecommendations
+          country={countryCode}
+          language={languageCode}
+        />
       </SearchPage>
     );
   }
 
   return (
-    <SearchPage query={decodeURI(query)}>
+    <SearchPage searchTerm={decodeURI(searchTerm)}>
       <Section>
-        <Grid layout="products">
-          {results.map((product, i) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              loading={getImageLoadingPriority(i)}
-            />
-          ))}
-        </Grid>
+        <ProductGrid
+          key="search"
+          url={`/search?country=${countryCode}&q=${searchTerm}`}
+          collection={{products} as Collection}
+        />
       </Section>
     </SearchPage>
   );
 }
 
-function SearchPage({
-  query,
-  children,
-}: {
-  query?: string | null;
-  children: React.ReactNode;
-}) {
-  return (
-    <Layout>
-      <PageHeader>
-        <Heading as="h1" size="copy">
-          Search
-        </Heading>
-        <form className="relative flex w-full text-heading">
-          <Input
-            defaultValue={query}
-            placeholder="Search…"
-            type="search"
-            variant="search"
-            name="q"
-          />
-          <button className="absolute right-0 py-2" type="submit">
-            Go
-          </button>
-        </form>
-      </PageHeader>
-      {children}
-    </Layout>
-  );
-}
+// API to paginate the results of the search query.
+// @see templates/demo-store/src/components/product/ProductGrid.client.tsx
+export async function api(
+  request: HydrogenRequest,
+  {params, queryShop}: HydrogenApiRouteOptions,
+) {
+  if (request.method !== 'POST') {
+    return new Response('Method not allowed', {
+      status: 405,
+      headers: {Allow: 'POST'},
+    });
+  }
 
-function NoResultRecommendation({
-  country,
-  language,
-}: {
-  country: string;
-  language: string;
-}) {
-  const {data} = useShopQuery<any>({
-    query: SEARCH_NO_RESULTS_QUERY,
+  const url = new URL(request.url);
+  const cursor = url.searchParams.get('cursor');
+  const country = url.searchParams.get('country');
+  const searchTerm = url.searchParams.get('q');
+  const {handle} = params;
+
+  return await queryShop({
+    query: PAGINATE_SEARCH_QUERY,
     variables: {
+      handle,
+      cursor,
+      pageBy: PAGINATION_SIZE,
       country,
-      language,
+      searchTerm,
     },
-    preload: false,
   });
-
-  return (
-    <Suspense>
-      <FeaturedCollections
-        title="Trending Collections"
-        data={data.featuredCollections.nodes}
-      />
-      <ProductSwimlane
-        title="Trending Products"
-        data={data.featuredProducts.nodes}
-      />
-    </Suspense>
-  );
 }
 
 const SEARCH_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
   query search(
-    $query: String
+    $searchTerm: String
     $country: CountryCode
     $language: LanguageCode
     $pageBy: Int!
     $after: String
   ) @inContext(country: $country, language: $language) {
-    products(first: $pageBy, sortKey: RELEVANCE, query: $query, after: $after) {
+    products(
+      first: $pageBy
+      sortKey: RELEVANCE
+      query: $searchTerm
+      after: $after
+    ) {
       nodes {
         ...ProductCard
       }
@@ -167,26 +134,27 @@ const SEARCH_QUERY = gql`
   }
 `;
 
-const SEARCH_NO_RESULTS_QUERY = gql`
+const PAGINATE_SEARCH_QUERY = gql`
   ${PRODUCT_CARD_FRAGMENT}
-  query searchNoResult($country: CountryCode, $language: LanguageCode)
-  @inContext(country: $country, language: $language) {
-    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
-      nodes {
-        id
-        title
-        handle
-        image {
-          altText
-          width
-          height
-          url
-        }
-      }
-    }
-    featuredProducts: products(first: 12) {
+  query ProductsPage(
+    $searchTerm: String
+    $pageBy: Int!
+    $cursor: String
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    products(
+      sortKey: RELEVANCE
+      query: $searchTerm
+      first: $pageBy
+      after: $cursor
+    ) {
       nodes {
         ...ProductCard
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
