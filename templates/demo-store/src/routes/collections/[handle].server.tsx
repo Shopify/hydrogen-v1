@@ -66,7 +66,7 @@ export default function Collection({params}: HydrogenRouteProps) {
       </PageHeader>
       <Section>
         <ProductGrid
-          key="collections"
+          key={collection.id}
           collection={collection}
           url={`/collections/${handle}?country=${country}`}
         />
