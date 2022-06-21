@@ -1,3 +1,4 @@
+import {gql} from '@shopify/hydrogen';
 import type {HydrogenApiRouteOptions, HydrogenRequest} from '@shopify/hydrogen';
 import type {Localization} from '@shopify/hydrogen/storefront-api-types';
 
@@ -18,7 +19,7 @@ export async function api(
   return availableCountries.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-const COUNTRIES_QUERY = `
+const COUNTRIES_QUERY = gql`
   query Localization {
     localization {
       availableCountries {

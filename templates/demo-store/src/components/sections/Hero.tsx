@@ -3,19 +3,32 @@ import type {Media} from '@shopify/hydrogen/storefront-api-types';
 
 import {Heading, Text} from '~/components';
 
-export function Hero({
-  data,
-  height,
-  top,
-  loading,
-}: {
-  data: any;
-  height?: 'full';
-  top?: boolean;
-  loading?: 'eager' | 'lazy';
-}) {
-  const {title, byline, cta, handle, spread, spreadSecondary} = data;
+interface Metafield {
+  value: string;
+  reference?: object;
+}
 
+export function Hero({
+  byline,
+  cta,
+  handle,
+  heading,
+  height,
+  loading,
+  spread,
+  spreadSecondary,
+  top,
+}: {
+  byline: Metafield;
+  cta: Metafield;
+  handle: string;
+  heading: Metafield;
+  height?: 'full';
+  loading?: 'eager' | 'lazy';
+  spread: Metafield;
+  spreadSecondary: Metafield;
+  top?: boolean;
+}) {
   return (
     <Link to={`/collections/${handle}`}>
       <section
@@ -60,15 +73,17 @@ export function Hero({
           )}
         </div>
         <div className="flex flex-col items-baseline justify-between gap-4 px-6 py-8 sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
-          <Heading format as="h2" size="display" className="max-w-md">
-            {title.value}
-          </Heading>
-          {byline && (
+          {heading?.value && (
+            <Heading format as="h2" size="display" className="max-w-md">
+              {heading.value}
+            </Heading>
+          )}
+          {byline?.value && (
             <Text format width="narrow" as="p" size="lead">
               {byline.value}
             </Text>
           )}
-          <Text size="lead">{cta ? cta?.value : 'Shop Now'}</Text>
+          {cta?.value && <Text size="lead">{cta.value}</Text>}
         </div>
       </section>
     </Link>
