@@ -31,7 +31,7 @@ export function CartEmpty({onClose}: {onClose?: () => void}) {
         </Heading>
         <div className="grid grid-cols-2 gap-x-6 gap-y-8">
           <Suspense fallback={<Loading />}>
-            <TopProducts />
+            <TopProducts onClose={onClose} />
           </Suspense>
         </div>
       </section>
@@ -39,7 +39,7 @@ export function CartEmpty({onClose}: {onClose?: () => void}) {
   );
 }
 
-function TopProducts() {
+function TopProducts({onClose}: {onClose?: () => void}) {
   const products: Product[] = fetchSync('/api/bestSellers').json();
 
   if (products.length === 0) {
@@ -49,7 +49,7 @@ function TopProducts() {
   return (
     <>
       {products.map((product) => (
-        <ProductCard product={product} key={product.id} />
+        <ProductCard product={product} key={product.id} onClick={onClose} />
       ))}
     </>
   );

@@ -22,11 +22,13 @@ export function ProductCard({
   label,
   className,
   loading,
+  onClick,
 }: {
   product: Product;
   label?: string;
   className?: string;
   loading?: HTMLImageElement['loading'];
+  onClick?: () => void;
 }) {
   let cardLabel;
 
@@ -51,7 +53,7 @@ export function ProductCard({
   const styles = clsx('grid gap-6', className);
 
   return (
-    <Link to={`/products/${product.handle}`}>
+    <Link onClick={onClick} to={`/products/${product.handle}`}>
       <div className={styles}>
         <div className="card-image aspect-[4/5] bg-primary/5">
           <Text
