@@ -92,7 +92,7 @@ For more information about retrieving language translations and the `@inContext`
 
 ### Search engine optimization (SEO)
 
-Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the `defaultLocale` value that's provided in your Hydrogen configuration file or `EN-US` when not specified.
+Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the locale within the [`LocalizationProvider`](/api/hydrogen/components/localization/localizationprovider) component.
 
 For more information about customizing the output of SEO-related tags in your Hydrogen app, refer to [SEO](https://shopify.dev/custom-storefronts/hydrogen/framework/seo).
 
