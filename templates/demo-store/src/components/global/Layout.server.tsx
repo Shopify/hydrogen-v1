@@ -1,3 +1,4 @@
+import {Suspense} from 'react';
 import {useLocalization, useShopQuery, CacheLong, gql} from '@shopify/hydrogen';
 import type {Menu, Shop} from '@shopify/hydrogen/storefront-api-types';
 
@@ -8,10 +9,45 @@ import {parseMenu} from '~/lib/utils';
 const HEADER_MENU_HANDLE = 'main-menu';
 const FOOTER_MENU_HANDLE = 'footer';
 
+const SHOP_NAME_FALLBACK = 'Hydrogen';
+
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
  */
 export function Layout({children}: {children: React.ReactNode}) {
+  return (
+    <>
+      <div className="flex flex-col min-h-screen">
+        <div className="">
+          <a href="#mainContent" className="sr-only">
+            Skip to content
+          </a>
+        </div>
+        <Suspense fallback={<Header title={SHOP_NAME_FALLBACK} />}>
+          <HeaderWithMenu />
+        </Suspense>
+        <main role="main" id="mainContent" className="flex-grow">
+          {children}
+        </main>
+      </div>
+      <Suspense fallback={<Footer />}>
+        <FooterWithMenu />
+      </Suspense>
+    </>
+  );
+}
+
+function HeaderWithMenu() {
+  const {shopName, headerMenu} = useLayoutQuery();
+  return <Header title={shopName} menu={headerMenu} />;
+}
+
+function FooterWithMenu() {
+  const {footerMenu} = useLayoutQuery();
+  return <Footer menu={footerMenu} />;
+}
+
+function useLayoutQuery() {
   const {
     language: {isoCode: languageCode},
   } = useLocalization();
@@ -31,7 +67,7 @@ export function Layout({children}: {children: React.ReactNode}) {
     preload: '*',
   });
 
-  const shopName = data ? data.shop.name : 'Hydrogen Demo Store';
+  const shopName = data ? data.shop.name : SHOP_NAME_FALLBACK;
 
   /*
     Modify specific links/routes (optional)
@@ -51,22 +87,7 @@ export function Layout({children}: {children: React.ReactNode}) {
     ? parseMenu(data.footerMenu, customPrefixes)
     : undefined;
 
-  return (
-    <>
-      <div className="flex flex-col min-h-screen">
-        <div className="">
-          <a href="#mainContent" className="sr-only">
-            Skip to content
-          </a>
-        </div>
-        <Header title={shopName} menu={headerMenu} />
-        <main role="main" id="mainContent" className="flex-grow">
-          {children}
-        </main>
-      </div>
-      <Footer menu={footerMenu} />
-    </>
-  );
+  return {footerMenu, headerMenu, shopName};
 }
 
 const SHOP_QUERY = gql`
@@ -78,7 +99,7 @@ const SHOP_QUERY = gql`
     type
     url
   }
-  query layout(
+  query layoutMenus(
     $language: LanguageCode
     $headerMenuHandle: String!
     $footerMenuHandle: String!
