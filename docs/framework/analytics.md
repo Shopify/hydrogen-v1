@@ -313,17 +313,14 @@ To send analytics data from the server-side, complete the following steps:
 
     {% endcodeblock %}
 
-    {% codeblock file, filename: 'App.server.js' %}
+    {% codeblock file, filename: 'hydrogen.config.js' %}
 
     ```js
     import * as MyServerAnalyticsConnector from '/components/MyServerAnalyticsConnector.jsx'
 
-    ...
-
-    export default renderHydrogen(App, {
-     shopifyConfig,
-     routes,
-     serverAnalyticsConnectors: [MyServerAnalyticsConnector]
+    export default defineConfig({
+      ...
+      serverAnalyticsConnectors: [MyServerAnalyticsConnector]
     });
     ```
 
@@ -342,7 +339,7 @@ The following table describes the request function parameters for `ServerAnalyti
 
 ## Unsubscribe from an event
 
-You can unsubscribe from events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `PAGE_VIEW` event:
+You can unsubscribe from events that you no longer want your Hydrogen app to track. The following example shows how to unsubscribe from the `accepts-marketing` event:
 
 {% codeblock file, filename: 'components/SomeComponent.client.jsx' %}
 
@@ -372,9 +369,9 @@ Performance metrics provide insight into how fast pages are loading in your Hydr
 - **Largest Contentful Paint (LCP)**: The time it takes to render and interact with the largest content element on the page
 - **Duration**: The total amount of time it takes for a page to finish streaming
 
-You can opt in to receive performance metrics for page loads in your Hydrogen storefront by including `<PerformanceMetrics />` and `PerformanceMetricsDebug` in `App.server.js`.
+You can opt in to receive performance metrics for page loads in your Hydrogen storefront by including `<PerformanceMetrics />` in `App.server.js`.
 
-If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in your client component:
+If you want to see performance debug metrics displayed in your browser console log, then include `<PerformanceMetricsDebug />` in `App.server.js`:
 
 {% codeblock file, filename: 'App.server.jsx' %}
 
