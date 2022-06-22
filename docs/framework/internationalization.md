@@ -163,7 +163,7 @@ After you've set up your routing strategies, you can create redirects based on y
 
 Shopify recommends manual redirects for customer privacy and SEO best practices. For example, reference the [`CountrySelector.client`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/CountrySelector.client.tsx) component in the Hydrogen demo store.
 
-If you're hosting your Hydrogen storefront on Oxygen, then you can access a visitor’s geolocation by using the `request` object and retrieving it using `request.headers.get()`:
+If you're hosting your Hydrogen storefront on Oxygen, then you can access a visitor’s geolocation by using the `request` object and retrieve it using `request.headers.get()`:
 
 {% codeblock %}
 
