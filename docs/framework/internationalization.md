@@ -8,7 +8,7 @@ Internationalization helps merchants expand their business to a global audience 
 
 ## Localization
 
-Shopify helps merchants, all over the world, sell to customers, all over the world. This means that there are multiple currencies and languages that they might need to sell in.
+Shopify helps merchants all over the world, sell to customers all over the world. This means that there are multiple currencies and languages that they might need to sell in.
 
 Hydrogen includes the following components and hooks for localization:
 
