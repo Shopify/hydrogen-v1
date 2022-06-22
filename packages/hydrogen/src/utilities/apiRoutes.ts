@@ -2,6 +2,7 @@ import {
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
   ImportGlobEagerOutput,
+  CachingStrategy,
 } from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
@@ -145,6 +146,8 @@ interface QueryShopArgs {
   query: string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
+  /** A Caching Strategy used by the query. */
+  cache?: CachingStrategy;
 }
 
 function queryShopBuilder(
