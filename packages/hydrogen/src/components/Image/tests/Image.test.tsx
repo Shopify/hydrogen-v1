@@ -211,6 +211,30 @@ describe('<Image />', () => {
       });
 
       const component = mount(
+        <Image
+          data={image}
+          loaderOptions={{scale: 2, crop: 'bottom'}}
+          width={500}
+          height={250}
+        />
+      );
+
+      expect(component).toContainReactComponent('img', {
+        width: 500,
+        height: 250,
+        // height is the aspect ratio (of width + height) * srcSet width, so in this case it should be half of width
+        srcSet: `${image.url}?width=704&height=352&crop=bottom 352w`,
+      });
+    });
+
+    it(`uses scale to multiply the srcset width but not the element width, and when crop is there, includes height in srcset using data.width / data.height for the aspect ratio`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 500,
+        height: 500,
+      });
+
+      const component = mount(
         <Image data={image} loaderOptions={{scale: 2, crop: 'bottom'}} />
       );
 

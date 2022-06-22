@@ -94,6 +94,7 @@ export function ProductGallery({
               // @ts-ignore
               options={{
                 crop: 'center',
+                scale: 2,
               }}
               {...mediaProps}
             />
