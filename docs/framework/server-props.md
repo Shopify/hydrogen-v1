@@ -12,7 +12,7 @@ This guide describes how to manage server props during your development process.
 
 Server `props` are props that are passed to your root server component route. Hydrogen provides a [`useServerProps`](https://shopify.dev/api/hydrogen/hooks/global/useserverprops) hook with a `setServerProps` helper function, which allows you to re-render the server component with new `props`. This is useful to paginate within collections, switch product variants, or do anything that requires new data from the server.
 
-For example, you can take geolocation co-ordinates and set them as server props to provide a new hydrated experience for the current location:
+For example, you can use geolocation co-ordinates as server props to provide a new hydrated experience for the current location:
 
 {% codeblock file, filename: 'GeoLocate.client.jsx' %}
 
