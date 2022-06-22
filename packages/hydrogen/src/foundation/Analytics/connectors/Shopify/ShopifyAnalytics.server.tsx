@@ -4,11 +4,11 @@ import AnalyticsErrorBoundary from '../../../AnalyticsErrorBoundary.client';
 import {useServerRequest} from '../../../ServerRequestProvider';
 import {useServerAnalytics} from '../../hook';
 import {useShop} from '../../../useShop';
-import {SHOPIFY_S, SHOPIFY_Y} from './const';
 import {ShopifyAnalyticsClient} from './ShopifyAnalytics.client';
 import {useShopQuery} from '../../../../hooks/useShopQuery';
 import {CacheLong} from '../../../Cache/strategies';
 import {gql} from '../../../../utilities/graphql-tag';
+import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants';
 
 export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {
   const {storeDomain} = useShop();

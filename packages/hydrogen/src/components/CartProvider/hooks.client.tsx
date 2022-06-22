@@ -11,7 +11,13 @@ import {Cart} from './types';
 import {
   SHOPIFY_STOREFRONT_ID_HEADER,
   STOREFRONT_API_PUBLIC_TOKEN_HEADER,
+  SHOPIFY_STOREFRONT_Y_HEADER,
+  SHOPIFY_STOREFRONT_S_HEADER,
+  SHOPIFY_Y,
+  SHOPIFY_S,
 } from '../../constants';
+import {parse} from 'worktop/cookie';
+import {buildUUID} from '../../foundation/Analytics/connectors/Shopify/utils';
 
 export function useCartFetch() {
   const {storeDomain, storefrontApiVersion, storefrontToken, storefrontId} =
@@ -34,6 +40,13 @@ export function useCartFetch() {
 
       if (storefrontId) {
         headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
+      }
+
+      // Find Shopify cookies
+      const cookieData = parse(document.cookie);
+      if (cookieData[SHOPIFY_Y] && cookieData[SHOPIFY_S]) {
+        headers[SHOPIFY_STOREFRONT_Y_HEADER] = cookieData[SHOPIFY_Y];
+        headers[SHOPIFY_STOREFRONT_S_HEADER] = cookieData[SHOPIFY_S];
       }
 
       return fetch(
