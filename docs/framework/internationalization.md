@@ -21,11 +21,11 @@ Hydrogen includes the following components and hooks for localization:
 
 ### Default configuration
 
-You can configure your Hydrogen storefront's default language and country by setting the `defaultLanguageCode` and `defaultCountryCode` in the [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). 
+You can configure your Hydrogen storefront's default language and country by setting the `defaultLanguageCode` and `defaultCountryCode` properties in the [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). 
 
 `LocalizationProvider` uses these default values, unless it is passed an override from the `languageCode` and/or `countryCode` props.
 
-In the following example, the default language is set to English and the default country is set to United States. 
+In the following example, the default language is set to English and the default country is set to United States:
 
 {% codeblock file, filename: 'hydrogen.config.js' %}
 ```tsx
@@ -41,11 +41,11 @@ export default defineConfig({
 
 ### Overriding the default locale
 
-You can change the active country and language at runtime by passing `countryCode` and `languageCode` props to the `LocalizationProvider`. 
+You can change the active country and language at runtime by passing the `countryCode` and `languageCode` props to the `LocalizationProvider` component. 
 
 ### Retrieving translated content from the Storefront API
 
-You can use the `useLocalization` hook to pass the visitor's active `country` and `language` into your Storefront API query. For example, you might need to create a product page in a customer's language.
+You can use the `useLocalization` hook to pass the visitor's active `country` and `language` into your Storefront API query. For example, you might need to create a product page in a customer's language:
 
 {% codeblock file %}
 ```tsx
@@ -106,11 +106,13 @@ Hydrogen supports two strategies for internationalized routes: domains and subfo
 
 ### Set up domains and subdomains
 
-First, [add all your domains/subdomains in Shopify](https://help.shopify.com/en/manual/domains/add-a-domain). 
+To set up domains and subdomains, complete the following steps:
 
-Then from your Shopify Admin, under **Settings > Domains**, update your domains/subdomains to target your custom storefront. Your primary domain will be used for the default URL when customers visit your store. 
+1. [Add all your domains/subdomains in Shopify](https://help.shopify.com/en/manual/domains/add-a-domain). 
 
-For non-primary domains/subdomains that you want to host a localized experience, set the domain type to Routing. 
+2. From your Shopify admin, under **Settings > Domains**, update your domains and subdomains to target your custom storefront. Your primary domain is used for the default URL when customers visit your store. 
+
+For non-primary domains and subdomains that you want to host a localized experience, set the domain type to **Routing**. 
 
 ### Set up subfolders
 
@@ -157,9 +159,9 @@ function NotFound() {
 
 ### Redirects
 
-After you've set up your routing strategies, you can create redirects based on your visitor's locale. Redirects may be triggered either manually (e.g. a visitor changes their country using a dropdown menu), or automatically (e.g. based on a visitor's geolocation). 
+After you've set up your routing strategies, you can create redirects based on your visitor's locale. You can trigger redirects manually (for example, a visitor changes their country using a dropdown menu), or automatically (for example, based on a visitor's geolocation). 
 
-Shopify recommends manual redirects for customer privacy and SEO best practices. As an example, reference the [`CountrySelector.client`](https://github.com/Shopify/hydrogen/blob/76f919487485682ad0918260274f8af3ab0165fb/templates/demo-store/src/components/CountrySelector.client.tsx) file in the Hydrogen demo store. 
+Shopify recommends manual redirects for customer privacy and SEO best practices. As an example, reference the [`CountrySelector.client`](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/CountrySelector.client.tsx) component in the Hydrogen demo store. 
 
 If you're hosting your Hydrogen storefront on Oxygen, then you can access a visitor’s geolocation by using the `request` object and retrieving it using `request.headers.get()`:
 
