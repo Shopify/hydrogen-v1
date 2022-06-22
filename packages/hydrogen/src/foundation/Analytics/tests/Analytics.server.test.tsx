@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
+import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {ServerRequestProvider} from '../../ServerRequestProvider';
 import {Analytics} from '../Analytics.server';
@@ -15,7 +15,7 @@ function SomeApiDelayServerComponent({
   request,
 }: {
   delay: number;
-  request: ServerComponentRequest;
+  request: HydrogenRequest;
 }) {
   const cache = request.ctx.cache;
   const delayKey = `api-${delay}`;
@@ -37,21 +37,16 @@ function SomeApiDelayServerComponent({
 
       throw promise;
     });
-    /* eslint-disable react-hooks/rules-of-hooks */
     useServerAnalytics({
       [delayKey]: delay,
     });
-    /* eslint-enable react-hooks/rules-of-hooks */
   }
   return <div>Api delay - {delay}</div>;
 }
 
-function mountComponent(
-  request: ServerComponentRequest,
-  children: React.ReactChild
-) {
+function mountComponent(request: HydrogenRequest, children: React.ReactChild) {
   return mountWithProviders(
-    <ServerRequestProvider request={request} isRSC={true}>
+    <ServerRequestProvider request={request}>
       <Suspense fallback={null}>
         {children}
         <Suspense fallback={null}>
@@ -64,9 +59,7 @@ function mountComponent(
 
 describe('Analytics.server', () => {
   it('should introduce delay if no cache queries are detected', async () => {
-    const request = new ServerComponentRequest(
-      new Request('https://examples.com')
-    );
+    const request = new HydrogenRequest(new Request('https://examples.com'));
     const analyticsData = {
       test: '123',
     };
@@ -81,7 +74,6 @@ describe('Analytics.server', () => {
 
     const cache = request.ctx.cache;
     expect(cache.size).toEqual(1);
-    expect(cache.has('analytics-delay')).toEqual(true);
     expect(request.ctx.analyticsData).toEqual({
       url: 'https://examples.com/',
       normalizedRscUrl: 'https://examples.com/',
@@ -90,9 +82,7 @@ describe('Analytics.server', () => {
   });
 
   it('should wait for all cache queries', async () => {
-    const request = new ServerComponentRequest(
-      new Request('https://examples.com')
-    );
+    const request = new HydrogenRequest(new Request('https://examples.com'));
     await mountComponent(
       request,
       <>
@@ -107,7 +97,6 @@ describe('Analytics.server', () => {
 
     const cache = request.ctx.cache;
     expect(cache.size).toEqual(2);
-    expect(cache.has('analytics-delay')).toEqual(false);
     expect(request.ctx.analyticsData).toEqual({
       url: 'https://examples.com/',
       normalizedRscUrl: 'https://examples.com/',

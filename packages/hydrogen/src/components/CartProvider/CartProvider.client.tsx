@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import type {Reducer} from 'react';
-import {flattenConnection} from '../../utilities';
+import {flattenConnection} from '../../utilities/flattenConnection';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
@@ -34,6 +34,7 @@ import {
   CartLineUpdateInput,
   CartBuyerIdentityInput,
   AttributeInput,
+  CountryCode,
 } from '../../storefront-api-types';
 import {useCartFetch} from './hooks.client';
 import {CartContext} from './context';
@@ -66,10 +67,8 @@ import {CART_ID_STORAGE_KEY} from './constants';
 import {CartFragmentFragment} from './graphql/CartFragment';
 import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
 
-import {useServerProps} from '../../foundation/useServerProps';
-import {ServerPropsContextValue} from '../../foundation';
 import type {CartWithActions} from './types';
-import {ClientAnalytics} from '../../foundation/Analytics';
+import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {
@@ -100,13 +99,20 @@ function cartReducer(state: State, action: CartAction): State {
       break;
     }
     case 'reject': {
+      if (action.errors) {
+        console.group('%cCart Error:', 'color:red');
+        for (const [i, error] of action.errors.entries()) {
+          console.log(`%c${i + 1}. ` + error.message, 'color:red');
+        }
+        console.groupEnd();
+      }
       if (state.status === 'fetching' || state.status === 'creating') {
-        return {status: 'uninitialized', error: action.error};
+        return {status: 'uninitialized', error: action.errors};
       } else if (state.status === 'updating') {
         return {
           status: 'idle',
           cart: state.lastValidCart,
-          error: action.error,
+          error: action.errors,
         };
       }
       break;
@@ -234,6 +240,8 @@ export function CartProvider({
   onDiscountCodesUpdate,
   data: cart,
   cartFragment = defaultCartFragment,
+  customerAccessToken,
+  countryCode = CountryCode.Us,
 }: {
   /** Any `ReactNode` elements. */
   children: React.ReactNode;
@@ -254,15 +262,16 @@ export function CartProvider({
   onAttributesUpdate?: () => void;
   /** A callback that is invoked when the process to update the cart discount codes begins, but before the discount codes are updated in the Storefront API. */
   onDiscountCodesUpdate?: () => void;
-  /**
-   * An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart).
-   */
+  /** An object with fields that correspond to the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart). */
   data?: CartFragmentFragment;
   /** A fragment used to query the Storefront API's [Cart object](https://shopify.dev/api/storefront/latest/objects/cart) for all queries and mutations. A default value is used if no argument is provided. */
   cartFragment?: string;
+  /** A customer access token that's accessible on the server if there's a customer login. */
+  customerAccessToken?: CartBuyerIdentityInput['customerAccessToken'];
+  /** The ISO country code for i18n. */
+  countryCode?: CountryCode;
 }) {
-  const {serverProps} = useServerProps() as ServerPropsContextValue;
-  const countryCode = serverProps?.country?.isoCode;
+  if (countryCode) countryCode = countryCode.toUpperCase() as CountryCode;
 
   const initialStatus: State = cart
     ? {status: 'idle', cart: cartFromGraphQL(cart)}
@@ -272,6 +281,11 @@ export function CartProvider({
     initialStatus
   );
   const fetchCart = useCartFetch();
+
+  const countryChanged =
+    state.status === 'idle' &&
+    countryCode !== state?.cart?.buyerIdentity?.countryCode &&
+    !state.error;
 
   const cartFetch = useCallback(
     async (cartId: string) => {
@@ -310,7 +324,14 @@ export function CartProvider({
         cart.buyerIdentity.countryCode = countryCode;
       }
 
-      const {data, error} = await fetchCart<
+      if (customerAccessToken && !cart.buyerIdentity?.customerAccessToken) {
+        if (cart.buyerIdentity == null) {
+          cart.buyerIdentity = {};
+        }
+        cart.buyerIdentity.customerAccessToken = customerAccessToken;
+      }
+
+      const {data, errors} = await fetchCart<
         CartCreateMutationVariables,
         CartCreateMutation
       >({
@@ -322,10 +343,10 @@ export function CartProvider({
         },
       });
 
-      if (error) {
+      if (errors) {
         dispatch({
           type: 'reject',
-          error,
+          errors,
         });
       }
 
@@ -351,7 +372,14 @@ export function CartProvider({
         );
       }
     },
-    [onCreate, countryCode, fetchCart, cartFragment, numCartLines]
+    [
+      onCreate,
+      countryCode,
+      fetchCart,
+      cartFragment,
+      numCartLines,
+      customerAccessToken,
+    ]
   );
 
   const addLineItem = useCallback(
@@ -359,7 +387,7 @@ export function CartProvider({
       if (state.status === 'idle') {
         dispatch({type: 'addLineItem'});
         onLineAdd?.();
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartLineAddMutationVariables,
           CartLineAddMutation
         >({
@@ -372,10 +400,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -405,7 +433,7 @@ export function CartProvider({
 
         onLineRemove?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartLineRemoveMutationVariables,
           CartLineRemoveMutation
         >({
@@ -418,10 +446,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -451,7 +479,7 @@ export function CartProvider({
 
         onLineUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartLineUpdateMutationVariables,
           CartLineUpdateMutation
         >({
@@ -463,10 +491,10 @@ export function CartProvider({
             country: countryCode,
           },
         });
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -496,7 +524,7 @@ export function CartProvider({
 
         onNoteUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartNoteUpdateMutationVariables,
           CartNoteUpdateMutation
         >({
@@ -509,10 +537,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -534,7 +562,7 @@ export function CartProvider({
 
         onBuyerIdentityUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartBuyerIdentityUpdateMutationVariables,
           CartBuyerIdentityUpdateMutation
         >({
@@ -547,10 +575,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -572,7 +600,7 @@ export function CartProvider({
 
         onAttributesUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartAttributesUpdateMutationVariables,
           CartAttributesUpdateMutation
         >({
@@ -585,10 +613,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -613,7 +641,7 @@ export function CartProvider({
 
         onDiscountCodesUpdate?.();
 
-        const {data, error} = await fetchCart<
+        const {data, errors} = await fetchCart<
           CartDiscountCodesUpdateMutationVariables,
           CartDiscountCodesUpdateMutation
         >({
@@ -626,10 +654,10 @@ export function CartProvider({
           },
         });
 
-        if (error) {
+        if (errors) {
           dispatch({
             type: 'reject',
-            error,
+            errors,
           });
         }
 
@@ -666,12 +694,15 @@ export function CartProvider({
   }, [cartFetch, state]);
 
   useEffect(() => {
-    if (state.status !== 'idle') {
-      return;
-    }
-    buyerIdentityUpdate({countryCode}, state);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countryCode]);
+    if (!countryChanged) return;
+    buyerIdentityUpdate({countryCode, customerAccessToken}, state);
+  }, [
+    state,
+    buyerIdentityUpdate,
+    countryCode,
+    customerAccessToken,
+    countryChanged,
+  ]);
 
   const cartContextValue = useMemo<CartWithActions>(() => {
     return {
@@ -684,12 +715,7 @@ export function CartProvider({
           }),
       status: state.status,
       error: 'error' in state ? state.error : undefined,
-      totalQuantity:
-        'cart' in state
-          ? state.cart.lines.reduce((previous, current) => {
-              return previous + current.quantity;
-            }, 0)
-          : 0,
+      totalQuantity: 'cart' in state ? state?.cart?.totalQuantity ?? 0 : 0,
       cartCreate,
       linesAdd(lines: CartLineInput[]) {
         if ('cart' in state && state.cart.id) {

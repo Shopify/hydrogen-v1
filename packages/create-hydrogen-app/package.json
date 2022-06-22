@@ -4,7 +4,7 @@
     "access": "public",
     "@shopify:registry": "https://registry.npmjs.org"
   },
-  "version": "0.20.0",
+  "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "bin": {
@@ -17,11 +17,6 @@
     "template-*"
   ],
   "scripts": {
-    "prepack": "node ./scripts/tmp-copy-template-from-dev.js"
-  },
-  "dependencies": {
-    "enquirer": "^2.3.6",
-    "kolorist": "^1.5.1",
-    "minimist": "^1.2.6"
+    "prepack": "node ./scripts/tmp-copy-template-from-dev.mjs"
   }
 }

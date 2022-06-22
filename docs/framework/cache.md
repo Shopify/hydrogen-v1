@@ -1,7 +1,7 @@
 ---
 gid: 038c475e-f28f-471b-a981-26e7ebb8bec9
 title: Caching
-description: Learn how to manage cache options for Hydrogen apps.
+description: Learn how to manage cache options for Hydrogen storefronts.
 ---
 
 Caching is a fundamental building block of a good shopping experience. Combined with [streaming server-side rendering](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr), caching ensures that buyers get the quickest response possible while also displaying the latest data.
@@ -20,22 +20,23 @@ Hydrogen also includes [default values for each mechanism](#default-values).
 
 Hydrogen includes recommended caching strategies to help you determine which cache control header to set. The following table lists the available caching strategies and their associated cache control headers and cache durations:
 
-| Caching strategy | Cache control header                                      | Cache duration |
-| ---------------- | --------------------------------------------------------- | -------------- |
-| `CacheSeconds()` | `public, max-age=1, stale-while-revalidate=9`             | 10 seconds     |
-| `CacheMinutes()` | `public, max-age=900, stale-while-revalidate=900`         | 30 minutes     |
-| `CacheHours()`   | `public, max-age=1800, stale-while-revalidate=1800`       | 1 hour         |
-| `CacheDays()`    | `public, max-age=3600, stale-while-revalidate=82800`      | 1 Day          |
-| `CacheWeeks()`   | `public, max-age=604800, stale-while-revalidate=604800`   | 2 Weeks        |
-| `CacheMonths()`  | `public, max-age=1296000, stale-while-revalidate=1296000` | 1 Month        |
-| `CacheCustom()`  | Define your own cache control header                      | Custom         |
+| Caching strategy | Cache control header                                 | Cache duration |
+| ---------------- | ---------------------------------------------------- | -------------- |
+| `CacheShort()`   | `public, max-age=1, stale-while-revalidate=9`        | 10 seconds     |
+| `CacheLong()`    | `public, max-age=3600, stale-while-revalidate=82800` | 1 Day          |
+| `CacheNone()`    | `no-store`                                           | No cache       |
+| `CacheCustom()`  | Define your own cache control header                 | Custom         |
 
 ### Example
 
 ```jsx
-import {CacheSeconds} from '@shopify/hydrogen';
-response.cache(CacheSeconds());
+import {CacheShort} from '@shopify/hydrogen';
+response.cache(CacheShort());
 ```
+
+### Disabling caching
+
+Use the `CacheNone()` caching strategy to disable caching. You should consider disabling caching on authenticated pages to prevent leaking personal identifying information.
 
 ### Build your own caching strategies
 
@@ -79,7 +80,7 @@ export interface AllCacheOptions {
 
 ## Sub-request caching
 
-While rendering a page in your Hydrogen app, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheSeconds` strategy.
+While rendering a page in your Hydrogen storefront, it’s common to make one or more sub-requests to Shopify or other third-party data sources within server components. You should use sub-request caching to keep pages loading quickly for end-users. All sub-request have the default `CacheShort` strategy.
 
 The following example shows how to implement [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery) for Shopify Storefront API queries:
 
@@ -89,7 +90,7 @@ The following example shows how to implement [`useShopQuery`](https://shopify.de
 // Use a caching strategy provided by Hydrogen
 const {data} = useShopQuery({
   query: QUERY,
-  cache: CacheHours(),
+  cache: CacheLong(),
 });
 ```
 
@@ -102,7 +103,7 @@ The following example shows how to implement [`fetchSync`](https://shopify.dev/a
 ```jsx
 // Use a caching strategy provided by Hydrogen
 const data = fetchSync('https://my.3p.com/data.json', {
-  cache: CacheHours(),
+  cache: CacheLong(),
 }).json();
 ```
 
@@ -112,7 +113,7 @@ When the cached entry becomes stale, if the age of the entry is still within the
 
 ## Full-page caching
 
-In addition to sub-request caching, it’s helpful to cache the entire page response at the network edge and in the browser. This is the most useful for pages without dynamic or personalized data, like marketing pages or blog content. All sub-requests implement a default `CacheSeconds()` strategy.
+In addition to sub-request caching, it’s helpful to cache the entire page response at the network edge and in the browser. This is the most useful for pages without dynamic or personalized data, like marketing pages or blog content. By default, Hydrogen implements a `CacheShort()` strategy for all full-page requests.
 
 To modify full-page caching options, use the `response` property passed to the page server component:
 
@@ -120,7 +121,7 @@ To modify full-page caching options, use the `response` property passed to the p
 
 ```jsx
 export default function MyProducts({response}) {
-  response.cache(CacheDays());
+  response.cache(CacheLong());
 }
 ```
 
@@ -152,25 +153,7 @@ export default defineConfig({
 
 {% endcodeblock %}
 
-To enable logging for the cache API status, call `setLoggerOptions` and set `showCacheApiStatus` to `true`:
-
-{% codeblock file, filename: '/src/App.server.jsx' %}
-
-```js
-import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {setLoggerOptions} from '@shopify/hydrogen';
-
-setLoggerOptions({showCacheApiStatus: true});
-
-function App() {
-  /* ... */
-}
-// ...
-```
-
-{% endcodeblock %}
-
-The status of the cache updates on each query:
+To enable logging for the cache API status, set `logger.showCacheApiStatus` to `true` in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger). The status of the cache updates on each query:
 
 ```sh
 [Cache] MISS   query shopInfo
@@ -179,25 +162,7 @@ The status of the cache updates on each query:
 [Cache] MISS   query Localization
 ```
 
-To enable logging for cache control headers, call `setLoggerOptions` and set `showCacheControlHeader` to `true`:
-
-{% codeblock file, filename: '/src/App.server.jsx' %}
-
-```js
-import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {setLoggerOptions} from '@shopify/hydrogen';
-
-setLoggerOptions({showCacheControlHeader: true});
-
-function App() {
-  /* ... */
-}
-// ...
-```
-
-{% endcodeblock %}
-
-A cache control header report displays for each page request. The report includes the associated queries
+To enable logging for cache control headers, set `logger.showCacheControlHeader` to `true` in your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config#logger). A cache control header report displays for each page request. The report includes the associated queries
 that built the request and the cache control headers:
 
 ```sh
@@ -240,8 +205,8 @@ For Worker-based runtimes, you can provide a `cache` option to `handleRequest`:
 addEventListener('fetch', (event) => {
   event.respondWith(
     handleEvent(event, {
-      // Your implementation of `Cache`. Defaults to `caches.default` for Oxygen support.
-      cache: caches.default,
+      // Your implementation of `Cache`. Defaults to `await caches.open` for Oxygen support.
+      cache: await caches.open('oxygen'),
 
       // ...
     })
@@ -268,10 +233,7 @@ app.use(
 
 {% endcodeblock %}
 
-Full-page caching is powered completely by [`cache-control` headers on the Hydrogen response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control). This means the network edge as well as the user’s browser is responsible managing full-page cache.
-
-> Note:
-> Oxygen caches HTML responses from Hydrogen at the network edge. However, your hosting provider or CDN might not cache HTML responses by default. Make sure to consult with your individual provider to enable HTML caching for your Hydrogen app.
+Full-page caching is powered completely by [`cache-control` headers on the Hydrogen response](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control). By default, full-page caching is enabled as long as there is a `cache` available.
 
 ## Related hooks
 

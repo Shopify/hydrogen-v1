@@ -17,7 +17,7 @@ export {CartLineQuantityAdjustButton} from './CartLineQuantityAdjustButton';
 export {CartLines} from './CartLines';
 export {CartCheckoutButton} from './CartCheckoutButton';
 export {CartShopPayButton} from './CartShopPayButton';
-export {CartEstimatedCost} from './CartEstimatedCost';
+export {CartCost} from './CartCost';
 export {CartProvider, useCart, useInstantCheckout} from './CartProvider';
 export type {
   State,
@@ -26,10 +26,12 @@ export type {
   CartWithActions,
   CartAction,
 } from './CartProvider';
-export {ProductProvider, useProduct} from './ProductProvider';
+export {
+  ProductOptionsProvider,
+  useProductOptions,
+} from './ProductOptionsProvider';
 export {ProductPrice} from './ProductPrice';
-export {ProductMetafield} from './ProductMetafield';
 export {BuyNowButton} from './BuyNowButton';
 export {ShopPayButton} from './ShopPayButton';
-export {useCountry} from '../hooks/useCountry';
+export {useLocalization} from '../hooks/useLocalization/useLocalization';
 export {Seo} from './Seo';

@@ -32,7 +32,7 @@ export default function Hero() {
 
 If you're [using Oxygen to deploy your Hydrogen custom storefront](https://shopify.dev/custom-storefronts/hydrogen/deployment#deploy-to-oxygen), then static assets are automatically deployed to Shopify's content delivery network (CDN).
 
-Shopify provides merchants with a world-class CDN backed by [Fastly](https://www.fastly.com) and [Cloudflare](https://cloudflare.com/). Using a CDN means that your custom storefront will load quickly around the globe.
+Shopify provides merchants with a world-class CDN backed by [Cloudflare](https://cloudflare.com/). Using a CDN means that your custom storefront will load quickly around the globe.
 
 Files delivered over the Shopify CDN are minified and compressed automatically using [Brotli](https://github.com/google/brotli), [Zopfli](https://github.com/google/zopfli), and [gzip](https://en.wikipedia.org/wiki/Gzip), reducing the size of the files the browser must download. Requests use [HTTP/3](https://developers.cloudflare.com/http3/) and [TLS 1.3](https://www.cloudflare.com/learning-resources/tls-1-3/) to further enhance request performance and security.
 
@@ -60,4 +60,4 @@ You should only import assets, such as styles or images, from [client components
 ## Next steps
 
 - Learn about [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components), an opinionated data-fetching and rendering workflow for React apps.
-- Learn how to [deploy your Hydrogen app](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.
+- Learn how to [deploy your Hydrogen storefront](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.

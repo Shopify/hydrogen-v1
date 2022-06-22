@@ -5,15 +5,16 @@ description: The MediaFile component renders the media for the Storefront API's 
 ---
 
 The `MediaFile` component renders the media for the Storefront API's
-[Media object](https://shopify.dev/api/storefront/reference/products/media). It renders an `Image`, a
-`Video`, an `ExternalVideo`, or a `ModelViewer` depending on the `mediaContentType` of the
+[Media object](https://shopify.dev/api/storefront/reference/products/media). It renders an [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image), a
+[`Video`](https://shopify.dev/api/hydrogen/components/primitive/video), an [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo), or a [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer) depending on the `mediaContentType` of the
 `media` provided as a prop.
+
+The component outputs the HTML element that corresponds to the rendered Hydrogen component. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
 ```tsx
-import {MediaFile, useShopQuery} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {MediaFile, useShopQuery, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {
@@ -96,57 +97,21 @@ export function MyComponent() {
 | data     | <code>PartialDeep&#60;MediaEdgeType['node']&#62;</code>                                                                                                                                                                        | An object with fields that correspond to the Storefront API's [Media object](https://shopify.dev/api/storefront/reference/products/media). |
 | options? | <code>React.ComponentProps&#60;typeof Video&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof ExternalVideo&#62;['options']</code> &#124; <code>React.ComponentProps&#60;typeof Image&#62;['options']</code> | The options for the `Image`, `Video`, or `ExternalVideo` components.                                                                       |
 
-## Component type
+## Required fields
 
-The `MediaFile` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Media object](https://shopify.dev/api/storefront/reference/products/media):
+The `MediaFile` component requires the following field from the Storefront API's
+[Media object](https://shopify.dev/api/storefront/reference/products/media), as well as additional fields depending on the type of media. Refer to [`Image`](https://shopify.dev/api/hydrogen/components/primitive/image),
+[`Video`](https://shopify.dev/api/hydrogen/components/primitive/video), [`ExternalVideo`](https://shopify.dev/api/hydrogen/components/primitive/externalvideo), and [`ModelViewer`](https://shopify.dev/api/hydrogen/components/primitive/modelviewer) for additional required fields.
 
 ```graphql
 {
-  ... on MediaImage {
-    mediaContentType
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-  }
-  ... on Video {
-    mediaContentType
-    id
-    previewImage {
-      url
-    }
-    sources {
-      mimeType
-      url
-    }
-  }
-  ... on ExternalVideo {
-    mediaContentType
-    id
-    embedUrl
-    host
-  }
-  ... on Model3d {
-    mediaContentType
-    id
-    alt
-    mediaContentType
-    previewImage {
-      url
-    }
-    sources {
-      url
-    }
-  }
+  mediaContentType
 }
 ```
+
+## Component type
+
+The `MediaFile` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 

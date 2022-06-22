@@ -1,10 +1,11 @@
 import React, {type ComponentProps} from 'react';
-import {useUrl} from '../../foundation';
+import {useUrl} from '../../foundation/useUrl';
 import {DefaultPageSeo} from './DefaultPageSeo.client';
 import {HomePageSeo} from './HomePageSeo.client';
 import {ProductSeo} from './ProductSeo.client';
 import {CollectionSeo} from './CollectionSeo.client';
 import {PageSeo} from './PageSeo.client';
+import {NoIndexPageSeo} from './NoIndexSeo.client';
 import type {
   DefaultPage as DefaultPageType,
   HomePage as HomePageType,
@@ -30,6 +31,10 @@ type Props =
   | {
       type: 'page';
       data: ComponentProps<typeof PageSeo>;
+    }
+  | {
+      type: 'noindex';
+      data: ComponentProps<typeof NoIndexPageSeo>;
     };
 
 /**
@@ -49,6 +54,8 @@ export function Seo(props: Props) {
       return <CollectionSeo {...props.data} />;
     case 'page':
       return <PageSeo {...props.data} />;
+    case 'noindex':
+      return <NoIndexPageSeo {...props.data} />;
     default:
       console.warn(
         'The <Seo/> only accepts type prop with values of defaultSeo, homepage, product, collection, or page.'

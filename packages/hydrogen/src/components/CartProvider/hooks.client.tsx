@@ -2,16 +2,20 @@ import React, {useState} from 'react';
 import {useShop} from '../../foundation';
 import {flattenConnection} from '../../utilities';
 import {CartInput} from '../../storefront-api-types';
-import {CartCreate} from './cart-queries';
+import {CartCreate, defaultCartFragment} from './cart-queries';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
 } from './graphql/CartCreateMutation';
 import {Cart} from './types';
-import {useCart} from '../../hooks/useCart';
+import {
+  SHOPIFY_STOREFRONT_ID_HEADER,
+  STOREFRONT_API_PUBLIC_TOKEN_HEADER,
+} from '../../constants';
 
 export function useCartFetch() {
-  const {storeDomain, storefrontApiVersion, storefrontToken} = useShop();
+  const {storeDomain, storefrontApiVersion, storefrontToken, storefrontId} =
+    useShop();
 
   return React.useCallback(
     <T, K>({
@@ -20,17 +24,23 @@ export function useCartFetch() {
     }: {
       query: string;
       variables: T;
-    }): Promise<{data: K | undefined; error: any}> => {
+    }): Promise<{data: K | undefined; errors: any}> => {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'X-SDK-Variant': 'hydrogen',
+        'X-SDK-Version': storefrontApiVersion,
+        [STOREFRONT_API_PUBLIC_TOKEN_HEADER]: storefrontToken,
+      };
+
+      if (storefrontId) {
+        headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
+      }
+
       return fetch(
         `https://${storeDomain}/api/${storefrontApiVersion}/graphql.json`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-SDK-Variant': 'hydrogen',
-            'X-SDK-Version': storefrontApiVersion,
-            'X-Shopify-Storefront-Access-Token': storefrontToken,
-          },
+          headers,
           body: JSON.stringify({
             query: query.toString(),
             variables,
@@ -45,12 +55,11 @@ export function useCartFetch() {
           };
         });
     },
-    [storeDomain, storefrontApiVersion, storefrontToken]
+    [storeDomain, storefrontApiVersion, storefrontToken, storefrontId]
   );
 }
 
 export function useInstantCheckout() {
-  const {cartFragment} = useCart();
   const [cart, updateCart] = useState<Cart | undefined>();
   const [checkoutUrl, updateCheckoutUrl] = useState<Cart['checkoutUrl']>();
   const [error, updateError] = useState<string | undefined>();
@@ -59,18 +68,18 @@ export function useInstantCheckout() {
 
   const createInstantCheckout = React.useCallback(
     async (cartInput: CartInput) => {
-      const {data, error} = await fetch<
+      const {data, errors} = await fetch<
         CartCreateMutationVariables,
         CartCreateMutation
       >({
-        query: CartCreate(cartFragment),
+        query: CartCreate(defaultCartFragment),
         variables: {
           input: cartInput,
         },
       });
 
-      if (error) {
-        updateError(error);
+      if (errors) {
+        updateError(errors);
         updateCart(undefined);
         updateCheckoutUrl(undefined);
       }
@@ -86,7 +95,7 @@ export function useInstantCheckout() {
         updateCheckoutUrl(dataCart.checkoutUrl);
       }
     },
-    [cartFragment, fetch]
+    [fetch]
   );
 
   return {cart, checkoutUrl, error, createInstantCheckout};

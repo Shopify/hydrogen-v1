@@ -4,14 +4,14 @@ title: ModelViewer
 description: The ModelViewer component renders a 3D model (with the model-viewer tag) for the Storefront API's Model3d object.
 ---
 
-The `ModelViewer` component renders a 3D model (with the `model-viewer` tag) for
-the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d).
+The `ModelViewer` component renders a 3D model for the Storefront API's [Model3d object](https://shopify.dev/api/storefront/reference/products/model3d). 
+
+The component outputs a `<model-viewer>` tag. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
 ```tsx
-import {ModelViewer} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {ModelViewer, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {
@@ -112,28 +112,23 @@ export default function MyProductModel() {
 | onPlay?                     | <code>(event: Event) => void</code>                            | The callback to invoke when the 'play' event is triggered. Refer to [play in the &lt;model-viewer&gt; documentation](https://modelviewer.dev/docs/index.html#entrydocs-animation-events-play).                                                                                                                                                                                                         |
 | onPause?                    | <code>(event: Event) => void</code>                            | The callback to invoke when the 'pause' event is triggered. Refer to [pause in the &lt;model-viewer&gt; documentation](https://modelviewer.dev/docs/index.html#entrydocs-animation-events-pause).                                                                                                                                                                                                      |
 | onSceneGraphReady?          | <code>(event: Event) => void</code>                            | The callback to invoke when the 'scene-graph-ready' event is triggered. Refer to [scene-graph-ready in the &lt;model-viewer&gt; documentation](https://modelviewer.dev/docs/index.html#entrydocs-scenegraph-events-sceneGraphReady).                                                                                                                                                                   |
+## Required fields
 
-## Component type
-
-The `ModelViewer` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Model3D object](https://shopify.dev/api/storefront/latest/objects/model3d):
+The `ModelViewer` component requires the following fields from the Storefront API's
+[Model3d object](https://shopify.dev/api/storefront/reference/products/model3d):
 
 ```graphql
 {
-  id
   alt
-  mediaContentType
-  previewImage {
-    url
-  }
   sources {
     url
   }
 }
 ```
+
+## Component type
+
+The `ModelViewer` component is a client component, which means that it renders on the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 

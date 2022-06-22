@@ -1,4 +1,4 @@
-import type {RequestHandler} from '../entry-server';
+import type {RequestHandler} from '../types';
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
 import entrypoint from '__SERVER_ENTRY__';

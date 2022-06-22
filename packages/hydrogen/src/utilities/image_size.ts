@@ -25,6 +25,19 @@ export function addImageSizeParametersToUrl({
   crop,
   scale,
 }: ShopifyLoaderParams) {
+  if (scale) {
+    // Have to do this specifically for 'scale' because it doesn't currently work otherwise.
+    // I'm also intentionally leaving 'scale' as a searchParam because that way it'll "just work" in the future and we can just delete this whole section of code
+
+    // We assume here that the last `.` is the delimiter between the file name and the file type
+    const baseUrl = new URL(src);
+    const fileDelimiterIndex = baseUrl.pathname.lastIndexOf('.');
+    const fileName = baseUrl.pathname.slice(0, fileDelimiterIndex);
+    const fileType = baseUrl.pathname.slice(fileDelimiterIndex);
+    baseUrl.pathname = `${fileName}${`@${scale.toString()}x`}${fileType}`;
+    src = baseUrl.toString();
+  }
+
   const newUrl = new URL(src);
   width && newUrl.searchParams.append('width', width.toString());
   height && newUrl.searchParams.append('height', height.toString());
@@ -50,47 +63,90 @@ export function shopifyImageLoader(params: ShopifyLoaderParams) {
   return addImageSizeParametersToUrl(params);
 }
 
-export function getShopifyImageDimensions(
-  image: Pick<
+type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
+
+export type GetShopifyImageDimensionsProps = {
+  data: Pick<
     PartialDeep<ImageType>,
     'altText' | 'url' | 'id' | 'width' | 'height'
-  >,
-  options?: ShopifyLoaderOptions
-) {
-  // Storefront API could return null dimension values for images that are not hosted on Shopify CDN
-  // The API dimensions references the image's intrinstic/natural dimensions and provides image aspect ratio information
-  const apiWidth = image.width;
-  const apiHeight = image.height;
+  >;
+  loaderOptions?: ShopifyLoaderOptions;
+  elementProps?: {
+    width?: HtmlImageProps['width'];
+    height?: HtmlImageProps['height'];
+  };
+};
 
-  if (apiWidth && apiHeight && (options?.width || options?.height)) {
-    const optionWidth = options?.width
-      ? parseInt(options.width.toString(), 10)
-      : undefined;
-    const optionHeight = options?.height
-      ? parseInt(options.height.toString(), 10)
-      : undefined;
+type GetShopifyImageDimensionsPropsReturn = {
+  width: number | string | null;
+  height: number | string | null;
+};
 
-    // Use option defined width & height
-    if (optionWidth && optionHeight) {
-      return {width: optionWidth, height: optionHeight};
-    }
+/**
+ * Width and height are determined using the followiing priority list:
+ * 1. `loaderOptions`'s width/height
+ * 2. `elementProps`'s width/height
+ * 3. `data`'s width/height
+ *
+ * If only one of `width` or `height` are defined, then the other will attempt to be calculated based on the Image's aspect ratio,
+ * provided that both `data.width` and `data.height` are available. If not, then the aspect ratio cannot be determined and the missing
+ * value will reamin as `null`
+ */
+export function getShopifyImageDimensions({
+  data: sfapiImage,
+  loaderOptions,
+  elementProps,
+}: GetShopifyImageDimensionsProps): GetShopifyImageDimensionsPropsReturn {
+  let aspectRatio: number | null = null;
 
-    // Calculate width from aspect ratio
-    if (!optionWidth && optionHeight) {
-      return {
-        width: Math.round((apiWidth / apiHeight) * optionHeight),
-        height: optionHeight,
-      };
-    }
-
-    // Calculate height from aspect ratio
-    if (optionWidth && !optionHeight) {
-      return {
-        width: optionWidth,
-        height: Math.round((apiHeight / apiWidth) * optionWidth),
-      };
-    }
+  if (sfapiImage?.width && sfapiImage?.height) {
+    aspectRatio = sfapiImage?.width / sfapiImage?.height;
   }
 
-  return {width: apiWidth, height: apiHeight};
+  //  * 1. `loaderOptions`'s width/height
+  if (loaderOptions?.width || loaderOptions?.height) {
+    return {
+      width:
+        loaderOptions?.width ??
+        (aspectRatio
+          ? // @ts-expect-error if width isn't defined, then height has to be defined due to the If statement above
+            Math.round(aspectRatio * loaderOptions.height)
+          : null),
+      height:
+        loaderOptions?.height ??
+        (aspectRatio
+          ? // @ts-expect-error if height isn't defined, then width has to be defined due to the If statement above
+            Math.round(aspectRatio * loaderOptions.width)
+          : null),
+    };
+  }
+
+  //  * 2. `elementProps`'s width/height
+  if (elementProps?.width || elementProps?.height) {
+    return {
+      width:
+        elementProps?.width ??
+        (aspectRatio
+          ? // @ts-expect-error if width isn't defined, then height has to be defined due to the If statement above
+            Math.round(aspectRatio * elementProps.height)
+          : null),
+      height:
+        elementProps?.height ??
+        (aspectRatio
+          ? // @ts-expect-error if height isn't defined, then width has to be defined due to the If statement above
+            Math.round(aspectRatio * elementProps.width)
+          : null),
+    };
+  }
+
+  //  * 3. `data`'s width/height
+  if (sfapiImage?.width || sfapiImage?.height) {
+    return {
+      // can't calculate the aspect ratio here
+      width: sfapiImage?.width ?? null,
+      height: sfapiImage?.height ?? null,
+    };
+  }
+
+  return {width: null, height: null};
 }

@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        node-version: [16.x, 17.x]
+        node-version: [16.x, 18.x]
 
     name: OS ${{ matrix.os }} / NodeJS ${{ matrix.node-version }}
 
@@ -50,7 +50,7 @@ jobs:
 
       - name: Lint the template code
         run: yarn lint
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
 
       - name: Type check hydrogen-ui
         run: yarn typecheck
@@ -64,6 +64,8 @@ jobs:
         env:
           CI: true
 
-      - name: Run the template code tests
+      - name: Run template E2E tests
         run: yarn test:ci
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
+        env:
+          CI: true

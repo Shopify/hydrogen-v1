@@ -9,10 +9,7 @@ export const port = 9428;
 export async function serve(root: string, isProd: boolean) {
   // we build first, regardless of whether it's prod/build mode
   // because Vite doesn't support the concept of a "webworker server"
-  execSync(
-    'yarn build:client --logLevel silent && yarn build:server --logLevel silent',
-    {cwd: root}
-  );
+  execSync('yarn build:server', {cwd: root});
 
   // @ts-ignore
   const {app} = await createServer({cwd: root});

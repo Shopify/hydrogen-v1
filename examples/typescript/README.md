@@ -15,6 +15,7 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 
 ```bash
 npx degit Shopify/hydrogen/examples/typescript hydrogen-app
+cd hydrogen-app
 yarn
 yarn dev
 ```

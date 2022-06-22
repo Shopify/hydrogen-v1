@@ -50,5 +50,9 @@ export default {
         jest: true,
       },
     },
+    {
+      files: ['*.server.*'],
+      rules: {'react-hooks/rules-of-hooks': 'off'},
+    },
   ],
 };

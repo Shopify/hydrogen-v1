@@ -1,10 +1,15 @@
 import React from 'react';
-import {Head} from '../../client';
+import {Head} from '../../foundation/Head';
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
 import type {HomePage} from './seo-types';
 
-export function HomePageSeo({title, description, url}: HomePage) {
+export function HomePageSeo({
+  title,
+  description,
+  url,
+  titleTemplate,
+}: HomePage) {
   const organizationSchema = {
     '@context': 'http://schema.org',
     '@type': 'Organization',
@@ -21,7 +26,7 @@ export function HomePageSeo({title, description, url}: HomePage) {
 
   return (
     <>
-      <Head>
+      <Head defaultTitle={title ?? ''} titleTemplate={titleTemplate ?? `%s`}>
         <meta property="og:url" content={url} />
 
         <script type="application/ld+json">

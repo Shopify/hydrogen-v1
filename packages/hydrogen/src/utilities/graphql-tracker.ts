@@ -7,10 +7,12 @@ import type {
   ASTNode,
 } from 'graphql';
 
+import gqlDev from 'graphql-tag';
+
 export const TIMEOUT_MS = 2000;
 
 type TrackerParams = {
-  query: ASTNode;
+  query: ASTNode | string;
   data: {data: unknown};
   onUnusedData?: (params: {queryName: string; properties: string[]}) => void;
 };
@@ -20,6 +22,10 @@ export function injectGraphQLTracker({
   data,
   onUnusedData,
 }: TrackerParams) {
+  if (__HYDROGEN_DEV__ && typeof query === 'string') {
+    query = gqlDev`${query}`;
+  }
+
   const info = convertQueryToResolveInfo(query as DocumentNode);
 
   // E.g. ['shop.stuff.myString']

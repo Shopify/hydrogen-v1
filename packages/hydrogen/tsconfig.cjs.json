@@ -1,12 +1,11 @@
 {
-  "extends": "./tsconfig.build.json",
+  "extends": "./tsconfig.json",
   "include": ["./src/framework"],
-  "exclude": ["**/tests", "**/__tests__"],
   "compilerOptions": {
     "outDir": "./dist/node",
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "esModuleInterop": true,
     "types": []
   }

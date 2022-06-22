@@ -1,8 +1,7 @@
-import type {RequestHandler} from '../entry-server';
+import type {RequestHandler, ShopifyConfig} from '../shared-types';
 import type {IncomingMessage, NextFunction} from 'connect';
 import type {ServerResponse} from 'http';
 import type {ViteDevServer} from 'vite';
-import type {ShopifyConfig} from '../types';
 import {graphiqlHtml} from './graphiql';
 
 type HydrogenMiddlewareArgs = {
@@ -98,30 +97,12 @@ export function hydrogenMiddleware({
 
       entrypointError = null;
 
-      const eventResponse = await handleRequest(request, {
+      await handleRequest(request, {
         dev,
         cache,
         indexTemplate,
         streamableResponse: response,
       });
-
-      /**
-       * If a `Response` was returned, that means it was not streamed.
-       * Convert the response into a proper Node.js response.
-       */
-      if (eventResponse) {
-        eventResponse.headers.forEach((value: string, key: string) => {
-          response.setHeader(key, value);
-        });
-
-        response.statusCode = eventResponse.status;
-
-        if (eventResponse.body) {
-          response.write(eventResponse.body);
-        }
-
-        response.end();
-      }
     } catch (e: any) {
       if (dev && devServer) devServer.ssrFixStacktrace(e);
       response.statusCode = 500;

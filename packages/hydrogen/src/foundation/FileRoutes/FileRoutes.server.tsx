@@ -6,7 +6,6 @@ import {useServerRequest} from '../ServerRequestProvider';
 
 import type {ImportGlobEagerOutput} from '../../types';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client';
-import {findRoutePrefix} from '../../utilities/findRoutePrefix';
 
 interface FileRoutesProps {
   /** The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. */
@@ -30,19 +29,17 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
 
   if (!routes) {
     const fileRoutes = request.ctx.hydrogenConfig!.routes;
-    routes = fileRoutes?.files ?? (fileRoutes as ImportGlobEagerOutput);
-    dirPrefix ??= fileRoutes?.dirPrefix as string;
-    basePath ??= fileRoutes?.basePath as string;
+    routes = fileRoutes.files;
+    dirPrefix ??= fileRoutes.dirPrefix;
+    basePath ??= fileRoutes.basePath;
   }
 
   basePath ??= '/';
 
-  /* eslint-disable react-hooks/rules-of-hooks */
   const pageRoutes = useMemo(
     () => createPageRoutes(routes!, basePath, dirPrefix),
     [routes, basePath, dirPrefix]
   );
-  /* eslint-enable react-hooks/rules-of-hooks */
 
   let foundRoute, foundRouteDetails;
 
@@ -59,7 +56,10 @@ export function FileRoutes({routes, basePath, dirPrefix}: FileRoutesProps) {
     request.ctx.router.routeRendered = true;
     request.ctx.router.routeParams = foundRouteDetails.params;
     return (
-      <RouteParamsProvider routeParams={foundRouteDetails.params}>
+      <RouteParamsProvider
+        routeParams={foundRouteDetails.params}
+        basePath={basePath}
+      >
         <foundRoute.component
           params={foundRouteDetails.params}
           {...serverProps}
@@ -80,17 +80,15 @@ interface HydrogenRoute {
 export function createPageRoutes(
   pages: ImportGlobEagerOutput,
   topLevelPath = '*',
-  dirPrefix?: string | RegExp
+  dirPrefix: string | RegExp = ''
 ): HydrogenRoute[] {
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const keys = Object.keys(pages);
 
-  const commonRoutePrefix = dirPrefix ?? findRoutePrefix(keys);
-
   const routes = keys
     .map((key) => {
-      const path = extractPathFromRoutesKey(key, commonRoutePrefix);
+      const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match

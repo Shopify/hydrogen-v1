@@ -4,7 +4,7 @@ title: Routes
 description: Get familiar with the file-based routing system that Hydrogen uses.
 ---
 
-The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen app.
+The Hydrogen framework uses a file-based routing system. This guide provides an introduction to how routing works in your Hydrogen storefront.
 
 ## How routes work
 
@@ -56,7 +56,7 @@ The routes are registered in `App.server.jsx` and Hydrogen converts `[handle]` t
 
 {% endcodeblock %}
 
-The `handle` property is passed directly to the root server component `/routes/products/[handle].server.jsx`:
+You can retrieve the `handle` property by using the [`useRouteParams` hook](https://shopify.dev/api/hydrogen/hooks/framework/userouteparams):
 
 {% codeblock file, filename: '[handle].server.jsx' %}
 
@@ -102,6 +102,14 @@ By default, when a user hovers or focuses on the link for more than 100ms, a pre
 
 You can extend dynamic routes to catch all paths by adding an ellipsis (...) inside the brackets. For example, `/routes/example/[...handle].server.jsx` will match `/example/a` and `/example/a/b`.
 
+### Built-in routes
+
+Hydrogen provides the following built-in routes:
+
+- **`/__health`**: A health check route that responds with a 200 status and no body. You can use this route within your infrastructure to verify that your app is healthy and able to respond to requests.
+- **`/__rsc`**: An internal route used to re-render server components. It's called by the Hydrogen frontend when the route changes, or when server props change. You should never need to manually request this route.
+- **`/__event`**: An internal route used to save client observability events. You should never need to manually request this route.
+
 ### Example
 
 The following example shows how to obtain catch all routes data using `location.pathname`:
@@ -120,7 +128,7 @@ export default function({request}) {
 
 By default, Hydrogen uses a file-based routing system, but you can customize routes in `App.server.jsx` using the following components:
 
-- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen app
+- [`Router`](https://shopify.dev/api/hydrogen/components/framework/router): Provides the context for routing in your Hydrogen storefront
 - [`FileRoutes`](https://shopify.dev/api/hydrogen/components/framework/fileroutes): Builds a set of default Hydrogen routes based on the output provided by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method
 - [`Route`](https://shopify.dev/api/hydrogen/components/framework/route): Used to set up a route in Hydrogen that's independent of the file system
 
@@ -210,7 +218,7 @@ export async function api(request, {params}) {
 {% endcodeblock %}
 
 > Tip:
-> Explore an [example implementation in GitHub](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/routes/countries.server.jsx) that lazy loads [available countries](https://github.com/Shopify/hydrogen/blob/main/templates/template-hydrogen-default/src/components/CountrySelector.client.jsx) by an API route (`/api/countries`).
+> Explore an [example implementation in GitHub](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/routes/api/countries.server.ts) that lazy loads [available countries](https://github.com/Shopify/hydrogen/blob/main/templates/demo-store/src/components/CountrySelector.client.tsx) by an API route (`/api/countries`).
 
 ### Concatenating requests
 
@@ -240,22 +248,22 @@ export default function Page() {
 
 Server components placed in the `src/routes` directory receive the following special props that you can use to create custom experiences:
 
-| Prop       | Type                      |
-| ---------- | ------------------------- |
-| `request`  | `ServerComponentRequest`  |
-| `response` | `ServerComponentResponse` |
+| Prop       | Type               |
+| ---------- | ------------------ |
+| `request`  | `HydrogenRequest`  |
+| `response` | `HydrogenResponse` |
 
 Each server component receives props, which includes custom versions of `request` and `response` and any `serverProps` that you have passed from the client.
 
 ![Shows a diagram that illustrates how server components receive props](/assets/custom-storefronts/hydrogen/hydrogen-pages.png)
 
-### `request`: `ServerComponentRequest`
+### `request`: `HydrogenRequest`
 
 You might want to inspect incoming requests for cookies, headers or other signals that might require a unique response.
 
 All server components receive a `request` prop containing a Hydrogen-specific version of [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request).
 
-In addition to the standard methods, `ServerComponentRequest` exposes a `cookies` helper, which is a simple `Map` of cookie values:
+In addition to the standard methods, `HydrogenRequest` exposes a `cookies` helper, which is a simple `Map` of cookie values:
 
 {% codeblock file %}
 
@@ -273,7 +281,7 @@ function MyPage({request}) {
 
 {% endcodeblock %}
 
-In some cases, you might want to use `ServerComponentRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components):
+In some cases, you might want to use `HydrogenRequest.normalizedUrl` to access the intended URL rather than the pathname encoded for a [React Server Components request](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components):
 
 {% codeblock file %}
 
@@ -291,7 +299,7 @@ function MyPage({request}) {
 
 {% endcodeblock %}
 
-### `response`: `ServerComponentResponse`
+### `response`: `HydrogenResponse`
 
 You might want to customize the response returned from the Hydrogen server. For example, set a different status code or define custom headers.
 
@@ -318,7 +326,7 @@ export default function MyProducts({response}) {
 
 #### `response.doNotStream()`
 
-By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). To customize a response, you need to tell Hydrogen that your server component plans to modify it in some way by calling `response.doNotStream()`:
+By default, Hydrogen [streams SSR responses](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr). However, you can also disable streaming for each route and return a fully buffered response. This is helpful in scenarios like [handling custom SEO bots](https://shopify.dev/custom-storefronts/hydrogen/framework/seo#checking-for-custom-robots). To disable streaming, call `response.doNotStream()`:
 
 {% codeblock file %}
 
@@ -332,6 +340,9 @@ export default function CustomPage({response}) {
 
 {% endcodeblock %}
 
+> Tip:
+> There are [performance benefits](https://shopify.dev/custom-storefronts/hydrogen/best-practices/performance) to streaming. You shouldn't completely disable streaming for all of your storefront's routes.
+
 You can use `response` to set headers or status codes using the `Response` API:
 
 {% codeblock file %}
@@ -341,6 +352,7 @@ export default function CustomPage({response}) {
   response.doNotStream();
 
   response.headers.set('custom-header', 'value');
+  response.status = 201;
 
   // ...
 }
@@ -379,309 +391,52 @@ return response.redirect('https://yoursite.com/new-page', 301);
 > Caution:
 > You must call `return response.redirect()` before any calls to `fetchSync`, `useQuery` or `useShopQuery` to prevent streaming while the Suspense data is resolved, or use `response.doNotStream()` to prevent streaming altogether on the response. The value must also be returned.
 
-#### `response.send()`
-
-If you want to return a different response body than React-rendered HTML, then pass the custom body to `response.send()` and return it from your server component:
-
-{% codeblock file %}
-
-```jsx
-export default function CustomPage({response}) {
-  response.doNotStream();
-
-  response.headers.set('content-type', 'application/json');
-
-  return response.send(JSON.stringify({data: 'here'}));
-}
-```
-
-{% endcodeblock %}
-
-Since this code lives inside a server component, you can use [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery) to populate your [custom responses](#custom-responses) with Shopify data.
-
 ### Server props
 
-In addition to `request` and `response` props, any props you manage with [`setServerProps`](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) is passed to each of your server components as props:
+In addition to `request` and `response` props, any props you manage with [`setServerProps`](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) are passed to each of your server components as props:
 
 {% codeblock file %}
 
 ```jsx
-function MyPage({custom, props, here}) {
+export default function MyPage({custom, props, here}) {
   // Use custom server props
 }
 ```
 
 {% endcodeblock %}
 
-## Custom responses
+## TypeScript
 
-Custom responses are React components that you can use to compose complex functionality in a response. This section provides examples that show some creative ways to use custom responses in your Hydrogen app.
-
-Custom responses provide the following benefits:
-
-- You don't have to use a custom API function to respond with JSON or another format.
-- You don't need to use another file or a different pattern to respond with something that's not a standard HTML response.
-- You have complete freedom over the response.
-
-### Create a custom sitemap
-
-The following example shows how to create a custom sitemap by adding a new server component called `routes/sitemap.xml.server.jsx`. The custom response object returns the sitemap.
-
-{% codeblock file, filename: '/routes/my-products.server.jsx' %}
-
-```jsx
-import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
-
-export default function Sitemap({response}) {
-  response.doNotStream();
-
-  const {data} = useShopQuery({query: QUERY});
-
-  response.headers.set('content-type', 'application/xml');
-
-  return response.send(shopSitemap(data));
-}
-
-function shopSitemap(data) {
-  return `
-    <urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-    >
-      ${flattenConnection(data.products)
-        .map((product) => {
-          return `
-          <url>
-            <loc>
-              https://hydrogen-preview.myshopify.com/products/${product.handle}
-            </loc>
-            <lastmod>${product.updatedAt}</lastmod>
-            <changefreq>daily</changefreq>
-            <image:image>
-              <image:loc>
-                ${product?.images?.edges?.[0]?.node?.url}
-              </image:loc>
-              <image:title>
-                ${product?.images?.edges?.[0]?.node?.altText ?? ''}
-              </image:title>
-              <image:caption />
-            </image:image>
-          </url>
-        `;
-        })
-        .join('')}
-    </urlset>`;
-}
-
-const QUERY = gql`
-  query Products {
-    products(first: 100) {
-      edges {
-        node {
-          updatedAt
-          handle
-          featuredImage {
-            url
-            altText
-          }
-        }
-      }
-    }
-  }
-`;
-```
-
-{% endcodeblock %}
-
-### Build a JSON API
-
-In modern app frameworks, it's common to create custom API endpoints in your own framework powered by the hosting platform you're using. In other frameworks, these API endpoints provide helpful ways to handle lazy-loading, Ajax type incremental data, or POST requests to mutate an external data store. For example, you might want to send a POST request to write to a custom data store after submitting a form.
-
-The following example shows how to build a JSON API with custom responses by adding a new server component called `/routes/my-products.server.jsx`. The custom response object returns the JSON API:
-
-{% codeblock file, filename: '/routes/my-products.server.jsx' %}
-
-```jsx
-import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
-
-export default function MyProducts({response}) {
-  response.doNotStream();
-
-  const {data} = useShopQuery({query: QUERY});
-
-  response.headers.set('content-type', 'application/json');
-
-  return response.send(JSON.stringify(flattenConnection(data.products)));
-}
-
-const QUERY = gql`
-  query Products {
-    products(first: 100) {
-      edges {
-        node {
-          updatedAt
-          handle
-          featuredImage {
-            url
-            altText
-          }
-        }
-      }
-    }
-  }
-`;
-```
-
-{% endcodeblock %}
-
-### Generate a spreadsheet
-
-You might want to generate a spreadsheet that includes product data from your store.
-
-The following example shows how to generate comma-separated values (CSV) file by adding a new server component called `/routes/spreadsheet.csv.server.jsx`. The custom response object returns the spreadsheet:
-
-{% codeblock file, filename: '/routes/spreadsheet.csv.server.jsx' %}
-
-```jsx
-import gql from 'graphql-tag';
-import {flattenConnection, useShopQuery} from '@shopify/hydrogen';
-
-export default function Report({response}) {
-  response.doNotStream();
-
-  const {data} = useShopQuery({query: QUERY});
-
-  response.headers.set('content-type', 'application/csv');
-
-  return response.send(
-    flattenConnection(data.products)
-      .map((product) => [product.id, product.title, product.handle].join(','))
-      .join('\n')
-  );
-}
-
-const QUERY = gql`
-  {
-    products(first: 10) {
-      edges {
-        node {
-          id
-          title
-          handle
-        }
-      }
-    }
-  }
-`;
-```
-
-{% endcodeblock %}
-
-### Generate PDFs
-
-You might want to generate brochures for products in a Shopify store.
-
-The following example shows how to generate a downloadable PDF for a product in a store by installing `@react-pdf/renderer`:
-
-```bash
-yarn add @react-pdf/renderer
-```
-
-After you've installed `@react-pdf/renderer`, create a new server component called `/routes/brochure.pdf.server.jsx`:
-
-{% codeblock file, filename: '/routes/brochure.pdf.server.jsx' %}
-
-```jsx
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  renderToString,
-  Image,
-} from '@react-pdf/renderer';
-import gql from 'graphql-tag';
-import {useShopQuery} from '@shopify/hydrogen';
-
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4',
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-    width: '50%',
-  },
-  description: {
-    fontSize: 10,
-  },
-});
-
-export default function Brochure({response}) {
-  response.doNotStream();
-
-  const {data} = useShopQuery({query: QUERY});
-
-  const product = data.productByHandle;
-
-  const BrochureDocument = () => (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text>{product.title}</Text>
-          <Text style={styles.description}>{product.description}</Text>
-        </View>
-        <View style={styles.section}>
-          <Image src={product.images.edges[0].node.url} />
-        </View>
-      </Page>
-    </Document>
-  );
-
-  response.headers.set('content-type', 'application/pdf');
-
-  return response.send(renderToString(<BrochureDocument />));
-}
-
-const QUERY = gql`
-  {
-    productByHandle(handle: "snowboard") {
-      title
-      handle
-      description
-      featuredImage {
-        url
-      }
-    }
-  }
-`;
-```
-
-{% endcodeblock %}
-
-### Interacting with custom responses on the browser
-
-When you build custom responses, you might want to call them from the browser using `fetch`. For example, you could check an API endpoint like `/api/views`.
-
-To call a custom response from the client, you need to tell Hydrogen about the request using a custom `accept` header value called `application/hydrogen`. You can combine this header value with any other `accept` value. This tells Hydrogen to handle the response using a server component rather than attempting to load an asset:
+Hydrogen supports TypeScript out of the box. When building route components, you can use the provided TypeScript types to improve your developer experience:
 
 {% codeblock file %}
 
-```js
-await fetch('/api/views', {
-  headers: {
-    accept: 'application/hydrogen, application/json',
-  },
-});
+```tsx
+import type {
+  HydrogenApiRoute,
+  HydrogenApiRouteOptions,
+  HydrogenRequest,
+  HydrogenRouteProps,
+} from '@shopify/hydrogen';
+
+export default function MyPage(props: HydrogenRouteProps) {
+  //
+}
+
+export const api: HydrogenApiRoute = async(request, options) => {
+  //
+}
+
+// Alternate version of `api`:
+export async function api(request: HydrogenRequest, options: HydrogenApiRouteOptions) {
+
+}
 ```
 
 {% endcodeblock %}
 
+> Tip:
+> The Hello World template is available in [TypeScript](https://shopify.dev/custom-storefronts/hydrogen/templates#hello-world-template). You can also refer to the [example implementation of TypeScript](https://github.com/Shopify/hydrogen/tree/main/examples/typescript) in GitHub.
 ## Related components and hooks
 
 - [`Link`](https://shopify.dev/api/hydrogen/components/framework/link)
@@ -698,6 +453,6 @@ await fetch('/api/views', {
 
 - Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.
 - Learn about how Hydrogen consumes data from different [sources](https://shopify.dev/custom-storefronts/hydrogen/data-sources).
-- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen apps.
+- Learn how to manage [cache options](https://shopify.dev/custom-storefronts/hydrogen/framework/cache) for Hydrogen storefronts.
 - Improve your app's loading performance with [streaming SSR and Suspense](https://shopify.dev/custom-storefronts/hydrogen/framework/streaming-ssr).
 - Learn how to [manage your server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) during your development process.

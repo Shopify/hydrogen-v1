@@ -16,10 +16,10 @@ export default async function testCases({
   isBuild,
   isWorker,
 }: TestOptions) {
+  let page;
   beforeEach(async () => {
-    await page.close();
-    //@ts-ignore
-    global.page = await global.browser.newPage();
+    page && (await page.close());
+    page = await global.browser.newPage();
   });
 
   it('shows the homepage, navigates to about, and increases the count', async () => {
@@ -47,7 +47,7 @@ export default async function testCases({
     await page.goto(getServerUrl() + '/config/someDynamicValue');
 
     expect(await page.textContent('#root > div')).toContain(
-      '{"locale":"EN-US","languageCode":"EN","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
+      '{"defaultCountryCode":"US","defaultLanguageCode":"EN","storeDomain":"someDynamicValue-domain","storefrontToken":"someDynamicValue-token","storefrontApiVersion":"someDynamicValue-version"}'
     );
   });
 
@@ -75,6 +75,16 @@ export default async function testCases({
     const secretsClient = await page.textContent('.secrets-client');
     expect(secretsClient).toContain('PUBLIC_VARIABLE:42-public|');
     expect(secretsClient).toContain('PRIVATE_VARIABLE:|'); // Missing private var in client bundle
+  });
+
+  it('has access to request context', async () => {
+    await page.goto(getServerUrl() + '/request-context');
+    expect(await page.textContent('h1')).toContain('Request Context');
+
+    const defaultContext = await page.textContent('#default-context');
+    expect(defaultContext).toContain('{"test1":true}');
+    const scopedContext = await page.textContent('#scoped-context');
+    expect(scopedContext).toContain('{"test2":true}');
   });
 
   it.skip('should render server props in client component', async () => {
@@ -216,12 +226,9 @@ export default async function testCases({
     ]);
   });
 
-  it('uses the provided custom body', async () => {
-    const response = await fetch(getServerUrl() + '/custom-body');
-    const body = await response.text();
-
-    expect(response.headers.get('Content-Type')).toEqual('text/plain');
-    expect(body).toEqual('User-agent: *\nDisallow: /admin\n');
+  it('returns powered-by header', async () => {
+    const response = await fetch(getServerUrl() + '/');
+    expect(response.headers.get('powered-by')).toBe('Shopify-Hydrogen');
   });
 
   it('properly escapes props in the SSR flight script chunks', async () => {
@@ -229,6 +236,14 @@ export default async function testCases({
     expect(await page.textContent('body')).toContain(
       "</script><script>alert('hi')</script>"
     );
+    expect(await page.textContent('body')).toContain(`"fiddle"`);
+  });
+
+  it('imports components using aliases', async () => {
+    await page.goto(getServerUrl() + '/alias');
+    expect(await page.textContent('h1')).toContain('Aliases');
+
+    expect(await page.$$('[data-test=alias]')).toHaveLength(3);
   });
 
   it('adds style tags for CSS modules', async () => {
@@ -246,6 +261,21 @@ export default async function testCases({
     expect(await page.textContent('style')).toEqual(
       `.${className} {\n  color: red;\n}\n`
     );
+  });
+
+  it('supports React.useId()', async () => {
+    const response = await page.goto(getServerUrl() + '/useid');
+
+    // Pattern: <div id="id">:Rcm:</div>
+    const serverRenderedId = (await response.text()).match(
+      /<div id="id">(.*?)<\/div>/
+    )[1];
+
+    const clientRenderedId = await page.evaluate(() => {
+      return document.getElementById('id').innerHTML;
+    });
+
+    expect(serverRenderedId).toEqual(clientRenderedId);
   });
 
   describe('HMR', () => {
@@ -431,10 +461,12 @@ export default async function testCases({
       const data = await response.json();
 
       expect(response.status()).toBe(200);
-      expect(data).toEqual({data: {shop: {name: 'Snowdevil'}}});
+      expect(data).toEqual({
+        data: {shop: {id: 'gid://shopify/Shop/55145660472'}},
+      });
     });
 
-    it.skip('supports form request on API routes', async () => {
+    it('supports form request on API routes', async () => {
       await page.goto(getServerUrl() + '/form');
       await page.type('#fname', 'sometext');
       await page.click('#fsubmit');

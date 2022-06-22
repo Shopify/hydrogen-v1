@@ -1,36 +1,74 @@
 type CacheMatch = {
-  value: Response;
-  date: Date;
+  body: Uint8Array;
+  timestamp: number;
+  status: number;
+  headers: [string, string][];
 };
 
 /**
- * This is an in-memory implementation of `Cache` that *barely*
- * works and is only meant to be used during development.
+ * This is a limited implementation of an in-memory cache.
+ * It only supports the `cache-control` header.
+ * It does NOT support `age` or `expires` headers.
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Cache
  */
-export class InMemoryCache {
-  private store: Map<string, CacheMatch>;
+export class InMemoryCache implements Cache {
+  #store: Map<string, CacheMatch>;
 
   constructor() {
-    this.store = new Map();
+    this.#store = new Map();
   }
 
-  put(request: Request, response: Response) {
-    this.store.set(request.url, {
-      value: response,
-      date: new Date(),
+  add(request: RequestInfo): Promise<void> {
+    throw new Error('Method not implemented. Use `put` instead.');
+  }
+
+  addAll(requests: RequestInfo[]): Promise<void> {
+    throw new Error('Method not implemented. Use `put` instead.');
+  }
+
+  matchAll(
+    request?: RequestInfo,
+    options?: CacheQueryOptions
+  ): Promise<readonly Response[]> {
+    throw new Error('Method not implemented. Use `match` instead.');
+  }
+
+  async put(request: Request, response: Response) {
+    if (request.method !== 'GET') {
+      throw new TypeError('Cannot cache response to non-GET request.');
+    }
+
+    if (response.status === 206) {
+      throw new TypeError(
+        'Cannot cache response to a range request (206 Partial Content).'
+      );
+    }
+
+    if (response.headers.get('vary')?.includes('*')) {
+      throw new TypeError("Cannot cache response with 'Vary: *' header.");
+    }
+
+    this.#store.set(request.url, {
+      body: new Uint8Array(await response.arrayBuffer()),
+      status: response.status,
+      headers: [...response.headers],
+      timestamp: Date.now(),
     });
   }
 
-  match(request: Request) {
-    const match = this.store.get(request.url);
+  async match(request: Request) {
+    if (request.method !== 'GET') return;
+
+    const match = this.#store.get(request.url);
 
     if (!match) {
       return;
     }
 
-    const {value, date} = match;
+    const {body, timestamp, ...metadata} = match;
 
-    const cacheControl = value.headers.get('cache-control') || '';
+    const headers = new Headers(metadata.headers);
+    const cacheControl = headers.get('cache-control') || '';
     const maxAge = parseInt(
       cacheControl.match(/max-age=(\d+)/)?.[1] || '0',
       10
@@ -39,35 +77,37 @@ export class InMemoryCache {
       cacheControl.match(/stale-while-revalidate=(\d+)/)?.[1] || '0',
       10
     );
-    const age = (new Date().valueOf() - date.valueOf()) / 1000;
+    const age = (Date.now() - timestamp) / 1000;
 
     const isMiss = age > maxAge + swr;
     if (isMiss) {
-      this.store.delete(request.url);
+      this.#store.delete(request.url);
       return;
     }
 
     const isStale = age > maxAge;
 
-    const headers = new Headers(value.headers);
     headers.set('cache', isStale ? 'STALE' : 'HIT');
-    headers.set('date', date.toUTCString());
+    headers.set('date', new Date(timestamp).toUTCString());
 
-    const response = new Response(value.body, {
+    return new Response(body, {
+      status: metadata.status ?? 200,
       headers,
     });
-
-    return response;
   }
 
-  delete(request: Request) {
-    this.store.delete(request.url);
+  async delete(request: Request) {
+    if (this.#store.has(request.url)) {
+      this.#store.delete(request.url);
+      return true;
+    }
+    return false;
   }
 
   keys(request?: Request) {
     const cacheKeys = [] as Request[];
 
-    for (const url of this.store.keys()) {
+    for (const url of this.#store.keys()) {
       if (!request || request.url === url) {
         cacheKeys.push(new Request(url));
       }

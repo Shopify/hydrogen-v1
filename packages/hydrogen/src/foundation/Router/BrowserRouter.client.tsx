@@ -8,6 +8,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useCallback,
+  ReactNode,
 } from 'react';
 import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider';
 import {META_ENV_SSR} from '../ssr-interop';
@@ -18,21 +19,23 @@ type RouterContextValue = {
   location: Location;
 };
 
-export const RouterContext = createContext<RouterContextValue | {}>({});
+export const RouterContext = createContext<RouterContextValue | undefined>(
+  undefined
+);
 
 let isFirstLoad = true;
 const positions: Record<string, number> = {};
 
-export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
-  history: pHistory,
-  children,
-}) => {
+export const BrowserRouter: FC<{
+  history?: BrowserHistory;
+  children: ReactNode;
+}> = ({history: pHistory, children}) => {
   if (META_ENV_SSR) return <>{children}</>;
   /* eslint-disable react-hooks/rules-of-hooks */
 
   const history = useMemo(() => pHistory || createBrowserHistory(), [pHistory]);
   const [location, setLocation] = useState(history.location);
-  const [locationChanged, setLocationChanged] = useState(false);
+  const [scrollNeedsRestoration, setScrollNeedsRestoration] = useState(false);
 
   const {pending, locationServerProps, setLocationServerProps} =
     useInternalServerProps();
@@ -41,12 +44,12 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
     location,
     pending,
     serverProps: locationServerProps,
-    locationChanged,
-    onFinishNavigating: () => setLocationChanged(false),
+    scrollNeedsRestoration,
+    onFinishNavigating: () => setScrollNeedsRestoration(false),
   });
 
   useLayoutEffect(() => {
-    const unlisten = history.listen(({location: newLocation}) => {
+    const unlisten = history.listen(({location: newLocation, action}) => {
       positions[location.key] = window.scrollY;
 
       setLocationServerProps({
@@ -55,14 +58,23 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
       });
 
       setLocation(newLocation);
-      setLocationChanged(true);
+
+      const state = (newLocation.state ?? {}) as Record<string, any>;
+
+      /**
+       * "pop" navigations, like forward/backward buttons, always restore scroll position
+       * regardless of what the original forward navigation intent was.
+       */
+      const needsScrollRestoration = action === 'POP' || !!state.scroll;
+
+      setScrollNeedsRestoration(needsScrollRestoration);
     });
 
     return () => unlisten();
   }, [
     history,
     location,
-    setLocationChanged,
+    setScrollNeedsRestoration,
     setLocation,
     setLocationServerProps,
   ]);
@@ -82,13 +94,15 @@ export const BrowserRouter: FC<{history?: BrowserHistory}> = ({
 };
 
 export function useRouter() {
-  const router = useContext<RouterContextValue | {}>(RouterContext);
+  if (META_ENV_SSR) return {location: {}, history: {}} as RouterContextValue;
 
-  if (!router && META_ENV_SSR) {
-    throw new Error('useRouter must be used within a <Router> component');
-  }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const router = useContext(RouterContext);
+  if (router) return router;
 
-  return router as RouterContextValue;
+  throw new Error(
+    'Router hooks and <Link> component must be used within a <Router> component'
+  );
 }
 
 export function useLocation() {
@@ -111,13 +125,13 @@ function useScrollRestoration({
   location,
   pending,
   serverProps,
-  locationChanged,
+  scrollNeedsRestoration,
   onFinishNavigating,
 }: {
   location: Location;
   pending: boolean;
   serverProps: LocationServerProps;
-  locationChanged: boolean;
+  scrollNeedsRestoration: boolean;
   onFinishNavigating: () => void;
 }) {
   /**
@@ -140,7 +154,7 @@ function useScrollRestoration({
 
   useLayoutEffect(() => {
     // The app has just loaded
-    if (isFirstLoad || !locationChanged) {
+    if (isFirstLoad || !scrollNeedsRestoration) {
       isFirstLoad = false;
       return;
     }
@@ -189,7 +203,7 @@ function useScrollRestoration({
     pending,
     serverProps.pathname,
     serverProps.search,
-    locationChanged,
+    scrollNeedsRestoration,
     onFinishNavigating,
   ]);
 }

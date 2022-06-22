@@ -1,29 +1,50 @@
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import {useMoney} from '../../hooks';
-import type {MoneyV2} from '../../storefront-api-types';
+import type {MoneyV2, UnitPriceMeasurement} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
 
-interface MoneyProps<TTag> {
-  /** An HTML tag to be rendered as the base element wrapper. The default is `div`. */
-  as?: TTag;
+interface CustomProps<ComponentGeneric extends React.ElementType> {
+  /** An HTML tag or React Component to be rendered as the base element wrapper. The default is `div`. */
+  as?: ComponentGeneric;
   /** An object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). */
   data: PartialDeep<MoneyV2>;
   /** Whether to remove the currency symbol from the output. */
   withoutCurrency?: boolean;
   /** Whether to remove trailing zeros (fractional money) from the output. */
   withoutTrailingZeros?: boolean;
+  /** A [UnitPriceMeasurement object](https://shopify.dev/api/storefront/latest/objects/unitpricemeasurement). */
+  measurement?: PartialDeep<UnitPriceMeasurement>;
+  /** Customizes the separator between the money output and the measurement output. Used with the `measurement` prop. Defaults to `'/'`. */
+  measurementSeparator?: ReactNode;
 }
+
+// This article helps understand the typing here https://www.benmvp.com/blog/polymorphic-react-components-typescript/ Ben is the best :)
+type MoneyProps<ComponentGeneric extends React.ElementType> =
+  CustomProps<ComponentGeneric> &
+    Omit<
+      React.ComponentPropsWithoutRef<ComponentGeneric>,
+      keyof CustomProps<ComponentGeneric>
+    >;
 
 /**
  * The `Money` component renders a string of the Storefront API's
  * [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the
- * `defaultLocale` in [the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
+ * `locale` in [the `LocalizationProvider` component](https://shopify.dev/api/hydrogen/components/localization/localizationprovider).
  */
-export function Money<TTag extends keyof JSX.IntrinsicElements = 'div'>(
-  props: JSX.IntrinsicElements[TTag] & MoneyProps<TTag>
-) {
-  const {data, as, withoutCurrency, withoutTrailingZeros, ...passthroughProps} =
-    props;
+export function Money<TTag extends React.ElementType>({
+  data,
+  as,
+  withoutCurrency,
+  withoutTrailingZeros,
+  measurement,
+  measurementSeparator = '/',
+  ...passthroughProps
+}: MoneyProps<TTag>) {
+  if (!isMoney(data)) {
+    throw new Error(
+      `<Money/> needs a valid 'data' prop that has 'amount' and 'currencyCode'`
+    );
+  }
   const moneyObject = useMoney(data);
   const Wrapper = as ?? 'div';
 
@@ -40,5 +61,25 @@ export function Money<TTag extends keyof JSX.IntrinsicElements = 'div'>(
     }
   }
 
-  return <Wrapper {...passthroughProps}>{output}</Wrapper>;
+  return (
+    <Wrapper {...passthroughProps}>
+      {output}
+      {measurement && measurement.referenceUnit && (
+        <>
+          {measurementSeparator}
+          {measurement.referenceUnit}
+        </>
+      )}
+    </Wrapper>
+  );
+}
+
+// required in order to narrow the money object down and make TS happy
+function isMoney(maybeMoney: PartialDeep<MoneyV2>): maybeMoney is MoneyV2 {
+  return (
+    typeof maybeMoney.amount === 'string' &&
+    !!maybeMoney.amount &&
+    typeof maybeMoney.currencyCode === 'string' &&
+    !!maybeMoney.currencyCode
+  );
 }

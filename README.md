@@ -9,15 +9,13 @@
 
 <div align="center">
 
-📚 [Docs](https://shopify.dev/custom-storefronts/hydrogen) | 🗣 [Discord](https://discord.gg/Hefq6w5c5d) | 💬 [Discussions](https://github.com/Shopify/hydrogen/discussions) | 📝 [Changelog](./packages/hydrogen/CHANGELOG.md)
+📚 [Docs](https://shopify.dev/custom-storefronts/hydrogen) | 🗣 [Discord](https://discord.gg/Hefq6w5c5d) | 💬 [Discussions](https://github.com/Shopify/hydrogen/discussions) | 📝 [Changelog](./packages/hydrogen/CHANGELOG.md) | 😎 [Awesome Hydrogen](https://github.com/Shopify/awesome-hydrogen)
 
 </div>
 
 Hydrogen is a **React-based framework** for building dynamic, **Shopify-powered** custom storefronts.
 
 Spin up a Hydrogen app in your browser with our [playground](https://hydrogen.new/) or set up your local environment with the instructions below ⬇️
-
-**This is a developer preview of Hydrogen**. The documentation will be updated as Shopify [introduces new features and refines existing functionality](https://github.com/Shopify/hydrogen/releases).
 
 ## Getting Started
 
@@ -30,13 +28,13 @@ Spin up a Hydrogen app in your browser with our [playground](https://hydrogen.ne
 
 ```bash
 # Using `yarn`
-yarn create hydrogen-app
+yarn create @shopify/hydrogen
 
 # Using `npm`
-npm init hydrogen-app@latest
+npm init @shopify/hydrogen
 
 # Using `npx`
-npx create-hydrogen-app
+npx @shopify/create-hydrogen
 ```
 
 **Running locally:**
@@ -63,11 +61,14 @@ Learn more about [getting started with Hydrogen](https://shopify.dev/custom-stor
 
 ## Other handy links
 
-🤩 [Learn more about Hydrogen](https://shopify.dev/hydrogen).
+[Learn more about Hydrogen](https://shopify.dev/hydrogen).
+
+[Awesome Hydrogen](https://github.com/Shopify/awesome-hydrogen) - A curated list of awesome Hydrogen things.
 
 👷‍♀️ Add `npm` packages to your project:
 
 - [`@shopify/hydrogen`](https://www.npmjs.com/package/@shopify/hydrogen)
-- [`create-hydrogen-app`](https://www.npmjs.com/package/create-hydrogen-app)
+- [`@shopify/create-hydrogen`](https://www.npmjs.com/package/@shopify/create-hydrogen)
+- [`@shopify/cli-hydrogen`](https://www.npmjs.com/package/@shopify/cli-hydrogen)
 - [`eslint-plugin-hydrogen`](https://www.npmjs.com/package/eslint-plugin-hydrogen)
 - [`hydrogen-plugin-sanity`](https://www.npmjs.com/package/hydrogen-plugin-sanity)

@@ -19,7 +19,7 @@ export default () => {
     };
   }
 
-  if (!process.env.LOCAL_DEV) {
+  if (process.env.NODE_ENV !== 'development' && !process.env.LOCAL_DEV) {
     /**
      * Ofuscate production asset name - To prevent ad blocker logics that blocks
      * certain files due to how it is named.
@@ -43,11 +43,17 @@ export default () => {
       },
 
       build: {
-        minify: config.build?.minify ?? 'esbuild',
+        minify:
+          config.build?.minify ?? (process.env.LOCAL_DEV ? false : 'esbuild'),
         sourcemap: true,
         rollupOptions: config.build?.rollupOptions
           ? Object.assign(rollupOptions, config.build.rollupOptions)
           : rollupOptions,
+        target: config.build?.ssr
+          ? isWorker
+            ? 'es2022' // CFW (Updates weekly to latest V8)
+            : 'es2020' // Node (Support for v14.19 used in SB)
+          : 'modules', // Browsers (Vite default value)
       },
 
       ssr: {
@@ -94,12 +100,16 @@ export default () => {
           'react-server-dom-vite/client-proxy',
           // https://github.com/vitejs/vite/issues/6215
           'react/jsx-runtime',
+          // https://github.com/nfriedly/set-cookie-parser/issues/50
+          'set-cookie-parser',
+          'undici',
         ],
       },
 
       define: {
-        __DEV__: env.mode !== 'production',
-        __WORKER__: isWorker,
+        __HYDROGEN_DEV__: env.mode !== 'production',
+        __HYDROGEN_WORKER__: isWorker,
+        __HYDROGEN_TEST__: false, // Used in unit tests
       },
 
       envPrefix: ['VITE_', 'PUBLIC_'],

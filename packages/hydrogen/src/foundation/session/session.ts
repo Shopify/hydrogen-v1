@@ -1,7 +1,7 @@
 import {Logger} from '../../utilities/log';
 import {wrapPromise} from '../../utilities/suspense';
-import type {ServerComponentResponse} from '../../framework/Hydration/ServerComponentResponse.server';
-import type {ServerComponentRequest} from '../../framework/Hydration/ServerComponentRequest.server';
+import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
 
 export type SessionSyncApi = {
   get: () => Record<string, string>;
@@ -20,8 +20,8 @@ export type SessionStorageAdapter = {
 };
 
 export function getSyncSessionApi(
-  request: ServerComponentRequest,
-  componentResponse: ServerComponentResponse,
+  request: HydrogenRequest,
+  componentResponse: HydrogenResponse,
   log: Logger,
   session?: SessionStorageAdapter
 ) {

@@ -39,7 +39,7 @@ If you're using `fetchSync` in a server component, then you provide options for 
 {% codeblock file, filename: "MyComponent.server.js" %}
 
 ```jsx
-import {fetchSync, CacheMinutes} from '@shopify/hydrogen';
+import {fetchSync, CacheLong} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 export function MyComponent() {
   return (
@@ -51,7 +51,7 @@ export function MyComponent() {
 function MyThings() {
   const things = fetchSync('https://3p.api.com/things.json', {
     preload: true,
-    cache: CacheMinutes(),
+    cache: CacheLong(),
   }).json();
   return <h2>{things.title}</h2>;
 }
@@ -70,11 +70,11 @@ The `fetchSync` hook takes the following arguments:
 
 The `requestInit` object augments the [`init` properties available in the Web Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request) to include the following additional properties:
 
-| Key                   | Required | Description                                                                                                                                                                                                                         |
-| --------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cache`               | No       | The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you determine which cache control header to set.                                                                 |
-| `preload`             | No       | Whether to [preload the request](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries). Defaults to `false`. Specify `true` to preload the query for the URL or `'*'` to preload the query for all requests. |
-| `shouldCacheResponse` | No       | A function that inspects the response body to determine if it should be cached.                                                                                                                                                     |
+| Key                   | Required | Description                                                                                                                                                                                                                                    |
+| --------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cache`               | No       | The [caching strategy](https://shopify.dev/custom-storefronts/hydrogen/framework/cache#caching-strategies) to help you determine which cache control header to set.                                                                            |
+| `preload`             | No       | Whether to [preload the request](https://shopify.dev/custom-storefronts/hydrogen/framework/preloaded-queries). It defaults to true only when the `CachingStrategy` is not `CacheNone`. Specify `false` to disable or use `'*'` to preload the query for all requests. |
+| `shouldCacheResponse` | No       | A function that inspects the response body to determine if it should be cached.                                                                                                                                                                |
 
 ### Return value
 

@@ -10,7 +10,7 @@ This guide describes how streaming server-side rendering (SSR) works in a Hydrog
 
 ## How streaming SSR works
 
-Streaming SSR is a feature in React that allows you to load data over a network in multiple chunks. The chunks are loaded out of order in parallel to rendering, which makes your Hydrogen app fast and performant.
+Streaming SSR is a feature in React that allows you to load data over a network in multiple chunks. The chunks are loaded out of order in parallel to rendering, which makes your Hydrogen storefront fast and performant.
 
 > Note:
 > Streaming SSR is critical for building performant storefronts, which typically depend on API calls to generate content on a page.

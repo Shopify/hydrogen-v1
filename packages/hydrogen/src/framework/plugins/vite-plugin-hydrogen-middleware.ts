@@ -1,25 +1,18 @@
-import {Plugin, loadEnv, ResolvedConfig, normalizePath} from 'vite';
+import {Plugin, loadEnv, ResolvedConfig} from 'vite';
 import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
-import type {HydrogenVitePluginOptions} from '../../types';
+import type {HydrogenVitePluginOptions} from '../types';
 import {InMemoryCache} from '../cache/in-memory';
+import {VIRTUAL_PROXY_HYDROGEN_CONFIG_ID} from './vite-plugin-hydrogen-virtual-files';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
 
-const virtualModuleId = 'virtual:hydrogen-config';
-const virtualProxyModuleId = virtualModuleId + ':proxy';
-
 export default (pluginOptions: HydrogenVitePluginOptions) => {
-  let config: ResolvedConfig;
-
   return {
-    name: 'vite-plugin-hydrogen-middleware',
-    configResolved(_config) {
-      config = _config;
-    },
+    name: 'hydrogen:middleware',
     /**
      * By adding a middleware to the Vite dev server, we can handle SSR without needing
      * a custom node script. It works by handling any requests for `text/html` documents,
@@ -42,7 +35,7 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
           dev: true,
           getShopifyConfig: async (incomingMessage) => {
             const {default: hydrogenConfig} = await server.ssrLoadModule(
-              'virtual:hydrogen-config:proxy'
+              VIRTUAL_PROXY_HYDROGEN_CONFIG_ID
             );
 
             // @ts-ignore
@@ -56,12 +49,11 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
             });
 
             // @ts-expect-error Manually set `normalizedUrl` which a developer expects to be available
-            // via `ServerComponentRequest` during production runtime.
+            // via `HydrogenRequest` during production runtime.
             request.normalizedUrl = request.url;
 
-            return typeof hydrogenConfig.shopify === 'function'
-              ? hydrogenConfig.shopify(request)
-              : hydrogenConfig.shopify;
+            const {shopify} = hydrogenConfig;
+            return typeof shopify === 'function' ? shopify(request) : shopify;
           },
         })
       );
@@ -81,31 +73,6 @@ export default (pluginOptions: HydrogenVitePluginOptions) => {
               : undefined,
           })
         );
-    },
-    async resolveId(source, importer) {
-      if (source === virtualModuleId) {
-        const configPath = await findHydrogenConfigPath(
-          config.root,
-          pluginOptions.configPath
-        );
-
-        return this.resolve(configPath, importer, {
-          skipSelf: true,
-        });
-      }
-
-      if (source === virtualProxyModuleId) {
-        // Virtual modules convention
-        // https://vitejs.dev/guide/api-plugin.html#virtual-modules-convention
-        return '\0' + virtualProxyModuleId;
-      }
-    },
-    async load(id) {
-      if (id === '\0' + virtualProxyModuleId) {
-        // Likely due to a bug in Vite, but the config cannot be loaded
-        // directly using ssrLoadModule. It needs to be proxied as follows:
-        return `import hc from 'virtual:hydrogen-config'; export default hc;`;
-      }
     },
   } as Plugin;
 };
@@ -129,28 +96,4 @@ async function polyfillOxygenEnv(config: ResolvedConfig) {
   }
 
   globalThis.Oxygen = {env};
-}
-
-async function findHydrogenConfigPath(root: string, userProvidedPath?: string) {
-  let configPath = userProvidedPath;
-
-  if (!configPath) {
-    // Find the config file in the project root
-    const files = await fs.readdir(root);
-    configPath = files.find((file) => /^hydrogen\.config\.[jt]s$/.test(file));
-  }
-
-  if (configPath) {
-    configPath = normalizePath(configPath);
-
-    if (!configPath.startsWith('/'))
-      configPath = path.resolve(root, configPath);
-  }
-
-  return (
-    configPath ||
-    require.resolve(
-      '@shopify/hydrogen/dist/esnext/utilities/empty-hydrogen-config.js'
-    )
-  );
 }

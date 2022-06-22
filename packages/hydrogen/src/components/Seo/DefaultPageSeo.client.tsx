@@ -1,6 +1,6 @@
 import React from 'react';
-import {useShop} from '../../foundation';
-import {Head} from '../../client';
+import {Head} from '../../foundation/Head';
+import {useLocalization} from '../../hooks/useLocalization/useLocalization';
 
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
@@ -15,7 +15,9 @@ export function DefaultPageSeo({
   titleTemplate,
   lang,
 }: PartialDeep<DefaultPage>) {
-  const {languageCode: fallBacklang} = useShop();
+  const {
+    language: {isoCode: fallBacklang},
+  } = useLocalization();
 
   return (
     <>

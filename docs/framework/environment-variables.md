@@ -98,4 +98,4 @@ app.use(hydrogenMiddleware({/* ... */}))
 
 ## Next steps
 
-- Learn how to [deploy your Hydrogen app](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.
+- Learn how to [deploy your Hydrogen storefront](https://shopify.dev/custom-storefronts/hydrogen/deployment) to Oxygen and other runtimes.

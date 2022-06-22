@@ -1,15 +1,12 @@
 import React, {createContext, useContext} from 'react';
 import {getTime} from '../../utilities/timing';
 import {hashKey} from '../../utilities/hash';
-import type {
-  PreloadQueriesByURL,
-  ServerComponentRequest,
-} from '../../framework/Hydration/ServerComponentRequest.server';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
 import type {QueryKey} from '../../types';
 import {collectQueryTimings} from '../../utilities/log';
 
 // Context to inject current request in SSR
-const RequestContextSSR = createContext<ServerComponentRequest | null>(null);
+const RequestContextSSR = createContext<HydrogenRequest | null>(null);
 
 // Cache to inject current request in RSC
 function requestCacheRSC() {
@@ -19,21 +16,30 @@ function requestCacheRSC() {
 requestCacheRSC.key = Symbol.for('HYDROGEN_REQUEST');
 
 type ServerRequestProviderProps = {
-  isRSC: boolean;
-  request: ServerComponentRequest;
-  children: JSX.Element;
+  request: HydrogenRequest;
+  children: React.ReactNode;
 };
+
+function getInternalReactDispatcher() {
+  return (
+    // @ts-ignore
+    React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
+      .ReactCurrentDispatcher.current || {}
+  );
+}
+
+function isRsc() {
+  // This flag is added by RSC Vite plugin
+  return __HYDROGEN_TEST__ || !!getInternalReactDispatcher().isRsc;
+}
 
 // Note: use this only during RSC/Flight rendering. The React dispatcher
 // for SSR/Fizz rendering does not implement getCacheForType.
 function getCacheForType(resource: () => Map<any, any>) {
-  const dispatcher =
-    // @ts-ignore
-    React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
-      .ReactCurrentDispatcher.current;
+  const dispatcher = getInternalReactDispatcher();
 
   // @ts-ignore
-  if (__DEV__ && typeof jest !== 'undefined' && !dispatcher.getCacheForType) {
+  if (__HYDROGEN_TEST__ && !dispatcher.getCacheForType) {
     // Jest does not have access to the RSC runtime, mock it here:
     // @ts-ignore
     return (globalThis.__jestRscCache ??= resource());
@@ -43,11 +49,10 @@ function getCacheForType(resource: () => Map<any, any>) {
 }
 
 export function ServerRequestProvider({
-  isRSC,
   request,
   children,
 }: ServerRequestProviderProps) {
-  if (isRSC) {
+  if (isRsc()) {
     // Save the request object in a React cache that is
     // scoped to this current rendering.
 
@@ -55,7 +60,7 @@ export function ServerRequestProvider({
 
     requestCache.set(requestCacheRSC.key, request);
 
-    return children;
+    return <>{children}</>;
   }
 
   // Use a normal provider in SSR to make the request object
@@ -68,24 +73,15 @@ export function ServerRequestProvider({
 }
 
 export function useServerRequest() {
-  let request: ServerComponentRequest | null;
-  try {
-    // This cache only works during RSC rendering:
-    // @ts-ignore
-    const cache = getCacheForType(requestCacheRSC);
-    request = cache ? cache.get(requestCacheRSC.key) : null;
-  } catch {
-    // If RSC cache failed it means this is not an RSC request.
-    // Try getting SSR context instead:
-    request = useContext(RequestContextSSR); // eslint-disable-line react-hooks/rules-of-hooks
-  }
+  const request: HydrogenRequest | undefined = isRsc()
+    ? getCacheForType(requestCacheRSC)?.get(requestCacheRSC.key)
+    : useContext(RequestContextSSR); // eslint-disable-line react-hooks/rules-of-hooks
 
   if (!request) {
-    // @ts-ignore
-    if (__DEV__ && typeof jest !== 'undefined') {
+    if (__HYDROGEN_TEST__) {
       // Unit tests are not wrapped in ServerRequestProvider.
       // This mocks it, instead of providing it in every test.
-      return {ctx: {}} as ServerComponentRequest;
+      return {ctx: {}} as HydrogenRequest;
     }
 
     throw new Error('No ServerRequest Context found');
@@ -104,7 +100,7 @@ type RequestCacheResult<T> =
  */
 export function useRequestCacheData<T>(
   key: QueryKey,
-  fetcher: () => T | Promise<T>
+  fetcher: (request: HydrogenRequest) => T | Promise<T>
 ): RequestCacheResult<T> {
   const request = useServerRequest();
   const cache = request.ctx.cache;
@@ -122,7 +118,7 @@ export function useRequestCacheData<T>(
 
       if (!promise) {
         const startApiTime = getTime();
-        const maybePromise = fetcher();
+        const maybePromise = fetcher(request);
 
         if (!(maybePromise instanceof Promise)) {
           result = {data: maybePromise};
@@ -155,11 +151,9 @@ export function useRequestCacheData<T>(
   return result as RequestCacheResult<T>;
 }
 
-export function preloadRequestCacheData(
-  request: ServerComponentRequest,
-  preloadQueries?: PreloadQueriesByURL
-): void {
-  const cache = request.ctx.cache;
+export function preloadRequestCacheData(request: HydrogenRequest): void {
+  const preloadQueries = request.getPreloadQueries();
+  const {cache} = request.ctx;
 
   preloadQueries?.forEach((preloadQuery, cacheKey) => {
     collectQueryTimings(request, preloadQuery.key, 'preload');
@@ -175,7 +169,7 @@ export function preloadRequestCacheData(
         }
         if (!promise) {
           const startApiTime = getTime();
-          promise = preloadQuery.fetcher().then(
+          promise = preloadQuery.fetcher(request).then(
             (data) => {
               result = {data};
               collectQueryTimings(

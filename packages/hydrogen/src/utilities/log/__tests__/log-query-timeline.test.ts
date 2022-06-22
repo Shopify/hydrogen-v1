@@ -1,5 +1,5 @@
-import {ServerComponentRequest} from '../../../framework/Hydration/ServerComponentRequest.server';
-import {Logger, setLogger, resetLogger, setLoggerOptions} from '../index';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
+import {Logger, setLogger} from '../log';
 import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
 
 let mockLogger: jest.Mocked<Logger>;
@@ -7,23 +7,8 @@ let mockLogger: jest.Mocked<Logger>;
 const QUERY_1 = 'test1';
 const QUERY_2 = 'testing2';
 
-function expectTiming(
-  mockCall: string,
-  method: string,
-  queryName: string,
-  duration?: number
-) {
-  let regex;
-  if (duration) {
-    regex = new RegExp(
-      `│ -?[0-9]+\\.[0-9]{2}ms.*${method}.*${queryName} \\(Took ${duration}\\.00ms\\)`
-    );
-  } else {
-    regex = new RegExp(`│ -?[0-9]+\\.[0-9]{2}ms.*${method}.*${queryName}`);
-  }
-
-  expect(mockCall).toEqual(expect.stringMatching(regex));
-}
+let dateNowSpy: jest.SpyInstance;
+const time = 1640995200000;
 
 describe('cache header log', () => {
   beforeEach(() => {
@@ -36,14 +21,14 @@ describe('cache header log', () => {
       options: jest.fn(() => ({})),
     };
 
-    setLogger(mockLogger);
-    setLoggerOptions({
-      showQueryTiming: true,
-    });
+    dateNowSpy = jest.spyOn(performance, 'now').mockImplementation(() => time);
+
+    setLogger({...mockLogger, showQueryTiming: true});
   });
 
   afterEach(() => {
-    resetLogger();
+    setLogger(undefined);
+    dateNowSpy.mockRestore();
   });
 
   it('should log query timing', () => {
@@ -52,8 +37,9 @@ describe('cache header log', () => {
       ctx: {
         queryTimings: [],
       },
-      time: Date.now(),
-    } as unknown as ServerComponentRequest;
+      time: 1640995200200,
+      previouslyLoadedRequest: () => false,
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'rendered');
@@ -61,13 +47,13 @@ describe('cache header log', () => {
     logQueryTimings('ssr', request);
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"[90m┌── Query timings for http://localhost:3000/[39m"`
-    );
-    expectTiming(mockLogger.debug.mock.calls[1][1], 'Requested', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[2][1], 'Resolved', 'test1', 100);
-    expectTiming(mockLogger.debug.mock.calls[3][1], 'Rendered', 'test1');
-    expect(mockLogger.debug.mock.calls[4][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(`
+      "[90m┌── Query timings for http://localhost:3000/[39m[90m
+      │ -200.00ms  [90mRequested [90m test1[39m[90m
+      │ -200.00ms  [90mResolved  [90m test1 (Took 100.00ms)[39m[90m
+      │ -200.00ms  [90mRendered  [90m test1[39m
+      [90m└──[39m"
+    `);
   });
 
   it('should detect suspense waterfall', () => {
@@ -76,8 +62,9 @@ describe('cache header log', () => {
       ctx: {
         queryTimings: [],
       },
-      time: Date.now(),
-    } as unknown as ServerComponentRequest;
+      time: 1640995200200,
+      previouslyLoadedRequest: () => true,
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'requested');
@@ -90,26 +77,19 @@ describe('cache header log', () => {
     logQueryTimings('ssr', request);
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"[90m┌── Query timings for http://localhost:3000/[39m"`
-    );
-    expectTiming(mockLogger.debug.mock.calls[1][1], 'Requested', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[2][1], 'Resolved', 'test1', 100);
-    expectTiming(mockLogger.debug.mock.calls[3][1], 'Requested', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[4][1], 'Rendered', 'test1');
-    expect(mockLogger.debug.mock.calls[5][1]).toMatchInlineSnapshot(
-      `"[90m│ [39m[33mSuspense waterfall detected[39m"`
-    );
-    expectTiming(mockLogger.debug.mock.calls[6][1], 'Requested', 'testing2');
-    expectTiming(
-      mockLogger.debug.mock.calls[7][1],
-      'Resolved',
-      'testing2',
-      100
-    );
-    expectTiming(mockLogger.debug.mock.calls[8][1], 'Requested', 'testing2');
-    expectTiming(mockLogger.debug.mock.calls[9][1], 'Rendered', 'testing2');
-    expect(mockLogger.debug.mock.calls[10][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(`
+      "[90m┌── Query timings for http://localhost:3000/[39m[90m
+      │ -200.00ms  [90mRequested [90m test1[39m[90m
+      │ -200.00ms  [90mResolved  [90m test1 (Took 100.00ms)[39m[90m
+      │ -200.00ms  [90mRequested [90m test1[39m[90m
+      │ -200.00ms  [90mRendered  [90m test1[39m
+      [90m│ [39m[33mSuspense waterfall detected[39m[90m
+      │ -200.00ms  [90mRequested [90m testing2[39m[90m
+      │ -200.00ms  [90mResolved  [90m testing2 (Took 100.00ms)[39m[90m
+      │ -200.00ms  [90mRequested [90m testing2[39m[90m
+      │ -200.00ms  [90mRendered  [90m testing2[39m
+      [90m└──[39m"
+    `);
   });
 
   it('should detect unused query', () => {
@@ -118,23 +98,22 @@ describe('cache header log', () => {
       ctx: {
         queryTimings: [],
       },
-      time: Date.now(),
-    } as unknown as ServerComponentRequest;
+      previouslyLoadedRequest: () => false,
+      time: 1640995200200,
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
 
     logQueryTimings('ssr', request);
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"[90m┌── Query timings for http://localhost:3000/[39m"`
-    );
-    expectTiming(mockLogger.debug.mock.calls[1][1], 'Requested', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[2][1], 'Resolved', 'test1', 100);
-    expect(mockLogger.debug.mock.calls[3][1]).toMatchInlineSnapshot(
-      `"[90m│ [39m[33mUnused query detected: test1[39m"`
-    );
-    expect(mockLogger.debug.mock.calls[4][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(`
+      "[90m┌── Query timings for http://localhost:3000/[39m[90m
+      │ -200.00ms  [90mRequested [90m test1[39m[90m
+      │ -200.00ms  [90mResolved  [90m test1 (Took 100.00ms)[39m
+      [90m│ [39m[33mUnused query detected: test1[39m
+      [90m└──[39m"
+    `);
   });
 
   it('should detect multiple data load', () => {
@@ -143,8 +122,9 @@ describe('cache header log', () => {
       ctx: {
         queryTimings: [],
       },
-      time: Date.now(),
-    } as unknown as ServerComponentRequest;
+      previouslyLoadedRequest: () => false,
+      time: 1640995200200,
+    } as unknown as HydrogenRequest;
     collectQueryTimings(request, QUERY_1, 'requested');
     collectQueryTimings(request, QUERY_1, 'resolved', 100);
     collectQueryTimings(request, QUERY_1, 'resolved', 120);
@@ -153,16 +133,14 @@ describe('cache header log', () => {
     logQueryTimings('ssr', request);
 
     expect(mockLogger.debug).toHaveBeenCalled();
-    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(
-      `"[90m┌── Query timings for http://localhost:3000/[39m"`
-    );
-    expectTiming(mockLogger.debug.mock.calls[1][1], 'Requested', 'test1');
-    expectTiming(mockLogger.debug.mock.calls[2][1], 'Resolved', 'test1', 100);
-    expectTiming(mockLogger.debug.mock.calls[3][1], 'Resolved', 'test1', 120);
-    expectTiming(mockLogger.debug.mock.calls[4][1], 'Rendered', 'test1');
-    expect(mockLogger.debug.mock.calls[5][1]).toMatchInlineSnapshot(
-      `"[90m│ [39m[33mMultiple data loads detected: test1[39m"`
-    );
-    expect(mockLogger.debug.mock.calls[6][1]).toMatchInlineSnapshot(`"[90m└──[39m"`);
+    expect(mockLogger.debug.mock.calls[0][1]).toMatchInlineSnapshot(`
+      "[90m┌── Query timings for http://localhost:3000/[39m[90m
+      │ -200.00ms  [90mRequested [90m test1[39m[90m
+      │ -200.00ms  [90mResolved  [90m test1 (Took 100.00ms)[39m[90m
+      │ -200.00ms  [90mResolved  [90m test1 (Took 120.00ms)[39m[90m
+      │ -200.00ms  [90mRendered  [90m test1[39m
+      [90m│ [39m[33mMultiple data loads detected: test1[39m
+      [90m└──[39m"
+    `);
   });
 });

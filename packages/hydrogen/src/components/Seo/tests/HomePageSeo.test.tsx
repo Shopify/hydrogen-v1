@@ -6,7 +6,7 @@ import {HomePageSeo} from '../HomePageSeo.client';
 import {TitleSeo} from '../TitleSeo.client';
 import {DescriptionSeo} from '../DescriptionSeo.client';
 
-jest.mock('../../../client', () => ({
+jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {
     return children;
   },

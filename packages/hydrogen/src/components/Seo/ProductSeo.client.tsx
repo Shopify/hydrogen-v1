@@ -1,11 +1,12 @@
 import React from 'react';
-import {Head} from '../../client';
+import {Head} from '../../foundation/Head';
 import {TitleSeo} from './TitleSeo.client';
 import {DescriptionSeo} from './DescriptionSeo.client';
 import {TwitterSeo} from './TwitterSeo.client';
 import {ImageSeo} from './ImageSeo.client';
 import type {Scalars, Product as ProductType} from '../../storefront-api-types';
 import type {PartialDeep} from 'type-fest';
+import {flattenConnection} from '../../utilities/flattenConnection';
 
 export function ProductSeo({
   url,
@@ -37,16 +38,17 @@ export function ProductSeo({
     productSchema.image = featuredImage.url;
   }
 
-  if (variants?.edges && variants.edges.length > 0) {
-    const firstVariant = variants.edges[0]?.node;
+  const flattenedVariants = flattenConnection(variants ?? {});
+
+  if (flattenedVariants.length) {
+    const firstVariant = flattenedVariants[0];
     firstVariantPrice = firstVariant?.priceV2;
 
     if (firstVariant && firstVariant.sku) {
       productSchema.sku = firstVariant.sku;
     }
 
-    productSchema.offers = variants.edges.map((edge) => {
-      const node = edge?.node;
+    productSchema.offers = flattenedVariants.map((node) => {
       if (!node || !node.priceV2?.amount || !node.priceV2.currencyCode) {
         throw new Error(
           `<ProductSeo/> requires variant.PriceV2 'amount' and 'currency`

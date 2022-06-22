@@ -1,45 +1,42 @@
-import type {ServerResponse} from 'http';
-import type {Logger} from './utilities/log/log';
-import type {ServerComponentRequest} from './framework/Hydration/ServerComponentRequest.server';
-import type {ServerComponentResponse} from './framework/Hydration/ServerComponentResponse.server';
-import type {
-  Metafield,
-  ProductVariant,
-  Product,
-  MediaImage,
-} from './storefront-api-types';
-import type {SessionStorageAdapter} from './foundation/session/session';
+export * from './shared-types';
+import {ShopifyConfig} from './shared-types';
 
-type CommonOptions = {
-  App: any;
+import type {ServerResponse} from 'http';
+import type {Logger, LoggerConfig} from './utilities/log/log';
+import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
+import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
+import type {Metafield} from './storefront-api-types';
+import type {SessionStorageAdapter} from './foundation/session/session';
+import type {PartialDeep, JsonValue} from 'type-fest';
+
+export type AssembleHtmlParams = {
+  ssrHtml: string;
+  rscPayload?: string;
   routes?: ImportGlobEagerOutput;
-  request: ServerComponentRequest;
-  componentResponse: ServerComponentResponse;
+  request: HydrogenRequest;
+  template: string;
+};
+
+export type RunSsrParams = {
+  state: Record<string, any>;
+  rsc: {readable: ReadableStream; didError: () => Error | undefined};
+  routes?: ImportGlobEagerOutput;
+  request: HydrogenRequest;
+  response: HydrogenResponse;
   log: Logger;
   dev?: boolean;
-};
-
-export type RendererOptions = CommonOptions & {
   template: string;
   nonce?: string;
+  nodeResponse?: ServerResponse;
+  revalidate?: Boolean;
 };
 
-export type StreamerOptions = CommonOptions & {
-  response?: ServerResponse;
-  template: string;
-  nonce?: string;
-};
-
-export type HydratorOptions = CommonOptions & {
-  response?: ServerResponse;
-  isStreamable: boolean;
-};
-
-export type ShopifyConfig = {
-  defaultLocale?: string;
-  storeDomain: string;
-  storefrontToken: string;
-  storefrontApiVersion: string;
+export type RunRscParams = {
+  App: any;
+  state: Record<string, any>;
+  log: Logger;
+  request: HydrogenRequest;
+  response: HydrogenResponse;
 };
 
 export type Hook = (
@@ -51,60 +48,63 @@ export type ImportGlobEagerOutput = Record<
   Record<'default' | 'api', any>
 >;
 
-export type HydrogenConfigRoutes = {
-  files?: ImportGlobEagerOutput;
-  basePath?: string;
-  dirPrefix?: string;
+export type InlineHydrogenRoutes =
+  | string
+  | {
+      files: string;
+      basePath?: string;
+    };
+
+export type ResolvedHydrogenRoutes = {
+  files: ImportGlobEagerOutput;
+  dirPrefix: string;
+  basePath: string;
 };
 
-type ConfigFetcher<T> = (request: ServerComponentRequest) => T | Promise<T>;
+type ConfigFetcher<T> = (request: HydrogenRequest) => T | Promise<T>;
 
 export type ShopifyConfigFetcher = ConfigFetcher<ShopifyConfig>;
 
 export type ServerAnalyticsConnector = {
   request: (
-    request: Request,
+    requestUrl: string,
+    requestHeader: Headers,
     data?: any,
     contentType?: 'json' | 'text'
-  ) => void;
+  ) => Promise<any>;
 };
 
-export type HydrogenConfig = {
-  routes?: HydrogenConfigRoutes | ImportGlobEagerOutput;
+export type InlineHydrogenConfig = ClientConfig & {
+  routes?: InlineHydrogenRoutes;
   shopify?: ShopifyConfig | ShopifyConfigFetcher;
   serverAnalyticsConnectors?: Array<ServerAnalyticsConnector>;
+  logger?: LoggerConfig;
   session?: (log: Logger) => SessionStorageAdapter;
-  enableStreaming?: (request: ServerComponentRequest) => boolean;
+  poweredByHeader?: boolean;
+  __EXPERIMENTAL__devTools?: boolean;
 };
 
-export type ClientHandlerConfig = {
+export type ResolvedHydrogenConfig = Omit<InlineHydrogenConfig, 'routes'> & {
+  routes: ResolvedHydrogenRoutes;
+};
+
+export type ClientConfig = {
   /** React's StrictMode is on by default for your client side app; if you want to turn it off (not recommended), you can pass `false` */
   strictMode?: boolean;
-  showDevTools?: boolean;
 };
 
 export type ClientHandler = (
   App: React.ElementType,
-  config: ClientHandlerConfig
+  config: ClientConfig
 ) => Promise<void>;
 
 export interface GraphQLConnection<T> {
   edges?: {node: T}[];
+  nodes?: T[];
 }
 
-export type ParsedMetafield = Omit<
-  Partial<Metafield>,
-  'value' | 'reference'
-> & {
-  value?:
-    | string
-    | number
-    | boolean
-    | Record<any, string>
-    | Date
-    | Rating
-    | Measurement;
-  reference?: MediaImage | ProductVariant | Product | null;
+export type ParsedMetafield = Omit<PartialDeep<Metafield>, 'value'> & {
+  value?: string | number | boolean | JsonValue | Date | Rating | Measurement;
 };
 
 export interface Rating {
@@ -134,10 +134,14 @@ export interface AllCacheOptions {
 
 export type CachingStrategy = AllCacheOptions;
 
-export interface HydrogenVitePluginOptions {
-  devCache?: boolean;
-  purgeQueryCacheOnBuild?: boolean;
-  configPath?: string;
-}
-
 export type PreloadOptions = boolean | string;
+
+export type HydrogenRouteProps = {
+  request: HydrogenRequest;
+  response: HydrogenResponse;
+  log: Logger;
+  params: Record<string, any>;
+  pathname: string;
+  search: string;
+  [key: string]: any;
+};

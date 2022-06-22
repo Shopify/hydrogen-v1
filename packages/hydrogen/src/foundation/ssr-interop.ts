@@ -6,13 +6,13 @@
  */
 
 import {useContext, Context} from 'react';
-import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
+import type {HydrogenRequest} from './HydrogenRequest/HydrogenRequest.server';
 //@SSR import {useServerRequest} from './ServerRequestProvider';
 
 // This is replaced by Vite to import.meta.env.SSR
 export const META_ENV_SSR = false;
 
-type ServerGetter<T> = (request: ServerComponentRequest) => T;
+type ServerGetter<T> = (request: HydrogenRequest) => T;
 
 const reactContextType = Symbol.for('react.context');
 

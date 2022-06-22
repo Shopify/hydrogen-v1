@@ -19,6 +19,36 @@ export default function Index() {
 
 {% endcodeblock %}
 
+## Scroll restoration
+
+By default, when you click a `<Link>` component, Hydrogen emulates default browser behavior and attempts to restore the scroll position that was previously used in the visitor's session. For new pages, the  `<Link>` component defaults to scrolling to the top of the page.
+
+However, if you want to build a user interface that re-renders server components and updates the URL, but doesn't modify the scroll position, then you can disable scroll restoration using the `scroll` prop:
+
+{% codeblock file, filename: 'index.server.jsx' %}
+
+```jsx
+import {Link} from '@shopify/hydrogen';
+export default function Index({request}) {
+  const url = new URL(request.normalizedUrl);
+
+  return (
+    <>
+      <p>Current param is: {url.searchParams.get('param')}</p>
+      <Link to="/?param=foo" scroll={false}>
+        Update param to foo
+      </Link>
+    </>
+  );
+}
+```
+
+{% endcodeblock %}
+
+## Base path
+
+The `<Link>` component automatically prepends a `basePath` to the destination URL. That `basePath` is inherited from the [`<FileRoutes>` component](https://shopify.dev/api/hydrogen/components/framework/fileroutes) it is rendered within. You can override this default behavior by passing a custom `basePath` prop to the `<Link>` component.
+
 ## Props
 
 | Name            | Type                 | Description                                                                                                                                                                                                                                   |
@@ -28,6 +58,8 @@ export default function Index() {
 | clientState?    | <code>any</code>     | The custom client state with the navigation.                                                                                                                                                                                                  |
 | reloadDocument? | <code>boolean</code> | Whether to reload the whole document on navigation.                                                                                                                                                                                           |
 | prefetch?       | <code>boolean</code> | Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). |
+| scroll?         | <code>boolean</code> | Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to `true`.                                                                                                                                    |
+| basePath? | <code>string</code> | Override the `basePath` inherited from the `<Route>`.
 
 ## Component type
 

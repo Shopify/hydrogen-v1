@@ -1,4 +1,4 @@
-const hydrogen = require('@shopify/hydrogen/plugin').default;
+const hydrogen = require('@shopify/hydrogen/plugin.cjs');
 
 /**
  * @type {import('vite').UserConfig}

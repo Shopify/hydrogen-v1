@@ -8,15 +8,18 @@ export function logCacheApiStatus(status: string | null, url: string) {
   }
 
   let queryName: string | undefined;
-  if (/shopify\.dev/.test(url)) {
+  if (url.includes('shopify.dev')) {
+    url = decodeURIComponent(url);
     queryName = findQueryName(url);
+
+    if (url.includes('?lock')) {
+      queryName += '-lock';
+    }
   }
 
   log.debug(
     gray(
-      `[Cache] ${status?.padEnd(8)} ${
-        queryName ? `query ${queryName}` : decodeURIComponent(url)
-      }`
+      `[Cache] ${status?.padEnd(8)} ${queryName ? `query ${queryName}` : url}`
     )
   );
 }

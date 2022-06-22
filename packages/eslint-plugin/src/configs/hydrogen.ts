@@ -5,5 +5,6 @@ export default {
     'hydrogen/prefer-image-component': 'error',
     'hydrogen/server-component-banned-hooks': 'error',
     'hydrogen/server-no-json-parse': 'error',
+    'hydrogen/prefer-gql': 'error',
   },
 };

@@ -33,8 +33,10 @@ function parseModel(response, json) {
   return JSON.parse(json, response._fromJSON);
 }
 
-// eslint-disable-next-line no-unused-vars
-function resolveModuleReference(moduleData) {
+var META_HOT = undefined;
+var META_ENV_DEV = undefined.DEV;
+
+function resolveModuleReference(bundlerConfig, moduleData) {
   return moduleData;
 } // Vite import globs will be injected here.
 
@@ -42,7 +44,7 @@ var allClientComponents = {
   __INJECTED_CLIENT_IMPORTERS__: null
 }; // Mock client component imports during testing
 
-if (typeof jest !== 'undefined') {
+if (META_ENV_DEV && typeof jest !== 'undefined') {
   global.allClientComponents = allClientComponents;
 }
 
@@ -50,7 +52,20 @@ function importClientComponent(moduleId) {
   var modImport = allClientComponents[moduleId];
 
   if (!modImport) {
-    return Promise.reject(new Error("Could not find client component " + moduleId));
+    var error = new Error("Could not find client component " + moduleId);
+
+    if (META_HOT) {
+      META_HOT.send('rsc:cc404', {
+        id: moduleId
+      });
+      return new Promise(function (_, reject) {
+        return setTimeout(function () {
+          return reject(error);
+        }, 200);
+      });
+    }
+
+    return Promise.reject(error);
   }
 
   return typeof modImport === 'function' ? modImport() : Promise.resolve(modImport);
@@ -361,9 +376,10 @@ function parseModelTuple(response, value) {
 
   return value;
 }
-function createResponse() {
+function createResponse(bundlerConfig) {
   var chunks = new Map();
   var response = {
+    _bundlerConfig: bundlerConfig,
     _chunks: chunks,
     readRoot: readRoot
   };
@@ -387,7 +403,7 @@ function resolveModule(response, id, model) {
   var chunks = response._chunks;
   var chunk = chunks.get(id);
   var moduleMetaData = parseModel(response, model);
-  var moduleReference = resolveModuleReference(moduleMetaData); // TODO: Add an option to encode modules that are lazy loaded.
+  var moduleReference = resolveModuleReference(response._bundlerConfig, moduleMetaData); // TODO: Add an option to encode modules that are lazy loaded.
   // For now we preload all modules as early as possible since it's likely
   // that we'll need them.
 
@@ -523,11 +539,11 @@ function createFromJSONCallback(response) {
   };
 }
 
-function createResponse$1() {
+function createResponse$1(bundlerConfig) {
   // NOTE: CHECK THE COMPILER OUTPUT EACH TIME YOU CHANGE THIS.
   // It should be inlined to one object literal but minor changes can break it.
   var stringDecoder =  createStringDecoder() ;
-  var response = createResponse();
+  var response = createResponse(bundlerConfig);
   response._partialRow = '';
 
   {
@@ -564,13 +580,13 @@ function startReadingFromStream(response, stream) {
 }
 
 function createFromReadableStream(stream) {
-  var response = createResponse$1();
+  var response = createResponse$1({});
   startReadingFromStream(response, stream);
   return response;
 }
 
 function createFromFetch(promiseForResponse) {
-  var response = createResponse$1();
+  var response = createResponse$1({});
   promiseForResponse.then(function (r) {
     startReadingFromStream(response, r.body);
   }, function (e) {
@@ -580,7 +596,7 @@ function createFromFetch(promiseForResponse) {
 }
 
 function createFromXHR(request) {
-  var response = createResponse$1();
+  var response = createResponse$1({});
   var processedLength = 0;
 
   function progress(e) {

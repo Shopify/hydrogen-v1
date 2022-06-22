@@ -4,7 +4,7 @@ import {
   Router,
   FileRoutes,
   ShopifyProvider,
-  setLogger,
+  useRequestContext,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import Custom1 from './customRoutes/custom1.server';
@@ -12,22 +12,14 @@ import Custom2 from './customRoutes/custom2.server';
 import LazyRoute from './customRoutes/lazyRoute.server';
 import ServerParams from './customRoutes/params.server';
 
-setLogger({
-  trace() {},
-  debug() {},
-  warn(context, ...args) {
-    console.warn(...args);
-  },
-  error(context, ...args) {
-    console.error(...args);
-  },
-  fatal(context, ...args) {
-    console.error(...args);
-  },
-  options: () => ({}),
-});
+export default renderHydrogen(({request, response}) => {
+  if (request.headers.get('user-agent') === 'custom bot') {
+    response.doNotStream();
+  }
 
-export default renderHydrogen(() => {
+  useRequestContext().test1 = true;
+  useRequestContext('scope').test2 = true;
+
   return (
     <Suspense fallback={'Loading...'}>
       <ShopifyProvider>

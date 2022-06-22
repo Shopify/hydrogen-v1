@@ -4,13 +4,14 @@ title: Video
 description: The Video component renders a video for the Storefront API's Video object.
 ---
 
-The `Video` component renders a `video` for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video).
+The `Video` component renders a video for the Storefront API's [Video object](https://shopify.dev/api/storefront/reference/products/video). 
+
+The component outputs a `video` element. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
 ## Example code
 
 ```tsx
-import {Video} from '@shopify/hydrogen';
-import gql from 'graphql-tag';
+import {Video, gql} from '@shopify/hydrogen';
 
 const QUERY = gql`
   query Products {
@@ -60,26 +61,23 @@ export default function MyProductVideo() {
 | data     | <code>PartialDeep&#60;VideoType&#62;</code> | An object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video). |
 | previewImageOptions? | <code>ShopifyLoaderParams</code>               | An object of image size options for the video's `previewImage`. Uses `shopifyImageLoader` to generate the `poster` URL.                                                                       |
 
-## Component type
+## Required fields
 
-The `Video` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
-
-## Storefront API data
-
-The `data` prop is an object with fields that correspond to the Storefront API's [Video object](https://shopify.dev/api/storefront/latest/objects/video):
+The `Video` component requires the following fields from the Storefront API's
+[Video object](https://shopify.dev/api/storefront/reference/products/video):
 
 ```graphql
 {
-  id
-  previewImage {
-    url
-  }
   sources {
-    mimeType
     url
+    mimeType
   }
 }
 ```
+
+## Component type
+
+The `Video` component is a shared component, which means that it renders on both the server and the client. For more information about component types, refer to [React Server Components](https://shopify.dev/custom-storefronts/hydrogen/framework/react-server-components).
 
 ## Related components
 

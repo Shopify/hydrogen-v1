@@ -4,6 +4,8 @@ import {
   STOREFRONT_API_SECRET_TOKEN_HEADER,
   STOREFRONT_API_PUBLIC_TOKEN_HEADER,
   STOREFRONT_API_BUYER_IP_HEADER,
+  SHOPIFY_STOREFRONT_ID_VARIABLE,
+  SHOPIFY_STOREFRONT_ID_HEADER,
 } from '../constants';
 
 export function getStorefrontApiRequestHeaders({
@@ -15,10 +17,10 @@ export function getStorefrontApiRequestHeaders({
 }) {
   const headers = {} as Record<string, any>;
 
-  const secretToken =
-    typeof Oxygen !== 'undefined'
-      ? Oxygen?.env?.[OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE]
-      : null;
+  const secretToken = getOxygenVariable(
+    OXYGEN_SECRET_TOKEN_ENVIRONMENT_VARIABLE
+  );
+  const storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
   /**
    * Only pass one type of storefront token at a time.
@@ -33,5 +35,13 @@ export function getStorefrontApiRequestHeaders({
     headers[STOREFRONT_API_BUYER_IP_HEADER] = buyerIp;
   }
 
+  if (storefrontId) {
+    headers[SHOPIFY_STOREFRONT_ID_HEADER] = storefrontId;
+  }
+
   return headers;
+}
+
+export function getOxygenVariable(key: string): any {
+  return typeof Oxygen !== 'undefined' ? Oxygen?.env?.[key] : null;
 }

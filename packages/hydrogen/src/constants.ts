@@ -8,3 +8,5 @@ export const STOREFRONT_API_SECRET_TOKEN_HEADER =
 export const STOREFRONT_API_PUBLIC_TOKEN_HEADER =
   'X-Shopify-Storefront-Access-Token';
 export const STOREFRONT_API_BUYER_IP_HEADER = 'Shopify-Storefront-Buyer-IP';
+export const SHOPIFY_STOREFRONT_ID_VARIABLE = 'SHOPIFY_STOREFRONT_ID';
+export const SHOPIFY_STOREFRONT_ID_HEADER = 'Shopify-Storefront-Id';

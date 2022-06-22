@@ -9,7 +9,7 @@ it('converts API functions to routes', () => {
     './routes/contact.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
 
   expect(routes).toEqual([
     {
@@ -28,7 +28,7 @@ it('handles index API routes', () => {
     './routes/api/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
 
   expect(routes).toEqual([
     {
@@ -62,7 +62,7 @@ it('handles nested index API routes', () => {
     './routes/articles/[...handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
 
   expect(routes).toEqual([
     {
@@ -111,7 +111,7 @@ it('handles dynamic paths', () => {
     './routes/products/[handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
   expect(routes).toEqual([
     {
       path: '/contact',
@@ -141,7 +141,7 @@ it('handles catch all routes', () => {
     './routes/products/[...handle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
   expect(routes).toEqual([
     {
       path: '/contact',
@@ -173,7 +173,7 @@ it('handles nested dynamic paths', () => {
     './routes/blogs/[handle]/[...articleHandle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
 
   expect(routes).toEqual([
     {
@@ -219,7 +219,7 @@ it('prioritizes overrides next to dynamic paths', () => {
     './routes/blogs/[handle]/[articleHandle].server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
 
   expect(routes).toEqual([
     {
@@ -262,7 +262,7 @@ it('handles typescript paths', () => {
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
 
   expect(routes).toEqual([
     {
@@ -286,7 +286,7 @@ it('lowercases routes', () => {
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes(files);
+  const routes = getApiRoutes({files, dirPrefix: './routes'});
 
   expect(routes).toEqual([
     {
@@ -310,7 +310,11 @@ it('factors in the top-level path prefix', () => {
     './routes/index.server.jsx': STUB_MODULE,
   };
 
-  const routes = getApiRoutes({files, basePath: '/foo/*'});
+  const routes = getApiRoutes({
+    files,
+    basePath: '/foo/*',
+    dirPrefix: './routes',
+  });
 
   expect(routes).toEqual([
     {

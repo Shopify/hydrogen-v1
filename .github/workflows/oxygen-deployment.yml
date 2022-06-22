@@ -30,7 +30,7 @@ jobs:
 
       - name: Generate deployment ID
         id: deployment-id
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
         run: |
           yarn add ulid
           echo "::set-output name=ID::$(LC_ALL=C </dev/urandom tr -dc "0123456789abcdefghjkmnpqrstvwxyz" | head -c 9)"
@@ -42,16 +42,15 @@ jobs:
 
       - name: Production build
         id: storefront-build
-        working-directory: ./templates/template-hydrogen-default
+        working-directory: ./templates/demo-store
         run: |
-          HYDROGEN_ASSET_BASE_URL=${{ steps.base-url.outputs.URL }} yarn build:client
-          HYDROGEN_ASSET_BASE_URL=${{ steps.base-url.outputs.URL }} yarn build:worker
+          HYDROGEN_ASSET_BASE_URL=${{ steps.base-url.outputs.URL }} yarn build
 
       - name: Publish to Oxygen
         id: deploy
         uses: shopify/oxygenctl-action@v2
         with:
-          path: ./templates/template-hydrogen-default
+          path: ./templates/demo-store
           deployment_id: ${{ steps.deployment-id.outputs.ID }}
           oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
           # Hardcode message and timestamp if manual dispatch
@@ -70,4 +69,4 @@ jobs:
       # Skip this for now. It takes Oxygen a few seconds to make the deployment live, and this 404s.
       # - name: Run health check
       #   run: |
-      #     yarn ts-node scripts/health-check.ts ${{ steps.deploy.outputs.url }}
+      #     node scripts/health-check ${{ steps.deploy.outputs.url }}

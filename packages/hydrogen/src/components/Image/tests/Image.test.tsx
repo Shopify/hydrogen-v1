@@ -82,8 +82,8 @@ describe('<Image />', () => {
       });
       const options = {scale: 2 as const};
       const mockDimensions = {
-        width: undefined,
-        height: undefined,
+        width: null,
+        height: null,
       };
 
       jest
@@ -144,6 +144,44 @@ describe('<Image />', () => {
         alt: 'Fancy image',
       });
     });
+
+    it('generates a default srcset', () => {
+      const mockUrl = 'https://cdn.shopify.com/someimage.jpg';
+      const sizes = [352, 832, 1200, 1920, 2560];
+      const expectedSrcset = sizes
+        .map((size) => `${mockUrl}?width=${size} ${size}w`)
+        .join(', ');
+      const image = getPreviewImage({
+        url: mockUrl,
+        width: 2560,
+        height: 2560,
+      });
+
+      const component = mount(<Image data={image} />);
+
+      expect(component).toContainReactComponent('img', {
+        srcSet: expectedSrcset,
+      });
+    });
+
+    it('generates a default srcset up to the image height and width', () => {
+      const mockUrl = 'https://cdn.shopify.com/someimage.jpg';
+      const sizes = [352, 832];
+      const expectedSrcset = sizes
+        .map((size) => `${mockUrl}?width=${size} ${size}w`)
+        .join(', ');
+      const image = getPreviewImage({
+        url: mockUrl,
+        width: 832,
+        height: 832,
+      });
+
+      const component = mount(<Image data={image} />);
+
+      expect(component).toContainReactComponent('img', {
+        srcSet: expectedSrcset,
+      });
+    });
   });
 
   describe('External image', () => {
@@ -173,6 +211,7 @@ describe('<Image />', () => {
           width={width}
           height={height}
           loading={loading}
+          alt=""
         />
       );
 
@@ -199,7 +238,9 @@ describe('<Image />', () => {
         const height = 100;
 
         expect(() => {
-          mount(<Image src={src} id={id} width={width} height={height} />);
+          mount(
+            <Image src={src} id={id} width={width} height={height} alt="" />
+          );
         }).toThrowError(
           `<Image/>: when 'src' is provided, 'width' and 'height' are required and need to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
         );
@@ -211,7 +252,9 @@ describe('<Image />', () => {
         const height = 0;
 
         expect(() => {
-          mount(<Image src={src} id={id} width={width} height={height} />);
+          mount(
+            <Image src={src} id={id} width={width} height={height} alt="" />
+          );
         }).toThrowError(
           `<Image/>: when 'src' is provided, 'width' and 'height' are required and need to be valid values (i.e. greater than zero). Provided values: 'src': ${src}, 'width': ${width}, 'height': ${height}`
         );
@@ -243,6 +286,7 @@ describe('<Image />', () => {
           height={height}
           loader={loaderMock}
           loaderOptions={loaderOptions}
+          alt=""
         />
       );
 
@@ -275,5 +319,80 @@ describe('<Image />', () => {
         alt: 'Fancy image',
       });
     });
+
+    it('generates a srcset when a loader and a widths prop are provided', () => {
+      const mockUrl = 'https://cdn.externalImg.com/someimage.jpg';
+      const sizes = [352, 832, 1200];
+      const loaderOptions = {
+        width: 600,
+        height: 800,
+        scale: 1,
+      };
+
+      const loader = (loaderOptions: {
+        src: string;
+        width: number;
+        height: number;
+        scale: number;
+      }): string =>
+        `${loaderOptions.src}?w=${loaderOptions.width}&h=${loaderOptions.height}`;
+
+      const heightToWidthRatio = loaderOptions.height / loaderOptions.width;
+      const expectedSrcset = sizes
+        .map(
+          (size) =>
+            `${loader({
+              src: mockUrl,
+              width: size,
+              height: Math.floor(size * heightToWidthRatio),
+              scale: loaderOptions.scale,
+            })} ${size}w`
+        )
+        .join(', ');
+
+      const component = mount(
+        <Image
+          src={mockUrl}
+          loader={loader as any}
+          loaderOptions={loaderOptions}
+          widths={sizes}
+          width={loaderOptions.width}
+          height={loaderOptions.height}
+          alt={'Fancy image'}
+        />
+      );
+
+      expect(component).toContainReactComponent('img', {
+        srcSet: expectedSrcset,
+      });
+    });
+  });
+
+  // eslint-disable-next-line jest/expect-expect
+  it.skip(`typescript types`, () => {
+    // this test is actually just using //@ts-expect-error as the assertion, and don't need to execute in order to have TS validation on them
+    // I don't love this idea, but at the moment I also don't have other great ideas for how to easily test our component TS types
+
+    // no errors in these situations
+    <Image data={{url: ''}} />;
+    <Image src="" width="" height="" alt="" />;
+
+    // @ts-expect-error data.url
+    <Image data={{}} />;
+
+    // @ts-expect-error data and src
+    <Image data={{url: ''}} src="" width="" height="" />;
+
+    // @ts-expect-error foo is invalid
+    <Image data={{url: ''}} foo="bar" />;
+
+    // @ts-expect-error must have alt
+    <Image src="" width="" height="" />;
+
+    // @ts-expect-error must have width
+    <Image src="" alt="" height="" />;
+
+    // @ts-expect-error must have height
+    <Image src="" alt="" width="" />;
   });
 });

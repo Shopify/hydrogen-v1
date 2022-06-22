@@ -10,6 +10,8 @@
 
 import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, createServerContext } from 'react';
 
+var assign = Object.assign;
+
 var ReactSharedInternals = __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
 function error(format) {
@@ -178,13 +180,15 @@ function processSymbolChunk(request, id, name) {
 // eslint-disable-next-line no-unused-vars
 var MODULE_TAG = Symbol.for('react.module.reference');
 function getModuleKey(reference) {
+  if (typeof reference === 'string') reference = globalThis.__STRING_REFERENCE_INDEX[reference];
   return reference.filepath + '#' + reference.name;
 }
-function getModuleReference(reference) {
-  if (typeof reference === 'string') return globalThis.__STRING_REFERENCE_INDEX[reference];
-  return reference && reference.$$typeof === MODULE_TAG ? reference : undefined;
+function isModuleReference(reference) {
+  if (typeof reference === 'string') return !!globalThis.__STRING_REFERENCE_INDEX[reference];
+  return reference.$$typeof === MODULE_TAG;
 }
 function resolveModuleMetaData(config, moduleReference) {
+  if (typeof moduleReference === 'string') moduleReference = globalThis.__STRING_REFERENCE_INDEX[moduleReference];
   return {
     id: moduleReference.filepath,
     name: moduleReference.name
@@ -500,7 +504,7 @@ var startInlineScript = stringToPrecomputedChunk('<script>');
 var endInlineScript = stringToPrecomputedChunk('</script>');
 var startScriptSrc = stringToPrecomputedChunk('<script src="');
 var startModuleSrc = stringToPrecomputedChunk('<script type="module" src="');
-var endAsyncScript = stringToPrecomputedChunk('" async=""></script>'); // Allows us to keep track of what we've already written so we can refer back to it.
+var endAsyncScript = stringToPrecomputedChunk('" async=""></script>');
 
 var textSeparator = stringToPrecomputedChunk('<!-- -->');
 
@@ -535,6 +539,12 @@ var startPendingSuspenseBoundary1 = stringToPrecomputedChunk('<!--$?--><template
 var startPendingSuspenseBoundary2 = stringToPrecomputedChunk('"></template>');
 var startClientRenderedSuspenseBoundary = stringToPrecomputedChunk('<!--$!-->');
 var endSuspenseBoundary = stringToPrecomputedChunk('<!--/$-->');
+var clientRenderedSuspenseBoundaryError1 = stringToPrecomputedChunk('<template');
+var clientRenderedSuspenseBoundaryErrorAttrInterstitial = stringToPrecomputedChunk('"');
+var clientRenderedSuspenseBoundaryError1A = stringToPrecomputedChunk(' data-dgst="');
+var clientRenderedSuspenseBoundaryError1B = stringToPrecomputedChunk(' data-msg="');
+var clientRenderedSuspenseBoundaryError1C = stringToPrecomputedChunk(' data-stck="');
+var clientRenderedSuspenseBoundaryError2 = stringToPrecomputedChunk('></template>');
 var startSegmentHTML = stringToPrecomputedChunk('<div hidden id="');
 var startSegmentHTML2 = stringToPrecomputedChunk('">');
 var endSegmentHTML = stringToPrecomputedChunk('</div>');
@@ -564,7 +574,7 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 // const SUSPENSE_PENDING_START_DATA = '$?';
 // const SUSPENSE_FALLBACK_START_DATA = '$!';
 //
-// function clientRenderBoundary(suspenseBoundaryID) {
+// function clientRenderBoundary(suspenseBoundaryID, errorDigest, errorMsg, errorComponentStack) {
 //   // Find the fallback's first element.
 //   const suspenseIdNode = document.getElementById(suspenseBoundaryID);
 //   if (!suspenseIdNode) {
@@ -576,6 +586,11 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 //   const suspenseNode = suspenseIdNode.previousSibling;
 //   // Tag it to be client rendered.
 //   suspenseNode.data = SUSPENSE_FALLBACK_START_DATA;
+//   // assign error metadata to first sibling
+//   let dataset = suspenseIdNode.dataset;
+//   if (errorDigest) dataset.dgst = errorDigest;
+//   if (errorMsg) dataset.msg = errorMsg;
+//   if (errorComponentStack) dataset.stck = errorComponentStack;
 //   // Tell React to retry it if the parent already hydrated.
 //   if (suspenseNode._reactRetry) {
 //     suspenseNode._reactRetry();
@@ -659,7 +674,7 @@ var endSegmentColGroup = stringToPrecomputedChunk('</colgroup></table>');
 
 var completeSegmentFunction = 'function $RS(a,b){a=document.getElementById(a);b=document.getElementById(b);for(a.parentNode.removeChild(a);a.firstChild;)b.parentNode.insertBefore(a.firstChild,b);b.parentNode.removeChild(b)}';
 var completeBoundaryFunction = 'function $RC(a,b){a=document.getElementById(a);b=document.getElementById(b);b.parentNode.removeChild(b);if(a){a=a.previousSibling;var f=a.parentNode,c=a.nextSibling,e=0;do{if(c&&8===c.nodeType){var d=c.data;if("/$"===d)if(0===e)break;else e--;else"$"!==d&&"$?"!==d&&"$!"!==d||e++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;b.firstChild;)f.insertBefore(b.firstChild,c);a.data="$";a._reactRetry&&a._reactRetry()}}';
-var clientRenderFunction = 'function $RX(a){if(a=document.getElementById(a))a=a.previousSibling,a.data="$!",a._reactRetry&&a._reactRetry()}';
+var clientRenderFunction = 'function $RX(b,c,d,e){var a=document.getElementById(b);a&&(b=a.previousSibling,b.data="$!",a=a.dataset,c&&(a.dgst=c),d&&(a.msg=d),e&&(a.stck=e),b._reactRetry&&b._reactRetry())}';
 var completeSegmentScript1Full = stringToPrecomputedChunk(completeSegmentFunction + ';$RS("');
 var completeSegmentScript1Partial = stringToPrecomputedChunk('$RS("');
 var completeSegmentScript2 = stringToPrecomputedChunk('","');
@@ -670,7 +685,9 @@ var completeBoundaryScript2 = stringToPrecomputedChunk('","');
 var completeBoundaryScript3 = stringToPrecomputedChunk('")</script>');
 var clientRenderScript1Full = stringToPrecomputedChunk(clientRenderFunction + ';$RX("');
 var clientRenderScript1Partial = stringToPrecomputedChunk('$RX("');
-var clientRenderScript2 = stringToPrecomputedChunk('")</script>');
+var clientRenderScript1A = stringToPrecomputedChunk('"');
+var clientRenderScript2 = stringToPrecomputedChunk(')</script>');
+var clientRenderErrorScriptArgInterstitial = stringToPrecomputedChunk(',');
 
 var rendererSigil;
 
@@ -862,6 +879,14 @@ function readContext(context) {
   return value;
 }
 
+var currentRequest = null;
+function prepareToUseHooksForRequest(request) {
+  currentRequest = request;
+}
+function resetHooksForRequest() {
+  currentRequest = null;
+}
+
 function readContext$1(context) {
   {
     if (context.$$typeof !== REACT_SERVER_CONTEXT_TYPE) {
@@ -910,7 +935,7 @@ var Dispatcher = {
   useLayoutEffect: unsupportedHook,
   useImperativeHandle: unsupportedHook,
   useEffect: unsupportedHook,
-  useId: unsupportedHook,
+  useId: useId,
   useMutableSource: unsupportedHook,
   useSyncExternalStore: unsupportedHook,
   useCacheRefresh: function () {
@@ -937,6 +962,16 @@ function getCurrentCache() {
   return currentCache;
 }
 
+function useId() {
+  if (currentRequest === null) {
+    throw new Error('useId can only be used while React is rendering');
+  }
+
+  var id = currentRequest.identifierCount++; // use 'S' for Flight components to distinguish from 'R' and 'r' in Fizz/Client
+
+  return ':' + currentRequest.identifierPrefix + 'S' + id.toString(32) + ':';
+}
+
 var ContextRegistry = ReactSharedInternals.ContextRegistry;
 function getOrCreateServerContext(globalName) {
   if (!ContextRegistry[globalName]) {
@@ -955,7 +990,7 @@ function defaultErrorHandler(error) {
 var OPEN = 0;
 var CLOSING = 1;
 var CLOSED = 2;
-function createRequest(model, bundlerConfig, onError, context) {
+function createRequest(model, bundlerConfig, onError, context, identifierPrefix) {
   var pingedSegments = [];
   var request = {
     status: OPEN,
@@ -972,6 +1007,8 @@ function createRequest(model, bundlerConfig, onError, context) {
     writtenSymbols: new Map(),
     writtenModules: new Map(),
     writtenProviders: new Map(),
+    identifierPrefix: identifierPrefix || '',
+    identifierCount: 1,
     onError: onError === undefined ? defaultErrorHandler : onError,
     toJSON: function (key, value) {
       return resolveModelToJSON(request, this, key, value);
@@ -998,13 +1035,13 @@ function attemptResolveElement(type, key, ref, props) {
     throw new Error('Refs cannot be used in server components, nor passed to client components.');
   }
 
-  if (getModuleReference(type)) {
-    // This is a reference to a client component.
-    return [REACT_ELEMENT_TYPE, type, key, props];
-  }
-
   if (typeof type === 'function') {
-    // This is a server-side component.
+    if (isModuleReference(type)) {
+      // This is a reference to a client component.
+      return [REACT_ELEMENT_TYPE, type, key, props];
+    } // This is a server-side component.
+
+
     return type(props);
   } else if (typeof type === 'string') {
     // This is a host element. E.g. HTML.
@@ -1022,6 +1059,11 @@ function attemptResolveElement(type, key, ref, props) {
 
     return [REACT_ELEMENT_TYPE, type, key, props];
   } else if (type != null && typeof type === 'object') {
+    if (isModuleReference(type)) {
+      // This is a reference to a client component.
+      return [REACT_ELEMENT_TYPE, type, key, props];
+    }
+
     switch (type.$$typeof) {
       case REACT_LAZY_TYPE:
         {
@@ -1348,59 +1390,56 @@ function resolveModelToJSON(request, parent, key, value) {
     }
   }
 
-  if (value === null) {
-    return null;
+  if (value == null) {
+    return value;
   }
 
-  var moduleReference = getModuleReference(value);
+  if (typeof value === 'object' || isModuleReference(value)) {
+    if (isModuleReference(value)) {
+      var moduleReference = value;
+      var moduleKey = getModuleKey(moduleReference);
+      var writtenModules = request.writtenModules;
+      var existingId = writtenModules.get(moduleKey);
 
-  if (moduleReference) {
-    var moduleKey = getModuleKey(moduleReference);
-    var writtenModules = request.writtenModules;
-    var existingId = writtenModules.get(moduleKey);
+      if (existingId !== undefined) {
+        if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
+          // If we're encoding the "type" of an element, we can refer
+          // to that by a lazy reference instead of directly since React
+          // knows how to deal with lazy values. This lets us suspend
+          // on this component rather than its parent until the code has
+          // loaded.
+          return serializeByRefID(existingId);
+        }
 
-    if (existingId !== undefined) {
-      if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
-        // If we're encoding the "type" of an element, we can refer
-        // to that by a lazy reference instead of directly since React
-        // knows how to deal with lazy values. This lets us suspend
-        // on this component rather than its parent until the code has
-        // loaded.
-        return serializeByRefID(existingId);
+        return serializeByValueID(existingId);
       }
 
-      return serializeByValueID(existingId);
-    }
+      try {
+        var moduleMetaData = resolveModuleMetaData(request.bundlerConfig, moduleReference);
+        request.pendingChunks++;
+        var moduleId = request.nextChunkId++;
+        emitModuleChunk(request, moduleId, moduleMetaData);
+        writtenModules.set(moduleKey, moduleId);
 
-    try {
-      var moduleMetaData = resolveModuleMetaData(request.bundlerConfig, moduleReference);
-      request.pendingChunks++;
-      var moduleId = request.nextChunkId++;
-      emitModuleChunk(request, moduleId, moduleMetaData);
-      writtenModules.set(moduleKey, moduleId);
+        if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
+          // If we're encoding the "type" of an element, we can refer
+          // to that by a lazy reference instead of directly since React
+          // knows how to deal with lazy values. This lets us suspend
+          // on this component rather than its parent until the code has
+          // loaded.
+          return serializeByRefID(moduleId);
+        }
 
-      if (parent[0] === REACT_ELEMENT_TYPE && key === '1') {
-        // If we're encoding the "type" of an element, we can refer
-        // to that by a lazy reference instead of directly since React
-        // knows how to deal with lazy values. This lets us suspend
-        // on this component rather than its parent until the code has
-        // loaded.
-        return serializeByRefID(moduleId);
+        return serializeByValueID(moduleId);
+      } catch (x) {
+        request.pendingChunks++;
+
+        var _errorId = request.nextChunkId++;
+
+        emitErrorChunk(request, _errorId, x);
+        return serializeByValueID(_errorId);
       }
-
-      return serializeByValueID(moduleId);
-    } catch (x) {
-      request.pendingChunks++;
-
-      var _errorId = request.nextChunkId++;
-
-      emitErrorChunk(request, _errorId, x);
-      return serializeByValueID(_errorId);
-    }
-  }
-
-  if (typeof value === 'object') {
-    if (value.$$typeof === REACT_PROVIDER_TYPE) {
+    } else if (value.$$typeof === REACT_PROVIDER_TYPE) {
       var providerKey = value._context._globalName;
       var writtenProviders = request.writtenProviders;
       var providerId = writtenProviders.get(key);
@@ -1429,7 +1468,7 @@ function resolveModelToJSON(request, parent, key, value) {
         // Verify that this is a simple plain object.
         if (objectName(value) !== 'Object') {
           error('Only plain objects can be passed to client components from server components. ' + 'Built-ins like %s are not supported. ' + 'Remove %s from these props: %s', objectName(value), describeKeyForErrorMessage(key), describeObjectForErrorMessage(parent));
-        } else if (!isSimpleObject(value)) {
+        } else if (typeof value === 'object' && !isSimpleObject(value)) {
           error('Only plain objects can be passed to client components from server components. ' + 'Classes or other objects with methods are not supported. ' + 'Remove %s from these props: %s', describeKeyForErrorMessage(key), describeObjectForErrorMessage(parent, key));
         } else if (Object.getOwnPropertySymbols) {
           var symbols = Object.getOwnPropertySymbols(value);
@@ -1582,6 +1621,7 @@ function performWork(request) {
   var prevCache = getCurrentCache();
   ReactCurrentDispatcher.current = Dispatcher;
   setCurrentCache(request.cache);
+  prepareToUseHooksForRequest(request);
 
   try {
     var pingedSegments = request.pingedSegments;
@@ -1601,6 +1641,7 @@ function performWork(request) {
   } finally {
     ReactCurrentDispatcher.current = prevDispatcher;
     setCurrentCache(prevCache);
+    resetHooksForRequest();
   }
 }
 
@@ -1726,9 +1767,20 @@ function importServerContexts(contexts) {
   return rootContextSnapshot;
 }
 
-function renderToReadableStream(model, options, context) {
-  var request = createRequest(model, {}, // Manifest, not used
-  options ? options.onError : undefined, context);
+function renderToReadableStream(model, options) {
+  var request = createRequest( // Wrap root in a dummy element that simply adds a flag
+  // to the current dispatcher to check later in the proxies.
+  assign({}, model, {
+    $$typeof: Symbol.for('react.element'),
+    props: {
+      children: model
+    },
+    type: function () {
+      __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher.current.isRsc = true;
+      return model;
+    }
+  }), {}, // Manifest, not used
+  options ? options.onError : undefined, options ? options.context : undefined, options ? options.identifierPrefix : undefined);
   var stream = new ReadableStream({
     type: 'bytes',
     start: function (controller) {
@@ -1738,6 +1790,9 @@ function renderToReadableStream(model, options, context) {
       startFlowing(request, controller);
     },
     cancel: function (reason) {}
+  }, // $FlowFixMe size() methods are not allowed on byte streams.
+  {
+    highWaterMark: 0
   });
   return stream;
 }

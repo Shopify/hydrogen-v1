@@ -1,10 +1,15 @@
 // @ts-ignore
-import reactServerDomVite from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin';
+import reactServerDomVite from '@shopify/hydrogen/vendor/react-server-dom-vite/plugin.js';
+import {HydrogenVitePluginOptions} from '../types';
 import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
-import {createServer} from 'vite';
+import {VIRTUAL_PROXY_HYDROGEN_ROUTES_ID} from './vite-plugin-hydrogen-virtual-files';
 
-export default function () {
+export default function (options?: HydrogenVitePluginOptions) {
   return reactServerDomVite({
+    serverBuildEntries: [
+      HYDROGEN_DEFAULT_SERVER_ENTRY,
+      VIRTUAL_PROXY_HYDROGEN_ROUTES_ID,
+    ],
     isServerComponentImporterAllowed(importer: string, source: string) {
       return (
         // Always allow the entry server (e.g. App.server.jsx) to be imported
@@ -16,25 +21,6 @@ export default function () {
         /\.test\.[tj]sx?$/.test(importer)
       );
     },
-    async findClientComponentsForClientBuild() {
-      // In client build, we create a local server to discover client compoents.
-      const server = await createServer({
-        clearScreen: false,
-        server: {middlewareMode: 'ssr'},
-      });
-
-      await Promise.all([
-        // Load server entry to discover client components early
-        server.ssrLoadModule(HYDROGEN_DEFAULT_SERVER_ENTRY),
-        // Route globs are placed in hydrogen.config.js and need to
-        // be loaded to discover client components in routes
-        server.ssrLoadModule('virtual:hydrogen-config:proxy'),
-      ]);
-
-      await server.close();
-
-      // At this point, the server has loaded all the components in the module graph
-      return reactServerDomVite.findClientComponentsFromServer(server);
-    },
+    ...options,
   });
 }

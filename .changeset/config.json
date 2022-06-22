@@ -8,8 +8,8 @@
   "baseBranch": "v1.x-2022-07",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "template-hydrogen-default",
-    "template-hydrogen-hello-world",
+    "demo-store",
+    "hello-world",
     "test-server-components",
     "test-async-config",
     "hydrogen-playground",

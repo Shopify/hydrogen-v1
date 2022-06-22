@@ -17,7 +17,7 @@ export type CartCreateMutation = {__typename?: 'Mutation'} & {
       cart?: Types.Maybe<
         {__typename?: 'Cart'} & Pick<
           Types.Cart,
-          'id' | 'checkoutUrl' | 'note'
+          'id' | 'checkoutUrl' | 'totalQuantity' | 'note'
         > & {
             buyerIdentity: {__typename?: 'CartBuyerIdentity'} & Pick<
               Types.CartBuyerIdentity,
@@ -43,6 +43,18 @@ export type CartCreateMutation = {__typename?: 'Mutation'} & {
                           'key' | 'value'
                         >
                       >;
+                      cost: {__typename?: 'CartLineCost'} & {
+                        totalAmount: {__typename?: 'MoneyV2'} & Pick<
+                          Types.MoneyV2,
+                          'amount' | 'currencyCode'
+                        >;
+                        compareAtAmountPerQuantity?: Types.Maybe<
+                          {__typename?: 'MoneyV2'} & Pick<
+                            Types.MoneyV2,
+                            'amount' | 'currencyCode'
+                          >
+                        >;
+                      };
                       merchandise: {__typename?: 'ProductVariant'} & Pick<
                         Types.ProductVariant,
                         'id' | 'availableForSale' | 'requiresShipping' | 'title'
@@ -78,7 +90,7 @@ export type CartCreateMutation = {__typename?: 'Mutation'} & {
                 }
               >;
             };
-            estimatedCost: {__typename?: 'CartEstimatedCost'} & {
+            cost: {__typename?: 'CartCost'} & {
               subtotalAmount: {__typename?: 'MoneyV2'} & Pick<
                 Types.MoneyV2,
                 'currencyCode' | 'amount'

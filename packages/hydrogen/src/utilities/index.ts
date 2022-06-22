@@ -12,10 +12,10 @@ export {
 export {loadScript} from './load_script';
 export {wrapPromise} from './suspense';
 export {flattenConnection} from './flattenConnection';
-export {isClient} from './isClient';
+export {isBrowser} from './isBrowser';
 export {isServer} from './isServer';
 export {getMeasurementAsParts, getMeasurementAsString} from './measurement';
-export {parseMetafieldValue} from './parseMetafieldValue';
+export {parseMetafieldValue, parseMetafield} from './parseMetafield';
 export {fetchBuilder, graphqlRequestBody, decodeShopifyId} from './fetch';
 export {getTime} from './timing';
-export {htmlEncode, htmlDecode} from './html-encoding';
+export {htmlEncode} from './html-encoding';

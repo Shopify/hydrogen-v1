@@ -1,8 +1,7 @@
 # Contributing to Hydrogen
 
-## Releasing
-
-See [Releasing](releasing.md).
+> Tip:
+> Looking for [releasing instructions](releasing.md)?
 
 **Requirements:**
 
@@ -17,21 +16,29 @@ yarn dev
 
 To develop against a template, open a new terminal window or tab and choose from the available templates:
 
-- templates/template-hydrogen-default
-- templates/template-hydrogen-hello-world
+- templates/demo-store
+- templates/hello-world-ts
 
 ```bash
-cd templates/template-hydrogen-default
+cd templates/demo-store
 yarn dev
 ```
 
 Visit the dev environment at http://localhost:3000.
 
-To make changes to the Demo Store template, edit the files in `templates/template-hydrogen-default`.
+To make changes to the Demo Store template, edit the files in `templates/demo-store`.
 
 To modify Hydrogen framework, components, and hooks, edit the files in `packages/hydrogen`.
 
 You can [inspect Vite plugin](https://github.com/antfu/vite-plugin-inspect) transformations by visiting `http://localhost:3000/__inspect`.
+
+During local development, you can use `LOCAL_DEV` environment variable to enable
+Hydrogen file watching when running templates or examples. This variable also disables file hashing and minification when building locally.
+
+```bash
+$ export LOCAL_DEV=true
+$ yarn [dev|build]
+```
 
 ## Context
 
@@ -93,7 +100,10 @@ yarn changeset add
 
 Follow the prompts to select which package(s) are affected by your change, and whether the change is a major, minor or patch change. This will create a file in the `.changesets` directory of the repo. This change should be committed and included with your PR.
 
-> **Important**: Until our official release, we will only release `minor` and `patch` updates. This means that breaking changes will be included in minor releases. Once we officially launch Hydrogen, we'll switch to `1.0.0` and follow a normal semantic release pattern.
+Considerations:
+
+- You can use markdown in your changeset to include code examples, headings, and more. However, **please use plain text for the first line of your changeset**. The formatting of the GitHub release notes does not support headings as the first line of the changeset.
+- When selecting packages for the changesets, only select packages which are published. Do not include private packages, as it will cause the build to fail. _Hopefully these are removed from the list of options in a [future Changesets release](https://github.com/changesets/changesets/issues/436)_.
 
 ## Contributing Examples
 
@@ -189,7 +199,7 @@ Next, choose an option below.
 
 ### Option 1: `localdev` package
 
-This option creates a new Hydrogen app similar to `templates/template-hydrogen-default` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
+This option creates a new Hydrogen app similar to `templates/demo-store` directly in the monorepo under `packages/localdev`. This directory is ignored in git, so your changes will not be tracked.
 
 ```terminal
 create-hydrogen packages/localdev

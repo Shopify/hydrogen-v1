@@ -1,4 +1,3 @@
-/* eslint-disable hydrogen/no-state-in-server-components */
 import React, {
   createContext,
   ReactNode,
@@ -11,7 +10,9 @@ import React, {
 
 declare global {
   // eslint-disable-next-line no-var
-  var __DEV__: boolean;
+  var __HYDROGEN_DEV__: boolean;
+  // eslint-disable-next-line no-var
+  var __HYDROGEN_TEST__: boolean;
 }
 
 const PRIVATE_PROPS = ['request', 'response'] as const;
@@ -129,7 +130,7 @@ export function ServerPropsProvider({
       newValue = input;
     }
 
-    if (__DEV__) {
+    if (__HYDROGEN_DEV__) {
       const privateProp = PRIVATE_PROPS.find((prop) => prop in newValue);
       if (privateProp) {
         console.warn(
@@ -169,5 +170,3 @@ export function ServerPropsProvider({
     </ServerPropsContext.Provider>
   );
 }
-
-/* eslint-enable hydrogen/no-state-in-server-components */

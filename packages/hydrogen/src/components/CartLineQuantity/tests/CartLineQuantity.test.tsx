@@ -3,7 +3,8 @@ import {mount} from '@shopify/react-testing';
 import {CartLineProvider} from '../../CartLineProvider';
 import {CartLineQuantity} from '../CartLineQuantity.client';
 import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
-import {Link} from '../../Link/index';
+import {Link} from '../../Link/Link.client';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 
 describe('<CartLineQuantity />', () => {
   it('displays the quantity', () => {
@@ -31,7 +32,7 @@ describe('<CartLineQuantity />', () => {
   });
 
   it(`validates props for a component passed to the 'as' prop`, () => {
-    const wrapper = mount(
+    const wrapper = mountWithProviders(
       <CartLineProvider line={CART_LINE}>
         <CartLineQuantity as={Link} to="/test" />
       </CartLineProvider>

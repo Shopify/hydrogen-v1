@@ -1,11 +1,9 @@
 export {
   log,
   setLogger,
-  setLoggerOptions,
   getLoggerWithContext,
   Logger,
   logServerResponse,
-  resetLogger,
 } from './log';
 export {
   collectQueryCacheControlHeaders,

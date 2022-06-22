@@ -1,0 +1,25 @@
+{
+  "name": "example-rust",
+  "description": "An example using rust with typescript in Hydrogen",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "build:wasm:nodejs": "cd rust-functions && wasm-pack build --target nodejs",
+    "preview": "shopify hydrogen preview"
+  },
+  "devDependencies": {
+    "@shopify/cli": "latest",
+    "@shopify/cli-hydrogen": "latest",
+    "typescript": "^4.6.4",
+    "vite": "^2.9.0"
+  },
+  "dependencies": {
+    "@shopify/hydrogen": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rust-functions": "./rust-functions/pkg"
+  }
+}

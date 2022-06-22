@@ -68,6 +68,19 @@ describe(`ShopPayButton`, () => {
     });
   });
 
+  it(`applies the css variable if 'width' exists`, () => {
+    const component = mountWithProviders(
+      <ShopPayButton
+        width="100%"
+        variantIdsAndQuantities={[{id: '123', quantity: 2}]}
+      />
+    );
+
+    expect(component).toContainReactComponent('div', {
+      style: {'--shop-pay-button-width': '100%'} as React.CSSProperties,
+    });
+  });
+
   describe(`getIdFromGid`, () => {
     it(`should handle undefined`, () => {
       expect(getIdFromGid()).toBe(undefined);

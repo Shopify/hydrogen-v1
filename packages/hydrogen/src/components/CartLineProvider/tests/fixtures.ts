@@ -19,4 +19,14 @@ export const CART_LINE = {
     selectedOptions: [{name: 'size', value: 'large'}],
     title: 'Product Name - Large',
   },
+  cost: {
+    totalAmount: {
+      amount: '123',
+      currencyCode: CurrencyCode.Usd,
+    },
+    compareAtAmount: {
+      amount: '125',
+      currencyCode: CurrencyCode.Usd,
+    },
+  },
 };

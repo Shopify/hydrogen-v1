@@ -1,3 +1,4 @@
+import {CacheNone} from '@shopify/hydrogen';
 const db = {
   counter: 0,
 };
@@ -12,7 +13,8 @@ export async function api(request) {
   return new Request(request.url);
 }
 
-export default function () {
+export default function ({response}) {
+  response.cache(CacheNone());
   return (
     <>
       DB counter is <span id="counter">{db.counter}</span>

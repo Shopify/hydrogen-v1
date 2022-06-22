@@ -10,9 +10,9 @@ describe('<CartLinePrice />', () => {
   it('renders <Money /> with the regular price by default', () => {
     const line = {
       ...CART_LINE,
-      merchandise: {
-        ...CART_LINE.merchandise,
-        priceV2: {
+      cost: {
+        ...CART_LINE.cost,
+        totalAmount: {
           amount: '50',
           currencyCode: CurrencyCode.Usd,
         },
@@ -33,9 +33,9 @@ describe('<CartLinePrice />', () => {
   it('renders <Money /> with the compareAt price when `priceType` is `compareAt`', () => {
     const line = {
       ...CART_LINE,
-      merchandise: {
-        ...CART_LINE.merchandise,
-        compareAtPriceV2: {
+      cost: {
+        ...CART_LINE.cost,
+        compareAtAmountPerQuantity: {
           amount: '60',
           currencyCode: CurrencyCode.Usd,
         },
@@ -50,30 +50,6 @@ describe('<CartLinePrice />', () => {
 
     expect(wrapper).toContainReactComponent(Money, {
       data: {amount: '60', currencyCode: CurrencyCode.Usd},
-    });
-  });
-
-  it('factors in quantity for the amount passed to <Money />', () => {
-    const line = {
-      ...CART_LINE,
-      quantity: 2,
-      merchandise: {
-        ...CART_LINE.merchandise,
-        priceV2: {
-          amount: '50',
-          currencyCode: CurrencyCode.Usd,
-        },
-      },
-    };
-
-    const wrapper = mountWithProviders(
-      <CartLineProvider line={line}>
-        <CartLinePrice />
-      </CartLineProvider>
-    );
-
-    expect(wrapper).toContainReactComponent(Money, {
-      data: {amount: '100', currencyCode: CurrencyCode.Usd},
     });
   });
 

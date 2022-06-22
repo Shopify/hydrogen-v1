@@ -15,36 +15,32 @@ import {
   flattenConnection,
   useShopQuery,
   Metafield,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 const QUERY = gql`
   query product($handle: String!) {
     product: productByHandle(handle: $handle) {
-      metafields(first: 10) {
-        edges {
-          node {
+      metafield(namespace: "my_namespace", key: "my_key") {
+        id
+        type
+        namespace
+        key
+        value
+        createdAt
+        updatedAt
+        description
+        reference @include(if: $includeReferenceMetafieldDetails) {
+          __typename
+          ... on MediaImage {
             id
-            type
-            namespace
-            key
-            value
-            createdAt
-            updatedAt
-            description
-            reference @include(if: $includeReferenceMetafieldDetails) {
-              __typename
-              ... on MediaImage {
-                id
-                mediaContentType
-                image {
-                  id
-                  url
-                  altText
-                  width
-                  height
-                }
-              }
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
             }
           }
         }
@@ -56,17 +52,12 @@ const QUERY = gql`
 export function Product({handle}) {
   const {data} = useShopQuery({query: QUERY, variables: {handle}});
 
-  const metafields = flattenConnection(data.product.metafields);
-  const parsedMetafields = metafields.map((metafield) =>
-    parseMetafieldValue(metafield)
-  );
+  const metafieldValue = parseMetafieldValue(data.product.metafield)
 
   return (
-    <>
-      {parsedMetafields.map((metafield) => {
-        return <Metafield data={metafield} key={metafield.id} />;
-      })}
-    </>
+    <div>
+      {metafieldValue}
+    </div>
   );
 }
 ```
@@ -102,6 +93,10 @@ Depending on the `type` specified in the passed [Metafield](https://shopify.dev/
 | `variant_reference`      | string                                                                                        |
 | `url`                    | string                                                                                        |
 
-## Related hook
+## Related components
 
-- [`useParsedMetafields`](https://shopify.dev/api/hydrogen/hooks/metafield/useparsedmetafields)
+- [`Metafield`](https://shopify.dev/api/hydrogen/components/primitive/metafield)
+
+## Related utilities
+
+- [`parseMetafield`](https://shopify.dev/api/hydrogen/utilities/parsemetafield)

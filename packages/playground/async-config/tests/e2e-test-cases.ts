@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 type TestOptions = {
   getServerUrl: () => string;
   isWorker?: boolean;
@@ -44,6 +46,20 @@ export default async function testCases({
     await page.goto(getServerUrl() + '/es/products');
     expect(await page.url()).toContain('/es/productos');
   });
+
+  it('does not powered-by header when disabled', async () => {
+    const response = await fetch(getServerUrl() + '/');
+    expect(response.headers.has('powered-by')).toBe(false);
+  });
+
+  if (!isBuild) {
+    it('sends client configuration to the browser and picks it', async () => {
+      await page.goto(getServerUrl());
+      expect(await page.textContent('h1')).toContain('Home');
+
+      expect(await page.locator('#hydrogen-dev-tools').isHidden()).toBeFalsy();
+    });
+  }
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

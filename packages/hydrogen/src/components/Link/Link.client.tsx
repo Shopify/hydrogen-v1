@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {useRouter} from '../../foundation/Router/BrowserRouter.client';
+import {useLocation} from '../../foundation/Router/BrowserRouter.client';
 import {createPath} from 'history';
-import {useNavigate} from '../../foundation/useNavigate/useNavigate';
+import {buildPath, useNavigate} from '../../foundation/useNavigate/useNavigate';
 import {RSC_PATHNAME} from '../../constants';
 import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props';
+import {useBasePath} from '../../foundation/useRouteParams/RouteParamsProvider.client';
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
@@ -17,6 +18,10 @@ export interface LinkProps
   reloadDocument?: boolean;
   /** Whether to prefetch the link source when the user signals intent. Defaults to `true`. For more information, refer to [Prefetching a link source](https://shopify.dev/custom-storefronts/hydrogen/framework/routes#prefetching-a-link-source). */
   prefetch?: boolean;
+  /** Whether to emulate natural browser behavior and restore scroll position on navigation. Defaults to `true`. */
+  scroll?: boolean;
+  /** Override the `basePath` inherited from the Route */
+  basePath?: string;
 }
 
 /**
@@ -27,8 +32,9 @@ export interface LinkProps
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   function Link(props, ref) {
     const navigate = useNavigate();
-    const {location} = useRouter();
+    const location = useLocation();
     const [_, startTransition] = (React as any).useTransition();
+    const routeBasePath = useBasePath();
 
     /**
      * Inspired by Remix's Link component
@@ -40,14 +46,16 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       reloadDocument,
       target,
       replace: _replace,
-      to,
       onClick,
       clientState,
       prefetch = true,
+      scroll = true,
     } = props;
 
+    const to = buildPath(props.basePath ?? routeBasePath, props.to);
+
     const internalClick = useCallback(
-      (e) => {
+      (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         if (onClick) onClick(e);
         if (
           !reloadDocument && // do regular browser stuff
@@ -63,19 +71,22 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
           navigate(to, {
             replace,
+            scroll,
             clientState,
+            basePath: '/', // path was already resolved with the base
           });
         }
       },
       [
+        onClick,
         reloadDocument,
         target,
         _replace,
-        to,
-        clientState,
-        onClick,
         location,
+        to,
         navigate,
+        clientState,
+        scroll,
       ]
     );
 
@@ -84,7 +95,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
        * startTransition to yield to more important updates
        */
       startTransition(() => {
-        if (prefetch) {
+        if (prefetch && !!to) {
           setMaybePrefetch(true);
         }
       });
@@ -141,15 +152,22 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
             'clientState',
             'reloadDocument',
             'prefetch',
+            'scroll',
           ])}
           ref={ref}
+          rel={
+            props.rel ??
+            (to.startsWith('http') || to.startsWith('//')
+              ? 'noreferrer noopener'
+              : undefined)
+          }
           onClick={internalClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onFocus={onFocus}
           onBlur={onBlur}
           onTouchStart={onTouchStart}
-          href={props.to}
+          href={to}
         >
           {props.children}
         </a>
@@ -161,7 +179,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
 function Prefetch({pathname}: {pathname: string}) {
   const {getProposedLocationServerProps} = useInternalServerProps();
-  const {location} = useRouter();
+  const location = useLocation();
 
   const newPath = createPath({pathname});
 

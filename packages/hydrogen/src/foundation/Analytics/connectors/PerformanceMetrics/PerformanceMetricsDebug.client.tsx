@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {ClientAnalytics} from '../../index';
+import {ClientAnalytics} from '../../ClientAnalytics';
 
 const PAD = 10;
 let isInit = false;

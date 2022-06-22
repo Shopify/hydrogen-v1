@@ -4,7 +4,7 @@ title: flattenConnection
 description: The flattenConnection utility transforms a connection object from the Storefront API (for example, Product-related connections) into a flat array of nodes.
 ---
 
-The `flattenConnection` utility transforms a connection object from the Storefront API (for example, [Product-related connections](https://shopify.dev/api/storefront/reference/products/product)) into a flat array of nodes.
+The `flattenConnection` utility transforms a connection object from the Storefront API (for example, [Product-related connections](https://shopify.dev/api/storefront/reference/products/product)) into a flat array of nodes. The utility works with either `nodes` or `edges.node`.
 
 ## Example code
 
@@ -14,8 +14,8 @@ import {
   MediaFile,
   useShopQuery,
   MediaFile,
+  gql,
 } from '@shopify/hydrogen';
-import gql from 'graphql-tag';
 
 const QUERY = gql`
   query product($handle: String!) {
@@ -83,18 +83,18 @@ export function Product({handle}) {
 
 ## Arguments
 
-| Argument                                                                                                                                                                                                   | Required |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| A connection object with the field `edges` whose value is an array of objects corresponding to `{node: Value}`. For example, any of the [Product connections](/api/storefront/reference/products/product). | Yes      |
+| Argument                                                                                                                                          | Required |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| A connection object with the field `nodes` or `edges`. For example, any of the [Product connections](/api/storefront/reference/products/product). | Yes      |
 
 ## Return type
 
-A flat array whose elements correspond to the `node` value in each element of the original `edges` array.
+A flat array that contains elements that correspond to the `node` value in each element of the original `edges` array, or the `node` itself.
 
 ## Related components
 
-- [ProductProvider](https://shopify.dev/api/hydrogen/components/product-variant/productprovider)
+- [ProductOptionsProvider](https://shopify.dev/api/hydrogen/components/product-variant/productoptionsprovider)
 
 ## Related hooks
 
-- [useProduct](https://shopify.dev/api/hydrogen/hooks/product-variant/useproduct)
+- [useProductOptions](https://shopify.dev/api/hydrogen/hooks/product-variant/useproductoptions)

@@ -18,7 +18,8 @@ const config: Config.InitialOptions = {
   watchPathIgnorePatterns: ['<rootDir>/temp', 'fixtures'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
   globals: {
-    __DEV__: true,
+    __HYDROGEN_DEV__: true,
+    __HYDROGEN_TEST__: true,
     'ts-jest': {
       tsconfig: './packages/hydrogen/tsconfig.json',
     },

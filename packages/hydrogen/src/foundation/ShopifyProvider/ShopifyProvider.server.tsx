@@ -3,21 +3,26 @@ import {ShopifyProviderClient} from './ShopifyProvider.client';
 import type {ShopifyProviderProps} from './types';
 import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 
-import {DEFAULT_LOCALE} from '../constants';
+import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../constants';
 import type {ShopifyContextValue} from './types';
 import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
+import {getOxygenVariable} from '../../utilities/storefrontApi';
+import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
-  const locale = shopifyConfig.defaultLocale ?? DEFAULT_LOCALE;
-  const languageCode = locale.split(/[-_]/)[0];
+  const countryCode = shopifyConfig.defaultCountryCode ?? DEFAULT_COUNTRY;
+  const languageCode = shopifyConfig.defaultLanguageCode ?? DEFAULT_LANGUAGE;
+  const storefrontId = getOxygenVariable(SHOPIFY_STOREFRONT_ID_VARIABLE);
 
   return {
-    locale: locale.toUpperCase() as `${LanguageCode}-${CountryCode}`,
-    languageCode: languageCode.toUpperCase() as `${LanguageCode}`,
+    defaultCountryCode: countryCode.toUpperCase() as `${CountryCode}`,
+    defaultLanguageCode: languageCode.toUpperCase() as `${LanguageCode}`,
     storeDomain: shopifyConfig?.storeDomain?.replace(/^https?:\/\//, ''),
     storefrontToken: shopifyConfig.storefrontToken,
     storefrontApiVersion: shopifyConfig.storefrontApiVersion,
+    multipassSecret: shopifyConfig.multipassSecret,
+    storefrontId,
   };
 }
 
@@ -53,7 +58,6 @@ export function ShopifyProvider({
   let actualShopifyConfig: ShopifyConfig;
 
   if (typeof shopifyConfig === 'function') {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const result = useRequestCacheData(['hydrogen-shopify-config'], () =>
       (shopifyConfig as ShopifyConfigFetcher)(request)
     );

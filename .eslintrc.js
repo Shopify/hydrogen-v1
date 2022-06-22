@@ -4,6 +4,7 @@ module.exports = {
   ignorePatterns: [
     '**/storefront-api-types.ts',
     '**/storefront-api-types.d.ts',
+    'examples/**',
   ],
   root: true,
   plugins: ['eslint-plugin-tsdoc'],
@@ -82,10 +83,16 @@ module.exports = {
     {
       files: ['packages/eslint-plugin/**'],
       rules: {
-        'hydrogen/no-state-in-server-components': 'off',
+        'hydrogen/server-component-banned-hooks': 'off',
         'hydrogen/prefer-image-component': 'off',
         'jsx-a11y/img-redundant-alt': 'off',
         'no-prototype-builtins': 'off',
+      },
+    },
+    {
+      files: ['packages/hydrogen/**'],
+      rules: {
+        'hydrogen/prefer-gql': 'off',
       },
     },
     {

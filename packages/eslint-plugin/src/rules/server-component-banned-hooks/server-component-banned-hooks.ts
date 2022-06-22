@@ -19,7 +19,6 @@ export const serverComponentBannedHooks = createRule({
       description: `Prevent using ${new (Intl as any).ListFormat('en').format(
         BANNED_HOOKS
       )} in server and shared components`,
-      category: 'Possible Errors',
       recommended: 'error',
     },
     messages: {

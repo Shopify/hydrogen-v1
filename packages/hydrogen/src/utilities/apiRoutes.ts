@@ -1,32 +1,32 @@
 import {
-  HydrogenConfig,
-  HydrogenConfigRoutes,
+  ResolvedHydrogenConfig,
+  ResolvedHydrogenRoutes,
   ImportGlobEagerOutput,
 } from '../types';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
-import type {ServerComponentRequest} from '../framework/Hydration/ServerComponentRequest.server';
-import type {ASTNode} from 'graphql';
+import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
-import {findRoutePrefix} from './findRoutePrefix';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
 import {
   emptySessionImplementation,
   SessionApi,
   SessionStorageAdapter,
 } from '../foundation/session/session';
+import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};
 
 type RouteParams = Record<string, string>;
-type RequestOptions = {
+export type RequestOptions = {
   params: RouteParams;
-  queryShop: (args: QueryShopArgs) => Promise<any>;
+  queryShop: <T>(args: QueryShopArgs) => Promise<UseShopQueryResponse<T>>;
   session: SessionApi | null;
+  hydrogenConfig: ResolvedHydrogenConfig;
 };
-type ResourceGetter = (
-  request: Request,
+export type ResourceGetter = (
+  request: HydrogenRequest,
   requestOptions: RequestOptions
 ) => Promise<Response | Object | String>;
 
@@ -70,24 +70,21 @@ export function extractPathFromRoutesKey(
   return path;
 }
 
-export function getApiRoutes(
-  rawRoutes: HydrogenConfigRoutes
-): Array<HydrogenApiRoute> {
-  const routes = (rawRoutes.files ?? rawRoutes) as ImportGlobEagerOutput;
-  const topLevelPath = (rawRoutes.basePath ?? '*') as string;
-  const dirPrefix = rawRoutes.dirPrefix as string | undefined;
-
+export function getApiRoutes({
+  files: routes,
+  basePath: topLevelPath = '',
+  dirPrefix = '',
+}: Partial<ResolvedHydrogenRoutes>): Array<HydrogenApiRoute> {
   if (!routes || memoizedRawRoutes === routes) return memoizedApiRoutes;
 
   const topLevelPrefix = topLevelPath.replace('*', '').replace(/\/$/, '');
 
   const keys = Object.keys(routes);
-  const commonRoutePrefix = dirPrefix ?? findRoutePrefix(keys);
 
   const apiRoutes = keys
     .filter((key) => routes[key].api)
     .map((key) => {
-      const path = extractPathFromRoutesKey(key, commonRoutePrefix);
+      const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
        * Catch-all routes [...handle].jsx don't need an exact match
@@ -145,14 +142,14 @@ interface QueryShopArgs {
   /** A string of the GraphQL query.
    * If no query is provided, then the `useShopQuery` makes no calls to the Storefront API.
    */
-  query: ASTNode | string;
+  query: string;
   /** An object of the variables for the GraphQL query. */
   variables?: Record<string, any>;
 }
 
 function queryShopBuilder(
-  shopifyConfigGetter: HydrogenConfig['shopify'],
-  request: ServerComponentRequest
+  shopifyConfigGetter: ResolvedHydrogenConfig['shopify'],
+  request: HydrogenRequest
 ) {
   return async function queryShop<T>({
     query,
@@ -194,10 +191,16 @@ function queryShopBuilder(
 }
 
 export async function renderApiRoute(
-  request: ServerComponentRequest,
+  request: HydrogenRequest,
   route: ApiRouteMatch,
-  shopifyConfig: HydrogenConfig['shopify'],
-  session?: SessionStorageAdapter
+  hydrogenConfig: ResolvedHydrogenConfig,
+  {
+    session,
+    suppressLog,
+  }: {
+    session?: SessionStorageAdapter;
+    suppressLog?: boolean;
+  }
 ): Promise<Response | Request> {
   let response;
   const log = getLoggerWithContext(request);
@@ -206,7 +209,8 @@ export async function renderApiRoute(
   try {
     response = await route.resource(request, {
       params: route.params,
-      queryShop: queryShopBuilder(shopifyConfig, request),
+      queryShop: queryShopBuilder(hydrogenConfig.shopify, request),
+      hydrogenConfig,
       session: session
         ? {
             async get() {
@@ -248,11 +252,13 @@ export async function renderApiRoute(
     response = new Response('Error processing: ' + request.url, {status: 500});
   }
 
-  logServerResponse(
-    'api',
-    request as ServerComponentRequest,
-    (response as Response).status ?? 200
-  );
+  if (!suppressLog) {
+    logServerResponse(
+      'api',
+      request as HydrogenRequest,
+      (response as Response).status ?? 200
+    );
+  }
 
   return response;
 }

@@ -3,9 +3,10 @@ import {CartProvider} from '../../CartProvider';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
 import {mountWithCartProvider} from '../../CartProvider/tests/utilities';
 
-import {ProductProvider} from '../../ProductProvider';
+import {ProductOptionsProvider} from '../../ProductOptionsProvider';
 import {AddToCartButton} from '../AddToCartButton.client';
 import {getProduct, getVariant} from '../../../utilities/tests/product';
+import {BaseButton} from '../../BaseButton';
 
 describe('AddToCartButton', () => {
   beforeEach(() => {
@@ -25,9 +26,12 @@ describe('AddToCartButton', () => {
   });
 
   it('renders a button', () => {
+    const product = getProduct();
     const component = mountWithProviders(
       <CartProvider>
-        <AddToCartButton variantId="123">Add to cart</AddToCartButton>
+        <ProductOptionsProvider data={product}>
+          <AddToCartButton variantId="123">Add to cart</AddToCartButton>
+        </ProductOptionsProvider>
       </CartProvider>
     );
 
@@ -37,11 +41,14 @@ describe('AddToCartButton', () => {
   });
 
   it('allows passthrough props', () => {
+    const product = getProduct();
     const component = mountWithProviders(
       <CartProvider>
-        <AddToCartButton variantId="123" className="bg-blue-600">
-          Add to cart
-        </AddToCartButton>
+        <ProductOptionsProvider data={product}>
+          <AddToCartButton variantId="123" className="bg-blue-600">
+            Add to cart
+          </AddToCartButton>
+        </ProductOptionsProvider>
       </CartProvider>
     );
 
@@ -52,8 +59,11 @@ describe('AddToCartButton', () => {
 
   describe('when variantId is set explicity', () => {
     it('renders a disabled button if the variantId is null', () => {
+      const product = getProduct();
       const component = mountWithCartProvider(
-        <AddToCartButton variantId={null}>Add to cart</AddToCartButton>
+        <ProductOptionsProvider data={product}>
+          <AddToCartButton variantId={null}>Add to cart</AddToCartButton>
+        </ProductOptionsProvider>
       );
 
       expect(component).toContainReactComponentTimes('button', 1, {
@@ -62,10 +72,13 @@ describe('AddToCartButton', () => {
     });
 
     it('calls linesAdd with the variantId', () => {
+      const product = getProduct();
       const mockLinesAdd = jest.fn();
       const id = '123';
       const component = mountWithCartProvider(
-        <AddToCartButton variantId={id}>Add to cart</AddToCartButton>,
+        <ProductOptionsProvider data={product}>
+          <AddToCartButton variantId={id}>Add to cart</AddToCartButton>
+        </ProductOptionsProvider>,
         {linesAdd: mockLinesAdd, cart: {id: '456'}}
       );
       component.find('button')?.trigger('onClick');
@@ -79,18 +92,20 @@ describe('AddToCartButton', () => {
     });
   });
 
-  describe('when inside a ProductProvider', () => {
+  describe('when inside a ProductOptionsProvider', () => {
     describe('and an initialVariantId is present', () => {
       it('calls linesAdd with the initialVariantId', () => {
         const mockLinesAdd = jest.fn();
         const product = getProduct();
-        const selectedVariant = product?.variants?.edges?.[0]?.node;
+        const selectedVariant = product?.variants?.nodes?.[0];
 
         const component = mountWithCartProvider(
-          // @ts-expect-error SellingPlanAllocations isn't mocked out correctly
-          <ProductProvider data={product} initialVariantId={selectedVariant.id}>
+          <ProductOptionsProvider
+            data={product}
+            initialVariantId={selectedVariant?.id}
+          >
             <AddToCartButton>Add to cart</AddToCartButton>
-          </ProductProvider>,
+          </ProductOptionsProvider>,
           {linesAdd: mockLinesAdd, cart: {id: '456'}}
         );
 
@@ -110,22 +125,19 @@ describe('AddToCartButton', () => {
         const mockLinesAdd = jest.fn();
         const product = getProduct({
           variants: {
-            edges: [
-              {
-                node: getVariant({
-                  availableForSale: true,
-                  id: 'some variant id',
-                }) as any,
-              },
+            nodes: [
+              getVariant({
+                availableForSale: true,
+                id: 'some variant id',
+              }),
             ],
           },
         });
 
         const component = mountWithCartProvider(
-          // @ts-expect-error The mock doesn't match perfectly, fix at some point
-          <ProductProvider data={product}>
+          <ProductOptionsProvider data={product}>
             <AddToCartButton>Add to cart</AddToCartButton>
-          </ProductProvider>,
+          </ProductOptionsProvider>,
           {linesAdd: mockLinesAdd, cart: {id: '456'}}
         );
 
@@ -146,10 +158,9 @@ describe('AddToCartButton', () => {
         const product = getProduct();
 
         const component = mountWithCartProvider(
-          // @ts-expect-error The mock doesn't match perfectly, fix at some point
-          <ProductProvider data={product} initialVariantId={null}>
+          <ProductOptionsProvider data={product} initialVariantId={null}>
             <AddToCartButton>Add to cart</AddToCartButton>
-          </ProductProvider>,
+          </ProductOptionsProvider>,
           {linesAdd: mockLinesAdd}
         );
 
@@ -162,9 +173,12 @@ describe('AddToCartButton', () => {
 
   describe('when the button is clicked', () => {
     it('disables the button', () => {
+      const product = getProduct();
       const component = mountWithProviders(
         <CartProvider>
-          <AddToCartButton variantId="123">Add to cart</AddToCartButton>
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton variantId="123">Add to cart</AddToCartButton>
+          </ProductOptionsProvider>
         </CartProvider>
       );
 
@@ -176,14 +190,18 @@ describe('AddToCartButton', () => {
     });
 
     it('renders a message for screen readers when an accessible label is provided', () => {
+      const product = getProduct();
+
       const component = mountWithProviders(
         <CartProvider>
-          <AddToCartButton
-            accessibleAddingToCartLabel="Adding product to your cart"
-            variantId="123"
-          >
-            Add to cart
-          </AddToCartButton>
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton
+              accessibleAddingToCartLabel="Adding product to your cart"
+              variantId="123"
+            >
+              Add to cart
+            </AddToCartButton>
+          </ProductOptionsProvider>
         </CartProvider>
       );
 
@@ -191,6 +209,42 @@ describe('AddToCartButton', () => {
 
       expect(component).toContainReactComponent('p', {
         children: 'Adding product to your cart',
+      });
+    });
+  });
+
+  describe('BaseButton', () => {
+    it('passes the onClick handler', () => {
+      const product = getProduct();
+      const mockOnClick = jest.fn();
+
+      const component = mountWithProviders(
+        <CartProvider>
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton onClick={mockOnClick}>Add to cart</AddToCartButton>
+          </ProductOptionsProvider>
+        </CartProvider>
+      );
+
+      expect(component).toContainReactComponent(BaseButton, {
+        onClick: mockOnClick,
+      });
+    });
+
+    it('passes the buttonRef', () => {
+      const product = getProduct();
+      const mockRef = React.createRef<HTMLButtonElement>();
+
+      const component = mountWithProviders(
+        <CartProvider>
+          <ProductOptionsProvider data={product}>
+            <AddToCartButton buttonRef={mockRef}>Add to cart</AddToCartButton>
+          </ProductOptionsProvider>
+        </CartProvider>
+      );
+
+      expect(component).toContainReactComponent(BaseButton, {
+        buttonRef: mockRef,
       });
     });
   });

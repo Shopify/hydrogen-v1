@@ -5,14 +5,17 @@ import type {
   SellingPlan as SellingPlanType,
   SellingPlanAllocation as SellingPlanAllocationType,
   SellingPlanGroup as SellingPlanGroupType,
-  SellingPlanConnection,
+  SellingPlanGroupConnection,
 } from '../../storefront-api-types';
+import type {PartialDeep} from 'type-fest';
 
 export type SelectedOptions = {
   [key: string]: string;
 };
 
-export type SelectVariantCallback = (variant: ProductVariantType) => void;
+export type SelectVariantCallback = (
+  variant: ProductVariantType | null
+) => void;
 
 export type SelectOptionCallback = (
   name: SelectedOptionType['name'],
@@ -35,7 +38,7 @@ export interface OptionWithValues {
   values: SelectedOptionType['value'][];
 }
 
-export interface ProductOptionsHookValue {
+export type ProductOptionsHookValue = PartialDeep<{
   /** An array of the variant `nodes` from the `VariantConnection`. */
   variants: ProductVariantType[];
   variantsConnection?: ProductVariantConnection;
@@ -43,17 +46,7 @@ export interface ProductOptionsHookValue {
   options: OptionWithValues[];
   /** The selected variant. */
   selectedVariant?: ProductVariantType | null;
-  /** A callback to set the selected variant to the variant passed as an argument. */
-  setSelectedVariant: SelectVariantCallback;
   selectedOptions: SelectedOptions;
-  /** A callback to set the selected option. */
-  setSelectedOption: SelectOptionCallback;
-  /** A callback to set multiple selected options at once. */
-  setSelectedOptions: SelectOptionsCallback;
-  /** A callback that returns a boolean indicating if the option is in stock. */
-  isOptionInStock: OptionsInStockCallback;
-  /** A callback to set the selected selling plan to the one passed as an argument. */
-  setSelectedSellingPlan: SelectedSellingPlanCallback;
   /** The selected selling plan. */
   selectedSellingPlan?: SellingPlanType;
   /** The selected selling plan allocation. */
@@ -62,5 +55,16 @@ export interface ProductOptionsHookValue {
   sellingPlanGroups?: (Omit<SellingPlanGroupType, 'sellingPlans'> & {
     sellingPlans: SellingPlanType[];
   })[];
-  sellingPlanGroupsConnection?: SellingPlanConnection;
-}
+  sellingPlanGroupsConnection?: SellingPlanGroupConnection;
+}> & {
+  /** A callback to set the selected variant to the variant passed as an argument. */
+  setSelectedVariant: SelectVariantCallback;
+  /** A callback to set the selected option. */
+  setSelectedOption: SelectOptionCallback;
+  /** A callback to set multiple selected options at once. */
+  setSelectedOptions: SelectOptionsCallback;
+  /** A callback to set the selected selling plan to the one passed as an argument. */
+  setSelectedSellingPlan: SelectedSellingPlanCallback;
+  /** A callback that returns a boolean indicating if the option is in stock. */
+  isOptionInStock: OptionsInStockCallback;
+};
