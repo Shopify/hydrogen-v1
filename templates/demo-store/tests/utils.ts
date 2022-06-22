@@ -6,8 +6,6 @@ import {
 import type {Server} from 'http';
 import {createServer as createViteDevServer} from 'vite';
 
-export const DEFAULT_DELAY = 60000;
-
 export interface HydrogenSession {
   page: Page;
   visit: (pathname: string) => Promise<PlaywrightResponse | null>;
