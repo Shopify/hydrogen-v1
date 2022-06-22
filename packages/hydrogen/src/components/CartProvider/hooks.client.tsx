@@ -17,7 +17,6 @@ import {
   SHOPIFY_S,
 } from '../../constants';
 import {parse} from 'worktop/cookie';
-import {buildUUID} from '../../foundation/Analytics/connectors/Shopify/utils';
 
 export function useCartFetch() {
   const {storeDomain, storefrontApiVersion, storefrontToken, storefrontId} =
