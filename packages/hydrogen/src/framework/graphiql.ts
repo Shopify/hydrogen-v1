@@ -11,7 +11,7 @@ export function graphiqlHtml(shop: string, token: string, apiVersion: string) {
   <script src="//cdn.jsdelivr.net/npm/graphql-playground-react/build/static/js/middleware.js"></script>
 </head>
 <body>
-  <div id="root">
+  <div id="root"></div>
   <script>window.addEventListener('load', function (event) {
     GraphQLPlayground.init(document.getElementById('root'), {
       endpoint:'https://${shop}/api/${apiVersion}/graphql.json',
