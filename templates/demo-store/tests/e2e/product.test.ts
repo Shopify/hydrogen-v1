@@ -44,5 +44,5 @@ describe('products', () => {
 
     const cartEvent = await cartResponse.json();
     expect(cartEvent.data).not.toBeNull();
-  });
+  }, 30000);
 });
