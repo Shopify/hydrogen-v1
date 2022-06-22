@@ -195,4 +195,3 @@ const countryCode = localeMatch ? localeMatch[1] : undefined;
 - Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.
 - Consult the references for the [`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component and [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
 - Learn how to customize the output of [SEO-related tags](https://shopify.dev/custom-storefronts/hydrogen/framework/seo) in your Hydrogen client and server components.
-](https://hydrogen-preview.myshopify.com/admin/settings/notifications)
