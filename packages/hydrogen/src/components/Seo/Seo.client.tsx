@@ -26,7 +26,7 @@ type Props =
     }
   | {
       type: 'collection';
-      data: ComponentProps<typeof CollectionSeo>;
+      data: Omit<ComponentProps<typeof CollectionSeo>, 'url'>;
     }
   | {
       type: 'page';
@@ -51,7 +51,7 @@ export function Seo(props: Props) {
     case 'product':
       return <ProductSeo {...{url, ...props.data}} />;
     case 'collection':
-      return <CollectionSeo {...props.data} />;
+      return <CollectionSeo {...{url, ...props.data}} />;
     case 'page':
       return <PageSeo {...props.data} />;
     case 'noindex':

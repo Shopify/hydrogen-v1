@@ -78,6 +78,7 @@ export function ProductSeo({
   return (
     <>
       <Head>
+        <meta property="og:url" content={url} />
         <meta property="og:type" content="og:product" />
         {firstVariantPrice && (
           <meta
