@@ -5,7 +5,7 @@
   "fixed": [["@shopify/hydrogen", "create-hydrogen-app"]],
   "linked": [],
   "access": "public",
-  "baseBranch": "v1.x-2022-07",
+  "baseBranch": "v0.x-2022-07",
   "updateInternalDependencies": "patch",
   "ignore": [
     "demo-store",
