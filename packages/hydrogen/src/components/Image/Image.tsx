@@ -304,6 +304,10 @@ function ExternalImage<GenericLoaderOpts>({
   /* eslint-enable hydrogen/prefer-image-component */
 }
 
+// based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
+// reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
+export const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
+
 type InternalShopifySrcSetGeneratorsParams = Simplify<
   ShopifyLoaderOptions & {
     src: ImageType['url'];
@@ -311,9 +315,6 @@ type InternalShopifySrcSetGeneratorsParams = Simplify<
     loader?: (params: ShopifyLoaderParams) => string;
   }
 >;
-// based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
-// reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
-const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
 function internalImageSrcSet({
   src,
   width,

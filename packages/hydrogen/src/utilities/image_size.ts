@@ -4,6 +4,7 @@ import type {
   ShopifyLoaderOptions,
   ShopifyLoaderParams,
 } from '../components/Image';
+import {IMG_SRC_SET_SIZES} from '../components/Image/Image';
 
 // TODO: Are there other CDNs missing from here?
 const PRODUCTION_CDN_HOSTNAMES = [
@@ -29,17 +30,22 @@ export function addImageSizeParametersToUrl({
 
   const multipliedScale = scale ?? 1;
 
-  width &&
-    newUrl.searchParams.append(
-      'width',
-      (Number(width) * multipliedScale).toString()
-    );
+  if (width) {
+    let finalWidth: string;
 
-  height &&
-    newUrl.searchParams.append(
-      'height',
-      (Number(height) * multipliedScale).toString()
-    );
+    if (typeof width === 'string') {
+      finalWidth = (IMG_SRC_SET_SIZES[0] * multipliedScale).toString();
+    } else {
+      finalWidth = (Number(width) * multipliedScale).toString();
+    }
+
+    newUrl.searchParams.append('width', finalWidth);
+  }
+
+  if (height && typeof height === 'number') {
+    newUrl.searchParams.append('height', (height * multipliedScale).toString());
+  }
+
   crop && newUrl.searchParams.append('crop', crop);
 
   // for now we intentionally leave off the scale param, and instead multiple width & height by scale instead
@@ -109,15 +115,13 @@ export function getShopifyImageDimensions({
     return {
       width:
         loaderOptions?.width ??
-        (aspectRatio
-          ? // @ts-expect-error if width isn't defined, then height has to be defined due to the If statement above
-            Math.round(aspectRatio * loaderOptions.height)
+        (aspectRatio && typeof loaderOptions.height === 'number'
+          ? Math.round(aspectRatio * loaderOptions.height)
           : null),
       height:
         loaderOptions?.height ??
-        (aspectRatio
-          ? // @ts-expect-error if height isn't defined, then width has to be defined due to the If statement above
-            Math.round(aspectRatio * loaderOptions.width)
+        (aspectRatio && typeof loaderOptions.width === 'number'
+          ? Math.round(aspectRatio * loaderOptions.width)
           : null),
     };
   }
@@ -127,15 +131,13 @@ export function getShopifyImageDimensions({
     return {
       width:
         elementProps?.width ??
-        (aspectRatio
-          ? // @ts-expect-error if width isn't defined, then height has to be defined due to the If statement above
-            Math.round(aspectRatio * elementProps.height)
+        (aspectRatio && typeof elementProps.height === 'number'
+          ? Math.round(aspectRatio * elementProps.height)
           : null),
       height:
         elementProps?.height ??
-        (aspectRatio
-          ? // @ts-expect-error if height isn't defined, then width has to be defined due to the If statement above
-            Math.round(aspectRatio * elementProps.width)
+        (aspectRatio && typeof elementProps.width === 'number'
+          ? Math.round(aspectRatio * elementProps.width)
           : null),
     };
   }

@@ -264,6 +264,40 @@ describe('<Image />', () => {
         srcSet: `${image.url}?width=704&height=1408&crop=bottom 352w`,
       });
     });
+
+    it(`should pass through width (as an inline prop) when it's a string, and use the first size in the size array for the URL width`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 100,
+        height: 100,
+      });
+
+      const component = mount(<Image data={image} width="100%" />);
+
+      expect(component).toContainReactComponent('img', {
+        width: '100%',
+        src: `${image.url}?width=352`,
+        height: undefined, // make sure height isn't NaN
+      });
+    });
+
+    it(`should pass through width (as part of loaderOptions) when it's a string, and use the first size in the size array for the URL width`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 100,
+        height: 100,
+      });
+
+      const component = mount(
+        <Image data={image} loaderOptions={{width: '100%'}} />
+      );
+
+      expect(component).toContainReactComponent('img', {
+        width: '100%',
+        src: `${image.url}?width=352`,
+        height: undefined, // make sure height isn't NaN
+      });
+    });
   });
 
   describe('External image', () => {
