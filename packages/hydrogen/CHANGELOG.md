@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.27.1
+
+### Patch Changes
+
+- [#1728](https://github.com/Shopify/hydrogen/pull/1728) [`e8d4980a`](https://github.com/Shopify/hydrogen/commit/e8d4980a691c68e71c56762596a59415f59600c6) Thanks [@jplhomer](https://github.com/jplhomer)! - This is an example of backporting a fix. You can ignore this version.
+
 ## 0.27.0
 
 ### Minor Changes
