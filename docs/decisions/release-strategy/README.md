@@ -107,10 +107,10 @@ Vue (and other potential variants of Hydrogen UI) will be pinned to the SFAPI, t
 
 The demo store templates will be affected by both Hydrogen and Hydrogen UI. This means this versioning and branching strategy is a perfect fit. Scaffolding CLIs are unique because only their latest versions are intended to be used. This means we don't need to be concerned about versioning here.
 
-## To the linter packages and any other semver packages we might include in the Hydrogen monorepo?
+### To the linter packages and any other semver packages we might include in the Hydrogen monorepo?
 
 They can be chill in the most recent major release Git branch. They are less frequently updated. There will be breaking changes from time to time, but we will be less committed to issuing patch releases to them.
 
-## To the `main` branch?
+### To the `main` branch?
 
 It's on GitHub, but we don't use it anymore. We sync to it for convenience of canonical links, etc.
