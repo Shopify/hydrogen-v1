@@ -4,7 +4,6 @@ import type {
   ShopifyLoaderOptions,
   ShopifyLoaderParams,
 } from '../components/Image';
-import {IMG_SRC_SET_SIZES} from '../components/Image/Image';
 
 // TODO: Are there other CDNs missing from here?
 const PRODUCTION_CDN_HOSTNAMES = [
@@ -15,6 +14,10 @@ const PRODUCTION_CDN_HOSTNAMES = [
 ];
 const LOCAL_CDN_HOSTNAMES = ['spin.dev'];
 const ALL_CDN_HOSTNAMES = [...PRODUCTION_CDN_HOSTNAMES, ...LOCAL_CDN_HOSTNAMES];
+
+// based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
+// reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
+export const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
 
 /**
  * Adds image size parameters to an image URL hosted by Shopify's CDN

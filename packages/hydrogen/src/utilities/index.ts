@@ -2,6 +2,7 @@ export {
   addImageSizeParametersToUrl,
   getShopifyImageDimensions,
   shopifyImageLoader,
+  IMG_SRC_SET_SIZES,
 } from './image_size';
 export {
   YouTube,

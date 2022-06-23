@@ -3,6 +3,7 @@ import {
   getShopifyImageDimensions,
   shopifyImageLoader,
   addImageSizeParametersToUrl,
+  IMG_SRC_SET_SIZES,
 } from '../../utilities';
 import type {Image as ImageType} from '../../storefront-api-types';
 import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
@@ -303,10 +304,6 @@ function ExternalImage<GenericLoaderOpts>({
   );
   /* eslint-enable hydrogen/prefer-image-component */
 }
-
-// based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
-// reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
-export const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
 
 type InternalShopifySrcSetGeneratorsParams = Simplify<
   ShopifyLoaderOptions & {
