@@ -8,8 +8,7 @@ This PR can stay open and will be continously updated by the changesets bot unti
 
 When you are ready to release a new version of Hydrogen, follow these steps:
 
-1. Merge the PR created by the changesets bot. This will convert all changesets into appropriate `CHANGELOG` files, add Git tags, create GitHub releases for each package contained in the release, and publish them to NPM.
-2. _Most recent stable version only_: After publishing to NPM, manually [run the Compile templates workflow](https://github.com/Shopify/hydrogen/actions/workflows/compile_templates.yml) in GitHub against the latest stable branch. This will compile the TypeScript templates to JavaScript and push these changes to the `dist` branch of the repo. The Shopify CLI will read the templates from this branch when running `yarn create @shopify/hydrogen`. (Note: This is required, because GitHub will not allow a bot to kick off another GitHub Action, and the Changesets bot is the user who created the release.)
+1. Merge the PR created by the changesets bot. This will convert all changesets into appropriate `CHANGELOG` files, add Git tags, create GitHub releases for each package contained in the release, and publish them to NPM. Then, the action will compile the TypeScript templates to JavaScript and push these changes to the `dist` branch of the repo. The Shopify CLI will read the templates from this branch when running `yarn create @shopify/hydrogen`.
 
 ## Releasing unstable versions
 
