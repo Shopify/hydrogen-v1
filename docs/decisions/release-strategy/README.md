@@ -12,9 +12,7 @@ The first branch will be `v1.x-2022-07`.
 
 ## Background
 
-Hydrogen is going to hit v1.0 soon. At that point, we'll have a version of the framework and UI that is considered stable.
-
-But we want to keep iterating! Especially against the unstable Storefront API version. This requires us to determine a smart Git and NPM strategy which:
+We want to keep iterating Hydrogen now that we have reached v1.0. Especially against the unstable Storefront API version. This requires us to determine a smart Git and NPM strategy which:
 
 - Allows us to keep maintaining the existing stable version of Hydrogen packages with packages and minor improvements
 
