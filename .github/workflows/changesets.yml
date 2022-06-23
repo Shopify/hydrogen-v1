@@ -41,7 +41,7 @@ jobs:
       - name: Install the packages
         run: yarn install --frozen-lockfile --ignore-engines
 
-      - name: Create Release Pull Request or Publish (latest)
+      - name: Create Release Pull Request or Publish (for latest release)
         if: steps.flags.outputs.latest == 'true'
         id: changesets
         uses: changesets/action@v1
@@ -54,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Create Release Pull Request or Publish (legacy)
+      - name: Create Release Pull Request or Publish (for legacy patch release)
         if: steps.flags.outputs.latest != 'true'
         id: changesets
         uses: changesets/action@v1
