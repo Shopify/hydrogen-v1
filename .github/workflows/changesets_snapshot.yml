@@ -10,7 +10,7 @@ concurrency:
 jobs:
   changelog:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'shopify'
+    if: github.repository_owner == 'shopify' && github.ref_name != 'latest'
     name: Changelog Snapshot Release
     steps:
       - name: Checkout the code
