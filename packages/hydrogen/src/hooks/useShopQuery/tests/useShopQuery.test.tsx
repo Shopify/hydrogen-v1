@@ -13,6 +13,10 @@ jest.mock('../../../foundation/ssr-interop', () => {
   };
 });
 
+jest.mock('../../../foundation/useUrl/useUrl', () => ({
+  useUrl: () => new URL('https://store-name.com/'),
+}));
+
 let waitUntilPromises = [] as Array<Promise<any>>;
 
 function mountComponent() {

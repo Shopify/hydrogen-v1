@@ -14,7 +14,7 @@ export function fetchSync(
 ): FetchResponse {
   const {cache, preload, shouldCacheResponse, ...requestInit} = options ?? {};
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const {origin} = __HYDROGEN_TEST__ ? ({} as any) : useUrl();
+  const {origin} = useUrl();
 
   const {data: useQueryResponse, error} = useQuery<[string, Response]>( // eslint-disable-line react-hooks/rules-of-hooks
     [url, requestInit],
