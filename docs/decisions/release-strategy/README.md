@@ -18,18 +18,20 @@ We want to keep iterating Hydrogen now that we have reached v1.0. Especially aga
 
 - Allows us to start building the next major version of Hydrogen without jumping through a bunch of hoops
 
-- Allows us to apply the same patches to stable and to the new major version of Hydrogen\
-  We plan to version hydrogen and hydrogen-ui differently on NPM:
+- Allows us to apply the same patches to stable and to the new major version of Hydrogen
 
-- hydrogen will be versioned using [semver](https://semver.org/) (<major>.<minor>.<patch>)
 
-- hydrogen-ui will be versioned using [calver](https://calver.org/) (<year>-<month>) according to its compatibility with the Storefront API of the same version
+We plan to version hydrogen and hydrogen-ui differently on NPM:
+
+- hydrogen will be versioned using [semver](https://semver.org/) `(<major>.<minor>.<patch>)`
+
+- hydrogen-ui will be versioned using [calver](https://calver.org/) `(<year>-<month>)` according to its compatibility with the Storefront API of the same version
 
 ## What should we do?
 
 We should use major version branches. At v1.0 Hydrogen launch, we'll create a new branch and set it as our default GitHub branch:
 
-`v1.x-2022-07``
+`v1.x-2022-07`
 
 - All stable patches and minor releases will be merged into that branch
 
