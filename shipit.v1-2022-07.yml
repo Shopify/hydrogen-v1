@@ -1,6 +1,0 @@
-deploy:
-  override:
-    - yarn install
-    - >-
-      yarn workspace @shopify/hydrogen build --force &&
-      node_modules/.bin/changeset publish
