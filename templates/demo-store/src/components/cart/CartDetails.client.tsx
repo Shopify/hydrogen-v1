@@ -72,9 +72,7 @@ function CartCheckoutActions() {
   return (
     <>
       <div className="grid gap-4">
-        <Button to={checkoutUrl} className="max-w-none">
-          Continue to Checkout
-        </Button>
+        <Button to={checkoutUrl}>Continue to Checkout</Button>
         <CartShopPayButton />
       </div>
     </>
