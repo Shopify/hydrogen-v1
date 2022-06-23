@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.1
+
+### Patch Changes
+
+- [#1716](https://github.com/Shopify/hydrogen/pull/1716) [`4e6356e6`](https://github.com/Shopify/hydrogen/commit/4e6356e67bf92ff621573eac36fe34f37a1c326c) Thanks [@wizardlyhel](https://github.com/wizardlyhel)! - Fix add to cart Shopify session tracking
+
+* [#1713](https://github.com/Shopify/hydrogen/pull/1713) [`ea47ab68`](https://github.com/Shopify/hydrogen/commit/ea47ab68b112c0c1c5b28020c8a2fa91a54f0b78) Thanks [@frandiox](https://github.com/frandiox)! - Fix `fetchSync` when called with relative URLs.
+
 ## 1.0.0
 
 ### Major Changes
