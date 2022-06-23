@@ -5,15 +5,20 @@ import {
 } from '../utils';
 import Collections from '../../src/routes/collections/[handle].server';
 
-const COLLECTION_URL = '/collections/freestyle';
-
 describe('collections', () => {
   let hydrogen: HydrogenServer;
   let session: HydrogenSession;
+  let collectionUrl: string;
 
   beforeAll(async () => {
     hydrogen = await startHydrogenServer();
     hydrogen.watchForUpdates(Collections);
+
+    // Find a collection url from home page
+    session = await hydrogen.newPage();
+    await session.visit('/');
+    const link = await session.page.locator('a[href^="/collections/"]').first();
+    collectionUrl = await link.getAttribute('href');
   });
 
   beforeEach(async () => {
@@ -25,14 +30,14 @@ describe('collections', () => {
   });
 
   it('should have collection title', async () => {
-    await session.visit(COLLECTION_URL);
+    await session.visit(collectionUrl);
 
     const heading = await session.page.locator('h1').first();
     expect(heading).not.toBeNull();
   });
 
   it('should have collection description', async () => {
-    await session.visit(COLLECTION_URL);
+    await session.visit(collectionUrl);
 
     const description = await session.page
       .locator('#mainContent header p')
@@ -41,7 +46,7 @@ describe('collections', () => {
   });
 
   it('should have collection product tiles', async () => {
-    await session.visit(COLLECTION_URL);
+    await session.visit(collectionUrl);
 
     const products = await session.page.locator('#mainContent section a');
     expect(await products.count()).not.toEqual(0);

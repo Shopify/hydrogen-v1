@@ -6,15 +6,20 @@ import {
 } from '../utils';
 import Product from '../../src/routes/products/[handle].server';
 
-const PRODUCT_URL = '/products/the-hero-snowboard';
-
 describe('products', () => {
   let hydrogen: HydrogenServer;
   let session: HydrogenSession;
+  let productUrl: string;
 
   beforeAll(async () => {
     hydrogen = await startHydrogenServer();
     hydrogen.watchForUpdates(Product);
+
+    // Find a product url from home page
+    session = await hydrogen.newPage();
+    await session.visit('/');
+    const link = await session.page.locator('a[href^="/products/"]').first();
+    productUrl = await link.getAttribute('href');
   });
 
   beforeEach(async () => {
@@ -26,13 +31,13 @@ describe('products', () => {
   });
 
   it('should have product title', async () => {
-    await session.visit(PRODUCT_URL);
+    await session.visit(productUrl);
     const heading = await session.page.locator('h1').first();
     expect(heading).not.toBeNull();
   });
 
   it('can be added to cart', async () => {
-    await session.visit(PRODUCT_URL);
+    await session.visit(productUrl);
 
     // Click on add to cart button
     const [cartResponse] = await Promise.all([
