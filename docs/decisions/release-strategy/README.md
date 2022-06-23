@@ -8,7 +8,7 @@ Approved by internal concensus in early 2022.
 
 We should use a Git branch strategy driven by major-release pairs of our two main packages (hydrogen and hydrogen-ui). We should set our GitHub default branch to the latest major version branch. We should use an `unstable` branch which generates scheduled or on-demand snapshot releases.
 
-The first branch will be `v1.x-2022-07``.
+The first branch will be `v1.x-2022-07`.
 
 ## Background
 
