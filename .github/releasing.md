@@ -4,6 +4,8 @@ Hydrogen versions are determined exclusively by [changesets](https://github.com/
 
 This PR can stay open and will be continously updated by the changesets bot until you are ready to release a new version.
 
+[Learn more about how we decided to manage Hydrogen releases on GitHub and NPM](https://github.com/shopify/hydrogen/blob/main/docs/decisions/release-strategy/README.md).
+
 ## Releasing new versions
 
 When you are ready to release a new version of Hydrogen, merge the PR created by the changesets bot. This will convert all changesets into appropriate `CHANGELOG` files, add Git tags, create GitHub releases for each package contained in the release, and publish them to NPM.
