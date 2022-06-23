@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import {ShopifyProviderClient} from './ShopifyProvider.client';
-import type {ShopifyProviderProps} from './types';
+import type {ShopifyProviderProps, LocalizationContextValue} from './types';
 import type {CountryCode, LanguageCode} from '../../storefront-api-types';
 
 import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../constants';
@@ -40,6 +40,11 @@ export function ShopifyProvider({
    * [the `shopify` property in the `hydrogen.config.js` file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
    */
   shopifyConfig,
+
+  countryCode,
+
+  languageCode,
+
   /** Any `ReactNode` elements. */
   children,
 }: ShopifyProviderProps): JSX.Element {
@@ -82,11 +87,48 @@ export function ShopifyProvider({
     [actualShopifyConfig]
   );
 
+  const localization = getLocalizationContextValue(
+    shopifyProviderValue.defaultLanguageCode,
+    shopifyProviderValue.defaultCountryCode,
+    languageCode,
+    countryCode
+  );
+
+  request.ctx.localization = localization;
   request.ctx.shopifyConfig = shopifyProviderValue;
 
   return (
-    <ShopifyProviderClient shopifyConfig={shopifyProviderValue}>
+    <ShopifyProviderClient
+      shopifyConfig={shopifyProviderValue}
+      localization={localization}
+    >
       {children}
     </ShopifyProviderClient>
   );
+}
+
+export function getLocalizationContextValue(
+  defaultLanguageCode: `${LanguageCode}`,
+  defaultCountryCode: `${CountryCode}`,
+  languageCode?: `${LanguageCode}`,
+  countryCode?: `${CountryCode}`
+): LocalizationContextValue {
+  return useMemo(() => {
+    const runtimeLanguageCode = (
+      languageCode ?? defaultLanguageCode
+    ).toUpperCase() as `${LanguageCode}`;
+    const runtimeCountryCode = (
+      countryCode ?? defaultCountryCode
+    ).toUpperCase() as `${CountryCode}`;
+
+    return {
+      country: {
+        isoCode: runtimeCountryCode,
+      },
+      language: {
+        isoCode: runtimeLanguageCode,
+      },
+      locale: `${runtimeLanguageCode}-${runtimeCountryCode}`,
+    };
+  }, [defaultLanguageCode, defaultCountryCode, countryCode, languageCode]);
 }

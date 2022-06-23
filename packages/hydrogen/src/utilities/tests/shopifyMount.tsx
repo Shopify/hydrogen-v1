@@ -6,7 +6,6 @@ import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../foundation/constants';
 import {ShopifyConfig} from '../../types';
 import {ShopifyProvider} from '../../foundation/ShopifyProvider/ShopifyProvider.server';
 import {BrowserRouter} from '../../foundation/Router/BrowserRouter.client';
-import LocalizationClientProvider from '../../components/LocalizationProvider/LocalizationClientProvider.client';
 import {
   LocationServerProps,
   ServerProps,
@@ -43,15 +42,12 @@ export const mountWithProviders = createMount<
       setServerPropsForRsc={setServerProps}
       initialServerProps={serverProps}
     >
-      <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <LocalizationClientProvider
-          localization={{
-            language: {isoCode: 'en'},
-            country: {isoCode: 'US'},
-          }}
-        >
-          <BrowserRouter history={history}>{element}</BrowserRouter>
-        </LocalizationClientProvider>
+      <ShopifyProvider
+        shopifyConfig={shopifyConfig}
+        languageCode="EN"
+        countryCode="US"
+      >
+        <BrowserRouter history={history}>{element}</BrowserRouter>
       </ShopifyProvider>
     </ServerPropsProvider>
   ),

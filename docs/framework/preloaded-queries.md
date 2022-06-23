@@ -97,7 +97,7 @@ If a query is being double loaded, then a warning displays in the server log. Th
 
 ## Related components and hooks
 
-- [`localizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider)
+- [`ShopifyProvider` component](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)
 - [`fetchSync`](https://shopify.dev/api/hydrogen/hooks/global/fetchsync)
 - [`useShopQuery`](https://shopify.dev/api/hydrogen/hooks/global/useshopquery)
 - [`useQuery`](https://shopify.dev/api/hydrogen/hooks/global/usequery)

@@ -1,4 +1,7 @@
-import type {ShopifyContextValue} from '../ShopifyProvider/types';
+import type {
+  ShopifyContextValue,
+  LocalizationContextValue,
+} from '../ShopifyProvider/types';
 import {getTime} from '../../utilities/timing';
 import type {QueryCacheControlHeaders} from '../../utilities/log/log-cache-header';
 import type {QueryTiming} from '../../utilities/log/log-query-timeline';
@@ -13,7 +16,6 @@ import {HelmetData as HeadData} from 'react-helmet-async';
 import {RSC_PATHNAME} from '../../constants';
 import {SessionSyncApi} from '../session/session';
 import {parseJSON} from '../../utilities/parse';
-import {LocalizationContextValue} from '../../components/LocalizationProvider/LocalizationContext.client';
 
 export type PreloadQueryEntry = {
   key: QueryKey;

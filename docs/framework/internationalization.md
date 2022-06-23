@@ -12,18 +12,18 @@ Shopify helps merchants all over the world, sell to customers all over the world
 
 Hydrogen includes the following components and hooks for localization:
 
-- **[`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider)**: A component that provides localization data in a context that can be used both within server and client components by the [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
+- **[`ShopifyProvider` component](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)**: A component that provides localization data in a context that can be used both within server and client components by the [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
 
 - **[`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization)**: A hook that returns the locale, country, and language of the current page.
 
 > Note:
-> Any descendents of `LocalizationProvider` can use the `useLocalization` hook. The `isoCode` of the `country` can be used in the Storefront API's [`@inContext` directive](https://shopify.dev/api/examples/international-pricing) as the `country` value.
+> Any descendents of `ShopifyProvider` can use the `useLocalization` hook. The `isoCode` of the `country` can be used in the Storefront API's [`@inContext` directive](https://shopify.dev/api/examples/international-pricing) as the `country` value.
 
 ### Default configuration
 
 You can configure your Hydrogen storefront's default language and country by setting the `defaultLanguageCode` and `defaultCountryCode` properties in the [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config).
 
-`LocalizationProvider` uses these default values, unless it's passed an override from the `languageCode` or `countryCode` props.
+`ShopifyProvider` uses these default values, unless it's passed an override from the `languageCode` or `countryCode` props.
 
 In the following example, the default language is set to English and the default country is set to the United States:
 
@@ -41,7 +41,7 @@ export default defineConfig({
 
 ### Overriding the default locale
 
-You can change the active country and language at runtime by passing the `countryCode` and `languageCode` props to the `LocalizationProvider` component.
+You can change the active country and language at runtime by passing the `countryCode` and `languageCode` props to the `ShopifyProvider` component.
 
 ### Retrieving translated content from the Storefront API
 
@@ -92,7 +92,7 @@ For more information about retrieving language translations and the `@inContext`
 
 ### Search engine optimization (SEO)
 
-Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the locale within the [`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component.
+Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the locale within the [`ShopifyProvider` component](https://shopify.dev/api/hydrogen/components/global/shopifyprovider) component.
 
 For more information about customizing the output of SEO-related tags in your Hydrogen app, refer to [SEO](https://shopify.dev/custom-storefronts/hydrogen/framework/seo).
 
@@ -122,7 +122,6 @@ Subfolder routes use the visitor's locale in the URL path. In Hydrogen, you can 
 ```tsx
 import {
   FileRoutes,
-  LocalizationProvider,
   Route,
   Router,
   ShopifyProvider,
@@ -135,18 +134,16 @@ function App({routes, request}) {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ShopifyProvider>
-        <LocalizationProvider countryCode={countryCode}>
-          <CartProvider>
-            <Router>
-              <FileRoutes
-                basePath={countryCode ? `/${countryCode}/` : null}
-                routes={routes}
-              />
-              <Route path="*" page={<NotFound />} />
-            </Router>
-          </CartProvider>
-        </LocalizationProvider>
+      <ShopifyProvider countryCode={countryCode}>
+        <CartProvider>
+          <Router>
+            <FileRoutes
+              basePath={countryCode ? `/${countryCode}/` : null}
+              routes={routes}
+            />
+            <Route path="*" page={<NotFound />} />
+          </Router>
+        </CartProvider>
       </ShopifyProvider>
     </Suspense>
   );
@@ -193,5 +190,5 @@ const countryCode = localeMatch ? localeMatch[1] : undefined;
 ## Next steps
 
 - Learn about [Hydrogen's configuration properties](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config) and how to change the location of the configuration file.
-- Consult the references for the [`LocalizationProvider`](https://shopify.dev/api/hydrogen/components/localization/localizationprovider) component and [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
+- Consult the references for the [`ShopifyProvider` component](https://shopify.dev/api/hydrogen/components/global/shopifyprovider) component and [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
 - Learn how to customize the output of [SEO-related tags](https://shopify.dev/custom-storefronts/hydrogen/framework/seo) in your Hydrogen client and server components.
