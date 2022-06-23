@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.27.2
+
+### Patch Changes
+
+- [`f1af7c3a`](https://github.com/Shopify/hydrogen/commit/f1af7c3a70e957a924c886b72450f5f5482bc19e) Thanks [@jplhomer](https://github.com/jplhomer)! - This is another patch test. Please ignore this version.
+
 ## 0.27.1
 
 ### Patch Changes
