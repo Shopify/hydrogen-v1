@@ -52,7 +52,7 @@ export default function Product() {
     },
   });
 
-  const {media, title, vendor, description, id} = product;
+  const {media, title, vendor, descriptionHtml, id} = product;
   const {shippingPolicy, refundPolicy} = shop;
 
   return (
@@ -79,10 +79,10 @@ export default function Product() {
                 </div>
                 <ProductForm />
                 <div className="grid gap-4 py-4">
-                  {description && (
+                  {descriptionHtml && (
                     <ProductDetail
                       title="Product Details"
-                      content={description}
+                      content={descriptionHtml}
                     />
                   )}
                   {shippingPolicy?.body && (
@@ -123,7 +123,7 @@ const PRODUCT_QUERY = gql`
       id
       title
       vendor
-      description
+      descriptionHtml
       media(first: 7) {
         nodes {
           ...Media

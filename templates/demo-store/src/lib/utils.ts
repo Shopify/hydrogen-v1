@@ -64,8 +64,8 @@ export function isDiscounted(price: MoneyV2, compareAtPrice: MoneyV2) {
 
 export function getExcerpt(text: string) {
   const regex = /<p.*>(.*?)<\/p>/;
-  const correspondingText = regex.exec(text);
-  return correspondingText ? correspondingText[1] : '';
+  const match = regex.exec(text);
+  return match?.length ? match[0] : text;
 }
 
 function resolveToFromType(
