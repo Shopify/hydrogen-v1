@@ -49,6 +49,22 @@ A new snapshot release will be created with your changes and tagged on NPM with 
 yarn add @shopify/hydrogen@experimental
 ```
 
+## Patching previous minor versions with updates
+
+Occasionally, we will need to patch a previous minor release of Hydrogen to address a security issue or to fix a critical bug which affects developers who cannot easily update to the latest major or minor version.
+
+To do so, follow these steps for each minor version you need to patch:
+
+1. Determine what the branch name would be for your desired version.
+
+   > Example:<br><br>
+   > If the latest release is `v1.2.3` on branch `v1.x-2022-07`, and you need to patch `v1.1.x`, your branch would be `v1.1.x-2022-07`.
+
+2. _If a branch already exists for your desired minor release, you can skip this step._ To create your release branch, check out the Git tag created for the most recent release in that minor range. You can view the list of tags using `git tag`.
+
+   > Example:<br><br>
+   > If the latest release for `v1.1.x` was `v1.1.5`, then you would run `git checkout v1.1.x`, your branch would be `v1.1.x-2022-07`.
+
 ## Common problems
 
 **After merging the auto-generated changeset PR, my GitHub Action encountered an Error with the message `No commits between X and changeset-release/Y`**
