@@ -35,8 +35,9 @@ jobs:
         uses: changesets/action@v1
         with:
           version: yarn run version
-          publish: yarn changeset tag
+          publish: yarn changeset publish
           commit: '[ci] release ${{ github.ref_name }}'
           title: '[ci] release ${{ github.ref_name }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
