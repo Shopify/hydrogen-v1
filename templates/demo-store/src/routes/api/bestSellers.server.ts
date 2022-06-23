@@ -1,9 +1,6 @@
 import {gql} from '@shopify/hydrogen';
 import type {HydrogenApiRouteOptions, HydrogenRequest} from '@shopify/hydrogen';
-import {
-  Product,
-  ProductConnection,
-} from '@shopify/hydrogen/storefront-api-types';
+import {ProductConnection} from '@shopify/hydrogen/storefront-api-types';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 
 export async function api(

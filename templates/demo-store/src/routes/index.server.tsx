@@ -19,6 +19,25 @@ import {
 } from '@shopify/hydrogen/storefront-api-types';
 
 export default function Homepage() {
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.home,
+    },
+  });
+
+  return (
+    <Layout>
+      <Suspense>
+        <SeoForHomepage />
+      </Suspense>
+      <Suspense>
+        <HomepageContent />
+      </Suspense>
+    </Layout>
+  );
+}
+
+function HomepageContent() {
   const {
     language: {isoCode: languageCode},
     country: {isoCode: countryCode},
@@ -44,17 +63,8 @@ export default function Homepage() {
     heroBanners.nodes,
   );
 
-  useServerAnalytics({
-    shopify: {
-      pageType: ShopifyAnalyticsConstants.pageType.home,
-    },
-  });
-
   return (
-    <Layout>
-      <Suspense>
-        <SeoForHomepage />
-      </Suspense>
+    <>
       {primaryHero && (
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}
@@ -69,7 +79,7 @@ export default function Homepage() {
         title="Collections"
       />
       {tertiaryHero && <Hero {...tertiaryHero} />}
-    </Layout>
+    </>
   );
 }
 
@@ -160,6 +170,7 @@ const HOMEPAGE_CONTENT_QUERY = gql`
 const HOMEPAGE_SEO_QUERY = gql`
   query homeShopInfo {
     shop {
+      title: name
       description
     }
   }

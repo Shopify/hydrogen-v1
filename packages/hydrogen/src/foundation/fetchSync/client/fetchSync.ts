@@ -7,7 +7,11 @@ import type {FetchResponse} from '../types';
  */
 export function fetchSync(url: string, options?: RequestInit): FetchResponse {
   const [text, response] = suspendFunction([url, options], async () => {
-    const response = await globalThis.fetch(url, options);
+    const response = await globalThis.fetch(
+      new URL(url, window.location.origin),
+      options
+    );
+
     const text = await response.text();
 
     return [text, response] as [string, Response];

@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {Suspense, useMemo} from 'react';
 import {gql, useShopQuery, useLocalization} from '@shopify/hydrogen';
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {ProductCard, Section} from '~/components';
@@ -24,7 +24,11 @@ export function ProductSwimlane({
     // If the data provided is a productId, we will query the productRecommendations API.
     // To make sure we have enough products for the swimlane, we'll combine the results with our top selling products.
     if (typeof data === 'string') {
-      return <RecommendedProducts productId={data} count={count} />;
+      return (
+        <Suspense>
+          <RecommendedProducts productId={data} count={count} />
+        </Suspense>
+      );
     }
 
     // If no data is provided, we'll go and query the top products
