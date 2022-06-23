@@ -41,7 +41,7 @@ To release an snapshot version:
 
 1. Merge your changes into the `experimental` branch (or your custom snapshot branch).
 1. Visit the [Changesets Snapshot](https://github.com/Shopify/hydrogen/actions/workflows/changesets_snapshot.yml) GitHub Action workflow.
-1. Click "Run Workflow." Be sure to select `unstable` as the branch name.
+1. Click "Run Workflow." Be sure to select the same branch name from step 1.
 
 A new snapshot release will be created with your changes and tagged on NPM with `experimental` or your branch name. You can install this version of Hydrogen using that tag:
 
