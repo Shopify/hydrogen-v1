@@ -26,7 +26,7 @@ export function CartDetails({
 
   const container = {
     drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto]',
-    page: 'pb-12 grid md:grid-cols-2 md:flex-row md:items-start gap-8 md:gap-8 lg:gap-12',
+    page: 'pb-12 grid md:grid-cols-2 md:items-start gap-8 md:gap-8 lg:gap-12',
   };
 
   const content = {

@@ -19,7 +19,7 @@ export function CartEmpty({
     drawer: `grid content-start gap-4 px-6 pb-8 transition overflow-y-scroll md:gap-12 md:px-12 h-screen-no-nav md:pb-12 ${
       y > 0 ? 'border-t' : ''
     }`,
-    page: `grid pb-12 w-full md:flex-row md:items-start gap-4 md:gap-8 lg:gap-12`,
+    page: `grid pb-12 w-full md:items-start gap-4 md:gap-8 lg:gap-12`,
   };
 
   const topProductsContainer = {
