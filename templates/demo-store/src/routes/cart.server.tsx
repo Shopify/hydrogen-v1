@@ -6,10 +6,8 @@ export default function Cart() {
   return (
     <Layout>
       <Seo type="page" data={{title: 'Cart'}} />
-      <div className="w-full mx-auto max-w-7xl xl:-translate-x-12">
-        <PageHeader heading="Your Cart" />
-      </div>
-      <Section padding="x">
+      <PageHeader heading="Your Cart" className="max-w-7xl mx-auto" />
+      <Section className="max-w-7xl mx-auto">
         <CartDetails layout="page" />
       </Section>
     </Layout>
