@@ -1,3 +1,4 @@
+// @ts-check
 const {config} = require('dotenv');
 const {
   getInfo,
@@ -6,9 +7,10 @@ const {
 
 config();
 
+const repo = 'shopify/hydrogen';
+
 const changelogFunctions = {
   getDependencyReleaseLine: async (changesets, dependenciesUpdated) => {
-    const repo = 'shopify/hydrogen';
     if (dependenciesUpdated.length === 0) return '';
 
     const changesetLink = `- Updated dependencies [${(
