@@ -45,7 +45,7 @@ export function getOptions(
 ): OptionWithValues[] {
   const map = variants.reduce((memo, variant) => {
     if (!variant.selectedOptions) {
-      throw new Error(`getOptions requires 'variant.selectedOptions`);
+      throw new Error(`'getOptions' requires 'variant.selectedOptions'`);
     }
     variant?.selectedOptions?.forEach((opt) => {
       memo[opt?.name ?? ''] = memo[opt?.name ?? ''] || new Set();
