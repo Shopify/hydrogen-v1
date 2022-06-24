@@ -14,7 +14,7 @@ The first branch will be `v1.x-2022-07`.
 
 We want to keep iterating Hydrogen now that we have reached v1.0. Especially against the unstable Storefront API version. This requires us to determine a smart Git and NPM strategy which:
 
-- Allows us to keep maintaining the existing stable version of Hydrogen packages with packages and minor improvements
+- Allows us to keep maintaining the existing stable version of Hydrogen packages with patches and minor improvements
 
 - Allows us to start building the next major version of Hydrogen without jumping through a bunch of hoops
 
@@ -25,7 +25,7 @@ We plan to version hydrogen and hydrogen-ui differently on NPM:
 
 - hydrogen will be versioned using [semver](https://semver.org/) `(<major>.<minor>.<patch>)`
 
-- hydrogen-ui will be versioned using [calver](https://calver.org/) `(<year>-<month>)` according to its compatibility with the Storefront API of the same version
+- hydrogen-ui will be versioned using [calver](https://calver.org/) `(<year>.<month>.<patch>)` according to its compatibility with the Storefront API of the same version
 
 ## What should we do?
 
