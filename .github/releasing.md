@@ -51,6 +51,33 @@ A new snapshot release will be created with your changes and tagged on NPM with 
 yarn add @shopify/hydrogen@experimental
 ```
 
+## Patching previous minor versions with updates
+
+Occasionally, we will need to patch a previous minor release of Hydrogen to address a security issue or to fix a critical bug which affects developers who cannot easily update to the latest major or minor version.
+
+To do so, follow these steps for each minor version you need to patch:
+
+1. Determine what the branch name would be for your desired version.
+
+   > Example:<br><br>
+   > If the latest release is `v1.2.3` on branch `v1.x-2022-07`, and you need to patch `v1.1.x`, your branch would be `v1.1.x-2022-07`.
+
+2. _If a branch already exists for your desired minor release, you can skip to step 4._ To create your release branch, check out the Git tag created for the most recent release in that minor range and create the desired branch name. You can view the list of tags using `git tag`.
+
+   > Example:<br><br>
+   > If the latest release for `v1.1.x` was `v1.1.5`, then you would run `git checkout @shopify/hydrogen@1.1.5 -b v1.1.x-2022-07`.
+
+3. Update `.changesets/config.json` to set `baseBranch` to your new release branch. This tells Changesets which base branch to use when preparing the "Release" PR which you will eventually merge to publish the release. Be sure to push this branch to GitHub.
+
+   > Example:<br><br>
+   > Update would be `"baseBranch": "v1.1.x-2022-07"`
+
+4. Create a new branch off of your desired release branch, apply your fix, and push that branch to GitHub.
+5. Create a pull request for your fix branch, and **use the release branch determined above as your base branch**. [Here is an example of backport fix PR](https://github.com/Shopify/hydrogen/pull/1728).
+6. Ensure tests pass on your branch, and get approval from someone on the Hydrogen team. Then, merge your PR.
+7. Changesets will create a new pull request called `Release <branch name>`. When you've applied all the patches you need to that specific minor version, merge that PR. Changesets will release a new version to NPM and to GitHub Releases.
+8. Developers can now install the latest patch version for the minor version: `yarn add @shopify/hydrogen@^v1.1`.
+
 ## Common problems
 
 **After merging the auto-generated changeset PR, my GitHub Action encountered an Error with the message `No commits between X and changeset-release/Y`**
