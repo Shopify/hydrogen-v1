@@ -34,7 +34,7 @@ jobs:
         with:
           path: ./templates/demo-store
           oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_9928760 }}
-          build_command: "HYDROGEN_ASSET_BASE_URL=$OXYGEN_ASSET_BASE_URL yarn build"
+          build_command: 'HYDROGEN_ASSET_BASE_URL=$OXYGEN_ASSET_BASE_URL yarn build'
           # Hardcode message and timestamp if manual dispatch
           commit_message: ${{ github.event.head_commit.message || 'Manual deployment' }}
           commit_timestamp: ${{ github.event.head_commit.timestamp || github.event.repository.updated_at }}
