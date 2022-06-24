@@ -182,6 +182,122 @@ describe('<Image />', () => {
         srcSet: expectedSrcset,
       });
     });
+
+    it(`uses scale to multiply the srcset width but not the element width, and when crop is missing, does not include height in srcset`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 500,
+        height: 500,
+      });
+
+      const component = mount(
+        <Image data={image} loaderOptions={{scale: 2}} />
+      );
+
+      expect(component).toContainReactComponent('img', {
+        width: 500,
+        height: 500,
+        // height is not applied if there is no crop
+        // width is not doulbe of the passed width, but instead double of the value in 'sizes_array' / '[number]w'
+        srcSet: `${image.url}?width=704 352w`,
+      });
+    });
+
+    it(`uses scale to multiply the srcset width but not the element width, and when crop is there, includes height in srcset`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 500,
+        height: 500,
+      });
+
+      const component = mount(
+        <Image
+          data={image}
+          loaderOptions={{scale: 2, crop: 'bottom'}}
+          width={500}
+          height={250}
+        />
+      );
+
+      expect(component).toContainReactComponent('img', {
+        width: 500,
+        height: 250,
+        // height is the aspect ratio (of width + height) * srcSet width, so in this case it should be half of width
+        srcSet: `${image.url}?width=704&height=352&crop=bottom 352w`,
+      });
+    });
+
+    it(`uses scale to multiply the srcset width but not the element width, and when crop is there, includes height in srcset using data.width / data.height for the aspect ratio`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 500,
+        height: 500,
+      });
+
+      const component = mount(
+        <Image data={image} loaderOptions={{scale: 2, crop: 'bottom'}} />
+      );
+
+      expect(component).toContainReactComponent('img', {
+        width: 500,
+        height: 500,
+        // height is the aspect ratio (of data.width + data.height) * srcSet width, so in this case it should be the same as width
+        srcSet: `${image.url}?width=704&height=704&crop=bottom 352w`,
+      });
+    });
+
+    it(`uses scale to multiply the srcset width but not the element width, and when crop is there, calculates height based on aspect ratio in srcset`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 500,
+        height: 1000,
+      });
+
+      const component = mount(
+        <Image data={image} loaderOptions={{scale: 2, crop: 'bottom'}} />
+      );
+
+      expect(component).toContainReactComponent('img', {
+        width: 500,
+        height: 1000,
+        // height is the aspect ratio (of data.width + data.height) * srcSet width, so in this case it should be double the width
+        srcSet: `${image.url}?width=704&height=1408&crop=bottom 352w`,
+      });
+    });
+
+    it(`should pass through width (as an inline prop) when it's a string, and use the first size in the size array for the URL width`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 100,
+        height: 100,
+      });
+
+      const component = mount(<Image data={image} width="100%" />);
+
+      expect(component).toContainReactComponent('img', {
+        width: '100%',
+        src: `${image.url}?width=352`,
+        height: undefined, // make sure height isn't NaN
+      });
+    });
+
+    it(`should pass through width (as part of loaderOptions) when it's a string, and use the first size in the size array for the URL width`, () => {
+      const image = getPreviewImage({
+        url: 'https://cdn.shopify.com/someimage.jpg',
+        width: 100,
+        height: 100,
+      });
+
+      const component = mount(
+        <Image data={image} loaderOptions={{width: '100%'}} />
+      );
+
+      expect(component).toContainReactComponent('img', {
+        width: '100%',
+        src: `${image.url}?width=352`,
+        height: undefined, // make sure height isn't NaN
+      });
+    });
   });
 
   describe('External image', () => {

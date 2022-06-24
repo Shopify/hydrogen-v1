@@ -15,6 +15,10 @@ const PRODUCTION_CDN_HOSTNAMES = [
 const LOCAL_CDN_HOSTNAMES = ['spin.dev'];
 const ALL_CDN_HOSTNAMES = [...PRODUCTION_CDN_HOSTNAMES, ...LOCAL_CDN_HOSTNAMES];
 
+// based on the default width sizes used by the Shopify liquid HTML tag img_tag plus a 2560 width to account for 2k resolutions
+// reference: https://shopify.dev/api/liquid/filters/html-filters#image_tag
+export const IMG_SRC_SET_SIZES = [352, 832, 1200, 1920, 2560];
+
 /**
  * Adds image size parameters to an image URL hosted by Shopify's CDN
  */
@@ -25,24 +29,30 @@ export function addImageSizeParametersToUrl({
   crop,
   scale,
 }: ShopifyLoaderParams) {
-  if (scale) {
-    // Have to do this specifically for 'scale' because it doesn't currently work otherwise.
-    // I'm also intentionally leaving 'scale' as a searchParam because that way it'll "just work" in the future and we can just delete this whole section of code
+  const newUrl = new URL(src);
 
-    // We assume here that the last `.` is the delimiter between the file name and the file type
-    const baseUrl = new URL(src);
-    const fileDelimiterIndex = baseUrl.pathname.lastIndexOf('.');
-    const fileName = baseUrl.pathname.slice(0, fileDelimiterIndex);
-    const fileType = baseUrl.pathname.slice(fileDelimiterIndex);
-    baseUrl.pathname = `${fileName}${`@${scale.toString()}x`}${fileType}`;
-    src = baseUrl.toString();
+  const multipliedScale = scale ?? 1;
+
+  if (width) {
+    let finalWidth: string;
+
+    if (typeof width === 'string') {
+      finalWidth = (IMG_SRC_SET_SIZES[0] * multipliedScale).toString();
+    } else {
+      finalWidth = (Number(width) * multipliedScale).toString();
+    }
+
+    newUrl.searchParams.append('width', finalWidth);
   }
 
-  const newUrl = new URL(src);
-  width && newUrl.searchParams.append('width', width.toString());
-  height && newUrl.searchParams.append('height', height.toString());
+  if (height && typeof height === 'number') {
+    newUrl.searchParams.append('height', (height * multipliedScale).toString());
+  }
+
   crop && newUrl.searchParams.append('crop', crop);
-  scale && newUrl.searchParams.append('scale', scale.toString());
+
+  // for now we intentionally leave off the scale param, and instead multiple width & height by scale instead
+  // scale && newUrl.searchParams.append('scale', scale.toString());
 
   return newUrl.toString();
 }
@@ -108,15 +118,13 @@ export function getShopifyImageDimensions({
     return {
       width:
         loaderOptions?.width ??
-        (aspectRatio
-          ? // @ts-expect-error if width isn't defined, then height has to be defined due to the If statement above
-            Math.round(aspectRatio * loaderOptions.height)
+        (aspectRatio && typeof loaderOptions.height === 'number'
+          ? Math.round(aspectRatio * loaderOptions.height)
           : null),
       height:
         loaderOptions?.height ??
-        (aspectRatio
-          ? // @ts-expect-error if height isn't defined, then width has to be defined due to the If statement above
-            Math.round(aspectRatio * loaderOptions.width)
+        (aspectRatio && typeof loaderOptions.width === 'number'
+          ? Math.round(aspectRatio * loaderOptions.width)
           : null),
     };
   }
@@ -126,15 +134,13 @@ export function getShopifyImageDimensions({
     return {
       width:
         elementProps?.width ??
-        (aspectRatio
-          ? // @ts-expect-error if width isn't defined, then height has to be defined due to the If statement above
-            Math.round(aspectRatio * elementProps.height)
+        (aspectRatio && typeof elementProps.height === 'number'
+          ? Math.round(aspectRatio * elementProps.height)
           : null),
       height:
         elementProps?.height ??
-        (aspectRatio
-          ? // @ts-expect-error if height isn't defined, then width has to be defined due to the If statement above
-            Math.round(aspectRatio * elementProps.width)
+        (aspectRatio && typeof elementProps.width === 'number'
+          ? Math.round(aspectRatio * elementProps.width)
           : null),
     };
   }

@@ -119,15 +119,6 @@ describe(`getShopifyImageDimensions`, () => {
 });
 
 describe(`'addImageSizeParametersToUrl'`, () => {
-  it(`adds scale before the file extension`, () => {
-    expect(
-      addImageSizeParametersToUrl({
-        src: 'https://cdn.example.com/filename.jpg',
-        scale: 2,
-      })
-    ).toBe('https://cdn.example.com/filename@2x.jpg?scale=2');
-  });
-
   it(`creates a url when scale isn't involved`, () => {
     expect(
       addImageSizeParametersToUrl({
@@ -141,7 +132,7 @@ describe(`'addImageSizeParametersToUrl'`, () => {
     );
   });
 
-  it(`creates a url`, () => {
+  it(`creates a url with scale=3`, () => {
     expect(
       addImageSizeParametersToUrl({
         src: 'https://cdn.example.com/filename.jpg',
@@ -151,8 +142,19 @@ describe(`'addImageSizeParametersToUrl'`, () => {
         scale: 3,
       })
     ).toBe(
-      'https://cdn.example.com/filename@3x.jpg?width=100&height=101&crop=bottom&scale=3'
+      'https://cdn.example.com/filename.jpg?width=300&height=303&crop=bottom'
     );
+  });
+
+  it(`creates a url with scale=2`, () => {
+    expect(
+      addImageSizeParametersToUrl({
+        src: 'https://cdn.example.com/filename.jpg',
+        width: 100,
+        height: 101,
+        scale: 2,
+      })
+    ).toBe('https://cdn.example.com/filename.jpg?width=200&height=202');
   });
 });
 
