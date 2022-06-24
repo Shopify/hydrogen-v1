@@ -78,7 +78,10 @@ async function createProcessor(from, to, template) {
       case '.stackblitzrc':
       case '_gitignore':
         await fs.mkdirp(resolve(destination, '..'));
-        await fs.writeFile(destination, content);
+        await fs.writeFile(
+          destination.replace('_gitignore', '.gitignore'),
+          content
+        );
         return;
       case 'tsconfig.json':
         destination = destination.replace('ts', 'js');
