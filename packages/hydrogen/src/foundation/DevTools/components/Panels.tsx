@@ -102,7 +102,13 @@ export function Panels({settings}: Props) {
             );
           }
           return (
-            <a style={style} href={panel.url} key={panel.url}>
+            <a
+              style={style}
+              target="_blank"
+              rel="noreferrer"
+              href={panel.url}
+              key={panel.url}
+            >
               {panel.content}
               <span>↗</span>
             </a>
@@ -128,7 +134,7 @@ function getPanels({settings, performance}: Props) {
     },
     graphiql: {
       content: 'GraphiQL',
-      url: '/graphiql',
+      url: '/___graphql',
     },
   };
 
