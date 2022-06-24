@@ -109,9 +109,7 @@ export const renderHydrogen = (App: any) => {
       response.headers.set('powered-by', 'Shopify-Hydrogen');
     }
 
-    sessionApi =
-      sessionApi ??
-      (hydrogenConfig.session ? hydrogenConfig.session(log) : undefined);
+    sessionApi ??= hydrogenConfig.session?.(log);
 
     request.ctx.session = getSyncSessionApi(request, response, log, sessionApi);
 

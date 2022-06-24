@@ -275,12 +275,6 @@ export async function renderApiRoute(
     state = response.state;
     customPath = response.newUrl;
 
-    if (!Array.from(response.headers.keys()).length) {
-      request.headers.forEach((value, key) => {
-        response.headers.set(key, value);
-      });
-    }
-
     if (request.headers.get('Hydrogen-Client') === 'Form-Action') {
       return new Request(
         url.origin +
