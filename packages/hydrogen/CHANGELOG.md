@@ -1,5 +1,41 @@
 # Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- `<Image/>` component has improved handling for `width` as a string. It also corrects an issue with the `scale` prop and its usage with the Shopify CDN. The generated `srcset` is also updated and improved. ([#1723](https://github.com/Shopify/hydrogen/pull/1723)) by [@frehner](https://github.com/frehner)
+
+* We've decided to deprecate the `<LocalizationProvider>`, and instead put all its functionality into `<ShopifyProvider>`. The justification is that both providers are required by many components and hooks, and we think it's easier to have a single required `<ShopifyProvider>` instead of two. The same props available to the `<LocalizationProvider>` are now available on the `<ShopifyProvider>`. ([#1735](https://github.com/Shopify/hydrogen/pull/1735)) by [@blittle](https://github.com/blittle)
+
+  ```diff
+  // App.server.tsx
+  function App({routes, request}: HydrogenRouteProps) {
+    ...
+    return (
+      <Suspense fallback={<HeaderFallback isHome={isHome} />}>
+  +     <ShopifyProvider countryCode={countryCode as CountryCode}>
+  -     <ShopifyProvider>
+  -     <LocalizationProvider countryCode={countryCode as CountryCode}>
+          <CartProvider countryCode={countryCode as CountryCode}>
+              ...
+          </CartProvider>
+          <PerformanceMetrics />
+          {import.meta.env.DEV && <PerformanceMetricsDebug />}
+          <ShopifyAnalytics />
+  -     </LocalizationProvider>
+        </ShopifyProvider>
+      </Suspense>
+    );
+  }
+  ```
+
+  Note: this is not a breaking change. `<LocalizationProvider>` will still be available, but all documentation will now point to `<ShopifyProvider>`.
+
+- Remove `formData` polyfill in worker environments. ([#1740](https://github.com/Shopify/hydrogen/pull/1740)) by [@frandiox](https://github.com/frandiox)
+
+* Fix `useProductOptions` export to avoid errors at build time. ([#1738](https://github.com/Shopify/hydrogen/pull/1738)) by [@frandiox](https://github.com/frandiox)
+
 ## 1.0.1
 
 ### Patch Changes
