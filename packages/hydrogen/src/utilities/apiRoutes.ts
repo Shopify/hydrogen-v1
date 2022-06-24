@@ -8,11 +8,11 @@ import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server';
 import {fetchBuilder, graphqlRequestBody} from './fetch';
 import {getStorefrontApiRequestHeaders} from './storefrontApi';
-import {
-  emptySessionImplementation,
+import type {
   SessionApi,
   SessionStorageAdapter,
-} from '../foundation/session/session';
+} from '../foundation/session/session-types';
+import {emptySessionImplementation} from '../foundation/session/session';
 import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks';
 import {RSC_PATHNAME} from '../constants';
 

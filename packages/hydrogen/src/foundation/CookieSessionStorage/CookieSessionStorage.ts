@@ -1,4 +1,4 @@
-import type {SessionStorageAdapter} from '../session/session';
+import type {SessionStorageAdapter} from '../session/session-types';
 import {Cookie} from '../Cookie/Cookie';
 import type {CookieOptions} from '../Cookie/Cookie';
 

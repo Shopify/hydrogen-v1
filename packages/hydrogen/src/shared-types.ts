@@ -3,7 +3,7 @@
 // affecting the files generated in the CJS build.
 
 import type {IncomingMessage, ServerResponse} from 'http';
-import type {SessionStorageAdapter} from './foundation/session/session';
+import type {SessionStorageAdapter} from './foundation/session/session-types';
 
 export interface RuntimeContext {
   waitUntil: (fn: Promise<any>) => void;
