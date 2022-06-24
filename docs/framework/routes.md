@@ -86,7 +86,7 @@ You can also provide a custom static implementation of a dynamic page to overrid
 
 The [`Link`](https://shopify.dev/api/hydrogen/components/framework/link) component includes an optional `prefetch` prop that controls whether to prefetch a link source when a user signals intent. The default value is `true`.
 
-If you want to disable link prefetching, then pass `preload={false}` to the `Link` component:
+If you want to disable link prefetching, then pass `prefetch={false}` to the `Link` component:
 
 {% codeblock file, filename: 'Component.client.jsx' %}
 
