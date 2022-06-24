@@ -195,7 +195,7 @@ export class HydrogenRequest extends Request {
 
   public async formData(): Promise<FormData> {
     // @ts-ignore
-    if (!__HYDROGEN_WORKER__ && super.formData) return super.formData();
+    if (__HYDROGEN_WORKER__ || super.formData) return super.formData();
 
     const contentType = this.headers.get('Content-Type') || '';
 
