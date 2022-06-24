@@ -37,16 +37,21 @@ describe('products', () => {
   });
 
   it('can be added to cart', async () => {
-    await session.visit(productUrl);
+    // Make sure cart script loads
+    await Promise.all([
+      session.page.waitForResponse(
+        'https://cdn.shopify.com/shopifycloud/shop-js/v1.0/client.js',
+      ),
+      session.visit(productUrl),
+    ]);
 
     const addToCartButton = await session.page.locator('text=Add to bag');
 
     // Click on add to cart button
     const [cartResponse] = await Promise.all([
-      session.page.waitForResponse((response: PlaywrightResponse) => {
-        console.log(response.url());
-        return /graphql\.json/.test(response.url());
-      }),
+      session.page.waitForResponse((response: PlaywrightResponse) =>
+        /graphql\.json/.test(response.url()),
+      ),
       addToCartButton.click(),
     ]);
 
