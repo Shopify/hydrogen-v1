@@ -43,9 +43,10 @@ describe('products', () => {
 
     // Click on add to cart button
     const [cartResponse] = await Promise.all([
-      session.page.waitForResponse((response: PlaywrightResponse) =>
-        /graphql\.json/.test(response.url()),
-      ),
+      session.page.waitForResponse((response: PlaywrightResponse) => {
+        console.log(response.url());
+        return /graphql\.json/.test(response.url());
+      }),
       addToCartButton.click(),
     ]);
 
