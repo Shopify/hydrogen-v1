@@ -68,7 +68,7 @@ function updateCookie(
   const cookieString = stringify(cookieName, value, {
     maxage,
     domain: getCookieDomain(cookieDomain),
-    secure: process.env.NODE_ENV === 'production',
+    secure: import.meta.env.PROD,
     samesite: 'Lax',
     path: '/',
   });
