@@ -1,6 +1,10 @@
 # This Action is responsible for deploying the default Hydrogen template to Oxygen.
 # It is split out from deployments.yml because Oxygen checks for the presence of this specific workflow in the repo.
 # TODO: Merge the workflow if/when Oxygen is more lenient.
+
+# Don't change the line below!
+#! oxygen_storefront_id: 9928760
+
 name: Oxygen Deployment
 
 on:
@@ -28,31 +32,13 @@ jobs:
       - name: Build Hydrogen
         run: yarn workspace @shopify/hydrogen build
 
-      - name: Generate deployment ID
-        id: deployment-id
-        working-directory: ./templates/demo-store
-        run: |
-          yarn add ulid
-          echo "::set-output name=ID::$(LC_ALL=C </dev/urandom tr -dc "0123456789abcdefghjkmnpqrstvwxyz" | head -c 9)"
-
-      - name: Set asset base URL
-        shell: bash
-        run: echo "::set-output name=URL::https://cdn.shopify.com/oxygen/55145660472/9928760/${{ steps.deployment-id.outputs.ID }}/"
-        id: base-url
-
-      - name: Production build
-        id: storefront-build
-        working-directory: ./templates/demo-store
-        run: |
-          HYDROGEN_ASSET_BASE_URL=${{ steps.base-url.outputs.URL }} yarn build
-
-      - name: Publish to Oxygen
+      - name: Build and Publish to Oxygen
         id: deploy
-        uses: shopify/oxygenctl-action@v2
+        uses: shopify/oxygenctl-action@v4
         with:
           path: ./templates/demo-store
-          deployment_id: ${{ steps.deployment-id.outputs.ID }}
-          oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
+          oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_9928760 }}
+          build_command: 'HYDROGEN_ASSET_BASE_URL=$OXYGEN_ASSET_BASE_URL yarn build'
           # Hardcode message and timestamp if manual dispatch
           commit_message: ${{ github.event.head_commit.message || 'Manual deployment' }}
           commit_timestamp: ${{ github.event.head_commit.timestamp || github.event.repository.updated_at }}
