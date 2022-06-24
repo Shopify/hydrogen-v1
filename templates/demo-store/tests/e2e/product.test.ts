@@ -33,18 +33,20 @@ describe('products', () => {
   it('should have product title', async () => {
     await session.visit(productUrl);
     const heading = await session.page.locator('h1').first();
-    expect(heading).not.toBeNull();
+    expect(await heading.textContent()).not.toBeNull();
   });
 
   it('can be added to cart', async () => {
     await session.visit(productUrl);
+
+    const addToCartButton = await session.page.locator('text=Add to bag');
 
     // Click on add to cart button
     const [cartResponse] = await Promise.all([
       session.page.waitForResponse((response: PlaywrightResponse) =>
         /graphql\.json/.test(response.url()),
       ),
-      session.page.locator('text=Add to bag').click(),
+      addToCartButton.click(),
     ]);
 
     const cartEvent = await cartResponse.json();

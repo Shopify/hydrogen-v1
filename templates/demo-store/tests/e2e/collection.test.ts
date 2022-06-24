@@ -33,16 +33,7 @@ describe('collections', () => {
     await session.visit(collectionUrl);
 
     const heading = await session.page.locator('h1').first();
-    expect(heading).not.toBeNull();
-  });
-
-  it('should have collection description', async () => {
-    await session.visit(collectionUrl);
-
-    const description = await session.page
-      .locator('#mainContent header p')
-      .first();
-    expect(description).not.toBeNull();
+    expect(await heading.textContent()).not.toBeNull();
   });
 
   it('should have collection product tiles', async () => {
