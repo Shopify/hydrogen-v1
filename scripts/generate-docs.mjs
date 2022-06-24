@@ -18,7 +18,12 @@ const CONFIG = {
     'deployment.md': 'content/custom-storefronts/hydrogen/deployment.md',
   },
   // Array of file paths to skip.
-  skip: ['docs/images', 'docs/contributing', 'docs/README.md'],
+  skip: [
+    'docs/images',
+    'docs/contributing',
+    'docs/README.md',
+    'docs/decisions',
+  ],
   // require a path entry to be copied. If true files will still be copied by default
   // and appear in the same directory structure as their source file.
   enableDefaultPaths: true,
