@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useCart} from '../CartProvider';
-import {useProductOptions} from '../ProductOptionsProvider';
+import {useProductOptions} from '../../hooks/useProductOptions';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
 interface AddToCartButtonProps {

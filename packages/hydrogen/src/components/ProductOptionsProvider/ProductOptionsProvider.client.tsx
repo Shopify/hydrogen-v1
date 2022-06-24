@@ -11,7 +11,7 @@ import {
   getSelectedVariant,
   getOptions,
 } from '../../hooks/useProductOptions/helpers';
-import {
+import type {
   SelectedOptions,
   ProductOptionsHookValue,
 } from '../../hooks/useProductOptions/types';
