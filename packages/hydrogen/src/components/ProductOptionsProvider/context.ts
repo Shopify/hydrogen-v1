@@ -1,5 +1,5 @@
 import {createContext} from 'react';
-import {ProductOptionsHookValue} from '../../hooks';
+import type {ProductOptionsHookValue} from '../../hooks';
 
 export const ProductOptionsContext =
   createContext<ProductOptionsHookValue | null>(null);

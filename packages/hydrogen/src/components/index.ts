@@ -33,5 +33,4 @@ export {
 export {ProductPrice} from './ProductPrice';
 export {BuyNowButton} from './BuyNowButton';
 export {ShopPayButton} from './ShopPayButton';
-export {useLocalization} from '../hooks/useLocalization/useLocalization';
 export {Seo} from './Seo';

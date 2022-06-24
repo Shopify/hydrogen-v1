@@ -1,9 +1,14 @@
 export * from './components';
 export * from './hooks';
-export * from './foundation/useServerProps';
-export * from './foundation/useShop';
-export * from './foundation/ServerPropsProvider';
-export * from './foundation/useUrl';
+export {useServerProps} from './foundation/useServerProps';
+export {useShop} from './foundation/useShop';
+export {
+  ServerPropsProvider,
+  ServerPropsContext,
+  type ServerProps,
+  type ServerPropsContextValue,
+} from './foundation/ServerPropsProvider';
+export {useUrl} from './foundation/useUrl';
 export {Head} from './foundation/Head';
 export * from './utilities';
 export {gql} from './utilities/graphql-tag';

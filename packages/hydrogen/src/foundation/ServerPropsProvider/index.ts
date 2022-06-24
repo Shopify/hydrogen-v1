@@ -1,2 +1,6 @@
-export {ServerPropsProvider, ServerPropsContext} from './ServerPropsProvider';
-export type {ServerProps, ServerPropsContextValue} from './ServerPropsProvider';
+export {
+  ServerPropsProvider,
+  ServerPropsContext,
+  type ServerProps,
+  type ServerPropsContextValue,
+} from './ServerPropsProvider';
