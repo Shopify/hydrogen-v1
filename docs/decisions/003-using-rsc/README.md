@@ -2,7 +2,7 @@
 
 ## Status
 
-Approved by internal concensus in mid-2021.
+Approved by internal consensus in mid-2021.
 
 ## tl;dr
 
