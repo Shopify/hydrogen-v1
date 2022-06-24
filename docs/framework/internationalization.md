@@ -12,7 +12,7 @@ Shopify helps merchants all over the world, sell to customers all over the world
 
 Hydrogen includes the following components and hooks for localization:
 
-- **[`ShopifyProvider` component](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)**: A component that provides localization data in a context that can be used both within server and client components by the [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
+- **[`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)**: A component that provides localization data in a context that can be used both within server and client components by the [`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization) hook.
 
 - **[`useLocalization`](https://shopify.dev/api/hydrogen/hooks/localization/uselocalization)**: A hook that returns the locale, country, and language of the current page.
 
@@ -92,7 +92,7 @@ For more information about retrieving language translations and the `@inContext`
 
 ### Search engine optimization (SEO)
 
-Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the locale within the [`ShopifyProvider` component](https://shopify.dev/api/hydrogen/components/global/shopifyprovider) component.
+Hydrogen provides an [`Seo`](https://shopify.dev/api/hydrogen/components/primitive/seo) component that renders SEO information on a webpage. The language of the default page (`defaultSeo`) defaults to the locale within the [`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider) component.
 
 For more information about customizing the output of SEO-related tags in your Hydrogen app, refer to [SEO](https://shopify.dev/custom-storefronts/hydrogen/framework/seo).
 

@@ -52,4 +52,4 @@ This hook returns an object with the following properties:
 
 ## Related components
 
-- [`ShopifyProvider` component](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)
+- [`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)
