@@ -2,10 +2,10 @@
 '@shopify/hydrogen': patch
 ---
 
-We've decided to deprecate the `<LocalizationProvider>`, and instead put all it's functionality into `<ShopifyProvider>`. The justification is that both providers are required by many components and hooks, and we think it's easier to have a single required `<ShopifyProvider>` instead of two. The same props available to the `<LocalizationProvider>` are now available on the `<ShopifyProvider>`.
+We've decided to deprecate the `<LocalizationProvider>`, and instead put all its functionality into `<ShopifyProvider>`. The justification is that both providers are required by many components and hooks, and we think it's easier to have a single required `<ShopifyProvider>` instead of two. The same props available to the `<LocalizationProvider>` are now available on the `<ShopifyProvider>`.
 
 ```diff
-// App.server.tsxx
+// App.server.tsx
 function App({routes, request}: HydrogenRouteProps) {
   ...
   return (
