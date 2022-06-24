@@ -75,12 +75,12 @@ fragment CartFragment on Cart {
           key
           value
         }
-        estimatedCost {
+        cost {
           totalAmount {
             amount
             currencyCode
           }
-          compareAtAmount {
+          compareAtAmountPerQuantity {
             amount
             currencyCode
           }
@@ -113,7 +113,7 @@ fragment CartFragment on Cart {
       }
     }
   }
-  estimatedCost {
+  cost {
     subtotalAmount {
       ...MoneyFragment
     }
