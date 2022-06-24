@@ -81,7 +81,7 @@ describe('<DefaultPageSeo />', () => {
       const wrapper = mountWithProviders(<DefaultPageSeo {...defaultProps} />);
 
       expect(wrapper).toContainReactComponent('html', {
-        lang: 'en',
+        lang: 'EN',
       });
     });
 

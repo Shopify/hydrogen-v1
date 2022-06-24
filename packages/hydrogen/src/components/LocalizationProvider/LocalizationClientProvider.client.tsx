@@ -1,8 +1,6 @@
 import React, {ReactNode} from 'react';
-import {
-  LocalizationContext,
-  LocalizationContextValue,
-} from './LocalizationContext.client';
+import {LocalizationContext} from '../../foundation/ShopifyProvider/ShopifyProvider.client';
+import type {LocalizationContextValue} from '../../foundation/ShopifyProvider/types';
 
 export default function LocalizationClientProvider({
   localization,

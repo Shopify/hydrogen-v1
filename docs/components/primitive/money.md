@@ -6,7 +6,7 @@ description: The Money component renders a string of the Storefront API's MoneyV
 
 The `Money` component renders a string of the Storefront API's
 [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) according to the
-`locale` in the [`LocalizationProvider` component](https://shopify.dev/api/hydrogen/components/localization/localizationprovider). 
+`locale` in the [`ShopifyProvider` component](https://shopify.dev/api/hydrogen/components/global/shopifyprovider). 
 
 The component outputs a `<div>`. You can [customize this component](https://shopify.dev/api/hydrogen/components#customizing-hydrogen-components) using passthrough props.
 
