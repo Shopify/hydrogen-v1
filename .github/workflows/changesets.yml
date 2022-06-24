@@ -56,7 +56,7 @@ jobs:
 
       - name: Create Release Pull Request or Publish (for legacy patch release)
         if: steps.flags.outputs.latest != 'true'
-        id: changesets
+        id: changesets_legacy
         uses: changesets/action@v1
         with:
           version: yarn run version
