@@ -17,7 +17,7 @@ import {HeaderFallback} from '~/components';
 import type {CountryCode} from '@shopify/hydrogen/storefront-api-types';
 import {DefaultSeo, NotFound} from '~/components/index.server';
 
-function App({routes, request}: HydrogenRouteProps) {
+function App({request}: HydrogenRouteProps) {
   const pathname = new URL(request.normalizedUrl).pathname;
   const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
   const countryCode = localeMatch ? localeMatch[1] : undefined;
@@ -35,7 +35,6 @@ function App({routes, request}: HydrogenRouteProps) {
             <Router>
               <FileRoutes
                 basePath={countryCode ? `/${countryCode}/` : undefined}
-                routes={routes}
               />
               <Route path="*" page={<NotFound />} />
             </Router>

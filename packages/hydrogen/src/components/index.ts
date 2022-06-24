@@ -26,12 +26,8 @@ export type {
   CartWithActions,
   CartAction,
 } from './CartProvider';
-export {
-  ProductOptionsProvider,
-  useProductOptions,
-} from './ProductOptionsProvider';
+export {ProductOptionsProvider} from './ProductOptionsProvider';
 export {ProductPrice} from './ProductPrice';
 export {BuyNowButton} from './BuyNowButton';
 export {ShopPayButton} from './ShopPayButton';
-export {useLocalization} from '../hooks/useLocalization/useLocalization';
 export {Seo} from './Seo';

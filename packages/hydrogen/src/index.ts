@@ -10,10 +10,23 @@ export * from './client';
  * The following are exported from this file because they are intended to be available
  * *only* on the server.
  */
-export * from './foundation/';
-export * from './hooks/useShopQuery/hooks';
-export * from './foundation/useQuery/hooks';
-export * from './foundation/useServerProps';
+export {
+  ServerPropsProvider,
+  ServerPropsContext,
+  type ServerProps,
+  type ServerPropsContextValue,
+} from './foundation/ServerPropsProvider';
+export {useShop} from './foundation/useShop';
+export {useUrl} from './foundation/useUrl';
+export {
+  useShopQuery,
+  type UseShopQueryResponse,
+} from './hooks/useShopQuery/hooks';
+export {
+  useQuery,
+  type HydrogenUseQueryOptions,
+} from './foundation/useQuery/hooks';
+export {useServerProps} from './foundation/useServerProps';
 export {FileRoutes} from './foundation/FileRoutes/FileRoutes.server';
 export {Route} from './foundation/Route/Route.server';
 export {Router} from './foundation/Router/Router.server';
@@ -32,7 +45,6 @@ export {useServerAnalytics} from './foundation/Analytics/hook';
 export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server';
 export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const';
 export {useSession} from './foundation/useSession/useSession';
-export {useLocalization} from './hooks/useLocalization/useLocalization';
 export {Cookie} from './foundation/Cookie/Cookie';
 
 /**
