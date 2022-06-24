@@ -53,7 +53,8 @@ Hydrogen is a Yarn v1 monorepo. It consists of several key packages:
 
 For more information, check out the following resources:
 
-- [Decision Log](./contributing/decisions.md)
+- [Decisions](../docs/decisions/)
+- [Decision Log (outdated)](./contributing/decisions.md)
 - [Principles & Assumptions](./contributing/principles.md)
 
 ## Formatting and Linting
