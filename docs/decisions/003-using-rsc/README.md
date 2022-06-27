@@ -38,6 +38,6 @@ By fetching data in components, Hydrogen also faced the problem of network reque
 
 There are also drawbacks related to assets. Developers are used to importing stylesheets and images into their React components. However, by design, no assets imported into server components are meant to end up in the browser. This has caused limitations to which CSS frameworks we can support. With CSS Modules, we've been able to create experimental workarounds to automatically inject `<style>` tags into server component default exports when CSS modules are imported.
 
-After production use by merchant developers, we found that the `*.client` component suffix was confusing. This is because client components are still executed during server-side rendering. We gave feedback on this, and are aligning on a solution that does not involve client suffixes.
+After production use by merchant developers, we found that the `*.client` component suffix was confusing. This is because client components still run during server-side rendering. We gave feedback on this, and are aligning on a solution that does not involve client suffixes.
 
 As of v1, Hydrogen continues to work with React and Vercel to refine the design of server components. We plan to introduce an updated version of server components in a future release of Hydrogen, along with a migration guide.
