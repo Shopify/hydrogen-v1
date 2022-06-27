@@ -1,0 +1,9 @@
+{
+  "common": {
+    "switcher": "Sprache"
+  },
+  "welcome": {
+    "title": "Hallo Welt",
+    "description": "Wasserstoff trifft i18n"
+  }
+}

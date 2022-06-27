@@ -1,0 +1,9 @@
+{
+  "common": {
+    "switcher": "Language"
+  },
+  "welcome": {
+    "title": "Hello world",
+    "description": "Hydrogen meets i18n"
+  }
+}

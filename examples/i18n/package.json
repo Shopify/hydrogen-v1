@@ -1,0 +1,25 @@
+{
+  "name": "hydrogen-i18n-example",
+  "description": "An example using react-i18next in Hydrogen",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "preview": "shopify hydrogen preview"
+  },
+  "devDependencies": {
+    "@shopify/cli": "latest",
+    "@shopify/cli-hydrogen": "latest",
+    "vite": "^2.9.0"
+  },
+  "dependencies": {
+    "@shopify/hydrogen": "latest",
+    "react": "^18.2.0",
+    "react-i18next": "latest",
+    "i18next": "latest",
+    "i18next-browser-languagedetector": "latest",
+    "react-dom": "^18.2.0"
+  }
+}
