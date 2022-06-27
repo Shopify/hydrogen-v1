@@ -1,0 +1,24 @@
+{
+  "name": "hydrogen-stitches-css",
+  "description": "An example using Stitches CSS-in-JS in Hydrogen",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "shopify hydrogen dev",
+    "build": "shopify hydrogen build",
+    "preview": "shopify hydrogen preview"
+  },
+  "devDependencies": {
+    "@shopify/cli": "latest",
+    "@shopify/cli-hydrogen": "latest",
+    "vite": "^2.9.0"
+  },
+  "dependencies": {
+    "@shopify/hydrogen": "latest",
+    "@stitches/react": "^1.2.8",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "author": "juanp.prieto"
+}
