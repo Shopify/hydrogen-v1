@@ -1,5 +1,4 @@
 import React from 'react';
-import {Heading} from './Heading';
 import {Table} from './Table';
 
 interface Props {
@@ -23,10 +22,5 @@ export function Settings(props: Props) {
     };
   });
 
-  return (
-    <>
-      <Heading>Config</Heading>
-      <Table items={items} />
-    </>
-  );
+  return <Table items={items} />;
 }

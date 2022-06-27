@@ -1,9 +1,4 @@
----
-title: 'Decision Log'
-sidebar_position: 3
----
-
-This document contains all the decisions that were taken since the beginning of this project. This is a living document and should be updated accordingly.
+**This document is outdated, but serves as an historical reference to early decisions made in the Hydrogen project circa April 2021.**
 
 - Use [Vite](https://vitejs.dev/) for the framework. Fast, modern, leans into the ES module support of modern browsers rather than creating a giant bundle a la Webpack.
 - Use [Tailwind](https://tailwindcss.com) for styles.

@@ -11,6 +11,11 @@ type TestOptions = {
   isBuild?: boolean;
 };
 
+const SHOPIFY_ANALYTICS_ENDPOINT =
+  'https://monorail-edge.shopifysvc.com/unstable/produce_batch';
+const SHOPIFY_PERFORMANCE_ENDPOINT =
+  'https://monorail-edge.shopifysvc.com/v1/produce';
+
 export default async function testCases({
   getServerUrl,
   isBuild,
@@ -586,6 +591,91 @@ export default async function testCases({
 
       expect(response.status).toBe(200);
       expect(text).toContain(`some value`);
+    });
+  });
+
+  describe('Shopify analytics', () => {
+    it('should emit page-view event', async () => {
+      const analyticFullPage = getServerUrl() + '/analytics/full';
+
+      const [request] = await Promise.all([
+        page.waitForRequest(SHOPIFY_ANALYTICS_ENDPOINT),
+        page.goto(analyticFullPage),
+      ]);
+
+      const shopifyEvents = request.postDataJSON();
+      expect(request.url()).toEqual(SHOPIFY_ANALYTICS_ENDPOINT);
+
+      const event = shopifyEvents.events[0];
+      const payload = event.payload;
+
+      expect(event.schema_id).toContain('trekkie_storefront_page_view');
+      expect(payload.url).toEqual(analyticFullPage);
+      expect(payload.shopId).not.toEqual(0);
+      expect(payload.pageType).toEqual('index');
+      expect(payload.isMerchantRequest).toEqual(true);
+    });
+
+    it('should emit page-view on sub load', async () => {
+      const analyticSubPage = '/analytics/sub';
+      // Full load
+      await Promise.all([
+        page.waitForRequest(SHOPIFY_ANALYTICS_ENDPOINT),
+        page.goto(getServerUrl() + '/analytics/full'),
+      ]);
+
+      // Sub load
+      const [request] = await Promise.all([
+        page.waitForRequest(SHOPIFY_ANALYTICS_ENDPOINT),
+        page.click(`a[href="${analyticSubPage}"]`),
+      ]);
+
+      const shopifyEvents = request.postDataJSON();
+      expect(request.url()).toEqual(SHOPIFY_ANALYTICS_ENDPOINT);
+
+      const event = shopifyEvents.events[0];
+      const payload = event.payload;
+
+      expect(event.schema_id).toContain('trekkie_storefront_page_view');
+      expect(payload.url).toEqual(getServerUrl() + analyticSubPage);
+      expect(payload.shopId).not.toEqual(0);
+      expect(payload.pageType).toEqual('page');
+      expect(payload.isMerchantRequest).toEqual(true);
+    });
+  });
+
+  describe('Performance metrics', () => {
+    it('should emit performance event', async () => {
+      const analyticFullPage = getServerUrl() + '/analytics/full';
+      const [request] = await Promise.all([
+        page.waitForRequest(SHOPIFY_PERFORMANCE_ENDPOINT),
+        page.goto(analyticFullPage),
+      ]);
+
+      const performanceEvent = request.postDataJSON().payload;
+      expect(request.url()).toEqual(SHOPIFY_PERFORMANCE_ENDPOINT);
+      expect(performanceEvent.page_load_type).toEqual('full');
+      expect(performanceEvent.url).toEqual(analyticFullPage);
+    });
+
+    it('should emit performance on sub load', async () => {
+      const analyticSubPage = '/analytics/sub';
+      // Full load
+      await Promise.all([
+        page.waitForRequest(SHOPIFY_PERFORMANCE_ENDPOINT),
+        page.goto(getServerUrl() + '/analytics/full'),
+      ]);
+
+      // Sub load
+      const [request] = await Promise.all([
+        page.waitForRequest(SHOPIFY_PERFORMANCE_ENDPOINT),
+        page.click(`a[href="${analyticSubPage}"]`),
+      ]);
+
+      const performanceEvent = request.postDataJSON().payload;
+      expect(request.url()).toEqual(SHOPIFY_PERFORMANCE_ENDPOINT);
+      expect(performanceEvent.page_load_type).toEqual('sub');
+      expect(performanceEvent.url).toEqual(getServerUrl() + analyticSubPage);
     });
   });
 }

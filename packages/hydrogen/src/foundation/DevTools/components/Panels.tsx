@@ -8,19 +8,29 @@ export interface Props {
   performance: ComponentProps<typeof Performance>;
 }
 
-interface Panel {
+interface BasePanel {
   content: string;
-  panel: React.ReactNode;
-  icon: React.ReactNode;
+}
+
+interface ExternalPanel extends BasePanel {
+  url: string;
+}
+
+interface ComponentPanel extends BasePanel {
+  component: React.ReactNode;
 }
 
 type Navigations = Props['performance']['navigations'];
 
 interface Panels {
-  performance: Panel;
-  settings: Panel;
-  graphql?: Panel;
+  performance: ComponentPanel;
+  settings: ComponentPanel;
+  graphiql: ExternalPanel;
 }
+
+const isComponentPanel = (
+  panel: ComponentPanel | ExternalPanel
+): panel is ComponentPanel => (panel as ComponentPanel).component !== undefined;
 
 export function Panels({settings}: Props) {
   const [selectedPanel, setSelectedPanel] = useState<number>(0);
@@ -55,61 +65,76 @@ export function Panels({settings}: Props) {
   }, [setNavigations, navigations]);
 
   const panels = getPanels({settings, performance: {navigations}});
-  const panelComponents = panels.map((obj, index) => (
-    <div
-      key={obj.content}
-      style={{display: selectedPanel === index ? 'block' : 'none'}}
-    >
-      {obj.panel}
-    </div>
-  ));
+  const panelComponents = panels.map((obj, index) =>
+    isComponentPanel(obj) ? (
+      <div
+        key={obj.content}
+        style={{display: selectedPanel === index ? 'block' : 'none'}}
+      >
+        {obj.component}
+      </div>
+    ) : null
+  );
 
   return (
     <div style={{display: 'flex', height: '100%'}}>
       <div style={{borderRight: '1px solid', padding: '1em 0em'}}>
-        {panels.map(({content, icon, id}, index) => {
+        {panels.map((panel, index) => {
           const active = selectedPanel === index;
+          const style = {
+            padding: '0em 1.25em',
+            fontWeight: 'bold',
+            textDecoration: active ? 'underline' : 'none',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          };
+          if (isComponentPanel(panel)) {
+            return (
+              <button
+                key={panel.id}
+                type="button"
+                style={style}
+                onClick={() => setSelectedPanel(index)}
+              >
+                <span>{panel.content}</span>
+              </button>
+            );
+          }
           return (
-            <button
-              key={id}
-              type="button"
-              style={{
-                lineHeight: 2,
-                padding: '0em 1.25em',
-                fontWeight: active ? 'bold' : 'normal',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              onClick={() => setSelectedPanel(index)}
+            <a
+              style={style}
+              target="_blank"
+              rel="noreferrer"
+              href={panel.url}
+              key={panel.url}
             >
-              <span style={{paddingRight: '0.4em'}}>{icon}</span>
-              <span style={{fontFamily: 'monospace'}}>{content}</span>
-            </button>
+              {panel.content}
+              <span>↗</span>
+            </a>
           );
         })}
       </div>
-      <div style={{padding: '1.25em', width: '100%'}}>
+      <div style={{padding: '1em', width: '100%'}}>
         {panelComponents[selectedPanel ? selectedPanel : 0]}
       </div>
     </div>
   );
 }
 
-function Panel({children}: {children: React.ReactNode}) {
-  return <div>{children}</div>;
-}
-
 function getPanels({settings, performance}: Props) {
   const panels: Panels = {
     settings: {
       content: 'Settings',
-      panel: <Settings {...settings} />,
-      icon: '🎛',
+      component: <Settings {...settings} />,
     },
     performance: {
       content: 'Performance',
-      panel: <Performance {...performance} />,
-      icon: '⏱',
+      component: <Performance {...performance} />,
+    },
+    graphiql: {
+      content: 'GraphiQL',
+      url: '/___graphql',
     },
   };
 
