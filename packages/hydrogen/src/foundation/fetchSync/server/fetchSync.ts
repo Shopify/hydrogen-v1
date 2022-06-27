@@ -1,7 +1,6 @@
-import {parseJSON} from '../../../utilities/parse';
 import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/hooks';
 import {useUrl} from '../../useUrl';
-import type {FetchResponse} from '../types';
+import {ResponseSync} from '../ResponseSync';
 
 /**
  * The `fetchSync` hook makes API requests and is the recommended way to make simple fetch calls on the server and the client.
@@ -11,12 +10,13 @@ import type {FetchResponse} from '../types';
 export function fetchSync(
   url: string,
   options?: Omit<RequestInit, 'cache'> & HydrogenUseQueryOptions
-): FetchResponse {
+) {
   const {cache, preload, shouldCacheResponse, ...requestInit} = options ?? {};
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const {origin} = useUrl();
 
-  const {data: useQueryResponse, error} = useQuery<[string, Response]>( // eslint-disable-line react-hooks/rules-of-hooks
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const {data, error} = useQuery(
     [url, requestInit],
     async () => {
       const response = await globalThis.fetch(
@@ -24,8 +24,7 @@ export function fetchSync(
         requestInit
       );
 
-      const text = await response.text();
-      return [text, response];
+      return ResponseSync.toSerializable(response);
     },
     {
       cache,
@@ -38,11 +37,5 @@ export function fetchSync(
     throw error;
   }
 
-  const [data, response] = useQueryResponse;
-
-  return {
-    response,
-    json: () => parseJSON(data),
-    text: () => data,
-  };
+  return new ResponseSync(data);
 }
