@@ -305,15 +305,15 @@ export default async function testCases({
     });
 
     it('updates the contents when a server component file changes', async () => {
-      const fullPath = resolve(__dirname, '../', 'src/routes/index.server.jsx');
+      const fullPath = resolve(__dirname, '../', 'src/routes/about.server.jsx');
       const newheading = 'Snow Devil';
 
-      await page.goto(getServerUrl());
+      await page.goto(getServerUrl() + '/about');
 
       await edit(
         fullPath,
-        (code) => code.replace('<h1>Home', `<h1>${newheading}`),
-        () => untilUpdated(() => page.textContent('h1'), 'Home'),
+        (code) => code.replace('<h1>About', `<h1>${newheading}`),
+        () => untilUpdated(() => page.textContent('h1'), 'About'),
         () => untilUpdated(() => page.textContent('h1'), newheading)
       );
     });
