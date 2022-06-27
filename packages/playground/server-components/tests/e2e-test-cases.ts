@@ -539,6 +539,35 @@ export default async function testCases({
       await page.click('#increase');
       expect(await page.textContent('#counter')).toEqual('2');
     });
+
+    it('RequestServerComponents responds with RSC', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `username=alincoln%40shopify.com&password=somepass`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Hydrogen-Client': 'Form-Action',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(text.split('\n')[0]).toBe('S1:"react.suspense"');
+      expect(text).toContain('["Welcome ","alincoln@shopify.com","!"]');
+    });
+
+    it('RequestServerComponents responds with html content when submitted by a form', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `username=alincoln%40shopify.com&password=somepass`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+      });
+      expect(response.status()).toBe(200);
+      const text = await response.text();
+
+      expect(text).toContain('<!DOCTYPE html>');
+      expect(text).toContain('alincoln@shopify.com');
+    });
   });
 
   describe('Custom Routing', () => {

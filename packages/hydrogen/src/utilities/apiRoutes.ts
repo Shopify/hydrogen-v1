@@ -291,14 +291,20 @@ export async function renderApiRoute(
         }
       );
     } else {
-      // JavaScript is disabled on the client, redirect instead of just rendering the response
-      // this will prevent odd refresh / bookmark behavior
+      // This request was made by a native form presumably because the client components had yet to hydrate,
+      // redirect instead of just rendering the response this will prevent odd refresh / back behavior.
+      // The redirect response also should *never* be cached.
+      //
+      // @todo No server props (state) will follow this redirect. Maybe we could find a way to make that happen?
+      response.headers.set(
+        'Location',
+        customPath ? url.origin + customPath : request.url
+      );
+      response.headers.set('Cache-Control', 'no-store');
+
       return new Response(null, {
         status: 303,
-        headers: {
-          ...response.headers,
-          Location: customPath ? url.origin + customPath : request.url,
-        },
+        headers: response.headers,
       });
     }
   }
