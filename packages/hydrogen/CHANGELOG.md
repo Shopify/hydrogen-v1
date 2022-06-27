@@ -382,7 +382,7 @@
   - Fix server analytics connector erroring out after more than 1 server analytics connectors are attached
   - Shopify analytics components
 
-  # Updates to server analytics connectors
+  #### Updates to server analytics connectors
 
   The server analytics connector interface has updated to
 
@@ -397,7 +397,7 @@
   }
   ```
 
-  # Introducing Shopify analytics
+  #### Introducing Shopify analytics
 
   Optional analytics components that allows you to send ecommerce related analytics to
   Shopify. Adding the Shopify analytics components will allow the Shopify admin - Analytics
