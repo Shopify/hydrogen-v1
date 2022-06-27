@@ -283,6 +283,24 @@ export default async function testCases({
     expect(serverRenderedId).toEqual(clientRenderedId);
   });
 
+  it('can cache fetchSync responses', async () => {
+    const test = async () => {
+      expect(await page.textContent('h1')).toContain('Request Sync');
+      expect(await page.textContent('#response-body')).toMatch('OK');
+      expect(await page.textContent('#response-status')).toMatch('201');
+      expect(await page.textContent('#response-header-test')).toMatch('42');
+    };
+
+    // Make fetchSync request and store in cache
+    await page.goto(getServerUrl() + '/response-sync');
+    await test();
+
+    // Reuse cached response dataReuses cache properly.
+    // This requires `devCache: true` in
+    await page.reload();
+    await test();
+  });
+
   describe('HMR', () => {
     if (isBuild) return;
 
