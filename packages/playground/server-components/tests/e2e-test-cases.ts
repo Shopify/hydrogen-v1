@@ -2,6 +2,11 @@ import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import {htmlEncode} from '../../../hydrogen/src/utilities';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
+import type {Browser, Page} from 'playwright';
+
+declare global {
+  const browser: Browser;
+}
 
 import {edit, untilUpdated} from '../../utilities';
 
@@ -21,10 +26,10 @@ export default async function testCases({
   isBuild,
   isWorker,
 }: TestOptions) {
-  let page;
+  let page: Page;
   beforeEach(async () => {
     page && (await page.close());
-    page = await global.browser.newPage();
+    page = await browser.newPage();
   });
 
   it('shows the homepage, navigates to about, and increases the count', async () => {

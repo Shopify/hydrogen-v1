@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import type {Page} from 'playwright';
 
 type TestOptions = {
   getServerUrl: () => string;
@@ -11,6 +12,12 @@ export default async function testCases({
   isBuild,
   isWorker,
 }: TestOptions) {
+  let page: Page;
+  beforeEach(async () => {
+    page && (await page.close());
+    page = await browser.newPage();
+  });
+
   it('shows the homepage with the correct locale', async () => {
     await page.goto(getServerUrl());
 
