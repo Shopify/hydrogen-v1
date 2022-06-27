@@ -4,8 +4,9 @@ import {log} from '../../utilities/log';
 type ResponseSyncInit = [string, ResponseInit];
 
 export class ResponseSync extends Response {
-  #text: string;
   bodyUsed = true;
+  #text: string;
+  #json: any;
 
   constructor(init: ResponseSyncInit) {
     super(...init);
@@ -18,7 +19,7 @@ export class ResponseSync extends Response {
   }
 
   json() {
-    return parseJSON(this.#text);
+    return (this.#json ??= parseJSON(this.#text));
   }
 
   /**
