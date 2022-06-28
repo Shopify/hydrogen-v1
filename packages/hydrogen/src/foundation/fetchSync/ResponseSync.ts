@@ -28,7 +28,8 @@ export class ResponseSync extends Response {
   get response() {
     if (__HYDROGEN_DEV__) {
       log.warn(
-        `Property 'response' is deprecated from the result of 'fetchSync'.`
+        `Property 'response' is deprecated from the result of 'fetchSync'.` +
+          ` Access response properties at the top level instead.`
       );
     }
 

@@ -296,12 +296,12 @@ export default async function testCases({
       expect(await page.textContent('#response-header-test')).toMatch('42');
     };
 
-    // Make fetchSync request and store in cache
+    // Make fetchSync request and store response data in cache
     await page.goto(getServerUrl() + '/response-sync');
     await test();
 
-    // Reuse cached response dataReuses cache properly.
-    // This requires `devCache: true` in
+    // Check that cached response data is reused properly.
+    // This requires `devCache: true` in `vite.config.js`.
     await page.reload();
     await test();
   });
