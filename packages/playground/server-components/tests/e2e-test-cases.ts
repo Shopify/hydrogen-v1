@@ -2,6 +2,11 @@ import {RSC_PATHNAME} from '../../../hydrogen/src/constants';
 import {htmlEncode} from '../../../hydrogen/src/utilities';
 import fetch from 'node-fetch';
 import {resolve} from 'path';
+import type {Browser, Page} from 'playwright';
+
+declare global {
+  const browser: Browser;
+}
 
 import {edit, untilUpdated} from '../../utilities';
 
@@ -21,10 +26,10 @@ export default async function testCases({
   isBuild,
   isWorker,
 }: TestOptions) {
-  let page;
+  let page: Page;
   beforeEach(async () => {
     page && (await page.close());
-    page = await global.browser.newPage();
+    page = await browser.newPage();
   });
 
   it('shows the homepage, navigates to about, and increases the count', async () => {
@@ -283,6 +288,24 @@ export default async function testCases({
     expect(serverRenderedId).toEqual(clientRenderedId);
   });
 
+  it('can cache fetchSync responses', async () => {
+    const test = async () => {
+      expect(await page.textContent('h1')).toContain('Request Sync');
+      expect(await page.textContent('#response-body')).toMatch('OK');
+      expect(await page.textContent('#response-status')).toMatch('201');
+      expect(await page.textContent('#response-header-test')).toMatch('42');
+    };
+
+    // Make fetchSync request and store response data in cache
+    await page.goto(getServerUrl() + '/response-sync');
+    await test();
+
+    // Check that cached response data is reused properly.
+    // This requires `devCache: true` in `vite.config.js`.
+    await page.reload();
+    await test();
+  });
+
   describe('HMR', () => {
     if (isBuild) return;
 
@@ -305,15 +328,15 @@ export default async function testCases({
     });
 
     it('updates the contents when a server component file changes', async () => {
-      const fullPath = resolve(__dirname, '../', 'src/routes/index.server.jsx');
+      const fullPath = resolve(__dirname, '../', 'src/routes/about.server.jsx');
       const newheading = 'Snow Devil';
 
-      await page.goto(getServerUrl());
+      await page.goto(getServerUrl() + '/about');
 
       await edit(
         fullPath,
-        (code) => code.replace('<h1>Home', `<h1>${newheading}`),
-        () => untilUpdated(() => page.textContent('h1'), 'Home'),
+        (code) => code.replace('<h1>About', `<h1>${newheading}`),
+        () => untilUpdated(() => page.textContent('h1'), 'About'),
         () => untilUpdated(() => page.textContent('h1'), newheading)
       );
     });

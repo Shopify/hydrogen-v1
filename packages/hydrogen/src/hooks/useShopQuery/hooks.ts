@@ -79,15 +79,17 @@ export function useShopQuery<T>({
   let useQueryError: any;
 
   try {
-    text = fetchSync(url, {
+    const response = fetchSync(url, {
       ...requestInit,
       cache,
       preload,
       shouldCacheResponse,
-    }).text();
+    });
+
+    text = response.text();
 
     try {
-      data = JSON.parse(text);
+      data = response.json();
     } catch (error: any) {
       useQueryError = new Error('Unable to parse response:\n' + text);
     }

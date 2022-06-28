@@ -1,5 +1,5 @@
 {
-  "name": "example-google-analytics",
+  "name": "example-meta-pixel",
   "description": "An example using Meta Pixel in Hydrogen",
   "license": "MIT",
   "private": true,

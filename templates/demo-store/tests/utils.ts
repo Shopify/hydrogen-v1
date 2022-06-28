@@ -3,6 +3,7 @@ import {
   type Page,
   type Response as PlaywrightResponse,
 } from 'playwright';
+import '@shopify/hydrogen/web-polyfills';
 import type {Server} from 'http';
 import {createServer as createViteDevServer} from 'vite';
 
