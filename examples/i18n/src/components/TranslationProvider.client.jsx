@@ -49,7 +49,7 @@ export function TranslationProvider({children}) {
         setI18nInstance(i18n);
       }
     );
-  }, [i18nInstance, language.isoCode]);
+  }, [i18n, setI18nInstance, i18nInstance, language]);
 
   return (
     i18nInstance && (

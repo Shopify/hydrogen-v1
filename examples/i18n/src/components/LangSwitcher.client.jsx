@@ -10,11 +10,14 @@ export function LangSwitcher() {
     {value: 'de', name: 'Deutsch', flag: '🇩🇪'},
   ]);
 
-  const handleChange = useCallback((e) => {
-    const selectedLang = e.target.value;
-    setLang(selectedLang);
-    i18n.changeLanguage(selectedLang);
-  }, []);
+  const handleChange = useCallback(
+    (e) => {
+      const selectedLang = e.target.value;
+      setLang(selectedLang);
+      i18n.changeLanguage(selectedLang);
+    },
+    [i18n]
+  );
 
   return (
     <div className="langSwitcher">
