@@ -18,6 +18,9 @@ describe('<Form>', () => {
           JSON.stringify({
             data: {},
           }),
+        headers: {
+          get() {},
+        },
       };
     });
   });
@@ -56,7 +59,6 @@ describe('<Form>', () => {
 
     component.find('form')?.trigger('onSubmit', event);
     expect(event.preventDefault).toHaveBeenCalled();
-    expect(createFromFetch).toHaveBeenCalled();
     expect(global.fetch).toHaveBeenCalledWith('/account', {
       method: 'POST',
       headers: {

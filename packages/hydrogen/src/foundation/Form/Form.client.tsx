@@ -43,19 +43,24 @@ export function Form({
       });
 
       startTransition(() => {
-        const response = createFromFetch(
-          fetch(action, {
-            method,
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-              'Hydrogen-Client': 'Form-Action',
-            },
-            body: formBody.join('&'),
-          })
-        );
-
-        setRscResponseFromApiRoute(response);
-        setLoading(false);
+        fetch(action, {
+          method,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            'Hydrogen-Client': 'Form-Action',
+          },
+          body: formBody.join('&'),
+        }).then((fetchResponse) => {
+          const rscPathname = fetchResponse.headers.get(
+            'Hydrogen-RSC-Pathname'
+          );
+          if (rscPathname !== window.location.pathname) {
+            window.history.pushState(null, '', rscPathname);
+          }
+          const rscResponse = createFromFetch(Promise.resolve(fetchResponse));
+          setRscResponseFromApiRoute(rscResponse);
+          setLoading(false);
+        });
       });
     },
     [onSubmit, startTransition, action, method, setRscResponseFromApiRoute]

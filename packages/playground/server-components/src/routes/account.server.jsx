@@ -1,4 +1,4 @@
-import {Form, RequestServerComponents, useSession} from '@shopify/hydrogen';
+import {Form, renderRsc, useSession} from '@shopify/hydrogen';
 import {
   LoginForm,
   INVALID_USER,
@@ -43,7 +43,7 @@ export async function api(request, {session}) {
 
   if (action === 'logout') {
     await session.destroy();
-    return new RequestServerComponents();
+    return renderRsc({url: '/'});
   }
 
   const username = data.get('username');
@@ -52,20 +52,18 @@ export async function api(request, {session}) {
   // Note, you can throw or return a vanilla `Request` or `Response` object.
   // RequestServerComponents is just syntactic sugar, the user could manually create a
   // Response object instead.
-  if (!username)
-    throw new RequestServerComponents(null, {error: INVALID_USERNAME});
-  if (!password)
-    throw new RequestServerComponents(null, {error: INVALID_PASSWORD});
+  if (!username) return renderRsc({props: {error: INVALID_USERNAME}});
+  if (!password) return renderRsc({props: {error: INVALID_PASSWORD}});
 
   const user = users.find(
     (user) => username === user.username && user.password === password
   );
 
   if (!user) {
-    throw new RequestServerComponents(null, {error: INVALID_USER});
+    return renderRsc({props: {error: INVALID_USER}});
   }
 
   await session.set('user', user.username);
 
-  return new RequestServerComponents();
+  return renderRsc();
 }

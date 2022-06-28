@@ -33,7 +33,7 @@ export {Router} from './foundation/Router/Router.server';
 export {log, type Logger} from './utilities/log';
 export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
 export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server';
-export {RequestServerComponents} from './utilities/apiRoutes';
+export {renderRscFromApiRoute as renderRsc} from './utilities/apiRoutes';
 export {
   generateCacheControlHeader,
   CacheNone,

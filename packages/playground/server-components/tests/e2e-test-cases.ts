@@ -540,7 +540,7 @@ export default async function testCases({
       expect(await page.textContent('#counter')).toEqual('2');
     });
 
-    it('RequestServerComponents responds with RSC', async () => {
+    it('responds with RSC', async () => {
       const response = await page.request.post(getServerUrl() + '/account', {
         data: `username=alincoln%40shopify.com&password=somepass`,
         headers: {
@@ -555,7 +555,23 @@ export default async function testCases({
       expect(text).toContain('["Welcome ","alincoln@shopify.com","!"]');
     });
 
-    it('RequestServerComponents responds with html content when submitted by a form', async () => {
+    it('responds with RSC pathname header', async () => {
+      const response = await page.request.post(getServerUrl() + '/account', {
+        data: `action=logout`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Hydrogen-Client': 'Form-Action',
+        },
+      });
+      const text = await response.text();
+
+      expect(response.status()).toBe(200);
+      expect(response.headers()['hydrogen-rsc-pathname']).toBe('/');
+      expect(text.split('\n')[0]).toBe('S1:"react.suspense"');
+      expect(text).toContain('Home');
+    });
+
+    it('responds with html content when submitted by a form', async () => {
       const response = await page.request.post(getServerUrl() + '/account', {
         data: `username=alincoln%40shopify.com&password=somepass`,
         headers: {

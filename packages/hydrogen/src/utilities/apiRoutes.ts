@@ -249,14 +249,10 @@ export async function renderApiRoute(
       response.headers.set('Set-Cookie', cookieToSet);
     }
   } catch (e) {
-    if (!(e instanceof Request) && !(e instanceof Response)) {
-      log.error(e);
-      response = new Response('Error processing: ' + request.url, {
-        status: 500,
-      });
-    } else {
-      response = e;
-    }
+    log.error(e);
+    response = new Response('Error processing: ' + request.url, {
+      status: 500,
+    });
   }
 
   if (!suppressLog) {
@@ -267,39 +263,20 @@ export async function renderApiRoute(
     );
   }
 
-  if (response instanceof RequestServerComponents) {
-    let state = {};
+  if (response instanceof ApiRouteRscRequest) {
     const url = new URL(request.url);
-    let customPath: string | null = null;
-
-    state = response.state;
-    customPath = response.newUrl;
 
     if (request.headers.get('Hydrogen-Client') === 'Form-Action') {
-      return new Request(
-        url.origin +
-          RSC_PATHNAME +
-          `?state=${encodeURIComponent(
-            JSON.stringify({
-              pathname: customPath ?? url.pathname,
-              search: '',
-              ...state,
-            })
-          )}`,
-        {
-          headers: response.headers,
-        }
-      );
+      return new Request(response.getRscUrl(url), {
+        headers: response.headers,
+      });
     } else {
       // This request was made by a native form presumably because the client components had yet to hydrate,
       // redirect instead of just rendering the response this will prevent odd refresh / back behavior.
       // The redirect response also should *never* be cached.
       //
       // @todo No server props (state) will follow this redirect. Maybe we could find a way to make that happen?
-      response.headers.set(
-        'Location',
-        customPath ? url.origin + customPath : request.url
-      );
+      response.headers.set('Location', response.getRedirectHeader(url));
       response.headers.set('Cache-Control', 'no-store');
 
       return new Response(null, {
@@ -312,13 +289,47 @@ export async function renderApiRoute(
   return response;
 }
 
-export class RequestServerComponents extends Request {
-  public state: Record<string, any>;
-  public newUrl: string;
+export class ApiRouteRscRequest extends Request {
+  #pathname?: string;
+  #state?: Record<string, any> = {};
 
-  constructor(url: string, state: Record<string, any> = {}) {
+  constructor(pathname?: string, state: Record<string, any> = {}) {
     super('http://localhost');
-    this.state = state;
-    this.newUrl = url;
+    this.#pathname = pathname;
+    this.#state = state;
+
+    if (pathname) {
+      this.headers.set('Hydrogen-RSC-Pathname', pathname);
+    }
   }
+
+  getRscUrl(currentUrl: URL) {
+    return (
+      currentUrl.origin +
+      RSC_PATHNAME +
+      `?state=${encodeURIComponent(
+        JSON.stringify({
+          pathname: this.#pathname ?? currentUrl.pathname,
+          search: '',
+          ...this.#state,
+        })
+      )}`
+    );
+  }
+
+  getRedirectHeader(currentUrl: URL) {
+    return this.#pathname
+      ? currentUrl.origin + this.#pathname
+      : currentUrl.href;
+  }
+}
+
+export function renderRscFromApiRoute(
+  options: {
+    url?: string;
+    props: Record<string, any>;
+  } = {props: {}}
+) {
+  const {url, props = {}} = options;
+  return new ApiRouteRscRequest(url, props);
 }
