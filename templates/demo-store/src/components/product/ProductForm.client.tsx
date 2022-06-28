@@ -106,6 +106,7 @@ export function ProductForm() {
           quantity={1}
           accessibleAddingToCartLabel="Adding item to your cart"
           disabled={isOutOfStock}
+          type="button"
         >
           <Button
             width="full"
