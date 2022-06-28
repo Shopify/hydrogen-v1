@@ -42,6 +42,7 @@ jobs:
           # Hardcode message and timestamp if manual dispatch
           commit_message: ${{ github.event.head_commit.message || 'Manual deployment' }}
           commit_timestamp: ${{ github.event.head_commit.timestamp || github.event.repository.updated_at }}
+          oxygen_health_check: true
 
       - name: Create GitHub Deployment
         uses: shopify/github-deployment-action@v1
@@ -51,8 +52,3 @@ jobs:
           environment: 'preview'
           preview_url: ${{ steps.deploy.outputs.url }}
           description: ${{ github.event.head_commit.message }}
-
-      # Skip this for now. It takes Oxygen a few seconds to make the deployment live, and this 404s.
-      # - name: Run health check
-      #   run: |
-      #     node scripts/health-check ${{ steps.deploy.outputs.url }}
