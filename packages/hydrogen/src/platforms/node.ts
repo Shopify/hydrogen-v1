@@ -3,10 +3,10 @@ import type {RequestHandler} from '../types';
 import path from 'path';
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
-import entrypoint from '__SERVER_ENTRY__';
+import entrypoint from '__HYDROGEN_ENTRY__';
 // @ts-ignore
 // eslint-disable-next-line node/no-missing-import
-import indexTemplate from '__INDEX_TEMPLATE__?raw';
+import indexTemplate from '__HYDROGEN_HTML_TEMPLATE__';
 import {hydrogenMiddleware} from '../framework/middleware';
 
 // @ts-ignore
@@ -34,7 +34,7 @@ export async function createServer({
   app.use(compression() as NextHandleFunction);
 
   app.use(
-    serveStatic(path.resolve(__dirname, '../client'), {
+    serveStatic(path.resolve(__dirname, '__HYDROGEN_RELATIVE_CLIENT_BUILD__'), {
       index: false,
     }) as NextHandleFunction
   );

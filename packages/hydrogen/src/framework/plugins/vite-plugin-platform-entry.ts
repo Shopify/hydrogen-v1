@@ -6,9 +6,14 @@ import fs from 'fs';
 
 const SSR_BUNDLE_NAME = 'index.js';
 
+// Keep this in the outer scope to share it
+// across client <> server builds.
+let clientBuildPath: string;
+
 export default () => {
   let config: ResolvedConfig;
   let isESM: boolean;
+  let ssrBuildEntry: string;
 
   return {
     name: 'vite-plugin-platform-entry',
@@ -22,6 +27,8 @@ export default () => {
           (Array.isArray(output) ? output[0] : output) || {};
 
         isESM = Boolean(process.env.WORKER) || ['es', 'esm'].includes(format);
+
+        ssrBuildEntry = normalizePath(resolveSsrEntry(config));
       }
     },
     resolveId(source, importer) {
@@ -46,26 +53,50 @@ export default () => {
       return null;
     },
     transform(code, id) {
-      if (normalizePath(id).includes('/hydrogen/dist/esnext/platforms/')) {
+      if (
+        config.command === 'build' &&
+        config.build.ssr &&
+        normalizePath(id) === ssrBuildEntry
+      ) {
         const ms = new MagicString(code);
 
-        ms.replace('__SERVER_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY);
+        ms.replace('__HYDROGEN_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY);
 
-        const indexTemplatePath = normalizePath(
-          path.resolve(
+        if (!clientBuildPath) {
+          // Default value
+          clientBuildPath = path.resolve(
             config.root,
             config.build.outDir,
             '..',
-            'client',
-            'index.html'
+            'client'
+          );
+        }
+
+        ms.replace(
+          '__HYDROGEN_HTML_TEMPLATE__',
+          normalizePath(path.resolve(clientBuildPath, 'index.html')) + '?raw'
+        );
+
+        ms.replace(
+          '__HYDROGEN_RELATIVE_CLIENT_BUILD__',
+          path.relative(
+            path.resolve(config.root, config.build.outDir),
+            clientBuildPath
           )
         );
-        ms.replace('__INDEX_TEMPLATE__', indexTemplatePath);
 
         return {
           code: ms.toString(),
           map: ms.generateMap({file: id, source: id}),
         };
+      }
+    },
+    buildEnd(err) {
+      if (!err && !config.build.ssr && config.command === 'build') {
+        // Save outDir from client build in the outer scope in order
+        // to read it during the server build. The CLI runs Vite in
+        // the same process so the scope is shared across builds.
+        clientBuildPath = path.resolve(config.root, config.build.outDir);
       }
     },
     generateBundle(options, bundle) {
@@ -104,3 +135,26 @@ export default () => {
     },
   } as Plugin;
 };
+
+function resolveSsrEntry(config: ResolvedConfig) {
+  const providedSsrEntry =
+    typeof config.build.ssr === 'string'
+      ? config.build.ssr
+      : (config.build.rollupOptions.input as string);
+
+  try {
+    return require.resolve(providedSsrEntry);
+  } catch (error: any) {
+    try {
+      // When the --ssr flag points to a local file without
+      // using relative path, it needs to be resolved first.
+      // E.g. `--ssr worker` instead of `--ssr ./worker`
+      return require.resolve(path.resolve(config.root, providedSsrEntry));
+    } catch {
+      /* */
+    }
+
+    error.message = `Could not resolve SSR entry file. ` + error.message;
+    throw error;
+  }
+}
