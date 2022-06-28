@@ -16,10 +16,11 @@
   },
   "dependencies": {
     "@shopify/hydrogen": "latest",
-    "react": "^18.2.0",
-    "react-i18next": "latest",
     "i18next": "latest",
     "i18next-browser-languagedetector": "latest",
-    "react-dom": "^18.2.0"
+    "i18next-resources-to-backend": "^1.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "latest"
   }
 }
