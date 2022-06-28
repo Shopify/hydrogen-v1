@@ -34,7 +34,7 @@ jobs:
 
       - name: Build and Publish to Oxygen
         id: deploy
-        uses: shopify/oxygenctl-action@v4.1.0
+        uses: shopify/oxygenctl-action@v4
         with:
           path: ./templates/demo-store
           oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_9928760 }}
