@@ -13,10 +13,9 @@ let clientBuildPath: string;
 export default () => {
   let config: ResolvedConfig;
   let isESM: boolean;
-  let ssrBuildEntry: string;
 
   return {
-    name: 'vite-plugin-platform-entry',
+    name: 'hydrogen:platform-entry',
     enforce: 'pre',
     configResolved(_config) {
       config = _config;
@@ -27,8 +26,6 @@ export default () => {
           (Array.isArray(output) ? output[0] : output) || {};
 
         isESM = Boolean(process.env.WORKER) || ['es', 'esm'].includes(format);
-
-        ssrBuildEntry = normalizePath(resolveSsrEntry(config));
       }
     },
     resolveId(source, importer) {
@@ -52,11 +49,13 @@ export default () => {
 
       return null;
     },
-    transform(code, id) {
+    transform(code, id, options) {
       if (
         config.command === 'build' &&
-        config.build.ssr &&
-        normalizePath(id) === ssrBuildEntry
+        options?.ssr &&
+        normalizePath(id)
+          .split('@shopify/hydrogen/')[1]
+          ?.includes('platforms/virtual')
       ) {
         const ms = new MagicString(code);
 
@@ -74,7 +73,7 @@ export default () => {
 
         ms.replace(
           '__HYDROGEN_HTML_TEMPLATE__',
-          normalizePath(path.resolve(clientBuildPath, 'index.html')) + '?raw'
+          normalizePath(path.resolve(clientBuildPath, 'index.html'))
         );
 
         ms.replace(
@@ -84,6 +83,17 @@ export default () => {
             clientBuildPath
           )
         );
+
+        const files = clientBuildPath
+          ? fs
+              .readdirSync(clientBuildPath)
+              .filter((file) => file !== 'index.html')
+          : [];
+        ms.replace("\\['__HYDROGEN_ASSETS__'\\]", JSON.stringify(files));
+        ms.replace('__HYDROGEN_ASSET_DIR__', config.build.assetsDir);
+
+        // Remove the poison pill
+        ms.replace('throw', '//');
 
         return {
           code: ms.toString(),
@@ -135,26 +145,3 @@ export default () => {
     },
   } as Plugin;
 };
-
-function resolveSsrEntry(config: ResolvedConfig) {
-  const providedSsrEntry =
-    typeof config.build.ssr === 'string'
-      ? config.build.ssr
-      : (config.build.rollupOptions.input as string);
-
-  try {
-    return require.resolve(providedSsrEntry);
-  } catch (error: any) {
-    try {
-      // When the --ssr flag points to a local file without
-      // using relative path, it needs to be resolved first.
-      // E.g. `--ssr worker` instead of `--ssr ./worker`
-      return require.resolve(path.resolve(config.root, providedSsrEntry));
-    } catch {
-      /* */
-    }
-
-    error.message = `Could not resolve SSR entry file. ` + error.message;
-    throw error;
-  }
-}
