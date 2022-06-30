@@ -94,9 +94,9 @@ export class HydrogenRequest extends Request {
 
     this.time = getTime();
     this.id = generateId();
-    this.normalizedUrl = this.isRscRequest()
-      ? normalizeUrl(this.url)
-      : this.url;
+    this.normalizedUrl = decodeURIComponent(
+      this.isRscRequest() ? normalizeUrl(this.url) : this.url
+    );
 
     this.ctx = {
       cache: new Map(),
