@@ -85,16 +85,18 @@ export default () => {
         );
 
         const files = clientBuildPath
-          ? FastGlob.sync(clientBuildPath + '/**/*', {
+          ? FastGlob.sync('**/*', {
+              cwd: clientBuildPath,
               ignore: ['**/index.html', `**/${config.build.assetsDir}/**`],
-            }).map(
-              (file) =>
-                '/' + normalizePath(path.relative(clientBuildPath, file))
-            )
+            }).map((file) => '/' + file)
           : [];
 
         ms.replace("\\['__HYDROGEN_ASSETS__'\\]", JSON.stringify(files));
         ms.replace('__HYDROGEN_ASSETS_DIR__', config.build.assetsDir);
+        ms.replace(
+          '__HYDROGEN_ASSETS_BASE_URL__',
+          (process.env.HYDROGEN_ASSET_BASE_URL || '').replace(/\/$/, '')
+        );
 
         // Remove the poison pill
         ms.replace('throw', '//');
