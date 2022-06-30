@@ -13,11 +13,11 @@ import {
   createFromReadableStream,
   // @ts-ignore
 } from '@shopify/hydrogen/vendor/react-server-dom-vite';
-import {RSC_PATHNAME} from './constants';
-import {ServerPropsProvider} from './foundation/ServerPropsProvider';
+import {RSC_PATHNAME} from './constants.js';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
 import type {DevServerMessage} from './utilities/devtools';
 import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider';
-import {ClientAnalytics} from './foundation/Analytics/';
+import {ClientAnalytics} from './foundation/Analytics/index.js';
 
 let rscReader: ReadableStream | null;
 

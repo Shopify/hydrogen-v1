@@ -5,8 +5,8 @@ import {
   logCacheControlHeaders,
   logQueryTimings,
   getLoggerWithContext,
-} from './utilities/log';
-import {getErrorMarkup} from './utilities/error';
+} from './utilities/log/index.js';
+import {getErrorMarkup} from './utilities/error.js';
 import type {
   AssembleHtmlParams,
   RunSsrParams,
@@ -16,46 +16,46 @@ import type {
   RequestHandler,
 } from './types';
 import type {RequestHandlerOptions} from './shared-types';
-import {Html, applyHtmlHead} from './foundation/Html/Html';
-import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
-import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
+import {Html, applyHtmlHead} from './foundation/Html/Html.js';
+import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
+import {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
 import {
   preloadRequestCacheData,
   ServerRequestProvider,
-} from './foundation/ServerRequestProvider';
+} from './foundation/ServerRequestProvider/index.js';
 import type {ServerResponse} from 'http';
 import type {PassThrough as PassThroughType} from 'stream';
 import {
   getApiRouteFromURL,
   renderApiRoute,
   getApiRoutes,
-} from './utilities/apiRoutes';
-import {ServerPropsProvider} from './foundation/ServerPropsProvider';
-import {isBotUA} from './utilities/bot-ua';
-import {getCache, setCache} from './foundation/runtime';
+} from './utilities/apiRoutes.js';
+import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
+import {isBotUA} from './utilities/bot-ua.js';
+import {getCache, setCache} from './foundation/runtime.js';
 import {
   ssrRenderToPipeableStream,
   ssrRenderToReadableStream,
   rscRenderToReadableStream,
   createFromReadableStream,
   bufferReadableStream,
-} from './streaming.server';
-import {stripScriptsFromTemplate} from './utilities/template';
-import {setLogger, RenderType} from './utilities/log/log';
-import {Analytics} from './foundation/Analytics/Analytics.server';
-import {DevTools} from './foundation/DevTools/DevTools.server';
-import {getSyncSessionApi} from './foundation/session/session';
-import {parseJSON} from './utilities/parse';
-import {htmlEncode} from './utilities';
+} from './streaming.server.js';
+import {stripScriptsFromTemplate} from './utilities/template.js';
+import {setLogger, RenderType} from './utilities/log/log.js';
+import {Analytics} from './foundation/Analytics/Analytics.server.js';
+import {DevTools} from './foundation/DevTools/DevTools.server.js';
+import {getSyncSessionApi} from './foundation/session/session.js';
+import {parseJSON} from './utilities/parse.js';
+import {htmlEncode} from './utilities/index.js';
 import {splitCookiesString} from 'set-cookie-parser';
 import {
   deleteItemFromCache,
   getItemFromCache,
   isStale,
   setItemInCache,
-} from './foundation/Cache/cache';
-import {CacheShort, NO_STORE} from './foundation/Cache/strategies';
-import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes';
+} from './foundation/Cache/cache.js';
+import {CacheShort, NO_STORE} from './foundation/Cache/strategies/index.js';
+import {getBuiltInRoute} from './foundation/BuiltInRoutes/BuiltInRoutes.js';
 
 declare global {
   // This is provided by a Vite plugin
@@ -77,13 +77,11 @@ export const renderHydrogen = (App: any) => {
 
     const {default: inlineHydrogenConfig} = await import(
       // @ts-ignore
-      // eslint-disable-next-line node/no-missing-import
       'virtual__hydrogen.config.ts'
     );
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore
-      // eslint-disable-next-line node/no-missing-import
       'virtual__hydrogen-routes.server.jsx'
     );
 

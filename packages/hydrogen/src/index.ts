@@ -4,7 +4,7 @@
  * inside client components during the client build only, but when the same components
  * run during SSR, they reference this path.
  */
-export * from './client';
+export * from './client.js';
 
 /**
  * The following are exported from this file because they are intended to be available
@@ -15,53 +15,53 @@ export {
   ServerPropsContext,
   type ServerProps,
   type ServerPropsContextValue,
-} from './foundation/ServerPropsProvider';
-export {useShop} from './foundation/useShop';
-export {useUrl} from './foundation/useUrl';
+} from './foundation/ServerPropsProvider/index.js';
+export {useShop} from './foundation/useShop/index.js';
+export {useUrl} from './foundation/useUrl/index.js';
 export {
   useShopQuery,
   type UseShopQueryResponse,
-} from './hooks/useShopQuery/hooks';
+} from './hooks/useShopQuery/hooks.js';
 export {
   useQuery,
   type HydrogenUseQueryOptions,
-} from './foundation/useQuery/hooks';
-export {useServerProps} from './foundation/useServerProps';
-export {FileRoutes} from './foundation/FileRoutes/FileRoutes.server';
-export {Route} from './foundation/Route/Route.server';
-export {Router} from './foundation/Router/Router.server';
-export {log, type Logger} from './utilities/log';
-export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server';
-export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server';
+} from './foundation/useQuery/hooks.js';
+export {useServerProps} from './foundation/useServerProps/index.js';
+export {FileRoutes} from './foundation/FileRoutes/FileRoutes.server.js';
+export {Route} from './foundation/Route/Route.server.js';
+export {Router} from './foundation/Router/Router.server.js';
+export {log, type Logger} from './utilities/log/index.js';
+export {LocalizationProvider} from './components/LocalizationProvider/LocalizationProvider.server.js';
+export {ShopifyProvider} from './foundation/ShopifyProvider/ShopifyProvider.server.js';
 export {
   generateCacheControlHeader,
   CacheNone,
   CacheShort,
   CacheLong,
   CacheCustom,
-} from './foundation/Cache/strategies';
-export {useRequestContext} from './foundation/useRequestContext';
-export {useServerAnalytics} from './foundation/Analytics/hook';
-export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server';
-export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const';
-export {useSession} from './foundation/useSession/useSession';
-export {Cookie} from './foundation/Cookie/Cookie';
+} from './foundation/Cache/strategies/index.js';
+export {useRequestContext} from './foundation/useRequestContext/index.js';
+export {useServerAnalytics} from './foundation/Analytics/hook.js';
+export {ShopifyAnalytics} from './foundation/Analytics/connectors/Shopify/ShopifyAnalytics.server.js';
+export {ShopifyAnalyticsConstants} from './foundation/Analytics/connectors/Shopify/const.js';
+export {useSession} from './foundation/useSession/useSession.js';
+export {Cookie} from './foundation/Cookie/Cookie.js';
 
 /**
  * Export server-only CartQuery here instead of `CartProvider.client` to prevent
  * it from being bundled with other client components
  */
-export {CartQuery} from './components/CartProvider/cart-queries';
+export {CartQuery} from './components/CartProvider/cart-queries.js';
 
 /**
  * Override the client version of `fetchSync` with the server version.
  */
-export {fetchSync} from './foundation/fetchSync/server/fetchSync';
+export {fetchSync} from './foundation/fetchSync/server/fetchSync.js';
 
-export {type HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
-export {type HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
-export {type HydrogenRouteProps} from './types';
+export {type HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.js';
+export {type HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';
+export {type HydrogenRouteProps} from './types.js';
 export {
   type ResourceGetter as HydrogenApiRoute,
   RequestOptions as HydrogenApiRouteOptions,
-} from './utilities/apiRoutes';
+} from './utilities/apiRoutes.js';

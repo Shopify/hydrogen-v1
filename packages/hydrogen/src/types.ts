@@ -1,5 +1,5 @@
-export * from './shared-types';
-import {ShopifyConfig} from './shared-types';
+export * from './shared-types.js';
+import {ShopifyConfig} from './shared-types.js';
 
 import type {ServerResponse} from 'http';
 import type {Logger, LoggerConfig} from './utilities/log/log';
