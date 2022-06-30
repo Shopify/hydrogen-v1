@@ -40,7 +40,6 @@ import {
   createFromReadableStream,
   bufferReadableStream,
 } from './streaming.server';
-import {RSC_PATHNAME} from './constants';
 import {stripScriptsFromTemplate} from './utilities/template';
 import {setLogger, RenderType} from './utilities/log/log';
 import {Analytics} from './foundation/Analytics/Analytics.server';
@@ -222,7 +221,7 @@ async function processRequest(
   const {dev, nonce, indexTemplate, streamableResponse: nodeResponse} = options;
 
   const log = getLoggerWithContext(request);
-  const isRSCRequest = url.pathname === RSC_PATHNAME;
+  const isRSCRequest = request.isRscRequest();
   const apiRoute = !isRSCRequest && getApiRoute(url, hydrogenConfig.routes);
 
   // The API Route might have a default export, making it also a server component
@@ -898,11 +897,10 @@ async function saveCacheResponse(
 
   if (cache && chunks.length > 0) {
     const {headers, status, statusText} = getResponseOptions(response);
-    const url = new URL(request.url);
 
     headers.set('cache-control', response.cacheControlHeader);
     const currentHeader = headers.get('Content-Type');
-    if (!currentHeader && url.pathname !== RSC_PATHNAME) {
+    if (!currentHeader && !request.isRscRequest()) {
       headers.set('Content-Type', HTML_CONTENT_TYPE);
     }
 
