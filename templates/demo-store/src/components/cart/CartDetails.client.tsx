@@ -1,6 +1,7 @@
 import {useRef} from 'react';
 import {useScroll} from 'react-use';
 import {
+  Link,
   useCart,
   CartLineProvider,
   CartShopPayButton,
@@ -72,7 +73,11 @@ function CartCheckoutActions() {
   return (
     <>
       <div className="grid gap-4">
-        <Button to={checkoutUrl}>Continue to Checkout</Button>
+        {checkoutUrl ? (
+          <Link to={checkoutUrl} prefetch={false} target="_self">
+            <Button width="full">Continue to Checkout</Button>
+          </Link>
+        ) : null}
         <CartShopPayButton />
       </div>
     </>
