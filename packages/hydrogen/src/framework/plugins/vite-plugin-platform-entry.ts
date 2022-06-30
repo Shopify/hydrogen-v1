@@ -64,11 +64,8 @@ export default () => {
 
         if (!clientBuildPath) {
           // Default value
-          clientBuildPath = path.resolve(
-            config.root,
-            config.build.outDir,
-            '..',
-            'client'
+          clientBuildPath = normalizePath(
+            path.resolve(config.root, config.build.outDir, '..', 'client')
           );
         }
 
@@ -79,9 +76,11 @@ export default () => {
 
         ms.replace(
           '__HYDROGEN_RELATIVE_CLIENT_BUILD__',
-          path.relative(
-            path.resolve(config.root, config.build.outDir),
-            clientBuildPath
+          normalizePath(
+            path.relative(
+              normalizePath(path.resolve(config.root, config.build.outDir)),
+              clientBuildPath
+            )
           )
         );
 
@@ -111,7 +110,9 @@ export default () => {
         // Save outDir from client build in the outer scope in order
         // to read it during the server build. The CLI runs Vite in
         // the same process so the scope is shared across builds.
-        clientBuildPath = path.resolve(config.root, config.build.outDir);
+        clientBuildPath = normalizePath(
+          path.resolve(config.root, config.build.outDir)
+        );
       }
     },
     generateBundle(options, bundle) {
