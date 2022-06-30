@@ -3,6 +3,7 @@ import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
 import MagicString from 'magic-string';
 import path from 'path';
 import fs from 'fs';
+import FastGlob from 'fast-glob';
 
 const SSR_BUNDLE_NAME = 'index.js';
 
@@ -85,12 +86,16 @@ export default () => {
         );
 
         const files = clientBuildPath
-          ? fs
-              .readdirSync(clientBuildPath)
-              .filter((file) => file !== 'index.html')
+          ? FastGlob.sync(clientBuildPath + '/**/*', {
+              ignore: ['**/index.html', `**/${config.build.assetsDir}/**`],
+            }).map(
+              (file) =>
+                '/' + normalizePath(path.relative(clientBuildPath, file))
+            )
           : [];
+
         ms.replace("\\['__HYDROGEN_ASSETS__'\\]", JSON.stringify(files));
-        ms.replace('__HYDROGEN_ASSET_DIR__', config.build.assetsDir);
+        ms.replace('__HYDROGEN_ASSETS_DIR__', config.build.assetsDir);
 
         // Remove the poison pill
         ms.replace('throw', '//');

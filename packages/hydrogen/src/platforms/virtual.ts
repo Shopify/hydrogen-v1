@@ -12,7 +12,7 @@ export const handleRequest = appEntry as RequestHandler;
 export {default as indexTemplate} from '__HYDROGEN_HTML_TEMPLATE__?raw';
 
 export const assets = ['__HYDROGEN_ASSETS__'] as string[];
-export const assetPrefix = '/__HYDROGEN_ASSET_DIR__/' as string;
+export const assetPrefix = '/__HYDROGEN_ASSETS_DIR__/' as string;
 
 export const isAsset = (pathname = '') =>
   pathname.startsWith(assetPrefix) || assets.includes(pathname);
