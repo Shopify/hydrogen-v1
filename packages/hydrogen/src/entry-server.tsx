@@ -242,8 +242,11 @@ async function processRequest(
   }
 
   const state: Record<string, any> = isRSCRequest
-    ? parseJSON(url.searchParams.get('state') || '{}')
-    : {pathname: url.pathname, search: url.search};
+    ? parseJSON(decodeURIComponent(url.searchParams.get('state') || '{}'))
+    : {
+        pathname: decodeURIComponent(url.pathname),
+        search: decodeURIComponent(url.search),
+      };
 
   const rsc = runRSC({App, state, log, request, response});
 
