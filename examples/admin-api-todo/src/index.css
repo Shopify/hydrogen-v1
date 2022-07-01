@@ -10,13 +10,13 @@ button {
 input {
   height: 30px;
   border: 1px solid black;
-  padding-left: .75rem;
-  padding-right: .75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 /* Fix to pass Lighthouse: */
 label {
   position: absolute;
-  top:-1000px;
-  left:-1000px;
+  top: -1000px;
+  left: -1000px;
 }
