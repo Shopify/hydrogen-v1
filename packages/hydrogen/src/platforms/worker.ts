@@ -1,12 +1,4 @@
-import type {RequestHandler} from '../types';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
-import entrypoint from '__SERVER_ENTRY__';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
-import indexTemplate from '__INDEX_TEMPLATE__?raw';
-
-const handleRequest = entrypoint as RequestHandler;
+import {handleRequest, indexTemplate} from './virtual';
 
 declare global {
   // eslint-disable-next-line no-var

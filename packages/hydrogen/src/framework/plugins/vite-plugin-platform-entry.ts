@@ -3,15 +3,20 @@ import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
 import MagicString from 'magic-string';
 import path from 'path';
 import fs from 'fs';
+import fastGlob from 'fast-glob';
 
 const SSR_BUNDLE_NAME = 'index.js';
+
+// Keep this in the outer scope to share it
+// across client <> server builds.
+let clientBuildPath: string;
 
 export default () => {
   let config: ResolvedConfig;
   let isESM: boolean;
 
   return {
-    name: 'vite-plugin-platform-entry',
+    name: 'hydrogen:platform-entry',
     enforce: 'pre',
     configResolved(_config) {
       config = _config;
@@ -45,27 +50,71 @@ export default () => {
 
       return null;
     },
-    transform(code, id) {
-      if (normalizePath(id).includes('/hydrogen/dist/esnext/platforms/')) {
+    async transform(code, id, options) {
+      if (
+        config.command === 'build' &&
+        options?.ssr &&
+        /@shopify\/hydrogen\/.+platforms\/virtual\./.test(normalizePath(id))
+      ) {
         const ms = new MagicString(code);
 
-        ms.replace('__SERVER_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY);
+        ms.replace('__HYDROGEN_ENTRY__', HYDROGEN_DEFAULT_SERVER_ENTRY);
 
-        const indexTemplatePath = normalizePath(
-          path.resolve(
-            config.root,
-            config.build.outDir,
-            '..',
-            'client',
-            'index.html'
+        if (!clientBuildPath) {
+          // Default value
+          clientBuildPath = normalizePath(
+            path.resolve(config.root, config.build.outDir, '..', 'client')
+          );
+        }
+
+        ms.replace(
+          '__HYDROGEN_HTML_TEMPLATE__',
+          normalizePath(path.resolve(clientBuildPath, 'index.html'))
+        );
+
+        ms.replace(
+          '__HYDROGEN_RELATIVE_CLIENT_BUILD__',
+          normalizePath(
+            path.relative(
+              normalizePath(path.resolve(config.root, config.build.outDir)),
+              clientBuildPath
+            )
           )
         );
-        ms.replace('__INDEX_TEMPLATE__', indexTemplatePath);
+
+        const files = clientBuildPath
+          ? (
+              await fastGlob('**/*', {
+                cwd: clientBuildPath,
+                ignore: ['**/index.html', `**/${config.build.assetsDir}/**`],
+              })
+            ).map((file) => '/' + file)
+          : [];
+
+        ms.replace("\\['__HYDROGEN_ASSETS__'\\]", JSON.stringify(files));
+        ms.replace('__HYDROGEN_ASSETS_DIR__', config.build.assetsDir);
+        ms.replace(
+          '__HYDROGEN_ASSETS_BASE_URL__',
+          (process.env.HYDROGEN_ASSET_BASE_URL || '').replace(/\/$/, '')
+        );
+
+        // Remove the poison pill
+        ms.replace('throw', '//');
 
         return {
           code: ms.toString(),
           map: ms.generateMap({file: id, source: id}),
         };
+      }
+    },
+    buildEnd(err) {
+      if (!err && !config.build.ssr && config.command === 'build') {
+        // Save outDir from client build in the outer scope in order
+        // to read it during the server build. The CLI runs Vite in
+        // the same process so the scope is shared across builds.
+        clientBuildPath = normalizePath(
+          path.resolve(config.root, config.build.outDir)
+        );
       }
     },
     generateBundle(options, bundle) {

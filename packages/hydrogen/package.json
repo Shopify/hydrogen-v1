@@ -35,6 +35,11 @@
       "import": "./dist/esnext/framework/cache/*.js",
       "require": "./dist/node/framework/cache/*.js"
     },
+    "./platforms": {
+      "types": "./dist/esnext/platforms/virtual.d.ts",
+      "import": "./dist/esnext/platforms/virtual.js",
+      "require": "./dist/node/platforms/virtual.js"
+    },
     "./package.json": "./package.json",
     "./*": "./dist/esnext/*.js"
   },
