@@ -43,4 +43,4 @@ $ npm init @shopify/hydrogen --template hello-world
 $ npx @shopify/create-hydrogen --template hello-world
 ```
 
-**Hello World in JavaScript** is a generated JavaScript implementation of the Hello WOrld in TypeScript template.
+**Hello World in JavaScript** is a generated JavaScript implementation of the Hello World in TypeScript template.
