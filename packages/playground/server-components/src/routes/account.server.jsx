@@ -49,9 +49,6 @@ export async function api(request, {session}) {
   const username = data.get('username');
   const password = data.get('password');
 
-  // Note, you can throw or return a vanilla `Request` or `Response` object.
-  // RequestServerComponents is just syntactic sugar, the user could manually create a
-  // Response object instead.
   if (!username) return renderRsc({props: {error: INVALID_USERNAME}});
   if (!password) return renderRsc({props: {error: INVALID_PASSWORD}});
 

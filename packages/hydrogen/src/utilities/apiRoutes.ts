@@ -304,17 +304,16 @@ export class ApiRouteRscRequest extends Request {
   }
 
   getRscUrl(currentUrl: URL) {
-    return (
-      currentUrl.origin +
-      RSC_PATHNAME +
-      `?state=${encodeURIComponent(
-        JSON.stringify({
-          pathname: this.#pathname ?? currentUrl.pathname,
-          search: '',
-          ...this.#state,
-        })
-      )}`
-    );
+    const rscUrl = new URL(RSC_PATHNAME, currentUrl);
+    const searchParams = new URLSearchParams({
+      state: JSON.stringify({
+        pathname: this.#pathname ?? currentUrl.pathname,
+        search: '',
+        ...this.#state,
+      }),
+    });
+    rscUrl.search = searchParams.toString();
+    return rscUrl.toString();
   }
 
   getRedirectHeader(currentUrl: URL) {

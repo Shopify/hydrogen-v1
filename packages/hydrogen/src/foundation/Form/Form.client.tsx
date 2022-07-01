@@ -1,4 +1,4 @@
-import React, {FormEvent, useCallback, useRef, useState} from 'react';
+import React, {FormEvent, useCallback, useState} from 'react';
 // @ts-ignore
 import {createFromFetch} from '@shopify/hydrogen/vendor/react-server-dom-vite';
 import {useInternalServerProps} from '../useServerProps/use-server-props';
@@ -21,7 +21,6 @@ export function Form({
   noValidate,
   ...props
 }: FormProps) {
-  const formRef = useRef<HTMLFormElement>(null);
   const {setRscResponseFromApiRoute} = useInternalServerProps();
   const [_, startTransition] = (React as any).useTransition();
   const [loading, setLoading] = useState(false);
@@ -33,14 +32,11 @@ export function Form({
 
       setLoading(true);
       e.preventDefault();
-      const multiFormData = new FormData(formRef.current!);
-      const formBody: Array<string> = [];
+      const formData = new FormData(e.target as HTMLFormElement);
 
-      multiFormData.forEach((value, key) => {
-        formBody.push(
-          `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`
-        );
-      });
+      // @ts-expect-error
+      // It is valid to pass a FormData instance to a URLSearchParams constructor
+      const formBody = new URLSearchParams(formData);
 
       startTransition(() => {
         fetch(action, {
@@ -49,7 +45,7 @@ export function Form({
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
             'Hydrogen-Client': 'Form-Action',
           },
-          body: formBody.join('&'),
+          body: formBody,
         }).then((fetchResponse) => {
           const rscPathname = fetchResponse.headers.get(
             'Hydrogen-RSC-Pathname'
@@ -58,7 +54,10 @@ export function Form({
             window.history.pushState(null, '', rscPathname);
           }
           const rscResponse = createFromFetch(Promise.resolve(fetchResponse));
-          setRscResponseFromApiRoute(rscResponse);
+          setRscResponseFromApiRoute({
+            url: method + action,
+            response: rscResponse,
+          });
           setLoading(false);
         });
       });
@@ -71,7 +70,6 @@ export function Form({
       action={action}
       method={method}
       onSubmit={submit}
-      ref={formRef}
       encType={enctype}
       noValidate={noValidate}
       {...props}

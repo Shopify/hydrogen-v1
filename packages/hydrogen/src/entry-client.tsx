@@ -3,8 +3,8 @@ import React, {
   useState,
   StrictMode,
   Fragment,
-  useEffect,
   type ElementType,
+  useEffect,
 } from 'react';
 import {hydrateRoot} from 'react-dom/client';
 import type {ClientConfig, ClientHandler} from './types';
@@ -146,6 +146,11 @@ const renderHydrogen: ClientHandler = async (ClientWrapper) => {
 
 export default renderHydrogen;
 
+interface APIRouteRscResponse {
+  url: string;
+  response: any;
+}
+
 function Content({
   clientWrapper: ClientWrapper = ({children}: {children: JSX.Element}) =>
     children,
@@ -157,12 +162,15 @@ function Content({
     search: window.location.search,
   });
   const [rscResponseFromApiRoute, setRscResponseFromApiRoute] =
-    useState<any>(null);
+    useState<APIRouteRscResponse | null>(null);
+
   const response = useServerResponse(serverProps, rscResponseFromApiRoute);
 
   useEffect(() => {
+    // If server props ever change, we want to make sure to use a fresh
+    // _rsc request, and ignore any response from API routes.
     setRscResponseFromApiRoute(null);
-  }, [response]);
+  }, [serverProps]);
 
   return (
     <ServerPropsProvider
@@ -213,13 +221,16 @@ function Error({error}: {error: Error}) {
   );
 }
 
-function useServerResponse(state: any, rscResponseFromApiRoute?: any) {
+function useServerResponse(
+  state: any,
+  apiRouteRscResponse: APIRouteRscResponse | null
+) {
   const key = JSON.stringify(state);
 
-  if (rscResponseFromApiRoute) {
+  if (apiRouteRscResponse) {
     cache.clear();
-    cache.set(key, rscResponseFromApiRoute);
-    return rscResponseFromApiRoute;
+    cache.set(apiRouteRscResponse.url, apiRouteRscResponse.response);
+    return apiRouteRscResponse.response;
   }
 
   let response = cache.get(key);
