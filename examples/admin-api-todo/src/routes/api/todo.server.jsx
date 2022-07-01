@@ -1,4 +1,3 @@
-// import url from 'url';
 import {nanoid} from 'nanoid';
 import {graphqlClient} from '../../utils/graphqlClient';
 import {restClient} from '../../utils/restClient';
