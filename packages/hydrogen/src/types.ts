@@ -2,11 +2,11 @@ export * from './shared-types.js';
 import {ShopifyConfig} from './shared-types.js';
 
 import type {ServerResponse} from 'http';
-import type {Logger, LoggerConfig} from './utilities/log/log';
-import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server';
-import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server';
+import type {Logger, LoggerConfig} from './utilities/log/log.js';
+import type {HydrogenRequest} from './foundation/HydrogenRequest/HydrogenRequest.server.jsx';
+import type {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.jsx';
 import type {Metafield} from './storefront-api-types.js';
-import type {SessionStorageAdapter} from './foundation/session/session';
+import type {SessionStorageAdapter} from './foundation/session/session.js';
 import type {PartialDeep, JsonValue} from 'type-fest';
 
 export type AssembleHtmlParams = {

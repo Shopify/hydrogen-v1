@@ -1,6 +1,6 @@
-import type {SessionStorageAdapter} from '../session/session';
-import {Cookie} from '../Cookie/Cookie';
-import type {CookieOptions} from '../Cookie/Cookie';
+import type {SessionStorageAdapter} from '../session/session.js';
+import {Cookie} from '../Cookie/Cookie.js';
+import type {CookieOptions} from '../Cookie/Cookie.js';
 
 /** The `CookieSessionStorage` component is the default session storage mechanism for Hydrogen.
  */

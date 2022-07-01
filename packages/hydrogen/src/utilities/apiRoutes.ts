@@ -3,17 +3,20 @@ import {
   ResolvedHydrogenRoutes,
   ImportGlobEagerOutput,
 } from '../types.js';
-import {matchPath} from './matchPath';
-import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
-import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server';
-import {fetchBuilder, graphqlRequestBody} from './fetch';
-import {getStorefrontApiRequestHeaders} from './storefrontApi';
+import {matchPath} from './matchPath.js';
+import {
+  getLoggerWithContext,
+  logServerResponse,
+} from '../utilities/log/index.js';
+import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server.jsx';
+import {fetchBuilder, graphqlRequestBody} from './fetch.js';
+import {getStorefrontApiRequestHeaders} from './storefrontApi.js';
 import {
   emptySessionImplementation,
   SessionApi,
   SessionStorageAdapter,
-} from '../foundation/session/session';
-import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks/index.js';
+} from '../foundation/session/session.js';
+import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks.js';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};

@@ -1,13 +1,19 @@
 import React, {useMemo} from 'react';
 import {ShopifyProviderClient} from './ShopifyProvider.client.jsx';
-import type {ShopifyProviderProps, LocalizationContextValue} from './types.js';
+import type {
+  ShopifyProviderProps,
+  LocalizationContextValue,
+  ShopifyContextValue,
+} from './types.js';
 import type {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 
 import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../constants.js';
-import type {ShopifyContextValue} from './types.js';
 import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types.js';
-import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
-import {getOxygenVariable} from '../../utilities/storefrontApi';
+import {
+  useRequestCacheData,
+  useServerRequest,
+} from '../ServerRequestProvider/index.js';
+import {getOxygenVariable} from '../../utilities/storefrontApi.js';
 import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants.js';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {

@@ -1,6 +1,6 @@
 import React, {cloneElement, ReactElement} from 'react';
-import {useServerRequest} from '../ServerRequestProvider';
-import {matchPath} from '../../utilities/matchPath';
+import {useServerRequest} from '../ServerRequestProvider/index.js';
+import {matchPath} from '../../utilities/matchPath.js';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client.jsx';
 
 export type RouteProps = {

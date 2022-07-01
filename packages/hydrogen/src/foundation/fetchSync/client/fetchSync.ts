@@ -1,5 +1,5 @@
-import {suspendFunction, preloadFunction} from '../../../utilities/suspense';
-import {ResponseSync} from '../ResponseSync';
+import {suspendFunction, preloadFunction} from '../../../utilities/suspense.js';
+import {ResponseSync} from '../ResponseSync.js';
 
 /**
  * Fetch a URL for use in a client component Suspense boundary.

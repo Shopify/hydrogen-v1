@@ -1,4 +1,4 @@
-import {ClientAnalytics} from '../ClientAnalytics';
+import {ClientAnalytics} from '../ClientAnalytics.js';
 import type {Subscriber} from '../types.js';
 
 describe('Analytics - ClientAnalytics', () => {

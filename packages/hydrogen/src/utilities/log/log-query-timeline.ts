@@ -1,12 +1,12 @@
-import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server';
+import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.jsx';
 import {QueryKey} from '../../types.js';
-import {hashKey} from '../hash';
-import {findQueryName, parseUrl} from './utils';
+import {hashKey} from '../hash.js';
+import {findQueryName, parseUrl} from './utils.js';
 import {gray, red, yellow, green} from 'kolorist';
-import {getLoggerWithContext} from './log';
-import {getTime} from '../timing';
+import {getLoggerWithContext} from './log.js';
+import {getTime} from '../timing.js';
 
-import type {RenderType} from './log';
+import type {RenderType} from './log.js';
 
 export type TimingType = 'requested' | 'resolved' | 'rendered' | 'preload';
 

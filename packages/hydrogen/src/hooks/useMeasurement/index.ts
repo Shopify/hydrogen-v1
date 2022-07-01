@@ -1,1 +1,1 @@
-export {useMeasurement} from './hooks/index.js';
+export {useMeasurement} from './hooks.js';

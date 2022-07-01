@@ -1,1 +1,1 @@
-export {FileSessionStorage} from './foundation/FileSessionStorage/FileSessionStorage';
+export {FileSessionStorage} from './foundation/FileSessionStorage/FileSessionStorage.js';

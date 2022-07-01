@@ -16,7 +16,7 @@ import type {
 import {Video} from '../Video/index.js';
 import {flattenConnection} from '../../utilities/flattenConnection/index.js';
 import type {PartialDeep} from 'type-fest';
-import {parseMetafield} from '../../utilities/parseMetafield/index.js';
+import {parseMetafield} from '../../utilities/parseMetafield.js';
 
 export interface MetafieldProps<TTag> {
   /** An object with fields that correspond to the Storefront API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield). */

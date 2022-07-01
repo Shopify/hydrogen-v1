@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useLocalization} from '../useLocalization/useLocalization';
+import {useLocalization} from '../useLocalization/useLocalization.js';
 import {
   getMeasurementAsParts,
   getMeasurementAsString,

@@ -10,7 +10,7 @@ import {
   LocationServerProps,
   ServerProps,
   ServerPropsProvider,
-} from '../../foundation/ServerPropsProvider/ServerPropsProvider';
+} from '../../foundation/ServerPropsProvider/ServerPropsProvider.jsx';
 
 type SetServerProps = React.Dispatch<React.SetStateAction<ServerProps>>;
 export interface ShopifyProviderOptions {

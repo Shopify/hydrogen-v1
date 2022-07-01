@@ -1,21 +1,18 @@
-import '../utilities/web-api-polyfill';
+import '../utilities/web-api-polyfill.js';
 import type {RequestHandler} from '../types.js';
 import path from 'path';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
+// @ts-expect-error this doesn't actually exist
 import entrypoint from '__SERVER_ENTRY__';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
 import indexTemplate from '__INDEX_TEMPLATE__?raw';
-import {hydrogenMiddleware} from '../framework/middleware';
+import {hydrogenMiddleware} from '../framework/middleware.js';
 
-// @ts-ignore
+// @ts-expect-error
 import serveStatic from 'serve-static';
-// @ts-ignore
+// @ts-expect-error
 import compression from 'compression';
 import bodyParser from 'body-parser';
 import connect, {NextHandleFunction} from 'connect';
-import {InMemoryCache} from '../framework/cache/in-memory';
+import {InMemoryCache} from '../framework/cache/in-memory.js';
 
 const handleRequest = entrypoint as RequestHandler;
 

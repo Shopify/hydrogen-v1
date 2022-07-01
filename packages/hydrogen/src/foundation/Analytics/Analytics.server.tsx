@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {useServerAnalytics} from './hook';
+import {useServerAnalytics} from './hook.jsx';
 import {Analytics as AnalyticsClient} from './Analytics.client.jsx';
-import {useServerRequest} from '../ServerRequestProvider';
+import {useServerRequest} from '../ServerRequestProvider/index.js';
 import AnalyticsErrorBoundary from '../AnalyticsErrorBoundary.client.jsx';
 import {wrapPromise} from '../../utilities/index.js';
 

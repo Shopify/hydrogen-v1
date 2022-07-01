@@ -1,4 +1,7 @@
-import {CacheShort, generateCacheControlHeader} from '../Cache/strategies';
+import {
+  CacheShort,
+  generateCacheControlHeader,
+} from '../Cache/strategies/index.js';
 import type {CachingStrategy} from '../../types.js';
 import Redirect from '../Redirect/Redirect.client.jsx';
 import React from 'react';

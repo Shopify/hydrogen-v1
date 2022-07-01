@@ -1,1 +1,1 @@
-export {useQuery} from './hooks/index.js';
+export {useQuery} from './hooks.js';

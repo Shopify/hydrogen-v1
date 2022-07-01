@@ -1,5 +1,5 @@
 import React, {ComponentProps, useState, useEffect} from 'react';
-import {ClientAnalytics} from '../../Analytics';
+import {ClientAnalytics} from '../../Analytics/index.js';
 import {Performance} from './Performance.client.jsx';
 import {Settings} from './Settings.client.jsx';
 

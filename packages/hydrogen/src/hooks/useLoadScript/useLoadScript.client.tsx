@@ -1,4 +1,4 @@
-import {loadScript} from '../../utilities/load_script';
+import {loadScript} from '../../utilities/load_script.js';
 import {useState, useEffect} from 'react';
 
 type LoadScriptParams = Parameters<typeof loadScript>;

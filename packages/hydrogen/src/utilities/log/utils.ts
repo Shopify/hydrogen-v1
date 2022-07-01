@@ -1,4 +1,4 @@
-import type {RenderType} from './log';
+import type {RenderType} from './log.js';
 
 export function findQueryName(key: string) {
   if (key.length < 100) {

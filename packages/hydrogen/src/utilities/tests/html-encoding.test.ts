@@ -1,4 +1,4 @@
-import {htmlEncode} from '../html-encoding';
+import {htmlEncode} from '../html-encoding.js';
 
 describe('html encoding', () => {
   describe('htmlEncode', () => {

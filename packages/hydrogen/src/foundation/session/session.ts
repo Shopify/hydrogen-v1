@@ -1,7 +1,7 @@
 import {Logger} from '../../utilities/log/index.js';
-import {wrapPromise} from '../../utilities/suspense';
-import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server';
-import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
+import {wrapPromise} from '../../utilities/suspense.js';
+import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server.jsx';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.jsx';
 
 export type SessionSyncApi = {
   get: () => Record<string, string>;

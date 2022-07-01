@@ -3,7 +3,7 @@ import {
   ServerPropsContext,
   ServerPropsContextValue,
   InternalServerPropsContextValue,
-} from '../ServerPropsProvider/ServerPropsProvider';
+} from '../ServerPropsProvider/ServerPropsProvider.jsx';
 
 /**
  * The `useServerProps` hook allows you to manage the [server props](https://shopify.dev/custom-storefronts/hydrogen/framework/server-props) passed to your server components when using Hydrogen as a React Server Component framework. The server props get cleared when you navigate from one route to another.

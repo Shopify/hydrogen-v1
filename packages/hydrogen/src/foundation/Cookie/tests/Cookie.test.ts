@@ -1,4 +1,4 @@
-import {Cookie} from '../Cookie';
+import {Cookie} from '../Cookie.js';
 import {log} from '../../../utilities/log/index.js';
 
 const options = {

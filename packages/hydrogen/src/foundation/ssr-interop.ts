@@ -6,8 +6,8 @@
  */
 
 import {useContext, Context} from 'react';
-import type {HydrogenRequest} from './HydrogenRequest/HydrogenRequest.server';
-//@SSR import {useServerRequest} from './ServerRequestProvider';
+import type {HydrogenRequest} from './HydrogenRequest/HydrogenRequest.server.jsx';
+//@SSR import {useServerRequest} from './ServerRequestProvider/index.js';
 
 // This is replaced by Vite to import.meta.env.SSR
 export const META_ENV_SSR = false;

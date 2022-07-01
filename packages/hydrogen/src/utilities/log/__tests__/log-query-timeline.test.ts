@@ -1,6 +1,6 @@
-import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server';
-import {Logger, setLogger} from '../log';
-import {collectQueryTimings, logQueryTimings} from '../log-query-timeline';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.jsx';
+import {Logger, setLogger} from '../log.js';
+import {collectQueryTimings, logQueryTimings} from '../log-query-timeline.js';
 
 let mockLogger: jest.Mocked<Logger>;
 

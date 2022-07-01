@@ -1,4 +1,4 @@
-import {MemorySessionStorage} from '../MemorySessionStorage';
+import {MemorySessionStorage} from '../MemorySessionStorage.js';
 
 const options = {
   httponly: true,

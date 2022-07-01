@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
 import {parse, stringify} from 'worktop/cookie';
 import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
-import {ClientAnalytics} from '../../ClientAnalytics';
-import {buildUUID, addDataIf} from './utils';
+import {ClientAnalytics} from '../../ClientAnalytics.js';
+import {buildUUID, addDataIf} from './utils.jsx';
 
 const longTermLength = 60 * 60 * 24 * 360 * 2; // ~2 year expiry
 const shortTermLength = 60 * 30; // 30 mins

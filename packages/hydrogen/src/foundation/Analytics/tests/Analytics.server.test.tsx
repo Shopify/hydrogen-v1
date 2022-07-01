@@ -1,9 +1,9 @@
 import React, {Suspense} from 'react';
-import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server';
+import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server.jsx';
 import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
-import {ServerRequestProvider} from '../../ServerRequestProvider';
-import {Analytics} from '../Analytics.server';
-import {useServerAnalytics} from '../hook';
+import {ServerRequestProvider} from '../../ServerRequestProvider/index.js';
+import {Analytics} from '../Analytics.server.jsx';
+import {useServerAnalytics} from '../hook.jsx';
 
 function SomeServerComponent({analyticsData}: {analyticsData: any}) {
   useServerAnalytics(analyticsData);

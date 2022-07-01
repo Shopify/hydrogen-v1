@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {mount} from '@shopify/react-testing';
 import {Analytics} from '../Analytics.client.jsx';
-import {ClientAnalytics} from '../ClientAnalytics';
+import {ClientAnalytics} from '../ClientAnalytics.js';
 
 export function SomeClientComponent({
   eventName,

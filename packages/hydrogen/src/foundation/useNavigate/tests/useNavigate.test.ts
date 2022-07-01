@@ -1,4 +1,4 @@
-import {buildPath} from '../useNavigate';
+import {buildPath} from '../useNavigate.js';
 
 describe('buildPath', () => {
   it('doesn\'t transform base path "/"', () => {

@@ -1,8 +1,8 @@
 import React, {useMemo} from 'react';
-import {matchPath} from '../../utilities/matchPath';
+import {matchPath} from '../../utilities/matchPath.js';
 import {log} from '../../utilities/log/index.js';
-import {extractPathFromRoutesKey} from '../../utilities/apiRoutes';
-import {useServerRequest} from '../ServerRequestProvider';
+import {extractPathFromRoutesKey} from '../../utilities/apiRoutes.js';
+import {useServerRequest} from '../ServerRequestProvider/index.js';
 
 import type {ImportGlobEagerOutput} from '../../types.js';
 import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client.jsx';

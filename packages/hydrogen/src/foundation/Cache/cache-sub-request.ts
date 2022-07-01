@@ -1,8 +1,8 @@
 import type {QueryKey, CachingStrategy, AllCacheOptions} from '../../types.js';
-import {getCache} from '../runtime';
-import {hashKey} from '../../utilities/hash';
-import * as CacheApi from './cache';
-import {CacheShort} from './strategies';
+import {getCache} from '../runtime.js';
+import {hashKey} from '../../utilities/hash.js';
+import * as CacheApi from './cache.js';
+import {CacheShort} from './strategies/index.js';
 
 /**
  * Wrapper Cache functions for sub queries

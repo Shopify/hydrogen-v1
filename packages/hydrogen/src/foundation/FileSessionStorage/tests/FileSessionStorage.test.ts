@@ -1,5 +1,5 @@
 import {Logger} from '../../../utilities/log/index.js';
-import {FileSessionStorage} from '../FileSessionStorage';
+import {FileSessionStorage} from '../FileSessionStorage.js';
 import path from 'path';
 import {promises as fsp} from 'fs';
 

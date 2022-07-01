@@ -1,5 +1,5 @@
-import {generateSubRequestCacheControlHeader} from '../cache-sub-request';
-import {CacheShort, CacheNone} from '../strategies';
+import {generateSubRequestCacheControlHeader} from '../cache-sub-request.js';
+import {CacheShort, CacheNone} from '../strategies/index.js';
 
 describe('generateSubRequestCacheControlHeader', () => {
   it('generates CacheShort caching strategy by default', () => {

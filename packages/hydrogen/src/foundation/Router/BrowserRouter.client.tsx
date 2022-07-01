@@ -10,9 +10,9 @@ import React, {
   useCallback,
   ReactNode,
 } from 'react';
-import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider';
-import {META_ENV_SSR} from '../ssr-interop';
-import {useInternalServerProps} from '../useServerProps/use-server-props';
+import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider.jsx';
+import {META_ENV_SSR} from '../ssr-interop.js';
+import {useInternalServerProps} from '../useServerProps/use-server-props.js';
 
 type RouterContextValue = {
   history: BrowserHistory;

@@ -1,5 +1,5 @@
 import {QueryKey} from '../types.js';
-import {hashKey} from './hash';
+import {hashKey} from './hash.js';
 
 /**
  * Wrap the fetch promise in a way that React Suspense understands.

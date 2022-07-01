@@ -1,4 +1,4 @@
-import {useEnvContext} from '../ssr-interop';
+import {useEnvContext} from '../ssr-interop.js';
 import {RouteParamsContext} from './RouteParamsProvider.client.jsx';
 
 /**

@@ -1,7 +1,7 @@
 import {EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from '../../constants.js';
-import {ResourceGetter} from '../../utilities/apiRoutes';
-import {ServerAnalyticsRoute} from '../Analytics/ServerAnalyticsRoute';
-import {HealthCheck} from './healthCheck';
+import {ResourceGetter} from '../../utilities/apiRoutes.js';
+import {ServerAnalyticsRoute} from '../Analytics/ServerAnalyticsRoute.js';
+import {HealthCheck} from './healthCheck.js';
 
 type BuiltInRoute = {
   pathname?: string;

@@ -1,5 +1,5 @@
 import {STOREFRONT_API_BUYER_IP_HEADER} from '../../constants.js';
-import {hashKey} from '../hash';
+import {hashKey} from '../hash.js';
 
 describe('Hash key for subrequests', () => {
   it('supports strings', () => {

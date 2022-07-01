@@ -1,6 +1,6 @@
-import {createMountableHook} from '../../../utilities/tests/createMountableHook';
+import {createMountableHook} from '../../../utilities/tests/createMountableHook.jsx';
 import {CurrencyCode} from '../../../storefront-api-types.js';
-import {useMoney} from '../hooks/index.js';
+import {useMoney} from '../hooks.js';
 
 const mountUseMoney = createMountableHook(useMoney);
 

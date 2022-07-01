@@ -1,6 +1,6 @@
 import type {CachingStrategy} from '../../types.js';
-import {getCache} from '../runtime';
-import {CacheShort, generateCacheControlHeader} from './strategies';
+import {getCache} from '../runtime.js';
+import {CacheShort, generateCacheControlHeader} from './strategies/index.js';
 import {logCacheApiStatus} from '../../utilities/log/index.js';
 
 function getCacheControlSetting(

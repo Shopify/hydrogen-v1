@@ -1,4 +1,4 @@
-import {gql} from '../graphql-tag';
+import {gql} from '../graphql-tag.js';
 import ast from 'graphql-tag';
 
 describe('GraphQL Tag', () => {

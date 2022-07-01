@@ -1,13 +1,13 @@
 import React from 'react';
 import {parse} from 'worktop/cookie';
 import AnalyticsErrorBoundary from '../../../AnalyticsErrorBoundary.client.jsx';
-import {useServerRequest} from '../../../ServerRequestProvider';
-import {useServerAnalytics} from '../../hook';
-import {useShop} from '../../../useShop';
+import {useServerRequest} from '../../../ServerRequestProvider/index.js';
+import {useServerAnalytics} from '../../hook.jsx';
+import {useShop} from '../../../useShop/index.js';
 import {ShopifyAnalyticsClient} from './ShopifyAnalytics.client.jsx';
-import {useShopQuery} from '../../../../hooks/useShopQuery';
-import {CacheLong} from '../../../Cache/strategies';
-import {gql} from '../../../../utilities/graphql-tag';
+import {useShopQuery} from '../../../../hooks/useShopQuery/index.js';
+import {CacheLong} from '../../../Cache/strategies/index.js';
+import {gql} from '../../../../utilities/graphql-tag.js';
 import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
 
 export function ShopifyAnalytics({cookieDomain}: {cookieDomain?: string}) {

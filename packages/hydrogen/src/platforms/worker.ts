@@ -1,9 +1,6 @@
 import type {RequestHandler} from '../types.js';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
+// @ts-expect-error
 import entrypoint from '__SERVER_ENTRY__';
-// @ts-ignore
-// eslint-disable-next-line node/no-missing-import
 import indexTemplate from '__INDEX_TEMPLATE__?raw';
 
 const handleRequest = entrypoint as RequestHandler;

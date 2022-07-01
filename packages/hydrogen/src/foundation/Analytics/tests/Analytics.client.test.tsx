@@ -3,7 +3,7 @@ import {
   mountComponent,
   SomeClientComponent,
 } from './analytics-client-test-utils.client.jsx';
-import {ClientAnalytics} from '../ClientAnalytics';
+import {ClientAnalytics} from '../ClientAnalytics.js';
 
 describe('Analytics.client', () => {
   afterEach(async () => {
