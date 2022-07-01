@@ -54,9 +54,7 @@ export default () => {
       if (
         config.command === 'build' &&
         options?.ssr &&
-        normalizePath(id)
-          .split('@shopify/hydrogen/')[1]
-          ?.includes('platforms/virtual')
+        /@shopify\/hydrogen\/.+platforms\/virtual\./.test(normalizePath(id))
       ) {
         const ms = new MagicString(code);
 
