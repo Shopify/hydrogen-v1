@@ -3,7 +3,7 @@ import {HYDROGEN_DEFAULT_SERVER_ENTRY} from './vite-plugin-hydrogen-middleware';
 import MagicString from 'magic-string';
 import path from 'path';
 import fs from 'fs';
-import FastGlob from 'fast-glob';
+import fastGlob from 'fast-glob';
 
 const SSR_BUNDLE_NAME = 'index.js';
 
@@ -50,7 +50,7 @@ export default () => {
 
       return null;
     },
-    transform(code, id, options) {
+    async transform(code, id, options) {
       if (
         config.command === 'build' &&
         options?.ssr &&
@@ -85,10 +85,12 @@ export default () => {
         );
 
         const files = clientBuildPath
-          ? FastGlob.sync('**/*', {
-              cwd: clientBuildPath,
-              ignore: ['**/index.html', `**/${config.build.assetsDir}/**`],
-            }).map((file) => '/' + file)
+          ? (
+              await fastGlob('**/*', {
+                cwd: clientBuildPath,
+                ignore: ['**/index.html', `**/${config.build.assetsDir}/**`],
+              })
+            ).map((file) => '/' + file)
           : [];
 
         ms.replace("\\['__HYDROGEN_ASSETS__'\\]", JSON.stringify(files));
