@@ -52,6 +52,15 @@ export default async function testCases({
     expect(await page.textContent('.count')).toBe('Count is 1');
   });
 
+  it('decodes non UTF-8 parameters', async () => {
+    await page.goto(getServerUrl() + '/encode-uri/送料無料対象商品');
+
+    expect(await page.textContent('h1')).toContain('Encode URI');
+    expect(await page.textContent('#encode-uri-content')).toMatch(
+      '送料無料対象商品'
+    );
+  });
+
   it('renders `<ShopifyProvider>` dynamically in RSC and on the client', async () => {
     // "someDynamicValue should get injected into the response config paylout"
     await page.goto(getServerUrl() + '/config/someDynamicValue');

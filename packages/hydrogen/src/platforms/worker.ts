@@ -1,10 +1,4 @@
-import type {RequestHandler} from '../types.js';
-// @ts-expect-error
-import entrypoint from '__SERVER_ENTRY__';
-import indexTemplate from '__INDEX_TEMPLATE__?raw';
-
-const handleRequest = entrypoint as RequestHandler;
-
+import {handleRequest, indexTemplate} from './virtual.js';
 declare global {
   // eslint-disable-next-line no-var
   var globalThis: {

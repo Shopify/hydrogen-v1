@@ -1,11 +1,11 @@
 import '../utilities/web-api-polyfill.js';
-import type {RequestHandler} from '../types.js';
 import path from 'path';
-// @ts-expect-error this doesn't actually exist
-import entrypoint from '__SERVER_ENTRY__';
-import indexTemplate from '__INDEX_TEMPLATE__?raw';
+import {
+  handleRequest,
+  indexTemplate,
+  relativeClientBuildPath,
+} from './virtual.js';
 import {hydrogenMiddleware} from '../framework/middleware.js';
-
 // @ts-expect-error
 import serveStatic from 'serve-static';
 // @ts-expect-error
@@ -13,8 +13,6 @@ import compression from 'compression';
 import bodyParser from 'body-parser';
 import connect, {NextHandleFunction} from 'connect';
 import {InMemoryCache} from '../framework/cache/in-memory.js';
-
-const handleRequest = entrypoint as RequestHandler;
 
 type CreateServerOptions = {
   cache?: Cache;
@@ -31,7 +29,7 @@ export async function createServer({
   app.use(compression() as NextHandleFunction);
 
   app.use(
-    serveStatic(path.resolve(__dirname, '../client'), {
+    serveStatic(path.resolve(__dirname, relativeClientBuildPath), {
       index: false,
     }) as NextHandleFunction
   );
