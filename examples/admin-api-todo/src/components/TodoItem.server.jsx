@@ -11,7 +11,7 @@ export function TodoItem({metafield, index}) {
       >
         <p style={{marginRight: '1rem'}}>{index}.</p>
 
-        {/* hidden fields passing required data to the api/admin/shop */}
+        {/* hidden fields passing required data to the api/shop */}
         <input type="text" hidden name="action" defaultValue="updateTodo" />
         <input type="text" hidden name="key" defaultValue={metafield.key} />
 
@@ -36,7 +36,7 @@ export function TodoItem({metafield, index}) {
 
       {/* delete todo */}
       <form id="delete-todo" action="/api/todo" method="post">
-        {/* hidden fields passing required data to the api/admin/shop */}
+        {/* hidden fields passing required data to the api/shop */}
         <input type="text" hidden name="action" defaultValue="deleteTodo" />
         <input type="text" hidden name="id" defaultValue={metafield.id} />
 
