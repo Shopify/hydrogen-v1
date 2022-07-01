@@ -1,5 +1,5 @@
-export {useProductOptions} from './useProductOptions';
-export * from './useProductOptions/types';
+export {useProductOptions} from './useProductOptions/index.js';
+export * from './useProductOptions/types.js';
 export {useMoney} from './useMoney';
 export {useMeasurement} from './useMeasurement';
 export {useLoadScript} from './useLoadScript';

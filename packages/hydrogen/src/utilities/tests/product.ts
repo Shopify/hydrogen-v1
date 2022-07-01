@@ -6,7 +6,7 @@ import {getAnyMedia, getPreviewImage} from './media';
 import {
   ProductVariant,
   Product as ProductType,
-} from '../../storefront-api-types';
+} from '../../storefront-api-types.js';
 import {getRawMetafield} from './metafields';
 import type {PartialDeep} from 'type-fest';
 

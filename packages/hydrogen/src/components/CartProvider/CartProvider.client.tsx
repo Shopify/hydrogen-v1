@@ -6,16 +6,16 @@ import React, {
   useRef,
 } from 'react';
 import type {Reducer} from 'react';
-import {flattenConnection} from '../../utilities/flattenConnection';
+import {flattenConnection} from '../../utilities/index.js';
 import {
   CartCreateMutation,
   CartCreateMutationVariables,
-} from './graphql/CartCreateMutation';
-import {Cart, CartAction, State} from './types';
+} from './graphql/CartCreateMutation.js';
+import {Cart, CartAction, State} from './types.js';
 import {
   CartLineAddMutation,
   CartLineAddMutationVariables,
-} from './graphql/CartLineAddMutation';
+} from './graphql/CartLineAddMutation.js';
 import {
   CartLineAdd,
   CartCreate,
@@ -27,7 +27,7 @@ import {
   CartDiscountCodesUpdate,
   CartQuery,
   defaultCartFragment,
-} from './cart-queries';
+} from './cart-queries.js';
 import {
   CartLineInput,
   CartInput,
@@ -35,40 +35,40 @@ import {
   CartBuyerIdentityInput,
   AttributeInput,
   CountryCode,
-} from '../../storefront-api-types';
-import {useCartFetch} from './hooks.client';
-import {CartContext} from './context';
+} from '../../storefront-api-types.js';
+import {useCartFetch} from './hooks.client.js';
+import {CartContext} from './context.js';
 import {
   CartLineRemoveMutationVariables,
   CartLineRemoveMutation,
-} from './graphql/CartLineRemoveMutation';
+} from './graphql/CartLineRemoveMutation.js';
 import {
   CartLineUpdateMutationVariables,
   CartLineUpdateMutation,
-} from './graphql/CartLineUpdateMutation';
+} from './graphql/CartLineUpdateMutation.js';
 import {
   CartNoteUpdateMutationVariables,
   CartNoteUpdateMutation,
-} from './graphql/CartNoteUpdateMutation';
+} from './graphql/CartNoteUpdateMutation.js';
 import {
   CartBuyerIdentityUpdateMutationVariables,
   CartBuyerIdentityUpdateMutation,
-} from './graphql/CartBuyerIdentityUpdateMutation';
+} from './graphql/CartBuyerIdentityUpdateMutation.js';
 import {
   CartDiscountCodesUpdateMutationVariables,
   CartDiscountCodesUpdateMutation,
-} from './graphql/CartDiscountCodesUpdateMutation';
+} from './graphql/CartDiscountCodesUpdateMutation.js';
 
 import {
   CartAttributesUpdateMutationVariables,
   CartAttributesUpdateMutation,
-} from './graphql/CartAttributesUpdateMutation';
-import {CART_ID_STORAGE_KEY} from './constants';
-import {CartFragmentFragment} from './graphql/CartFragment';
-import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery';
+} from './graphql/CartAttributesUpdateMutation.js';
+import {CART_ID_STORAGE_KEY} from './constants.js';
+import {CartFragmentFragment} from './graphql/CartFragment.js';
+import {CartQueryQuery, CartQueryQueryVariables} from './graphql/CartQuery.js';
 
-import type {CartWithActions} from './types';
-import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics';
+import type {CartWithActions} from './types.js';
+import {ClientAnalytics} from '../../foundation/Analytics/ClientAnalytics.js';
 
 function cartReducer(state: State, action: CartAction): State {
   switch (action.type) {

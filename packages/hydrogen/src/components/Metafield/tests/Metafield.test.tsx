@@ -1,12 +1,12 @@
 import React from 'react';
-import {Metafield} from '../Metafield.client';
-import {getRawMetafield} from '../../../utilities/tests/metafields';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {Image} from '../../Image';
-import {getMediaImage} from '../../../utilities/tests/media';
-import type {Rating} from '../../../types';
-import {Link} from '../../Link/Link.client';
-import {Page, Product, ProductVariant} from '../../../storefront-api-types';
+import {Metafield} from '../Metafield.client.jsx';
+import {getRawMetafield} from '../../../utilities/tests/metafields.js';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {Image} from '../../Image/index.js';
+import {getMediaImage} from '../../../utilities/tests/media.js';
+import type {Rating} from '../../../types.js';
+import {Link} from '../../Link/Link.client.jsx';
+import {Page, Product, ProductVariant} from '../../../storefront-api-types.js';
 
 describe('<Metafield />', () => {
   it('renders nothing when the metafield is null', () => {

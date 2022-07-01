@@ -1,14 +1,14 @@
 import React, {useMemo} from 'react';
-import {ShopifyProviderClient} from './ShopifyProvider.client';
-import type {ShopifyProviderProps, LocalizationContextValue} from './types';
-import type {CountryCode, LanguageCode} from '../../storefront-api-types';
+import {ShopifyProviderClient} from './ShopifyProvider.client.jsx';
+import type {ShopifyProviderProps, LocalizationContextValue} from './types.js';
+import type {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 
-import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../constants';
-import type {ShopifyContextValue} from './types';
-import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types';
+import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../constants.js';
+import type {ShopifyContextValue} from './types.js';
+import type {ShopifyConfig, ShopifyConfigFetcher} from '../../types.js';
 import {useRequestCacheData, useServerRequest} from '../ServerRequestProvider';
 import {getOxygenVariable} from '../../utilities/storefrontApi';
-import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants';
+import {SHOPIFY_STOREFRONT_ID_VARIABLE} from '../../constants.js';
 
 function makeShopifyContext(shopifyConfig: ShopifyConfig): ShopifyContextValue {
   const countryCode = shopifyConfig.defaultCountryCode ?? DEFAULT_COUNTRY;

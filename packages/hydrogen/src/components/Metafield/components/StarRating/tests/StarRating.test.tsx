@@ -1,10 +1,10 @@
 import React from 'react';
-import {getRawMetafield} from '../../../../../utilities/tests/metafields';
+import {getRawMetafield} from '../../../../../utilities/tests/metafields.js';
 import {mount} from '@shopify/react-testing';
-import {StarRating, Star} from '../StarRating';
-import {Rating} from '../../../../../types';
-import {Link} from '../../../../Link/Link.client';
-import {mountWithProviders} from '../../../../../utilities/tests/shopifyMount';
+import {StarRating, Star} from '../StarRating.jsx';
+import {Rating} from '../../../../../types.js';
+import {Link} from '../../../../Link/Link.client.jsx';
+import {mountWithProviders} from '../../../../../utilities/tests/shopifyMount.js';
 
 describe('<StarRating />', () => {
   it('renders the number of stars in the rating scale', () => {

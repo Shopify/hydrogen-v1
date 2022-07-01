@@ -1,2 +1,2 @@
-export {Metafield} from './Metafield.client';
-export type {MetafieldType} from './types';
+export {Metafield} from './Metafield.client.jsx';
+export type {MetafieldType} from './types.js';

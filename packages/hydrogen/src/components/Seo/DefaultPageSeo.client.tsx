@@ -1,10 +1,10 @@
 import React from 'react';
-import {Head} from '../../foundation/Head';
-import {useLocalization} from '../../hooks/useLocalization/useLocalization';
+import {Head} from '../../foundation/Head/index.js';
+import {useLocalization} from '../../hooks/useLocalization/useLocalization.js';
 
-import {TitleSeo} from './TitleSeo.client';
-import {DescriptionSeo} from './DescriptionSeo.client';
-import {TwitterSeo} from './TwitterSeo.client';
+import {TitleSeo} from './TitleSeo.client.jsx';
+import {DescriptionSeo} from './DescriptionSeo.client.jsx';
+import {TwitterSeo} from './TwitterSeo.client.jsx';
 import type {DefaultPage} from './seo-types';
 import type {PartialDeep} from 'type-fest';
 

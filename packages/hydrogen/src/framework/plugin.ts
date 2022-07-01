@@ -1,4 +1,4 @@
-import type {HydrogenVitePluginOptions} from './types';
+import type {HydrogenVitePluginOptions} from './types.js';
 import hydrogenConfig from './plugins/vite-plugin-hydrogen-config';
 import type {Plugin} from 'vite';
 import hydrogenMiddleware from './plugins/vite-plugin-hydrogen-middleware';

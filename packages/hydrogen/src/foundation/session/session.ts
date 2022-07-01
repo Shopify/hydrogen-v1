@@ -1,4 +1,4 @@
-import {Logger} from '../../utilities/log';
+import {Logger} from '../../utilities/log/index.js';
 import {wrapPromise} from '../../utilities/suspense';
 import type {HydrogenResponse} from '../HydrogenResponse/HydrogenResponse.server';
 import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';

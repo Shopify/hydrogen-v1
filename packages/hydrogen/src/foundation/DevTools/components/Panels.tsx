@@ -1,7 +1,7 @@
 import React, {ComponentProps, useState, useEffect} from 'react';
 import {ClientAnalytics} from '../../Analytics';
-import {Performance} from './Performance.client';
-import {Settings} from './Settings.client';
+import {Performance} from './Performance.client.jsx';
+import {Settings} from './Settings.client.jsx';
 
 export interface Props {
   settings: ComponentProps<typeof Settings>;

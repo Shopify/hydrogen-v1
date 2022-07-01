@@ -1,10 +1,13 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {useLocation} from '../../foundation/Router/BrowserRouter.client';
+import {useLocation} from '../../foundation/Router/BrowserRouter.client.jsx';
 import {createPath} from 'history';
-import {buildPath, useNavigate} from '../../foundation/useNavigate/useNavigate';
-import {RSC_PATHNAME} from '../../constants';
-import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props';
-import {useBasePath} from '../../foundation/useRouteParams/RouteParamsProvider.client';
+import {
+  buildPath,
+  useNavigate,
+} from '../../foundation/useNavigate/useNavigate.js';
+import {RSC_PATHNAME} from '../../constants.js';
+import {useInternalServerProps} from '../../foundation/useServerProps/use-server-props.js';
+import {useBasePath} from '../../foundation/useRouteParams/RouteParamsProvider.client.jsx';
 
 export interface LinkProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {

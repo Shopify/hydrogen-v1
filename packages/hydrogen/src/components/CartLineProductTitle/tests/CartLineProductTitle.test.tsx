@@ -1,10 +1,10 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {CartLineProvider} from '../../CartLineProvider';
-import {CartLineProductTitle} from '../CartLineProductTitle.client';
-import {CART_LINE} from '../../CartLineProvider/tests/fixtures';
-import {Link} from '../../Link/Link.client';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {CartLineProvider} from '../../CartLineProvider/index.js';
+import {CartLineProductTitle} from '../CartLineProductTitle.client.jsx';
+import {CART_LINE} from '../../CartLineProvider/tests/fixtures.js';
+import {Link} from '../../Link/Link.client.jsx';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 
 describe(`<CartLineProductTitle/>`, () => {
   it('displays the title', () => {

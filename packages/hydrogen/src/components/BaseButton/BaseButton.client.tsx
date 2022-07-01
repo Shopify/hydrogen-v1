@@ -1,5 +1,4 @@
-import React, {ReactNode, Ref} from 'react';
-import {useCallback} from 'react';
+import React, {ReactNode, Ref, useCallback} from 'react';
 
 interface Props {
   /** Any ReactNode elements. */

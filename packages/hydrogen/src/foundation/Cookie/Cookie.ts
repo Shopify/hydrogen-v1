@@ -1,5 +1,5 @@
 import {parse, stringify as stringifyCookie} from 'worktop/cookie';
-import {log} from '../../utilities/log';
+import {log} from '../../utilities/log/index.js';
 import {parseJSON} from '../../utilities/parse';
 
 export type CookieOptions = {

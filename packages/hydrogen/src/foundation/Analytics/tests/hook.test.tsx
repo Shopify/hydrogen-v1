@@ -1,6 +1,6 @@
 import React, {Suspense} from 'react';
 import {HydrogenRequest} from '../../HydrogenRequest/HydrogenRequest.server';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 import {ServerRequestProvider} from '../../ServerRequestProvider';
 import {useServerAnalytics} from '../hook';
 

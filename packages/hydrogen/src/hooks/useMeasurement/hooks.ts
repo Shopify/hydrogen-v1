@@ -1,7 +1,10 @@
 import {useMemo} from 'react';
 import {useLocalization} from '../useLocalization/useLocalization';
-import {getMeasurementAsParts, getMeasurementAsString} from '../../utilities';
-import {Measurement} from '../../types';
+import {
+  getMeasurementAsParts,
+  getMeasurementAsString,
+} from '../../utilities/index.js';
+import {Measurement} from '../../types.js';
 
 export interface UseMeasurementValue {
   localizedString: string;

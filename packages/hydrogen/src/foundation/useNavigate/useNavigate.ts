@@ -1,5 +1,5 @@
-import {useRouter} from '../Router/BrowserRouter.client';
-import {useBasePath} from '../useRouteParams/RouteParamsProvider.client';
+import {useRouter} from '../Router/BrowserRouter.client.jsx';
+import {useBasePath} from '../useRouteParams/RouteParamsProvider.client.jsx';
 
 type NavigationOptions = {
   /** Whether to update the state object or URL of the current history entry. Defaults to false. */

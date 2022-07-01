@@ -1,4 +1,4 @@
-import {ResolvedHydrogenConfig} from '../../../types';
+import {ResolvedHydrogenConfig} from '../../../types.js';
 import {ServerAnalyticsRoute} from '../ServerAnalyticsRoute';
 
 const createRequest = () => {

@@ -1,8 +1,8 @@
 import React from 'react';
-import {TitleSeo} from './TitleSeo.client';
-import {DescriptionSeo} from './DescriptionSeo.client';
-import {TwitterSeo} from './TwitterSeo.client';
-import type {Page as PageType} from '../../storefront-api-types';
+import {TitleSeo} from './TitleSeo.client.jsx';
+import {DescriptionSeo} from './DescriptionSeo.client.jsx';
+import {TwitterSeo} from './TwitterSeo.client.jsx';
+import type {Page as PageType} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 
 export function PageSeo({title, seo}: PartialDeep<PageType>) {

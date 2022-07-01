@@ -1,5 +1,5 @@
 import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server';
-import {QueryKey} from '../../types';
+import {QueryKey} from '../../types.js';
 import {hashKey} from '../hash';
 import {findQueryName, parseUrl} from './utils';
 import {gray, red, yellow, green} from 'kolorist';

@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {parse, stringify} from 'worktop/cookie';
-import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants';
+import {SHOPIFY_Y, SHOPIFY_S} from '../../../../constants.js';
 import {ClientAnalytics} from '../../ClientAnalytics';
 import {buildUUID, addDataIf} from './utils';
 

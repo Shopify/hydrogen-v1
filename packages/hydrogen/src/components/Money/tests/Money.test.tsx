@@ -1,10 +1,10 @@
 import React from 'react';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {CurrencyCode} from '../../../storefront-api-types';
-import {getPrice} from '../../../utilities/tests/price';
-import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement';
-import {Money} from '../Money.client';
-import {Link} from '../../Link/Link.client';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {CurrencyCode} from '../../../storefront-api-types.js';
+import {getPrice} from '../../../utilities/tests/price.js';
+import {getUnitPriceMeasurement} from '../../../utilities/tests/unitPriceMeasurement.js';
+import {Money} from '../Money.client.jsx';
+import {Link} from '../../Link/Link.client.jsx';
 
 describe('<Money />', () => {
   it('renders a formatted money string', () => {

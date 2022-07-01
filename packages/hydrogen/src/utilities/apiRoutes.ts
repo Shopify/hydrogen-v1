@@ -2,7 +2,7 @@ import {
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
   ImportGlobEagerOutput,
-} from '../types';
+} from '../types.js';
 import {matchPath} from './matchPath';
 import {getLoggerWithContext, logServerResponse} from '../utilities/log/';
 import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server';
@@ -13,7 +13,7 @@ import {
   SessionApi,
   SessionStorageAdapter,
 } from '../foundation/session/session';
-import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks';
+import {UseShopQueryResponse} from '../hooks/useShopQuery/hooks/index.js';
 
 let memoizedApiRoutes: Array<HydrogenApiRoute> = [];
 let memoizedRawRoutes: ImportGlobEagerOutput = {};

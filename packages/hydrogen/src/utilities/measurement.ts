@@ -1,4 +1,4 @@
-import {Measurement} from '../types';
+import {Measurement} from '../types.js';
 
 const UNIT_MAPPING: Record<string, string> = {
   // Dimension

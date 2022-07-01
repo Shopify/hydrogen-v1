@@ -1,10 +1,10 @@
 import React from 'react';
-import {Head} from '../../../foundation/Head/Head.client';
-import {DefaultPageSeo} from '../DefaultPageSeo.client';
-import {TitleSeo} from '../TitleSeo.client';
-import {DescriptionSeo} from '../DescriptionSeo.client';
-import {TwitterSeo} from '../TwitterSeo.client';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
+import {Head} from '../../../foundation/Head/Head.client.jsx';
+import {DefaultPageSeo} from '../DefaultPageSeo.client.jsx';
+import {TitleSeo} from '../TitleSeo.client.jsx';
+import {DescriptionSeo} from '../DescriptionSeo.client.jsx';
+import {TwitterSeo} from '../TwitterSeo.client.jsx';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
 
 jest.mock('../../../foundation/Head/Head.client', () => ({
   Head({children}: {children: React.ReactNode}) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {Video} from '../Video';
+import {Video} from '../index.js';
 
 const VIDEO_PROPS = {
   id: 'video',

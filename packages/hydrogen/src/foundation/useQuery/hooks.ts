@@ -1,9 +1,9 @@
-import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types';
+import type {CachingStrategy, PreloadOptions, QueryKey} from '../../types.js';
 import {
   getLoggerWithContext,
   collectQueryCacheControlHeaders,
   collectQueryTimings,
-} from '../../utilities/log';
+} from '../../utilities/log/index.js';
 import {
   deleteItemFromCache,
   generateSubRequestCacheControlHeader,

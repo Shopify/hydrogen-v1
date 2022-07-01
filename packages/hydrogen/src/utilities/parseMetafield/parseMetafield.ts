@@ -1,5 +1,5 @@
-import type {Metafield} from '../../storefront-api-types';
-import type {ParsedMetafield} from '../../types';
+import type {Metafield} from '../../storefront-api-types.js';
+import type {ParsedMetafield} from '../../types.js';
 import type {PartialDeep} from 'type-fest';
 import {parseJSON} from '../parse';
 

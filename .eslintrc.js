@@ -12,8 +12,6 @@ module.exports = {
     'plugin:node/recommended',
     'plugin:hydrogen/recommended',
     'plugin:hydrogen/typescript',
-    'plugin:import/recommended',
-    'plugin:import/typescript',
   ],
   parserOptions: {
     sourceType: 'module',
@@ -27,12 +25,8 @@ module.exports = {
     'no-constant-condition': 'off',
     'jest/no-done-callback': 'off',
     'tsdoc/syntax': 'error',
-    // ensure that file extensions are used from now on
-    'import/extensions': ['error', 'ignorePackages'],
-    // next two are turned off because of the conflict between TS requiring .js extensions and those .js files not actually existing in the filesystem
-    'import/no-unresolved': 'off',
     'node/no-missing-import': [
-      'off',
+      'error',
       {
         allowModules: [
           'types',

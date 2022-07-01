@@ -14,7 +14,7 @@ import type {
   ResolvedHydrogenConfig,
   ResolvedHydrogenRoutes,
   RequestHandler,
-} from './types';
+} from './types.js';
 import type {RequestHandlerOptions} from './shared-types';
 import {Html, applyHtmlHead} from './foundation/Html/Html.js';
 import {HydrogenResponse} from './foundation/HydrogenResponse/HydrogenResponse.server.js';

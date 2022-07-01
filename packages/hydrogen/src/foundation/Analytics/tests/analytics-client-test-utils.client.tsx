@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {mount} from '@shopify/react-testing';
-import {Analytics} from '../Analytics.client';
+import {Analytics} from '../Analytics.client.jsx';
 import {ClientAnalytics} from '../ClientAnalytics';
 
 export function SomeClientComponent({

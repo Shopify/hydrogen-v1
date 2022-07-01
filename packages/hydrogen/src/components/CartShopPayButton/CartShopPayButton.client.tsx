@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
-import {useCart} from '../CartProvider';
-import {ShopPayButton} from '../ShopPayButton';
+import {useCart} from '../CartProvider/index.js';
+import {ShopPayButton} from '../ShopPayButton/index.js';
 
 /**
  * The `CartShopPayButton` component renders a `ShopPayButton` for the items in the cart.

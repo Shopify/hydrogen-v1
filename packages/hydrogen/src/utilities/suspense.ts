@@ -1,4 +1,4 @@
-import {QueryKey} from '../types';
+import {QueryKey} from '../types.js';
 import {hashKey} from './hash';
 
 /**

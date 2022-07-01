@@ -1,1 +1,1 @@
-export {useLoadScript} from './useLoadScript.client';
+export {useLoadScript} from './useLoadScript.client.jsx';

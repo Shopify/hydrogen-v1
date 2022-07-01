@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import {useLocalization} from '../useLocalization/useLocalization';
-import {CurrencyCode, MoneyV2} from '../../storefront-api-types';
+import {CurrencyCode, MoneyV2} from '../../storefront-api-types.js';
 
 export type UseMoneyValue = {
   /**

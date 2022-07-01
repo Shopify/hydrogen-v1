@@ -1014,7 +1014,7 @@
   import DefaultSeo from './components/DefaultSeo.server';
   import NotFound from './components/NotFound.server';
   import LoadingFallback from './components/LoadingFallback';
-  import CartProvider from './components/CartProvider.client';
+  import CartProvider from './components/CartProvider.client.jsx';
 
   function App({routes}) {
     return (
@@ -1657,7 +1657,7 @@
   import DefaultSeo from './components/DefaultSeo.server';
   import NotFound from './components/NotFound.server';
   import LoadingFallback from './components/LoadingFallback';
-  import CartProvider from './components/CartProvider.client';
+  import CartProvider from './components/CartProvider.client.jsx';
 
   function App({routes, ...serverProps}) {
     return (

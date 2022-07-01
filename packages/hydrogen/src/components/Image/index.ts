@@ -1,6 +1,6 @@
-export {Image} from './Image';
+export {Image} from './Image.jsx';
 export type {
   ShopifyLoaderParams,
   ShopifyLoaderOptions,
   ShopifyImageProps,
-} from './Image';
+} from './Image.jsx';

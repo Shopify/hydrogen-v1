@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import {promises as fs} from 'fs';
 import {hydrogenMiddleware, graphiqlMiddleware} from '../middleware';
-import type {HydrogenVitePluginOptions} from '../types';
+import type {HydrogenVitePluginOptions} from '../types.js';
 import {InMemoryCache} from '../cache/in-memory';
 import {VIRTUAL_PROXY_HYDROGEN_CONFIG_ID} from './vite-plugin-hydrogen-virtual-files';
 

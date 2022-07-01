@@ -1,5 +1,5 @@
 //getAPI
-import {ImportGlobEagerOutput} from '../../types';
+import {ImportGlobEagerOutput} from '../../types.js';
 import {getApiRoutes} from '../apiRoutes';
 
 const STUB_MODULE = {default: null, api: {}};

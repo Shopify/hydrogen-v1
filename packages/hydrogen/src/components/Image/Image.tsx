@@ -4,8 +4,8 @@ import {
   shopifyImageLoader,
   addImageSizeParametersToUrl,
   IMG_SRC_SET_SIZES,
-} from '../../utilities';
-import type {Image as ImageType} from '../../storefront-api-types';
+} from '../../utilities/index.js';
+import type {Image as ImageType} from '../../storefront-api-types.js';
 import type {PartialDeep, Simplify, SetRequired} from 'type-fest';
 
 type HtmlImageProps = React.ImgHTMLAttributes<HTMLImageElement>;

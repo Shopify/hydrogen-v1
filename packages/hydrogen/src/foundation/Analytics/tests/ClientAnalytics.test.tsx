@@ -1,5 +1,5 @@
 import {ClientAnalytics} from '../ClientAnalytics';
-import type {Subscriber} from '../types';
+import type {Subscriber} from '../types.js';
 
 describe('Analytics - ClientAnalytics', () => {
   const originalFetch = globalThis.fetch;

@@ -4,7 +4,7 @@ import {v4 as uid} from 'uuid';
 import path from 'path';
 import {promises as fsp} from 'fs';
 import type {CookieOptions} from '../Cookie/Cookie';
-import {Logger} from '../../utilities/log';
+import {Logger} from '../../utilities/log/index.js';
 import {parseJSON} from '../../utilities/parse';
 
 async function wait() {

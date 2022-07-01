@@ -1,9 +1,9 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {ShopifyContext} from '../ShopifyProvider.client';
+import {ShopifyContext} from '../ShopifyProvider.client.jsx';
 import {ShopifyProvider} from '../ShopifyProvider.server';
-import {SHOPIFY_CONFIG} from './fixtures';
-import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../constants';
+import {SHOPIFY_CONFIG} from './fixtures.js';
+import {DEFAULT_COUNTRY, DEFAULT_LANGUAGE} from '../../constants.js';
 
 describe('<ShopifyProvider />', () => {
   it('renders its children', () => {

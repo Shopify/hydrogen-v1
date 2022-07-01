@@ -1,13 +1,13 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
 
-import {Seo} from '../Seo.client';
+import {Seo} from '../Seo.client.jsx';
 
-import {DefaultPageSeo} from '../DefaultPageSeo.client';
-import {HomePageSeo} from '../HomePageSeo.client';
-import {ProductSeo} from '../ProductSeo.client';
-import {CollectionSeo} from '../CollectionSeo.client';
-import {PageSeo} from '../PageSeo.client';
+import {DefaultPageSeo} from '../DefaultPageSeo.client.jsx';
+import {HomePageSeo} from '../HomePageSeo.client.jsx';
+import {ProductSeo} from '../ProductSeo.client.jsx';
+import {CollectionSeo} from '../CollectionSeo.client.jsx';
+import {PageSeo} from '../PageSeo.client.jsx';
 
 const mockUrl = 'https://store-name.com/';
 

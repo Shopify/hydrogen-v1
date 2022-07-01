@@ -1,4 +1,4 @@
-import {EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from '../../constants';
+import {EVENT_PATHNAME, EVENT_PATHNAME_REGEX} from '../../constants.js';
 import {ResourceGetter} from '../../utilities/apiRoutes';
 import {ServerAnalyticsRoute} from '../Analytics/ServerAnalyticsRoute';
 import {HealthCheck} from './healthCheck';

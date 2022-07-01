@@ -1,8 +1,8 @@
 import React, {ElementType, useCallback} from 'react';
-import {useCart} from '../CartProvider';
-import {Props} from '../types';
-import {useCartLine} from '../CartLineProvider';
-import {BaseButton, BaseButtonProps} from '../BaseButton';
+import {useCart} from '../CartProvider/index.js';
+import {Props} from '../types.js';
+import {useCartLine} from '../CartLineProvider/index.js';
+import {BaseButton, BaseButtonProps} from '../BaseButton/index.js';
 
 type PropsWeControl = 'adjust';
 

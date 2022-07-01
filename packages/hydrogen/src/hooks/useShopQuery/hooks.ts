@@ -1,8 +1,8 @@
-import {useShop} from '../../foundation/useShop';
-import {getLoggerWithContext} from '../../utilities/log';
-import type {CachingStrategy, PreloadOptions} from '../../types';
-import {graphqlRequestBody} from '../../utilities';
-import {useServerRequest} from '../../foundation/ServerRequestProvider';
+import {useShop} from '../../foundation/useShop/index.js';
+import {getLoggerWithContext} from '../../utilities/log/index.js';
+import type {CachingStrategy, PreloadOptions} from '../../types.js';
+import {graphqlRequestBody} from '../../utilities/index.js';
+import {useServerRequest} from '../../foundation/ServerRequestProvider/index.js';
 import {injectGraphQLTracker} from '../../utilities/graphql-tracker';
 import {sendMessageToClient} from '../../utilities/devtools';
 import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';

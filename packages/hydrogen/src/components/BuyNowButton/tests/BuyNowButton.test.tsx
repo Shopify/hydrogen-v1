@@ -1,16 +1,16 @@
 import React from 'react';
 
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {BaseButton} from '../../BaseButton';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {BaseButton} from '../../BaseButton/index.js';
 
 const mockCreateInstantCheckout = jest.fn();
 const mockUseInstantCheckout = jest.fn();
 const mockUseCartFetch = jest.fn();
 
-import {BuyNowButton} from '../BuyNowButton.client';
+import {BuyNowButton} from '../BuyNowButton.client.jsx';
 
-jest.mock('../../CartProvider', () => ({
-  ...(jest.requireActual('../../CartProvider') as {}),
+jest.mock('../../CartProvider/index.js', () => ({
+  ...(jest.requireActual('../../CartProvider/index.js') as {}),
   useInstantCheckout: mockUseInstantCheckout,
   useCartFetch: mockUseCartFetch,
 }));

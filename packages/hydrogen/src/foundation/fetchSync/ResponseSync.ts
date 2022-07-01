@@ -1,5 +1,5 @@
 import {parseJSON} from '../../utilities/parse';
-import {log} from '../../utilities/log';
+import {log} from '../../utilities/log/index.js';
 
 type ResponseSyncInit = [string, ResponseInit];
 

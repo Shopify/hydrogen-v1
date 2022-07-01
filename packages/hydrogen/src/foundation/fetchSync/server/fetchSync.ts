@@ -1,4 +1,7 @@
-import {type HydrogenUseQueryOptions, useQuery} from '../../useQuery/hooks';
+import {
+  type HydrogenUseQueryOptions,
+  useQuery,
+} from '../../useQuery/hooks/index.js';
 import {useUrl} from '../../useUrl';
 import {ResponseSync} from '../ResponseSync';
 

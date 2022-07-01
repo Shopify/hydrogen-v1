@@ -1,4 +1,4 @@
-import {STOREFRONT_API_BUYER_IP_HEADER} from '../../constants';
+import {STOREFRONT_API_BUYER_IP_HEADER} from '../../constants.js';
 import {hashKey} from '../hash';
 
 describe('Hash key for subrequests', () => {

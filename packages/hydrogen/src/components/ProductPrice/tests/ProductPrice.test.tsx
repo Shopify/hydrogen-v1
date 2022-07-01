@@ -1,8 +1,8 @@
 import React from 'react';
-import {getProduct} from '../../../utilities/tests/product';
-import {mountWithProviders} from '../../../utilities/tests/shopifyMount';
-import {Money} from '../../Money';
-import {ProductPrice} from '../ProductPrice.client';
+import {getProduct} from '../../../utilities/tests/product.js';
+import {mountWithProviders} from '../../../utilities/tests/shopifyMount.js';
+import {Money} from '../../Money/index.js';
+import {ProductPrice} from '../ProductPrice.client.jsx';
 
 describe('<ProductPrice />', () => {
   describe('variantId prop is provided', () => {

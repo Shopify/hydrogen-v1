@@ -2,8 +2,8 @@ import React, {createContext, useContext} from 'react';
 import {getTime} from '../../utilities/timing';
 import {hashKey} from '../../utilities/hash';
 import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server';
-import type {QueryKey} from '../../types';
-import {collectQueryTimings} from '../../utilities/log';
+import type {QueryKey} from '../../types.js';
+import {collectQueryTimings} from '../../utilities/log/index.js';
 
 // Context to inject current request in SSR
 const RequestContextSSR = createContext<HydrogenRequest | null>(null);

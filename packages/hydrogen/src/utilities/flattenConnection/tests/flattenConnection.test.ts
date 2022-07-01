@@ -1,6 +1,6 @@
 import {PartialDeep} from 'type-fest';
-import {Product} from '../../../storefront-api-types';
-import {GraphQLConnection} from '../../../types';
+import {Product} from '../../../storefront-api-types.js';
+import {GraphQLConnection} from '../../../types.js';
 import {flattenConnection} from '../flattenConnection';
 
 describe('flattenConnection', () => {

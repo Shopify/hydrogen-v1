@@ -1,10 +1,10 @@
 import React, {ReactNode} from 'react';
-import LocalizationClientProvider from './LocalizationClientProvider.client';
-import {useShop} from '../../foundation/useShop';
-import {useServerRequest} from '../../foundation/ServerRequestProvider';
-import {log} from '../../utilities/log';
-import {CountryCode, LanguageCode} from '../../storefront-api-types';
-import {getLocalizationContextValue} from '../../foundation/ShopifyProvider/ShopifyProvider.server';
+import LocalizationClientProvider from './LocalizationClientProvider.client.jsx';
+import {useShop} from '../../foundation/useShop/index.js';
+import {useServerRequest} from '../../foundation/ServerRequestProvider/index.js';
+import {log} from '../../utilities/log/index.js';
+import {CountryCode, LanguageCode} from '../../storefront-api-types.js';
+import {getLocalizationContextValue} from '../../foundation/ShopifyProvider/ShopifyProvider.server.jsx';
 
 export interface LocalizationProviderProps {
   /** A `ReactNode` element. */

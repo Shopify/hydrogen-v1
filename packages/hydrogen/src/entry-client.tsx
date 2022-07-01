@@ -6,7 +6,7 @@ import React, {
   type ElementType,
 } from 'react';
 import {hydrateRoot} from 'react-dom/client';
-import type {ClientConfig, ClientHandler} from './types';
+import type {ClientConfig, ClientHandler} from './types.js';
 import {ErrorBoundary} from 'react-error-boundary';
 import {
   createFromFetch,

@@ -1,2 +1,2 @@
-export {useProductOptions} from './useProductOptions.client';
-export * from './types';
+export {useProductOptions} from './useProductOptions.client.jsx';
+export * from './types.js';

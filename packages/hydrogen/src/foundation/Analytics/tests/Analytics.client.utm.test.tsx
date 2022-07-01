@@ -2,7 +2,7 @@ import React from 'react';
 import {
   mountComponent,
   SomeClientComponent,
-} from './analytics-client-test-utils.client';
+} from './analytics-client-test-utils.client.jsx';
 import {ClientAnalytics} from '../ClientAnalytics';
 
 // This test is in its own file is due to the fact that I cannot set

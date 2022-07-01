@@ -1,7 +1,7 @@
-import {LocalizationContext} from '../../foundation/ShopifyProvider/ShopifyProvider.client';
-import type {LocalizationContextValue} from '../../foundation/ShopifyProvider/types';
+import {LocalizationContext} from '../../foundation/ShopifyProvider/ShopifyProvider.client.jsx';
+import type {LocalizationContextValue} from '../../foundation/ShopifyProvider/types.js';
 import {useEnvContext} from '../../foundation/ssr-interop';
-import {CountryCode, LanguageCode} from '../../storefront-api-types';
+import {CountryCode, LanguageCode} from '../../storefront-api-types.js';
 
 export function useLocalization(): LocalizationContextValue & {
   locale: `${LanguageCode}-${CountryCode}`;

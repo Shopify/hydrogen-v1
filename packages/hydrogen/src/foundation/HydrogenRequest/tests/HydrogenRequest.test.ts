@@ -1,8 +1,8 @@
 import {IncomingMessage} from 'http';
-import {RSC_PATHNAME} from '../../../constants';
-import {PreloadOptions} from '../../../types';
+import {RSC_PATHNAME} from '../../../constants.js';
+import {PreloadOptions} from '../../../types.js';
 import {CacheLong, CacheShort, CacheNone} from '../../Cache/strategies';
-import {shouldPreloadQuery} from '../../useQuery/hooks';
+import {shouldPreloadQuery} from '../../useQuery/hooks/index.js';
 import {PreloadQueryEntry, HydrogenRequest} from '../HydrogenRequest.server';
 
 describe('HydrogenRequest', () => {

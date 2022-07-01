@@ -1,4 +1,4 @@
-import type {QueryKey, CachingStrategy, AllCacheOptions} from '../../types';
+import type {QueryKey, CachingStrategy, AllCacheOptions} from '../../types.js';
 import {getCache} from '../runtime';
 import {hashKey} from '../../utilities/hash';
 import * as CacheApi from './cache';

@@ -1,5 +1,5 @@
 import {Cookie} from '../Cookie';
-import {log} from '../../../utilities/log';
+import {log} from '../../../utilities/log/index.js';
 
 const options = {
   httponly: true,
