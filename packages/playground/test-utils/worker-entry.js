@@ -3,7 +3,7 @@ import {
   isAsset,
   handleRequest,
   indexTemplate,
-} from '@shopify/hydrogen/platforms/virtual';
+} from '@shopify/hydrogen/platforms';
 
 // Mock Oxygen global
 globalThis.Oxygen = {env: globalThis};
