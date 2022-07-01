@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from '@shopify/react-testing';
-import {CartLineProvider} from '../CartLineProvider.client.js';
+import {CartLineProvider} from '../CartLineProvider.client.jsx';
 import {CART_LINE} from './fixtures.js';
 import {useCartLine} from '../../../hooks/useCartLine/index.js';
 

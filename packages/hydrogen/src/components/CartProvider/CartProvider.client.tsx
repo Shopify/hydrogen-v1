@@ -36,7 +36,7 @@ import {
   AttributeInput,
   CountryCode,
 } from '../../storefront-api-types.js';
-import {useCartFetch} from './hooks.client.js';
+import {useCartFetch} from './hooks.client.jsx';
 import {CartContext} from './context.js';
 import {
   CartLineRemoveMutationVariables,

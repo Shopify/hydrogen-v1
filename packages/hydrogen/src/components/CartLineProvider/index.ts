@@ -1,2 +1,2 @@
-export {CartLineProvider} from './CartLineProvider.client.js';
+export {CartLineProvider} from './CartLineProvider.client.jsx';
 export {useCartLine} from '../../hooks/useCartLine/index.js';
