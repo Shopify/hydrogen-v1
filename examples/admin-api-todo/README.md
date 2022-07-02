@@ -9,7 +9,7 @@ Hydrogen is a React framework and SDK that you can use to build fast and dynamic
 ## Required Admin API token to `.env` 🔑
 
 ```
-SHOPIFY_ADMIN_API_PRIVATE_TOKEN=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 — Not a valid token ;)
+SHOPIFY_ADMIN_API_PRIVATE_TOKEN=shpat_....
 SHOPIFY_ADMIN_API_VERSION=2022-04
 SHOPIFY_ADMIN_API_DOMAIN=yourstore.myshopify.com
 ```
