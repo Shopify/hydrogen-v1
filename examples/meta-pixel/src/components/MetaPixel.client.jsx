@@ -27,14 +27,17 @@ export function MetaPixel() {
 
       fbq('init', PIXEL_ID);
 
+      function trackPageView() {
+        fbq('track', 'PageView');
+      }
+
       // Listen for events from Hydrogen
       // https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#default-events
-      ClientAnalytics.subscribe(
-        ClientAnalytics.eventNames.PAGE_VIEW,
-        (payload) => {
-          fbq('track', 'PageView');
-        }
+      ClientAnalytics.subscribe(ClientAnalytics.eventNames.PAGE_VIEW, () =>
+        trackPageView()
       );
+
+      ClientAnalytics.hasSentFirstPageView() && trackPageView();
     }
   });
 

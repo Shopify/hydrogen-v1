@@ -25,14 +25,18 @@ export function GoogleAnalytics() {
       // Load the gtag script
       loadScript(URL).catch(() => {});
 
+      function trackPageView() {
+        gtag('event', 'page_view');
+        console.log('page view');
+      }
+
       // Listen for events from Hydrogen
       // https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#default-events
-      ClientAnalytics.subscribe(
-        ClientAnalytics.eventNames.PAGE_VIEW,
-        (payload) => {
-          gtag('event', 'page_view');
-        }
+      ClientAnalytics.subscribe(ClientAnalytics.eventNames.PAGE_VIEW, () =>
+        trackPageView()
       );
+
+      ClientAnalytics.hasSentFirstPageView() && trackPageView();
     }
   });
 
