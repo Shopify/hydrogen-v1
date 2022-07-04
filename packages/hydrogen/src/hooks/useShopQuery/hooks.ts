@@ -91,6 +91,7 @@ export function useShopQuery<T>({
     try {
       data = response.json();
     } catch (error: any) {
+      console.log('useShopQuery error');
       useQueryError = new Error(
         `Unable to parse response (x-request-id: ${response.headers.get(
           'x-request-id'
