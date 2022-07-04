@@ -91,7 +91,19 @@ export function useShopQuery<T>({
     try {
       data = response.json();
     } catch (error: any) {
-      console.log('useShopQuery error');
+      console.log(
+        // @ts-ignore
+        `Public api token: ${requestInit.headers[
+          'X-Shopify-Storefront-Access-Token'
+        ]?.substr(0, 12)}`
+      );
+      console.log(
+        // @ts-ignore
+        `Public api token: ${requestInit.headers[
+          'Shopify-Storefront-Private-Token'
+        ]?.substr(0, 12)}`
+      );
+
       useQueryError = new Error(
         `Unable to parse response (x-request-id: ${response.headers.get(
           'x-request-id'
