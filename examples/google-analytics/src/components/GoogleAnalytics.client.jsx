@@ -27,7 +27,6 @@ export function GoogleAnalytics() {
 
       function trackPageView() {
         gtag('event', 'page_view');
-        console.log('page view');
       }
 
       // Listen for events from Hydrogen
