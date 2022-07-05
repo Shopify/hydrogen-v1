@@ -88,7 +88,8 @@ export function useShopQuery<T>({
 
     text = response.text();
 
-    console.log(serverRequest.headers);
+    // @ts-ignore
+    console.log('Worker location:', serverRequest.cf?.colo);
 
     try {
       data = response.json();
