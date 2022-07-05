@@ -88,6 +88,8 @@ export function useShopQuery<T>({
 
     text = response.text();
 
+    console.log(serverRequest.headers);
+
     try {
       data = response.json();
     } catch (error: any) {
@@ -99,7 +101,7 @@ export function useShopQuery<T>({
       );
       console.log(
         // @ts-ignore
-        `Public api token: ${requestInit.headers[
+        `S2S token: ${requestInit.headers[
           'Shopify-Storefront-Private-Token'
         ]?.substr(0, 12)}`
       );
