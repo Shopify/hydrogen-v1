@@ -92,6 +92,8 @@ export function useShopQuery<T>({
     // @ts-ignore
     console.log(
       'Buyer region:',
+      serverRequest.headers.get('oxygen-buyer-city'),
+      ', ',
       serverRequest.headers.get('oxygen-buyer-region-code')
     );
     const queryname = findQueryName(body);
@@ -113,7 +115,7 @@ export function useShopQuery<T>({
       );
 
       useQueryError = new Error(
-        `Unable to parse response (x-request-id: ${response.headers.get(
+        `Unable to parse ${queryname} response (x-request-id: ${response.headers.get(
           'x-request-id'
         )}):\n${text}`
       );
