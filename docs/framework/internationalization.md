@@ -129,8 +129,8 @@ import {
 
 function App({routes, request}) {
   const pathname = new URL(request.normalizedUrl).pathname;
-  const acceptLanguage = request.headers.get(‘accept-language’);
-  const countryCode = acceptLanguage?.replace(/-.*/, '') || undefined; // Or set a default country code. For example, 'en'.
+  const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(pathname);
+  const countryCode = localeMatch ? localeMatch[1] : null;
 
   return (
     <Suspense fallback={<LoadingFallback />}>
