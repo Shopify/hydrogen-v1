@@ -27,7 +27,7 @@ export default function Homepage() {
 
   return (
     <Layout>
-      <Suspense>
+      <Suspense fallback="">
         <SeoForHomepage />
       </Suspense>
       <Suspense>
