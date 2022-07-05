@@ -89,14 +89,7 @@ export function useShopQuery<T>({
 
     text = response.text();
 
-    // @ts-ignore
-    console.log(
-      'Buyer region:',
-      serverRequest.headers.get('oxygen-buyer-city'),
-      ', ',
-      serverRequest.headers.get('oxygen-buyer-region-code')
-    );
-    const queryname = findQueryName(body);
+    const queryname = findQueryName(query);
     console.log('Query name', queryname);
     try {
       data = response.json();
