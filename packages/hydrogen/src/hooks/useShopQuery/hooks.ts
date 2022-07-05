@@ -9,6 +9,7 @@ import {fetchSync} from '../../foundation/fetchSync/server/fetchSync';
 import {META_ENV_SSR} from '../../foundation/ssr-interop';
 import {getStorefrontApiRequestHeaders} from '../../utilities/storefrontApi';
 import {parseJSON} from '../../utilities/parse';
+import {findQueryName} from '../../utilities/log/utils';
 
 export interface UseShopQueryResponse<T> {
   /** The data returned by the query. */
@@ -89,8 +90,12 @@ export function useShopQuery<T>({
     text = response.text();
 
     // @ts-ignore
-    console.log('Worker location:', serverRequest.cf?.colo);
-
+    console.log(
+      'Buyer region:',
+      serverRequest.headers.get('oxygen-buyer-region-code')
+    );
+    const queryname = findQueryName(body);
+    console.log('Query name', queryname);
     try {
       data = response.json();
     } catch (error: any) {

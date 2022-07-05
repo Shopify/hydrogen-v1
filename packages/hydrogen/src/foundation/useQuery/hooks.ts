@@ -162,7 +162,6 @@ function cachedQueryFnBuilder<T>(
      * Important: Do this async
      */
     if (shouldCacheResponse(newOutput)) {
-      console.log('Caching new output:', newOutput);
       const setItemInCachePromise = setItemInCache(
         key,
         newOutput,
