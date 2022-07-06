@@ -35,7 +35,7 @@ export function MetaPixel() {
       // https://shopify.dev/custom-storefronts/hydrogen/framework/analytics#default-events
       ClientAnalytics.subscribe(
         ClientAnalytics.eventNames.PAGE_VIEW,
-        (payload) => trackPageView(payload)
+        trackPageView
       );
 
       ClientAnalytics.hasSentFirstPageView() &&
