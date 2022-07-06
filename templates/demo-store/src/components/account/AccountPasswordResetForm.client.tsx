@@ -91,7 +91,7 @@ export function AccountPasswordResetForm({
           )}
           <div className="mb-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline ${
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline ${
                 passwordError ? ' border-red-500' : 'border-gray-900'
               }`}
               id="password"
@@ -119,7 +119,7 @@ export function AccountPasswordResetForm({
           </div>
           <div className="mb-3">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline ${
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline ${
                 passwordConfirmError ? ' border-red-500' : 'border-gray-900'
               }`}
               id="passwordConfirm"

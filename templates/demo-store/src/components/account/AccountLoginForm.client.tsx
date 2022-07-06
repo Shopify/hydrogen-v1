@@ -151,7 +151,7 @@ function EmailField({
     <>
       <div className="mb-3">
         <input
-          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline ${
+          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline ${
             emailError ? ' border-red-500' : 'border-gray-900'
           }`}
           id="email"
@@ -176,7 +176,7 @@ function EmailField({
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 rounded text-primary py-2 px-4 focus:shadow-outline block w-full"
+          className="bg-gray-900 rounded text-light py-2 px-4 focus:shadow-outline block w-full"
           type="submit"
         >
           Next
@@ -239,7 +239,7 @@ function PasswordField({
     <>
       <div className="mb-3">
         <input
-          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline ${
+          className={`mb-1 appearance-none rounded border w-full py-2 px-3 dark:text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline ${
             passwordError ? ' border-red-500' : 'border-gray-900'
           }`}
           id="password"
@@ -265,7 +265,7 @@ function PasswordField({
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 text-primary rounded py-2 px-4 focus:shadow-outline block w-full"
+          className="bg-gray-900 text-light rounded py-2 px-4 focus:shadow-outline block w-full"
           type="submit"
         >
           Sign in

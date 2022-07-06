@@ -88,7 +88,7 @@ export function AccountActivateForm({
           )}
           <div className="mb-4">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-primary placeholder:text-primary/30 leading-tight focus:shadow-outline ${
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-dark placeholder:text-dark/30 leading-tight focus:shadow-outline ${
                 passwordError ? ' border-notice' : 'border-primary'
               }`}
               id="password"
@@ -114,7 +114,7 @@ export function AccountActivateForm({
           </div>
           <div className="mb-4">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline ${
+              className={`mb-1 appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline ${
                 passwordConfirmError ? ' border-red-500' : 'border-gray-900'
               }`}
               id="passwordConfirm"
@@ -140,7 +140,7 @@ export function AccountActivateForm({
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="block w-full px-4 py-2 text-contrast uppercase bg-gray-900 focus:shadow-outline"
+              className="block w-full px-4 py-2 text-light uppercase bg-gray-900 focus:shadow-outline"
               type="submit"
             >
               Save

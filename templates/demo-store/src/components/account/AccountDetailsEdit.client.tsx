@@ -133,7 +133,7 @@ export function AccountDetailsEdit({
         )}
         <div className="mt-3">
           <input
-            className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
             id="firstname"
             name="firstname"
             type="text"
@@ -148,7 +148,7 @@ export function AccountDetailsEdit({
         </div>
         <div className="mt-3">
           <input
-            className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
             id="lastname"
             name="lastname"
             type="text"
@@ -163,7 +163,7 @@ export function AccountDetailsEdit({
         </div>
         <div className="mt-3">
           <input
-            className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
             id="phone"
             name="phone"
             type="tel"
@@ -178,7 +178,7 @@ export function AccountDetailsEdit({
         </div>
         <div className="mt-3">
           <input
-            className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline rounded ${
+            className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline rounded ${
               emailError ? ' border-red-500' : 'border-gray-500'
             }`}
             id="email"
@@ -276,7 +276,7 @@ function Password({
   return (
     <div className="mt-3">
       <input
-        className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline rounded ${
+        className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline rounded ${
           passwordError ? ' border-red-500' : 'border-gray-500'
         }`}
         id={name}

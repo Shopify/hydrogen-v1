@@ -76,7 +76,7 @@ export function AccountAddressEdit({
           )}
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="firstname"
               name="firstname"
               required
@@ -92,7 +92,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="lastname"
               name="lastname"
               required
@@ -108,7 +108,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="company"
               name="company"
               type="text"
@@ -123,7 +123,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="street1"
               name="street1"
               type="text"
@@ -139,7 +139,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="address2"
               name="address2"
               type="text"
@@ -154,7 +154,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="city"
               name="city"
               type="text"
@@ -170,7 +170,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="state"
               name="state"
               type="text"
@@ -186,7 +186,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="zip"
               name="zip"
               type="text"
@@ -202,7 +202,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="country"
               name="country"
               type="text"
@@ -218,7 +218,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-contrast/90 placeholder:text-contrast/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={`appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
               id="phone"
               name="phone"
               type="tel"
