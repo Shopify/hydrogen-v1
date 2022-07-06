@@ -140,7 +140,7 @@ export function AccountActivateForm({
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="block w-full px-4 py-2 text-light uppercase bg-gray-900 focus:shadow-outline"
+              className="block w-full px-4 py-2 text-contrast uppercase bg-primary focus:shadow-outline"
               type="submit"
             >
               Save

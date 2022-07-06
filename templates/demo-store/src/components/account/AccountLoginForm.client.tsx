@@ -176,7 +176,7 @@ function EmailField({
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 rounded text-light py-2 px-4 focus:shadow-outline block w-full"
+          className="bg-primary rounded text-contrast py-2 px-4 focus:shadow-outline block w-full"
           type="submit"
         >
           Next
@@ -265,7 +265,7 @@ function PasswordField({
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-gray-900 text-light rounded py-2 px-4 focus:shadow-outline block w-full"
+          className="bg-primary text-contrast rounded py-2 px-4 focus:shadow-outline block w-full"
           type="submit"
         >
           Sign in
