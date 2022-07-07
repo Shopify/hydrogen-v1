@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useNavigate, Link} from '@shopify/hydrogen/client';
+import {getInputStyleClasses} from '../../lib/styleUtils';
 
 interface FormElements {
   email: HTMLInputElement;
@@ -151,9 +152,7 @@ function EmailField({
     <>
       <div className="mb-3">
         <input
-          className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline ${
-            emailError ? ' border-red-500' : 'border-gray-900'
-          }`}
+          className={`mb-1 ${getInputStyleClasses(emailError)}`}
           id="email"
           name="email"
           type="email"
@@ -239,9 +238,7 @@ function PasswordField({
     <>
       <div className="mb-3">
         <input
-          className={`mb-1 appearance-none rounded border w-full py-2 px-3 dark:text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline ${
-            passwordError ? ' border-red-500' : 'border-gray-900'
-          }`}
+          className={`mb-1 ${getInputStyleClasses(passwordError)}`}
           id="password"
           name="password"
           type="password"

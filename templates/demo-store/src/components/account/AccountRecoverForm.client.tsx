@@ -1,6 +1,7 @@
 import {useState} from 'react';
 
 import {emailValidation} from '~/lib/utils';
+import {getInputStyleClasses} from '../../lib/styleUtils';
 
 interface FormElements {
   email: HTMLInputElement;
@@ -64,9 +65,7 @@ export function AccountRecoverForm() {
           )}
           <div className="mb-3">
             <input
-              className={`mb-1 rounded appearance-none border w-full py-2 px-3 text-dark/90 placeholder:text-dark/50 leading-tight focus:shadow-outline ${
-                emailError ? ' border-red-500' : 'border-gray-900'
-              }`}
+              className={`mb-1 ${getInputStyleClasses(emailError)}`}
               id="email"
               name="email"
               type="email"
