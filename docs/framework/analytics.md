@@ -152,7 +152,7 @@ Aside from the [default events](#default-events) that Hydrogen supports, you can
 ```
 {% endcodeblock %}
 
-> Note: 
+> Note:
 > You can test the custom event subscription by clicking the button with the analytics event attached. The  custom fields `creative_name` and `creative_slot` are added to the payload.
 
 ### Retrieving data from other parts of your Hydrogen storefront
@@ -419,6 +419,10 @@ export function GoogleAnalytics() {
       // Load the gtag script
       loadScript(URL).catch(() => {});
 
+      function trackPageView(payload) {
+        gtag('event', 'page_view');
+      }
+
       // gtag initialization code
       window.dataLayer = window.dataLayer || [];
       function gtag() {
@@ -434,10 +438,11 @@ export function GoogleAnalytics() {
       // Listen for events from Hydrogen
       ClientAnalytics.subscribe(
         ClientAnalytics.eventNames.PAGE_VIEW,
-        (payload) => {
-          gtag('event', 'page_view');
-        }
+        trackPageView
       );
+
+      ClientAnalytics.hasSentFirstPageView() &&
+        trackPageView(ClientAnalytics.getPageAnalyticsData());
     }
   });
 
