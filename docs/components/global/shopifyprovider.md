@@ -4,7 +4,7 @@ title: ShopifyProvider
 description: The ShopifyProvider component wraps your entire app and provides support for hooks.
 ---
 
-The `ShopifyProvider` component wraps your entire app and provides functionality for many components, hooks, and utilities. You should place it in your app's entry point component. If you're using the Hydrogen framework, then it should be within `App.server.jsx`. 
+The `ShopifyProvider` component wraps your entire app and provides functionality for many components, hooks, and utilities. You should place it in your app's entry point component. If you're using the Hydrogen framework, then it should be within `App.server.jsx`.
 
 The `ShopifyProvider` component also provides localization data for the app. The default localization data is defined within your [Hydrogen configuration file](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config). You can change the active country and language at runtime by passing in the `countryCode` and `languageCode` props.
 
@@ -34,6 +34,7 @@ The `ShopifyProvider` component is a server component that renders inside `App.s
 ## Related framework topics
 
 - [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+- [Internationalization](https://shopify.dev/custom-storefronts/hydrogen/framework/internationalization)
 
 ## Considerations
 
