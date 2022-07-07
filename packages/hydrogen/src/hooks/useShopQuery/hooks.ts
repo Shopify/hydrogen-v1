@@ -89,26 +89,13 @@ export function useShopQuery<T>({
 
     text = response.text();
 
-    const queryname = findQueryName(query);
-    console.log('Query name', queryname);
     try {
       data = response.json();
     } catch (error: any) {
-      console.log(
-        // @ts-ignore
-        `Public api token: ${requestInit.headers[
-          'X-Shopify-Storefront-Access-Token'
-        ]?.substr(0, 12)}`
-      );
-      console.log(
-        // @ts-ignore
-        `S2S token: ${requestInit.headers[
-          'Shopify-Storefront-Private-Token'
-        ]?.substr(0, 12)}`
-      );
-
       useQueryError = new Error(
-        `Unable to parse ${queryname} response (x-request-id: ${response.headers.get(
+        `Unable to parse ${findQueryName(
+          query
+        )} response (x-request-id: ${response.headers.get(
           'x-request-id'
         )}):\n${text}`
       );
