@@ -122,7 +122,7 @@ The `requestInit` object mirrors the [`init` properties available in the Web Fet
 
 ### Return value
 
-The `fetchSync` function returns a [Response object and its properties](https://developer.mozilla.org/en-US/docs/Web/API/Response). However, the following properties are adapted to work with React Suspense
+The `fetchSync` function returns a [Response object and its properties](https://developer.mozilla.org/en-US/docs/Web/API/Response). However, the following properties are adapted to work with React Suspense:
 
 | Key        | Description                                                                             |
 | ---------- | --------------------------------------------------------------------------------------- |
