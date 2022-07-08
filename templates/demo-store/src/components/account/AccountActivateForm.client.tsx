@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useNavigate} from '@shopify/hydrogen/client';
+import {getInputStyleClasses} from '../../lib/styleUtils';
 
 export function AccountActivateForm({
   id,
@@ -88,9 +89,7 @@ export function AccountActivateForm({
           )}
           <div className="mb-4">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-primary placeholder:text-primary/30 leading-tight focus:shadow-outline ${
-                passwordError ? ' border-notice' : 'border-primary'
-              }`}
+              className={`mb-1 ${getInputStyleClasses(passwordError)}`}
               id="password"
               name="password"
               type="password"
@@ -114,9 +113,7 @@ export function AccountActivateForm({
           </div>
           <div className="mb-4">
             <input
-              className={`mb-1 appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline ${
-                passwordConfirmError ? ' border-red-500' : 'border-gray-900'
-              }`}
+              className={`mb-1 ${getInputStyleClasses(passwordConfirmError)}`}
               id="passwordConfirm"
               name="passwordConfirm"
               type="password"
@@ -140,7 +137,7 @@ export function AccountActivateForm({
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="block w-full px-4 py-2 text-contrast uppercase bg-gray-900 focus:shadow-outline"
+              className="block w-full px-4 py-2 text-contrast uppercase bg-primary focus:shadow-outline"
               type="submit"
             >
               Save

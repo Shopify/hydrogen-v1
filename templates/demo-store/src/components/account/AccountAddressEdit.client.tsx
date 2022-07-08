@@ -2,6 +2,7 @@ import {useMemo, useState} from 'react';
 import {useRenderServerComponents} from '~/lib/utils';
 
 import {Button, Text} from '~/components';
+import {getInputStyleClasses} from '../../lib/styleUtils';
 
 export function AccountAddressEdit({
   address,
@@ -76,7 +77,7 @@ export function AccountAddressEdit({
           )}
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="firstname"
               name="firstname"
               required
@@ -92,7 +93,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="lastname"
               name="lastname"
               required
@@ -108,7 +109,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="company"
               name="company"
               type="text"
@@ -123,7 +124,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="street1"
               name="street1"
               type="text"
@@ -139,7 +140,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="address2"
               name="address2"
               type="text"
@@ -154,7 +155,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="city"
               name="city"
               type="text"
@@ -170,7 +171,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="state"
               name="state"
               type="text"
@@ -186,7 +187,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="zip"
               name="zip"
               type="text"
@@ -202,7 +203,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="country"
               name="country"
               type="text"
@@ -218,7 +219,7 @@ export function AccountAddressEdit({
           </div>
           <div className="mt-3">
             <input
-              className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+              className={getInputStyleClasses()}
               id="phone"
               name="phone"
               type="tel"
