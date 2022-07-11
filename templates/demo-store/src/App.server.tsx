@@ -39,7 +39,7 @@ function App({request}: HydrogenRouteProps) {
         </CartProvider>
         <PerformanceMetrics />
         {import.meta.env.DEV && <PerformanceMetricsDebug />}
-        <ShopifyAnalytics />
+        <ShopifyAnalytics cookieDomain="hydrogen.shop" />
       </ShopifyProvider>
     </Suspense>
   );
