@@ -1,1 +1,1 @@
-export {ShopifyContext} from './ShopifyProvider.client.jsx';
+export {ShopifyContext} from './ShopifyProvider.client.js';

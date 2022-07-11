@@ -3,4 +3,4 @@ export {
   ServerPropsContext,
   type ServerProps,
   type ServerPropsContextValue,
-} from './ServerPropsProvider.jsx';
+} from './ServerPropsProvider.js';

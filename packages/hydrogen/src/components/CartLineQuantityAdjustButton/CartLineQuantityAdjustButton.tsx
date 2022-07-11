@@ -1,4 +1,4 @@
-import React, {ElementType, useCallback} from 'react';
+import {ElementType, useCallback} from 'react';
 import {useCart} from '../CartProvider/index.js';
 import {Props} from '../types.js';
 import {useCartLine} from '../CartLineProvider/index.js';

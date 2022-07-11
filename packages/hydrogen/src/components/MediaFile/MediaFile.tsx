@@ -1,4 +1,3 @@
-import React from 'react';
 import {Image, type ShopifyImageProps} from '../Image/index.js';
 import {Video} from '../Video/index.js';
 import {ExternalVideo} from '../ExternalVideo/index.js';

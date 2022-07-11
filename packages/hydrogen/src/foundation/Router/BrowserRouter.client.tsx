@@ -1,5 +1,5 @@
 import {createBrowserHistory, BrowserHistory, Location} from 'history';
-import React, {
+import {
   createContext,
   useContext,
   useMemo,
@@ -10,7 +10,7 @@ import React, {
   useCallback,
   ReactNode,
 } from 'react';
-import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider.jsx';
+import type {LocationServerProps} from '../ServerPropsProvider/ServerPropsProvider.js';
 import {META_ENV_SSR} from '../ssr-interop.js';
 import {useInternalServerProps} from '../useServerProps/use-server-props.js';
 
@@ -82,14 +82,16 @@ export const BrowserRouter: FC<{
   /* eslint-enable react-hooks/rules-of-hooks */
 
   return (
-    <RouterContext.Provider
-      value={{
-        history,
-        location,
-      }}
-    >
-      {children}
-    </RouterContext.Provider>
+    <>
+      <RouterContext.Provider
+        value={{
+          history,
+          location,
+        }}
+      >
+        {children}
+      </RouterContext.Provider>
+    </>
   );
 };
 
@@ -113,7 +115,7 @@ export function useLocation() {
  * Run a callback before browser unload.
  */
 function useBeforeUnload(callback: () => any): void {
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('beforeunload', callback);
     return () => {
       window.removeEventListener('beforeunload', callback);

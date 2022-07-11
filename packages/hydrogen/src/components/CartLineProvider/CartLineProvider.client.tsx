@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import {ReactNode} from 'react';
 import {CartLineContext} from './context.js';
 import {Cart} from '../CartProvider/index.js';
 

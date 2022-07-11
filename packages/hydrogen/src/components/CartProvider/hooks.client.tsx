@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState, useCallback} from 'react';
 import {useShop} from '../../foundation/index.js';
 import {flattenConnection} from '../../utilities/index.js';
 import {CartInput} from '../../storefront-api-types.js';
@@ -22,7 +22,7 @@ export function useCartFetch() {
   const {storeDomain, storefrontApiVersion, storefrontToken, storefrontId} =
     useShop();
 
-  return React.useCallback(
+  return useCallback(
     <T, K>({
       query,
       variables,
@@ -78,7 +78,7 @@ export function useInstantCheckout() {
 
   const fetch = useCartFetch();
 
-  const createInstantCheckout = React.useCallback(
+  const createInstantCheckout = useCallback(
     async (cartInput: CartInput) => {
       const {data, errors} = await fetch<
         CartCreateMutationVariables,

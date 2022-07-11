@@ -1,5 +1,5 @@
 import {useServerRequest} from '../ServerRequestProvider/index.js';
-import {mergeDeep} from './utils.jsx';
+import {mergeDeep} from './utils.js';
 
 export function useServerAnalytics(data?: any): any {
   const request = useServerRequest();

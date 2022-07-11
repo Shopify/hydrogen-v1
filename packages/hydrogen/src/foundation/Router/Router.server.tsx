@@ -1,5 +1,5 @@
-import React, {ReactElement} from 'react';
-import {BrowserRouter} from './BrowserRouter.client.jsx';
+import {ReactElement} from 'react';
+import {BrowserRouter} from './BrowserRouter.client.js';
 
 type RouterProps = {
   /** Any React elements. */

@@ -1,1 +1,1 @@
-export {Link} from './Link.client.jsx';
+export {Link} from './Link.client.js';

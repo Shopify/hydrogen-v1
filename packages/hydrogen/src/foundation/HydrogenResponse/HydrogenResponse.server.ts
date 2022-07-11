@@ -3,8 +3,8 @@ import {
   generateCacheControlHeader,
 } from '../Cache/strategies/index.js';
 import type {CachingStrategy} from '../../types.js';
-import Redirect from '../Redirect/Redirect.client.jsx';
-import React from 'react';
+import Redirect from '../Redirect/Redirect.client.js';
+import {createElement} from 'react';
 
 export class HydrogenResponse extends Response {
   private wait = false;
@@ -60,6 +60,6 @@ export class HydrogenResponse extends Response {
     this.headers.set('location', location);
 
     // in the case of an RSC request, instead render a client component that will redirect
-    return React.createElement(Redirect, {to: location});
+    return createElement(Redirect, {to: location});
   }
 }

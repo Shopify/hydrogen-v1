@@ -1,2 +1,2 @@
-export {Interface} from './Interface.client.jsx';
-export {Panels} from './Panels.jsx';
+export {Interface} from './Interface.client.js';
+export {Panels} from './Panels.js';

@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import React, {ReactNode} from 'react';
+import {ReactNode} from 'react';
 import type {HelmetData as HeadData} from 'react-helmet-async';
 import {ClientConfig, ResolvedHydrogenConfig} from '../../types.js';
 

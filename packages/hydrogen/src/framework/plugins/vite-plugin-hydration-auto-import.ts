@@ -2,7 +2,7 @@ import {Plugin, ResolvedConfig, normalizePath} from 'vite';
 import path from 'path';
 import MagicString from 'magic-string';
 
-const HYDROGEN_ENTRY_FILE = 'hydrogen-entry-client.jsx';
+const HYDROGEN_ENTRY_FILE = 'hydrogen-entry-client.js';
 
 export default () => {
   let config: ResolvedConfig;

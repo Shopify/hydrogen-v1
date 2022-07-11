@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import {Suspense} from 'react';
 import {
   Logger,
   logServerResponse,
@@ -82,7 +82,7 @@ export const renderHydrogen = (App: any) => {
 
     const {default: hydrogenRoutes} = await import(
       // @ts-ignore
-      'virtual__hydrogen-routes.server.jsx'
+      'virtual__hydrogen-routes.server.js'
     );
 
     const hydrogenConfig: ResolvedHydrogenConfig = {

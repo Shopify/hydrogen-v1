@@ -1,1 +1,1 @@
-export {MediaFile, MediaFileProps} from './MediaFile.jsx';
+export {MediaFile, MediaFileProps} from './MediaFile.js';

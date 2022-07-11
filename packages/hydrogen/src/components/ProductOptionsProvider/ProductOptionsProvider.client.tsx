@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useEffect, useCallback} from 'react';
+import {useMemo, useState, useEffect, useCallback} from 'react';
 import {ProductOptionsContext} from './context.js';
 import type {
   SellingPlan,

@@ -2,7 +2,7 @@
   "exclude": ["**/__tests__", "**/tests", "**/*.example.*"],
   "compilerOptions": {
     "declaration": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "target": "ES2022",
     "outDir": "./dist/esnext",
     "module": "esnext",

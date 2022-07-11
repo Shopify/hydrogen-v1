@@ -1,4 +1,4 @@
-import {getNamedspacedEventname, mergeDeep} from './utils.jsx';
+import {getNamedspacedEventname, mergeDeep} from './utils.js';
 import type {Subscriber, Subscribers, SubscriberFunction} from './types.js';
 import {eventNames} from './const.js';
 import {EVENT_PATHNAME} from '../../constants.js';

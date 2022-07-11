@@ -3,8 +3,8 @@ import {
   logCacheControlHeaders,
   collectQueryCacheControlHeaders,
 } from '../log-cache-header.js';
-import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.jsx';
-import {HydrogenResponse} from '../../../foundation/HydrogenResponse/HydrogenResponse.server.jsx';
+import {HydrogenRequest} from '../../../foundation/HydrogenRequest/HydrogenRequest.server.js';
+import {HydrogenResponse} from '../../../foundation/HydrogenResponse/HydrogenResponse.server.js';
 
 let mockLogger: jest.Mocked<Logger>;
 

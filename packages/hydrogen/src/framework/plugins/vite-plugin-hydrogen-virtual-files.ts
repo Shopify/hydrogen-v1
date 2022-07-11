@@ -2,7 +2,7 @@ import {Plugin, ResolvedConfig, normalizePath, ViteDevServer} from 'vite';
 import path from 'path';
 import {promises as fs} from 'fs';
 import type {HydrogenVitePluginOptions} from '../types.js';
-import {viteception} from '../viteception';
+import {viteception} from '../viteception.js';
 
 export const HYDROGEN_DEFAULT_SERVER_ENTRY =
   process.env.HYDROGEN_SERVER_ENTRY || '/src/App.server';
@@ -16,7 +16,7 @@ const VIRTUAL_HYDROGEN_CONFIG_ID = VIRTUAL_PREFIX + HYDROGEN_CONFIG_ID;
 export const VIRTUAL_PROXY_HYDROGEN_CONFIG_ID =
   VIRTUAL_PREFIX + PROXY_PREFIX + HYDROGEN_CONFIG_ID;
 
-const HYDROGEN_ROUTES_ID = 'hydrogen-routes.server.jsx';
+const HYDROGEN_ROUTES_ID = 'hydrogen-routes.server.js';
 const VIRTUAL_HYDROGEN_ROUTES_ID = VIRTUAL_PREFIX + HYDROGEN_ROUTES_ID;
 export const VIRTUAL_PROXY_HYDROGEN_ROUTES_ID =
   VIRTUAL_PREFIX + PROXY_PREFIX + HYDROGEN_ROUTES_ID;

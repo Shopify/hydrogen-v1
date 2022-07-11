@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useCallback,
-  useReducer,
-  useMemo,
-  useRef,
-} from 'react';
+import {useEffect, useCallback, useReducer, useMemo, useRef} from 'react';
 import type {Reducer} from 'react';
 import {flattenConnection} from '../../utilities/index.js';
 import {
@@ -36,7 +30,7 @@ import {
   AttributeInput,
   CountryCode,
 } from '../../storefront-api-types.js';
-import {useCartFetch} from './hooks.client.jsx';
+import {useCartFetch} from './hooks.client.js';
 import {CartContext} from './context.js';
 import {
   CartLineRemoveMutationVariables,

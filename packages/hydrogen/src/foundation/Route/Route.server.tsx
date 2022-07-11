@@ -1,7 +1,7 @@
-import React, {cloneElement, ReactElement} from 'react';
+import {cloneElement, ReactElement} from 'react';
 import {useServerRequest} from '../ServerRequestProvider/index.js';
 import {matchPath} from '../../utilities/matchPath.js';
-import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client.jsx';
+import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client.js';
 
 export type RouteProps = {
   /** The URL path where the route exists. The path can contain variables. For example, `/products/:handle`. */

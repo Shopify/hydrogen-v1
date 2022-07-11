@@ -1,5 +1,5 @@
-import React, {useMemo} from 'react';
-import {ShopifyProviderClient} from './ShopifyProvider.client.jsx';
+import {useMemo} from 'react';
+import {ShopifyProviderClient} from './ShopifyProvider.client.js';
 import type {
   ShopifyProviderProps,
   LocalizationContextValue,

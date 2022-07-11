@@ -1,4 +1,4 @@
-import React, {type ElementType, useMemo} from 'react';
+import {type ElementType, useMemo} from 'react';
 import type {Props} from '../types.js';
 import {useLocalization} from '../../hooks/useLocalization/useLocalization.js';
 import {getMeasurementAsString} from '../../utilities/measurement.js';

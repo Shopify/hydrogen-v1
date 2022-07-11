@@ -1,4 +1,4 @@
-import React, {
+import {
   Suspense,
   useState,
   StrictMode,
@@ -16,7 +16,7 @@ import {
 import {RSC_PATHNAME} from './constants.js';
 import {ServerPropsProvider} from './foundation/ServerPropsProvider/index.js';
 import type {DevServerMessage} from './utilities/devtools.js';
-import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider.jsx';
+import type {LocationServerProps} from './foundation/ServerPropsProvider/ServerPropsProvider.js';
 import {ClientAnalytics} from './foundation/Analytics/index.js';
 
 let rscReader: ReadableStream | null;

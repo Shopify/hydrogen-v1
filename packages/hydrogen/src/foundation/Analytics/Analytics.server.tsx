@@ -1,8 +1,7 @@
-import * as React from 'react';
-import {useServerAnalytics} from './hook.jsx';
-import {Analytics as AnalyticsClient} from './Analytics.client.jsx';
+import {useServerAnalytics} from './hook.js';
+import {Analytics as AnalyticsClient} from './Analytics.client.js';
 import {useServerRequest} from '../ServerRequestProvider/index.js';
-import AnalyticsErrorBoundary from '../AnalyticsErrorBoundary.client.jsx';
+import AnalyticsErrorBoundary from '../AnalyticsErrorBoundary.client.js';
 import {wrapPromise} from '../../utilities/index.js';
 
 const DELAY_KEY_1 = 'analytics-delay-1';

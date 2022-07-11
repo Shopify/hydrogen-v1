@@ -1,7 +1,7 @@
-import React, {createContext, useContext} from 'react';
+import {createContext, useContext} from 'react';
 import {getTime} from '../../utilities/timing.js';
 import {hashKey} from '../../utilities/hash.js';
-import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.jsx';
+import type {HydrogenRequest} from '../HydrogenRequest/HydrogenRequest.server.js';
 import type {QueryKey} from '../../types.js';
 import {collectQueryTimings} from '../../utilities/log/index.js';
 

@@ -1,4 +1,4 @@
-import React, {useContext, createContext, FC, ReactNode} from 'react';
+import {useContext, createContext, FC, ReactNode} from 'react';
 
 type RouteParamsContextValue = {
   routeParams: Record<string, string>;

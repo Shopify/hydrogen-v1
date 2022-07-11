@@ -17,5 +17,5 @@ export {useRouteParams} from './foundation/useRouteParams/useRouteParams.js';
 export {useNavigate} from './foundation/useNavigate/useNavigate.js';
 export {fetchSync} from './foundation/fetchSync/client/fetchSync.js';
 export {suspendFunction, preloadFunction} from './utilities/suspense.js';
-export {PerformanceMetrics} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.client.jsx';
-export {PerformanceMetricsDebug} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetricsDebug.client.jsx';
+export {PerformanceMetrics} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetrics.client.js';
+export {PerformanceMetricsDebug} from './foundation/Analytics/connectors/PerformanceMetrics/PerformanceMetricsDebug.client.js';

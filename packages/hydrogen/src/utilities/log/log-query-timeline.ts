@@ -1,4 +1,4 @@
-import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.jsx';
+import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
 import {QueryKey} from '../../types.js';
 import {hashKey} from '../hash.js';
 import {findQueryName, parseUrl} from './utils.js';

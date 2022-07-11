@@ -1,4 +1,4 @@
-import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.jsx';
+import {HydrogenRequest} from '../../foundation/HydrogenRequest/HydrogenRequest.server.js';
 import {yellow, red, green, italic, lightBlue} from 'kolorist';
 import {getTime} from '../timing.js';
 import {parseUrl} from './utils.js';

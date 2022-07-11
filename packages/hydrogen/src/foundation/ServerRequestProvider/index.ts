@@ -1,1 +1,1 @@
-export * from './ServerRequestProvider.jsx';
+export * from './ServerRequestProvider.js';

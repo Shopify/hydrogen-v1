@@ -1,5 +1,4 @@
-import React from 'react';
-import {Table} from './Table.jsx';
+import {Table} from './Table.js';
 
 interface Props {
   locale: string;

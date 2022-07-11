@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import {useCart} from '../CartProvider/index.js';
 import {ShopPayButton} from '../ShopPayButton/index.js';
 

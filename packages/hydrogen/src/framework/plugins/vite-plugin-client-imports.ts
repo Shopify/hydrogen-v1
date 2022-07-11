@@ -7,7 +7,7 @@ export default function clientImports(): Plugin {
     enforce: 'pre',
 
     /**
-     * When importer does not end in `server.jsx`, and source is `@shopify/hydrogen`,
+     * When importer does not end in `server.js`, and source is `@shopify/hydrogen`,
      * replace with `@shopify/hydrogen/client`. This prevents other server-only imports
      * from "leaking" into the client bundle.
      */

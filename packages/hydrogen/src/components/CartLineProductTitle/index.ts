@@ -1,1 +1,1 @@
-export {CartLineProductTitle} from './CartLineProductTitle.client.jsx';
+export {CartLineProductTitle} from './CartLineProductTitle.client.js';

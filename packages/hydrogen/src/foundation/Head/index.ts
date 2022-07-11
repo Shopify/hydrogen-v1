@@ -1,1 +1,1 @@
-export {Head} from './Head.client.jsx';
+export {Head} from './Head.client.js';

@@ -1,1 +1,1 @@
-export {ShopPayButton} from './ShopPayButton.client.jsx';
+export {ShopPayButton} from './ShopPayButton.client.js';

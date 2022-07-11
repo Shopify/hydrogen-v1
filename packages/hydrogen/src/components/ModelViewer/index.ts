@@ -1,1 +1,1 @@
-export {ModelViewer} from './ModelViewer.client.jsx';
+export {ModelViewer} from './ModelViewer.client.js';

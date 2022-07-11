@@ -1,1 +1,1 @@
-export {Seo} from './Seo.client.jsx';
+export {Seo} from './Seo.client.js';

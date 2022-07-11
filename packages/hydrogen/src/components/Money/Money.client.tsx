@@ -1,4 +1,4 @@
-import React, {type ReactNode} from 'react';
+import {type ReactNode} from 'react';
 import {useMoney} from '../../hooks/index.js';
 import type {
   MoneyV2,

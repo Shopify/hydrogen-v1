@@ -1,11 +1,11 @@
-import React, {type ComponentProps} from 'react';
+import {type ComponentProps} from 'react';
 import {useUrl} from '../../foundation/useUrl/index.js';
-import {DefaultPageSeo} from './DefaultPageSeo.client.jsx';
-import {HomePageSeo} from './HomePageSeo.client.jsx';
-import {ProductSeo} from './ProductSeo.client.jsx';
-import {CollectionSeo} from './CollectionSeo.client.jsx';
-import {PageSeo} from './PageSeo.client.jsx';
-import {NoIndexPageSeo} from './NoIndexSeo.client.jsx';
+import {DefaultPageSeo} from './DefaultPageSeo.client.js';
+import {HomePageSeo} from './HomePageSeo.client.js';
+import {ProductSeo} from './ProductSeo.client.js';
+import {CollectionSeo} from './CollectionSeo.client.js';
+import {PageSeo} from './PageSeo.client.js';
+import {NoIndexPageSeo} from './NoIndexSeo.client.js';
 import type {
   DefaultPage as DefaultPageType,
   HomePage as HomePageType,

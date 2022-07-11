@@ -1,5 +1,4 @@
-import React from 'react';
-import {Heading} from './Heading.jsx';
+import {Heading} from './Heading.js';
 
 interface Navigation {
   url: string;

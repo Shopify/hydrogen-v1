@@ -1,7 +1,7 @@
 import {useContext, useMemo} from 'react';
 import {RSC_PATHNAME} from '../../constants.js';
 import {parseJSON} from '../../utilities/parse.js';
-import {RouterContext} from '../Router/BrowserRouter.client.jsx';
+import {RouterContext} from '../Router/BrowserRouter.client.js';
 import {useEnvContext, META_ENV_SSR} from '../ssr-interop.js';
 
 /**

@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   HelmetProps as HeadProps,
   Helmet,
@@ -15,7 +14,6 @@ export function Head({
   const headData = useEnvContext((req) => req.ctx.head, clientHeadData);
 
   return (
-    // @ts-ignore
     <Helmet {...props} helmetData={headData}>
       {children}
     </Helmet>

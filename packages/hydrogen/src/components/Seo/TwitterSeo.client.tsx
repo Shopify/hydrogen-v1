@@ -1,4 +1,3 @@
-import React from 'react';
 import {Head} from '../../foundation/Head/index.js';
 import type {Twitter} from './seo-types';
 

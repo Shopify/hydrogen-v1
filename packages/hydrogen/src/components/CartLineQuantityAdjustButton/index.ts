@@ -1,1 +1,1 @@
-export {CartLineQuantityAdjustButton} from './CartLineQuantityAdjustButton.jsx';
+export {CartLineQuantityAdjustButton} from './CartLineQuantityAdjustButton.js';

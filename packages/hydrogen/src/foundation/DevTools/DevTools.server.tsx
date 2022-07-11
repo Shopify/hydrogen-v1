@@ -1,5 +1,4 @@
-import React from 'react';
-import {DevTools as DevToolsClient} from './DevTools.client.jsx';
+import {DevTools as DevToolsClient} from './DevTools.client.js';
 import {useServerRequest} from '../ServerRequestProvider/index.js';
 
 export function DevTools() {

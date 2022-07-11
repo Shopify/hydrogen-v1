@@ -1,6 +1,5 @@
-import React from 'react';
 import {useShop} from '../../foundation/useShop/index.js';
-import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client.jsx';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client.js';
 
 // By using 'never' in the "or" cases below, it makes these props "exclusive" and means that you cannot pass both of them; you must pass either one OR the other.
 type ShopPayButtonProps = {

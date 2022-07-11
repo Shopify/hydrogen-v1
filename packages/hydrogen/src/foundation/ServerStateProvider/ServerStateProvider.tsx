@@ -1,9 +1,8 @@
-import React, {
+import {
   createContext,
   ReactNode,
   useMemo,
   useCallback,
-  // @ts-ignore
   useTransition,
 } from 'react';
 

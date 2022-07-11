@@ -1,7 +1,6 @@
-import React from 'react';
-import {TitleSeo} from './TitleSeo.client.jsx';
-import {DescriptionSeo} from './DescriptionSeo.client.jsx';
-import {TwitterSeo} from './TwitterSeo.client.jsx';
+import {TitleSeo} from './TitleSeo.client.js';
+import {DescriptionSeo} from './DescriptionSeo.client.js';
+import {TwitterSeo} from './TwitterSeo.client.js';
 import type {Page as PageType} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';
 

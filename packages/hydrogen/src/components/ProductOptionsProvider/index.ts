@@ -1,1 +1,1 @@
-export {ProductOptionsProvider} from './ProductOptionsProvider.client.jsx';
+export {ProductOptionsProvider} from './ProductOptionsProvider.client.js';

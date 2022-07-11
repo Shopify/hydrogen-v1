@@ -1,11 +1,5 @@
-import React, {
-  ReactNode,
-  useState,
-  useEffect,
-  ElementType,
-  useCallback,
-} from 'react';
-import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client.jsx';
+import {ReactNode, useState, useEffect, ElementType, useCallback} from 'react';
+import {useLoadScript} from '../../hooks/useLoadScript/useLoadScript.client.js';
 import {Props} from '../types.js';
 import type {Model3d} from '../../storefront-api-types.js';
 import type {PartialDeep} from 'type-fest';

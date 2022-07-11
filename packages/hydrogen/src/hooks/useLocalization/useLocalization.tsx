@@ -1,4 +1,4 @@
-import {LocalizationContext} from '../../foundation/ShopifyProvider/ShopifyProvider.client.jsx';
+import {LocalizationContext} from '../../foundation/ShopifyProvider/ShopifyProvider.client.js';
 import type {LocalizationContextValue} from '../../foundation/ShopifyProvider/types.js';
 import {useEnvContext} from '../../foundation/ssr-interop.js';
 import {CountryCode, LanguageCode} from '../../storefront-api-types.js';

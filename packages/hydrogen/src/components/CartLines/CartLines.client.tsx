@@ -1,4 +1,4 @@
-import React, {ReactNode, ElementType, Fragment} from 'react';
+import {ReactNode, ElementType, Fragment} from 'react';
 import {useCart} from '../CartProvider/index.js';
 import {CartLineProvider} from '../CartLineProvider/index.js';
 import {Props} from '../types.js';

@@ -1,11 +1,11 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import {matchPath} from '../../utilities/matchPath.js';
 import {log} from '../../utilities/log/index.js';
 import {extractPathFromRoutesKey} from '../../utilities/apiRoutes.js';
 import {useServerRequest} from '../ServerRequestProvider/index.js';
 
 import type {ImportGlobEagerOutput} from '../../types.js';
-import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client.jsx';
+import {RouteParamsProvider} from '../useRouteParams/RouteParamsProvider.client.js';
 
 interface FileRoutesProps {
   /** The routes defined by Vite's [import.meta.globEager](https://vitejs.dev/guide/features.html#glob-import) method. */
@@ -91,7 +91,7 @@ export function createPageRoutes(
       const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
-       * Catch-all routes [...handle].jsx don't need an exact match
+       * Catch-all routes [...handle].js don't need an exact match
        * https://reactrouter.com/core/api/Route/exact-bool
        */
       const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);

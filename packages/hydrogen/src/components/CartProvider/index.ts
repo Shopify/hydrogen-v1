@@ -1,5 +1,5 @@
-export {CartProvider} from './CartProvider.client.jsx';
-export {useCartFetch, useInstantCheckout} from './hooks.client.jsx';
+export {CartProvider} from './CartProvider.client.js';
+export {useCartFetch, useInstantCheckout} from './hooks.client.js';
 export {useCart} from '../../hooks/useCart/index.js';
 export type {
   State,

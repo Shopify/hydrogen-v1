@@ -1,6 +1,5 @@
-import React from 'react';
 import {useLocalization} from '../../hooks/useLocalization/useLocalization.js';
-import {Head} from '../../foundation/Head/Head.client.jsx';
+import {Head} from '../../foundation/Head/Head.client.js';
 import type {DefaultPage} from './seo-types';
 import type {PartialDeep} from 'type-fest';
 

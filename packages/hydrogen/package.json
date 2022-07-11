@@ -50,8 +50,8 @@
   ],
   "scripts": {
     "dev": "run-p hoist-files  \"dev-esnext {@}/esnext\" \"dev-node {@}/node\" -- --outDir ../../node_modules/@shopify/hydrogen/dist",
-    "dev-esnext": "tsc -w --incremental --p tsconfig.esm.json",
-    "dev-node": "tsc -w --incremental --p tsconfig.cjs.json",
+    "dev-esnext": "tsc -w --incremental --p tsconfig.esm.json --jsx react-jsxdev",
+    "dev-node": "tsc -w --incremental --p tsconfig.cjs.json --jsx react-jsxdev",
     "dev-graphql": "graphql-codegen --config codegen.yml --watch",
     "hoist-files": "cpy --parents *.cjs *.json vendor ../../node_modules/@shopify/hydrogen",
     "hoist-dist": "cpy --parents dist ../../node_modules/@shopify/hydrogen",

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import {useInstantCheckout} from '../CartProvider/index.js';
 import {BaseButton, BaseButtonProps} from '../BaseButton/index.js';
 

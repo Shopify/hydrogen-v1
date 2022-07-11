@@ -1,4 +1,3 @@
-import React from 'react';
 import {useCartLine} from '../CartLineProvider/index.js';
 import {Image, type ShopifyImageProps} from '../Image/index.js';
 import type {Simplify} from 'type-fest';

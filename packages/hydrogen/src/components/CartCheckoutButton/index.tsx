@@ -1,1 +1,1 @@
-export {CartCheckoutButton} from './CartCheckoutButton.client.jsx';
+export {CartCheckoutButton} from './CartCheckoutButton.client.js';

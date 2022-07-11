@@ -1,4 +1,3 @@
-import React from 'react';
 import {useCart} from '../CartProvider/index.js';
 import {Money} from '../Money/index.js';
 

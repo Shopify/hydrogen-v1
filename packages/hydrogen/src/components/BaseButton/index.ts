@@ -1,1 +1,1 @@
-export {BaseButton, BaseButtonProps} from './BaseButton.client.jsx';
+export {BaseButton, BaseButtonProps} from './BaseButton.client.js';

@@ -8,7 +8,7 @@ import {
   getLoggerWithContext,
   logServerResponse,
 } from '../utilities/log/index.js';
-import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server.jsx';
+import type {HydrogenRequest} from '../foundation/HydrogenRequest/HydrogenRequest.server.js';
 import {fetchBuilder, graphqlRequestBody} from './fetch.js';
 import {getStorefrontApiRequestHeaders} from './storefrontApi.js';
 import {
@@ -62,7 +62,7 @@ export function extractPathFromRoutesKey(
      */
     .replace(/\b[A-Z]/, (firstLetter) => firstLetter.toLowerCase())
     /**
-     * Convert /[handle].jsx and /[...handle].jsx to /:handle.jsx for react-router-dom
+     * Convert /[handle].js and /[...handle].js to /:handle.js for react-router-dom
      */
     .replace(/\[(?:[.]{3})?(\w+?)\]/g, (_match, param: string) => `:${param}`);
 
@@ -90,7 +90,7 @@ export function getApiRoutes({
       const path = extractPathFromRoutesKey(key, dirPrefix);
 
       /**
-       * Catch-all routes [...handle].jsx don't need an exact match
+       * Catch-all routes [...handle].js don't need an exact match
        * https://reactrouter.com/core/api/Route/exact-bool
        */
       const exact = !/\[(?:[.]{3})(\w+?)\]/.test(key);
@@ -139,7 +139,7 @@ export function getApiRouteFromURL(
 
 /** The `queryShop` utility is a function that helps you query the Storefront API.
  * It's similar to the `useShopQuery` hook, which is available in server components.
- * To use `queryShop`, pass `shopifyConfig` to `renderHydrogen` inside `App.server.jsx`.
+ * To use `queryShop`, pass `shopifyConfig` to `renderHydrogen` inside `App.server.js`.
  */
 interface QueryShopArgs {
   /** A string of the GraphQL query.
