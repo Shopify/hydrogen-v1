@@ -1,7 +1,8 @@
 import React, {ReactNode, Ref} from 'react';
 import {useCallback} from 'react';
 
-interface Props {
+export interface BaseButtonProps {
+  as?: any;
   /** Any ReactNode elements. */
   children: ReactNode;
   /** Click event handler. Default behaviour triggers unless prevented */
@@ -14,21 +15,18 @@ interface Props {
   ) => void | boolean;
   /** A ref to the underlying button */
   buttonRef?: Ref<HTMLButtonElement>;
+
+  disabled?: boolean;
 }
 
-export type BaseButtonProps = Omit<
-  JSX.IntrinsicElements['button'],
-  'onClick' | 'children'
-> &
-  Props;
-
-export function BaseButton({
+export const BaseButton = <AsType extends React.ElementType = 'button'>({
+  as,
   onClick,
   defaultOnClick,
   children,
   buttonRef,
   ...passthroughProps
-}: BaseButtonProps) {
+}: BaseButtonProps) => {
   const handleOnClick = useCallback(
     (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (onClick) {
@@ -46,9 +44,15 @@ export function BaseButton({
     [defaultOnClick, onClick]
   );
 
-  return (
-    <button {...passthroughProps} ref={buttonRef} onClick={handleOnClick}>
-      {children}
-    </button>
+  const Component = as || 'button';
+
+  return React.createElement(
+    Component,
+    {
+      ref: buttonRef,
+      onClick: handleOnClick,
+      ...passthroughProps,
+    },
+    children
   );
-}
+};

@@ -25,11 +25,10 @@ export function MyComponent() {
 import {BuyNowButton} from '@shopify/hydrogen';
 
 export function MyComponent() {
-
   const handleCustomOnClick = (event) => {
     event.preventDefault(); // prevents button from triggering default behaviour
     // custom click handler code
-  }
+  };
 
   return (
     <BuyNowButton quantity={1} variantId={'123'} onClick={handleCustomOnClick}>
@@ -38,7 +37,6 @@ export function MyComponent() {
   );
 }
 ```
-
 
 ```tsx
 // Run an async action before the default `onClick` behaviour
@@ -61,14 +59,15 @@ export function MyComponent() {
 
     performed.current = true; // prevents retriggering
     buttonRef.current.click(); // trigger button default behaviour
-  }
+  };
 
   return (
     <BuyNowButton
       quantity={1}
       variantId={'123'}
       onClick={handleCustomOnClick}
-      buttonRef={buttonRef}>
+      buttonRef={buttonRef}
+    >
       Buy it now
     </BuyNowButton>
   );
@@ -77,14 +76,15 @@ export function MyComponent() {
 
 ## Props
 
-| Name        | Type                                            | Description                                                                       |
-| ----------- | ----------------------------------------------- | --------------------------------------------------------------------------------- |
-| quantity?   | <code>number</code>                             | The item quantity. Defaults to 1.                                                 |
-| variantId   | <code>string</code>                             | The ID of the variant.                                                            |
-| attributes? | <code>Object<<wbr>string, string<wbr>>[]</code> | An array of cart line attributes that belong to the item being added to the cart. |
-| children    | <code>ReactNode<<wbr>Imported<wbr>></code>      | Any `ReactNode` elements.                                                         |
+| Name        | Type                                                                                                     | Description                                                                          |
+| ----------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| quantity?   | <code>number</code>                                                                                      | The item quantity. Defaults to 1.                                                    |
+| variantId   | <code>string</code>                                                                                      | The ID of the variant.                                                               |
+| attributes? | <code>Object<<wbr>string, string<wbr>>[]</code>                                                          | An array of cart line attributes that belong to the item being added to the cart.    |
+| children    | <code>ReactNode<<wbr>Imported<wbr>></code>                                                               | Any `ReactNode` elements.                                                            |
 | onClick?    | <code>(event?: React.MouseEvent<<wbr>HTMLButtonElement, MouseEvent<wbr>>) => void &#124; boolean;</code> | A click event handler. Default behaviour triggers the click event, unless prevented. |
-| buttonRef?  | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>  | A reference to the underlying button. |
+| buttonRef?  | <code>Ref<<wbr>HTMLButtonElement<wbr>> </code>                                                           | A reference to the underlying button.                                                |
+| as?         | <code>React.ElementType</code> with `button` as default                                                  | Provide a React element or component to render as the underlying button.             |
 
 ## Component type
 

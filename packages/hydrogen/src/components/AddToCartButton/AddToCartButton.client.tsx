@@ -3,7 +3,9 @@ import {useCart} from '../CartProvider';
 import {useProductOptions} from '../../hooks/useProductOptions';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
-interface AddToCartButtonProps {
+interface CustomAddToCartButtonProps<AsType extends React.ElementType> {
+  as?: AsType;
+
   /** An array of cart line attributes that belong to the item being added to the cart. */
   attributes?: {
     key: string;
@@ -17,11 +19,20 @@ interface AddToCartButtonProps {
   accessibleAddingToCartLabel?: string;
 }
 
+type AddToCartButtonProps<AsType extends React.ElementType> =
+  CustomAddToCartButtonProps<AsType> &
+    Omit<
+      React.ComponentPropsWithoutRef<AsType>,
+      keyof CustomAddToCartButtonProps<AsType>
+    >;
+
 /**
  * The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
  * It must be a descendent of the `CartProvider` component.
  */
-export function AddToCartButton(props: AddToCartButtonProps & BaseButtonProps) {
+export function AddToCartButton<AsType extends React.ElementType = 'button'>(
+  props: AddToCartButtonProps<AsType> & BaseButtonProps
+) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {
     variantId: explicitVariantId,
@@ -30,6 +41,7 @@ export function AddToCartButton(props: AddToCartButtonProps & BaseButtonProps) {
     onClick,
     children,
     accessibleAddingToCartLabel,
+    as,
     ...passthroughProps
   } = props;
   const {status, linesAdd} = useCart();
@@ -61,11 +73,12 @@ export function AddToCartButton(props: AddToCartButtonProps & BaseButtonProps) {
 
   return (
     <>
-      <BaseButton
-        {...passthroughProps}
+      <BaseButton<AsType>
+        as={as}
         disabled={disabled}
         onClick={onClick}
         defaultOnClick={handleAddItem}
+        {...passthroughProps}
       >
         {children}
       </BaseButton>

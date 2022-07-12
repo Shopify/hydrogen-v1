@@ -1,4 +1,4 @@
-import {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 
 import {
   useProductOptions,
@@ -102,11 +102,11 @@ export function ProductForm() {
       }
       <div className="grid items-stretch gap-4">
         <AddToCartButton
+          as={'button' as const}
           variantId={selectedVariant?.id}
           quantity={1}
           accessibleAddingToCartLabel="Adding item to your cart"
           disabled={isOutOfStock}
-          type="button"
         >
           <Button
             width="full"

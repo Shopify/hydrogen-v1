@@ -2,7 +2,9 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {useInstantCheckout} from '../CartProvider';
 import {BaseButton, BaseButtonProps} from '../BaseButton';
 
-interface BuyNowButtonProps {
+interface CustomBuyNowButtonProps<AsType extends React.ElementType> {
+  as?: AsType;
+
   /** The item quantity. Defaults to 1. */
   quantity?: number;
   /** The ID of the variant. */
@@ -14,8 +16,17 @@ interface BuyNowButtonProps {
   }[];
 }
 
+type BuyNowButtonProps<AsType extends React.ElementType> =
+  CustomBuyNowButtonProps<AsType> &
+    Omit<
+      React.ComponentPropsWithoutRef<AsType>,
+      keyof CustomBuyNowButtonProps<AsType>
+    >;
+
 /** The `BuyNowButton` component renders a button that adds an item to the cart and redirects the customer to checkout. */
-export function BuyNowButton(props: BuyNowButtonProps & BaseButtonProps) {
+export function BuyNowButton<AsType extends React.ElementType = 'button'>(
+  props: BuyNowButtonProps<AsType> & BaseButtonProps
+) {
   const {createInstantCheckout, checkoutUrl} = useInstantCheckout();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -25,6 +36,7 @@ export function BuyNowButton(props: BuyNowButtonProps & BaseButtonProps) {
     onClick,
     attributes,
     children,
+    as,
     ...passthroughProps
   } = props;
 
@@ -49,8 +61,9 @@ export function BuyNowButton(props: BuyNowButtonProps & BaseButtonProps) {
 
   return (
     <BaseButton
-      disabled={loading ?? passthroughProps.disabled}
+      as={as}
       {...passthroughProps}
+      disabled={loading ?? passthroughProps.disabled}
       onClick={onClick}
       defaultOnClick={handleBuyNow}
     >
