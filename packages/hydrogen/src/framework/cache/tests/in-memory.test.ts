@@ -1,4 +1,4 @@
-import {InMemoryCache} from '../in-memory';
+import {InMemoryCache} from '../in-memory.js';
 
 describe('In-Memory Cache', () => {
   const clock = {timestamp: 0};
