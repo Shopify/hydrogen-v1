@@ -41,7 +41,7 @@ const config: InitialOptionsTsJest = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   testEnvironment: 'jsdom',
-  transformIgnorePatterns: ['node_modules/(?!(kolorist))'],
+  transformIgnorePatterns: ['node_modules/(?!(kolorist|uuid))'],
 };
 
 export default config;
