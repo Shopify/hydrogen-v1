@@ -91,7 +91,11 @@ export function useShopQuery<T>({
     try {
       data = response.json();
     } catch (error: any) {
-      useQueryError = new Error('Unable to parse response:\n' + text);
+      useQueryError = new Error(
+        `Unable to parse response (x-request-id: ${response.headers.get(
+          'x-request-id'
+        )}):\n${text}`
+      );
     }
   } catch (error: any) {
     // Pass-through thrown promise for Suspense functionality
