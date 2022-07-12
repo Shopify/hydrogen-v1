@@ -327,6 +327,10 @@ export default async function testCases({
       const newButtonText = 'add';
 
       await page.goto(getServerUrl() + '/about');
+      expect(await page.textContent('h1')).toContain('About');
+
+      await page.click('.increase');
+      expect(await page.textContent('.count')).toBe('Count is 1');
 
       await edit(
         fullPath,
@@ -334,6 +338,9 @@ export default async function testCases({
         () => untilUpdated(() => page.textContent('button'), 'increase count'),
         () => untilUpdated(() => page.textContent('button'), newButtonText)
       );
+
+      // Only refreshes the client component without changing input state
+      expect(await page.textContent('.count')).toBe('Count is 1');
     });
 
     it('updates the contents when a server component file changes', async () => {
@@ -341,6 +348,10 @@ export default async function testCases({
       const newheading = 'Snow Devil';
 
       await page.goto(getServerUrl() + '/about');
+      expect(await page.textContent('h1')).toContain('About');
+
+      await page.click('.increase');
+      expect(await page.textContent('.count')).toBe('Count is 1');
 
       await edit(
         fullPath,
@@ -348,6 +359,9 @@ export default async function testCases({
         () => untilUpdated(() => page.textContent('h1'), 'About'),
         () => untilUpdated(() => page.textContent('h1'), newheading)
       );
+
+      // Full page refresh
+      expect(await page.textContent('.count')).toBe('Count is 0');
     });
   });
 
