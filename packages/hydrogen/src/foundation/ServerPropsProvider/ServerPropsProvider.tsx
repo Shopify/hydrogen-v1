@@ -96,12 +96,12 @@ export function ServerPropsProvider({
   );
 
   const setLocationServerPropsCallback = useCallback<ServerPropsSetter>(
-    (input, propValue) => {
+    (input) => {
       // Flush the existing user server state when location changes, leaving only the persisted state
       startTransition(() => {
-        setServerPropsForRsc((prev) => getNewValue(prev, input, propValue));
+        setServerPropsForRsc(input as LocationServerProps);
         setServerProps({});
-        setLocationServerProps((prev) => getNewValue(prev, input, propValue));
+        setLocationServerProps(input as LocationServerProps);
       });
     },
     [setServerProps, setServerPropsForRsc, setLocationServerProps]

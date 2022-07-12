@@ -106,7 +106,7 @@ export default async function testCases({
     expect(scopedContext).toContain('{"test2":true}');
   });
 
-  it.skip('should render server props in client component', async () => {
+  it('should render server props in client component', async () => {
     await page.goto(getServerUrl() + '/test-server-props');
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
@@ -120,12 +120,17 @@ export default async function testCases({
     ).toMatchInlineSnapshot(`"props: {\\"hello\\":\\"world\\"}"`);
 
     // Navigate events should clear the server props
+    page.on('request', (request) => {
+      expect(request.url()).toContain(
+        '__rsc?state=%7B%22pathname%22%3A%22%2Ftest-server-props%22%2C%22search%22%3A%22%3Frefresh%22%7D'
+      );
+    });
     await Promise.all([page.click('#navigate'), page.waitForNavigation()]);
     await page.waitForSelector('#server-props', {timeout: 35000});
     expect(await page.textContent('#server-props')).toMatchInlineSnapshot(
       `"props: {}"`
     );
-  }, 35000);
+  });
 
   it('streams the SSR response and includes RSC payload', async () => {
     const response = await fetch(getServerUrl() + '/stream');
