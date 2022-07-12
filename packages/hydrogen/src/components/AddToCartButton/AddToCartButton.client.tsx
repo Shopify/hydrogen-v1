@@ -5,7 +5,6 @@ import {BaseButton, BaseButtonProps} from '../BaseButton';
 
 interface CustomAddToCartButtonProps<AsType extends React.ElementType> {
   as?: AsType;
-
   /** An array of cart line attributes that belong to the item being added to the cart. */
   attributes?: {
     key: string;
@@ -30,8 +29,8 @@ type AddToCartButtonProps<AsType extends React.ElementType> =
  * The `AddToCartButton` component renders a button that adds an item to the cart when pressed.
  * It must be a descendent of the `CartProvider` component.
  */
-export function AddToCartButton<AsType extends React.ElementType = 'button'>(
-  props: AddToCartButtonProps<AsType> & BaseButtonProps
+export function AddToCartButton<AsType extends React.ElementType>(
+  props: AddToCartButtonProps<AsType> & BaseButtonProps<AsType>
 ) {
   const [addingItem, setAddingItem] = useState<boolean>(false);
   const {

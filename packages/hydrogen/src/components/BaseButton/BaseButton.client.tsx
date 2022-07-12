@@ -1,8 +1,8 @@
 import React, {ReactNode, Ref} from 'react';
 import {useCallback} from 'react';
 
-export interface BaseButtonProps {
-  as?: any;
+export interface BaseButtonProps<AsType extends React.ElementType> {
+  as?: AsType;
   /** Any ReactNode elements. */
   children: ReactNode;
   /** Click event handler. Default behaviour triggers unless prevented */
@@ -26,7 +26,7 @@ export const BaseButton = <AsType extends React.ElementType = 'button'>({
   children,
   buttonRef,
   ...passthroughProps
-}: BaseButtonProps) => {
+}: BaseButtonProps<AsType>) => {
   const handleOnClick = useCallback(
     (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (onClick) {
