@@ -178,8 +178,7 @@ If you're hosting your Hydrogen storefront on a platform that isn't Oxygen, then
 
 ```tsx
 const acceptLanguage = request.headers.get(‘accept-language’);
-const localeMatch = /^\/([a-z]{2})(\/|$)/i.exec(acceptLanguage);
-const countryCode = localeMatch ? localeMatch[1] : undefined;
+const countryCode = acceptLanguage?.replace(/-.*/, '') || undefined; // Or set a default country code. For example, 'en'.
 ```
 
 {% endcodeblock %}

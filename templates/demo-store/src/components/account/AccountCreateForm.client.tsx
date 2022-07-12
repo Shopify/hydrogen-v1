@@ -4,6 +4,7 @@ import {useNavigate, Link} from '@shopify/hydrogen/client';
 import {emailValidation, passwordValidation} from '~/lib/utils';
 
 import {callLoginApi} from './AccountLoginForm.client';
+import {getInputStyleClasses} from '../../lib/styleUtils';
 
 interface FormElements {
   email: HTMLInputElement;
@@ -73,9 +74,7 @@ export function AccountCreateForm() {
           )}
           <div className="mb-3">
             <input
-              className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline ${
-                emailError ? ' border-red-500' : 'border-gray-900'
-              }`}
+              className={`mb-1 ${getInputStyleClasses(emailError)}`}
               id="email"
               name="email"
               type="email"
@@ -98,9 +97,7 @@ export function AccountCreateForm() {
           </div>
           <div className="mb-3">
             <input
-              className={`mb-1 appearance-none rounded border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline ${
-                passwordError ? ' border-red-500' : 'border-gray-900'
-              }`}
+              className={`mb-1 ${getInputStyleClasses(passwordError)}`}
               id="password"
               name="password"
               type="password"
@@ -122,7 +119,7 @@ export function AccountCreateForm() {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-gray-900 text-contrast rounded py-2 px-4 focus:shadow-outline block w-full"
+              className="bg-primary text-contrast rounded py-2 px-4 focus:shadow-outline block w-full"
               type="submit"
             >
               Create Account

@@ -53,3 +53,8 @@ This hook returns an object with the following properties:
 ## Related components
 
 - [`ShopifyProvider`](https://shopify.dev/api/hydrogen/components/global/shopifyprovider)
+
+## Related framework topics
+
+- [Hydrogen configuration](https://shopify.dev/custom-storefronts/hydrogen/framework/hydrogen-config)
+- [Internationalization](https://shopify.dev/custom-storefronts/hydrogen/framework/internationalization)

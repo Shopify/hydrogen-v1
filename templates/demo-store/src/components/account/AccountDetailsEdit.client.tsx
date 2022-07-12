@@ -6,6 +6,7 @@ import {
   passwordValidation,
   useRenderServerComponents,
 } from '~/lib/utils';
+import {getInputStyleClasses} from '../../lib/styleUtils';
 
 interface FormElements {
   firstName: HTMLInputElement;
@@ -133,7 +134,7 @@ export function AccountDetailsEdit({
         )}
         <div className="mt-3">
           <input
-            className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            className={getInputStyleClasses()}
             id="firstname"
             name="firstname"
             type="text"
@@ -148,7 +149,7 @@ export function AccountDetailsEdit({
         </div>
         <div className="mt-3">
           <input
-            className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            className={getInputStyleClasses()}
             id="lastname"
             name="lastname"
             type="text"
@@ -163,7 +164,7 @@ export function AccountDetailsEdit({
         </div>
         <div className="mt-3">
           <input
-            className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 rounded`}
+            className={getInputStyleClasses()}
             id="phone"
             name="phone"
             type="tel"
@@ -178,9 +179,7 @@ export function AccountDetailsEdit({
         </div>
         <div className="mt-3">
           <input
-            className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline rounded ${
-              emailError ? ' border-red-500' : 'border-gray-500'
-            }`}
+            className={getInputStyleClasses(emailError)}
             id="email"
             name="email"
             type="email"
@@ -276,9 +275,7 @@ function Password({
   return (
     <div className="mt-3">
       <input
-        className={`appearance-none border w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline rounded ${
-          passwordError ? ' border-red-500' : 'border-gray-500'
-        }`}
+        className={getInputStyleClasses(passwordError)}
         id={name}
         name={name}
         type="password"
