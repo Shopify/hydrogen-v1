@@ -91,11 +91,19 @@ export function useShopQuery<T>({
     try {
       data = response.json();
     } catch (error: any) {
-      useQueryError = new Error(
-        `Unable to parse response (x-request-id: ${response.headers.get(
-          'x-request-id'
-        )}):\n${text}`
-      );
+      if (response.headers.get('content-length')) {
+        useQueryError = new Error(
+          `Unable to parse response (x-request-id: ${response.headers.get(
+            'x-request-id'
+          )}):\n${text}`
+        );
+      } else {
+        useQueryError = new Error(
+          `${response.status} ${
+            response.statusText
+          } (x-request-id: ${response.headers.get('x-request-id')})`
+        );
+      }
     }
   } catch (error: any) {
     // Pass-through thrown promise for Suspense functionality
